@@ -1,0 +1,24 @@
+---
+- name: Install the sftp server
+  hosts: sftp
+  become: yes
+  become_user: root
+  roles:
+    - name: sftp
+    - name: johanmeiring.sftp-server
+      vars:
+      - sftp_users:
+        - name: "{{ sftp_user }}"
+          password: "{{ sftp_password }}"
+          shell: False
+          sftp_directories:
+          - sati
+          - sisaap
+          - sacapt
+          - referential
+          - ers
+          - ric
+      - sftp_allow_passwords: True
+      - sftp_enable_logging: True
+      - sftp_home_partition: "{{ sftp_home_folder }}"
+  tags: sftp_install

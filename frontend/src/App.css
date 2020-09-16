@@ -1,0 +1,35 @@
+.App {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+
+.app-label{
+  width: auto;
+  overflow: auto;
+  margin: 5px;
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.map-container{
+  height: 100vh;
+  width: 100%;
+}
+
+.clicked-coord-label{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: white;
+  border-radius: 5px;
+}
+
+.clicked-coord-label p {
+  margin: 10px;
+}
+
+.boat {
+  object-position: 0 -234px;
+}

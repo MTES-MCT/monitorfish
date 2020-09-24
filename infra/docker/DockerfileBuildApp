@@ -1,0 +1,80 @@
+#####################
+# Multi stage build #
+#####################
+
+########################################
+# Build monitorfish backend with maven #
+########################################
+FROM maven:3.6.0-jdk-11-slim as buildMaven
+
+WORKDIR /tmp/
+
+RUN mkdir /tmp/monitorfish
+
+COPY --from=buildCoreMaven /tmp/target/monitorfish-VERSION_TO_CHANGE.jar /tmp/monitorfish
+COPY --from=buildCoreMaven /tmp/pom.xml /tmp/monitorfish
+
+RUN mvn dependency:go-offline -B
+
+COPY backend/src/ /tmp/src/
+RUN mvn clean package -DskipTests=true
+
+###########################
+# Build frontend with npm #
+###########################
+FROM ubuntu:18.04 old image source
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update &&\
+    apt-get install  --no-install-recommends -y \
+                   curl \
+                   zip \
+                   unzip \
+                   ca-certificates &&\
+    apt-get clean
+USER root
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash &&\
+ apt-get install -y nodejs &&\
+ npm install -g @angular/cli
+
+COPY frontend/ /tmp/frontend/
+WORKDIR /tmp/frontend
+
+# Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
+RUN npm install &&\
+    npm run build
+
+######################
+# Create final image #
+######################
+# There is no more JRE with Java 11 : https://stackoverflow.com/a/53733414
+FROM azul/zulu-openjdk-alpine:11
+
+# Add bash
+RUN apk add --no-cache bash
+
+RUN adduser -D monitorfish
+USER monitorfish
+
+EXPOSE 8880
+WORKDIR /home/monitorfish
+
+# Copy files for the back
+COPY --from=buildMaven /tmp/target/monitorfish-VERSION_TO_CHANGE.jar /home/monitorfish
+COPY airquality/monitorfish/infra/ /home/monitorfish/infra/
+
+# Copy files for the front
+RUN mkdir /home/frontend/public
+COPY --from=buildNpm /tmp/frontend/dist/monitorfish-frontend /home/monitorfish/public/
+
+# Set up environement variable that define the root folder use for serving static files
+# It must point to the front (angular) files
+ENV AQ_STATIC_FILES_PATH /home/monitorfish/public
+
+# Default profile is for local. Can be overiden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
+ENV SPRING_PROFILES_ACTIVE local
+
+CMD exec java -Dspring.config.additional-location="/home/monitorfish/infra/" -jar "monitorfish-VERSION_TO_CHANGE.jar"
+
+# Pour tester que cela fonctionne : http://localhost:8880/greeting

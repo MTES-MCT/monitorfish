@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Map from 'ol/Map'
 import View from 'ol/View'
 import Feature from 'ol/Feature';
-import TileLayer from 'ol/layer/Tile'
+import VectorTileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import {OSM} from 'ol/source';
@@ -13,6 +13,7 @@ import Point from 'ol/geom/Point';
 import {Icon, Style} from 'ol/style';
 import {transform} from 'ol/proj'
 import {toStringXY} from 'ol/coordinate';
+import {apply} from 'ol-mapbox-style';
 
 function MapWrapper(props) {
 
@@ -35,14 +36,16 @@ function MapWrapper(props) {
       source: new VectorSource()
     })
 
+    const OSMLayer = new VectorTileLayer({
+      source: new OSM(), // We use Open Street Map
+    })
+
     // create map
     const centeredOnFrance = [2.99049, 46.82801];
     const initialMap = new Map({
       target: mapElement.current,
       layers: [
-        new TileLayer({
-          source: new OSM(), // We use Open Street Map
-        }),
+        OSMLayer,
         initalFeaturesLayer
       ],
       view: new View({

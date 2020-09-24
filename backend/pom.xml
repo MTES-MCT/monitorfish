@@ -10,14 +10,15 @@
 	</parent>
 	<groupId>fr.gouv.cnsp</groupId>
 	<artifactId>monitorfish</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>VERSION_TO_CHANGE</version>
 	<name>MonitorFish</name>
 	<description>MonitorFish</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 		<kotlin.version>1.3.72</kotlin.version>
 		<testcontainers.version>1.14.3</testcontainers.version>
+		<commit.hash>COMMIT_TO_CHANGE</commit.hash>
 	</properties>
 
 	<dependencies>
@@ -26,8 +27,27 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-kotlin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
+			<version>2.9.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -41,7 +61,6 @@
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib-jdk8</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -76,13 +95,26 @@
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
-			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>jdbc</artifactId>
+			<version>1.14.3	</version>
 		</dependency>
 	</dependencies>
 
@@ -130,22 +162,93 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>build-info</id>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+						<configuration>
+							<additionalProperties>
+								<commit.hash>${commit.hash}</commit.hash>
+							</additionalProperties>
+						</configuration>
+					</execution>
+					<execution>
+						<id>repackage</id>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<classifier>exec</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<executions>
+					<!-- Replacing default-compile as it is treated specially by maven -->
+					<execution>
+						<id>default-compile</id>
+						<phase>none</phase>
+					</execution>
+					<!-- Replacing default-testCompile as it is treated specially by maven -->
+					<execution>
+						<id>default-testCompile</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>java-compile</id>
+						<phase>compile</phase>
+						<goals> <goal>compile</goal> </goals>
+					</execution>
+					<execution>
+						<id>java-test-compile</id>
+						<phase>test-compile</phase>
+						<goals> <goal>testCompile</goal> </goals>
+					</execution>
+				</executions>
+				<configuration>
+					<compilerArgument>-parameters</compilerArgument>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
+				<version>${kotlin.version}</version>
+				<executions>
+					<execution>
+						<id>test-compile</id>
+						<goals> <goal>test-compile</goal> </goals>
+						<configuration>
+							<sourceDirs>
+								<sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+							</sourceDirs>
+						</configuration>
+					</execution>
+				</executions>
 				<configuration>
 					<args>
 						<arg>-Xjsr305=strict</arg>
 					</args>
+					<jvmTarget>1.8</jvmTarget>
 					<compilerPlugins>
 						<plugin>spring</plugin>
+						<plugin>jpa</plugin>
 					</compilerPlugins>
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.jetbrains.kotlin</groupId>
 						<artifactId>kotlin-maven-allopen</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-noarg</artifactId>
 						<version>${kotlin.version}</version>
 					</dependency>
 				</dependencies>

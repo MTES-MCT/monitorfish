@@ -7,6 +7,11 @@
 
 ## Backend
 
+Stack:
+- Kotlin
+- Spring Boot
+- Flyway
+
 ### Run
 
 Executing this script will run the backend application and the PostgreSQL database.

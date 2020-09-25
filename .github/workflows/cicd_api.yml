@@ -1,0 +1,30 @@
+name: CI/CD API
+
+on:
+  push:
+    paths:
+    - '**.kt'
+    - '.github/workflows/cicd_api.yml'
+    - 'infra/configurations/**.properties'
+    - 'infra/docker/DockerfileBuildApp'
+    - '**.sql'
+
+jobs:
+  build:
+    name: Tests and build
+    runs-on: ubuntu-18.04
+    steps:
+    
+    - name: Setup Java JDK
+      uses: actions/setup-java@v1.4.2
+      with:
+        # The Java version to make available on the path. Takes a whole or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x). Early access versions can be specified in the form of e.g. 14-ea, 14.0.0-ea, or 14.0.0-ea.28
+        java-version: 1.8
+
+    - uses: actions/checkout@v2
+
+    - name: Get dependencies
+      run: cd backend && ./mvnw install
+      
+    - name: Unit test
+      run: cd backend && ./scripts/test.sh

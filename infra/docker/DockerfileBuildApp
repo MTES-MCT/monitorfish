@@ -5,24 +5,26 @@
 ########################################
 # Build monitorfish backend with maven #
 ########################################
-FROM maven:3.6.0-jdk-11-slim as buildMaven
+FROM maven:3.6.0-jdk-11-slim as buildBack
+
+ENV GITHUB_SHA=NO_COMMIT
+ENV VERSION=NO_VERSION
 
 WORKDIR /tmp/
+COPY backend/ /tmp/
+COPY backend/pom.xml /tmp/POM_WITH_ENV_VARS
 
-RUN mkdir /tmp/monitorfish
-
-COPY --from=buildCoreMaven /tmp/target/monitorfish-VERSION_TO_CHANGE.jar /tmp/monitorfish
-COPY --from=buildCoreMaven /tmp/pom.xml /tmp/monitorfish
+RUN sed -e 's/COMMIT_TO_CHANGE/${GITHUB_SHA}/' \
+        -e 's/VERSION_TO_CHANGE/${VERSION}/' \
+        POM_WITH_ENV_VARS > pom.xml
 
 RUN mvn dependency:go-offline -B
-
-COPY backend/src/ /tmp/src/
 RUN mvn clean package -DskipTests=true
 
 ###########################
 # Build frontend with npm #
 ###########################
-FROM ubuntu:18.04 old image source
+FROM ubuntu:18.04 as buildFront
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update &&\
@@ -35,8 +37,7 @@ RUN apt-get update &&\
 USER root
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash &&\
- apt-get install -y nodejs &&\
- npm install -g @angular/cli
+ apt-get install -y nodejs
 
 COPY frontend/ /tmp/frontend/
 WORKDIR /tmp/frontend
@@ -51,6 +52,9 @@ RUN npm install &&\
 # There is no more JRE with Java 11 : https://stackoverflow.com/a/53733414
 FROM azul/zulu-openjdk-alpine:11
 
+ENV VERSION=NO_VERSION
+ENV ENV_PROFILE=local
+
 # Add bash
 RUN apk add --no-cache bash
 
@@ -61,20 +65,18 @@ EXPOSE 8880
 WORKDIR /home/monitorfish
 
 # Copy files for the back
-COPY --from=buildMaven /tmp/target/monitorfish-VERSION_TO_CHANGE.jar /home/monitorfish
-COPY airquality/monitorfish/infra/ /home/monitorfish/infra/
+COPY --from=buildBack /tmp/target/monitorfish-${VERSION}.jar /home/monitorfish
+COPY infra/configurations /home/monitorfish/configurations/
 
 # Copy files for the front
-RUN mkdir /home/frontend/public
-COPY --from=buildNpm /tmp/frontend/dist/monitorfish-frontend /home/monitorfish/public/
+RUN mkdir /home/monitorfish/public
+COPY --from=buildFront /tmp/frontend/build /home/monitorfish/public/
 
 # Set up environement variable that define the root folder use for serving static files
 # It must point to the front (angular) files
-ENV AQ_STATIC_FILES_PATH /home/monitorfish/public
+ENV STATIC_FILES_PATH /home/monitorfish/public
 
 # Default profile is for local. Can be overiden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
-ENV SPRING_PROFILES_ACTIVE local
+ENV SPRING_PROFILES_ACTIVE ${ENV_PROFILE}
 
-CMD exec java -Dspring.config.additional-location="/home/monitorfish/infra/" -jar "monitorfish-VERSION_TO_CHANGE.jar"
-
-# Pour tester que cela fonctionne : http://localhost:8880/greeting
+CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

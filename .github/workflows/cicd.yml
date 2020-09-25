@@ -1,0 +1,47 @@
+name: CI/CD Back/Front
+
+on:
+  push:
+    paths:
+    - '**.kt'
+    - '**.js'
+    - '**.ts'
+    - '.github/workflows/cicd.yml'
+    - 'infra/configurations/**.properties'
+    - 'infra/docker/DockerfileBuildApp'
+    - '**.sql'
+
+jobs:
+  build:
+    name: Tests and build
+    runs-on: ubuntu-18.04
+    steps:
+
+    - name: Get last release version
+      id: lastrelease
+      uses: pozetroninc/github-action-get-latest-release@master
+          with:
+            repository: mtes-mct/monitorfish
+
+    - name: Set VERSION env
+      run: echo ::set-env name=VERSION::$(echo ${{ steps.lastrelease.outputs.release }})
+    
+    - name: Setup Java JDK
+      uses: actions/setup-java@v1.4.2
+      with:
+        java-version: 11
+
+    - uses: actions/checkout@v2
+            
+    - name: Unit test
+      run: make test
+
+    - name: Build docker image
+      run: make docker-build
+
+    - name: Push docker image to registry
+      if: github.ref == 'refs/heads/master'
+      run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+        make docker-tag
+        make docker-push

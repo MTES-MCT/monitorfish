@@ -1,4 +1,4 @@
-name: CI/CD Back/Front
+name: CI/CD Back & Front
 
 on:
   push:

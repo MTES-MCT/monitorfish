@@ -27,7 +27,7 @@ jobs:
       run: |
         echo ::set-env name=VERSION::$(echo ${{ steps.lastrelease.outputs.release }})
         if [ "$(ENV_PROFILE)" != "prod" ]; then\
-            echo ::set-env name=VERSION::$(echo ${{ env.VERSION }}_SNAPSHOT)
+            echo ::set-env name=VERSION::$(echo $(VERSION)_SNAPSHOT)
         fi
     
     - name: Setup Java JDK

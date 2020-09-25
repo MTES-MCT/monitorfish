@@ -20,8 +20,8 @@ jobs:
     - name: Get last release version
       id: lastrelease
       uses: pozetroninc/github-action-get-latest-release@master
-          with:
-            repository: mtes-mct/monitorfish
+      with:
+        repository: mtes-mct/monitorfish
 
     - name: Set VERSION env
       run: echo ::set-env name=VERSION::$(echo ${{ steps.lastrelease.outputs.release }})

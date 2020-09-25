@@ -13,7 +13,7 @@ on:
 
 jobs:
   build:
-    name: Tests and build
+    name: Test, build and Package
     runs-on: ubuntu-18.04
     steps:
 
@@ -24,7 +24,11 @@ jobs:
         repository: mtes-mct/monitorfish
 
     - name: Set VERSION env
-      run: echo ::set-env name=VERSION::$(echo ${{ steps.lastrelease.outputs.release }})
+      run: |
+        echo ::set-env name=VERSION::$(echo ${{ steps.lastrelease.outputs.release }})
+        if [ "$(ENV_PROFILE)" != "prod" ]; then\
+            echo ::set-env name=VERSION::$(echo ${{ env.VERSION }}_SNAPSHOT)
+        fi
     
     - name: Setup Java JDK
       uses: actions/setup-java@v1.4.2

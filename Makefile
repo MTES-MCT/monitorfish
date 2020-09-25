@@ -1,9 +1,12 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
+STATIC_FILE_PATH="$(shell pwd)/frontend/build"
 
 .PHONY: run docker-build docker-tag docker-push check-clean-archi test
 
 run-dev:
-	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
+	killall java || true
+	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local" &
+	cd frontend && npm start
 docker-build:
 	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION)
 docker-tag:

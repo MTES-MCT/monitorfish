@@ -3,8 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllPositions
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.notNullValue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given

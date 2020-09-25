@@ -5,7 +5,6 @@ if [ ! -f mvnw ]; then
     exit 1
 fi
 
-INFRA_FOLDER="$(pwd)/infra/configurations"
-./mvnw test -DargLine="-ea -Dspring.config.additional-location=$INFRA_FOLDER"
+./mvnw test
 
 cd tools && ./check-clean-architecture.sh && cd -

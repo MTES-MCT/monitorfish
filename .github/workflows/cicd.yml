@@ -10,6 +10,7 @@ on:
     - 'infra/configurations/**.properties'
     - 'infra/docker/DockerfileBuildApp'
     - '**.sql'
+    - 'backend/pom.xml'
 
 jobs:
   build:

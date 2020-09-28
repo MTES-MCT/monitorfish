@@ -2,3 +2,4 @@
 db_name: monitorfish-dev
 db_data_directory: /data/postgres_data
 db_listen_addresses: "*"
+db_host: "172.17.0.1" # Docker's IP address on host (found with ifconfig)

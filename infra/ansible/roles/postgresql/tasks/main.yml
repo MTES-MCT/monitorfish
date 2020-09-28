@@ -80,6 +80,16 @@
     password: "{{ vault_db_password }}"
     role_attr_flags: NOSUPERUSER,NOCREATEDB,NOCREATEROLE
 
+- name: Grant access to API docker container to host database (from the docker subnet 172.17.0.0/16)
+  become: yes
+  postgresql_pg_hba:
+    dest: /etc/postgresql/10/main/pg_hba.conf
+    contype: host
+    source: 172.17.0.0/16
+    users: "{{ vault_db_user }}"
+    databases: "{{ db_name }}"
+    state: present
+
 - name: Create PostgreSQL database
   become: yes
   become_user: postgres

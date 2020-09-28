@@ -16,7 +16,7 @@
           - "{{ api_container_port }}:8880"
         env:
           SPRING_PROFILES_ACTIVE: "{{ current_env }}"
-          HOST_IP: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
+          HOST_IP: "{{ ansible_ssh_host }}"
 
           # DB
           ENV_DB_URL: "jdbc:postgresql://{{ db_host }}:5432/{{ db_name }}?user={{ vault_db_user }}&password={{ vault_db_password }}"

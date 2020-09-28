@@ -19,6 +19,7 @@
 		<kotlin.version>1.3.72</kotlin.version>
 		<testcontainers.version>1.14.3</testcontainers.version>
 		<commit.hash>COMMIT_TO_CHANGE</commit.hash>
+		<main.class>fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt</main.class>
 	</properties>
 
 	<dependencies>
@@ -181,6 +182,7 @@
 						</goals>
 						<configuration>
 							<classifier>exec</classifier>
+							<mainClass>fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt</mainClass>
 						</configuration>
 					</execution>
 				</executions>

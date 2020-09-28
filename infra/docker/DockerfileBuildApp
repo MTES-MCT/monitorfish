@@ -53,7 +53,7 @@ RUN npm install &&\
 FROM azul/zulu-openjdk-alpine:11
 
 ENV VERSION=NO_VERSION
-ENV ENV_PROFILE=local
+ENV ENV_PROFILE=dev
 ENV ENV_DB_URL=
 
 # Add bash

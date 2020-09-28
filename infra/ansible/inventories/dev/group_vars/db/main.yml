@@ -1,0 +1,4 @@
+---
+db_name: monitorfish-dev
+db_data_directory: /data/postgres_data
+db_listen_addresses: "*"

@@ -1,0 +1,88 @@
+---
+- name: Update APT cache
+  become: yes
+  apt:
+    update_cache: yes
+
+# Needed to allow Ansible to create users and databases with Ansible
+- name: Install ACL package
+  become: yes
+  apt:
+    name: acl
+
+- name: Install PostgreSQL package
+  become: yes
+  apt:
+     pkg:
+      - python3-psycopg2
+      - postgresql
+
+- name: Set postgres as owner for database data directory
+  become: yes
+  file:
+    path: "{{ db_data_directory }}"
+    recurse: yes
+    owner: postgres
+    group: postgres
+    state: directory
+
+- name: Check if database data directory is empty
+  become: yes
+  find:
+    paths: "{{ db_data_directory }}"
+  register: find_output
+
+- name: Init database data directory if not done yet
+  become: yes
+  become_user: postgres
+  command: "/usr/lib/postgresql/10/bin/pg_ctl initdb -D {{ db_data_directory }}"
+  when: find_output.matched == 0
+
+- name: Configure PostgreSQL global settings
+  become: yes
+  template:
+    src: postgresql.j2
+    dest: /etc/postgresql/10/main/postgresql.conf
+  notify: restart postgresql service
+  tags: postgres_refresh_config
+
+# Needed because changing data directory need to be taken in account before creating users and databases
+- name: Force restart postgresql service
+  meta: flush_handlers
+
+- name: Add authorized hosts (API) in pg_hba configuration
+  become: yes
+  postgresql_pg_hba:
+    dest: /etc/postgresql/10/main/pg_hba.conf
+    contype: host
+    databases: all
+    users: all
+    source: "{{ item }}/32"
+    method: md5
+    state: present
+  with_items:
+    - "{{ groups.api }}"
+  notify: restart postgresql service
+  tags: update_authorized_hosts_in_pg_hba
+
+- name: Start and enable postgresql service
+  become: yes
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Create PostgreSQL user
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{ vault_db_user }}"
+    password: "{{ vault_db_password }}"
+    role_attr_flags: NOSUPERUSER,NOCREATEDB,NOCREATEROLE
+
+- name: Create PostgreSQL database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+    owner: "{{ vault_db_user }}"

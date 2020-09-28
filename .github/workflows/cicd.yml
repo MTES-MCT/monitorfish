@@ -6,6 +6,7 @@ on:
     - '**.kt'
     - '**.js'
     - '**.ts'
+    - '**.yml'
     - '.github/workflows/cicd.yml'
     - 'infra/configurations/**.properties'
     - 'infra/docker/DockerfileBuildApp'

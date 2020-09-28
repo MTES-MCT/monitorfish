@@ -15,10 +15,10 @@
         ports:
           - "{{ api_container_port }}:8880"
         env:
-          CURRENT_ENV: "{{ current_env }}"
+          SPRING_PROFILES_ACTIVE: "{{ current_env }}"
 
           # DB
-          ENV_DB_URL: "jdbc://{{ vault_db_user }}:{{ vault_db_password }}@localhost:5432/{{ db_name }}"
+          ENV_DB_URL: "jdbc:postgresql//:@localhost:5432/{{ db_name }}?user={{ vault_db_user }}&password={{ vault_db_password }}"
 
     - name: Add api-xxx service (systemd)
       include_role:

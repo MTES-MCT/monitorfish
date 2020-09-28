@@ -9,6 +9,7 @@
       docker_container:
         image: "{{ docker_registry_url }}/{{ docker_image_path }}:{{ docker_image_tag }}"
         name: "{{ api_container_name }}-{{ current_env }}"
+        pull: yes
         state: started
         restart: yes
         ports:

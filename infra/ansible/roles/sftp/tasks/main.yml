@@ -2,7 +2,7 @@
 - name: Set sftp data directory
   become: yes
   file:
-    path: "{{ sftp_home_folder }}/{{ sftp_user }}"
+    path: "{{ sftp_home_folder }}/{{ vault_sftp_user }}"
     recurse: yes
     owner: root
     group: sftpusers

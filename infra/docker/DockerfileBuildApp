@@ -54,6 +54,7 @@ FROM azul/zulu-openjdk-alpine:11
 
 ENV VERSION=NO_VERSION
 ENV ENV_PROFILE=local
+ENV ENV_DB_URL=
 
 # Add bash
 RUN apk add --no-cache bash
@@ -65,7 +66,7 @@ EXPOSE 8880
 WORKDIR /home/monitorfish
 
 # Copy files for the back
-COPY --from=buildBack /tmp/target/monitorfish-${VERSION}.jar /home/monitorfish
+COPY --from=buildBack /tmp/target/monitorfish-${VERSION}-exec.jar /home/monitorfish
 COPY infra/configurations /home/monitorfish/configurations/
 
 # Copy files for the front
@@ -79,4 +80,4 @@ ENV STATIC_FILES_PATH /home/monitorfish/public
 # Default profile is for local. Can be overiden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
 ENV SPRING_PROFILES_ACTIVE ${ENV_PROFILE}
 
-CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"
+CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}-exec.jar"

@@ -1,0 +1,29 @@
+---
+- name: Install nginx package
+  become: yes
+  apt:
+    update_cache: yes
+    name: nginx
+
+- name: Remove default nginx configuration
+  become: yes
+  replace:
+    path: /etc/nginx/sites-available/default
+    before: "# Virtual Host configuration"
+    regexp: ".|\n"
+    replace: ""
+
+- name: Add reverse proxy in nginx configuration
+  become: yes
+  blockinfile:
+    path: /etc/nginx/sites-available/default
+    marker: "# {mark} of reverse proxy config for {{ current_env }} environment"
+    content: "{{ reverse_proxy_config }}"
+  notify: restart nginx service
+
+- name: Start and enable nginx service
+  become: yes
+  service:
+    name: nginx
+    state: started
+    enabled: yes

@@ -36,13 +36,13 @@ Note : Le mot de passe des vaults de PROD est différent de celui de DEV, SANDBO
 
 ### 4. Configuration des environnements
 
-#### a. Configurer le serveur sFTP
+#### a. Configurer l'environnement de DEV
 
 Dans un terminal, exécuter :
 
 ```bash
 # Depuis le dossier "infra"
-ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook -v -i ansible/inventories/dev/hosts ansible/initialize_platform.yml --user mf -kK --ask-vault-pass
+ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook -v -i ansible/inventories/dev/hosts ansible/initialize_platform.yml -kK --ask-vault-pass --become --become-method=su -e ansible_become_exe=runuser
 ```
 
 ### 5. Autre

@@ -1,0 +1,12 @@
+[Unit]
+Description={{ api_container_name }}-{{ current_env }} container service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a {{ api_container_name }}-{{ current_env }}
+ExecStop=/usr/bin/docker stop -t 2 {{ api_container_name }}-{{ current_env }}
+
+[Install]
+WantedBy=local.target

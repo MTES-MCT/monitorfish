@@ -1,15 +1,13 @@
 ---
-- name: Install the sftp server
-  hosts: sftp
+- hosts: sftp
   become: yes
   become_user: root
   roles:
-    - name: sftp
     - name: johanmeiring.sftp-server
       vars:
       - sftp_users:
-        - name: "{{ sftp_user }}"
-          password: "{{ sftp_password }}"
+        - name: "{{ vault_sftp_user }}"
+          password: "{{ vault_sftp_password }}"
           shell: False
           sftp_directories:
           - sati
@@ -21,4 +19,21 @@
       - sftp_allow_passwords: True
       - sftp_enable_logging: True
       - sftp_home_partition: "{{ sftp_home_folder }}"
+    - name: sftp
+
   tags: sftp_install
+
+- hosts: api
+  roles:
+    - name: docker
+  tags: docker_install
+
+- hosts: api
+  roles:
+    - name: nginx_service
+  tags: reverse_proxy_setup
+
+- hosts: db
+  roles:
+    - name: postgresql
+  tags: postgresql_install

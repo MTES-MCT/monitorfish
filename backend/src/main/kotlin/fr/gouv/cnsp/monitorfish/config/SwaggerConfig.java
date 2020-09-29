@@ -18,12 +18,12 @@ import java.util.Collections;
 public class SwaggerConfig {
 
     @Autowired
-    private HostIp hostIp;
+    private HostProperties hostProperties;
 
     @Bean
     public Docket airQualityApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .host(hostIp.getIp())
+                .host(hostProperties.getIp())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("fr.gouv.cnsp.monitorfish"))
                 .paths(PathSelectors.any())

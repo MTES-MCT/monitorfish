@@ -38,13 +38,13 @@
 # The default values of these variables are driven from the -D command-line
 # option or PGDATA environment variable, represented here as ConfigDir.
 
-hba_file = '/etc/postgresql/10/main/pg_hba.conf'	# host-based authentication file
+hba_file = '/etc/postgresql/11/main/pg_hba.conf'	# host-based authentication file
 					# (change requires restart)
-ident_file = '/etc/postgresql/10/main/pg_ident.conf'	# ident configuration file
+ident_file = '/etc/postgresql/11/main/pg_ident.conf'	# ident configuration file
 					# (change requires restart)
 
 # If external_pid_file is not explicitly set, no extra PID file is written.
-external_pid_file = '/var/run/postgresql/10-main.pid'			# write an extra PID file
+external_pid_file = '/var/run/postgresql/11-main.pid'			# write an extra PID file
 					# (change requires restart)
 
 
@@ -135,7 +135,7 @@ dynamic_shared_memory_type = posix	# the default is the first option
 
 #max_files_per_process = 1000		# min 25
 					# (change requires restart)
-#shared_preload_libraries = ''		# (change requires restart)
+shared_preload_libraries = 'timescaledb'		# (change requires restart)
 
 # - Cost-Based Vacuum Delay -
 
@@ -462,7 +462,7 @@ log_timezone = 'Europe/Paris'
 
 # - Process Title -
 
-cluster_name = '10/main'			# added to process titles if nonempty
+cluster_name = '11/main'			# added to process titles if nonempty
 					# (change requires restart)
 #update_process_title = on
 
@@ -478,7 +478,7 @@ cluster_name = '10/main'			# added to process titles if nonempty
 #track_io_timing = off
 #track_functions = none			# none, pl, all
 #track_activity_query_size = 1024	# (change requires restart)
-stats_temp_directory = '/var/run/postgresql/10-main.pg_stat_tmp'
+stats_temp_directory = '/var/run/postgresql/11-main.pg_stat_tmp'
 
 
 # - Statistics Monitoring -

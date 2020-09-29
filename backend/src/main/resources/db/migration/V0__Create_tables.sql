@@ -1,12 +1,14 @@
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START 1;
 
-create table POSITIONS (
-  ID serial not null,
-  IMEI varchar(100) not null,
-  LATITUDE double precision not null,
-  LONGITUDE double precision not null,
-  SPEED double precision not null,
-  DIRECTION double precision not null,
-  POSITION_DATE timestamp,
-  RECEIVED_DATE timestamp
+create table positions (
+  id serial not null,
+  imei varchar(100) not null,
+  latitude double precision not null,
+  longitude double precision not null,
+  speed double precision not null,
+  direction double precision not null,
+  position_date timestamp,
+  received_date timestamp
 );
+
+SELECT create_hypertable('positions', 'position_date');

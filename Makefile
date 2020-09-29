@@ -3,10 +3,12 @@ STATIC_FILE_PATH="$(shell pwd)/frontend/build"
 
 .PHONY: run docker-build docker-tag docker-push check-clean-archi test
 
-run-dev:
-	killall java || true
-	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local" &
+run-front:
 	cd frontend && npm start
+run-back:
+	killall java || true
+	docker-compose up -d
+	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local" &
 docker-build:
 	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION)
 docker-tag:

@@ -4,18 +4,45 @@
   apt:
     update_cache: yes
 
+- name: Add postgresql key
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+  become: yes
+     
+- name: Create postgres repo variable
+  command: bash -c "echo \"deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main\" "
+  register: repo_line
+ 
+- debug: 
+    msg: "{{ repo_line.stdout }}"
+     
+- name: Add postgresql repo 
+  apt_repository:
+    repo: "{{ repo_line.stdout }}"
+    state: present
+  become: yes
+
 # Needed to allow Ansible to create users and databases with Ansible
 - name: Install ACL package
   become: yes
   apt:
     name: acl
 
-- name: Install PostgreSQL package
+- name: Add timescaledb repository into sources list
+  apt_repository:
+    repo: ppa:timescale/timescaledb-ppa
+    state: present
+
+- name: Install PostgreSQL, PostGIS and TimescaleDB packages
   become: yes
   apt:
      pkg:
       - python3-psycopg2
-      - postgresql
+      - postgresql-11
+      - postgis
+      - postgresql-11-postgis-3
+      - timescaledb-postgresql-11
 
 - name: Set postgres as owner for database data directory
   become: yes
@@ -35,14 +62,14 @@
 - name: Init database data directory if not done yet
   become: yes
   become_user: postgres
-  command: "/usr/lib/postgresql/10/bin/pg_ctl initdb -D {{ db_data_directory }}"
+  command: "/usr/lib/postgresql/11/bin/pg_ctl initdb -D {{ db_data_directory }}"
   when: find_output.matched == 0
 
 - name: Configure PostgreSQL global settings
   become: yes
   template:
     src: postgresql.j2
-    dest: /etc/postgresql/10/main/postgresql.conf
+    dest: /etc/postgresql/11/main/postgresql.conf
   notify: restart postgresql service
   tags: postgres_refresh_config
 
@@ -53,7 +80,7 @@
 - name: Add authorized hosts (API) in pg_hba configuration
   become: yes
   postgresql_pg_hba:
-    dest: /etc/postgresql/10/main/pg_hba.conf
+    dest: /etc/postgresql/11/main/pg_hba.conf
     contype: host
     databases: all
     users: all
@@ -83,7 +110,7 @@
 - name: Grant access to API docker container to host database (from the docker subnet 172.17.0.0/16)
   become: yes
   postgresql_pg_hba:
-    dest: /etc/postgresql/10/main/pg_hba.conf
+    dest: /etc/postgresql/11/main/pg_hba.conf
     contype: host
     source: 172.17.0.0/16
     users: "{{ vault_db_user }}"
@@ -96,3 +123,17 @@
   postgresql_db:
     name: "{{ db_name }}"
     owner: "{{ vault_db_user }}"
+    
+- name: Adds postgis extension to the database
+  become: yes
+  become_user: postgres
+  postgresql_ext:
+    name: postgis
+    db: "{{ db_name }}"
+
+- name: Adds timescaledb extension to the database
+  become: yes
+  become_user: postgres
+  postgresql_ext:
+    name: timescaledb
+    db: "{{ db_name }}"

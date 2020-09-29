@@ -5,6 +5,14 @@
 
 ## Frontend
 
+### Run
+
+Executing this script will run the backend application and the PostgreSQL database.
+
+```shell
+make run-front
+```
+
 ## Backend
 
 Stack:
@@ -17,7 +25,7 @@ Stack:
 Executing this script will run the backend application and the PostgreSQL database.
 
 ```shell
-./scripts/run.sh
+make run-back
 ```
 
 ### Test

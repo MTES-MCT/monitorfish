@@ -14,7 +14,7 @@ function App() {
   // initialization - retrieve mock boat coordinates
   useEffect( () => {
 
-    fetch('/mock-boats.json')
+    fetch('http://localhost:8880/api/v1/positions')
       .then(response => response.json())
       .then(fetchedFeatures => {
         setFeatures(fetchedFeatures)

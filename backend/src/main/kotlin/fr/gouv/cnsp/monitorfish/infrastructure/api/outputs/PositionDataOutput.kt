@@ -10,8 +10,7 @@ data class PositionDataOutput(
         val longitude: Double,
         val speed: Double,
         val direction: Double,
-        val positionDate: ZonedDateTime,
-        val receivedDate: ZonedDateTime) {
+        val positionDate: ZonedDateTime) {
     companion object {
         fun fromPosition(position: Position): PositionDataOutput {
             return PositionDataOutput(
@@ -21,8 +20,7 @@ data class PositionDataOutput(
                     longitude = position.longitude,
                     speed =  position.speed,
                     direction = position.direction,
-                    positionDate = position.positionDate,
-                    receivedDate = position.receivedDate
+                    positionDate = position.positionDate
             )
         }
     }

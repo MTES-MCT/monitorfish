@@ -22,9 +22,7 @@ data class PositionEntity(
         @Column(name = "DIRECTION")
         val direction: Double,
         @Column(name = "POSITION_DATE")
-        val positionDate: ZonedDateTime,
-        @Column(name = "RECEIVED_DATE")
-        val receivedDate: ZonedDateTime) {
+        val positionDate: ZonedDateTime) {
 
     fun toPosition() = Position(
             id = this.id,
@@ -33,6 +31,5 @@ data class PositionEntity(
             longitude = this.longitude,
             speed = this.speed,
             direction = this.direction,
-            positionDate = this.positionDate,
-            receivedDate = this.receivedDate)
+            positionDate = this.positionDate)
 }

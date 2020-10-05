@@ -9,5 +9,4 @@ data class Position(
         val longitude: Double,
         val speed: Double,
         val direction: Double,
-        val positionDate: ZonedDateTime,
-        val receivedDate: ZonedDateTime)
+        val positionDate: ZonedDateTime)

@@ -24,6 +24,6 @@ class JpaPositionsRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(sensors).isNotEmpty
-        assertThat(sensors).hasSize(3)
+        assertThat(sensors).hasSize(1441)
     }
 }

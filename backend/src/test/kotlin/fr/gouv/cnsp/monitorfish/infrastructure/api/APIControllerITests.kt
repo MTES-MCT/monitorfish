@@ -33,8 +33,7 @@ class APIControllerITests {
     fun `Should get all positions`() {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"));
-        val pastFixedDateTime = ZonedDateTime.of(EPOCH.plusYears(10), LocalTime.MIN.plusSeconds(1), ZoneId.of("UTC"));
-        val position = Position(0, "IMEI", 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime, pastFixedDateTime)
+        val position = Position(0, "IMEI", 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
         given(this.getAllPositions.execute()).willReturn(listOf(position))
 
         // When
@@ -48,6 +47,5 @@ class APIControllerITests {
                 .andExpect(jsonPath("$[0].speed", equalTo(position.speed)))
                 .andExpect(jsonPath("$[0].direction", equalTo(position.direction)))
                 .andExpect(jsonPath("$[0].positionDate", equalTo(position.positionDate.toOffsetDateTime().toString())))
-                .andExpect(jsonPath("$[0].receivedDate", equalTo(position.receivedDate.toOffsetDateTime().toString())))
     }
 }

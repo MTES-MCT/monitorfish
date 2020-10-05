@@ -13,7 +13,6 @@ import Point from 'ol/geom/Point';
 import {Icon, Style} from 'ol/style';
 import {transform} from 'ol/proj'
 import {toStringXY} from 'ol/coordinate';
-import {apply} from 'ol-mapbox-style';
 
 function MapWrapper(props) {
 
@@ -37,7 +36,9 @@ function MapWrapper(props) {
     })
 
     const OSMLayer = new VectorTileLayer({
-      source: new OSM(), // We use Open Street Map
+      source: new OSM({
+        attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+      }),
     })
 
     // create map
@@ -51,7 +52,8 @@ function MapWrapper(props) {
       view: new View({
         projection: 'EPSG:3857',
         center: transform(centeredOnFrance, 'EPSG:4326', 'EPSG:3857'),
-        zoom: 6
+        zoom: 6,
+        minZoom: 5
       }),
       controls: []
     })
@@ -69,19 +71,24 @@ function MapWrapper(props) {
     if (props.features.length) { // may be null on first render
       let features = props.features.map(feature => {
         // transform coord to EPSG 4326 standard Lat Long
-        const transformedCoordinates = transform([feature.lon, feature.lat], 'EPSG:4326', 'EPSG:3857')
+        const transformedCoordinates = transform([feature.longitude, feature.latitude], 'EPSG:4326', 'EPSG:3857')
         
         const iconFeature = new Feature({
           geometry: new Point(transformedCoordinates),
-          name: feature.name,
+          name: feature.imei,
         });
+
+        const featureDate = new Date(feature.positionDate);
+        const nowMinusTwoHours = new Date();
+        nowMinusTwoHours.setHours(nowMinusTwoHours.getHours() - 3);
 
         const iconStyle = new Style({
           image: new Icon({
-            src: 'sprite_medium.webp',
+            src: 'boat.png',
             offset: [0, 0],
             imgSize: [20, 20],
-            rotation: feature.cog
+            rotation: feature.direction,
+            opacity: featureDate < nowMinusTwoHours ? 0.5 : 1
           }),
         });
         
@@ -96,12 +103,6 @@ function MapWrapper(props) {
           features: features
         })
       )
-
-      // fit map to feature extent (with 100px of padding)
-      //map.getView().fit(featuresLayer.getSource().getExtent(), {
-      //  padding: [100,100,100,100]
-      //})
-
     }
 
   },[props.features, featuresLayer, map])

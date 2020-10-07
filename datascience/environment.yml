@@ -1,0 +1,15 @@
+name: base
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - matplotlib=3.3.1=0
+  - numpy>=1.19.1
+  - scipy=1.5.2
+  - pandas>=1.1.1
+  - pip=20.0.2=py38_3
+  - plotly>=4.10.0
+  - jupyter
+prefix: /opt/conda

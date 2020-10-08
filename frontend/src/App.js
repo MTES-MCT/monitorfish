@@ -8,29 +8,29 @@ import MapWrapper from './components/MapWrapper'
 
 function App() {
   
-  // set intial state
-  const [ features, setFeatures ] = useState([])
+  const [features, setFeatures] = useState([])
 
-  // initialization - retrieve mock boat coordinates
-  useEffect( () => {
-
-    fetch('http://localhost:8880/api/v1/positions')
-      .then(response => response.json())
-      .then(fetchedFeatures => {
-        setFeatures(fetchedFeatures)
-      })
-
+  useEffect(() => {
+    getShips()
+    setInterval(() => {
+      getShips()
+    }, 30000)
   },[])
+
+  function getShips() {
+    fetch('/bff/v1/positions')
+        .then(response => response.json())
+        .then(fetchedFeatures => {
+          setFeatures(fetchedFeatures)
+        })
+  }
   
   return (
     <div className="App">
-      
       <div className="app-label">
-        <img src="monitorfish.png" alt='MonirorFish'/>
+        <img src="monitorfish.png" alt='MonitorFish'/>
       </div>
-      
       <MapWrapper features={features} />
-
     </div>
   )
 }

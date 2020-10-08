@@ -1,35 +1,98 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
+import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "POSITIONS", indexes = [Index(columnList = "IMEI")])
+@Table(name = "positions", indexes = [
+        Index(columnList = "internal_reference_number"),
+        Index(columnList = "mmsi"),
+        Index(columnList = "ircs"),
+        Index(columnList = "date_time")])
 data class PositionEntity(
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE)
-        @Column(name = "ID")
+        @SequenceGenerator(name = "POSITION_ID_SEQ", sequenceName = "POSITION_ID_SEQ", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POSITION_ID_SEQ")
+        @Column(name = "id")
         val id: Int? = null,
-        @Column(name = "IMEI")
-        val IMEI: String,
-        @Column(name = "LATITUDE")
+
+        // Optional fields
+        @Column(name = "internal_reference_number")
+        val internalReferenceNumber: String? = null,
+        @Column(name = "mmsi")
+        val MMSI: String? = null,
+        @Column(name = "ircs")
+        val IRCS: String? = null,
+        @Column(name = "external_reference_number")
+        val externalReferenceNumber: String? = null,
+        @Column(name = "vessel_name")
+        val vesselName: String? = null,
+        @Column(name = "flag_state")
+        @Enumerated(EnumType.STRING)
+        val flagState: CountryCode? = null,
+        @Column(name = "from_country")
+        @Enumerated(EnumType.STRING)
+        val from: CountryCode? = null,
+        @Column(name = "destination_country")
+        @Enumerated(EnumType.STRING)
+        val destination: CountryCode? = null,
+        @Column(name = "trip_number")
+        val tripNumber: Int? = null,
+
+        // Mandatory fields
+        @Enumerated(EnumType.STRING)
+        @Column(name = "position_type")
+        val positionType: PositionType,
+        @Column(name = "latitude")
         val latitude: Double,
-        @Column(name = "LONGITUDE")
+        @Column(name = "longitude")
         val longitude: Double,
-        @Column(name = "SPEED")
+        @Column(name = "speed")
         val speed: Double,
-        @Column(name = "DIRECTION")
-        val direction: Double,
-        @Column(name = "POSITION_DATE")
-        val positionDate: ZonedDateTime) {
+        @Column(name = "course")
+        val course: Double,
+        @Column(name = "date_time")
+        val dateTime: ZonedDateTime) {
 
     fun toPosition() = Position(
-            id = this.id,
-            IMEI = this.IMEI,
-            latitude = this.latitude,
-            longitude = this.longitude,
-            speed = this.speed,
-            direction = this.direction,
-            positionDate = this.positionDate)
+            internalReferenceNumber = internalReferenceNumber,
+            IRCS = IRCS,
+            MMSI = MMSI,
+            externalReferenceNumber = externalReferenceNumber,
+            dateTime = dateTime,
+            latitude = latitude,
+            longitude = longitude,
+            vesselName = vesselName,
+            speed = speed,
+            course = course,
+            flagState = flagState,
+            destination = destination,
+            from = from,
+            tripNumber = tripNumber,
+            positionType = positionType)
+
+        companion object {
+                fun fromPosition(position: Position): PositionEntity {
+                        return PositionEntity(
+                                internalReferenceNumber = position.internalReferenceNumber,
+                                IRCS = position.IRCS,
+                                MMSI = position.MMSI,
+                                externalReferenceNumber = position.externalReferenceNumber,
+                                dateTime = position.dateTime,
+                                latitude = position.latitude,
+                                longitude = position.longitude,
+                                vesselName = position.vesselName,
+                                speed = position.speed,
+                                course = position.course,
+                                flagState = position.flagState,
+                                destination = position.destination,
+                                from = position.from,
+                                tripNumber = position.tripNumber,
+                                positionType = position.positionType
+                        )
+                }
+        }
 }

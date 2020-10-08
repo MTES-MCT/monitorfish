@@ -15,7 +15,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @RunWith(SpringRunner::class)
-@SpringBootTest
 class JpaPositionsRepositoryITests : AbstractDBTests() {
 
     @Autowired

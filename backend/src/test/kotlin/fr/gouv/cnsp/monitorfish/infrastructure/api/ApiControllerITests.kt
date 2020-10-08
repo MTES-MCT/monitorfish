@@ -23,11 +23,11 @@ class ApiControllerITests {
     private lateinit var receivePosition: ReceivePosition
 
     @Test
-    fun `A bad NAF param Should return 400`() {
+    fun `A bad NAF param Should return 200 for the sender to not be worried`() {
         // When
         val body = mockMvc.perform(post("/api/v1/positions").content("TEST"))
                 // Then
-                .andExpect(status().isBadRequest)
+                .andExpect(status().isOk)
                 .andReturn().response.contentAsString
 
         assertThat(body).contains("No date or time fields found")

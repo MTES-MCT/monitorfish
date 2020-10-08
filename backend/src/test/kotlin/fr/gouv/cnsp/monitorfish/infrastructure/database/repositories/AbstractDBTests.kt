@@ -1,8 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.infrastructure.api.ApiController
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -10,7 +7,6 @@ import org.springframework.test.context.TestPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.output.OutputFrame
-import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.containers.output.ToStringConsumer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Container
@@ -37,12 +33,8 @@ abstract class AbstractDBTests {
                             Wait.forLogMessage(".*ready to accept connections.*\\s", 2)
                     );
                     withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
-                }.also{
-                    val toStringConsumer = ToStringConsumer();
-                    it.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT);
-                    println(toStringConsumer.toUtf8String())
                 }
-
+        
         @JvmStatic
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {
@@ -50,6 +42,10 @@ abstract class AbstractDBTests {
         }
 
         private fun getJdbcUrl(): String {
+            val toStringConsumer = ToStringConsumer();
+            container.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT);
+            println(toStringConsumer.toUtf8String())
+
             return "jdbc:postgresql://" + container.containerIpAddress + ":" + container.getMappedPort(PostgreSQLContainer.POSTGRESQL_PORT).toString() + "/testdb?user=postgres&password=postgres"
         }
     }

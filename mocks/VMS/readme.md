@@ -1,34 +1,21 @@
-This tool mock IOT Platform and send random sensors measures to Airquality backend.  
-Need :
-* API_URL
-* PORT
-* API_KEY
+## VMS
 
-Example Of message sended by API :
+This tool mocks a VMS service and sends NAF messages.
 
+> See: [North Atlantic Format](http://www.naf-format.org/)
+
+Required environment variables:
+* `API_URL`
+* `PORT`
+
+Example of message sent by the service:
 ```
-"applicationID": "2",
-	"applicationName": "livin-it",
-	"deviceName": "fakeDeviceName",
-	"devEUI": "70b3d54999e58f05",
-	"rxInfo": [{
-		"gatewayID": "7276ff000b031703",
-		"name": "fakeName",
-		"time": "2019-04-16T14:31:55.003Z",
-		"rssi": -111,
-		"loRaSNR": 6.5,
-		"location": {"latitude": 0, "longitude": 0, "altitude": 0}
-	}],
-	"txInfo": {"frequency": 868500000, "dr": 5},
-	"adr": true,
-	"fCnt": 66,
-	"fPort": 2,
-	"data": "AAAAAAAAAAKcZAECnGQCAgbcAGcA4ABoUQBzJ4A=",
-	"object": {
-		"digitalInput": {"0": 0},
-		"analogInput": {"0": -255, "1": -255, "2": 32},
-		"temperatureSensor": {"0": 12},
-		"humiditySensor": {"0": 7},
-		"barometer": {"0": 950}
-	}
+//SR//AD/FRA//FR/GBR//RD/20201006//RT/2141//FS/GBR//RC/MGXR6//IR/GBROOC21250//DA/20201006//TI/1625//LT/53.254//LG/.940//SP/96//CO/8//TM/POS//ER
+```
+
+### Run
+
+From this folder, run:
+```
+$> npm start
 ```

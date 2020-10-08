@@ -1,7 +1,5 @@
-// react
 import React, { useState, useEffect, useRef } from 'react';
 
-// openlayers
 import Map from 'ol/Map'
 import View from 'ol/View'
 import Feature from 'ol/Feature';
@@ -15,7 +13,6 @@ import {transform} from 'ol/proj'
 import {toStringXY} from 'ol/coordinate';
 
 function MapWrapper(props) {
-
   // set intial state
   const [ map, setMap ] = useState()
   const [ featuresLayer, setFeaturesLayer ] = useState()
@@ -124,7 +121,7 @@ function MapWrapper(props) {
   // render component
   return (      
     <div>
-      <div ref={mapElement} className="map-container"></div>
+      <div ref={mapElement} className="map-container"/>
       
       <div className="clicked-coord-label">
         <p>{ (selectedCoord) ? toStringXY(selectedCoord, 5) : '' }</p>

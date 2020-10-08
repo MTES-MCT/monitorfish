@@ -3,12 +3,24 @@
   MonitorFish
 </h1>
 
+> Improve monitoring and controlling of the activities of fishing vessels
+
 ## Frontend
 
-### Run
+Stack:
+- Openlayers
+- React
 
-Executing this script will run the backend application and the PostgreSQL database.
+## Install
 
+To install dependencies, execute:
+```shell
+make install
+```
+
+## Run
+
+To run the frontend for development purpose, execute:
 ```shell
 make run-front
 ```
@@ -18,36 +30,25 @@ make run-front
 Stack:
 - Kotlin
 - Spring Boot
-- Flyway
+- Flyway (DB Migration)
+- PostgreSQL with PostGIS/TimescaleDB
 
 ### Run
 
-Executing this script will run the backend application and the PostgreSQL database.
+> During the first run, dependencies will be downloaded
 
+To run the backend for development purpose (with hot-reload), execute:
 ```shell
 make run-back
 ```
 
 ### Test
 
-Executing this script will run all backend-related tests.
-
+To run all tests and checks clean architecture principles are respected, execute:
 ```shell
-./scripts/test.sh
-```
-
-### Local setup of the app in Intellij
-
-Set the VM options to locate the properties files:
-```
--Dspring.config.additional-location="</path/to/project/>/infra/"
-```
-
-Set a Program argument to select a property file:
-```
---spring.profiles.active=local
+make test
 ```
 
 ### API Documentation
 
-API docs can be bound at http://localhost:8880/swagger-ui.html#/
+API documentation can be found at http://localhost:8880/swagger-ui.html

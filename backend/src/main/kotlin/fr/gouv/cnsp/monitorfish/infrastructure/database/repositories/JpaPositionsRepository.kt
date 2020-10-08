@@ -11,4 +11,9 @@ class JpaPositionsRepository(private val dbPositionRepository: DBPositionReposit
         return dbPositionRepository.findAll()
                 .map(PositionEntity::toPosition)
     }
+
+    override fun save(position: Position) {
+        val positionEntity = PositionEntity.fromPosition(position)
+        dbPositionRepository.save(positionEntity)
+    }
 }

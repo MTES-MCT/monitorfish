@@ -1,8 +1,9 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
-STATIC_FILE_PATH="$(shell pwd)/frontend/build"
 
-.PHONY: run docker-build docker-tag docker-push check-clean-archi test
+.PHONY: install run-front run-back docker-build docker-tag docker-push check-clean-archi test
 
+install:
+	cd frontend && npm install
 run-front:
 	cd frontend && npm start
 run-back:

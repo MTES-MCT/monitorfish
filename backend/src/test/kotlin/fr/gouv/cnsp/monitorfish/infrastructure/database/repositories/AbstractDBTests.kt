@@ -33,8 +33,9 @@ abstract class AbstractDBTests {
                             Wait.forLogMessage(".*ready to accept connections.*\\s", 2)
                     );
                     withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
+                    this.start()
                 }
-        
+
         @JvmStatic
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {

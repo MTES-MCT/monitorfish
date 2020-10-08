@@ -9,9 +9,9 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
-
 @Testcontainers
 @TestPropertySource("classpath:/application.properties")
+@SpringBootTest
 abstract class AbstractDBTests {
 
     companion object {

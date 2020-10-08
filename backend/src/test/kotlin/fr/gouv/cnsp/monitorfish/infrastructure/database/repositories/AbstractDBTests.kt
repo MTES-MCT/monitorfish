@@ -11,7 +11,6 @@ import org.testcontainers.junit.jupiter.Testcontainers
 
 
 @Testcontainers
-@SpringBootTest
 @TestPropertySource("classpath:/application.properties")
 abstract class AbstractDBTests {
 

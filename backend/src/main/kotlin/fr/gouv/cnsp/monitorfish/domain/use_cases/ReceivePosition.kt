@@ -5,9 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionsRepository
 
 @UseCase
-class GetAllPositions(private val positionsRepository: PositionsRepository) {
-
-    fun execute(): List<Position> {
-        return positionsRepository.findAll()
+class ReceivePosition(private val positionsRepository: PositionsRepository) {
+    fun execute(position: Position) {
+        positionsRepository.save(position)
     }
 }

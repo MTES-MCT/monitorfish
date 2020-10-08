@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest
 class MonitorFishApplicationTests : AbstractDBTests(){
 
 	@Test
-	fun contextLoads() {
-	}
+	fun contextLoads() {}
 
 }

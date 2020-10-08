@@ -37,12 +37,12 @@ abstract class AbstractDBTests {
                             Wait.forLogMessage(".*ready to accept connections.*\\s", 2)
                     );
                     withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
-                }.run {
+                }.also{
                     val toStringConsumer = ToStringConsumer();
-                    this.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT);
+                    it.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT);
                     println(toStringConsumer.toUtf8String())
                 }
-        
+
         @JvmStatic
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {

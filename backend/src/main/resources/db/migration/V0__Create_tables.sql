@@ -1,14 +1,23 @@
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START 1;
+CREATE SEQUENCE IF NOT EXISTS position_id_seq START 1;
 
 create table positions (
-  id serial not null,
-  imei varchar(100) not null,
+  id integer NOT NULL DEFAULT nextval('position_id_seq'),
+  internal_reference_number varchar(100),
+  external_reference_number varchar(100),
+  mmsi varchar(100),
+  ircs varchar(100),
+  vessel_name varchar(100),
+  flag_state varchar(100),
+  from_country varchar(100),
+  destination_country varchar(100),
+  trip_number integer,
   latitude double precision not null,
   longitude double precision not null,
   speed double precision not null,
-  direction double precision not null,
-  position_date timestamp,
-  received_date timestamp
+  course double precision not null,
+  date_time timestamp,
+  position_type varchar(100)
 );
 
-SELECT create_hypertable('positions', 'position_date');
+SELECT create_hypertable('positions', 'date_time');

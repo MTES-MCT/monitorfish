@@ -1,17 +1,17 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.inputs
+package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.helpers.degreeMinuteToDecimal
-import fr.gouv.cnsp.monitorfish.infrastructure.api.inputs.exceptions.NAFMessageParsingException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.properties.Delegates
 
-class NAFPositionDataInput(private val naf: String) {
+class NAFMessageMapper(private val naf: String) {
 
     private lateinit var dateTime: ZonedDateTime
     private var from: CountryCode? = null
@@ -29,61 +29,62 @@ class NAFPositionDataInput(private val naf: String) {
     private var speed by Delegates.notNull<Double>()
     private var tripNumber: Int? = null
 
-    private val fieldSize = 2
-    private val fieldCodeIndex = 0
-    private val fieldValueIndex = 1
     private val positionMessageType = "POS"
     private val dateTimeFormat = "yyyyMMddHHmm"
 
     init {
-        naf.split("//")
-                .forEach { fieldString ->
-                    val field = fieldString.split("/")
+        if (!isValidMessage(naf)) {
+            throw NAFMessageParsingException("Invalid NAF format", naf);
+        }
 
-                    if (field.isNotEmpty() && field.size == fieldSize) {
-                        val code = field[fieldCodeIndex]
-                        val value = field[fieldValueIndex]
+        NAFCode.values()
+                .filter { it.matches(naf) }
+                .forEach {
+                    val value: String = it.getValue(naf)!!
 
-                        when (code) {
-                            "TM" -> if (value != positionMessageType) throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
-                            // Internal number
-                            // i.e //IR/DEU009876//
-                            "IR" -> this.internalReferenceNumber = value
-                            // Radio call sign
-                            // i.e //RC/MGDD4//
-                            "RC" -> this.IRCS = value
-                            "NA" -> this.vesselName = value
-                            "XR" -> this.externalReferenceNumber
-                            "FS" -> this.flagState = getCountryOrThrowIfCountryNotFound(value)
-                            "FR" -> this.from = getCountryOrThrowIfCountryNotFound(value)
-                            "AD" -> this.destination = getCountryOrThrowIfCountryNotFound(value)
-                            "TN" -> this.tripNumber = value.toInt()
-                            "TI" -> this.time = value
-                            "DA" -> this.date = value
+                    try {
+                        when (it) {
+                            NAFCode.TYPE_OF_MESSAGE -> if (value != positionMessageType) throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
+                            NAFCode.INTERNAL_REFERENCE_NUMBER -> this.internalReferenceNumber = value
+                            NAFCode.RADIO_CALL_SIGN -> this.IRCS = value
+                            NAFCode.VESSEL_NAME -> this.vesselName = value
+                            NAFCode.EXTERNAL_REFERENC_NUMBER -> this.externalReferenceNumber = value
+                            NAFCode.FLAG -> this.flagState = getCountryOrThrowIfCountryNotFound(value)
+                            NAFCode.FROM -> this.from = getCountryOrThrowIfCountryNotFound(value)
+                            NAFCode.TO -> this.destination = getCountryOrThrowIfCountryNotFound(value)
+                            NAFCode.TRIP_NUMBER -> this.tripNumber = value.toInt()
+                            NAFCode.TIME -> this.time = value
+                            NAFCode.DATE -> this.date = value
                             // Latitude
                             // i.e //LA/N4533// or //LA/S2344//
-                            "LA" -> this.latitude = getLatLonFromString(value)
+                            NAFCode.LATITUDE -> this.latitude = getLatLonFromString(value)
                             // Latitude in LT format
                             // i.e //LT/45.544// or //LT/-23.743//
-                            "LT"
-                            -> this.latitude = value.toDouble()
+                            NAFCode.LATITUDE_DECIMAL -> this.latitude = value.toDouble()
                             // Longitude
                             // i.e //LO/W04411//or //LO/E16600//
-                            "LO" -> this.longitude = getLatLonFromString(value)
+                            NAFCode.LONGITUDE -> this.longitude = value.let { longitude -> getLatLonFromString(longitude) }
                             // Longitude in LG format
                             // i.e //LG/-044.174// or //LG/+166.000//
-                            "LG" -> this.longitude = value.toDouble()
-                            "SP" -> this.speed = value.toDouble().div(10)
-                            "CO" -> this.course = value.toDouble()
-
+                            NAFCode.LONGITUDE_DECIMAL -> this.longitude = value.toDouble()
+                            NAFCode.SPEED -> this.speed = value.toDouble().div(10)
+                            NAFCode.COURSE -> this.course = value.toDouble()
                             else -> {
                                 // TODO : Log
                             }
                         }
+                    } catch (e: NumberFormatException) {
+                        throw NAFMessageParsingException("Incorrect value at field $it", naf, e)
                     }
                 }.run {
                     setZoneDateTimeFromString()
                 }
+    }
+
+    private fun isValidMessage(message: String): Boolean {
+        val startRecord: String = NAFCode.DELIMITER + NAFCode.START_RECORD.code + NAFCode.DELIMITER
+        val endRecord: String = NAFCode.DELIMITER + NAFCode.END_RECORD.code + NAFCode.DELIMITER
+        return message.startsWith(startRecord) && message.endsWith(endRecord)
     }
 
     private fun getCountryOrThrowIfCountryNotFound(value: String): CountryCode? {

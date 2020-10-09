@@ -3,11 +3,6 @@ package fr.gouv.cnsp.monitorfish.domain.entities
 import com.neovisionaries.i18n.CountryCode
 import java.time.ZonedDateTime
 
-enum class PositionType {
-    VMS,
-    AIS
-}
-
 data class Position(
         val id: Int? = null,
 

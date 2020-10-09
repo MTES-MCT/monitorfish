@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.ReceivePosition
-import fr.gouv.cnsp.monitorfish.infrastructure.api.inputs.NAFPositionDataInput
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
+import fr.gouv.cnsp.monitorfish.domain.use_cases.ParseAndSavePosition
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
@@ -14,18 +14,15 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 @Api(description = "External API")
 class ApiController(
-        private val receivePosition: ReceivePosition) {
-
-    private val logger: Logger = LoggerFactory.getLogger(ApiController::class.java)
+        private val parseAndSavePosition: ParseAndSavePosition) {
 
     @PostMapping(value = ["/v1/positions"])
     @ApiOperation("Receive position")
     @ResponseStatus(HttpStatus.CREATED)
-    fun receivePosition(
+    fun postPosition(
             @ApiParam("VMS NAF", required = true)
             @RequestBody naf: String
     ) {
-        val positionDataInput = NAFPositionDataInput(naf)
-        receivePosition.execute(positionDataInput.toPosition())
+        parseAndSavePosition.execute(naf)
     }
 }

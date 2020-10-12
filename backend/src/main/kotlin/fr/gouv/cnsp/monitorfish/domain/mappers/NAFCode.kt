@@ -14,7 +14,7 @@ enum class NAFCode(val code: String) {
     FLAG("FS"),
     RADIO_CALL_SIGN("RC"),
     VESSEL_NAME("NA"),
-    EXTERNAL_REFERENC_NUMBER("XR"),
+    EXTERNAL_REFERENCE_NUMBER("XR"),
     LATITUDE_DECIMAL("LT"),
     LONGITUDE_DECIMAL("LG"),
     SPEED("SP"),

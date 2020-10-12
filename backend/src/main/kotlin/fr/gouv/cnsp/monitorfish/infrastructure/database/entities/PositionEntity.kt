@@ -8,14 +8,16 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "positions", indexes = [
-        Index(columnList = "internal_reference_number"),
-        Index(columnList = "mmsi"),
-        Index(columnList = "ircs"),
-        Index(columnList = "date_time")])
+        Index(columnList = "id", unique = true),
+        Index(columnList = "external_reference_number", unique = false),
+        Index(columnList = "internal_reference_number", unique = false),
+        Index(columnList = "mmsi", unique = false),
+        Index(columnList = "ircs", unique = false),
+        Index(columnList = "date_time", unique = false)])
 data class PositionEntity(
         @Id
-        @SequenceGenerator(name = "POSITION_ID_SEQ", sequenceName = "POSITION_ID_SEQ", allocationSize = 1)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POSITION_ID_SEQ")
+        @SequenceGenerator(name = "position_id_seq", sequenceName = "position_id_seq", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "position_id_seq")
         @Column(name = "id")
         val id: Int? = null,
 
@@ -58,6 +60,7 @@ data class PositionEntity(
         val dateTime: ZonedDateTime) {
 
     fun toPosition() = Position(
+            id = id,
             internalReferenceNumber = internalReferenceNumber,
             IRCS = IRCS,
             MMSI = MMSI,

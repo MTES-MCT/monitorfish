@@ -12,4 +12,5 @@ dependencies:
   - pip=20.0.2=py38_3
   - plotly>=4.10.0
   - jupyter
+  - geopandas
 prefix: /opt/conda

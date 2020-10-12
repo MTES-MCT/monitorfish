@@ -1,0 +1,34 @@
+version: '3'
+services:
+  db:
+    image: timescale/timescaledb-postgis:1.7.4-pg11
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=monitorfishdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+
+  app:
+    image: docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:v0.0.1_snapshot
+    environment:
+      - ENV_DB_URL=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
+      - HOST_IP=127.0.0.1
+    ports:
+      - 8880:8880
+    networks:
+      - backend
+    depends_on:
+      - db
+    restart: on-failure:10
+
+networks:
+  backend:
+
+volumes:
+  db-data:
+    driver: local

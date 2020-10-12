@@ -19,7 +19,7 @@ class ControllersExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NAFMessageParsingException::class)
     fun handleNAFMessageParsingException(e: Exception): ApiError {
-        logger.error(e.message, e.stackTrace, e.cause)
+        logger.error(e.message, e.cause)
         return ApiError(e)
     }
 }

@@ -12,8 +12,18 @@ class JpaPositionsRepository(private val dbPositionRepository: DBPositionReposit
                 .map(PositionEntity::toPosition)
     }
 
+    override fun findLastDistinctPositions(): List<Position> {
+        return dbPositionRepository.findLastDistinctPositions()
+                .map(PositionEntity::toPosition)
+    }
+
     override fun save(position: Position) {
         val positionEntity = PositionEntity.fromPosition(position)
         dbPositionRepository.save(positionEntity)
+    }
+
+    override fun findAllByMMSI(MMSI: String): List<Position> {
+        return dbPositionRepository.findAllByMMSI(MMSI)
+                .map(PositionEntity::toPosition)
     }
 }

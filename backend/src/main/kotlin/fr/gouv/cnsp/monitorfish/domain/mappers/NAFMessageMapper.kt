@@ -48,7 +48,7 @@ class NAFMessageMapper(private val naf: String) {
                             NAFCode.INTERNAL_REFERENCE_NUMBER -> this.internalReferenceNumber = value
                             NAFCode.RADIO_CALL_SIGN -> this.IRCS = value
                             NAFCode.VESSEL_NAME -> this.vesselName = value
-                            NAFCode.EXTERNAL_REFERENC_NUMBER -> this.externalReferenceNumber = value
+                            NAFCode.EXTERNAL_REFERENCE_NUMBER -> this.externalReferenceNumber = value
                             NAFCode.FLAG -> this.flagState = getCountryOrThrowIfCountryNotFound(value)
                             NAFCode.FROM -> this.from = getCountryOrThrowIfCountryNotFound(value)
                             NAFCode.TO -> this.destination = getCountryOrThrowIfCountryNotFound(value)

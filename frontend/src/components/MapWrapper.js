@@ -1,7 +1,5 @@
-// react
 import React, { useState, useEffect, useRef } from 'react';
 
-// openlayers
 import Map from 'ol/Map'
 import View from 'ol/View'
 import Feature from 'ol/Feature';
@@ -15,7 +13,6 @@ import {transform} from 'ol/proj'
 import {toStringXY} from 'ol/coordinate';
 
 function MapWrapper(props) {
-
   // set intial state
   const [ map, setMap ] = useState()
   const [ featuresLayer, setFeaturesLayer ] = useState()
@@ -68,17 +65,18 @@ function MapWrapper(props) {
 
   // update map if features prop changes - logic formerly put into componentDidUpdate
   useEffect( () => {
-    if (props.features.length) { // may be null on first render
+    console.log(props.features.length)
+    if (props.features.length) {
       let features = props.features.map(feature => {
         // transform coord to EPSG 4326 standard Lat Long
         const transformedCoordinates = transform([feature.longitude, feature.latitude], 'EPSG:4326', 'EPSG:3857')
         
         const iconFeature = new Feature({
           geometry: new Point(transformedCoordinates),
-          name: feature.imei,
+          name: feature.mmsi || feature.internalReferenceNumber,
         });
 
-        const featureDate = new Date(feature.positionDate);
+        const featureDate = new Date(feature.dateTime);
         const nowMinusTwoHours = new Date();
         nowMinusTwoHours.setHours(nowMinusTwoHours.getHours() - 3);
 
@@ -87,7 +85,7 @@ function MapWrapper(props) {
             src: 'boat.png',
             offset: [0, 0],
             imgSize: [20, 20],
-            rotation: feature.direction,
+            rotation: feature.course,
             opacity: featureDate < nowMinusTwoHours ? 0.5 : 1
           }),
         });
@@ -123,7 +121,7 @@ function MapWrapper(props) {
   // render component
   return (      
     <div>
-      <div ref={mapElement} className="map-container"></div>
+      <div ref={mapElement} className="map-container"/>
       
       <div className="clicked-coord-label">
         <p>{ (selectedCoord) ? toStringXY(selectedCoord, 5) : '' }</p>

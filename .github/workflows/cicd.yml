@@ -55,7 +55,7 @@ jobs:
       run: make docker-build
 
     - name: Push docker image to registry
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'v')
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
         make docker-tag

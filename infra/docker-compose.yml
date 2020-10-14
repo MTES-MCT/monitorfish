@@ -20,6 +20,7 @@ services:
       - HOST_IP=127.0.0.1
     ports:
       - 8880:8880
+      - 5000:5000
     networks:
       - backend
     depends_on:

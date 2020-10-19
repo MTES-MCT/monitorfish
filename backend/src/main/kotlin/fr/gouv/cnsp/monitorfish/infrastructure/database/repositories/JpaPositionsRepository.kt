@@ -13,7 +13,7 @@ class JpaPositionsRepository(private val dbPositionRepository: DBPositionReposit
     }
 
     override fun findLastDistinctPositions(): List<Position> {
-        return dbPositionRepository.findLastDistinctPositions()
+        return dbPositionRepository.findLastDistinctInternalReferenceNumberPositions()
                 .map(PositionEntity::toPosition)
     }
 

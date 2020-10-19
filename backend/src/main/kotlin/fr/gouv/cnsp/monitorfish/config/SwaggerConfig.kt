@@ -20,8 +20,6 @@ class SwaggerConfig {
 
     @Bean
     fun api(): Docket {
-        println("YEAH")
-        println(hostProperties?.ip)
         return Docket(DocumentationType.SWAGGER_2)
                 .host(hostProperties?.ip ?: "localhost")
                 .select()
@@ -30,12 +28,12 @@ class SwaggerConfig {
                 .build()
                 .apiInfo(ApiInfo(
                         "API Documentation",
-                        "This is public API",
+                        "This is a public API",
                         "v1",
                         "",
                         Contact("CNSP", "URL", "EMAIL"),
                         "APACHE 2",
-                        "LICENSE URL", emptyList()))
+                        "https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE", emptyList()))
                 .enableUrlTemplating(true)
     }
 }

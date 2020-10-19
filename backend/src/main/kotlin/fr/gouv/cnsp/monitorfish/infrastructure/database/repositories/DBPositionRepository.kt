@@ -47,5 +47,5 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
                 "p.course, " +
                 "p.position_type ",
             nativeQuery = true)
-    fun findLastDistinctPositions(): List<PositionEntity>
+    fun findLastDistinctInternalReferenceNumberPositions(): List<PositionEntity>
 }

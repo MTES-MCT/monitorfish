@@ -7,6 +7,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.net.InetAddress
 
 @Configuration
 class AJPConfig {
@@ -29,6 +30,8 @@ class AJPConfig {
         connector.secure = false
         connector.allowTrace = false
         (connector.protocolHandler as AbstractAjpProtocol<*>).secretRequired = false
+        (connector.protocolHandler as AbstractAjpProtocol<*>).address = InetAddress.getByName( "0.0.0.0" )
+
         return connector
     }
 }

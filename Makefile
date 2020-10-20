@@ -9,6 +9,9 @@ run-front:
 run-back:
 	docker-compose up -d
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
+erase-db:
+	docker-compose down
+	docker volume rm monitorfish_db-data
 docker-build:
 	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION)
 docker-tag:
@@ -20,4 +23,4 @@ check-clean-archi:
 test: check-clean-archi
 	cd backend && ./mvnw test
 restart-app:
-	cd infra && sudo docker-compose up -d --build app
+	cd infra && sudo docker-compose pull && sudo docker-compose up -d --build app

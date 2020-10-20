@@ -1,0 +1,3 @@
+FROM camptocamp/tinyows
+
+COPY tinyows.xml /etc/mapserver/

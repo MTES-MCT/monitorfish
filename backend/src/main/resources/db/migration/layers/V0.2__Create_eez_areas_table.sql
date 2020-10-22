@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS "public"."eez_areas" CASCADE;
 DELETE FROM geometry_columns WHERE f_table_name = 'eez_areas' AND f_table_schema = 'public';
-BEGIN;
 CREATE TABLE "public"."eez_areas" ( "ogc_fid" SERIAL, CONSTRAINT "eez_areas_pk" PRIMARY KEY ("ogc_fid") );
 SELECT AddGeometryColumn('public','eez_areas','wkb_geometry',32631,'MULTIPOLYGON',2);
 CREATE INDEX "eez_areas_wkb_geometry_geom_idx" ON "public"."eez_areas" USING GIST ("wkb_geometry");

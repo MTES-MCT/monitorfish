@@ -5,24 +5,22 @@ import View from 'ol/View'
 import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
-import {toStringXY} from 'ol/coordinate';
+import {toStringHDMS, toStringXY} from 'ol/coordinate';
 import {defaults as defaultControls} from 'ol/control';
 import {Context} from "../state/Store";
 import EEZControl from "./EEZControl";
 import LayersEnum from "../layers/LayersEnum";
+import FAOControl from "./FAOControl";
+import MapBottomBox from "./MapBottomBox";
 
 const OL_MAP_PROJECTION = 'EPSG:3857';
 
 const MapWrapper = () => {
   const [state, dispatch] = useContext(Context)
   const [map, setMap] = useState()
-  const [selectedCoord , setSelectedCoord] = useState()
+  const [cursorCoordinates , setCursorCoordinates] = useState()
 
-  // pull refs
   const mapElement = useRef()
-
-  // create state ref that can be accessed in OpenLayers onclick callback function
-  //  https://stackoverflow.com/a/60643670
   const mapRef = useRef()
   mapRef.current = map
 
@@ -55,6 +53,7 @@ const MapWrapper = () => {
 
     // set map onclick handler
     initialMap.on('click', handleMapClick)
+    initialMap.on('pointermove', handlePointerMove)
 
     setMap(initialMap)
   },[])
@@ -99,28 +98,46 @@ const MapWrapper = () => {
     }
   },[state.layers, state.layerToHide, map])
 
-  // map click handler
-  const handleMapClick = (event) => {
-    // get clicked coordinate using mapRef to access current React state inside OpenLayers callback
-    //  https://stackoverflow.com/a/60643670
-    const clickedCoord = mapRef.current.getCoordinateFromPixel(event.pixel);
+  const handleMapClick = event => {
+    const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => {
+      return feature;
+    });
 
-    // transform coord to EPSG 4326 standard Lat Long
-    const transormedCoord = transform(clickedCoord, OL_MAP_PROJECTION, 'EPSG:4326')
-
-    // set React state
-    setSelectedCoord(transormedCoord)
+    if (feature) {
+      console.log("Clicked on feature", feature.getId())
+    }
   }
 
-  // render component
+  function showPointerIfShipFeature(feature) {
+    if (feature && feature.getId().includes(LayersEnum.SHIPS)) {
+      mapRef.current.getTarget().style.cursor = 'pointer'
+    } else {
+      mapRef.current.getTarget().style.cursor = ''
+    }
+  }
+
+  function showCoordinatesInDMS(event) {
+    const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel);
+    const transformedCoordinates = transform(clickedCoordinates, OL_MAP_PROJECTION, 'EPSG:4326')
+    setCursorCoordinates(toStringHDMS(transformedCoordinates))
+  }
+
+  const handlePointerMove = event => {
+    const pixel = mapRef.current.getEventPixel(event.originalEvent);
+    const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => {
+      return feature;
+    });
+
+    showPointerIfShipFeature(feature);
+    showCoordinatesInDMS(event);
+  }
+
   return (
       <div>
         <div ref={mapElement} className="map-container"/>
         <EEZControl />
-
-        <div className="clicked-coord-label">
-          <p>{ (selectedCoord) ? toStringXY(selectedCoord, 5) : '' }</p>
-        </div>
+        <FAOControl />
+        <MapBottomBox coordinates={cursorCoordinates} />
 
       </div>
   )

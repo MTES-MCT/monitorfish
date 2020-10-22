@@ -33,3 +33,24 @@
 .boat {
   object-position: 0 -234px;
 }
+
+.eez-control {
+  top: 130px;
+  left: 1em;
+  font-size: 0.8em;
+  color: aliceblue;
+  background-color: #05125f;
+  z-index: 999999;
+}
+
+.eez-control button {
+  width: 30px;
+}
+
+.ol-zoom {
+  margin-top: 50px;
+}
+
+.ol-control button {
+  background-color: #05125f;
+}

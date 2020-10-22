@@ -1,9 +1,11 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 
-.PHONY: install run-front run-back docker-build docker-tag docker-push check-clean-archi test
+.PHONY: install init-sig run-front run-back docker-build docker-tag docker-push check-clean-archi test restart-app
 
 install:
 	cd frontend && npm install
+init-sig:
+	./init/geoserver_init_layers.sh && ./init/postgis_insert_layers.sh
 run-front:
 	cd frontend && npm start
 run-back:

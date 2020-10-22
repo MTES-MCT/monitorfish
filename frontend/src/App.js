@@ -1,37 +1,25 @@
+import 'ol/ol.css';
 import './App.css';
 
-// react
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-// components
 import MapWrapper from './components/MapWrapper'
+import Store from "./state/Store";
+import ShipsLayer from "./layers/ShipsLayer";
+import EEZLayer from "./layers/EEZLayer";
 
 function App() {
-  
-  const [features, setFeatures] = useState([])
-
-  useEffect(() => {
-    getShips()
-    setInterval(() => {
-      getShips()
-    }, 30000)
-  },[])
-
-  function getShips() {
-    fetch('/bff/v1/positions')
-        .then(response => response.json())
-        .then(fetchedFeatures => {
-          setFeatures(fetchedFeatures)
-        })
-  }
-  
   return (
-    <div className="App">
-      <div className="app-label">
-        <img src="monitorfish.png" alt='MonitorFish'/>
-      </div>
-      <MapWrapper features={features} />
-    </div>
+      <Store>
+        <div className="App">
+          <div className="app-label">
+            <img src="monitorfish.png" alt='MonitorFish'/>
+          </div>
+          <MapWrapper />
+          <ShipsLayer />
+          <EEZLayer />
+        </div>
+      </Store>
   )
 }
 

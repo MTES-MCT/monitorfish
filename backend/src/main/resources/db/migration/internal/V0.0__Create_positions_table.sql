@@ -1,5 +1,9 @@
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START 1;
 CREATE SEQUENCE IF NOT EXISTS position_id_seq START 1;
+SET standard_conforming_strings = OFF;
+
+-- Enable PostGIS (as of 3.0 contains just geometry/geography)
+CREATE EXTENSION postgis;
 
 create table positions (
   id integer NOT NULL DEFAULT nextval('position_id_seq'),

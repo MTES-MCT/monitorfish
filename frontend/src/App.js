@@ -7,6 +7,7 @@ import MapWrapper from './components/MapWrapper'
 import Store from "./state/Store";
 import ShipsLayer from "./layers/ShipsLayer";
 import EEZLayer from "./layers/EEZLayer";
+import FAOLayer from "./layers/FAOLayer";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <MapWrapper />
           <ShipsLayer />
           <EEZLayer />
+          <FAOLayer />
         </div>
       </Store>
   )

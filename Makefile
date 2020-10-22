@@ -24,5 +24,5 @@ check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: check-clean-archi
 	cd backend && ./mvnw test
-restart-app:
-	cd infra && sudo docker-compose pull && sudo docker-compose up -d --build app
+restart-remote-app:
+	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app

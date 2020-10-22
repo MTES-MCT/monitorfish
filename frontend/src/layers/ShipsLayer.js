@@ -8,6 +8,7 @@ import {Icon, Style} from 'ol/style';
 import {transform} from 'ol/proj'
 import {Context} from "../state/Store";
 import Layers from "./LayersEnum";
+import LayersEnum from "./LayersEnum";
 
 const THIRTY_SECONDS = 30000;
 
@@ -42,14 +43,15 @@ const ShipsLayer = () => {
 
     useEffect( () => {
         if (ships.length && state.layers) {
-            let shipsFeatures = ships.map(ship => {
+            let shipsFeatures = ships.map((ship, index) => {
                 // transform coord to EPSG 4326 standard Lat Long
                 const transformedCoordinates = transform([ship.longitude, ship.latitude], 'EPSG:4326', 'EPSG:3857')
 
                 const iconFeature = new Feature({
                     geometry: new Point(transformedCoordinates),
-                    name: ship.internalReferenceNumber || ship.mmsi,
+                    name: ship.internalReferenceNumber || ship.mmsi
                 });
+                iconFeature.setId(`${LayersEnum.SHIPS}:${index}`)
 
                 setShipIconStyle(ship, iconFeature);
 

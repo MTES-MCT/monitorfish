@@ -47,6 +47,37 @@
   width: 30px;
 }
 
+.fao-control {
+  top: 160px;
+  left: 1em;
+  font-size: 0.8em;
+  color: aliceblue;
+  background-color: #05125f;
+  z-index: 999999;
+}
+
+.coordinates-box {
+  position: absolute;
+  bottom: 10px;
+  right: 50px;
+  display: inline-block;
+  margin: 1px;
+  padding: 2px;
+  color: white;
+  font-size: 0.9em;
+  text-decoration: none;
+  text-align: center;
+  height: 1.375em;
+  background-color: #05125f;
+  border: none;
+  border-radius: 2px;
+  width: 180px;
+}
+
+.fao-control button {
+  width: 30px;
+}
+
 .ol-zoom {
   margin-top: 50px;
 }

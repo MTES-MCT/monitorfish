@@ -7,9 +7,9 @@ import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS, toStringXY} from 'ol/coordinate';
 import {defaults as defaultControls} from 'ol/control';
-import {Context} from "../state/Store";
+import {Context} from "../Store";
 import EEZControl from "./EEZControl";
-import LayersEnum from "../layers/LayersEnum";
+import LayersEnum from "../domain/LayersEnum";
 import FAOControl from "./FAOControl";
 import MapBottomBox from "./MapBottomBox";
 
@@ -59,10 +59,10 @@ const MapWrapper = () => {
   },[])
 
   useEffect( () => {
-    if(map && state.layers.length && state.layerToShow) {
-      state.layers
+    if(map && state.layer.layers.length && state.layer.layerToShow) {
+      state.layer.layers
           .filter(layer => {
-            return layer.className_ === state.layerToShow
+            return layer.className_ === state.layer.layerToShow
           })
           .forEach(layer => {
             if(map.getLayers().getLength() === 1) {
@@ -83,33 +83,51 @@ const MapWrapper = () => {
             dispatch({type: 'RESET_SHOW_LAYER'});
           })
     }
-  },[state.layers, state.layerToShow, map])
+  },[state.layer.layers, state.layer.layerToShow, map])
 
   useEffect( () => {
-    if(map && state.layers.length && state.layerToHide) {
-      state.layers
+    if(map && state.layer.layers.length && state.layer.layerToHide) {
+      state.layer.layers
           .filter(layer => {
-            return layer.className_ === state.layerToHide
+            return layer.className_ === state.layer.layerToHide
           })
-          .forEach((layer, index) => {
+          .forEach(layer => {
             map.getLayers().remove(layer);
             dispatch({type: 'RESET_HIDE_LAYER'});
           })
     }
-  },[state.layers, state.layerToHide, map])
+  },[state.layer.layers, state.layer.layerToHide, map])
+
+  useEffect( () => {
+    if(map && state.ship.shipTrack) {
+        map.getLayers().getArray()
+          .filter(layer => {
+            return layer.className_ === LayersEnum.SHIP_TRACK
+          })
+          .forEach(layer => {
+            map.getLayers().remove(layer);
+          })
+
+      let belowShipLayer = map.getLayers().getLength() - 1;
+      map.getLayers().insertAt(belowShipLayer, state.ship.shipTrack);
+
+      dispatch({type: 'RESET_SHOW_SHIP_TRACK'});
+      dispatch({type: 'RESET_SHIP_TRACK'});
+    }
+  },[state.ship.shipTrack, state.ship.shipTrackInternalReferenceNumberToShow , map])
 
   const handleMapClick = event => {
     const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => {
       return feature;
     });
 
-    if (feature) {
-      console.log("Clicked on feature", feature.getId())
+    if (feature && feature.getId() && feature.getId().includes(LayersEnum.SHIPS)) {
+      dispatch({type: 'SHOW_SHIP_TRACK', payload: feature.get('name')});
     }
   }
 
   function showPointerIfShipFeature(feature) {
-    if (feature && feature.getId().includes(LayersEnum.SHIPS)) {
+    if (feature && feature.getId() && feature.getId().includes(LayersEnum.SHIPS)) {
       mapRef.current.getTarget().style.cursor = 'pointer'
     } else {
       mapRef.current.getTarget().style.cursor = ''

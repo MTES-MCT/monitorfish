@@ -1,9 +1,9 @@
-import Layers from "../layers/LayersEnum";
+import LayersEnum from "../domain/LayersEnum";
 
-const Reducer = (state, action) => {
+const Layer = (state, action) => {
     switch (action.type) {
         case 'REPLACE_SHIPS_LAYER':
-            const arrayWithoutShips = state.layers.filter(layer => layer.className_ !== Layers.SHIPS)
+            const arrayWithoutShips = state.layers.filter(layer => layer.className_ !== LayersEnum.SHIPS)
             return {
                 ...state,
                 layers: [...arrayWithoutShips, action.payload]
@@ -43,15 +43,9 @@ const Reducer = (state, action) => {
                 ...state,
                 layers: state.layers.filter(layer => layer.className_ !== action.payload.className_)
             };
-        case 'SET_ERROR':
-            console.error(action.payload)
-            return {
-                ...state,
-                error: action.payload
-            };
         default:
             return state;
     }
 };
 
-export default Reducer;
+export default Layer;

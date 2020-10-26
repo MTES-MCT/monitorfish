@@ -17,6 +17,11 @@ class JpaPositionsRepository(private val dbPositionRepository: DBPositionReposit
                 .map(PositionEntity::toPosition)
     }
 
+    override fun findShipLastPositions(internalReferenceNumber: String): List<Position> {
+        return dbPositionRepository.findLastPositionsByInternalReferenceNumber(internalReferenceNumber)
+                .map(PositionEntity::toPosition)
+    }
+
     override fun save(position: Position) {
         val positionEntity = PositionEntity.fromPosition(position)
         dbPositionRepository.save(positionEntity)

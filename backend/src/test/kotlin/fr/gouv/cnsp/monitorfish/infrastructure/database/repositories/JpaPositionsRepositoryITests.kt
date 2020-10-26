@@ -59,4 +59,26 @@ class JpaPositionsRepositoryITests : AbstractDBTests() {
         assertThat(positions).hasSize(1442)
         assertThat(positions.last().dateTime.toString()).isEqualTo("1970-01-01T00:00:00.999999999Z[UTC]")
     }
+
+    @Test
+    @Transactional
+    fun `findShipLastPositions Should return the list of last positions for a given ship`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
+
+        // When
+        jpaPositionRepository.save(firstPosition)
+        jpaPositionRepository.save(secondPosition)
+        jpaPositionRepository.save(thirdPosition)
+        jpaPositionRepository.save(fourthPosition)
+        val lastPositions = jpaPositionRepository.findShipLastPositions("FR224226850")
+
+        // Then
+        // For this ship, we inserted 4 rows and then were 1 row inserted with the DB test data
+        assertThat(lastPositions).hasSize(5)
+    }
 }

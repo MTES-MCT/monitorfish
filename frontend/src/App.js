@@ -4,7 +4,7 @@ import './App.css';
 import React from 'react';
 
 import MapWrapper from './components/MapWrapper'
-import Store from "./state/Store";
+import Store from "./Store";
 import ShipsLayer from "./layers/ShipsLayer";
 import EEZLayer from "./layers/EEZLayer";
 import FAOLayer from "./layers/FAOLayer";

@@ -2,14 +2,14 @@ import React, {useContext, useEffect} from 'react';
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import {Style} from 'ol/style';
-import {Context} from "../state/Store";
+import {Context} from "../Store";
 
 import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 import GeoJSON from "ol/format/GeoJSON";
 import Stroke from "ol/style/Stroke";
-import Layers from "./LayersEnum";
+import Layers from "../domain/LayersEnum";
 import Fill from "ol/style/Fill";
-import LayersEnum from "./LayersEnum";
+import LayersEnum from "../domain/LayersEnum";
 
 const EEZLayer = () => {
     const [state, dispatch] = useContext(Context)
@@ -22,7 +22,7 @@ const EEZLayer = () => {
         url: (extent) => {
             // I had to reproject to 4326 from 32631 (declared nativeSRS from Geoserver) and force declared
             return (
-                'http://localhost:8081/geoserver/wfs?service=WFS&' +
+                process.env.REACT_APP_GEOSERVER_LOCAL_URL + '/geoserver/wfs?service=WFS&' +
                 'version=1.1.0&request=GetFeature&typename=monitorfish:'+ LayersEnum.EEZ +'&' +
                 'outputFormat=application/json&srsname=EPSG:4326&' +
                 'bbox=' +
@@ -49,16 +49,16 @@ const EEZLayer = () => {
     });
 
     useEffect( () => {
-        if(state.layerToShow === Layers.EEZ) {
+        if(state.layer.layerToShow === Layers.EEZ) {
             dispatch({type: 'ADD_LAYER', payload: vector});
         }
-    },[state.layerToShow])
+    },[state.layer.layerToShow])
 
     useEffect( () => {
-        if(state.layerToHide === Layers.EEZ) {
+        if(state.layer.layerToHide === Layers.EEZ) {
             dispatch({type: 'REMOVE_LAYER', payload: vector});
         }
-    },[state.layerToHide])
+    },[state.layer.layerToHide])
 
     return null
 }

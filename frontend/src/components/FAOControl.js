@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
-import {Context} from "../state/Store";
-import Layers from "../layers/LayersEnum"
+import {Context} from "../Store";
+import Layers from "../domain/LayersEnum"
 
 const FAOControl = () => {
     const [_, dispatch] = useContext(Context)

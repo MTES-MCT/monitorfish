@@ -1,14 +1,21 @@
 import React, {createContext, useReducer} from "react";
-import Reducer from './Reducer'
+import reducer from './reducers'
 
 
 const initialState = {
-    layers: [],
-    error: null
+    layer: {
+        layers: []
+    },
+    ship: {
+
+    },
+    global: {
+        error: null
+    }
 };
 
 const Store = ({children}) => {
-    const [state, dispatch] = useReducer(Reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState);
     return (
         <Context.Provider value={[state, dispatch]}>
             {children}

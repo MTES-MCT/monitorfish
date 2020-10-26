@@ -6,5 +6,6 @@ interface PositionsRepository {
     fun findAll(): List<Position>
     fun findAllByMMSI(MMSI: String): List<Position>
     fun findLastDistinctPositions(): List<Position>
+    fun findShipLastPositions(internalReferenceNumber: String): List<Position>
     fun save(position: Position)
 }

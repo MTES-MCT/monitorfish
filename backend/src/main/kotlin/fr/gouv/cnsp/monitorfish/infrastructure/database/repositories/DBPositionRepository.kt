@@ -48,4 +48,28 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
                 "p.position_type ",
             nativeQuery = true)
     fun findLastDistinctInternalReferenceNumberPositions(): List<PositionEntity>
+
+    @Query(value = "select distinct " +
+            "p.internal_reference_number, " +
+            "p.external_reference_number, " +
+            "p.mmsi, " +
+            "p.ircs, " +
+            "p.id, " +
+            "p.date_time, " +
+            "p.vessel_name, " +
+            "p.flag_state, " +
+            "p.from_country, " +
+            "p.destination_country, " +
+            "p.trip_number, " +
+            "p.latitude, " +
+            "p.longitude, " +
+            "p.speed, " +
+            "p.course, " +
+            "p.position_type " +
+            "from positions p " +
+            "where p.internal_reference_number = ?1 " +
+            "order by p.date_time DESC " +
+            "limit 12",
+            nativeQuery = true)
+    fun findLastPositionsByInternalReferenceNumber(internalReferenceNumber: String): List<PositionEntity>
 }

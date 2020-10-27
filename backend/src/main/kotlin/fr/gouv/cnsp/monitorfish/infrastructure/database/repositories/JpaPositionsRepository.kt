@@ -18,6 +18,7 @@ class JpaPositionsRepository(@Autowired
     override fun findLastDistinctPositions(): List<Position> {
         return dbPositionRepository.findLastDistinctInternalReferenceNumberPositions()
                 .map {
+                    // We NEED this non null receiver "?." as the Apache/AOP connector bypass Kotlin non null safety
                     it?.toPosition()
                 }
     }

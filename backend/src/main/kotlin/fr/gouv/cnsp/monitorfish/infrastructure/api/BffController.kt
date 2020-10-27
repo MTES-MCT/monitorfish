@@ -20,10 +20,12 @@ class BffController(
     @ApiOperation("Get all positions")
     fun getPositions(): List<PositionDataOutput> {
         return getLastPositions.execute().map { position ->
+            // We NEED this non null receiver "?." as the Apache/AOP connector bypass Kotlin non null safety
             position?.let {
                 PositionDataOutput.fromPosition(position)
             }
-        }
+        // We NEED this non null receiver "?." as the Apache/AOP connector bypass Kotlin non null safety
+        }.filterNotNull()
     }
 
     @GetMapping("/v1/positions/{internalReferenceNumber}")

@@ -14,7 +14,6 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import LineString from "ol/geom/LineString";
 import getTrackColor from "../domain/ShipTrack";
-import {THIRTY_SECONDS} from "../api/Ship";
 
 const ShipsLayer = () => {
     const [state, dispatch] = useContext(Context)
@@ -39,12 +38,15 @@ const ShipsLayer = () => {
             className: Layers.SHIPS
         })
         dispatch({type: 'SET_LAYERS', payload: [initialShipsLayer]});
-
-        getShips()
-        setInterval(() => {
-            getShips()
-        }, THIRTY_SECONDS)
     }, [])
+
+    useEffect(() => {
+        getShips()
+
+        if (state.ship.shipTrackInternalReferenceNumberToShow) {
+            getShipTrack()
+        }
+    }, [state.global.fetch, state.ship.shipTrackInternalReferenceNumberToShow])
 
     useEffect(() => {
         if (ships && ships.length && state.layer.layers) {
@@ -93,9 +95,9 @@ const ShipsLayer = () => {
                     let firstPoint = new transform([position.longitude, position.latitude], 'EPSG:4326', 'EPSG:3857')
                     let secondPoint = new transform([shipTrack.positions[index + 1].longitude, shipTrack.positions[index + 1].latitude], 'EPSG:4326', 'EPSG:3857')
 
-                    var dx = secondPoint[0] - firstPoint[0];
-                    var dy = secondPoint[1] - firstPoint[1];
-                    var rotation = Math.atan2(dy, dx);
+                    const dx = secondPoint[0] - firstPoint[0];
+                    const dy = secondPoint[1] - firstPoint[1];
+                    const rotation = Math.atan2(dy, dx);
 
                     const feature = new Feature({
                         geometry: new LineString([firstPoint, secondPoint]),
@@ -155,15 +157,6 @@ const ShipsLayer = () => {
             });
     }
 
-    useEffect(() => {
-        if (state.ship.shipTrackInternalReferenceNumberToShow) {
-            getShipTrack();
-            setInterval(() => {
-                getShipTrack()
-            }, THIRTY_SECONDS)
-        }
-    }, [state.ship.shipTrackInternalReferenceNumberToShow])
-
     const setShipIconStyle = (ship, iconFeature) => {
         const shipDate = new Date(ship.dateTime);
         const nowMinusTwoHours = new Date();
@@ -171,9 +164,9 @@ const ShipsLayer = () => {
 
         const iconStyle = new Style({
             image: new Icon({
-                src: 'sprite_medium.webp',
-                offset: [3, 3],
-                imgSize: [20, 20],
+                src: 'boat_mf.png',
+                offset: [0, 0],
+                imgSize: [14, 14],
                 rotation: ship.course,
                 opacity: shipDate < nowMinusTwoHours ? 0.5 : 1
             }),

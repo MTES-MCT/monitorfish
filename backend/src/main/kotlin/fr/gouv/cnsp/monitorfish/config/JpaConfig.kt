@@ -10,4 +10,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableJpaRepositories(basePackages = ["fr.gouv.cnsp.monitorfish.infrastructure.database.repositories"])
 @EnableTransactionManagement
 @EnableAutoConfiguration
+@ComponentScan("fr.gouv.cnsp.monitorfish")
 class JpaConfig

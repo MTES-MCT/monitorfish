@@ -29,6 +29,6 @@ class BffController(
     fun getPosition(@ApiParam("Ship internal reference number (CFR)", required = true)
                     @PathVariable(name = "internalReferenceNumber")
                     internalReferenceNumber: String): PositionsDataOutput {
-        return PositionsDataOutput.fromPositions(getShipPositions.execute(internalReferenceNumber))
+        return PositionsDataOutput?.fromPositions(getShipPositions.execute(internalReferenceNumber))
     }
 }

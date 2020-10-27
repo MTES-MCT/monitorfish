@@ -17,7 +17,10 @@ class JpaPositionsRepository(@Autowired
 
     override fun findLastDistinctPositions(): List<Position> {
         return dbPositionRepository.findLastDistinctInternalReferenceNumberPositions()
-                .map(PositionEntity::toPosition)
+                .map {
+                    println(it)
+                    it.toPosition()
+                }
     }
 
     override fun findShipLastPositions(internalReferenceNumber: String): List<Position> {

@@ -8,6 +8,7 @@ import Store from "./Store";
 import ShipsLayer from "./layers/ShipsLayer";
 import EEZLayer from "./layers/EEZLayer";
 import FAOLayer from "./layers/FAOLayer";
+import Cron from "./api/Cron";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
           <ShipsLayer />
           <EEZLayer />
           <FAOLayer />
+
+          <Cron />
         </div>
       </Store>
   )

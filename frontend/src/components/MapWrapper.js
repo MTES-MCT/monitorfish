@@ -110,9 +110,6 @@ const MapWrapper = () => {
 
       let belowShipLayer = map.getLayers().getLength() - 1;
       map.getLayers().insertAt(belowShipLayer, state.ship.shipTrack);
-
-      dispatch({type: 'RESET_SHOW_SHIP_TRACK'});
-      dispatch({type: 'RESET_SHIP_TRACK'});
     }
   },[state.ship.shipTrack, state.ship.shipTrackInternalReferenceNumberToShow , map])
 

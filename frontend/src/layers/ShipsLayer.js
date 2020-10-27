@@ -48,20 +48,22 @@ const ShipsLayer = () => {
 
     useEffect(() => {
         if (ships && ships.length && state.layer.layers) {
-            let shipsFeatures = ships.map((ship, index) => {
-                // transform coord to EPSG 4326 standard Lat Long
-                const transformedCoordinates = transform([ship.longitude, ship.latitude], 'EPSG:4326', 'EPSG:3857')
+            let shipsFeatures = ships
+                .filter(ship => ship)
+                .map((ship, index) => {
+                    // transform coord to EPSG 4326 standard Lat Long
+                    const transformedCoordinates = transform([ship.longitude, ship.latitude], 'EPSG:4326', 'EPSG:3857')
 
-                const iconFeature = new Feature({
-                    geometry: new Point(transformedCoordinates),
-                    name: ship.internalReferenceNumber || ship.mmsi
-                });
-                iconFeature.setId(`${LayersEnum.SHIPS}:${index}`)
+                    const iconFeature = new Feature({
+                        geometry: new Point(transformedCoordinates),
+                        name: ship.internalReferenceNumber || ship.mmsi
+                    });
+                    iconFeature.setId(`${LayersEnum.SHIPS}:${index}`)
 
-                setShipIconStyle(ship, iconFeature);
+                    setShipIconStyle(ship, iconFeature);
 
-                return iconFeature;
-            })
+                    return iconFeature;
+                })
 
             state.layer.layers
                 .filter(layer => layer.className_ === Layers.SHIPS)
@@ -79,37 +81,39 @@ const ShipsLayer = () => {
 
     useEffect(() => {
         if (shipTrack && shipTrack.positions.length && state.layer.layers) {
-            let shipTrackLines = shipTrack.positions.map((position, index) => {
-                let lastPoint = index + 1;
-                if (lastPoint === shipTrack.positions.length) {
-                    return
-                }
+            let shipTrackLines = shipTrack.positions
+                .filter(position => position)
+                .map((position, index) => {
+                    let lastPoint = index + 1;
+                    if (lastPoint === shipTrack.positions.length) {
+                        return
+                    }
 
-                // transform coord to EPSG 3857 standard Lat Long
-                let firstPoint = new transform([position.longitude, position.latitude], 'EPSG:4326', 'EPSG:3857')
-                let secondPoint = new transform([shipTrack.positions[index + 1].longitude, shipTrack.positions[index + 1].latitude], 'EPSG:4326', 'EPSG:3857')
+                    // transform coord to EPSG 3857 standard Lat Long
+                    let firstPoint = new transform([position.longitude, position.latitude], 'EPSG:4326', 'EPSG:3857')
+                    let secondPoint = new transform([shipTrack.positions[index + 1].longitude, shipTrack.positions[index + 1].latitude], 'EPSG:4326', 'EPSG:3857')
 
-                var dx = secondPoint[0] - firstPoint[0];
-                var dy = secondPoint[1] - firstPoint[1];
-                var rotation = Math.atan2(dy, dx);
+                    var dx = secondPoint[0] - firstPoint[0];
+                    var dy = secondPoint[1] - firstPoint[1];
+                    var rotation = Math.atan2(dy, dx);
 
-                const feature = new Feature({
-                    geometry: new LineString([firstPoint, secondPoint]),
-                    course: -rotation
-                })
+                    const feature = new Feature({
+                        geometry: new LineString([firstPoint, secondPoint]),
+                        course: -rotation
+                    })
 
-                let trackColor = getTrackColor(position.speed);
+                    let trackColor = getTrackColor(position.speed);
 
-                feature.setStyle(new Style({
-                    fill: new Fill({color: trackColor, weight: 4}),
-                    stroke: new Stroke({color: trackColor, width: 3})
-                }))
+                    feature.setStyle(new Style({
+                        fill: new Fill({color: trackColor, weight: 4}),
+                        stroke: new Stroke({color: trackColor, width: 3})
+                    }))
 
-                return feature
-            }).filter(lineString => lineString)
+                    return feature
+                }).filter(lineString => lineString)
 
             let arrowPoints = shipTrackLines.map((feature, index) => {
-                if(index === shipTrackLines.length - 1) {
+                if (index === shipTrackLines.length - 1) {
                     return
                 }
 

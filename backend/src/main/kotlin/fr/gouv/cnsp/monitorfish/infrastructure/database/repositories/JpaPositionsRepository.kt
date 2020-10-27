@@ -18,8 +18,7 @@ class JpaPositionsRepository(@Autowired
     override fun findLastDistinctPositions(): List<Position> {
         return dbPositionRepository.findLastDistinctInternalReferenceNumberPositions()
                 .map {
-                    println(it)
-                    it.toPosition()
+                    it?.toPosition()
                 }
     }
 

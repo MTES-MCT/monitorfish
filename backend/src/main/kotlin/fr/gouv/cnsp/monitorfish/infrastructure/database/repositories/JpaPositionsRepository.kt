@@ -4,8 +4,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
+@Transactional
 class JpaPositionsRepository(private val dbPositionRepository: DBPositionRepository) : PositionsRepository {
     override fun findAll(): List<Position> {
         return dbPositionRepository.findAll()

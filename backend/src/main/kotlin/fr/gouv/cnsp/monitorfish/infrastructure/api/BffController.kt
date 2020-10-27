@@ -20,7 +20,9 @@ class BffController(
     @ApiOperation("Get all positions")
     fun getPositions(): List<PositionDataOutput> {
         return getLastPositions.execute().map { position ->
-            PositionDataOutput.fromPosition(position)
+            position?.let {
+                PositionDataOutput.fromPosition(position)
+            }
         }
     }
 
@@ -29,6 +31,6 @@ class BffController(
     fun getPosition(@ApiParam("Ship internal reference number (CFR)", required = true)
                     @PathVariable(name = "internalReferenceNumber")
                     internalReferenceNumber: String): PositionsDataOutput {
-        return PositionsDataOutput?.fromPositions(getShipPositions.execute(internalReferenceNumber))
+        return PositionsDataOutput.fromPositions(getShipPositions.execute(internalReferenceNumber))
     }
 }

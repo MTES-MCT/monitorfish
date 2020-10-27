@@ -3,12 +3,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 
 @Repository
-@Transactional
-class JpaPositionsRepository(private val dbPositionRepository: DBPositionRepository) : PositionsRepository {
+class JpaPositionsRepository(@Autowired
+                             private val dbPositionRepository: DBPositionRepository) : PositionsRepository {
+
     override fun findAll(): List<Position> {
         return dbPositionRepository.findAll()
                 .map(PositionEntity::toPosition)

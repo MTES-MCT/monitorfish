@@ -6,6 +6,11 @@ const Global = (state, action) => {
                 ...state,
                 error: action.payload
             };
+        case 'CRON_EVENT':
+            return {
+                ...state,
+                fetch: true
+            };
         default:
             return state;
     }

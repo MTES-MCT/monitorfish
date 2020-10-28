@@ -34,26 +34,65 @@
   object-position: 0 -234px;
 }
 
-.eez-control {
-  top: 130px;
-  left: 1em;
-  font-size: 0.8em;
-  color: aliceblue;
-  background-color: #05125f;
-  z-index: 999999;
-}
-
 .eez-control button {
   width: 30px;
 }
 
-.fao-control {
-  top: 160px;
-  left: 1em;
-  font-size: 0.8em;
-  color: aliceblue;
-  background-color: #05125f;
+.layer-selection-box {
+  position: absolute;
+  display: inline-block;
+  top: 120px;
+  left: 0.5em;
   z-index: 999999;
+  color: white;
+  text-decoration: none;
+  border: none;
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 4px;
+  padding: 3px 3px 3px 3px;
+}
+
+.layer-selection-box-title {
+  position: absolute;
+  display: inline-block;
+  color: #05055E;
+  font-size: 0.8em;
+  font-weight: bolder;
+  writing-mode: vertical-rl;
+  text-orientation: sideways;
+  background-color: rgba(255,255,255,0.4);
+  padding: 3px 1px 3px 1px;
+  margin-left: 40px;
+  margin-top: -3px;
+  border-radius: 4px;
+}
+
+.layer-selection-box ul {
+  margin: 0;
+  background-color: #05055E;
+  border-radius: 2px;
+  padding: 3px;
+}
+
+.layer-selection-box ul li {
+  padding: 2px 5px 2px 5px;
+  margin: 0;
+  font-size: 0.8em;
+}
+
+.layer-button {
+  text-align: left;
+  list-style-type: none;
+  cursor: pointer;
+  margin: 0;
+  border-bottom: #767AB2 1px solid;
+}
+
+.eye {
+  margin-bottom: -5px;
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
 }
 
 .coordinates-box {
@@ -68,7 +107,7 @@
   text-decoration: none;
   text-align: center;
   height: 1.275em;
-  background-color: #05125f;
+  background-color: #05055E;
   border: none;
   border-radius: 2px;
   width: 180px;
@@ -83,5 +122,5 @@
 }
 
 .ol-control button {
-  background-color: #05125f;
+  background-color: #05055E;
 }

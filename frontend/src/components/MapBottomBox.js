@@ -1,6 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import {Context} from "../Store";
-import Layers from "../domain/LayersEnum"
+import React from "react";
 
 const MapBottomBox = props => {
     return (<span className={`coordinates-box`}>{props.coordinates}</span>)

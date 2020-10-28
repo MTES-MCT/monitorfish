@@ -1,4 +1,10 @@
 const Global = (state, action) => {
+    const ticTac = value => {
+        if (value === 'tic') {
+            return 'tac'
+        } else return 'tic'
+    }
+
     switch (action.type) {
         case 'SET_ERROR':
             console.error(action.payload)
@@ -9,7 +15,7 @@ const Global = (state, action) => {
         case 'CRON_EVENT':
             return {
                 ...state,
-                fetch: true
+                fetch: ticTac(state.fetch)
             };
         default:
             return state;

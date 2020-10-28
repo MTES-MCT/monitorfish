@@ -15,7 +15,7 @@ function App() {
       <Store>
         <div className="App">
           <div className="app-label">
-            <img src="monitorfish.png" alt='MonitorFish'/>
+            <img src="monitorfish.png" style={{width: 40, height: 40}} alt='MonitorFish'/>
           </div>
           <MapWrapper />
           <ShipsLayer />

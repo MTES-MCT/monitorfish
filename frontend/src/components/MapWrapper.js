@@ -13,6 +13,7 @@ import LayersEnum from "../domain/LayersEnum";
 import FAOControl from "./FAOControl";
 import MapBottomBox from "./MapBottomBox";
 import LayerSelectionBox from "./LayerSelectionBox";
+import SearchBox from "./SearchBox";
 
 const OL_MAP_PROJECTION = 'EPSG:3857';
 
@@ -152,6 +153,7 @@ const MapWrapper = () => {
       <div>
         <div ref={mapElement} className="map-container"/>
 
+        <SearchBox />
         <LayerSelectionBox layers={[<EEZControl />, <FAOControl />]} />
         <MapBottomBox coordinates={cursorCoordinates} />
 

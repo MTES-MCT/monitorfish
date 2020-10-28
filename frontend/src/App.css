@@ -124,3 +124,47 @@
 .ol-control button {
   background-color: #05055E;
 }
+
+.search-box {
+  position: absolute;
+  display: inline-block;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 999999;
+  color: white;
+  text-decoration: none;
+  border: none;
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 4px;
+  padding: 3px 3px 3px 3px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-box input {
+  margin: 0;
+  background-color: #05055E;
+  border: none;
+  border-radius: 2px;
+  color: white;
+  padding: 3px;
+  font-size: 0.8em;
+  height: 25px;
+}
+
+.search-box button {
+  margin: 0;
+  background: none;
+  border-radius: 2px;
+  padding: 2px;
+}
+
+.search-box-icon {
+  margin-bottom: -8px;
+  margin-right: -2px;
+  border-radius: 2px;
+  width: 25px;
+  height: 25px;
+  background-color: #05055E;
+}

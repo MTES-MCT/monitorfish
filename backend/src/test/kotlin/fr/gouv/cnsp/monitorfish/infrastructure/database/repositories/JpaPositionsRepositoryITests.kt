@@ -21,7 +21,8 @@ class JpaPositionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAll Should return the list of distinct ships last positions`() {
+    @kotlin.time.ExperimentalTime
+    fun `findLastDistinctPositions Should return the list of distinct ships last positions`() {
         // Given
         val now = ZonedDateTime.now()
         val onePosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
@@ -37,6 +38,37 @@ class JpaPositionsRepositoryITests : AbstractDBTests() {
         val lastInsertedPosition = lastPositions.filter { it.internalReferenceNumber == "FR224226850" }
         assertThat(lastInsertedPosition).hasSize(1)
         assertThat(lastInsertedPosition.first().dateTime).isEqualTo(now)
+    }
+
+    @Test
+    @Transactional
+    @kotlin.time.ExperimentalTime
+    fun `findLastDistinctPositions Should return the list of distinct ships last positions When there is a null item returned from the SQL query`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val onePosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
+        val positionWithoutInternalReferenceNumber = Position(null, null, "Patrouilleur", null, "PM40", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
+
+        // When
+        jpaPositionRepository.save(onePosition)
+        jpaPositionRepository.save(positionWithoutInternalReferenceNumber)
+        val lastPositions = jpaPositionRepository.findLastDistinctPositions()
+
+        // Then
+        // Size of test data is 1441
+        // + 1 position of the ship FR224226850 (2 entries)
+        // + 1 position of a ship without an internal reference number (1 entry)
+        // the expected last positions size is 1442
+        assertThat(lastPositions).hasSize(1442)
+        val lastInsertedPosition = lastPositions.filter { it.internalReferenceNumber == "FR224226850" }
+        assertThat(lastInsertedPosition).hasSize(1)
+        assertThat(lastInsertedPosition.first().dateTime).isEqualTo(now)
+
+        val nullPosition = lastPositions.filter { it == null }
+        assertThat(nullPosition).hasSize(0)
+
+        val nullInternalReferenceNumberPosition = lastPositions.filter { it.internalReferenceNumber == null }
+        assertThat(nullInternalReferenceNumberPosition).hasSize(1)
     }
 
     @Test

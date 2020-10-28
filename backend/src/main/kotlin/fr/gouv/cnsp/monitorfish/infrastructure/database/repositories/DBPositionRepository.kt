@@ -8,46 +8,51 @@ import javax.persistence.Tuple
 interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
     fun findAllByMMSI(MMSI: String): List<PositionEntity>
 
-    @Query(value = "select distinct " +
-                "n.internal_reference_number, " +
-                "n.external_reference_number, " +
-                "n.mmsi, " +
-                "n.ircs, " +
-                "p.id, " +
-                "p.date_time, " +
-                "p.vessel_name, " +
-                "p.flag_state, " +
-                "p.from_country, " +
-                "p.destination_country, " +
-                "p.trip_number, " +
-                "p.latitude, " +
-                "p.longitude, " +
-                "p.speed, " +
-                "p.course, " +
-                "p.position_type " +
-            "from positions n " +
-            "left join positions p on p.id = (select po.ID from positions po where " +
-                "n.internal_reference_number = po.internal_reference_number " +
-                "order by po.date_time desc limit 1) " +
-            "group by " +
-                "n.internal_reference_number, " +
-                "n.external_reference_number, " +
-                "n.mmsi, " +
-                "n.ircs, " +
-                "p.id, " +
-                "p.date_time, " +
-                "p.vessel_name, " +
-                "p.flag_state, " +
-                "p.from_country, " +
-                "p.destination_country, " +
-                "p.trip_number, " +
-                "p.latitude, " +
-                "p.longitude, " +
-                "p.speed, " +
-                "p.course, " +
-                "p.position_type ",
+    @Query(value = "select distinct on (internal_reference_number) " +
+                "internal_reference_number, " +
+                "external_reference_number, " +
+                "mmsi, " +
+                "ircs, " +
+                "id, " +
+                "date_time, " +
+                "vessel_name, " +
+                "flag_state, " +
+                "from_country, " +
+                "destination_country, " +
+                "trip_number, " +
+                "latitude, " +
+                "longitude, " +
+                "speed, " +
+                "course, " +
+                "position_type " +
+            "from positions " +
+            "where internal_reference_number is not null " +
+            "order by internal_reference_number, date_time desc ",
             nativeQuery = true)
-    fun findLastDistinctInternalReferenceNumberPositions(): List<PositionEntity>
+    fun findLastDistinctInternalReferenceNumbers(): List<PositionEntity>
+
+    @Query(value = "select distinct on (external_reference_number) " +
+            "internal_reference_number, " +
+            "external_reference_number, " +
+            "mmsi, " +
+            "ircs, " +
+            "id, " +
+            "date_time, " +
+            "vessel_name, " +
+            "flag_state, " +
+            "from_country, " +
+            "destination_country, " +
+            "trip_number, " +
+            "latitude, " +
+            "longitude, " +
+            "speed, " +
+            "course, " +
+            "position_type " +
+            "from positions " +
+            "where internal_reference_number is null " +
+            "order by external_reference_number, date_time desc ",
+            nativeQuery = true)
+    fun findLastDistinctExternalReferenceNumberByInternalReferenceNumberIsNull(): List<PositionEntity>
 
     @Query(value = "select distinct " +
             "p.internal_reference_number, " +
@@ -71,5 +76,5 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "order by p.date_time DESC " +
             "limit 12",
             nativeQuery = true)
-    fun findLastPositionsByInternalReferenceNumber(internalReferenceNumber: String): List<PositionEntity>
+    fun findLastByInternalReferenceNumber(internalReferenceNumber: String): List<PositionEntity>
 }

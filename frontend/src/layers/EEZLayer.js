@@ -10,6 +10,7 @@ import Stroke from "ol/style/Stroke";
 import Layers from "../domain/LayersEnum";
 import Fill from "ol/style/Fill";
 import LayersEnum from "../domain/LayersEnum";
+import Text from "ol/style/Text";
 
 const EEZLayer = () => {
     const [state, dispatch] = useContext(Context)
@@ -37,15 +38,20 @@ const EEZLayer = () => {
         source: vectorSource,
         renderMode: 'image',
         className: Layers.EEZ,
-        style: new Style({
-            stroke: new Stroke({
-                color: 'rgba(255, 255, 255, 0.5)',
-                width: 2,
-            }),
-            fill: new Fill({
-                color: 'rgba(255, 255, 255, 0.3)',
+        style: (feature, _) => {
+            return new Style({
+                stroke: new Stroke({
+                    color: '#767AB2',
+                    width: 1,
+                }),
+                text: new Text({
+                    font: '12px Avenir',
+                    text: `${feature.get('union')}`,
+                    fill: new Fill({color: '#05055E'}),
+                    stroke: new Stroke({color: 'rgba(255,255,255,0.9)', width: 2})
+                })
             })
-        }),
+        }
     });
 
     useEffect( () => {

@@ -12,6 +12,7 @@ import EEZControl from "./EEZControl";
 import LayersEnum from "../domain/LayersEnum";
 import FAOControl from "./FAOControl";
 import MapBottomBox from "./MapBottomBox";
+import LayerSelectionBox from "./LayerSelectionBox";
 
 const OL_MAP_PROJECTION = 'EPSG:3857';
 
@@ -150,8 +151,8 @@ const MapWrapper = () => {
   return (
       <div>
         <div ref={mapElement} className="map-container"/>
-        <EEZControl />
-        <FAOControl />
+
+        <LayerSelectionBox layers={[<EEZControl />, <FAOControl />]} />
         <MapBottomBox coordinates={cursorCoordinates} />
 
       </div>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="1200"
+     viewBox="0 0 1200 1200">
+    <rect width="100%" height="100%" fill="#05055e"></rect>
+    <g transform="translate(600 600) scale(1.5 1.5) rotate(0) translate(-600 -600)" style="fill:#05055e">
+        <svg fill="#e2e2e9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve"><path d="M8,5.32c-1.515,0-2.963,0.723-3.872,1.936L3.57,8l0.558,0.744C5.037,9.956,6.485,10.68,8,10.68s2.963-0.723,3.872-1.936  L12.43,8l-0.558-0.744C10.963,6.044,9.515,5.32,8,5.32z M8,9.64C7.096,9.64,6.36,8.904,6.36,8c0-0.904,0.736-1.64,1.64-1.64  S9.64,7.096,9.64,8C9.64,8.904,8.904,9.64,8,9.64z"></path><path
+                d="M8,6.76C7.316,6.76,6.76,7.316,6.76,8S7.316,9.24,8,9.24S9.24,8.684,9.24,8S8.684,6.76,8,6.76z"></path></svg>
+    </g>
+</svg>

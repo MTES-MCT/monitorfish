@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {Context} from "../Store";
 import Layers from "../domain/LayersEnum"
+import {ReactComponent as ShowIcon} from "./icons/eye.svg";
+import {ReactComponent as HideIcon} from "./icons/eye_not.svg";
 
 const EEZControl = () => {
     const [_, dispatch] = useContext(Context)
@@ -20,7 +22,7 @@ const EEZControl = () => {
         }
     }, [showLayer])
 
-    return (<span className={`ol-unselectable ol-control button eez-control`} onClick={() => setShowLayer(!showLayer)}>EEZ</span>)
+    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>ZEE { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
 export default EEZControl

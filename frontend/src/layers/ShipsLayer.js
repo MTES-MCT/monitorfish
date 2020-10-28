@@ -4,7 +4,7 @@ import Feature from 'ol/Feature';
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import Point from 'ol/geom/Point';
-import {Icon, Style} from 'ol/style';
+import {Style} from 'ol/style';
 import {transform} from 'ol/proj'
 import {Context} from "../Store";
 import Layers from "../domain/LayersEnum";
@@ -13,23 +13,15 @@ import {Vector} from "ol/layer";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import LineString from "ol/geom/LineString";
-import getTrackColor from "../domain/ShipTrack";
+import {getTrackArrow, getTrackColor} from "../domain/ShipTrack";
+import {calculatePointsDistance, calculateSplitPointCoords} from "../utils";
+import {setArrowStyle, setCircleStyle, setShipIconStyle} from "./styles/featuresStyles";
+import {getShips, getShipTrack} from "../api/fetch";
 
 const ShipsLayer = () => {
     const [state, dispatch] = useContext(Context)
     const [ships, setShips] = useState(null)
     const [shipTrack, setShipTrack] = useState(null)
-
-    function getShips() {
-        fetch('/bff/v1/positions')
-            .then(response => response.json())
-            .then(ships => {
-                setShips(ships)
-            })
-            .catch(error => {
-                dispatch({type: 'SET_ERROR', payload: error});
-            });
-    }
 
     useEffect(() => {
         // create and add vector source layer
@@ -41,10 +33,10 @@ const ShipsLayer = () => {
     }, [])
 
     useEffect(() => {
-        getShips()
+        getShips(setShips, dispatch)
 
         if (state.ship.shipTrackInternalReferenceNumberToShow) {
-            getShipTrack()
+            getShipTrack(setShipTrack, dispatch, state.ship.shipTrackInternalReferenceNumberToShow)
         }
     }, [state.global.fetch, state.ship.shipTrackInternalReferenceNumberToShow])
 
@@ -58,7 +50,7 @@ const ShipsLayer = () => {
 
                     const iconFeature = new Feature({
                         geometry: new Point(transformedCoordinates),
-                        name: ship.internalReferenceNumber || ship.mmsi
+                        name: ship.internalReferenceNumber || ship.externalReferenceNumber
                     });
                     iconFeature.setId(`${LayersEnum.SHIPS}:${index}`)
 
@@ -83,62 +75,22 @@ const ShipsLayer = () => {
 
     useEffect(() => {
         if (shipTrack && shipTrack.positions.length && state.layer.layers) {
-            let shipTrackLines = shipTrack.positions
-                .filter(position => position)
-                .map((position, index) => {
-                    let lastPoint = index + 1;
-                    if (lastPoint === shipTrack.positions.length) {
-                        return
-                    }
+            let shipTrackLines = buildShipTrackLines()
 
-                    // transform coord to EPSG 3857 standard Lat Long
-                    let firstPoint = new transform([position.longitude, position.latitude], 'EPSG:4326', 'EPSG:3857')
-                    let secondPoint = new transform([shipTrack.positions[index + 1].longitude, shipTrack.positions[index + 1].latitude], 'EPSG:4326', 'EPSG:3857')
+            let circlePoints = buildCirclePoints(shipTrackLines);
+            circlePoints.forEach(circlePoint => {
+                shipTrackLines.push(circlePoint)
+            })
 
-                    const dx = secondPoint[0] - firstPoint[0];
-                    const dy = secondPoint[1] - firstPoint[1];
-                    const rotation = Math.atan2(dy, dx);
-
-                    const feature = new Feature({
-                        geometry: new LineString([firstPoint, secondPoint]),
-                        course: -rotation
-                    })
-
-                    let trackColor = getTrackColor(position.speed);
-
-                    feature.setStyle(new Style({
-                        fill: new Fill({color: trackColor, weight: 4}),
-                        stroke: new Stroke({color: trackColor, width: 3})
-                    }))
-
-                    return feature
-                }).filter(lineString => lineString)
-
-            let arrowPoints = shipTrackLines.map((feature, index) => {
-                if (index === shipTrackLines.length - 1) {
-                    return
-                }
-
-                const arrowFeature = new Feature({
-                    geometry: new Point(feature.getGeometry().getCoordinates()[1]),
-                    name: 'ship:track:arrow:' + index
-                });
-
-                setArrowStyle(index, feature, arrowFeature);
-
-                return arrowFeature
-            }).filter(arrowPoint => arrowPoint)
-
+            let arrowPoints = buildArrowPoints(shipTrackLines)
             arrowPoints.forEach(arrowPoint => {
                 shipTrackLines.push(arrowPoint)
             })
 
-            let vectorLine = new VectorSource({
-                features: shipTrackLines
-            });
-
             let shipTrackVector = new Vector({
-                source: vectorLine,
+                source: new VectorSource({
+                    features: shipTrackLines
+                }),
                 className: Layers.SHIP_TRACK
             });
 
@@ -146,47 +98,72 @@ const ShipsLayer = () => {
         }
     }, [shipTrack])
 
-    function getShipTrack() {
-        fetch(`/bff/v1/positions/${state.ship.shipTrackInternalReferenceNumberToShow}`)
-            .then(response => response.json())
-            .then(shipTrack => {
-                setShipTrack(shipTrack)
-            })
-            .catch(error => {
-                dispatch({type: 'SET_ERROR', payload: error});
+    function buildCirclePoints(shipTrackLines) {
+        return shipTrackLines.map((feature, index) => {
+            if (index === shipTrackLines.length - 1) {
+                return
+            }
+
+            const circleFeature = new Feature({
+                geometry: new Point(feature.getGeometry().getCoordinates()[1]),
+                name: 'ship:track:circle:' + index
             });
+
+            setCircleStyle(getTrackColor(feature.getProperties().speed), circleFeature);
+
+            return circleFeature
+        }).filter(circlePoint => circlePoint)
     }
 
-    const setShipIconStyle = (ship, iconFeature) => {
-        const shipDate = new Date(ship.dateTime);
-        const nowMinusTwoHours = new Date();
-        nowMinusTwoHours.setHours(nowMinusTwoHours.getHours() - 3);
+    function buildArrowPoints(shipTrackLines) {
+        return shipTrackLines.map((feature, index) => {
+            let pointsDistance = calculatePointsDistance(feature.getGeometry().getCoordinates()[0], feature.getGeometry().getCoordinates()[1])
+            let newPoint = calculateSplitPointCoords(feature.getGeometry().getCoordinates()[0], feature.getGeometry().getCoordinates()[1], pointsDistance, pointsDistance / 2)
 
-        const iconStyle = new Style({
-            image: new Icon({
-                src: 'boat_mf.png',
-                offset: [0, 0],
-                imgSize: [14, 14],
-                rotation: ship.course,
-                opacity: shipDate < nowMinusTwoHours ? 0.5 : 1
-            }),
-        });
-        iconFeature.setStyle(iconStyle);
+            const arrowFeature = new Feature({
+                geometry: new Point(newPoint),
+                name: 'ship:track:arrow:' + index,
+                course: feature.getProperties().course
+            });
+
+            setArrowStyle(getTrackArrow(feature.getProperties().speed), arrowFeature);
+
+            return arrowFeature
+        }).filter(arrowPoint => arrowPoint);
     }
 
-    function setArrowStyle(index, feature, arrowFeature) {
-        const arrowStyle = new Style({
-            image: new Icon({
-                src: 'arrow.png',
-                offset: [0, 0],
-                imgSize: [30, 30],
-                rotation: feature.getProperties().course,
-                rotateWithView: true,
-                opacity: 1,
-                scale: 0.4
-            })
-        });
-        arrowFeature.setStyle(arrowStyle);
+    function buildShipTrackLines() {
+        return shipTrack.positions
+            .filter(position => position)
+            .map((position, index) => {
+                let lastPoint = index + 1;
+                if (lastPoint === shipTrack.positions.length) {
+                    return
+                }
+
+                // transform coord to EPSG 3857 standard Lat Long
+                let firstPoint = new transform([position.longitude, position.latitude], 'EPSG:4326', 'EPSG:3857')
+                let secondPoint = new transform([shipTrack.positions[index + 1].longitude, shipTrack.positions[index + 1].latitude], 'EPSG:4326', 'EPSG:3857')
+
+                const dx = secondPoint[0] - firstPoint[0];
+                const dy = secondPoint[1] - firstPoint[1];
+                const rotation = Math.atan2(dy, dx);
+
+                const feature = new Feature({
+                    geometry: new LineString([firstPoint, secondPoint]),
+                    course: -rotation,
+                    speed: position.speed
+                })
+
+                let trackColor = getTrackColor(position.speed);
+
+                feature.setStyle(new Style({
+                    fill: new Fill({color: trackColor, weight: 4}),
+                    stroke: new Stroke({color: trackColor, width: 3})
+                }))
+
+                return feature
+            }).filter(lineString => lineString);
     }
 
     return null

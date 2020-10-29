@@ -58,7 +58,10 @@ const SearchBox = () => {
                             foundShips.map(foundShip => {
                                 return <li
                                     onClick={() => setSelectedShip(foundShip)}
-                                    key={foundShip.getProperties().internalReferenceNumber}>{foundShip.getProperties().internalReferenceNumber}</li>
+                                    key={foundShip.getProperties().internalReferenceNumber-foundShip.getProperties().externalReferenceNumber}>
+                                    <b>{foundShip.getProperties().vesselName ? foundShip.getProperties().vesselName : 'SANS NOM'}</b><br/>
+                                    {foundShip.getProperties().internalReferenceNumber} - {foundShip.getProperties().externalReferenceNumber}
+                                </li>
                             })
                         }
                     </ul>

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import {Style} from 'ol/style';
@@ -8,27 +8,27 @@ import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 import GeoJSON from "ol/format/GeoJSON";
 import Stroke from "ol/style/Stroke";
 import Text from "ol/style/Text";
-import Layers from "../domain/LayersEnum";
+import Layers from "../domain/enum";
 import Fill from "ol/style/Fill";
-import LayersEnum from "../domain/LayersEnum";
+import LayersEnum from "../domain/enum";
+import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 
 const FAOLayer = () => {
     const [state, dispatch] = useContext(Context)
 
     const vectorSource = new VectorSource({
         format: new GeoJSON({
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857'
+            dataProjection: BACKEND_PROJECTION,
+            featureProjection: OPENLAYERS_PROJECTION
         }),
         url: (extent) => {
-            // I had to reproject to 4326 from 32631 (declared nativeSRS from Geoserver) and force declared
             return (
                 process.env.REACT_APP_GEOSERVER_LOCAL_URL + '/geoserver/wfs?service=WFS&' +
                 'version=1.1.0&request=GetFeature&typename=monitorfish:'+ LayersEnum.FAO +'&' +
-                'outputFormat=application/json&srsname=EPSG:4326&' +
+                'outputFormat=application/json&srsname='+ BACKEND_PROJECTION +'&' +
                 'bbox=' +
                 extent.join(',') +
-                ',EPSG:3857'
+                ',' + OPENLAYERS_PROJECTION
             );
         },
         strategy: bboxStrategy,
@@ -58,7 +58,6 @@ const FAOLayer = () => {
         if(state.layer.layerToShow === Layers.FAO) {
             dispatch({type: 'ADD_LAYER', payload: vector});
         }
-        console.log(vector)
     },[state.layer.layerToShow])
 
     useEffect( () => {

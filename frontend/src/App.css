@@ -142,6 +142,11 @@
   margin-right: auto;
 }
 
+.search-box-results {
+  background: white;
+  color: #05055E;
+}
+
 .search-box input {
   margin: 0;
   background-color: #05055E;
@@ -167,4 +172,23 @@
   width: 25px;
   height: 25px;
   background-color: #05055E;
+}
+
+.search-box ul {
+  margin: 0;
+  border-radius: 2px;
+  padding: 3px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 200px;
+}
+
+.search-box ul li {
+  padding: 2px 5px 2px 5px;
+  margin: 0;
+  font-size: 0.8em;
+  text-align: left;
+  list-style-type: none;
+  cursor: pointer;
+  border-bottom: #E2E2E9 1px solid;
 }

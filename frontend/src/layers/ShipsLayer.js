@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import Feature from 'ol/Feature';
 import VectorLayer from 'ol/layer/Vector'
@@ -7,16 +7,17 @@ import Point from 'ol/geom/Point';
 import {Style} from 'ol/style';
 import {transform} from 'ol/proj'
 import {Context} from "../Store";
-import Layers from "../domain/LayersEnum";
-import LayersEnum from "../domain/LayersEnum";
+import Layers from "../domain/enum";
+import LayersEnum from "../domain/enum";
 import {Vector} from "ol/layer";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import LineString from "ol/geom/LineString";
-import {getTrackArrow, getTrackColor} from "../domain/ShipTrack";
+import {getTrackArrow, getTrackColor} from "../domain/shipTrack";
 import {calculatePointsDistance, calculateSplitPointCoords} from "../utils";
 import {setArrowStyle, setCircleStyle, setShipIconStyle} from "./styles/featuresStyles";
 import {getShips, getShipTrack} from "../api/fetch";
+import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 
 const ShipsLayer = () => {
     const [state, dispatch] = useContext(Context)
@@ -35,33 +36,38 @@ const ShipsLayer = () => {
     useEffect(() => {
         getShips(setShips, dispatch)
 
-        if (state.ship.shipTrackInternalReferenceNumberToShow) {
-            getShipTrack(setShipTrack, dispatch, state.ship.shipTrackInternalReferenceNumberToShow)
+        if (state.ship.shipTrackToShow) {
+            getShipTrack(setShipTrack, dispatch, state.ship.shipTrackToShow.getProperties().internalReferenceNumber)
         }
-    }, [state.global.fetch, state.ship.shipTrackInternalReferenceNumberToShow])
+    }, [state.global.fetch, state.ship.shipTrackToShow])
 
     useEffect(() => {
         if (ships && ships.length && state.layer.layers) {
             let shipsFeatures = ships
                 .filter(ship => ship)
                 .map((ship, index) => {
-                    // transform coord to EPSG 4326 standard Lat Long
-                    const transformedCoordinates = transform([ship.longitude, ship.latitude], 'EPSG:4326', 'EPSG:3857')
+                    const transformedCoordinates = transform([ship.longitude, ship.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
 
                     const iconFeature = new Feature({
                         geometry: new Point(transformedCoordinates),
-                        name: ship.internalReferenceNumber || ship.externalReferenceNumber
+                        internalReferenceNumber: ship.internalReferenceNumber,
+                        externalReferenceNumber: ship.externalReferenceNumber,
+                        MMSI: ship.MMSI,
+                        flagState: ship.flagState,
+                        vesselName: ship.vesselName,
                     });
+
                     iconFeature.setId(`${LayersEnum.SHIPS}:${index}`)
 
-                    setShipIconStyle(ship, iconFeature);
+                    let shipTrackInternalReferenceNumberToShow = state.ship.shipTrackToShow ? state.ship.shipTrackToShow.getProperties().internalReferenceNumber : null;
+                    setShipIconStyle(ship, iconFeature, shipTrackInternalReferenceNumberToShow);
 
                     return iconFeature;
                 })
 
             state.layer.layers
                 .filter(layer => layer.className_ === Layers.SHIPS)
-                .map(layer => {
+                .forEach(layer => {
                     layer.setSource(
                         new VectorSource({
                             features: shipsFeatures
@@ -142,8 +148,8 @@ const ShipsLayer = () => {
                 }
 
                 // transform coord to EPSG 3857 standard Lat Long
-                let firstPoint = new transform([position.longitude, position.latitude], 'EPSG:4326', 'EPSG:3857')
-                let secondPoint = new transform([shipTrack.positions[index + 1].longitude, shipTrack.positions[index + 1].latitude], 'EPSG:4326', 'EPSG:3857')
+                let firstPoint = new transform([position.longitude, position.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
+                let secondPoint = new transform([shipTrack.positions[index + 1].longitude, shipTrack.positions[index + 1].latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
 
                 const dx = secondPoint[0] - firstPoint[0];
                 const dy = secondPoint[1] - firstPoint[1];

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import {Context} from "../Store";
 
 export const THIRTY_SECONDS = 30000;

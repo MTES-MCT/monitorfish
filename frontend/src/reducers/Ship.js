@@ -3,12 +3,14 @@ const Reducer = (state, action) => {
         case 'SHOW_SHIP_TRACK':
             return {
                 ...state,
-                shipTrackInternalReferenceNumberToShow: action.payload
+                previousShipTrackShowed: state.shipTrackToShow,
+                shipTrackToShow: action.payload
             };
         case 'RESET_SHOW_SHIP_TRACK':
             return {
                 ...state,
-                shipTrackInternalReferenceNumberToShow: null
+                previousShipTrackShowed: state.shipTrackToShow,
+                shipTrackToShow: null
             };
         case 'SET_SHIP_TRACK':
             return {
@@ -19,6 +21,11 @@ const Reducer = (state, action) => {
             return {
                 ...state,
                 shipTrack: action.payload
+            };
+        case 'ANIMATE_TO_SHIP':
+            return {
+                ...state,
+                shipToMoveOn: action.payload
             };
         default:
             return state;

@@ -1,4 +1,4 @@
-import LayersEnum from "../domain/LayersEnum";
+import LayersEnum from "../domain/enum";
 
 const Layer = (state, action) => {
     switch (action.type) {

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="1200"
+     viewBox="0 0 1200 1200">
+    <g transform="translate(600 600) scale(0.69 0.69) rotate(0) translate(-600 -600)" style="fill:#05055e">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" x="0px"
+             y="0px">
+            <path d="M65,65H183V47H56a9,9,0,0,0-9,9V183H65Z"></path>
+            <path d="M447,183h18V56a9,9,0,0,0-9-9H329V65H447Z"></path>
+            <path d="M447,447H329v18H456a9,9,0,0,0,9-9V329H447Z"></path>
+            <path d="M56,465H183V447H65V329H47V456A9,9,0,0,0,56,465Z"></path>
+        </svg>
+    </g>
+</svg>

@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {Context} from "../Store";
-import Layers from "../domain/LayersEnum"
+import Layers from "../domain/enum"
 import {ReactComponent as ShowIcon} from "./icons/eye.svg";
 import {ReactComponent as HideIcon} from "./icons/eye_not.svg";
 

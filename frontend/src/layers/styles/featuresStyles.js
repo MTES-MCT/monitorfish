@@ -4,17 +4,23 @@ import Fill from "ol/style/Fill";
 
 export const setShipIconStyle = (ship, iconFeature, shipTrackInternalReferenceNumberToShow) => {
     const shipDate = new Date(ship.dateTime);
-    const nowMinusTwoHours = new Date();
-    nowMinusTwoHours.setHours(nowMinusTwoHours.getHours() - 3);
+    const nowMinusThreeHours = new Date;
+    nowMinusThreeHours.setHours(nowMinusThreeHours.getHours() - 3);
 
+    let opacity = shipDate < nowMinusThreeHours ? 0.3 : 1;
     const iconStyle = new Style({
-        image: new Icon({
+        image: ship.speed > 0 ? new Icon({
             src: 'boat_mf.png',
             offset: [0, 0],
             imgSize: [14, 14],
             rotation: ship.course,
-            opacity: shipDate < nowMinusTwoHours ? 0.5 : 1
-        }),
+            opacity: opacity
+        }) : new CircleStyle({
+            radius: 4,
+            fill: new Fill({
+                color: `rgba(5, 5, 94, ${opacity})`
+            })
+        })
     });
 
    if (ship.internalReferenceNumber === shipTrackInternalReferenceNumberToShow) {

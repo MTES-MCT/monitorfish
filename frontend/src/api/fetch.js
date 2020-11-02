@@ -16,6 +16,7 @@ export function getShipTrack(setShipTrack, dispatch, shipTrackInternalReferenceN
             setShipTrack(shipTrack)
         })
         .catch(error => {
+            console.log(error)
             dispatch({type: 'SET_ERROR', payload: error});
         });
 }

@@ -10,6 +10,7 @@
     "ol": "^6.4.3",
     "ol-mapbox-style": "^6.1.4",
     "react": "^16.13.1",
+    "react-country-flag": "^2.3.0",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3"
   },

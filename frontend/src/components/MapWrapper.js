@@ -8,14 +8,19 @@ import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import {defaults as defaultControls} from 'ol/control';
 import {Context} from "../Store";
-import EEZControl from "./EEZControl";
+import EEZControl from "./layers-control/EEZControl";
 import LayersEnum from "../domain/enum";
-import FAOControl from "./FAOControl";
+import FAOControl from "./layers-control/FAOControl";
 import MapBottomBox from "./MapBottomBox";
 import LayerSelectionBox from "./LayerSelectionBox";
 import SearchBox from "./SearchBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {selectedShipStyle} from "../layers/styles/featuresStyles";
+import ThreeMilesControl from "./layers-control/ThreeMilesControl";
+import SixMilesControl from "./layers-control/SixMilesControl";
+import TwelveMilesControl from "./layers-control/TwelveMilesControl";
+import OneHundredMilesControl from "./layers-control/OneHundredMilesControl";
+import CoastLinesControl from "./layers-control/CoastLinesControl";
 
 const MapWrapper = () => {
     const [state, dispatch] = useContext(Context)
@@ -185,7 +190,9 @@ const MapWrapper = () => {
             <div ref={mapElement} className="map-container"/>
 
             <SearchBox/>
-            <LayerSelectionBox layers={[<EEZControl/>, <FAOControl/>]}/>
+            <LayerSelectionBox
+                layers={[<EEZControl/>, <FAOControl/>, <ThreeMilesControl/>, <SixMilesControl/>, <TwelveMilesControl/>,
+                    <OneHundredMilesControl/>, <CoastLinesControl />]}/>
             <MapBottomBox coordinates={cursorCoordinates}/>
 
         </div>

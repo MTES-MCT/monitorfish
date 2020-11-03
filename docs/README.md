@@ -6,7 +6,7 @@ Shapefile links:
 
 ### Download and add the FAO layer to PsotGIS
 1. Download the shapefile
-2. `ogr2ogr --config PG_USE_COPY YES --config SHAPE_RESTORE_SHX YES -f PGDump SQL_FILENAME.sql FAO_AREAS.shp -lco SRID=32631 -nlt PROMOTE_TO_MULTI`
+2. `ogr2ogr --config PG_USE_COPY YES --config SHAPE_RESTORE_SHX YES -f PGDump SQL_FILENAME.sql FAO_AREAS.shp -lco SRID=4326 -nlt PROMOTE_TO_MULTI`
 3. The INSERT part is extracted and copied to the resource folder: `cp /tmp/abc.sql backend/src/main/resources/db/layers/Insert_FAO_Areas.sql`
 
 Then, add the layers to the database:

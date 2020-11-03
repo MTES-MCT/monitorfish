@@ -28,9 +28,9 @@ docker-push:
 
 # RUN commands
 init-local-sig:
-	./init/geoserver_init_layers.sh && ./local/postgis_insert_layers.sh
+	./infra/local/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 init-remote-sig:
-	./init/geoserver_init_layers.sh && ./remote/postgis_insert_layers.sh
+	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 restart-remote-app:
 	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
 ruu-local-app:

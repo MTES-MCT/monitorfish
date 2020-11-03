@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
-import {Context} from "../Store";
-import Layers from "../domain/enum"
-import {ReactComponent as ShowIcon} from './icons/eye.svg'
-import {ReactComponent as HideIcon} from './icons/eye_not.svg'
+import {Context} from "../../Store";
+import Layers from "../../domain/enum"
+import {ReactComponent as ShowIcon} from '../icons/eye.svg'
+import {ReactComponent as HideIcon} from '../icons/eye_not.svg'
 
 const FAOControl = () => {
     const [_, dispatch] = useContext(Context)
@@ -24,7 +24,7 @@ const FAOControl = () => {
         }
     }, [showLayer])
 
-    return (<span onClick={() => setShowLayer(!showLayer)}>CIAM { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
+    return (<span onClick={() => setShowLayer(!showLayer)}>FAO { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
 export default FAOControl

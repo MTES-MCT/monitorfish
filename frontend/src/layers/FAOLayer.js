@@ -46,7 +46,7 @@ const FAOLayer = () => {
                 }),
                 text: new Text({
                     font: '12px Avenir',
-                    text: `${feature.get('f_subarea')}`,
+                    text: `${feature.get('f_division') ? feature.get('f_division') : ''}`,
                     fill: new Fill({color: '#05055E'}),
                     stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
                 })

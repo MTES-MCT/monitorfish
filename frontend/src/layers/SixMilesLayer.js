@@ -7,13 +7,13 @@ import {Context} from "../Store";
 import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 import GeoJSON from "ol/format/GeoJSON";
 import Stroke from "ol/style/Stroke";
-import Text from "ol/style/Text";
 import Layers from "../domain/enum";
 import Fill from "ol/style/Fill";
 import LayersEnum from "../domain/enum";
+import Text from "ol/style/Text";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 
-const FAOLayer = () => {
+const SixMilesLayer = () => {
     const [state, dispatch] = useContext(Context)
 
     const vectorSource = new VectorSource({
@@ -24,7 +24,7 @@ const FAOLayer = () => {
         url: (extent) => {
             return (
                 process.env.REACT_APP_GEOSERVER_LOCAL_URL + '/geoserver/wfs?service=WFS&' +
-                'version=1.1.0&request=GetFeature&typename=monitorfish:'+ LayersEnum.FAO +'&' +
+                'version=1.1.0&request=GetFeature&typename=monitorfish:'+ LayersEnum.SIX_MILES +'&' +
                 'outputFormat=application/json&srsname='+ BACKEND_PROJECTION +'&' +
                 'bbox=' +
                 extent.join(',') +
@@ -37,31 +37,25 @@ const FAOLayer = () => {
     const vector = new VectorLayer({
         source: vectorSource,
         renderMode: 'image',
-        className: Layers.FAO,
+        className: Layers.SIX_MILES,
         style: (feature, _) => {
             return new Style({
                 stroke: new Stroke({
-                    color: '#767AB2',
-                    width: 1,
-                }),
-                text: new Text({
-                    font: '12px Avenir',
-                    text: `${feature.get('f_division') ? feature.get('f_division') : ''}`,
-                    fill: new Fill({color: '#05055E'}),
-                    stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+                    color: '#05055E',
+                    width: 3,
                 })
             })
-        },
+        }
     });
 
     useEffect( () => {
-        if(state.layer.layerToShow === Layers.FAO) {
+        if(state.layer.layerToShow === Layers.SIX_MILES) {
             dispatch({type: 'ADD_LAYER', payload: vector});
         }
     },[state.layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide === Layers.FAO) {
+        if(state.layer.layerToHide === Layers.SIX_MILES) {
             dispatch({type: 'REMOVE_LAYER', payload: vector});
         }
     },[state.layer.layerToHide])
@@ -69,4 +63,4 @@ const FAOLayer = () => {
     return null
 }
 
-export default FAOLayer
+export default SixMilesLayer

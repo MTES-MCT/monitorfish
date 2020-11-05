@@ -4,7 +4,7 @@ import Layers from "../../domain/enum"
 import {ReactComponent as ShowIcon} from "../icons/eye.svg";
 import {ReactComponent as HideIcon} from "../icons/eye_not.svg";
 
-const TwelveMilesControl = () => {
+const TwelveMilesLayerControl = () => {
     const [_, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
     const [showLayer, setShowLayer] = useState(false);
@@ -16,13 +16,13 @@ const TwelveMilesControl = () => {
         }
 
         if(showLayer) {
-            dispatch({type: 'SHOW_LAYER', payload: Layers.TWELVE_MILES});
+            dispatch({type: 'SHOW_LAYER', payload: { type: Layers.TWELVE_MILES }});
         } else {
-            dispatch({type: 'HIDE_LAYER', payload: Layers.TWELVE_MILES});
+            dispatch({type: 'HIDE_LAYER', payload: { type: Layers.TWELVE_MILES }});
         }
     }, [showLayer])
 
     return (<span className={``} onClick={() => setShowLayer(!showLayer)}>12 Milles { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
-export default TwelveMilesControl
+export default TwelveMilesLayerControl

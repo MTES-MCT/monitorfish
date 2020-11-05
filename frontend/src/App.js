@@ -14,6 +14,7 @@ import OneHundredMilesLayer from "./layers/OneHundredMilesLayer";
 import SixMilesLayer from "./layers/SixMilesLayer";
 import TwelveMilesLayer from "./layers/TwelveMilesLayer";
 import CoastLinesLayer from "./layers/CoastLinesLayer";
+import RegulatoryLayer from "./layers/RegulatoryLayer";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <TwelveMilesLayer />
           <OneHundredMilesLayer />
           <CoastLinesLayer />
+          <RegulatoryLayer />
 
           <Cron />
         </div>

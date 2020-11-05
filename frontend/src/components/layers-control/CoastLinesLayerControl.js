@@ -4,7 +4,7 @@ import Layers from "../../domain/enum"
 import {ReactComponent as ShowIcon} from "../icons/eye.svg";
 import {ReactComponent as HideIcon} from "../icons/eye_not.svg";
 
-const OneHundredMilesControl = () => {
+const CoastLinesLayerControl = () => {
     const [_, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
     const [showLayer, setShowLayer] = useState(false);
@@ -16,13 +16,13 @@ const OneHundredMilesControl = () => {
         }
 
         if(showLayer) {
-            dispatch({type: 'SHOW_LAYER', payload: Layers.ONE_HUNDRED_MILES});
+            dispatch({type: 'SHOW_LAYER', payload: { type: Layers.COAST_LINES }});
         } else {
-            dispatch({type: 'HIDE_LAYER', payload: Layers.ONE_HUNDRED_MILES});
+            dispatch({type: 'HIDE_LAYER', payload: { type: Layers.COAST_LINES }});
         }
     }, [showLayer])
 
-    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>100 Milles { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
+    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>Trait de côte { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
-export default OneHundredMilesControl
+export default CoastLinesLayerControl

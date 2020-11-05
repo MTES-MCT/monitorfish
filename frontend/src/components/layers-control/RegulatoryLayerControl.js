@@ -4,7 +4,7 @@ import Layers from "../../domain/enum"
 import {ReactComponent as ShowIcon} from "../icons/eye.svg";
 import {ReactComponent as HideIcon} from "../icons/eye_not.svg";
 
-const CoastLinesControl = () => {
+const RegulatoryLayerControl = props => {
     const [_, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
     const [showLayer, setShowLayer] = useState(false);
@@ -16,13 +16,13 @@ const CoastLinesControl = () => {
         }
 
         if(showLayer) {
-            dispatch({type: 'SHOW_LAYER', payload: Layers.COAST_LINES});
+            dispatch({type: 'SHOW_LAYER', payload: { type: Layers.REGULATORY, filter: props.layerName }});
         } else {
-            dispatch({type: 'HIDE_LAYER', payload: Layers.COAST_LINES});
+            dispatch({type: 'HIDE_LAYER', payload: { type: Layers.REGULATORY, filter: props.layerName }});
         }
     }, [showLayer])
 
-    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>Trait de côte { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
+    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>{props.layerName.replace('_', ' ')} { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
-export default CoastLinesControl
+export default RegulatoryLayerControl

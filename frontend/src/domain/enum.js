@@ -1,5 +1,6 @@
 export default {
     SHIPS: 'ships',
+    REGULATORY: 'regulatory_areas',
     EEZ: 'eez_areas',
     FAO: 'fao_areas',
     THREE_MILES: '3_miles_areas',

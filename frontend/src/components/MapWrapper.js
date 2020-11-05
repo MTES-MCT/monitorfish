@@ -8,19 +8,20 @@ import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import {defaults as defaultControls} from 'ol/control';
 import {Context} from "../Store";
-import EEZControl from "./layers-control/EEZControl";
+import EEZLayerControl from "./layers-control/EEZLayerControl";
 import LayersEnum from "../domain/enum";
-import FAOControl from "./layers-control/FAOControl";
+import FAOLayerControl from "./layers-control/FAOLayerControl";
 import MapBottomBox from "./MapBottomBox";
-import LayerSelectionBox from "./LayerSelectionBox";
-import SearchBox from "./SearchBox";
+import ZoneLayerSelectionBox from "./ZoneLayerSelectionBox";
+import ShipsSearchBox from "./ShipsSearchBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {selectedShipStyle} from "../layers/styles/featuresStyles";
-import ThreeMilesControl from "./layers-control/ThreeMilesControl";
-import SixMilesControl from "./layers-control/SixMilesControl";
-import TwelveMilesControl from "./layers-control/TwelveMilesControl";
-import OneHundredMilesControl from "./layers-control/OneHundredMilesControl";
-import CoastLinesControl from "./layers-control/CoastLinesControl";
+import ThreeMilesLayerControl from "./layers-control/ThreeMilesLayerControl";
+import SixMilesLayerControl from "./layers-control/SixMilesLayerControl";
+import TwelveMilesLayerControl from "./layers-control/TwelveMilesLayerControl";
+import OneHundredMilesLayerControl from "./layers-control/OneHundredMilesLayerControl";
+import CoastLinesLayerControl from "./layers-control/CoastLinesLayerControl";
+import RegulatoryLayerSelectionBox from "./RegulatoryLayerSelectionBox";
 
 const MapWrapper = () => {
     const [state, dispatch] = useContext(Context)
@@ -69,7 +70,11 @@ const MapWrapper = () => {
         if (map && state.layer.layers.length && state.layer.layerToShow) {
             state.layer.layers
                 .filter(layer => {
-                    return layer.className_ === state.layer.layerToShow
+                    if (state.layer.layerToShow.filter) {
+                        return layer.className_ === state.layer.layerToShow.type + ':' + state.layer.layerToShow.filter
+                    }
+
+                    return layer.className_ === state.layer.layerToShow.type
                 })
                 .forEach(layer => {
                     if (map.getLayers().getLength() === 1) {
@@ -96,7 +101,11 @@ const MapWrapper = () => {
         if (map && state.layer.layers.length && state.layer.layerToHide) {
             state.layer.layers
                 .filter(layer => {
-                    return layer.className_ === state.layer.layerToHide
+                    if (state.layer.layerToHide.filter) {
+                        return layer.className_ === state.layer.layerToHide.type + ':' + state.layer.layerToHide.filter
+                    }
+
+                    return layer.className_ === state.layer.layerToHide.type
                 })
                 .forEach(layer => {
                     map.getLayers().remove(layer);
@@ -189,10 +198,17 @@ const MapWrapper = () => {
         <div>
             <div ref={mapElement} className="map-container"/>
 
-            <SearchBox/>
-            <LayerSelectionBox
-                layers={[<EEZControl/>, <FAOControl/>, <ThreeMilesControl/>, <SixMilesControl/>, <TwelveMilesControl/>,
-                    <OneHundredMilesControl/>, <CoastLinesControl />]}/>
+            <ShipsSearchBox/>
+            <ZoneLayerSelectionBox
+                layers={[
+                    <EEZLayerControl/>,
+                    <FAOLayerControl/>,
+                    <ThreeMilesLayerControl/>,
+                    <SixMilesLayerControl/>,
+                    <TwelveMilesLayerControl/>,
+                    <OneHundredMilesLayerControl/>,
+                    <CoastLinesLayerControl />]}/>
+            <RegulatoryLayerSelectionBox />
             <MapBottomBox coordinates={cursorCoordinates}/>
 
         </div>

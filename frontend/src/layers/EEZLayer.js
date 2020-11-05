@@ -55,13 +55,13 @@ const EEZLayer = () => {
     });
 
     useEffect( () => {
-        if(state.layer.layerToShow === Layers.EEZ) {
+        if(state.layer.layerToShow && state.layer.layerToShow.type === Layers.EEZ) {
             dispatch({type: 'ADD_LAYER', payload: vector});
         }
     },[state.layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide === Layers.EEZ) {
+        if(state.layer.layerToHide && state.layer.layerToHide.type === Layers.EEZ) {
             dispatch({type: 'REMOVE_LAYER', payload: vector});
         }
     },[state.layer.layerToHide])

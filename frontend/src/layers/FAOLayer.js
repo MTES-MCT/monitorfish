@@ -55,13 +55,13 @@ const FAOLayer = () => {
     });
 
     useEffect( () => {
-        if(state.layer.layerToShow === Layers.FAO) {
+        if(state.layer.layerToShow && state.layer.layerToShow.type === Layers.FAO) {
             dispatch({type: 'ADD_LAYER', payload: vector});
         }
     },[state.layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide === Layers.FAO) {
+        if(state.layer.layerToHide && state.layer.layerToHide.type === Layers.FAO) {
             dispatch({type: 'REMOVE_LAYER', payload: vector});
         }
     },[state.layer.layerToHide])

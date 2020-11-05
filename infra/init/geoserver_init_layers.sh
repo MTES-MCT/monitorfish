@@ -1,21 +1,21 @@
 #!/bin/sh
-set -e
+set -eu
 
 curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces -H  "accept: text/html" -H  "content-type: application/json" \
 -d "{ \"workspace\": {\"name\": \"monitorfish\"}}"
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "dataStore": {
     "name": "monitorfish_postgis",
     "connectionParameters": {
       "entry": [
-        {"@key":"host","$":"db"},
+        {"@key":"host","$":"$DB_HOST"},
         {"@key":"port","$":"5432"},
-        {"@key":"database","$":"monitorfishdb"},
-        {"@key":"schema","$":"public"},
-        {"@key":"user","$":"postgres"},
-        {"@key":"passwd","$":"postgres"},
+        {"@key":"database","$":"$DB_NAME"},
+        {"@key":"schema","$":"$DB_SCHEMA"},
+        {"@key":"user","$":"$DB_USER"},
+        {"@key":"passwd","$":"$DB_PASSWORD"},
         {"@key":"dbtype","$":"postgis"}
       ]
     }
@@ -23,7 +23,7 @@ curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/
 }
 EOF
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
     "name": "eez_areas",
@@ -36,7 +36,7 @@ curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/
 }
 EOF
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
     "name": "fao_areas",
@@ -49,7 +49,7 @@ curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/
 }
 EOF
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
     "name": "3_miles_areas",
@@ -62,7 +62,7 @@ curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/
 }
 EOF
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
     "name": "6_miles_areas",
@@ -75,7 +75,7 @@ curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/
 }
 EOF
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
     "name": "12_miles_areas",
@@ -88,7 +88,7 @@ curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/
 }
 EOF
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
     "name": "100_miles_areas",
@@ -101,12 +101,25 @@ curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/
 }
 EOF
 
-curl -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
     "name": "coast_lines",
     "nativeName": "coast_lines",
     "title": "Coast lines",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "regulatory_areas",
+    "nativeName": "all_decisions",
+    "title": "Regulatory Areas",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
     "enabled": true,

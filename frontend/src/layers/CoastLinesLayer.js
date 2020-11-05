@@ -49,13 +49,13 @@ const CoastLinesLayer = () => {
     });
 
     useEffect( () => {
-        if(state.layer.layerToShow === Layers.COAST_LINES) {
+        if(state.layer.layerToShow && state.layer.layerToShow.type === Layers.COAST_LINES) {
             dispatch({type: 'ADD_LAYER', payload: vector});
         }
     },[state.layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide === Layers.COAST_LINES) {
+        if(state.layer.layerToHide && state.layer.layerToHide.type === Layers.COAST_LINES) {
             dispatch({type: 'REMOVE_LAYER', payload: vector});
         }
     },[state.layer.layerToHide])

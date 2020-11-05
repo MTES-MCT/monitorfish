@@ -4,7 +4,7 @@ import Layers from "../../domain/enum"
 import {ReactComponent as ShowIcon} from '../icons/eye.svg'
 import {ReactComponent as HideIcon} from '../icons/eye_not.svg'
 
-const FAOControl = () => {
+const FAOLayerControl = () => {
     const [_, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
     const [showLayer, setShowLayer] = useState(false);
@@ -17,14 +17,14 @@ const FAOControl = () => {
 
         if(showLayer) {
             console.log('SHOW_LAYER')
-            dispatch({type: 'SHOW_LAYER', payload: Layers.FAO});
+            dispatch({type: 'SHOW_LAYER', payload: { type: Layers.FAO }});
         } else {
             console.log('HIDE_LAYER')
-            dispatch({type: 'HIDE_LAYER', payload: Layers.FAO});
+            dispatch({type: 'HIDE_LAYER', payload: { type: Layers.FAO }});
         }
     }, [showLayer])
 
     return (<span onClick={() => setShowLayer(!showLayer)}>FAO { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
-export default FAOControl
+export default FAOLayerControl

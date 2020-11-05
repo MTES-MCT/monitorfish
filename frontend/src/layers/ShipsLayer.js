@@ -74,7 +74,7 @@ const ShipsLayer = () => {
                         })
                     )
                     dispatch({type: 'REPLACE_SHIPS_LAYER', payload: layer})
-                    dispatch({type: 'SHOW_LAYER', payload: Layers.SHIPS});
+                    dispatch({type: 'SHOW_LAYER', payload: {type: Layers.SHIPS}});
                 });
         }
     }, [ships])

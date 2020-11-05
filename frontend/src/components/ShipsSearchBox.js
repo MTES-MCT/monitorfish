@@ -4,7 +4,7 @@ import ReactCountryFlag from "react-country-flag"
 import {ReactComponent as SearchIcon} from './icons/search.svg'
 import LayersEnum from "../domain/enum";
 
-const SearchBox = () => {
+const ShipsSearchBox = () => {
     const [state, dispatch] = useContext(Context)
     const [searchText, setSearchText] = useState('');
     const [foundShips, setFoundShips] = useState([]);
@@ -94,4 +94,4 @@ const SearchBox = () => {
         </div>)
 }
 
-export default SearchBox
+export default ShipsSearchBox

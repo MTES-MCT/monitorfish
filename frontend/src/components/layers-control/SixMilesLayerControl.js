@@ -4,7 +4,7 @@ import Layers from "../../domain/enum"
 import {ReactComponent as ShowIcon} from "../icons/eye.svg";
 import {ReactComponent as HideIcon} from "../icons/eye_not.svg";
 
-const ThreeMilesControl = () => {
+const SixMilesLayerControl = () => {
     const [_, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
     const [showLayer, setShowLayer] = useState(false);
@@ -16,13 +16,13 @@ const ThreeMilesControl = () => {
         }
 
         if(showLayer) {
-            dispatch({type: 'SHOW_LAYER', payload: Layers.THREE_MILES});
+            dispatch({type: 'SHOW_LAYER', payload: { type: Layers.SIX_MILES }});
         } else {
-            dispatch({type: 'HIDE_LAYER', payload: Layers.THREE_MILES});
+            dispatch({type: 'HIDE_LAYER', payload: { type: Layers.SIX_MILES }});
         }
     }, [showLayer])
 
-    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>3 Milles { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
+    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>6 Milles { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
-export default ThreeMilesControl
+export default SixMilesLayerControl

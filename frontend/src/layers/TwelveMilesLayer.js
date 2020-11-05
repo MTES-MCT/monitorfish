@@ -49,13 +49,13 @@ const TwelveMilesLayer = () => {
     });
 
     useEffect( () => {
-        if(state.layer.layerToShow === Layers.TWELVE_MILES) {
+        if(state.layer.layerToShow && state.layer.layerToShow.type === Layers.TWELVE_MILES) {
             dispatch({type: 'ADD_LAYER', payload: vector});
         }
     },[state.layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide === Layers.TWELVE_MILES) {
+        if(state.layer.layerToHide && state.layer.layerToHide.type === Layers.TWELVE_MILES) {
             dispatch({type: 'REMOVE_LAYER', payload: vector});
         }
     },[state.layer.layerToHide])

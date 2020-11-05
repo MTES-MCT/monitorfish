@@ -5,12 +5,8 @@ services:
     restart: unless-stopped
     ports:
       - 8081:8080
-    links:
-      - "db:db"
     volumes:
       - geoserver-data:/opt/geoserver/data_dir
-    depends_on:
-      - db
 
 volumes:
   geoserver-data:

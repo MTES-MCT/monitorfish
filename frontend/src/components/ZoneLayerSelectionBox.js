@@ -1,6 +1,7 @@
 import React from "react";
+import RegulatoryLayerControl from "./layers-control/RegulatoryLayerControl";
 
-const LayerSelectionBox = props => {
+const ZoneLayerSelectionBox = props => {
     return (
         <div className={`layer-selection-box`}>
             <span className={'layer-selection-box-title'}>ZONES</span>
@@ -15,4 +16,4 @@ const LayerSelectionBox = props => {
     )
 }
 
-export default LayerSelectionBox
+export default ZoneLayerSelectionBox

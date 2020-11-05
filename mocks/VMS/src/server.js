@@ -1,12 +1,12 @@
-var express = require('express');
-var bodyParser = require('body-parser');
 var cron = require('node-cron');
 var request = require('request');
 const logger = require('./logger');
+const randomLocation = require('random-location')
 
 var nbExecution = 0;
 
 const stubs = require("./stubs.json")
+const stubsCFR = require("./cfr_stubs.json")
 
 logger.info("API_URL is : " + process.env.API_URL);
 logger.info("PORT is : " + process.env.PORT);
@@ -28,17 +28,15 @@ let generateRandomNAF = function() {
 	const mins = dateTime.getMinutes();
 	const time = (hrs < 10 ? "0" + hrs : hrs) + "" + (mins < 10 ? "0" + mins : mins);
 
-	const randomSeedLatLong = Math.floor(Math.random() * stubs.latitudes.length)
-	const latitude = parseFloat(stubs.latitudes[randomSeedLatLong]) + (Math.random() < 0.5 ? -2 : -1);
-	const longitude = parseFloat(stubs.longitudes[randomSeedLatLong]) + (Math.random() < 0.5 ? -2 : 2);
+	const randomPoint = randomLocation.randomCirclePoint({latitude:45.9602075,longitude:-19.3276946}, 180000000)
 
 	const speed = Math.floor(Math.random() * 10);
 	const course = Math.floor(Math.random() * 360);
 
-	const internalNumber = countries[Math.floor(Math.random() * countries.length)] + Math.floor(Math.random() * 99999999)
+	const internalNumber = stubsCFR.cfr[Math.floor(Math.random() * stubsCFR.cfr.length)]
 	let IRCS = Math.random().toString(36).substring(5);
 
-	const naf = `//SR//AD/${randomDestinationCountry}//FR/${randomFromCountry}//RD/${date}//RT/2141//FS/${randomFlagCountry}//RC/${IRCS}//IR/${internalNumber}//DA/${date}//TI/${time}//LT/${latitude}//LG/${longitude}//SP/${speed}//CO/${course}//TM/POS//ER//`
+	const naf = `//SR//AD/${randomDestinationCountry}//FR/${randomFromCountry}//RD/${date}//RT/2141//FS/${randomFlagCountry}//RC/${IRCS}//IR/${internalNumber}//DA/${date}//TI/${time}//LT/${randomPoint.latitude}//LG/${randomPoint.longitude}//SP/${speed}//CO/${course}//TM/POS//ER//`
 	logger.info(naf)
 	return naf	
 };

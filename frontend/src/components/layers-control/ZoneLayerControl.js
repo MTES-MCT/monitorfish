@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {Context} from "../../Store";
-import Layers from "../../domain/enum"
+import Layers from "../../domain/layers"
 import {ReactComponent as ShowIcon} from "../icons/eye.svg";
 import {ReactComponent as HideIcon} from "../icons/eye_not.svg";
 
-const OneHundredMilesLayerControl = () => {
+const ZoneLayerControl = (props) => {
     const [_, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
     const [showLayer, setShowLayer] = useState(false);
@@ -16,13 +16,13 @@ const OneHundredMilesLayerControl = () => {
         }
 
         if(showLayer) {
-            dispatch({type: 'SHOW_LAYER', payload: { type: Layers.ONE_HUNDRED_MILES }});
+            dispatch({type: 'SHOW_LAYER', payload: { type: props.layer.layer }});
         } else {
-            dispatch({type: 'HIDE_LAYER', payload: { type: Layers.ONE_HUNDRED_MILES }});
+            dispatch({type: 'HIDE_LAYER', payload: { type: props.layer.layer }});
         }
     }, [showLayer])
 
-    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>100 Milles { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
+    return (<span className={``} onClick={() => setShowLayer(!showLayer)}>{props.layer.layerName} { showLayer ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}</span>)
 }
 
-export default OneHundredMilesLayerControl
+export default ZoneLayerControl

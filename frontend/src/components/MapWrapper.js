@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
+import styled from 'styled-components';
 
 import Map from 'ol/Map'
 import View from 'ol/View'
@@ -6,22 +7,17 @@ import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
-import {defaults as defaultControls} from 'ol/control';
+import {Attribution, Zoom} from 'ol/control';
 import {Context} from "../Store";
-import EEZLayerControl from "./layers-control/EEZLayerControl";
-import LayersEnum from "../domain/enum";
-import FAOLayerControl from "./layers-control/FAOLayerControl";
-import MapBottomBox from "./MapBottomBox";
+import LayersEnum from "../domain/layers";
+import Layers from "../domain/layers";
+import MapCoordinatesBox from "./MapCoordinatesBox";
 import ZoneLayerSelectionBox from "./ZoneLayerSelectionBox";
 import ShipsSearchBox from "./ShipsSearchBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {selectedShipStyle} from "../layers/styles/featuresStyles";
-import ThreeMilesLayerControl from "./layers-control/ThreeMilesLayerControl";
-import SixMilesLayerControl from "./layers-control/SixMilesLayerControl";
-import TwelveMilesLayerControl from "./layers-control/TwelveMilesLayerControl";
-import OneHundredMilesLayerControl from "./layers-control/OneHundredMilesLayerControl";
-import CoastLinesLayerControl from "./layers-control/CoastLinesLayerControl";
 import RegulatoryLayerSelectionBox from "./RegulatoryLayerSelectionBox";
+import MapAttributionsBox from "./MapAttributionsBox";
 
 const MapWrapper = () => {
     const [state, dispatch] = useContext(Context)
@@ -52,11 +48,7 @@ const MapWrapper = () => {
                 zoom: 6,
                 minZoom: 5
             }),
-            controls: defaultControls({
-                attributionOptions: {
-                    collapsible: true
-                }
-            }),
+            controls: [new Zoom({className: 'zoom'})],
         })
 
         // set map onclick handler
@@ -196,23 +188,30 @@ const MapWrapper = () => {
 
     return (
         <div>
-            <div ref={mapElement} className="map-container"/>
+            <MapContainer ref={mapElement} />
 
             <ShipsSearchBox/>
             <ZoneLayerSelectionBox
                 layers={[
-                    <EEZLayerControl/>,
-                    <FAOLayerControl/>,
-                    <ThreeMilesLayerControl/>,
-                    <SixMilesLayerControl/>,
-                    <TwelveMilesLayerControl/>,
-                    <OneHundredMilesLayerControl/>,
-                    <CoastLinesLayerControl />]}/>
+                    { layer: Layers.EEZ, layerName: 'ZEE' },
+                    { layer: Layers.FAO, layerName: 'FAO' },
+                    { layer: Layers.THREE_MILES, layerName: '3 Milles' },
+                    { layer: Layers.SIX_MILES, layerName: '6 Milles' },
+                    { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
+                    { layer: Layers.ONE_HUNDRED_MILES, layerName: '100 Milles' },
+                    { layer: Layers.COAST_LINES, layerName: 'Trait de côte' }
+                ]}/>
             <RegulatoryLayerSelectionBox />
-            <MapBottomBox coordinates={cursorCoordinates}/>
+            <MapCoordinatesBox coordinates={cursorCoordinates}/>
+            <MapAttributionsBox />
 
         </div>
     )
 }
+
+const MapContainer = styled.div`
+  height: 100vh;
+  width: 100%;
+`
 
 export default MapWrapper

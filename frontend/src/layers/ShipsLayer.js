@@ -7,8 +7,8 @@ import Point from 'ol/geom/Point';
 import {Style} from 'ol/style';
 import {transform} from 'ol/proj'
 import {Context} from "../Store";
-import Layers from "../domain/enum";
-import LayersEnum from "../domain/enum";
+import Layers from "../domain/layers";
+import LayersEnum from "../domain/layers";
 import {Vector} from "ol/layer";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";

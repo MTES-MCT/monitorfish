@@ -1,4 +1,4 @@
-import Layers from "../domain/enum"
+import Layers from "../domain/layers"
 
 export function getShips(setShips, dispatch) {
     fetch('/bff/v1/positions')

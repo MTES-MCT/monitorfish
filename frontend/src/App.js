@@ -2,6 +2,7 @@ import 'ol/ol.css';
 import './App.css';
 
 import React from 'react';
+import styled from "styled-components";
 
 import MapWrapper from './components/MapWrapper'
 import Store from "./Store";
@@ -19,10 +20,10 @@ import RegulatoryLayer from "./layers/RegulatoryLayer";
 function App() {
   return (
       <Store>
-        <div className="App">
-          <div className="app-label">
+        <Wrapper>
+          <Logo>
             <img src="monitorfish.png" style={{width: 40, height: 40}} alt='MonitorFish'/>
-          </div>
+          </Logo>
           <MapWrapper />
 
           <ShipsLayer />
@@ -36,9 +37,24 @@ function App() {
           <RegulatoryLayer />
 
           <Cron />
-        </div>
+        </Wrapper>
       </Store>
   )
 }
+
+const Wrapper = styled.div`
+  text-align: center;
+  height: 100%;
+  width: 100%;
+`
+
+const Logo = styled.div`
+  width: auto;
+  overflow: auto;
+  margin: 5px;
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+`
 
 export default App

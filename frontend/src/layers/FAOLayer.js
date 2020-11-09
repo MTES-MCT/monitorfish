@@ -8,9 +8,9 @@ import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 import GeoJSON from "ol/format/GeoJSON";
 import Stroke from "ol/style/Stroke";
 import Text from "ol/style/Text";
-import Layers from "../domain/enum";
+import Layers from "../domain/layers";
 import Fill from "ol/style/Fill";
-import LayersEnum from "../domain/enum";
+import LayersEnum from "../domain/layers";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 
 const FAOLayer = () => {

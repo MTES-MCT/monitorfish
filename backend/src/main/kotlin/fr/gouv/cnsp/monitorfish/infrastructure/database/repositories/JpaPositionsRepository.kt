@@ -3,9 +3,12 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import kotlin.time.measureTimedValue
 
@@ -22,7 +25,8 @@ class JpaPositionsRepository(@Autowired
 
     @Suppress("UselessCallOnCollection")
     @kotlin.time.ExperimentalTime
-    override fun findLastDistinctPositions(): List<Position> {
+    @Cacheable(value = ["vessels_position"])
+    override fun findAllLastDistinctPositions(): List<Position> {
         val (internalReferenceNumberPositions, internalReferenceNumberPositionsElapsed) = measureTimedValue {
             dbPositionRepository.findLastDistinctInternalReferenceNumbers()
         }
@@ -41,10 +45,12 @@ class JpaPositionsRepository(@Autowired
                 }
     }
 
-    override fun findShipLastPositions(internalReferenceNumber: String): List<Position> {
+    @Cacheable(value = ["vessel_track"])
+    override fun findVesselLastPositions(internalReferenceNumber: String): List<Position> {
         return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber)
                 .map(PositionEntity::toPosition)
     }
+
 
     override fun save(position: Position) {
         val positionEntity = PositionEntity.fromPosition(position)

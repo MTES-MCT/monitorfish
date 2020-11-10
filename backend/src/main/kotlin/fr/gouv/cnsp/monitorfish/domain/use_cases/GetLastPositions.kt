@@ -8,6 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PositionsRepository
 class GetLastPositions(private val positionsRepository: PositionsRepository) {
 
     fun execute(): List<Position> {
-        return positionsRepository.findLastDistinctPositions()
+        return positionsRepository.findAllLastDistinctPositions()
     }
 }

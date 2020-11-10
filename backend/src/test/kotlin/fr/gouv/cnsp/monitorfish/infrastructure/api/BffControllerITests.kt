@@ -1,13 +1,17 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetLastPositions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetShipLastPositions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,7 +38,7 @@ class BffControllerITests {
     private lateinit var getLastPositions: GetLastPositions
 
     @MockBean
-    private lateinit var getShipLastPositions: GetShipLastPositions
+    private lateinit var getVessel: GetVessel
 
     @Test
     fun `Should get all positions`() {
@@ -44,7 +48,7 @@ class BffControllerITests {
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When
-        mockMvc.perform(get("/bff/v1/positions"))
+        mockMvc.perform(get("/bff/v1/vessels"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
@@ -63,20 +67,36 @@ class BffControllerITests {
                 .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
     }
 
+    private fun <T> givenSuspended(block: suspend () -> T) = given(runBlocking { block() })!!
+
+    private infix fun <T> BDDMockito.BDDMyOngoingStubbing<T>.willReturn(block: () -> T) = willReturn(block())
+
     @Test
-    fun `Should get ship's last positions`() {
+    fun `Should get vessels's last positions`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        given(this.getShipLastPositions.execute(any())).willReturn(listOf(firstPosition, secondPosition, thirdPosition))
+        givenSuspended { getVessel.execute(any()) } willReturn {
+            Pair(Vessel("FR224226850", "", "MY AWESOME VESSEL", CountryCode.FR, null, "Fishing"),
+                listOf(firstPosition, secondPosition, thirdPosition))
+        }
 
         // When
-        mockMvc.perform(get("/bff/v1/positions/FR224226850"))
+        mockMvc.perform(get("/bff/v1/vessels/FR224226850"))
                 // Then
                 .andExpect(status().isOk)
+                .andExpect(jsonPath("$.gearType", equalTo(null)))
+                .andExpect(jsonPath("$.vesselType", equalTo("Fishing")))
+                .andExpect(jsonPath("$.flagState", equalTo("FR")))
+                .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
+                .andExpect(jsonPath("$.externalReferenceNumber", equalTo("")))
+                .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
-        Mockito.verify(this.getShipLastPositions).execute("FR224226850")
+
+        runBlocking {
+            Mockito.verify(getVessel).execute("FR224226850")
+        }
     }
 }

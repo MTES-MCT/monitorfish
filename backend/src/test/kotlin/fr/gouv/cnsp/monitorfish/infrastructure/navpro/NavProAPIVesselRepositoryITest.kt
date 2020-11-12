@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.navpro
 import fr.gouv.cnsp.monitorfish.config.ThirdPartyProperties
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.cache.CaffeineConfiguration
+import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.InvalidAPIResponseException
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -96,6 +97,7 @@ internal class NavProAPIVesselRepositoryITest {
         }
 
         // Then
+        assertThat(throwable).isInstanceOf(InvalidAPIResponseException::class.java)
         assertThat(throwable.message).contains("Could not obtain vessel data")
     }
 
@@ -130,4 +132,23 @@ internal class NavProAPIVesselRepositoryITest {
         // Then the response will be the same as it is cached
         assertThat(expectedVessel).isEqualTo(cacheVessel)
     }
+
+    @Test
+    fun `findVessel Should throw an exception When the JSON response is invalid`() {
+        // Given the server will return two different responses
+        server.enqueue(MockResponse().setBody("""
+            INVALID_JSON
+        """.trimIndent()))
+
+        // When
+        val throwable = catchThrowable {
+            vesselRepository.findVessel("DUMMY_REFERENCE_NUMBER")
+        }
+
+        // Then the response will be the same as it is cached
+        assertThat(throwable).isInstanceOf(InvalidAPIResponseException::class.java)
+        assertThat(throwable.message).contains("Could not obtain vessel data from API")
+    }
+
+    //BIG ERROR 500 MESSAGE
 }

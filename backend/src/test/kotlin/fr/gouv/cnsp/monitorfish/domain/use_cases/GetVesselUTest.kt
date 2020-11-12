@@ -13,8 +13,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import fr.gouv.cnsp.monitorfish.domain.exceptions.VesselNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.catchThrowable
 
 @ExtendWith(SpringExtension::class)
 class GetVesselUTest {
@@ -26,7 +28,7 @@ class GetVesselUTest {
     private lateinit var vesselRepository: VesselRepository
 
     @Test
-    fun `execute Should return the sip and an ordered list of last positions for a given vessel`() {
+    fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
@@ -43,5 +45,22 @@ class GetVesselUTest {
         // Then
         assertThat(pair.second.first().dateTime).isEqualTo(now.minusHours(4))
         assertThat(pair.second.last().dateTime).isEqualTo(now.minusHours(1))
+    }
+
+    @Test
+    fun `execute Should throw an exception When a vessel's position is not found`() {
+        // Given
+        given(positionsRepository.findVesselLastPositions(any())).willReturn(listOf())
+
+        // When
+        val throwable = catchThrowable {
+            runBlocking {
+                GetVessel(vesselRepository, positionsRepository).execute("FR224226850")
+            }
+        }
+
+        // Then
+        assertThat(throwable).isInstanceOf(VesselNotFoundException::class.java)
+        assertThat(throwable.message).contains("No position found for vessel FR224226850")
     }
 }

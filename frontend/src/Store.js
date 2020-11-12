@@ -6,7 +6,7 @@ const initialState = {
     layer: {
         layers: []
     },
-    ship: {
+    vessel: {
 
     },
     global: {

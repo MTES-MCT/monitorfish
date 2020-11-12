@@ -1,5 +1,5 @@
 export default {
-    SHIPS: 'ships',
+    VESSELS: 'vessels',
     REGULATORY: 'regulatory_areas',
     EEZ: 'eez_areas',
     FAO: 'fao_areas',
@@ -8,5 +8,5 @@ export default {
     TWELVE_MILES: '12_miles_areas',
     ONE_HUNDRED_MILES: '100_miles_areas',
     COAST_LINES: 'coast_lines',
-    SHIP_TRACK: 'shipsTrack'
+    VESSEL_TRACK: 'shipTrack'
 }

@@ -1,21 +1,21 @@
 import Layers from "../domain/layers"
 
-export function getShips(setShips, dispatch) {
-    fetch('/bff/v1/positions')
+export function getVessels(setVessels, dispatch) {
+    fetch('/bff/v1/vessels')
         .then(response => response.json())
-        .then(ships => {
-            setShips(ships)
+        .then(vessels => {
+            setVessels(vessels)
         })
         .catch(error => {
             dispatch({type: 'SET_ERROR', payload: error});
         });
 }
 
-export function getShipTrack(setShipTrack, dispatch, shipTrackInternalReferenceNumberToShow) {
-    fetch(`/bff/v1/positions/${shipTrackInternalReferenceNumberToShow}`)
+export function getVesselTrack(setVesselTrack, dispatch, vesselTrackInternalReferenceNumberToShow) {
+    fetch(`/bff/v1/vessels/${vesselTrackInternalReferenceNumberToShow}`)
         .then(response => response.json())
-        .then(shipTrack => {
-            setShipTrack(shipTrack)
+        .then(vesselTrack => {
+            setVesselTrack(vesselTrack)
         })
         .catch(error => {
             console.log(error)

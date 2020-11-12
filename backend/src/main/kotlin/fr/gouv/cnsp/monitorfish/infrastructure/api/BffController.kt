@@ -28,8 +28,8 @@ class BffController(
     }
 
     @GetMapping("/v1/vessels/{internalReferenceNumber}")
-    @ApiOperation("Get ship's last positions and data")
-    fun getPosition(@ApiParam("Ship internal reference number (CFR)", required = true)
+    @ApiOperation("Get vessels's last positions and data")
+    fun getPosition(@ApiParam("Vessel internal reference number (CFR)", required = true)
                     @PathVariable(name = "internalReferenceNumber")
                     internalReferenceNumber: String): VesselDataOutput {
         return runBlocking {

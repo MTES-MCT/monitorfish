@@ -13,9 +13,8 @@ import LayersEnum from "../domain/layers";
 import Layers from "../domain/layers";
 import MapCoordinatesBox from "./MapCoordinatesBox";
 import ZoneLayerSelectionBox from "./ZoneLayerSelectionBox";
-import ShipsSearchBox from "./ShipsSearchBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
-import {selectedShipStyle} from "../layers/styles/featuresStyles";
+import {selectedVesselStyle} from "../layers/styles/featuresStyles";
 import RegulatoryLayerSelectionBox from "./RegulatoryLayerSelectionBox";
 import MapAttributionsBox from "./MapAttributionsBox";
 
@@ -75,7 +74,7 @@ const MapWrapper = () => {
                         return
                     }
 
-                    if (layer.className_ === LayersEnum.SHIPS) {
+                    if (layer.className_ === LayersEnum.VESSELS) {
                         map.getLayers().pop();
                         map.getLayers().push(layer);
                         dispatch({type: 'RESET_SHOW_LAYER'});
@@ -107,63 +106,63 @@ const MapWrapper = () => {
     }, [state.layer.layers, state.layer.layerToHide, map])
 
     useEffect(() => {
-        if (map && state.ship.shipTrack) {
+        if (map && state.vessel.vesselTrack) {
             map.getLayers().getArray()
                 .filter(layer => {
-                    return layer.className_ === LayersEnum.SHIP_TRACK
+                    return layer.className_ === LayersEnum.VESSEL_TRACK
                 })
                 .forEach(layer => {
                     map.getLayers().remove(layer);
                 })
 
-            let belowShipLayer = map.getLayers().getLength() - 1;
-            map.getLayers().insertAt(belowShipLayer, state.ship.shipTrack);
+            let belowVesselLayer = map.getLayers().getLength() - 1;
+            map.getLayers().insertAt(belowVesselLayer, state.vessel.vesselTrack);
         }
-    }, [state.ship.shipTrack, state.ship.shipTrackToShow, map])
+    }, [state.vessel.vesselTrack, state.vessel.vesselTrackToShow, map])
 
 
     useEffect(() => {
-        if (map && state.ship.shipToMoveOn) {
+        if (map && state.vessel.vesselToMoveOn) {
             map.getView().animate({
-                center: state.ship.shipToMoveOn.getGeometry().getCoordinates(),
+                center: state.vessel.vesselToMoveOn.getGeometry().getCoordinates(),
                 duration: 1000,
                 zoom: 8
             });
 
         }
-    }, [state.ship.shipToMoveOn, map])
+    }, [state.vessel.vesselToMoveOn, map])
 
     const handleMapClick = event => {
         const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => {
             return feature;
         });
 
-        if (feature && feature.getId() && feature.getId().includes(LayersEnum.SHIPS)) {
-            feature.setStyle([feature.getStyle(), selectedShipStyle]);
-            dispatch({type: 'SHOW_SHIP_TRACK', payload: feature});
+        if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
+            feature.setStyle([feature.getStyle(), selectedVesselStyle]);
+            dispatch({type: 'SHOW_VESSEL_TRACK', payload: feature});
         }
     }
 
     useEffect(() => {
-        if (map && state.ship.previousShipTrackShowed) {
+        if (map && state.vessel.previousVesselTrackShowed) {
             removeSelectStyleToPreviouslySelectedFeature();
         }
-    }, [state.ship.previousShipTrackShowed, map])
+    }, [state.vessel.previousVesselTrackShowed, map])
 
     function removeSelectStyleToPreviouslySelectedFeature() {
         state.layer.layers
-            .filter(layer => layer.className_ === LayersEnum.SHIPS)
-            .forEach(shipsLayer => {
-                shipsLayer.getSource().getFeatures().map(feature => {
-                    if (feature.getId() === state.ship.previousShipTrackShowed.getId()) {
+            .filter(layer => layer.className_ === LayersEnum.VESSELS)
+            .forEach(vesselsLayer => {
+                vesselsLayer.getSource().getFeatures().map(feature => {
+                    if (feature.getId() === state.vessel.previousVesselTrackShowed.getId()) {
                         feature.setStyle(feature.getStyle()[0])
                     }
                 })
             })
     }
 
-    function showPointerIfShipFeature(feature) {
-        if (feature && feature.getId() && feature.getId().includes(LayersEnum.SHIPS)) {
+    function showPointerIfVesselFeature(feature) {
+        if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
             mapRef.current.getTarget().style.cursor = 'pointer'
         } else {
             mapRef.current.getTarget().style.cursor = ''
@@ -182,15 +181,13 @@ const MapWrapper = () => {
             return feature;
         });
 
-        showPointerIfShipFeature(feature);
+        showPointerIfVesselFeature(feature);
         showCoordinatesInDMS(event);
     }
 
     return (
         <div>
             <MapContainer ref={mapElement} />
-
-            <ShipsSearchBox/>
             <ZoneLayerSelectionBox
                 layers={[
                     { layer: Layers.EEZ, layerName: 'ZEE' },
@@ -204,7 +201,6 @@ const MapWrapper = () => {
             <RegulatoryLayerSelectionBox />
             <MapCoordinatesBox coordinates={cursorCoordinates}/>
             <MapAttributionsBox />
-
         </div>
     )
 }

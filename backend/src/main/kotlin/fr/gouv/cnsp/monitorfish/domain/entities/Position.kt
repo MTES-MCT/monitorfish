@@ -6,7 +6,7 @@ import java.time.ZonedDateTime
 data class Position(
         val id: Int? = null,
 
-        /* Ship identification properties */
+        /* Vessel identification properties */
         // Unique code composed by the contracting party/cooperating non-contracting party expressed as 3-alpha
         // country code followed by the vessel registration number as recorded in the national fleet register
         val internalReferenceNumber: String ? = null,

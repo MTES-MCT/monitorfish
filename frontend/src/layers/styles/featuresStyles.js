@@ -2,18 +2,18 @@ import {Icon, Style} from "ol/style";
 import CircleStyle from "ol/style/Circle";
 import Fill from "ol/style/Fill";
 
-export const setShipIconStyle = (ship, iconFeature, shipTrackInternalReferenceNumberToShow) => {
-    const shipDate = new Date(ship.dateTime);
+export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalReferenceNumberToShow) => {
+    const vesselDate = new Date(vessel.dateTime);
     const nowMinusThreeHours = new Date;
     nowMinusThreeHours.setHours(nowMinusThreeHours.getHours() - 3);
 
-    let opacity = shipDate < nowMinusThreeHours ? 0.3 : 1;
+    let opacity = vesselDate < nowMinusThreeHours ? 0.3 : 1;
     const iconStyle = new Style({
-        image: ship.speed > 0 ? new Icon({
+        image: vessel.speed > 0 ? new Icon({
             src: 'boat_mf.png',
             offset: [0, 0],
             imgSize: [14, 14],
-            rotation: ship.course,
+            rotation: vessel.course,
             opacity: opacity
         }) : new CircleStyle({
             radius: 4,
@@ -23,14 +23,14 @@ export const setShipIconStyle = (ship, iconFeature, shipTrackInternalReferenceNu
         })
     });
 
-   if (ship.internalReferenceNumber === shipTrackInternalReferenceNumberToShow) {
-       iconFeature.setStyle([iconStyle, selectedShipStyle]);
+   if (vessel.internalReferenceNumber === vesselTrackInternalReferenceNumberToShow) {
+       iconFeature.setStyle([iconStyle, selectedVesselStyle]);
    } else {
        iconFeature.setStyle(iconStyle);
    }
 }
 
-export const selectedShipStyle =  new Style({
+export const selectedVesselStyle =  new Style({
     image: new Icon({
         opacity: 1,
         src: 'select.png',

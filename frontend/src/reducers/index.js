@@ -1,6 +1,6 @@
 import layer from './Layer'
 import global from './Global'
-import ship from './Ship'
+import vessel from './Vessel'
 
 function combineReducers(reducers) {
     return (state = {}, action) => {
@@ -15,5 +15,5 @@ function combineReducers(reducers) {
 export default combineReducers({
     layer: layer,
     global: global,
-    ship: ship,
+    vessel: vessel,
 })

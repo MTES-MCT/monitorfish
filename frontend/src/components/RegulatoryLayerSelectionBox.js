@@ -26,7 +26,7 @@ const RegulatoryLayerSelectionBox = () => {
 
     return (
         layerNames && layerNames.length > 0 ? <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
-            <Title onClick={() => setOpenBox(!openBox)}>REGLEMENTATION</Title>
+            <Title onClick={() => setOpenBox(!openBox)}>RÉGLEMENTATION</Title>
             <RegulatoryLayerSearchBox layerNames={layerNames} setFoundLayerNames={setFoundLayerNames}/>
             <List>
                 {

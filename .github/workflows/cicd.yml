@@ -27,18 +27,18 @@ jobs:
 
     - name: Set ENV profile as LOCAL when it is on master branch
       if: github.ref == 'refs/heads/master'
-      run: echo ::set-env name=ENV_PROFILE::$(echo "local")
+      run: echo "dev" >> $ENV_PROFILE
 
     - name: Set ENV profile as PROD when it is a release
       if: startsWith(github.ref, 'refs/tags/v')
-      run: echo ::set-env name=ENV_PROFILE::$(echo "prod")
+      run: echo "prod" >> $ENV_PROFILE
 
     - name: Set VERSION env
       run: |
         if [ "${ENV_PROFILE}" != "prod" ]; then\
-            echo ::set-env name=VERSION::$(echo ${{ steps.lastrelease.outputs.release }}_SNAPSHOT)
+            echo ${{ steps.lastrelease.outputs.release }}_SNAPSHOT >> $VERSION
         else\
-            echo ::set-env name=VERSION::$(echo ${{ steps.lastrelease.outputs.release }})
+            echo ${{ steps.lastrelease.outputs.release }} >> $VERSION
         fi
     
     - name: Setup Java JDK

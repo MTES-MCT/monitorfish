@@ -19,13 +19,13 @@ const MapAttributionsBox = () => {
 
 const Wrapper = styled.div`
   bottom: .5em;
-  right: .5em;
+  left: .5em;
   max-width: calc(100% - 1.3em);  
   background: none;
 `
 
 const Button = styled.button`
-  float:right;
+  float: left;
   
   :hover {
     background: none;
@@ -57,5 +57,3 @@ const Link = styled.a`
 `
 
 export default MapAttributionsBox
-
-

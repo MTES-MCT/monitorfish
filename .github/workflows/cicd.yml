@@ -17,6 +17,8 @@ jobs:
   build:
     name: Test, build and Package
     runs-on: ubuntu-18.04
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
     steps:
 
     - name: Get last release version

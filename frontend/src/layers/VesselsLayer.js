@@ -16,13 +16,10 @@ import LineString from "ol/geom/LineString";
 import {getTrackArrow, getTrackColor} from "../domain/vesselTrack";
 import {calculatePointsDistance, calculateSplitPointCoords} from "../utils";
 import {setArrowStyle, setCircleStyle, setVesselIconStyle} from "./styles/featuresStyles";
-import {getVessels, getVesselTrack} from "../api/fetch";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 
 const VesselsLayer = () => {
     const [state, dispatch] = useContext(Context)
-    const [vessels, setVessels] = useState(null)
-    const [vesselTrack, setVesselTrack] = useState(null)
 
     useEffect(() => {
         // create and add vector source layer
@@ -34,16 +31,8 @@ const VesselsLayer = () => {
     }, [])
 
     useEffect(() => {
-        getVessels(setVessels, dispatch)
-
-        if (state.vessel.vesselTrackToShow) {
-            getVesselTrack(setVesselTrack, dispatch, state.vessel.vesselTrackToShow.getProperties().internalReferenceNumber)
-        }
-    }, [state.global.fetch, state.vessel.vesselTrackToShow])
-
-    useEffect(() => {
-        if (vessels && vessels.length && state.layer.layers) {
-            let vesselsFeatures = vessels
+        if (state.vessel.vessels && state.vessel.vessels.length && state.layer.layers) {
+            let vesselsFeatures = state.vessel.vessels
                 .filter(vessel => vessel)
                 .map((vessel, index) => {
                     const transformedCoordinates = transform([vessel.longitude, vessel.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
@@ -77,11 +66,11 @@ const VesselsLayer = () => {
                     dispatch({type: 'SHOW_LAYER', payload: {type: Layers.VESSELS}});
                 });
         }
-    }, [vessels])
+    }, [state.vessel.vessels])
 
     useEffect(() => {
-        if (vesselTrack && vesselTrack.positions.length && state.layer.layers) {
-            let vesselTrackLines = buildVesselTrackLines()
+        if (state.vessel.vessel && state.vessel.vessel.positions && state.vessel.vessel.positions.length && state.layer.layers) {
+            let vesselTrackLines = buildVesselTrackLines(state.vessel.vessel)
 
             let circlePoints = buildCirclePoints(vesselTrackLines);
             circlePoints.forEach(circlePoint => {
@@ -100,9 +89,9 @@ const VesselsLayer = () => {
                 className: Layers.VESSEL_TRACK
             });
 
-            dispatch({type: 'SET_VESSEL_TRACK', payload: vesselTrackVector})
+            dispatch({type: 'SET_VESSEL_TRACK_VECTOR', payload: vesselTrackVector})
         }
-    }, [vesselTrack])
+    }, [state.vessel.vessel])
 
     function buildCirclePoints(vesselTrackLines) {
         return vesselTrackLines.map((feature, index) => {
@@ -138,18 +127,18 @@ const VesselsLayer = () => {
         }).filter(arrowPoint => arrowPoint);
     }
 
-    function buildVesselTrackLines() {
-        return vesselTrack.positions
+    function buildVesselTrackLines(vessel) {
+        return vessel.positions
             .filter(position => position)
             .map((position, index) => {
                 let lastPoint = index + 1;
-                if (lastPoint === vesselTrack.positions.length) {
+                if (lastPoint === vessel.positions.length) {
                     return
                 }
 
                 // transform coord to EPSG 3857 standard Lat Long
                 let firstPoint = new transform([position.longitude, position.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
-                let secondPoint = new transform([vesselTrack.positions[index + 1].longitude, vesselTrack.positions[index + 1].latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
+                let secondPoint = new transform([vessel.positions[index + 1].longitude, vessel.positions[index + 1].latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
 
                 const dx = secondPoint[0] - firstPoint[0];
                 const dy = secondPoint[1] - firstPoint[1];

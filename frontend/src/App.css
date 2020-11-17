@@ -2,6 +2,11 @@
   object-position: 0 -234px;
 }
 
+html {
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
 .eye {
   margin-bottom: -5px;
   margin-left: 10px;
@@ -10,7 +15,7 @@
 }
 
 .zoom {
-  bottom: .5em;
+  bottom: 40px;
   left: .5em;
 }
 
@@ -32,4 +37,40 @@
 
 button:hover, button:focus {
   background: inherit;
+}
+
+.hide {
+  display: none;
+}
+
+.active-tab {
+  background-color: white;
+}
+
+table:not(.horizontal) th, table:not(.horizontal) td {
+  overflow: unset;
+  flex: unset;
+}
+
+table th, table td {
+  padding: unset;
+}
+
+table tr {
+  display: table-row
+}
+
+.primary {
+  background: rgba(5, 5, 94, 1);
+}
+
+tbody {
+  display: contents !important;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
 }

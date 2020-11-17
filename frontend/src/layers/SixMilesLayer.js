@@ -8,9 +8,7 @@ import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 import GeoJSON from "ol/format/GeoJSON";
 import Stroke from "ol/style/Stroke";
 import Layers from "../domain/layers";
-import Fill from "ol/style/Fill";
 import LayersEnum from "../domain/layers";
-import Text from "ol/style/Text";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 
 const SixMilesLayer = () => {

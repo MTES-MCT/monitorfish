@@ -44,7 +44,7 @@ const RegulatoryLayerSelectionBox = () => {
 const Wrapper = styled.div`
   position: absolute;
   display: inline-block;
-  top: 100px;
+  top: 70px;
   left: 0.5em;
   z-index: 999999;
   color: white;

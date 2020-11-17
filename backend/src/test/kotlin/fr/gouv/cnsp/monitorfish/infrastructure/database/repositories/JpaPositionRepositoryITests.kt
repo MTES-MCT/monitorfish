@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,10 +16,10 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @RunWith(SpringRunner::class)
-class JpaPositionsRepositoryITests : AbstractDBTests() {
+class JpaPositionRepositoryITests : AbstractDBTests() {
 
     @Autowired
-    private lateinit var jpaPositionRepository: JpaPositionsRepository
+    private lateinit var jpaPositionRepository: JpaPositionRepository
 
     @Autowired
     lateinit var cacheManager: CacheManager

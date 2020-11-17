@@ -7,15 +7,12 @@ import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
-import {Attribution, Zoom} from 'ol/control';
+import {Zoom} from 'ol/control';
 import {Context} from "../Store";
 import LayersEnum from "../domain/layers";
-import Layers from "../domain/layers";
 import MapCoordinatesBox from "./MapCoordinatesBox";
-import ZoneLayerSelectionBox from "./ZoneLayerSelectionBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {selectedVesselStyle} from "../layers/styles/featuresStyles";
-import RegulatoryLayerSelectionBox from "./RegulatoryLayerSelectionBox";
 import MapAttributionsBox from "./MapAttributionsBox";
 
 const MapWrapper = () => {
@@ -106,7 +103,7 @@ const MapWrapper = () => {
     }, [state.layer.layers, state.layer.layerToHide, map])
 
     useEffect(() => {
-        if (map && state.vessel.vesselTrack) {
+        if (map && state.vessel.vesselTrackVector) {
             map.getLayers().getArray()
                 .filter(layer => {
                     return layer.className_ === LayersEnum.VESSEL_TRACK
@@ -116,9 +113,9 @@ const MapWrapper = () => {
                 })
 
             let belowVesselLayer = map.getLayers().getLength() - 1;
-            map.getLayers().insertAt(belowVesselLayer, state.vessel.vesselTrack);
+            map.getLayers().insertAt(belowVesselLayer, state.vessel.vesselTrackVector);
         }
-    }, [state.vessel.vesselTrack, state.vessel.vesselTrackToShow, map])
+    }, [state.vessel.vesselTrackVector, state.vessel.vesselTrackToShow, map])
 
 
     useEffect(() => {
@@ -188,17 +185,6 @@ const MapWrapper = () => {
     return (
         <div>
             <MapContainer ref={mapElement} />
-            <ZoneLayerSelectionBox
-                layers={[
-                    { layer: Layers.EEZ, layerName: 'ZEE' },
-                    { layer: Layers.FAO, layerName: 'FAO' },
-                    { layer: Layers.THREE_MILES, layerName: '3 Milles' },
-                    { layer: Layers.SIX_MILES, layerName: '6 Milles' },
-                    { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
-                    { layer: Layers.ONE_HUNDRED_MILES, layerName: '100 Milles' },
-                    { layer: Layers.COAST_LINES, layerName: 'Trait de côte' }
-                ]}/>
-            <RegulatoryLayerSelectionBox />
             <MapCoordinatesBox coordinates={cursorCoordinates}/>
             <MapAttributionsBox />
         </div>
@@ -208,6 +194,8 @@ const MapWrapper = () => {
 const MapContainer = styled.div`
   height: 100vh;
   width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
 `
 
 export default MapWrapper

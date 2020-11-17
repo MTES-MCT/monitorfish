@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 
-interface PositionsRepository {
+interface PositionRepository {
     fun findAll(): List<Position>
     fun findAllByMMSI(MMSI: String): List<Position>
     fun findAllLastDistinctPositions(): List<Position>

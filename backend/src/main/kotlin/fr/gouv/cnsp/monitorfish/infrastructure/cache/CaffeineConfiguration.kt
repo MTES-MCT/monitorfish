@@ -20,7 +20,7 @@ class CaffeineConfiguration {
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
-        val vesselCache = buildCache(vessels, ticker, 4320)
+        val vesselCache = buildCache(vessels, ticker, 5)
         val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
         val vesselsPositions = buildCache(vesselsPosition, ticker, 1)
         val manager = SimpleCacheManager()

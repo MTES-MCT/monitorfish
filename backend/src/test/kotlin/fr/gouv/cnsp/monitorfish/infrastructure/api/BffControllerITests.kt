@@ -79,7 +79,7 @@ class BffControllerITests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any()) } willReturn {
-            Pair(Vessel("FR224226850", "", "MY AWESOME VESSEL", CountryCode.FR, null, "Fishing"),
+            Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGearMain = "Trémails", vesselType = "Fishing"),
                 listOf(firstPosition, secondPosition, thirdPosition))
         }
 
@@ -87,11 +87,10 @@ class BffControllerITests {
         mockMvc.perform(get("/bff/v1/vessels/FR224226850"))
                 // Then
                 .andExpect(status().isOk)
-                .andExpect(jsonPath("$.gearType", equalTo(null)))
+                .andExpect(jsonPath("$.declaredFishingGearMain", equalTo("Trémails")))
                 .andExpect(jsonPath("$.vesselType", equalTo("Fishing")))
                 .andExpect(jsonPath("$.flagState", equalTo("FR")))
                 .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
-                .andExpect(jsonPath("$.externalReferenceNumber", equalTo("")))
                 .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
 

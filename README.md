@@ -54,3 +54,60 @@ make test
 
 API documentation can be found at http://localhost:8880/swagger-ui.html
 
+## Data science
+
+Data analysis and visualization is performed in a dockerized environment. Inside the docker environment :
+* python 3.8 is installed in the `base` conda environment with commonly used libraries for geo data analysis (geopandas, plotly...)
+* the `datascience` directory of this repository is bind-mounted at `/home/jovyan/work`.
+* Notebooks (stored in `/home/jovyan/work/notebooks`) can therefore access and import code from the `/home/jovyan/work/src` directory where code worth keeping - helper functions, data processing steps... - is kept
+
+### Running a notebook in the data science environment
+To start a jupyter notebook in the data science environment, execute :
+```shell
+make run-jupyter-notebook
+```
+
+In this environment, `http_proxy` and `https_proxy` environment variables are set to access the Internet through the RIE proxy.
+
+To start a jupyter notebook without proxy configuration (e.g. when connected to the Internet from outside the RIE network, for exemple when using a shared connection from a cell phone):
+
+```shell
+make run-jupyter-notebook-no-proxy
+```
+
+### Installing new packages in the data science environment
+To install packages, the conda package manager is set up to use the conda-forge channel with `channel_priority: strict`. In order to avoid dependency conflits, it is recommended to install only packages from the conda-forge repository.
+
+To install a new python package in the conda environment:
+1. Check the exact name of the package in the [conda-forge repository](https://anaconda.org/conda-forge)
+2. Add the package name to the `datascience/environment.yml` file and save the file.
+3. Execute :
+```shell
+make update-data-science-env
+```
+This will :
+* start the data science docker environment (if one is already running, it will spawn a new container)
+* read the `environment.yml` file (which is accessible since `datascience` is bind-mounted into the docker container) where the newly added package will be detected
+* install the package in the conda environment
+* update the docker image
+
+This can be performed even as the environment is up and running. For instance, if, while exploring a dataset in a Jupyter Notebook running in the data science environment, you realize that you need a package that is not installed: 
+* add the package to the `environment.yml` file
+* open a new shell in the repository and run `make update-data-science-env`.
+
+This will start a second container next to the one where the notebook is running, install the package, commit the changes to the docker image, and the container in which the notebook is running will pick up the update and make the package available without requiring the environment and the notebook to be restarted.
+
+### Getting a shell in the data science environment
+To run a bash shell in the data science environment, after cloning the repo, execute :
+```bash
+make run-data-science-env
+```
+Or, if connecting from outside the RIE network:
+```bash
+make run-data-science-env-no-proxy
+```
+
+### Data
+Data is currently not open and can only be accessed from inside the RIE network. 
+TO BE UPDATED.
+

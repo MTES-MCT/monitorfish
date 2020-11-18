@@ -48,7 +48,15 @@ const VesselsLayer = () => {
 
                     iconFeature.setId(`${LayersEnum.VESSELS}:${index}`)
 
-                    let vesselTrackInternalReferenceNumberToShow = state.vessel.vesselTrackToShow ? state.vessel.vesselTrackToShow.getProperties().internalReferenceNumber : null;
+                    let vesselTrackInternalReferenceNumberToShow
+                    if (state.vessel.vesselTrackToShow) {
+                        vesselTrackInternalReferenceNumberToShow = state.vessel.vesselTrackToShow.getProperties().internalReferenceNumber
+                    } else if (state.vessel.vessel) {
+                        vesselTrackInternalReferenceNumberToShow = state.vessel.vessel.internalReferenceNumber
+                    } else {
+                        vesselTrackInternalReferenceNumberToShow = null
+                    }
+
                     setVesselIconStyle(vessel, iconFeature, vesselTrackInternalReferenceNumberToShow);
 
                     return iconFeature;
@@ -90,6 +98,7 @@ const VesselsLayer = () => {
             });
 
             dispatch({type: 'SET_VESSEL_TRACK_VECTOR', payload: vesselTrackVector})
+            dispatch({type: 'RESET_SHOW_VESSEL_TRACK'})
         }
     }, [state.vessel.vessel])
 

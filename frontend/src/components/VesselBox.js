@@ -11,9 +11,9 @@ import VesselIdentity from "./VesselIdentity";
 
 const VesselBox = () => {
     const [openBox, setOpenBox] = useState(false);
-    const [vessel, setVessel] = useState(false);
+    const [vessel, setVessel] = useState(null);
     const [index, setIndex] = useState(1)
-    const [state] = useContext(Context)
+    const [state, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
 
     useEffect(() => {
@@ -23,18 +23,24 @@ const VesselBox = () => {
     }, [openBox])
 
     useEffect(() => {
-        if (state.vessel.vesselTrackToShow) {
+        if (state.vessel.vesselTrackToShow || state.vessel.vessel) {
             setOpenBox(true)
-        } else {
+        } else if (!state.vessel.vessel) {
             setOpenBox(false)
         }
-    }, [state.vessel.vesselTrackToShow])
+    }, [state.vessel.vesselTrackToShow, state.vessel.vessel])
 
     useEffect(() => {
         if (state.vessel.vessel) {
             setVessel(state.vessel.vessel)
         }
     }, [state.vessel.vessel])
+
+    function hideVessel() {
+        dispatch({type: 'RESET_VESSEL_TRACK_VECTOR'});
+        dispatch({type: 'RESET_VESSEL'});
+        setVessel(null)
+    }
 
     return (
         <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
@@ -46,6 +52,7 @@ const VesselBox = () => {
                             <VesselName>{vessel.vesselName} {' '}
                                 <VesselCountry>({vessel.flagState})</VesselCountry>
                             </VesselName>
+                            <Close src={'close.png'} onClick={() => hideVessel()}/>
                         </VesselHeader>
                     <div>
                         <TabList>
@@ -87,6 +94,14 @@ const VesselBox = () => {
         </Wrapper>
     )
 }
+
+const Close = styled.img`
+  width: 12px;
+  float: right;
+  margin-top: 9px;
+  padding: 5px 5px 5px 5px;
+  cursor: pointer;
+`
 
 const Panel = styled.div`
   padding: 5px 5px 5px 10px;

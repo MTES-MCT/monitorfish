@@ -2,12 +2,13 @@ import LayersEnum from "../domain/layers";
 
 const Layer = (state, action) => {
     switch (action.type) {
-        case 'REPLACE_VESSELS_LAYER':
+        case 'REPLACE_VESSELS_LAYER': {
             const arrayWithoutVessels = state.layers.filter(layer => layer.className_ !== LayersEnum.VESSELS)
             return {
                 ...state,
                 layers: [...arrayWithoutVessels, action.payload]
             };
+        }
         case 'SHOW_LAYER':
             return {
                 ...state,

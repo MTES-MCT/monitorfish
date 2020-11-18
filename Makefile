@@ -1,6 +1,6 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 
-.PHONY: install init-sig run-front run-back docker-build docker-tag docker-push check-clean-archi test restart-app
+.PHONY: install init-sig run-front run-back docker-build docker-tag docker-push check-clean-archi test restart-app data_science update_data_science_environment
 
 # DEV commands
 install:
@@ -35,3 +35,32 @@ restart-remote-app:
 	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
 ruu-local-app:
 	cd infra/local && sudo docker-compose up -d
+
+# DATA commands
+run-jupyter-notebook:
+	docker-compose -f datascience/docker-compose.yml up
+run-jupyter-notebook-no-proxy:
+	docker-compose -f datascience/docker-compose-no-proxy.yml up
+run-jupyter-notebook-dam-si:
+	docker-compose -f datascience/docker-compose-dam-si.yml up
+run-data-science-env:
+	docker-compose -f datascience/docker-compose.yml up -d
+	docker exec -it monitorfish_data_science bash
+run-data-science-env-no-proxy:
+	docker-compose -f datascience/docker-compose-no-proxy.yml up -d
+	docker exec -it monitorfish_data_science bash
+run-data-science-env-dam-si:
+	docker-compose -f datascience/docker-compose-dam-si.yml up -d
+	docker exec -it monitorfish_data_science_dam_si bash
+update-data-science-env:
+	docker-compose -f datascience/docker-compose.yml up -d
+	docker container exec monitorfish_data_science conda env update -n base -f "work/environment.yml"
+	docker container commit monitorfish_data_science monitorfish_data_science
+update-data-science-env-no-proxy:
+	docker-compose -f datascience/docker-compose-no-proxy.yml up -d
+	docker container exec monitorfish_data_science conda env update -n base -f "work/environment.yml"
+	docker container commit monitorfish_data_science monitorfish_data_science
+update-data-science-env-dam-si:
+	docker-compose -f datascience/docker-compose-dam-si.yml up -d
+	docker container exec monitorfish_data_science_dam_si conda env update -n base -f "work/environment.yml"
+	docker container commit monitorfish_data_science_dam_si monitorfish_data_science_dam_si

@@ -1,0 +1,12 @@
+version: "3"
+services: 
+  data_science:
+    build: 
+      context: .
+      dockerfile: Dockerfile-dam-si
+    image: monitorfish_data_science_dam_si
+    container_name: monitorfish_data_science_dam_si
+    ports: 
+        - 8888:8888
+    volumes:
+      - .:/home/jovyan/work

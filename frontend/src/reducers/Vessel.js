@@ -12,15 +12,30 @@ const Reducer = (state, action) => {
                 previousVesselTrackShowed: state.vesselTrackToShow,
                 vesselTrackToShow: null
             };
+        case 'RESET_PREVIOUS_VESSEL_SHOWED':
+            return {
+                ...state,
+                previousVesselTrackShowed: null,
+            };
         case 'SET_VESSEL_TRACK_VECTOR':
             return {
                 ...state,
                 vesselTrackVector: action.payload
             };
+        case 'RESET_VESSEL_TRACK_VECTOR':
+            return {
+                ...state,
+                vesselTrackVector: null
+            };
         case 'SET_VESSEL':
             return {
                 ...state,
                 vessel: action.payload
+            };
+        case 'RESET_VESSEL':
+            return {
+                ...state,
+                vessel: null
             };
         case 'SET_VESSELS':
             return {

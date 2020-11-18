@@ -43,6 +43,6 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessel = jpaVesselRepository.findVessel("FR209143000")
 
-        assertThat(vessel.externalReferenceNumber).isEqualTo("FR209143000")
+        assertThat(vessel.internalReferenceNumber).isEqualTo("FR209143000")
     }
 }

@@ -104,19 +104,24 @@ const MapWrapper = () => {
 
     useEffect(() => {
         if (map && state.vessel.vesselTrackVector) {
-            map.getLayers().getArray()
-                .filter(layer => {
-                    return layer.className_ === LayersEnum.VESSEL_TRACK
-                })
-                .forEach(layer => {
-                    map.getLayers().remove(layer);
-                })
+            removeVesselTrackLayer();
 
             let belowVesselLayer = map.getLayers().getLength() - 1;
             map.getLayers().insertAt(belowVesselLayer, state.vessel.vesselTrackVector);
+        } else if (map && !state.vessel.vesselTrackVector) {
+            removeVesselTrackLayer();
         }
-    }, [state.vessel.vesselTrackVector, state.vessel.vesselTrackToShow, map])
+    }, [state.vessel.vesselTrackVector, map])
 
+    function removeVesselTrackLayer() {
+        map.getLayers().getArray()
+            .filter(layer => {
+                return layer.className_ === LayersEnum.VESSEL_TRACK
+            })
+            .forEach(layer => {
+                map.getLayers().remove(layer);
+            })
+    }
 
     useEffect(() => {
         if (map && state.vessel.vesselToMoveOn) {
@@ -134,17 +139,22 @@ const MapWrapper = () => {
             return feature;
         });
 
-        if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
-            feature.setStyle([feature.getStyle(), selectedVesselStyle]);
-            dispatch({type: 'SHOW_VESSEL_TRACK', payload: feature});
+        if (feature
+            && feature.getId()
+            && feature.getId().includes(LayersEnum.VESSELS)) {
+
+            if(!feature.getStyle().length) {
+                feature.setStyle([feature.getStyle(), selectedVesselStyle]);
+                dispatch({type: 'SHOW_VESSEL_TRACK', payload: feature});
+            }
         }
     }
 
     useEffect(() => {
-        if (map && state.vessel.previousVesselTrackShowed) {
+        if (map && state.vessel.previousVesselTrackShowed && !state.vessel.vessel) {
             removeSelectStyleToPreviouslySelectedFeature();
         }
-    }, [state.vessel.previousVesselTrackShowed, map])
+    }, [state.vessel.previousVesselTrackShowed, state.vessel.vessel, map])
 
     function removeSelectStyleToPreviouslySelectedFeature() {
         state.layer.layers
@@ -153,6 +163,7 @@ const MapWrapper = () => {
                 vesselsLayer.getSource().getFeatures().map(feature => {
                     if (feature.getId() === state.vessel.previousVesselTrackShowed.getId()) {
                         feature.setStyle(feature.getStyle()[0])
+                        dispatch({type: 'RESET_PREVIOUS_VESSEL_SHOWED'})
                     }
                 })
             })

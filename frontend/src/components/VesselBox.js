@@ -45,10 +45,13 @@ const VesselBox = () => {
     return (
         <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
             {
-                vessel ? <div>
+                vessel ? (vessel.internalReferenceNumber ||
+                    vessel.externalReferenceNumber ||
+                    vessel.MMSI ||
+                    vessel.IRCS) ? <div>
                         <VesselHeader>
-                            <ReactCountryFlag countryCode={vessel.flagState}
-                                              style={{fontSize: '2em'}}/>
+                            {vessel.flagState ? <ReactCountryFlag countryCode={vessel.flagState}
+                                                                  style={{fontSize: '2em'}}/> : null}
                             <VesselName>{vessel.vesselName} {' '}
                                 <VesselCountry>({vessel.flagState})</VesselCountry>
                             </VesselName>
@@ -88,12 +91,37 @@ const VesselBox = () => {
                         <Panel className={index === 5 ? '' : 'hide'}>
                             <h1>TODO</h1>
                         </Panel>
-                    </div> </div>: "Récupération..."
+                    </div> </div> : <VesselNotFound>
+                        <Close src={'close.png'} onClick={() => hideVessel()}/>
+                        <VesselNotFoundText>
+                            <VesselNotFoundImage src="boat_fishing_not_found.png"/>
+                            <p>Nous n'avons pas trouvé ce navire dans notre base de donnée...</p>
+                        </VesselNotFoundText>
+                    </VesselNotFound> : "Récupération..."
             }
 
         </Wrapper>
     )
 }
+
+const VesselNotFoundImage = styled.img`
+  height: 200px;
+`
+
+const VesselNotFound = styled.div`
+  padding: 5px 10px 10px 10px;
+  position: absolute;
+  right: 0;
+  height: inherit;
+`
+
+const VesselNotFoundText = styled.div`
+  padding: 5px 10px 10px 10px;
+  display: table-cell;
+  vertical-align: middle;
+  height: inherit;
+  color: gray;
+`
 
 const Close = styled.img`
   width: 12px;

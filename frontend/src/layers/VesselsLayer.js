@@ -17,6 +17,7 @@ import {getTrackArrow, getTrackColor} from "../domain/vesselTrack";
 import {calculatePointsDistance, calculateSplitPointCoords} from "../utils";
 import {setArrowStyle, setCircleStyle, setVesselIconStyle} from "./styles/featuresStyles";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {toStringHDMS} from "ol/coordinate";
 
 const VesselsLayer = () => {
     const [state, dispatch] = useContext(Context)
@@ -44,6 +45,12 @@ const VesselsLayer = () => {
                         MMSI: vessel.MMSI,
                         flagState: vessel.flagState,
                         vesselName: vessel.vesselName,
+                        coordinates: toStringHDMS(transformedCoordinates),
+                        course: vessel.course,
+                        positionType: vessel.positionType,
+                        speed: vessel.speed,
+                        IRCS: vessel.IRCS,
+                        dateTime: vessel.dateTime
                     });
 
                     iconFeature.setId(`${LayersEnum.VESSELS}:${index}`)

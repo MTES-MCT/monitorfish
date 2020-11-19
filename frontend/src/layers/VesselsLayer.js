@@ -88,7 +88,7 @@ const VesselsLayer = () => {
         if (state.vessel.vessel && state.vessel.vessel.positions && state.vessel.vessel.positions.length && state.layer.layers) {
             let vesselTrackLines = buildVesselTrackLines(state.vessel.vessel)
 
-            let circlePoints = buildCirclePoints(vesselTrackLines);
+            let circlePoints = buildCirclePoints(vesselTrackLines, state.vessel.vessel.positions);
             circlePoints.forEach(circlePoint => {
                 vesselTrackLines.push(circlePoint)
             })
@@ -110,17 +110,48 @@ const VesselsLayer = () => {
         }
     }, [state.vessel.vessel])
 
-    function buildCirclePoints(vesselTrackLines) {
+    function arraysEqual(a, b) {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length !== b.length) return false;
+
+        // If you don't care about the order of the elements inside
+        // the array, you should sort both arrays here.
+        // Please note that calling sort on an array will modify that array.
+        // you might want to clone your array first.
+
+        for (var i = 0; i < a.length; ++i) {
+            if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    function buildCirclePoints(vesselTrackLines, positions) {
         return vesselTrackLines.map((feature, index) => {
             if (index === vesselTrackLines.length - 1) {
                 return
             }
 
+            let position = positions.filter(position => {
+                let point = new transform([position.longitude, position.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
+                return arraysEqual(feature.getGeometry().getCoordinates()[0], point)
+            })
+            if(position.length > 0) {
+                position = position[0]
+            } else {
+                position = null
+            }
+
             const circleFeature = new Feature({
                 geometry: new Point(feature.getGeometry().getCoordinates()[1]),
-                name: 'vessel:track:circle:' + index
+                name: LayersEnum.VESSEL_TRACK + ':position:' + index,
+                course: position ? position.course : null,
+                positionType: position ? position.positionType : null,
+                speed: position ? position.speed : null,
+                dateTime: position ? position.dateTime : null
             });
 
+            circleFeature.setId(LayersEnum.VESSEL_TRACK + ':position:' + index)
             setCircleStyle(getTrackColor(feature.getProperties().speed), circleFeature);
 
             return circleFeature
@@ -134,10 +165,11 @@ const VesselsLayer = () => {
 
             const arrowFeature = new Feature({
                 geometry: new Point(newPoint),
-                name: 'vessel:track:arrow:' + index,
+                name: LayersEnum.VESSEL_TRACK + ':arrow:' + index,
                 course: feature.getProperties().course
             });
 
+            arrowFeature.setId(LayersEnum.VESSEL_TRACK + ':arrow:' + index)
             setArrowStyle(getTrackArrow(feature.getProperties().speed), arrowFeature);
 
             return arrowFeature

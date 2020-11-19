@@ -1,20 +1,21 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import fr.gouv.cnsp.monitorfish.domain.exceptions.PositionsNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
-import com.nhaarman.mockitokotlin2.any
-import fr.gouv.cnsp.monitorfish.domain.exceptions.VesselNotFoundException
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import kotlinx.coroutines.runBlocking
-import org.assertj.core.api.Assertions.catchThrowable
 
 @ExtendWith(SpringExtension::class)
 class GetVesselUTest {
@@ -34,6 +35,7 @@ class GetVesselUTest {
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
         given(positionRepository.findVesselLastPositions(any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
+        given(vesselRepository.findVessel(any())).willReturn(Vessel())
 
         // When
         val pair = runBlocking {
@@ -58,7 +60,8 @@ class GetVesselUTest {
         }
 
         // Then
-        assertThat(throwable).isInstanceOf(VesselNotFoundException::class.java)
+        assertThat(throwable).isInstanceOf(PositionsNotFoundException::class.java)
         assertThat(throwable.message).contains("No position found for vessel FR224226850")
     }
+
 }

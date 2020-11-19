@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.exceptions.VesselNotFoundException
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -27,14 +25,14 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findVessel Should throw a VesselNotFoundException When no vessel is found`() {
+    fun `findVessel Should return an empty Vessel object When no vessel is found`() {
         // When
-        val throwable = catchThrowable {
-            jpaVesselRepository.findVessel("DUMMY")
-        }
+        val vessel = jpaVesselRepository.findVessel("DUMMY")
 
-        assertThat(throwable).isInstanceOf(VesselNotFoundException::class.java)
-        assertThat(throwable).hasMessageContaining("Vessel DUMMY not found")
+        assertThat(vessel.internalReferenceNumber).isNull()
+        assertThat(vessel.externalReferenceNumber).isNull()
+        assertThat(vessel.MMSI).isNull()
+        assertThat(vessel.IRCS).isNull()
     }
 
     @Test

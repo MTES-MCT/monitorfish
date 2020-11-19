@@ -8,28 +8,41 @@ import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import {Zoom} from 'ol/control';
+import {add} from 'ol/coordinate';
 import {Context} from "../Store";
 import LayersEnum from "../domain/layers";
 import MapCoordinatesBox from "./MapCoordinatesBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {selectedVesselStyle} from "../layers/styles/featuresStyles";
 import MapAttributionsBox from "./MapAttributionsBox";
+import Overlay from "ol/Overlay";
+import VesselCard from "./VesselCard";
+import {getWidth} from "ol/extent";
 
 const MapWrapper = () => {
     const [state, dispatch] = useContext(Context)
     const [map, setMap] = useState()
     const [cursorCoordinates, setCursorCoordinates] = useState()
-
+    const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
     const mapElement = useRef()
     const mapRef = useRef()
     mapRef.current = map
 
     useEffect(() => {
+        const vesselCardOverlay = new Overlay({
+            element: document.getElementById('vessel-card'),
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 400,
+            }
+        });
+
         const OSMLayer = new VectorTileLayer({
             source: new OSM({
                 attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
             }),
         })
+
 
         const centeredOnFrance = [2.99049, 46.82801];
         const initialMap = new Map({
@@ -38,6 +51,7 @@ const MapWrapper = () => {
                 OSMLayer
             ],
             renderer: (['webgl', 'canvas']),
+            overlays: [vesselCardOverlay],
             view: new View({
                 projection: OPENLAYERS_PROJECTION,
                 center: transform(centeredOnFrance, BACKEND_PROJECTION, OPENLAYERS_PROJECTION),
@@ -49,7 +63,7 @@ const MapWrapper = () => {
 
         // set map onclick handler
         initialMap.on('click', handleMapClick)
-        initialMap.on('pointermove', handlePointerMove)
+        initialMap.on('pointermove', event => handlePointerMove(event, vesselCardOverlay))
 
         setMap(initialMap)
     }, [])
@@ -169,10 +183,25 @@ const MapWrapper = () => {
             })
     }
 
-    function showPointerIfVesselFeature(feature) {
+    const handlePointerMove = (event, vesselCardOverlay) => {
+        const pixel = mapRef.current.getEventPixel(event.originalEvent);
+        const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => {
+            return feature;
+        });
+
+        showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay);
+        showCoordinatesInDMS(event)
+    }
+
+    function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay) {
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
+            setVesselFeatureToShowOnCard(feature)
+            document.getElementById('vessel-card').style.display = 'block';
+            vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates());
             mapRef.current.getTarget().style.cursor = 'pointer'
         } else {
+            document.getElementById('vessel-card').style.display = 'none';
+            setVesselFeatureToShowOnCard(feature)
             mapRef.current.getTarget().style.cursor = ''
         }
     }
@@ -183,24 +212,30 @@ const MapWrapper = () => {
         setCursorCoordinates(toStringHDMS(transformedCoordinates))
     }
 
-    const handlePointerMove = event => {
-        const pixel = mapRef.current.getEventPixel(event.originalEvent);
-        const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => {
-            return feature;
-        });
-
-        showPointerIfVesselFeature(feature);
-        showCoordinatesInDMS(event);
-    }
-
     return (
         <div>
             <MapContainer ref={mapElement} />
+            <VesselCardOverlay id="vessel-card">
+                { vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null }
+            </VesselCardOverlay>
+
             <MapCoordinatesBox coordinates={cursorCoordinates}/>
             <MapAttributionsBox />
         </div>
     )
 }
+
+const VesselCardOverlay = styled.div`
+position: absolute;
+  box-shadow: 0px 0px 0px 1px rgba(5, 5, 94, 0.3) !important;
+  top: -210px;
+  left: -166px;
+  width: 360px;
+  height: 180px;
+  text-align: left;
+  background-color: #fff;
+  border-radius: 2px;
+`
 
 const MapContainer = styled.div`
   height: 100vh;

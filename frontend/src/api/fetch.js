@@ -60,6 +60,7 @@ export function getAllRegulatoryLayerNames(dispatch) {
             return [...uniqueLayerNames]
         })
         .catch(error => {
-            dispatch({type: 'SET_ERROR', payload: error});
+            console.error("Récupération des couches réglementaire impossible", error)
+            dispatch({type: 'SET_ERROR', payload: new Error("Récupération des couches réglementaire impossible")});
         });
 }

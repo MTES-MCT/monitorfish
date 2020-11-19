@@ -20,7 +20,7 @@ const Coordinates = styled.span`
   background-color: #05055E;
   border: none;
   border-radius: 2px;
-  width: 180px;
+  width: 190px;
 `
 
 export default MapCoordinatesBox

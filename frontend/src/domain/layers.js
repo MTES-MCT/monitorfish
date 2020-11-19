@@ -8,5 +8,5 @@ export default {
     TWELVE_MILES: '12_miles_areas',
     ONE_HUNDRED_MILES: '100_miles_areas',
     COAST_LINES: 'coast_lines',
-    VESSEL_TRACK: 'shipTrack'
+    VESSEL_TRACK: 'vessel_track'
 }

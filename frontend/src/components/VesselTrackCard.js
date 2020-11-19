@@ -1,16 +1,12 @@
 import React from "react";
 import styled from 'styled-components';
-import ReactCountryFlag from "react-country-flag";
 import {getDateTime, getCoordinates} from "../utils";
 
-const VesselCard = props => {
+const VesselTrackCard = props => {
     return (
         <>
             <VesselCardHeader>
-                {
-                    props.vessel.getProperties().flagState ? <><ReactCountryFlag countryCode={props.vessel.getProperties().flagState} style={{fontSize: '1.5em', marginLeft: '5px'}}/>{' '}</> : null
-                }
-                <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
+                <VesselCardTitle>POSITION</VesselCardTitle>
             </VesselCardHeader>
             <VesselCardBody>
                 <LatLon>
@@ -40,28 +36,6 @@ const VesselCard = props => {
                     </FieldValue>
                 </Position>
             </VesselCardBody>
-            <VesselCardBottom>
-                <ColumnOne>
-                    <Row>
-                        <BottomFieldName>CFR</BottomFieldName>
-                        <BottomFieldValue>{props.vessel.getProperties().internalReferenceNumber ? props.vessel.getProperties().internalReferenceNumber : <NoValue>-</NoValue>}</BottomFieldValue>
-                    </Row>
-                    <Row>
-                        <BottomFieldName>XR</BottomFieldName>
-                        <BottomFieldValue>{props.vessel.getProperties().externalReferenceNumber ? props.vessel.getProperties().externalReferenceNumber : <NoValue>-</NoValue>}</BottomFieldValue>
-                    </Row>
-                </ColumnOne>
-                <ColumnTwo>
-                    <Row>
-                        <BottomFieldName>MMSI</BottomFieldName>
-                        <BottomFieldValue>{props.vessel.getProperties().MMSI ? props.vessel.getProperties().MMSI : <NoValue>-</NoValue>}</BottomFieldValue>
-                    </Row>
-                    <Row>
-                        <BottomFieldName>CALL SIGN</BottomFieldName>
-                        <BottomFieldValue>{props.vessel.getProperties().IRCS ? props.vessel.getProperties().IRCS : <NoValue>-</NoValue>}</BottomFieldValue>
-                    </Row>
-                </ColumnTwo>
-            </VesselCardBottom>
             <TrianglePointer>
                 <TriangleShadow />
                 <Triangle />
@@ -85,7 +59,7 @@ const TriangleShadow = styled.div`
   border-width: 17px 9px 0 9px;
   border-color: rgba(5, 5, 94, 0.3) transparent transparent transparent;
   margin-left: 43.7%;
-  margin-top: -1px;
+  margin-top: 5px;
   clear: top;
 `
 
@@ -97,7 +71,7 @@ const Triangle = styled.div`
   border-width: 15px 8.5px 0 8.5px;
   border-color: white transparent transparent transparent;
   margin-left: 44%;
-  margin-top: -1px;
+  margin-top: 5px;
   clear: top;
 
 `
@@ -105,38 +79,6 @@ const Triangle = styled.div`
 const NoValue = styled.span`
   color: grey;
   font-weight: 300;
-`
-
-const Row = styled.div`
-  margin-top: -5px;
-`
-
-const BottomFieldName = styled.span`
-  color: gray;
-  font-size: 0.8em;
-`
-
-const BottomFieldValue = styled.span`
-  margin-left: 5px;
-  font-size: 0.8em;
-  font-weight: 500;
-`
-
-const ColumnOne = styled.div`
-  width: 50%;
-  order: 1;
-  padding: 10px 5px 5px 15px;
-`
-
-const ColumnTwo = styled.div`
-  width: 50%;
-  order: 2;
-  padding: 10px 5px 5px 15px;
-`
-
-const VesselCardBottom = styled.div`
-  border-top: 1px rgba(5, 5, 94, 0.1) solid;
-  display: flex
 `
 
 const Gray = styled.span`
@@ -176,8 +118,9 @@ const Position = styled.div`
 `
 
 const VesselCardHeader = styled.div`
+  text-align: center;
   background: rgba(5, 5, 94, 0.1);
-  padding: 5px 5px 5px 5px;
+  padding: 2px 5px 2px 5px;
   border-bottom: 1px rgba(5, 5, 94, 0.1) solid;
 `
 
@@ -185,6 +128,7 @@ const VesselCardTitle = styled.span`
   margin-left: 5px;
   display: inline-block;
   vertical-align: middle;
+  font-size: 0.9em;
 `
 
 const VesselCardBody = styled.div`
@@ -192,4 +136,4 @@ const VesselCardBody = styled.div`
   text-align: center;
 `
 
-export default VesselCard
+export default VesselTrackCard

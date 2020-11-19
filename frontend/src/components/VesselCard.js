@@ -30,7 +30,9 @@ const VesselCard = props => {
     return (
         <>
             <VesselCardHeader>
-                <ReactCountryFlag countryCode={props.vessel.getProperties().flagState} style={{fontSize: '1.5em', marginLeft: '5px'}}/>{' '}
+                {
+                    props.vessel.getProperties().flagState ? <><ReactCountryFlag countryCode={props.vessel.getProperties().flagState} style={{fontSize: '1.5em', marginLeft: '5px'}}/>{' '}</> : null
+                }
                 <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
             </VesselCardHeader>
             <VesselCardBody>

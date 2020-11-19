@@ -17,7 +17,12 @@ const VesselIdentity = props => {
             {
                 fallback ?
                     <DummyPhoto src={`boat_fishing.png`}/> :
-                    <Photo referrerpolicy="no-referrer" onError={() => setFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                    <>
+                    {
+                        props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                        : null
+                    }
+                    </>
             }
             <Zone>
                 <ZoneTitle>Numéros d'identification</ZoneTitle>

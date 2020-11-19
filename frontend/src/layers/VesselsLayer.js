@@ -59,7 +59,8 @@ const VesselsLayer = () => {
                     if (state.vessel.vesselTrackToShow) {
                         vesselTrackInternalReferenceNumberToShow = state.vessel.vesselTrackToShow.getProperties().internalReferenceNumber
                     } else if (state.vessel.vessel) {
-                        vesselTrackInternalReferenceNumberToShow = state.vessel.vessel.internalReferenceNumber
+                        // THe first position will always be non-null as it is the source of selection
+                        vesselTrackInternalReferenceNumberToShow = state.vessel.vessel.positions[0].internalReferenceNumber
                     } else {
                         vesselTrackInternalReferenceNumberToShow = null
                     }

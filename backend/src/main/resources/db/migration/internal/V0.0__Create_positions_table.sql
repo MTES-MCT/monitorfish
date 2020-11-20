@@ -25,3 +25,4 @@ create table positions (
 );
 
 SELECT create_hypertable('positions', 'date_time');
+CREATE INDEX ON positions (internal_reference_number, date_time DESC);

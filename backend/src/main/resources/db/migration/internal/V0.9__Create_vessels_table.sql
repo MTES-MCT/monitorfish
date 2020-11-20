@@ -31,3 +31,4 @@ create table vessels (
   fisher_telephone_number varchar(200),
   fisher_email varchar(200)
 );
+CREATE INDEX ON vessels (internal_reference_number);

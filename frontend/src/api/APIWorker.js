@@ -4,7 +4,7 @@ import { useToasts } from 'react-toast-notifications'
 import {Context} from "../Store";
 import {getVessels, getVessel} from "./fetch";
 
-export const SIXTY_SECONDS = 60000;
+export const FIVE_MINUTES = 300000;
 
 const APIWorker = () => {
     const [state, dispatch] = useContext(Context)
@@ -13,7 +13,7 @@ const APIWorker = () => {
     useEffect(() => {
         setInterval(() => {
             dispatch({type: 'CRON_EVENT'});
-        }, SIXTY_SECONDS)
+        }, FIVE_MINUTES)
     }, [])
 
     useEffect(() => {

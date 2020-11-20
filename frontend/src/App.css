@@ -35,6 +35,10 @@ html {
   background: inherit;
 }
 
+.ol-control button:hover, .ol-control button:focus {
+  background-color: #05055E;
+}
+
 button:hover, button:focus {
   background: inherit;
 }

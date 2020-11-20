@@ -23,7 +23,7 @@ export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalRefer
         })
     });
 
-   if (vessel.internalReferenceNumber === vesselTrackInternalReferenceNumberToShow) {
+   if (vessel.internalReferenceNumber && vessel.internalReferenceNumber === vesselTrackInternalReferenceNumberToShow) {
        iconFeature.setStyle([iconStyle, selectedVesselStyle]);
    } else {
        iconFeature.setStyle(iconStyle);
@@ -41,7 +41,7 @@ export const selectedVesselStyle =  new Style({
 export const setCircleStyle = (color, arrowFeature) => {
     const arrowStyle = new Style({
         image: new CircleStyle({
-            radius: 3,
+            radius: 4,
             fill: new Fill({
                 color: color
             })

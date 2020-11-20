@@ -16,3 +16,5 @@ dependencies:
   - matplotlib-venn
   - seaborn
   - cx_oracle
+  - tabula-py
+  - xlrd

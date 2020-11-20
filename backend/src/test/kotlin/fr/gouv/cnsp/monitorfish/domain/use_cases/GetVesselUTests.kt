@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetVesselUTest {
+class GetVesselUTests {
 
     @MockBean
     private lateinit var positionRepository: PositionRepository

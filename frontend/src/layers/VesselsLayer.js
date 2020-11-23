@@ -59,13 +59,13 @@ const VesselsLayer = () => {
                     if (state.vessel.vesselTrackToShow) {
                         vesselTrackInternalReferenceNumberToShow = state.vessel.vesselTrackToShow.getProperties().internalReferenceNumber
                     } else if (state.vessel.vessel) {
-                        // THe first position will always be non-null as it is the source of selection
+                        // The first position will always be non-null as it is the source of selection
                         vesselTrackInternalReferenceNumberToShow = state.vessel.vessel.positions[0].internalReferenceNumber
                     } else {
                         vesselTrackInternalReferenceNumberToShow = null
                     }
 
-                    setVesselIconStyle(vessel, iconFeature, vesselTrackInternalReferenceNumberToShow);
+                    setVesselIconStyle(vessel, iconFeature, vesselTrackInternalReferenceNumberToShow, state.vessel.showVesselNames && !state.vessel.vesselNamesZoomHide);
 
                     return iconFeature;
                 })
@@ -82,7 +82,7 @@ const VesselsLayer = () => {
                     dispatch({type: 'SHOW_LAYER', payload: {type: Layers.VESSELS}});
                 });
         }
-    }, [state.vessel.vessels])
+    }, [state.vessel.vessels], state.vessel.showVesselNames, state.vessel.vesselNamesZoomHide)
 
     useEffect(() => {
         if (state.vessel.vessel && state.vessel.vessel.positions && state.vessel.vessel.positions.length && state.layer.layers) {

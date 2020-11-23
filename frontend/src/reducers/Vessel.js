@@ -47,6 +47,17 @@ const Reducer = (state, action) => {
                 ...state,
                 vesselToMoveOn: action.payload
             };
+        case 'SHOW_VESSEL_NAMES':
+            window.localStorage.setItem('SHOW_VESSEL_NAMES', JSON.stringify(action.payload));
+            return {
+                ...state,
+                showVesselNames: action.payload
+            };
+        case 'VESSEL_NAMES_ZOOM_HIDE':
+            return {
+                ...state,
+                vesselNamesZoomHide: action.payload
+            };
         default:
             return state;
     }

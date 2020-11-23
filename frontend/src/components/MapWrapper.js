@@ -12,11 +12,19 @@ import {Context} from "../Store";
 import LayersEnum from "../domain/layers";
 import MapCoordinatesBox from "./MapCoordinatesBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
-import {selectedVesselStyle} from "../layers/styles/featuresStyles";
+import {
+    selectedVesselStyle,
+    getVesselNameStyle,
+    VESSEL_SELECTOR_STYLE,
+    VESSEL_NAME_STYLE
+} from "../layers/styles/featuresStyles";
 import MapAttributionsBox from "./MapAttributionsBox";
 import Overlay from "ol/Overlay";
 import VesselCard from "./VesselCard";
 import VesselTrackCard from "./VesselTrackCard";
+import ShowVesselsNamesBox from "./ShowVesselsNamesBox";
+
+const MIN_ZOOM_VESSEL_NAMES = 8;
 
 const MapWrapper = () => {
     const [state, dispatch] = useContext(Context)
@@ -50,7 +58,6 @@ const MapWrapper = () => {
             }),
         })
 
-
         const centeredOnFrance = [2.99049, 46.82801];
         const initialMap = new Map({
             target: mapElement.current,
@@ -68,9 +75,9 @@ const MapWrapper = () => {
             controls: [new Zoom({className: 'zoom'})],
         })
 
-        // set map onclick handler
         initialMap.on('click', handleMapClick)
         initialMap.on('pointermove', event => handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay))
+        initialMap.on('moveend', handleZoom)
 
         setMap(initialMap)
     }, [])
@@ -149,23 +156,72 @@ const MapWrapper = () => {
             map.getView().animate({
                 center: state.vessel.vesselToMoveOn.getGeometry().getCoordinates(),
                 duration: 1000,
-                zoom: 8
+                zoom: MIN_ZOOM_VESSEL_NAMES
             });
 
         }
     }, [state.vessel.vesselToMoveOn, map])
+
+    function removeVesselNameToAllFeatures() {
+        state.layer.layers
+            .filter(layer => layer.className_ === LayersEnum.VESSELS)
+            .forEach(vesselsLayer => {
+                vesselsLayer.getSource().getFeatures().map(feature => {
+                    let stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_NAME_STYLE)
+                    feature.setStyle([...stylesWithoutVesselName]);
+                })
+            })
+    }
+
+    const handleZoom = () => {
+        if (isVesselNameMinimumZoom()) {
+            dispatch({type: 'VESSEL_NAMES_ZOOM_HIDE', payload: false});
+        } else if (isVesselNameMaximumZoom()) {
+            dispatch({type: 'VESSEL_NAMES_ZOOM_HIDE', payload: true});
+        }
+    }
+
+    function addVesselNameToAllFeatures() {
+        state.layer.layers
+            .filter(layer => layer.className_ === LayersEnum.VESSELS)
+            .forEach(vesselsLayer => {
+                vesselsLayer.getSource().getFeatures().map(feature => {
+                    feature.setStyle([...feature.getStyle(), getVesselNameStyle(feature)]);
+                })
+            })
+    }
+
+    function isVesselNameMinimumZoom() {
+        return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES;
+    }
+
+    function isVesselNameMaximumZoom() {
+        return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES;
+    }
+
+    useEffect(() => {
+        if (state.layer.layers && state.vessel.showVesselNames
+            && !state.vessel.vesselNamesZoomHide && isVesselNameMinimumZoom()) {
+            addVesselNameToAllFeatures();
+        } else if (state.layer.layers && state.vessel.showVesselNames
+            && state.vessel.vesselNamesZoomHide && isVesselNameMaximumZoom()) {
+            removeVesselNameToAllFeatures();
+        } else if (state.layer.layers && !state.vessel.showVesselNames) {
+            removeVesselNameToAllFeatures();
+        }
+    }, [state.vessel.showVesselNames, map, state.vessel.vesselNamesZoomHide])
 
     const handleMapClick = event => {
         const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => {
             return feature;
         });
 
-        if (feature
-            && feature.getId()
+        if (feature && feature.getId()
             && feature.getId().includes(LayersEnum.VESSELS)) {
 
-            if(!feature.getStyle().length) {
-                feature.setStyle([feature.getStyle(), selectedVesselStyle]);
+            let vesselNameStyle = feature.getStyle().filter(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
+            if (vesselNameStyle.length === 0) {
+                feature.setStyle([...feature.getStyle(), selectedVesselStyle]);
                 dispatch({type: 'SHOW_VESSEL_TRACK', payload: feature});
             }
         }
@@ -183,7 +239,8 @@ const MapWrapper = () => {
             .forEach(vesselsLayer => {
                 vesselsLayer.getSource().getFeatures().map(feature => {
                     if (feature.getId() === state.vessel.previousVesselTrackShowed.getId()) {
-                        feature.setStyle(feature.getStyle()[0])
+                        let stylesWithoutVesselSelector = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
+                        feature.setStyle([...stylesWithoutVesselSelector]);
                         dispatch({type: 'RESET_PREVIOUS_VESSEL_SHOWED'})
                     }
                 })
@@ -237,6 +294,7 @@ const MapWrapper = () => {
 
             <MapCoordinatesBox coordinates={cursorCoordinates}/>
             <MapAttributionsBox />
+            <ShowVesselsNamesBox />
         </div>
     )
 }
@@ -266,10 +324,11 @@ const VesselTrackCardOverlay = styled.div`
 `
 
 const MapContainer = styled.div`
-  height: 100vh;
+  height: 95vh;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
+  margin-top: 5vh;
 `
 
 export default MapWrapper

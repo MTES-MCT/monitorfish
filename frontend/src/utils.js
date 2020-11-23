@@ -37,3 +37,16 @@ export let getDateTime = dateString => {
         return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.toLocaleTimeString('fr-FR')}`
     }
 }
+
+export let getTextWidth =  text => {
+    let canvas = undefined,
+        context = undefined,
+        metrics = undefined;
+
+    canvas = document.createElement( "canvas" )
+    context = canvas.getContext( "2d" );
+    context.font = "Normal 12px Arial";
+    metrics = context.measureText( text );
+
+    return metrics.width;
+}

@@ -20,13 +20,18 @@ const APIWorker = () => {
         getVessels(dispatch).then(vessels => {
             dispatch({type: 'SET_VESSELS', payload: vessels})
         })
+    }, [state.global.fetchVessels])
 
+    useEffect(() => {
         if (state.vessel.vesselTrackToShow) {
             getVessel(dispatch, state.vessel.vesselTrackToShow.getProperties().internalReferenceNumber).then(vessel => {
                 dispatch({type: 'SET_VESSEL', payload: vessel})
             })
+            getVessels(dispatch).then(vessels => {
+                dispatch({type: 'SET_VESSELS', payload: vessels})
+            })
         }
-    }, [state.global.fetchVessels, state.vessel.vesselTrackToShow])
+    }, [state.vessel.vesselTrackToShow])
 
     useEffect(() => {
         if (state.global.error) {

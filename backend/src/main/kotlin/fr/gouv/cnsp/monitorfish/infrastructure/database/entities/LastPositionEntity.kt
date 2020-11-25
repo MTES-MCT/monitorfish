@@ -3,25 +3,29 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
+import java.io.Serializable
 import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "positions")
-data class PositionEntity(
-        @Id
-        @SequenceGenerator(name = "position_id_seq", sequenceName = "position_id_seq", allocationSize = 1)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "position_id_seq")
+@IdClass(LastPositionEntity.ReferenceCompositeKey::class)
+@Table(name = "last_positions", uniqueConstraints = [UniqueConstraint(columnNames = ["internal_reference_number", "external_reference_number"])])
+data class LastPositionEntity(
+        /*@Id
+        @SequenceGenerator(name = "last_position_id_seq", sequenceName = "last_position_id_seq", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "last_position_id_seq")
         @Column(name = "id")
-        val id: Int? = null,
+        val id: Int? = null,*/
 
         // Optional fields
+        @Id
         @Column(name = "internal_reference_number")
         val internalReferenceNumber: String? = null,
         @Column(name = "mmsi")
         val MMSI: String? = null,
         @Column(name = "ircs")
         val IRCS: String? = null,
+        @Id
         @Column(name = "external_reference_number")
         val externalReferenceNumber: String? = null,
         @Column(name = "vessel_name")
@@ -51,10 +55,11 @@ data class PositionEntity(
         @Column(name = "course")
         val course: Double,
         @Column(name = "date_time")
-        val dateTime: ZonedDateTime) {
+        val dateTime: ZonedDateTime) : Serializable {
 
-    fun toPosition() = Position(
-            id = id,
+        data class ReferenceCompositeKey(val internalReferenceNumber: String? = null, val externalReferenceNumber: String? = null) : Serializable
+
+        fun toPosition() = Position(
             internalReferenceNumber = internalReferenceNumber,
             IRCS = IRCS,
             MMSI = MMSI,
@@ -72,8 +77,8 @@ data class PositionEntity(
             positionType = positionType)
 
         companion object {
-                fun fromPosition(position: Position): PositionEntity {
-                        return PositionEntity(
+                fun fromPosition(position: Position): LastPositionEntity {
+                        return LastPositionEntity(
                                 internalReferenceNumber = position.internalReferenceNumber,
                                 IRCS = position.IRCS,
                                 MMSI = position.MMSI,

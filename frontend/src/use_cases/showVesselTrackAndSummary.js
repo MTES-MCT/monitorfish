@@ -1,7 +1,11 @@
 import {getVesselFromAPI} from "../api/fetch";
 import LayersEnum from "../domain/layers";
 import {setArrowStyle, setCircleStyle, VESSEL_SELECTOR_STYLE} from "../layers/styles/featuresStyles";
-import {loadingVessel, setVessel, setVesselTrackVector} from "../reducers/Vessel";
+import {
+    loadingVessel,
+    setSelectedVessel,
+    setSelectedVesselTrackVector,
+} from "../reducers/Vessel";
 import {Vector} from "ol/layer";
 import VectorSource from "ol/source/Vector";
 import Layers from "../domain/layers";
@@ -26,7 +30,7 @@ const showVesselTrackAndSummary = (internalReferenceNumber, feature, fromSearch)
     }
 
     getVesselFromAPI(dispatch, internalReferenceNumber).then(vessel => {
-        dispatch(setVessel(vessel))
+        dispatch(setSelectedVessel(vessel))
 
         let vesselTrackLines = buildVesselTrackLines(vessel)
 
@@ -47,8 +51,9 @@ const showVesselTrackAndSummary = (internalReferenceNumber, feature, fromSearch)
             className: Layers.VESSEL_TRACK
         });
 
-        dispatch(setVesselTrackVector(vesselTrackVector))
+        dispatch(setSelectedVesselTrackVector(vesselTrackVector))
     })
+
 }
 
 function buildCirclePoints(vesselTrackLines, positions) {

@@ -3,32 +3,31 @@ import { createSlice } from '@reduxjs/toolkit'
 const vesselSlice = createSlice({
     name: 'vessel',
     initialState: {
-        vesselTrackVector: null,
+        selectedVesselTrackVector: null,
         selectedVesselFeature: null,
-        vessel: null,
+        selectedVessel: null,
         loadingVessel: null,
         vesselSummaryIsOpen: false,
         vesselBoxIsOpen: false,
         vesselBoxTabIndexToShow: 1
     },
     reducers: {
-        setVesselTrackVector(state, action) {
-            state.vesselTrackVector = action.payload
-        },
-        resetVesselTrackVector(state) {
-            state.vesselTrackVector = null
+        setSelectedVesselTrackVector(state, action) {
+            state.selectedVesselTrackVector = action.payload
         },
         loadingVessel(state, action) {
-            state.loadingVessel = action.payload
+            state.loadingVessel = true
             state.selectedVesselFeature = action.payload
+            state.selectedVesselTrackVector = null
+            state.selectedVessel = null
             state.vesselSummaryIsOpen = true
         },
-        setVessel(state, action) {
+        setSelectedVessel(state, action) {
             state.loadingVessel = null
-            state.vessel = action.payload
+            state.selectedVessel = action.payload
         },
-        resetVessel(state) {
-            state.vessel = null
+        resetSelectedVessel(state) {
+            state.selectedVessel = null
             state.selectedVesselFeature = null
         },
         openVesselSummary(state) {
@@ -39,24 +38,37 @@ const vesselSlice = createSlice({
             state.vesselBoxIsOpen = true
             state.vesselSummaryIsOpen = false
         },
-        closeVessel(state) {
+        closeVesselSummary(state, action) {
             state.vesselSummaryIsOpen = false
+
+            let keepSelectedVessel = action.payload
+            if(!keepSelectedVessel) {
+                state.selectedVesselTrackVector = null
+                state.selectedVessel = null
+                state.selectedVesselFeature = null
+            }
+        },
+        closeVesselBox(state, action) {
             state.vesselBoxIsOpen = false
-            state.vesselTrackVector = null
-            state.vessel = null
-            state.selectedVesselFeature = null
+
+            let keepSelectedVessel = action.payload
+            if(!keepSelectedVessel) {
+                state.selectedVesselTrackVector = null
+                state.selectedVessel = null
+                state.selectedVesselFeature = null
+            }
         }
     }
 })
 
 export const {
     loadingVessel,
-    setVesselTrackVector,
-    resetVesselTrackVector,
-    setVessel,
-    resetVessel,
+    setSelectedVesselTrackVector,
+    setSelectedVessel,
+    resetSelectedVessel,
     openVesselBox,
-    closeVessel
+    closeVesselSummary,
+    closeVesselBox
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

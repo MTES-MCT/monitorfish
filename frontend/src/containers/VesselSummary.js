@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
+import { FingerprintSpinner } from 'react-epic-spinners'
 import ReactCountryFlag from "react-country-flag";
+
 import {getDateTime, getCoordinates} from "../utils";
 import {BACKEND_PROJECTION} from "../domain/map";
 import {ReactComponent as VesselIDSVG} from "../components/icons/picto_carte_identite_navire.svg";
@@ -9,37 +11,41 @@ import {ReactComponent as ObservationsSVG} from "../components/icons/Picto_obser
 import {ReactComponent as VMSSVG} from "../components/icons/Picto_VMS_ERS.svg";
 import {ReactComponent as FisheriesSVG} from "../components/icons/Picto_activites_peche.svg";
 import {useDispatch, useSelector} from "react-redux";
-import {closeVessel, openVesselBox} from "../reducers/Vessel";
-import hideVesselTrackAndInfos from "../use_cases/hideVesselTrackAndInfos";
+import hideVesselSummary from "../use_cases/hideVesselSummary";
 import showVesselBox from "../use_cases/showVesselBox";
 
 const VesselSummary = () => {
     const [photoFallback, setPhotoFallback] = useState(false)
-    const vesselState = useSelector(state => state.vessel.vessel)
+    const selectedVessel = useSelector(state => state.vessel.selectedVessel)
     const [vessel, setVessel] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch()
 
     useEffect(() => {
         if (!isOpen) {
-            dispatch(hideVesselTrackAndInfos())
+            dispatch(hideVesselSummary())
         }
     }, [isOpen])
 
     useEffect(() => {
-        if (vesselState) {
-            setVessel(vesselState)
+        if (selectedVessel) {
+            setVessel(selectedVessel)
             setIsOpen(true)
+            setIsLoading(false)
 
-            if(vesselState.mmsi) {
+            if(selectedVessel.mmsi) {
                 setPhotoFallback(false)
             } else {
                 setPhotoFallback(true)
             }
+        } else {
+            setVessel(selectedVessel)
+            setIsLoading(true)
         }
-    }, [vesselState])
+    }, [selectedVessel])
 
-    return isOpen ? (
+    return isOpen && !isLoading ? (
         <>
             <VesselSummaryHeader>
                 {
@@ -175,7 +181,7 @@ const VesselSummary = () => {
                 <Triangle />
             </TrianglePointer>
         </>
-    ) : null;
+    ) : <FingerprintSpinner color={'rgba(5, 5, 94, 1)'} className={'radar'} size={100}/>;
 }
 
 const VerticalAlignHelper = styled.span`
@@ -335,6 +341,7 @@ const PhotoColumn = styled.div`
   width: 220px;
   order: 1;
   border-right: 1px rgba(5, 5, 94, 0.1) solid;
+  height: 137px;
 `
 
 const PositionColumn = styled.div`

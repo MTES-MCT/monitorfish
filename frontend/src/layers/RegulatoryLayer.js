@@ -9,9 +9,12 @@ import GeoJSON from "ol/format/GeoJSON";
 import Stroke from "ol/style/Stroke";
 import Layers from "../domain/layers";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {useDispatch, useSelector} from "react-redux";
+import {addLayer, removeLayer} from "../reducers/Layer";
 
 const RegulatoryLayer = (props) => {
-    const [state, dispatch] = useContext(Context)
+    const layer = useSelector(state => state.layer)
+    const dispatch = useDispatch()
 
     const getVectorSource = layerName => {
         return new VectorSource({
@@ -46,16 +49,16 @@ const RegulatoryLayer = (props) => {
     }
 
     useEffect( () => {
-        if(state.layer.layerToShow && state.layer.layerToShow.type === Layers.REGULATORY && state.layer.layerToShow.filter) {
-            dispatch({type: 'ADD_LAYER', payload: getVector(state.layer.layerToShow.filter)});
+        if(layer.layerToShow && layer.layerToShow.type === Layers.REGULATORY && layer.layerToShow.filter) {
+            dispatch(addLayer(getVector(layer.layerToShow.filter)));
         }
-    },[state.layer.layerToShow])
+    },[layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide && state.layer.layerToHide.type === Layers.REGULATORY && state.layer.layerToHide.filter) {
-            dispatch({type: 'REMOVE_LAYER', payload: getVector(state.layer.layerToHide.filter)});
+        if(layer.layerToHide && layer.layerToHide.type === Layers.REGULATORY && layer.layerToHide.filter) {
+            dispatch(removeLayer(getVector(layer.layerToHide.filter)));
         }
-    },[state.layer.layerToHide])
+    },[layer.layerToHide])
 
     return null
 }

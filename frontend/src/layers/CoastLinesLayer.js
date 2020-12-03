@@ -1,8 +1,7 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import {Style} from 'ol/style';
-import {Context} from "../Store";
 
 import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 import GeoJSON from "ol/format/GeoJSON";
@@ -10,9 +9,12 @@ import Stroke from "ol/style/Stroke";
 import Layers from "../domain/layers";
 import LayersEnum from "../domain/layers";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {useDispatch, useSelector} from "react-redux";
+import {addLayer, removeLayer} from "../reducers/Layer";
 
 const CoastLinesLayer = () => {
-    const [state, dispatch] = useContext(Context)
+    const layer = useSelector(state => state.layer)
+    const dispatch = useDispatch()
 
     const vectorSource = new VectorSource({
         format: new GeoJSON({
@@ -47,16 +49,16 @@ const CoastLinesLayer = () => {
     });
 
     useEffect( () => {
-        if(state.layer.layerToShow && state.layer.layerToShow.type === Layers.COAST_LINES) {
-            dispatch({type: 'ADD_LAYER', payload: vector});
+        if(layer.layerToShow && layer.layerToShow.type === Layers.COAST_LINES) {
+            dispatch(addLayer(vector));
         }
-    },[state.layer.layerToShow])
+    },[layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide && state.layer.layerToHide.type === Layers.COAST_LINES) {
-            dispatch({type: 'REMOVE_LAYER', payload: vector});
+        if(layer.layerToHide && layer.layerToHide.type === Layers.COAST_LINES) {
+            dispatch(removeLayer(vector));
         }
-    },[state.layer.layerToHide])
+    },[layer.layerToHide])
 
     return null
 }

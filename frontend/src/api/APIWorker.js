@@ -1,46 +1,31 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 import { useToasts } from 'react-toast-notifications'
 
-import {Context} from "../Store";
-import {getVessels, getVessel} from "./fetch";
+import showAllVessels from "../use_cases/showVesselsLastPosition";
+import {useDispatch, useSelector} from "react-redux";
 
 export const FIVE_MINUTES = 300000;
 
 const APIWorker = () => {
-    const [state, dispatch] = useContext(Context)
+    const error = useSelector(state => state.global.error)
+    const dispatch = useDispatch()
     const { addToast } = useToasts()
 
     useEffect(() => {
+        dispatch(showAllVessels());
         setInterval(() => {
-            dispatch({type: 'CRON_EVENT'});
+            dispatch(showAllVessels());
         }, FIVE_MINUTES)
     }, [])
 
     useEffect(() => {
-        getVessels(dispatch).then(vessels => {
-            dispatch({type: 'SET_VESSELS', payload: vessels})
-        })
-    }, [state.global.fetchVessels])
-
-    useEffect(() => {
-        if (state.vessel.vesselTrackToShow) {
-            getVessel(dispatch, state.vessel.vesselTrackToShow.getProperties().internalReferenceNumber).then(vessel => {
-                dispatch({type: 'SET_VESSEL', payload: vessel})
-            })
-            getVessels(dispatch).then(vessels => {
-                dispatch({type: 'SET_VESSELS', payload: vessels})
-            })
-        }
-    }, [state.vessel.vesselTrackToShow])
-
-    useEffect(() => {
-        if (state.global.error) {
-            addToast(state.global.error.message, {
+        if (error) {
+            addToast(error.message, {
                 appearance: 'warning',
                 autoDismiss: true,
             })
         }
-    }, [state.global.error])
+    }, [error])
 
     return null
 }

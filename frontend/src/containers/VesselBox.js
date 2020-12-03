@@ -8,7 +8,7 @@ import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_obser
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
 import VesselIdentity from "../components/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
-import hideVesselTrackAndInfos from "../use_cases/hideVesselTrackAndInfos";
+import hideVesselBox from "../use_cases/hideVesselBox";
 
 const VesselBox = () => {
     const vesselState = useSelector(state => state.vessel)
@@ -35,13 +35,13 @@ const VesselBox = () => {
     }, [vesselState.vesselBoxIsOpen, vesselState.vesselBoxTabIndexToShow])
 
     useEffect(() => {
-        if (vesselState.vessel) {
-            setVessel(vesselState.vessel)
+        if (vesselState.selectedVessel) {
+            setVessel(vesselState.selectedVessel)
         }
-    }, [vesselState.vessel])
+    }, [vesselState.selectedVessel])
 
     function hideVessel() {
-        dispatch(hideVesselTrackAndInfos())
+        dispatch(hideVesselBox())
     }
 
     return (

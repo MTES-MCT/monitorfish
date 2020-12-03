@@ -161,15 +161,15 @@ const MapWrapper = () => {
     }, [layer.layers, layer.layerToHide, map])
 
     useEffect(() => {
-        if (map && vessel.vesselTrackVector) {
+        if (map && vessel.selectedVesselTrackVector) {
             removeCurrentVesselTrackLayer();
 
             let belowVesselLayer = map.getLayers().getLength() - 1;
-            map.getLayers().insertAt(belowVesselLayer, vessel.vesselTrackVector);
-        } else if (map && !vessel.vesselTrackVector) {
+            map.getLayers().insertAt(belowVesselLayer, vessel.selectedVesselTrackVector);
+        } else if (map && !vessel.selectedVesselTrackVector) {
             removeCurrentVesselTrackLayer();
         }
-    }, [vessel.vesselTrackVector, map])
+    }, [vessel.selectedVesselTrackVector, map])
 
     function removeCurrentVesselTrackLayer() {
         const layerToRemove = map.getLayers().getArray()
@@ -276,17 +276,17 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
-        if(vessel.loadingVessel) {
-            let vesselAlreadyWithSelectorStyle = vessel.loadingVessel.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
+        if(vessel.loadingVessel && vessel.selectedVesselFeature) {
+            let vesselAlreadyWithSelectorStyle = vessel.selectedVesselFeature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
 
             if (!vesselAlreadyWithSelectorStyle) {
-                vessel.loadingVessel.setStyle([...vessel.loadingVessel.getStyle(), selectedVesselStyle]);
+                vessel.selectedVesselFeature.setStyle([...vessel.selectedVesselFeature.getStyle(), selectedVesselStyle]);
                 let vesselSummaryOverlay = mapRef.current.getOverlays().getArray().find(overlay => overlay.id === vesselSummaryID)
                 document.getElementById(vesselSummaryOverlay.getId()).style.display = 'block';
-                vesselSummaryOverlay.setPosition(vessel.loadingVessel.getGeometry().getCoordinates());
+                vesselSummaryOverlay.setPosition(vessel.selectedVesselFeature.getGeometry().getCoordinates());
             }
         }
-    }, [vessel.loadingVessel])
+    }, [vessel.loadingVessel, vessel.selectedVesselFeature])
 
     useEffect(() => {
         if(map && !vessel.vesselSummaryIsOpen) {

@@ -5,9 +5,7 @@ import 'mini.css';
 import React from 'react';
 import styled from "styled-components";
 import { ToastProvider } from 'react-toast-notifications'
-import MapWrapper from './components/MapWrapper'
-import Store from "./Store";
-import VesselsLayer from "./layers/VesselsLayer";
+import MapWrapper from './containers/MapWrapper'
 import EEZLayer from "./layers/EEZLayer";
 import FAOLayer from "./layers/FAOLayer";
 import APIWorker from "./api/APIWorker";
@@ -17,15 +15,15 @@ import SixMilesLayer from "./layers/SixMilesLayer";
 import TwelveMilesLayer from "./layers/TwelveMilesLayer";
 import CoastLinesLayer from "./layers/CoastLinesLayer";
 import RegulatoryLayer from "./layers/RegulatoryLayer";
-import VesselsSearchBox from "./components/VesselsSearchBox";
-import VesselBox from "./components/VesselBox";
+import VesselsSearchBox from "./containers/VesselsSearchBox";
+import VesselBox from "./containers/VesselBox";
 import ZoneLayerSelectionBox from "./components/ZoneLayerSelectionBox";
 import Layers from "./domain/layers";
-import RegulatoryLayerSelectionBox from "./components/RegulatoryLayerSelectionBox";
+import RegulatoryLayerSelectionBox from "./containers/RegulatoryLayerSelectionBox";
 
 function App() {
   return (
-      <Store>
+      <>
           <ToastProvider placement="bottom-right">
         <Wrapper>
           <Header>
@@ -48,7 +46,6 @@ function App() {
           <RegulatoryLayerSelectionBox />
           <VesselBox />
 
-          <VesselsLayer />
           <EEZLayer />
           <FAOLayer />
           <ThreeMilesLayer />
@@ -61,7 +58,7 @@ function App() {
           <APIWorker />
         </Wrapper>
           </ToastProvider>
-      </Store>
+      </>
   )
 }
 

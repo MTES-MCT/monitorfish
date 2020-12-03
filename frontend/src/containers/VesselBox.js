@@ -1,19 +1,22 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import ReactCountryFlag from "react-country-flag";
-import {ReactComponent as VesselIDSVG} from './icons/picto_carte_identite_navire.svg';
-import {ReactComponent as FisheriesSVG} from './icons/Picto_activites_peche.svg';
-import {ReactComponent as ControlsSVG} from './icons/Picto_controles.svg';
-import {ReactComponent as ObservationsSVG} from './icons/Picto_observations_ciblage.svg';
-import {ReactComponent as VMSSVG} from './icons/Picto_VMS_ERS.svg';
-import {Context} from "../Store";
-import VesselIdentity from "./VesselIdentity";
+import {ReactComponent as VesselIDSVG} from '../components/icons/picto_carte_identite_navire.svg';
+import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_activites_peche.svg';
+import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles.svg';
+import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_observations_ciblage.svg';
+import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
+import VesselIdentity from "../components/VesselIdentity";
+import {useDispatch, useSelector} from "react-redux";
+import hideVesselTrackAndInfos from "../use_cases/hideVesselTrackAndInfos";
 
 const VesselBox = () => {
+    const vesselState = useSelector(state => state.vessel)
+    const dispatch = useDispatch()
+
     const [openBox, setOpenBox] = useState(false);
     const [vessel, setVessel] = useState(null);
     const [index, setIndex] = useState(1)
-    const [state, dispatch] = useContext(Context)
     const firstUpdate = useRef(true);
 
     useEffect(() => {
@@ -23,23 +26,22 @@ const VesselBox = () => {
     }, [openBox])
 
     useEffect(() => {
-        if (state.vessel.vesselTrackToShow || state.vessel.vessel) {
+        if (vesselState.vesselBoxIsOpen) {
             setOpenBox(true)
-        } else if (!state.vessel.vessel) {
+            setIndex(vesselState.vesselBoxTabIndexToShow)
+        } else {
             setOpenBox(false)
         }
-    }, [state.vessel.vesselTrackToShow, state.vessel.vessel])
+    }, [vesselState.vesselBoxIsOpen, vesselState.vesselBoxTabIndexToShow])
 
     useEffect(() => {
-        if (state.vessel.vessel) {
-            setVessel(state.vessel.vessel)
+        if (vesselState.vessel) {
+            setVessel(vesselState.vessel)
         }
-    }, [state.vessel.vessel])
+    }, [vesselState.vessel])
 
     function hideVessel() {
-        dispatch({type: 'RESET_VESSEL_TRACK_VECTOR'});
-        dispatch({type: 'RESET_VESSEL'});
-        setVessel(null)
+        dispatch(hideVesselTrackAndInfos())
     }
 
     return (
@@ -62,16 +64,16 @@ const VesselBox = () => {
                             <Tab className={index === 1 ? 'active-tab' : ''} onClick={() => setIndex(1)}>
                                 <VesselIDIcon />
                             </Tab>
-                            <Tab className={index === 2 ? 'active-tab' : ''} onClick={() => setIndex(2)}>
+                            <Tab type="button" disabled className={index === 2 ? 'active-tab' : ''} onClick={() => setIndex(2)}>
                                 <FisheriesIcon />
                             </Tab>
-                            <Tab className={index === 3 ? 'active-tab' : ''} onClick={() => setIndex(3)}>
+                            <Tab type="button" disabled className={index === 3 ? 'active-tab' : ''} onClick={() => setIndex(3)}>
                                 <ControlsIcon onClick={() => setIndex(1)} />
                             </Tab>
-                            <Tab className={index === 4 ? 'active-tab' : ''} onClick={() => setIndex(4)}>
+                            <Tab type="button" disabled className={index === 4 ? 'active-tab' : ''} onClick={() => setIndex(4)}>
                                 <ObservationsIcon />
                             </Tab>
-                            <Tab className={index === 5 ? 'active-tab' : ''} onClick={() => setIndex(5)}>
+                            <Tab type="button" disabled className={index === 5 ? 'active-tab' : ''} onClick={() => setIndex(5)}>
                                 <VMSIcon />
                             </Tab>
                         </TabList>
@@ -133,7 +135,7 @@ const Close = styled.img`
 
 const Panel = styled.div`
   padding: 5px 5px 5px 10px;
-  height: 800px;
+  height: 780px;
   overflow-y: auto;
 `
 
@@ -143,7 +145,7 @@ const Tab = styled.button`
   margin: 0;
   border: none;
   border-radius: 0;
-  height: 55px;
+  height: 45px;
 `
 
 const TabList = styled.div`
@@ -197,23 +199,22 @@ const VesselCountry = styled.span`
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`
-  width: 40px;
-`
-
-const ControlsIcon = styled(ControlsSVG)`
-  width: 33px;
-`
-
-const ObservationsIcon = styled(ObservationsSVG)`
-  width: 45px;
-`
-
-const VMSIcon = styled(VMSSVG)`
   width: 30px;
 `
 
-const FisheriesIcon = styled(FisheriesSVG)`
-  width: 40px;
+const ControlsIcon = styled(ControlsSVG)`
+  width: 23px;
 `
 
+const ObservationsIcon = styled(ObservationsSVG)`
+  width: 35px;
+`
+
+const VMSIcon = styled(VMSSVG)`
+  width: 20px;
+`
+
+const FisheriesIcon = styled(FisheriesSVG)`
+  width: 30px;
+`
 export default VesselBox

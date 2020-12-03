@@ -1,8 +1,9 @@
 import Layers from "../domain/layers"
+import {setError} from "../reducers/Global";
 
 const HTTP_OK = 200
 
-export function getVessels(dispatch) {
+export function getVesselsLastPositionsFromAPI(dispatch) {
     return fetch('/bff/v1/vessels')
         .then(response => {
             if (response.status === HTTP_OK) {
@@ -17,11 +18,11 @@ export function getVessels(dispatch) {
             return vessels
         })
         .catch(error => {
-            dispatch({type: 'SET_ERROR', payload: error});
+            dispatch(setError(error));
         });
 }
 
-export function getVessel(dispatch, vesselTrackInternalReferenceNumberToShow) {
+export function getVesselFromAPI(dispatch, vesselTrackInternalReferenceNumberToShow) {
     return fetch(`/bff/v1/vessels/${vesselTrackInternalReferenceNumberToShow}`)
         .then(response => {
             if (response.status === HTTP_OK) {
@@ -34,8 +35,7 @@ export function getVessel(dispatch, vesselTrackInternalReferenceNumberToShow) {
         })
         .then(vessel => vessel)
         .catch(error => {
-            dispatch({type: 'RESET_SHOW_VESSEL_TRACK'})
-            dispatch({type: 'SET_ERROR', payload: error});
+            dispatch(setError(error))
         });
 }
 
@@ -61,6 +61,6 @@ export function getAllRegulatoryLayerNames(dispatch) {
         })
         .catch(error => {
             console.error("Récupération des couches réglementaire impossible", error)
-            dispatch({type: 'SET_ERROR', payload: new Error("Récupération des couches réglementaire impossible")});
+            dispatch(setError(new Error("Récupération des couches réglementaire impossible")));
         });
 }

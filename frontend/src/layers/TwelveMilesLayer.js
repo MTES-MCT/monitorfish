@@ -10,9 +10,12 @@ import Stroke from "ol/style/Stroke";
 import Layers from "../domain/layers";
 import LayersEnum from "../domain/layers";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {useDispatch, useSelector} from "react-redux";
+import {addLayer, removeLayer} from "../reducers/Layer";
 
 const TwelveMilesLayer = () => {
-    const [state, dispatch] = useContext(Context)
+    const layer = useSelector(state => state.layer)
+    const dispatch = useDispatch()
 
     const vectorSource = new VectorSource({
         format: new GeoJSON({
@@ -47,16 +50,16 @@ const TwelveMilesLayer = () => {
     });
 
     useEffect( () => {
-        if(state.layer.layerToShow && state.layer.layerToShow.type === Layers.TWELVE_MILES) {
-            dispatch({type: 'ADD_LAYER', payload: vector});
+        if(layer.layerToShow && layer.layerToShow.type === Layers.TWELVE_MILES) {
+            dispatch(addLayer(vector));
         }
-    },[state.layer.layerToShow])
+    },[layer.layerToShow])
 
     useEffect( () => {
-        if(state.layer.layerToHide && state.layer.layerToHide.type === Layers.TWELVE_MILES) {
-            dispatch({type: 'REMOVE_LAYER', payload: vector});
+        if(layer.layerToHide && layer.layerToHide.type === Layers.TWELVE_MILES) {
+            dispatch(removeLayer(vector));
         }
-    },[state.layer.layerToHide])
+    },[layer.layerToHide])
 
     return null
 }

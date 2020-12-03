@@ -1,24 +1,19 @@
-const Global = (state, action) => {
-    const ticTac = value => {
-        if (value === 'tic') {
-            return 'tac'
-        } else return 'tic'
-    }
+import { createSlice } from '@reduxjs/toolkit'
 
-    switch (action.type) {
-        case 'SET_ERROR':
-            return {
-                ...state,
-                error: action.payload
-            };
-        case 'CRON_EVENT':
-            return {
-                ...state,
-                fetchVessels: ticTac(state.fetchVessels)
-            };
-        default:
-            return state;
+const globalSlice = createSlice({
+    name: 'global',
+    initialState: {
+        error: null,
+    },
+    reducers: {
+        setError(state, action) {
+            state.error = action.payload
+        }
     }
-};
+})
 
-export default Global;
+export const {
+    setError,
+} = globalSlice.actions
+
+export default globalSlice.reducer

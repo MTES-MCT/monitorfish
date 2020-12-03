@@ -1,5 +1,5 @@
 import {transform} from "ol/proj";
-import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "./domain/map";
+import {BACKEND_PROJECTION} from "./domain/map";
 import {toStringHDMS} from "ol/coordinate";
 
 export let calculatePointsDistance = (coord1, coord2) => {
@@ -17,8 +17,8 @@ export let calculateSplitPointCoords = (startNode, nextNode, distanceBetweenNode
     return [x, y];
 };
 
-export let getCoordinates = coordinates => {
-    const transformedCoordinates = transform(coordinates, OPENLAYERS_PROJECTION, BACKEND_PROJECTION)
+export let getCoordinates = (coordinates, projection) => {
+    const transformedCoordinates = transform(coordinates, projection, BACKEND_PROJECTION)
     const hourCoordinates = toStringHDMS(transformedCoordinates)
     let nSplit = hourCoordinates.split('N')
     if (nSplit.length > 1) {
@@ -65,4 +65,11 @@ export let getTextWidth =  text => {
     metrics = context.measureText( text );
 
     return metrics.width;
+}
+
+export const getLocalStorageState = (defaultValue, key) => {
+    const stickyValue = window.localStorage.getItem(key);
+    return stickyValue !== null
+        ? JSON.parse(stickyValue)
+        : defaultValue;
 }

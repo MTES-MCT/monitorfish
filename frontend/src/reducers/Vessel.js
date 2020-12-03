@@ -1,66 +1,62 @@
-const Reducer = (state, action) => {
-    switch (action.type) {
-        case 'SHOW_VESSEL_TRACK':
-            return {
-                ...state,
-                previousVesselTrackShowed: state.vesselTrackToShow,
-                vesselTrackToShow: action.payload
-            };
-        case 'RESET_SHOW_VESSEL_TRACK':
-            return {
-                ...state,
-                previousVesselTrackShowed: state.vesselTrackToShow,
-                vesselTrackToShow: null
-            };
-        case 'RESET_PREVIOUS_VESSEL_SHOWED':
-            return {
-                ...state,
-                previousVesselTrackShowed: null,
-            };
-        case 'SET_VESSEL_TRACK_VECTOR':
-            return {
-                ...state,
-                vesselTrackVector: action.payload
-            };
-        case 'RESET_VESSEL_TRACK_VECTOR':
-            return {
-                ...state,
-                vesselTrackVector: null
-            };
-        case 'SET_VESSEL':
-            return {
-                ...state,
-                vessel: action.payload
-            };
-        case 'RESET_VESSEL':
-            return {
-                ...state,
-                vessel: null
-            };
-        case 'SET_VESSELS':
-            return {
-                ...state,
-                vessels: action.payload
-            };
-        case 'ANIMATE_TO_VESSEL':
-            return {
-                ...state,
-                vesselToMoveOn: action.payload
-            };
-        case 'SHOW_VESSEL_NAMES':
-            window.localStorage.setItem('SHOW_VESSEL_NAMES', JSON.stringify(action.payload));
-            return {
-                ...state,
-                showVesselNames: action.payload
-            };
-        case 'VESSEL_NAMES_ZOOM_HIDE':
-            return {
-                ...state,
-                vesselNamesZoomHide: action.payload
-            };
-        default:
-            return state;
-    }
-};
+import { createSlice } from '@reduxjs/toolkit'
 
-export default Reducer;
+const vesselSlice = createSlice({
+    name: 'vessel',
+    initialState: {
+        vesselTrackVector: null,
+        selectedVesselFeature: null,
+        vessel: null,
+        loadingVessel: null,
+        vesselSummaryIsOpen: false,
+        vesselBoxIsOpen: false,
+        vesselBoxTabIndexToShow: 1
+    },
+    reducers: {
+        setVesselTrackVector(state, action) {
+            state.vesselTrackVector = action.payload
+        },
+        resetVesselTrackVector(state) {
+            state.vesselTrackVector = null
+        },
+        loadingVessel(state, action) {
+            state.loadingVessel = action.payload
+            state.selectedVesselFeature = action.payload
+            state.vesselSummaryIsOpen = true
+        },
+        setVessel(state, action) {
+            state.loadingVessel = null
+            state.vessel = action.payload
+        },
+        resetVessel(state) {
+            state.vessel = null
+            state.selectedVesselFeature = null
+        },
+        openVesselSummary(state) {
+            state.vesselSummaryIsOpen = true
+        },
+        openVesselBox(state, action) {
+            state.vesselBoxTabIndexToShow = action.payload ? action.payload : 1
+            state.vesselBoxIsOpen = true
+            state.vesselSummaryIsOpen = false
+        },
+        closeVessel(state) {
+            state.vesselSummaryIsOpen = false
+            state.vesselBoxIsOpen = false
+            state.vesselTrackVector = null
+            state.vessel = null
+            state.selectedVesselFeature = null
+        }
+    }
+})
+
+export const {
+    loadingVessel,
+    setVesselTrackVector,
+    resetVesselTrackVector,
+    setVessel,
+    resetVessel,
+    openVesselBox,
+    closeVessel
+} = vesselSlice.actions
+
+export default vesselSlice.reducer

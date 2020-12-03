@@ -1,13 +1,17 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 
-import {Context} from "../Store";
 import ReactCountryFlag from "react-country-flag"
-import {ReactComponent as SearchIconSVG} from './icons/search.svg'
+import {ReactComponent as SearchIconSVG} from '../components/icons/search.svg'
 import LayersEnum from "../domain/layers";
+import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
+import {useDispatch, useSelector} from "react-redux";
+import {animateToVessel} from "../reducers/Map";
 
 const VesselsSearchBox = () => {
-    const [state, dispatch] = useContext(Context)
+    const layers = useSelector(state => state.layer.layers)
+    const dispatch = useDispatch()
+
     const [searchText, setSearchText] = useState('');
     const [foundVessels, setFoundVessels] = useState([]);
     const [selectedVessel, setSelectedVessel] = useState(null);
@@ -25,7 +29,7 @@ const VesselsSearchBox = () => {
 
     useEffect(() => {
         if (searchText.length > 1) {
-            state.layer.layers
+            layers
                 .filter(layer => layer.className_ === LayersEnum.VESSELS)
                 .forEach(vesselsLayer => {
                     let vessels = vesselsLayer.getSource().getFeatures().map(feature => {
@@ -34,7 +38,8 @@ const VesselsSearchBox = () => {
                         }
                     }).filter(vessel => vessel)
 
-                    setFoundVessels(vessels)
+                    const firstFiftyElements = vessels.slice(0, 50);
+                    setFoundVessels(firstFiftyElements)
                 })
         } else {
             setFoundVessels([])
@@ -43,8 +48,7 @@ const VesselsSearchBox = () => {
 
     useEffect(() => {
         if (selectedVessel) {
-            dispatch({type: 'ANIMATE_TO_VESSEL', payload: selectedVessel});
-            dispatch({type: 'SHOW_VESSEL_TRACK', payload: selectedVessel});
+            dispatch(showVesselTrackAndSummary(selectedVessel.getProperties().internalReferenceNumber, selectedVessel, true));
             setFoundVessels([])
             setSearchText('')
         }

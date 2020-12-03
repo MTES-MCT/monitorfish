@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 
 const VesselIdentity = props => {
-    const [fallback, setFallback] = useState(false)
+    const [photoFallback, setPhotoFallback] = useState(false)
 
     const showLicenceExpirationDate = licenceExpirationDate => {
         if (licenceExpirationDate) {
@@ -15,11 +15,11 @@ const VesselIdentity = props => {
         <div>
             <PanelTitle>Carte d'identité du navire</PanelTitle>
             {
-                fallback ?
+                photoFallback ?
                     <DummyPhoto src={`boat_fishing.png`}/> :
                     <>
                     {
-                        props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                        props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
                         : null
                     }
                     </>
@@ -270,16 +270,16 @@ const Key = styled.th`
   color: grey;
   flex: initial;
   display: inline-block;
-  font-size: 0.8rem;
   text-transform: uppercase;
   margin: 0;
   border: none;
   padding: 5px 5px 5px 0;
   background: none;
-  font-weight: 300;
   width: max-content;
   line-height: 0.5em;
   height: 0.5em;
+  font-size: 0.8em;
+  font-weight: 400;
 `
 
 const KeyInfo = styled.span`
@@ -297,14 +297,12 @@ const Value = styled.td`
   background: none;
   border: none;
   line-height: normal;
-  vertical-align: top;
 `
 
 const NoValue = styled.span`
   color: grey;
   font-weight: 300;
   line-height: normal;
-  vertical-align: top;
 `
 
 const NoPersonalData = styled.div`

@@ -7,7 +7,7 @@ import {getTextWidth} from "../../utils";
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
-export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalReferenceNumberToShow, showVesselNames) => {
+export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalReferenceNumberToShow, vesselNamesShowedOnMap) => {
     const vesselDate = new Date(vessel.dateTime);
     const nowMinusThreeHours = new Date;
     nowMinusThreeHours.setHours(nowMinusThreeHours.getHours() - 3);
@@ -30,7 +30,7 @@ export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalRefer
     });
     styles.push(iconStyle)
 
-    if (showVesselNames) {
+    if (vesselNamesShowedOnMap) {
         styles.push(getVesselNameStyle(iconFeature))
     }
     if (vessel.internalReferenceNumber && vessel.internalReferenceNumber === vesselTrackInternalReferenceNumberToShow) {

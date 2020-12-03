@@ -2,12 +2,12 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 
 import {getAllRegulatoryLayerNames} from "../api/fetch";
-import {Context} from "../Store";
 import RegulatoryLayerControl from "./layers-control/RegulatoryLayerControl";
-import RegulatoryLayerSearchBox from "./RegulatoryLayerSearchBox";
+import RegulatoryLayerSearchBox from "../components/RegulatoryLayerSearchBox";
+import {useDispatch} from "react-redux";
 
 const RegulatoryLayerSelectionBox = () => {
-    const [_, dispatch] = useContext(Context)
+    const dispatch = useDispatch()
     const [layerNames, setLayerNames] = useState([]);
     const [foundLayerNames, setFoundLayerNames] = useState([]);
     const [openBox, setOpenBox] = useState(false);

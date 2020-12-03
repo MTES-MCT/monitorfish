@@ -78,3 +78,15 @@ tbody {
   vertical-align: baseline;
   background: transparent;
 }
+
+.vessel-overlay {
+  z-index: 100;
+}
+
+.vessel-track-overlay {
+  z-index: 300;
+}
+
+.vessel-summary-overlay {
+  z-index: 200;
+}

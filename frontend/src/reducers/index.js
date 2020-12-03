@@ -1,19 +1,14 @@
 import layer from './Layer'
 import global from './Global'
+import map from './Map'
 import vessel from './Vessel'
-
-function combineReducers(reducers) {
-    return (state = {}, action) => {
-        const newState = {};
-        for (let key in reducers) {
-            newState[key] = reducers[key](state[key], action);
-        }
-        return newState;
-    }
-}
+import vessels from './Vessels'
+import { combineReducers } from "@reduxjs/toolkit"
 
 export default combineReducers({
     layer: layer,
+    map: map,
     global: global,
     vessel: vessel,
+    vessels: vessels
 })

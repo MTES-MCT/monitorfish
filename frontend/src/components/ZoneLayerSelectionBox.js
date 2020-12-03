@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import ZoneLayerControl from "./layers-control/ZoneLayerControl";
+import ZoneLayerControl from "../containers/layers-control/ZoneLayerControl";
 import styled from "styled-components";
 
 const ZoneLayerSelectionBox = props => {

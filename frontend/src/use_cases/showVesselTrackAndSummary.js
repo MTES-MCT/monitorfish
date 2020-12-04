@@ -20,6 +20,7 @@ import {Style} from "ol/style";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import {animateToVessel, setUsingSearch} from "../reducers/Map";
+import {setError} from "../reducers/Global";
 
 const showVesselTrackAndSummary = (internalReferenceNumber, feature, fromSearch) => (dispatch, getState) => {
     removePreviousSelectedFeature(getState);
@@ -29,7 +30,7 @@ const showVesselTrackAndSummary = (internalReferenceNumber, feature, fromSearch)
         dispatch(animateToVessel(feature));
     }
 
-    getVesselFromAPI(dispatch, internalReferenceNumber).then(vessel => {
+    getVesselFromAPI(internalReferenceNumber).then(vessel => {
         dispatch(setSelectedVessel(vessel))
 
         let vesselTrackLines = buildVesselTrackLines(vessel)
@@ -52,7 +53,9 @@ const showVesselTrackAndSummary = (internalReferenceNumber, feature, fromSearch)
         });
 
         dispatch(setSelectedVesselTrackVector(vesselTrackVector))
-    })
+    }).catch(error => {
+        dispatch(setError(error));
+    });
 
 }
 

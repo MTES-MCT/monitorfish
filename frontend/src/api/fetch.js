@@ -3,52 +3,49 @@ import {setError} from "../reducers/Global";
 
 const HTTP_OK = 200
 
-export function getVesselsLastPositionsFromAPI(dispatch) {
+export function getVesselsLastPositionsFromAPI() {
     return fetch('/bff/v1/vessels')
         .then(response => {
             if (response.status === HTTP_OK) {
                 return response.json()
             } else {
-                return response.json().then(error => {
-                    throw Error(error.error)
+                response.text().then(text => {
+                    console.error(text)
                 })
+                throw Error("Récupération des dernières positions impossible")
             }
         })
         .then(vessels => {
             return vessels
         })
-        .catch(error => {
-            dispatch(setError(error));
-        });
 }
 
-export function getVesselFromAPI(dispatch, vesselTrackInternalReferenceNumberToShow) {
+export function getVesselFromAPI(vesselTrackInternalReferenceNumberToShow) {
     return fetch(`/bff/v1/vessels/${vesselTrackInternalReferenceNumberToShow}`)
         .then(response => {
             if (response.status === HTTP_OK) {
                 return response.json()
             } else {
-                return response.json().then(error => {
-                    throw Error(error.error)
+                response.text().then(text => {
+                    console.error(text)
                 })
+                throw Error("Récupération des positions navire impossible")
             }
         })
         .then(vessel => vessel)
-        .catch(error => {
-            dispatch(setError(error))
-        });
 }
 
-export function getAllRegulatoryLayerNames(dispatch) {
+export function getAllRegulatoryLayerNames() {
     return fetch(`${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
                 `${Layers.REGULATORY}&outputFormat=application/json&propertyName=layer_name`)
         .then(response => {
             if (response.status === HTTP_OK) {
                 return response.json()
             } else {
-                return response.json().then(error => {
-                    throw Error(error.error)
+                response.text().then(text => {
+                    console.error(text)
                 })
+                throw Error("Récupération des couches réglementaire impossible")
             }
         })
         .then(features => {
@@ -59,8 +56,4 @@ export function getAllRegulatoryLayerNames(dispatch) {
 
             return [...uniqueLayerNames]
         })
-        .catch(error => {
-            console.error("Récupération des couches réglementaire impossible", error)
-            dispatch(setError(new Error("Récupération des couches réglementaire impossible")));
-        });
 }

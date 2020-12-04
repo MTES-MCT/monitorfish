@@ -5,6 +5,7 @@ import {getAllRegulatoryLayerNames} from "../api/fetch";
 import RegulatoryLayerControl from "./layers-control/RegulatoryLayerControl";
 import RegulatoryLayerSearchBox from "../components/RegulatoryLayerSearchBox";
 import {useDispatch} from "react-redux";
+import {setError} from "../reducers/Global";
 
 const RegulatoryLayerSelectionBox = () => {
     const dispatch = useDispatch()
@@ -20,8 +21,11 @@ const RegulatoryLayerSelectionBox = () => {
     }, [openBox])
 
     useEffect(() => {
-        getAllRegulatoryLayerNames(dispatch)
+        getAllRegulatoryLayerNames()
             .then(layerNames => setLayerNames(layerNames))
+            .catch(error => {
+                dispatch(setError(error));
+            });
     }, [])
 
     return (

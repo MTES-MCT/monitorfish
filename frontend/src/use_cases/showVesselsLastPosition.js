@@ -10,6 +10,7 @@ import Layers from "../domain/layers";
 import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer, setLayers, showLayer} from "../reducers/Layer";
 import VectorLayer from "ol/layer/Vector";
+import {setError} from "../reducers/Global";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
     if(getState().layer.layers.length === 0){
@@ -20,7 +21,7 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
         dispatch(setLayers([initialVesselsLayer]));
     }
 
-    getVesselsLastPositionsFromAPI(dispatch).then(vessels => {
+    getVesselsLastPositionsFromAPI().then(vessels => {
         let vesselsFeatures = vessels
             .filter(vessel => vessel)
             .map((currentVessel, index) => {
@@ -36,7 +37,9 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
 
         dispatch(replaceVesselLayer(vesselLayer))
         dispatch(showLayer({type: Layers.VESSELS}))
-    })
+    }).catch(error => {
+        dispatch(setError(error));
+    });
 }
 
 function buildFeature(currentVessel, index, getState) {

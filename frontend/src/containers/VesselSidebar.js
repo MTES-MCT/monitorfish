@@ -10,7 +10,7 @@ import VesselIdentity from "../components/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
 import hideVesselBox from "../use_cases/hideVesselBox";
 
-const VesselBox = () => {
+const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
     const dispatch = useDispatch()
 
@@ -217,4 +217,4 @@ const VMSIcon = styled(VMSSVG)`
 const FisheriesIcon = styled(FisheriesSVG)`
   width: 30px;
 `
-export default VesselBox
+export default VesselSidebar

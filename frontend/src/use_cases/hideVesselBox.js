@@ -1,5 +1,5 @@
 import {VESSEL_SELECTOR_STYLE} from "../layers/styles/featuresStyles";
-import {closeVesselBox, closeVesselSummary} from "../reducers/Vessel";
+import {closeVesselBox} from "../reducers/Vessel";
 
 const hideVesselBox = () => (dispatch, getState) => {
     const keepSelectedVessel = true

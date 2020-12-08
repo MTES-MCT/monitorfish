@@ -4,8 +4,8 @@ import {closeVesselSummary} from "../reducers/Vessel";
 const hideVesselSummary = () => (dispatch, getState) => {
     const keepSelectedVessel = true
     if(!getState().vessel.vesselBoxIsOpen) {
-        dispatch(closeVesselSummary(!keepSelectedVessel))
         removeSelectorStyleToSelectedVessel(getState);
+        dispatch(closeVesselSummary(!keepSelectedVessel))
         return
     }
 

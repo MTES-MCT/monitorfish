@@ -25,7 +25,6 @@ import ShowVesselsNamesBox from "./ShowVesselsNamesBox";
 import VesselSummary from "./VesselSummary";
 import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
-import {resetHideLayer, resetShowLayer} from "../reducers/Layer";
 import {hideVesselNames, isMoving, resetAnimateToVessel, setUsingSearch} from "../reducers/Map";
 
 const MIN_ZOOM_VESSEL_NAMES = 8;
@@ -107,58 +106,60 @@ const MapWrapper = () => {
     }, [])
 
     useEffect(() => {
-        if (map && layer.layers.length && layer.layerToShow) {
-            const layerToInsert = layer.layers
-                .filter(currentLayer => {
-                    if (layer.layerToShow.filter) {
-                        return currentLayer.className_ === layer.layerToShow.type + ':' + layer.layerToShow.filter
-                    }
+        if (map && layer.layers.length) {
 
-                    return currentLayer.className_ === layer.layerToShow.type
-                }).find(layer => layer)
+            addLayersToMap();
+            removeLayersToMap();
+        }
+    }, [layer.layers, map])
 
+    function addLayersToMap() {
+        const layersToInsert = layer.layers.filter(layer => {
+            return !map.getLayers().getArray().some(layer_ => layer === layer_)
+        })
+
+        layersToInsert.map(layerToInsert => {
             if (!layerToInsert) {
                 return
             }
 
             if (map.getLayers().getLength() === 1) {
                 map.getLayers().push(layerToInsert);
-                dispatch(resetShowLayer());
                 return
             }
 
             if (layerToInsert.className_ === LayersEnum.VESSELS) {
-                map.getLayers().pop();
+                removeCurrentVesselLayer()
                 map.getLayers().push(layerToInsert);
-                dispatch(resetShowLayer());
                 return
             }
 
             let index = map.getLayers().getLength() - 1
             map.getLayers().insertAt(index, layerToInsert);
-            dispatch(resetShowLayer());
-        }
-    }, [layer.layers, layer.layerToShow, map])
+        })
+    }
 
-    useEffect(() => {
-        if (map && layer.layers.length && layer.layerToHide) {
-            const layerToRemove = layer.layers
-                .filter(currentLayer => {
-                    if (layer.layerToHide.filter) {
-                        return currentLayer.className_ === layer.layerToHide.type + ':' + layer.layerToHide.filter
-                    }
+    function removeLayersToMap() {
+        let tileBaseLayer = 'ol-layer';
+        const layersToRemove = map.getLayers().getArray().filter(showedLayer => {
+            return !layer.layers.some(layer_ => showedLayer === layer_)
+        }).filter(layer => layer.className_ !== tileBaseLayer)
 
-                    return currentLayer.className_ === layer.layerToHide.type
-                }).find(layer => layer)
-
-            if (!layerToRemove) {
-                return
-            }
-
+        layersToRemove.map(layerToRemove => {
             map.getLayers().remove(layerToRemove);
-            dispatch(resetHideLayer());
+        })
+    }
+
+    function removeCurrentVesselLayer() {
+        const layerToRemove = map.getLayers().getArray()
+            .find(layer => layer.className_ === LayersEnum.VESSELS)
+
+        if (!layerToRemove) {
+            return
         }
-    }, [layer.layers, layer.layerToHide, map])
+
+        map.getLayers().remove(layerToRemove)
+    }
 
     useEffect(() => {
         if (map && vessel.selectedVesselTrackVector) {

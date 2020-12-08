@@ -6,57 +6,28 @@ import React from 'react';
 import styled from "styled-components";
 import { ToastProvider } from 'react-toast-notifications'
 import MapWrapper from './containers/MapWrapper'
-import EEZLayer from "./layers/EEZLayer";
-import FAOLayer from "./layers/FAOLayer";
-import APIWorker from "./api/APIWorker";
-import ThreeMilesLayer from "./layers/ThreeMilesLayer";
-import OneHundredMilesLayer from "./layers/OneHundredMilesLayer";
-import SixMilesLayer from "./layers/SixMilesLayer";
-import TwelveMilesLayer from "./layers/TwelveMilesLayer";
-import CoastLinesLayer from "./layers/CoastLinesLayer";
-import RegulatoryLayer from "./layers/RegulatoryLayer";
 import VesselsSearchBox from "./containers/VesselsSearchBox";
-import VesselBox from "./containers/VesselBox";
-import ZoneLayerSelectionBox from "./components/ZoneLayerSelectionBox";
-import Layers from "./domain/layers";
-import RegulatoryLayerSelectionBox from "./containers/RegulatoryLayerSelectionBox";
+import VesselSidebar from "./containers/VesselSidebar";
+import LeftSidebar from "./containers/LeftSidebar";
+import APIWorker from "./api/APIWorker";
 
 function App() {
   return (
       <>
           <ToastProvider placement="bottom-right">
-        <Wrapper>
-          <Header>
-            <Logo>
-              <img src="monitorfish.png" style={{width: 40, height: 40}} alt='MonitorFish'/>
-            </Logo>
-            <VesselsSearchBox/>
-          </Header>
-          <MapWrapper />
-          <ZoneLayerSelectionBox
-              layers={[
-                { layer: Layers.EEZ, layerName: 'ZEE' },
-                { layer: Layers.FAO, layerName: 'FAO' },
-                { layer: Layers.THREE_MILES, layerName: '3 Milles' },
-                { layer: Layers.SIX_MILES, layerName: '6 Milles' },
-                { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
-                { layer: Layers.ONE_HUNDRED_MILES, layerName: '100 Milles' },
-                { layer: Layers.COAST_LINES, layerName: 'Trait de côte' }
-              ]}/>
-          <RegulatoryLayerSelectionBox />
-          <VesselBox />
+              <Wrapper>
+              <Header>
+                <Logo>
+                  <img src="monitorfish.png" style={{width: 40, height: 40}} alt='MonitorFish'/>
+                </Logo>
+                <VesselsSearchBox/>
+              </Header>
+              <MapWrapper />
+              <LeftSidebar />
+              <VesselSidebar />
 
-          <EEZLayer />
-          <FAOLayer />
-          <ThreeMilesLayer />
-          <SixMilesLayer />
-          <TwelveMilesLayer />
-          <OneHundredMilesLayer />
-          <CoastLinesLayer />
-          <RegulatoryLayer />
-
-          <APIWorker />
-        </Wrapper>
+              <APIWorker />
+            </Wrapper>
           </ToastProvider>
       </>
   )
@@ -73,10 +44,11 @@ const Wrapper = styled.div`
 const Header = styled.div`
   position: absolute;
   top: 0;
-  height: 50px;
+  height: 49px;
   width: 100%;
   background-color: #05055E;
   z-index: 666666;
+  border-bottom: 1px solid rgb(255,255,255,0.2);
 `
 
 const Logo = styled.div`

@@ -13,13 +13,14 @@ import addRegulatoryZonesToMySelection from "../use_cases/addRegulatoryZonesToMy
 import RegulatoryZoneSelectedItem from "./RegulatoryZoneSelectedItem";
 import LayersEnum from "../domain/layers";
 import getAllRegulatoryZones from "../use_cases/getAllRegulatoryZones";
+import RegulatorySelectionList from "./RegulatorySelectionList";
 
 const LeftSidebar = () => {
     const dispatch = useDispatch()
     const showedLayers = useSelector(state => state.layer.showedLayers)
     const selectedRegulatoryZones = useSelector(state => state.layer.selectedRegulatoryZones)
     const zones = useSelector(state => state.layer.zones)
-    const [regulatoryZones, setRegulatoryZones] = useState([]);
+    const [regulatoryZones, setRegulatoryZones] = useState();
     const [foundRegulatoryZones, setFoundRegulatoryZones] = useState([]);
     const [openBox, setOpenBox] = useState(false);
     const [showRegulatorySection, setShowRegulatorySection] = useState(false);
@@ -36,7 +37,7 @@ const LeftSidebar = () => {
 
     useEffect(() => {
         dispatch(getAllRegulatoryZones())
-            .then(layerNames => setRegulatoryZones(layerNames))
+            .then(regulatoryZones => setRegulatoryZones(regulatoryZones))
             .catch(error => {
                 dispatch(setError(error));
             });
@@ -67,20 +68,17 @@ const LeftSidebar = () => {
                     showRegulatorySection ? <Close src={'close.png'} /> : <SearchIcon />
                 }
             </SectionTitle>
-            <RegulatoryLayerSearchInput showRegulatorySearchInput={showRegulatorySection} regulatoryZones={regulatoryZones} setFoundLayerNames={setFoundRegulatoryZones}/>
-            <RegulatorySelectionList showRegulatorySearchInput={showRegulatorySection} foundLayerNames={foundRegulatoryZones}>
-                {
-                    foundRegulatoryZones.map((regulatoryZone, index) => {
-                        return (<ListItem key={index}>
-                            <RegulatoryZoneSelectionItem
-                                layerName={regulatoryZone.layerName}
-                                toggleSelectRegulatoryZone={toggleSelectRegulatoryZone}
-                                isSelected={regulatoryZonesSelection.some(selected => selected.filter === regulatoryZone.layerName)}
-                            />
-                        </ListItem>)
-                    })
-                }
-            </RegulatorySelectionList>
+            <RegulatoryLayerSearchInput
+                showRegulatorySearchInput={showRegulatorySection}
+                regulatoryZones={regulatoryZones}
+                setFoundRegulatoryZones={setFoundRegulatoryZones}/>
+            <RegulatorySelectionList
+                showRegulatorySearchInput={showRegulatorySection}
+                foundRegulatoryZones={foundRegulatoryZones}
+                showRegulatorySection={showRegulatorySection}
+                regulatoryZonesSelection={regulatoryZonesSelection}
+                toggleSelectRegulatoryZone={toggleSelectRegulatoryZone}
+            />
             <AddRegulatoryLayerButton
                 onClick={() => callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)}
                 showRegulatorySearchInput={showRegulatorySection}
@@ -222,29 +220,6 @@ const RegulatorySelectedList = styled.ul`
   }
 
   @keyframes regulatory-selected-closing {
-    0%   { height: 200px; }
-    100% { height: 0;   }
-  }
-`
-
-const RegulatorySelectionList = styled.ul`
-  margin: 0;
-  background-color: #05055E;
-  border-radius: 0;
-  padding: 0;
-  height: 200px;
-  max-height: 200px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  
-  animation: ${props => props.showRegulatorySearchInput ? props.foundLayerNames.length > 0 ? 'regulatory-input-opening' : 'regulatory-input-closing' : 'regulatory-input-closing'} 1s ease forwards;
-
-  @keyframes regulatory-result-opening {
-    0%   { height: 0;   }
-    100% { height: 200px; }
-  }
-
-  @keyframes regulatory-result-closing {
     0%   { height: 200px; }
     100% { height: 0;   }
   }

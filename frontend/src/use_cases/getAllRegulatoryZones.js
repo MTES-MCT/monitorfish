@@ -1,6 +1,6 @@
 import {getAllRegulatoryZonesFromAPI} from "../api/fetch";
 
-const getRegulatoryZone = properties => {
+const mapToRegulatoryZone = properties => {
     return {
         layerName: properties.layer_name,
         gears: properties.engins,
@@ -14,14 +14,14 @@ const getAllRegulatoryZones = () => (dispatch, getState) => {
     return getAllRegulatoryZonesFromAPI()
         .then(features => {
             const featuresWithoutGeometry = features.features.map(feature => {
-                return getRegulatoryZone(feature.properties)
+                return mapToRegulatoryZone(feature.properties)
             })
 
             const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
                 const found = acc.find(item =>
-                    item.layer_name === current.layer_name &&
+                    item.layerName === current.layerName &&
                     item.gears === current.gears &&
-                    item.zones === current.zones &&
+                    item.zone === current.zone &&
                     item.species === current.species &&
                     item.regulatoryReference === current.regulatoryReference);
                 if (!found) {
@@ -31,7 +31,18 @@ const getAllRegulatoryZones = () => (dispatch, getState) => {
                 }
             }, []);
 
-            return uniqueFeaturesWithoutGeometry
+            const layerNamesArray = uniqueFeaturesWithoutGeometry
+                .map(layer => layer.layerName)
+                .map(layerName => {
+                    return uniqueFeaturesWithoutGeometry.filter(layer => layer.layerName === layerName)
+                })
+
+            const layersNamesToZones = layerNamesArray.reduce((accumulatedObject, zone) => {
+                accumulatedObject[zone[0].layerName] = zone;
+                return accumulatedObject;
+            }, {});
+
+            return layersNamesToZones
         })
 }
 

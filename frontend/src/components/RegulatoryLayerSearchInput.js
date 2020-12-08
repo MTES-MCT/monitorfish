@@ -6,23 +6,31 @@ const RegulatoryLayerSearchInput = props => {
 
     useEffect(() => {
         if (placeSearchText.length > 1 && props.regulatoryZones) {
-            console.log(props.regulatoryZones)
-            const foundRegulatoryZones = props.regulatoryZones
-                .filter(regulatoryZone => regulatoryZone.layerName.toLowerCase().includes(placeSearchText.toLowerCase()))
-                .filter(regulatoryZone => regulatoryZone)
+            let regulatoryZones = props.regulatoryZones
+            Object.keys(regulatoryZones)
+                .forEach(key => {
+                    regulatoryZones[key] = regulatoryZones[key]
+                        .filter(zone => {
+                            return zone.zone ? zone.zone.toLowerCase().includes(placeSearchText.toLowerCase()) : false
+                        })
 
-            props.setFoundLayerNames(foundRegulatoryZones)
+                    if (!regulatoryZones[key] || !regulatoryZones[key].length > 0) {
+                        delete regulatoryZones[key]
+                    }
+                })
+
+            props.setFoundRegulatoryZones(regulatoryZones)
         } else {
-            props.setFoundLayerNames([])
+            props.setFoundRegulatoryZones([])
         }
     }, [placeSearchText, props.regulatoryZones])
 
     return (
         <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
-            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Morbihan...'} onChange={e => setPlaceSearchText(e.target.value)}/>
-            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Engin...'} onChange={e => setPlaceSearchText(e.target.value)}/>
-            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Oursins...'} onChange={e => setPlaceSearchText(e.target.value)}/>
-            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Réglementation...'} onChange={e => setPlaceSearchText(e.target.value)}/>
+            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Zone (ex. Bretagne, Charente...)'} onChange={e => setPlaceSearchText(e.target.value)}/>
+            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Engin (ex. chalut, OTB...)'} onChange={e => setPlaceSearchText(e.target.value)}/>
+            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Espèce (ex. Bivalve, HKE...)'} onChange={e => setPlaceSearchText(e.target.value)}/>
+            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Réglementation (ex. 2018-171)'} onChange={e => setPlaceSearchText(e.target.value)}/>
         </SearchBox>)
 }
 

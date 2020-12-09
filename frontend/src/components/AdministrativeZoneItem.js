@@ -1,13 +1,9 @@
 import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIcon} from "../components/icons/eye.svg";
-import {ReactComponent as HideIcon} from "../components/icons/eye_not.svg";
-import {useDispatch} from "react-redux";
+import {ReactComponent as ShowIcon} from "./icons/eye.svg";
+import {ReactComponent as HideIcon} from "./icons/eye_not.svg";
 import styled from "styled-components";
-import showLayer from "../use_cases/showLayer";
-import hideLayer from "../use_cases/hideLayer";
 
 const AdministrativeZoneItem = props => {
-    const dispatch = useDispatch()
     const firstUpdate = useRef(true);
     const [showLayer_, setShowLayer] = useState(undefined);
 
@@ -23,11 +19,10 @@ const AdministrativeZoneItem = props => {
             return;
         }
 
-        let payload = { type: props.layer.layer };
         if(showLayer_) {
-            dispatch(showLayer(payload));
+            props.callShowAdministrativeZone(props.layer.layer)
         } else {
-            dispatch(hideLayer(payload));
+            props.callHideAdministrativeZone(props.layer.layer)
         }
     }, [showLayer_])
 

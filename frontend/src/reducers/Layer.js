@@ -27,7 +27,7 @@ const layerSlice = createSlice({
             { layer: Layers.ONE_HUNDRED_MILES, layerName: '100 Milles' }
         ],
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
-        selectedRegulatoryZones: getLocalStorageState([], selectedRegulatoryZonesLocalStorageKey)
+        selectedRegulatoryZones: getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey)
     },
     reducers: {
         replaceVesselLayer(state, action) {
@@ -58,14 +58,22 @@ const layerSlice = createSlice({
             }
         },
         addRegulatoryZonesToSelection(state, action) {
-            state.selectedRegulatoryZones = state.selectedRegulatoryZones.concat(action.payload)
+            state.selectedRegulatoryZones = action.payload
             window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
         },
         removeRegulatoryZonesToSelection(state, action) {
-            state.selectedRegulatoryZones = state.selectedRegulatoryZones.filter(layer =>
-                (layer.type !== action.payload.type && layer.filter !== action.payload.filter))
-            console.log(action.payload)
-            console.log(state.selectedRegulatoryZones)
+            state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
+                return !(subZone.layerName === action.payload.layerName &&
+                    subZone.gears === action.payload.gears &&
+                    subZone.zone === action.payload.zone &&
+                    subZone.species === action.payload.species &&
+                    subZone.regulatoryReference === action.payload.regulatoryReference)
+            })
+
+            if (!state.selectedRegulatoryZones[action.payload.layerName].length) {
+                delete state.selectedRegulatoryZones[action.payload.layerName]
+            }
+
             window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
         }
     }

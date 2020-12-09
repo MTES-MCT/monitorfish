@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 
-const RegulatoryLayerSearchInput = props => {
+const RegulatoryZoneSelectionSearchInput = props => {
     const [placeSearchText, setPlaceSearchText] = useState('');
 
     useEffect(() => {
         if (placeSearchText.length > 1 && props.regulatoryZones) {
-            let regulatoryZones = props.regulatoryZones
+            let regulatoryZones = {...props.regulatoryZones}
             Object.keys(regulatoryZones)
                 .forEach(key => {
                     regulatoryZones[key] = regulatoryZones[key]
@@ -21,7 +21,7 @@ const RegulatoryLayerSearchInput = props => {
 
             props.setFoundRegulatoryZones(regulatoryZones)
         } else {
-            props.setFoundRegulatoryZones([])
+            props.setFoundRegulatoryZones({})
         }
     }, [placeSearchText, props.regulatoryZones])
 
@@ -72,4 +72,4 @@ const SearchBoxInput = styled.input`
   padding: 0 5px 0 5px;
 `;
 
-export default RegulatoryLayerSearchInput
+export default RegulatoryZoneSelectionSearchInput

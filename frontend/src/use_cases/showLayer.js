@@ -18,11 +18,11 @@ const showLayer = layerToShow => (dispatch, getState) => {
             case Layers.TWELVE_MILES: dispatch(addLayer(getVectorLayer(Layers.TWELVE_MILES))); break;
             case Layers.ONE_HUNDRED_MILES: dispatch(addLayer(getVectorLayer(Layers.ONE_HUNDRED_MILES))); break;
             case Layers.REGULATORY: {
-                if (!layerToShow.filter) {
+                if (!layerToShow.zone) {
                     console.error("No regulatory layer given.")
                     return
                 }
-                dispatch(addLayer(getVectorLayer(Layers.REGULATORY, layerToShow.filter)));
+                dispatch(addLayer(getVectorLayer(Layers.REGULATORY, layerToShow.zone)));
                 break;
             }
         }

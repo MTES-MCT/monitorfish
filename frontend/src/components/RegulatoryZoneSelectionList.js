@@ -1,33 +1,24 @@
-import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIcon} from "../components/icons/eye.svg";
-import {ReactComponent as HideIcon} from "../components/icons/eye_not.svg";
-import {useDispatch} from "react-redux";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import showLayer from "../use_cases/showLayer";
-import hideLayer from "../use_cases/hideLayer";
 import RegulatoryZoneSelectionItem from "./RegulatoryZoneSelectionItem";
 
-const RegulatorySelectionList = props => {
+const RegulatoryZoneSelectionList = props => {
     const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({})
-    const [regulatoryZones, setRegulatoryZones] = useState({})
 
     useEffect(() => {
-        //let layerNames = new Set(props.foundRegulatoryZones.map(layer => layer.layerName))
-        setLayerNames([...layerNames])
-
         setFoundRegulatoryZones(props.foundRegulatoryZones)
     }, [props.foundRegulatoryZones])
 
     return (
-        <List showRegulatorySearchInput={props.showRegulatorySection} foundRegulatoryZones={props.foundRegulatoryZones}>
+        <List showRegulatorySearchInput={props.showRegulatorySection} foundRegulatoryZones={foundRegulatoryZones}>
             {
-                Object.keys()
-                foundRegulatoryZones.map((regulatoryZone, index) => {
+                Object.keys(foundRegulatoryZones).map((regulatoryZoneName, index) => {
                     return (<ListItem key={index}>
                         <RegulatoryZoneSelectionItem
-                            layerName={regulatoryZone.layerName}
+                            regulatorySubZones={foundRegulatoryZones[regulatoryZoneName]}
+                            regulatoryZoneName={regulatoryZoneName}
                             toggleSelectRegulatoryZone={props.toggleSelectRegulatoryZone}
-                            isSelected={props.regulatoryZonesSelection.some(selected => selected.filter === regulatoryZone.layerName)}
+                            regulatoryZonesSelection={props.regulatoryZonesSelection}
                         />
                     </ListItem>)
                 })
@@ -46,7 +37,7 @@ const List = styled.ul`
   overflow-y: scroll;
   overflow-x: hidden;
   
-  animation: ${props => props.showRegulatorySearchInput ? props.foundRegulatoryZones.length > 0 ? 'regulatory-input-opening' : 'regulatory-input-closing' : 'regulatory-input-closing'} 1s ease forwards;
+  animation: ${props => props.showRegulatorySearchInput ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-result-opening' : 'regulatory-result-closing' : 'regulatory-result-closing'} 1s ease forwards;
 
   @keyframes regulatory-result-opening {
     0%   { height: 0;   }
@@ -75,4 +66,4 @@ const ListItem = styled.li`
   line-height: 1.9em;
 `
 
-export default RegulatorySelectionList
+export default RegulatoryZoneSelectionList

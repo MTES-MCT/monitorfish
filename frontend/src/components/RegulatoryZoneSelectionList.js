@@ -15,6 +15,7 @@ const RegulatoryZoneSelectionList = props => {
                 Object.keys(foundRegulatoryZones).map((regulatoryZoneName, index) => {
                     return (<ListItem key={index}>
                         <RegulatoryZoneSelectionItem
+                            key={index}
                             regulatorySubZones={foundRegulatoryZones[regulatoryZoneName]}
                             regulatoryZoneName={regulatoryZoneName}
                             toggleSelectRegulatoryZone={props.toggleSelectRegulatoryZone}

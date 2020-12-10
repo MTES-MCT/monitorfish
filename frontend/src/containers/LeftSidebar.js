@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setError} from "../reducers/Global";
 
 import {ReactComponent as LayersSVG} from '../components/icons/layers.svg';
+import LayersEnum from "../domain/layers";
 
 import addRegulatoryZonesToMySelection from "../use_cases/addRegulatoryZonesToMySelection";
 import getAllRegulatoryZones from "../use_cases/getAllRegulatoryZones";
@@ -43,18 +44,19 @@ const LeftSidebar = () => {
 
     function callRemoveRegulatoryZoneFromMySelection(regulatoryZone) {
         dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
+        callHideRegulatoryZone(regulatoryZone)
     }
 
     function callShowRegulatoryZone(regulatoryZone) {
         dispatch(showLayer({
-            type: Layers.REGULATORY,
+            type: LayersEnum.REGULATORY,
             zone: regulatoryZone
         }))
     }
 
     function callHideRegulatoryZone(regulatoryZone) {
         dispatch(hideLayer({
-            type: Layers.REGULATORY,
+            type: LayersEnum.REGULATORY,
             zone: regulatoryZone
         }))
     }
@@ -87,6 +89,7 @@ const LeftSidebar = () => {
             <RegulatoryZoneSelected
                 callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                 callShowRegulatoryZone={callShowRegulatoryZone}
+                callHideRegulatoryZone={callHideRegulatoryZone}
                 showedLayers={showedLayers}
                 selectedRegulatoryZones={selectedRegulatoryZones}
             />

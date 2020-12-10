@@ -3,10 +3,11 @@ import {removeLayer, removeShowedLayer} from "../reducers/Layer";
 const hideLayer = layerToHide => (dispatch, getState) => {
     if(layerToHide && layerToHide.type) {
         let layerToRemove
-        switch (layerToHide.filter) {
+        switch (layerToHide.zone) {
             case undefined: layerToRemove = getState().layer.layers.find(layer => layer.className_ === layerToHide.type); break;
             default: {
-                layerToRemove = getState().layer.layers.find(layer => layer.className_ === `${layerToHide.type}:${layerToHide.filter}`);
+                layerToRemove = getState().layer.layers.find(layer =>
+                    layer.className_ === `${layerToHide.type}:${layerToHide.zone.layerName}:${layerToHide.zone.zone}`);
                 break;
             }
         }

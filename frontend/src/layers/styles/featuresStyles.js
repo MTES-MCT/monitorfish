@@ -3,13 +3,19 @@ import CircleStyle from "ol/style/Circle";
 import Fill from "ol/style/Fill";
 import IconOrigin from "ol/style/IconOrigin";
 import {getTextWidth} from "../../utils";
+import * as Comlink from "comlink";
+/* eslint-disable import/no-webpack-loader-syntax */
+import Worker from 'worker-loader!../../workers/MapperWorker';
 
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
+const worker = new Worker();
+const OpenLayerWorker = Comlink.wrap(worker);
+
 export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalReferenceNumberToShow, vesselNamesShowedOnMap) => {
     const vesselDate = new Date(vessel.dateTime);
-    const nowMinusThreeHours = new Date;
+    const nowMinusThreeHours = new Date();
     nowMinusThreeHours.setHours(nowMinusThreeHours.getHours() - 3);
 
     let opacity = vesselDate < nowMinusThreeHours ? 0.3 : 1;

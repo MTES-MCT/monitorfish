@@ -13,9 +13,8 @@ import MapCoordinatesBox from "../components/MapCoordinatesBox";
 import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {
     selectedVesselStyle,
-    getVesselNameStyle,
     VESSEL_SELECTOR_STYLE,
-    VESSEL_NAME_STYLE
+    VESSEL_NAME_STYLE, getVesselNameStyle
 } from "../layers/styles/featuresStyles";
 import MapAttributionsBox from "../components/MapAttributionsBox";
 import Overlay from "ol/Overlay";
@@ -26,6 +25,7 @@ import VesselSummary from "./VesselSummary";
 import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
 import {hideVesselNames, isMoving, resetAnimateToVessel, setUsingSearch} from "../reducers/Map";
+import {getHDMSCoordinates} from "../utils";
 
 const MIN_ZOOM_VESSEL_NAMES = 8;
 
@@ -325,10 +325,11 @@ const MapWrapper = () => {
         }
     }
 
-    function showCoordinatesInDMS(event) {
+    async function showCoordinatesInDMS(event) {
         const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel);
         const transformedCoordinates = transform(clickedCoordinates, OPENLAYERS_PROJECTION, BACKEND_PROJECTION)
-        setCursorCoordinates(toStringHDMS(transformedCoordinates))
+        const stringHDMS = toStringHDMS(transformedCoordinates)
+        setCursorCoordinates(stringHDMS)
     }
 
     return (

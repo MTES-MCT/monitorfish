@@ -9,10 +9,7 @@ const addRegulatoryZonesToMySelection = regulatoryZones => (dispatch, getState) 
             regulatoryZones[regulatoryZoneName].forEach(regulatorySubZone => {
                 if(!regulatoryZonesToAdd[regulatoryZoneName].some(item =>
                     item.layerName === regulatorySubZone.layerName &&
-                    item.gears === regulatorySubZone.gears &&
-                    item.zone === regulatorySubZone.zone &&
-                    item.species === regulatorySubZone.species &&
-                    item.regulatoryReference === regulatorySubZone.regulatoryReference)) {
+                    item.zone === regulatorySubZone.zone)) {
                     regulatoryZonesToAdd[regulatoryZoneName].concat(regulatorySubZone)
                 }
             })

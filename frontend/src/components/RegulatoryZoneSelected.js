@@ -1,19 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import styled from 'styled-components';
-import {useDispatch, useSelector} from "react-redux";
-import {setError} from "../reducers/Global";
-
-import {ReactComponent as LayersSVG} from './icons/layers.svg';
 import {ReactComponent as ChevronIconSVG} from './icons/Chevron_double_gris.svg'
-
-import addRegulatoryZonesToMySelection from "../use_cases/addRegulatoryZonesToMySelection";
 import RegulatoryZoneSelectedItem from "./RegulatoryZoneSelectedItem";
-import getAllRegulatoryZones from "../use_cases/getAllRegulatoryZones";
-import removeRegulatoryZoneFromMySelection from "../use_cases/removeRegulatoryZoneFromMySelection";
-import showLayer from "../use_cases/showLayer";
-import hideLayer from "../use_cases/hideLayer";
-import RegulatoryZoneSelection from "./RegulatoryZoneSelection";
-import AdministrativeZoneSelection from "./AdministrativeZoneSelection";
 
 const RegulatoryZoneSelected = props => {
     const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(true);
@@ -21,7 +9,7 @@ const RegulatoryZoneSelected = props => {
     return (
         <>
             <RegulatoryZoneSelectedTitle onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}>
-                Mes zones <ChevronIcon isOpen={showRegulatoryZonesSelected}/>
+                Mes zones réglementaires <ChevronIcon isOpen={showRegulatoryZonesSelected}/>
             </RegulatoryZoneSelectedTitle>
             <RegulatoryZoneSelectedList showRegulatoryZonesSelected={showRegulatoryZonesSelected}>
                 {
@@ -32,7 +20,8 @@ const RegulatoryZoneSelected = props => {
                                 regulatoryZoneName={regulatoryZoneName}
                                 regulatorySubZones={props.selectedRegulatoryZones[regulatoryZoneName]}
                                 callShowRegulatoryZone={props.callShowRegulatoryZone}
-                                isShownOnInit={props.showedLayers.some(layer_ => layer_.type === regulatoryZoneName.layer && layer_.filter && layer_.filter === regulatoryZoneName.filter)}
+                                callHideRegulatoryZone={props.callHideRegulatoryZone}
+                                showedLayers={props.showedLayers}
                             />
                         </ListItem>)
                     })

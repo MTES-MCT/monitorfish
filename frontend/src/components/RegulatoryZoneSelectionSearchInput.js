@@ -3,15 +3,21 @@ import styled from 'styled-components';
 
 const RegulatoryZoneSelectionSearchInput = props => {
     const [placeSearchText, setPlaceSearchText] = useState('');
+    const [gearSearchText, setGearSearchText] = useState('');
+    const [speciesSearchText, setSpeciesSearchText] = useState('');
+    const [regulatoryReferenceSearchText, setRegulatoryReferenceSearchText] = useState('');
 
-    useEffect(() => {
-        if (placeSearchText.length > 1 && props.regulatoryZones) {
-            let regulatoryZones = {...props.regulatoryZones}
+    function search(searchText, propertiesToSearch) {
+        if (props.foundRegulatoryZones && props.regulatoryZones) {
+            let regulatoryZones = Object.keys(props.foundRegulatoryZones).length !== 0 ? {...props.foundRegulatoryZones} : {...props.regulatoryZones}
             Object.keys(regulatoryZones)
                 .forEach(key => {
                     regulatoryZones[key] = regulatoryZones[key]
                         .filter(zone => {
-                            return zone.zone ? zone.zone.toLowerCase().includes(placeSearchText.toLowerCase()) : false
+                            return propertiesToSearch.length === 1
+                                ? zone[propertiesToSearch[0]] ? zone[propertiesToSearch[0]].toLowerCase().includes(searchText.toLowerCase()) : false
+                                : (zone[propertiesToSearch[0]] ? zone[propertiesToSearch[0]].toLowerCase().includes(searchText.toLowerCase()) : false) ||
+                                (zone[propertiesToSearch[1]] ? zone[propertiesToSearch[1]].toLowerCase().includes(searchText.toLowerCase()) : false)
                         })
 
                     if (!regulatoryZones[key] || !regulatoryZones[key].length > 0) {
@@ -20,17 +26,40 @@ const RegulatoryZoneSelectionSearchInput = props => {
                 })
 
             props.setFoundRegulatoryZones(regulatoryZones)
-        } else {
+        }
+    }
+
+    useEffect(() => {
+        search(placeSearchText, ['layerName', 'zone']);
+    }, [placeSearchText])
+
+    useEffect(() => {
+        search(gearSearchText, ['gears']);
+    }, [gearSearchText])
+
+    useEffect(() => {
+        search(speciesSearchText, ['species']);
+    }, [speciesSearchText])
+
+    useEffect(() => {
+        search(regulatoryReferenceSearchText, ['regulatoryReference']);
+    }, [regulatoryReferenceSearchText])
+
+    useEffect(() => {
+        if(placeSearchText.length < 1 &&
+            gearSearchText.length < 1 &&
+            regulatoryReferenceSearchText.length < 1 &&
+            speciesSearchText.length < 1) {
             props.setFoundRegulatoryZones({})
         }
-    }, [placeSearchText, props.regulatoryZones])
+    }, [speciesSearchText, gearSearchText, placeSearchText])
 
     return (
         <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
             <SearchBoxInput type="text" value={placeSearchText} placeholder={'Zone (ex. Bretagne, Charente...)'} onChange={e => setPlaceSearchText(e.target.value)}/>
-            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Engin (ex. chalut, OTB...)'} onChange={e => setPlaceSearchText(e.target.value)}/>
-            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Espèce (ex. Bivalve, HKE...)'} onChange={e => setPlaceSearchText(e.target.value)}/>
-            <SearchBoxInput type="text" value={placeSearchText} placeholder={'Réglementation (ex. 2018-171)'} onChange={e => setPlaceSearchText(e.target.value)}/>
+            <SearchBoxInput type="text" value={gearSearchText} placeholder={'Engin (ex. chalut, OTB...)'} onChange={e => setGearSearchText(e.target.value)}/>
+            <SearchBoxInput type="text" value={speciesSearchText} placeholder={'Espèce (ex. Bivalve, HKE...)'} onChange={e => setSpeciesSearchText(e.target.value)}/>
+            <SearchBoxInput type="text" value={regulatoryReferenceSearchText} placeholder={'Réglementation (ex. 2018-171)'} onChange={e => setRegulatoryReferenceSearchText(e.target.value)}/>
         </SearchBox>)
 }
 
@@ -65,7 +94,7 @@ const SearchBoxInput = styled.input`
   border: none;
   border-bottom: 1px #8080802b solid;
   border-radius: 0;
-  color: gray;
+  color: white;
   font-size: 0.8em;
   height: 25px;
   width: 100%;

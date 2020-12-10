@@ -34,6 +34,7 @@ const Row = styled.span`
   display: block;
   line-height: 1.9em;
   padding-left: 10px;
+  user-select: none;
 `
 
 export default AdministrativeZoneItem

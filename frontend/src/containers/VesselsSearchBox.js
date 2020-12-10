@@ -6,7 +6,6 @@ import {ReactComponent as SearchIconSVG} from '../components/icons/search.svg'
 import LayersEnum from "../domain/layers";
 import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
-import {animateToVessel} from "../reducers/Map";
 
 const VesselsSearchBox = () => {
     const layers = useSelector(state => state.layer.layers)

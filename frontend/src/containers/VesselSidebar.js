@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import ReactCountryFlag from "react-country-flag";
 import {ReactComponent as VesselIDSVG} from '../components/icons/picto_carte_identite_navire.svg';

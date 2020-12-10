@@ -29,11 +29,14 @@ const RegulatoryZoneSelectionItem = props => {
 
     return (<Row>
         <Zone selected={globalIsSelected} onClick={() => select()}>
-            {props.regulatoryZoneName.replace('_', ' ')}
+            {props.regulatoryZoneName.replace(/[_]/g, ' ')}
         </Zone>
         {
             props.regulatorySubZones ? props.regulatorySubZones.map((subZone, index) => {
-                return (<SubZone onClick={() => select(subZone)} selected={globalIsSelected || (!globalIsSelected && isSelected(props.regulatoryZonesSelection[props.regulatoryZoneName], subZone))} key={index}>
+                return (<SubZone
+                    onClick={() => select(subZone)}
+                    selected={globalIsSelected || (!globalIsSelected && isSelected(props.regulatoryZonesSelection[props.regulatoryZoneName], subZone))}
+                    key={index}>
                     <Rectangle /> {subZone.zone}
                 </SubZone>)
             }) : null
@@ -51,7 +54,10 @@ const Rectangle = styled.div`
 `
 
 const Zone = styled.span`
-  width: 100%;
+  user-select: none;
+  text-overflow: ellipsis;
+  overflow-x: hidden !important;
+  padding-right: 10px;
   display: block;
   line-height: 2.7em;
   text-transform: uppercase;
@@ -61,11 +67,14 @@ const Zone = styled.span`
 `
 
 const SubZone = styled.span`
-  width: 100%;
+  user-select: none;
   display: block;
   line-height: 1.9em;
   font-size: smaller;
   padding-left: 10px;
+  padding-right: 10px;
+  text-overflow: ellipsis;
+  overflow-x: hidden !important;
   background: ${props => props.selected ? 'rgb(255, 255, 255, 0.3)' : 'rgb(255, 255, 255, 0.1)'};
   border-top: 1px solid rgb(255, 255, 255, 0.1)
 `

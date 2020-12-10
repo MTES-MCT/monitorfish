@@ -5,8 +5,19 @@ services:
       context: .
       dockerfile: Dockerfile-dam-si
     image: monitorfish_data_science_dam_si
+    user: jovyan
     container_name: monitorfish_data_science_dam_si
     ports: 
         - 8888:8888
     volumes:
-      - .:/home/jovyan/work
+      - .:/home/jovyan/work/
+    networks: 
+      - remote_backend
+    environment: 
+      - PYTHONPATH=/home/jovyan/work
+      - GRANT_SUDO=no
+      - PREFECT__FLOWS__CHECKPOINTING=true
+
+networks: 
+  remote_backend:
+    external: true

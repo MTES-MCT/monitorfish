@@ -1,55 +1,74 @@
-const Reducer = (state, action) => {
-    switch (action.type) {
-        case 'SHOW_VESSEL_TRACK':
-            return {
-                ...state,
-                previousVesselTrackShowed: state.vesselTrackToShow,
-                vesselTrackToShow: action.payload
-            };
-        case 'RESET_SHOW_VESSEL_TRACK':
-            return {
-                ...state,
-                previousVesselTrackShowed: state.vesselTrackToShow,
-                vesselTrackToShow: null
-            };
-        case 'RESET_PREVIOUS_VESSEL_SHOWED':
-            return {
-                ...state,
-                previousVesselTrackShowed: null,
-            };
-        case 'SET_VESSEL_TRACK_VECTOR':
-            return {
-                ...state,
-                vesselTrackVector: action.payload
-            };
-        case 'RESET_VESSEL_TRACK_VECTOR':
-            return {
-                ...state,
-                vesselTrackVector: null
-            };
-        case 'SET_VESSEL':
-            return {
-                ...state,
-                vessel: action.payload
-            };
-        case 'RESET_VESSEL':
-            return {
-                ...state,
-                vessel: null
-            };
-        case 'SET_VESSELS':
-            return {
-                ...state,
-                vessels: action.payload
-            };
-        case 'ANIMATE_TO_VESSEL':
-            return {
-                ...state,
-                vesselToMoveOn: action.payload
-            };
-        default:
-            return state;
-    }
-};
+import { createSlice } from '@reduxjs/toolkit'
 
-export default Reducer;
+const vesselSlice = createSlice({
+    name: 'vessel',
+    initialState: {
+        selectedVesselTrackVector: null,
+        selectedVesselFeature: null,
+        selectedVessel: null,
+        loadingVessel: null,
+        vesselSummaryIsOpen: false,
+        vesselBoxIsOpen: false,
+        vesselBoxTabIndexToShow: 1
+    },
+    reducers: {
+        setSelectedVesselTrackVector(state, action) {
+            state.selectedVesselTrackVector = action.payload
+        },
+        loadingVessel(state, action) {
+            state.loadingVessel = true
+            state.selectedVesselFeature = action.payload
+            state.selectedVesselTrackVector = null
+            state.selectedVessel = null
+            state.vesselSummaryIsOpen = true
+        },
+        setSelectedVessel(state, action) {
+            state.loadingVessel = null
+            state.selectedVessel = action.payload
+        },
+        resetSelectedVessel(state) {
+            state.selectedVessel = null
+            state.selectedVesselFeature = null
+        },
+        openVesselSummary(state) {
+            state.vesselSummaryIsOpen = true
+        },
+        openVesselBox(state, action) {
+            state.vesselBoxTabIndexToShow = action.payload ? action.payload : 1
+            state.vesselBoxIsOpen = true
+            state.vesselSummaryIsOpen = false
+        },
+        closeVesselSummary(state, action) {
+            state.vesselSummaryIsOpen = false
+
+            let keepSelectedVessel = action.payload
+            if(!keepSelectedVessel) {
+                state.selectedVesselTrackVector = null
+                state.selectedVessel = null
+                state.selectedVesselFeature = null
+            }
+        },
+        closeVesselBox(state, action) {
+            state.vesselBoxIsOpen = false
+
+            let keepSelectedVessel = action.payload
+            if(!keepSelectedVessel) {
+                state.selectedVesselTrackVector = null
+                state.selectedVessel = null
+                state.selectedVesselFeature = null
+            }
+        }
+    }
+})
+
+export const {
+    loadingVessel,
+    setSelectedVesselTrackVector,
+    setSelectedVessel,
+    resetSelectedVessel,
+    openVesselBox,
+    closeVesselSummary,
+    closeVesselBox
+} = vesselSlice.actions
+
+export default vesselSlice.reducer

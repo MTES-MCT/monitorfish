@@ -23,7 +23,6 @@ class JpaPositionRepository(@Autowired
 
     @Suppress("UselessCallOnCollection")
     @kotlin.time.ExperimentalTime
-    @Cacheable(value = ["vessels_position"])
     override fun findAllLastDistinctPositions(): List<Position> {
         val (internalReferenceNumberPositions, internalReferenceNumberPositionsElapsed) = measureTimedValue {
             dbPositionRepository.findLastDistinctInternalReferenceNumbers()

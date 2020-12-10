@@ -2,12 +2,12 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
+import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 
 @UseCase
-class GetLastPositions(private val positionRepository: PositionRepository) {
-
+class GetLastPositions(private val lastPositionRepository: LastPositionRepository) {
     fun execute(): List<Position> {
-        return positionRepository.findAllLastDistinctPositions()
+        return lastPositionRepository.findAll()
     }
 }

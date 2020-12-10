@@ -23,12 +23,6 @@ services:
     depends_on:
       - db
 
-  navpro:
-    build: mocks/navpro
-    restart: unless-stopped
-    ports:
-      - 8882:8882
-
 volumes:
   geoserver-data:
     driver: local

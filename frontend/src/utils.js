@@ -1,5 +1,5 @@
 import {transform} from "ol/proj";
-import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "./domain/map";
+import {BACKEND_PROJECTION} from "./domain/map";
 import {toStringHDMS} from "ol/coordinate";
 
 export let calculatePointsDistance = (coord1, coord2) => {
@@ -17,8 +17,8 @@ export let calculateSplitPointCoords = (startNode, nextNode, distanceBetweenNode
     return [x, y];
 };
 
-export let getCoordinates = coordinates => {
-    const transformedCoordinates = transform(coordinates, OPENLAYERS_PROJECTION, BACKEND_PROJECTION)
+export let getCoordinates = (coordinates, projection) => {
+    const transformedCoordinates = transform(coordinates, projection, BACKEND_PROJECTION)
     const hourCoordinates = toStringHDMS(transformedCoordinates)
     let nSplit = hourCoordinates.split('N')
     if (nSplit.length > 1) {
@@ -36,4 +36,40 @@ export let getDateTime = dateString => {
         const date = new Date(dateString)
         return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.toLocaleTimeString('fr-FR')}`
     }
+}
+
+export let arraysEqual = (a, b) => {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    // If you don't care about the order of the elements inside
+    // the array, you should sort both arrays here.
+    // Please note that calling sort on an array will modify that array.
+    // you might want to clone your array first.
+
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}
+
+export let getTextWidth =  text => {
+    let canvas = undefined,
+        context = undefined,
+        metrics = undefined;
+
+    canvas = document.createElement( "canvas" )
+    context = canvas.getContext( "2d" );
+    context.font = "Normal 12px Arial";
+    metrics = context.measureText( text );
+
+    return metrics.width;
+}
+
+export const getLocalStorageState = (defaultValue, key) => {
+    const stickyValue = window.localStorage.getItem(key);
+    return stickyValue !== null
+        ? JSON.parse(stickyValue)
+        : defaultValue;
 }

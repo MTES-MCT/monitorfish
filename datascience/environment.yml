@@ -18,3 +18,10 @@ dependencies:
   - cx_oracle
   - tabula-py
   - xlrd
+  - python-dotenv
+  - prefect
+  - prefect[viz]
+  - black
+  - isort
+  - python-graphviz
+  - line_profiler

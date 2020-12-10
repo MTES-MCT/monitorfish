@@ -7,4 +7,6 @@ services:
     ports: 
         - 8888:8888
     volumes:
-      - .:/home/jovyan/work
+      - .:/home/jovyan/work/
+    environment: 
+      - PYTHONPATH=/home/jovyan/work

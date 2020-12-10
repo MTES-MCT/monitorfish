@@ -9,9 +9,11 @@ html {
 
 .eye {
   margin-bottom: -5px;
-  margin-left: 10px;
   width: 20px;
-  height: 20px;
+  float: right;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0 16px 0 5px;
+  height: 1.5em;
 }
 
 .zoom {
@@ -33,6 +35,10 @@ html {
 
 .ol-control:hover {
   background: inherit;
+}
+
+.ol-control button:hover, .ol-control button:focus {
+  background-color: #05055E;
 }
 
 button:hover, button:focus {
@@ -73,4 +79,32 @@ tbody {
   font-size: 100%;
   vertical-align: baseline;
   background: transparent;
+}
+
+.vessel-overlay {
+  z-index: 100;
+}
+
+.vessel-track-overlay {
+  z-index: 300;
+}
+
+.vessel-summary-overlay {
+  z-index: 200;
+}
+
+.radar {
+  position: initial !important;
+}
+
+a:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+input:focus {
+  outline: none;
 }

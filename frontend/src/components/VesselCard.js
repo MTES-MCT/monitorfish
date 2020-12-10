@@ -2,6 +2,7 @@ import React from "react";
 import styled from 'styled-components';
 import ReactCountryFlag from "react-country-flag";
 import {getDateTime, getCoordinates} from "../utils";
+import {OPENLAYERS_PROJECTION} from "../domain/map";
 
 const VesselCard = props => {
     return (
@@ -15,9 +16,9 @@ const VesselCard = props => {
             <VesselCardBody>
                 <LatLon>
                     <FieldName>LATITUDE</FieldName>
-                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates())[0]}</FieldValue>
+                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[0]}</FieldValue>
                     <FieldName>LONGITUDE</FieldName>
-                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates())[1]}</FieldValue>
+                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[1]}</FieldValue>
                 </LatLon>
                 <Course>
                     <FieldName>ROUTE</FieldName>

@@ -7,13 +7,7 @@ import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "positions", indexes = [
-        Index(columnList = "id", unique = true),
-        Index(columnList = "external_reference_number", unique = false),
-        Index(columnList = "internal_reference_number", unique = false),
-        Index(columnList = "mmsi", unique = false),
-        Index(columnList = "ircs", unique = false),
-        Index(columnList = "date_time", unique = false)])
+@Table(name = "positions")
 data class PositionEntity(
         @Id
         @SequenceGenerator(name = "position_id_seq", sequenceName = "position_id_seq", allocationSize = 1)

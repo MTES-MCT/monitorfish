@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import {COLORS} from "../constants/constants";
 
 const VesselIdentity = props => {
     const [photoFallback, setPhotoFallback] = useState(false)
@@ -241,7 +242,7 @@ const Zone = styled.div`
 `
 
 const ZoneTitle = styled.div`
-  color: grey;
+  color: ${COLORS.textGray};
   font-size: 0.8rem;
   text-transform: uppercase;
   flex-shrink: 0;
@@ -267,7 +268,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: grey;
+  color: ${COLORS.textGray};
   flex: initial;
   display: inline-block;
   text-transform: uppercase;
@@ -289,7 +290,7 @@ const KeyInfo = styled.span`
 
 const Value = styled.td`
   font-size: 0.8rem;
-  color: rgba(5, 5, 94, 1);
+  color: ${COLORS.background};
   font-weight: bold;
   margin: 0;
   text-align: left;
@@ -300,13 +301,13 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: grey;
+  color: ${COLORS.textGray};
   font-weight: 300;
   line-height: normal;
 `
 
 const NoPersonalData = styled.div`
-  color: grey;
+  color: ${COLORS.textGray};
   font-weight: 300;
 `
 
@@ -322,7 +323,7 @@ const PanelTitle = styled.span`
   margin: 5px 0 0 5px;
   text-align: left;
   font-weight: bolder;
-  color: rgba(5, 5, 94, 1);
+  color: ${COLORS.background};
   width: 100%;
 `
 

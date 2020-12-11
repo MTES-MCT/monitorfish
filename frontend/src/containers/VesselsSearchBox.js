@@ -6,6 +6,7 @@ import {ReactComponent as SearchIconSVG} from '../components/icons/search.svg'
 import LayersEnum from "../domain/layers";
 import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
+import {COLORS} from "../constants/constants";
 
 const VesselsSearchBox = () => {
     const layers = useSelector(state => state.layer.layers)
@@ -109,7 +110,7 @@ const Wrapper = styled.div`
   top: 0.5em;
   right: 0.5em;
   z-index: 999999;
-  color: white;
+  color: ${COLORS.textWhite};
   text-decoration: none;
   border: none;
   background-color: rgba(255,255,255,0.1);
@@ -134,7 +135,7 @@ const Input = styled.input`
   background-color: #05055E;
   border: none;
   border-radius: 2px;
-  color: white;
+  color: ${COLORS.textWhite};
   padding: 3px;
   font-size: 0.8em;
   height: 25px;

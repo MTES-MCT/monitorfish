@@ -13,6 +13,7 @@ import {ReactComponent as FisheriesSVG} from "../components/icons/Picto_activite
 import {useDispatch, useSelector} from "react-redux";
 import hideVesselSummary from "../use_cases/hideVesselSummary";
 import showVesselBox from "../use_cases/showVesselBox";
+import {COLORS} from "../constants/constants";
 
 const VesselSummary = () => {
     const [photoFallback, setPhotoFallback] = useState(false)
@@ -181,7 +182,7 @@ const VesselSummary = () => {
                 <Triangle />
             </TrianglePointer>
         </>
-    ) : <FingerprintSpinner color={'rgba(5, 5, 94, 1)'} className={'radar'} size={100}/>;
+    ) : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>;
 }
 
 const VerticalAlignHelper = styled.span`
@@ -266,7 +267,7 @@ const Triangle = styled.div`
 `
 
 const NoValue = styled.span`
-  color: grey;
+  color: ${COLORS.textGray};
   font-weight: 300;
 `
 
@@ -275,7 +276,7 @@ const Row = styled.div`
 `
 
 const BottomFieldName = styled.span`
-  color: gray;
+  color: ${COLORS.textGray};
   font-size: 0.8em;
 `
 
@@ -303,19 +304,19 @@ const VesselSummaryBottom = styled.div`
 `
 
 const Gray = styled.span`
-  color: gray;
+  color: ${COLORS.textGray};
   font-weight: 300;
 `
 
 const FieldName = styled.div`
   margin-top: 2px;
-  color: gray;
+  color: ${COLORS.textGray};
   font-size: 0.8em;
 `
 
 const FieldNameWithTopMargin = styled.div`
   margin-top: 10px;
-  color: gray;
+  color: ${COLORS.textGray};
   font-size: 0.8em;
 `
 
@@ -377,7 +378,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: grey;
+  color: ${COLORS.textGray};
   flex: initial;
   display: inline-block;
   font-size: 0.8em;

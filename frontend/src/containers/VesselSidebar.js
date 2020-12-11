@@ -10,6 +10,7 @@ import {ReactComponent as CloseIconSVG} from '../components/icons/Croix_grise.sv
 import VesselIdentity from "../components/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
 import hideVesselBox from "../use_cases/hideVesselBox";
+import {COLORS} from "../constants/constants";
 
 const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
@@ -123,7 +124,7 @@ const VesselNotFoundText = styled.div`
   display: table-cell;
   vertical-align: middle;
   height: inherit;
-  color: gray;
+  color: ${COLORS.textGray};
 `
 
 const Close = styled.img`
@@ -136,7 +137,7 @@ const Close = styled.img`
 
 const Panel = styled.div`
   padding: 5px 5px 5px 10px;
-  height: 780px;
+  height: 815px;
   overflow-y: auto;
 `
 
@@ -159,7 +160,7 @@ const Wrapper = styled.div`
   top: 50px;
   right: 0;
   width: 450px;
-  height: calc(100vh - 50px - 6px);
+  height: calc(100vh - 50px - 4px);
   z-index: 999;
   padding: 0 0px 3px 0px;
   background: white;
@@ -185,8 +186,8 @@ const VesselHeader = styled.div`
   padding: 5px 10px 10px 10px;
   text-transform: uppercase;
   text-align: left;
-  background: rgba(5, 5, 94, 1);
-  color: white;
+  background: ${COLORS.background};
+  color: ${COLORS.textWhite};
 `
 
 const VesselName = styled.span`

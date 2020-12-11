@@ -14,6 +14,7 @@ import hideLayer from "../use_cases/hideLayer";
 import RegulatoryZoneSelection from "../components/RegulatoryZoneSelection";
 import AdministrativeZoneSelection from "../components/AdministrativeZoneSelection";
 import RegulatoryZoneSelected from "../components/RegulatoryZoneSelected";
+import {COLORS} from "../constants/constants";
 
 const LeftSidebar = () => {
     const dispatch = useDispatch()
@@ -105,10 +106,10 @@ const Wrapper = styled.div`
   top: 50px;
   left: 0;
   z-index: 999999;
-  color: white;
+  color: ${COLORS.textWhite};
   text-decoration: none;
   border: none;
-  background-color: rgba(5, 5, 94, 1);
+  background-color: ${COLORS.background};
   padding: 0;
   margin-left: -270px;
   height: calc(100vh - 50px);
@@ -130,8 +131,8 @@ const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;
-  background: rgba(5, 5, 94, 1);
-  background: linear-gradient(to right, #2F006F, rgba(5, 5, 94, 1));
+  background: ${COLORS.background};
+  background: linear-gradient(to right, #2F006F, ${COLORS.background});
   padding: 3px 1px 3px 1px;
   margin-left: 135px;
   border-radius: 4px;
@@ -143,7 +144,7 @@ const SidebarLayersIcon = styled.button`
   border-left: none;
     
   :hover, :focus {
-    background: linear-gradient(to right, #2F006F, rgba(5, 5, 94, 1));
+    background: linear-gradient(to right, #2F006F, ${COLORS.background});
   }
 `
 

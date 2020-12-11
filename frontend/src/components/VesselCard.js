@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ReactCountryFlag from "react-country-flag";
 import {getDateTime, getCoordinates} from "../utils";
 import {OPENLAYERS_PROJECTION} from "../domain/map";
+import {COLORS} from "../constants/constants";
 
 const VesselCard = props => {
     return (
@@ -104,7 +105,7 @@ const Triangle = styled.div`
 `
 
 const NoValue = styled.span`
-  color: grey;
+  color: ${COLORS.textGray};
   font-weight: 300;
 `
 
@@ -113,7 +114,7 @@ const Row = styled.div`
 `
 
 const BottomFieldName = styled.span`
-  color: gray;
+  color: ${COLORS.textGray};
   font-size: 0.8em;
 `
 
@@ -141,13 +142,13 @@ const VesselCardBottom = styled.div`
 `
 
 const Gray = styled.span`
-  color: gray;
+  color: ${COLORS.textGray};
   font-weight: 300;
 `
 
 const FieldName = styled.div`
   margin-top: 2px;
-  color: gray;
+  color: ${COLORS.textGray};
   font-size: 0.8em;
 `
 

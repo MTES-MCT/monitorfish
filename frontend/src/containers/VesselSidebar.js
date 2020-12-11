@@ -6,6 +6,7 @@ import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_activite
 import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles.svg';
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_observations_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
+import {ReactComponent as CloseIconSVG} from '../components/icons/Croix_grise.svg'
 import VesselIdentity from "../components/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
 import hideVesselBox from "../use_cases/hideVesselBox";
@@ -57,7 +58,7 @@ const VesselSidebar = () => {
                             <VesselName>{vessel.vesselName} {' '}
                                 <VesselCountry>({vessel.flagState})</VesselCountry>
                             </VesselName>
-                            <Close src={'close.png'} onClick={() => hideVessel()}/>
+                            <CloseIcon onClick={() => hideVessel()}/>
                         </VesselHeader>
                     <div>
                         <TabList>
@@ -160,7 +161,7 @@ const Wrapper = styled.div`
   width: 450px;
   height: calc(100vh - 50px - 6px);
   z-index: 999;
-  padding: 3px 0px 3px 0px;
+  padding: 0 0px 3px 0px;
   background: white;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -184,6 +185,8 @@ const VesselHeader = styled.div`
   padding: 5px 10px 10px 10px;
   text-transform: uppercase;
   text-align: left;
+  background: rgba(5, 5, 94, 1);
+  color: white;
 `
 
 const VesselName = styled.span`
@@ -195,7 +198,7 @@ const VesselName = styled.span`
 `
 
 const VesselCountry = styled.span`
-  color: rgba(5, 5, 94, 0.4);
+  color: rgba(255, 255, 255, 0.4);
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`
@@ -217,4 +220,14 @@ const VMSIcon = styled(VMSSVG)`
 const FisheriesIcon = styled(FisheriesSVG)`
   width: 30px;
 `
+
+const CloseIcon = styled(CloseIconSVG)`
+    width: 15px;
+    float: right;
+    margin-right: 7px;
+    height: 1.5em;
+    margin-top: 6px;
+    cursor: pointer;
+`
+
 export default VesselSidebar

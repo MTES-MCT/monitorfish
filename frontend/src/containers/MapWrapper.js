@@ -24,8 +24,7 @@ import ShowVesselsNamesBox from "./ShowVesselsNamesBox";
 import VesselSummary from "./VesselSummary";
 import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
-import {hideVesselNames, isMoving, resetAnimateToVessel, setUsingSearch} from "../reducers/Map";
-import {getHDMSCoordinates} from "../utils";
+import {hideVesselNames, isMoving, resetAnimateToVessel} from "../reducers/Map";
 
 const MIN_ZOOM_VESSEL_NAMES = 8;
 

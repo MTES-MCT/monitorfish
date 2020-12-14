@@ -11,13 +11,6 @@ import javax.persistence.*
 @IdClass(LastPositionEntity.ReferenceCompositeKey::class)
 @Table(name = "last_positions", uniqueConstraints = [UniqueConstraint(columnNames = ["internal_reference_number", "external_reference_number"])])
 data class LastPositionEntity(
-        /*@Id
-        @SequenceGenerator(name = "last_position_id_seq", sequenceName = "last_position_id_seq", allocationSize = 1)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "last_position_id_seq")
-        @Column(name = "id")
-        val id: Int? = null,*/
-
-        // Optional fields
         @Id
         @Column(name = "internal_reference_number")
         val internalReferenceNumber: String? = null,

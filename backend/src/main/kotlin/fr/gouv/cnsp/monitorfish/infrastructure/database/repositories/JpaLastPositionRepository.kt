@@ -15,6 +15,8 @@ class JpaLastPositionRepository(@Autowired
     @Cacheable(value = ["vessels_position"])
     override fun findAll(): List<Position> {
         return dbLastPositionRepository.findAll()
+                // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
+                .filterNotNull()
                 .map(LastPositionEntity::toPosition)
     }
 

@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import java.time.ZonedDateTime
+import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -65,7 +66,7 @@ data class VesselEntity(
         @Column(name = "pinger")
         val pinger: Boolean? = null,
         @Column(name = "nav_licence_expiration_date")
-        val navigationLicenceExpirationDate: ZonedDateTime? = null,
+        val navigationLicenceExpirationDate: Date? = null,
 
         @Column(name = "shipowner_name")
         val shipownerName: String? = null,

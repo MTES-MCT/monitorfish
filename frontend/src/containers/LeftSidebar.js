@@ -20,6 +20,7 @@ const LeftSidebar = () => {
     const dispatch = useDispatch()
     const firstUpdate = useRef(true);
     const showedLayers = useSelector(state => state.layer.showedLayers)
+    const gears = useSelector(state => state.gears)
     const selectedRegulatoryZones = useSelector(state => state.layer.selectedRegulatoryZones)
     const zones = useSelector(state => state.layer.zones)
     const [regulatoryZones, setRegulatoryZones] = useState();
@@ -80,6 +81,7 @@ const LeftSidebar = () => {
             <RegulatoryZoneSelection
                 callAddRegulatoryZonesToMySelection={callAddRegulatoryZonesToMySelection}
                 regulatoryZones={regulatoryZones}
+                gears={gears}
             />
             <AdministrativeZoneSelection
                 zones={zones}

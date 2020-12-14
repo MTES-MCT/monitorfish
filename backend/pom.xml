@@ -156,6 +156,11 @@
 			<artifactId>testcontainers</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.vladmihalcea</groupId>
+			<artifactId>hibernate-types-52</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
@@ -295,7 +300,6 @@
 				</executions>
 				<configuration>
 					<args>
-						<arg>-Xcoroutines=enable</arg>
 						<arg>-Xjsr305=strict</arg>
 					</args>
 					<jvmTarget>11</jvmTarget>

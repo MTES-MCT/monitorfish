@@ -20,7 +20,7 @@ create table if not exists vessels (
   declared_fishing_gears varchar(100)[],
   weight_authorized_on_deck double precision,
   pinger boolean,
-  nav_licence_expiration_date timestamp,
+  nav_licence_expiration_date date,
   shipowner_name varchar(200),
   shipowner_phones varchar(100)[],
   shipowner_emails varchar(100)[],

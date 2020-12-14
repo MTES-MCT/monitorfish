@@ -24,7 +24,7 @@ create table if not exists positions (
   position_type varchar(100)
 );
 
-SELECT create_hypertable('positions', 'date_time');
+SELECT create_hypertable('positions', 'date_time', if_not_exists => TRUE);
 CREATE INDEX ON positions (internal_reference_number, date_time DESC);
 CREATE INDEX ON positions (external_reference_number, date_time DESC);
 CREATE INDEX ON positions (ircs, date_time DESC);

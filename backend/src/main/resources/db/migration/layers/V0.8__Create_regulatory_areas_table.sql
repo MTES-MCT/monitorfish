@@ -1,4 +1,4 @@
-CREATE TABLE public.all_decisions (
+CREATE TABLE if not exists public.all_decisions (
     autorisations text,
     captures_accessoires text,
     crocs text,

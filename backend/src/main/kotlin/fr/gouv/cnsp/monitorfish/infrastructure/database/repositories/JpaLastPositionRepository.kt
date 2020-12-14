@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 class JpaLastPositionRepository(@Autowired
-                            private val dbLastPositionRepository: DBLastPositionRepository) : LastPositionRepository {
+                                private val dbLastPositionRepository: DBLastPositionRepository) : LastPositionRepository {
 
     @Cacheable(value = ["vessels_position"])
     override fun findAll(): List<Position> {

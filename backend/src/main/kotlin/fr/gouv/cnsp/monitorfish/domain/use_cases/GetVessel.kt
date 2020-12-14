@@ -13,13 +13,13 @@ import kotlinx.coroutines.coroutineScope
 class GetVessel(private val vesselRepository: VesselRepository, private val positionRepository: PositionRepository) {
 
     @Throws(PositionsNotFoundException::class)
-    suspend fun execute(internalReferenceNumber: String): Pair<Vessel, List<Position>> {
+    suspend fun execute(internalReferenceNumber: String, externalReferenceNumber: String, IRCS: String): Pair<Vessel, List<Position>> {
         return coroutineScope {
             val positionsFuture = async {
-                positionRepository.findVesselLastPositions(internalReferenceNumber)
+                positionRepository.findVesselLastPositions(internalReferenceNumber, externalReferenceNumber, IRCS)
                         .sortedBy { it.dateTime }
             }
-            val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber) }
+            val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, IRCS) }
 
             if (positionsFuture.await().isEmpty()) throw PositionsNotFoundException("No position found for vessel $internalReferenceNumber")
 

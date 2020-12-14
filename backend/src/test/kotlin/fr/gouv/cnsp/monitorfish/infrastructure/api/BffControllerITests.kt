@@ -83,13 +83,13 @@ class BffControllerITests {
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        givenSuspended { getVessel.execute(any()) } willReturn {
+        givenSuspended { getVessel.execute(any(), any(), any()) } willReturn {
             Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                 listOf(firstPosition, secondPosition, thirdPosition))
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/FR224226850"))
+        mockMvc.perform(get("/bff/v1/vessels/search?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.declaredFishingGears[0]", equalTo("Trémails")))
@@ -100,7 +100,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850")
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4")
         }
     }
 

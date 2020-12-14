@@ -30,13 +30,19 @@ class BffController(
         }
     }
 
-    @GetMapping("/v1/vessels/{internalReferenceNumber}")
-    @ApiOperation("Get vessels's last positions and data")
-    fun getPosition(@ApiParam("Vessel internal reference number (CFR)", required = true)
-                    @PathVariable(name = "internalReferenceNumber")
-                    internalReferenceNumber: String): VesselDataOutput {
+    @GetMapping("/v1/vessels/search")
+    @ApiOperation("Get vessel's last positions and data")
+    fun getPosition(@ApiParam("Vessel internal reference number (CFR)", required = false)
+                    @RequestParam(name = "internalReferenceNumber")
+                    internalReferenceNumber: String,
+                    @ApiParam("Vessel external reference number", required = false)
+                    @RequestParam(name = "externalReferenceNumber")
+                    externalReferenceNumber: String,
+                    @ApiParam("Vessel IRCS", required = false)
+                    @RequestParam(name = "IRCS")
+                    IRCS: String): VesselDataOutput {
         return runBlocking {
-            val (vessel, positions) = getVessel.execute(internalReferenceNumber)
+            val (vessel, positions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
 
             VesselDataOutput.fromVessel(vessel, positions)
         }

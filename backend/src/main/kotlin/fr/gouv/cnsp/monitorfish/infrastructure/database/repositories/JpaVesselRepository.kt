@@ -15,12 +15,31 @@ class JpaVesselRepository(@Autowired
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
 
     @Cacheable(value = ["vessel"])
-    override fun findVessel(internalReferenceNumber: String): Vessel {
-        return try {
-            dbVesselRepository.findByInternalReferenceNumber(internalReferenceNumber).toVessel()
-        } catch (e: EmptyResultDataAccessException) {
-            logger.error("Vessel $internalReferenceNumber not found", e)
-            Vessel()
+    override fun findVessel(internalReferenceNumber: String, externalReferenceNumber: String, IRCS: String): Vessel {
+        if (internalReferenceNumber.isNotEmpty()) {
+            try {
+                return dbVesselRepository.findByInternalReferenceNumber(internalReferenceNumber).toVessel()
+            } catch (e: EmptyResultDataAccessException) {
+                logger.warn("No vessel found for CFR $internalReferenceNumber", e)
+            }
         }
+
+        if (externalReferenceNumber.isNotEmpty()) {
+            try {
+                return dbVesselRepository.findByExternalReferenceNumberIgnoreCaseContaining(externalReferenceNumber).toVessel()
+            } catch (e: EmptyResultDataAccessException) {
+                logger.warn("No vessel found for external marking $externalReferenceNumber", e)
+            }
+        }
+
+        if (IRCS.isNotEmpty()) {
+            try {
+                return dbVesselRepository.findByIRCS(IRCS).toVessel()
+            } catch (e: EmptyResultDataAccessException) {
+                logger.warn("No vessel found for IRCS $externalReferenceNumber", e)
+            }
+        }
+
+        return Vessel()
     }
 }

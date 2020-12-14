@@ -104,7 +104,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findVesselLastPositions Should return the list of last positions for a given vessel`() {
+    fun `findVesselLastPositions Should return the list of last positions for a given vessel When the CFR is not empty`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
@@ -117,10 +117,52 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(secondPosition)
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
-        val lastPositions = jpaPositionRepository.findVesselLastPositions("FR224226850")
+        val lastPositions = jpaPositionRepository.findVesselLastPositions("FR224226850", "", "")
 
         // Then
         // For this vessel, we inserted 4 rows and then were 1 row inserted with the DB test data
         assertThat(lastPositions).hasSize(5)
+    }
+
+    @Test
+    @Transactional
+    fun `findVesselLastPositions Should return the list of last positions for a given vessel When the external marking is not empty`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        val firstPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val fourthPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
+
+        // When
+        jpaPositionRepository.save(firstPosition)
+        jpaPositionRepository.save(secondPosition)
+        jpaPositionRepository.save(thirdPosition)
+        jpaPositionRepository.save(fourthPosition)
+        val lastPositions = jpaPositionRepository.findVesselLastPositions("", "NOT_NULL", "")
+
+        // Then
+        assertThat(lastPositions).hasSize(4)
+    }
+
+    @Test
+    @Transactional
+    fun `findVesselLastPositions Should return the list of last positions for a given vessel When the IRCS is not empty`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        val firstPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val fourthPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
+
+        // When
+        jpaPositionRepository.save(firstPosition)
+        jpaPositionRepository.save(secondPosition)
+        jpaPositionRepository.save(thirdPosition)
+        jpaPositionRepository.save(fourthPosition)
+        val lastPositions = jpaPositionRepository.findVesselLastPositions("", "", "NOT_NULL")
+
+        // Then
+        assertThat(lastPositions).hasSize(4)
     }
 }

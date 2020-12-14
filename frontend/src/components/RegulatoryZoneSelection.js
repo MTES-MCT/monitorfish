@@ -111,14 +111,14 @@ const RegulatoryZoneTitle = styled.div`
 `
 
 const SearchIcon = styled(SearchIconSVG)`
-  margin-bottom: -11px;
+  padding-top: 2px;
   border-radius: 2px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   width: 17px;
   height: 17px;
   float: right;
-  margin-right: 5px;
+  margin-right: 4px;
 `
 
 const CloseIcon = styled(CloseIconSVG)`

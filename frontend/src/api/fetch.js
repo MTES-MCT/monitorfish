@@ -48,3 +48,17 @@ export function getAllRegulatoryZonesFromAPI() {
             }
         })
 }
+
+export function getAllGearCodesFromAPI() {
+    return fetch(`/bff/v1/gears`)
+        .then(response => {
+            if (response.status === HTTP_OK) {
+                return response.json()
+            } else {
+                response.text().then(text => {
+                    console.error(text)
+                })
+                throw Error("Récupération des codes engins de pêches impossible")
+            }
+        })
+}

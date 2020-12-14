@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
 import java.time.ZonedDateTime
+import java.util.*
 
 data class VesselDataOutput(
         val internalReferenceNumber: String? = null,
@@ -26,7 +27,7 @@ data class VesselDataOutput(
         val declaredFishingGears: List<String>? = null,
         val weightAuthorizedOnDeck: Double? = null,
         val pinger: Boolean? = null,
-        val navigationLicenceExpirationDate: ZonedDateTime? = null,
+        val navigationLicenceExpirationDate: Date? = null,
         val shipownerName: String? = null,
         val shipownerPhones: List<String>? = null,
         val shipownerEmails: List<String>? = null,

@@ -40,4 +40,4 @@ CREATE TABLE if not exists public.all_decisions (
     zones text
 );
 
-CREATE INDEX idx_all_decisions_geometry ON public.all_decisions USING gist (geometry);
+CREATE INDEX IF NOT EXISTS idx_all_decisions_geometry ON public.all_decisions USING gist (geometry);

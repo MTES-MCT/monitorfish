@@ -3,13 +3,20 @@ import CircleStyle from "ol/style/Circle";
 import Fill from "ol/style/Fill";
 import IconOrigin from "ol/style/IconOrigin";
 import {getTextWidth} from "../../utils";
+import * as Comlink from "comlink";
+/* eslint-disable import/no-webpack-loader-syntax */
+import Worker from 'worker-loader!../../workers/MapperWorker';
+import {COLORS} from "../../constants/constants";
 
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
+const worker = new Worker();
+const OpenLayerWorker = Comlink.wrap(worker);
+
 export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalReferenceNumberToShow, vesselNamesShowedOnMap) => {
     const vesselDate = new Date(vessel.dateTime);
-    const nowMinusThreeHours = new Date;
+    const nowMinusThreeHours = new Date();
     nowMinusThreeHours.setHours(nowMinusThreeHours.getHours() - 3);
 
     let opacity = vesselDate < nowMinusThreeHours ? 0.3 : 1;
@@ -54,7 +61,7 @@ const getImageElement = feature => {
     let iconSVG = `
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
         <rect x="0" y="0" width="${textWidth}" height="16" rx="8px" fill="#FFFFFF" />
-        <text x="5" y="13" fill="rgba(5, 5, 94, 1)" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
+        <text x="5" y="13" fill="${COLORS.background}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
         </svg>`;
 
     let imageElement = new Image();

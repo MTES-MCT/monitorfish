@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import {COLORS} from "../constants/constants";
 
 const VesselIdentity = props => {
     const [photoFallback, setPhotoFallback] = useState(false)
@@ -34,7 +35,7 @@ const VesselIdentity = props => {
                         </Field>
                         <Field>
                             <Key>IMO</Key>
-                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Value>{props.vessel.imo ? props.vessel.imo : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </Body>
                 </Fields>
@@ -114,10 +115,8 @@ const VesselIdentity = props => {
                         <Field>
                             <Key>Engins de pêche déclarés <KeyInfo>PME</KeyInfo></Key>
                             <Value>
-                                { props.vessel.declaredFishingGearMain ? <>
-                                    {props.vessel.declaredFishingGearMain}
-                                    {props.vessel.declaredFishingGearSecondary ? ', ' + props.vessel.declaredFishingGearSecondary : null}
-                                    {props.vessel.declaredFishingGearThird ? ', ' + props.vessel.declaredFishingGearThird : null}
+                                { props.vessel.declaredFishingGears ? <>
+                                    {props.vessel.declaredFishingGears.join(", ")}
                                 </> : <NoValue>-</NoValue>
                                 }
                             </Value>
@@ -168,7 +167,7 @@ const VesselIdentity = props => {
                             <Key>Coordonnées pêcheur</Key>
                             <Value>
                                 <PersonalData>
-                                    { props.vessel.fisherName ? <>{props.vessel.fisherName}<br/>{props.vessel.fisherTelephoneNumber}<br/>{props.vessel.fisherEmail}</> : <NoPersonalData>-</NoPersonalData> }
+                                    { props.vessel.fisherName ? <>{props.vessel.fisherName}<br/>{props.vessel.fisherPhones.join(", ")}<br/>{props.vessel.fisherEmails.join(", ")}</> : <NoPersonalData>-</NoPersonalData> }
                                 </PersonalData>
                             </Value>
                         </Field>
@@ -178,8 +177,8 @@ const VesselIdentity = props => {
                                 <PersonalData>
                                     { props.vessel.shipownerName ? <>
                                         {props.vessel.shipownerName}
-                                        <span>{ props.vessel.shipownerTelephoneNumber ? <><br/>{props.vessel.shipownerTelephoneNumber}</> : '' }</span>
-                                        { props.vessel.shipownerEmail ? <><br/>{props.vessel.shipownerEmail}</> : '' }
+                                        <span>{ props.vessel.shipownerPhones ? <><br/>{props.vessel.shipownerPhones.join(", ")}</> : '' }</span>
+                                        { props.vessel.shipownerEmails ? <><br/>{props.vessel.shipownerEmails.join(", ")}</> : '' }
                                     </> : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
@@ -241,7 +240,7 @@ const Zone = styled.div`
 `
 
 const ZoneTitle = styled.div`
-  color: grey;
+  color: ${COLORS.textGray};
   font-size: 0.8rem;
   text-transform: uppercase;
   flex-shrink: 0;
@@ -267,7 +266,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: grey;
+  color: ${COLORS.textGray};
   flex: initial;
   display: inline-block;
   text-transform: uppercase;
@@ -289,7 +288,7 @@ const KeyInfo = styled.span`
 
 const Value = styled.td`
   font-size: 0.8rem;
-  color: rgba(5, 5, 94, 1);
+  color: ${COLORS.background};
   font-weight: bold;
   margin: 0;
   text-align: left;
@@ -300,13 +299,13 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: grey;
+  color: ${COLORS.textGray};
   font-weight: 300;
   line-height: normal;
 `
 
 const NoPersonalData = styled.div`
-  color: grey;
+  color: ${COLORS.textGray};
   font-weight: 300;
 `
 
@@ -322,7 +321,7 @@ const PanelTitle = styled.span`
   margin: 5px 0 0 5px;
   text-align: left;
   font-weight: bolder;
-  color: rgba(5, 5, 94, 1);
+  color: ${COLORS.background};
   width: 100%;
 `
 

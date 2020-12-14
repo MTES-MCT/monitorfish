@@ -2,9 +2,11 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.domain.entities.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
 import kotlinx.coroutines.runBlocking
@@ -39,6 +41,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var getVessel: GetVessel
+
+    @MockBean
+    private lateinit var getAllGears: GetAllGears
 
     @Test
     fun `Should get all positions`() {
@@ -79,7 +84,7 @@ class BffControllerITests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any()) } willReturn {
-            Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGearMain = "Trémails", vesselType = "Fishing"),
+            Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                 listOf(firstPosition, secondPosition, thirdPosition))
         }
 
@@ -87,7 +92,7 @@ class BffControllerITests {
         mockMvc.perform(get("/bff/v1/vessels/FR224226850"))
                 // Then
                 .andExpect(status().isOk)
-                .andExpect(jsonPath("$.declaredFishingGearMain", equalTo("Trémails")))
+                .andExpect(jsonPath("$.declaredFishingGears[0]", equalTo("Trémails")))
                 .andExpect(jsonPath("$.vesselType", equalTo("Fishing")))
                 .andExpect(jsonPath("$.flagState", equalTo("FR")))
                 .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
@@ -97,5 +102,20 @@ class BffControllerITests {
         runBlocking {
             Mockito.verify(getVessel).execute("FR224226850")
         }
+    }
+
+    @Test
+    fun `Should get all gears`() {
+        // Given
+        given(this.getAllGears.execute()).willReturn(listOf(Gear("CHL", "SUPER CHALUT", "CHALUT")))
+
+        // When
+        mockMvc.perform(get("/bff/v1/gears"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(1)))
+                .andExpect(jsonPath("$[0].code", equalTo("CHL")))
+                .andExpect(jsonPath("$[0].name", equalTo("SUPER CHALUT")))
+                .andExpect(jsonPath("$[0].category", equalTo("CHALUT")))
     }
 }

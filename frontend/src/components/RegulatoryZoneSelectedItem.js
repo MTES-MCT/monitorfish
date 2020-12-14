@@ -1,58 +1,34 @@
-import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIcon} from "./icons/eye.svg";
-import {ReactComponent as HideIcon} from "./icons/eye_not.svg";
+import React from "react";
 import styled from "styled-components";
-import {ReactComponent as CloseIconSVG} from './icons/Croix_grise.svg'
+import RegulatoryZoneSelectedSubZone from "./RegulatoryZoneSelectedSubZone";
+import LayersEnum from "../domain/layers";
 
 const RegulatoryZoneSelectedItem = props => {
-    const firstUpdate = useRef(true);
-    const [showLayer_, setShowLayer] = useState(undefined);
-
-    useEffect(() => {
-        if (showLayer_ === undefined) {
-            setShowLayer(props.isShownOnInit)
-        }
-    }, [props.isShownOnInit, showLayer_])
-
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
-
-        props.callShowRegulatoryZone()
-        /*let payload = { type: props.layer.type, filter: props.layer.filter };
-        if(showLayer_) {
-            dispatch(showLayer(payload));
-        } else {
-            dispatch(hideLayer(payload));
-        }*/
-    }, [showLayer_])
-
-    return (<Row>
-        <Zone onClick={() => setShowLayer(!showLayer_)}>
-            {props.regulatoryZoneName.replace('_', ' ')}
-        </Zone>
-        {
-            props.regulatorySubZones ? props.regulatorySubZones.map((subZone, index) => {
-                return (<SubZone onClick={() => setShowLayer(!showLayer_)} key={index}>
-                    <Rectangle />
-                    <SubZoneText>{subZone.zone}</SubZoneText>
-                    { showLayer_ ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}
-                    <CloseIcon onClick={() => props.callRemoveRegulatoryZoneFromMySelection(subZone)}/>
-                </SubZone>)
-            }) : null
-        }
-    </Row>)}
-
-const Rectangle = styled.div`
-  width: 8px;
-  height: 8px;
-  background: gray;
-  border: 1px solid white;
-  display: inline-block;
-  margin-right: 5px;
-`
+    return (
+        <Row>
+            <Zone>
+                {props.regulatoryZoneName.replace(/[_]/g, ' ')}
+            </Zone>
+            {
+                props.regulatorySubZones ? props.regulatorySubZones.map((subZone, index) => {
+                    return (
+                        <RegulatoryZoneSelectedSubZone
+                            subZone={subZone}
+                            key={index}
+                            callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
+                            callShowRegulatoryZone={props.callShowRegulatoryZone}
+                            callHideRegulatoryZone={props.callHideRegulatoryZone}
+                            isShowOnInit={props.showedLayers
+                                .filter(layer => layer.type === LayersEnum.REGULATORY)
+                                .some(layer =>
+                                    layer.zone.layerName === subZone.layerName &&
+                                    layer.zone.zone === subZone.zone)}
+                        />
+                    )
+                }) : null
+            }
+        </Row>
+    )}
 
 const Zone = styled.span`
   width: 100%;
@@ -62,37 +38,12 @@ const Zone = styled.span`
   font-size: smaller;
   padding-left: 10px;
   background: rgb(255, 255, 255, 0);
-`
-
-const SubZone = styled.span`
-  width: 100%;
-  display: block;
-  line-height: 1.9em;
-  font-size: smaller;
-  padding-left: 10px;
-  background: rgb(255, 255, 255, 0.1);
-  border-top: 1px solid rgb(255, 255, 255, 0.1);
-`
-
-const SubZoneText = styled.span`
-  width: 70%;
-  display: inline-block;
-  text-overflow: ellipsis;
-  overflow-x: hidden !important;
-  vertical-align: bottom;
-  padding-bottom: 3px;
+  user-select: none;
 `
 
 const Row = styled.div`
   width: 100%;
   display: block;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 10px;
-  float: right;
-  margin-right: 7px;
-  height: 1.5em;
 `
 
 export default RegulatoryZoneSelectedItem

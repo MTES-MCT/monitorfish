@@ -32,37 +32,36 @@ export const getVectorLayerStyle = (type, regulatoryLayerName) => {
         })
         case Layers.THREE_MILES: return feature => new Style({
             stroke: new Stroke({
-                color: '#05055E',
-                width: 3,
+                color: 'rgba(5, 5, 94, 0.5)',
+                width: 2,
             })
         })
         case Layers.SIX_MILES: return feature => new Style({
             stroke: new Stroke({
-                color: '#05055E',
-                width: 3,
+                color: 'rgba(5, 5, 94, 0.5)',
+                width: 2,
             })
         })
         case Layers.TWELVE_MILES: return feature => new Style({
             stroke: new Stroke({
-                color: '#05055E',
-                width: 3,
+                color: 'rgba(5, 5, 94, 0.5)',
+                width: 2,
             })
         })
         case Layers.ONE_HUNDRED_MILES: return feature => new Style({
             stroke: new Stroke({
-                color: '#05055E',
-                width: 3,
+                color: 'rgba(5, 5, 94, 0.5)',
+                width: 2,
             })
         })
         case Layers.REGULATORY: return feature => new Style({
             stroke: new Stroke({
-                color: '#05055E',
-                width: 3,
+                color: 'rgba(5, 5, 94, 0.5)',
+                width: 1,
             }),
             fill: new Fill({
-                color: '#05055E'
+                color: 'rgba(5, 5, 94, 0.2)'
             }),
         })
-
     }
 }

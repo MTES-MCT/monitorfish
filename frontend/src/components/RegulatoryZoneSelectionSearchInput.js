@@ -96,6 +96,39 @@ const RegulatoryZoneSelectionSearchInput = props => {
         }
     }
 
+    function searchGears(searchText, regulatoryZones) {
+        if (regulatoryZones) {
+            let foundRegulatoryZones = {...regulatoryZones}
+
+            Object.keys(foundRegulatoryZones)
+                .forEach(key => {
+                    foundRegulatoryZones[key] = foundRegulatoryZones[key]
+                        .filter(zone => {
+                            if(zone['gears']) {
+                                let gears = zone['gears']
+                                    .replace(/ /g, '')
+                                    .split(',')
+                                let found = gears.some(gearCodeFromREG => {
+                                    if(props.gears.some(gear => gear.code === gearCodeFromREG)) {
+                                        return true
+                                    }
+                                })
+
+                                return found || zone['gears'].toLowerCase().includes(searchText.toLowerCase())
+                            } else {
+                                return false
+                            }
+                        })
+
+                    if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
+                        delete foundRegulatoryZones[key]
+                    }
+                })
+
+            return foundRegulatoryZones
+        }
+    }
+
     return (
         <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
             <SearchBoxInput type="text" value={placeSearchText} placeholder={'Zone (ex. Bretagne, Charente...)'} onChange={e => setPlaceSearchText(e.target.value)}/>

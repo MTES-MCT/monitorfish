@@ -53,6 +53,7 @@ const RegulatoryZoneSelection = props => {
             regulatoryZones={props.regulatoryZones}
             setFoundRegulatoryZones={setFoundRegulatoryZones}
             foundRegulatoryZones={foundRegulatoryZones}
+            gears={props.gears}
         />
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}

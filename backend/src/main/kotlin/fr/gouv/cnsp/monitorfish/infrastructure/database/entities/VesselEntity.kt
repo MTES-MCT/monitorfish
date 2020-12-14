@@ -5,7 +5,6 @@ import com.vladmihalcea.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
-import java.time.ZonedDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -63,8 +62,6 @@ data class VesselEntity(
         val declaredFishingGears:  List<String>? = null,
         @Column(name = "weight_authorized_on_deck")
         val weightAuthorizedOnDeck: Double? = null,
-        @Column(name = "pinger")
-        val pinger: Boolean? = null,
         @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
         val navigationLicenceExpirationDate: Date? = null,
 
@@ -105,7 +102,6 @@ data class VesselEntity(
             sailingType = sailingType,
             declaredFishingGears = declaredFishingGears,
             weightAuthorizedOnDeck = weightAuthorizedOnDeck,
-            pinger = pinger,
             navigationLicenceExpirationDate = navigationLicenceExpirationDate,
             shipownerName = shipownerName,
             shipownerPhones = shipownerPhones,
@@ -136,7 +132,6 @@ data class VesselEntity(
                                 sailingType = vessel.sailingType,
                                 declaredFishingGears = vessel.declaredFishingGears,
                                 weightAuthorizedOnDeck = vessel.weightAuthorizedOnDeck,
-                                pinger = vessel.pinger,
                                 navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
                                 shipownerName = vessel.shipownerName,
                                 shipownerPhones = vessel.shipownerPhones,

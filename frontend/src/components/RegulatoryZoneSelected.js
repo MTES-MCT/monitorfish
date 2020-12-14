@@ -57,13 +57,25 @@ const RegulatoryZoneSelectedList = styled.ul`
   animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 1s ease forwards;
 
   @keyframes regulatory-selected-opening {
-    0%   { height: 0;   }
-    100% { height: 300px; }
+    0%   {
+        height: 0;
+        overflow-y: hidden;
+    }
+    100% {
+        height: 300px;
+        overflow-y: auto;
+    }
   }
 
   @keyframes regulatory-selected-closing {
-    0%   { height: 300px; }
-    100% { height: 0;   }
+    0%   {
+        height: 300px;
+        overflow-y: hidden !important;
+    }
+    100% {
+        height: 0;
+        overflow-y: auto;
+    }
   }
 `
 

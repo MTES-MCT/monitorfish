@@ -2,9 +2,11 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.domain.entities.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
 import kotlinx.coroutines.runBlocking
@@ -39,6 +41,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var getVessel: GetVessel
+
+    @MockBean
+    private lateinit var getAllGears: GetAllGears
 
     @Test
     fun `Should get all positions`() {
@@ -97,5 +102,20 @@ class BffControllerITests {
         runBlocking {
             Mockito.verify(getVessel).execute("FR224226850")
         }
+    }
+
+    @Test
+    fun `Should get all gears`() {
+        // Given
+        given(this.getAllGears.execute()).willReturn(listOf(Gear("CHL", "SUPER CHALUT", "CHALUT")))
+
+        // When
+        mockMvc.perform(get("/bff/v1/gears"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(1)))
+                .andExpect(jsonPath("$[0].code", equalTo("CHL")))
+                .andExpect(jsonPath("$[0].name", equalTo("SUPER CHALUT")))
+                .andExpect(jsonPath("$[0].category", equalTo("CHALUT")))
     }
 }

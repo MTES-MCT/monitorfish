@@ -1,7 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.neovisionaries.i18n.CountryCode
+import com.vladmihalcea.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
 import java.time.ZonedDateTime
 import javax.persistence.*
 
@@ -12,6 +15,9 @@ import javax.persistence.*
         Index(columnList = "internal_reference_number", unique = false),
         Index(columnList = "mmsi", unique = false),
         Index(columnList = "ircs", unique = false)])
+@TypeDef(
+        name = "list-array",
+        typeClass = ListArrayType::class)
 data class VesselEntity(
         @Id
         @SequenceGenerator(name = "vessel_id_seq", sequenceName = "vessel_id_seq", allocationSize = 1)
@@ -23,6 +29,8 @@ data class VesselEntity(
         val internalReferenceNumber: String? = null,
         @Column(name = "mmsi")
         val MMSI: String? = null,
+        @Column(name = "imo")
+        val IMO: String? = null,
         @Column(name = "ircs")
         val IRCS: String? = null,
         @Column(name = "external_reference_number")
@@ -53,12 +61,9 @@ data class VesselEntity(
         val sailingCategory: String? = null,
         @Column(name = "sailing_type")
         val sailingType: String? = null,
-        @Column(name = "declared_fishing_gear_main")
-        val declaredFishingGearMain: String? = null,
-        @Column(name = "declared_fishing_gear_secondary")
-        val declaredFishingGearSecondary: String? = null,
-        @Column(name = "declared_fishing_gear_third")
-        val declaredFishingGearThird: String? = null,
+        @Column(name = "declared_fishing_gears", columnDefinition = "varchar(100)[]")
+        @Type(type = "list-array")
+        val declaredFishingGears:  List<String>? = null,
         @Column(name = "weight_authorized_on_deck")
         val weightAuthorizedOnDeck: Double? = null,
         @Column(name = "pinger")
@@ -68,17 +73,21 @@ data class VesselEntity(
 
         @Column(name = "shipowner_name")
         val shipownerName: String? = null,
-        @Column(name = "shipowner_telephone_number")
-        val shipownerTelephoneNumber: String? = null,
-        @Column(name = "shipowner_email")
-        val shipownerEmail: String? = null,
+        @Column(name = "shipowner_phones", columnDefinition = "varchar(100)[]")
+        @Type(type = "list-array")
+        val shipownerPhones:  List<String>? = null,
+        @Column(name = "shipowner_emails", columnDefinition = "varchar(100)[]")
+        @Type(type = "list-array")
+        val shipownerEmails:  List<String>? = null,
 
         @Column(name = "fisher_name")
         val fisherName: String? = null,
-        @Column(name = "fisher_telephone_number")
-        val fisherTelephoneNumber: String? = null,
-        @Column(name = "fisher_email")
-        val fisherEmail: String? = null) {
+        @Column(name = "fisher_phones", columnDefinition = "varchar(100)[]")
+        @Type(type = "list-array")
+        val fisherPhones: List<String>? = null,
+        @Column(name = "fisher_emails", columnDefinition = "varchar(100)[]")
+        @Type(type = "list-array")
+        val fisherEmails: List<String>? = null) {
 
     fun toVessel() = Vessel(
             internalReferenceNumber = internalReferenceNumber,
@@ -97,18 +106,16 @@ data class VesselEntity(
             vesselType = vesselType,
             sailingCategory = sailingCategory,
             sailingType = sailingType,
-            declaredFishingGearMain = declaredFishingGearMain,
-            declaredFishingGearSecondary = declaredFishingGearSecondary,
-            declaredFishingGearThird = declaredFishingGearThird,
+            declaredFishingGears = declaredFishingGears,
             weightAuthorizedOnDeck = weightAuthorizedOnDeck,
             pinger = pinger,
             navigationLicenceExpirationDate = navigationLicenceExpirationDate,
             shipownerName = shipownerName,
-            shipownerTelephoneNumber = shipownerTelephoneNumber,
-            shipownerEmail = shipownerEmail,
+            shipownerPhones = shipownerPhones,
+            shipownerEmails = shipownerEmails,
             fisherName = fisherName,
-            fisherTelephoneNumber = fisherTelephoneNumber,
-            fisherEmail = fisherEmail
+            fisherPhones = fisherPhones,
+            fisherEmails = fisherEmails
     )
 
         companion object {
@@ -130,18 +137,16 @@ data class VesselEntity(
                                 vesselType = vessel.vesselType,
                                 sailingCategory = vessel.sailingCategory,
                                 sailingType = vessel.sailingType,
-                                declaredFishingGearMain = vessel.declaredFishingGearMain,
-                                declaredFishingGearSecondary = vessel.declaredFishingGearSecondary,
-                                declaredFishingGearThird = vessel.declaredFishingGearThird,
+                                declaredFishingGears = vessel.declaredFishingGears,
                                 weightAuthorizedOnDeck = vessel.weightAuthorizedOnDeck,
                                 pinger = vessel.pinger,
                                 navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
                                 shipownerName = vessel.shipownerName,
-                                shipownerTelephoneNumber = vessel.shipownerTelephoneNumber,
-                                shipownerEmail = vessel.shipownerEmail,
+                                shipownerPhones = vessel.shipownerPhones,
+                                shipownerEmails = vessel.shipownerEmails,
                                 fisherName = vessel.fisherName,
-                                fisherTelephoneNumber = vessel.fisherTelephoneNumber,
-                                fisherEmail = vessel.fisherEmail,
+                                fisherPhones = vessel.fisherPhones,
+                                fisherEmails = vessel.fisherEmails,
                         )
                 }
         }

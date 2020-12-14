@@ -15,16 +15,18 @@ import java.util.concurrent.TimeUnit
 @Configuration
 class CaffeineConfiguration {
     val vessels = "vessel"
+    val gear = "gear"
     val vesselTrack = "vessel_track"
     val vesselsPosition = "vessels_position"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
         val vesselCache = buildCache(vessels, ticker, 5)
+        val gearCache = buildCache(gear, ticker, 60)
         val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
         val vesselsPositions = buildCache(vesselsPosition, ticker, 1)
         val manager = SimpleCacheManager()
-        manager.setCaches(listOf(vesselCache, vesselTrackCache, vesselsPositions))
+        manager.setCaches(listOf(vesselCache, vesselTrackCache, vesselsPositions, gearCache))
 
         return manager
     }

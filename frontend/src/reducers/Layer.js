@@ -45,7 +45,19 @@ const layerSlice = createSlice({
         },
         addShowedLayer(state, action) {
             if(action.payload.type !== Layers.VESSELS) {
-                if(!state.showedLayers.find(layer => layer.type === action.payload.type)) {
+                let found = false
+                if (action.payload.type === LayersEnum.REGULATORY) {
+                    found = state.showedLayers
+                        .filter(layer => layer.type === LayersEnum.REGULATORY)
+                        .some(layer => (
+                            layer.zone.layerName === action.payload.zone.layerName &&
+                            layer.zone.zone === action.payload.zone.zone
+                    ))
+                } else {
+                    found = state.showedLayers.some(layer => layer.type === action.payload.type)
+                }
+
+                if (!found) {
                     state.showedLayers = state.showedLayers.concat(action.payload)
                     window.localStorage.setItem(layersShowedOnMapLocalStorageKey, JSON.stringify(state.showedLayers))
                 }
@@ -53,7 +65,16 @@ const layerSlice = createSlice({
         },
         removeShowedLayer(state, action) {
             if(action.payload.type !== Layers.VESSELS) {
-                state.showedLayers = state.showedLayers.filter(layer => layer.type !== action.payload.type)
+                if (action.payload.type === LayersEnum.REGULATORY) {
+                    state.showedLayers = state.showedLayers
+                        .filter(layer => !(
+                            layer.type === LayersEnum.REGULATORY &&
+                            layer.zone.layerName === action.payload.zone.layerName &&
+                            layer.zone.zone === action.payload.zone.zone))
+                } else {
+                    state.showedLayers = state.showedLayers.filter(layer => layer.type !== action.payload.type)
+                }
+
                 window.localStorage.setItem(layersShowedOnMapLocalStorageKey, JSON.stringify(state.showedLayers))
             }
         },
@@ -61,13 +82,9 @@ const layerSlice = createSlice({
             state.selectedRegulatoryZones = action.payload
             window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
         },
-        removeRegulatoryZonesToSelection(state, action) {
+        removeRegulatoryZonesFromSelection(state, action) {
             state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
-                return !(subZone.layerName === action.payload.layerName &&
-                    subZone.gears === action.payload.gears &&
-                    subZone.zone === action.payload.zone &&
-                    subZone.species === action.payload.species &&
-                    subZone.regulatoryReference === action.payload.regulatoryReference)
+                return !(subZone.layerName === action.payload.layerName && subZone.zone === action.payload.zone)
             })
 
             if (!state.selectedRegulatoryZones[action.payload.layerName].length) {
@@ -87,7 +104,7 @@ export const {
     addShowedLayer,
     removeShowedLayer,
     addRegulatoryZonesToSelection,
-    removeRegulatoryZonesToSelection
+    removeRegulatoryZonesFromSelection
 } = layerSlice.actions
 
 export default layerSlice.reducer

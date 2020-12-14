@@ -5,6 +5,7 @@ import java.time.ZonedDateTime
 
 data class Vessel(
         val internalReferenceNumber: String? = null,
+        val IMO: String? = null,
         val MMSI: String? = null,
         val IRCS: String? = null,
         val externalReferenceNumber: String? = null,
@@ -20,15 +21,13 @@ data class Vessel(
         val vesselType: String? = null,
         val sailingCategory: String? = null,
         val sailingType: String? = null,
-        val declaredFishingGearMain: String? = null,
-        val declaredFishingGearSecondary: String? = null,
-        val declaredFishingGearThird: String? = null,
+        val declaredFishingGears: List<String>? = null,
         val weightAuthorizedOnDeck: Double? = null,
         val pinger: Boolean? = null,
         val navigationLicenceExpirationDate: ZonedDateTime? = null,
         val shipownerName: String? = null,
-        val shipownerTelephoneNumber: String? = null,
-        val shipownerEmail: String? = null,
+        val shipownerPhones: List<String>? = null,
+        val shipownerEmails: List<String>? = null,
         val fisherName: String? = null,
-        val fisherTelephoneNumber: String? = null,
-        val fisherEmail: String? = null)
+        val fisherPhones: List<String>? = null,
+        val fisherEmails: List<String>? = null)

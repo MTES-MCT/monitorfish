@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setError} from "../reducers/Global";
 
 import {ReactComponent as LayersSVG} from '../components/icons/layers.svg';
+import LayersEnum from "../domain/layers";
 
 import addRegulatoryZonesToMySelection from "../use_cases/addRegulatoryZonesToMySelection";
 import getAllRegulatoryZones from "../use_cases/getAllRegulatoryZones";
@@ -13,11 +14,13 @@ import hideLayer from "../use_cases/hideLayer";
 import RegulatoryZoneSelection from "../components/RegulatoryZoneSelection";
 import AdministrativeZoneSelection from "../components/AdministrativeZoneSelection";
 import RegulatoryZoneSelected from "../components/RegulatoryZoneSelected";
+import {COLORS} from "../constants/constants";
 
 const LeftSidebar = () => {
     const dispatch = useDispatch()
     const firstUpdate = useRef(true);
     const showedLayers = useSelector(state => state.layer.showedLayers)
+    const gears = useSelector(state => state.gears)
     const selectedRegulatoryZones = useSelector(state => state.layer.selectedRegulatoryZones)
     const zones = useSelector(state => state.layer.zones)
     const [regulatoryZones, setRegulatoryZones] = useState();
@@ -43,18 +46,19 @@ const LeftSidebar = () => {
 
     function callRemoveRegulatoryZoneFromMySelection(regulatoryZone) {
         dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
+        callHideRegulatoryZone(regulatoryZone)
     }
 
     function callShowRegulatoryZone(regulatoryZone) {
         dispatch(showLayer({
-            type: Layers.REGULATORY,
+            type: LayersEnum.REGULATORY,
             zone: regulatoryZone
         }))
     }
 
     function callHideRegulatoryZone(regulatoryZone) {
         dispatch(hideLayer({
-            type: Layers.REGULATORY,
+            type: LayersEnum.REGULATORY,
             zone: regulatoryZone
         }))
     }
@@ -77,6 +81,7 @@ const LeftSidebar = () => {
             <RegulatoryZoneSelection
                 callAddRegulatoryZonesToMySelection={callAddRegulatoryZonesToMySelection}
                 regulatoryZones={regulatoryZones}
+                gears={gears}
             />
             <AdministrativeZoneSelection
                 zones={zones}
@@ -87,6 +92,7 @@ const LeftSidebar = () => {
             <RegulatoryZoneSelected
                 callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                 callShowRegulatoryZone={callShowRegulatoryZone}
+                callHideRegulatoryZone={callHideRegulatoryZone}
                 showedLayers={showedLayers}
                 selectedRegulatoryZones={selectedRegulatoryZones}
             />
@@ -102,10 +108,10 @@ const Wrapper = styled.div`
   top: 50px;
   left: 0;
   z-index: 999999;
-  color: white;
+  color: ${COLORS.textWhite};
   text-decoration: none;
   border: none;
-  background-color: rgba(5, 5, 94, 1);
+  background-color: ${COLORS.background};
   padding: 0;
   margin-left: -270px;
   height: calc(100vh - 50px);
@@ -127,8 +133,8 @@ const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;
-  background: rgba(5, 5, 94, 1);
-  background: linear-gradient(to right, #2F006F, rgba(5, 5, 94, 1));
+  background: ${COLORS.background};
+  background: linear-gradient(to right, #2F006F, ${COLORS.background});
   padding: 3px 1px 3px 1px;
   margin-left: 135px;
   border-radius: 4px;
@@ -140,7 +146,7 @@ const SidebarLayersIcon = styled.button`
   border-left: none;
     
   :hover, :focus {
-    background: linear-gradient(to right, #2F006F, rgba(5, 5, 94, 1));
+    background: linear-gradient(to right, #2F006F, ${COLORS.background});
   }
 `
 

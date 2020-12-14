@@ -1,22 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import styled from 'styled-components';
-import {useDispatch, useSelector} from "react-redux";
-import {setError} from "../reducers/Global";
 
 import RegulatoryZoneSelectionSearchInput from "./RegulatoryZoneSelectionSearchInput";
-import {ReactComponent as LayersSVG} from './icons/layers.svg';
 import {ReactComponent as SearchIconSVG} from './icons/search.svg'
 import {ReactComponent as CloseIconSVG} from './icons/Croix_grise.svg'
-import {ReactComponent as ChevronIconSVG} from './icons/Chevron_double_gris.svg'
-
-import AdministrativeZoneItem from "./AdministrativeZoneItem";
-import addRegulatoryZonesToMySelection from "../use_cases/addRegulatoryZonesToMySelection";
-import RegulatoryZoneSelectedItem from "./RegulatoryZoneSelectedItem";
-import getAllRegulatoryZones from "../use_cases/getAllRegulatoryZones";
 import RegulatoryZoneSelectionList from "./RegulatoryZoneSelectionList";
-import removeRegulatoryZoneFromMySelection from "../use_cases/removeRegulatoryZoneFromMySelection";
-import showLayer from "../use_cases/showLayer";
-import hideLayer from "../use_cases/hideLayer";
 
 const RegulatoryZoneSelection = props => {
     const [showRegulatorySection, setShowRegulatorySection] = useState(false);
@@ -33,16 +21,10 @@ const RegulatoryZoneSelection = props => {
             regulatorySubZones.forEach(regulatorySubZone => {
                 if(existingSelectedZones[regulatoryZoneName].some(item =>
                     item.layerName === regulatorySubZone.layerName &&
-                    item.gears === regulatorySubZone.gears &&
-                    item.zone === regulatorySubZone.zone &&
-                    item.species === regulatorySubZone.species &&
-                    item.regulatoryReference === regulatorySubZone.regulatoryReference)) {
+                    item.zone === regulatorySubZone.zone)) {
                     existingSelectedZones[regulatoryZoneName] = existingSelectedZones[regulatoryZoneName].filter(item =>
                         !(item.layerName === regulatorySubZone.layerName &&
-                        item.gears === regulatorySubZone.gears &&
-                        item.zone === regulatorySubZone.zone &&
-                        item.species === regulatorySubZone.species &&
-                        item.regulatoryReference === regulatorySubZone.regulatoryReference))
+                        item.zone === regulatorySubZone.zone))
                     if(!existingSelectedZones[regulatoryZoneName].length) {
                         delete existingSelectedZones[regulatoryZoneName]
                     }
@@ -69,7 +51,10 @@ const RegulatoryZoneSelection = props => {
         <RegulatoryZoneSelectionSearchInput
             showRegulatorySearchInput={showRegulatorySection}
             regulatoryZones={props.regulatoryZones}
-            setFoundRegulatoryZones={setFoundRegulatoryZones}/>
+            setFoundRegulatoryZones={setFoundRegulatoryZones}
+            foundRegulatoryZones={foundRegulatoryZones}
+            gears={props.gears}
+        />
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}
             foundRegulatoryZones={foundRegulatoryZones}
@@ -99,6 +84,7 @@ const RegulatoryZoneAddButton = styled.div`
   height: 0;
   width: 100%;
   overflow: hidden;
+  user-select: none;
   animation: ${props => props.showRegulatorySearchInput ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-button-opening' : 'regulatory-button-closing' : 'regulatory-button-closing'} 1s ease forwards;
 
   @keyframes regulatory-button-opening {
@@ -126,14 +112,14 @@ const RegulatoryZoneTitle = styled.div`
 `
 
 const SearchIcon = styled(SearchIconSVG)`
-  margin-bottom: -11px;
+  padding-top: 2px;
   border-radius: 2px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   width: 17px;
   height: 17px;
   float: right;
-  margin-right: 5px;
+  margin-right: 4px;
 `
 
 const CloseIcon = styled(CloseIconSVG)`

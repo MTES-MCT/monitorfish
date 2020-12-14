@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import ReactCountryFlag from "react-country-flag";
 import {ReactComponent as VesselIDSVG} from '../components/icons/picto_carte_identite_navire.svg';
@@ -6,9 +6,11 @@ import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_activite
 import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles.svg';
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_observations_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
+import {ReactComponent as CloseIconSVG} from '../components/icons/Croix_grise.svg'
 import VesselIdentity from "../components/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
 import hideVesselBox from "../use_cases/hideVesselBox";
+import {COLORS} from "../constants/constants";
 
 const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
@@ -57,7 +59,7 @@ const VesselSidebar = () => {
                             <VesselName>{vessel.vesselName} {' '}
                                 <VesselCountry>({vessel.flagState})</VesselCountry>
                             </VesselName>
-                            <Close src={'close.png'} onClick={() => hideVessel()}/>
+                            <CloseIcon onClick={() => hideVessel()}/>
                         </VesselHeader>
                     <div>
                         <TabList>
@@ -122,7 +124,7 @@ const VesselNotFoundText = styled.div`
   display: table-cell;
   vertical-align: middle;
   height: inherit;
-  color: gray;
+  color: ${COLORS.textGray};
 `
 
 const Close = styled.img`
@@ -135,7 +137,7 @@ const Close = styled.img`
 
 const Panel = styled.div`
   padding: 5px 5px 5px 10px;
-  height: 780px;
+  height: 815px;
   overflow-y: auto;
 `
 
@@ -158,9 +160,9 @@ const Wrapper = styled.div`
   top: 50px;
   right: 0;
   width: 450px;
-  height: calc(100vh - 50px - 6px);
+  height: calc(100vh - 50px - 4px);
   z-index: 999;
-  padding: 3px 0px 3px 0px;
+  padding: 0 0px 3px 0px;
   background: white;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -184,6 +186,8 @@ const VesselHeader = styled.div`
   padding: 5px 10px 10px 10px;
   text-transform: uppercase;
   text-align: left;
+  background: ${COLORS.background};
+  color: ${COLORS.textWhite};
 `
 
 const VesselName = styled.span`
@@ -195,7 +199,7 @@ const VesselName = styled.span`
 `
 
 const VesselCountry = styled.span`
-  color: rgba(5, 5, 94, 0.4);
+  color: rgba(255, 255, 255, 0.4);
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`
@@ -217,4 +221,14 @@ const VMSIcon = styled(VMSSVG)`
 const FisheriesIcon = styled(FisheriesSVG)`
   width: 30px;
 `
+
+const CloseIcon = styled(CloseIconSVG)`
+    width: 15px;
+    float: right;
+    margin-right: 7px;
+    height: 1.5em;
+    margin-top: 6px;
+    cursor: pointer;
+`
+
 export default VesselSidebar

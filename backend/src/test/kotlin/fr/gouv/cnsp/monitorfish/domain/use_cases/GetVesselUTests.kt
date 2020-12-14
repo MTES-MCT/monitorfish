@@ -34,12 +34,12 @@ class GetVesselUTests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
-        given(positionRepository.findVesselLastPositions(any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
-        given(vesselRepository.findVessel(any())).willReturn(Vessel())
+        given(positionRepository.findVesselLastPositions(any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
+        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
 
         // When
         val pair = runBlocking {
-             GetVessel(vesselRepository, positionRepository).execute("FR224226850")
+             GetVessel(vesselRepository, positionRepository).execute("FR224226850", "", "")
         }
 
         // Then
@@ -50,12 +50,12 @@ class GetVesselUTests {
     @Test
     fun `execute Should throw an exception When a vessel's position is not found`() {
         // Given
-        given(positionRepository.findVesselLastPositions(any())).willReturn(listOf())
+        given(positionRepository.findVesselLastPositions(any(), any(), any())).willReturn(listOf())
 
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVessel(vesselRepository, positionRepository).execute("FR224226850")
+                GetVessel(vesselRepository, positionRepository).execute("FR224226850", "", "")
             }
         }
 

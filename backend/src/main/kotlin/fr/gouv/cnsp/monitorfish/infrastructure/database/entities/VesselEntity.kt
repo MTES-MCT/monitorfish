@@ -65,7 +65,7 @@ data class VesselEntity(
         val weightAuthorizedOnDeck: Double? = null,
         @Column(name = "pinger")
         val pinger: Boolean? = null,
-        @Column(name = "nav_licence_expiration_date")
+        @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
         val navigationLicenceExpirationDate: Date? = null,
 
         @Column(name = "shipowner_name")

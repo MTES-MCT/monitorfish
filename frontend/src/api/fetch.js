@@ -19,8 +19,12 @@ export function getVesselsLastPositionsFromAPI() {
         })
 }
 
-export function getVesselFromAPI(vesselTrackInternalReferenceNumberToShow) {
-    return fetch(`/bff/v1/vessels/${vesselTrackInternalReferenceNumberToShow}`)
+export function getVesselFromAPI(internalReferenceNumber, externalReferenceNumber, IRCS) {
+    internalReferenceNumber = internalReferenceNumber ? internalReferenceNumber : ""
+    externalReferenceNumber = externalReferenceNumber ? externalReferenceNumber : ""
+    IRCS = IRCS ? IRCS : ""
+
+    return fetch(`/bff/v1/vessels/search?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${IRCS}`)
         .then(response => {
             if (response.status === HTTP_OK) {
                 return response.json()

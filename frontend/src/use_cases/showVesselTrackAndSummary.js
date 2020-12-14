@@ -22,7 +22,7 @@ import Stroke from "ol/style/Stroke";
 import {animateToVessel, setUsingSearch} from "../reducers/Map";
 import {setError} from "../reducers/Global";
 
-const showVesselTrackAndSummary = (internalReferenceNumber, feature, fromSearch) => (dispatch, getState) => {
+const showVesselTrackAndSummary = (feature, fromSearch) => (dispatch, getState) => {
     removePreviousSelectedFeature(getState);
     dispatch(loadingVessel(feature))
     if (fromSearch) {
@@ -30,32 +30,36 @@ const showVesselTrackAndSummary = (internalReferenceNumber, feature, fromSearch)
         dispatch(animateToVessel(feature));
     }
 
-    getVesselFromAPI(internalReferenceNumber).then(vessel => {
-        dispatch(setSelectedVessel(vessel))
+    getVesselFromAPI(
+        feature.getProperties().internalReferenceNumber,
+        feature.getProperties().externalReferenceNumber,
+        feature.getProperties().IRCS)
+        .then(vessel => {
+            dispatch(setSelectedVessel(vessel))
 
-        let vesselTrackLines = buildVesselTrackLines(vessel)
+            let vesselTrackLines = buildVesselTrackLines(vessel)
 
-        let circlePoints = buildCirclePoints(vesselTrackLines, vessel.positions);
-        circlePoints.forEach(circlePoint => {
-            vesselTrackLines.push(circlePoint)
-        })
+            let circlePoints = buildCirclePoints(vesselTrackLines, vessel.positions);
+            circlePoints.forEach(circlePoint => {
+                vesselTrackLines.push(circlePoint)
+            })
 
-        let arrowPoints = buildArrowPoints(vesselTrackLines)
-        arrowPoints.forEach(arrowPoint => {
-            vesselTrackLines.push(arrowPoint)
-        })
+            let arrowPoints = buildArrowPoints(vesselTrackLines)
+            arrowPoints.forEach(arrowPoint => {
+                vesselTrackLines.push(arrowPoint)
+            })
 
-        let vesselTrackVector = new Vector({
-            source: new VectorSource({
-                features: vesselTrackLines
-            }),
-            className: Layers.VESSEL_TRACK
+            let vesselTrackVector = new Vector({
+                source: new VectorSource({
+                    features: vesselTrackLines
+                }),
+                className: Layers.VESSEL_TRACK
+            });
+
+            dispatch(setSelectedVesselTrackVector(vesselTrackVector))
+        }).catch(error => {
+            dispatch(setError(error));
         });
-
-        dispatch(setSelectedVesselTrackVector(vesselTrackVector))
-    }).catch(error => {
-        dispatch(setError(error));
-    });
 
 }
 

@@ -43,9 +43,23 @@ class JpaPositionRepository(@Autowired
     }
 
     @Cacheable(value = ["vessel_track"])
-    override fun findVesselLastPositions(internalReferenceNumber: String): List<Position> {
-        return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber)
-                .map(PositionEntity::toPosition)
+    override fun findVesselLastPositions(internalReferenceNumber: String, externalReferenceNumber: String, IRCS: String): List<Position> {
+        if(internalReferenceNumber.isNotEmpty()) {
+            return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber)
+                    .map(PositionEntity::toPosition)
+        }
+
+        if(externalReferenceNumber.isNotEmpty()) {
+            return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber)
+                    .map(PositionEntity::toPosition)
+        }
+
+        if(IRCS.isNotEmpty()) {
+            return dbPositionRepository.findLastByIRCS(IRCS)
+                    .map(PositionEntity::toPosition)
+        }
+
+        return listOf()
     }
 
 

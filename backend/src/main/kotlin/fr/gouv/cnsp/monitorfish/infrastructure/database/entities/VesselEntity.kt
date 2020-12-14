@@ -11,21 +11,17 @@ import javax.persistence.*
 @Entity
 @Table(name = "vessels", indexes = [
         Index(columnList = "id", unique = true),
-        Index(columnList = "external_reference_number", unique = false),
-        Index(columnList = "internal_reference_number", unique = false),
-        Index(columnList = "mmsi", unique = false),
+        Index(columnList = "cfr", unique = false),
+        Index(columnList = "external_immatriculation", unique = false),
         Index(columnList = "ircs", unique = false)])
 @TypeDef(
         name = "list-array",
         typeClass = ListArrayType::class)
 data class VesselEntity(
         @Id
-        @SequenceGenerator(name = "vessel_id_seq", sequenceName = "vessel_id_seq", allocationSize = 1)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vessel_id_seq")
         @Column(name = "id")
         val id: Int? = null,
-
-        @Column(name = "internal_reference_number")
+        @Column(name = "cfr")
         val internalReferenceNumber: String? = null,
         @Column(name = "mmsi")
         val MMSI: String? = null,
@@ -33,7 +29,7 @@ data class VesselEntity(
         val IMO: String? = null,
         @Column(name = "ircs")
         val IRCS: String? = null,
-        @Column(name = "external_reference_number")
+        @Column(name = "external_immatriculation")
         val externalReferenceNumber: String? = null,
         @Column(name = "vessel_name")
         val vesselName: String? = null,
@@ -68,7 +64,7 @@ data class VesselEntity(
         val weightAuthorizedOnDeck: Double? = null,
         @Column(name = "pinger")
         val pinger: Boolean? = null,
-        @Column(name = "navigation_licence_expiration_date")
+        @Column(name = "nav_licence_expiration_date")
         val navigationLicenceExpirationDate: ZonedDateTime? = null,
 
         @Column(name = "shipowner_name")

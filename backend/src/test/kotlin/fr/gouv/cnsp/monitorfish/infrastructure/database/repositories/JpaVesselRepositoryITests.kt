@@ -27,7 +27,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findVessel Should return an empty Vessel object When no vessel is found`() {
         // When
-        val vessel = jpaVesselRepository.findVessel("DUMMY")
+        val vessel = jpaVesselRepository.findVessel("DUMMY", "", "")
 
         assertThat(vessel.internalReferenceNumber).isNull()
         assertThat(vessel.externalReferenceNumber).isNull()
@@ -37,9 +37,18 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findVessel Should return a vessel`() {
+    fun `findVessel Should return a vessel When the CFR is given`() {
         // When
-        val vessel = jpaVesselRepository.findVessel("FR209143000")
+        val vessel = jpaVesselRepository.findVessel("FR209143000", "", "")
+
+        assertThat(vessel.internalReferenceNumber).isEqualTo("FR209143000")
+    }
+
+    @Test
+    @Transactional
+    fun `findVessel Should return a vessel When the external marking is given`() {
+        // When
+        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "07019871338", "")
 
         assertThat(vessel.internalReferenceNumber).isEqualTo("FR209143000")
     }

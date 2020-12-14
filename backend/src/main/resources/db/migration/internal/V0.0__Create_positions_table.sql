@@ -3,9 +3,9 @@ CREATE SEQUENCE IF NOT EXISTS position_id_seq START 1;
 SET standard_conforming_strings = OFF;
 
 -- Enable PostGIS (as of 3.0 contains just geometry/geography)
-CREATE EXTENSION postgis;
+CREATE EXTENSION IF NOT EXISTS postgis;
 
-create table positions (
+create table if not exists positions (
   id integer NOT NULL DEFAULT nextval('position_id_seq'),
   internal_reference_number varchar(100),
   external_reference_number varchar(100),
@@ -26,3 +26,5 @@ create table positions (
 
 SELECT create_hypertable('positions', 'date_time');
 CREATE INDEX ON positions (internal_reference_number, date_time DESC);
+CREATE INDEX ON positions (external_reference_number, date_time DESC);
+CREATE INDEX ON positions (ircs, date_time DESC);

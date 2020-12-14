@@ -1,4 +1,4 @@
-create table last_positions (
+create table if not exists last_positions (
   internal_reference_number varchar(100),
   external_reference_number varchar(100),
   mmsi varchar(100),

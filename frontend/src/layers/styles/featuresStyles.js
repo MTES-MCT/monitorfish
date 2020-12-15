@@ -3,18 +3,12 @@ import CircleStyle from "ol/style/Circle";
 import Fill from "ol/style/Fill";
 import IconOrigin from "ol/style/IconOrigin";
 import {getTextWidth} from "../../utils";
-import * as Comlink from "comlink";
-/* eslint-disable import/no-webpack-loader-syntax */
-import Worker from 'worker-loader!../../workers/MapperWorker';
 import {COLORS} from "../../constants/constants";
 
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
-const worker = new Worker();
-const OpenLayerWorker = Comlink.wrap(worker);
-
-export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalReferenceNumberToShow, vesselNamesShowedOnMap) => {
+export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselNamesShowedOnMap) => {
     const vesselDate = new Date(vessel.dateTime);
     const nowMinusThreeHours = new Date();
     nowMinusThreeHours.setHours(nowMinusThreeHours.getHours() - 3);
@@ -40,7 +34,8 @@ export const setVesselIconStyle = (vessel, iconFeature, vesselTrackInternalRefer
     if (vesselNamesShowedOnMap) {
         styles.push(getVesselNameStyle(iconFeature))
     }
-    if (vessel.internalReferenceNumber && vessel.internalReferenceNumber === vesselTrackInternalReferenceNumberToShow) {
+
+    if (vessel.internalReferenceNumber && selectedFeature && vessel.internalReferenceNumber === selectedFeature.getProperties().internalReferenceNumber) {
         styles.push(selectedVesselStyle)
     }
 
@@ -104,7 +99,7 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
     });
 
     arrowFeature.setStyle((feature, resolution) => {
-        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/6));
+        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/4));
         return arrowStyle;
     });
 }

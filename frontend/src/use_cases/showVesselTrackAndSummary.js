@@ -10,7 +10,7 @@ import {Vector} from "ol/layer";
 import VectorSource from "ol/source/Vector";
 import Layers from "../domain/layers";
 import {transform} from "ol/proj";
-import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {arraysEqual, calculatePointsDistance, calculateSplitPointCoords} from "../utils";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
@@ -36,7 +36,6 @@ const showVesselTrackAndSummary = (feature, fromSearch) => (dispatch, getState) 
         feature.getProperties().IRCS)
         .then(vessel => {
             dispatch(setSelectedVessel(vessel))
-
             let vesselTrackLines = buildVesselTrackLines(vessel)
 
             let circlePoints = buildCirclePoints(vesselTrackLines, vessel.positions);
@@ -70,7 +69,7 @@ function buildCirclePoints(vesselTrackLines, positions) {
         }
 
         let position = positions.filter(position => {
-            let point = new transform([position.longitude, position.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
+            let point = new transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
             return arraysEqual(feature.getGeometry().getCoordinates()[0], point)
         })
         if(position.length > 0) {
@@ -123,8 +122,8 @@ function buildVesselTrackLines(vessel) {
             }
 
             // transform coord to EPSG 3857 standard Lat Long
-            let firstPoint = new transform([position.longitude, position.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
-            let secondPoint = new transform([vessel.positions[index + 1].longitude, vessel.positions[index + 1].latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
+            let firstPoint = new transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+            let secondPoint = new transform([vessel.positions[index + 1].longitude, vessel.positions[index + 1].latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
             const dx = secondPoint[0] - firstPoint[0];
             const dy = secondPoint[1] - firstPoint[1];

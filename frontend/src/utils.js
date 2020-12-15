@@ -1,5 +1,5 @@
 import {transform} from "ol/proj";
-import {BACKEND_PROJECTION} from "./domain/map";
+import {WSG84_PROJECTION} from "./domain/map";
 import {toStringHDMS} from "ol/coordinate";
 
 export let calculatePointsDistance = (coord1, coord2) => {
@@ -18,7 +18,7 @@ export let calculateSplitPointCoords = (startNode, nextNode, distanceBetweenNode
 };
 
 export let getCoordinates = (coordinates, projection) => {
-    const transformedCoordinates = transform(coordinates, projection, BACKEND_PROJECTION)
+    const transformedCoordinates = transform(coordinates, projection, WSG84_PROJECTION)
     const hourCoordinates = toStringHDMS(transformedCoordinates)
     let nSplit = hourCoordinates.split('N')
     if (nSplit.length > 1) {

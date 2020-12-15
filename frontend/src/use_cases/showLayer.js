@@ -4,7 +4,7 @@ import {addLayer, addShowedLayer} from "../reducers/Layer";
 import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
-import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {bbox as bboxStrategy} from "ol/loadingstrategy";
 
 const showLayer = layerToShow => (dispatch, getState) => {
@@ -42,7 +42,7 @@ const getVectorLayer = (type, regulatoryZone) => new VectorLayer({
 const getVectorSource = (type, regulatoryZone) => {
     return new VectorSource({
         format: new GeoJSON({
-            dataProjection: BACKEND_PROJECTION,
+            dataProjection: WSG84_PROJECTION,
             featureProjection: OPENLAYERS_PROJECTION
         }),
         url: extent => {
@@ -56,7 +56,7 @@ function getAdministrativeZoneURL(type, extent) {
     return (
         `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
         `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-        `outputFormat=application/json&srsname=${BACKEND_PROJECTION}&` +
+        `outputFormat=application/json&srsname=${WSG84_PROJECTION}&` +
         `bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
     );
 }

@@ -25,3 +25,4 @@ dependencies:
   - isort
   - python-graphviz
   - line_profiler
+  - ipywidgets

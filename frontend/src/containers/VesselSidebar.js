@@ -137,7 +137,7 @@ const Close = styled.img`
 
 const Panel = styled.div`
   padding: 5px 5px 5px 10px;
-  height: 815px;
+  height: 790px;
   overflow-y: auto;
 `
 

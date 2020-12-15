@@ -4,7 +4,7 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import ReactCountryFlag from "react-country-flag";
 
 import {getDateTime, getCoordinates} from "../utils";
-import {BACKEND_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION} from "../domain/map";
 import {ReactComponent as VesselIDSVG} from "../components/icons/picto_carte_identite_navire.svg";
 import {ReactComponent as ControlsSVG} from "../components/icons/Picto_controles.svg";
 import {ReactComponent as ObservationsSVG} from "../components/icons/Picto_observations_ciblage.svg";
@@ -19,6 +19,7 @@ const VesselSummary = () => {
     const [photoFallback, setPhotoFallback] = useState(false)
     const selectedVessel = useSelector(state => state.vessel.selectedVessel)
     const [vessel, setVessel] = useState(null);
+    const [lastPosition, setLastPosition] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch()
@@ -32,6 +33,7 @@ const VesselSummary = () => {
     useEffect(() => {
         if (selectedVessel) {
             setVessel(selectedVessel)
+            setLastPosition(selectedVessel.positions[selectedVessel.positions.length - 1])
             setIsOpen(true)
             setIsLoading(false)
 
@@ -41,7 +43,6 @@ const VesselSummary = () => {
                 setPhotoFallback(true)
             }
         } else {
-            setVessel(selectedVessel)
             setIsLoading(true)
         }
     }, [selectedVessel])
@@ -71,10 +72,10 @@ const VesselSummary = () => {
                 </PhotoColumn>
                 <PositionColumn>
                     <FieldName>LAT / LON</FieldName>
-                    <FieldValue>{getCoordinates([vessel.positions[0].longitude, vessel.positions[0].latitude], BACKEND_PROJECTION)[0]}</FieldValue>
-                    <FieldValue>{getCoordinates([vessel.positions[0].longitude, vessel.positions[0].latitude], BACKEND_PROJECTION)[1]}</FieldValue>
+                    <FieldValue>{getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0]}</FieldValue>
+                    <FieldValue>{getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1]}</FieldValue>
                     <FieldNameWithTopMargin>ROUTE / VITESSE</FieldNameWithTopMargin>
-                    <FieldValue>{vessel.positions[0].course ? <>{vessel.positions[0].course}°</> : <NoValue>-</NoValue>} <Gray>/</Gray> {vessel.positions[0].speed ? <>{vessel.positions[0].speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition.course ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>} <Gray>/</Gray> {lastPosition.speed ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </PositionColumn>
             </VesselSummaryBody>
             <Zone>
@@ -84,8 +85,8 @@ const VesselSummary = () => {
                             <Key>DERNIER SIGNAL</Key>
                             <Value>
                                 {
-                                vessel.positions[0].dateTime ? <>
-                                        {getDateTime(vessel.positions[0].dateTime)}{' '}
+                                lastPosition.dateTime ? <>
+                                        {getDateTime(lastPosition.dateTime)}{' '}
                                         <Gray>CET</Gray></>
                                     : <NoValue>-</NoValue>
                             }
@@ -343,6 +344,7 @@ const PhotoColumn = styled.div`
   order: 1;
   border-right: 1px rgba(5, 5, 94, 0.1) solid;
   height: 137px;
+  overflow-y: hidden;
 `
 
 const PositionColumn = styled.div`

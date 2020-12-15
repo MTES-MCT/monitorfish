@@ -58,15 +58,15 @@ const VesselIdentity = props => {
                     <Body>
                         <Field>
                             <Key>Nationalité</Key>
-                            <Value>{props.vessel.flagState ? props.vessel.flagState : <NoValue>-</NoValue>}</Value>
+                            <TrimmedValue>{props.vessel.flagState ? props.vessel.flagState : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Quartier</Key>
-                            <Value>{props.vessel.district ? <>{props.vessel.district} {props.vessel.districtCode ? <>({props.vessel.districtCode})</> : ''}</> : <NoValue>-</NoValue>}</Value>
+                            <TrimmedValue>{props.vessel.district ? <>{props.vessel.district} {props.vessel.districtCode ? <>({props.vessel.districtCode})</> : ''}</> : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Port d'attache</Key>
-                            <Value>{props.vessel.registryPort ? props.vessel.registryPort : <NoValue>-</NoValue>}</Value>
+                            <TrimmedValue>{props.vessel.registryPort ? props.vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                     </Body>
                 </Fields>
@@ -285,6 +285,21 @@ const KeyInfo = styled.span`
   font-size: 0.5rem;
 `
 
+const TrimmedValue = styled.td`
+  font-size: 0.8rem;
+  color: ${COLORS.background};
+  font-weight: bold;
+  margin: 0;
+  text-align: left;
+  padding: 1px 5px 5px 5px;
+  background: none;
+  border: none;
+  line-height: normal;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;    
+  max-width: 110px; 
+`
 
 const Value = styled.td`
   font-size: 0.8rem;

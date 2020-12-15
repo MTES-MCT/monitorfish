@@ -1,6 +1,6 @@
 import {getVesselsLastPositionsFromAPI} from "../api/fetch";
 import {transform} from "ol/proj";
-import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import {toStringHDMS} from "ol/coordinate";
@@ -10,6 +10,7 @@ import Layers from "../domain/layers";
 import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";
+import showVesselTrackAndSummary from "./showVesselTrackAndSummary";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
     getVesselsLastPositionsFromAPI().then(vessels => {
@@ -30,10 +31,14 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
     }).catch(error => {
         dispatch(setError(error));
     });
+
+    if(getState().vessel.selectedVesselFeature) {
+        dispatch(showVesselTrackAndSummary(getState().vessel.selectedVesselFeature))
+    }
 }
 
 function buildFeature(currentVessel, index, getState) {
-    const transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], BACKEND_PROJECTION, OPENLAYERS_PROJECTION)
+    const transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
     const iconFeature = new Feature({
         geometry: new Point(transformedCoordinates),

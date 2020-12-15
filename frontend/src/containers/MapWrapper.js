@@ -10,7 +10,7 @@ import {toStringHDMS} from 'ol/coordinate';
 import {Zoom} from 'ol/control';
 import LayersEnum from "../domain/layers";
 import MapCoordinatesBox from "../components/MapCoordinatesBox";
-import {BACKEND_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
 import {
     selectedVesselStyle,
     VESSEL_SELECTOR_STYLE,
@@ -90,7 +90,7 @@ const MapWrapper = () => {
             overlays: [vesselSummaryOverlay, vesselCardOverlay, vesselTrackCardOverlay],
             view: new View({
                 projection: OPENLAYERS_PROJECTION,
-                center: transform(centeredOnFrance, BACKEND_PROJECTION, OPENLAYERS_PROJECTION),
+                center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
                 zoom: 6,
                 minZoom: 5
             }),
@@ -142,7 +142,9 @@ const MapWrapper = () => {
         let tileBaseLayer = 'ol-layer';
         const layersToRemove = map.getLayers().getArray().filter(showedLayer => {
             return !layer.layers.some(layer_ => showedLayer === layer_)
-        }).filter(layer => layer.className_ !== tileBaseLayer)
+        })
+            .filter(layer => layer.className_ !== tileBaseLayer)
+            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK)
 
         layersToRemove.map(layerToRemove => {
             map.getLayers().remove(layerToRemove);
@@ -326,7 +328,7 @@ const MapWrapper = () => {
 
     async function showCoordinatesInDMS(event) {
         const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel);
-        const transformedCoordinates = transform(clickedCoordinates, OPENLAYERS_PROJECTION, BACKEND_PROJECTION)
+        const transformedCoordinates = transform(clickedCoordinates, OPENLAYERS_PROJECTION, WSG84_PROJECTION)
         const stringHDMS = toStringHDMS(transformedCoordinates)
         setCursorCoordinates(stringHDMS)
     }

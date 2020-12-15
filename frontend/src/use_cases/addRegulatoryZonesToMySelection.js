@@ -8,7 +8,6 @@ const addRegulatoryZonesToMySelection = regulatoryZones => (dispatch, getState) 
             regulatoryZonesToAdd[regulatoryZoneName] = regulatoryZones[regulatoryZoneName]
         } else {
             regulatoryZones[regulatoryZoneName].forEach(regulatorySubZone => {
-                console.log(regulatorySubZone)
                 if(!regulatoryZonesToAdd[regulatoryZoneName].some(item =>
                     item.layerName === regulatorySubZone.layerName &&
                     item.zone === regulatorySubZone.zone)) {

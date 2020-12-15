@@ -49,7 +49,7 @@ data class PositionEntity(
         @Column(name = "speed")
         val speed: Double,
         @Column(name = "course")
-        val course: Double,
+        val course: Double? = null,
         @Column(name = "date_time")
         val dateTime: ZonedDateTime) {
 

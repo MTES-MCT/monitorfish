@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const gearSlice = createSlice({
     name: 'gear',
-    initialState: [],
+    initialState: {
+        gears: []
+    },
     reducers: {
         setGears(state, action) {
-            state = action.payload
+            state.gears = action.payload
         }
     }
 })

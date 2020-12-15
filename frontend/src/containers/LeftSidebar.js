@@ -20,7 +20,7 @@ const LeftSidebar = () => {
     const dispatch = useDispatch()
     const firstUpdate = useRef(true);
     const showedLayers = useSelector(state => state.layer.showedLayers)
-    const gears = useSelector(state => state.gears)
+    const gears = useSelector(state => state.gear.gears)
     const selectedRegulatoryZones = useSelector(state => state.layer.selectedRegulatoryZones)
     const zones = useSelector(state => state.layer.zones)
     const [regulatoryZones, setRegulatoryZones] = useState();

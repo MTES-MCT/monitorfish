@@ -28,10 +28,12 @@ const RegulatoryZoneSelectedSubZone = props => {
     }, [showSubZone])
 
     return (
-        <SubZone onClick={() => setShowSubZone(!showSubZone)}>
+        <SubZone>
             <Rectangle />
-            <SubZoneText>{props.subZone.zone}</SubZoneText>
-            { showSubZone ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}
+            <SubZoneText onClick={() => setShowSubZone(!showSubZone)}>{props.subZone.zone}</SubZoneText>
+            <span onClick={() => setShowSubZone(!showSubZone)}>
+                { showSubZone ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}
+            </span>
             <CloseIcon onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone)}/>
         </SubZone>
         )}

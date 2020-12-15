@@ -6,8 +6,9 @@ const hideLayer = layerToHide => (dispatch, getState) => {
         switch (layerToHide.zone) {
             case undefined: layerToRemove = getState().layer.layers.find(layer => layer.className_ === layerToHide.type); break;
             default: {
-                layerToRemove = getState().layer.layers.find(layer =>
-                    layer.className_ === `${layerToHide.type}:${layerToHide.zone.layerName}:${layerToHide.zone.zone}`);
+                layerToRemove = getState().layer.layers.find(layer => {
+                    return layer.className_ === `${layerToHide.type}:${layerToHide.zone.layerName}:${layerToHide.zone.zone}`
+                })
                 break;
             }
         }

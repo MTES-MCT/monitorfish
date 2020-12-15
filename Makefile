@@ -33,7 +33,7 @@ init-remote-sig:
 	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 restart-remote-app:
 	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
-ruu-local-app:
+run-local-app:
 	cd infra/local && sudo docker-compose up -d
 
 # DATA commands

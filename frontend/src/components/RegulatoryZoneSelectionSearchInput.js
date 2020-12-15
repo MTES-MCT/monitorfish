@@ -38,10 +38,17 @@ const RegulatoryZoneSelectionSearchInput = props => {
         let foundRegulatoryZones = {}
         Object.keys(searchFields).forEach(searchProperty => {
             if(searchFields[searchProperty].searchText.length > 0) {
-                let searchFieldFoundRegulatoryZones = search(
-                    searchFields[searchProperty].searchText,
-                    searchFields[searchProperty].properties,
-                    props.regulatoryZones)
+                let searchFieldFoundRegulatoryZones
+                if(searchFields[searchProperty].properties === searchFields.gearSearchText.properties) {
+                    searchFieldFoundRegulatoryZones = searchGears(
+                        searchFields[searchProperty].searchText,
+                        props.regulatoryZones)
+                } else {
+                    searchFieldFoundRegulatoryZones = search(
+                        searchFields[searchProperty].searchText,
+                        searchFields[searchProperty].properties,
+                        props.regulatoryZones)
+                }
 
                 if(Object.keys(foundRegulatoryZones).length === 0) {
                     foundRegulatoryZones = searchFieldFoundRegulatoryZones
@@ -97,24 +104,21 @@ const RegulatoryZoneSelectionSearchInput = props => {
     }
 
     function searchGears(searchText, regulatoryZones) {
-        if (regulatoryZones) {
+        if (regulatoryZones && props.gears) {
             let foundRegulatoryZones = {...regulatoryZones}
+
+            let uniqueGearCodes = getUniqueGearCodesFromSearch(searchText);
 
             Object.keys(foundRegulatoryZones)
                 .forEach(key => {
                     foundRegulatoryZones[key] = foundRegulatoryZones[key]
                         .filter(zone => {
-                            if(zone['gears']) {
-                                let gears = zone['gears']
-                                    .replace(/ /g, '')
-                                    .split(',')
-                                let found = gears.some(gearCodeFromREG => {
-                                    if(props.gears.some(gear => gear.code === gearCodeFromREG)) {
-                                        return true
-                                    }
-                                })
+                            let gears = zone['gears']
+                            if(gears) {
+                                let gearsArray = gears.replace(/ /g, '').split(',')
+                                let found = gearCodeIsFoundInRegulatoryZone(gearsArray, uniqueGearCodes)
 
-                                return found || zone['gears'].toLowerCase().includes(searchText.toLowerCase())
+                                return found || gears.toLowerCase().includes(searchText.toLowerCase())
                             } else {
                                 return false
                             }
@@ -126,7 +130,24 @@ const RegulatoryZoneSelectionSearchInput = props => {
                 })
 
             return foundRegulatoryZones
+        } else {
+            return {}
         }
+    }
+
+    function getUniqueGearCodesFromSearch(searchText) {
+        let foundGearCodes = props.gears
+            .filter(gear => gear.name.toLowerCase().includes(searchText.toLowerCase()))
+            .map(gear => gear.code)
+        return [...new Set(foundGearCodes)]
+    }
+
+    function gearCodeIsFoundInRegulatoryZone(gears, uniqueGearCodes) {
+        return gears.some(gearCodeFromREG => {
+            if (uniqueGearCodes.some(foundGearCode => foundGearCode === gearCodeFromREG)) {
+                return true
+            }
+        });
     }
 
     return (

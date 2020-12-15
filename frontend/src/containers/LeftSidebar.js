@@ -45,8 +45,8 @@ const LeftSidebar = () => {
     }
 
     function callRemoveRegulatoryZoneFromMySelection(regulatoryZone) {
-        dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
         callHideRegulatoryZone(regulatoryZone)
+        dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
     }
 
     function callShowRegulatoryZone(regulatoryZone) {

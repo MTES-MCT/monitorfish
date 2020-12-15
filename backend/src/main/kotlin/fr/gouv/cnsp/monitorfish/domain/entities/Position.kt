@@ -23,7 +23,7 @@ data class Position(
         val latitude: Double,
         val longitude: Double,
         val speed: Double,
-        val course: Double,
+        val course: Double?,
         val dateTime: ZonedDateTime,
         val from: CountryCode? = null,
         val destination: CountryCode? = null,

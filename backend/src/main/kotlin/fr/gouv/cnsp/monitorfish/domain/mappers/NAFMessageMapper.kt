@@ -26,7 +26,7 @@ class NAFMessageMapper(private val naf: String) {
     private var latitude by Delegates.notNull<Double>()
     private var longitude by Delegates.notNull<Double>()
     private var course by Delegates.notNull<Double>()
-    private var speed by Delegates.notNull<Double>()
+    private var speed: Double = 0.0
     private var tripNumber: Int? = null
 
     private val positionMessageType = "POS"

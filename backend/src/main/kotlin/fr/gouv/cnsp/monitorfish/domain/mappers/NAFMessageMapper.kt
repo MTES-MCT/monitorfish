@@ -25,7 +25,7 @@ class NAFMessageMapper(private val naf: String) {
     private var externalReferenceNumber: String? = null
     private var latitude by Delegates.notNull<Double>()
     private var longitude by Delegates.notNull<Double>()
-    private var course by Delegates.notNull<Double>()
+    private var course: Double? = null
     private var speed: Double = 0.0
     private var tripNumber: Int? = null
 

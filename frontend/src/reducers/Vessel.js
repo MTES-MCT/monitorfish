@@ -16,11 +16,13 @@ const vesselSlice = createSlice({
             state.selectedVesselTrackVector = action.payload
         },
         loadingVessel(state, action) {
-            state.loadingVessel = true
-            state.selectedVesselFeature = action.payload
-            state.selectedVesselTrackVector = null
-            state.selectedVessel = null
-            state.vesselSummaryIsOpen = true
+            if(!state.selectedVesselFeature) {
+                state.selectedVesselFeature = action.payload
+                state.selectedVesselTrackVector = null
+                state.selectedVessel = null
+                state.vesselSummaryIsOpen = true
+                state.loadingVessel = true
+            }
         },
         setSelectedVessel(state, action) {
             state.loadingVessel = null

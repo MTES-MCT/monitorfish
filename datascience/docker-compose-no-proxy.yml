@@ -10,3 +10,5 @@ services:
       - .:/home/jovyan/work/
     environment: 
       - PYTHONPATH=/home/jovyan/work
+      - http_proxy=
+      - https_proxy=

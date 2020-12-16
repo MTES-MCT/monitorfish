@@ -20,6 +20,7 @@ const LeftSidebar = () => {
     const dispatch = useDispatch()
     const firstUpdate = useRef(true);
     const showedLayers = useSelector(state => state.layer.showedLayers)
+    const isReadyToShowRegulatoryZones = useSelector(state => state.layer.isReadyToShowRegulatoryZones)
     const gears = useSelector(state => state.gear.gears)
     const selectedRegulatoryZones = useSelector(state => state.layer.selectedRegulatoryZones)
     const zones = useSelector(state => state.layer.zones)
@@ -52,7 +53,7 @@ const LeftSidebar = () => {
     function callShowRegulatoryZone(regulatoryZone) {
         dispatch(showLayer({
             type: LayersEnum.REGULATORY,
-            zone: regulatoryZone
+            zone: regulatoryZone,
         }))
     }
 
@@ -90,6 +91,7 @@ const LeftSidebar = () => {
                 callHideAdministrativeZone={callHideAdministrativeZone}
             />
             <RegulatoryZoneSelected
+                isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
                 callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                 callShowRegulatoryZone={callShowRegulatoryZone}
                 callHideRegulatoryZone={callHideRegulatoryZone}

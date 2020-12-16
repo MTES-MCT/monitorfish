@@ -26,6 +26,7 @@ const layerSlice = createSlice({
             { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
             { layer: Layers.ONE_HUNDRED_MILES, layerName: '100 Milles' }
         ],
+        isReadyToShowRegulatoryZones: false,
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
         selectedRegulatoryZones: getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey)
     },
@@ -92,6 +93,9 @@ const layerSlice = createSlice({
             }
 
             window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
+        },
+        setIsReadyToShowRegulatoryZones(state) {
+            state.isReadyToShowRegulatoryZones = true
         }
     }
 })
@@ -104,7 +108,8 @@ export const {
     addShowedLayer,
     removeShowedLayer,
     addRegulatoryZonesToSelection,
-    removeRegulatoryZonesFromSelection
+    removeRegulatoryZonesFromSelection,
+    setIsReadyToShowRegulatoryZones
 } = layerSlice.actions
 
 export default layerSlice.reducer

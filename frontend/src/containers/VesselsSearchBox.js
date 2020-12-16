@@ -48,7 +48,7 @@ const VesselsSearchBox = () => {
 
     useEffect(() => {
         if (selectedVessel) {
-            dispatch(showVesselTrackAndSummary(selectedVessel, true));
+            dispatch(showVesselTrackAndSummary(selectedVessel, true, false));
             setFoundVessels([])
             setSearchText('')
         }

@@ -22,9 +22,12 @@ import Stroke from "ol/style/Stroke";
 import {animateToVessel, setUsingSearch} from "../reducers/Map";
 import {setError} from "../reducers/Global";
 
-const showVesselTrackAndSummary = (feature, fromSearch) => (dispatch, getState) => {
+const showVesselTrackAndSummary = (feature, fromSearch, updateShowedVessel) => (dispatch, getState) => {
     removePreviousSelectedFeature(getState);
-    dispatch(loadingVessel(feature))
+    if(!updateShowedVessel) {
+        dispatch(loadingVessel(feature))
+    }
+
     if (fromSearch) {
         dispatch(setUsingSearch())
         dispatch(animateToVessel(feature));

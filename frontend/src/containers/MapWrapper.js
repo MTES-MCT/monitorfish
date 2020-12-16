@@ -273,7 +273,7 @@ const MapWrapper = () => {
         });
 
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
-            dispatch(showVesselTrackAndSummary(feature, false))
+            dispatch(showVesselTrackAndSummary(feature, false, false))
         }
     }
 

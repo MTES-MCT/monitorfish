@@ -21,7 +21,7 @@ const showLayer = layerToShow => (dispatch, getState) => {
                     console.error("No regulatory layer to show.")
                     return
                 }
-                dispatch(addLayer(getVectorLayer(Layers.REGULATORY, layerToShow.zone)));
+                dispatch(addLayer(getVectorLayer(Layers.REGULATORY, layerToShow.zone, getState)));
                 break;
             }
         }
@@ -30,11 +30,15 @@ const showLayer = layerToShow => (dispatch, getState) => {
     }
 }
 
-const getVectorLayer = (type, regulatoryZone) => new VectorLayer({
+const getVectorLayer = (type, regulatoryZone, getState) => new VectorLayer({
     source: getVectorSource(type, regulatoryZone),
     renderMode: 'image',
     className: regulatoryZone ? `${Layers.REGULATORY}:${regulatoryZone.layerName}:${regulatoryZone.zone}` : type,
     style: (feature, _) => {
+        if (regulatoryZone) {
+            //getState().
+        }
+        // TODO: Fix the opacity going up...
         return [getVectorLayerStyle(type, regulatoryZone)(feature)]
     }
 });

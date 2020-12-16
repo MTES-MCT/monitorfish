@@ -33,7 +33,7 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
     });
 
     if(getState().vessel.selectedVesselFeature) {
-        dispatch(showVesselTrackAndSummary(getState().vessel.selectedVesselFeature))
+        dispatch(showVesselTrackAndSummary(getState().vessel.selectedVesselFeature, false, true))
     }
 }
 

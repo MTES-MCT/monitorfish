@@ -16,7 +16,7 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselN
     let opacity = vesselDate < nowMinusThreeHours ? 0.3 : 1;
     let styles = []
     const iconStyle = new Style({
-        image: vessel.speed > 0 ? new Icon({
+        image: vessel.speed > 0.1 ? new Icon({
             src: 'boat_mf.png',
             offset: [0, 0],
             imgSize: [14, 14],

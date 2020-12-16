@@ -26,3 +26,5 @@ dependencies:
   - python-graphviz
   - line_profiler
   - ipywidgets
+  - pyarrow
+  - tqdm

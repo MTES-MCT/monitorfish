@@ -20,12 +20,12 @@ const RegulatoryZoneSelectedSubZone = props => {
             return;
         }
 
-        if (showSubZone) {
+        if (showSubZone && props.isReadyToShowRegulatoryZones) {
             props.callShowRegulatoryZone(props.subZone)
         } else {
             props.callHideRegulatoryZone(props.subZone)
         }
-    }, [showSubZone])
+    }, [showSubZone, props.isReadyToShowRegulatoryZones])
 
     return (
         <SubZone>

@@ -13,8 +13,8 @@ const APIWorker = () => {
     const { addToast } = useToasts()
 
     useEffect(() => {
-        dispatch(showAllVessels());
         dispatch(getAllGearCodes())
+        dispatch(showAllVessels());
 
         setInterval(() => {
             dispatch(showAllVessels());

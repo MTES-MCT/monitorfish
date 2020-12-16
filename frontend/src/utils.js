@@ -1,6 +1,7 @@
 import {transform} from "ol/proj";
 import {WSG84_PROJECTION} from "./domain/map";
 import {toStringHDMS} from "ol/coordinate";
+import {asArray, asString} from "ol/color";
 
 export let calculatePointsDistance = (coord1, coord2) => {
     let dx = coord1[0] - coord2[0];
@@ -72,4 +73,20 @@ export const getLocalStorageState = (defaultValue, key) => {
     return stickyValue !== null
         ? JSON.parse(stickyValue)
         : defaultValue;
+}
+
+export const getHash = string => {
+    let len = string.length
+    let h = 5381
+
+    for (let i = 0; i < len; i++) {
+        h = h * 33 ^ string.charCodeAt(i)
+    }
+
+    return h >>> 0
+}
+
+export const getColorWithAlpha = (color, alpha) => {
+    const [r, g, b] = Array.from(asArray(color));
+    return asString([r, g, b, alpha]);
 }

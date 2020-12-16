@@ -5,7 +5,8 @@ import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
 import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
-import {bbox as bboxStrategy} from "ol/loadingstrategy";
+import {all, bbox as bboxStrategy} from "ol/loadingstrategy";
+import {getHash} from "../utils";
 
 const showLayer = layerToShow => (dispatch, getState) => {
     if(layerToShow && layerToShow.type){
@@ -21,7 +22,10 @@ const showLayer = layerToShow => (dispatch, getState) => {
                     console.error("No regulatory layer to show.")
                     return
                 }
-                dispatch(addLayer(getVectorLayer(Layers.REGULATORY, layerToShow.zone, getState)));
+
+                let hash = getHash(`${layerToShow.zone.layerName}:${layerToShow.zone.zone}`)
+                let gearCategory = getGearCategory(layerToShow, getState);
+                dispatch(addLayer(getVectorLayer(Layers.REGULATORY, layerToShow.zone, hash, gearCategory)));
                 break;
             }
         }
@@ -30,16 +34,12 @@ const showLayer = layerToShow => (dispatch, getState) => {
     }
 }
 
-const getVectorLayer = (type, regulatoryZone, getState) => new VectorLayer({
+const getVectorLayer = (type, regulatoryZone, hash, gearCategory) => new VectorLayer({
     source: getVectorSource(type, regulatoryZone),
     renderMode: 'image',
     className: regulatoryZone ? `${Layers.REGULATORY}:${regulatoryZone.layerName}:${regulatoryZone.zone}` : type,
-    style: (feature, _) => {
-        if (regulatoryZone) {
-            //getState().
-        }
-        // TODO: Fix the opacity going up...
-        return [getVectorLayerStyle(type, regulatoryZone)(feature)]
+    style: feature => {
+        return [getVectorLayerStyle(type, regulatoryZone)(feature, hash, gearCategory)]
     }
 });
 
@@ -52,7 +52,7 @@ const getVectorSource = (type, regulatoryZone) => {
         url: extent => {
             return regulatoryZone ? getRegulatoryZoneURL(type, regulatoryZone) : getAdministrativeZoneURL(type, extent);
         },
-        strategy: bboxStrategy,
+        strategy: regulatoryZone ? all : bboxStrategy,
     });
 }
 
@@ -73,6 +73,24 @@ function getRegulatoryZoneURL(type, regulatoryZone) {
         `&outputFormat=application/json&CQL_FILTER=` +
         filter.replace(/'/g, '%27').replace(/ /g, '%20')
     )
+}
+
+function getGearCategory(layerToShow, getState) {
+    let gear = null
+    if (layerToShow.zone.gears) {
+        let layerGearsArray = layerToShow.zone.gears.replace(/ /g, '').split(',')
+        gear = getState().gear.gears
+            .filter(gear => gear.category !== 'Pièges')
+            .find(gear => {
+                return layerGearsArray.some(gearCode => {
+                    if (gearCode === gear.code) {
+                        if(gearCode === "LLS") console.log("FOUNDDDD")
+                        return true
+                    }
+                })
+        })
+    }
+    return gear ? gear.category : null
 }
 
 export default showLayer

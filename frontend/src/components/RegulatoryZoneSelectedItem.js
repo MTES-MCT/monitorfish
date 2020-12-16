@@ -15,6 +15,7 @@ const RegulatoryZoneSelectedItem = props => {
                         <RegulatoryZoneSelectedSubZone
                             subZone={subZone}
                             key={index}
+                            isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
                             callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
                             callShowRegulatoryZone={props.callShowRegulatoryZone}
                             callHideRegulatoryZone={props.callHideRegulatoryZone}

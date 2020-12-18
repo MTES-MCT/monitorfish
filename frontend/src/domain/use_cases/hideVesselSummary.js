@@ -1,4 +1,4 @@
-import {VESSEL_SELECTOR_STYLE} from "../layers/styles/featuresStyles";
+import {VESSEL_SELECTOR_STYLE} from "../../layers/styles/featuresStyles";
 import {closeVesselSummary} from "../reducers/Vessel";
 
 const hideVesselSummary = () => (dispatch, getState) => {

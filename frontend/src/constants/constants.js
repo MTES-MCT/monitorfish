@@ -1,5 +1,9 @@
 export const COLORS = {
-    background: 'rgba(5, 5, 94, 1)',
+    background: '#FFFFFF',
+    gray: '#EEEEEE',
+    grayDarker: '#E1E1E1',
+    grayDarkerTwo: '#9A9A9A',
+    grayDarkerThree: '#515151',
     textGray: '#848DAE',
     textWhite: '#EDEDF5'
 };

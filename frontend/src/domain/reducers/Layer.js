@@ -1,13 +1,11 @@
-import LayersEnum from "../domain/layers";
-
-import Layers from '../domain/layers'
-import { createSlice } from '@reduxjs/toolkit'
-import {getLocalStorageState} from "../utils";
+import LayersEnum from "../entities/layers";
+import Layers from "../entities/layers";
+import {createSlice} from '@reduxjs/toolkit'
+import {getLocalStorageState} from "../../utils";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
-const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
 
 const layerSlice = createSlice({
     name: 'layer',
@@ -18,7 +16,7 @@ const layerSlice = createSlice({
                 className: Layers.VESSELS
             })
         ],
-        zones: [
+        administrativeZones: [
             { layer: Layers.EEZ, layerName: 'Zones ZEE' },
             { layer: Layers.FAO, layerName: 'Zones FAO/CIEM' },
             { layer: Layers.THREE_MILES, layerName: '3 Milles' },
@@ -26,9 +24,7 @@ const layerSlice = createSlice({
             { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
             { layer: Layers.ONE_HUNDRED_MILES, layerName: '100 Milles' }
         ],
-        isReadyToShowRegulatoryZones: false,
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
-        selectedRegulatoryZones: getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey)
     },
     reducers: {
         replaceVesselLayer(state, action) {
@@ -78,24 +74,6 @@ const layerSlice = createSlice({
 
                 window.localStorage.setItem(layersShowedOnMapLocalStorageKey, JSON.stringify(state.showedLayers))
             }
-        },
-        addRegulatoryZonesToSelection(state, action) {
-            state.selectedRegulatoryZones = action.payload
-            window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
-        },
-        removeRegulatoryZonesFromSelection(state, action) {
-            state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
-                return !(subZone.layerName === action.payload.layerName && subZone.zone === action.payload.zone)
-            })
-
-            if (!state.selectedRegulatoryZones[action.payload.layerName].length) {
-                delete state.selectedRegulatoryZones[action.payload.layerName]
-            }
-
-            window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
-        },
-        setIsReadyToShowRegulatoryZones(state) {
-            state.isReadyToShowRegulatoryZones = true
         }
     }
 })
@@ -107,9 +85,6 @@ export const {
     setLayers,
     addShowedLayer,
     removeShowedLayer,
-    addRegulatoryZonesToSelection,
-    removeRegulatoryZonesFromSelection,
-    setIsReadyToShowRegulatoryZones
 } = layerSlice.actions
 
 export default layerSlice.reducer

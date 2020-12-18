@@ -1,15 +1,49 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 
 import RegulatoryZoneSelectionSearchInput from "./RegulatoryZoneSelectionSearchInput";
-import {ReactComponent as SearchIconSVG} from './icons/search.svg'
-import {ReactComponent as CloseIconSVG} from './icons/Croix_grise.svg'
+import {ReactComponent as SearchIconSVG} from './icons/Loupe.svg'
 import RegulatoryZoneSelectionList from "./RegulatoryZoneSelectionList";
+import {COLORS} from "../constants/constants";
+
+function useOutsideAlerter(ref, showRegulatorySearchInput, setShowRegulatorySection, setInitSearchFields) {
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (ref.current && !ref.current.contains(event.target) && showRegulatorySearchInput) {
+                setShowRegulatorySection(false)
+                setInitSearchFields(true)
+            }
+        }
+
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref, showRegulatorySearchInput]);
+}
 
 const RegulatoryZoneSelection = props => {
     const [showRegulatorySection, setShowRegulatorySection] = useState(false);
     const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({});
     const [regulatoryZonesSelection, setRegulatoryZonesSelection] = useState({})
+    const [initSearchFields, setInitSearchFields] = useState(false)
+
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, showRegulatorySection, setShowRegulatorySection, setInitSearchFields);
+
+    useEffect(() => {
+        if(showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
+            setShowRegulatorySection(false)
+        }
+    }, [props.regulatoryZoneMetadataPanelIsOpen])
+
+    useEffect(() => {
+        if(showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
+            props.callCloseRegulatoryZoneMetadata()
+        }
+    }, [showRegulatorySection])
 
     const toggleSelectRegulatoryZone = (regulatoryZoneName, regulatorySubZones) => {
         let existingSelectedZones = {...regulatoryZonesSelection}
@@ -37,23 +71,37 @@ const RegulatoryZoneSelection = props => {
     }
 
     function addRegulatoryZonesToMySelection(regulatoryZonesSelection) {
+        const numberOfZonesAdded = Object.keys(regulatoryZonesSelection)
+            .map(regulatoryLayerKey => regulatoryZonesSelection[regulatoryLayerKey].length)
+            .reduce((a, b) => a + b, 0)
+        props.setRegulatoryZonesAddedToMySelection(numberOfZonesAdded)
+        setTimeout(() => { props.setRegulatoryZonesAddedToMySelection(0) }, 2000);
         props.callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)
         setRegulatoryZonesSelection({})
     }
 
-    return (<>
-        <RegulatoryZoneTitle onClick={() => setShowRegulatorySection(!showRegulatorySection)}>
-            Rechercher des zones réglementaires
+    return (<Search ref={wrapperRef}>
             {
-                showRegulatorySection ? <CloseIcon /> : <SearchIcon />
+                showRegulatorySection ? null
+                : <RegulatoryZoneTitle
+                        onClick={() => setShowRegulatorySection(!showRegulatorySection)}
+                        showRegulatorySection={showRegulatorySection}
+                    >
+                        <TitleText>
+                            Rechercher des zones réglementaires
+                        </TitleText>
+                        <SearchIcon />
+                    </RegulatoryZoneTitle>
             }
-        </RegulatoryZoneTitle>
         <RegulatoryZoneSelectionSearchInput
             showRegulatorySearchInput={showRegulatorySection}
+            setShowRegulatorySection={setShowRegulatorySection}
             regulatoryZones={props.regulatoryZones}
             setFoundRegulatoryZones={setFoundRegulatoryZones}
             foundRegulatoryZones={foundRegulatoryZones}
             gears={props.gears}
+            initSearchFields={initSearchFields}
+            setInitSearchFields={setInitSearchFields}
         />
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}
@@ -67,66 +115,68 @@ const RegulatoryZoneSelection = props => {
             showRegulatorySearchInput={showRegulatorySection}
             foundRegulatoryZones={foundRegulatoryZones}
         >
-            Ajouter à mes zones
+            {
+                props.regulatoryZonesAddedToMySelection ? `${props.regulatoryZonesAddedToMySelection} zones ajoutées` : `Ajouter à mes zones`
+            }
         </RegulatoryZoneAddButton>
-    </>
+    </Search>
     )
 }
+
+const Search = styled.div`
+  width: 360px;
+`
+
+const TitleText = styled.span`
+  margin-top: 10px;
+  font-size: 13px;
+  display: inline-block;
+`
 
 const RegulatoryZoneAddButton = styled.div`
   cursor: pointer;
   border-radius: 0;
   font-size: 0.8em;
-  background: rgba(255, 255, 255, 0.3);
+  background: ${COLORS.grayDarkerThree};
+  color: ${COLORS.gray};
   padding: 0;
-  line-height: 1.9em;
+  line-height: 2.5em;
   margin: 0;
   height: 0;
   width: 100%;
   overflow: hidden;
   user-select: none;
-  animation: ${props => props.showRegulatorySearchInput ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-button-opening' : 'regulatory-button-closing' : 'regulatory-button-closing'} 1s ease forwards;
+  animation: ${props => props.showRegulatorySearchInput ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-button-opening' : 'regulatory-button-closing' : 'regulatory-button-closing'} 0.5s ease forwards;
 
   @keyframes regulatory-button-opening {
     0%   { height: 0;   }
-    100% { height: 25px; }
+    100% { height: 36px; }
   }
 
   @keyframes regulatory-button-closing {
-    0%   { height: 25px; }
+    0%   { height: 36px; }
     100% { height: 0;   }
   }
 `
 
 const RegulatoryZoneTitle = styled.div`
-  height: 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  background: #2F006F;
+  height: 40px;
+  background: ${COLORS.grayDarker};
+  color: ${COLORS.grayDarkerTwo};
   font-size: 0.8em;
-  padding-top: 10px;
   cursor: pointer;
   font-weight: 500;
   text-align: left;
-  padding-left: 10px;
+  padding-left: 15px;
   user-select: none;
+  width: 345px;
 `
 
 const SearchIcon = styled(SearchIconSVG)`
-  padding-top: 2px;
-  border-radius: 2px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  width: 17px;
-  height: 17px;
+  width: 40px;
+  height: 40px;
   float: right;
-  margin-right: 4px;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 10px;
-  float: right;
-  margin-right: 7px;
-  margin-top: 5px;
+  background: ${COLORS.grayDarkerThree}
 `
 
 export default RegulatoryZoneSelection

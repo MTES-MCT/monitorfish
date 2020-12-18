@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import ReactCountryFlag from "react-country-flag"
 import {ReactComponent as SearchIconSVG} from '../components/icons/search.svg'
-import LayersEnum from "../domain/layers";
-import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
+import LayersEnum from "../domain/entities/layers";
+import showVesselTrackAndSummary from "../domain/use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 

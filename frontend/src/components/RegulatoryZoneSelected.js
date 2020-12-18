@@ -1,27 +1,56 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 import {ReactComponent as ChevronIconSVG} from './icons/Chevron_double_gris.svg'
-import RegulatoryZoneSelectedItem from "./RegulatoryZoneSelectedItem";
+import RegulatoryZoneSelectedLayer from "./RegulatoryZoneSelectedLayer";
+import {COLORS} from "../constants/constants";
 
 const RegulatoryZoneSelected = props => {
-    const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(true);
+    const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false);
+    const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
+
+    function increaseNumberOfZonesOpened(number) {
+        setNumberOfZonesOpened(numberOfZonesOpened + number)
+    }
+
+    function decreaseNumberOfZonesOpened(number) {
+        const value = numberOfZonesOpened - number
+        if (value < 0) {
+            setNumberOfZonesOpened(0)
+        } else {
+            setNumberOfZonesOpened(value)
+        }
+    }
+
+    useEffect(() => {
+        console.log(props.regulatoryZonesAddedToMySelection)
+    }, [props.regulatoryZonesAddedToMySelection])
 
     return (
         <>
-            <RegulatoryZoneSelectedTitle onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}>
+            <RegulatoryZoneSelectedTitle
+                onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}
+                regulatoryZonesAddedToMySelection={props.regulatoryZonesAddedToMySelection}
+            >
                 Mes zones réglementaires <ChevronIcon isOpen={showRegulatoryZonesSelected}/>
             </RegulatoryZoneSelectedTitle>
-            <RegulatoryZoneSelectedList showRegulatoryZonesSelected={showRegulatoryZonesSelected}>
+            <RegulatoryZoneSelectedList
+                layerLength={Object.keys(props.selectedRegulatoryZones).length}
+                zoneLength={numberOfZonesOpened}
+                showRegulatoryZonesSelected={showRegulatoryZonesSelected}
+            >
                 {
                     Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
                         return (<ListItem key={index}>
-                            <RegulatoryZoneSelectedItem
+                            <RegulatoryZoneSelectedLayer
+                                increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+                                decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
                                 isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
                                 callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
                                 regulatoryZoneName={regulatoryZoneName}
                                 regulatorySubZones={props.selectedRegulatoryZones[regulatoryZoneName]}
                                 callShowRegulatoryZone={props.callShowRegulatoryZone}
                                 callHideRegulatoryZone={props.callHideRegulatoryZone}
+                                callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
                                 showedLayers={props.showedLayers}
                             />
                         </ListItem>)
@@ -33,29 +62,66 @@ const RegulatoryZoneSelected = props => {
 }
 
 const RegulatoryZoneSelectedTitle = styled.div`
-  height: 30px;
+  height: 27px;
+  padding-top: 8px;
+  margin-top: 5px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  background: #2F006F;
+  background: ${COLORS.grayDarker};
+  
+  animation: ${props => props.regulatoryZonesAddedToMySelection ? 'blink' : ''} 0.3s ease forwards;
+
+  @keyframes blink {
+    0%   {
+        background: ${COLORS.grayDarker};
+    }
+    20%   {
+        background: ${COLORS.grayDarkerTwo};
+    }
+    40% {
+        background: ${COLORS.grayDarker};
+    }
+    60%   {
+        background: ${COLORS.grayDarker};
+    }
+    80%   {
+        background: ${COLORS.grayDarkerTwo};
+    }
+    100% {
+        background: ${COLORS.grayDarker};
+    }
+  }
+  
+  color: ${COLORS.grayDarkerTwo};
   font-size: 0.8em;
-  padding-top: 10px;
   cursor: pointer;
   font-weight: 500;
   text-align: left;
-  padding-left: 10px;
+  padding-left: 15px;
   user-select: none;
 `
 
 const RegulatoryZoneSelectedList = styled.ul`
   margin: 0;
-  background-color: #05055E;
+  background-color: ${COLORS.background};
   border-radius: 0;
   padding: 0;
-  height: 0px;
+  height: ${props => {
+        if(props.layerLength) {
+            if(props.zoneLength > 0) {
+                return props.layerLength * 36 + props.zoneLength * 36
+            } else {
+                return props.layerLength * 36
+            }
+        } else {
+            return 20
+        }
+    }}px;
   max-height: 300px;
   overflow-y: auto;
   overflow-x: hidden;
+  color: ${COLORS.grayDarkerThree};
   
-  animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 1s ease forwards;
+  animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
 
   @keyframes regulatory-selected-opening {
     0%   {
@@ -63,19 +129,39 @@ const RegulatoryZoneSelectedList = styled.ul`
         overflow-y: hidden;
     }
     100% {
-        height: 300px;
+        height: ${props => {
+            if(props.layerLength) {
+                if(props.zoneLength) {
+                    return props.layerLength * 36 + props.zoneLength * 36
+                } else {
+                    return props.layerLength * 36
+                }
+            } else {
+              return 20
+            }  
+        }}px;
         overflow-y: auto;
     }
   }
 
   @keyframes regulatory-selected-closing {
     0%   {
-        height: 300px;
+        height: ${props => {
+            if(props.layerLength) {
+                if(props.zoneLength > 0) {
+                    return props.layerLength * 36 + props.zoneLength * 27
+                } else {
+                    return props.layerLength * 36
+                }
+            } else {
+                return 20
+            }
+        }}px;
         overflow-y: hidden !important;
     }
     100% {
         height: 0;
-        overflow-y: auto;
+        overflow-y: hidden;
     }
   }
 `
@@ -98,12 +184,12 @@ const ListItem = styled.li`
 
 const ChevronIcon = styled(ChevronIconSVG)`
   transform: rotate(180deg);
-  width: 10px;
+  width: 12px;
   float: right;
   margin-right: 10px;
   margin-top: 5px;
   
-  animation: ${props => props.isOpen ? 'chevron-zones-opening' : 'chevron-zones-closing'} 1s ease forwards;
+  animation: ${props => props.isOpen ? 'chevron-zones-opening' : 'chevron-zones-closing'} 0.5s ease forwards;
 
   @keyframes chevron-zones-opening {
     0%   { transform: rotate(180deg); }

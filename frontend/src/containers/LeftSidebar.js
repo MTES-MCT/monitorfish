@@ -1,35 +1,48 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {useDispatch, useSelector} from "react-redux";
-import {setError} from "../reducers/Global";
+import {setError} from "../domain/reducers/Global";
 
-import {ReactComponent as LayersSVG} from '../components/icons/layers.svg';
-import LayersEnum from "../domain/layers";
+import {ReactComponent as LayersSVG} from '../components/icons/Couches.svg';
+import LayersEnum from "../domain/entities/layers";
 
-import addRegulatoryZonesToMySelection from "../use_cases/addRegulatoryZonesToMySelection";
-import getAllRegulatoryZones from "../use_cases/getAllRegulatoryZones";
-import removeRegulatoryZoneFromMySelection from "../use_cases/removeRegulatoryZoneFromMySelection";
-import showLayer from "../use_cases/showLayer";
-import hideLayer from "../use_cases/hideLayer";
+import addRegulatoryZonesToMySelection from "../domain/use_cases/addRegulatoryZonesToMySelection";
+import getAllRegulatoryZones from "../domain/use_cases/getAllRegulatoryZones";
+import removeRegulatoryZoneFromMySelection from "../domain/use_cases/removeRegulatoryZoneFromMySelection";
+import showLayer from "../domain/use_cases/showLayer";
+import hideLayer from "../domain/use_cases/hideLayer";
 import RegulatoryZoneSelection from "../components/RegulatoryZoneSelection";
 import AdministrativeZoneSelection from "../components/AdministrativeZoneSelection";
 import RegulatoryZoneSelected from "../components/RegulatoryZoneSelected";
 import {COLORS} from "../constants/constants";
+import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
+import closeRegulatoryZoneMetadata from "../domain/use_cases/closeRegulatoryZoneMetadata";
+import RegulatoryZoneMetadata from "../components/RegulatoryZoneMetadata";
 
 const LeftSidebar = () => {
     const dispatch = useDispatch()
-    const firstUpdate = useRef(true);
     const showedLayers = useSelector(state => state.layer.showedLayers)
-    const isReadyToShowRegulatoryZones = useSelector(state => state.layer.isReadyToShowRegulatoryZones)
+    const administrativeZones = useSelector(state => state.layer.administrativeZones)
+    const {
+        isReadyToShowRegulatoryZones,
+        regulatoryZoneMetadataPanelIsOpen,
+        loadingRegulatoryZoneMetadata,
+        selectedRegulatoryZones,
+        regulatoryZoneMetadata
+    } = useSelector(state => state.regulatory)
     const gears = useSelector(state => state.gear.gears)
-    const selectedRegulatoryZones = useSelector(state => state.layer.selectedRegulatoryZones)
-    const zones = useSelector(state => state.layer.zones)
+    const firstUpdate = useRef(true);
     const [regulatoryZones, setRegulatoryZones] = useState();
     const [openBox, setOpenBox] = useState(false);
+    const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
 
     useEffect(() => {
         if (openBox === true) {
             firstUpdate.current = false;
+        }
+
+        if(!openBox) {
+            callCloseRegulatoryZoneMetadata()
         }
     }, [openBox])
 
@@ -76,84 +89,113 @@ const LeftSidebar = () => {
         }));
     }
 
+    function callShowRegulatorySubZoneMetadata(regulatorySubZone) {
+        dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
+    }
+
+    function callCloseRegulatoryZoneMetadata() {
+        dispatch(closeRegulatoryZoneMetadata())
+    }
+
     return (
-        <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
-            <SidebarLayersIcon onClick={() => setOpenBox(!openBox)}><Layers/></SidebarLayersIcon>
+        <Sidebar
+            openBox={openBox}
+            firstUpdate={firstUpdate.current}>
+            <SidebarLayersIcon
+                openBox={openBox}
+                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+                onClick={() => setOpenBox(!openBox)}>
+                <Layers/>
+            </SidebarLayersIcon>
             <RegulatoryZoneSelection
                 callAddRegulatoryZonesToMySelection={callAddRegulatoryZonesToMySelection}
+                callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
                 regulatoryZones={regulatoryZones}
                 gears={gears}
+                regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
+                setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
             />
-            <AdministrativeZoneSelection
-                zones={zones}
-                showedLayers={showedLayers}
-                callShowAdministrativeZone={callShowAdministrativeZone}
-                callHideAdministrativeZone={callHideAdministrativeZone}
+            <Zones>
+                <RegulatoryZoneSelected
+                    isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
+                    callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
+                    callShowRegulatoryZone={callShowRegulatoryZone}
+                    callHideRegulatoryZone={callHideRegulatoryZone}
+                    callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
+                    showedLayers={showedLayers}
+                    regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
+                    selectedRegulatoryZones={selectedRegulatoryZones}
+                />
+                <AdministrativeZoneSelection
+                    administrativeZones={administrativeZones}
+                    showedLayers={showedLayers}
+                    callShowAdministrativeZone={callShowAdministrativeZone}
+                    callHideAdministrativeZone={callHideAdministrativeZone}
+                />
+            </Zones>
+            <RegulatoryZoneMetadata
+                loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+                regulatoryZoneMetadata={regulatoryZoneMetadata}
+                callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+                gears={gears}
             />
-            <RegulatoryZoneSelected
-                isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
-                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
-                callShowRegulatoryZone={callShowRegulatoryZone}
-                callHideRegulatoryZone={callHideRegulatoryZone}
-                showedLayers={showedLayers}
-                selectedRegulatoryZones={selectedRegulatoryZones}
-            />
-        </Wrapper>
+        </Sidebar>
     )
 }
 
-const Wrapper = styled.div`
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-  width: 270px;
+const Sidebar = styled.div`
+  margin-left: -376px;
+  top: 62px;
+  left: 12px;
+  z-index: 999999;
+  border-radius: 1px;
   position: absolute;
   display: inline-block;
-  top: 50px;
-  left: 0;
-  z-index: 999999;
-  color: ${COLORS.textWhite};
-  text-decoration: none;
-  border: none;
-  background-color: ${COLORS.background};
-  padding: 0;
-  margin-left: -270px;
-  height: calc(100vh - 50px);
-  
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'regulatory-box-opening' : 'regulatory-box-closing'} 1s ease forwards;
+  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards;
 
-  @keyframes regulatory-box-opening {
-    0%   { margin-left: -270px;   }
+  @keyframes left-sidebar-opening {
+    0%   { margin-left: -376px;   }
     100% { margin-left: 0; }
   }
 
-  @keyframes regulatory-box-closing {
+  @keyframes left-sidebar-closing {
     0% { margin-left: 0; }
-    100%   { margin-left: -270px;   }
+    100%   { margin-left: -376px;   }
   }
+`
+
+const Zones = styled.div`
+  margin-top: 5px;
+  width: 344px;
+  color: ${COLORS.textWhite};
+  text-decoration: none;
+  background-color: ${COLORS.gray};
+  padding: 4px 8px 8px 8px;
+  max-height: calc(100vh - 50px);
 `
 
 const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;
-  background: ${COLORS.background};
-  background: linear-gradient(to right, #2F006F, ${COLORS.background});
-  padding: 3px 1px 3px 1px;
-  margin-left: 135px;
-  border-radius: 4px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 0;
-  height: 40px;
+  background: ${props => props.firstUpdate && !props.openBox ? COLORS.grayDarkerThree : props.openBox ? '#9A9A9A' : COLORS.grayDarkerThree };
+  padding: 2px 2px 2px 2px;
   margin-top: 0;
-  border-left: none;
-    
+  margin-left: 187px;
+  border-radius: 1px;
+  height: 40px;
+  width: 40px;
+
   :hover, :focus {
-    background: linear-gradient(to right, #2F006F, ${COLORS.background});
+      background: ${props => props.firstUpdate && !props.openBox ? COLORS.grayDarkerThree : props.openBox ? '#9A9A9A' : COLORS.grayDarkerThree };
   }
 `
 
 const Layers = styled(LayersSVG)`
-  width: 30px;
+  width: 35px;
+  height: 35px;
 `
 
 export default LeftSidebar

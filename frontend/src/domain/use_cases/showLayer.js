@@ -1,12 +1,13 @@
-import Layers from "../domain/layers";
+import Layers from "../entities/layers";
 import VectorLayer from "ol/layer/Vector";
 import {addLayer, addShowedLayer} from "../reducers/Layer";
-import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
+import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
-import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
 import {all, bbox as bboxStrategy} from "ol/loadingstrategy";
-import {getHash} from "../utils";
+import {getHash} from "../../utils";
+import {getAdministrativeZoneURL, getRegulatoryZoneURL} from "../../api/fetch";
 
 const showLayer = layerToShow => (dispatch, getState) => {
     if(layerToShow && layerToShow.type){
@@ -50,29 +51,18 @@ const getVectorSource = (type, regulatoryZone) => {
             featureProjection: OPENLAYERS_PROJECTION
         }),
         url: extent => {
-            return regulatoryZone ? getRegulatoryZoneURL(type, regulatoryZone) : getAdministrativeZoneURL(type, extent);
+            if (regulatoryZone) {
+                try {
+                    return getRegulatoryZoneURL(type, regulatoryZone);
+                } catch (e) {
+                    console.error(e)
+                }
+            } else {
+                return getAdministrativeZoneURL(type, extent);
+            }
         },
         strategy: regulatoryZone ? all : bboxStrategy,
     });
-}
-
-function getAdministrativeZoneURL(type, extent) {
-    return (
-        `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
-        `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-        `outputFormat=application/json&srsname=${WSG84_PROJECTION}&` +
-        `bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
-    );
-}
-
-function getRegulatoryZoneURL(type, regulatoryZone) {
-    let filter = `layer_name='${regulatoryZone.layerName.replace(/'/g, '\'\'')}' AND zones='${regulatoryZone.zone.replace(/'/g, '\'\'')}'`;
-    return (
-        `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS` +
-        `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
-        `&outputFormat=application/json&CQL_FILTER=` +
-        filter.replace(/'/g, '%27').replace(/ /g, '%20')
-    )
 }
 
 function getGearCategory(layerToShow, getState) {
@@ -80,7 +70,6 @@ function getGearCategory(layerToShow, getState) {
     if (layerToShow.zone.gears) {
         let layerGearsArray = layerToShow.zone.gears.replace(/ /g, '').split(',')
         gear = getState().gear.gears
-            .filter(gear => gear.category !== 'Pièges')
             .find(gear => {
                 return layerGearsArray.some(gearCode => {
                     if (gearCode === gear.code) {

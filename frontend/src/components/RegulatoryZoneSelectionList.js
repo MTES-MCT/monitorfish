@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import RegulatoryZoneSelectionItem from "./RegulatoryZoneSelectionItem";
+import {COLORS} from "../constants/constants";
 
 const RegulatoryZoneSelectionList = props => {
     const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({})
@@ -30,7 +31,7 @@ const RegulatoryZoneSelectionList = props => {
 
 const List = styled.ul`
   margin: 0;
-  background-color: #05055E;
+  background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
   height: 200px;
@@ -38,7 +39,7 @@ const List = styled.ul`
   overflow-y: scroll;
   overflow-x: hidden;
   
-  animation: ${props => props.showRegulatorySearchInput ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-result-opening' : 'regulatory-result-closing' : 'regulatory-result-closing'} 1s ease forwards;
+  animation: ${props => props.showRegulatorySearchInput ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-result-opening' : 'regulatory-result-closing' : 'regulatory-result-closing'} 0.5s ease forwards;
 
   @keyframes regulatory-result-opening {
     0%   { height: 0;   }
@@ -63,7 +64,6 @@ const ListItem = styled.li`
   overflow: hidden !important;
   cursor: pointer;
   margin: 0;
-  border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
 `
 

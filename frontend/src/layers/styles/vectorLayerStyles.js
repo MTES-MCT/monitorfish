@@ -2,7 +2,7 @@ import {Style} from "ol/style";
 import Stroke from "ol/style/Stroke";
 import Text from "ol/style/Text";
 import Fill from "ol/style/Fill";
-import Layers from "../../domain/layers";
+import Layers from "../../domain/entities/layers";
 import {getColorWithAlpha} from "../../utils";
 
 export const getVectorLayerStyle = (type, regulatoryLayerName) => {
@@ -56,15 +56,6 @@ export const getVectorLayerStyle = (type, regulatoryLayerName) => {
             })
         })
         case Layers.REGULATORY: return (feature, hash, gearCategory) => {
-            const getStyle = color => new Style({
-                stroke: new Stroke({
-                    color: 'rgba(5, 5, 94, 0.7)',
-                    width: 1,
-                }),
-                fill: new Fill({
-                    color: color,
-                }),
-            })
             let lastNumber = hash.toString().slice(-1)
 
             switch (gearCategory) {
@@ -122,7 +113,7 @@ export const getVectorLayerStyle = (type, regulatoryLayerName) => {
                     }
                     break
                 }
-                case 'Casiers': {
+                case 'Pièges': {
                     switch (lastNumber) {
                         case '0': return getStyle(getColorWithAlpha('#EAD0B2', 0.75))
                         case '1': return getStyle(getColorWithAlpha('#DCB57F', 0.75))
@@ -139,7 +130,7 @@ export const getVectorLayerStyle = (type, regulatoryLayerName) => {
                 }
                 default: {
                     // Pièges
-                    return getStyle(getColorWithAlpha('#022F40', 0.75))
+                    return getStyle(getColorWithAlpha('#022f40', 0.75))
                 }
             }
         }
@@ -160,3 +151,13 @@ const getFishnetStyles = (lastNumber, getStyle) => {
         case '9': return getStyle(getColorWithAlpha('#041B0A', 0.75))
     }
 }
+
+const getStyle = color => new Style({
+    stroke: new Stroke({
+        color: 'rgba(5, 5, 94, 0.7)',
+        width: 1,
+    }),
+    fill: new Fill({
+        color: color,
+    }),
+})

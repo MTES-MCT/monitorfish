@@ -3,6 +3,7 @@ import global from './Global'
 import map from './Map'
 import vessel from './Vessel'
 import gear from './Gear'
+import regulatory from './Regulatory'
 import { combineReducers } from "@reduxjs/toolkit"
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
     map: map,
     global: global,
     vessel: vessel,
-    gear: gear
+    gear: gear,
+    regulatory: regulatory
 })

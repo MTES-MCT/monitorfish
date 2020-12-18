@@ -4,15 +4,15 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import ReactCountryFlag from "react-country-flag";
 
 import {getDateTime, getCoordinates} from "../utils";
-import {WSG84_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION} from "../domain/entities/map";
 import {ReactComponent as VesselIDSVG} from "../components/icons/picto_carte_identite_navire.svg";
 import {ReactComponent as ControlsSVG} from "../components/icons/Picto_controles.svg";
 import {ReactComponent as ObservationsSVG} from "../components/icons/Picto_observations_ciblage.svg";
 import {ReactComponent as VMSSVG} from "../components/icons/Picto_VMS_ERS.svg";
 import {ReactComponent as FisheriesSVG} from "../components/icons/Picto_activites_peche.svg";
 import {useDispatch, useSelector} from "react-redux";
-import hideVesselSummary from "../use_cases/hideVesselSummary";
-import showVesselBox from "../use_cases/showVesselBox";
+import hideVesselSummary from "../domain/use_cases/hideVesselSummary";
+import showVesselBox from "../domain/use_cases/showVesselBox";
 import {COLORS} from "../constants/constants";
 
 const VesselSummary = () => {

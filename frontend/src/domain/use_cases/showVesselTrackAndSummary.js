@@ -1,6 +1,6 @@
-import {getVesselFromAPI} from "../api/fetch";
-import LayersEnum from "../domain/layers";
-import {setArrowStyle, setCircleStyle, VESSEL_SELECTOR_STYLE} from "../layers/styles/featuresStyles";
+import {getVesselFromAPI} from "../../api/fetch";
+import LayersEnum from "../entities/layers";
+import {setArrowStyle, setCircleStyle, VESSEL_SELECTOR_STYLE} from "../../layers/styles/featuresStyles";
 import {
     loadingVessel,
     setSelectedVessel,
@@ -8,13 +8,13 @@ import {
 } from "../reducers/Vessel";
 import {Vector} from "ol/layer";
 import VectorSource from "ol/source/Vector";
-import Layers from "../domain/layers";
+import Layers from "../entities/layers";
 import {transform} from "ol/proj";
-import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
-import {arraysEqual, calculatePointsDistance, calculateSplitPointCoords} from "../utils";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
+import {arraysEqual, calculatePointsDistance, calculateSplitPointCoords} from "../../utils";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import {getTrackArrow, getTrackColor} from "../domain/vesselTrack";
+import {getTrackArrow, getTrackColor} from "../entities/vesselTrack";
 import LineString from "ol/geom/LineString";
 import {Style} from "ol/style";
 import Fill from "ol/style/Fill";

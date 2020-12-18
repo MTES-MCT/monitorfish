@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {ReactComponent as ChevronIconSVG} from './icons/Chevron_double_gris.svg'
 
 import AdministrativeZoneItem from "./AdministrativeZoneItem";
+import {COLORS} from "../constants/constants";
 
 const AdministrativeZoneSelection = props => {
     const [showZones, setShowZones] = useState(false);
@@ -12,9 +13,9 @@ const AdministrativeZoneSelection = props => {
             <SectionTitle onClick={() => setShowZones(!showZones)}>
                 Zones administratives <ChevronIcon isOpen={showZones}/>
             </SectionTitle>
-            <ZonesList showZones={showZones} zonesLength={props.zones.length}>
+            <ZonesList showZones={showZones} zonesLength={props.administrativeZones.length}>
                 {
-                    props.zones.map((layer, index) => {
+                    props.administrativeZones.map((layer, index) => {
                         return (<ListItem key={index}>
                             <AdministrativeZoneItem
                                 isShownOnInit={props.showedLayers.some(layer_ => layer_.type === layer.layer)}
@@ -31,42 +32,44 @@ const AdministrativeZoneSelection = props => {
 }
 
 const SectionTitle = styled.div`
-  height: 30px;
+  height: 27px;
+  margin-top: 5px;
+  padding-top: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  background: #2F006F;
+  background: ${COLORS.grayDarker};
+  color: ${COLORS.grayDarkerTwo};
   font-size: 0.8em;
   padding-top: 10px;
   cursor: pointer;
   font-weight: 500;
   text-align: left;
-  padding-left: 10px;
+  padding-left: 15px;
   user-select: none;
 `
 
 const ZonesList = styled.ul`
   margin: 0;
-  background-color: #05055E;
   border-radius: 0;
   padding: 0;
   height: 0;
   overflow-y: hidden;
   overflow-x: hidden;
   
-  animation: ${props => props.showZones ? 'zones-opening' : 'zones-closing'} 1s ease forwards;
+  animation: ${props => props.showZones ? 'zones-opening' : 'zones-closing'} 0.5s ease forwards;
 
   @keyframes zones-opening {
     0%   { height: 0;   }
-    100% { height: ${props => props.zonesLength ? `${25 * props.zonesLength}px` : '175px'}; }
+    100% { height: ${props => props.zonesLength ? `${36 * props.zonesLength}px` : '175px'}; }
   }
 
   @keyframes zones-closing {
-    0%   { height: ${props => props.zonesLength ? `${25 * props.zonesLength}px` : '175px'}; }
+    0%   { height: ${props => props.zonesLength ? `${36 * props.zonesLength}px` : '175px'}; }
     100% { height: 0;   }
   }
 `
 
 const ListItem = styled.li`
-  padding: 0px 5px 0px 0px;
+  padding: 6px 5px 5px 0px;
   margin: 0;
   font-size: 0.8em;
   text-align: left;
@@ -77,18 +80,20 @@ const ListItem = styled.li`
   overflow: hidden !important;
   cursor: pointer;
   margin: 0;
-  border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
+  background: ${COLORS.background};
+  color: ${COLORS.grayDarkerThree};
+  border-bottom: 1px solid ${COLORS.gray};
   line-height: 1.9em;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
   transform: rotate(180deg);
-  width: 10px;
+  width: 12px;
   float: right;
   margin-right: 10px;
   margin-top: 5px;
   
-  animation: ${props => props.isOpen ? 'chevron-zones-opening' : 'chevron-zones-closing'} 1s ease forwards;
+  animation: ${props => props.isOpen ? 'chevron-zones-opening' : 'chevron-zones-closing'} 0.5s ease forwards;
 
   @keyframes chevron-zones-opening {
     0%   { transform: rotate(180deg); }

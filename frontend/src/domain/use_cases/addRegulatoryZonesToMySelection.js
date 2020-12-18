@@ -1,7 +1,7 @@
-import {addRegulatoryZonesToSelection} from "../reducers/Layer";
+import {addRegulatoryZonesToSelection} from "../reducers/Regulatory";
 
 const addRegulatoryZonesToMySelection = regulatoryZones => (dispatch, getState) => {
-    let regulatoryZonesToAdd = {...getState().layer.selectedRegulatoryZones}
+    let regulatoryZonesToAdd = {...getState().regulatory.selectedRegulatoryZones}
 
     Object.keys(regulatoryZones).forEach(regulatoryZoneName => {
         if(!regulatoryZonesToAdd[regulatoryZoneName] || !regulatoryZonesToAdd[regulatoryZoneName].length) {

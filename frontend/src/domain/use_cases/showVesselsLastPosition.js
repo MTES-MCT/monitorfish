@@ -1,12 +1,12 @@
-import {getVesselsLastPositionsFromAPI} from "../api/fetch";
+import {getVesselsLastPositionsFromAPI} from "../../api/fetch";
 import {transform} from "ol/proj";
-import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import {toStringHDMS} from "ol/coordinate";
-import LayersEnum from "../domain/layers";
-import {setVesselIconStyle} from "../layers/styles/featuresStyles";
-import Layers from "../domain/layers";
+import LayersEnum from "../entities/layers";
+import {setVesselIconStyle} from "../../layers/styles/featuresStyles";
+import Layers from "../entities/layers";
 import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {getLocalStorageState} from "../utils";
+import {getLocalStorageState} from "../../utils";
 
 const vesselNamesShowedOnMapLocalStorageKey = 'vesselNamesShowedOnMap'
 

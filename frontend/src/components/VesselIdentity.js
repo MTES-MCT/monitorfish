@@ -287,7 +287,7 @@ const KeyInfo = styled.span`
 
 const TrimmedValue = styled.td`
   font-size: 0.8rem;
-  color: ${COLORS.background};
+  color: ${COLORS.grayDarker};
   font-weight: bold;
   margin: 0;
   text-align: left;
@@ -303,7 +303,7 @@ const TrimmedValue = styled.td`
 
 const Value = styled.td`
   font-size: 0.8rem;
-  color: ${COLORS.background};
+  color: ${COLORS.grayDarker};
   font-weight: bold;
   margin: 0;
   text-align: left;
@@ -336,7 +336,7 @@ const PanelTitle = styled.span`
   margin: 5px 0 0 5px;
   text-align: left;
   font-weight: bolder;
-  color: ${COLORS.background};
+  color: ${COLORS.grayDarker};
   width: 100%;
 `
 

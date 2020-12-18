@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {ReactComponent as ShowIconSVG} from "../components/icons/eye.svg";
 import {ReactComponent as HideIconSVG} from "../components/icons/eye_not.svg";
 import {useDispatch, useSelector} from "react-redux";
-import {setVesselNamesShowedOnMap} from "../reducers/Map";
+import {setVesselNamesShowedOnMap} from "../domain/reducers/Map";
 
 const ShowVesselsNamesBox = () => {
     const {vesselNamesShowedOnMap} = useSelector(state => state.map)

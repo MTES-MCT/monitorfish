@@ -8,9 +8,9 @@ import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import {Zoom} from 'ol/control';
-import LayersEnum from "../domain/layers";
+import LayersEnum from "../domain/entities/layers";
 import MapCoordinatesBox from "../components/MapCoordinatesBox";
-import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/map";
+import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {
     selectedVesselStyle,
     VESSEL_SELECTOR_STYLE,
@@ -22,9 +22,9 @@ import VesselCard from "../components/VesselCard";
 import VesselTrackCard from "../components/VesselTrackCard";
 import ShowVesselsNamesBox from "./ShowVesselsNamesBox";
 import VesselSummary from "./VesselSummary";
-import showVesselTrackAndSummary from "../use_cases/showVesselTrackAndSummary";
+import showVesselTrackAndSummary from "../domain/use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
-import {hideVesselNames, isMoving, resetAnimateToVessel} from "../reducers/Map";
+import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducers/Map";
 
 const MIN_ZOOM_VESSEL_NAMES = 8;
 

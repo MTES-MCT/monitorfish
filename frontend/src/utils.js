@@ -1,5 +1,5 @@
 import {transform} from "ol/proj";
-import {WSG84_PROJECTION} from "./domain/map";
+import {WSG84_PROJECTION} from "./domain/entities/map";
 import {toStringHDMS} from "ol/coordinate";
 import {asArray, asString} from "ol/color";
 

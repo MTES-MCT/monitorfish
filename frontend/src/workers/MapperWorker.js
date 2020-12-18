@@ -1,28 +1,16 @@
 import * as Comlink from 'comlink'
+import {mapToRegulatoryZone} from '../domain/entities/regulatory'
 
 class MapperWorker {
-    mapToRegulatoryZone = properties => {
-        return {
-            layerName: properties.layer_name,
-            gears: properties.engins,
-            zone: properties.zones,
-            species: properties.especes,
-            regulatoryReference: properties.references_reglementaires
-        }
-    }
-
     convertGeoJSONFeaturesToObject(features) {
         const featuresWithoutGeometry = features.features.map(feature => {
-            return this.mapToRegulatoryZone(feature.properties)
+            return mapToRegulatoryZone(feature.properties)
         })
 
         const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
             const found = acc.find(item =>
                 item.layerName === current.layerName &&
-                item.gears === current.gears &&
-                item.zone === current.zone &&
-                item.species === current.species &&
-                item.regulatoryReference === current.regulatoryReference);
+                item.zone === current.zone);
             if (!found) {
                 return acc.concat([current]);
             } else {

@@ -7,15 +7,6 @@ html {
   overflow-x: hidden;
 }
 
-.eye {
-  margin-bottom: -5px;
-  width: 20px;
-  float: right;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0 16px 0 5px;
-  height: 1.5em;
-}
-
 .zoom {
   bottom: 40px;
   left: .5em;

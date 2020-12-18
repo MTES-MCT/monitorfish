@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import {COLORS} from "../constants/constants";
 
 const RegulatoryZoneSelectionItem = props => {
     const [globalIsSelected, setGlobalIsSelected] = useState(undefined);
@@ -60,23 +61,25 @@ const Zone = styled.span`
   padding-right: 10px;
   display: block;
   line-height: 2.7em;
-  text-transform: uppercase;
-  font-size: smaller;
-  padding-left: 10px;
-  background: ${props => props.selected ? 'rgb(255, 255, 255, 0.3)' : 'rgb(255, 255, 255, 0)'};
+  font-size: 13px;
+  padding-left: 15px;
+  color: ${COLORS.grayDarkerThree};
+  border-bottom: 1px solid ${props => props.selected ? COLORS.grayDarker : COLORS.gray};
+  background: ${props => props.selected ? COLORS.gray : COLORS.background};
 `
 
 const SubZone = styled.span`
   user-select: none;
   display: block;
-  line-height: 1.9em;
-  font-size: smaller;
-  padding-left: 10px;
+  line-height: 2.7em;
+  font-size: 13px;
+  padding-left: 20px;
   padding-right: 10px;
   text-overflow: ellipsis;
   overflow-x: hidden !important;
-  background: ${props => props.selected ? 'rgb(255, 255, 255, 0.3)' : 'rgb(255, 255, 255, 0.1)'};
-  border-top: 1px solid rgb(255, 255, 255, 0.1)
+  background: ${props => props.selected ? COLORS.gray : COLORS.background};
+  border-bottom: 1px solid ${props => props.selected ? COLORS.grayDarker : COLORS.gray};
+  color: ${COLORS.grayDarkerThree};
 `
 
 const Row = styled.div`

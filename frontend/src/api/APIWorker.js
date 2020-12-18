@@ -1,9 +1,9 @@
 import {useEffect} from 'react';
 import { useToasts } from 'react-toast-notifications'
 
-import showAllVessels from "../use_cases/showVesselsLastPosition";
+import showAllVessels from "../domain/use_cases/showVesselsLastPosition";
 import {useDispatch, useSelector} from "react-redux";
-import getAllGearCodes from "../use_cases/getAllGearCodes";
+import getAllGearCodes from "../domain/use_cases/getAllGearCodes";
 
 export const FIVE_MINUTES = 300000;
 

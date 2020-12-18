@@ -2,7 +2,7 @@ import React from "react";
 import styled from 'styled-components';
 import ReactCountryFlag from "react-country-flag";
 import {getDateTime, getCoordinates} from "../utils";
-import {OPENLAYERS_PROJECTION} from "../domain/map";
+import {OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
 
 const VesselCard = props => {

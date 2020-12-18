@@ -34,6 +34,7 @@ function App() {
 }
 
 const Wrapper = styled.div`
+  font-size: 13px;
   text-align: center;
   height: 100%;
   width: 100%;

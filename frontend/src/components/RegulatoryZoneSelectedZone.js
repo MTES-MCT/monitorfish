@@ -1,10 +1,12 @@
 import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIcon} from "./icons/eye.svg";
-import {ReactComponent as HideIcon} from "./icons/eye_not.svg";
+import {ReactComponent as ShowIconSVG} from "./icons/oeil_affiche.svg";
+import {ReactComponent as HideIconSVG} from "./icons/oeil_masque.svg";
 import styled from "styled-components";
 import {ReactComponent as CloseIconSVG} from './icons/Croix_grise.svg'
+import {ReactComponent as REGPaperSVG} from './icons/reg_paper.svg'
+import {COLORS} from "../constants/constants";
 
-const RegulatoryZoneSelectedSubZone = props => {
+const RegulatoryZoneSelectedZone = props => {
     const firstUpdate = useRef(true);
     const [showSubZone, setShowSubZone] = useState(undefined);
 
@@ -31,47 +33,72 @@ const RegulatoryZoneSelectedSubZone = props => {
         <SubZone>
             <Rectangle />
             <SubZoneText onClick={() => setShowSubZone(!showSubZone)}>{props.subZone.zone}</SubZoneText>
-            <span onClick={() => setShowSubZone(!showSubZone)}>
-                { showSubZone ? <ShowIcon className={'eye'} /> : <HideIcon className={'eye'} />}
-            </span>
-            <CloseIcon onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone)}/>
+            <Icons>
+                <REGPaperIcon onClick={() => props.callShowRegulatorySubZoneMetadata(props.subZone)}/>
+                { showSubZone ? <ShowIcon onClick={() => setShowSubZone(!showSubZone)} /> : <HideIcon onClick={() => setShowSubZone(!showSubZone)} />}
+                <CloseIcon onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone)}/>
+            </Icons>
+
         </SubZone>
         )}
 
 const Rectangle = styled.div`
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background: gray;
-  border: 1px solid white;
+  border: 1px solid ${COLORS.grayDarkerThree};
   display: inline-block;
   margin-right: 5px;
 `
 
+const Icons = styled.span`
+  float: right;
+  display: flex;
+`
+
 const SubZone = styled.span`
-  width: 100%;
+  width: 88%;
   display: block;
   line-height: 1.9em;
-  font-size: smaller;
-  padding-left: 10px;
-  background: rgb(255, 255, 255, 0.1);
-  border-top: 1px solid rgb(255, 255, 255, 0.1);
+  padding-left: 30px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   user-select: none;
+  font-size: 13px;
+  font-weight: 300;
 `
 
 const SubZoneText = styled.span`
-  width: 70%;
+  width: 65%;
   display: inline-block;
   text-overflow: ellipsis;
   overflow-x: hidden !important;
   vertical-align: bottom;
   padding-bottom: 3px;
+  padding-left: 5px;
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 10px;
-  float: right;
+  width: 12px;
+  height: 1.5em;
+`
+
+const REGPaperIcon = styled(REGPaperSVG)`
+  width: 17px;
   margin-right: 7px;
   height: 1.5em;
 `
 
-export default RegulatoryZoneSelectedSubZone
+const ShowIcon = styled(ShowIconSVG)`
+  width: 21px;
+  padding: 0 8px 0 0;
+  height: 1.5em;
+`
+
+const HideIcon = styled(HideIconSVG)`
+  width: 21px;
+  padding: 0 8px 0 0;
+  height: 1.5em;
+`
+
+export default RegulatoryZoneSelectedZone

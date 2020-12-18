@@ -9,7 +9,7 @@ import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
 import {ReactComponent as CloseIconSVG} from '../components/icons/Croix_grise.svg'
 import VesselIdentity from "../components/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
-import hideVesselBox from "../use_cases/hideVesselBox";
+import hideVesselBox from "../domain/use_cases/hideVesselBox";
 import {COLORS} from "../constants/constants";
 
 const VesselSidebar = () => {
@@ -169,7 +169,7 @@ const Wrapper = styled.div`
   margin: 0;
   margin-right: -450px;
  
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-box-opening' : 'vessel-box-closing'} 1s ease forwards;
+  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-box-opening' : 'vessel-box-closing'} 0.5s ease forwards;
 
   @keyframes vessel-box-opening {
     0%   { margin-right: -450px;   }

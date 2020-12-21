@@ -79,18 +79,18 @@ const Triangle = styled.div`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-weight: 300;
 `
 
 const Gray = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-weight: 300;
 `
 
 const FieldName = styled.div`
   margin-top: 2px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-size: 0.8em;
 `
 

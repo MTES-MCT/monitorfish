@@ -25,6 +25,7 @@ import VesselSummary from "./VesselSummary";
 import showVesselTrackAndSummary from "../domain/use_cases/showVesselTrackAndSummary";
 import {useDispatch, useSelector} from "react-redux";
 import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducers/Map";
+import {COLORS} from "../constants/constants";
 
 const MIN_ZOOM_VESSEL_NAMES = 8;
 
@@ -319,10 +320,10 @@ const MapWrapper = () => {
             mapRef.current.getTarget().style.cursor = 'pointer'
             vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates());
         } else {
-            document.getElementById(vesselCardID).style.display = 'none';
+            /*document.getElementById(vesselCardID).style.display = 'none';
             document.getElementById(vesselTrackCardID).style.display = 'none';
             setVesselFeatureToShowOnCard(null)
-            mapRef.current.getTarget().style.cursor = ''
+            mapRef.current.getTarget().style.cursor = ''*/
         }
     }
 
@@ -368,14 +369,12 @@ const VesselSummaryOverlay = styled.div`
 
 const VesselCardOverlay = styled.div`
   position: absolute;
-  box-shadow: 0px 0px 0px 1px rgba(5, 5, 94, 0.3) !important;
-  top: -210px;
-  left: -166px;
-  width: 360px;
-  height: 180px;
+  top: -233px;
+  left: -185px;
+  width: 370px;
   text-align: left;
-  background-color: #fff;
-  border-radius: 2px;
+  background-color: ${COLORS.grayBackground};
+  border-radius: 1px;
   z-index: 200;
 `
 

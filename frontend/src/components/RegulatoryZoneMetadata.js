@@ -150,6 +150,8 @@ const Content = styled.div`
   background: ${COLORS.background};
   margin-top: 6px;
   min-height: 480px;
+  overflow-y: auto;
+  max-height: 750px;
 `
 
 const Title = styled.span`
@@ -257,7 +259,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-weight: 300;
   line-height: normal;
   font-size: 13px;

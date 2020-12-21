@@ -124,7 +124,7 @@ const VesselNotFoundText = styled.div`
   display: table-cell;
   vertical-align: middle;
   height: inherit;
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
 `
 
 const Close = styled.img`

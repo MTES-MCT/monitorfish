@@ -268,7 +268,7 @@ const Triangle = styled.div`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-weight: 300;
 `
 
@@ -277,7 +277,7 @@ const Row = styled.div`
 `
 
 const BottomFieldName = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-size: 0.8em;
 `
 
@@ -305,19 +305,19 @@ const VesselSummaryBottom = styled.div`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-weight: 300;
 `
 
 const FieldName = styled.div`
   margin-top: 2px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-size: 0.8em;
 `
 
 const FieldNameWithTopMargin = styled.div`
   margin-top: 10px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-size: 0.8em;
 `
 
@@ -380,7 +380,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   flex: initial;
   display: inline-block;
   font-size: 0.8em;

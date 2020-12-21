@@ -146,7 +146,7 @@ const LeftSidebar = () => {
 }
 
 const Sidebar = styled.div`
-  margin-left: -376px;
+  margin-left: -373px;
   top: 62px;
   left: 12px;
   z-index: 999999;
@@ -156,13 +156,13 @@ const Sidebar = styled.div`
   animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards;
 
   @keyframes left-sidebar-opening {
-    0%   { margin-left: -376px;   }
+    0%   { margin-left: -373px;   }
     100% { margin-left: 0; }
   }
 
   @keyframes left-sidebar-closing {
     0% { margin-left: 0; }
-    100%   { margin-left: -376px;   }
+    100%   { margin-left: -373px;   }
   }
 `
 

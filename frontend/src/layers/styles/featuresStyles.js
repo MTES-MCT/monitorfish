@@ -78,7 +78,7 @@ export const getVesselNameStyle = feature => new Style({
 export const setCircleStyle = (color, arrowFeature) => {
     const arrowStyle = new Style({
         image: new CircleStyle({
-            radius: 4,
+            radius: 3,
             fill: new Fill({
                 color: color
             })

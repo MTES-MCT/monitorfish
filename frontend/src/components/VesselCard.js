@@ -1,9 +1,11 @@
 import React from "react";
 import styled from 'styled-components';
 import ReactCountryFlag from "react-country-flag";
-import {getDateTime, getCoordinates} from "../utils";
+import {getDateTime, getCoordinates, timeagoFrenchLocale} from "../utils";
 import {OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
+import * as timeago from 'timeago.js';
+timeago.register('fr', timeagoFrenchLocale);
 
 const VesselCard = props => {
     return (
@@ -33,9 +35,7 @@ const VesselCard = props => {
                     <FieldName>Dernier signal</FieldName>
                     <FieldValue>
                         {
-                            props.vessel.getProperties().dateTime ? <>
-                                    {getDateTime(props.vessel.getProperties().dateTime)}{' '}
-                                    <Gray>CET</Gray></>
+                            props.vessel.getProperties().dateTime ? <>{timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
                                 : <NoValue>-</NoValue>
                         }
 
@@ -185,25 +185,27 @@ const FieldValue = styled.div`
 `
 
 const LatLon = styled.div`
-  height: 110px;
   width: 120px;
   order: 1;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
+  padding-bottom: 10px;
 `
 
 const Course = styled.div`
-  width: 100px;
+  width: 115px;
   order: 2;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
+  padding-bottom: 10px;
 `
 
 const Position = styled.div`
-  width: 210px;
+  width: 115px;
   order: 3;
   background: ${COLORS.background};
   margin: 5px 5px 5px 5px;
+  padding-bottom: 10px;
 `
 
 const VesselCardHeader = styled.div`

@@ -21,6 +21,7 @@
     "react-toast-notifications": "^2.4.0",
     "redux": "^4.0.5",
     "styled-components": "^5.2.1",
+    "timeago.js": "^4.0.2",
     "worker-loader": "^3.0.6"
   },
   "proxy": "http://localhost:8880",

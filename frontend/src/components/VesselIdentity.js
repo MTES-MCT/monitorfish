@@ -240,7 +240,7 @@ const Zone = styled.div`
 `
 
 const ZoneTitle = styled.div`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-size: 0.8rem;
   text-transform: uppercase;
   flex-shrink: 0;
@@ -266,7 +266,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   flex: initial;
   display: inline-block;
   text-transform: uppercase;
@@ -314,13 +314,13 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-weight: 300;
   line-height: normal;
 `
 
 const NoPersonalData = styled.div`
-  color: ${COLORS.textGray};
+  color: ${COLORS.textBueGray};
   font-weight: 300;
 `
 

@@ -166,7 +166,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
         <SearchBox  showRegulatorySearchInput={props.showRegulatorySearchInput}>
             <SearchBoxField>
                 <Label>Zone</Label>
-                <SearchBoxInput type="text" value={placeSearchText} placeholder={'Bretagne, Charente...'} onChange={e => setPlaceSearchText(e.target.value)}/>
+                <SearchBoxInput ref={input => props.showRegulatorySearchInput ? input && input.focus() : null} type="text" value={placeSearchText} placeholder={'Bretagne, Charente...'} onChange={e => setPlaceSearchText(e.target.value)}/>
                 <SearchIcon showRegulatorySearchInput={props.showRegulatorySearchInput}/>
             </SearchBoxField>
             <SearchBoxField>
@@ -249,6 +249,7 @@ const SearchIcon = styled(SearchIconSVG)`
   height: 40px;
   float: right;
   background: ${COLORS.grayDarkerThree};
+  cursor: pointer;
 `
 
 export default RegulatoryZoneSelectionSearchInput

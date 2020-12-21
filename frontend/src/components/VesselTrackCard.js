@@ -1,8 +1,10 @@
 import React from "react";
 import styled from 'styled-components';
-import {getDateTime, getCoordinates} from "../utils";
+import {getCoordinates, timeagoFrenchLocale} from "../utils";
 import {OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
+import * as timeago from 'timeago.js';
+timeago.register('fr', timeagoFrenchLocale);
 
 const VesselTrackCard = props => {
     return (
@@ -12,26 +14,25 @@ const VesselTrackCard = props => {
             </VesselCardHeader>
             <VesselCardBody>
                 <LatLon>
-                    <FieldName>LATITUDE</FieldName>
+                    <FieldName>Latitude</FieldName>
                     <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[0]}</FieldValue>
-                    <FieldName>LONGITUDE</FieldName>
+                    <FieldName>Longitude</FieldName>
                     <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[1]}</FieldValue>
                 </LatLon>
                 <Course>
-                    <FieldName>ROUTE</FieldName>
+                    <FieldName>Route</FieldName>
                     <FieldValue>{props.vessel.getProperties().course ? <>{props.vessel.getProperties().course}°</> : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>VITESSE</FieldName>
+                    <FieldName>Vitesse</FieldName>
                     <FieldValue>{props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
-                    <FieldName>TYPE DE SIGNAL</FieldName>
+                    <FieldName>Type de signal</FieldName>
                     <FieldValue>{props.vessel.getProperties().positionType ? props.vessel.getProperties().positionType : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>DERNIER SIGNAL</FieldName>
+                    <FieldName>Dernier signal</FieldName>
                     <FieldValue>
                         {
                             props.vessel.getProperties().dateTime ? <>
-                                    {getDateTime(props.vessel.getProperties().dateTime)}{' '}
-                                    <Gray>CET</Gray></>
+                                    {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
                                 : <NoValue>-</NoValue>
                         }
 
@@ -40,17 +41,16 @@ const VesselTrackCard = props => {
             </VesselCardBody>
             <TrianglePointer>
                 <TriangleShadow />
-                <Triangle />
             </TrianglePointer>
         </>
     )
 }
 
 const TrianglePointer = styled.div`
-  margin-left:auto;
-  margin-right:auto;
-  height:auto; 
-  width:auto;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto; 
+  width: auto;
 `
 
 const TriangleShadow = styled.div`
@@ -58,72 +58,63 @@ const TriangleShadow = styled.div`
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 17px 9px 0 9px;
-  border-color: rgba(5, 5, 94, 0.3) transparent transparent transparent;
-  margin-left: 43.7%;
-  margin-top: 5px;
+  border-width: 11px 6px 0 6px;
+  border-color: ${COLORS.grayBackground} transparent transparent transparent;
+  margin-left: 150px;
+  margin-top: -1px;
   clear: top;
-`
-
-const Triangle = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 15px 8.5px 0 8.5px;
-  border-color: white transparent transparent transparent;
-  margin-left: 44%;
-  margin-top: 5px;
-  clear: top;
-
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.textGray};
   font-weight: 300;
-`
-
-const Gray = styled.span`
-  color: ${COLORS.textBueGray};
-  font-weight: 300;
+  margin: 0;
+  line-height: normal;
 `
 
 const FieldName = styled.div`
-  margin-top: 2px;
-  color: ${COLORS.textBueGray};
-  font-size: 0.8em;
+  margin-top: 9px;
+  color: ${COLORS.textGray};
+  font-size: 13px;
+  font-weight: normal;
 `
 
 const FieldValue = styled.div`
-  font-size: 0.8em;
-  font-weight: 500;
+  color: ${COLORS.grayDarkerThree};
+  font-size: 13px;
+  font-weight: medium;
+  margin-top: 2px;
 `
 
 const LatLon = styled.div`
-  width: 120px;
+  width: 100px;
   order: 1;
-  border-right: 1px rgba(5, 5, 94, 0.1) solid;
-  padding: 5px 5px 5px 5px;
+  background: ${COLORS.background};
+  margin: 5px 0 5px 5px;
+  padding-bottom: 10px;
 `
 
 const Course = styled.div`
-  width: 100px;
+  width: 70px;
   order: 2;
-  border-right: 1px rgba(5, 5, 94, 0.1) solid;
-  padding: 5px 5px 5px 5px;
+  background: ${COLORS.background};
+  margin: 5px 0 5px 5px;
+  padding-bottom: 10px;
 `
 
 const Position = styled.div`
-  width: 210px;
+  width: 120px;
   order: 3;
-  padding: 5px 5px 5px 5px;
+  background: ${COLORS.background};
+  margin: 5px 5px 5px 5px;
+  padding-bottom: 10px;
 `
 
 const VesselCardHeader = styled.div`
+  background: ${COLORS.grayDarkerThree};
+  color: ${COLORS.grayBackground};
+  padding: 5px 5px 5px 5px;
   text-align: center;
-  background: rgba(5, 5, 94, 0.1);
-  padding: 2px 5px 2px 5px;
-  border-bottom: 1px rgba(5, 5, 94, 0.1) solid;
 `
 
 const VesselCardTitle = styled.span`

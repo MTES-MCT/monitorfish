@@ -356,14 +356,12 @@ const MapWrapper = () => {
 
 const VesselSummaryOverlay = styled.div`
   position: absolute;
-  box-shadow: 0px 0px 0px 1px rgba(5, 5, 94, 0.3) !important;
-  top: -500px;
-  left: -166px;
-  width: 360px;
-  height: 472px;
+  top: -535px;
+  left: -185px;
+  width: 370px;
   text-align: left;
-  background-color: #fff;
-  border-radius: 2px;
+  background-color: ${COLORS.grayBackground};
+  border-radius: 1px;
   z-index: 100;
 `
 

@@ -35,7 +35,7 @@ export let getCoordinates = (coordinates, projection) => {
 export let getDateTime = dateString => {
     if (dateString) {
         const date = new Date(dateString)
-        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.toLocaleTimeString('fr-FR')}`
+        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} à ${date.toLocaleTimeString('fr-FR')}`
     }
 }
 

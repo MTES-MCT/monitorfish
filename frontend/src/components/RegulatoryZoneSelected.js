@@ -21,10 +21,6 @@ const RegulatoryZoneSelected = props => {
         }
     }
 
-    useEffect(() => {
-        console.log(props.regulatoryZonesAddedToMySelection)
-    }, [props.regulatoryZonesAddedToMySelection])
-
     return (
         <>
             <RegulatoryZoneSelectedTitle

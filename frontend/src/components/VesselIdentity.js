@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
 
@@ -13,22 +13,23 @@ const VesselIdentity = props => {
     }
 
     return (
-        <div>
-            <PanelTitle>Carte d'identité du navire</PanelTitle>
-            {
-                photoFallback ?
-                    <DummyPhoto src={`boat_fishing.png`}/> :
-                    <>
-                    {
-                        props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
-                        : null
-                    }
-                    </>
-            }
+        <>
+        <Body>
+            <PhotoZone>
+                {
+                    photoFallback ?
+                        <DummyPhoto src={`boat_fishing.png`}/> :
+                        <>
+                        {
+                            props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                            : null
+                        }
+                        </>
+                }
+            </PhotoZone>
             <Zone>
-                <ZoneTitle>Numéros d'identification</ZoneTitle>
                 <Fields>
-                    <Body>
+                    <TableBody>
                         <Field>
                             <Key>CFR</Key>
                             <Value>{props.vessel.internalReferenceNumber ? props.vessel.internalReferenceNumber : <NoValue>-</NoValue>}</Value>
@@ -37,10 +38,10 @@ const VesselIdentity = props => {
                             <Key>IMO</Key>
                             <Value>{props.vessel.imo ? props.vessel.imo : <NoValue>-</NoValue>}</Value>
                         </Field>
-                    </Body>
+                    </TableBody>
                 </Fields>
                 <Fields>
-                    <Body>
+                    <TableBody>
                         <Field>
                             <Key>MMSI</Key>
                             <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
@@ -49,13 +50,12 @@ const VesselIdentity = props => {
                             <Key>CALL SIGN</Key>
                             <Value>{props.vessel.ircs ? props.vessel.ircs : <NoValue>-</NoValue>}</Value>
                         </Field>
-                    </Body>
+                    </TableBody>
                 </Fields>
             </Zone>
             <Zone>
-                <ZoneTitle>Informations navire</ZoneTitle>
                 <Fields>
-                    <Body>
+                    <TableBody>
                         <Field>
                             <Key>Nationalité</Key>
                             <TrimmedValue>{props.vessel.flagState ? props.vessel.flagState : <NoValue>-</NoValue>}</TrimmedValue>
@@ -68,10 +68,10 @@ const VesselIdentity = props => {
                             <Key>Port d'attache</Key>
                             <TrimmedValue>{props.vessel.registryPort ? props.vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
-                    </Body>
+                    </TableBody>
                 </Fields>
                 <Fields>
-                    <Body>
+                    <TableBody>
                         <Field>
                             <Key>Taille</Key>
                             <Value>
@@ -86,13 +86,12 @@ const VesselIdentity = props => {
                             <Key>Moteur</Key>
                             <Value>{props.vessel.power ? <>{props.vessel.power} kW</> : <NoValue>-</NoValue>}</Value>
                         </Field>
-                    </Body>
+                    </TableBody>
                 </Fields>
             </Zone>
             <Zone>
-                <ZoneTitle>Informations activités</ZoneTitle>
                 <Fields>
-                    <Body>
+                    <TableBody>
                         <Field>
                             <Key>Genre de navigation</Key>
                             <Value>{props.vessel.vesselType ? props.vessel.vesselType : <NoValue>-</NoValue>}</Value>
@@ -143,13 +142,12 @@ const VesselIdentity = props => {
                                 }
                             </Value>
                         </Field>
-                    </Body>
+                    </TableBody>
                 </Fields>
             </Zone>
             <Zone>
-                <ZoneTitle>Informations équipage</ZoneTitle>
                 <Fields>
-                    <Body>
+                    <TableBody>
                         <Field>
                             <Key>Permis de navigation</Key>
                             <Value>
@@ -184,12 +182,23 @@ const VesselIdentity = props => {
                                 </PersonalData>
                             </Value>
                         </Field>
-                    </Body>
+                    </TableBody>
                 </Fields>
             </Zone>
-        </div>
+        </Body>
+        </>
     )
 }
+
+const PhotoZone = styled.div`
+  margin: 5px 5px 10px 5px;
+  background: ${COLORS.background};
+`
+
+const Body = styled.div`
+  background: ${COLORS.grayBackground};
+  padding: 5px 5px 1px 5px;
+`
 
 const LicenceActive = styled.span`
   height: 8px;
@@ -209,7 +218,7 @@ const LicenceExpired = styled.span`
   display: inline-block;
 `
 
-const Body = styled.tbody``
+const TableBody = styled.tbody``
 
 const PingerInput = styled.input`
   font-size: 0.9em;
@@ -218,39 +227,42 @@ const PingerInput = styled.input`
 `
 
 const Photo = styled.img`
-  margin: 10px 0 5px 0;
+  margin: 15px 0 10px 0;
   max-height: 190px;
   left: auto;
   right: auto;
 `
 
 const DummyPhoto = styled.img`
-  margin: 10px 0 5px 0;
+  margin: 15px 0 10px 0;
   max-height: 130px;
   left: auto;
   right: auto;
+  opacity: 0.3;
 `
 
 const Zone = styled.div`
-  margin: 0;
-  padding: 15px 5px 0 5px;
+  margin: 5px 5px 10px 5px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
+  background: ${COLORS.background};
 `
 
+// TODO Keep for the fishery tab
 const ZoneTitle = styled.div`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.textGray};
+  background: ${COLORS.grayDarker};
+  padding: 10px 10px 10px 20px;
   font-size: 0.8rem;
-  text-transform: uppercase;
   flex-shrink: 0;
   flex-grow: 1;
-  width: 100%;
+  width: 400px;
   margin-bottom: 5px;
-  font-weight: 600;
 `
 
 const Fields = styled.table`
+  padding: 10px 5px 5px 20px; 
   width: inherit;
   display: table;
   margin: 0;
@@ -266,10 +278,9 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.textGray};
   flex: initial;
   display: inline-block;
-  text-transform: uppercase;
   margin: 0;
   border: none;
   padding: 5px 5px 5px 0;
@@ -277,8 +288,8 @@ const Key = styled.th`
   width: max-content;
   line-height: 0.5em;
   height: 0.5em;
-  font-size: 0.8em;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: normal;
 `
 
 const KeyInfo = styled.span`
@@ -286,9 +297,8 @@ const KeyInfo = styled.span`
 `
 
 const TrimmedValue = styled.td`
-  font-size: 0.8rem;
-  color: ${COLORS.grayDarker};
-  font-weight: bold;
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -302,9 +312,8 @@ const TrimmedValue = styled.td`
 `
 
 const Value = styled.td`
-  font-size: 0.8rem;
-  color: ${COLORS.grayDarker};
-  font-weight: bold;
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -331,12 +340,12 @@ const PersonalData = styled.div`
 `
 
 const PanelTitle = styled.span`
+  padding: 5px 0 5px 0;
   display: inline-block;
-  font-size: 1rem;
-  margin: 5px 0 0 5px;
-  text-align: left;
-  font-weight: bolder;
-  color: ${COLORS.grayDarker};
+  font-size: 16px;
+  text-align: center;
+  background: ${COLORS.grayDarkerThree};
+  color: ${COLORS.grayBackground};
   width: 100%;
 `
 

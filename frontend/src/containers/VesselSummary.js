@@ -10,6 +10,7 @@ import {ReactComponent as ControlsSVG} from "../components/icons/Picto_controles
 import {ReactComponent as ObservationsSVG} from "../components/icons/Picto_observations_ciblage.svg";
 import {ReactComponent as VMSSVG} from "../components/icons/Picto_VMS_ERS.svg";
 import {ReactComponent as FisheriesSVG} from "../components/icons/Picto_activites_peche.svg";
+import {ReactComponent as CloseIconSVG} from "../components/icons/Croix_grise.svg";
 import {useDispatch, useSelector} from "react-redux";
 import hideVesselSummary from "../domain/use_cases/hideVesselSummary";
 import showVesselBox from "../domain/use_cases/showVesselBox";
@@ -20,6 +21,7 @@ timeago.register('fr', timeagoFrenchLocale);
 const VesselSummary = () => {
     const [photoFallback, setPhotoFallback] = useState(false)
     const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+    const vesselSummaryIsOpen = useSelector(state => state.vessel.vesselSummaryIsOpen)
     const [vessel, setVessel] = useState(null);
     const [lastPosition, setLastPosition] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -47,16 +49,16 @@ const VesselSummary = () => {
         } else {
             setIsLoading(true)
         }
-    }, [selectedVessel])
+    }, [selectedVessel, vesselSummaryIsOpen])
 
     return isOpen && !isLoading ? (
         <>
             <VesselSummaryHeader>
                 {
-                    vessel.flagState ? <><ReactCountryFlag countryCode={vessel.flagState} style={{fontSize: '1.5em', marginLeft: '5px'}}/>{' '}</> : null
+                    vessel.flagState ? <><ReactCountryFlag svg countryCode={vessel.flagState} style={{fontSize: '1.5em', marginLeft: '5px'}}/>{' '}</> : null
                 }
                 <VesselSummaryTitle>{vessel.vesselName ? vessel.vesselName : 'NOM INCONNU'} {vessel.flagState ? <>({vessel.flagState})</> : ''}</VesselSummaryTitle>
-                <Close src={'close.png'} onClick={() => setIsOpen(false)}/>
+                <CloseIcon onClick={() => setIsOpen(false)}/>
             </VesselSummaryHeader>
             <VesselSummaryBody>
                 <PhotoColumn>
@@ -329,6 +331,8 @@ const DummyPhoto = styled.img`
   max-height: 140px;
   left: auto;
   right: auto;
+  vertical-align: middle;
+  opacity: 0.5;
 `
 
 const PhotoColumn = styled.div`
@@ -417,6 +421,15 @@ const VesselSummaryBody = styled.div`
   margin: 5px 5px 5px 5px;
   display: flex;
   text-align: center;
+`
+
+const CloseIcon = styled(CloseIconSVG)`
+  width: 15px;
+  float: right;
+  margin-right: 5px;
+  height: 1.5em;
+  margin-top: 1px;
+  cursor: pointer;
 `
 
 export default VesselSummary

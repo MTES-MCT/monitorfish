@@ -227,7 +227,6 @@ const Label = styled.div`
 const SearchBoxInput = styled.input`
   margin: 0;
   background-color: white;
-  background-color: rgba(255,255,255,0.1);
   border: none;
   border-bottom: 1px ${COLORS.gray} solid;
   border-radius: 0;

@@ -1,8 +1,12 @@
 import {getVesselFromAPI} from "../../api/fetch";
 import LayersEnum from "../entities/layers";
-import {setArrowStyle, setCircleStyle, VESSEL_SELECTOR_STYLE} from "../../layers/styles/featuresStyles";
 import {
-    loadingVessel,
+    setArrowStyle,
+    setCircleStyle,
+    VESSEL_SELECTOR_STYLE
+} from "../../layers/styles/featuresStyles";
+import {
+    loadingVessel, openVesselSummary,
     setSelectedVessel,
     setSelectedVesselTrackVector,
 } from "../reducers/Vessel";
@@ -23,6 +27,13 @@ import {animateToVessel, setUsingSearch} from "../reducers/Map";
 import {setError} from "../reducers/Global";
 
 const showVesselTrackAndSummary = (feature, fromSearch, updateShowedVessel) => (dispatch, getState) => {
+    if(getState().vessel.selectedVesselFeature === feature) {
+        if(!getState().vessel.vesselSummaryIsOpen && getState().vessel.selectedVessel && !updateShowedVessel) {
+            dispatch(openVesselSummary())
+        }
+        return
+    }
+
     removePreviousSelectedFeature(getState);
     if(!updateShowedVessel) {
         dispatch(loadingVessel(feature))

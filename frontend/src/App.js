@@ -16,18 +16,16 @@ function App() {
       <>
           <ToastProvider placement="bottom-right">
               <Wrapper>
-              <Header>
-                <Logo>
-                  <img src="monitorfish.png" style={{width: 40, height: 40}} alt='MonitorFish'/>
-                </Logo>
-                <VesselsSearchBox/>
-              </Header>
-              <MapWrapper />
-              <LeftSidebar />
-              <VesselSidebar />
+                  <Logo>
+                      <img src="monitorfish.png" style={{width: 30, height: 30}} alt='MonitorFish'/>
+                  </Logo>
+                  <VesselsSearchBox/>
+                  <MapWrapper />
+                  <LeftSidebar />
+                  <VesselSidebar />
 
-              <APIWorker />
-            </Wrapper>
+                  <APIWorker />
+              </Wrapper>
           </ToastProvider>
       </>
   )
@@ -42,20 +40,10 @@ const Wrapper = styled.div`
   overflow-x: hidden;
 `
 
-const Header = styled.div`
-  position: absolute;
-  top: 0;
-  height: 49px;
-  width: 100%;
-  background-color: #05055E;
-  z-index: 666666;
-  border-bottom: 1px solid rgb(255,255,255,0.2);
-`
-
 const Logo = styled.div`
   width: auto;
   overflow: auto;
-  margin: 5px;
+  margin: 10px;
   position: absolute;
   z-index: 2;
   pointer-events: none;

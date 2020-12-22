@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {VESSEL_SELECTOR_STYLE} from "../../layers/styles/featuresStyles";
 
 const vesselSlice = createSlice({
     name: 'vessel',
     initialState: {
         selectedVesselTrackVector: null,
         selectedVesselFeature: null,
+        removeSelectedIconToFeature: false,
         selectedVessel: null,
         loadingVessel: null,
         vesselSummaryIsOpen: false,
@@ -38,25 +40,20 @@ const vesselSlice = createSlice({
             state.vesselBoxIsOpen = true
             state.vesselSummaryIsOpen = false
         },
-        closeVesselSummary(state, action) {
+        closeVesselSummary(state) {
             state.vesselSummaryIsOpen = false
-
-            let keepSelectedVessel = action.payload
-            if(!keepSelectedVessel) {
-                state.selectedVesselTrackVector = null
-                state.selectedVessel = null
-                state.selectedVesselFeature = null
-            }
         },
-        closeVesselBox(state, action) {
+        closeVesselBox(state) {
             state.vesselBoxIsOpen = false
-
-            let keepSelectedVessel = action.payload
-            if(!keepSelectedVessel) {
-                state.selectedVesselTrackVector = null
-                state.selectedVessel = null
-                state.selectedVesselFeature = null
-            }
+            state.selectedVesselTrackVector = null
+            state.selectedVessel = null
+            state.selectedVesselFeature = null
+        },
+        updateVesselFeature(state, action) {
+            state.selectedVesselFeature = action.payload
+        },
+        removeSelectedIconToFeature(state) {
+            state.removeSelectedIconToFeature = true
         }
     }
 })
@@ -68,7 +65,10 @@ export const {
     resetSelectedVessel,
     openVesselBox,
     closeVesselSummary,
-    closeVesselBox
+    openVesselSummary,
+    closeVesselBox,
+    updateVesselFeature,
+    removeSelectedIconToFeature,
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

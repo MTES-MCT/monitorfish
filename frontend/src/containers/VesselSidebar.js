@@ -1,15 +1,12 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import ReactCountryFlag from "react-country-flag";
 import {ReactComponent as VesselIDSVG} from '../components/icons/picto_carte_identite_navire.svg';
 import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_activites_peche.svg';
 import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles.svg';
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_observations_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
-import {ReactComponent as CloseIconSVG} from '../components/icons/Croix_grise.svg'
 import VesselIdentity from "../components/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
-import hideVesselBox from "../domain/use_cases/hideVesselBox";
 import {COLORS} from "../constants/constants";
 
 const VesselSidebar = () => {
@@ -42,10 +39,6 @@ const VesselSidebar = () => {
         }
     }, [vesselState.selectedVessel])
 
-    function hideVessel() {
-        dispatch(hideVesselBox())
-    }
-
     return (
         <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
             {
@@ -53,30 +46,22 @@ const VesselSidebar = () => {
                     vessel.externalReferenceNumber ||
                     vessel.MMSI ||
                     vessel.IRCS) ? <div>
-                        <VesselHeader>
-                            {vessel.flagState ? <ReactCountryFlag countryCode={vessel.flagState}
-                                                                  style={{fontSize: '2em'}}/> : null}
-                            <VesselName>{vessel.vesselName} {' '}
-                                <VesselCountry>({vessel.flagState})</VesselCountry>
-                            </VesselName>
-                            <CloseIcon onClick={() => hideVessel()}/>
-                        </VesselHeader>
                     <div>
                         <TabList>
-                            <Tab className={index === 1 ? 'active-tab' : ''} onClick={() => setIndex(1)}>
-                                <VesselIDIcon />
+                            <Tab isActive={index === 1} onClick={() => setIndex(1)}>
+                                <VesselIDIcon /> Identité
                             </Tab>
-                            <Tab type="button" disabled className={index === 2 ? 'active-tab' : ''} onClick={() => setIndex(2)}>
-                                <FisheriesIcon />
+                            <Tab type="button" disabled isActive={index === 2} onClick={() => setIndex(2)}>
+                                <FisheriesIcon /> <br/> Pêche
                             </Tab>
-                            <Tab type="button" disabled className={index === 3 ? 'active-tab' : ''} onClick={() => setIndex(3)}>
-                                <ControlsIcon onClick={() => setIndex(1)} />
+                            <Tab type="button" disabled isActive={index === 3} onClick={() => setIndex(3)}>
+                                <ControlsIcon /> Contrôles
                             </Tab>
-                            <Tab type="button" disabled className={index === 4 ? 'active-tab' : ''} onClick={() => setIndex(4)}>
-                                <ObservationsIcon />
+                            <Tab type="button" disabled isActive={index === 4} onClick={() => setIndex(4)}>
+                                <ObservationsIcon /> Observations
                             </Tab>
-                            <Tab type="button" disabled className={index === 5 ? 'active-tab' : ''} onClick={() => setIndex(5)}>
-                                <VMSIcon />
+                            <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
+                                <VMSIcon /> VMS/ERS
                             </Tab>
                         </TabList>
 
@@ -96,7 +81,6 @@ const VesselSidebar = () => {
                             <h1>TODO</h1>
                         </Panel>
                     </div> </div> : <VesselNotFound>
-                        <Close src={'close.png'} onClick={() => hideVessel()}/>
                         <VesselNotFoundText>
                             <VesselNotFoundImage src="boat_fishing_not_found.png"/>
                             <p>Nous n'avons pas trouvé ce navire dans notre base de donnée...</p>
@@ -109,22 +93,21 @@ const VesselSidebar = () => {
 }
 
 const VesselNotFoundImage = styled.img`
-  height: 200px;
+  height: 150px;
 `
 
 const VesselNotFound = styled.div`
   padding: 5px 10px 10px 10px;
-  position: absolute;
   right: 0;
-  height: inherit;
 `
 
 const VesselNotFoundText = styled.div`
   padding: 5px 10px 10px 10px;
   display: table-cell;
+  font-size: 13px;
   vertical-align: middle;
   height: inherit;
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.textGray};
 `
 
 const Close = styled.img`
@@ -136,8 +119,7 @@ const Close = styled.img`
 `
 
 const Panel = styled.div`
-  padding: 5px 5px 5px 10px;
-  height: 790px;
+  padding: 0;
   overflow-y: auto;
 `
 
@@ -147,59 +129,50 @@ const Tab = styled.button`
   margin: 0;
   border: none;
   border-radius: 0;
-  height: 45px;
+  height: 60px;
+  font-size: 13px;
+  color: ${props => props.isActive ? COLORS.grayDarkerThree : COLORS.textGray};
+  border-right: 1px solid ${COLORS.grayDarkerTwo};
+  background: ${props => props.isActive ? COLORS.textGray : COLORS.grayDarkerThree};
+  
+  :hover {
+    background: ${COLORS.textGray};
+    color: ${COLORS.grayDarkerThree};
+  }
 `
 
 const TabList = styled.div`
   display: flex;
-  border-top: 1px solid rgba(5, 5, 94, 0.6);
+  background: ${COLORS.grayDarkerThree};
+  border-bottom: 1px solid ${COLORS.grayDarkerTwo};
+  border-top: 1px solid ${COLORS.grayDarkerTwo};
 `
 
 const Wrapper = styled.div`
   position: absolute;
-  top: 50px;
-  right: 0;
-  width: 450px;
-  height: calc(100vh - 50px - 4px);
-  z-index: 999;
-  padding: 0 0px 3px 0px;
+  top: 52px;
+  right: 10px;
+  width: 500px;
+  max-height: 93vh;
+  z-index: 999999;
+  padding: 0;
   background: white;
-  overflow-y: hidden;
   overflow-x: hidden;
   margin: 0;
-  margin-right: -450px;
+  margin-right: -510px;
+  border-top: 1px solid ${COLORS.grayDarkerTwo};
  
   animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-box-opening' : 'vessel-box-closing'} 0.5s ease forwards;
 
   @keyframes vessel-box-opening {
-    0%   { margin-right: -450px;   }
+    0%   { margin-right: -510px;   }
     100% { margin-right: 0; }
   }
 
   @keyframes vessel-box-closing {
     0% { margin-right: 0; }
-    100%   { margin-right: -450px;   }
+    100%   { margin-right: -510px;   }
   }
-`
-
-const VesselHeader = styled.div`
-  padding: 5px 10px 10px 10px;
-  text-transform: uppercase;
-  text-align: left;
-  background: ${COLORS.background};
-  color: ${COLORS.textWhite};
-`
-
-const VesselName = styled.span`
-  display: inline-block;
-  font-size: 1.4rem;
-  margin: 0 0 0 10px;
-  vertical-align: bottom;
-  font-weight: bolder;
-`
-
-const VesselCountry = styled.span`
-  color: rgba(255, 255, 255, 0.4);
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`
@@ -208,6 +181,7 @@ const VesselIDIcon = styled(VesselIDSVG)`
 
 const ControlsIcon = styled(ControlsSVG)`
   width: 23px;
+  margin-top: -1px;
 `
 
 const ObservationsIcon = styled(ObservationsSVG)`
@@ -216,19 +190,12 @@ const ObservationsIcon = styled(ObservationsSVG)`
 
 const VMSIcon = styled(VMSSVG)`
   width: 20px;
+  margin-top: 2px;
 `
 
 const FisheriesIcon = styled(FisheriesSVG)`
   width: 30px;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-    width: 15px;
-    float: right;
-    margin-right: 7px;
-    height: 1.5em;
-    margin-top: 6px;
-    cursor: pointer;
+  margin-top: 3px;
 `
 
 export default VesselSidebar

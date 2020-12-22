@@ -4,6 +4,7 @@ import {ReactComponent as ShowIconSVG} from "../components/icons/eye.svg";
 import {ReactComponent as HideIconSVG} from "../components/icons/eye_not.svg";
 import {useDispatch, useSelector} from "react-redux";
 import {setVesselNamesShowedOnMap} from "../domain/reducers/Map";
+import {COLORS} from "../constants/constants";
 
 const ShowVesselsNamesBox = () => {
     const {vesselNamesShowedOnMap} = useSelector(state => state.map)
@@ -53,9 +54,10 @@ const Wrapper = styled.div`
 
 const Button = styled.button`
   float: left;
+  background: ${COLORS.grayDarkerThree};
   
   :hover {
-    background: none;
+    background: ${COLORS.grayDarkerThree};
   }
 `
 

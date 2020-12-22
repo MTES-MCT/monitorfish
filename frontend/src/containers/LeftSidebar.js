@@ -147,9 +147,9 @@ const LeftSidebar = () => {
 
 const Sidebar = styled.div`
   margin-left: -373px;
-  top: 62px;
+  top: 55px;
   left: 12px;
-  z-index: 999999;
+  z-index: 9999;
   border-radius: 1px;
   position: absolute;
   display: inline-block;

@@ -11,13 +11,14 @@ import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";
 import showVesselTrackAndSummary from "./showVesselTrackAndSummary";
+import {updateVesselFeature} from "../reducers/Vessel";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
     getVesselsLastPositionsFromAPI().then(vessels => {
         let vesselsFeatures = vessels
             .filter(vessel => vessel)
             .map((currentVessel, index) => {
-                return buildFeature(currentVessel, index, getState);
+                return buildFeature(currentVessel, index, getState, dispatch);
             })
 
         let vesselLayer = getState().layer.layers.find(layer => layer.className_ === Layers.VESSELS)
@@ -37,7 +38,7 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
     }
 }
 
-function buildFeature(currentVessel, index, getState) {
+function buildFeature(currentVessel, index, getState, dispatch) {
     const transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
     const iconFeature = new Feature({
@@ -59,7 +60,10 @@ function buildFeature(currentVessel, index, getState) {
 
     let vesselNamesShowedOnMap = getState().map.vesselNamesHiddenByZoom === undefined ?
         false : getState().map.vesselNamesShowedOnMap && !getState().map.vesselNamesHiddenByZoom;
-    setVesselIconStyle(currentVessel, iconFeature, getState().vessel.selectedVesselFeature, vesselNamesShowedOnMap);
+    let newSelectedVesselFeature = setVesselIconStyle(currentVessel, iconFeature, getState().vessel.selectedVesselFeature, vesselNamesShowedOnMap)
+    if (newSelectedVesselFeature) {
+        dispatch(updateVesselFeature(newSelectedVesselFeature))
+    }
 
     return iconFeature;
 }

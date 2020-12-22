@@ -13,12 +13,12 @@ const Coordinates = styled.span`
   display: inline-block;
   margin: 1px;
   padding: 2px 0 5px 2px;
-  color: ${COLORS.textWhite};
+  color: ${COLORS.textGray};
   font-size: 0.9em;
   text-decoration: none;
   text-align: center;
   height: 1.275em;
-  background-color: #05055E;
+  background-color: ${COLORS.grayDarkerThree};
   border: none;
   border-radius: 2px;
   width: 190px;

@@ -73,7 +73,6 @@ function getGearCategory(layerToShow, getState) {
             .find(gear => {
                 return layerGearsArray.some(gearCode => {
                     if (gearCode === gear.code) {
-                        if(gearCode === "LLS") console.log("FOUNDDDD")
                         return true
                     }
                 })

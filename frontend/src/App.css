@@ -21,7 +21,7 @@ html {
 }
 
 .ol-control button {
-  background-color: #05055E;
+  background-color: #515151;
 }
 
 .ol-control:hover {
@@ -29,7 +29,7 @@ html {
 }
 
 .ol-control button:hover, .ol-control button:focus {
-  background-color: #05055E;
+  background-color: #515151;
 }
 
 button:hover, button:focus {
@@ -41,7 +41,7 @@ button:hover, button:focus {
 }
 
 .active-tab {
-  background-color: white;
+  background-color: #969696;
 }
 
 table:not(.horizontal) th, table:not(.horizontal) td {

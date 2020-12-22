@@ -26,6 +26,7 @@ import showVesselTrackAndSummary from "../domain/use_cases/showVesselTrackAndSum
 import {useDispatch, useSelector} from "react-redux";
 import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
+import {updateVesselFeature} from "../domain/reducers/Vessel";
 
 const MIN_ZOOM_VESSEL_NAMES = 8;
 
@@ -279,17 +280,18 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
-        if(vessel.loadingVessel && vessel.selectedVesselFeature) {
-            let vesselAlreadyWithSelectorStyle = vessel.selectedVesselFeature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
+        if(vessel.vesselSummaryIsOpen && vessel.selectedVesselFeature && !vessel.removeSelectedIconToFeature) {
+            let vesselSummaryOverlay = mapRef.current.getOverlays().getArray().find(overlay => overlay.id === vesselSummaryID)
+            document.getElementById(vesselSummaryOverlay.getId()).style.display = 'block';
+            vesselSummaryOverlay.setPosition(vessel.selectedVesselFeature.getGeometry().getCoordinates());
 
+            let vesselAlreadyWithSelectorStyle = vessel.selectedVesselFeature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
             if (!vesselAlreadyWithSelectorStyle) {
                 vessel.selectedVesselFeature.setStyle([...vessel.selectedVesselFeature.getStyle(), selectedVesselStyle]);
-                let vesselSummaryOverlay = mapRef.current.getOverlays().getArray().find(overlay => overlay.id === vesselSummaryID)
-                document.getElementById(vesselSummaryOverlay.getId()).style.display = 'block';
-                vesselSummaryOverlay.setPosition(vessel.selectedVesselFeature.getGeometry().getCoordinates());
+                dispatch(updateVesselFeature(vessel.selectedVesselFeature))
             }
         }
-    }, [vessel.loadingVessel, vessel.selectedVesselFeature])
+    }, [vessel.vesselSummaryIsOpen, vessel.selectedVesselFeature])
 
     useEffect(() => {
         if(map && !vessel.vesselSummaryIsOpen) {
@@ -359,6 +361,7 @@ const VesselSummaryOverlay = styled.div`
   top: -535px;
   left: -185px;
   width: 370px;
+  min-height: 515px;
   text-align: left;
   background-color: ${COLORS.grayBackground};
   border-radius: 1px;
@@ -388,11 +391,10 @@ const VesselTrackCardOverlay = styled.div`
 `
 
 const MapContainer = styled.div`
-  height: 95vh;
+  height: 100vh;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
-  margin-top: 5vh;
 `
 
 export default MapWrapper

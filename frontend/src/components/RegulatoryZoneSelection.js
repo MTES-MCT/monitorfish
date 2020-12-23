@@ -146,7 +146,7 @@ const RegulatoryZoneAddButton = styled.div`
   width: 100%;
   overflow: hidden;
   user-select: none;
-  animation: ${props => props.showRegulatorySearchInput ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-button-opening' : 'regulatory-button-closing' : 'regulatory-button-closing'} 0.5s ease forwards;
+  animation: ${props => props.showRegulatorySearchInput && props.foundRegulatoryZones ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-button-opening' : 'regulatory-button-closing' : 'regulatory-button-closing'} 0.5s ease forwards;
 
   @keyframes regulatory-button-opening {
     0%   { height: 0;   }

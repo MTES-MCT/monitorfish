@@ -5,7 +5,7 @@ import showAllVessels from "../domain/use_cases/showVesselsLastPosition";
 import {useDispatch, useSelector} from "react-redux";
 import getAllGearCodes from "../domain/use_cases/getAllGearCodes";
 
-export const FIVE_MINUTES = 30000;
+export const FIVE_MINUTES = 300000;
 
 const APIWorker = () => {
     const error = useSelector(state => state.global.error)

@@ -4,6 +4,7 @@ import Fill from "ol/style/Fill";
 import IconOrigin from "ol/style/IconOrigin";
 import {getTextWidth} from "../../utils";
 import {COLORS} from "../../constants/constants";
+import Flags from "../../components/icons/flags"
 
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
@@ -55,11 +56,14 @@ export const selectedVesselStyle =  new Style({
 })
 
 const getImageElement = feature => {
-    const textWidth = getTextWidth(feature.getProperties().vesselName) + 10
+    const textWidth = getTextWidth(feature.getProperties().vesselName) + 28
+    const flag = feature.getProperties().flagState ? Flags.byId[feature.getProperties().flagState.toLowerCase()].data : null
+
     let iconSVG = `
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
             <rect x="0" y="0" width="${textWidth}" height="16" rx="8px" fill="#FFFFFF" />
-            <text x="5" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
+            ${flag}
+            <text x="23" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
         </svg>`;
 
     let imageElement = new Image();

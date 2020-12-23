@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 
-import ReactCountryFlag from "react-country-flag"
 import {ReactComponent as SearchIconSVG} from "../components/icons/Loupe.svg";
 import {ReactComponent as SearchIconDarkSVG} from "../components/icons/Loupe_dark.svg";
 import LayersEnum from "../domain/entities/layers";
@@ -137,8 +136,7 @@ const VesselsSearchBox = () => {
                         selectedVessel={selectedVessel}
                         searchingWhileVesselSelected={searchingWhileVesselSelected}
                     >
-                        {selectedVessel.getProperties().flagState ? <ReactCountryFlag svg countryCode={selectedVessel.getProperties().flagState}
-                                                              style={{lineHeight: '1.9em', fontSize: '21px'}}/> : null}
+                        {selectedVessel.getProperties().flagState ? <Flag src={`flags/${selectedVessel.getProperties().flagState.toLowerCase()}.svg`} /> : null}
                         <VesselName>{selectedVessel.getProperties().vesselName}</VesselName>
                         <CloseIcon onClick={() => {
                             setSelectedVessel(null)
@@ -170,8 +168,7 @@ const VesselsSearchBox = () => {
                                         key={index}>
                                         <b>{foundVessel.getProperties().vesselName ? foundVessel.getProperties().vesselName : 'SANS NOM'}</b>
                                         {foundVessel.getProperties().flagState ?
-                                            <ReactCountryFlag countryCode={foundVessel.getProperties().flagState}
-                                                              style={{float: 'right', marginTop: '0.5em'}}/> : null}
+                                            <Flag rel="preload" src={`flags/${foundVessel.getProperties().flagState.toLowerCase()}.svg`} style={{float: 'right'}}/> : null}
                                         <br/>
                                         {getVesselInformation(foundVessel)}
                                     </ListItem>
@@ -184,6 +181,15 @@ const VesselsSearchBox = () => {
 
         </Wrapper>)
 }
+
+const Flag = styled.img`
+    font-size: 25px;
+    margin-left: 5px;
+    display: inline-block;
+    width: 1em;                      
+    height: 1em;                      
+    vertical-align: middle;
+`
 
 const VesselName = styled.span`
   display: inline-block;

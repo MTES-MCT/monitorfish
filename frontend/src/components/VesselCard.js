@@ -1,7 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import ReactCountryFlag from "react-country-flag";
-import {getDateTime, getCoordinates, timeagoFrenchLocale} from "../utils";
+import {getCoordinates, timeagoFrenchLocale} from "../utils";
 import {OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
 import * as timeago from 'timeago.js';
@@ -12,7 +11,8 @@ const VesselCard = props => {
         <>
             <VesselCardHeader>
                 {
-                    props.vessel.getProperties().flagState ? <><ReactCountryFlag countryCode={props.vessel.getProperties().flagState} style={{fontSize: '1.5em', marginLeft: '5px'}}/>{' '}</> : null
+                    props.vessel.getProperties().flagState ? <>
+                        <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`} />{' '}</> : null
                 }
                 <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
             </VesselCardHeader>
@@ -78,6 +78,15 @@ const VesselCard = props => {
         </>
     )
 }
+
+const Flag = styled.img`
+    font-size: 1.5em;
+    margin-left: 5px;
+    display: inline-block;
+    width: 1em;                      
+    height: 1em;                      
+    vertical-align: middle;
+`
 
 const Body = styled.tbody``
 

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 import { FingerprintSpinner } from 'react-epic-spinners'
-import ReactCountryFlag from "react-country-flag";
 
 import {getDateTime, getCoordinates, timeagoFrenchLocale} from "../utils";
 import {WSG84_PROJECTION} from "../domain/entities/map";
@@ -55,7 +54,7 @@ const VesselSummary = () => {
         <>
             <VesselSummaryHeader>
                 {
-                    vessel.flagState ? <><ReactCountryFlag svg countryCode={vessel.flagState} style={{fontSize: '1.5em', marginLeft: '5px'}}/>{' '}</> : null
+                    vessel.flagState ? <><Flag rel="preload" src={`flags/${vessel.flagState.toLowerCase()}.svg`} />{' '}</> : null
                 }
                 <VesselSummaryTitle>{vessel.vesselName ? vessel.vesselName : 'NOM INCONNU'} {vessel.flagState ? <>({vessel.flagState})</> : ''}</VesselSummaryTitle>
                 <CloseIcon onClick={() => setIsOpen(false)}/>
@@ -197,6 +196,15 @@ const VesselSummary = () => {
         </>
     ) : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>;
 }
+
+const Flag = styled.img`
+    font-size: 1.5em;
+    margin-left: 5px;
+    display: inline-block;
+    width: 1em;                      
+    height: 1em;                      
+    vertical-align: middle;
+`
 
 const VerticalAlignHelper = styled.span`
   display: inline-block;

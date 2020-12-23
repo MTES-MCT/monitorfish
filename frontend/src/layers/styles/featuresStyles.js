@@ -55,15 +55,15 @@ export const selectedVesselStyle =  new Style({
     zIndex: VESSEL_SELECTOR_STYLE
 })
 
-const getImageElement = feature => {
-    const textWidth = getTextWidth(feature.getProperties().vesselName) + 28
+const getSVG = feature => {
     const flag = feature.getProperties().flagState ? Flags.byId[feature.getProperties().flagState.toLowerCase()].data : null
+    const textWidth = getTextWidth(feature.getProperties().vesselName) + 10 + (flag ? 18 : 0)
 
     let iconSVG = `
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
             <rect x="0" y="0" width="${textWidth}" height="16" rx="8px" fill="#FFFFFF" />
             ${flag}
-            <text x="23" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
+            <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
         </svg>`;
 
     let imageElement = new Image();
@@ -75,7 +75,7 @@ const getImageElement = feature => {
 export const getVesselNameStyle = feature => new Style({
     image: new Icon({
         anchorOrigin: IconOrigin.TOP_RIGHT,
-        img: getImageElement(feature),
+        img: getSVG(feature),
         imgSize: [getTextWidth(feature.getProperties().vesselName)*4, 36],
         offset: [-getTextWidth(feature.getProperties().vesselName)*2 - 10, 11]
     }),

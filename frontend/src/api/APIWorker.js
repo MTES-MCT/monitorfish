@@ -23,7 +23,7 @@ const APIWorker = () => {
 
     useEffect(() => {
         if (error) {
-            addToast(error.message, {
+            addToast(error.message.split(':')[0], {
                 appearance: 'warning',
                 autoDismiss: true,
             })

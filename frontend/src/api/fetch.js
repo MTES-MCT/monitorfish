@@ -1,5 +1,4 @@
 import Layers from "../domain/entities/layers"
-import {setError} from "../domain/reducers/Global";
 import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 
 const HTTP_OK = 200
@@ -34,7 +33,7 @@ export function getVesselFromAPI(internalReferenceNumber, externalReferenceNumbe
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Récupération des positions navire impossible")
+                throw Error("Nous n'avons pas pu récupérer les positions du navire")
             }
         })
         .then(vessel => vessel)
@@ -50,7 +49,32 @@ export function getAllRegulatoryZonesFromAPI() {
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Récupération des couches réglementaire impossible")
+                throw Error("Nous n'avons pas pu récupérer les zones réglementaires")
+            }
+        })
+}
+
+function throwIrretrievableAdministrativeZoneError(e, type) {
+    throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
+}
+
+function throwIrretrievableRegulatoryZoneError(e, regulatoryZone) {
+    throw Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.layerName}/${regulatoryZone.zone} : ${e}`)
+}
+
+export function getAdministrativeZoneFromAPI(type, extent) {
+    return fetch(getAdministrativeZoneURL(type, extent))
+        .then(response => {
+            if (response.status === HTTP_OK) {
+                return response.json().then(response => {
+                    return response
+                }).catch(e => {
+                    throwIrretrievableAdministrativeZoneError(e, type);
+                })
+            } else {
+                response.text().then(response => {
+                    throwIrretrievableAdministrativeZoneError(response, type);
+                })
             }
         })
 }
@@ -64,9 +88,29 @@ export function getAdministrativeZoneURL(type, extent) {
     );
 }
 
+export function getRegulatoryZoneFromAPI(type, regulatoryZone) {
+    return fetch(getRegulatoryZoneURL(type, regulatoryZone))
+        .then(response => {
+            if (response.status === HTTP_OK) {
+                return response.json().then(response => {
+                    return response
+                }).catch(e => {
+                    throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
+                })
+            } else {
+                response.text().then(response => {
+                    throwIrretrievableRegulatoryZoneError(response, regulatoryZone);
+                })
+            }
+        })
+}
+
 export function getRegulatoryZoneURL(type, regulatoryZone) {
-    if(!regulatoryZone.layerName || !regulatoryZone.zone) {
-        throw new Error("Récupération de la couche réglementaire impossible")
+    if(!regulatoryZone.layerName) {
+        throw new Error('Le nom de la couche n\'est pas renseigné')
+    }
+    if(!regulatoryZone.zone) {
+        throw new Error('Le nom de la zone n\'est pas renseigné')
     }
 
     let filter = `layer_name='${regulatoryZone.layerName.replace(/'/g, '\'\'')}' AND zones='${regulatoryZone.zone.replace(/'/g, '\'\'')}'`;
@@ -93,14 +137,14 @@ export function getRegulatoryZoneMetadataFromAPI(regulatorySubZone) {
                     if(response.features.length === 1) {
                         return response.features[0].properties
                     } else {
-                        throw Error("Récupération de la couche réglementaire impossible")
+                        throw Error("Nous n'avons pas pu récupérer la couche réglementaire")
                     }
                 })
             } else {
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Récupération de la couche réglementaire impossible")
+                throw Error("Nous n'avons pas pu récupérer la couche réglementaire")
             }
         })
 }
@@ -114,7 +158,7 @@ export function getAllGearCodesFromAPI() {
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Récupération des codes engins de pêches impossible")
+                throw Error("Nous n'avons pas pu récupérer les codes des engins de pêches")
             }
         })
 }

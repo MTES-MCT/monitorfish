@@ -28,7 +28,7 @@ import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducer
 import {COLORS} from "../constants/constants";
 import {updateVesselFeature} from "../domain/reducers/Vessel";
 
-const MIN_ZOOM_VESSEL_NAMES = 8;
+const MIN_ZOOM_VESSEL_NAMES = 9;
 
 const vesselSummaryID = 'vessel-summary';
 const vesselCardID = 'vessel-card';

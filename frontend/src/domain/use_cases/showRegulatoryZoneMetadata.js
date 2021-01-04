@@ -14,6 +14,7 @@ const showRegulatoryZoneMetadata = regulatoryZone => dispatch => {
             let regulatoryZone = mapToRegulatoryZone(regulatoryZoneProperties)
             dispatch(setRegulatoryZoneMetadata(regulatoryZone))
         }).catch(error => {
+            console.error(error)
             dispatch(closeRegulatoryZoneMetadataPanel())
             dispatch(setError(error));
         });

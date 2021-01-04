@@ -10,7 +10,7 @@
     "comlink": "^4.3.0",
     "immer": "^8.0.0",
     "mini.css": "^3.0.1",
-    "ol": "^6.4.3",
+    "ol": "^6.5.0",
     "ol-mapbox-style": "^6.1.4",
     "react": "^16.13.1",
     "react-country-flag": "^2.3.0",

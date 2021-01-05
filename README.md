@@ -43,6 +43,25 @@ To run the backend for development purpose (with hot-reload), execute:
 make run-back
 ```
 
+Then, insert the GIS layers to the postgres database by executing:
+```shell
+./infra/remote/postgis_insert_layers.sh
+```
+
+export the required environment variables:
+```
+export DB_HOST=0.0.0.0
+export DB_NAME=monitorfishdb
+export DB_SCHEMA=public
+export DB_USER=postgres
+export DB_PASSWORD=postgres
+```
+
+And add to Geoserver the layers by executing (make sure to remove your proxy if you have one configured with `unset HTTP_PROXY` and `unset http_proxy`):
+```shell
+./infra/init/geoserver_init_layers.sh
+```
+
 ### Test
 
 To run all tests and checks clean architecture principles are respected, execute:

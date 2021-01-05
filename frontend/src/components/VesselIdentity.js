@@ -165,7 +165,12 @@ const VesselIdentity = props => {
                             <Key>Coordonnées pêcheur</Key>
                             <Value>
                                 <PersonalData>
-                                    { props.vessel.fisherName ? <>{props.vessel.fisherName}<br/>{props.vessel.fisherPhones.join(", ")}<br/>{props.vessel.fisherEmails.join(", ")}</> : <NoPersonalData>-</NoPersonalData> }
+                                    { props.vessel.fisherName ? <>
+                                        {props.vessel.fisherName}
+                                        <span>{ props.vessel.fisherPhones ? <><br/>{props.vessel.fisherPhones.join(", ")}</> : '' }</span>
+                                        { props.vessel.fisherEmails ? <><br/>{props.vessel.fisherEmails.join(", ")}</> : '' }
+                                    </> : <NoPersonalData>-</NoPersonalData>
+                                    }
                                 </PersonalData>
                             </Value>
                         </Field>

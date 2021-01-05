@@ -96,7 +96,7 @@ const MapWrapper = () => {
                 zoom: 6,
                 minZoom: 5
             }),
-            controls: [new Zoom({className: 'zoom'})],
+            controls: [],
         })
 
         initialMap.on('click', handleMapClick)

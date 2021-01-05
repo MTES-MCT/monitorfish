@@ -46,8 +46,8 @@ const HideIcon = styled(HideIconSVG)`
 `
 
 const Wrapper = styled.div`
-  bottom: 6.2em;
-  left: .5em;
+  bottom: 8px;
+  left: 39px;
   max-width: calc(100% - 1.3em);  
   background: none;
 `

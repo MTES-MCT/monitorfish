@@ -5,6 +5,7 @@ import IconOrigin from "ol/style/IconOrigin";
 import {getTextWidth} from "../../utils";
 import {COLORS} from "../../constants/constants";
 import Flags from "../../components/icons/flags"
+const images = require.context('../../../public/flags', true);
 
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
@@ -56,13 +57,14 @@ export const selectedVesselStyle =  new Style({
 })
 
 const getSVG = feature => {
-    const flag = feature.getProperties().flagState ? Flags.byId[feature.getProperties().flagState.toLowerCase()].data : null
+    //const flag = feature.getProperties().flagState ? Flags.byId[feature.getProperties().flagState.toLowerCase()].data : null
+    const flag = images(`./${feature.getProperties().flagState.toLowerCase()}.png`)
     const textWidth = getTextWidth(feature.getProperties().vesselName) + 10 + (flag ? 18 : 0)
 
     let iconSVG = `
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
             <rect x="0" y="0" width="${textWidth}" height="16" rx="8px" fill="#FFFFFF" />
-            ${flag}
+            <image xlink:href="${flag}" width="14px" x="5px" height="16px"/>
             <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
         </svg>`;
 

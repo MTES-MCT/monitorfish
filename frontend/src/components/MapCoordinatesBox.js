@@ -9,11 +9,11 @@ const MapCoordinatesBox = props => {
 const Coordinates = styled.span`
   position: absolute;
   bottom: 10px;
-  left: 42px;
+  left: 72px;
   display: inline-block;
   margin: 1px;
   padding: 2px 0 5px 2px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.textWhite};
   font-size: 0.9em;
   text-decoration: none;
   text-align: center;

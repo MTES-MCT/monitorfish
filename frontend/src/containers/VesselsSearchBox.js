@@ -194,7 +194,7 @@ const Flag = styled.img`
 const VesselName = styled.span`
   display: inline-block;
   color: ${COLORS.grayBackground};
-  margin: 0 0 0 10px;
+  margin: 1px 0 0 10px;
   line-height: 1.9em;
   vertical-align: middle;
   font-size: 20px;
@@ -271,7 +271,7 @@ const SelectedVessel = styled.div`
   border-radius: 0;
   color: ${COLORS.grayBackground};
   height: 40px;
-  width: ${props => props.selectedVessel && props.vesselBoxIsOpen && props.searchingWhileVesselSelected ? '485px' : '320px'};
+  width: ${props => props.selectedVessel && props.vesselBoxIsOpen && props.searchingWhileVesselSelected ? '485px' : props.selectedVessel.getProperties().vesselName ?  props.selectedVessel.getProperties().vesselName.length * 12 + 80 + 'px' : '320px'};
   padding: 0 5px 0 10px;
   flex: 3;
   text-align: left;
@@ -279,7 +279,7 @@ const SelectedVessel = styled.div`
   animation: ${props => props.firstUpdate && !props.vesselBoxIsOpen ? '' : props.vesselBoxIsOpen && !props.searchingWhileVesselSelected ? 'vessel-search-opening' : ''} 0.7s ease forwards;
 
   @keyframes vessel-search-opening {
-    0%   { width: 320px;   }
+    0%   { width: ${props => props.selectedVessel.getProperties().vesselName ? props.selectedVessel.getProperties().vesselName.length * 12 + 80 + 'px' : '320px'};   }
     100% { width: 485px; }
   }
 

@@ -61,7 +61,8 @@ const getSVG = feature => {
     const flag = images(`./${feature.getProperties().flagState.toLowerCase()}.png`)
     const textWidth = getTextWidth(feature.getProperties().vesselName) + 10 + (flag ? 18 : 0)
 
-    console.log(flag)
+    console.log(feature.getProperties().flagState.toLowerCase())
+    if(!flag) console.log("NOT FOUND")
 
     let iconSVG = `
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">

@@ -147,7 +147,7 @@ const VesselsSearchBox = () => {
                         type="text"
                         firstUpdate={firstUpdate}
                         value={searchText}
-                        placeholder={'Rechercher un navire...'}
+                        placeholder={'Rechercher un navire (nom, CFR, MMSI, etc.)...'}
                         onChange={e => setSearchText(e.target.value)}
                         searchingWhileVesselSelected={searchingWhileVesselSelected}
                         vesselBoxIsOpen={vesselBoxIsOpen}
@@ -247,7 +247,7 @@ const SearchBoxInput = styled.input`
   color: ${COLORS.grayDarkerThree};
   font-size: 0.8em;
   height: 40px;
-  width: ${props => props.searchingWhileVesselSelected || props.vesselBoxIsOpen ? '460px' : '269px'};
+  width: ${props => props.searchingWhileVesselSelected || props.vesselBoxIsOpen ? '460px' : '300px'};
   padding: 0 5px 0 10px;
   flex: 3;
   
@@ -255,7 +255,7 @@ const SearchBoxInput = styled.input`
 
   @keyframes vessel-search-closing {
     0% { width: 460px; }
-    100%   { width: 269px;   }
+    100%   { width: 300px;   }
   }
   
   :hover, :focus {
@@ -271,7 +271,7 @@ const SelectedVessel = styled.div`
   border-radius: 0;
   color: ${COLORS.grayBackground};
   height: 40px;
-  width: ${props => props.selectedVessel && props.vesselBoxIsOpen && props.searchingWhileVesselSelected ? '485px' : '300px'};
+  width: ${props => props.selectedVessel && props.vesselBoxIsOpen && props.searchingWhileVesselSelected ? '485px' : '320px'};
   padding: 0 5px 0 10px;
   flex: 3;
   text-align: left;
@@ -279,7 +279,7 @@ const SelectedVessel = styled.div`
   animation: ${props => props.firstUpdate && !props.vesselBoxIsOpen ? '' : props.vesselBoxIsOpen && !props.searchingWhileVesselSelected ? 'vessel-search-opening' : ''} 0.7s ease forwards;
 
   @keyframes vessel-search-opening {
-    0%   { width: 300px;   }
+    0%   { width: 320px;   }
     100% { width: 485px; }
   }
 

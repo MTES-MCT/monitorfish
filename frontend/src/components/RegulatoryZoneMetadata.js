@@ -46,7 +46,7 @@ const RegulatoryZoneMetadata = props => {
                                     <Body>
                                         <Field>
                                             <Key>Façade</Key>
-                                            <Value>{props.regulatoryZoneMetadata.facade ? props.regulatoryZoneMetadata.facade : <NoValue>-</NoValue>}</Value>
+                                            <Value>{props.regulatoryZoneMetadata.seafront ? props.regulatoryZoneMetadata.seafront : <NoValue>-</NoValue>}</Value>
                                         </Field>
                                         <Field>
                                             <Key>Région</Key>

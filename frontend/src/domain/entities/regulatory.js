@@ -16,5 +16,7 @@ export const mapToRegulatoryZone = properties => {
         period: properties.periodes,
         quantity: properties.quantites,
         size: properties.taille,
+        region: properties.region,
+        seafront: properties.facade,
     }
 }

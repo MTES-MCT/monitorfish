@@ -1,8 +1,10 @@
 import pandas as pd
 import plotly.express as px
+import matplotlib.pyplot as plt
+from matplotlib_venn import venn3
 
 
-def dataframe_inventory(df: pd.DataFrame, table_name=None, fig_height=None):
+def dataframe_inventory(df: pd.DataFrame, title=None, fig_height=None):
     fig = px.bar(
         pd.DataFrame(
             {"Valeurs renseignées": df.count(), "Valeurs distinctes": df.nunique()}
@@ -10,7 +12,7 @@ def dataframe_inventory(df: pd.DataFrame, table_name=None, fig_height=None):
         orientation="h",
         barmode="group",
         labels={"index": "colonne", "value": "Nombre d'entrées"},
-        title=f"Inventaire des données dans la table {table_name}",
+        title=title,
     )
     if fig_height:
         fig.update_layout(height=fig_height)

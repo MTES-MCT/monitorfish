@@ -11,7 +11,6 @@ import {COLORS} from "../constants/constants";
 
 const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
-    const dispatch = useDispatch()
 
     const [openBox, setOpenBox] = useState(false);
     const [vessel, setVessel] = useState(null);
@@ -110,14 +109,6 @@ const VesselNotFoundText = styled.div`
   color: ${COLORS.textGray};
 `
 
-const Close = styled.img`
-  width: 12px;
-  float: right;
-  margin-top: 9px;
-  padding: 5px 5px 5px 5px;
-  cursor: pointer;
-`
-
 const Panel = styled.div`
   padding: 0;
   overflow-y: auto;
@@ -157,7 +148,7 @@ const Wrapper = styled.div`
   z-index: 999999;
   padding: 0;
   background: white;
-  overflow-x: hidden;
+  overflow: hidden;
   margin: 0;
   margin-right: -510px;
   border-top: 1px solid ${COLORS.grayDarkerTwo};

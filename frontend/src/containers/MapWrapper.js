@@ -263,7 +263,7 @@ const MapWrapper = () => {
         layer.layers
             .filter(layer => layer.className_ === LayersEnum.VESSELS)
             .forEach(vesselsLayer => {
-                vesselsLayer.getSource().forEachFeatureInExtent(extent, feature => {
+                vesselsLayer.getSource().forEachFeatureIntersectingExtent(extent, feature => {
                     feature.setStyle([...feature.getStyle(), getVesselNameStyle(feature)]);
                 })
             })

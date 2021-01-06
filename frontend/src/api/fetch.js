@@ -41,7 +41,7 @@ export function getVesselFromAPI(internalReferenceNumber, externalReferenceNumbe
 
 export function getAllRegulatoryZonesFromAPI() {
     return fetch(`${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-                `${Layers.REGULATORY}&outputFormat=application/json&propertyName=layer_name,engins,especes,references_reglementaires,zones`)
+                `${Layers.REGULATORY}&outputFormat=application/json&propertyName=layer_name,engins,especes,references_reglementaires,zones,facade,region`)
         .then(response => {
             if (response.status === HTTP_OK) {
                 return response.json()

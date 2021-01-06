@@ -6,12 +6,11 @@ import {ReactComponent as SearchIconSVG} from './icons/Loupe.svg'
 import RegulatoryZoneSelectionList from "./RegulatoryZoneSelectionList";
 import {COLORS} from "../constants/constants";
 
-function useOutsideAlerter(ref, showRegulatorySearchInput, setShowRegulatorySection, setInitSearchFields) {
+function useOutsideAlerter(ref, showRegulatorySearchInput, setShowRegulatorySection) {
     useEffect(() => {
         function handleClickOutside(event) {
             if (ref.current && !ref.current.contains(event.target) && showRegulatorySearchInput) {
                 setShowRegulatorySection(false)
-                setInitSearchFields(true)
             }
         }
 
@@ -31,7 +30,7 @@ const RegulatoryZoneSelection = props => {
     const [initSearchFields, setInitSearchFields] = useState(false)
 
     const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef, showRegulatorySection, setShowRegulatorySection, setInitSearchFields);
+    useOutsideAlerter(wrapperRef, showRegulatorySection, setShowRegulatorySection);
 
     useEffect(() => {
         if(showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {

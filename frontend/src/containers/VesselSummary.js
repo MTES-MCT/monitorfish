@@ -67,7 +67,7 @@ const VesselSummary = () => {
                             <DummyPhoto src={`boat_fishing.png`}/> :
                             <>
                                 {
-                                    vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${vessel.mmsi}&size=thumb300`}/>
+                                    vessel.mmsi ? <Photo alt="Photo de MarineTraffic" referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${vessel.mmsi}&size=thumb300`}/>
                                         : null
                                 }
                             </>
@@ -137,7 +137,7 @@ const VesselSummary = () => {
                             <Value>{vessel.fleetSegment ? vessel.fleetSegment : <NoValue>à venir</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>Engins à bord <KeyInfo>JPE</KeyInfo></Key>
+                            <Key>Engins à bord (JPE)</Key>
                             <Value><NoValue>à venir</NoValue></Value>
                         </Field>
                     </Body>
@@ -185,9 +185,9 @@ const VesselSummary = () => {
                 <Tab>
                     <ObservationsIcon />
                 </Tab>
-                <Tab>
+                <TabWithoutBorder>
                     <VMSIcon />
-                </Tab>
+                </TabWithoutBorder>
             </TabList>
 
             <TrianglePointer>
@@ -214,14 +214,6 @@ const VerticalAlignHelper = styled.span`
 
 const Body = styled.tbody``
 
-const Close = styled.img`
-  width: 12px;
-  float: right;
-  margin-top: 3px;
-  padding: 5px 5px 5px 5px;
-  cursor: pointer;
-`
-
 const Tab = styled.button`
   display: inline-block;
   width: 100px;
@@ -233,11 +225,20 @@ const Tab = styled.button`
   border-right: 1px solid ${COLORS.grayDarkerTwo}
 `
 
+const TabWithoutBorder = styled.button`
+  display: inline-block;
+  width: 100px;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  height: 44px;
+  background: ${COLORS.grayDarkerThree};
+`
+
 const TabList = styled.div`
   display: flex;
   margin-top: 5px;
   background: ${COLORS.grayDarkerTwo};
-  border-right: 1px solid ${COLORS.grayDarkerTwo}
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`
@@ -329,10 +330,11 @@ const FieldValue = styled.div`
 `
 
 const Photo = styled.img`
-  max-height: 140px;
   left: auto;
   right: auto;
-  vertical-align: middle;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 `
 
 const DummyPhoto = styled.img`
@@ -345,8 +347,9 @@ const DummyPhoto = styled.img`
 
 const PhotoColumn = styled.div`
   width: 220px;
+  position: relative;
   order: 1;
-  overflow-y: hidden;
+  overflow: hidden;
 `
 
 const PositionColumn = styled.div`
@@ -394,10 +397,6 @@ const Key = styled.th`
   width: max-content;
   line-height: normal;
   height: 20px;
-`
-
-const KeyInfo = styled.span`
-  font-size: 0.5rem;
 `
 
 const Value = styled.td`

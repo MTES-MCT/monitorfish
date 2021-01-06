@@ -361,7 +361,7 @@ const VesselSummaryOverlay = styled.div`
   top: -535px;
   left: -185px;
   width: 370px;
-  min-height: 515px;
+  min-height: 513px;
   text-align: left;
   background-color: ${COLORS.grayBackground};
   border-radius: 1px;

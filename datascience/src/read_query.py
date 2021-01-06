@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 import pandas as pd
 
@@ -32,7 +33,7 @@ def read_saved_query(db: str, sql_filepath: str) -> pd.DataFrame:
     return pd.read_sql(query, engine)
 
 
-def read_query(db: str, query: str) -> pd.DataFrame:
+def read_query(db: str, query: str, chunksize: Union[None,str] = None) -> pd.DataFrame:
     """Run SQLquery on a database. Supported databases :
     - 'ocani' : OCAN integration database
     - 'fmcit': FMC integration database
@@ -48,8 +49,8 @@ def read_query(db: str, query: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Query results
     """
-    engine = create_engine(db=db)
-    return pd.read_sql(query, engine)
+    engine = create_engine(db=db, execution_options=dict(stream_results=True))
+    return pd.read_sql(query, engine, chunksize=chunksize)
 
 
 def read_table(db: str, schema: str, table_name: str):

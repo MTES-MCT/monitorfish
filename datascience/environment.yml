@@ -28,3 +28,4 @@ dependencies:
   - ipywidgets
   - pyarrow
   - tqdm
+  - h3-py

@@ -13,17 +13,16 @@ const VesselIdentity = props => {
     }
 
     return (
-        <>
         <Body>
             <PhotoZone>
                 {
                     photoFallback ?
                         <DummyPhoto src={`boat_fishing.png`}/> :
                         <>
-                        {
-                            props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
-                            : null
-                        }
+                            {
+                                props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                                    : null
+                            }
                         </>
                 }
             </PhotoZone>
@@ -93,26 +92,26 @@ const VesselIdentity = props => {
                 <Fields>
                     <TableBody>
                         <Field>
-                            <Key>Genre de navigation</Key>
-                            <Value>{props.vessel.vesselType ? props.vessel.vesselType : <NoValue>-</NoValue>}</Value>
+                            <Key>Type de navire</Key>
+                            <Value>{props.vessel.sailingType ? props.vessel.sailingType : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key>Catégorie de navigation</Key>
                             <Value>{props.vessel.sailingCategory ? props.vessel.sailingCategory : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>Type de flotte</Key>
-                            <Value>{props.vessel.sailingType ? props.vessel.sailingType : <NoValue>-</NoValue>}</Value>
+                            <Key>Genre de navigation</Key>
+                            <Value>{props.vessel.vesselType ? props.vessel.vesselType : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key/>
                         </Field>
                         <Field>
-                            <Key>Engins de pêche utilisé <KeyInfo>JPE</KeyInfo></Key>
+                            <Key>Engins de pêche utilisés (JPE)</Key>
                             <Value><NoValue>-</NoValue></Value>
                         </Field>
                         <Field>
-                            <Key>Engins de pêche déclarés <KeyInfo>PME</KeyInfo></Key>
+                            <Key>Engins de pêche déclarés (PME)</Key>
                             <Value>
                                 { props.vessel.declaredFishingGears ? <>
                                     {props.vessel.declaredFishingGears.join(", ")}
@@ -138,7 +137,7 @@ const VesselIdentity = props => {
                                     props.vessel.pinger != null ? <>
                                         <PingerInput type="button" className={props.vessel.pinger ? 'primary' : ''} value="OUI"/>
                                         <PingerInput type="button" className={!props.vessel.pinger ? 'primary' : ''} value="NON"/>
-                                        </> : <NoValue>-</NoValue>
+                                    </> : <NoValue>-</NoValue>
                                 }
                             </Value>
                         </Field>
@@ -155,8 +154,8 @@ const VesselIdentity = props => {
                                     props.vessel.navigationLicenceExpirationDate ? <>
                                             Exp le {showLicenceExpirationDate(props.vessel.navigationLicenceExpirationDate)}
                                             { new Date(props.vessel.navigationLicenceExpirationDate) >= Date.now() ? <LicenceActive /> : <LicenceExpired />}
-                                         </>
-                                    : <NoValue>-</NoValue>
+                                        </>
+                                        : <NoValue>-</NoValue>
                                 }
 
                             </Value>
@@ -191,7 +190,6 @@ const VesselIdentity = props => {
                 </Fields>
             </Zone>
         </Body>
-        </>
     )
 }
 
@@ -203,13 +201,14 @@ const PhotoZone = styled.div`
 const Body = styled.div`
   background: ${COLORS.grayBackground};
   padding: 5px 5px 1px 5px;
+  max-height: 86vh;
 `
 
 const LicenceActive = styled.span`
   height: 8px;
   margin-left: 5px;
   width: 8px;
-  background-color: green;
+  background-color: #8CC61F;
   border-radius: 50%;
   display: inline-block;
 `
@@ -218,7 +217,7 @@ const LicenceExpired = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: red;
+  background-color: #E1000F;
   border-radius: 50%;
   display: inline-block;
 `

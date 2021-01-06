@@ -2,7 +2,6 @@ import os
 from typing import Union
 
 import pandas as pd
-
 from config import LIBRARY_LOCATION
 
 # from .db_config import connect_fmcit, connect_monitorfish_remote_i, connect_ocani
@@ -33,7 +32,7 @@ def read_saved_query(db: str, sql_filepath: str) -> pd.DataFrame:
     return pd.read_sql(query, engine)
 
 
-def read_query(db: str, query: str, chunksize: Union[None,str] = None) -> pd.DataFrame:
+def read_query(db: str, query: str, chunksize: Union[None, str] = None) -> pd.DataFrame:
     """Run SQLquery on a database. Supported databases :
     - 'ocani' : OCAN integration database
     - 'fmcit': FMC integration database

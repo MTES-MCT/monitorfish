@@ -163,10 +163,10 @@ const RegulatoryZoneSelectionSearchInput = props => {
     }
 
     return (
-        <SearchBox  showRegulatorySearchInput={props.showRegulatorySearchInput}>
+        <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
             <SearchBoxField>
                 <Label>Zone</Label>
-                <SearchBoxInput ref={input => props.showRegulatorySearchInput ? input && input.focus() : null} type="text" value={placeSearchText} placeholder={'Bretagne, Charente...'} onChange={e => setPlaceSearchText(e.target.value)}/>
+                <SearchBoxInput ref={input => props.showRegulatorySearchInput && !gearSearchText && !speciesSearchText && !regulatoryReferenceSearchText ? input && input.focus() : null} type="text" value={placeSearchText} placeholder={'Bretagne, Charente...'} onChange={e => setPlaceSearchText(e.target.value)}/>
                 <SearchIcon showRegulatorySearchInput={props.showRegulatorySearchInput}/>
             </SearchBoxField>
             <SearchBoxField>

@@ -61,7 +61,7 @@ const VesselCard = props => {
                     <Fields>
                         <Body>
                             <Field>
-                                <Key>Marquage extérieur</Key>
+                                <Key>Marquage ext.</Key>
                                 <Value>{props.vessel.getProperties().externalReferenceNumber ? props.vessel.getProperties().externalReferenceNumber : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
@@ -171,12 +171,7 @@ const ColumnTwo = styled.div`
 const VesselCardBottom = styled.div`
   display: flex;
   background: ${COLORS.background};
-  margin: 0 5px 5px 5px;
-`
-
-const Gray = styled.span`
-  color: ${COLORS.textGray};
-  font-weight: 300;
+  margin: 0 5px 8px 8px;
 `
 
 const FieldName = styled.div`

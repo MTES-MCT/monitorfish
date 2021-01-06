@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import {COLORS} from "../constants/constants";
 import {ReactComponent as SearchIconSVG} from "./icons/Loupe.svg";
 
+function findIfSearchStringIncludedInProperty(zone, propertiesToSearch, searchText) {
+    return zone[propertiesToSearch] ? zone[propertiesToSearch].toLowerCase().includes(searchText.toLowerCase()) : false;
+}
+
 const RegulatoryZoneSelectionSearchInput = props => {
     const [placeSearchText, setPlaceSearchText] = useState('');
     const [gearSearchText, setGearSearchText] = useState('');
@@ -22,7 +26,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
     const searchFields = {
         "placeSearchText": {
             "searchText": placeSearchText,
-            "properties": ['layerName', 'zone']
+            "properties": ['layerName', 'zone', 'region', 'seafront']
         },
         "gearSearchText": {
             "searchText": gearSearchText,
@@ -100,10 +104,29 @@ const RegulatoryZoneSelectionSearchInput = props => {
                 .forEach(key => {
                     foundRegulatoryZones[key] = foundRegulatoryZones[key]
                         .filter(zone => {
-                            return propertiesToSearch.length === 1
-                                ? zone[propertiesToSearch[0]] ? zone[propertiesToSearch[0]].toLowerCase().includes(searchText.toLowerCase()) : false
-                                : (zone[propertiesToSearch[0]] ? zone[propertiesToSearch[0]].toLowerCase().includes(searchText.toLowerCase()) : false) ||
-                                (zone[propertiesToSearch[1]] ? zone[propertiesToSearch[1]].toLowerCase().includes(searchText.toLowerCase()) : false)
+                            switch (propertiesToSearch.length) {
+                                case 1: {
+                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText)
+                                }
+                                case 2: {
+                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
+                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText)
+                                }
+                                case 3: {
+                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
+                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
+                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText)
+                                }
+                                case 4: {
+                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
+                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
+                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText) ||
+                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[3], searchText)
+                                }
+                                default: {
+                                    return false
+                                }
+                            }
                         })
 
                     if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {

@@ -1,12 +1,18 @@
-# Production
+# Production (local)
 
 ## Setup and maintenance
 
-### Layers management
+### Manage Postgres connexion entries
+
+Edit `/etc/postgresql/10/main/pg_hba.conf` to add the IP range. See `infra/local/pg_hba.conf` of this repo.
+
+Then execute `SELECT pg_reload_conf();` within `psql` to update entries.
+
+### Upload layers to PostGIS and Geoserver
 
 In production, layers tables are under the schema `prod`.
 
-To upload layers to Geoserver:
+To upload layers:
 1. Execute `sh infra/local/postgis_insert_layers.sh`
 2. Modify the schema from public to prod:
 ```shell

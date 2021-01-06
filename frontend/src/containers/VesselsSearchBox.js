@@ -271,7 +271,7 @@ const SelectedVessel = styled.div`
   border-radius: 0;
   color: ${COLORS.grayBackground};
   height: 40px;
-  width: ${props => props.selectedVessel && props.vesselBoxIsOpen && props.searchingWhileVesselSelected ? '485px' : props.selectedVessel.getProperties().vesselName ?  props.selectedVessel.getProperties().vesselName.length * 12 + 80 + 'px' : '320px'};
+  width: ${props => props.selectedVessel && props.vesselBoxIsOpen && props.searchingWhileVesselSelected ? '485px' : props.selectedVessel.getProperties().vesselName ?  props.selectedVessel.getProperties().vesselName.length * 13 + 80 + 'px' : '320px'};
   padding: 0 5px 0 10px;
   flex: 3;
   text-align: left;
@@ -279,7 +279,7 @@ const SelectedVessel = styled.div`
   animation: ${props => props.firstUpdate && !props.vesselBoxIsOpen ? '' : props.vesselBoxIsOpen && !props.searchingWhileVesselSelected ? 'vessel-search-opening' : ''} 0.7s ease forwards;
 
   @keyframes vessel-search-opening {
-    0%   { width: ${props => props.selectedVessel.getProperties().vesselName ? props.selectedVessel.getProperties().vesselName.length * 12 + 80 + 'px' : '320px'};   }
+    0%   { width: ${props => props.selectedVessel.getProperties().vesselName ? props.selectedVessel.getProperties().vesselName.length * 13 + 80 + 'px' : '320px'};   }
     100% { width: 485px; }
   }
 
@@ -296,16 +296,6 @@ const SearchIcon = styled(SearchIconSVG)`
   background: ${COLORS.grayDarkerThree};
   cursor: pointer;
 `
-
-const SearchIconDark = styled(SearchIconDarkSVG)`
-  opacity: 1;
-  width: 40px;
-  height: 40px;
-  float: right;
-  background: ${COLORS.grayBackground};
-  cursor: pointer;
-`
-
 
 const List = styled.ul`
   margin: 0;

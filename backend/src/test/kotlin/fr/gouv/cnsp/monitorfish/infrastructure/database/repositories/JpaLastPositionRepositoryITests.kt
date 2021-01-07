@@ -28,7 +28,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `upsert Should add a new position When the vessel does not exist in the table`() {
+    fun `upsert Should add a new position When the vessel does not exist in the table and the CFR is empty`() {
         // Given
         val now = ZonedDateTime.now()
         val positionWithoutInternalReferenceNumber = Position(null, "", "Patrouilleur", null, "PM40", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
@@ -37,6 +37,26 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         jpaLastPositionRepository.upsert(positionWithoutInternalReferenceNumber)
         val lastPositions = jpaLastPositionRepository.findAll()
 
+        // Then
+        // Size of test data is 1441
+        // + 1 position of a vessel without an internal reference number (1 entry)
+        // the expected last positions size is 1442
+        assertThat(lastPositions).hasSize(1442)
+    }
+
+    @Test
+    @Transactional
+    fun `upsert Should add a new position When the vessel does not exist in the table and the CFR is null`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val positionWithoutInternalReferenceNumber = Position(null, null, "TEST", null, "YEAH", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
+
+        // When
+        jpaLastPositionRepository.upsert(positionWithoutInternalReferenceNumber)
+        val lastPositions = jpaLastPositionRepository.findAll()
+
+        val position = lastPositions.find { it.MMSI == "TEST" }
+        assertThat(position).isNotNull
         // Then
         // Size of test data is 1441
         // + 1 position of a vessel without an internal reference number (1 entry)
@@ -65,5 +85,4 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         }
         assertThat(position.dateTime).isEqualTo(now)
     }
-
 }

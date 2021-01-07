@@ -9,6 +9,6 @@ services:
     volumes:
       - ..:/home/jovyan/work/
     environment: 
-      - PYTHONPATH=/home/jovyan/work
+      - PYTHONPATH=/home/jovyan/work/datascience
       - http_proxy=
       - https_proxy=

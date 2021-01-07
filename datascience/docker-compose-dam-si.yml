@@ -14,7 +14,7 @@ services:
     networks: 
       - remote_backend
     environment: 
-      - PYTHONPATH=/home/jovyan/work
+      - PYTHONPATH=/home/jovyan/work/datascience
       - GRANT_SUDO=no
       - PREFECT__FLOWS__CHECKPOINTING=true
 

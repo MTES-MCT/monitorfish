@@ -72,10 +72,10 @@ data class LastPositionEntity(
         companion object {
                 fun fromPosition(position: Position): LastPositionEntity {
                         return LastPositionEntity(
-                                internalReferenceNumber = position.internalReferenceNumber,
+                                internalReferenceNumber = position.internalReferenceNumber ?: "",
                                 IRCS = position.IRCS,
                                 MMSI = position.MMSI,
-                                externalReferenceNumber = position.externalReferenceNumber,
+                                externalReferenceNumber = position.externalReferenceNumber ?: "",
                                 dateTime = position.dateTime,
                                 latitude = position.latitude,
                                 longitude = position.longitude,

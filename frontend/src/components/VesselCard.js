@@ -171,7 +171,7 @@ const ColumnTwo = styled.div`
 const VesselCardBottom = styled.div`
   display: flex;
   background: ${COLORS.background};
-  margin: 0 5px 8px 8px;
+  margin: 0 5px 5px 5px;
 `
 
 const FieldName = styled.div`

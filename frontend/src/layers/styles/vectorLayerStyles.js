@@ -5,7 +5,7 @@ import Fill from "ol/style/Fill";
 import Layers from "../../domain/entities/layers";
 import {getColorWithAlpha} from "../../utils";
 
-export const getVectorLayerStyle = (type, regulatoryLayerName) => {
+export const getVectorLayerStyle = type => {
     switch (type) {
         case Layers.EEZ: return feature => new Style({
             stroke: new Stroke({

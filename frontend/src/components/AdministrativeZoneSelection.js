@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
-import {ReactComponent as ChevronIconSVG} from './icons/Chevron_double_gris.svg'
+import {ReactComponent as ChevronIconSVG} from './icons/Chevron_simple_gris.svg'
 
 import AdministrativeZoneItem from "./AdministrativeZoneItem";
 import {COLORS} from "../constants/constants";
@@ -33,7 +33,7 @@ const AdministrativeZoneSelection = props => {
 
 const SectionTitle = styled.div`
   height: 27px;
-  margin-top: 5px;
+  margin-top: 10px;
   padding-top: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   background: ${COLORS.grayDarker};
@@ -88,7 +88,7 @@ const ListItem = styled.li`
 
 const ChevronIcon = styled(ChevronIconSVG)`
   transform: rotate(180deg);
-  width: 12px;
+  width: 17px;
   float: right;
   margin-right: 10px;
   margin-top: 5px;

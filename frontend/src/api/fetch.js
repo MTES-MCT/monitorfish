@@ -3,6 +3,20 @@ import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 
 const HTTP_OK = 200
 
+const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
+const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les positions du navire"
+const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
+const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
+const GEAR_CODES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les codes des engins de pêches"
+
+function throwIrretrievableAdministrativeZoneError(e, type) {
+    throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
+}
+
+function throwIrretrievableRegulatoryZoneError(e, regulatoryZone) {
+    throw Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.layerName}/${regulatoryZone.zone} : ${e}`)
+}
+
 export function getVesselsLastPositionsFromAPI() {
     return fetch('/bff/v1/vessels')
         .then(response => {
@@ -12,8 +26,12 @@ export function getVesselsLastPositionsFromAPI() {
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Récupération des dernières positions impossible")
+                throw Error(LAST_POSITIONS_ERROR_MESSAGE)
             }
+        })
+        .catch(error => {
+            console.error(error)
+            throw Error(LAST_POSITIONS_ERROR_MESSAGE)
         })
         .then(vessels => {
             return vessels
@@ -33,8 +51,12 @@ export function getVesselFromAPI(internalReferenceNumber, externalReferenceNumbe
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Nous n'avons pas pu récupérer les positions du navire")
+                throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
             }
+        })
+        .catch(error => {
+            console.error(error)
+            throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
         })
         .then(vessel => vessel)
 }
@@ -49,18 +71,16 @@ export function getAllRegulatoryZonesFromAPI() {
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Nous n'avons pas pu récupérer les zones réglementaires")
+                throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
             }
         })
+        .catch(error => {
+            console.error(error)
+            throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
+        })
+
 }
 
-function throwIrretrievableAdministrativeZoneError(e, type) {
-    throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
-}
-
-function throwIrretrievableRegulatoryZoneError(e, regulatoryZone) {
-    throw Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.layerName}/${regulatoryZone.zone} : ${e}`)
-}
 
 export function getAdministrativeZoneFromAPI(type, extent) {
     return fetch(getAdministrativeZoneURL(type, extent))
@@ -76,6 +96,8 @@ export function getAdministrativeZoneFromAPI(type, extent) {
                     throwIrretrievableAdministrativeZoneError(response, type);
                 })
             }
+        }).catch(e => {
+            throwIrretrievableAdministrativeZoneError(e, type);
         })
 }
 
@@ -102,6 +124,8 @@ export function getRegulatoryZoneFromAPI(type, regulatoryZone) {
                     throwIrretrievableRegulatoryZoneError(response, regulatoryZone);
                 })
             }
+        }).catch(e => {
+            throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
         })
 }
 
@@ -123,6 +147,7 @@ export function getRegulatoryZoneURL(type, regulatoryZone) {
 }
 
 export function getRegulatoryZoneMetadataFromAPI(regulatorySubZone) {
+
     let url
     try {
         url = getRegulatoryZoneURL(Layers.REGULATORY, regulatorySubZone)
@@ -137,15 +162,18 @@ export function getRegulatoryZoneMetadataFromAPI(regulatorySubZone) {
                     if(response.features.length === 1) {
                         return response.features[0].properties
                     } else {
-                        throw Error("Nous n'avons pas pu récupérer la couche réglementaire")
+                        throw Error("We found multiple layers for this layer")
                     }
                 })
             } else {
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Nous n'avons pas pu récupérer la couche réglementaire")
+                throw Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)
             }
+        }).catch(error => {
+            console.error(error)
+            throw Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)
         })
 }
 
@@ -158,7 +186,10 @@ export function getAllGearCodesFromAPI() {
                 response.text().then(text => {
                     console.error(text)
                 })
-                throw Error("Nous n'avons pas pu récupérer les codes des engins de pêches")
+                throw Error(GEAR_CODES_ERROR_MESSAGE)
             }
+        }).catch(error => {
+            console.error(error)
+            throw Error(GEAR_CODES_ERROR_MESSAGE)
         })
 }

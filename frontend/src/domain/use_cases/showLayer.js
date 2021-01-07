@@ -37,7 +37,7 @@ const showLayer = layerToShow => (dispatch, getState) => {
                 }
 
                 let hash = getHash(`${layerToShow.zone.layerName}:${layerToShow.zone.zone}`)
-                let gearCategory = getGearCategory(layerToShow, getState);
+                let gearCategory = getGearCategory(layerToShow.zone.gears, getState().gear.gears);
                 let vectorLayer = getVectorLayerClosure(Layers.REGULATORY, layerToShow.zone, hash, gearCategory);
                 dispatch(addLayer(vectorLayer));
                 break;
@@ -53,7 +53,7 @@ const getVectorLayer = dispatch => (type, regulatoryZone, hash, gearCategory) =>
     renderMode: 'image',
     className: regulatoryZone ? `${Layers.REGULATORY}:${regulatoryZone.layerName}:${regulatoryZone.zone}` : type,
     style: feature => {
-        return [getVectorLayerStyle(type, regulatoryZone)(feature, hash, gearCategory)]
+        return [getVectorLayerStyle(type)(feature, hash, gearCategory)]
     }
 });
 
@@ -91,11 +91,11 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
     return vectorSource
 }
 
-function getGearCategory(layerToShow, getState) {
+export function getGearCategory(layerGears, gears) {
     let gear = null
-    if (layerToShow.zone.gears) {
-        let layerGearsArray = layerToShow.zone.gears.replace(/ /g, '').split(',')
-        gear = getState().gear.gears
+    if (layerGears) {
+        let layerGearsArray = layerGears.replace(/ /g, '').split(',')
+        gear = gears
             .find(gear => {
                 return layerGearsArray.some(gearCode => {
                     if (gearCode === gear.code) {

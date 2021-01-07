@@ -4,8 +4,7 @@ import Fill from "ol/style/Fill";
 import IconOrigin from "ol/style/IconOrigin";
 import {getTextWidth} from "../../utils";
 import {COLORS} from "../../constants/constants";
-import Flags from "../../components/icons/flags"
-const images = require.context('../../../public/flags', true);
+const images = require.context('../../../public/flags', false, /\.png$/);
 
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200

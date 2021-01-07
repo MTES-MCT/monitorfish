@@ -93,7 +93,7 @@ const VesselSummary = () => {
                                         {getDateTime(lastPosition.dateTime)}{' '}
                                         <Gray>(CET)</Gray></>
                                     : <NoValue>-</NoValue>
-                            }
+                                }
                             </Value>
                         </Field>
                     </Body>

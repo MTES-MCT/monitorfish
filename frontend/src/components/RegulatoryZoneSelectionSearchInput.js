@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {COLORS} from "../constants/constants";
 import {ReactComponent as SearchIconSVG} from "./icons/Loupe.svg";
@@ -11,7 +11,14 @@ const RegulatoryZoneSelectionSearchInput = props => {
     const [placeSearchText, setPlaceSearchText] = useState('');
     const [gearSearchText, setGearSearchText] = useState('');
     const [speciesSearchText, setSpeciesSearchText] = useState('');
-    const [regulatoryReferenceSearchText, setRegulatoryReferenceSearchText] = useState('');
+    const [regulatoryReferencesSearchText, setRegulatoryReferenceSearchText] = useState('');
+    const [focusPlaceSearchText, setFocusPlaceSearchText] = useState(true);
+
+    useEffect(() => {
+        if(props.openBox) {
+            setFocusPlaceSearchText(true)
+        }
+    }, [props.openBox])
 
     useEffect(() => {
         if (props.initSearchFields) {
@@ -36,16 +43,16 @@ const RegulatoryZoneSelectionSearchInput = props => {
             "searchText": speciesSearchText,
             "properties": ['species']
         },
-        "regulatoryReferenceSearchText": {
-            "searchText": regulatoryReferenceSearchText,
-            "properties": ['regulatoryReference']
+        "regulatoryReferencesSearchText": {
+            "searchText": regulatoryReferencesSearchText,
+            "properties": ['regulatoryReferences']
         }
     }
 
     useEffect(() => {
         if(placeSearchText.length < 1 &&
             gearSearchText.length < 1 &&
-            regulatoryReferenceSearchText.length < 1 &&
+            regulatoryReferencesSearchText.length < 1 &&
             speciesSearchText.length < 1) {
             props.setFoundRegulatoryZones({})
             return
@@ -75,7 +82,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
         })
         props.setFoundRegulatoryZones(foundRegulatoryZones)
 
-    }, [speciesSearchText, gearSearchText, placeSearchText, regulatoryReferenceSearchText])
+    }, [speciesSearchText, gearSearchText, placeSearchText, regulatoryReferencesSearchText])
 
     function getMergedRegulatoryZones(foundRegulatoryZones, searchFieldFoundRegulatoryZones) {
         let mergedRegulatoryZones = {}
@@ -189,20 +196,44 @@ const RegulatoryZoneSelectionSearchInput = props => {
         <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
             <SearchBoxField>
                 <Label>Zone</Label>
-                <SearchBoxInput ref={input => props.showRegulatorySearchInput && !gearSearchText && !speciesSearchText && !regulatoryReferenceSearchText ? input && input.focus() : null} type="text" value={placeSearchText} placeholder={'Bretagne, Charente...'} onChange={e => setPlaceSearchText(e.target.value)}/>
+                <SearchBoxInput
+                    ref={input => props.showRegulatorySearchInput
+                        && focusPlaceSearchText
+                        && !gearSearchText
+                        && !speciesSearchText
+                        && !regulatoryReferencesSearchText ? input && input.focus() : null}
+                    type="text"
+                    value={placeSearchText}
+                    placeholder={'Bretagne, Charente...'}
+                    onChange={e => setPlaceSearchText(e.target.value)}/>
                 <SearchIcon showRegulatorySearchInput={props.showRegulatorySearchInput}/>
             </SearchBoxField>
             <SearchBoxField>
                 <Label>Engin</Label>
-                <SearchBoxInput type="text" value={gearSearchText} placeholder={'chalut, OTB...'} onChange={e => setGearSearchText(e.target.value)}/>
+                <SearchBoxInput
+                    type="text"
+                    value={gearSearchText}
+                    onClick={() => setFocusPlaceSearchText(false)}
+                    placeholder={'chalut, OTB...'}
+                    onChange={e => setGearSearchText(e.target.value)}/>
             </SearchBoxField>
             <SearchBoxField>
                 <Label>Espèce</Label>
-                <SearchBoxInput type="text" value={speciesSearchText} placeholder={'Bivalve, HKE...'} onChange={e => setSpeciesSearchText(e.target.value)}/>
+                <SearchBoxInput
+                    type="text"
+                    value={speciesSearchText}
+                    onClick={() => setFocusPlaceSearchText(false)}
+                    placeholder={'Bivalve, HKE...'}
+                    onChange={e => setSpeciesSearchText(e.target.value)}/>
             </SearchBoxField>
             <SearchBoxField>
                 <Label>Ref. reg.</Label>
-                <SearchBoxInput type="text" value={regulatoryReferenceSearchText} placeholder={'2018-171...'} onChange={e => setRegulatoryReferenceSearchText(e.target.value)}/>
+                <SearchBoxInput
+                    type="text"
+                    value={regulatoryReferencesSearchText}
+                    onClick={() => setFocusPlaceSearchText(false)}
+                    placeholder={'2018-171...'}
+                    onChange={e => setRegulatoryReferenceSearchText(e.target.value)}/>
             </SearchBoxField>
         </SearchBox>)
 }

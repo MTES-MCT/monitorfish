@@ -101,10 +101,12 @@ const RegulatoryZoneSelection = props => {
             gears={props.gears}
             initSearchFields={initSearchFields}
             setInitSearchFields={setInitSearchFields}
+            openBox={props.openBox}
         />
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}
             foundRegulatoryZones={foundRegulatoryZones}
+            gears={props.gears}
             showRegulatorySection={showRegulatorySection}
             regulatoryZonesSelection={regulatoryZonesSelection}
             toggleSelectRegulatoryZone={toggleSelectRegulatoryZone}

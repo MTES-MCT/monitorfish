@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
+import {getHash} from "../utils";
+import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
+import {getGearCategory} from "../domain/use_cases/showLayer";
+import Layers from "../domain/entities/layers"
 
 const RegulatoryZoneSelectionItem = props => {
     const [globalIsSelected, setGlobalIsSelected] = useState(undefined);
@@ -34,24 +38,41 @@ const RegulatoryZoneSelectionItem = props => {
         </Zone>
         {
             props.regulatorySubZones ? props.regulatorySubZones.map((subZone, index) => {
+                let vectorLayerStyle
+                if(subZone.zone && subZone.layerName && subZone.gears && props.gears) {
+                    let hash = getHash(`${subZone.layerName}:${subZone.zone}`)
+                    let gearCategory = getGearCategory(subZone.gears, props.gears);
+                    vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY)(null, hash, gearCategory)
+                }
+
                 return (<SubZone
                     onClick={() => select(subZone)}
                     selected={globalIsSelected || (!globalIsSelected && isSelected(props.regulatoryZonesSelection[props.regulatoryZoneName], subZone))}
                     key={index}>
-                    <Rectangle /> {subZone.zone}
+                    <Rectangle vectorLayerStyle={vectorLayerStyle} />
+                    <Name>{subZone.zone ? subZone.zone : 'AUCUN NOM'}</Name>
                 </SubZone>)
             }) : null
         }
             </Row>)
 }
 
+const Name = styled.span`
+  width: 280px;
+  text-overflow: ellipsis;
+  overflow-x: hidden !important;
+  font-size: inherit;
+  margin-top: 8px;
+`
+
 const Rectangle = styled.div`
-  width: 8px;
-  height: 8px;
-  background: gray;
-  border: 1px solid white;
+  width: 14px;
+  height: 14px;
+  background: ${props => props.vectorLayerStyle && props.vectorLayerStyle.getFill() ? props.vectorLayerStyle.getFill().getColor() : COLORS.gray};
+  border: 1px solid ${props => props.vectorLayerStyle && props.vectorLayerStyle.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : COLORS.grayDarkerTwo};
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 10px;
+  margin-top: 9px;
 `
 
 const Zone = styled.span`
@@ -62,7 +83,8 @@ const Zone = styled.span`
   display: block;
   line-height: 2.7em;
   font-size: 13px;
-  padding-left: 15px;
+  padding-left: 18px;
+  font-weight: 500;
   color: ${COLORS.grayDarkerThree};
   border-bottom: 1px solid ${props => props.selected ? COLORS.grayDarker : COLORS.gray};
   background: ${props => props.selected ? COLORS.gray : COLORS.background};
@@ -70,16 +92,15 @@ const Zone = styled.span`
 
 const SubZone = styled.span`
   user-select: none;
-  display: block;
-  line-height: 2.7em;
+  display: flex;
   font-size: 13px;
   padding-left: 20px;
   padding-right: 10px;
-  text-overflow: ellipsis;
-  overflow-x: hidden !important;
   background: ${props => props.selected ? COLORS.gray : COLORS.background};
   border-bottom: 1px solid ${props => props.selected ? COLORS.grayDarker : COLORS.gray};
   color: ${COLORS.grayDarkerThree};
+  padding-top: 1px;
+  padding-bottom: 8px;
 `
 
 const Row = styled.div`

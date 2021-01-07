@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
-import {ReactComponent as ChevronIconSVG} from './icons/Chevron_double_gris.svg'
+import {ReactComponent as ChevronIconSVG} from './icons/Chevron_simple_gris.svg'
 import RegulatoryZoneSelectedLayer from "./RegulatoryZoneSelectedLayer";
 import {COLORS} from "../constants/constants";
 
@@ -47,7 +47,10 @@ const RegulatoryZoneSelected = props => {
                                 callShowRegulatoryZone={props.callShowRegulatoryZone}
                                 callHideRegulatoryZone={props.callHideRegulatoryZone}
                                 callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
+                                callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
+                                regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showedLayers={props.showedLayers}
+                                gears={props.gears}
                             />
                         </ListItem>)
                     })
@@ -60,7 +63,7 @@ const RegulatoryZoneSelected = props => {
 const RegulatoryZoneSelectedTitle = styled.div`
   height: 27px;
   padding-top: 8px;
-  margin-top: 5px;
+  margin-top: 9px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   background: ${COLORS.grayDarker};
   
@@ -106,13 +109,13 @@ const RegulatoryZoneSelectedList = styled.ul`
             if(props.zoneLength > 0) {
                 return props.layerLength * 36 + props.zoneLength * 36
             } else {
-                return props.layerLength * 36
+                return props.layerLength * 37
             }
         } else {
             return 20
         }
     }}px;
-  max-height: 300px;
+  max-height: 550px;
   overflow-y: auto;
   overflow-x: hidden;
   color: ${COLORS.grayDarkerThree};
@@ -122,42 +125,20 @@ const RegulatoryZoneSelectedList = styled.ul`
   @keyframes regulatory-selected-opening {
     0%   {
         height: 0;
-        overflow-y: hidden;
+        opacity: 0;
     }
     100% {
-        height: ${props => {
-            if(props.layerLength) {
-                if(props.zoneLength) {
-                    return props.layerLength * 36 + props.zoneLength * 36
-                } else {
-                    return props.layerLength * 36
-                }
-            } else {
-              return 20
-            }  
-        }}px;
-        overflow-y: auto;
+        opacity: 1;
     }
   }
 
   @keyframes regulatory-selected-closing {
     0%   {
-        height: ${props => {
-            if(props.layerLength) {
-                if(props.zoneLength > 0) {
-                    return props.layerLength * 36 + props.zoneLength * 27
-                } else {
-                    return props.layerLength * 36
-                }
-            } else {
-                return 20
-            }
-        }}px;
-        overflow-y: hidden !important;
+        opacity: 1;
     }
     100% {
+        opacity: 0;
         height: 0;
-        overflow-y: hidden;
     }
   }
 `
@@ -180,7 +161,7 @@ const ListItem = styled.li`
 
 const ChevronIcon = styled(ChevronIconSVG)`
   transform: rotate(180deg);
-  width: 12px;
+  width: 17px;
   float: right;
   margin-right: 10px;
   margin-top: 5px;

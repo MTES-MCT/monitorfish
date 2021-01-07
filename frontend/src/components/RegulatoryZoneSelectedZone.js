@@ -54,7 +54,7 @@ const RegulatoryZoneSelectedZone = props => {
         <SubZone>
             <Rectangle vectorLayerStyle={props.vectorLayerStyle}/>
             <SubZoneText
-                title={props.subZone.zone.replace(/[_]/g, ' ')}
+                title={props.subZone.zone ? props.subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
                 onClick={() => setShowSubZone(!showSubZone)}>
                 {props.subZone.zone ? props.subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
             </SubZoneText>

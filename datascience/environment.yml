@@ -25,3 +25,7 @@ dependencies:
   - isort
   - python-graphviz
   - line_profiler
+  - ipywidgets
+  - pyarrow
+  - tqdm
+  - h3-py

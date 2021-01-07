@@ -1,7 +1,6 @@
 import pandas as pd
 from prefect import Flow, task
 from sqlalchemy import String
-
 from src.db_config import create_engine
 from src.read_query import read_saved_query
 

@@ -77,8 +77,8 @@ API documentation can be found at http://localhost:8880/swagger-ui.html
 
 Data analysis and visualization is performed in a dockerized environment. Inside the docker environment :
 * python 3.8 is installed in the `base` conda environment with commonly used libraries for geo data analysis (geopandas, plotly...)
-* the `datascience` directory of this repository is bind-mounted at `/home/jovyan/work`.
-* Notebooks (stored in `/home/jovyan/work/notebooks`) can therefore access and import code from the `/home/jovyan/work/src` directory where code worth keeping - helper functions, data processing steps... - is kept
+* this repository is bind-mounted at `/home/jovyan/work`.
+* Notebooks (stored in `/home/jovyan/work/notebooks`) can therefore access and import code from the `/home/jovyan/work/datascience/src` directory where code worth keeping - helper functions, data processing steps... - is kept
 
 ### Running a notebook in the data science environment
 To start a jupyter notebook in the data science environment, execute :
@@ -127,8 +127,7 @@ make run-data-science-env-no-proxy
 ```
 
 ### Data
-Data is currently not open and can only be accessed from inside the RIE network. 
-TO BE UPDATED.
+Data is currently not open and can only be accessed from inside the RIE network.
 
 ### Problems & solutions
 

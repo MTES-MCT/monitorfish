@@ -38,29 +38,29 @@ run-local-app:
 
 # DATA commands
 run-jupyter-notebook:
-	docker-compose -f datascience/docker-compose.yml up
+	docker-compose -f datascience/docker-compose.yml up --force-recreate
 run-jupyter-notebook-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up
+	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate
 run-jupyter-notebook-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up
+	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate
 run-data-science-env:
-	docker-compose -f datascience/docker-compose.yml up -d
+	docker-compose -f datascience/docker-compose.yml up --force-recreate -d
 	docker exec -it monitorfish_data_science bash
 run-data-science-env-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up -d
+	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate -d
 	docker exec -it monitorfish_data_science bash
 run-data-science-env-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up -d
+	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate -d
 	docker exec -it monitorfish_data_science_dam_si bash
 update-data-science-env:
-	docker-compose -f datascience/docker-compose.yml up -d
+	docker-compose -f datascience/docker-compose.yml up --force-recreate -d
 	docker container exec monitorfish_data_science conda env update -n base -f "work/environment.yml"
 	docker container commit monitorfish_data_science monitorfish_data_science
 update-data-science-env-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up -d
+	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate -d
 	docker container exec monitorfish_data_science conda env update -n base -f "work/environment.yml"
 	docker container commit monitorfish_data_science monitorfish_data_science
 update-data-science-env-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up -d
+	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate -d
 	docker container exec monitorfish_data_science_dam_si conda env update -n base -f "work/environment.yml"
 	docker container commit monitorfish_data_science_dam_si monitorfish_data_science_dam_si

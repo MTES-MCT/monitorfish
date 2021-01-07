@@ -4,7 +4,6 @@ from typing import List
 
 import pandas as pd
 from sqlalchemy import MetaData, Table, inspect
-
 from src.db_config import create_engine
 from src.read_query import read_query
 

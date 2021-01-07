@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
 
 const VesselIdentity = props => {
     const [photoFallback, setPhotoFallback] = useState(false)
+    const [gears, setGears] = useState([])
 
     const showLicenceExpirationDate = licenceExpirationDate => {
         if (licenceExpirationDate) {
@@ -11,6 +12,20 @@ const VesselIdentity = props => {
             return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
         }
     }
+
+    useEffect(() => {
+        if(props.gears && props.vessel && props.vessel.declaredFishingGears) {
+            const gears = props.vessel.declaredFishingGears.map(declaredGearCode => {
+                let foundGear = props.gears.find(gear => gear.code === declaredGearCode)
+                return {
+                    name: foundGear ? foundGear.name : null,
+                    code: declaredGearCode
+                }
+            })
+
+            setGears(gears)
+        }
+    }, [props.gears, props.vessel])
 
     return (
         <Body>
@@ -113,9 +128,14 @@ const VesselIdentity = props => {
                         <Field>
                             <Key>Engins de pêche déclarés (PME)</Key>
                             <Value>
-                                { props.vessel.declaredFishingGears ? <>
-                                    {props.vessel.declaredFishingGears.join(", ")}
-                                </> : <NoValue>-</NoValue>
+                                {
+                                    gears ?
+                                        gears.map(gear => {
+                                            return gear.name ?
+                                                <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                                                : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+
+                                        }) : <NoValue>-</NoValue>
                                 }
                             </Value>
                         </Field>
@@ -193,15 +213,20 @@ const VesselIdentity = props => {
     )
 }
 
+const ValueWithLineBreak = styled.div`
+  color: ${COLORS.grayDarkerThree};
+  padding: 2px 5px 5px 0;
+  line-height: normal;
+  font-size: 13px;
+`
+
 const PhotoZone = styled.div`
   margin: 5px 5px 10px 5px;
   background: ${COLORS.background};
 `
 
 const Body = styled.div`
-  background: ${COLORS.grayBackground};
   padding: 5px 5px 1px 5px;
-  max-height: 86vh;
 `
 
 const LicenceActive = styled.span`

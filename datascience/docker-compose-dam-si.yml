@@ -10,7 +10,7 @@ services:
     ports: 
         - 8888:8888
     volumes:
-      - .:/home/jovyan/work/
+      - ..:/home/jovyan/work/
     networks: 
       - remote_backend
     environment: 

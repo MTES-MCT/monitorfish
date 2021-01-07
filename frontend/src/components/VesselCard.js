@@ -128,6 +128,10 @@ const Value = styled.td`
   background: none;
   border: none;
   line-height: normal;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;
+  max-width: 90px;
 `
 
 const TrianglePointer = styled.div`
@@ -160,6 +164,7 @@ const ColumnOne = styled.div`
   order: 1;
   padding: 10px 0 0 5px;
   margin-bottom: 5px;
+  min-width: 100px;
 `
 
 const ColumnTwo = styled.div`

@@ -171,7 +171,7 @@ const Content = styled.div`
   margin-top: 6px;
   min-height: 480px;
   overflow-y: auto;
-  max-height: 750px;
+  max-height: 85vh;
 `
 
 const Title = styled.span`

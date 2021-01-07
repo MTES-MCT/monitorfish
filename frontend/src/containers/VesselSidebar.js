@@ -11,6 +11,7 @@ import {COLORS} from "../constants/constants";
 
 const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
+    const gears = useSelector(state => state.gear.gears)
 
     const [openBox, setOpenBox] = useState(false);
     const [vessel, setVessel] = useState(null);
@@ -65,7 +66,10 @@ const VesselSidebar = () => {
                         </TabList>
 
                         <Panel className={index === 1 ? '' : 'hide'}>
-                            <VesselIdentity vessel={vessel}/>
+                            <VesselIdentity
+                                vessel={vessel}
+                                gears={gears}
+                            />
                         </Panel>
                         <Panel className={index === 2 ? '' : 'hide'}>
                             <h1>TODO</h1>
@@ -112,6 +116,8 @@ const VesselNotFoundText = styled.div`
 const Panel = styled.div`
   padding: 0;
   overflow-y: auto;
+  background: #F0F0F0;
+  max-height: 86vh;
 `
 
 const Tab = styled.button`

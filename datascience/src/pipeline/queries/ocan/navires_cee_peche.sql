@@ -5,9 +5,9 @@ SELECT
     jauge_ums AS gauge_ncp,
     puissance_propulsion AS power_ncp,
     nom_armateur AS shipowner_name_ncp,
-    eng1.libelle AS fishing_gear_main_ncp,
-    eng2.libelle AS fishing_gear_secondary_ncp,
-    eng3.libelle AS fishing_gear_third_ncp,
+    eng1.code AS fishing_gear_main_ncp,
+    eng2.code AS fishing_gear_secondary_ncp,
+    eng3.code AS fishing_gear_third_ncp,
     tn.libelle AS vessel_type_ncp,
     NVL(arm_email, prop_email) AS shipowner_email_ncp
 FROM NAVPRO.NAV_NAVIRE_CEE_PECHE ncp

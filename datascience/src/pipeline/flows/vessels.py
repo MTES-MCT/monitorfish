@@ -13,7 +13,7 @@ from src.utils.database import psql_insert_copy
 serializer = PandasSerializer(file_type="csv", serialize_kwargs={"index": False})
 
 result = LocalResult(
-    dir="/home/jovyan/work/data/pipeline/vessels",
+    dir="/home/jovyan/work/datascience/data/pipeline/vessels",
     location="{task_name}_{date:%Y-%m-%d-%H:%M:%S}.csv",
     serializer=serializer,
 )

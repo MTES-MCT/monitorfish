@@ -264,7 +264,7 @@ const MapWrapper = () => {
             .filter(layer => layer.className_ === LayersEnum.VESSELS)
             .forEach(vesselsLayer => {
                 vesselsLayer.getSource().forEachFeatureIntersectingExtent(extent, feature => {
-                    setTimeout(() => { feature.setStyle([...feature.getStyle(), getVesselNameStyle(feature)]) }, 1);
+                    setTimeout(() => { feature.setStyle([...feature.getStyle(), getVesselNameStyle(feature)]) }, 100);
                 })
             })
     }

@@ -7,7 +7,7 @@ services:
     ports: 
         - 8888:8888
     volumes:
-      - ..:/home/jovyan/work/
+      - ..:/home/jovyan/work/datascience
     environment: 
       - http_proxy=http://100.78.40.201:8080
       - https_proxy=http://100.78.40.201:8080

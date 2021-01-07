@@ -2,4 +2,4 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-LIBRARY_LOCATION = "/home/jovyan/work/src"
+LIBRARY_LOCATION = "/home/jovyan/work/datascience/src"

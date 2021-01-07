@@ -43,7 +43,8 @@ const Wrapper = styled.div`
 const Logo = styled.div`
   width: auto;
   overflow: auto;
-  margin: 10px;
+  bottom: 5px;
+  right: 10px;
   position: absolute;
   z-index: 2;
   pointer-events: none;

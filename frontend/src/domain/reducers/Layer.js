@@ -22,7 +22,6 @@ const layerSlice = createSlice({
             { layer: Layers.THREE_MILES, layerName: '3 Milles' },
             { layer: Layers.SIX_MILES, layerName: '6 Milles' },
             { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
-            { layer: Layers.ONE_HUNDRED_MILES, layerName: '100 Milles' }
         ],
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
     },

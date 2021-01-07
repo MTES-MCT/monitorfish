@@ -4,6 +4,7 @@ import {COLORS} from "../constants/constants";
 import {ReactComponent as REGPaperSVG} from './icons/reg_paper.svg'
 import {ReactComponent as CloseIconSVG} from './icons/Croix_grise.svg'
 import {FingerprintSpinner} from "react-epic-spinners";
+import {getDateTime} from "../utils";
 
 const RegulatoryZoneMetadata = props => {
     const [gears, setGears] = useState([])
@@ -68,11 +69,25 @@ const RegulatoryZoneMetadata = props => {
                                         </Field>
                                         <Field>
                                             <Key>Dates d'ouvertures</Key>
-                                            <Value>{props.regulatoryZoneMetadata.openingDate ? props.regulatoryZoneMetadata.openingDate : <NoValue>-</NoValue>}</Value>
+                                            <Value>
+                                            {
+                                                props.regulatoryZoneMetadata.openingDate ? <>
+                                                        {getDateTime(props.regulatoryZoneMetadata.openingDate)}{' '}
+                                                        <Gray>(CET)</Gray></>
+                                                    : <NoValue>-</NoValue>
+                                            }
+                                            </Value>
                                         </Field>
                                         <Field>
                                             <Key>Dates de fermetures</Key>
-                                            <Value>{props.regulatoryZoneMetadata.closingDate ? props.regulatoryZoneMetadata.closingDate : <NoValue>-</NoValue>}</Value>
+                                            <Value>
+                                                {
+                                                    props.regulatoryZoneMetadata.closingDate ? <>
+                                                            {getDateTime(props.regulatoryZoneMetadata.closingDate)}{' '}
+                                                            <Gray>(CET)</Gray></>
+                                                        : <NoValue>-</NoValue>
+                                                }
+                                            </Value>
                                         </Field>
                                         <Field>
                                             <Key>État</Key>
@@ -122,6 +137,11 @@ const RegulatoryZoneMetadata = props => {
         </Wrapper>
     )
 }
+
+const Gray = styled.span`
+  color: ${COLORS.textGray};
+  font-weight: 300;
+`
 
 const RegulatoryName = styled.span`
     display: inline-flex;
@@ -280,20 +300,20 @@ const Wrapper = styled.div`
     top: 0px;
     opacity: 0;
     z-index: -1;
-    min-height: 300px;
+    min-height: 100px;
     max-height: calc(100vh - 50px);
     padding: 10px;
     
     animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
     
     @keyframes regulatory-metadata-box-opening {
-        0%   { min-height: 200px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 500px; opacity: 1; margin-left: 360px; }
+        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
+        100% { min-height: 500px; opacity: 1; margin-left: 361px; }
     }
     
     @keyframes regulatory-metadata-box-closing {
-        0% { min-height: 500px; opacity: 1; margin-left: 360px; }
-        100%   { min-height: 200px; opacity: 0; margin-left: -30px;   }
+        0% { min-height: 500px; opacity: 1; margin-left: 361px; }
+        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
     }
 `
 

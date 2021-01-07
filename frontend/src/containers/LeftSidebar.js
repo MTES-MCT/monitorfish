@@ -102,6 +102,7 @@ const LeftSidebar = () => {
             openBox={openBox}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon
+                title={"Couches réglementaires"}
                 openBox={openBox}
                 regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
                 onClick={() => setOpenBox(!openBox)}>
@@ -115,6 +116,7 @@ const LeftSidebar = () => {
                 gears={gears}
                 regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
                 setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
+                openBox={openBox}
             />
             <Zones>
                 <RegulatoryZoneSelected
@@ -126,6 +128,9 @@ const LeftSidebar = () => {
                     showedLayers={showedLayers}
                     regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
                     selectedRegulatoryZones={selectedRegulatoryZones}
+                    gears={gears}
+                    callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+                    regulatoryZoneMetadata={regulatoryZoneMetadata}
                 />
                 <AdministrativeZoneSelection
                     administrativeZones={administrativeZones}
@@ -147,7 +152,7 @@ const LeftSidebar = () => {
 
 const Sidebar = styled.div`
   margin-left: -373px;
-  top: 55px;
+  top: 10px;
   left: 12px;
   z-index: 9999;
   border-radius: 1px;
@@ -168,11 +173,11 @@ const Sidebar = styled.div`
 
 const Zones = styled.div`
   margin-top: 5px;
-  width: 344px;
+  width: 340px;
   color: ${COLORS.textWhite};
   text-decoration: none;
   background-color: ${COLORS.gray};
-  padding: 4px 8px 8px 8px;
+  padding: 1px 10px 10px 10px;
   max-height: calc(100vh - 50px);
 `
 
@@ -183,7 +188,7 @@ const SidebarLayersIcon = styled.button`
   background: ${props => props.firstUpdate && !props.openBox ? COLORS.grayDarkerThree : props.openBox ? '#9A9A9A' : COLORS.grayDarkerThree };
   padding: 2px 2px 2px 2px;
   margin-top: 0;
-  margin-left: 187px;
+  margin-left: ${props => props.firstUpdate && !props.openBox ? '190px' : props.openBox ? '187px' : '190px' };
   border-radius: 1px;
   height: 40px;
   width: 40px;

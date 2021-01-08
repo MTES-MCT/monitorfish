@@ -67,32 +67,41 @@ const RegulatoryZoneMetadata = props => {
                                             <Key>Période(s)</Key>
                                             <Value>{props.regulatoryZoneMetadata.period ? props.regulatoryZoneMetadata.period : <NoValue>-</NoValue>}</Value>
                                         </Field>
-                                        <Field>
-                                            <Key>Dates d'ouvertures</Key>
-                                            <Value>
-                                            {
-                                                props.regulatoryZoneMetadata.openingDate ? <>
-                                                        {getDateTime(props.regulatoryZoneMetadata.openingDate, true)}{' '}
-                                                        <Gray>(CET)</Gray></>
-                                                    : <NoValue>-</NoValue>
-                                            }
-                                            </Value>
-                                        </Field>
-                                        <Field>
-                                            <Key>Dates de fermetures</Key>
-                                            <Value>
-                                                {
-                                                    props.regulatoryZoneMetadata.closingDate ? <>
-                                                            {getDateTime(props.regulatoryZoneMetadata.closingDate, true)}{' '}
-                                                            <Gray>(CET)</Gray></>
-                                                        : <NoValue>-</NoValue>
-                                                }
-                                            </Value>
-                                        </Field>
-                                        <Field>
-                                            <Key>État</Key>
-                                            <Value>{props.regulatoryZoneMetadata.state ? props.regulatoryZoneMetadata.state : <NoValue>-</NoValue>}</Value>
-                                        </Field>
+                                        {
+                                            props.regulatoryZoneMetadata.openingDate ?
+                                                <Field>
+                                                    <Key>Dates d'ouvertures</Key>
+                                                    <Value>
+                                                        {
+                                                            props.regulatoryZoneMetadata.openingDate ? <>
+                                                                    {getDateTime(props.regulatoryZoneMetadata.openingDate, true)}{' '}
+                                                                    <Gray>(CET)</Gray></>
+                                                                : <NoValue>-</NoValue>
+                                                        }
+                                                    </Value>
+                                                </Field> : null
+                                        }
+                                        {
+                                            props.regulatoryZoneMetadata.closingDate ?
+                                                <Field>
+                                                    <Key>Dates de fermetures</Key>
+                                                    <Value>
+                                                        {
+                                                            props.regulatoryZoneMetadata.closingDate ? <>
+                                                                    {getDateTime(props.regulatoryZoneMetadata.closingDate, true)}{' '}
+                                                                    <Gray>(CET)</Gray></>
+                                                                : <NoValue>-</NoValue>
+                                                        }
+                                                    </Value>
+                                                </Field> : null
+                                        }
+                                        {
+                                            props.regulatoryZoneMetadata.state ?
+                                                <Field>
+                                                    <Key>État</Key>
+                                                    <Value>{props.regulatoryZoneMetadata.state ? props.regulatoryZoneMetadata.state : <NoValue>-</NoValue>}</Value>
+                                                </Field> : null
+                                        }
                                     </Body>
                                 </Fields>
                             </Zone>
@@ -122,12 +131,40 @@ const RegulatoryZoneMetadata = props => {
                                 <ValueWithLineBreak>{props.regulatoryZoneMetadata.size ? props.regulatoryZoneMetadata.size : <NoValue>-</NoValue>} </ValueWithLineBreak>
                                 <KeyWithLineBreak>Quantités</KeyWithLineBreak>
                                 <ValueWithLineBreak>{props.regulatoryZoneMetadata.quantity ? props.regulatoryZoneMetadata.quantity : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                {
+                                    props.regulatoryZoneMetadata.bycatch ?
+                                        <>
+                                            <KeyWithLineBreak>Captures accessoires</KeyWithLineBreak>
+                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.bycatch ? props.regulatoryZoneMetadata.bycatch : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                        </> : null
+                                }
+                                {
+                                    props.regulatoryZoneMetadata.rejections ?
+                                        <>
+                                            <KeyWithLineBreak>Rejets</KeyWithLineBreak>
+                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.rejections ? props.regulatoryZoneMetadata.rejections : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                        </> : null
+                                }
                             </ZoneWithLineBreak>
                             <ZoneWithLineBreak>
                                 <KeyWithLineBreak>Documents obligatoires</KeyWithLineBreak>
                                 <ValueWithLineBreak>{props.regulatoryZoneMetadata.mandatoryDocuments ? props.regulatoryZoneMetadata.mandatoryDocuments : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                {
+                                    props.regulatoryZoneMetadata.obligations ?
+                                        <>
+                                            <KeyWithLineBreak>Autres obligations</KeyWithLineBreak>
+                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.obligations ? props.regulatoryZoneMetadata.obligations : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                        </> : null
+                                }
                                 <KeyWithLineBreak>Interdictions</KeyWithLineBreak>
                                 <ValueWithLineBreak>{props.regulatoryZoneMetadata.prohibitions ? props.regulatoryZoneMetadata.prohibitions : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                {
+                                    props.regulatoryZoneMetadata.permissions ?
+                                        <>
+                                            <KeyWithLineBreak>Autorisations</KeyWithLineBreak>
+                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.permissions ? props.regulatoryZoneMetadata.permissions : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                        </> : null
+                                }
                                 <KeyWithLineBreak>Références réglementaires</KeyWithLineBreak>
                                 <ValueWithLineBreak>{props.regulatoryZoneMetadata.regulatoryReferences ? props.regulatoryZoneMetadata.regulatoryReferences : <NoValue>-</NoValue>} </ValueWithLineBreak>
                             </ZoneWithLineBreak>

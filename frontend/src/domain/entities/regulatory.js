@@ -18,5 +18,7 @@ export const mapToRegulatoryZone = properties => {
         size: properties.taille,
         region: properties.region,
         seafront: properties.facade,
+        obligations: properties.obligations,
+        rejections: properties.rejets
     }
 }

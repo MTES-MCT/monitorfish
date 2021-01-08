@@ -46,7 +46,7 @@ def find_table_schema(db: str, table_name: str):
 
     If the table is not found, returns None.
 
-    Possible values for db : 'ocani', 'monitorfish_remote_i', 'fmcit'
+    Possible values for db : 'ocani', 'monitorfish_remote_i', 'fmcit', 'monitorfish_local'
     """
     e = create_engine(db)
     insp = sa.inspect(e)
@@ -63,7 +63,7 @@ def print_schemas_tables(db: str, schemas=None):
     """Prints all schemas and associated tables in a database.
     Optionnal argument 'schemas' takes a list of schemas to restrict the scan.
 
-    Possible values for db : 'ocani', 'monitorfish_remote_i', 'fmcit'
+    Possible values for db : 'ocani', 'monitorfish_remote_i', 'fmcit', 'monitorfish_local'
     """
     e = create_engine(db)
     insp = inspect(e)

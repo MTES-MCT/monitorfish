@@ -13,12 +13,13 @@ def read_saved_query(db: str, sql_filepath: str) -> pd.DataFrame:
     - 'ocani' : OCAN integration database
     - 'fmcit': FMC integration database
     - 'monitorfish_remote_i': Monitorfish integration database
+    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
     Args:
         db (str): Database name. Possible values :
-            'ocani', 'fmcit', 'monitorfish_remote_i'
+            'ocani', 'fmcit', 'monitorfish_remote_i', 'monitorfish_local'
         sql_filepath (str): path to .sql file, starting from datascience library folder.
             example : "pipeline/queries/ocan/nav_fr_peche.sql"
 
@@ -37,12 +38,13 @@ def read_query(db: str, query: str, chunksize: Union[None, str] = None) -> pd.Da
     - 'ocani' : OCAN integration database
     - 'fmcit': FMC integration database
     - 'monitorfish_remote_i': Monitorfish integration database
+    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
     Args:
         db (str): Database name. Possible values :
-            'ocani', 'fmcit', 'monitorfish_remote_i'
+            'ocani', 'fmcit', 'monitorfish_remote_i', 'monitorfish_local'
         query (str): Query string
 
     Returns:
@@ -57,10 +59,11 @@ def read_table(db: str, schema: str, table_name: str):
     - 'ocani' : OCAN integration database
     - 'fmcit': FMC integration database
     - 'monitorfish_remote_i': Monitorfish integration database
+    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
 
     Args:
         db (str): Database name. Possible values :
-            'ocani', 'fmcit', 'monitorfish_remote_i'
+            'ocani', 'fmcit', 'monitorfish_remote_i', 'monitorfish_local'
         schema (str): Schema name
         table_name (str): Table name
 

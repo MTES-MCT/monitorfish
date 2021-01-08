@@ -215,6 +215,8 @@ const Position = styled.div`
   background: ${COLORS.background};
   margin: 5px 5px 5px 5px;
   padding-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
 `
 
 const VesselCardHeader = styled.div`

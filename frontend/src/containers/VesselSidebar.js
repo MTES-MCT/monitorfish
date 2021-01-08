@@ -1,13 +1,15 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {ReactComponent as VesselIDSVG} from '../components/icons/picto_carte_identite_navire.svg';
-import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_activites_peche.svg';
+import {ReactComponent as SummarySVG} from '../components/icons/Picto_resume.svg';
+import {ReactComponent as VesselIDSVG} from '../components/icons/Picto_identite.svg';
+import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_peche.svg';
 import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles.svg';
-import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_observations_ciblage.svg';
+import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
 import VesselIdentity from "../components/VesselIdentity";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
+import VesselSummary from "../components/VesselSummary";
 
 const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
@@ -25,13 +27,13 @@ const VesselSidebar = () => {
     }, [openBox])
 
     useEffect(() => {
-        if (vesselState.vesselBoxIsOpen) {
+        if (vesselState.vesselSidebarIsOpen) {
             setOpenBox(true)
-            setIndex(vesselState.vesselBoxTabIndexToShow)
+            setIndex(vesselState.vesselSidebarTabIndexToShow)
         } else {
             setOpenBox(false)
         }
-    }, [vesselState.vesselBoxIsOpen, vesselState.vesselBoxTabIndexToShow])
+    }, [vesselState.vesselSidebarIsOpen, vesselState.vesselSidebarTabIndexToShow])
 
     useEffect(() => {
         if (vesselState.selectedVessel) {
@@ -49,30 +51,36 @@ const VesselSidebar = () => {
                     <div>
                         <TabList>
                             <Tab isActive={index === 1} onClick={() => setIndex(1)}>
+                                <SummaryIcon /> Résumé
+                            </Tab>
+                            <Tab isActive={index === 2} onClick={() => setIndex(2)}>
                                 <VesselIDIcon /> Identité
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 2} onClick={() => setIndex(2)}>
+                            <Tab type="button" disabled isActive={index === 3} onClick={() => setIndex(3)}>
                                 <FisheriesIcon /> <br/> Pêche
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 3} onClick={() => setIndex(3)}>
+                            <Tab type="button" disabled isActive={index === 4} onClick={() => setIndex(3)}>
                                 <ControlsIcon /> Contrôles
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 4} onClick={() => setIndex(4)}>
+                            <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(4)}>
                                 <ObservationsIcon /> Observations
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
+                            <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(5)}>
                                 <VMSIcon /> VMS/ERS
                             </Tab>
                         </TabList>
 
                         <Panel className={index === 1 ? '' : 'hide'}>
-                            <VesselIdentity
+                            <VesselSummary
                                 vessel={vessel}
                                 gears={gears}
                             />
                         </Panel>
                         <Panel className={index === 2 ? '' : 'hide'}>
-                            <h1>TODO</h1>
+                            <VesselIdentity
+                                vessel={vessel}
+                                gears={gears}
+                            />
                         </Panel>
                         <Panel className={index === 3 ? '' : 'hide'}>
                             <h1>TODO</h1>
@@ -81,6 +89,9 @@ const VesselSidebar = () => {
                             <h1>TODO</h1>
                         </Panel>
                         <Panel className={index === 5 ? '' : 'hide'}>
+                            <h1>TODO</h1>
+                        </Panel>
+                        <Panel className={index === 6 ? '' : 'hide'}>
                             <h1>TODO</h1>
                         </Panel>
                     </div> </div> : <VesselNotFound>
@@ -121,20 +132,20 @@ const Panel = styled.div`
 `
 
 const Tab = styled.button`
+  padding-top: 10px;
   display: inline-block;
   width: 100px;
   margin: 0;
   border: none;
   border-radius: 0;
-  height: 60px;
+  height: 65px;
   font-size: 13px;
-  color: ${props => props.isActive ? COLORS.grayDarkerThree : COLORS.textGray};
+  color: ${COLORS.grayDarker};
   border-right: 1px solid ${COLORS.grayDarkerTwo};
   background: ${props => props.isActive ? COLORS.textGray : COLORS.grayDarkerThree};
   
-  :hover {
+  :hover, :focus, :active {
     background: ${COLORS.textGray};
-    color: ${COLORS.grayDarkerThree};
   }
 `
 
@@ -177,22 +188,23 @@ const VesselIDIcon = styled(VesselIDSVG)`
 `
 
 const ControlsIcon = styled(ControlsSVG)`
-  width: 23px;
-  margin-top: -1px;
+  width: 30px;
 `
 
 const ObservationsIcon = styled(ObservationsSVG)`
-  width: 35px;
+  width: 30px;
 `
 
 const VMSIcon = styled(VMSSVG)`
-  width: 20px;
-  margin-top: 2px;
+  width: 30px;
 `
 
 const FisheriesIcon = styled(FisheriesSVG)`
   width: 30px;
-  margin-top: 3px;
+`
+
+const SummaryIcon = styled(SummarySVG)`
+  width: 30px;
 `
 
 export default VesselSidebar

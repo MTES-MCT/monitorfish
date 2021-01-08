@@ -91,13 +91,23 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
     return vectorSource
 }
 
+function removeMiscellaneousGears(layerGearsArray) {
+    return layerGearsArray
+        .filter(gearCode => gearCode !== 'MIS')
+        .map(gearCode => gearCode);
+}
+
 export function getGearCategory(layerGears, gears) {
     let gear = null
     if (layerGears) {
         let layerGearsArray = layerGears.replace(/ /g, '').split(',')
+        if (layerGearsArray.length > 1) {
+            layerGearsArray = removeMiscellaneousGears(layerGearsArray)
+        }
         gear = gears
             .find(gear => {
-                return layerGearsArray.some(gearCode => {
+                return layerGearsArray
+                    .some(gearCode => {
                     if (gearCode === gear.code) {
                         return true
                     }

@@ -194,7 +194,7 @@ const Flag = styled.img`
 const VesselName = styled.span`
   display: inline-block;
   color: ${COLORS.grayBackground};
-  margin: 1px 0 0 10px;
+  margin: 0 0 0 10px;
   line-height: 1.9em;
   vertical-align: middle;
   font-size: 20px;

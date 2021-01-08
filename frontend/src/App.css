@@ -80,10 +80,6 @@ tbody {
   z-index: 300;
 }
 
-.vessel-summary-overlay {
-  z-index: 200;
-}
-
 .radar {
   position: initial !important;
 }

@@ -10,7 +10,7 @@ import Layers from "../entities/layers";
 import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";
-import showVesselTrackAndSummary from "./showVesselTrackAndSummary";
+import showVesselTrackAndSidebar from "./showVesselTrackAndSidebar";
 import {updateVesselFeature} from "../reducers/Vessel";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
@@ -34,7 +34,7 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
     });
 
     if(getState().vessel.selectedVesselFeature) {
-        dispatch(showVesselTrackAndSummary(getState().vessel.selectedVesselFeature, false, true))
+        dispatch(showVesselTrackAndSidebar(getState().vessel.selectedVesselFeature, false, true))
     }
 }
 

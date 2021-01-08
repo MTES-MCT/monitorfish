@@ -30,6 +30,14 @@ db_env = {
         "usr": "MONITORFISH_REMOTE_DB_USER",
         "pwd": "MONITORFISH_REMOTE_DB_PWD",
     },
+    "monitorfish_local": {
+        "client": "MONITORFISH_LOCAL_CLIENT",
+        "host": "MONITORFISH_LOCAL_HOST",
+        "port": "MONITORFISH_LOCAL_PORT",
+        "sid": "MONITORFISH_LOCAL_NAME",
+        "usr": "MONITORFISH_LOCAL_USER",
+        "pwd": "MONITORFISH_LOCAL_PWD",
+    }
 }
 
 
@@ -38,7 +46,7 @@ def create_engine(db: str, **kwargs) -> sa.engine.Engine:
 
     Args:
         db (str): Database name. Possible values :
-            'ocani', 'fmcit', 'monitorfish_remote_i'
+            'ocani', 'fmcit', 'monitorfish_remote_i', 'monistorfish_local'
 
     Returns:
         sa.engine.Engine: sqlalchemy engine for selected database.

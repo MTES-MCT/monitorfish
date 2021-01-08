@@ -2,9 +2,8 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 
 import {ReactComponent as SearchIconSVG} from "../components/icons/Loupe.svg";
-import {ReactComponent as SearchIconDarkSVG} from "../components/icons/Loupe_dark.svg";
 import LayersEnum from "../domain/entities/layers";
-import showVesselTrackAndSummary from "../domain/use_cases/showVesselTrackAndSummary";
+import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import {ReactComponent as CloseIconSVG} from "../components/icons/Croix_grise.svg";
@@ -12,7 +11,7 @@ import unselectVessel from "../domain/use_cases/unselectVessel";
 
 const VesselsSearchBox = () => {
     const layers = useSelector(state => state.layer.layers)
-    const vesselBoxIsOpen = useSelector(state => state.vessel.vesselBoxIsOpen)
+    const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
     const selectedVesselFeature = useSelector(state => state.vessel.selectedVesselFeature)
     const dispatch = useDispatch()
 
@@ -29,7 +28,7 @@ const VesselsSearchBox = () => {
         function handleClickOutside(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
                 if(selectedVessel) {
-                    if(!vesselNameIsShown && vesselBoxIsOpen) {
+                    if(!vesselNameIsShown && vesselSidebarIsOpen) {
                         setSearchingWhileVesselSelected(true)
                     }
                     setVesselNameIsShown(true)
@@ -48,7 +47,7 @@ const VesselsSearchBox = () => {
             // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [wrapperRef, vesselNameIsShown, selectedVessel, vesselBoxIsOpen]);
+    }, [wrapperRef, vesselNameIsShown, selectedVessel, vesselSidebarIsOpen]);
 
     useEffect(() => {
         setSelectedVessel(selectedVesselFeature)
@@ -94,7 +93,7 @@ const VesselsSearchBox = () => {
 
     useEffect(() => {
         if (selectedVessel) {
-            dispatch(showVesselTrackAndSummary(selectedVessel, true, false));
+            dispatch(showVesselTrackAndSidebar(selectedVessel, true, false));
             setFoundVessels([])
             setSearchText('')
         } else {
@@ -128,11 +127,11 @@ const VesselsSearchBox = () => {
                     vesselNameIsShown && selectedVessel ? <SelectedVessel
                         onClick={() => {
                             setVesselNameIsShown(false)
-                            if(vesselBoxIsOpen) {
+                            if(vesselSidebarIsOpen) {
                                 setSearchingWhileVesselSelected(true)
                             }
                         }}
-                        vesselBoxIsOpen={vesselBoxIsOpen}
+                        vesselSidebarIsOpen={vesselSidebarIsOpen}
                         selectedVessel={selectedVessel}
                         searchingWhileVesselSelected={searchingWhileVesselSelected}
                     >
@@ -150,7 +149,7 @@ const VesselsSearchBox = () => {
                         placeholder={'Rechercher un navire (nom, CFR, MMSI, etc.)...'}
                         onChange={e => setSearchText(e.target.value)}
                         searchingWhileVesselSelected={searchingWhileVesselSelected}
-                        vesselBoxIsOpen={vesselBoxIsOpen}
+                        vesselSidebarIsOpen={vesselSidebarIsOpen}
                     />
                 }
                 {
@@ -247,11 +246,11 @@ const SearchBoxInput = styled.input`
   color: ${COLORS.grayDarkerThree};
   font-size: 0.8em;
   height: 40px;
-  width: ${props => props.searchingWhileVesselSelected || props.vesselBoxIsOpen ? '460px' : '300px'};
+  width: ${props => props.searchingWhileVesselSelected || props.vesselSidebarIsOpen ? '460px' : '300px'};
   padding: 0 5px 0 10px;
   flex: 3;
   
-  animation: ${props => props.searchingWhileVesselSelected && !props.vesselBoxIsOpen ? 'vessel-search-closing' : ''}  0.7s ease forwards;
+  animation: ${props => props.searchingWhileVesselSelected && !props.vesselSidebarIsOpen ? 'vessel-search-closing' : ''}  0.7s ease forwards;
 
   @keyframes vessel-search-closing {
     0% { width: 460px; }
@@ -271,15 +270,15 @@ const SelectedVessel = styled.div`
   border-radius: 0;
   color: ${COLORS.grayBackground};
   height: 40px;
-  width: ${props => props.selectedVessel && props.vesselBoxIsOpen && props.searchingWhileVesselSelected ? '485px' : props.selectedVessel.getProperties().vesselName ?  props.selectedVessel.getProperties().vesselName.length * 13 + 80 + 'px' : '320px'};
+  width: 485px;
   padding: 0 5px 0 10px;
   flex: 3;
   text-align: left;
   cursor: text;
-  animation: ${props => props.firstUpdate && !props.vesselBoxIsOpen ? '' : props.vesselBoxIsOpen && !props.searchingWhileVesselSelected ? 'vessel-search-opening' : ''} 0.7s ease forwards;
+  animation: ${props => props.firstUpdate && !props.vesselSidebarIsOpen ? '' : props.vesselSidebarIsOpen && !props.searchingWhileVesselSelected ? 'vessel-search-opening' : ''} 0.7s ease forwards;
 
   @keyframes vessel-search-opening {
-    0%   { width: ${props => props.selectedVessel.getProperties().vesselName ? props.selectedVessel.getProperties().vesselName.length * 13 + 80 + 'px' : '320px'};   }
+    0%   { width: ${props => props.selectedVessel.getProperties().vesselName ? '485px' : '320px'};   }
     100% { width: 485px; }
   }
 

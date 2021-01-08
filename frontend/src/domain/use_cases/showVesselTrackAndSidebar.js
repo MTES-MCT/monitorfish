@@ -6,8 +6,7 @@ import {
     VESSEL_SELECTOR_STYLE
 } from "../../layers/styles/featuresStyles";
 import {
-    loadingVessel, openVesselSummary,
-    setSelectedVessel,
+    loadingVessel, openVesselSidebar, setSelectedVessel,
     setSelectedVesselTrackVector,
 } from "../reducers/Vessel";
 import {Vector} from "ol/layer";
@@ -26,10 +25,10 @@ import Stroke from "ol/style/Stroke";
 import {animateToVessel, setUsingSearch} from "../reducers/Map";
 import {setError} from "../reducers/Global";
 
-const showVesselTrackAndSummary = (feature, fromSearch, updateShowedVessel) => (dispatch, getState) => {
+const showVesselTrackAndSidebar = (feature, fromSearch, updateShowedVessel) => (dispatch, getState) => {
     if(getState().vessel.selectedVesselFeature === feature) {
-        if(!getState().vessel.vesselSummaryIsOpen && getState().vessel.selectedVessel && !updateShowedVessel) {
-            dispatch(openVesselSummary())
+        if(getState().vessel.selectedVessel && !updateShowedVessel) {
+            dispatch(openVesselSidebar())
         }
         return
     }
@@ -43,6 +42,11 @@ const showVesselTrackAndSummary = (feature, fromSearch, updateShowedVessel) => (
         dispatch(setUsingSearch())
         dispatch(animateToVessel(feature));
     }
+
+    if(feature) {
+        dispatch(animateToVessel(feature));
+    }
+    dispatch(openVesselSidebar())
 
     getVesselFromAPI(
         feature.getProperties().internalReferenceNumber,
@@ -168,4 +172,4 @@ function removePreviousSelectedFeature(getState) {
     }
 }
 
-export default showVesselTrackAndSummary
+export default showVesselTrackAndSidebar

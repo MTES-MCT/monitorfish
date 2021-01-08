@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {VESSEL_SELECTOR_STYLE} from "../../layers/styles/featuresStyles";
 
 const vesselSlice = createSlice({
     name: 'vessel',
@@ -9,9 +8,8 @@ const vesselSlice = createSlice({
         removeSelectedIconToFeature: false,
         selectedVessel: null,
         loadingVessel: null,
-        vesselSummaryIsOpen: false,
-        vesselBoxIsOpen: false,
-        vesselBoxTabIndexToShow: 1
+        vesselSidebarIsOpen: false,
+        vesselSidebarTabIndexToShow: 1
     },
     reducers: {
         setSelectedVesselTrackVector(state, action) {
@@ -21,7 +19,6 @@ const vesselSlice = createSlice({
             state.selectedVesselFeature = action.payload
             state.selectedVesselTrackVector = null
             state.selectedVessel = null
-            state.vesselSummaryIsOpen = true
             state.loadingVessel = true
         },
         setSelectedVessel(state, action) {
@@ -32,19 +29,12 @@ const vesselSlice = createSlice({
             state.selectedVessel = null
             state.selectedVesselFeature = null
         },
-        openVesselSummary(state) {
-            state.vesselSummaryIsOpen = true
-        },
-        openVesselBox(state, action) {
-            state.vesselBoxTabIndexToShow = action.payload ? action.payload : 1
-            state.vesselBoxIsOpen = true
-            state.vesselSummaryIsOpen = false
-        },
-        closeVesselSummary(state) {
-            state.vesselSummaryIsOpen = false
+        openVesselSidebar(state, action) {
+            state.vesselSidebarTabIndexToShow = action.payload ? action.payload : 1
+            state.vesselSidebarIsOpen = true
         },
         closeVesselBox(state) {
-            state.vesselBoxIsOpen = false
+            state.vesselSidebarIsOpen = false
             state.selectedVesselTrackVector = null
             state.selectedVessel = null
             state.selectedVesselFeature = null
@@ -63,9 +53,7 @@ export const {
     setSelectedVesselTrackVector,
     setSelectedVessel,
     resetSelectedVessel,
-    openVesselBox,
-    closeVesselSummary,
-    openVesselSummary,
+    openVesselSidebar,
     closeVesselBox,
     updateVesselFeature,
     removeSelectedIconToFeature,

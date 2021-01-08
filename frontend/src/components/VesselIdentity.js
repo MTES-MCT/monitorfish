@@ -29,18 +29,6 @@ const VesselIdentity = props => {
 
     return (
         <Body>
-            <PhotoZone>
-                {
-                    photoFallback ?
-                        <DummyPhoto src={`boat_fishing.png`}/> :
-                        <>
-                            {
-                                props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
-                                    : null
-                            }
-                        </>
-                }
-            </PhotoZone>
             <Zone>
                 <Fields>
                     <TableBody>
@@ -220,11 +208,6 @@ const ValueWithLineBreak = styled.div`
   font-size: 13px;
 `
 
-const PhotoZone = styled.div`
-  margin: 5px 5px 10px 5px;
-  background: ${COLORS.background};
-`
-
 const Body = styled.div`
   padding: 5px 5px 1px 5px;
 `
@@ -253,21 +236,6 @@ const PingerInput = styled.input`
   font-size: 0.9em;
   padding: 0px 2px 0px 2px;
   margin: -5px 2px 0 2px;
-`
-
-const Photo = styled.img`
-  margin: 15px 0 10px 0;
-  max-height: 190px;
-  left: auto;
-  right: auto;
-`
-
-const DummyPhoto = styled.img`
-  margin: 15px 0 10px 0;
-  max-height: 130px;
-  left: auto;
-  right: auto;
-  opacity: 0.3;
 `
 
 const Zone = styled.div`
@@ -321,10 +289,6 @@ const Key = styled.th`
   font-weight: normal;
 `
 
-const KeyInfo = styled.span`
-  font-size: 0.5rem;
-`
-
 const TrimmedValue = styled.td`
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
@@ -366,16 +330,6 @@ const PersonalData = styled.div`
   line-height: inherit;
   font-size: 0.8rem !important;
   margin-top: -5px;
-`
-
-const PanelTitle = styled.span`
-  padding: 5px 0 5px 0;
-  display: inline-block;
-  font-size: 16px;
-  text-align: center;
-  background: ${COLORS.grayDarkerThree};
-  color: ${COLORS.grayBackground};
-  width: 100%;
 `
 
 export default VesselIdentity

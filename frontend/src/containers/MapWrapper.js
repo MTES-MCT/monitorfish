@@ -7,7 +7,6 @@ import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
-import {Zoom} from 'ol/control';
 import LayersEnum from "../domain/entities/layers";
 import MapCoordinatesBox from "../components/MapCoordinatesBox";
 import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/entities/map";
@@ -21,8 +20,7 @@ import Overlay from "ol/Overlay";
 import VesselCard from "../components/VesselCard";
 import VesselTrackCard from "../components/VesselTrackCard";
 import ShowVesselsNamesBox from "./ShowVesselsNamesBox";
-import VesselSummary from "./VesselSummary";
-import showVesselTrackAndSummary from "../domain/use_cases/showVesselTrackAndSummary";
+import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
@@ -30,7 +28,6 @@ import {updateVesselFeature} from "../domain/reducers/Vessel";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
-const vesselSummaryID = 'vessel-summary';
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
 
@@ -57,16 +54,6 @@ const MapWrapper = () => {
             className: 'ol-overlay-container ol-selectable vessel-overlay'
         });
 
-        const vesselSummaryOverlay = new Overlay({
-            id: vesselSummaryID,
-            element: document.getElementById(vesselSummaryID),
-            autoPan: true,
-            autoPanAnimation: {
-                duration: 400,
-            },
-            className: 'ol-overlay-container ol-selectable vessel-summary-overlay'
-        });
-
         const vesselTrackCardOverlay = new Overlay({
             element: document.getElementById('vessel-track-card'),
             autoPan: true,
@@ -89,7 +76,7 @@ const MapWrapper = () => {
                 OSMLayer
             ],
             renderer: (['webgl', 'canvas']),
-            overlays: [vesselSummaryOverlay, vesselCardOverlay, vesselTrackCardOverlay],
+            overlays: [vesselCardOverlay, vesselTrackCardOverlay],
             view: new View({
                 projection: OPENLAYERS_PROJECTION,
                 center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
@@ -187,7 +174,7 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
-        if (map && mapState.animateToVessel && vessel.selectedVesselFeature && !vessel.vesselBoxIsOpen) {
+        if (map && mapState.animateToVessel && vessel.selectedVesselFeature && !vessel.vesselSidebarIsOpen) {
             map.getView().animate({
                 center: [
                     mapState.animateToVessel.getGeometry().getCoordinates()[0],
@@ -197,7 +184,7 @@ const MapWrapper = () => {
                 zoom: MIN_ZOOM_VESSEL_NAMES
             });
             dispatch(resetAnimateToVessel())
-        } else if (map && mapState.animateToVessel && vessel.selectedVesselFeature && vessel.vesselBoxIsOpen) {
+        } else if (map && mapState.animateToVessel && vessel.selectedVesselFeature && vessel.vesselSidebarIsOpen) {
             const resolution = mapRef.current.getView().getResolution()
             map.getView().animate({
                 center: [
@@ -209,7 +196,7 @@ const MapWrapper = () => {
             });
             dispatch(resetAnimateToVessel())
         }
-    }, [mapState.animateToVessel, map, vessel.vesselBoxIsOpen, vessel.selectedVesselFeature, mapState.usingSearch])
+    }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeature, mapState.usingSearch])
 
     function removeVesselNameToAllFeatures() {
         layer.layers
@@ -275,30 +262,19 @@ const MapWrapper = () => {
         });
 
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
-            dispatch(showVesselTrackAndSummary(feature, false, false))
+            dispatch(showVesselTrackAndSidebar(feature, false, false))
         }
     }
 
     useEffect(() => {
-        if(vessel.vesselSummaryIsOpen && vessel.selectedVesselFeature && !vessel.removeSelectedIconToFeature) {
-            let vesselSummaryOverlay = mapRef.current.getOverlays().getArray().find(overlay => overlay.id === vesselSummaryID)
-            document.getElementById(vesselSummaryOverlay.getId()).style.display = 'block';
-            vesselSummaryOverlay.setPosition(vessel.selectedVesselFeature.getGeometry().getCoordinates());
-
+        if(vessel.selectedVesselFeature && !vessel.removeSelectedIconToFeature) {
             let vesselAlreadyWithSelectorStyle = vessel.selectedVesselFeature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
             if (!vesselAlreadyWithSelectorStyle) {
                 vessel.selectedVesselFeature.setStyle([...vessel.selectedVesselFeature.getStyle(), selectedVesselStyle]);
                 dispatch(updateVesselFeature(vessel.selectedVesselFeature))
             }
         }
-    }, [vessel.vesselSummaryIsOpen, vessel.selectedVesselFeature])
-
-    useEffect(() => {
-        if(map && !vessel.vesselSummaryIsOpen) {
-            let vesselSummaryOverlay = mapRef.current.getOverlays().getArray().find(overlay => overlay.id === vesselSummaryID)
-            document.getElementById(vesselSummaryOverlay.getId()).style.display = 'none';
-        }
-    }, [vessel.vesselSummaryIsOpen, map])
+    }, [vessel.selectedVesselFeature])
 
     const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay) => {
         const pixel = mapRef.current.getEventPixel(event.originalEvent);
@@ -342,9 +318,6 @@ const MapWrapper = () => {
             <VesselCardOverlay id="vessel-card">
                 { vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null }
             </VesselCardOverlay>
-            <VesselSummaryOverlay id="vessel-summary">
-                 <VesselSummary />
-            </VesselSummaryOverlay>
             <VesselTrackCardOverlay id="vessel-track-card">
                 { vesselFeatureToShowOnCard ? <VesselTrackCard vessel={vesselFeatureToShowOnCard} /> : null }
             </VesselTrackCardOverlay>
@@ -355,18 +328,6 @@ const MapWrapper = () => {
         </div>
     )
 }
-
-const VesselSummaryOverlay = styled.div`
-  position: absolute;
-  top: -535px;
-  left: -185px;
-  width: 370px;
-  min-height: 500px;
-  text-align: left;
-  background-color: ${COLORS.grayBackground};
-  border-radius: 1px;
-  z-index: 100;
-`
 
 const VesselCardOverlay = styled.div`
   position: absolute;

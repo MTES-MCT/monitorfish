@@ -49,8 +49,8 @@ const VesselIdentity = props => {
                             <Value>{props.vessel.internalReferenceNumber ? props.vessel.internalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>IMO</Key>
-                            <Value>{props.vessel.imo ? props.vessel.imo : <NoValue>-</NoValue>}</Value>
+                            <Key>Marquage ext.</Key>
+                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>
                 </Fields>
@@ -108,7 +108,7 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Type de navire</Key>
-                            <Value>{props.vessel.sailingType ? props.vessel.sailingType : <NoValue>-</NoValue>}</Value>
+                            <Value>{props.vessel.vesselType ? props.vessel.vesselType : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key>Catégorie de navigation</Key>
@@ -116,7 +116,7 @@ const VesselIdentity = props => {
                         </Field>
                         <Field>
                             <Key>Genre de navigation</Key>
-                            <Value>{props.vessel.vesselType ? props.vessel.vesselType : <NoValue>-</NoValue>}</Value>
+                            <Value>{props.vessel.sailingType ? props.vessel.sailingType : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key/>

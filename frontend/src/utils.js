@@ -32,10 +32,17 @@ export let getCoordinates = (coordinates, projection) => {
     }
 }
 
-export let getDateTime = dateString => {
+export let getDateTime = (dateString, withoutSeconds) => {
     if (dateString) {
         const date = new Date(dateString)
-        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} à ${date.toLocaleTimeString('fr-FR')}`
+        let time = date.toLocaleTimeString('fr-FR')
+        time = time.replace(':', 'h')
+
+        if(withoutSeconds) {
+            time = time.substring(0, time.length - 3)
+        }
+
+        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} à ${time}`
     }
 }
 

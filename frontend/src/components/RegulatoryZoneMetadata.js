@@ -72,7 +72,7 @@ const RegulatoryZoneMetadata = props => {
                                             <Value>
                                             {
                                                 props.regulatoryZoneMetadata.openingDate ? <>
-                                                        {getDateTime(props.regulatoryZoneMetadata.openingDate)}{' '}
+                                                        {getDateTime(props.regulatoryZoneMetadata.openingDate, true)}{' '}
                                                         <Gray>(CET)</Gray></>
                                                     : <NoValue>-</NoValue>
                                             }
@@ -83,7 +83,7 @@ const RegulatoryZoneMetadata = props => {
                                             <Value>
                                                 {
                                                     props.regulatoryZoneMetadata.closingDate ? <>
-                                                            {getDateTime(props.regulatoryZoneMetadata.closingDate)}{' '}
+                                                            {getDateTime(props.regulatoryZoneMetadata.closingDate, true)}{' '}
                                                             <Gray>(CET)</Gray></>
                                                         : <NoValue>-</NoValue>
                                                 }

@@ -10,6 +10,7 @@ import VesselIdentity from "../components/VesselIdentity";
 import {useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
+import { FingerprintSpinner } from 'react-epic-spinners'
 
 const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
@@ -94,12 +95,13 @@ const VesselSidebar = () => {
                         <Panel className={index === 6 ? '' : 'hide'}>
                             <h1>TODO</h1>
                         </Panel>
-                    </div> </div> : <VesselNotFound>
+                    </div>
+                </div> : <VesselNotFound>
                         <VesselNotFoundText>
                             <VesselNotFoundImage src="boat_fishing_not_found.png"/>
                             <p>Nous n'avons pas trouvé ce navire dans notre base de donnée...</p>
                         </VesselNotFoundText>
-                    </VesselNotFound> : "Récupération..."
+                    </VesselNotFound> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
             }
 
         </Wrapper>

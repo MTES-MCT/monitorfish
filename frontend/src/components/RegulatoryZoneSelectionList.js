@@ -13,7 +13,7 @@ const RegulatoryZoneSelectionList = props => {
     return (
         <List showRegulatorySearchInput={props.showRegulatorySection} foundRegulatoryZones={foundRegulatoryZones}>
             {
-                foundRegulatoryZones ? Object.keys(foundRegulatoryZones).map((regulatoryZoneName, index) => {
+                foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0 ? Object.keys(foundRegulatoryZones).map((regulatoryZoneName, index) => {
                     return (<ListItem key={index}>
                         <RegulatoryZoneSelectionItem
                             key={index}
@@ -39,6 +39,7 @@ const List = styled.ul`
   max-height: 200px;
   overflow-y: scroll;
   overflow-x: hidden;
+  color: ${COLORS.textGray};
   
   animation: ${props => props.showRegulatorySearchInput && props.foundRegulatoryZones ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-result-opening' : 'regulatory-result-closing' : 'regulatory-result-closing'} 0.5s ease forwards;
 

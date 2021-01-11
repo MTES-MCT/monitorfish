@@ -35,7 +35,7 @@ const RegulatoryZoneSelected = props => {
                 showRegulatoryZonesSelected={showRegulatoryZonesSelected}
             >
                 {
-                    Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
+                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0 ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
                         return (<ListItem key={index}>
                             <RegulatoryZoneSelectedLayer
                                 increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
@@ -53,12 +53,18 @@ const RegulatoryZoneSelected = props => {
                                 gears={props.gears}
                             />
                         </ListItem>)
-                    })
+                    }) : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
                 }
             </RegulatoryZoneSelectedList>
         </>
     )
 }
+
+const NoZoneSelected = styled.div`
+  color: ${COLORS.grayDarkerTwo};
+  margin: 10px;
+  font-size: 13px;
+`
 
 const RegulatoryZoneSelectedTitle = styled.div`
   height: 27px;
@@ -112,7 +118,7 @@ const RegulatoryZoneSelectedList = styled.ul`
                 return props.layerLength * 37
             }
         } else {
-            return 20
+            return 40
         }
     }}px;
   max-height: 550px;

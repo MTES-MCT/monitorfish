@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {COLORS} from "../constants/constants";
 
 const VesselIdentity = props => {
-    const [photoFallback, setPhotoFallback] = useState(false)
     const [gears, setGears] = useState([])
 
     const showLicenceExpirationDate = licenceExpirationDate => {

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 import { FingerprintSpinner } from 'react-epic-spinners'
+import {ReactComponent as NoVesselSVG} from '../components/icons/Picto_photo_navire_manquante.svg';
 
 import {getCoordinates, timeagoFrenchLocale} from "../utils";
 import {WSG84_PROJECTION} from "../domain/entities/map";
@@ -8,7 +9,7 @@ import {COLORS} from "../constants/constants";
 import * as timeago from 'timeago.js';
 timeago.register('fr', timeagoFrenchLocale);
 
-const VesselSummary = props => {
+    const VesselSummary = props => {
     const [photoFallback, setPhotoFallback] = useState(false)
     const [vessel, setVessel] = useState(null);
     const [lastPosition, setLastPosition] = useState(null);
@@ -46,10 +47,10 @@ const VesselSummary = props => {
             <PhotoZone>
                 {
                     photoFallback ?
-                        <DummyPhoto src={`boat_fishing.png`}/> :
+                        <NoVessel /> :
                         <>
                             {
-                                props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                                props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.d}&size=thumb300`}/>
                                     : null
                             }
                         </>
@@ -167,6 +168,13 @@ const VesselSummary = props => {
         </Body>
     ) : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>;
 }
+
+const NoVessel = styled(NoVesselSVG)`
+  width: 60px;
+  background: ${COLORS.grayBackground};
+  padding: 92px 136px 92px 136px;
+  margin: 10px 0 5px 0;
+`
 
 const FieldName = styled.div`
   margin-top: 9px;

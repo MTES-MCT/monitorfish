@@ -82,6 +82,8 @@ tbody {
 
 .radar {
   position: initial !important;
+  margin-top: 80px;
+  margin-bottom: 80px;
 }
 
 a:focus {

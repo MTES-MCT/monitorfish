@@ -174,17 +174,7 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
-        if (map && mapState.animateToVessel && vessel.selectedVesselFeature && !vessel.vesselSidebarIsOpen) {
-            map.getView().animate({
-                center: [
-                    mapState.animateToVessel.getGeometry().getCoordinates()[0],
-                    mapState.animateToVessel.getGeometry().getCoordinates()[1] + 90000
-                ],
-                duration: 1000,
-                zoom: undefined
-            });
-            dispatch(resetAnimateToVessel())
-        } else if (map && mapState.animateToVessel && vessel.selectedVesselFeature && vessel.vesselSidebarIsOpen) {
+        if (map && mapState.animateToVessel && vessel.selectedVesselFeature && vessel.vesselSidebarIsOpen) {
             const resolution = mapRef.current.getView().getResolution()
             map.getView().animate({
                 center: [

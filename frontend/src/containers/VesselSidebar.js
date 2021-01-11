@@ -52,7 +52,7 @@ const VesselSidebar = () => {
                 <GrayOverlay isOverlayed={searchVesselWhileVesselSelected && !firstUpdate.current}/>
             }
             {
-                vessel ? (vessel.internalReferenceNumber ||
+                vessel && !vesselState.loadingVessel ? (vessel.internalReferenceNumber ||
                     vessel.externalReferenceNumber ||
                     vessel.MMSI ||
                     vessel.IRCS) ? <div>

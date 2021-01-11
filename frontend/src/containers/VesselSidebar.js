@@ -7,14 +7,17 @@ import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
 import VesselIdentity from "../components/VesselIdentity";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
+import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
 
 const VesselSidebar = () => {
+    const dispatch = useDispatch()
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)
+    const searchVesselWhileVesselSelected = useSelector(state => state.vessel.searchVesselWhileVesselSelected)
 
     const [openBox, setOpenBox] = useState(false);
     const [vessel, setVessel] = useState(null);
@@ -39,11 +42,15 @@ const VesselSidebar = () => {
     useEffect(() => {
         if (vesselState.selectedVessel) {
             setVessel(vesselState.selectedVessel)
+            dispatch(setSearchVesselWhileVesselSelected(false))
         }
     }, [vesselState.selectedVessel])
 
     return (
         <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
+            {
+                <GrayOverlay isOverlayed={searchVesselWhileVesselSelected && !firstUpdate.current}/>
+            }
             {
                 vessel ? (vessel.internalReferenceNumber ||
                     vessel.externalReferenceNumber ||
@@ -107,6 +114,24 @@ const VesselSidebar = () => {
         </Wrapper>
     )
 }
+
+const GrayOverlay = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  background: ${COLORS.grayDarkerThree};
+  animation: ${props => props.isOverlayed ? 'opacity-up' : 'opacity-down' } 0.5s ease forwards;
+
+  @keyframes opacity-up {
+    0%   { opacity: 0;   }
+    100% { opacity: 0.5; z-index: 0; }
+  }
+    @keyframes opacity-down {
+    0%   { opacity: 0.5;   }
+    100% { opacity: 0; z-index: -99999;}
+  }
+`
 
 const VesselNotFoundImage = styled.img`
   height: 150px;

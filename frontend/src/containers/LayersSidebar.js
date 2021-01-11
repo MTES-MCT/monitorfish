@@ -19,7 +19,7 @@ import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMe
 import closeRegulatoryZoneMetadata from "../domain/use_cases/closeRegulatoryZoneMetadata";
 import RegulatoryZoneMetadata from "../components/RegulatoryZoneMetadata";
 
-const LeftSidebar = () => {
+const LayersSidebar = () => {
     const dispatch = useDispatch()
     const showedLayers = useSelector(state => state.layer.showedLayers)
     const administrativeZones = useSelector(state => state.layer.administrativeZones)
@@ -203,4 +203,4 @@ const Layers = styled(LayersSVG)`
   height: 35px;
 `
 
-export default LeftSidebar
+export default LayersSidebar

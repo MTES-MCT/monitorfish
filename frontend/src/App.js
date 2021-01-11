@@ -8,7 +8,7 @@ import { ToastProvider } from 'react-toast-notifications'
 import MapWrapper from './containers/MapWrapper'
 import VesselsSearchBox from "./containers/VesselsSearchBox";
 import VesselSidebar from "./containers/VesselSidebar";
-import LeftSidebar from "./containers/LeftSidebar";
+import LayersSidebar from "./containers/LayersSidebar";
 import APIWorker from "./api/APIWorker";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
                   </Logo>
                   <VesselsSearchBox/>
                   <MapWrapper />
-                  <LeftSidebar />
+                  <LayersSidebar />
                   <VesselSidebar />
 
                   <APIWorker />

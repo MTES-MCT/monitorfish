@@ -82,11 +82,11 @@ const List = styled.div`
 
   @keyframes ${props => props.name ? `list-zones-${props.name}-opening` : null} {
     0%   { height: 0px; }
-    100% { height: ${props => props.length * 38}px; }
+    100% { height: ${props => props.length * 39}px; }
   }
 
   @keyframes ${props => props.name ? `list-zones-${props.name}-closing` : null} {
-    0%   { height: ${props => props.length * 38}px; }
+    0%   { height: ${props => props.length * 39}px; }
     100% { height: 0px;   }
   }
 `

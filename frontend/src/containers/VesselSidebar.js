@@ -12,6 +12,7 @@ import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
 import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
+import {ReactComponent as NoVesselSVG} from "../components/icons/Picto_photo_navire_manquante.svg";
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()
@@ -105,8 +106,7 @@ const VesselSidebar = () => {
                     </div>
                 </div> : <VesselNotFound>
                         <VesselNotFoundText>
-                            <VesselNotFoundImage src="boat_fishing_not_found.png"/>
-                            <p>Nous n'avons pas trouvé ce navire dans notre base de donnée...</p>
+                            Nous n'avons pas d'information sur ce navire...
                         </VesselNotFoundText>
                     </VesselNotFound> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
             }
@@ -133,19 +133,15 @@ const GrayOverlay = styled.div`
   }
 `
 
-const VesselNotFoundImage = styled.img`
-  height: 150px;
-`
-
 const VesselNotFound = styled.div`
   padding: 5px 10px 10px 10px;
   right: 0;
 `
 
 const VesselNotFoundText = styled.div`
-  padding: 5px 10px 10px 10px;
+  padding: 10px 10px 5px 10px;
   display: table-cell;
-  font-size: 13px;
+  font-size: 15px;
   vertical-align: middle;
   height: inherit;
   color: ${COLORS.textGray};

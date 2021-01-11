@@ -181,7 +181,7 @@ const MapWrapper = () => {
                     mapState.animateToVessel.getGeometry().getCoordinates()[1] + 90000
                 ],
                 duration: 1000,
-                zoom: MIN_ZOOM_VESSEL_NAMES
+                zoom: undefined
             });
             dispatch(resetAnimateToVessel())
         } else if (map && mapState.animateToVessel && vessel.selectedVesselFeature && vessel.vesselSidebarIsOpen) {
@@ -192,7 +192,7 @@ const MapWrapper = () => {
                     mapState.animateToVessel.getGeometry().getCoordinates()[1] + (resolution * 150)
                 ],
                 duration: 1000,
-                zoom: mapState.usingSearch ? MIN_ZOOM_VESSEL_NAMES : undefined
+                zoom: undefined
             });
             dispatch(resetAnimateToVessel())
         }

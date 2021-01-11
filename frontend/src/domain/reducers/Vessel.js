@@ -9,7 +9,8 @@ const vesselSlice = createSlice({
         selectedVessel: null,
         loadingVessel: null,
         vesselSidebarIsOpen: false,
-        vesselSidebarTabIndexToShow: 1
+        vesselSidebarTabIndexToShow: 1,
+        searchVesselWhileVesselSelected: false
     },
     reducers: {
         setSelectedVesselTrackVector(state, action) {
@@ -44,6 +45,9 @@ const vesselSlice = createSlice({
         },
         removeSelectedIconToFeature(state) {
             state.removeSelectedIconToFeature = true
+        },
+        setSearchVesselWhileVesselSelected(state, action) {
+            state.searchVesselWhileVesselSelected = action.payload
         }
     }
 })
@@ -56,7 +60,7 @@ export const {
     openVesselSidebar,
     closeVesselBox,
     updateVesselFeature,
-    removeSelectedIconToFeature,
+    setSearchVesselWhileVesselSelected,
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

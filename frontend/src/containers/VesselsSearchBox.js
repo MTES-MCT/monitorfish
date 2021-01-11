@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import {ReactComponent as CloseIconSVG} from "../components/icons/Croix_grise.svg";
 import unselectVessel from "../domain/use_cases/unselectVessel";
+import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
 
 const VesselsSearchBox = () => {
     const layers = useSelector(state => state.layer.layers)
@@ -28,8 +29,10 @@ const VesselsSearchBox = () => {
         function handleClickOutside(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
                 if(selectedVessel) {
-                    if(!vesselNameIsShown && vesselSidebarIsOpen) {
+                    if(!vesselNameIsShown && vesselSidebarIsOpen && !searchingWhileVesselSelected) {
                         setSearchingWhileVesselSelected(true)
+                    } else {
+                        setSearchingWhileVesselSelected(false)
                     }
                     setVesselNameIsShown(true)
                     setSearchText('')
@@ -47,7 +50,7 @@ const VesselsSearchBox = () => {
             // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [wrapperRef, vesselNameIsShown, selectedVessel, vesselSidebarIsOpen]);
+    }, [wrapperRef, vesselNameIsShown, selectedVessel, vesselSidebarIsOpen, searchingWhileVesselSelected]);
 
     useEffect(() => {
         setSelectedVessel(selectedVesselFeature)
@@ -101,24 +104,9 @@ const VesselsSearchBox = () => {
         }
     }, [selectedVessel])
 
-    function getVesselInformation(foundVessel) {
-        const informationList = Array.of(
-            foundVessel.getProperties().internalReferenceNumber,
-            foundVessel.getProperties().externalReferenceNumber,
-            foundVessel.getProperties().MMSI
-        ).filter(information => information)
-
-        return <>
-            {
-                informationList.map((information, index) => {
-                    if (index === 2 || index === 3) {
-                        return -information
-                    }
-                    return information
-                })
-            }
-        </>
-    }
+    useEffect(() => {
+        dispatch(setSearchVesselWhileVesselSelected(searchingWhileVesselSelected))
+    }, [searchingWhileVesselSelected])
 
     return (
         <Wrapper ref={wrapperRef}>
@@ -165,11 +153,27 @@ const VesselsSearchBox = () => {
                                     <ListItem
                                         onClick={() => setSelectedVessel(foundVessel)}
                                         key={index}>
-                                        <b>{foundVessel.getProperties().vesselName ? foundVessel.getProperties().vesselName : 'SANS NOM'}</b>
-                                        {foundVessel.getProperties().flagState ?
-                                            <Flag rel="preload" src={`flags/${foundVessel.getProperties().flagState.toLowerCase()}.svg`} style={{float: 'right'}}/> : null}
-                                        <br/>
-                                        {getVesselInformation(foundVessel)}
+                                        <div>
+                                            {foundVessel.getProperties().flagState ?
+                                                <Flag rel="preload" src={`flags/${foundVessel.getProperties().flagState.toLowerCase()}.svg`} /> : null}
+                                            <Name>{foundVessel.getProperties().vesselName ? foundVessel.getProperties().vesselName : 'SANS NOM'}</Name>
+                                        </div>
+                                        <Information>
+                                            <CFR>
+                                                {foundVessel.getProperties().internalReferenceNumber ? foundVessel.getProperties().internalReferenceNumber : <Light>Inconnu</Light>} <Light>(CFR)</Light>
+                                            </CFR>
+                                            <ExtNum>
+                                                {foundVessel.getProperties().externalReferenceNumber ? foundVessel.getProperties().externalReferenceNumber : <Light>Inconnu</Light>} <Light>(Marq. Ext.)</Light>
+                                            </ExtNum>
+                                        </Information>
+                                        <Information>
+                                            <MMSI>
+                                                {foundVessel.getProperties().MMSI ? foundVessel.getProperties().MMSI : <Light>Inconnu</Light>} <Light>(MMSI)</Light>
+                                            </MMSI>
+                                            <CallSign>
+                                                {foundVessel.getProperties().IRCS ? foundVessel.getProperties().IRCS : <Light>Inconnu</Light>} <Light>(Call Sign)</Light>
+                                            </CallSign>
+                                        </Information>
                                     </ListItem>
                                 )
                             })
@@ -180,6 +184,50 @@ const VesselsSearchBox = () => {
 
         </Wrapper>)
 }
+
+const Light = styled.span`
+  font-weight: 300; 
+`
+
+const Name = styled.span`
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 10px;
+  font-weight: 400;
+  font-size: 13px;
+`
+
+const Information = styled.div`
+  display: flex;
+  font-size: 13px;
+  margin-left: 5px;
+  color: ${COLORS.textGray};
+`
+
+const CallSign = styled.div`
+  font-size: 13px;
+  flex: 2;
+  min-width: 130px;
+`
+
+const MMSI = styled.div`
+  font-size: 13px;
+  flex: 1;
+  min-width: 130px;
+`
+
+const ExtNum = styled.div`
+  font-size: 13px;
+  flex: 2;
+  min-width: 130px;
+`
+
+const CFR = styled.div`
+  font-size: 13px;
+  flex: 1;
+  min-width: 130px;
+`
+
 
 const Flag = styled.img`
     font-size: 25px;
@@ -302,12 +350,12 @@ const List = styled.ul`
   border-radius: 2px;
   overflow-y: scroll;
   overflow-x: hidden;
-  max-height: 200px;
+  max-height: 311px;
 `
 
 const ListItem = styled.li`
-  padding: 2px 5px 2px 5px;
-  font-size: 0.8em;
+  padding: 0 5px 5px 7px;
+  font-size: 13px;
   text-align: left;
   list-style-type: none;
   cursor: pointer;

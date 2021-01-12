@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
+import countries from "i18n-iso-countries";
+countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselIdentity = props => {
     const [gears, setGears] = useState([])
@@ -59,7 +61,7 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Nationalité</Key>
-                            <TrimmedValue>{props.vessel.flagState ? props.vessel.flagState : <NoValue>-</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{props.vessel.flagState ? countries.getName(props.vessel.flagState, "fr") : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Quartier</Key>

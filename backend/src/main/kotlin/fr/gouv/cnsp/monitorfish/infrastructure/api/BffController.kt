@@ -6,11 +6,19 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.GearDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PositionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselDataOutput
+import io.micrometer.core.instrument.DistributionSummary
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
+import io.prometheus.client.Summary
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+import java.util.concurrent.TimeUnit
 
 @RestController
 @RequestMapping("/bff")
@@ -18,7 +26,10 @@ import org.springframework.web.bind.annotation.*
 class BffController(
         private val getLastPositions: GetLastPositions,
         private val getVessel: GetVessel,
-        private val getAllGears: GetAllGears) {
+        private val getAllGears: GetAllGears,
+        private val meterRegistry: MeterRegistry) {
+
+    val timer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
 
     @GetMapping("/v1/vessels")
     @ApiOperation("Get all vessels' last position")
@@ -42,7 +53,9 @@ class BffController(
                     @RequestParam(name = "IRCS")
                     IRCS: String): VesselDataOutput {
         return runBlocking {
+            val start = System.currentTimeMillis()
             val (vessel, positions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
+            timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
             VesselDataOutput.fromVessel(vessel, positions)
         }

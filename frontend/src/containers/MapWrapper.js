@@ -5,6 +5,7 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
+import {getTopLeft} from 'ol/extent';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import LayersEnum from "../domain/entities/layers";
@@ -26,11 +27,13 @@ import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducer
 import {COLORS} from "../constants/constants";
 import {updateVesselFeature} from "../domain/reducers/Vessel";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
+import RegulatoryNameCard from "../components/RegulatoryNameCard";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
+const regulatoryNameCardID = 'regulatory-name-card';
 let lastEvent, timeout;
 
 const MapWrapper = () => {
@@ -42,27 +45,37 @@ const MapWrapper = () => {
     const [map, setMap] = useState()
     const [cursorCoordinates, setCursorCoordinates] = useState()
     const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
+    const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
     const mapElement = useRef()
     const mapRef = useRef()
     mapRef.current = map
 
     useEffect(() => {
         const vesselCardOverlay = new Overlay({
-            element: document.getElementById('vessel-card'),
+            element: document.getElementById(vesselCardID),
             autoPan: true,
             autoPanAnimation: {
                 duration: 400,
             },
-            className: 'ol-overlay-container ol-selectable vessel-overlay'
+            className: 'ol-overlay-container ol-selectable'
         });
 
         const vesselTrackCardOverlay = new Overlay({
-            element: document.getElementById('vessel-track-card'),
+            element: document.getElementById(vesselTrackCardID),
             autoPan: true,
             autoPanAnimation: {
                 duration: 400,
             },
-            className: 'ol-overlay-container ol-selectable vessel-track-overlay'
+            className: 'ol-overlay-container ol-selectable'
+        });
+
+        const regulatoryNameCardOverlay = new Overlay({
+            element: document.getElementById(regulatoryNameCardID),
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 400,
+            },
+            className: 'ol-overlay-container ol-selectable'
         });
 
         const OSMLayer = new VectorTileLayer({
@@ -78,7 +91,7 @@ const MapWrapper = () => {
                 OSMLayer
             ],
             renderer: (['webgl', 'canvas']),
-            overlays: [vesselCardOverlay, vesselTrackCardOverlay],
+            overlays: [vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay],
             view: new View({
                 projection: OPENLAYERS_PROJECTION,
                 center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
@@ -95,11 +108,10 @@ const MapWrapper = () => {
                 return;
             }
 
-            timeout = setTimeout(function () {
+            timeout = setTimeout(() => {
                 timeout = null;
-                handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay)
+                handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay)
             }, 100);
-
         })
         initialMap.on('moveend', handleMovingAndZoom)
 
@@ -285,33 +297,50 @@ const MapWrapper = () => {
         }
     }, [vessel.selectedVesselFeature])
 
-    const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay) => {
+    const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay) => {
         const pixel = mapRef.current.getEventPixel(event.originalEvent);
         const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => {
             return feature;
         });
 
-        showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay);
+        showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay);
         showCoordinatesInDMS(event)
     }
 
-    function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay) {
+    function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay) {
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
             setVesselFeatureToShowOnCard(feature)
+
             document.getElementById(vesselCardID).style.display = 'block';
+            document.getElementById(vesselTrackCardID).style.display = 'none';
+            document.getElementById(regulatoryNameCardID).style.display = 'none';
+
             vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates());
             mapRef.current.getTarget().style.cursor = 'pointer'
         } else if (feature && feature.getId() && feature.getId().includes(`${LayersEnum.VESSEL_TRACK}:position`)) {
             setVesselFeatureToShowOnCard(feature)
+
             document.getElementById(vesselTrackCardID).style.display = 'block';
+            document.getElementById(regulatoryNameCardID).style.display = 'none';
+            document.getElementById(vesselCardID).style.display = 'none';
+
             mapRef.current.getTarget().style.cursor = 'pointer'
             vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates());
         } else if (feature && feature.getId() && feature.getId().includes(`${LayersEnum.REGULATORY}`)) {
+            setRegulatoryFeatureToShowOnCard(feature)
+
+            document.getElementById(regulatoryNameCardID).style.display = 'block';
+            document.getElementById(vesselCardID).style.display = 'none';
+            document.getElementById(vesselTrackCardID).style.display = 'none';
+
             mapRef.current.getTarget().style.cursor = 'pointer'
+            regulatoryNameCardOverlay.setPosition(getTopLeft(feature.getGeometry().getExtent()));
         } else {
             document.getElementById(vesselCardID).style.display = 'none';
             document.getElementById(vesselTrackCardID).style.display = 'none';
+            document.getElementById(regulatoryNameCardID).style.display = 'none';
             setVesselFeatureToShowOnCard(null)
+            setRegulatoryFeatureToShowOnCard(null)
             mapRef.current.getTarget().style.cursor = ''
         }
     }
@@ -326,12 +355,21 @@ const MapWrapper = () => {
     return (
         <div>
             <MapContainer ref={mapElement} />
-            <VesselCardOverlay id="vessel-card">
-                { vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null }
+            <VesselCardOverlay id={vesselCardID}>
+                {
+                    vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null
+                }
             </VesselCardOverlay>
-            <VesselTrackCardOverlay id="vessel-track-card">
-                { vesselFeatureToShowOnCard ? <VesselTrackCard vessel={vesselFeatureToShowOnCard} /> : null }
+            <VesselTrackCardOverlay id={vesselTrackCardID}>
+                {
+                    vesselFeatureToShowOnCard ? <VesselTrackCard vessel={vesselFeatureToShowOnCard} /> : null
+                }
             </VesselTrackCardOverlay>
+            <RegulatoryNameCardOverlay id={regulatoryNameCardID}>
+                {
+                    regulatoryFeatureToShowOnCard ? <RegulatoryNameCard regulatory={regulatoryFeatureToShowOnCard} /> : null
+                }
+            </RegulatoryNameCardOverlay>
 
             <MapCoordinatesBox coordinates={cursorCoordinates}/>
             <MapAttributionsBox />
@@ -360,6 +398,13 @@ const VesselTrackCardOverlay = styled.div`
   background-color: ${COLORS.grayBackground};
   border-radius: 1px;
   z-index: 300;
+`
+
+const RegulatoryNameCardOverlay = styled.div`
+  top: -50px;
+  position: absolute;
+  text-align: left;
+  z-index: 400;
 `
 
 const MapContainer = styled.div`

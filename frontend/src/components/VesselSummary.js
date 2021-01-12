@@ -50,7 +50,7 @@ const VesselSummary = props => {
                         <NoVessel /> :
                         <>
                             {
-                                props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.d}&size=thumb300`}/>
+                                props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
                                     : null
                             }
                         </>

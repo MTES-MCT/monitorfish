@@ -124,7 +124,13 @@ const VesselsSearchBox = () => {
                         searchingWhileVesselSelected={searchingWhileVesselSelected}
                     >
                         {selectedVessel.getProperties().flagState ? <Flag src={`flags/${selectedVessel.getProperties().flagState.toLowerCase()}.svg`} /> : null}
-                        <VesselName>{selectedVessel.getProperties().vesselName}</VesselName>
+                        <VesselName>
+                            {selectedVessel.getProperties().vesselName}
+                            {' '}
+                            {
+                                selectedVessel.getProperties().flagState ? <>({selectedVessel.getProperties().flagState})</> : null
+                            }
+                        </VesselName>
                         <CloseIcon onClick={() => {
                             setSelectedVessel(null)
                             setVesselNameIsShown(null)

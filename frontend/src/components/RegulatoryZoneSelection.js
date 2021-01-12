@@ -101,7 +101,7 @@ const RegulatoryZoneSelection = props => {
             gears={props.gears}
             initSearchFields={initSearchFields}
             setInitSearchFields={setInitSearchFields}
-            openBox={props.openBox}
+            layersSidebarIsOpen={props.layersSidebarIsOpen}
         />
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}
@@ -132,6 +132,7 @@ const TitleText = styled.span`
   margin-top: 10px;
   font-size: 13px;
   display: inline-block;
+  font-weight: 400;
 `
 
 const RegulatoryZoneAddButton = styled.div`
@@ -162,13 +163,13 @@ const RegulatoryZoneAddButton = styled.div`
 
 const RegulatoryZoneTitle = styled.div`
   height: 40px;
-  background: ${COLORS.grayDarker};
+  background: white;
   color: ${COLORS.grayDarkerTwo};
   font-size: 0.8em;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 300;
   text-align: left;
-  padding-left: 15px;
+  padding-left: 10px;
   user-select: none;
   width: 345px;
 `

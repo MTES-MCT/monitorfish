@@ -25,6 +25,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
 import {updateVesselFeature} from "../domain/reducers/Vessel";
+import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
@@ -265,6 +266,12 @@ const MapWrapper = () => {
 
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
             dispatch(showVesselTrackAndSidebar(feature, false, false))
+        } else if(feature && feature.getId() && feature.getId().includes(LayersEnum.REGULATORY)) {
+            let zone = {
+                layerName: feature.getProperties().layer_name,
+                zone: feature.getProperties().zones
+            }
+            dispatch(showRegulatoryZoneMetadata(zone))
         }
     }
 
@@ -299,6 +306,8 @@ const MapWrapper = () => {
             document.getElementById(vesselTrackCardID).style.display = 'block';
             mapRef.current.getTarget().style.cursor = 'pointer'
             vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates());
+        } else if (feature && feature.getId() && feature.getId().includes(`${LayersEnum.REGULATORY}`)) {
+            mapRef.current.getTarget().style.cursor = 'pointer'
         } else {
             document.getElementById(vesselCardID).style.display = 'none';
             document.getElementById(vesselTrackCardID).style.display = 'none';

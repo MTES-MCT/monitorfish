@@ -22,6 +22,12 @@ const RegulatoryZoneSelectedLayer = props => {
         }
     }, [isOpen])
 
+    useEffect(() => {
+        if(props.regulatoryZoneMetadata && props.regulatoryZoneName && props.regulatoryZoneMetadata.layerName === props.regulatoryZoneName) {
+            setIsOpen(true)
+        }
+    }, [props.regulatoryZoneMetadata, props.regulatoryZoneName])
+
     return (
         <Row>
             <Zone onClick={() => setIsOpen(!isOpen)}>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {COLORS} from "../constants/constants";
 import {ReactComponent as REGPaperSVG} from './icons/reg_paper.svg'
@@ -8,9 +8,12 @@ import {getDateTime} from "../utils";
 
 const RegulatoryZoneMetadata = props => {
     const [gears, setGears] = useState([])
+    const firstUpdate = useRef(true);
 
     useEffect(() => {
         if (props.regulatoryZoneMetadata && props.gears) {
+            firstUpdate.current = false;
+
             if(!props.regulatoryZoneMetadata.gears){
                 return setGears(null)
             }
@@ -30,15 +33,17 @@ const RegulatoryZoneMetadata = props => {
 
     return (
         <Wrapper
-            firstUpdate={props.firstUpdate}
-            openBox={props.regulatoryZoneMetadataPanelIsOpen}
+            firstUpdate={firstUpdate.current}
+            regulatoryZoneMetadataPanelIsOpen={props.regulatoryZoneMetadataPanelIsOpen}
+            layersSidebarIsOpen={props.layersSidebarIsOpen}
+            regulatoryZoneMetadata={props.regulatoryZoneMetadata}
         >
             {
                 props.regulatoryZoneMetadataPanelIsOpen && props.regulatoryZoneMetadata ?
                     <>
                         <Header>
                             <REGPaperIcon/>
-                            <Title>Réglementation "<RegulatoryName><Ellipsis>{props.regulatoryZoneMetadata.zone}</Ellipsis></RegulatoryName>"</Title>
+                            <Title>{props.regulatoryZoneMetadata.layerName.replace(/[_]/g, ' ')} - <RegulatoryName><Ellipsis>{props.regulatoryZoneMetadata.zone.replace(/[_]/g, ' ')}</Ellipsis></RegulatoryName></Title>
                             <CloseIcon onClick={() => props.callCloseRegulatoryZoneMetadata()}/>
                         </Header>
                         <Content>
@@ -341,8 +346,18 @@ const Wrapper = styled.div`
     max-height: calc(100vh - 50px);
     padding: 10px;
     
-    animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
+    animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
     
+    @keyframes regulatory-metadata-box-opening-with-margin {
+        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
+        100% { min-height: 500px; opacity: 1; margin-left: 371px; }
+    }
+    
+    @keyframes regulatory-metadata-box-closing-with-margin {
+        0% { min-height: 500px; opacity: 1; margin-left: 371px; }
+        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
+    }
+       
     @keyframes regulatory-metadata-box-opening {
         0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
         100% { min-height: 500px; opacity: 1; margin-left: 361px; }

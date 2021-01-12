@@ -26,7 +26,15 @@ const RegulatoryZoneSelectedZone = props => {
         if(props.regulatoryZoneMetadata &&
             props.subZone &&
             (props.subZone.layerName !== props.regulatoryZoneMetadata.layerName ||
-            props.subZone.zone !== props.regulatoryZoneMetadata.zone)) {
+                props.subZone.zone !== props.regulatoryZoneMetadata.zone)) {
+            setMetadataIsShown(false)
+        } else if(props.regulatoryZoneMetadata &&
+            props.subZone &&
+            (props.subZone.layerName === props.regulatoryZoneMetadata.layerName &&
+                props.subZone.zone === props.regulatoryZoneMetadata.zone)) {
+            setMetadataIsShown(true)
+        }
+        else if (!props.regulatoryZoneMetadata && props.subZone) {
             setMetadataIsShown(false)
         }
     }, [props.regulatoryZoneMetadata, props.subZone])

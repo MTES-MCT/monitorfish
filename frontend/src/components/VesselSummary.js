@@ -90,19 +90,19 @@ const VesselSummary = props => {
                             <Value>{props.vessel.internalReferenceNumber ? props.vessel.internalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>Marquage ext.</Key>
-                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Key>MMSI</Key>
+                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>
                 </Fields>
                 <Fields>
                     <TableBody>
                         <Field>
-                            <Key>MMSI</Key>
-                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
+                            <Key>Marquage ext.</Key>
+                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>CALL SIGN</Key>
+                            <Key>Call Sign (IRCS)</Key>
                             <Value>{props.vessel.ircs ? props.vessel.ircs : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>

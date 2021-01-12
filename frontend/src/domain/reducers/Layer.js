@@ -12,6 +12,7 @@ const layerSlice = createSlice({
     initialState: {
         layers: [
             new VectorLayer({
+                renderBuffer: 7,
                 source: new VectorSource(),
                 className: Layers.VESSELS
             })

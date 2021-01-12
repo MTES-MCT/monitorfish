@@ -9,7 +9,7 @@ import {COLORS} from "../constants/constants";
 import * as timeago from 'timeago.js';
 timeago.register('fr', timeagoFrenchLocale);
 
-    const VesselSummary = props => {
+const VesselSummary = props => {
     const [photoFallback, setPhotoFallback] = useState(false)
     const [vessel, setVessel] = useState(null);
     const [lastPosition, setLastPosition] = useState(null);

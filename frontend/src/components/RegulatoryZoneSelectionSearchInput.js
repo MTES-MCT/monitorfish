@@ -4,7 +4,15 @@ import {COLORS} from "../constants/constants";
 import {ReactComponent as SearchIconSVG} from "./icons/Loupe.svg";
 
 function findIfSearchStringIncludedInProperty(zone, propertiesToSearch, searchText) {
-    return zone[propertiesToSearch] ? zone[propertiesToSearch].toLowerCase().includes(searchText.toLowerCase()) : false;
+    return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false;
+}
+
+function getTextForSearch(text) {
+    return text
+        .toLowerCase()
+        .replace(/[ ]/g, '')
+        .replace(/[_]/g, '')
+        .replace(/[-]/g, '')
 }
 
 const RegulatoryZoneSelectionSearchInput = props => {
@@ -15,10 +23,10 @@ const RegulatoryZoneSelectionSearchInput = props => {
     const [focusPlaceSearchText, setFocusPlaceSearchText] = useState(true);
 
     useEffect(() => {
-        if(props.openBox) {
+        if(props.layersSidebarIsOpen) {
             setFocusPlaceSearchText(true)
         }
-    }, [props.openBox])
+    }, [props.layersSidebarIsOpen])
 
     useEffect(() => {
         if (props.initSearchFields) {

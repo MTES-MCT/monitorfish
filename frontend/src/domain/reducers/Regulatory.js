@@ -43,6 +43,7 @@ const layerSlice = createSlice({
         },
         closeRegulatoryZoneMetadataPanel(state) {
             state.regulatoryZoneMetadataPanelIsOpen = false
+            state.regulatoryZoneMetadata = null
         }
     }
 })

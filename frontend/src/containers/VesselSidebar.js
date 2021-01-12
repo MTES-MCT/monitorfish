@@ -72,7 +72,7 @@ const VesselSidebar = () => {
                                 <ControlsIcon /> Contrôles
                             </Tab>
                             <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(4)}>
-                                <ObservationsIcon /> Observations
+                                <ObservationsIcon /> Ciblage
                             </Tab>
                             <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(5)}>
                                 <VMSIcon /> VMS/ERS

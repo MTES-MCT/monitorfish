@@ -72,14 +72,6 @@ tbody {
   background: transparent;
 }
 
-.vessel-overlay {
-  z-index: 100;
-}
-
-.vessel-track-overlay {
-  z-index: 300;
-}
-
 .radar {
   position: initial !important;
   margin-top: 80px;

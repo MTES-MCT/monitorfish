@@ -21,6 +21,12 @@ const RegulatoryZoneSelected = props => {
         }
     }
 
+    useEffect(() => {
+        if(props.regulatoryZoneMetadata) {
+            setShowRegulatoryZonesSelected(true)
+        }
+    }, [props.regulatoryZoneMetadata])
+
     return (
         <>
             <RegulatoryZoneSelectedTitle
@@ -113,7 +119,7 @@ const RegulatoryZoneSelectedList = styled.ul`
   height: ${props => {
         if(props.layerLength) {
             if(props.zoneLength > 0) {
-                return props.layerLength * 36 + props.zoneLength * 36
+                return props.layerLength * 37 + props.zoneLength * 39
             } else {
                 return props.layerLength * 37
             }

@@ -30,6 +30,7 @@ const MIN_ZOOM_VESSEL_NAMES = 9;
 
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
+let lastEvent, timeout;
 
 const MapWrapper = () => {
     const layer = useSelector(state => state.layer)
@@ -87,7 +88,18 @@ const MapWrapper = () => {
         })
 
         initialMap.on('click', handleMapClick)
-        initialMap.on('pointermove', event => handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay))
+        initialMap.on('pointermove', event => {
+            if (event.dragging || timeout) {
+                timeout && (lastEvent = event);
+                return;
+            }
+
+            timeout = setTimeout(function () {
+                timeout = null;
+                handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay)
+            }, 100);
+
+        })
         initialMap.on('moveend', handleMovingAndZoom)
 
         setMap(initialMap)

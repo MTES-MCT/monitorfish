@@ -54,13 +54,13 @@ run-data-science-env-dam-si:
 	docker exec -it monitorfish_data_science_dam_si bash
 update-data-science-env:
 	docker-compose -f datascience/docker-compose.yml up --force-recreate -d
-	docker container exec monitorfish_data_science conda env update -n base -f "work/environment.yml"
+	docker container exec monitorfish_data_science conda env update -n base -f "work/datascience/environment.yml"
 	docker container commit monitorfish_data_science monitorfish_data_science
 update-data-science-env-no-proxy:
 	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate -d
-	docker container exec monitorfish_data_science conda env update -n base -f "work/environment.yml"
+	docker container exec monitorfish_data_science conda env update -n base -f "work/datascience/environment.yml"
 	docker container commit monitorfish_data_science monitorfish_data_science
 update-data-science-env-dam-si:
 	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate -d
-	docker container exec monitorfish_data_science_dam_si conda env update -n base -f "work/environment.yml"
+	docker container exec monitorfish_data_science_dam_si conda env update -n base -f "work/datascience/environment.yml"
 	docker container commit monitorfish_data_science_dam_si monitorfish_data_science_dam_si

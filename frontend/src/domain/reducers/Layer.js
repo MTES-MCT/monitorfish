@@ -37,6 +37,10 @@ const layerSlice = createSlice({
         removeLayer(state, action) {
             state.layers = state.layers.filter(layer => layer.className_ !== action.payload.className_)
         },
+        removeLayers(state, action) {
+            state.layers = state.layers.filter(layer => !action.payload
+                .some(layerToRemove => layerToRemove.className_ === layer.className_))
+        },
         setLayers(state, action) {
             state.layers = action.payload
         },
@@ -63,11 +67,18 @@ const layerSlice = createSlice({
         removeShowedLayer(state, action) {
             if(action.payload.type !== Layers.VESSELS) {
                 if (action.payload.type === LayersEnum.REGULATORY) {
-                    state.showedLayers = state.showedLayers
-                        .filter(layer => !(
-                            layer.type === LayersEnum.REGULATORY &&
-                            layer.zone.layerName === action.payload.zone.layerName &&
-                            layer.zone.zone === action.payload.zone.zone))
+                    if(action.payload.zone.zone) {
+                        state.showedLayers = state.showedLayers
+                            .filter(layer => !(
+                                layer.type === LayersEnum.REGULATORY &&
+                                layer.zone.layerName === action.payload.zone.layerName &&
+                                layer.zone.zone === action.payload.zone.zone))
+                    } else {
+                        state.showedLayers = state.showedLayers
+                            .filter(layer => !(
+                                layer.type === LayersEnum.REGULATORY &&
+                                layer.zone.layerName === action.payload.zone.layerName))
+                    }
                 } else {
                     state.showedLayers = state.showedLayers.filter(layer => layer.type !== action.payload.type)
                 }
@@ -82,6 +93,7 @@ export const {
     replaceVesselLayer,
     addLayer,
     removeLayer,
+    removeLayers,
     setLayers,
     addShowedLayer,
     removeShowedLayer,

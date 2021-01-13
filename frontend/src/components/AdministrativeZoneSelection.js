@@ -24,7 +24,7 @@ const AdministrativeZoneSelection = props => {
             <ZonesList showZones={showZones} zonesLength={props.administrativeZones.length}>
                 {
                     props.administrativeZones.map((layer, index) => {
-                        return (<ListItem key={index}>
+                        return (<ListItem key={layer.layer}>
                             <AdministrativeZoneItem
                                 isShownOnInit={props.showedLayers.some(layer_ => layer_.type === layer.layer)}
                                 layer={layer}

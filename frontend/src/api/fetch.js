@@ -111,22 +111,26 @@ export function getAdministrativeZoneURL(type, extent) {
 }
 
 export function getRegulatoryZoneFromAPI(type, regulatoryZone) {
-    return fetch(getRegulatoryZoneURL(type, regulatoryZone))
-        .then(response => {
-            if (response.status === HTTP_OK) {
-                return response.json().then(response => {
-                    return response
-                }).catch(e => {
-                    throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
-                })
-            } else {
-                response.text().then(response => {
-                    throwIrretrievableRegulatoryZoneError(response, regulatoryZone);
-                })
-            }
-        }).catch(e => {
-            throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
-        })
+    try {
+        return fetch(getRegulatoryZoneURL(type, regulatoryZone))
+            .then(response => {
+                if (response.status === HTTP_OK) {
+                    return response.json().then(response => {
+                        return response
+                    }).catch(e => {
+                        throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
+                    })
+                } else {
+                    response.text().then(response => {
+                        throwIrretrievableRegulatoryZoneError(response, regulatoryZone);
+                    })
+                }
+            }).catch(e => {
+                throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
+            })
+    } catch (e) {
+        throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
+    }
 }
 
 export function getRegulatoryZoneURL(type, regulatoryZone) {

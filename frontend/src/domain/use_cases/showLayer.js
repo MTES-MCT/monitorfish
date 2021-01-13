@@ -65,12 +65,17 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
         }),
         loader: extent => {
             if (regulatoryZoneProperties) {
-                getRegulatoryZoneFromAPI(type, regulatoryZoneProperties).then(regulatoryZone => {
-                    vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
-                }).catch(e => {
-                    vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
-                    vectorSource.removeLoadedExtent(extent);
-                })
+                try {
+                    getRegulatoryZoneFromAPI(type, regulatoryZoneProperties).then(regulatoryZone => {
+                        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
+                    }).catch(e => {
+                        vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
+                        vectorSource.removeLoadedExtent(extent);
+                    })
+                } catch (e) {
+                    console.error(e)
+                    dispatch(setError(e));
+                }
             } else {
                 getAdministrativeZoneFromAPI(type, extent).then(administrativeZone => {
                     vectorSource.addFeatures(vectorSource.getFormat().readFeatures(administrativeZone))

@@ -73,7 +73,7 @@ const RegulatoryZoneSelectedZone = props => {
                         <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/>
                 }
                 { showSubZone ? <ShowIcon title="Cacher la zone" onClick={() => setShowSubZone(!showSubZone)} /> : <HideIcon title="Afficher la zone" onClick={() => setShowSubZone(!showSubZone)} />}
-                <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone)}/>
+                <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone, 1)}/>
             </Icons>
 
         </SubZone>

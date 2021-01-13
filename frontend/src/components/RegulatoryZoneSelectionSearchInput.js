@@ -66,6 +66,8 @@ const RegulatoryZoneSelectionSearchInput = props => {
             return
         }
 
+        props.resetSelectRegulatoryZone()
+
         let foundRegulatoryZones = {}
         Object.keys(searchFields).forEach(searchProperty => {
             if(searchFields[searchProperty].searchText.length > 0) {

@@ -27,6 +27,14 @@ const RegulatoryZoneSelected = props => {
         }
     }, [props.regulatoryZoneMetadata])
 
+    useEffect(() => {
+        if(props.hideZonesListWhenSearching) {
+            setShowRegulatoryZonesSelected(false)
+        } else {
+            setShowRegulatoryZonesSelected(true)
+        }
+    }, [props.hideZonesListWhenSearching])
+
     return (
         <>
             <RegulatoryZoneSelectedTitle

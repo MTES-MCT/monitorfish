@@ -44,6 +44,16 @@ const RegulatoryZoneSelection = props => {
         }
     }, [showRegulatorySection])
 
+    const resetSelectRegulatoryZone = () => {
+        setRegulatoryZonesSelection({})
+    }
+
+    useEffect(() => {
+        if(foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0) {
+            props.setHideZonesListWhenSearching({})
+        }
+    }, [foundRegulatoryZones, showRegulatorySection])
+
     const toggleSelectRegulatoryZone = (regulatoryZoneName, regulatorySubZones) => {
         let existingSelectedZones = {...regulatoryZonesSelection}
 
@@ -102,6 +112,7 @@ const RegulatoryZoneSelection = props => {
             initSearchFields={initSearchFields}
             setInitSearchFields={setInitSearchFields}
             layersSidebarIsOpen={props.layersSidebarIsOpen}
+            resetSelectRegulatoryZone={resetSelectRegulatoryZone}
         />
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}

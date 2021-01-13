@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 import {ReactComponent as ChevronIconSVG} from './icons/Chevron_simple_gris.svg'
 
@@ -7,6 +7,14 @@ import {COLORS} from "../constants/constants";
 
 const AdministrativeZoneSelection = props => {
     const [showZones, setShowZones] = useState(false);
+
+    useEffect(() => {
+        if(props.hideZonesListWhenSearching) {
+            setShowZones(false)
+        } else {
+            setShowZones(true)
+        }
+    }, [props.hideZonesListWhenSearching])
 
     return (
         <>

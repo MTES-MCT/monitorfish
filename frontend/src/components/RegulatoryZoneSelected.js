@@ -127,7 +127,7 @@ const RegulatoryZoneSelectedList = styled.ul`
   height: ${props => {
         if(props.layerLength) {
             if(props.zoneLength > 0) {
-                return props.layerLength * 37 + props.zoneLength * 39
+                return props.layerLength * 37 + props.zoneLength * 38.5
             } else {
                 return props.layerLength * 37
             }

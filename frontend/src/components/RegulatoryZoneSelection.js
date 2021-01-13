@@ -136,7 +136,7 @@ const RegulatoryZoneSelection = props => {
 }
 
 const Search = styled.div`
-  width: 360px;
+  width: 355px;
 `
 
 const TitleText = styled.span`

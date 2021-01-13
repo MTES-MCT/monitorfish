@@ -178,7 +178,7 @@ const Sidebar = styled.div`
 
 const Zones = styled.div`
   margin-top: 5px;
-  width: 340px;
+  width: 335px;
   color: ${COLORS.textWhite};
   text-decoration: none;
   background-color: ${COLORS.gray};

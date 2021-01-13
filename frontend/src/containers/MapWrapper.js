@@ -5,7 +5,7 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
-import {getTopLeft} from 'ol/extent';
+import {getTopLeft, getTopRight, getWidth} from 'ol/extent';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import LayersEnum from "../domain/entities/layers";
@@ -34,7 +34,7 @@ const MIN_ZOOM_VESSEL_NAMES = 9;
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
 const regulatoryNameCardID = 'regulatory-name-card';
-let lastEvent, timeout;
+let lastEventForPointerMove, timeoutForPointerMove, lastEventForMove, timeoutForMove;
 
 const MapWrapper = () => {
     const layer = useSelector(state => state.layer)
@@ -96,24 +96,34 @@ const MapWrapper = () => {
                 projection: OPENLAYERS_PROJECTION,
                 center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
                 zoom: 6,
-                minZoom: 5
+                minZoom: 3
             }),
             controls: [],
         })
 
         initialMap.on('click', handleMapClick)
         initialMap.on('pointermove', event => {
-            if (event.dragging || timeout) {
-                timeout && (lastEvent = event);
+            if (event.dragging || timeoutForPointerMove) {
+                timeoutForPointerMove && (lastEventForPointerMove = event);
                 return;
             }
 
-            timeout = setTimeout(() => {
-                timeout = null;
-                handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay)
+            timeoutForPointerMove = setTimeout(() => {
+                timeoutForPointerMove = null;
+                handlePointerMove(initialMap, event, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay)
             }, 100);
         })
-        initialMap.on('moveend', handleMovingAndZoom)
+        initialMap.on('moveend', event => {
+            if (timeoutForMove) {
+                timeoutForMove && (lastEventForMove = event);
+                return;
+            }
+
+            timeoutForMove = setTimeout(() => {
+                timeoutForMove = null;
+                handleMovingAndZoom()
+            }, 100);
+        })
 
         setMap(initialMap)
     }, [])
@@ -266,7 +276,7 @@ const MapWrapper = () => {
             .filter(layer => layer.className_ === LayersEnum.VESSELS)
             .forEach(vesselsLayer => {
                 vesselsLayer.getSource().forEachFeatureIntersectingExtent(extent, feature => {
-                    setTimeout(() => { feature.setStyle([...feature.getStyle(), getVesselNameStyle(feature)]) }, 100);
+                    feature.setStyle([...feature.getStyle(), getVesselNameStyle(feature)])
                 })
             })
     }
@@ -297,17 +307,17 @@ const MapWrapper = () => {
         }
     }, [vessel.selectedVesselFeature])
 
-    const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay) => {
+    const handlePointerMove = (map, event, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay) => {
         const pixel = mapRef.current.getEventPixel(event.originalEvent);
         const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => {
             return feature;
         });
 
-        showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay);
+        showPointerAndCardIfVessel(map, feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay);
         showCoordinatesInDMS(event)
     }
 
-    function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay) {
+    function showPointerAndCardIfVessel(map, feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay, regulatoryNameCardOverlay) {
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
             setVesselFeatureToShowOnCard(feature)
 
@@ -392,8 +402,8 @@ const VesselCardOverlay = styled.div`
 const VesselTrackCardOverlay = styled.div`
   position: absolute;
   top: -170px;
-  left: -155px;
-  width: 310px;
+  left: -175px;
+  width: 350px;
   text-align: left;
   background-color: ${COLORS.grayBackground};
   border-radius: 1px;

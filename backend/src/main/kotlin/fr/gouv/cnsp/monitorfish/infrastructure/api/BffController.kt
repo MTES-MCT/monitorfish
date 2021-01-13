@@ -6,10 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.GearDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PositionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselDataOutput
-import io.micrometer.core.instrument.DistributionSummary
 import io.micrometer.core.instrument.MeterRegistry
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import io.prometheus.client.Summary
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 @RestController
 @RequestMapping("/bff")
@@ -30,11 +28,15 @@ class BffController(
         private val meterRegistry: MeterRegistry) {
 
     val timer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
+    val gauge = meterRegistry.gauge("ws_vessels_stored_in_last_positions", AtomicInteger(0))
 
     @GetMapping("/v1/vessels")
     @ApiOperation("Get all vessels' last position")
     fun getPositions(): List<PositionDataOutput> {
-        return getLastPositions.execute().map { position ->
+        val positions = getLastPositions.execute()
+        gauge?.set(positions.size)
+
+        return positions.map { position ->
             position.let {
                 PositionDataOutput.fromPosition(position)
             }

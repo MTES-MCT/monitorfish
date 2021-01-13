@@ -31,6 +31,8 @@ const RegulatoryZoneMetadata = props => {
         }
     }, [props.gears, props.regulatoryZoneMetadata])
 
+    const getTitle = regulatory => `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+
     return (
         <Wrapper
             firstUpdate={firstUpdate.current}
@@ -43,7 +45,11 @@ const RegulatoryZoneMetadata = props => {
                     <>
                         <Header>
                             <REGPaperIcon/>
-                            <Title>{props.regulatoryZoneMetadata.layerName.replace(/[_]/g, ' ')} - <RegulatoryName><Ellipsis>{props.regulatoryZoneMetadata.zone.replace(/[_]/g, ' ')}</Ellipsis></RegulatoryName></Title>
+                            <RegulatoryName title={getTitle(props.regulatoryZoneMetadata)}>
+                                <Ellipsis>
+                                    <Title>{getTitle(props.regulatoryZoneMetadata)}</Title>
+                                </Ellipsis>
+                            </RegulatoryName>
                             <CloseIcon onClick={() => props.callCloseRegulatoryZoneMetadata()}/>
                         </Header>
                         <Content>
@@ -195,17 +201,18 @@ const Gray = styled.span`
 `
 
 const RegulatoryName = styled.span`
-    display: inline-flex;
-    padding: unset;
-    margin: unset;
-    line-height: initial;
+  padding: unset;
+  margin: unset;
+  line-height: initial;
 `
 
 const Ellipsis = styled.span`
-    max-width: 176px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  max-width: 290px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  display: inline-block;
 `
 
 const Header = styled.div`
@@ -228,8 +235,6 @@ const Content = styled.div`
 const Title = styled.span`
   margin-top: 2px;
   margin-left: 12px;
-  vertical-align: top;
-  display: inline-block;
   font-size: 13px;
 }
 `
@@ -239,7 +244,7 @@ const REGPaperIcon = styled(REGPaperSVG)`
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 10px;
+  width: 13px;
   float: right;
   margin-right: 7px;
   margin-top: 5px;

@@ -302,7 +302,7 @@ const TrimmedValue = styled.td`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;    
-  max-width: 110px; 
+  max-width: 120px; 
 `
 
 const Value = styled.td`

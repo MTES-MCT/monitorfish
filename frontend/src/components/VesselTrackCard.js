@@ -1,6 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import {getCoordinates, timeagoFrenchLocale} from "../utils";
+import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../utils";
 import {OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
 import * as timeago from 'timeago.js';
@@ -11,6 +11,13 @@ const VesselTrackCard = props => {
         <>
             <VesselCardHeader>
                 <VesselCardTitle>POSITION</VesselCardTitle>
+                <TimeAgo>
+                    {
+                        props.vessel.getProperties().dateTime ? <>
+                                {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+                            : <NoValue>-</NoValue>
+                    }
+                </TimeAgo>
             </VesselCardHeader>
             <VesselCardBody>
                 <LatLon>
@@ -32,10 +39,10 @@ const VesselTrackCard = props => {
                     <FieldValue>
                         {
                             props.vessel.getProperties().dateTime ? <>
-                                    {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+                                    {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
+                                    <Gray>(CET)</Gray></>
                                 : <NoValue>-</NoValue>
                         }
-
                     </FieldValue>
                 </Position>
             </VesselCardBody>
@@ -45,6 +52,11 @@ const VesselTrackCard = props => {
         </>
     )
 }
+
+const Gray = styled.span`
+  color: ${COLORS.textGray};
+  font-weight: 300;
+`
 
 const TrianglePointer = styled.div`
   margin-left: auto;
@@ -60,7 +72,7 @@ const TriangleShadow = styled.div`
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.grayBackground} transparent transparent transparent;
-  margin-left: 150px;
+  margin-left: 170px;
   margin-top: -1px;
   clear: top;
 `
@@ -103,7 +115,7 @@ const Course = styled.div`
 `
 
 const Position = styled.div`
-  width: 120px;
+  width: 160px;
   order: 3;
   background: ${COLORS.background};
   margin: 5px 5px 5px 5px;
@@ -113,8 +125,7 @@ const Position = styled.div`
 const VesselCardHeader = styled.div`
   background: ${COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
-  padding: 5px 5px 5px 5px;
-  text-align: center;
+  padding: 4px 5px 6px 5px;
 `
 
 const VesselCardTitle = styled.span`
@@ -122,6 +133,15 @@ const VesselCardTitle = styled.span`
   display: inline-block;
   vertical-align: middle;
   font-size: 0.9em;
+`
+
+const TimeAgo = styled.span`
+  float: right;
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 4px;
+  font-size: 13px;
 `
 
 const VesselCardBody = styled.div`

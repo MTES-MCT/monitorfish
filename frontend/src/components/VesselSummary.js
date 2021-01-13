@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FingerprintSpinner } from 'react-epic-spinners'
 import {ReactComponent as NoVesselSVG} from '../components/icons/Picto_photo_navire_manquante.svg';
 
-import {getCoordinates, timeagoFrenchLocale} from "../utils";
+import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../utils";
 import {WSG84_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
 import * as timeago from 'timeago.js';
@@ -75,10 +75,11 @@ const VesselSummary = props => {
                     <FieldName>Dernier signal</FieldName>
                     <FieldValue>
                         {
-                            lastPosition.dateTime ? <>{timeago.format(lastPosition.dateTime, 'fr')}</>
+                            lastPosition.dateTime ? <>
+                                    {getDateTime(lastPosition.dateTime, true)}{' '}
+                                    <Gray>(CET)</Gray></>
                                 : <NoValue>-</NoValue>
                         }
-
                     </FieldValue>
                 </Position>
             </ZoneWithoutBackground>
@@ -168,6 +169,11 @@ const VesselSummary = props => {
         </Body>
     ) : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>;
 }
+
+const Gray = styled.span`
+  color: ${COLORS.textGray};
+  font-weight: 300;
+`
 
 const NoVessel = styled(NoVesselSVG)`
   width: 60px;
@@ -319,7 +325,7 @@ const LatLon = styled.div`
 `
 
 const Course = styled.div`
-  width: 133px;
+  width: 103px;
   order: 2;
   background: ${COLORS.background};
   margin: 0 0 0 10px;
@@ -328,7 +334,7 @@ const Course = styled.div`
 `
 
 const Position = styled.div`
-  width: 133px;
+  width: 163px;
   order: 3;
   background: ${COLORS.background};
   margin: 0 0 0 10px;

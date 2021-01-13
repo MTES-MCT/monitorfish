@@ -65,7 +65,7 @@ const RegulatoryZoneMetadata = props => {
                                         {
                                             props.regulatoryZoneMetadata.deposit ?
                                                 <Field>
-                                                    <Key>Zone</Key>
+                                                    <Key>Gisement</Key>
                                                     <Value>{props.regulatoryZoneMetadata.deposit ? props.regulatoryZoneMetadata.deposit : <NoValue>-</NoValue>}</Value>
                                                 </Field> : null
 

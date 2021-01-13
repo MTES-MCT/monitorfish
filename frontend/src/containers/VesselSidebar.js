@@ -12,7 +12,6 @@ import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
 import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
-import {ReactComponent as NoVesselSVG} from "../components/icons/Picto_photo_navire_manquante.svg";
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()

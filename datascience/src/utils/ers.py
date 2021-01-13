@@ -1,5 +1,7 @@
+from datetime import datetime
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
+from typing import Union
 
 NS = {"ers": "http://ec.europa.eu/fisheries/schema/ers/v3"}
 
@@ -67,3 +69,57 @@ def has_tag(tag):
 
 def get_elements_by_ers_tag(xml_element, ers_tag):
     return xml_element.findall(f".//ers:{ers_tag}", NS)
+
+
+def get_root_tag(xml_element):
+    root_tag = remove_namespace(xml_element.tag)
+    return root_tag
+
+
+def get_first_child(xml_element, assert_child_single=True):
+    children = list(xml_element)
+
+    if assert_child_single:
+        assert len(children) == 1
+
+    return children[0]
+
+
+def make_datetime(date:str, time:Union[str, None]):
+    datetime_string = date
+    datetime_format = "%Y-%m-%d"
+
+    if date:
+        if time:
+            datetime_string += f" {time}"
+            datetime_format += " %H:%M"
+        try:
+            res = datetime.strptime(datetime_string, datetime_format)
+        except ValueError:
+            logging.warning("ERS datetime could not be parsed")
+            res = None
+    else:
+        res = None
+    
+    return res
+
+
+def try_float(s:str):
+    try:
+        return float(s)
+    except:
+        return None
+
+
+def tagged_children(el):
+    children = list(el)
+    res = {}
+
+    for child in children :
+        tag = remove_namespace(child.tag)
+        if tag in res:
+            res[tag].append(child)
+        else:
+            res[tag] = [child]
+    
+    return res

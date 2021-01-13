@@ -28,7 +28,7 @@ export let getCoordinates = (coordinates, projection) => {
 
     let sSplit = hourCoordinates.split('S')
     if (sSplit.length > 1) {
-        return [`${nSplit[0]} S`, nSplit[1]]
+        return [`${sSplit[0]} S`, sSplit[1]]
     }
 }
 

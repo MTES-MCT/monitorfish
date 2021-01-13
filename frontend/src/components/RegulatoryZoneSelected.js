@@ -21,6 +21,11 @@ const RegulatoryZoneSelected = props => {
         }
     }
 
+    const callRemoveRegulatoryZoneFromMySelection = (regulatoryZone, numberOfZones) => {
+        decreaseNumberOfZonesOpened(numberOfZones)
+        props.callRemoveRegulatoryZoneFromMySelection(regulatoryZone)
+    }
+
     useEffect(() => {
         if(props.regulatoryZoneMetadata) {
             setShowRegulatoryZonesSelected(true)
@@ -49,13 +54,13 @@ const RegulatoryZoneSelected = props => {
                 showRegulatoryZonesSelected={showRegulatoryZonesSelected}
             >
                 {
-                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0 ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
-                        return (<ListItem key={index}>
+                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0 ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName) => {
+                        return (<ListItem key={regulatoryZoneName}>
                             <RegulatoryZoneSelectedLayer
                                 increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
                                 decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
                                 isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
-                                callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
+                                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                                 regulatoryZoneName={regulatoryZoneName}
                                 regulatorySubZones={props.selectedRegulatoryZones[regulatoryZoneName]}
                                 callShowRegulatoryZone={props.callShowRegulatoryZone}

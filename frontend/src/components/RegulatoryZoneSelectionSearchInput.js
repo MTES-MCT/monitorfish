@@ -15,6 +15,16 @@ function getTextForSearch(text) {
         .replace(/[-]/g, '')
 }
 
+function orderByAlphabeticalZone(foundRegulatoryZones) {
+    Object.keys(foundRegulatoryZones).forEach(layer => {
+        foundRegulatoryZones[layer] = foundRegulatoryZones[layer].sort((a, b) => {
+            if (a.zone && b.zone) {
+                return a.zone.localeCompare(b.zone)
+            }
+        })
+    })
+}
+
 const RegulatoryZoneSelectionSearchInput = props => {
     const [placeSearchText, setPlaceSearchText] = useState('');
     const [gearSearchText, setGearSearchText] = useState('');
@@ -90,6 +100,9 @@ const RegulatoryZoneSelectionSearchInput = props => {
                 }
             }
         })
+
+        orderByAlphabeticalZone(foundRegulatoryZones);
+
         props.setFoundRegulatoryZones(foundRegulatoryZones)
 
     }, [speciesSearchText, gearSearchText, placeSearchText, regulatoryReferencesSearchText])

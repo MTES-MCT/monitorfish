@@ -10,7 +10,7 @@ import addRegulatoryZonesToMySelection from "../domain/use_cases/addRegulatoryZo
 import getAllRegulatoryZones from "../domain/use_cases/getAllRegulatoryZones";
 import removeRegulatoryZoneFromMySelection from "../domain/use_cases/removeRegulatoryZoneFromMySelection";
 import showLayer from "../domain/use_cases/showLayer";
-import hideLayer from "../domain/use_cases/hideLayer";
+import hideLayers from "../domain/use_cases/hideLayers";
 import RegulatoryZoneSelection from "../components/RegulatoryZoneSelection";
 import AdministrativeZoneSelection from "../components/AdministrativeZoneSelection";
 import RegulatoryZoneSelected from "../components/RegulatoryZoneSelected";
@@ -72,7 +72,7 @@ const LayersSidebar = () => {
     }
 
     function callHideRegulatoryZone(regulatoryZone) {
-        dispatch(hideLayer({
+        dispatch(hideLayers({
             type: LayersEnum.REGULATORY,
             zone: regulatoryZone
         }))
@@ -85,7 +85,7 @@ const LayersSidebar = () => {
     }
 
     function callHideAdministrativeZone(administrativeZone) {
-        dispatch(hideLayer({
+        dispatch(hideLayers({
             type: administrativeZone
         }));
     }

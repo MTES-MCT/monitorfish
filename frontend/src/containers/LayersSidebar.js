@@ -35,6 +35,7 @@ const LayersSidebar = () => {
     const [regulatoryZones, setRegulatoryZones] = useState();
     const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false);
     const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
+    const [hideZonesListWhenSearching, setHideZonesListWhenSearching] = useState(false)
 
     useEffect(() => {
         if (layersSidebarIsOpen === true) {
@@ -117,6 +118,7 @@ const LayersSidebar = () => {
                 regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
                 setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
                 layersSidebarIsOpen={layersSidebarIsOpen}
+                setHideZonesListWhenSearching={setHideZonesListWhenSearching}
             />
             <Zones>
                 <RegulatoryZoneSelected
@@ -131,12 +133,14 @@ const LayersSidebar = () => {
                     gears={gears}
                     callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
                     regulatoryZoneMetadata={regulatoryZoneMetadata}
+                    hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />
                 <AdministrativeZoneSelection
                     administrativeZones={administrativeZones}
                     showedLayers={showedLayers}
                     callShowAdministrativeZone={callShowAdministrativeZone}
                     callHideAdministrativeZone={callHideAdministrativeZone}
+                    hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />
             </Zones>
             <RegulatoryZoneMetadata

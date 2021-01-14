@@ -142,7 +142,17 @@ const RegulatoryZoneSelectedList = styled.ul`
         }
     }}px;
   max-height: 550px;
-  overflow-y: auto;
+  overflow-y: ${props => {
+            if(props.layerLength) {
+                if(props.zoneLength > 0) {
+                    return props.layerLength + props.zoneLength > 13 ? 'auto' : 'hidden' 
+                }
+                
+                return 'hidden'
+            } else {
+               return 'hidden'
+            }
+        }};
   overflow-x: hidden;
   color: ${COLORS.grayDarkerThree};
   

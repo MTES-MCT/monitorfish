@@ -10,8 +10,8 @@ ARG VERSION=NO_VERSION
 ########################################
 FROM maven:3.6.0-jdk-11-slim as buildBack
 
-ARG GITHUB_SHA=NO_COMMIT
-ARG VERSION=NO_VERSION
+ARG GITHUB_SHA
+ARG VERSION
 
 WORKDIR /tmp/
 COPY backend/ /tmp/
@@ -57,8 +57,8 @@ RUN npm install &&\
 # There is no more JRE with Java 11 : https://stackoverflow.com/a/53733414
 FROM azul/zulu-openjdk-alpine:11
 
-ARG GITHUB_SHA=NO_COMMIT
-ARG VERSION=NO_VERSION
+ARG GITHUB_SHA
+ARG VERSION
 ENV ENV_PROFILE=dev
 ENV REACT_APP_ENV=dev
 ENV ENV_DB_URL=

@@ -2,14 +2,14 @@
 # Multi stage build #
 #####################
 
+ARG GITHUB_SHA=NO_COMMIT
+ARG VERSION=NO_VERSION
+ENV VERSION=$VERSION
+
 ########################################
 # Build monitorfish backend with maven #
 ########################################
 FROM maven:3.6.0-jdk-11-slim as buildBack
-
-ARG GITHUB_SHA=NO_COMMIT
-ARG VERSION=NO_VERSION
-ENV VERSION=$VERSION
 
 WORKDIR /tmp/
 COPY backend/ /tmp/

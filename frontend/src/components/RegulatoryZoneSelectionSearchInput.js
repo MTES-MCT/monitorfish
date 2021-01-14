@@ -13,6 +13,8 @@ function getTextForSearch(text) {
         .replace(/[ ]/g, '')
         .replace(/[_]/g, '')
         .replace(/[-]/g, '')
+        .replace(/[']/g, '')
+        .replace(/["]/g, '')
 }
 
 function orderByAlphabeticalZone(foundRegulatoryZones) {

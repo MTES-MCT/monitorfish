@@ -45,7 +45,6 @@ function getDay(date) {
 
 export let getDateTime = (dateString, withoutSeconds) => {
     if (dateString) {
-        console.log(dateString)
         const date = new Date(dateString)
         let timeOptions = withoutSeconds ? {
                 hour: '2-digit',

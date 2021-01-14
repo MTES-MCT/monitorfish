@@ -20,7 +20,7 @@ test: check-clean-archi
 
 # CI commands
 docker-build:
-	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) --build-arg VERSION=$(VERSION) GITHUB_SHA=$(GITHUB_SHA)
+	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) --build-arg VERSION=$(VERSION) --build-arg GITHUB_SHA=$(GITHUB_SHA)
 docker-tag:
 	docker tag monitorfish-app:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-push:

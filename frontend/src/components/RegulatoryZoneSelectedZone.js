@@ -96,10 +96,10 @@ const Icons = styled.span`
 `
 
 const SubZone = styled.span`
-  width: 88%;
+  width: 94%;
   display: flex;
   line-height: 1.9em;
-  padding-left: 30px;
+  padding-left: 31px;
   padding-top: 4px;
   padding-bottom: 4px;
   user-select: none;

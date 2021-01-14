@@ -2,13 +2,13 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import RegulatoryZoneSelectedZone from "./RegulatoryZoneSelectedZone";
 import LayersEnum from "../domain/entities/layers";
-import {COLORS} from "../constants/constants";
 import {ReactComponent as ChevronIconSVG} from './icons/Chevron_simple_gris.svg'
 import {getHash} from "../utils";
 import {getGearCategory} from "../domain/use_cases/showLayer";
 import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
 import Layers from "../domain/entities/layers";
 import {ReactComponent as CloseIconSVG} from "./icons/Croix_grise.svg";
+import {COLORS} from "../constants/constants";
 
 const RegulatoryZoneSelectedLayer = props => {
     const [isOpen, setIsOpen] = useState(false)
@@ -43,7 +43,7 @@ const RegulatoryZoneSelectedLayer = props => {
 
     return (
         <Row>
-            <Zone>
+            <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
                 <Text onClick={() => setIsOpen(!isOpen)}>
                     <ChevronIcon isOpen={isOpen}/>
                     {props.regulatoryZoneName.replace(/[_]/g, ' ')}
@@ -98,15 +98,16 @@ const Text = styled.span`
 
 const CloseIcon = styled(CloseIconSVG)`
   width: 12px;
-  display: inline-block;
   margin-left: 12px;
+  padding-top: 13px;
+  position: fixed;
 `
 
 const Zone = styled.span`
   width: 100%;
   display: block;
   user-select: none;
-  border-bottom: 1px solid ${COLORS.gray};
+  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
 `
 
 const List = styled.div`

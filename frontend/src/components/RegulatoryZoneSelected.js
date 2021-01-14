@@ -54,7 +54,7 @@ const RegulatoryZoneSelected = props => {
                 showRegulatoryZonesSelected={showRegulatoryZonesSelected}
             >
                 {
-                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0 ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName) => {
+                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0 ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
                         return (<ListItem key={regulatoryZoneName}>
                             <RegulatoryZoneSelectedLayer
                                 increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
@@ -70,6 +70,7 @@ const RegulatoryZoneSelected = props => {
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showedLayers={props.showedLayers}
                                 gears={props.gears}
+                                isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}
                             />
                         </ListItem>)
                     }) : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>

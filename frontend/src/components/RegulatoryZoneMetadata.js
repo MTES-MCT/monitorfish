@@ -364,7 +364,7 @@ const Wrapper = styled.div`
     
     @keyframes regulatory-metadata-box-opening-with-margin {
         0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 500px; opacity: 1; margin-left: 371px; }
+        100% { min-height: 500px; opacity: 1; margin-left: 356px; }
     }
     
     @keyframes regulatory-metadata-box-closing-with-margin {
@@ -374,7 +374,7 @@ const Wrapper = styled.div`
        
     @keyframes regulatory-metadata-box-opening {
         0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 500px; opacity: 1; margin-left: 361px; }
+        100% { min-height: 500px; opacity: 1; margin-left: 356px; }
     }
     
     @keyframes regulatory-metadata-box-closing {

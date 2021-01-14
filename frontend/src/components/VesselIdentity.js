@@ -132,10 +132,6 @@ const VesselIdentity = props => {
                             <Key/>
                         </Field>
                         <Field>
-                            <Key>Poids autorisés en pontée</Key>
-                            <Value>{ props.vessel.weightAuthorizedOnDeck ? <>{props.vessel.weightAuthorizedOnDeck} kg</> : <NoValue>-</NoValue> }</Value>
-                        </Field>
-                        <Field>
                             <Key>Appartenance à une liste</Key>
                             <Value><NoValue>-</NoValue></Value>
                         </Field>

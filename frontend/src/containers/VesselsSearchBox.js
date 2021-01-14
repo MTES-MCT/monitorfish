@@ -60,15 +60,23 @@ const VesselsSearchBox = () => {
         }
     }, [selectedVesselFeature])
 
+    function getTextForSearch(text) {
+        return text
+            .toLowerCase()
+            .replace(/[ ]/g, '')
+            .replace(/[']/g, '')
+            .replace(/["]/g, '')
+    }
+
     function findMatchingFeature(feature) {
         return (feature.getProperties().internalReferenceNumber &&
-            feature.getProperties().internalReferenceNumber.toLowerCase().includes(searchText.toLowerCase())) ||
+            getTextForSearch(feature.getProperties().internalReferenceNumber).includes(getTextForSearch(searchText))) ||
             (feature.getProperties().externalReferenceNumber &&
-                feature.getProperties().externalReferenceNumber.toLowerCase().includes(searchText.toLowerCase())) ||
+                getTextForSearch(feature.getProperties().externalReferenceNumber).includes(getTextForSearch(searchText))) ||
             (feature.getProperties().MMSI &&
-                feature.getProperties().MMSI.toLowerCase().includes(searchText.toLowerCase())) ||
+                getTextForSearch(feature.getProperties().MMSI).includes(getTextForSearch(searchText))) ||
             (feature.getProperties().vesselName &&
-                feature.getProperties().vesselName.toLowerCase().includes(searchText.toLowerCase()));
+                getTextForSearch(feature.getProperties().vesselName).includes(getTextForSearch(searchText)))
     }
 
     useEffect(() => {

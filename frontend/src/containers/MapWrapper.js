@@ -206,7 +206,7 @@ const MapWrapper = () => {
                 map.getView().animate({
                     center: [
                         mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
-                        mapState.animateToVessel.getGeometry().getCoordinates()[1] + (resolution * 150)
+                        mapState.animateToVessel.getGeometry().getCoordinates()[1]
                     ],
                     duration: 1000,
                     zoom: undefined
@@ -224,7 +224,7 @@ const MapWrapper = () => {
                     map.getView().animate({
                         center: [
                             mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
-                            mapState.animateToVessel.getGeometry().getCoordinates()[1] + (resolution * 150)
+                            mapState.animateToVessel.getGeometry().getCoordinates()[1]
                         ],
                         duration: 500,
                         zoom: undefined

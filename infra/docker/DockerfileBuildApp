@@ -28,6 +28,7 @@ RUN mvn clean package -DskipTests=true
 # Build frontend with npm #
 ###########################
 FROM ubuntu:18.04 as buildFront
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV REACT_APP_ENV=dev
 
@@ -57,8 +58,8 @@ RUN npm install &&\
 # There is no more JRE with Java 11 : https://stackoverflow.com/a/53733414
 FROM azul/zulu-openjdk-alpine:11
 
-ARG GITHUB_SHA
 ARG VERSION
+ENV VERSION=VERSION
 ENV ENV_PROFILE=dev
 ENV REACT_APP_ENV=dev
 ENV ENV_DB_URL=

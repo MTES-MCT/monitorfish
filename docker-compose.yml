@@ -25,7 +25,7 @@ services:
 
   prometheus:
     ports:
-      - "9090:9090"
+      - 9090:9090
     image: prom/prometheus
     container_name: prometheus
     volumes:

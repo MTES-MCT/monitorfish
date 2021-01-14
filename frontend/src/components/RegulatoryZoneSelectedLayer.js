@@ -99,13 +99,12 @@ const Text = styled.span`
 const CloseIcon = styled(CloseIconSVG)`
   width: 12px;
   margin-left: 12px;
-  padding-top: 13px;
-  position: fixed;
+  padding-top: 2px;
 `
 
 const Zone = styled.span`
   width: 100%;
-  display: block;
+  display: flex;
   user-select: none;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
 `

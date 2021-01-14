@@ -16,13 +16,15 @@ function getTextForSearch(text) {
 }
 
 function orderByAlphabeticalZone(foundRegulatoryZones) {
-    Object.keys(foundRegulatoryZones).forEach(layer => {
-        foundRegulatoryZones[layer] = foundRegulatoryZones[layer].sort((a, b) => {
-            if (a.zone && b.zone) {
-                return a.zone.localeCompare(b.zone)
-            }
+    if(foundRegulatoryZones) {
+        Object.keys(foundRegulatoryZones).forEach(layer => {
+            foundRegulatoryZones[layer] = foundRegulatoryZones[layer].sort((a, b) => {
+                if (a.zone && b.zone) {
+                    return a.zone.localeCompare(b.zone)
+                }
+            })
         })
-    })
+    }
 }
 
 const RegulatoryZoneSelectionSearchInput = props => {

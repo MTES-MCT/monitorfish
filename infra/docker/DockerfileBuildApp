@@ -7,8 +7,9 @@
 ########################################
 FROM maven:3.6.0-jdk-11-slim as buildBack
 
-ENV GITHUB_SHA=NO_COMMIT
-ENV VERSION=NO_VERSION
+ARG GITHUB_SHA=NO_COMMIT
+ARG VERSION=NO_VERSION
+ENV VERSION=$VERSION
 
 WORKDIR /tmp/
 COPY backend/ /tmp/

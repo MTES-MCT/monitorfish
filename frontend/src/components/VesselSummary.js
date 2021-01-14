@@ -77,7 +77,7 @@ const VesselSummary = props => {
                         {
                             lastPosition.dateTime ? <>
                                     {getDateTime(lastPosition.dateTime, true)}{' '}
-                                    <Gray>(CET)</Gray></>
+                                    <Gray>(Zulu)</Gray></>
                                 : <NoValue>-</NoValue>
                         }
                     </FieldValue>

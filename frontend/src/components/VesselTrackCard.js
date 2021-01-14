@@ -40,7 +40,7 @@ const VesselTrackCard = props => {
                         {
                             props.vessel.getProperties().dateTime ? <>
                                     {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
-                                    <Gray>(CET)</Gray></>
+                                    <Gray>(Zulu)</Gray></>
                                 : <NoValue>-</NoValue>
                         }
                     </FieldValue>
@@ -99,7 +99,7 @@ const FieldValue = styled.div`
 `
 
 const LatLon = styled.div`
-  width: 100px;
+  flex-grow: 1;
   order: 1;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
@@ -107,7 +107,7 @@ const LatLon = styled.div`
 `
 
 const Course = styled.div`
-  width: 70px;
+  flex-grow: 1;
   order: 2;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
@@ -115,7 +115,7 @@ const Course = styled.div`
 `
 
 const Position = styled.div`
-  width: 160px;
+  flex-grow: 1;
   order: 3;
   background: ${COLORS.background};
   margin: 5px 5px 5px 5px;
@@ -146,6 +146,7 @@ const TimeAgo = styled.span`
 
 const VesselCardBody = styled.div`
   display: flex;
+  flex: 1 1 1;
   text-align: center;
 `
 

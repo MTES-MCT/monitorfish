@@ -32,17 +32,36 @@ export let getCoordinates = (coordinates, projection) => {
     }
 }
 
+function getMonth(date) {
+    let month = date.getMonth() + 1;
+    return month < 10 ? '0' + month : '' + month;
+}
+
+function getDay(date) {
+    let day = date.getDate() ;
+    return day < 10 ? '0' + day : '' + day;
+}
+
+
 export let getDateTime = (dateString, withoutSeconds) => {
     if (dateString) {
+        console.log(dateString)
         const date = new Date(dateString)
-        let time = date.toLocaleTimeString('fr-FR')
+        let timeOptions = withoutSeconds ? {
+                hour: '2-digit',
+                minute:'2-digit',
+                timeZone: 'UTC',
+            hourCycle: 'h24'} : {
+            hour: '2-digit',
+            minute:'2-digit',
+            second: '2-digit',
+            timeZone: 'UTC',
+            hourCycle: 'h24'}
+
+        let time = date.toLocaleTimeString([], timeOptions)
         time = time.replace(':', 'h')
 
-        if(withoutSeconds) {
-            time = time.substring(0, time.length - 3)
-        }
-
-        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} à ${time}`
+        return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()} à ${time}`
     }
 }
 

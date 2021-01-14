@@ -201,15 +201,37 @@ const MapWrapper = () => {
 
     useEffect(() => {
         if (map && mapState.animateToVessel && vessel.selectedVesselFeature && vessel.vesselSidebarIsOpen) {
-            const resolution = mapRef.current.getView().getResolution()
-            map.getView().animate({
-                center: [
-                    mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
-                    mapState.animateToVessel.getGeometry().getCoordinates()[1] + (resolution * 150)
-                ],
-                duration: 1000,
-                zoom: undefined
-            });
+            if(map.getView().getZoom() >= 8) {
+                const resolution = map.getView().getResolution()
+                map.getView().animate({
+                    center: [
+                        mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
+                        mapState.animateToVessel.getGeometry().getCoordinates()[1] + (resolution * 150)
+                    ],
+                    duration: 1000,
+                    zoom: undefined
+                })
+            } else {
+                map.getView().animate({
+                    center: [
+                        mapState.animateToVessel.getGeometry().getCoordinates()[0],
+                        mapState.animateToVessel.getGeometry().getCoordinates()[1]
+                    ],
+                    duration: 800,
+                    zoom: 8
+                }, () => {
+                    const resolution = map.getView().getResolution()
+                    map.getView().animate({
+                        center: [
+                            mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
+                            mapState.animateToVessel.getGeometry().getCoordinates()[1] + (resolution * 150)
+                        ],
+                        duration: 500,
+                        zoom: undefined
+                    })
+                });
+            }
+
             dispatch(resetAnimateToVessel())
         }
     }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeature, mapState.usingSearch])

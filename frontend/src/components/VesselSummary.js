@@ -229,27 +229,12 @@ const Photo = styled.img`
   right: auto;
 `
 
-const DummyPhoto = styled.img`
-  margin: 15px 0 10px 0;
-  max-height: 130px;
-  left: auto;
-  right: auto;
-  opacity: 0.3;
-`
-
 const Zone = styled.div`
   margin: 5px 5px 10px 5px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
   background: ${COLORS.background};
-`
-
-const ZoneWithoutBackground = styled.div`
-  margin: 5px 5px 10px 5px;
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
 `
 
 const Fields = styled.table`
@@ -315,31 +300,39 @@ const NoValue = styled.span`
   line-height: normal;
 `
 
+const ZoneWithoutBackground = styled.div`
+  margin: 5px 5px 10px 5px;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 1;
+`
+
 const LatLon = styled.div`
-  width: 133px;
   order: 1;
   background: ${COLORS.background};
   margin: 0;
   padding: 1px 10px 10px 10px;
   text-align: center;
+  flex-grow: 1;
 `
 
 const Course = styled.div`
-  width: 103px;
   order: 2;
   background: ${COLORS.background};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;
+  flex-grow: 1;
 `
 
 const Position = styled.div`
-  width: 163px;
   order: 3;
   background: ${COLORS.background};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;
+  flex-grow: 1;
 `
 
 export default VesselSummary

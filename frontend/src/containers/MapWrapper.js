@@ -23,7 +23,7 @@ import VesselTrackCard from "../components/VesselTrackCard";
 import ShowVesselsNamesBox from "./ShowVesselsNamesBox";
 import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
 import {useDispatch, useSelector} from "react-redux";
-import {hideVesselNames, isMoving, resetAnimateToVessel} from "../domain/reducers/Map";
+import {hideVesselNames, isMoving, resetAnimateToVessel, setView} from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
 import {updateVesselFeature} from "../domain/reducers/Vessel";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
@@ -43,12 +43,22 @@ const MapWrapper = () => {
     const dispatch = useDispatch()
 
     const [map, setMap] = useState()
+    const [shouldUpdateView, setShouldUpdateView] = useState(true)
     const [cursorCoordinates, setCursorCoordinates] = useState()
     const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
     const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
     const mapElement = useRef()
     const mapRef = useRef()
     mapRef.current = map
+
+    window.addEventListener('popstate', event => {
+        if (event.state === null) {
+            return
+        }
+        mapRef.current.getView().setCenter(event.state.center)
+        mapRef.current.getView().setZoom(event.state.zoom)
+        setShouldUpdateView(false)
+    });
 
     useEffect(() => {
         const vesselCardOverlay = new Overlay({
@@ -91,6 +101,20 @@ const MapWrapper = () => {
             }),
             controls: [],
         })
+
+        if(window.location.hash !== '') {
+            let hash = window.location.hash.replace('@', '');
+            let viewParts = hash.split(',');
+            if (viewParts.length === 3) {
+                initialMap.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])]);
+                initialMap.getView().setZoom(parseFloat(viewParts[2]));
+            }
+        } else if(mapState) {
+            if(mapState.view && mapState.view.center && mapState.view.zoom) {
+                initialMap.getView().setCenter(mapState.view.center);
+                initialMap.getView().setZoom(mapState.view.zoom);
+            }
+        }
 
         initialMap.on('click', handleMapClick)
         initialMap.on('pointermove', event => {
@@ -249,11 +273,30 @@ const MapWrapper = () => {
 
     const handleMovingAndZoom = () => {
         dispatch(isMoving())
+        updateViewHistory(shouldUpdateView, mapRef, dispatch);
+
         if (isVesselNameMinimumZoom()) {
             dispatch(hideVesselNames(false));
         } else if (isVesselNameMaximumZoom()) {
             dispatch(hideVesselNames(true));
         }
+    }
+
+    function updateViewHistory(shouldUpdateView, mapRef, dispatch) {
+        if (!shouldUpdateView) {
+            setShouldUpdateView(true)
+            return
+        }
+
+        const center = mapRef.current.getView().getCenter();
+        let view = {
+            zoom: mapRef.current.getView().getZoom().toFixed(2),
+            center: center,
+        };
+        let url = `@${center[0].toFixed(2)},${center[1].toFixed(2)},${mapRef.current.getView().getZoom().toFixed(2)}`
+
+        dispatch(setView(view))
+        window.history.pushState(view, 'map', url);
     }
 
     function isVesselNameMinimumZoom() {

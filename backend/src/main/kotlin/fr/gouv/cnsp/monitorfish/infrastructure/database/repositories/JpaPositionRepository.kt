@@ -21,27 +21,6 @@ class JpaPositionRepository(@Autowired
                 .map(PositionEntity::toPosition)
     }
 
-    @Suppress("UselessCallOnCollection")
-    @kotlin.time.ExperimentalTime
-    override fun findAllLastDistinctPositions(): List<Position> {
-        val (internalReferenceNumberPositions, internalReferenceNumberPositionsElapsed) = measureTimedValue {
-            dbPositionRepository.findLastDistinctInternalReferenceNumbers()
-        }
-        logger.info("findLastDistinctInternalReferenceNumberPositions SQL query took ${internalReferenceNumberPositionsElapsed.inSeconds} seconds to execute")
-
-        val (externalReferenceNumberPositions, externalReferenceNumberPositionsElapsed) = measureTimedValue {
-            dbPositionRepository.findLastDistinctExternalReferenceNumberByInternalReferenceNumberIsNull()
-        }
-        logger.info("findLastDistinctInternalReferenceNumberPositions SQL query took ${externalReferenceNumberPositionsElapsed.inSeconds} seconds to execute")
-
-        return (internalReferenceNumberPositions + externalReferenceNumberPositions)
-                // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
-                .filterNotNull()
-                .map {
-                    it.toPosition()
-                }
-    }
-
     @Cacheable(value = ["vessel_track"])
     override fun findVesselLastPositions(internalReferenceNumber: String, externalReferenceNumber: String, IRCS: String): List<Position> {
         if(internalReferenceNumber.isNotEmpty()) {

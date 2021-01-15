@@ -31,17 +31,17 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     fun `upsert Should add a new position When the vessel does not exist in the table and the CFR is empty`() {
         // Given
         val now = ZonedDateTime.now()
-        val positionWithoutInternalReferenceNumber = Position(null, "", "Patrouilleur", null, "PM40", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
+        val positionWithoutInternalReferenceNumber = Position(null, "", "Patrouilleur", null, "PM45", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
 
         // When
         jpaLastPositionRepository.upsert(positionWithoutInternalReferenceNumber)
         val lastPositions = jpaLastPositionRepository.findAll()
 
         // Then
-        // Size of test data is 1441
+        // Size of test data is 2886
         // + 1 position of a vessel without an internal reference number (1 entry)
-        // the expected last positions size is 1442
-        assertThat(lastPositions).hasSize(1442)
+        // the expected last positions size is 2885
+        assertThat(lastPositions).hasSize(2887)
     }
 
     @Test
@@ -58,10 +58,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val position = lastPositions.find { it.MMSI == "TEST" }
         assertThat(position).isNotNull
         // Then
-        // Size of test data is 1441
+        // Size of test data is 2886
         // + 1 position of a vessel without an internal reference number (1 entry)
-        // the expected last positions size is 1442
-        assertThat(lastPositions).hasSize(1442)
+        // the expected last positions size is 2887
+        assertThat(lastPositions).hasSize(2887)
     }
 
     @Test
@@ -76,10 +76,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val lastPositions = jpaLastPositionRepository.findAll()
 
         // Then
-        // Size of test data is 1441
-        // + 1 position of the vessel FR224226850 (2 entries)
-        // the expected last positions size is 1441
-        assertThat(lastPositions).hasSize(1441)
+        // Size of test data is 2886
+        // + 1 position of the vessel FR224226850
+        // the expected last positions size is 2887
+        assertThat(lastPositions).hasSize(2887)
         val position = lastPositions.single {
             it.internalReferenceNumber == "FR224226850"
         }

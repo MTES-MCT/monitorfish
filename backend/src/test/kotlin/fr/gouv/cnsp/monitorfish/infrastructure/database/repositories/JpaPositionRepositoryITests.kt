@@ -31,58 +31,6 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    @kotlin.time.ExperimentalTime
-    fun `findLastDistinctPositions Should return the list of distinct vessels last positions`() {
-        // Given
-        val now = ZonedDateTime.now()
-        val onePosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
-
-        // When
-        jpaPositionRepository.save(onePosition)
-        val lastPositions = jpaPositionRepository.findAllLastDistinctPositions()
-
-        // Then
-        // Size of test data is 1441 + 1 position, as the vessel FR224226850 has 2 entries
-        // the expected last positions size is 1441
-        assertThat(lastPositions).hasSize(1441)
-        val lastInsertedPosition = lastPositions.filter { it.internalReferenceNumber == "FR224226850" }
-        assertThat(lastInsertedPosition).hasSize(1)
-        assertThat(lastInsertedPosition.first().dateTime).isEqualTo(now)
-    }
-
-    @Test
-    @Transactional
-    @kotlin.time.ExperimentalTime
-    fun `findLastDistinctPositions Should return the list of distinct vessels last positions When there is a null item returned from the SQL query`() {
-        // Given
-        val now = ZonedDateTime.now()
-        val onePosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
-        val positionWithoutInternalReferenceNumber = Position(null, null, "Patrouilleur", null, "PM40", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
-
-        // When
-        jpaPositionRepository.save(onePosition)
-        jpaPositionRepository.save(positionWithoutInternalReferenceNumber)
-        val lastPositions = jpaPositionRepository.findAllLastDistinctPositions()
-
-        // Then
-        // Size of test data is 1441
-        // + 1 position of the vessel FR224226850 (2 entries)
-        // + 1 position of a vessel without an internal reference number (1 entry)
-        // the expected last positions size is 1442
-        assertThat(lastPositions).hasSize(1442)
-        val lastInsertedPosition = lastPositions.filter { it.internalReferenceNumber == "FR224226850" }
-        assertThat(lastInsertedPosition).hasSize(1)
-        assertThat(lastInsertedPosition.first().dateTime).isEqualTo(now)
-
-        val nullPosition = lastPositions.filter { it == null }
-        assertThat(nullPosition).hasSize(0)
-
-        val nullInternalReferenceNumberPosition = lastPositions.filter { it.internalReferenceNumber == null }
-        assertThat(nullInternalReferenceNumberPosition).hasSize(1)
-    }
-
-    @Test
-    @Transactional
     fun `save Should save the position`() {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(LocalDate.EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"));
@@ -97,8 +45,8 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         val sameMMSIPositions = positions.filter {
             it.MMSI == "224136470"
         }
-        assertThat(sameMMSIPositions).hasSize(2)
-        assertThat(positions).hasSize(1445)
+        assertThat(sameMMSIPositions).hasSize(1)
+        assertThat(positions).hasSize(31786)
         assertThat(positions.last().dateTime.toString()).isEqualTo("1970-01-01T00:00:00.999999999Z[UTC]")
     }
 
@@ -120,8 +68,8 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         val lastPositions = jpaPositionRepository.findVesselLastPositions("FR224226850", "", "")
 
         // Then
-        // For this vessel, we inserted 4 rows and then were 1 row inserted with the DB test data
-        assertThat(lastPositions).hasSize(5)
+        // For this vessel, we inserted
+        assertThat(lastPositions).hasSize(4)
     }
 
     @Test

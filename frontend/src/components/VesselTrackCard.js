@@ -40,7 +40,7 @@ const VesselTrackCard = props => {
                         {
                             props.vessel.getProperties().dateTime ? <>
                                     {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
-                                    <Gray>(Zulu)</Gray></>
+                                    <Gray>(UTC)</Gray></>
                                 : <NoValue>-</NoValue>
                         }
                     </FieldValue>

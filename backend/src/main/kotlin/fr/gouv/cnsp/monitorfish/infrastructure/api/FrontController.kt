@@ -12,4 +12,9 @@ class FrontController {
     fun redirectToSPA() : String {
         return "index.html"
     }
+
+    @GetMapping(value = ["/**/{path:[^\\.]*}"])
+    fun forward(): String? {
+        return "forward:/"
+    }
 }

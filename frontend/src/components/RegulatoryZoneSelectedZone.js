@@ -40,10 +40,8 @@ const RegulatoryZoneSelectedZone = props => {
     }, [props.regulatoryZoneMetadata, props.subZone])
 
     useEffect(() => {
-        if (showSubZone === undefined) {
-            setShowSubZone(props.isShowOnInit)
-        }
-    }, [props.isShownOnInit])
+        setShowSubZone(props.isShown)
+    }, [props.isShown])
 
     useEffect(() => {
         if (firstUpdate.current) {

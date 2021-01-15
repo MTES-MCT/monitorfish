@@ -38,26 +38,25 @@ const Rectangle = styled.div`
   height: 14px;
   background: ${props => props.vectorLayerStyle && props.vectorLayerStyle.getFill() ? props.vectorLayerStyle.getFill().getColor() : COLORS.gray};
   border: 1px solid ${props => props.vectorLayerStyle && props.vectorLayerStyle.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : COLORS.grayDarkerTwo};
-  display: inline-block;
   margin-right: 7px;
-  margin-top: 3px;
+  margin-top: 5px;
 `
 
 const Text = styled.span`
-  display: inline-block;
   vertical-align: text-bottom;
+  margin-top: 3px;
 `
 
 const Details = styled.span`
   position: absolute;
   bottom: 10px;
   left: 272px;
-  display: inline-block;
+  display: flex;
   margin: 1px;
-  padding: 1px 10px 1px 10px;
+  padding: 0 10px 4px 10px;
   text-decoration: none;
   text-align: center;
-  height: 23px;
+  height: 21px;
   border: none;
   border-radius: 2px;
   background: ${COLORS.grayBackground};

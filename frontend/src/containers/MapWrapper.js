@@ -14,7 +14,7 @@ import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {
     selectedVesselStyle,
     VESSEL_SELECTOR_STYLE,
-    VESSEL_NAME_STYLE, getVesselNameStyle
+    VESSEL_NAME_STYLE, getVesselNameStyle, getSVG
 } from "../layers/styles/featuresStyles";
 import MapAttributionsBox from "../components/MapAttributionsBox";
 import Overlay from "ol/Overlay";
@@ -332,7 +332,10 @@ const MapWrapper = () => {
             .filter(layer => layer.className_ === LayersEnum.VESSELS)
             .forEach(vesselsLayer => {
                 vesselsLayer.getSource().forEachFeatureIntersectingExtent(extent, feature => {
-                    feature.setStyle([...feature.getStyle(), getVesselNameStyle(feature)])
+                    getSVG(feature).then(svg => {
+                        let style = getVesselNameStyle(feature, svg)
+                        feature.setStyle([...feature.getStyle(), style])
+                    })
                 })
             })
     }

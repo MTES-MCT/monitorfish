@@ -34,7 +34,9 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselN
     styles.push(iconStyle)
 
     if (vesselNamesShowedOnMap) {
-        styles.push(getVesselNameStyle(iconFeature))
+        getSVG(iconFeature).then(svg => {
+            styles.push(getVesselNameStyle(iconFeature, svg))
+        })
     }
 
     if (vessel.internalReferenceNumber && selectedFeature && vessel.internalReferenceNumber === selectedFeature.getProperties().internalReferenceNumber) {
@@ -42,7 +44,7 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselN
         selectedVesselFeatureToUpdate = iconFeature
     }
 
-   iconFeature.setStyle(styles);
+    iconFeature.setStyle(styles);
     return selectedVesselFeatureToUpdate
 }
 
@@ -55,8 +57,9 @@ export const selectedVesselStyle =  new Style({
     zIndex: VESSEL_SELECTOR_STYLE
 })
 
-const getSVG = feature => {
+export const getSVG = feature => new Promise(function (resolve) {
     //const flag = feature.getProperties().flagState ? Flags.byId[feature.getProperties().flagState.toLowerCase()].data : null
+    let imageElement = new Image();
     const flag = images(`./${feature.getProperties().flagState.toLowerCase()}.png`)
     const textWidth = getTextWidth(feature.getProperties().vesselName) + 10 + (flag ? 18 : 0)
 
@@ -67,16 +70,17 @@ const getSVG = feature => {
             <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
         </svg>`;
 
-    let imageElement = new Image();
+    imageElement.addEventListener('load', function animationendListener() {
+        imageElement.removeEventListener("load", animationendListener);
+        resolve(imageElement);
+    },{once: true});
     imageElement.src = 'data:image/svg+xml,' + escape(iconSVG);
+})
 
-    return imageElement
-}
-
-export const getVesselNameStyle = feature => new Style({
+export const getVesselNameStyle = (feature, image) => new Style({
     image: new Icon({
         anchorOrigin: IconOrigin.TOP_RIGHT,
-        img: getSVG(feature),
+        img: image,
         imgSize: [getTextWidth(feature.getProperties().vesselName)*4, 36],
         offset: [-getTextWidth(feature.getProperties().vesselName)*2 - 10, 11]
     }),

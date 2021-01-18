@@ -5,7 +5,7 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
-import {getTopLeft, getTopRight, getWidth} from 'ol/extent';
+import {getArea} from 'ol/extent';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import LayersEnum from "../domain/entities/layers";
@@ -28,9 +28,11 @@ import {COLORS} from "../constants/constants";
 import {updateVesselFeature} from "../domain/reducers/Vessel";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
 import LayerDetailsBox from "../components/LayerDetailsBox";
+import {forEach} from "ol/geom/flat/segments";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
+const tileBaseLayer = 'ol-layer';
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
 let lastEventForPointerMove, timeoutForPointerMove, lastEventForMove, timeoutForMove;
@@ -145,11 +147,46 @@ const MapWrapper = () => {
 
     useEffect(() => {
         if (map && layer.layers.length) {
+            reorganizeLayers();
+        }
+    }, [layer.layers, map, layer.layersAndAreas])
 
+    useEffect(() => {
+        if (map && layer.layers.length) {
             addLayersToMap();
             removeLayersToMap();
         }
-    }, [layer.layers, map])
+    }, [layer.layers])
+
+    function reorganizeLayers() {
+        const layersToRemove = map.getLayers().getArray().filter(showedLayer => {
+            return !layer.layers.some(layer_ => showedLayer === layer_)
+        })
+            .filter(layer => layer.className_ !== tileBaseLayer)
+            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK)
+
+        if(layersToRemove.length) {
+            return
+        }
+
+        const layersToInsert = layer.layers.filter(layer => {
+            return !map.getLayers().getArray().some(layer_ => layer === layer_)
+        })
+
+        if(layersToInsert.length === 0 && layer.layersAndAreas.length > 1) {
+            let sortedLayersToArea = [...layer.layersAndAreas].sort((a, b) => a.area - b.area).reverse()
+
+            sortedLayersToArea.forEach((layerAndArea, index) => {
+                index = index + 1
+                let layer = map.getLayers().getArray().find(layer => layer.className_ === layerAndArea.name)
+
+                if(layer) {
+                    map.getLayers().remove(layer);
+                    map.getLayers().insertAt(index, layer);
+                }
+            })
+        }
+    }
 
     function addLayersToMap() {
         const layersToInsert = layer.layers.filter(layer => {
@@ -161,24 +198,26 @@ const MapWrapper = () => {
                 return
             }
 
+            // Add vessel layer
             if (map.getLayers().getLength() === 1) {
                 map.getLayers().push(layerToInsert);
                 return
             }
 
+            // Replace vessel layer
             if (layerToInsert.className_ === LayersEnum.VESSELS) {
                 removeCurrentVesselLayer()
                 map.getLayers().push(layerToInsert);
                 return
             }
 
+            // Add other layers
             let index = map.getLayers().getLength() - 1
             map.getLayers().insertAt(index, layerToInsert);
         })
     }
 
     function removeLayersToMap() {
-        let tileBaseLayer = 'ol-layer';
         const layersToRemove = map.getLayers().getArray().filter(showedLayer => {
             return !layer.layers.some(layer_ => showedLayer === layer_)
         })

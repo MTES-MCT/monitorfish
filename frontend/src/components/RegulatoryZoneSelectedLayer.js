@@ -15,8 +15,7 @@ import {ReactComponent as HideIconSVG} from "./icons/oeil_masque.svg";
 const RegulatoryZoneSelectedLayer = props => {
     const [isOpen, setIsOpen] = useState(false)
     const firstUpdate = useRef(true);
-    const initialShowState = useRef(true);
-    const [showLayer, setShowLayer] = useState({show: false})
+    const [showWholeLayer, setShowWholeLayer] = useState(undefined)
     const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
 
     useEffect(() => {
@@ -28,23 +27,6 @@ const RegulatoryZoneSelectedLayer = props => {
             setAtLeastOneLayerIsShowed(showLayer)
         }
     }, [props.showedLayers])
-
-    useEffect(() => {
-        if (initialShowState.current) {
-            initialShowState.current = false;
-            return
-        }
-
-        if(showLayer.show) {
-            props.regulatorySubZones.forEach(subZone => {
-                props.callShowRegulatoryZone(subZone)
-            })
-        } else {
-            props.regulatorySubZones.forEach(subZone => {
-                props.callHideRegulatoryZone(subZone)
-            })
-        }
-    }, [showLayer])
 
     useEffect(() => {
         if (firstUpdate.current) {
@@ -80,7 +62,7 @@ const RegulatoryZoneSelectedLayer = props => {
                     <ChevronIcon isOpen={isOpen}/>
                     {props.regulatoryZoneName.replace(/[_]/g, ' ')}
                 </Text>
-                { atLeastOneLayerIsShowed ? <ShowIcon title="Cacher la couche" onClick={() => setShowLayer({show: false})} /> : <HideIcon title="Afficher la couche" onClick={() => setShowLayer({show: true})} />}
+                { atLeastOneLayerIsShowed ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({show: false})} /> : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({show: true})} />}
                 <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(props.regulatorySubZones), props.regulatorySubZones.length)}/>
             </Zone>
             <List
@@ -108,7 +90,8 @@ const RegulatoryZoneSelectedLayer = props => {
                                 callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
                                 callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
-                                isShown={props.showedLayers
+                                showWholeLayer={showWholeLayer}
+                                zoneIsShown={props.showedLayers
                                     .filter(layer => layer.type === LayersEnum.REGULATORY)
                                     .some(layer =>
                                         layer.zone.layerName === subZone.layerName &&

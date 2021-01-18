@@ -25,6 +25,7 @@ const layerSlice = createSlice({
             { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
         ],
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
+        layersAndAreas: []
     },
     reducers: {
         replaceVesselLayer(state, action) {
@@ -85,6 +86,17 @@ const layerSlice = createSlice({
 
                 window.localStorage.setItem(layersShowedOnMapLocalStorageKey, JSON.stringify(state.showedLayers))
             }
+        },
+        pushLayerAndArea(state, action) {
+            state.layersAndAreas = state.layersAndAreas.filter(layerAndArea => {
+                return layerAndArea.name !== action.payload.name
+            })
+            state.layersAndAreas = state.layersAndAreas.concat(action.payload)
+        },
+        removeLayerAndArea(state, action) {
+            state.layersAndAreas = state.layersAndAreas.filter(layerAndArea => {
+                return layerAndArea.name !== action.payload
+            })
         }
     }
 })
@@ -97,6 +109,8 @@ export const {
     setLayers,
     addShowedLayer,
     removeShowedLayer,
+    pushLayerAndArea,
+    removeLayerAndArea
 } = layerSlice.actions
 
 export default layerSlice.reducer

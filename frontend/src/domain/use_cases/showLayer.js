@@ -1,14 +1,15 @@
 import Layers from "../entities/layers";
 import VectorLayer from "ol/layer/Vector";
-import {addLayer, addShowedLayer} from "../reducers/Layer";
+import {addLayer, addShowedLayer, pushLayerAndArea} from "../reducers/Layer";
 import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
-import VectorSource, {VectorSourceEvent} from "ol/source/Vector";
+import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
-import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
+import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../entities/map";
 import {all, bbox as bboxStrategy} from "ol/loadingstrategy";
 import {getHash} from "../../utils";
 import {getAdministrativeZoneFromAPI, getRegulatoryZoneFromAPI} from "../../api/fetch";
 import {setError} from "../reducers/Global";
+import {getArea} from "ol/extent";
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -68,6 +69,10 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
                 try {
                     getRegulatoryZoneFromAPI(type, regulatoryZoneProperties).then(regulatoryZone => {
                         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
+                        dispatch(pushLayerAndArea({
+                            name: `${type}:${regulatoryZoneProperties.layerName}:${regulatoryZoneProperties.zone}`,
+                            area: getArea(vectorSource.getExtent())
+                        }))
                     }).catch(e => {
                         vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
                         vectorSource.removeLoadedExtent(extent);

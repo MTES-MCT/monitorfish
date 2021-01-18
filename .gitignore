@@ -14,3 +14,6 @@ datascience/.env
 
 # Python
 *.pyc
+
+# IDEs
+.vscode

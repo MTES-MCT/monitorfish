@@ -8,7 +8,6 @@ import {ReactComponent as REGPaperDarkSVG} from './icons/reg_paper_dark.svg'
 import {COLORS} from "../constants/constants";
 
 const RegulatoryZoneSelectedZone = props => {
-    const firstUpdate = useRef(true);
     const [showSubZone, setShowSubZone] = useState(undefined);
     const [metadataIsShown, setMetadataIsShown] = useState(false)
 
@@ -40,15 +39,22 @@ const RegulatoryZoneSelectedZone = props => {
     }, [props.regulatoryZoneMetadata, props.subZone])
 
     useEffect(() => {
-        setShowSubZone(props.isShown)
-    }, [props.isShown])
+        if(props.showWholeLayer) {
+            if(!props.zoneIsShown && props.showWholeLayer.show) {
+                setShowSubZone(true)
+            } else if(props.zoneIsShown && !props.showWholeLayer.show) {
+                setShowSubZone(false)
+            }
+        } else {
+            if(props.zoneIsShown) {
+                setShowSubZone(true)
+            } else if(!props.zoneIsShown) {
+                setShowSubZone(false)
+            }
+        }
+    }, [props.zoneIsShown, props.showWholeLayer])
 
     useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
-
         if (showSubZone && props.isReadyToShowRegulatoryZones) {
             props.callShowRegulatoryZone(props.subZone)
         } else {

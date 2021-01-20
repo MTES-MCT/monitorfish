@@ -9,6 +9,10 @@ const images = require.context('../../../public/flags', false, /\.png$/);
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
+function degreesToRadian(vessel) {
+    return vessel.course * Math.PI / 180;
+}
+
 export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselNamesShowedOnMap) => {
     let selectedVesselFeatureToUpdate = null;
     const vesselDate = new Date(vessel.dateTime);
@@ -22,7 +26,7 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselN
             src: 'boat_mf.png',
             offset: [0, 0],
             imgSize: [14, 14],
-            rotation: vessel.course,
+            rotation: degreesToRadian(vessel),
             opacity: opacity
         }) : new CircleStyle({
             radius: 4,
@@ -58,7 +62,6 @@ export const selectedVesselStyle =  new Style({
 })
 
 export const getSVG = feature => new Promise(function (resolve) {
-    //const flag = feature.getProperties().flagState ? Flags.byId[feature.getProperties().flagState.toLowerCase()].data : null
     let imageElement = new Image();
     const flag = images(`./${feature.getProperties().flagState.toLowerCase()}.png`)
     const textWidth = getTextWidth(feature.getProperties().vesselName) + 10 + (flag ? 18 : 0)
@@ -105,13 +108,13 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
             src: trackArrow,
             offset: [0, 0],
             imgSize: [20, 34],
-            scale: 0.6,
+            scale: 0.7,
             rotation: arrowFeature.getProperties().course
         }),
     });
 
     arrowFeature.setStyle((feature, resolution) => {
-        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/4));
+        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/7));
         return arrowStyle;
     });
 }

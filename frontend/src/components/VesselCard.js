@@ -66,7 +66,7 @@ const VesselCard = props => {
                             </Field>
                             <Field>
                                 <Key>Call Sign (IRCS)</Key>
-                                <Value>{props.vessel.getProperties().IRCS ? props.vessel.getProperties().IRCS : <NoValue>-</NoValue>}</Value>
+                                <Value>{props.vessel.getProperties().ircs ? props.vessel.getProperties().ircs : <NoValue>-</NoValue>}</Value>
                             </Field>
                         </Body>
                     </Fields>

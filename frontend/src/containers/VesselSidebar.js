@@ -54,8 +54,8 @@ const VesselSidebar = () => {
             {
                 vessel && !vesselState.loadingVessel ? (vessel.internalReferenceNumber ||
                     vessel.externalReferenceNumber ||
-                    vessel.MMSI ||
-                    vessel.IRCS) ? <div>
+                    vessel.ircs ||
+                    vessel.mmsi) ? <div>
                     <div>
                         <TabList>
                             <Tab isActive={index === 1} onClick={() => setIndex(1)}>

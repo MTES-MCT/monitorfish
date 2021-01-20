@@ -131,7 +131,7 @@ const Value = styled.td`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;
-  max-width: 90px;
+  max-width: 95px;
 `
 
 const TrianglePointer = styled.div`

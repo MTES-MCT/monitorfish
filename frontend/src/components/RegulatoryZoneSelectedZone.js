@@ -45,14 +45,16 @@ const RegulatoryZoneSelectedZone = props => {
             } else if(props.zoneIsShown && !props.showWholeLayer.show) {
                 setShowSubZone(false)
             }
-        } else {
-            if(props.zoneIsShown) {
-                setShowSubZone(true)
-            } else if(!props.zoneIsShown) {
-                setShowSubZone(false)
-            }
         }
-    }, [props.zoneIsShown, props.showWholeLayer])
+    }, [props.showWholeLayer])
+
+    useEffect(() => {
+        if(props.zoneIsShown) {
+            setShowSubZone(true)
+        } else if(!props.zoneIsShown) {
+            setShowSubZone(false)
+        }
+    }, [props.zoneIsShown])
 
     useEffect(() => {
         if (showSubZone && props.isReadyToShowRegulatoryZones) {

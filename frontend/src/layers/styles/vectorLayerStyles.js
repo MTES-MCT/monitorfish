@@ -60,19 +60,10 @@ export const getVectorLayerStyle = type => {
 
             switch (gearCategory) {
                 case 'Sennes': {
-                    switch (lastNumber) {
-                        case '0': return getStyle(getColorWithAlpha('#DFF7F3', 0.75))
-                        case '1': return getStyle(getColorWithAlpha('#C7EAE5', 0.75))
-                        case '2': return getStyle(getColorWithAlpha('#C7EAE5', 0.75))
-                        case '3': return getStyle(getColorWithAlpha('#91CFC9', 0.75))
-                        case '4': return getStyle(getColorWithAlpha('#91CFC9', 0.75))
-                        case '5': return getStyle(getColorWithAlpha('#56B3AB', 0.75))
-                        case '6': return getStyle(getColorWithAlpha('#56B3AB', 0.75))
-                        case '7': return getStyle(getColorWithAlpha('#499390', 0.75))
-                        case '8': return getStyle(getColorWithAlpha('#36696B', 0.75))
-                        case '9': return getStyle(getColorWithAlpha('#294F50', 0.75))
-                    }
-                    break
+                    return getTrawlStyles(lastNumber, getStyle)
+                }
+                case 'Chaluts': {
+                    return getTrawlStyles(lastNumber, getStyle)
                 }
                 case 'Filets tournants': {
                     return getFishnetStyles(lastNumber, getStyle)
@@ -149,6 +140,21 @@ const getFishnetStyles = (lastNumber, getStyle) => {
         case '7': return getStyle(getColorWithAlpha('#0B541E', 0.75))
         case '8': return getStyle(getColorWithAlpha('#073613', 0.75))
         case '9': return getStyle(getColorWithAlpha('#041B0A', 0.75))
+    }
+}
+
+const getTrawlStyles = (lastNumber, getStyle) => {
+    switch (lastNumber) {
+        case '0': return getStyle(getColorWithAlpha('#DFF7F3', 0.75))
+        case '1': return getStyle(getColorWithAlpha('#C7EAE5', 0.75))
+        case '2': return getStyle(getColorWithAlpha('#C7EAE5', 0.75))
+        case '3': return getStyle(getColorWithAlpha('#91CFC9', 0.75))
+        case '4': return getStyle(getColorWithAlpha('#91CFC9', 0.75))
+        case '5': return getStyle(getColorWithAlpha('#56B3AB', 0.75))
+        case '6': return getStyle(getColorWithAlpha('#56B3AB', 0.75))
+        case '7': return getStyle(getColorWithAlpha('#499390', 0.75))
+        case '8': return getStyle(getColorWithAlpha('#36696B', 0.75))
+        case '9': return getStyle(getColorWithAlpha('#294F50', 0.75))
     }
 }
 

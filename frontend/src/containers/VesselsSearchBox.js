@@ -73,8 +73,10 @@ const VesselsSearchBox = () => {
             getTextForSearch(feature.getProperties().internalReferenceNumber).includes(getTextForSearch(searchText))) ||
             (feature.getProperties().externalReferenceNumber &&
                 getTextForSearch(feature.getProperties().externalReferenceNumber).includes(getTextForSearch(searchText))) ||
-            (feature.getProperties().MMSI &&
-                getTextForSearch(feature.getProperties().MMSI).includes(getTextForSearch(searchText))) ||
+            (feature.getProperties().mmsi &&
+                getTextForSearch(feature.getProperties().mmsi).includes(getTextForSearch(searchText))) ||
+            (feature.getProperties().ircs &&
+                getTextForSearch(feature.getProperties().ircs).includes(getTextForSearch(searchText))) ||
             (feature.getProperties().vesselName &&
                 getTextForSearch(feature.getProperties().vesselName).includes(getTextForSearch(searchText)))
     }
@@ -182,10 +184,10 @@ const VesselsSearchBox = () => {
                                         </Information>
                                         <Information>
                                             <MMSI>
-                                                {foundVessel.getProperties().MMSI ? foundVessel.getProperties().MMSI : <Light>Inconnu</Light>} <Light>(MMSI)</Light>
+                                                {foundVessel.getProperties().mmsi ? foundVessel.getProperties().mmsi : <Light>Inconnu</Light>} <Light>(MMSI)</Light>
                                             </MMSI>
                                             <CallSign>
-                                                {foundVessel.getProperties().IRCS ? foundVessel.getProperties().IRCS : <Light>Inconnu</Light>} <Light>(Call Sign)</Light>
+                                                {foundVessel.getProperties().ircs ? foundVessel.getProperties().ircs : <Light>Inconnu</Light>} <Light>(Call Sign)</Light>
                                             </CallSign>
                                         </Information>
                                     </ListItem>

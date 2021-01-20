@@ -51,7 +51,7 @@ const showVesselTrackAndSidebar = (feature, fromSearch, updateShowedVessel) => (
     getVesselFromAPI(
         feature.getProperties().internalReferenceNumber,
         feature.getProperties().externalReferenceNumber,
-        feature.getProperties().IRCS)
+        feature.getProperties().ircs)
         .then(vessel => {
             dispatch(setSelectedVessel(vessel))
             let vesselTrackLines = buildVesselTrackLines(vessel)

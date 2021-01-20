@@ -45,14 +45,14 @@ function buildFeature(currentVessel, index, getState, dispatch) {
         geometry: new Point(transformedCoordinates),
         internalReferenceNumber: currentVessel.internalReferenceNumber,
         externalReferenceNumber: currentVessel.externalReferenceNumber,
-        MMSI: currentVessel.MMSI,
+        mmsi: currentVessel.mmsi,
         flagState: currentVessel.flagState,
         vesselName: currentVessel.vesselName,
         coordinates: toStringHDMS(transformedCoordinates),
         course: currentVessel.course,
         positionType: currentVessel.positionType,
         speed: currentVessel.speed,
-        IRCS: currentVessel.IRCS,
+        ircs: currentVessel.ircs,
         dateTime: currentVessel.dateTime
     });
 

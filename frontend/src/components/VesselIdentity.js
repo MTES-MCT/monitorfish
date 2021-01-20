@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
 import countries from "i18n-iso-countries";
+import {getDay, getMonth} from "../utils";
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselIdentity = props => {
@@ -10,7 +11,7 @@ const VesselIdentity = props => {
     const showLicenceExpirationDate = licenceExpirationDate => {
         if (licenceExpirationDate) {
             const date = new Date(licenceExpirationDate)
-            return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+            return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()}`
         }
     }
 

@@ -32,14 +32,14 @@ export let getCoordinates = (coordinates, projection) => {
     }
 }
 
-function getMonth(date) {
-    let month = date.getMonth() + 1;
-    return month < 10 ? '0' + month : '' + month;
+export function getMonth(date) {
+    let month = date.getMonth() + 1
+    return month < 10 ? '0' + month : '' + month
 }
 
-function getDay(date) {
-    let day = date.getDate() ;
-    return day < 10 ? '0' + day : '' + day;
+export function getDay(date) {
+    let day = date.getDate()
+    return day < 10 ? '0' + day : '' + day
 }
 
 

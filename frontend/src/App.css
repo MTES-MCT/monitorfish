@@ -89,3 +89,10 @@ button:focus {
 input:focus {
   outline: none;
 }
+
+.highlight {
+  margin: 0;
+  padding: 0;
+  background-color: #E0E0E0;
+  color: rgb(81, 81, 81);
+}

@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
+import Highlighter from "react-highlight-words";
 
 import {ReactComponent as SearchIconSVG} from "../components/icons/Loupe.svg";
 import LayersEnum from "../domain/entities/layers";
@@ -167,27 +168,61 @@ const VesselsSearchBox = () => {
                             foundVessels.map((foundVessel, index) => {
                                 return (
                                     <ListItem
-                                        onClick={() => setSelectedVessel(foundVessel)}
-                                        key={index}>
+                                        onClick={() => setSelectedVessel(foundVessel)}>
                                         <div>
                                             {foundVessel.getProperties().flagState ?
                                                 <Flag rel="preload" src={`flags/${foundVessel.getProperties().flagState.toLowerCase()}.svg`} /> : null}
-                                            <Name>{foundVessel.getProperties().vesselName ? foundVessel.getProperties().vesselName : 'SANS NOM'}</Name>
+                                            <Name>
+                                                <Highlighter
+                                                    highlightClassName="highlight"
+                                                    searchWords={[searchText]}
+                                                    autoEscape={true}
+                                                    textToHighlight={foundVessel.getProperties().vesselName ? foundVessel.getProperties().vesselName : 'SANS NOM'}
+                                                />
+                                            </Name>
                                         </div>
                                         <Information>
                                             <CFR>
-                                                {foundVessel.getProperties().internalReferenceNumber ? foundVessel.getProperties().internalReferenceNumber : <Light>Inconnu</Light>} <Light>(CFR)</Light>
+                                                <Highlighter
+                                                    highlightClassName="highlight"
+                                                    searchWords={[searchText]}
+                                                    autoEscape={true}
+                                                    textToHighlight={foundVessel.getProperties().internalReferenceNumber ? foundVessel.getProperties().internalReferenceNumber : ''}
+                                                />
+                                                {foundVessel.getProperties().internalReferenceNumber ? null : <Light>Inconnu</Light>}
+                                                {' '}<Light>(CFR)</Light>
                                             </CFR>
                                             <ExtNum>
-                                                {foundVessel.getProperties().externalReferenceNumber ? foundVessel.getProperties().externalReferenceNumber : <Light>Inconnu</Light>} <Light>(Marq. Ext.)</Light>
+                                                <Highlighter
+                                                    highlightClassName="highlight"
+                                                    searchWords={[searchText]}
+                                                    autoEscape={true}
+                                                    textToHighlight={foundVessel.getProperties().externalReferenceNumber ? foundVessel.getProperties().externalReferenceNumber : ''}
+                                                />
+                                                {foundVessel.getProperties().externalReferenceNumber ? null : <Light>Inconnu</Light>}
+                                                {' '}<Light>(Marq. Ext.)</Light>
                                             </ExtNum>
                                         </Information>
                                         <Information>
                                             <MMSI>
-                                                {foundVessel.getProperties().mmsi ? foundVessel.getProperties().mmsi : <Light>Inconnu</Light>} <Light>(MMSI)</Light>
+                                                <Highlighter
+                                                    highlightClassName="highlight"
+                                                    searchWords={[searchText]}
+                                                    autoEscape={true}
+                                                    textToHighlight={foundVessel.getProperties().mmsi ? foundVessel.getProperties().mmsi : ''}
+                                                />
+                                                {foundVessel.getProperties().mmsi ? null : <Light>Inconnu</Light>}
+                                                {' '}<Light>(MMSI)</Light>
                                             </MMSI>
                                             <CallSign>
-                                                {foundVessel.getProperties().ircs ? foundVessel.getProperties().ircs : <Light>Inconnu</Light>} <Light>(Call Sign)</Light>
+                                                <Highlighter
+                                                    highlightClassName="highlight"
+                                                    searchWords={[searchText]}
+                                                    autoEscape={true}
+                                                    textToHighlight={foundVessel.getProperties().ircs ? foundVessel.getProperties().ircs : ''}
+                                                />
+                                                {foundVessel.getProperties().ircs ? null : <Light>Inconnu</Light>}
+                                                {' '}<Light>(Call Sign)</Light>
                                             </CallSign>
                                         </Information>
                                     </ListItem>

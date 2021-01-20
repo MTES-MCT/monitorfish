@@ -107,6 +107,12 @@ function removeMiscellaneousGears(layerGearsArray) {
         .map(gearCode => gearCode);
 }
 
+function removeVariousLonglineGears(layerGearsArray) {
+    return layerGearsArray
+        .filter(gearCode => gearCode !== 'LL')
+        .map(gearCode => gearCode);
+}
+
 export function getGearCategory(layerGears, gears) {
     let gear = null
     if (layerGears) {
@@ -114,6 +120,10 @@ export function getGearCategory(layerGears, gears) {
         if (layerGearsArray.length > 1) {
             layerGearsArray = removeMiscellaneousGears(layerGearsArray)
         }
+        if (layerGearsArray.length > 1) {
+            layerGearsArray = removeVariousLonglineGears(layerGearsArray)
+        }
+
         gear = gears
             .find(gear => {
                 return layerGearsArray

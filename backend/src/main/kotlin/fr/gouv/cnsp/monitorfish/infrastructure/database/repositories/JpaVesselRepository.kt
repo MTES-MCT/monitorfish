@@ -42,4 +42,14 @@ class JpaVesselRepository(@Autowired
 
         return Vessel()
     }
+
+    @Cacheable(value = ["search_vessels"])
+    override fun search(searched: String): List<Vessel> {
+        if (searched.isEmpty()) {
+            return listOf()
+        }
+
+        return dbVesselRepository.searchBy(searched)
+                .map { it.toVessel() }
+    }
 }

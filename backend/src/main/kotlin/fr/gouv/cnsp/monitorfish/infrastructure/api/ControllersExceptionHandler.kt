@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.PositionsNotFoundException
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,13 +20,6 @@ class ControllersExceptionHandler {
     @ExceptionHandler(NAFMessageParsingException::class)
     fun handleNAFMessageParsingException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
-        return ApiError(e)
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(PositionsNotFoundException::class)
-    fun handleVesselNotFoundException(e: Exception): ApiError {
-        logger.warn(e.message, e.cause)
         return ApiError(e)
     }
 }

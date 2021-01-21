@@ -11,7 +11,6 @@ const mapSlice = createSlice({
         vesselNamesShowedOnMap: getLocalStorageState(false, vesselNamesShowedOnMapLocalStorageKey),
         vesselNamesHiddenByZoom: undefined,
         isMoving: false,
-        usingSearch: false,
         view: getLocalStorageState({
             zoom: null,
             center: null,
@@ -21,12 +20,8 @@ const mapSlice = createSlice({
         animateToVessel(state, action) {
             state.animateToVessel = action.payload
         },
-        setUsingSearch(state) {
-            state.usingSearch = true
-        },
         resetAnimateToVessel(state) {
             state.animateToVessel = null
-            state.usingSearch = false
         },
         setVesselNamesShowedOnMap(state, action) {
             window.localStorage.setItem(vesselNamesShowedOnMapLocalStorageKey, JSON.stringify(action.payload))
@@ -51,7 +46,6 @@ export const {
     hideVesselNames,
     isMoving,
     resetAnimateToVessel,
-    setUsingSearch,
     setView
 } = mapSlice.actions
 

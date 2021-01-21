@@ -7,10 +7,10 @@ const unselectVessel = () => (dispatch, getState) => {
 }
 
 function removeSelectorStyleToSelectedVessel(getState) {
-    let feature = getState().vessel.selectedVesselFeature
-    if (feature) {
-        let stylesWithoutVesselSelector = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
-        feature.setStyle([...stylesWithoutVesselSelector]);
+    let vessel = getState().vessel.selectedVesselFeatureAndIdentity
+    if (vessel && vessel.feature) {
+        let stylesWithoutVesselSelector = vessel.feature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
+        vessel.feature.setStyle([...stylesWithoutVesselSelector]);
     }
 }
 

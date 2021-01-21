@@ -52,4 +52,33 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
         assertThat(vessel.internalReferenceNumber).isEqualTo("GBR000B14430")
     }
+
+    @Test
+    @Transactional
+    fun `search Should return a vessel When part of the CFR is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("GBR")
+
+        assertThat(vessels).hasSize(1)
+        assertThat(vessels.first().internalReferenceNumber).isEqualTo("GBR000B14430")
+    }
+
+    @Test
+    @Transactional
+    fun `search Should return no vessel When no search string is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("")
+
+        assertThat(vessels).hasSize(0)
+    }
+
+    @Test
+    @Transactional
+    fun `search Should return a vessel When part of the vessel name is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("LE b")
+
+        assertThat(vessels).hasSize(1)
+        assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
+    }
 }

@@ -5,7 +5,6 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 import VectorTileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
-import {getArea} from 'ol/extent';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import LayersEnum from "../domain/entities/layers";
@@ -25,10 +24,10 @@ import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSid
 import {useDispatch, useSelector} from "react-redux";
 import {hideVesselNames, isMoving, resetAnimateToVessel, setView} from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
-import {updateVesselFeature} from "../domain/reducers/Vessel";
+import {updateVesselFeatureAndIdentity} from "../domain/reducers/Vessel";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
 import LayerDetailsBox from "../components/LayerDetailsBox";
-import {forEach} from "ol/geom/flat/segments";
+import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
@@ -263,7 +262,7 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
-        if (map && mapState.animateToVessel && vessel.selectedVesselFeature && vessel.vesselSidebarIsOpen) {
+        if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
             if(map.getView().getZoom() >= 8) {
                 const resolution = map.getView().getResolution()
                 map.getView().animate({
@@ -297,7 +296,7 @@ const MapWrapper = () => {
 
             dispatch(resetAnimateToVessel())
         }
-    }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeature, mapState.usingSearch])
+    }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
 
     function removeVesselNameToAllFeatures() {
         layer.layers
@@ -385,7 +384,8 @@ const MapWrapper = () => {
         });
 
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
-            dispatch(showVesselTrackAndSidebar(feature, false, false))
+            let vessel = getVesselIdentityFromFeature(feature)
+            dispatch(showVesselTrackAndSidebar(getVesselFeatureAndIdentity(feature, vessel), false, false))
         } else if(feature && feature.getId() && feature.getId().includes(LayersEnum.REGULATORY)) {
             let zone = {
                 layerName: feature.getProperties().layer_name,
@@ -396,14 +396,18 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
-        if(vessel.selectedVesselFeature && !vessel.removeSelectedIconToFeature) {
-            let vesselAlreadyWithSelectorStyle = vessel.selectedVesselFeature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
+        if(vessel.selectedVesselFeatureAndIdentity &&
+            vessel.selectedVesselFeatureAndIdentity.feature &&
+            !vessel.removeSelectedIconToFeature) {
+            let style = vessel.selectedVesselFeatureAndIdentity.feature.getStyle()
+            let vesselAlreadyWithSelectorStyle = vessel.selectedVesselFeatureAndIdentity.feature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
             if (!vesselAlreadyWithSelectorStyle) {
-                vessel.selectedVesselFeature.setStyle([...vessel.selectedVesselFeature.getStyle(), selectedVesselStyle]);
-                dispatch(updateVesselFeature(vessel.selectedVesselFeature))
+                vessel.selectedVesselFeatureAndIdentity.feature.setStyle([...style, selectedVesselStyle]);
+                let vesselIdentity = getVesselIdentityFromFeature(vessel.selectedVesselFeatureAndIdentity.feature)
+                dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(vessel.selectedVesselFeatureAndIdentity.feature, vesselIdentity)))
             }
         }
-    }, [vessel.selectedVesselFeature])
+    }, [vessel.selectedVesselFeatureAndIdentity])
 
     const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay) => {
         const pixel = mapRef.current.getEventPixel(event.originalEvent);

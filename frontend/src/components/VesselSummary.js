@@ -18,7 +18,9 @@ const VesselSummary = props => {
     useEffect(() => {
         if (props.vessel) {
             setVessel(props.vessel)
-            setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+            if(props.vessel.positions.length) {
+                setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+            }
 
             if(props.vessel.mmsi) {
                 setPhotoFallback(false)
@@ -59,23 +61,23 @@ const VesselSummary = props => {
             <ZoneWithoutBackground>
                 <LatLon>
                     <FieldName>Latitude</FieldName>
-                    <FieldValue>{getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0]}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.latitude && lastPosition.longitude ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0] : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Longitude</FieldName>
-                    <FieldValue>{getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1]}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.latitude && lastPosition.longitude ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1] : <NoValue>-</NoValue>}</FieldValue>
                 </LatLon>
                 <Course>
                     <FieldName>Route</FieldName>
-                    <FieldValue>{lastPosition.course ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.course ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Vitesse</FieldName>
-                    <FieldValue>{lastPosition.speed ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.speed ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
                     <FieldName>Type de signal</FieldName>
-                    <FieldValue>{lastPosition.positionType ? lastPosition.positionType : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.positionType ? lastPosition.positionType : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Dernier signal</FieldName>
                     <FieldValue>
                         {
-                            lastPosition.dateTime ? <>
+                            lastPosition && lastPosition.dateTime ? <>
                                     {getDateTime(lastPosition.dateTime, true)}{' '}
                                     <Gray>(UTC)</Gray></>
                                 : <NoValue>-</NoValue>

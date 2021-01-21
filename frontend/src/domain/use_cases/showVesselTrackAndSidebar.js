@@ -9,9 +9,6 @@ import {
     loadingVessel, openVesselSidebar, setSelectedVessel,
     setSelectedVesselTrackVector,
 } from "../reducers/Vessel";
-import {Vector} from "ol/layer";
-import VectorSource from "ol/source/Vector";
-import Layers from "../entities/layers";
 import {transform} from "ol/proj";
 import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
 import {arraysEqual, calculatePointsDistance, calculateSplitPointCoords} from "../../utils";
@@ -22,62 +19,68 @@ import LineString from "ol/geom/LineString";
 import {Style} from "ol/style";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
-import {animateToVessel, setUsingSearch} from "../reducers/Map";
+import {animateToVessel} from "../reducers/Map";
 import {setError} from "../reducers/Global";
+import {Vector} from "ol/layer";
+import VectorSource from "ol/source/Vector";
+import Layers from "../entities/layers";
 
-const showVesselTrackAndSidebar = (feature, fromSearch, updateShowedVessel) => (dispatch, getState) => {
-    if(getState().vessel.selectedVesselFeature === feature) {
-        if(getState().vessel.selectedVessel && !updateShowedVessel) {
-            dispatch(openVesselSidebar())
+const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateShowedVessel) => (dispatch, getState) => {
+    if(vesselFeatureAndIdentity.feature) {
+        let alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
+        if(alreadySelectedVessel && alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature) {
+            if(getState().vessel.selectedVessel && !updateShowedVessel) {
+                dispatch(openVesselSidebar())
+            }
+
+            return
         }
-        return
+
+        dispatch(animateToVessel(vesselFeatureAndIdentity.feature));
     }
 
     removePreviousSelectedFeature(getState);
+
     if(!updateShowedVessel) {
-        dispatch(loadingVessel(feature))
+        dispatch(loadingVessel(vesselFeatureAndIdentity))
     }
 
-    if (fromSearch) {
-        dispatch(setUsingSearch())
-        dispatch(animateToVessel(feature));
-    }
-
-    if(feature) {
-        dispatch(animateToVessel(feature));
-    }
     dispatch(openVesselSidebar())
-
     getVesselFromAPI(
-        feature.getProperties().internalReferenceNumber,
-        feature.getProperties().externalReferenceNumber,
-        feature.getProperties().ircs)
+        vesselFeatureAndIdentity.vessel.internalReferenceNumber,
+        vesselFeatureAndIdentity.vessel.externalReferenceNumber,
+        vesselFeatureAndIdentity.vessel.ircs)
         .then(vessel => {
             dispatch(setSelectedVessel(vessel))
-            let vesselTrackLines = buildVesselTrackLines(vessel)
 
-            let circlePoints = buildCirclePoints(vesselTrackLines, vessel.positions);
-            circlePoints.forEach(circlePoint => {
-                vesselTrackLines.push(circlePoint)
-            })
-
-            let arrowPoints = buildArrowPoints(vesselTrackLines)
-            arrowPoints.forEach(arrowPoint => {
-                vesselTrackLines.push(arrowPoint)
-            })
-
-            let vesselTrackVector = new Vector({
-                source: new VectorSource({
-                    features: vesselTrackLines
-                }),
-                className: Layers.VESSEL_TRACK
-            });
-
-            dispatch(setSelectedVesselTrackVector(vesselTrackVector))
+            if(vessel.positions && vessel.positions.length) {
+                let vesselTrackVector = buildVesselTrackVector(vessel)
+                dispatch(setSelectedVesselTrackVector(vesselTrackVector))
+            }
         }).catch(error => {
             dispatch(setError(error));
         });
+}
 
+function buildVesselTrackVector(vessel) {
+    let vesselTrackLines = buildVesselTrackLines(vessel)
+
+    let circlePoints = buildCirclePoints(vesselTrackLines, vessel.positions);
+    circlePoints.forEach(circlePoint => {
+        vesselTrackLines.push(circlePoint)
+    })
+
+    let arrowPoints = buildArrowPoints(vesselTrackLines)
+    arrowPoints.forEach(arrowPoint => {
+        vesselTrackLines.push(arrowPoint)
+    })
+
+    return new Vector({
+        source: new VectorSource({
+            features: vesselTrackLines
+        }),
+        className: Layers.VESSEL_TRACK
+    })
 }
 
 function buildCirclePoints(vesselTrackLines, positions) {
@@ -168,10 +171,10 @@ function buildVesselTrackLines(vessel) {
 }
 
 function removePreviousSelectedFeature(getState) {
-    let previousSelectedFeature = getState().vessel.selectedVesselFeature
-    if (previousSelectedFeature) {
-        let stylesWithoutVesselSelector = previousSelectedFeature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
-        previousSelectedFeature.setStyle([...stylesWithoutVesselSelector]);
+    let previousSelectedFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
+    if (previousSelectedFeatureAndIdentity && previousSelectedFeatureAndIdentity.feature) {
+        let stylesWithoutVesselSelector = previousSelectedFeatureAndIdentity.feature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
+        previousSelectedFeatureAndIdentity.feature.setStyle([...stylesWithoutVesselSelector]);
     }
 }
 

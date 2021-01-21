@@ -3,8 +3,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.SearchVessels
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.GearDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PositionDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselIdentityDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselDataOutput
 import io.micrometer.core.instrument.MeterRegistry
 import io.swagger.annotations.Api
@@ -25,14 +27,15 @@ class BffController(
         private val getLastPositions: GetLastPositions,
         private val getVessel: GetVessel,
         private val getAllGears: GetAllGears,
-        private val meterRegistry: MeterRegistry) {
+        private val searchVessels: SearchVessels,
+        meterRegistry: MeterRegistry) {
 
     val timer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
     val gauge = meterRegistry.gauge("ws_vessels_stored_in_last_positions", AtomicInteger(0))
 
     @GetMapping("/v1/vessels")
     @ApiOperation("Get all vessels' last position")
-    fun getPositions(): List<PositionDataOutput> {
+    fun getVessels(): List<PositionDataOutput> {
         val positions = getLastPositions.execute()
         gauge?.set(positions.size)
 
@@ -43,9 +46,9 @@ class BffController(
         }
     }
 
-    @GetMapping("/v1/vessels/search")
+    @GetMapping("/v1/vessels/find")
     @ApiOperation("Get vessel's last positions and data")
-    fun getPosition(@ApiParam("Vessel internal reference number (CFR)", required = false)
+    fun getVessel(@ApiParam("Vessel internal reference number (CFR)", required = false)
                     @RequestParam(name = "internalReferenceNumber")
                     internalReferenceNumber: String,
                     @ApiParam("Vessel external reference number", required = false)
@@ -60,6 +63,16 @@ class BffController(
             timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
             VesselDataOutput.fromVessel(vessel, positions)
+        }
+    }
+
+    @GetMapping("/v1/vessels/search")
+    @ApiOperation("Search vessels")
+    fun searchVessel(@ApiParam("Vessel internal reference number (CFR), external marker, IRCS, MMSI or name", required = true)
+                      @RequestParam(name = "searched")
+                      searched: String): List<VesselIdentityDataOutput> {
+        return searchVessels.execute(searched).map {
+            VesselIdentityDataOutput.fromVessel(it)
         }
     }
 

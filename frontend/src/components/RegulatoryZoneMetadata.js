@@ -66,7 +66,7 @@ const RegulatoryZoneMetadata = props => {
                                         </Field>
                                         <Field>
                                             <Key>Zone</Key>
-                                            <Value>{props.regulatoryZoneMetadata.zone ? props.regulatoryZoneMetadata.zone : <NoValue>-</NoValue>}</Value>
+                                            <Value>{props.regulatoryZoneMetadata.zone ? props.regulatoryZoneMetadata.zone.replace(/[_]/g, ' ') : <NoValue>-</NoValue>}</Value>
                                         </Field>
                                         {
                                             props.regulatoryZoneMetadata.deposit ?

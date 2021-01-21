@@ -13,7 +13,7 @@ function degreesToRadian(vessel) {
     return vessel.course * Math.PI / 180;
 }
 
-export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselNamesShowedOnMap) => {
+export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdentity, vesselNamesShowedOnMap) => {
     let selectedVesselFeatureToUpdate = null;
     const vesselDate = new Date(vessel.dateTime);
     const nowMinusThreeHours = new Date();
@@ -43,7 +43,10 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselN
         })
     }
 
-    if (vessel.internalReferenceNumber && selectedFeature && vessel.internalReferenceNumber === selectedFeature.getProperties().internalReferenceNumber) {
+    if (vessel.internalReferenceNumber &&
+        selectedFeatureAndIdentity &&
+        selectedFeatureAndIdentity.feature &&
+        vessel.internalReferenceNumber === selectedFeatureAndIdentity.feature.getProperties().internalReferenceNumber) {
         styles.push(selectedVesselStyle)
         selectedVesselFeatureToUpdate = iconFeature
     }

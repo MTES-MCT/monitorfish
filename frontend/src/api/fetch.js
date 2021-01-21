@@ -4,7 +4,8 @@ import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 const HTTP_OK = 200
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
-const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les positions du navire"
+const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
+const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
 const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const GEAR_CODES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les codes des engins de pêches"
@@ -43,7 +44,7 @@ export function getVesselFromAPI(internalReferenceNumber, externalReferenceNumbe
     externalReferenceNumber = externalReferenceNumber ? externalReferenceNumber : ""
     IRCS = IRCS ? IRCS : ""
 
-    return fetch(`/bff/v1/vessels/search?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${IRCS}`)
+    return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${IRCS}`)
         .then(response => {
             if (response.status === HTTP_OK) {
                 return response.json()
@@ -59,6 +60,26 @@ export function getVesselFromAPI(internalReferenceNumber, externalReferenceNumbe
             throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
         })
         .then(vessel => vessel)
+}
+
+export function searchVesselsFromAPI(searched) {
+    searched = searched ? searched : ""
+
+    return fetch(`/bff/v1/vessels/search?searched=${searched}`)
+        .then(response => {
+            if (response.status === HTTP_OK) {
+                return response.json()
+            } else {
+                response.text().then(text => {
+                    console.error(text)
+                })
+                throw Error(VESSEL_SEARCH_ERROR_MESSAGE)
+            }
+        })
+        .catch(error => {
+            console.error(error)
+            throw Error(VESSEL_SEARCH_ERROR_MESSAGE)
+        })
 }
 
 export function getAllRegulatoryZonesFromAPI() {

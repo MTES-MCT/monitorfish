@@ -40,6 +40,7 @@ const MapWrapper = () => {
     const layer = useSelector(state => state.layer)
     const gears = useSelector(state => state.gear.gears)
     const vessel = useSelector(state => state.vessel)
+    const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
     const mapState = useSelector(state => state.map)
     const dispatch = useDispatch()
 
@@ -249,6 +250,43 @@ const MapWrapper = () => {
             removeCurrentVesselTrackLayer();
         }
     }, [vessel.selectedVesselTrackVector, map])
+
+    function addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName) {
+        const features = layerToAddProperty.getSource().getFeatures()
+        if (features.length) {
+            layerToAddProperty.getSource().getFeatures()
+                .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
+        } else if (layer.lastShowedFeatures.length) {
+            layer.lastShowedFeatures
+                .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
+        }
+    }
+
+    function removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName) {
+        regulatoryLayers.forEach(layer => {
+            layer.getSource().getFeatures()
+                .filter(feature => feature.getProperties().metadataIsShowed)
+                .forEach(feature => feature.set(metadataIsShowedPropertyName, false))
+        })
+    }
+
+    useEffect(() => {
+        if (map) {
+            let metadataIsShowedPropertyName = "metadataIsShowed";
+            let regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY))
+            if (regulatoryZoneMetadata) {
+                let layerToAddProperty = regulatoryLayers.find(layer => {
+                    return layer.className_ === `${LayersEnum.REGULATORY}:${regulatoryZoneMetadata.layerName}:${regulatoryZoneMetadata.zone}`
+                })
+
+                if (layerToAddProperty) {
+                    addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName);
+                }
+            } else {
+                removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName);
+            }
+        }
+    }, [regulatoryZoneMetadata, layer.lastShowedFeatures])
 
     function removeCurrentVesselTrackLayer() {
         const layerToRemove = map.getLayers().getArray()

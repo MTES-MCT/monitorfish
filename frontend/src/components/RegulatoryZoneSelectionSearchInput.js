@@ -2,13 +2,14 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {COLORS} from "../constants/constants";
 import {ReactComponent as SearchIconSVG} from "./icons/Loupe.svg";
+import {removeAccents} from "../utils";
 
 function findIfSearchStringIncludedInProperty(zone, propertiesToSearch, searchText) {
     return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false;
 }
 
 function getTextForSearch(text) {
-    return text
+    return removeAccents(text)
         .toLowerCase()
         .replace(/[ ]/g, '')
         .replace(/[_]/g, '')

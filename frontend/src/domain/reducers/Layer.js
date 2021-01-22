@@ -25,6 +25,7 @@ const layerSlice = createSlice({
             { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
         ],
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
+        lastShowedFeatures: [],
         layersAndAreas: []
     },
     reducers: {
@@ -97,6 +98,9 @@ const layerSlice = createSlice({
             state.layersAndAreas = state.layersAndAreas.filter(layerAndArea => {
                 return layerAndArea.name !== action.payload
             })
+        },
+        setLastShowedFeatures(state, action) {
+            state.lastShowedFeatures = action.payload
         }
     }
 })
@@ -110,7 +114,8 @@ export const {
     addShowedLayer,
     removeShowedLayer,
     pushLayerAndArea,
-    removeLayerAndArea
+    removeLayerAndArea,
+    setLastShowedFeatures
 } = layerSlice.actions
 
 export default layerSlice.reducer

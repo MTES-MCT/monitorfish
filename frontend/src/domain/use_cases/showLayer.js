@@ -1,6 +1,6 @@
 import Layers from "../entities/layers";
 import VectorLayer from "ol/layer/Vector";
-import {addLayer, addShowedLayer, pushLayerAndArea} from "../reducers/Layer";
+import {addLayer, addShowedLayer, pushLayerAndArea, setLastShowedFeatures} from "../reducers/Layer";
 import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
@@ -69,6 +69,7 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
                 try {
                     getRegulatoryZoneFromAPI(type, regulatoryZoneProperties).then(regulatoryZone => {
                         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
+                        dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
                         dispatch(pushLayerAndArea({
                             name: `${type}:${regulatoryZoneProperties.layerName}:${regulatoryZoneProperties.zone}`,
                             area: getArea(vectorSource.getExtent())

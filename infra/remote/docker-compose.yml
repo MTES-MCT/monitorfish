@@ -12,6 +12,7 @@ services:
       - 5432:5432
     networks:
       - backend
+    restart: always
 
   app:
     image: docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:v0.0.1_snapshot
@@ -26,7 +27,7 @@ services:
       - backend
     depends_on:
       - db
-    restart: on-failure:10
+    restart: always
 
 
   prometheus:

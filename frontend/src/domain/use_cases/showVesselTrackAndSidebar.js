@@ -49,9 +49,9 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
     dispatch(openVesselSidebar())
 
     getVesselFromAPI(
-        vesselFeatureAndIdentity.vessel.internalReferenceNumber,
-        vesselFeatureAndIdentity.vessel.externalReferenceNumber,
-        vesselFeatureAndIdentity.vessel.ircs)
+        vesselFeatureAndIdentity.identity.internalReferenceNumber,
+        vesselFeatureAndIdentity.identity.externalReferenceNumber,
+        vesselFeatureAndIdentity.identity.ircs)
         .then(vessel => {
             dispatch(setSelectedVessel(vessel))
 

@@ -11,13 +11,13 @@ import getAllRegulatoryZones from "../domain/use_cases/getAllRegulatoryZones";
 import removeRegulatoryZoneFromMySelection from "../domain/use_cases/removeRegulatoryZoneFromMySelection";
 import showLayer from "../domain/use_cases/showLayer";
 import hideLayers from "../domain/use_cases/hideLayers";
-import RegulatoryZoneSelection from "../components/RegulatoryZoneSelection";
-import AdministrativeZoneSelection from "../components/AdministrativeZoneSelection";
-import RegulatoryZoneSelected from "../components/RegulatoryZoneSelected";
+import RegulatoryZoneSelection from "../components/regulatory_zones/RegulatoryZoneSelection";
+import AdministrativeZoneSelection from "../components/administratives_zones/AdministrativeZoneSelection";
+import RegulatoryZoneSelected from "../components/regulatory_zones/RegulatoryZoneSelected";
 import {COLORS} from "../constants/constants";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
 import closeRegulatoryZoneMetadata from "../domain/use_cases/closeRegulatoryZoneMetadata";
-import RegulatoryZoneMetadata from "../components/RegulatoryZoneMetadata";
+import RegulatoryZoneMetadata from "../components/regulatory_zones/RegulatoryZoneMetadata";
 
 const LayersSidebar = () => {
     const dispatch = useDispatch()

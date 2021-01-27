@@ -1,16 +1,16 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import RegulatoryZoneSelectedZone from "./RegulatoryZoneSelectedZone";
-import LayersEnum from "../domain/entities/layers";
-import {ReactComponent as ChevronIconSVG} from './icons/Chevron_simple_gris.svg'
-import {getHash} from "../utils";
-import {getGearCategory} from "../domain/use_cases/showLayer";
-import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
-import Layers from "../domain/entities/layers";
-import {ReactComponent as CloseIconSVG} from "./icons/Croix_grise.svg";
-import {COLORS} from "../constants/constants";
-import {ReactComponent as ShowIconSVG} from "./icons/oeil_affiche.svg";
-import {ReactComponent as HideIconSVG} from "./icons/oeil_masque.svg";
+import LayersEnum from "../../domain/entities/layers";
+import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
+import {getHash} from "../../utils";
+import {getGearCategory} from "../../domain/use_cases/showLayer";
+import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
+import Layers from "../../domain/entities/layers";
+import {ReactComponent as CloseIconSVG} from "../icons/Croix_grise.svg";
+import {COLORS} from "../../constants/constants";
+import {ReactComponent as ShowIconSVG} from "../icons/oeil_affiche.svg";
+import {ReactComponent as HideIconSVG} from "../icons/oeil_masque.svg";
 
 const RegulatoryZoneSelectedLayer = props => {
     const [isOpen, setIsOpen] = useState(false)

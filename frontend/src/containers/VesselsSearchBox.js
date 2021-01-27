@@ -16,13 +16,13 @@ import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../doma
 const VesselsSearchBox = () => {
     const layers = useSelector(state => state.layer.layers)
     const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
-    const selectedVesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
+    const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
     const dispatch = useDispatch()
 
     const [searchText, setSearchText] = useState('');
     const [foundVesselsOnMap, setFoundVesselsOnMap] = useState([]);
     const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([]);
-    const [selectedVessel, setSelectedVessel] = useState(null);
+    const [selectedVesselFeatureAndIdentity, setSelectedVesselFeatureAndIdentity] = useState(null);
     const [vesselNameIsShown, setVesselNameIsShown] = useState(false);
     const [searchingWhileVesselSelected, setSearchingWhileVesselSelected] = useState(false);
     const firstUpdate = useRef(true);
@@ -32,7 +32,7 @@ const VesselsSearchBox = () => {
     useEffect(() => {
         function handleClickOutside(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                if(selectedVessel) {
+                if(selectedVesselFeatureAndIdentity) {
                     if(!vesselNameIsShown && vesselSidebarIsOpen && !searchingWhileVesselSelected) {
                         setSearchingWhileVesselSelected(true)
                     } else {
@@ -54,22 +54,22 @@ const VesselsSearchBox = () => {
             // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [wrapperRef, vesselNameIsShown, selectedVessel, vesselSidebarIsOpen, searchingWhileVesselSelected]);
+    }, [wrapperRef, vesselNameIsShown, selectedVesselFeatureAndIdentity, vesselSidebarIsOpen, searchingWhileVesselSelected]);
 
     useEffect(() => {
-        if(selectedVessel &&
-            selectedVessel.vessel &&
-            selectedVesselFeatureAndIdentity &&
-            selectedVesselFeatureAndIdentity.vessel === selectedVesselFeatureAndIdentity.vessel) {
+        if(selectedVesselFeatureAndIdentity &&
+            selectedVesselFeatureAndIdentity.identity &&
+            vesselFeatureAndIdentity &&
+            vesselFeatureAndIdentity.identity === selectedVesselFeatureAndIdentity.identity) {
             return
         }
 
-        setSelectedVessel(selectedVesselFeatureAndIdentity)
+        setSelectedVesselFeatureAndIdentity(vesselFeatureAndIdentity)
 
-        if(selectedVesselFeatureAndIdentity) {
+        if(vesselFeatureAndIdentity) {
             setVesselNameIsShown(true)
         }
-    }, [selectedVesselFeatureAndIdentity])
+    }, [vesselFeatureAndIdentity])
 
     function getTextForSearch(text) {
         return text
@@ -136,8 +136,8 @@ const VesselsSearchBox = () => {
     }, [])
 
     useEffect(() => {
-        if (selectedVessel && selectedVessel.vessel) {
-            dispatch(showVesselTrackAndSidebar(selectedVessel, true, false));
+        if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
+            dispatch(showVesselTrackAndSidebar(selectedVesselFeatureAndIdentity, true, false));
 
             setFoundVesselsOnMap([])
             setFoundVesselsFromAPI([])
@@ -145,7 +145,7 @@ const VesselsSearchBox = () => {
         } else {
             dispatch(unselectVessel())
         }
-    }, [selectedVessel])
+    }, [selectedVesselFeatureAndIdentity])
 
     useEffect(() => {
         dispatch(setSearchVesselWhileVesselSelected(searchingWhileVesselSelected))
@@ -154,7 +154,7 @@ const VesselsSearchBox = () => {
     function getListItem(id, flagState, internalReferenceNumber, externalReferenceNumber, ircs, mmsi, vesselName, vessel) {
         return (
             <ListItem
-                onClick={() => setSelectedVessel(vessel)}
+                onClick={() => setSelectedVesselFeatureAndIdentity(vessel)}
                 key={id}>
                 <div>
                     {flagState ?
@@ -221,7 +221,7 @@ const VesselsSearchBox = () => {
         <Wrapper ref={wrapperRef}>
             <SearchBoxField>
                 {
-                    vesselNameIsShown && selectedVessel && selectedVessel.vessel ? <SelectedVessel
+                    vesselNameIsShown && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity ? <SelectedVessel
                         onClick={() => {
                             setVesselNameIsShown(false)
                             if(vesselSidebarIsOpen) {
@@ -229,23 +229,23 @@ const VesselsSearchBox = () => {
                             }
                         }}
                         vesselSidebarIsOpen={vesselSidebarIsOpen}
-                        vesselName={selectedVessel.vessel.vesselName}
+                        vesselName={selectedVesselFeatureAndIdentity.identity.vesselName}
                         searchingWhileVesselSelected={searchingWhileVesselSelected}
                     >
-                        {selectedVessel.vessel.flagState ? <Flag src={`flags/${selectedVessel.vessel.flagState.toLowerCase()}.svg`} /> : null}
+                        {selectedVesselFeatureAndIdentity.identity.flagState ? <Flag src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`} /> : null}
                         <VesselName>
-                            {selectedVessel.vessel.vesselName}
+                            {selectedVesselFeatureAndIdentity.identity.vesselName}
                             {' '}
                             {
-                                selectedVessel.vessel.flagState ? <>({selectedVessel.vessel.flagState})</> : null
+                                selectedVesselFeatureAndIdentity.identity.flagState ? <>({selectedVesselFeatureAndIdentity.identity.flagState})</> : null
                             }
                         </VesselName>
                         <CloseIcon onClick={() => {
-                            setSelectedVessel(null)
+                            setSelectedVesselFeatureAndIdentity(null)
                             setVesselNameIsShown(null)
                         }}/>
                     </SelectedVessel> : <SearchBoxInput
-                        ref={input => selectedVessel ? input && input.focus() : null}
+                        ref={input => selectedVesselFeatureAndIdentity ? input && input.focus() : null}
                         type="text"
                         firstUpdate={firstUpdate}
                         value={searchText}
@@ -256,7 +256,7 @@ const VesselsSearchBox = () => {
                     />
                 }
                 {
-                    vesselNameIsShown && selectedVessel ? null : <SearchIcon />
+                    vesselNameIsShown && selectedVesselFeatureAndIdentity ? null : <SearchIcon />
                 }
             </SearchBoxField>
             {
@@ -477,6 +477,5 @@ const ListItem = styled.li`
     background: ${COLORS.grayBackground};
   }
 `
-
 
 export default VesselsSearchBox

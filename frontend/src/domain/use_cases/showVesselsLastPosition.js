@@ -67,7 +67,7 @@ function buildFeature(currentVessel, index, getState, dispatch) {
     let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     let newSelectedVesselFeature = setVesselIconStyle(currentVessel, iconFeature, vesselFeatureAndIdentity, vesselNamesShowedOnMap)
     if (newSelectedVesselFeature) {
-        dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.vessel)))
+        dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))
     }
 
     return iconFeature;

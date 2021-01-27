@@ -12,6 +12,8 @@ import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
 import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
+import FishingActivities from "../components/FishingActivities";
+import getFishingActivities from "../domain/use_cases/getFishingActivities";
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()
@@ -46,6 +48,13 @@ const VesselSidebar = () => {
         }
     }, [vesselState.selectedVessel])
 
+    const showFishingActivities = () => {
+        if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
+            dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+            setIndex(3)
+        }
+    }
+
     return (
         <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
             {
@@ -64,7 +73,7 @@ const VesselSidebar = () => {
                             <Tab isActive={index === 2} onClick={() => setIndex(2)}>
                                 <VesselIDIcon /> Identité
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 3} onClick={() => setIndex(3)}>
+                            <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
                                 <FisheriesIcon /> <br/> Pêche
                             </Tab>
                             <Tab type="button" disabled isActive={index === 4} onClick={() => setIndex(3)}>
@@ -91,7 +100,7 @@ const VesselSidebar = () => {
                             />
                         </Panel>
                         <Panel className={index === 3 ? '' : 'hide'}>
-                            <h1>TODO</h1>
+                            <FishingActivities fishingActivities={vesselState.fishingActivities}/>
                         </Panel>
                         <Panel className={index === 4 ? '' : 'hide'}>
                             <h1>TODO</h1>

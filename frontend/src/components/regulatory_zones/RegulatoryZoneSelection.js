@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 
 import RegulatoryZoneSelectionSearchInput from "./RegulatoryZoneSelectionSearchInput";
-import {ReactComponent as SearchIconSVG} from './icons/Loupe.svg'
+import {ReactComponent as SearchIconSVG} from '../icons/Loupe.svg'
 import RegulatoryZoneSelectionList from "./RegulatoryZoneSelectionList";
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 
 function useOutsideAlerter(ref, showRegulatorySearchInput, setShowRegulatorySection) {
     useEffect(() => {

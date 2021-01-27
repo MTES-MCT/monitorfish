@@ -10,7 +10,8 @@ const vesselSlice = createSlice({
         loadingVessel: null,
         vesselSidebarIsOpen: false,
         vesselSidebarTabIndexToShow: 1,
-        searchVesselWhileVesselSelected: false
+        searchVesselWhileVesselSelected: false,
+        fishingActivities: []
     },
     reducers: {
         setSelectedVesselTrackVector(state, action) {
@@ -48,6 +49,16 @@ const vesselSlice = createSlice({
         },
         setSearchVesselWhileVesselSelected(state, action) {
             state.searchVesselWhileVesselSelected = action.payload
+        },
+        loadingFisheriesActivities(state) {
+            state.loadingVessel = true
+        },
+        setFishingActivities(state, action) {
+            state.fishingActivities = action.payload
+            state.loadingVessel = null
+        },
+        resetFisheriesActivities(state, action) {
+            state.fishingActivities = null
         }
     }
 })
@@ -61,6 +72,8 @@ export const {
     closeVesselBox,
     updateVesselFeatureAndIdentity,
     setSearchVesselWhileVesselSelected,
+    setFishingActivities,
+    loadingFisheriesActivities
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

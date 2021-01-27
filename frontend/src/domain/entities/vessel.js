@@ -9,9 +9,9 @@ export const getVesselIdentityFromFeature = feature => {
     }
 }
 
-export const getVesselFeatureAndIdentity = (feature, vessel) => {
+export const getVesselFeatureAndIdentity = (feature, identity) => {
     return {
-        vessel: vessel,
+        identity: identity,
         feature: feature
     }
 }

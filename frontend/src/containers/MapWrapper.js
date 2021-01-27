@@ -57,9 +57,12 @@ const MapWrapper = () => {
         if (event.state === null) {
             return
         }
-        mapRef.current.getView().setCenter(event.state.center)
-        mapRef.current.getView().setZoom(event.state.zoom)
-        setShouldUpdateView(false)
+
+        if(mapRef.current) {
+            mapRef.current.getView().setCenter(event.state.center)
+            mapRef.current.getView().setZoom(event.state.zoom)
+            setShouldUpdateView(false)
+        }
     });
 
     useEffect(() => {

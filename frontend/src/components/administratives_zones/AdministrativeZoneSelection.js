@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
-import {ReactComponent as ChevronIconSVG} from './icons/Chevron_simple_gris.svg'
+import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
 
 import AdministrativeZoneItem from "./AdministrativeZoneItem";
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 
 const AdministrativeZoneSelection = props => {
     const [showZones, setShowZones] = useState(false);
@@ -23,7 +23,7 @@ const AdministrativeZoneSelection = props => {
             </SectionTitle>
             <ZonesList showZones={showZones} zonesLength={props.administrativeZones.length}>
                 {
-                    props.administrativeZones.map((layer, index) => {
+                    props.administrativeZones.map(layer => {
                         return (<ListItem key={layer.layer}>
                             <AdministrativeZoneItem
                                 isShownOnInit={props.showedLayers.some(layer_ => layer_.type === layer.layer)}

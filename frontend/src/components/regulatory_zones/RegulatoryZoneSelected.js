@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
-import {ReactComponent as ChevronIconSVG} from './icons/Chevron_simple_gris.svg'
+import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
 import RegulatoryZoneSelectedLayer from "./RegulatoryZoneSelectedLayer";
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 
 const RegulatoryZoneSelected = props => {
     const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false);

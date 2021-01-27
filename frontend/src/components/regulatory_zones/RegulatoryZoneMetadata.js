@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
-import {COLORS} from "../constants/constants";
-import {ReactComponent as REGPaperSVG} from './icons/reg_paper.svg'
-import {ReactComponent as CloseIconSVG} from './icons/Croix_grise.svg'
+import {COLORS} from "../../constants/constants";
+import {ReactComponent as REGPaperSVG} from '../icons/reg_paper.svg'
+import {ReactComponent as CloseIconSVG} from '../icons/Croix_grise.svg'
 import {FingerprintSpinner} from "react-epic-spinners";
-import {getDateTime} from "../utils";
+import {getDateTime} from "../../utils";
 
 const RegulatoryZoneMetadata = props => {
     const [gears, setGears] = useState([])

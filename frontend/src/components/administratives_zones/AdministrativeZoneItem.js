@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIconSVG} from "./icons/oeil_affiche.svg";
-import {ReactComponent as HideIconSVG} from "./icons/oeil_masque.svg";
+import {ReactComponent as ShowIconSVG} from "../icons/oeil_affiche.svg";
+import {ReactComponent as HideIconSVG} from "../icons/oeil_masque.svg";
 import styled from "styled-components";
 
 const AdministrativeZoneItem = props => {

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../constants/constants";
-import {getHash} from "../utils";
-import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
-import {getGearCategory} from "../domain/use_cases/showLayer";
-import Layers from "../domain/entities/layers"
+import {COLORS} from "../../constants/constants";
+import {getHash} from "../../utils";
+import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
+import {getGearCategory} from "../../domain/use_cases/showLayer";
+import Layers from "../../domain/entities/layers"
 
 const RegulatoryZoneSelectionItem = props => {
     const [globalIsSelected, setGlobalIsSelected] = useState(undefined);

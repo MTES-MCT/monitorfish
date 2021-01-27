@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
-import {COLORS} from "../constants/constants";
-import {ReactComponent as SearchIconSVG} from "./icons/Loupe.svg";
-import {removeAccents} from "../utils";
+import {COLORS} from "../../constants/constants";
+import {ReactComponent as SearchIconSVG} from "../icons/Loupe.svg";
+import {removeAccents} from "../../utils";
 
 function findIfSearchStringIncludedInProperty(zone, propertiesToSearch, searchText) {
     return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false;
@@ -98,7 +98,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
                         props.regulatoryZones)
                 }
 
-                if(Object.keys(foundRegulatoryZones).length === 0) {
+                if(foundRegulatoryZones && Object.keys(foundRegulatoryZones).length === 0) {
                     foundRegulatoryZones = searchFieldFoundRegulatoryZones
                 } else {
                     foundRegulatoryZones = getMergedRegulatoryZones(foundRegulatoryZones, searchFieldFoundRegulatoryZones);

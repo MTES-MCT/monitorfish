@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIconSVG} from "./icons/oeil_affiche.svg";
-import {ReactComponent as HideIconSVG} from "./icons/oeil_masque.svg";
+import {ReactComponent as ShowIconSVG} from "../icons/oeil_affiche.svg";
+import {ReactComponent as HideIconSVG} from "../icons/oeil_masque.svg";
 import styled from "styled-components";
-import {ReactComponent as CloseIconSVG} from './icons/Croix_grise.svg'
-import {ReactComponent as REGPaperSVG} from './icons/reg_paper.svg'
-import {ReactComponent as REGPaperDarkSVG} from './icons/reg_paper_dark.svg'
-import {COLORS} from "../constants/constants";
+import {ReactComponent as CloseIconSVG} from '../icons/Croix_grise.svg'
+import {ReactComponent as REGPaperSVG} from '../icons/reg_paper.svg'
+import {ReactComponent as REGPaperDarkSVG} from '../icons/reg_paper_dark.svg'
+import {COLORS} from "../../constants/constants";
 
 const RegulatoryZoneSelectedZone = props => {
     const [showSubZone, setShowSubZone] = useState(undefined);

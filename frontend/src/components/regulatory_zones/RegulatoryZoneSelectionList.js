@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import RegulatoryZoneSelectionItem from "./RegulatoryZoneSelectionItem";
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 
 const RegulatoryZoneSelectionList = props => {
     const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({})

@@ -104,6 +104,14 @@ def make_datetime(date:str, time:Union[str, None]):
     return res
 
 
+def make_datetime_json_serializable(date:str, time:Union[str, None]):
+    if date:
+        res = date
+        if time:
+            res += " " + time
+        return res
+
+
 def try_float(s:str):
     try:
         return float(s)

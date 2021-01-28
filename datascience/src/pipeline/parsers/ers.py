@@ -5,6 +5,8 @@ from collections import Counter
 from datetime import datetime
 from functools import partial
 from xml.etree.ElementTree import ParseError
+import tqdm
+import pandas as pd
 
 from typing import List, Union
 from src.utils.ers import (
@@ -12,31 +14,37 @@ from src.utils.ers import (
     get_root_tag,
     get_first_child,
     make_datetime,
+    make_datetime_json_serializable,
     try_float,
     tagged_children,
     xml_tag_structure_func_factory
 )
 
 
-def root_tag_checker(
+def minimal_parser(
     el: xml.etree.ElementTree.Element,
     metadata_key: Union[str, None] = None,
-    forward_child: bool = False,
+    pass_child: bool = False,
     data_key: Union[str, None] = None):
+    
     root_tag = get_root_tag(el)
+    
     if metadata_key:
         metadata = {metadata_key: root_tag}
     else:
         metadata = None
-    if forward_child:
+
+    if pass_child:
         child = get_first_child(el, assert_child_single=True)
     else:
         child = None
+
     if data_key:
         data = {data_key: root_tag}
     else:
         data = None
     logs = None
+
     return metadata, child, logs, data
 
 
@@ -173,7 +181,8 @@ def parse_pos(pos):
 def parse_dep(dep):
     date = dep.get("DA")
     time = dep.get("TI")
-    departure_datetime_utc = make_datetime(date, time)
+    # cannot use DateTime because the data needs to be json serializable
+    departure_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
         "departure_datetime_utc": departure_datetime_utc,
@@ -199,7 +208,7 @@ def parse_dep(dep):
 def parse_far(far):
     date = far.get("DA")
     time = far.get("TI")
-    far_datetime_utc = make_datetime(date, time)
+    far_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {"far_datetime_utc": far_datetime_utc}
 
@@ -230,7 +239,7 @@ def parse_far(far):
 def parse_dis(dis):
     date = dis.get("DA")
     time = dis.get("TI")
-    discard_datetime_utc = make_datetime(date, time)
+    discard_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
         "discard_datetime_utc": discard_datetime_utc
@@ -253,10 +262,10 @@ def parse_dis(dis):
 def parse_pno(pno):
     date = pno.get("PD")
     time = pno.get("PT")
-    predicted_arrival_datetime_utc = make_datetime(date, time)
+    predicted_arrival_datetime_utc = make_datetime_json_serializable(date, time)
 
     start_date = pno.get("DS")
-    trip_start_date = make_datetime(start_date, None).date()
+    trip_start_date = make_datetime_json_serializable(start_date, None)
 
     children = tagged_children(pno)
 
@@ -292,7 +301,7 @@ def parse_pno(pno):
 def parse_lan(lan):
     date = lan.get("DA")
     time = lan.get("TI")
-    landing_datetime_utc = make_datetime(date, time)
+    landing_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
         "landing_datetime_utc": landing_datetime_utc,
@@ -316,7 +325,7 @@ def parse_lan(lan):
 def parse_eof(eof):
     date = eof.get("DA")
     time = eof.get("TI")
-    end_of_fishing_datetime_utc = make_datetime(date, time)
+    end_of_fishing_datetime_utc = make_datetime_json_serializable(date, time)
     value = {"end_of_fishing_datetime_utc": end_of_fishing_datetime_utc}
     data = {"log_type": "EOF", "value": value}
     return None, None, None, data
@@ -325,7 +334,7 @@ def parse_eof(eof):
 def parse_rtp(rtp):
     date = rtp.get("DA")
     time = rtp.get("TI")
-    return_datetime_utc = make_datetime(date, time)
+    return_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
         "return_datetime_utc": return_datetime_utc,
@@ -347,28 +356,12 @@ def parse_rtp(rtp):
     return None, None, None, data
 
 parsers = {
-    "DAT": partial(
-        root_tag_checker,
-        metadata_key="operation_type",
-        forward_child=True,
-    ),
+    "DAT": partial(minimal_parser, metadata_key="operation_type", pass_child=True),
     "COR": parse_cor,
     "DEL": parse_del,
-    "RET": partial(
-        root_tag_checker,
-        metadata_key="operation_type",
-        forward_child=False,
-    ),
-    "QUE": partial(
-        root_tag_checker,
-        metadata_key="operation_type",
-        forward_child=False,
-    ),
-    "RSP": partial(
-        root_tag_checker,
-        metadata_key="operation_type",
-        forward_child=False,
-    ),
+    "RET": partial(minimal_parser, metadata_key="operation_type", pass_child=False),
+    "QUE": partial(minimal_parser, metadata_key="operation_type", pass_child=False),
+    "RSP": partial(minimal_parser, metadata_key="operation_type", pass_child=False),
     "OPS": parse_ops,
     "ERS": parse_ers,
     "LOG": parse_log,
@@ -379,46 +372,14 @@ parsers = {
     "PNO": parse_pno,
     "RTP": parse_rtp,
     "LAN": parse_lan,
-    "RLC": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    ),
-    "TRA": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    ),
-    "COE": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    ),
-    "COX": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    ),
-    "CRO": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    ),
-    "TRZ": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    ),
-    "INS": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    ),
-    "PNT": partial(
-        root_tag_checker,
-        data_key="log_type",
-        forward_child=False,
-    )
+    "RLC": partial(minimal_parser, data_key="log_type", pass_child=False),
+    "TRA": partial(minimal_parser, data_key="log_type", pass_child=False),
+    "COE": partial(minimal_parser, data_key="log_type", pass_child=False),
+    "COX": partial(minimal_parser, data_key="log_type", pass_child=False),
+    "CRO": partial(minimal_parser, data_key="log_type", pass_child=False),
+    "TRZ": partial(minimal_parser, data_key="log_type", pass_child=False),
+    "INS": partial(minimal_parser, data_key="log_type", pass_child=False),
+    "PNT": partial(minimal_parser, data_key="log_type", pass_child=False)
 }
 
 
@@ -479,23 +440,65 @@ def batch_parse(ers_xmls:List[str]):
         pd.DataFrame:  Dataframe with parsed metadata, including a "xml_message" column
             with the original xml message
     """
-    res= []
-    raw_res = []
+    res_json = []
+    res_xml = []
 
+    res_xml_default = {
+        'operation_number': None,
+        'operation_country': None,
+        'operation_datetime_utc': None,
+        'operation_type': None,
+        'ers_id': None,
+        'ers_id_to_delete_or_correcters_datetime_utc': None,
+        'cfr': None,
+        'ircs': None,
+        'external_identification': None,
+        'vessel_name': None,
+        'flag_state': None,
+        'imo': None,
+        'xml_message': None,
+        'raw_integration_datetime_utc': None,
+        'parsed_integration_datetime_utc': None}
+    
+    res_json_default = {
+        'operation_number': None,
+        'operation_country': None,
+        'operation_datetime_utc': None,
+        'operation_type': None,
+        'ers_id': None,
+        'ers_id_to_delete_or_correct': None,
+        'ers_datetime_utc': None,
+        'cfr': None,
+        'ircs': None,
+        'external_identification': None,
+        'vessel_name': None,
+        'flag_state': None,
+        'imo': None,
+        'log_type': None,
+        'value': None,
+        'parsed_integration_datetime_utc': None}
+        
+    
     for xml_message in tqdm.tqdm(ers_xmls):
         now = datetime.utcnow()
-        raw = {"xml_message": xml_message, "raw_integration_datetime_utc": now}
+        raw = {"xml_message": xml_message, "xml_integration_datetime_utc": now}
         try:
-            metadata, data_iterator = ers.parse_xml_string(xml_message)
+            metadata, data_iterator = parse_xml_string(xml_message)
             raw = {**metadata, **raw}
             for data in data_iterator:
-                res.append(pd.Series({**metadata, **data, "parsed_integration_datetime_utc": now}))
+                res_json.append(pd.Series({
+                    **res_json_default, 
+                    **metadata, 
+                    **data, 
+                    "parsed_integration_datetime_utc": now
+                }))
                 raw["parsed_integration_datetime_utc"] = now
-        except:
-            print("Error!")
-        raw_res.append(pd.Series(raw))
+        except Exception as e:
+            raise e
+            logging.error("Parsing error - one ERS message will be ignored.")
+        res_xml.append(pd.Series({**res_xml_default, **raw}))
 
-    parsed = pd.concat(res, axis=1).T
-    parsed_with_xml = pd.concat(raw_res, axis=1).T    
+    ers_json = pd.concat(res_json, axis=1).T
+    ers_xml = pd.concat(res_xml, axis=1).T    
 
-    return parsed, parsed_with_xml
+    return ers_json, ers_xml

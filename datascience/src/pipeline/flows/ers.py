@@ -4,15 +4,13 @@ import pandas as pd
 import prefect
 from prefect import Flow, Parameter, task
 from sqlalchemy import (Boolean, Date, DateTime, Float, Integer, MetaData,
-                        String, Table)
+                        String, Table, JSON)
 from src.db_config import create_engine
-from src.pipeline.parsers.ers.ops import parse_xml_string
+from src.pipeline.parsers.ers import batch_parse
 from src.read_query import read_query
 from src.utils.database import psql_insert_copy
 
 RAW_XML_TABLE = {"dam": "raw_jpe_dam_xml", "dpma": "raw_jpe_dpma_xml"}
-
-PROCESSED_XML_TABLE = {"dam": "processed_jpe_dam_xml", "dpma": "processed_jpe_dpma_xml"}
 
 
 @task
@@ -31,51 +29,18 @@ def extract_raw_xml(
     raw_xml = read_query(
         "monitorfish_remote_i",
         f"SELECT xml_message FROM raw.{table}",
-        chunksize=chunksize,
-    )
+        chunksize=chunksize)
 
     return raw_xml
 
 
 @task
 def parse_xml(raw_xml: Iterator[pd.DataFrame]) -> Iterator[pd.DataFrame]:
-
     logger = prefect.context.get("logger")
-
-    for raw_xml_chunk in raw_xml:
-        logger.info("Parsing chunk")
-        parsed_xml = raw_xml_chunk.apply(
-            lambda row: parse_xml_string(row["xml_message"]),
-            result_type="expand",
-            axis=1,
-        )
-
-        log_cols = [
-            "far",
-            "dep",
-            "rlc",
-            "tra",
-            "coe",
-            "cox",
-            "cro",
-            "trz",
-            "ins",
-            "dis",
-            "pno",
-            "pnt",
-            "eof",
-            "rtp",
-            "lan",
-        ]
-
-        try:
-            parsed_xml[log_cols] = parsed_xml[log_cols].fillna(0)
-            parsed_xml[log_cols] = parsed_xml[log_cols].astype(int)
-        except ValueError as e:
-            print("Unique values :")
-            print(parsed_xml[log_cols].apply(pd.unique))
-            raise e
-        yield parsed_xml
+    for i, raw_xml_chunk in enumerate(raw_xml):
+        logger.info(f"Parsing chunk {i}")
+        parsed, parsed_with_xml = batch_parse(raw_xml_chunk.xml_message.values)
+        yield parsed, parsed_with_xml
 
 
 @task
@@ -85,7 +50,7 @@ def load_parsed_xml(parsed_xml: Iterator[pd.DataFrame], data_source: str = "dam"
     parsed_xml: iterator that yields chunks of parsed data to load into DB.
     data_source : "dam" or "dpma"
     """
-    table_name = PROCESSED_XML_TABLE[data_source]
+    table_name = "ers"
     engine = create_engine("monitorfish_remote_i")
     logger = prefect.context.get("logger")
 
@@ -94,14 +59,14 @@ def load_parsed_xml(parsed_xml: Iterator[pd.DataFrame], data_source: str = "dam"
         meta.bind = connection
         table = Table(table_name, meta, schema="processed")
         if table.exists():
-            logger.info(f"Dropping existing table {table_name}.")
-            table.drop()
+            logger.info(f"Deleting from existing table {table_name}.")
+            table.delete()
         else:
             logger.info(f"Creating table {table_name}.")
 
-        for parsed_xml_chunk in parsed_xml:
-            logger.info("Inserting chunk.")
-            parsed_xml_chunk.to_sql(
+        for i, (parsed, parsed_with_xml) in enumerate(parsed_xml):
+            logger.info(f"Inserting chunk {i}")
+            parsed.to_sql(
                 name=table_name,
                 con=connection,
                 schema="processed",
@@ -120,22 +85,7 @@ def load_parsed_xml(parsed_xml: Iterator[pd.DataFrame], data_source: str = "dam"
                     "external_identification": String(14),
                     "vessel_name": String(100),
                     "flag_state": String(3),
-                    "imo": String(100),
-                    "far": Integer,
-                    "dep": Integer,
-                    "rlc": Integer,
-                    "tra": Integer,
-                    "coe": Integer,
-                    "cox": Integer,
-                    "cro": Integer,
-                    "trz": Integer,
-                    "ins": Integer,
-                    "dis": Integer,
-                    "pno": Integer,
-                    "pnt": Integer,
-                    "eof": Integer,
-                    "rtp": Integer,
-                    "lan": Integer,
+                    "imo": String(100)
                 },
             )
 

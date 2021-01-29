@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZonedDateTime
 
 class PNO() : ERSMessageValue {
     var faoZone: String? = null
@@ -19,8 +20,7 @@ class PNO() : ERSMessageValue {
     var catchOnboard: List<Catch> = listOf()
 
     @JsonProperty("predictedArrivalDatetimeUtc")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
-    var predictedArrivalDateTime: Instant? = null
+    var predictedArrivalDateTime: ZonedDateTime? = null
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
     var tripStartDate: LocalDate? = null

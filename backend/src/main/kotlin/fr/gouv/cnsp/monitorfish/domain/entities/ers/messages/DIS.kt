@@ -11,6 +11,5 @@ class DIS() : ERSMessageValue {
     var catches: List<Catch> = listOf()
 
     @JsonProperty("discardDatetimeUtc")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
     var discardDateTime: ZonedDateTime? = null
 }

@@ -14,6 +14,5 @@ class RTP() : ERSMessageValue {
     var gearOnboard: List<Gear> = listOf()
 
     @JsonProperty("returnDatetimeUtc")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
     var dateTime: ZonedDateTime? = null
 }

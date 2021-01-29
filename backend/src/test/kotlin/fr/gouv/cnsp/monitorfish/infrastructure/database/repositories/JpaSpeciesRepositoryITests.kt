@@ -12,46 +12,45 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 
 @RunWith(SpringRunner::class)
-class JpaGearRepositoryITests : AbstractDBTests() {
+class JpaSpeciesRepositoryITests : AbstractDBTests() {
 
     @Autowired
-    private lateinit var jpaGearRepository: JpaGearRepository
+    private lateinit var jpaSpeciesRepository: JpaSpeciesRepository
 
     @Autowired
     lateinit var cacheManager: CacheManager
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("gear")?.clear()
-        cacheManager.getCache("gears")?.clear()
+        cacheManager.getCache("all_species")?.clear()
+        cacheManager.getCache("species")?.clear()
     }
 
     @Test
     @Transactional
-    fun `findAll Should return all gears`() {
+    fun `findAll Should return all species`() {
         // When
-        val gears = jpaGearRepository.findAll()
+        val gears = jpaSpeciesRepository.findAll()
 
-        assertThat(gears).hasSize(83)
-        assertThat(gears.first().code).isEqualTo("MIS")
-        assertThat(gears.first().name).isEqualTo("Engin divers")
-        assertThat(gears.first().category).isEqualTo("Engin inconnu")
+        assertThat(gears).hasSize(12459)
+        assertThat(gears.first().code).isEqualTo("COD")
+        assertThat(gears.first().name).isEqualTo("MORUE COMMUNE (CABILLAUD)")
     }
 
     @Test
     @Transactional
-    fun `find Should return a gear`() {
+    fun `find Should return a species`() {
         // When
-        val gear = jpaGearRepository.find("OTB")
+        val gear = jpaSpeciesRepository.find("OTB")
 
-        assertThat(gear.name).isEqualTo("Chaluts de fond à panneaux")
+        assertThat(gear.name).isEqualTo("OTOLITHOIDES BIAURITUS")
     }
 
     @Test
     @Transactional
-    fun `find Should throw an exception When there is no gear found`() {
+    fun `find Should throw an exception When there is no species found`() {
         // When
-        val throwable = catchThrowable { jpaGearRepository.find("BAD_GEAR") }
+        val throwable = catchThrowable { jpaSpeciesRepository.find("BAD_SPECIES") }
 
         assertThat(throwable).isInstanceOf(CodeNotFoundException::class.java)
     }

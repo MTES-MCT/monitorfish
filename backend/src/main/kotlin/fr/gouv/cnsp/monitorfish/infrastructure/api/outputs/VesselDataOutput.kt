@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
-import java.time.ZonedDateTime
 import java.util.*
 
 data class VesselDataOutput(

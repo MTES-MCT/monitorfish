@@ -41,8 +41,8 @@ class CaffeineConfiguration {
         val allSpeciesCache = buildCache(allSpecies, ticker, oneWeek)
         val speciesCache = buildCache(species, ticker, oneWeek)
 
-        val portsCache = buildCache(allSpecies, ticker, oneWeek)
-        val portCache = buildCache(species, ticker, oneWeek)
+        val portsCache = buildCache(ports, ticker, oneWeek)
+        val portCache = buildCache(port, ticker, oneWeek)
 
         val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
         val vesselsPositionCache = buildCache(vesselsPosition, ticker, 1)

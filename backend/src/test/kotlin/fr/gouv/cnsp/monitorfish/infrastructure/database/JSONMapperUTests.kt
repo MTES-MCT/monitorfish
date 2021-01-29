@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.context.annotation.Import
 import java.time.Instant
-import java.time.OffsetDateTime
-import java.time.ZonedDateTime
 
 
 @Import(MapperConfiguration::class)
@@ -40,7 +38,7 @@ class JSONMapperUTests {
         farMessage.mesh = 80.0
         farMessage.latitude = 45.389
         farMessage.longitude = -1.303
-        farMessage.catchDateTime = Instant.now().minusSeconds(60)
+        //farMessage.catchDateTime = Instant.now().minusSeconds(60)
 
         // When
         val jsonString = mapper.writeValueAsString(farMessage);
@@ -82,7 +80,7 @@ class JSONMapperUTests {
                 "{\"weight\": 70.0, \"nbFish\": null, \"species\": \"POL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
                 "{\"weight\": 40.0, \"nbFish\": null, \"species\": \"USB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
                 "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"RJH\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"WHG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}], \"farDatetimeUtc\": \"2019-12-05 11:55\"" +
+                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"WHG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}], \"farDatetimeUtc\": \"2019-12-05T11:55Z\"" +
                 "}"
 
         // When
@@ -95,7 +93,7 @@ class JSONMapperUTests {
 
         assertThat(parsedFARMessage.gear).isEqualTo("GTN")
         assertThat(parsedFARMessage.mesh).isEqualTo(100.0)
-        assertThat(parsedFARMessage.catchDateTime.toString()).isEqualTo("2019-12-05T11:55:00Z")
+        assertThat(parsedFARMessage.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
         assertThat(parsedFARMessage.catches).hasSize(14)
 
         val receivedCatch = parsedFARMessage.catches.first()

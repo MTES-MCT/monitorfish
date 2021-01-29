@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
 import java.time.Instant
+import java.time.ZonedDateTime
 
 class FAR() : ERSMessageValue {
     var gear: String? = null
@@ -14,6 +15,6 @@ class FAR() : ERSMessageValue {
     var longitude: Double? = null
 
     @JsonProperty("farDatetimeUtc")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
-    var catchDateTime: Instant? = null
+    //@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mmZ", shape = JsonFormat.Shape.STRING)
+    var catchDateTime: ZonedDateTime? = null
 }

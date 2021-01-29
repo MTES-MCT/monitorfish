@@ -47,13 +47,13 @@ class BffController(
 
     @GetMapping("/v1/vessels/find")
     @ApiOperation("Get vessel's last positions and data")
-    fun getVessel(@ApiParam("Vessel internal reference number (CFR)", required = false)
+    fun getVessel(@ApiParam("Vessel internal reference number (CFR)")
                     @RequestParam(name = "internalReferenceNumber")
                     internalReferenceNumber: String,
-                    @ApiParam("Vessel external reference number", required = false)
+                    @ApiParam("Vessel external reference number")
                     @RequestParam(name = "externalReferenceNumber")
                     externalReferenceNumber: String,
-                    @ApiParam("Vessel IRCS", required = false)
+                    @ApiParam("Vessel IRCS")
                     @RequestParam(name = "IRCS")
                     IRCS: String): VesselDataOutput {
         return runBlocking {
@@ -77,13 +77,13 @@ class BffController(
 
     @GetMapping("/v1/ers/find")
     @ApiOperation("Get vessel's ERS messages")
-    fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)", required = false)
+    fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)")
                   @RequestParam(name = "internalReferenceNumber")
                   internalReferenceNumber: String,
-                  @ApiParam("Vessel external reference number", required = false)
+                  @ApiParam("Vessel external reference number")
                   @RequestParam(name = "externalReferenceNumber")
                   externalReferenceNumber: String,
-                  @ApiParam("Vessel IRCS", required = false)
+                  @ApiParam("Vessel IRCS")
                   @RequestParam(name = "IRCS")
                   IRCS: String): List<ERSMessage> {
         val start = System.currentTimeMillis()

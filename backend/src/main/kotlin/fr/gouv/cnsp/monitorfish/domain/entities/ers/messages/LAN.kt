@@ -13,6 +13,5 @@ class LAN() : ERSMessageValue {
     var catchLanded: List<Catch> = listOf()
 
     @JsonProperty("landingDatetimeUtc")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
     var landingDateTime: ZonedDateTime? = null
 }

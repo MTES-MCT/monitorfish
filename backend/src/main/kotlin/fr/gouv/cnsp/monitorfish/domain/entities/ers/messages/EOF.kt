@@ -10,6 +10,5 @@ import java.util.*
 
 class EOF() : ERSMessageValue {
     @JsonProperty("endOfFishingDatetimeUtc")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
-    var endOfFishingDateTime: Instant? = null
+    var endOfFishingDateTime: ZonedDateTime? = null
 }

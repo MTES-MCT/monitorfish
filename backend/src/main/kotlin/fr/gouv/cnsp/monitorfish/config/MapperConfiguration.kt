@@ -7,10 +7,8 @@ import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.Gear
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Scope
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 @Configuration

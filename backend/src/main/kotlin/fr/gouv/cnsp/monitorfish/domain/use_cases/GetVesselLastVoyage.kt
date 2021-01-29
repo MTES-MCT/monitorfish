@@ -1,0 +1,170 @@
+package fr.gouv.cnsp.monitorfish.domain.use_cases
+
+import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import org.slf4j.LoggerFactory
+
+@UseCase
+class GetVesselLastVoyage(private val ersRepository: ERSRepository,
+                          private val gearRepository: GearRepository,
+                          private val speciesRepository: SpeciesRepository,
+                          private val portRepository: PortRepository,
+                          private val ersMessageRepository: ERSMessageRepository) {
+    private val logger = LoggerFactory.getLogger(GetVesselLastVoyage::class.java)
+
+    fun execute(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): List<ERSMessage> {
+        val lastDepartureDate = ersRepository.findLastDepartureDate(internalReferenceNumber, externalReferenceNumber, ircs)
+
+        return ersRepository
+                .findAllMessagesAfterDepartureDate(lastDepartureDate, internalReferenceNumber, externalReferenceNumber, ircs)
+                .sortedBy { it.operationDateTime }
+                .map {
+                    try {
+                        val rawMessage = ersMessageRepository.findRawMessage(it.operationNumber)
+                        it.rawMessage = rawMessage
+                    } catch (e: NoERSMessagesFound) {
+                        logger.warn(e.message)
+                    }
+
+                    when (it.messageType) {
+                        ERSMessageTypeMapping.FAR.name -> {
+                            setNamesFromCodes(it.message as FAR)
+                        }
+                        ERSMessageTypeMapping.DEP.name -> {
+                            setNamesFromCodes(it.message as DEP)
+                        }
+                        ERSMessageTypeMapping.DIS.name -> {
+                            setNamesFromCodes(it.message as DIS)
+                        }
+                        ERSMessageTypeMapping.LAN.name -> {
+                            setNamesFromCodes(it.message as LAN)
+                        }
+                        ERSMessageTypeMapping.PNO.name -> {
+                            setNamesFromCodes(it.message as PNO)
+                        }
+                        ERSMessageTypeMapping.RTP.name -> {
+                            setNamesFromCodes(it.message as RTP)
+                        }
+                    }
+
+                    it
+                }
+    }
+
+    private fun setNamesFromCodes(message: FAR) {
+        message.gear?.let { gear ->
+            try {
+                message.gearName = gearRepository.find(gear).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+
+        message.catches.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: DEP) {
+        message.gearOnboard.forEach { gear ->
+            gear.gear?.let { gearCode ->
+                addGearName(gear, gearCode)
+            }
+        }
+
+        message.departurePort?.let { departurePort ->
+            try {
+                message.departurePortName = portRepository.find(departurePort).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+
+        message.speciesOnboard.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: DIS) {
+        message.catches.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: LAN) {
+        message.port?.let { port ->
+            try {
+                message.portName = portRepository.find(port).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+
+        message.catchLanded.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: PNO) {
+        message.port?.let { port ->
+            try {
+                message.portName = portRepository.find(port).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+
+        message.catchOnboard.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: RTP) {
+        message.port?.let { port ->
+            try {
+                message.portName = portRepository.find(port).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+
+        message.gearOnboard.forEach { gear ->
+            gear.gear?.let { gearCode ->
+                addGearName(gear, gearCode)
+            }
+        }
+    }
+
+    private fun addSpeciesName(catch: Catch, species: String) {
+        try {
+            catch.speciesName = speciesRepository.find(species).name
+        } catch (e: CodeNotFoundException) {
+            logger.warn(e.message)
+        }
+    }
+
+    private fun addGearName(gear: Gear, gearCode: String) {
+        try {
+            gear.gearName = gearRepository.find(gearCode).name
+        } catch (e: CodeNotFoundException) {
+            logger.warn(e.message)
+        }
+    }
+}

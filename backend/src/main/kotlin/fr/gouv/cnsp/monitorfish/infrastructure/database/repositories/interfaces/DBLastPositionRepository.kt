@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
+package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
 import org.hibernate.annotations.DynamicUpdate

@@ -17,8 +17,7 @@ class DEP() : ERSMessageValue {
     var gearOnboard: List<Gear> = listOf()
 
     @JsonProperty("departureDatetimeUtc")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
-    var departureDateTime: Instant? = null
+    var departureDateTime: ZonedDateTime? = null
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
     var tripStartDate: LocalDate? = null

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPositionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,7 +47,7 @@ class JpaPositionRepository(@Autowired
         dbPositionRepository.save(positionEntity)
     }
 
-    override fun findAllByMMSI(mmsi: String): List<Position> {
+    override fun findAllByMmsi(mmsi: String): List<Position> {
         return dbPositionRepository.findAllByMmsi(mmsi)
                 .map(PositionEntity::toPosition)
     }

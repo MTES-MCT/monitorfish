@@ -105,7 +105,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         val farMessageOne = messages[0].message as FAR
         assertThat(farMessageOne.gear).isEqualTo("GTN")
         assertThat(farMessageOne.mesh).isEqualTo(100.0)
-        assertThat(farMessageOne.catchDateTime.toString()).isEqualTo("2019-12-05T11:55:00Z")
+        assertThat(farMessageOne.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
         assertThat(farMessageOne.catches).hasSize(3)
         assertThat(farMessageOne.catches.first().weight).isEqualTo(2.0)
         assertThat(farMessageOne.catches.first().numberFish).isEqualTo(null)

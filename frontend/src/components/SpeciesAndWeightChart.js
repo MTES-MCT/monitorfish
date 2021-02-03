@@ -1,26 +1,44 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
 
 const SpeciesAndWeightChart = props => {
+    const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
+
+    useEffect(() => {
+        if(props.speciesAndWeightArray && props.increaseChartHeight) {
+            let speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
+                let height = speciesAndWeight.weight ? speciesAndWeight.weight * 0.04 : 20
+
+                speciesAndWeight.height = height >= 22 ? height : 22
+                return speciesAndWeight
+            })
+
+            setSpeciesAndWeightArray(speciesAndWeightArray)
+            let totalHeight = speciesAndWeightArray.reduce((subAccumulator, speciesCatch) => {
+                return subAccumulator + speciesCatch.height
+            }, 0)
+            props.increaseChartHeight(totalHeight)
+        }
+    }, [props.speciesAndWeightArray])
+
+    const getPercentOfTotalFARWeight = speciesAndWeight => {
+        return ((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1)
+    }
+
     return <>
         {
-            props.speciesAndWeightArray && props.speciesAndWeightArray.length ? props.speciesAndWeightArray.map((speciesAndWeight, index) => {
-                return <SpeciesAndWeight key={speciesAndWeight.species} weight={speciesAndWeight.weight}>
+            speciesAndWeightArray && speciesAndWeightArray.length ? props.speciesAndWeightArray.map((speciesAndWeight, index) => {
+                return <SpeciesAndWeight key={speciesAndWeight.species}>
                     <Weight
-                        weight={speciesAndWeight.weight}
+                        height={speciesAndWeight.height}
                         isLast={index === props.speciesAndWeightArray.length - 1}
-                        compareWeights={props.compareWeights}
-                        weightAreEquals={speciesAndWeight.farWeight ? speciesAndWeight.farWeight === speciesAndWeight.weight : false}
                     >
-
-                        <WeightText>{speciesAndWeight.weight}{speciesAndWeight.farWeight ? `/${speciesAndWeight.farWeight}` : null} kg</WeightText>
+                        <WeightText>{speciesAndWeight.weight} kg {props.compareWithTotalWeight ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray> : null}</WeightText>
                     </Weight>
                     <Species
-                        weight={speciesAndWeight.weight}
-                        isLast={index === props.speciesAndWeightArray.length - 1}
-                        compareWeights={props.compareWeights}
-                        weightAreEquals={speciesAndWeight.farWeight ? speciesAndWeight.farWeight === speciesAndWeight.weight : false}
+                        height={speciesAndWeight.height}
+                        isLast={index === speciesAndWeightArray.length - 1}
                     >
                         {
                             speciesAndWeight.speciesName ?
@@ -33,6 +51,11 @@ const SpeciesAndWeightChart = props => {
     </>
 }
 
+const Gray = styled.span`
+  color: ${COLORS.textGray};
+  font-weight: 300;
+`
+
 const SpeciesAndWeight = styled.div`
   display: flex;
   width: 100%;
@@ -41,8 +64,7 @@ const SpeciesAndWeight = styled.div`
 
 const Species = styled.div`
   display: flex;
-  height: ${props => props.weight ? props.weight * 0.04 : 20}px;
-  font-weight: ${props => props.compareWeights ? props.weightAreEquals ? 'normal' : '500' : 'normal'};
+  height: ${props => props.height}px;
   min-height: 20px;
   align-items: center;
   justify-content: center;
@@ -55,14 +77,14 @@ const Species = styled.div`
 const WeightText = styled.span``
 
 const Weight = styled.div`
-  width: 75px;
-  background: ${props => props.compareWeights ? props.weightAreEquals ? COLORS.grayBackground : COLORS.grayDarker : COLORS.grayBackground} 0% 0% no-repeat padding-box;
-  font-weight: ${props => props.compareWeights ? props.weightAreEquals ? 'normal' : '500' : 'normal'};
+  width: 110px;
+  background: ${COLORS.grayBackground} 0% 0% no-repeat padding-box;
+  font-weight: normal;
   border-left: 2px solid ${COLORS.textGray};
   border-right: 2px solid ${COLORS.textGray};
   border-top: 2px solid ${COLORS.textGray};
   ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.textGray};` : ''}
-  height: ${props => props.weight ? props.weight * 0.04 : 20}px;
+  height: ${props => props.height}px;
   min-height: 20px;
   max-height: 90px;
   color: ${COLORS.grayDarkerThree};
@@ -71,11 +93,6 @@ const Weight = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
-
-const Zone = styled.div`
-  margin: 10px;
-  background: ${COLORS.background};
 `
 
 export default SpeciesAndWeightChart

@@ -4,8 +4,14 @@ import ERSMessages from "./ERSMessages";
 
 const FishingActivities = props => {
     const [fishingViewIndex, setFishingViewIndex] = useState(1)
+    const [messageTypeFilter, setMessageTypeFilter] = useState(null)
 
-    const showERSMessages = () => {
+    const showERSMessages = messageType => {
+        if(messageType) {
+            setMessageTypeFilter(messageType)
+        } else {
+            setMessageTypeFilter(null)
+        }
         setFishingViewIndex(2)
     }
 
@@ -24,6 +30,7 @@ const FishingActivities = props => {
             <ERSMessages
                 showFishingActivitiesSummary={showFishingActivitiesSummary}
                 fishingActivities={props.fishingActivities}
+                messageTypeFilter={messageTypeFilter}
             /> : null }
         </>
 }

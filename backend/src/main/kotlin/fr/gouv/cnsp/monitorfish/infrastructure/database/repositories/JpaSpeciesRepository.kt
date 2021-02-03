@@ -25,7 +25,7 @@ class JpaSpeciesRepository(@Autowired
         return try {
             dbSpeciesRepository.findByCodeEquals(code).toSpecies()
         } catch (e: EmptyResultDataAccessException) {
-            throw CodeNotFoundException("Code $code not found")
+            throw CodeNotFoundException("Species: code $code not found")
         }
     }
 }

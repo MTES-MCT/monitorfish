@@ -58,7 +58,7 @@ const VesselSidebar = () => {
                 <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
             }
             {
-                vessel && !vesselState.loadingVessel ? (vessel.internalReferenceNumber ||
+                vessel ? (vessel.internalReferenceNumber ||
                     vessel.externalReferenceNumber ||
                     vessel.ircs ||
                     vessel.mmsi) ? <div>
@@ -84,30 +84,35 @@ const VesselSidebar = () => {
                             </Tab>
                         </TabList>
 
-                        <Panel className={index === 1 ? '' : 'hide'}>
-                            <VesselSummary
-                                vessel={vessel}
-                                gears={gears}
-                            />
-                        </Panel>
-                        <Panel className={index === 2 ? '' : 'hide'}>
-                            <VesselIdentity
-                                vessel={vessel}
-                                gears={gears}
-                            />
-                        </Panel>
-                        <Panel className={index === 3 ? '' : 'hide'}>
-                            <FishingActivities fishingActivities={vesselState.fishingActivities}/>
-                        </Panel>
-                        <Panel className={index === 4 ? '' : 'hide'}>
-                            <h1>TODO</h1>
-                        </Panel>
-                        <Panel className={index === 5 ? '' : 'hide'}>
-                            <h1>TODO</h1>
-                        </Panel>
-                        <Panel className={index === 6 ? '' : 'hide'}>
-                            <h1>TODO</h1>
-                        </Panel>
+                        {
+                            !vesselState.loadingVessel ? <>
+                                <Panel className={index === 1 ? '' : 'hide'}>
+                                    <VesselSummary
+                                        vessel={vessel}
+                                        gears={gears}
+                                    />
+                                </Panel>
+                                <Panel className={index === 2 ? '' : 'hide'}>
+                                    <VesselIdentity
+                                        vessel={vessel}
+                                        gears={gears}
+                                    />
+                                </Panel>
+                                <Panel className={index === 3 ? '' : 'hide'}>
+                                    <FishingActivities fishingActivities={vesselState.fishingActivities}/>
+                                </Panel>
+                                <Panel className={index === 4 ? '' : 'hide'}>
+                                    <h1>TODO</h1>
+                                </Panel>
+                                <Panel className={index === 5 ? '' : 'hide'}>
+                                    <h1>TODO</h1>
+                                </Panel>
+                                <Panel className={index === 6 ? '' : 'hide'}>
+                                    <h1>TODO</h1>
+                                </Panel>
+                            </> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+                        }
+
                     </div>
                 </div> : <VesselNotFound>
                         <VesselNotFoundText>

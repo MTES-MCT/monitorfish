@@ -25,7 +25,7 @@ class JpaGearRepository(@Autowired
         return try {
             dbGearRepository.findByCodeEquals(code).toGear()
         } catch (e: EmptyResultDataAccessException) {
-            throw CodeNotFoundException("Code $code not found")
+            throw CodeNotFoundException("Gear: code $code not found")
         }
     }
 }

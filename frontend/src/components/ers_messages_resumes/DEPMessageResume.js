@@ -1,35 +1,97 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
-// todo fix anticipatedActivityName
+import {getDateTime} from "../../utils";
+import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+
 const DEPMessageResume = props => {
+    const [isOpen, setIsOpen] = useState(false)
+    const firstUpdate = useRef(true);
+
+    useEffect(() => {
+        if(isOpen) {
+            firstUpdate.current = false
+        }
+    }, [isOpen])
+
+    const getDEPMessageResumeTitle = depMessage => {
+        return <>{depMessage.departurePortName ? depMessage.departurePortName : depMessage.departurePort}
+            {' '}le {getDateTime(depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
+    }
+
     return <>
-        { props.message ?
-            <Zone>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Activité prévue</Key>
-                            <Value>{props.message.anticipatedActivity ? <>{props.message.anticipatedActivityName} ({props.message.anticipatedActivity})</> : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        <Field>
-                            <Key>Captures à bord</Key>
-                            <Value>{props.message.speciesOnboard && props.message.speciesOnboard.length ?
-                                props.message.speciesOnboard.map(speciesCatch => {
-                                    return <span key={speciesCatch.species}>
+        <Wrapper>
+            <ERSMessageResumeHeader
+                title={props.hasNoMessage ? null : getDEPMessageResumeTitle(props.depMessage)}
+                hasNoMessage={props.hasNoMessage}
+                showERSMessages={props.showERSMessages}
+                messageType={ERSMessageTypeEnum.DEP.code.toString()}
+                setIsOpen={setIsOpen}
+                isOpen={isOpen}/>
+            {
+                props.hasNoMessage ? null :
+                    <ERSMessageContent
+                        speciesOnboard={(props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length > 0) ? props.depMessage.speciesOnboard.length : 1}
+                        gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
+                        firstUpdate={firstUpdate}
+                        isOpen={isOpen}
+                        name={ERSMessageTypeEnum.DEP.code.toString()}>
+                        <Zone>
+                            {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length ?
+                                props.depMessage.gearOnboard.map((gear, index) => {
+                                    return <Gear key={gear.gear}>
+                                        <SubKey>Engin à bord {index + 1}</SubKey>{' '}
+                                        <SubValue>
+                                            {
+                                                gear.gearName ?
+                                                    <>{gear.gearName} ({gear.gear})</> : gear.species
+                                            }
+                                        </SubValue><br/>
+                                        <SubKey>Maillage</SubKey><SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
+                                        <SubKey>Dimensions</SubKey><SubValue>{gear.size ? <>{gear.size} mm</> : <NoValue>-</NoValue>}</SubValue>
+                                        <br/>
+                                    </Gear>
+                                }) : <NoValue>Pas d'engins à bord</NoValue>}
+                            <Fields>
+                                <TableBody>
+                                    <Field>
+                                        <Key>Captures à bord</Key>
+                                        <Value>{props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length ?
+                                            props.depMessage.speciesOnboard.map(speciesCatch => {
+                                                return <span key={speciesCatch.species}>
                                         {
                                             speciesCatch.speciesName ?
                                                 <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
                                         }
-                                        {''} - {speciesCatch.weight} kg<br/>
+                                                    {''} - {speciesCatch.weight} kg<br/>
                                     </span>
-                                }) : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-            </Zone> : null }
+                                            }) : <NoValue>-</NoValue>}</Value>
+                                    </Field>
+                                </TableBody>
+                            </Fields>
+                        </Zone>
+                    </ERSMessageContent>
+            }
+        </Wrapper>
     </>
 }
+
+const Gear = styled.div`
+  margin-left: 5px;
+`
+
+const SubKey = styled.span`
+  font-size: 13px;
+  color: ${COLORS.textGray};
+  margin-right: 5px;
+`
+
+const SubValue = styled.span`
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
+  margin-right: 10px;
+`
 
 const TableBody = styled.tbody``
 
@@ -46,7 +108,6 @@ const Fields = styled.table`
   width: inherit;
   display: table;
   margin: 0;
-  min-width: 40%;
   line-height: 0.2em;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -89,6 +150,42 @@ const NoValue = styled.span`
   color: ${COLORS.textBueGray};
   font-weight: 300;
   line-height: normal;
+`
+
+const Gray = styled.span`
+  color: ${COLORS.grayDarkerThree};
+  font-weight: 300;
+`
+
+const Wrapper = styled.li`
+  margin: 0;
+  background: ${COLORS.background};
+  border-radius: 0;
+  padding: 0;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: ${COLORS.textGray};
+`
+
+const ERSMessageContent = styled.div`
+  width: inherit;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 0 0 20px;
+  border-bottom: 1px solid ${COLORS.gray};
+  animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-opening` : `list-resume-${props.name}-closing`} 0.2s ease forwards;
+
+  @keyframes ${props => props.name ? `list-resume-${props.name}-opening` : null} {
+    0%   { height: 0; opacity: 0; }
+    100% { height: ${props => props.speciesOnboard * 22 + props.gearOnboard * 50 + 30}px; opacity: 1; }
+  }
+
+  @keyframes ${props => props.name ? `list-resume-${props.name}-closing` : null} {
+    0%   { opacity: 1; height: ${props => props.speciesOnboard * 22 + props.gearOnboard * 50 + 30}px; }
+    100% { opacity: 0; height: 0; }
+  }
 `
 
 export default DEPMessageResume

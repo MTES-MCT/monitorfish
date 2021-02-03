@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
 import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+import {ReactComponent as XMLSVG} from '../icons/Picto_XML.svg'
 import {getDateTime} from "../../utils";
 import DEPMessage from "./DEPMessage";
 import FARMessage from "./FARMessage";
@@ -24,15 +25,33 @@ const ERSMessage = props => {
             case ERSMessageTypeEnum.DIS.code.toString(): {
                 return 'Déclaration de rejets'
             }
+            case ERSMessageTypeEnum.EOF.code.toString(): {
+                return 'Fin de la marée'
+            }
+            case ERSMessageTypeEnum.RTP.code.toString(): {
+                return 'Retour au port'
+            }
         }
+    }
+
+    const openXML = xml => {
+        xml = xml.replace('<ers:OPS', '<ers:OPS xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" ' +
+            'xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" ' +
+            'xmlns:tns="http://ec.europa.eu/fisheries/schema/ers/wsdl/v3" ' +
+            'xmlns:ers="http://ec.europa.eu/fisheries/schema/ers/v3" ' +
+            'xmlns:xsd="http://www.w3.org/2001/XMLSchema"')
+        let blob = new Blob([xml], { type: 'text/xml' });
+        let url = URL.createObjectURL(blob);
+        window.open(url);
+        URL.revokeObjectURL(url);
     }
 
     const getERSMessage = ersMessage => {
         switch (ersMessage.messageType) {
-            case ERSMessageTypeEnum.DEP.code: {
+            case ERSMessageTypeEnum.DEP.code.toString(): {
                 return <DEPMessage message={ersMessage.message} />
             }
-            case ERSMessageTypeEnum.FAR.code: {
+            case ERSMessageTypeEnum.FAR.code.toString(): {
                 return <FARMessage message={ersMessage.message} />
             }
         }
@@ -46,6 +65,12 @@ const ERSMessage = props => {
                     <ERSMessageHeaderText>
                         {getERSMessageHeaderTitle(props.message)}
                     </ERSMessageHeaderText>
+                    {
+                        props.message.rawMessage ? <XML
+                            title="Ouvrir le message XML brut"
+                            style={{cursor: 'pointer'}}
+                            onClick={() => openXML(props.message.rawMessage)}/> : <XML />
+                    }
                 </Header>
                 <Body>
                     <ERSMessageMetadata>
@@ -112,7 +137,7 @@ const Body = styled.div`
 `
 
 const Wrapper = styled.div`
-  margin: 10px;
+  margin-top: 10px;
   font-size: 13px;
   background: ${COLORS.background};
   text-align: left;
@@ -123,17 +148,18 @@ const Header = styled.div`
   width: inherit;
   padding: 0 0 0 10px;
   background: ${COLORS.grayDarkerThree};
+  display: flex;
 `
 
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.grayDarker};
   font-weight: 300;
 `
 
 const ERSMessageHeaderText = styled.span`
   color: ${COLORS.grayBackground};
   margin: 5px 5px 5px 5px;
-  padding: 2px 4px 2px 0;
+  padding: 3px 4px 2px 0;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
 `
@@ -156,6 +182,17 @@ const ERSMessageType = styled.span`
   width: 31px;
   display: inline-block;
   text-align: center;
+`
+
+const XML = styled(XMLSVG)`
+  margin-left: auto;
+  margin-top: 6.5px;
+  margin-right: 10px;
+  user-select: none;
+  
+  tspan {
+    font-size: 9px;
+  }
 `
 
 export default ERSMessage

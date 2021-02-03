@@ -25,7 +25,7 @@ class JpaPortRepository(@Autowired
         return try {
             dbPortRepository.findByLocodeEquals(code).toPort()
         } catch (e: EmptyResultDataAccessException) {
-            throw CodeNotFoundException("Code $code not found")
+            throw CodeNotFoundException("Port: code $code not found")
         }
     }
 }

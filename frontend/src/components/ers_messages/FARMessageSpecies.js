@@ -8,19 +8,12 @@ countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const FARMessageSpecies = props => {
     const [isOpen, setIsOpen] = useState(false)
-    const firstUpdate = useRef(true);
-
-    useEffect(() => {
-        if(props.species && isOpen) {
-            firstUpdate.current = false
-        }
-    }, [props.species])
 
     const getSpeciesName = species => {
         if (species.speciesName && species.species) {
-            return <>{species.speciesName} ({species.species})</>
+            return `${species.speciesName} (${species.species})`
         } else if(species.species) {
-            return <>{species.species}</>
+            return species.species
         }
 
         return "Aucun Nom"
@@ -29,18 +22,18 @@ const FARMessageSpecies = props => {
     return <>
         { props.species ?
             <Species>
-                <Title onClick={() => setIsOpen(!isOpen)}>
+                <Title isLast={props.isLast} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
                     <SpeciesNumber>Espèce {props.index ? props.index : null}</SpeciesNumber>
-                    <TitleText>
+                    <TitleText title={getSpeciesName(props.species)}>
                         {getSpeciesName(props.species)}
                     </TitleText>
-                    <ChevronIcon isOpen={isOpen} name={props.species.species}/>
                     <Weight>
                         <InlineKey>Poids (estimé) </InlineKey>
                         <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
                     </Weight>
+                    <ChevronIcon isOpen={isOpen} name={props.species.species}/>
                 </Title>
-                <Content firstUpdate={firstUpdate} isOpen={isOpen} name={props.species.species}>
+                <Content isOpen={isOpen} name={props.species.species}>
                     <Fields>
                         <TableBody>
                             <Field>
@@ -109,7 +102,10 @@ const TitleText = styled.span`
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
-  vertical-align: -moz-middle-with-baseline;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;    
+  max-width: 150px; 
 `
 
 const Weight = styled.span`
@@ -117,8 +113,7 @@ const Weight = styled.span`
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
-  float: right;
-  vertical-align: -moz-middle-with-baseline;
+  margin-left: auto;
 `
 
 const Species = styled.li`
@@ -146,28 +141,30 @@ const Title = styled.div`
   padding: 0 0 0 20px;
   user-select: none;
   cursor: pointer;
-  border-bottom: 1px solid ${COLORS.gray};
+  ${props => props.isLast && !props.isOpen ? '' : `border-bottom: 1px solid ${COLORS.gray};`}
+ 
+  display: flex;
+  flex-wrap: wrap;
 `
 
 const Content = styled.div`
   width: inherit;
   height: 0;
-  opacity: 0;
   overflow: hidden;
   padding: 0;
   border-bottom: 1px solid ${COLORS.gray};
   display: flex;
   flex-wrap: wrap;
-  animation: ${props =>  props.firstUpdate && !props.isOpen  ? '' : props.isOpen ? `list-zones-${props.name}-opening` : `list-zones-${props.name}-closing`} 0.2s ease forwards;
+  animation: ${props =>  props.isOpen ? `list-zones-${props.name}-opening` : `list-zones-${props.name}-closing`} 0.2s ease forwards;
 
   @keyframes ${props => props.name ? `list-zones-${props.name}-opening` : null} {
-    0%   { height: 0; opacity: 0; }
-    100% { height: auto; opacity: 1; }
+    0%   { height: 0; }
+    100% { height: 82px; }
   }
 
   @keyframes ${props => props.name ? `list-zones-${props.name}-closing` : null} {
-    0%   { opacity: 1; height: auto; }
-    100% { opacity: 0; height: 0; }
+    0%   { height: 82px; }
+    100% { height: 0; }
   }
 `
 
@@ -176,7 +173,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   width: 17px;
   float: right;
   margin-right: 10px;
-  margin-top: 12px;
+  margin-top: 2px;
   
   animation: ${props => props.isOpen ? `chevron-${props.name}-zones-opening` : `chevron-${props.name}-zones-closing`} 0.5s ease forwards;
 

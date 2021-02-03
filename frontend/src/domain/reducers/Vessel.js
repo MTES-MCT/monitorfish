@@ -57,7 +57,7 @@ const vesselSlice = createSlice({
             state.fishingActivities = action.payload
             state.loadingVessel = null
         },
-        resetFisheriesActivities(state, action) {
+        resetFisheriesActivities(state) {
             state.fishingActivities = null
         }
     }

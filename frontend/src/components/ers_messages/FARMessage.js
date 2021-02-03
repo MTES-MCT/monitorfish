@@ -10,12 +10,12 @@ const FARMessage = props => {
     const getGearName = message => {
         if (message.gear && message.gearName) {
             return <>
-                {message.gearName} ({message.gear})
+                <Gear title={`${message.gearName} (${message.gear})`}>{message.gearName} ({message.gear})</Gear>
                 { message.mesh ? <><InlineKey>Taille</InlineKey> {message.mesh} mm</> : null }
                 </>
         } else if(message.gear) {
             return <>
-                {message.gear}
+                <Gear title={`${message.gear}`}>{message.gear}</Gear>
                 { message.mesh ? <><InlineKey>Taille</InlineKey> {message.mesh} mm</> : null }
                 </>
         }
@@ -36,8 +36,12 @@ const FARMessage = props => {
                             <Field>
                                 <Key>Position opération</Key>
                                 <Value>
-                                    <Key>Lat.</Key> { props.message.latitude && props.message.longitude ? getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[0] : null }
-                                    <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude ? getCoordinates([props.message.latitude, props.message.latitude], WSG84_PROJECTION)[1] : null}
+                                    <Key>Lat.</Key> { props.message.latitude && props.message.longitude ?
+                                    getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[0] :
+                                    <NoValue>-</NoValue> }
+                                    <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude ?
+                                    getCoordinates([props.message.latitude, props.message.latitude], WSG84_PROJECTION)[1] :
+                                    <NoValue>-</NoValue>}
                                 </Value>
                             </Field>
                             <Field>
@@ -52,6 +56,7 @@ const FARMessage = props => {
                         props.message.catches.map((speciesCatch, index) => {
                             return <FARMessageSpecies
                                 index={index + 1}
+                                isLast={props.message.catches.length === index + 1}
                                 species={speciesCatch}
                                 key={speciesCatch.species}
                             />
@@ -61,6 +66,15 @@ const FARMessage = props => {
             </> : null }
     </>
 }
+
+const Gear = styled.span`
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;    
+  max-width: 190px;
+  display: inline-block;
+  vertical-align: top;
+`
 
 const SpeciesList = styled.ul`
   margin: 10px 0 0 0;

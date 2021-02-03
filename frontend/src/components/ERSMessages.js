@@ -1,22 +1,45 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
-import {ERSMessageType as ERSMessageTypeEnum} from "../domain/entities/ERS";
-import ERSMessageResume from "./ers_messages_resumes/ERSMessageResume";
 import ERSMessage from "./ers_messages/ERSMessage";
+import {ReactComponent as ArrowSVG} from './icons/Picto_fleche-pleine-droite.svg'
 
 const ERSMessages = props => {
     return <Wrapper>
-        <Previous onClick={() => props.showFishingActivitiesSummary()}>Revenir au résumé</Previous>
+        <Arrow onClick={() => props.showFishingActivitiesSummary()}/><Previous onClick={() => props.showFishingActivitiesSummary()}>Revenir au résumé</Previous>
         { props.fishingActivities && props.fishingActivities.length ?
-            props.fishingActivities.map(message => {
+            props.fishingActivities
+                .filter(ersMessage =>{
+                    if(props.messageTypeFilter) {
+                        return ersMessage.messageType === props.messageTypeFilter
+                    } else {
+                        return true
+                    }
+                })
+                .map(message => {
                 return <ERSMessage key={message.ersId} message={message}/>
-            }) : null }
+            }) : <NoMessage>Aucun message reçu</NoMessage> }
     </Wrapper>
 }
+
+const Arrow = styled(ArrowSVG)`
+  vertical-align: sub;
+  transform: rotate(180deg);
+  margin-right: 5px
+`
+
+const NoMessage = styled.div`
+  text-align: center;
+  margin-top: 10px;
+  padding-bottom: 30px;
+  font-size: 13px;
+  color: ${COLORS.textGray};
+`
+
 const Wrapper = styled.div`
   text-align: left;
   background: ${COLORS.background};
+  padding: 5px 10px 10px 10px;
 `
 
 const Previous = styled.a`
@@ -24,7 +47,6 @@ const Previous = styled.a`
   text-decoration: underline;
   font-size: 13px;
   color: ${COLORS.textGray};
-  margin: 5px 0px 0 10px;
   cursor: pointer;
   display: inline-block;
 `

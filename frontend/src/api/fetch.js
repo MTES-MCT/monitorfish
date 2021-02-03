@@ -5,6 +5,7 @@ const HTTP_OK = 200
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
+const ERS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
 const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
@@ -224,273 +225,21 @@ export function getVesselERSMessagesFromAPI(vesselIdentity) {
     let externalReferenceNumber = vesselIdentity.externalReferenceNumber ? vesselIdentity.externalReferenceNumber : ""
     let ircs = vesselIdentity.ircs ? vesselIdentity.ircs : ""
 
-    return Promise.resolve([{
-        ersId: "1225234534",
-        ersIdToDeleteOrCorrect: "",
-        operationType: "DAT",
-        operationDateTime: "2020-10-18T18:55Z",
-        internalReferenceNumber: "",
-        externalReferenceNumber: "",
-        ircs: "",
-        vesselName: "",
-        flagState: "",
-        imo: "",
-        messageType: "DEP",
-        parsedIntegrationDateTime: "",
-        message: {
-            'anticipatedActivity': 'FSH',
-            'departureDatetimeUtc': '2020-10-18T18:55Z',
-            'departurePort': 'FRHON',
-            // TODO Ajouter le nom du port depuis le LOCODE
-            'departurePortName': null,
-            'gearOnboard': [{'gear': 'DRB', 'gearName': 'Drague', 'mesh': 92.0}, {'gear': 'OTB', 'gearName': 'Chalut de fond', 'mesh': 81.0}],
-            'speciesOnboard': [{
-                'economicZone': 'FRA',
-                'effort_zone': 'B',
-                'faoZone': '27.7.d',
-                'freshness': null,
-                'nb_fish': null,
-                'packaging': 'BGS',
-                'presentation': 'WHL',
-                'preservationState': 'ALI',
-                'species': 'SCE',
-                'speciesName': 'Coquille St-Jacques atlantique',
-                'statisticalRectangle': '28F0',
-                'weight': 1.0
-            }]
-        },
-    },
-        {
-            ersId: "1225234536",
-            ersIdToDeleteOrCorrect: "",
-            operationType: "DAT",
-            operationDateTime: "2020-10-18T18:55Z",
-            internalReferenceNumber: "",
-            externalReferenceNumber: "",
-            ircs: "",
-            vesselName: "",
-            flagState: "",
-            imo: "",
-            messageType: "FAR",
-            parsedIntegrationDateTime: "2020-10-19T01:00Z",
-            message: {
-                'catches': [{
-                    'economicZone': 'GBR',
-                    'effort_zone': null,
-                    'faoZone': '27.4.a',
-                    'freshness': null,
-                    'nb_fish': null,
-                    'packaging': 'BOX',
-                    'presentation': 'GUT',
-                    'preservationState': 'FRE',
-                    'species': 'HKE',
-                    'speciesName': 'Merlu européen',
-                    'statisticalRectangle': '49E6',
-                    'weight': 1995.0
-                },
-                    {
-                        'economicZone': 'GBR',
-                        'effort_zone': null,
-                        'faoZone': '27.4.a',
-                        'freshness': null,
-                        'nb_fish': null,
-                        'packaging': 'BOX',
-                        'presentation': 'GUH',
-                        'preservationState': 'FRE',
-                        'species': 'HKE',
-                        'speciesName': 'Merlu européen',
-                        'statisticalRectangle': '49E6',
-                        'weight': 33.0
-                    },
-                    {
-                        'economicZone': 'GBR',
-                        'effort_zone': null,
-                        'faoZone': '27.4.a',
-                        'freshness': null,
-                        'nb_fish': null,
-                        'packaging': 'BOX',
-                        'presentation': 'GUT',
-                        'preservationState': 'FRE',
-                        'species': 'LIN',
-                        'speciesName': 'Lingue franche',
-                        'statisticalRectangle': '49E6',
-                        'weight': 754.0
-                    },
-                    {
-                        'economicZone': 'GBR',
-                        'effort_zone': null,
-                        'faoZone': '27.4.b',
-                        'freshness': null,
-                        'nb_fish': null,
-                        'packaging': 'BOX',
-                        'presentation': 'GUT',
-                        'preservationState': 'FRE',
-                        'species': 'POK',
-                        'speciesName': 'Lieu noir',
-                        'statisticalRectangle': '49E6',
-                        'weight': 27.0
-                    }],
-                'farDatetimeUtc': '2020-10-19 01:00',
-                'gear': 'LLS',
-                'gearName': 'Palangre',
-                'latitude': 60.43,
-                'longitude': -3.633,
-                'mesh': 80.0
-            }
-        },
-        {
-            ersId: "1225234539",
-            ersIdToDeleteOrCorrect: "",
-            operationType: "DAT",
-            operationDateTime: "2020-10-19T01:00Z",
-            internalReferenceNumber: "",
-            externalReferenceNumber: "",
-            ircs: "",
-            vesselName: "",
-            flagState: "",
-            imo: "",
-            messageType: "PNO",
-            parsedIntegrationDateTime: "2020-10-19T01:00Z",
-            message: {
-                'catchOnboard': [{
-                    'economicZone': 'FRA',
-                    'effort_zone': null,
-                    'faoZone': '27.8.b',
-                    'freshness': null,
-                    'nb_fish': null,
-                    'packaging': 'BUL',
-                    'presentation': 'WHL',
-                    'preservationState': 'FRE',
-                    'species': 'CTC',
-                    'statisticalRectangle': '19E8',
-                    'weight': 775.0
-                },
-                    {
-                        'economicZone': 'FRA',
-                        'effort_zone': null,
-                        'faoZone': '27.8.b',
-                        'freshness': null,
-                        'nb_fish': null,
-                        'packaging': 'BUL',
-                        'presentation': 'WHL',
-                        'preservationState': 'FRE',
-                        'species': 'LIN',
-                        'speciesName': 'Lingue franche',
-                        'statisticalRectangle': '19E8',
-                        'weight': 754.0
-                    },
-                    {
-                        'economicZone': 'FRA',
-                        'effort_zone': null,
-                        'faoZone': '27.8.b',
-                        'freshness': null,
-                        'nb_fish': null,
-                        'packaging': 'BUL',
-                        'presentation': 'WHL',
-                        'preservationState': 'FRE',
-                        'species': 'WEG',
-                        'statisticalRectangle': '19E8',
-                        'weight': 85.0
-                    },
-                    {
-                        'economicZone': 'FRA',
-                        'effort_zone': null,
-                        'faoZone': '27.8.b',
-                        'freshness': null,
-                        'nb_fish': null,
-                        'packaging': 'BUL',
-                        'presentation': 'WHL',
-                        'preservationState': 'FRE',
-                        'species': 'POK',
-                        'speciesName': 'Lieu noir',
-                        'statisticalRectangle': '19E8',
-                        'weight': 27.0
-                    },
-                    {
-                        'economicZone': 'FRA',
-                        'effort_zone': null,
-                        'faoZone': '27.8.b',
-                        'freshness': null,
-                        'nb_fish': null,
-                        'packaging': 'BUL',
-                        'presentation': 'GUT',
-                        'preservationState': 'FRE',
-                        'species': 'HKE',
-                        'statisticalRectangle': '19E8',
-                        'weight': 10.0
-                    }],
-                'economicZone': 'FRA',
-                'effort_zone': null,
-                'faoZone': '27.8.b',
-                'latitude': 45.389,
-                'longitude': -1.303,
-                'port': 'FRLC5',
-                'portName': 'LA COTINIERE',
-                'predictedArrivalDatetimeUtc': '2020-09-14T10:15Z',
-                'purpose': 'LAN',
-                'statisticalRectangle': '19E8',
-                'trip_start_date': '2020-09-10'
-            }
-        },
-        {
-            ersId: "1225234526",
-            ersIdToDeleteOrCorrect: "",
-            operationType: "DAT",
-            operationDateTime: "2020-10-18T18:55Z",
-            internalReferenceNumber: "",
-            externalReferenceNumber: "",
-            ircs: "",
-            vesselName: "",
-            flagState: "",
-            imo: "",
-            messageType: "DIS",
-            parsedIntegrationDateTime: "",
-            message: {
-                'catches': [{
-                    'weight': 5.0,
-                    'nb_fish': 1.0,
-                    'species': 'NEP',
-                    'faoZone': '27.8.a',
-                    'freshness': null,
-                    'packaging': 'BOX',
-                    'effort_zone': null,
-                    'presentation': 'DIM',
-                    'economicZone': 'FRA',
-                    'preservationState': 'ALI',
-                    'statisticalRectangle': '24E5'
-                }, {
-                    'weight': 3.0,
-                    'nb_fish': 2.0,
-                    'species': 'BIB',
-                    'faoZone': '27.8.a',
-                    'freshness': null,
-                    'packaging': 'BOX',
-                    'effort_zone': null,
-                    'presentation': 'DIM',
-                    'economicZone': 'FRA',
-                    'preservationState': 'FRE',
-                    'statisticalRectangle': '24E5'
-                }], 'discard_datetime_utc': '2020-10-19 13:38'
-            }
-        }])
-
-
-    /*return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${IRCS}`)
-        .then(response => {
-            if (response.status === HTTP_OK) {
-                return response.json()
-            } else {
-                response.text().then(text => {
-                    console.error(text)
-                })
-                throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
-            }
-        })
-        .catch(error => {
-            console.error(error)
-            throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
-        })
-        .then(vessel => vessel)*/
+    return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}`)
+            .then(response => {
+                if (response.status === HTTP_OK) {
+                    return response.json()
+                } else {
+                    response.text().then(text => {
+                        console.error(text)
+                    })
+                    throw Error(ERS_ERROR_MESSAGE)
+                }
+            })
+            .catch(error => {
+                console.error(error)
+                throw Error(ERS_ERROR_MESSAGE)
+            })
+            .then(ers => ers)
 }
-
 

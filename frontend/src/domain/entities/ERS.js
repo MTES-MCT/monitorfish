@@ -13,7 +13,7 @@ export const ERSMessageType = {
     },
     LAN: {
         code: 'LAN',
-        name: ''
+        name: 'Débarquement'
     },
     RTP: {
         code: 'RTP',
@@ -92,5 +92,3 @@ export const ERSSpeciesPresentation = {
     WHL : "Entier",
     WNG : "Ailerons",
 }
-
-// TODO Finir les associations

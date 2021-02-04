@@ -14,9 +14,12 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
 import FishingActivities from "../components/FishingActivities";
 import getFishingActivities from "../domain/use_cases/getFishingActivities";
+import {removeError} from "../domain/reducers/Global";
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()
+
+    const error = useSelector(state => state.global.error)
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)
     const searchVesselWhileVesselSelected = useSelector(state => state.vessel.searchVesselWhileVesselSelected)
@@ -45,6 +48,12 @@ const VesselSidebar = () => {
         if (vesselState.selectedVessel) {
             setVessel(vesselState.selectedVessel)
             dispatch(setSearchVesselWhileVesselSelected(false))
+
+            if(index === 3) {
+                if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
+                    dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+                }
+            }
         }
     }, [vesselState.selectedVessel])
 
@@ -52,6 +61,13 @@ const VesselSidebar = () => {
         if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
             dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
             setIndex(3)
+        }
+    }
+
+    const showTab = tabNumber => {
+        if(vessel) {
+            dispatch(removeError())
+            setIndex(tabNumber)
         }
     }
 
@@ -67,10 +83,10 @@ const VesselSidebar = () => {
                     vessel.mmsi) ? <div>
                     <div>
                         <TabList>
-                            <Tab isActive={index === 1} onClick={() => setIndex(1)}>
+                            <Tab isActive={index === 1} onClick={() => showTab(1)}>
                                 <SummaryIcon /> Résumé
                             </Tab>
-                            <Tab isActive={index === 2} onClick={() => setIndex(2)}>
+                            <Tab isActive={index === 2} onClick={() => showTab(2)}>
                                 <VesselIDIcon /> Identité
                             </Tab>
                             <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
@@ -88,7 +104,7 @@ const VesselSidebar = () => {
                         </TabList>
 
                         {
-                            !vesselState.loadingVessel ? <>
+                            !vesselState.loadingVessel && !error ? <>
                                 <Panel className={index === 1 ? '' : 'hide'}>
                                     <VesselSummary
                                         vessel={vessel}
@@ -113,15 +129,19 @@ const VesselSidebar = () => {
                                 <Panel className={index === 6 ? '' : 'hide'}>
                                     <h1>TODO</h1>
                                 </Panel>
-                            </> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+                            </> : error ? <Error>
+                                <ErrorText>
+                                    { error.message }
+                                </ErrorText>
+                            </Error> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
                         }
 
                     </div>
-                </div> : <VesselNotFound>
-                        <VesselNotFoundText>
+                </div> : <Error>
+                        <ErrorText>
                             Nous n'avons pas d'information sur ce navire...
-                        </VesselNotFoundText>
-                    </VesselNotFound> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+                        </ErrorText>
+                    </Error> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
             }
 
         </Wrapper>
@@ -146,12 +166,12 @@ const GrayOverlay = styled.div`
   }
 `
 
-const VesselNotFound = styled.div`
+const Error = styled.div`
   padding: 5px 10px 10px 10px;
   right: 0;
 `
 
-const VesselNotFoundText = styled.div`
+const ErrorText = styled.div`
   padding: 10px 10px 5px 10px;
   display: table-cell;
   font-size: 15px;

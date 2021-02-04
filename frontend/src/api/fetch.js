@@ -5,7 +5,7 @@ const HTTP_OK = 200
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
-const ERS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE du navire"
+const ERS_ERROR_MESSAGE = "Nous n'avons pas trouvé de message JPE pour ce navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
 const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"

@@ -6,7 +6,7 @@ import {
     VESSEL_SELECTOR_STYLE
 } from "../../layers/styles/featuresStyles";
 import {
-    loadingVessel, openVesselSidebar, setSelectedVessel,
+    loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel,
     setSelectedVesselTrackVector,
 } from "../reducers/Vessel";
 import {transform} from "ol/proj";
@@ -20,7 +20,7 @@ import {Style} from "ol/style";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import {animateToVessel} from "../reducers/Map";
-import {setError} from "../reducers/Global";
+import {removeError, setError} from "../reducers/Global";
 import {Vector} from "ol/layer";
 import VectorSource from "ol/source/Vector";
 import Layers from "../entities/layers";
@@ -37,6 +37,7 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
         }
 
         dispatch(animateToVessel(vesselFeatureAndIdentity.feature));
+        dispatch(removeError());
     }
 
     removePreviousSelectedFeature(getState);
@@ -51,6 +52,7 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
         vesselFeatureAndIdentity.identity.externalReferenceNumber,
         vesselFeatureAndIdentity.identity.ircs)
         .then(vessel => {
+            dispatch(removeError());
             dispatch(setSelectedVessel(vessel))
 
             if(vessel.positions && vessel.positions.length) {
@@ -58,7 +60,9 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
                 dispatch(setSelectedVesselTrackVector(vesselTrackVector))
             }
         }).catch(error => {
+            console.error(error)
             dispatch(setError(error));
+            dispatch(resetLoadingVessel())
         });
 }
 

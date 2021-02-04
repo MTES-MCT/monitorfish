@@ -53,6 +53,9 @@ const vesselSlice = createSlice({
         loadingFisheriesActivities(state) {
             state.loadingVessel = true
         },
+        resetLoadingVessel(state) {
+            state.loadingVessel = false
+        },
         setFishingActivities(state, action) {
             state.fishingActivities = action.payload
             state.loadingVessel = null
@@ -65,6 +68,7 @@ const vesselSlice = createSlice({
 
 export const {
     loadingVessel,
+    resetLoadingVessel,
     setSelectedVesselTrackVector,
     setSelectedVessel,
     resetSelectedVessel,

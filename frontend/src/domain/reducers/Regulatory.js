@@ -43,6 +43,9 @@ const layerSlice = createSlice({
             state.regulatoryZoneMetadata = null
             state.regulatoryZoneMetadataPanelIsOpen = true
         },
+        resetLoadingRegulatoryZoneMetadata(state) {
+            state.loadingRegulatoryZoneMetadata = false
+        },
         setRegulatoryZoneMetadata(state, action) {
             state.loadingRegulatoryZoneMetadata = false
             state.regulatoryZoneMetadata = action.payload
@@ -65,6 +68,7 @@ export const {
     removeRegulatoryZonesFromSelection,
     setIsReadyToShowRegulatoryZones,
     setLoadingRegulatoryZoneMetadata,
+    resetLoadingRegulatoryZoneMetadata,
     setRegulatoryZoneMetadata,
     closeRegulatoryZoneMetadataPanel
 } = layerSlice.actions

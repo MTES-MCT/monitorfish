@@ -1,6 +1,7 @@
 import {getRegulatoryZoneMetadataFromAPI} from "../../api/fetch";
 import {
     closeRegulatoryZoneMetadataPanel,
+    resetLoadingRegulatoryZoneMetadata,
     setLoadingRegulatoryZoneMetadata,
     setRegulatoryZoneMetadata
 } from "../reducers/Regulatory";
@@ -17,6 +18,7 @@ const showRegulatoryZoneMetadata = regulatoryZone => dispatch => {
             console.error(error)
             dispatch(closeRegulatoryZoneMetadataPanel())
             dispatch(setError(error));
+            dispatch(resetLoadingRegulatoryZoneMetadata())
         });
     }
 }

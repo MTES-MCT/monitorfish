@@ -1,6 +1,6 @@
 import {getVesselERSMessagesFromAPI} from "../../api/fetch";
-import {setError} from "../reducers/Global";
-import {loadingFisheriesActivities, setFishingActivities} from "../reducers/Vessel";
+import {removeError, setError} from "../reducers/Global";
+import {loadingFisheriesActivities, resetLoadingVessel, setFishingActivities} from "../reducers/Vessel";
 
 const getFishingActivities = vesselIdentity => (dispatch, getState) => {
     if(vesselIdentity){
@@ -23,9 +23,11 @@ const getFishingActivities = vesselIdentity => (dispatch, getState) => {
         dispatch(loadingFisheriesActivities())
         getVesselERSMessagesFromAPI(vesselIdentity).then(fishingActivities => {
             dispatch(setFishingActivities(fishingActivities))
+            dispatch(removeError());
         }).catch(error => {
             console.error(error)
-            dispatch(setError(error));
+            dispatch(setError(error))
+            dispatch(resetLoadingVessel())
         });
     }
 }

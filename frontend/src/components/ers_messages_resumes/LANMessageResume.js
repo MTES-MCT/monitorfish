@@ -199,7 +199,6 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
 `
 
 const Wrapper = styled.li`

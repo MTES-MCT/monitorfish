@@ -12,6 +12,8 @@ import unselectVessel from "../domain/use_cases/unselectVessel";
 import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
 import searchVessels from "../domain/use_cases/searchVessels";
 import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
+import countries from "i18n-iso-countries";
+countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselsSearchBox = () => {
     const layers = useSelector(state => state.layer.layers)
@@ -159,6 +161,7 @@ const VesselsSearchBox = () => {
                 <div>
                     {flagState ?
                         <Flag rel="preload"
+                              title={countries.getName(flagState, "fr")}
                               src={`flags/${flagState.toLowerCase()}.svg`}/> : null}
                     <Name>
                         <Highlighter
@@ -232,7 +235,9 @@ const VesselsSearchBox = () => {
                         vesselName={selectedVessel.vessel.vesselName}
                         searchingWhileVesselSelected={searchingWhileVesselSelected}
                     >
-                        {selectedVessel.vessel.flagState ? <Flag src={`flags/${selectedVessel.vessel.flagState.toLowerCase()}.svg`} /> : null}
+                        {selectedVessel.vessel.flagState ? <Flag
+                            title={countries.getName(selectedVessel.vessel.flagState, "fr")}
+                            src={`flags/${selectedVessel.vessel.flagState.toLowerCase()}.svg`} /> : null}
                         <VesselName>
                             {selectedVessel.vessel.vesselName}
                             {' '}

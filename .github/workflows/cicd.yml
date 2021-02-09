@@ -49,6 +49,15 @@ jobs:
         java-version: 11
 
     - uses: actions/checkout@v2
+      
+    - name: NPM install with caching
+      uses: bahmutov/npm-install@v1.6.0
+      with:
+        # Working directory to specify subfolder in which dependencies are defined
+        working-directory: frontend/
+        useLockFile: true
+        # Custom install command to use
+        install-command: npm install
             
     - name: Unit test
       run: make test

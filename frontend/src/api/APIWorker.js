@@ -1,9 +1,10 @@
 import {useEffect} from 'react';
-import { useToasts } from 'react-toast-notifications'
+import {useToasts} from 'react-toast-notifications'
 
 import showAllVessels from "../domain/use_cases/showVesselsLastPosition";
 import {useDispatch, useSelector} from "react-redux";
 import getAllGearCodes from "../domain/use_cases/getAllGearCodes";
+import updateVesselTrackAndSidebar from "../domain/use_cases/updateVesselTrackAndSidebar";
 
 export const FIVE_MINUTES = 300000;
 
@@ -18,6 +19,7 @@ const APIWorker = () => {
 
         setInterval(() => {
             dispatch(showAllVessels());
+            dispatch(updateVesselTrackAndSidebar())
         }, FIVE_MINUTES)
     }, [])
 

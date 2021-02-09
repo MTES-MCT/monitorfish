@@ -7,7 +7,7 @@ import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
 import VesselIdentity from "../components/VesselIdentity";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
@@ -16,6 +16,8 @@ import getFishingActivities from "../domain/use_cases/getFishingActivities";
 import {removeError} from "../domain/reducers/Global";
 
 const VesselSidebar = () => {
+    const dispatch = useDispatch()
+
     const error = useSelector(state => state.global.error)
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)

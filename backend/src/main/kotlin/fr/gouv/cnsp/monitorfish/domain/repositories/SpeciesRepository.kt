@@ -7,5 +7,5 @@ import kotlin.jvm.Throws
 interface SpeciesRepository {
     fun findAll() : List<Species>
     @Throws(CodeNotFoundException::class)
-    fun find(locode: String): Species
+    fun find(code: String): Species
 }

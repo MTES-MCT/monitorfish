@@ -13,6 +13,7 @@ import searchVessels from "../domain/use_cases/searchVessels";
 import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
 import countries from "i18n-iso-countries";
 import focusOnVesselSearch, {focusState} from "../domain/use_cases/focusOnVesselSearch";
+
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselsSearchBox = () => {
@@ -26,10 +27,7 @@ const VesselsSearchBox = () => {
     const [vesselsHasBeenUpdated, setVesselsHasBeenUpdated] = useState(false);
     const [foundVesselsOnMap, setFoundVesselsOnMap] = useState([]);
     const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([]);
-    const [selectedVessel, setSelectedVessel] = useState(null);
     const [selectedVesselFeatureAndIdentity, setSelectedVesselFeatureAndIdentity] = useState(null);
-    const [vesselNameIsShown, setVesselNameIsShown] = useState(false);
-    const [searchingWhileVesselSelected, setSearchingWhileVesselSelected] = useState(false);
     const firstUpdate = useRef(true);
 
     const wrapperRef = useRef(null);
@@ -58,11 +56,14 @@ const VesselsSearchBox = () => {
             vesselFeatureAndIdentity.identity === selectedVesselFeatureAndIdentity.identity) {
             isUpdatedVessel = true
             setVesselsHasBeenUpdated(true)
-        } else {
-            setVesselsHasBeenUpdated(false)
+            dispatch(focusOnVesselSearch(null, isUpdatedVessel))
+
+            return
         }
+
+        setVesselsHasBeenUpdated(false)
         dispatch(focusOnVesselSearch(null, isUpdatedVessel))
-        setSelectedVesselFeatureAndIdentity(selectedVesselFeatureAndIdentity)
+        setSelectedVesselFeatureAndIdentity(vesselFeatureAndIdentity)
     }, [vesselFeatureAndIdentity])
 
     function getTextForSearch(text) {
@@ -150,6 +151,7 @@ const VesselsSearchBox = () => {
                     dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT))
                     setVesselsHasBeenUpdated(false)
                     setSelectedVesselFeatureAndIdentity(vessel)
+                    setSearchText('')
                 }}
                 key={id}>
                 <div>

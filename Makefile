@@ -16,8 +16,8 @@ erase-db:
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: check-clean-archi
-	cd backend && ./mvnw test
-	cd frontend && CI=true npm test
+	cd backend && ./mvnw clean && ./mvnw test
+	cd frontend && npm install && CI=true npm test
 test-front:
 	cd frontend && npm test
 	

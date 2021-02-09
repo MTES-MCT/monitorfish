@@ -10,7 +10,6 @@ import Layers from "../entities/layers";
 import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";
-import showVesselTrackAndSidebar from "./showVesselTrackAndSidebar";
 import {updateVesselFeatureAndIdentity} from "../reducers/Vessel";
 import {getVesselFeatureAndIdentity} from "../entities/vessel";
 
@@ -34,11 +33,6 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
         console.error(error)
         dispatch(setError(error));
     });
-
-    let vessel = getState().vessel.selectedVesselFeatureAndIdentity
-    if(vessel) {
-        dispatch(showVesselTrackAndSidebar(vessel, false, true))
-    }
 }
 
 function buildFeature(currentVessel, index, getState, dispatch) {

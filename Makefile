@@ -17,7 +17,10 @@ check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: check-clean-archi
 	cd backend && ./mvnw test
-
+	cd frontend && CI=true npm test
+test-front:
+	cd frontend && npm test
+	
 # CI commands
 docker-build:
 	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) --build-arg VERSION=$(VERSION) --build-arg GITHUB_SHA=$(GITHUB_SHA)

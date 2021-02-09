@@ -7,7 +7,7 @@ import {
 } from "../../layers/styles/featuresStyles";
 import {
     loadingVessel, openVesselSidebar, setSelectedVessel,
-    setSelectedVesselTrackVector,
+    setSelectedVesselTrackVector, setVesselPositionIsUpdating,
 } from "../reducers/Vessel";
 import {transform} from "ol/proj";
 import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
@@ -26,26 +26,28 @@ import VectorSource from "ol/source/Vector";
 import Layers from "../entities/layers";
 
 const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateShowedVessel) => (dispatch, getState) => {
-    if(vesselFeatureAndIdentity.feature) {
-        let alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
-        if(alreadySelectedVessel && alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature) {
-            if(getState().vessel.selectedVessel && !updateShowedVessel) {
-                dispatch(openVesselSidebar())
-            }
-
-            return
+    let alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
+    if(!updateShowedVessel &&
+        alreadySelectedVessel &&
+        alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature) {
+        if(getState().vessel.selectedVessel) {
+            dispatch(openVesselSidebar())
         }
 
-        dispatch(animateToVessel(vesselFeatureAndIdentity.feature));
+        return
     }
 
     removePreviousSelectedFeature(getState);
+    if(vesselFeatureAndIdentity.feature && !updateShowedVessel) {
+        dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
+    }
 
     if(!updateShowedVessel) {
         dispatch(loadingVessel(vesselFeatureAndIdentity))
     }
 
     dispatch(openVesselSidebar())
+
     getVesselFromAPI(
         vesselFeatureAndIdentity.vessel.internalReferenceNumber,
         vesselFeatureAndIdentity.vessel.externalReferenceNumber,

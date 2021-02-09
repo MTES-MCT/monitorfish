@@ -7,17 +7,15 @@ import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
 import VesselIdentity from "../components/VesselIdentity";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
-import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
 
 const VesselSidebar = () => {
-    const dispatch = useDispatch()
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)
-    const searchVesselWhileVesselSelected = useSelector(state => state.vessel.searchVesselWhileVesselSelected)
+    const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
 
     const [openBox, setOpenBox] = useState(false);
     const [vessel, setVessel] = useState(null);
@@ -42,14 +40,13 @@ const VesselSidebar = () => {
     useEffect(() => {
         if (vesselState.selectedVessel) {
             setVessel(vesselState.selectedVessel)
-            dispatch(setSearchVesselWhileVesselSelected(false))
         }
     }, [vesselState.selectedVessel])
 
     return (
         <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
             {
-                <GrayOverlay isOverlayed={searchVesselWhileVesselSelected && !firstUpdate.current}/>
+                <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
             }
             {
                 vessel && !vesselState.loadingVessel ? (vessel.internalReferenceNumber ||

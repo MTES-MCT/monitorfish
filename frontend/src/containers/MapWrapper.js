@@ -28,6 +28,7 @@ import {updateVesselFeatureAndIdentity} from "../domain/reducers/Vessel";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
 import LayerDetailsBox from "../components/LayerDetailsBox";
 import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
+import Point from "ol/geom/Point";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
@@ -239,6 +240,27 @@ const MapWrapper = () => {
 
         map.getLayers().remove(layerToRemove)
     }
+
+    useEffect(() => {
+        if(vessel.selectedVessel && vessel.selectedVessel.positions && vessel.selectedVessel.positions.length) {
+            const vesselsLayer = map.getLayers().getArray()
+                .find(layer => layer.className_ === LayersEnum.VESSELS)
+
+            const featureToModify = vesselsLayer.getSource().getFeatures().find(feature => {
+                const properties = feature.getProperties()
+                return properties.externalReferenceNumber === vessel.selectedVessel.externalReferenceNumber &&
+                    properties.internalReferenceNumber === vessel.selectedVessel.internalReferenceNumber &&
+                    properties.ircs === vessel.selectedVessel.ircs
+            })
+
+            if(featureToModify) {
+                const lastPosition = vessel.selectedVessel.positions[vessel.selectedVessel.positions.length - 1]
+                const newCoordinates = new transform([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+
+                featureToModify.setGeometry(new Point(newCoordinates))
+            }
+        }
+    }, [vessel.selectedVessel])
 
     useEffect(() => {
         if (map && vessel.selectedVesselTrackVector) {

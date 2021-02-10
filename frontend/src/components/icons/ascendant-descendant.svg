@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16.061" height="14.121" viewBox="0 0 16.061 14.121">
+  <g id="Tri_ascendant_descendant" data-name="Tri ascendant/descendant" transform="translate(0.53 1.061)">
+    <g id="Groupe_123" data-name="Groupe 123" transform="translate(-2886.053 -208.831)">
+      <path id="Tracé_88" data-name="Tracé 88" d="M2886.053,212.331l3.5-3.5,3.5,3.5" fill="none" stroke="#969696" stroke-miterlimit="10" stroke-width="1.5"/>
+      <line id="Ligne_363" data-name="Ligne 363" y2="12" transform="translate(2889.553 208.831)" fill="none" stroke="#969696" stroke-miterlimit="10" stroke-width="1.5"/>
+    </g>
+    <g id="Groupe_124" data-name="Groupe 124" transform="translate(2901.053 220.831) rotate(180)">
+      <path id="Tracé_88-2" data-name="Tracé 88" d="M2886.053,212.331l3.5-3.5,3.5,3.5" fill="none" stroke="#E0E0E0" stroke-miterlimit="10" stroke-width="1.5"/>
+      <line id="Ligne_363-2" data-name="Ligne 363" y2="12" transform="translate(2889.553 208.831)" fill="none" stroke="#E0E0E0" stroke-miterlimit="10" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

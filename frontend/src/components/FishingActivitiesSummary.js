@@ -359,6 +359,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
+  background: ${COLORS.background};
 `
 
 const Fields = styled.table`

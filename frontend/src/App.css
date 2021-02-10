@@ -96,3 +96,8 @@ input:focus {
   background-color: #E0E0E0;
   color: rgb(81, 81, 81);
 }
+
+input:not([type]), [type="text"], [type="email"], [type="number"], [type="search"], [type="password"], [type="url"], [type="tel"], [type="checkbox"], [type="radio"], textarea, select {
+  margin: 0;
+  padding: 0;
+}

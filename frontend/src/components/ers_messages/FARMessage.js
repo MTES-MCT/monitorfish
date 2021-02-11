@@ -1,27 +1,23 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
-import {getDateTime, getCoordinates} from "../../utils";
+import {getCoordinates, getDateTime} from "../../utils";
 import {WSG84_PROJECTION} from "../../domain/entities/map";
 import FARMessageSpecies from "./FARMessageSpecies";
+import {buildCatchArray} from "../../domain/entities/ERS";
 
 const FARMessage = props => {
+    const [catches, setCatches] = useState([])
 
-    const getGearName = message => {
-        if (message.gear && message.gearName) {
-            return <>
-                <Gear title={`${message.gearName} (${message.gear})`}>{message.gearName} ({message.gear})</Gear>
-                { message.mesh ? <><InlineKey>Taille</InlineKey> {message.mesh} mm</> : null }
-                </>
-        } else if(message.gear) {
-            return <>
-                <Gear title={`${message.gear}`}>{message.gear}</Gear>
-                { message.mesh ? <><InlineKey>Taille</InlineKey> {message.mesh} mm</> : null }
-                </>
+    useEffect(() => {
+        if (props.message && props.message.catches) {
+            let catches = buildCatchArray(props.message.catches)
+
+            setCatches(catches)
+        } else {
+            setCatches([])
         }
-
-        return <NoValue>-</NoValue>
-    }
+    }, [props.message])
 
     return <>
         { props.message ?
@@ -30,8 +26,8 @@ const FARMessage = props => {
                     <Fields>
                         <TableBody>
                             <Field>
-                                <Key>Date de capture</Key>
-                                <Value>{props.message.farDatetimeUtc ? <>{getDateTime(props.message.farDatetimeUtc, true)}</> : <NoValue>-</NoValue>}</Value>
+                                <Key>Date opération</Key>
+                                <Value>{props.message.farDatetimeUtc ? <>{getDateTime(props.message.farDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
                                 <Key>Position opération</Key>
@@ -44,21 +40,40 @@ const FARMessage = props => {
                                     <NoValue>-</NoValue>}
                                 </Value>
                             </Field>
-                            <Field>
-                                <Key>Engins à bord</Key>
-                                <Value>{getGearName(props.message)}</Value>
-                            </Field>
                         </TableBody>
                     </Fields>
+                    {
+                        props.message.gear ?
+                            <Gear>
+                                <SubKey>Engin à bord</SubKey>{' '}
+                                <SubValue>
+                                    {
+                                        props.message.gearName ?
+                                            <>{props.message.gearName} ({props.message.gear})</> : props.message.gear
+                                    }
+                                </SubValue><br/>
+                                <SubFields>
+                                    <SubField>
+                                        <SubKey>Maillage</SubKey>
+                                        <SubValue>{props.message.mesh ? <>{props.message.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
+                                    </SubField>
+                                    <SubField>
+                                        <SubKey>Dimensions</SubKey>
+                                        <SubValue>{props.message.size ? <>{props.message.size}</> : <NoValue>-</NoValue>}</SubValue>
+                                    </SubField>
+                                </SubFields>
+                            </Gear> : null
+                    }
                 </Zone>
                 <SpeciesList>
                     {
-                        props.message.catches.map((speciesCatch, index) => {
+                        catches.map((speciesCatch, index) => {
                             return <FARMessageSpecies
                                 index={index + 1}
-                                isLast={props.message.catches.length === index + 1}
+                                hasManyProperties={speciesCatch.properties.length > 1}
+                                isLast={catches.length === index + 1}
                                 species={speciesCatch}
-                                key={speciesCatch.species}
+                                key={'FAR' + speciesCatch.species}
                             />
                         })
                     }
@@ -67,7 +82,36 @@ const FARMessage = props => {
     </>
 }
 
-const Gear = styled.span`
+const Gray = styled.span`
+  color: ${COLORS.grayDarkerThree};
+  font-weight: 300;
+`
+
+const SubFields = styled.div`
+  display: flex;
+`
+
+const SubField = styled.div`
+  flex: 1 1 0;
+`
+
+const Gear = styled.div`
+  margin: 0 5px 5px 5px;
+`
+
+const SubKey = styled.span`
+  font-size: 13px;
+  color: ${COLORS.textGray};
+  margin-right: 10px;
+`
+
+const SubValue = styled.span`
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
+  margin-right: 10px;
+`
+
+const GearName = styled.span`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;    

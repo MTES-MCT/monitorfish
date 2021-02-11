@@ -11,15 +11,15 @@ const animatedComponents = makeAnimated();
 
 const options = [
     { value: 'DEP', label: 'DEP' },
-    { value: 'FAR', label: 'FAR' },
-    { value: 'PNO', label: 'PNO' },
-    { value: 'LAN', label: 'LAN' },
-    { value: 'RTP', label: 'RTP' },
-    { value: 'EOF', label: 'EOF' },
     { value: 'COE', label: 'COE' },
     { value: 'COX', label: 'COX' },
+    { value: 'FAR', label: 'FAR' },
     { value: 'DIS', label: 'DIS' },
     { value: 'DIM', label: 'DIM' },
+    { value: 'EOF', label: 'EOF' },
+    { value: 'PNO', label: 'PNO' },
+    { value: 'RTP', label: 'RTP' },
+    { value: 'LAN', label: 'LAN' },
 ]
 
 const ERSMessages = props => {
@@ -60,7 +60,8 @@ const ERSMessages = props => {
         }),
         control: base => ({ ...base, minHeight: 26, fontSize: 13, borderRadius: 'unset', borderColor: COLORS.grayDarker }),
         option: base => ({ ...base, fontSize: 13 }),
-        menu: base => ({ ...base, margin: 0, padding: 0 }),
+        menu: base => ({ ...base, margin: 0, padding: 0, maxHeight: 360 }),
+        menuList: base => ({ ...base, maxHeight: 360 }),
         input: base => ({ padding: 0, margin: 0 }),
         clearIndicator: base => ({ ...base, padding: 1, width: 18 }),
         dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),

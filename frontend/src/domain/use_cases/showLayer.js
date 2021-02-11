@@ -66,22 +66,17 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
         }),
         loader: extent => {
             if (regulatoryZoneProperties) {
-                try {
-                    getRegulatoryZoneFromAPI(type, regulatoryZoneProperties).then(regulatoryZone => {
-                        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
-                        dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
-                        dispatch(pushLayerAndArea({
-                            name: `${type}:${regulatoryZoneProperties.layerName}:${regulatoryZoneProperties.zone}`,
-                            area: getArea(vectorSource.getExtent())
-                        }))
-                    }).catch(e => {
-                        vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
-                        vectorSource.removeLoadedExtent(extent);
-                    })
-                } catch (e) {
-                    console.error(e)
-                    dispatch(setError(e));
-                }
+                getRegulatoryZoneFromAPI(type, regulatoryZoneProperties).then(regulatoryZone => {
+                    vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
+                    dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
+                    dispatch(pushLayerAndArea({
+                        name: `${type}:${regulatoryZoneProperties.layerName}:${regulatoryZoneProperties.zone}`,
+                        area: getArea(vectorSource.getExtent())
+                    }))
+                }).catch(e => {
+                    vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
+                    vectorSource.removeLoadedExtent(extent);
+                })
             } else {
                 getAdministrativeZoneFromAPI(type, extent).then(administrativeZone => {
                     vectorSource.addFeatures(vectorSource.getFormat().readFeatures(administrativeZone))

@@ -10,7 +10,7 @@ const getAllGearCodes = () => dispatch => {
 
         let categories = [...new Set(gears.map(gear => gear.category))]
         let categoriesToGears = {}
-        categories.map(category => {
+        categories.forEach(category => {
             categoriesToGears[category] = gears.filter(gear => gear.category === category)
         })
         dispatch(setCategoriesToGears(categoriesToGears))

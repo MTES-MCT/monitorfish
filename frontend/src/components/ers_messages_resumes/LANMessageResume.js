@@ -2,9 +2,8 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
 import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import SpeciesAndWeightChart from "../SpeciesAndWeightChart";
 import {getDateTime} from "../../utils";
-import {ERSMessagePNOPurposeType, ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
 
 const LANMessageResume = props => {
     const [isOpen, setIsOpen] = useState(false)
@@ -118,7 +117,7 @@ const Weight = styled.div`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.grayDarkerThree};
   font-weight: 300;
   font-size: 13px;
   text-align: center;

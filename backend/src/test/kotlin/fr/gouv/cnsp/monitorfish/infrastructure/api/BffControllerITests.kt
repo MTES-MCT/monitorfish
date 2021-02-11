@@ -166,6 +166,7 @@ class BffControllerITests {
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(3)))
                 .andExpect(jsonPath("$[0].messageType", equalTo("DEP")))
+                .andExpect(jsonPath("$[0].tripNumber", equalTo(345)))
                 .andExpect(jsonPath("$[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
 

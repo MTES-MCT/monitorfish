@@ -35,11 +35,7 @@ const VesselsSearchBox = () => {
         function handleClickOutside(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
                 dispatch(focusOnVesselSearch())
-                if(selectedVessel) {
-                    setSearchText('')
-                } else {
-                    setSearchText('')
-                }
+                setSearchText('')
             }
         }
 

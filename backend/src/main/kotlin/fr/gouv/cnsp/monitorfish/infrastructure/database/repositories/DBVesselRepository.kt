@@ -14,5 +14,5 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Long> {
     fun searchBy(@Param("searched") searched: String): List<VesselEntity>
     fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselEntity
     fun findByExternalReferenceNumberIgnoreCaseContaining(externalReferenceNumber: String): VesselEntity
-    fun findByIRCS(IRCS: String): VesselEntity
+    fun findByIrcs(ircs: String): VesselEntity
 }

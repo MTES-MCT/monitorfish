@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository
 import javax.persistence.Tuple
 
 interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
-    fun findAllByMMSI(MMSI: String): List<PositionEntity>
+    fun findAllByMmsi(mmsi: String): List<PositionEntity>
 
     @Query(value = "select distinct " +
             "p.internal_reference_number, " +
@@ -78,5 +78,5 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "order by p.date_time DESC " +
             "limit 12",
             nativeQuery = true)
-    fun findLastByIRCS(IRCS: String): List<PositionEntity>
+    fun findLastByIrcs(ircs: String): List<PositionEntity>
 }

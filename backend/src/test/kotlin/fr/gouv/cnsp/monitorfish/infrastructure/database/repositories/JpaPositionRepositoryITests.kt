@@ -43,7 +43,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         val positions = jpaPositionRepository.findAll()
 
         val sameMMSIPositions = positions.filter {
-            it.MMSI == "224136470"
+            it.mmsi == "224136470"
         }
         assertThat(sameMMSIPositions).hasSize(1)
         assertThat(positions).hasSize(31776)

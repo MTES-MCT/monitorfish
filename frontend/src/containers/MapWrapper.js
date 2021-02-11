@@ -418,9 +418,9 @@ const MapWrapper = () => {
                 addVesselNameToAllFeatures(extent);
             } else if (layer.layers && mapState.vesselNamesShowedOnMap
                 && mapState.vesselNamesHiddenByZoom && isVesselNameMaximumZoom()) {
-                removeVesselNameToAllFeatures(extent);
+                removeVesselNameToAllFeatures();
             } else if (layer.layers && !mapState.vesselNamesShowedOnMap) {
-                removeVesselNameToAllFeatures(extent);
+                removeVesselNameToAllFeatures();
             }
         }
     }, [mapState.vesselNamesShowedOnMap, map, mapState.vesselNamesHiddenByZoom, mapState.isMoving])

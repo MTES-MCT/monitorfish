@@ -39,11 +39,11 @@ object TestUtils {
         pno.port = "AEJAZ"
 
         return listOf(
-                ERSMessage(operationNumber = "", ersId = "", operationType = ERSOperationType.DAT, messageType = "DEP",
+                ERSMessage(operationNumber = "", tripNumber = 345, ersId = "", operationType = ERSOperationType.DAT, messageType = "DEP",
                         message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24)),
-                ERSMessage(operationNumber = "", ersId = "", operationType = ERSOperationType.DAT, messageType = "FAR",
+                ERSMessage(operationNumber = "", tripNumber = 345, ersId = "", operationType = ERSOperationType.DAT, messageType = "FAR",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(operationNumber = "", ersId = "", operationType = ERSOperationType.DAT, messageType = "PNO",
+                ERSMessage(operationNumber = "", tripNumber = 345, ersId = "", operationType = ERSOperationType.DAT, messageType = "PNO",
                         message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0)))
     }
 }

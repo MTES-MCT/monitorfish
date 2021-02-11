@@ -10,6 +10,8 @@ data class ERSMessageEntity(
         @Id
         @Column(name = "operation_number")
         val operationNumber: String,
+        @Column(name = "trip_number")
+        val tripNumber: Int? = null,
         @Column(name = "operation_country")
         val operationCountry: String? = null,
         @Column(name = "operation_datetime_utc")
@@ -19,7 +21,7 @@ data class ERSMessageEntity(
         val operationType: ERSOperationType,
         @Column(name = "ers_id")
         val ersId: String,
-        @Column(name = "ers_id_to_delete_or_correct")
+        @Column(name = "referenced_ers_id")
         val ersIdToDeleteOrCorrect: String? = null,
         @Column(name = "ers_datetime_utc")
         val ersDateTime: Instant? = null,
@@ -37,8 +39,6 @@ data class ERSMessageEntity(
         val imo: String? = null,
         @Column(name = "xml_message")
         val rawMessage: String? = null,
-        @Column(name = "raw_integration_datetime_utc")
-        val rawIntegrationDateTime: Instant? = null,
-        @Column(name = "parsed_integration_datetime_utc")
+        @Column(name = "integration_datetime_utc")
         val parsedIntegrationDateTime: Instant? = null)
 

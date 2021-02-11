@@ -112,7 +112,7 @@ const ERSMessage = props => {
                         </ReceptionDateTime>
                         <VoyageNumber>
                             <Key>N° de marée</Key><br/>
-                            12516165
+                            { props.message.tripNumber ? props.message.tripNumber : <Gray>-</Gray> }
                         </VoyageNumber>
                     </ERSMessageMetadata>
                     {getERSMessage(props.message)}
@@ -121,6 +121,11 @@ const ERSMessage = props => {
              : null }
     </>
 }
+
+const Gray = styled.span`
+  color: ${COLORS.grayDarkerThree};
+  font-weight: 300;
+`
 
 const Key = styled.span`
   color: ${COLORS.textGray};
@@ -177,11 +182,6 @@ const Header = styled.div`
   padding: 0 0 0 10px;
   background: ${COLORS.grayDarkerThree};
   display: flex;
-`
-
-const Gray = styled.span`
-  color: ${COLORS.grayDarker};
-  font-weight: 300;
 `
 
 const ERSMessageHeaderText = styled.span`

@@ -68,10 +68,10 @@ class BffControllerITests {
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
-                .andExpect(jsonPath("$[0].mmsi", equalTo(position.MMSI)))
+                .andExpect(jsonPath("$[0].mmsi", equalTo(position.mmsi)))
                 .andExpect(jsonPath("$[0].externalReferenceNumber", equalTo(position.externalReferenceNumber)))
                 .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo(position.internalReferenceNumber)))
-                .andExpect(jsonPath("$[0].ircs", equalTo(position.IRCS)))
+                .andExpect(jsonPath("$[0].ircs", equalTo(position.ircs)))
                 .andExpect(jsonPath("$[0].flagState", equalTo(position.flagState)))
                 .andExpect(jsonPath("$[0].latitude", equalTo(position.latitude)))
                 .andExpect(jsonPath("$[0].longitude", equalTo(position.longitude)))

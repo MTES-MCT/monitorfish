@@ -55,7 +55,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         jpaLastPositionRepository.upsert(positionWithoutInternalReferenceNumber)
         val lastPositions = jpaLastPositionRepository.findAll()
 
-        val position = lastPositions.find { it.MMSI == "TEST" }
+        val position = lastPositions.find { it.mmsi == "TEST" }
         assertThat(position).isNotNull
         // Then
         // Size of test data is 2886

@@ -5,6 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.helpers.degreeMinuteToDecimal
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
@@ -12,6 +14,8 @@ import java.time.format.DateTimeFormatter
 import kotlin.properties.Delegates
 
 class NAFMessageMapper(private val naf: String) {
+
+    private val logger: Logger = LoggerFactory.getLogger(NAFMessageMapper::class.java)
 
     private lateinit var dateTime: ZonedDateTime
     private var from: CountryCode? = null
@@ -21,7 +25,7 @@ class NAFMessageMapper(private val naf: String) {
     private var flagState: CountryCode? = null
     private var vesselName: String? = null
     private var internalReferenceNumber: String? = null
-    private var IRCS: String? = null
+    private var ircs: String? = null
     private var externalReferenceNumber: String? = null
     private var latitude by Delegates.notNull<Double>()
     private var longitude by Delegates.notNull<Double>()
@@ -46,7 +50,7 @@ class NAFMessageMapper(private val naf: String) {
                         when (it) {
                             NAFCode.TYPE_OF_MESSAGE -> if (value != positionMessageType) throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
                             NAFCode.INTERNAL_REFERENCE_NUMBER -> this.internalReferenceNumber = value
-                            NAFCode.RADIO_CALL_SIGN -> this.IRCS = value
+                            NAFCode.RADIO_CALL_SIGN -> this.ircs = value
                             NAFCode.VESSEL_NAME -> this.vesselName = value
                             NAFCode.EXTERNAL_REFERENCE_NUMBER -> this.externalReferenceNumber = value
                             NAFCode.FLAG -> this.flagState = getCountryOrThrowIfCountryNotFound(value)
@@ -70,7 +74,7 @@ class NAFMessageMapper(private val naf: String) {
                             NAFCode.SPEED -> this.speed = value.toDouble().div(10)
                             NAFCode.COURSE -> this.course = value.toDouble()
                             else -> {
-                                // TODO : Log
+                                logger.debug("VMS parsing: NAF code \"$it\" of value \"$value\" not handled")
                             }
                         }
                     } catch (e: NumberFormatException) {
@@ -125,7 +129,7 @@ class NAFMessageMapper(private val naf: String) {
     fun toPosition(): Position {
         return Position(
                 internalReferenceNumber = internalReferenceNumber,
-                IRCS = IRCS,
+                ircs = ircs,
                 externalReferenceNumber = externalReferenceNumber,
                 dateTime = dateTime,
                 latitude = latitude,

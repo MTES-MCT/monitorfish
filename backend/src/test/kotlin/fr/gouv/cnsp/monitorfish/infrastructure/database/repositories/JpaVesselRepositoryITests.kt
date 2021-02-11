@@ -31,8 +31,8 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
         assertThat(vessel.internalReferenceNumber).isNull()
         assertThat(vessel.externalReferenceNumber).isNull()
-        assertThat(vessel.MMSI).isNull()
-        assertThat(vessel.IRCS).isNull()
+        assertThat(vessel.mmsi).isNull()
+        assertThat(vessel.ircs).isNull()
     }
 
     @Test

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
-import kotlin.time.measureTimedValue
 
 @Repository
 class JpaPositionRepository(@Autowired
@@ -22,7 +21,7 @@ class JpaPositionRepository(@Autowired
     }
 
     @Cacheable(value = ["vessel_track"])
-    override fun findVesselLastPositions(internalReferenceNumber: String, externalReferenceNumber: String, IRCS: String): List<Position> {
+    override fun findVesselLastPositions(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): List<Position> {
         if(internalReferenceNumber.isNotEmpty()) {
             return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber)
                     .map(PositionEntity::toPosition)
@@ -33,8 +32,8 @@ class JpaPositionRepository(@Autowired
                     .map(PositionEntity::toPosition)
         }
 
-        if(IRCS.isNotEmpty()) {
-            return dbPositionRepository.findLastByIRCS(IRCS)
+        if(ircs.isNotEmpty()) {
+            return dbPositionRepository.findLastByIrcs(ircs)
                     .map(PositionEntity::toPosition)
         }
 
@@ -47,8 +46,8 @@ class JpaPositionRepository(@Autowired
         dbPositionRepository.save(positionEntity)
     }
 
-    override fun findAllByMMSI(MMSI: String): List<Position> {
-        return dbPositionRepository.findAllByMMSI(MMSI)
+    override fun findAllByMMSI(mmsi: String): List<Position> {
+        return dbPositionRepository.findAllByMmsi(mmsi)
                 .map(PositionEntity::toPosition)
     }
 }

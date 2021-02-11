@@ -15,7 +15,7 @@ class JpaVesselRepository(@Autowired
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
 
     @Cacheable(value = ["vessel"])
-    override fun findVessel(internalReferenceNumber: String, externalReferenceNumber: String, IRCS: String): Vessel {
+    override fun findVessel(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): Vessel {
         if (internalReferenceNumber.isNotEmpty()) {
             try {
                 return dbVesselRepository.findByInternalReferenceNumber(internalReferenceNumber).toVessel()
@@ -32,9 +32,9 @@ class JpaVesselRepository(@Autowired
             }
         }
 
-        if (IRCS.isNotEmpty()) {
+        if (ircs.isNotEmpty()) {
             try {
-                return dbVesselRepository.findByIRCS(IRCS).toVessel()
+                return dbVesselRepository.findByIrcs(ircs).toVessel()
             } catch (e: EmptyResultDataAccessException) {
                 logger.warn("No vessel found for IRCS $externalReferenceNumber", e)
             }

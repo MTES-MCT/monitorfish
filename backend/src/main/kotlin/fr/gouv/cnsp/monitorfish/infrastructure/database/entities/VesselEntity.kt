@@ -24,11 +24,11 @@ data class VesselEntity(
         @Column(name = "cfr")
         val internalReferenceNumber: String? = null,
         @Column(name = "mmsi")
-        val MMSI: String? = null,
+        val mmsi: String? = null,
         @Column(name = "imo")
-        val IMO: String? = null,
+        val imo: String? = null,
         @Column(name = "ircs")
-        val IRCS: String? = null,
+        val ircs: String? = null,
         @Column(name = "external_immatriculation")
         val externalReferenceNumber: String? = null,
         @Column(name = "vessel_name")
@@ -85,8 +85,8 @@ data class VesselEntity(
 
     fun toVessel() = Vessel(
             internalReferenceNumber = internalReferenceNumber,
-            IRCS = IRCS,
-            MMSI = MMSI,
+            ircs = ircs,
+            mmsi = mmsi,
             externalReferenceNumber = externalReferenceNumber,
             vesselName = vesselName,
             flagState = flagState,
@@ -115,8 +115,8 @@ data class VesselEntity(
                 fun fromVessel(vessel: Vessel): VesselEntity {
                         return VesselEntity(
                                 internalReferenceNumber = vessel.internalReferenceNumber,
-                                IRCS = vessel.IRCS,
-                                MMSI = vessel.MMSI,
+                                ircs = vessel.ircs,
+                                mmsi = vessel.mmsi,
                                 externalReferenceNumber = vessel.externalReferenceNumber,
                                 vesselName = vessel.vesselName,
                                 flagState = vessel.flagState,

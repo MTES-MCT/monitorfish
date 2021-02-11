@@ -6,6 +6,7 @@ import java.time.ZonedDateTime
 class ERSMessage(
         val ersId: String,
         val operationNumber: String,
+        val tripNumber: Int,
         val ersIdToDeleteOrCorrect: String? = null,
         val operationType: ERSOperationType,
         val operationDateTime: ZonedDateTime? = null,

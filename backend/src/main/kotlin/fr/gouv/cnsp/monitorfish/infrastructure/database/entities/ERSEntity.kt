@@ -24,6 +24,8 @@ data class ERSEntity(
 
         @Column(name = "operation_number")
         val operationNumber: String,
+        @Column(name = "trip_number")
+        val tripNumber: Int,
         @Column(name = "operation_country")
         val operationCountry: String? = null,
         @Column(name = "operation_datetime_utc")
@@ -33,7 +35,7 @@ data class ERSEntity(
         val operationType: ERSOperationType,
         @Column(name = "ers_id")
         val ersId: String,
-        @Column(name = "ers_id_to_delete_or_correct")
+        @Column(name = "referenced_ers_id")
         val ersIdToDeleteOrCorrect: String? = null,
         @Column(name = "ers_datetime_utc")
         val ersDateTime: Instant? = null,
@@ -54,7 +56,7 @@ data class ERSEntity(
         @Type(type = "jsonb")
         @Column(name = "value", nullable = true, columnDefinition = "jsonb")
         val message: String? = null,
-        @Column(name = "parsed_integration_datetime_utc")
+        @Column(name = "integration_datetime_utc")
         val integrationDateTime: Instant? = null) {
 
         fun toERSMessage(mapper: ObjectMapper) = ERSMessage(
@@ -67,6 +69,7 @@ data class ERSEntity(
                 operationType = operationType,
                 ersId = ersId,
                 operationNumber = operationNumber,
+                tripNumber = tripNumber,
                 flagState = flagState,
                 imo = imo,
                 messageType = messageType,

@@ -6,9 +6,9 @@ import java.util.*
 
 data class Vessel(
         val internalReferenceNumber: String? = null,
-        val IMO: String? = null,
-        val MMSI: String? = null,
-        val IRCS: String? = null,
+        val imo: String? = null,
+        val mmsi: String? = null,
+        val ircs: String? = null,
         val externalReferenceNumber: String? = null,
         val vesselName: String? = null,
         val flagState: CountryCode? = null,

@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.mappers.NAFMessageMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -19,7 +18,7 @@ internal class NAFMessageMapperUTests {
 
         // Then
         assertThat(position.internalReferenceNumber).isEqualTo("GBROOC21250")
-        assertThat(position.IRCS).isEqualTo("MGXR6")
+        assertThat(position.ircs).isEqualTo("MGXR6")
         assertThat(position.dateTime).isEqualTo(ZonedDateTime.parse("2020-10-06T16:25Z"))
         assertThat(position.course).isEqualTo(8.0)
         assertThat(position.from).isEqualTo(CountryCode.GB)
@@ -46,7 +45,7 @@ internal class NAFMessageMapperUTests {
         // Then
         assertThat(position.vesselName).isEqualTo("GENGI")
         assertThat(position.internalReferenceNumber).isEqualTo("NLD201901153")
-        assertThat(position.IRCS).isEqualTo("PCVC")
+        assertThat(position.ircs).isEqualTo("PCVC")
         assertThat(position.dateTime).isEqualTo(ZonedDateTime.parse("2020-10-06T21:26Z"))
         assertThat(position.course).isEqualTo(173.0)
         assertThat(position.from).isEqualTo(CountryCode.NL)
@@ -72,7 +71,7 @@ internal class NAFMessageMapperUTests {
         // Then
         assertThat(position.vesselName).isEqualTo("Ship1007")
         assertThat(position.internalReferenceNumber).isEqualTo("SWE0000F1007")
-        assertThat(position.IRCS).isEqualTo("F1007")
+        assertThat(position.ircs).isEqualTo("F1007")
         assertThat(position.dateTime).isEqualTo(ZonedDateTime.parse("2017-08-17T05:00Z"))
         assertThat(position.course).isEqualTo(190.0)
         assertThat(position.from).isEqualTo(CountryCode.SE)

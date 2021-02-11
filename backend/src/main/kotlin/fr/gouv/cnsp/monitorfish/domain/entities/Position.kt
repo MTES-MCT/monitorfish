@@ -11,9 +11,9 @@ data class Position(
         // country code followed by the vessel registration number as recorded in the national fleet register
         val internalReferenceNumber: String ? = null,
         // Maritime Mobile Service Identity (MMSI)
-        val MMSI: String? = null,
+        val mmsi: String? = null,
         // International Radio Call Sign of the vessel (IRCS)
-        val IRCS: String? = null,
+        val ircs: String? = null,
         // i.e side number, registration number, IMO number or any other external marking identifying the vessel
         val externalReferenceNumber: String? = null,
         val vesselName: String? = null,

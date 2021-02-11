@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.DEP
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.EOF
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.FAR
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.PNO
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -98,71 +95,85 @@ class JpaERSRepositoryITests : AbstractDBTests() {
                 .findAllMessagesAfterDepartureDate(lastDepartureDate, "GBR000B14430", "", "")
 
         // Then
-        assertThat(messages).hasSize(6)
+        assertThat(messages).hasSize(10)
 
-        // Message FAR #1
-        assertThat(messages[0].message).isInstanceOf(FAR::class.java)
-        val farMessageOne = messages[0].message as FAR
-        assertThat(farMessageOne.gear).isEqualTo("GTN")
-        assertThat(farMessageOne.mesh).isEqualTo(100.0)
-        assertThat(farMessageOne.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
-        assertThat(farMessageOne.catches).hasSize(3)
-        assertThat(farMessageOne.catches.first().weight).isEqualTo(2.0)
-        assertThat(farMessageOne.catches.first().numberFish).isEqualTo(null)
-        assertThat(farMessageOne.catches.first().species).isEqualTo("SCL")
-        assertThat(farMessageOne.catches.first().faoZone).isEqualTo("27.8.a")
-        assertThat(farMessageOne.catches.first().effortZone).isEqualTo("C")
-        assertThat(farMessageOne.catches.first().economicZone).isEqualTo("FRA")
-        assertThat(farMessageOne.catches.first().statisticalRectangle).isEqualTo("23E6")
+        assertThat(messages[0].message).isInstanceOf(LAN::class.java)
+        val lanMessage = messages[0].message as LAN
+        assertThat(lanMessage.port).isEqualTo("AEAJM")
+        assertThat(lanMessage.catchLanded).hasSize(5)
+        assertThat(lanMessage.landingDateTime.toString()).isEqualTo("2019-10-22T11:06Z[UTC]")
 
-        // Message EOF
-        assertThat(messages[1].message).isInstanceOf(EOF::class.java)
-        val eofMessage = messages[1].message as EOF
-        assertThat(eofMessage.endOfFishingDateTime.toString()).isEqualTo("2019-12-03T12:16:00Z")
+        assertThat(messages[1].message).isInstanceOf(RTP::class.java)
+        val rtpMessage = messages[1].message as RTP
+        assertThat(rtpMessage.dateTime).isEqualTo("2019-10-21T11:12:00Z[UTC]")
 
-        // Message FAR #2
-        assertThat(messages[2].message).isInstanceOf(FAR::class.java)
-        val farMessageTwo = messages[2].message as FAR
-        assertThat(farMessageTwo.gear).isEqualTo("GTN")
-        assertThat(farMessageTwo.mesh).isEqualTo(100.0)
-        assertThat(farMessageTwo.catchDateTime.toString()).isEqualTo("2019-01-26T11:24:00Z")
-        assertThat(farMessageTwo.catches).hasSize(3)
-        assertThat(farMessageTwo.catches.first().weight).isEqualTo(15.0)
-        assertThat(farMessageTwo.catches.first().numberFish).isEqualTo(null)
-        assertThat(farMessageTwo.catches.first().species).isEqualTo("BON")
-        assertThat(farMessageTwo.catches.first().faoZone).isEqualTo("27.8.a")
-        assertThat(farMessageTwo.catches.first().effortZone).isEqualTo("C")
-        assertThat(farMessageTwo.catches.first().economicZone).isEqualTo("FRA")
-        assertThat(farMessageTwo.catches.first().statisticalRectangle).isEqualTo("23E6")
-
-        // Message COX
-        assertThat(messages[3].messageType).isEqualTo("COX")
-        assertThat(messages[3].message).isNull()
-
-        // Message PNO
-        assertThat(messages[4].message).isInstanceOf(PNO::class.java)
-        val pnoMessage = messages[4].message as PNO
+        assertThat(messages[2].message).isInstanceOf(PNO::class.java)
+        val pnoMessage = messages[2].message as PNO
         assertThat(pnoMessage.port).isEqualTo("AEJAZ")
         assertThat(pnoMessage.purpose).isEqualTo("LAN")
-        assertThat(pnoMessage.catchOnboard).hasSize(1)
-        assertThat(pnoMessage.catchOnboard.first().weight).isEqualTo(2.0)
+        assertThat(pnoMessage.catchOnboard).hasSize(4)
+        assertThat(pnoMessage.catchOnboard.first().weight).isEqualTo(20.0)
         assertThat(pnoMessage.catchOnboard.first().numberFish).isEqualTo(null)
-        assertThat(pnoMessage.catchOnboard.first().species).isEqualTo("SOL")
+        assertThat(pnoMessage.catchOnboard.first().species).isEqualTo("SLS")
         assertThat(pnoMessage.catchOnboard.first().faoZone).isEqualTo("27.8.a")
         assertThat(pnoMessage.catchOnboard.first().effortZone).isEqualTo("C")
         assertThat(pnoMessage.catchOnboard.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
         assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11")
-        assertThat(pnoMessage.predictedArrivalDateTime.toString()).isEqualTo("2019-10-11T12:15:00Z")
+        assertThat(pnoMessage.predictedArrivalDateTime.toString()).isEqualTo("2019-10-21T08:16Z[UTC]")
 
-        // Message DEP
-        assertThat(messages[5].message).isInstanceOf(DEP::class.java)
-        val depMessage = messages[5].message as DEP
+        assertThat(messages[3].message).isInstanceOf(EOF::class.java)
+        val eofMessage = messages[3].message as EOF
+        assertThat(eofMessage.endOfFishingDateTime.toString()).isEqualTo("2019-10-20T12:16Z[UTC]")
+
+        assertThat(messages[4].message).isInstanceOf(DIS::class.java)
+        val disMessage = messages[4].message as DIS
+        assertThat(disMessage.catches).hasSize(2)
+        assertThat(disMessage.catches.first().weight).isEqualTo(5.0)
+        assertThat(disMessage.catches.first().numberFish).isEqualTo(1.0)
+        assertThat(disMessage.catches.first().species).isEqualTo("NEP")
+
+        assertThat(messages[5].message).isInstanceOf(FAR::class.java)
+        val farMessageOne = messages[5].message as FAR
+        assertThat(farMessageOne.gear).isEqualTo("GTN")
+        assertThat(farMessageOne.mesh).isEqualTo(100.0)
+        assertThat(farMessageOne.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z[UTC]")
+        assertThat(farMessageOne.catches).hasSize(4)
+        assertThat(farMessageOne.catches.first().weight).isEqualTo(1500.0)
+        assertThat(farMessageOne.catches.first().numberFish).isEqualTo(null)
+        assertThat(farMessageOne.catches.first().species).isEqualTo("BON")
+        assertThat(farMessageOne.catches.first().faoZone).isEqualTo("27.8.a")
+        assertThat(farMessageOne.catches.first().effortZone).isEqualTo("C")
+        assertThat(farMessageOne.catches.first().economicZone).isEqualTo("FRA")
+        assertThat(farMessageOne.catches.first().statisticalRectangle).isEqualTo("23E6")
+
+        assertThat(messages[6].messageType).isEqualTo("COE")
+        assertThat(messages[6].message).isNull()
+
+        assertThat(messages[7].message).isInstanceOf(FAR::class.java)
+        val farMessageTwo = messages[7].message as FAR
+        assertThat(farMessageTwo.gear).isEqualTo("GTN")
+        assertThat(farMessageTwo.mesh).isEqualTo(100.0)
+        assertThat(farMessageTwo.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
+        assertThat(farMessageTwo.catches).hasSize(4)
+        assertThat(farMessageTwo.catches.first().weight).isEqualTo(20.0)
+        assertThat(farMessageTwo.catches.first().numberFish).isEqualTo(null)
+        assertThat(farMessageTwo.catches.first().species).isEqualTo("SLS")
+        assertThat(farMessageTwo.catches.first().faoZone).isEqualTo("27.8.a")
+        assertThat(farMessageTwo.catches.first().effortZone).isEqualTo("C")
+        assertThat(farMessageTwo.catches.first().economicZone).isEqualTo("FRA")
+        assertThat(farMessageTwo.catches.first().statisticalRectangle).isEqualTo("23E6")
+
+        assertThat(messages[8].messageType).isEqualTo("COX")
+        assertThat(messages[8].message).isNull()
+
+        assertThat(messages[9].message).isInstanceOf(DEP::class.java)
+        val depMessage = messages[9].message as DEP
         assertThat(depMessage.gearOnboard).hasSize(1)
         assertThat(depMessage.gearOnboard.first().gear).isEqualTo("GTN")
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
         assertThat(depMessage.departurePort).isEqualTo("AEJAZ")
         assertThat(depMessage.anticipatedActivity).isEqualTo("FSH")
-        assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40:00Z")
+        assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
     }
 }

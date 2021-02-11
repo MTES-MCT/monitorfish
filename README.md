@@ -17,6 +17,7 @@ Backend:
 - Spring Boot
 - Flyway (database migration)
 - PostgreSQL with PostGIS/TimescaleDB
+- Tomcat (version 9.0.37)
 
 ## Install
 

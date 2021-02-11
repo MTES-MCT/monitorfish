@@ -6,6 +6,10 @@ import {ReactComponent as XMLSVG} from '../icons/Picto_XML.svg'
 import {getDateTime} from "../../utils";
 import DEPMessage from "./DEPMessage";
 import FARMessage from "./FARMessage";
+import EOFMessage from "./EOFMessage";
+import PNOMessage from "./PNOMessage";
+import RTPMessage from "./RTPMessage";
+import LANMessage from "./LANMessage";
 
 const ERSMessage = props => {
     const getERSMessageHeaderTitle = message => {
@@ -22,14 +26,26 @@ const ERSMessage = props => {
             case ERSMessageTypeEnum.FAR.code.toString(): {
                 return 'Déclaration de capture'
             }
+            case ERSMessageTypeEnum.COE.code.toString(): {
+                return 'Entrée dans une zone d\'effort'
+            }
+            case ERSMessageTypeEnum.COX.code.toString(): {
+                return 'Sortie d\'une zone d\'effort'
+            }
+            case ERSMessageTypeEnum.CRO.code.toString(): {
+                return 'Traversée d\'une zone d\'effort'
+            }
             case ERSMessageTypeEnum.DIS.code.toString(): {
                 return 'Déclaration de rejets'
             }
             case ERSMessageTypeEnum.EOF.code.toString(): {
-                return 'Fin de la marée'
+                return 'Fin de pêche'
             }
             case ERSMessageTypeEnum.RTP.code.toString(): {
                 return 'Retour au port'
+            }
+            case ERSMessageTypeEnum.LAN.code.toString(): {
+                return 'Débarquement'
             }
         }
     }
@@ -53,6 +69,18 @@ const ERSMessage = props => {
             }
             case ERSMessageTypeEnum.FAR.code.toString(): {
                 return <FARMessage message={ersMessage.message} />
+            }
+            case ERSMessageTypeEnum.EOF.code.toString(): {
+                return <EOFMessage message={ersMessage.message} />
+            }
+            case ERSMessageTypeEnum.PNO.code.toString(): {
+                return <PNOMessage message={ersMessage.message} />
+            }
+            case ERSMessageTypeEnum.RTP.code.toString(): {
+                return <RTPMessage message={ersMessage.message} />
+            }
+            case ERSMessageTypeEnum.LAN.code.toString(): {
+                return <LANMessage message={ersMessage.message} />
             }
         }
     }

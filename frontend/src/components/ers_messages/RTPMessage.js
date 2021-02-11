@@ -2,15 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
 import {getDateTime} from "../../utils";
-import {ERSMessageActivityType} from "../../domain/entities/ERS";
+import {ERSMessagePNOPurposeType} from "../../domain/entities/ERS";
 
-const DEPMessage = props => {
+const RTPMessage = props => {
 
     const getPortName = message => {
-        if (message.departurePortName && message.departurePort) {
-            return <>{message.departurePortName} ({message.departurePort})</>
-        } else if(message.departurePort) {
-            return <>{message.departurePort}</>
+        if (message.portName && message.port) {
+            return <>{message.portName} ({message.port})</>
+        } else if(message.port) {
+            return <>{message.port}</>
         }
 
         return <NoValue>-</NoValue>
@@ -23,16 +23,16 @@ const DEPMessage = props => {
                     <Fields>
                         <TableBody>
                             <Field>
-                                <Key>Date de départ</Key>
-                                <Value>{props.message.departureDatetimeUtc ? <>{getDateTime(props.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
+                                <Key>Date de retour</Key>
+                                <Value>{props.message.returnDatetimeUtc ? <>{getDateTime(props.message.returnDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
-                                <Key>Port de départ</Key>
+                                <Key>Port d'arrivée</Key>
                                 <Value>{getPortName(props.message)}</Value>
                             </Field>
                             <Field>
-                                <Key>Activité prévue</Key>
-                                <Value>{props.message.anticipatedActivity ? <>{ERSMessageActivityType[props.message.anticipatedActivity]} ({props.message.anticipatedActivity})</> : <NoValue>-</NoValue>}</Value>
+                                <Key>Raison du retour</Key>
+                                <Value>{props.message.reasonOfReturn ? <>{ERSMessagePNOPurposeType[props.message.reasonOfReturn]} ({props.message.reasonOfReturn})</> : <NoValue>-</NoValue>}</Value>
                             </Field>
                         </TableBody>
                     </Fields>
@@ -61,28 +61,14 @@ const DEPMessage = props => {
                             </Gear>
                         }) : <NoValue>-</NoValue>}
                 </Zone>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Captures à bord</Key>
-                                <Value>{props.message.speciesOnboard && props.message.speciesOnboard.length ?
-                                    props.message.speciesOnboard.map(speciesCatch => {
-                                        return <span key={speciesCatch.species}>
-                                        {
-                                            speciesCatch.speciesName ?
-                                                <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
-                                        }
-                                            {''} - {speciesCatch.weight} kg<br/>
-                                    </span>
-                                    }) : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
             </> : null }
     </>
 }
+
+const Gray = styled.span`
+  color: ${COLORS.grayDarkerThree};
+  font-weight: 300;
+`
 
 const SubFields = styled.div`
   display: flex;
@@ -172,9 +158,4 @@ const NoValue = styled.span`
   display: inline-block;
 `
 
-const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
-  font-weight: 300;
-`
-
-export default DEPMessage
+export default RTPMessage

@@ -1,8 +1,8 @@
-from datetime import datetime
-import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import ParseError
-from typing import Union
 import logging
+import xml.etree.ElementTree as ET
+from datetime import datetime
+from typing import Union
+from xml.etree.ElementTree import ParseError
 
 NS = {"ers": "http://ec.europa.eu/fisheries/schema/ers/v3"}
 
@@ -86,8 +86,8 @@ def get_first_child(xml_element, assert_child_single=True):
     return children[0]
 
 
-def make_datetime(date:str, time:Union[str, None]=None):
-    """Takes date a "2020-12-24" string and, optionnally, a time "16:49" string, 
+def make_datetime(date: str, time: Union[str, None] = None):
+    """Takes date a "2020-12-24" string and, optionnally, a time "16:49" string,
     Returns a datetime object"""
     datetime_string = date
     datetime_format = "%Y-%m-%d"
@@ -103,19 +103,19 @@ def make_datetime(date:str, time:Union[str, None]=None):
             res = None
     else:
         res = None
-    
+
     return res
 
 
-def make_datetime_json_serializable(date:str, time:Union[str, None]=None):
+def make_datetime_json_serializable(date: str, time: Union[str, None] = None):
     dt = make_datetime(date, time)
     if dt:
-        return dt.isoformat()+"Z"
+        return dt.isoformat() + "Z"
     else:
         return None
 
 
-def try_float(s:str):
+def try_float(s: str):
     try:
         return float(s)
     except:
@@ -126,11 +126,11 @@ def tagged_children(el):
     children = list(el)
     res = {}
 
-    for child in children :
+    for child in children:
         tag = remove_namespace(child.tag)
         if tag in res:
             res[tag].append(child)
         else:
             res[tag] = [child]
-    
+
     return res

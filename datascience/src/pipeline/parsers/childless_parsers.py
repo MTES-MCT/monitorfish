@@ -1,4 +1,4 @@
-from src.utils.ers import try_float, tagged_children
+from src.utils.ers import tagged_children, try_float
 
 
 def parse_ras(ras):
@@ -29,7 +29,7 @@ def parse_pro(pro):
         "packaging": pro.get("TY"),
         "freshness": pro.get("FF"),
         "preservationState": pro.get("PS"),
-        "conversionFactor": try_float(pro.get("CF"))
+        "conversionFactor": try_float(pro.get("CF")),
     }
     return data
 
@@ -64,6 +64,10 @@ def parse_pos(pos):
 
 def parse_gea(gea):
 
-    data = {"gear": gea.get("GE"), "mesh": try_float(gea.get("ME")), "dimensions": try_float(gea.get("GC"))}
+    data = {
+        "gear": gea.get("GE"),
+        "mesh": try_float(gea.get("ME")),
+        "dimensions": try_float(gea.get("GC")),
+    }
 
     return data

@@ -1,6 +1,7 @@
 import pandas as pd
 from prefect import Flow, task
-from sqlalchemy import MetaData, Integer, String
+from sqlalchemy import Integer, MetaData, String
+
 from src.db_config import create_engine
 from src.read_query import read_saved_query
 from src.utils.database import psql_insert_copy

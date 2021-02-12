@@ -1,16 +1,17 @@
 import xml
 
-from src.utils.ers import (try_float, 
-                           tagged_children, 
-                           make_datetime_json_serializable, 
-                           get_root_tag)
-
 from src.pipeline.parsers.childless_parsers import (
-    parse_ras,
-    parse_pro,
-    parse_spe,
+    parse_gea,
     parse_pos,
-    parse_gea
+    parse_pro,
+    parse_ras,
+    parse_spe,
+)
+from src.utils.ers import (
+    get_root_tag,
+    make_datetime_json_serializable,
+    tagged_children,
+    try_float,
 )
 
 
@@ -81,9 +82,7 @@ def parse_dis(dis):
     time = dis.get("TI")
     discard_datetime_utc = make_datetime_json_serializable(date, time)
 
-    value = {
-        "discardDatetimeUtc": discard_datetime_utc
-    }
+    value = {"discardDatetimeUtc": discard_datetime_utc}
 
     children = tagged_children(dis)
 
@@ -91,10 +90,7 @@ def parse_dis(dis):
         catches = [parse_spe(spe) for spe in children["SPE"]]
         value["catches"] = catches
 
-    data = {
-        "log_type": "DIS",
-        "value": value
-    }
+    data = {"log_type": "DIS", "value": value}
 
     return data
 
@@ -108,7 +104,7 @@ def parse_coe(coe):
 
     value = {
         "effortZoneEntryDatetimeUtc": effort_zone_entry_datetime_utc,
-        "targetSpeciesOnEntry": coe.get("TS")
+        "targetSpeciesOnEntry": coe.get("TS"),
     }
 
     if "RAS" in children:
@@ -141,7 +137,7 @@ def parse_cox(cox):
 
     value = {
         "effortZoneExitDatetimeUtc": effort_zone_exit_datetime_utc,
-        "targetSpeciesOnExit": cox.get("TS")
+        "targetSpeciesOnExit": cox.get("TS"),
     }
 
     if "RAS" in children:
@@ -169,13 +165,13 @@ def parse_cro(cro):
     children = tagged_children(cro)
 
     value = {}
-    
+
     if "COE" in children:
         assert len(children["COE"]) == 1
         coe = children["COE"][0]
         coe_data = parse_coe(coe)
         value = coe_data["value"]
-        
+
     if "COX" in children:
         assert len(children["COX"]) == 1
         cox = children["COX"][0]
@@ -185,6 +181,7 @@ def parse_cro(cro):
 
     data = {"log_type": "CRO", "value": value}
     return data
+
 
 def parse_pno(pno):
     date = pno.get("PD")
@@ -233,19 +230,16 @@ def parse_lan(lan):
     value = {
         "landingDatetimeUtc": landing_datetime_utc,
         "port": lan.get("PO"),
-        "sender": lan.get("TS")
+        "sender": lan.get("TS"),
     }
-    
+
     children = tagged_children(lan)
 
     if "SPE" in children:
         catches = [parse_spe(spe) for spe in children["SPE"]]
         value["catchLanded"] = catches
 
-    data = {
-        "log_type": "LAN",
-        "value": value
-    }
+    data = {"log_type": "LAN", "value": value}
 
     return data
 
@@ -267,7 +261,7 @@ def parse_rtp(rtp):
     value = {
         "returnDatetimeUtc": return_datetime_utc,
         "port": rtp.get("PO"),
-        "reasonOfReturn": rtp.get("RE")
+        "reasonOfReturn": rtp.get("RE"),
     }
 
     children = tagged_children(rtp)
@@ -276,9 +270,6 @@ def parse_rtp(rtp):
         gear = [parse_gea(gea) for gea in children["GEA"]]
         value["gearOnboard"] = gear
 
-    data = {
-        "log_type": "RTP",
-        "value": value
-    }
+    data = {"log_type": "RTP", "value": value}
 
     return data

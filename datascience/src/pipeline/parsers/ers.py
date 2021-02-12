@@ -7,37 +7,37 @@ from functools import partial
 from typing import List, Union
 from xml.etree.ElementTree import ParseError
 
-import tqdm
 import pandas as pd
-
-from src.utils.ers import (
-    remove_namespace,
-    get_root_tag,
-    get_first_child,
-    make_datetime,
-    make_datetime_json_serializable,
-    try_float,
-    tagged_children,
-    xml_tag_structure_func_factory
-)
+import tqdm
 
 from src.pipeline.parsers.log_parsers import (
-    parse_dep,
-    parse_far,
-    parse_dis,
-    parse_pno,
-    parse_lan,
-    parse_eof,
-    parse_rtp, 
-    parse_coe, 
-    parse_cox, 
+    default_log_parser,
+    parse_coe,
+    parse_cox,
     parse_cro,
-    default_log_parser
+    parse_dep,
+    parse_dis,
+    parse_eof,
+    parse_far,
+    parse_lan,
+    parse_pno,
+    parse_rtp,
+)
+from src.utils.ers import (
+    get_first_child,
+    get_root_tag,
+    make_datetime,
+    make_datetime_json_serializable,
+    remove_namespace,
+    tagged_children,
+    try_float,
+    xml_tag_structure_func_factory,
 )
 
 
 class ERSParsingError(Exception):
     """Raised when an ERS message cannot be parsed."""
+
     pass
 
 
@@ -73,38 +73,29 @@ def parse_ops(ops):
 
 
 def parse_cor(cor):
-    metadata = {
-        'operation_type': 'COR',
-        'referenced_ers_id': cor.get('RN')
-        }
+    metadata = {"operation_type": "COR", "referenced_ers_id": cor.get("RN")}
     child = get_first_child(cor, assert_child_single=True)
     return metadata, child, None, None
 
 
 def parse_del(del_):
-    metadata = {
-        'operation_type': 'DEL',
-        'referenced_ers_id': del_.get('RN')
-        }
-    
+    metadata = {"operation_type": "DEL", "referenced_ers_id": del_.get("RN")}
+
     return metadata, None, None, {"value": None}
 
 
 def parse_ret(ret):
-    metadata = {
-        'operation_type': 'RET',
-        'referenced_ers_id': ret.get('ON')
-        }
-    
+    metadata = {"operation_type": "RET", "referenced_ers_id": ret.get("ON")}
+
     data = {
         "returnStatus": ret.get("RS"),
     }
-    
-    rejectionCause = ret.get("RE")
-    
-    if rejectionCause :
-        data["rejectionCause"] = rejectionCause
-    
+
+    rejection_cause = ret.get("RE")
+
+    if rejection_cause:
+        data["rejectionCause"] = rejection_cause
+
     return metadata, None, None, {"value": data}
 
 
@@ -117,7 +108,9 @@ def parse_ers(ers):
     metadata = {"ers_id": ers.get("RN"), "ers_datetime_utc": ers_datetime}
 
     children = list(ers)
-    child = get_first_child(children, )
+    child = get_first_child(
+        children,
+    )
 
     return metadata, child, None, None
 
@@ -131,14 +124,13 @@ def parse_log(log):
         "external_identification": log.get("XR"),
         "vessel_name": log.get("NA"),
         "flag_state": log.get("FS"),
-        "imo": log.get("IM")
+        "imo": log.get("IM"),
     }
-    
+
     elogs = [child for child in list(log) if remove_namespace(child.tag) == "ELOG"]
     if len(elogs) == 1:
         elog = elogs[0]
         metadata["trip_number"] = elog.get("TN")
-
 
     return metadata, None, logs, None
 
@@ -167,7 +159,7 @@ parsers = {
     "CRO": parse_cro,
     "TRZ": default_log_parser,
     "INS": default_log_parser,
-    "PNT": default_log_parser
+    "PNT": default_log_parser,
 }
 
 
@@ -176,11 +168,11 @@ def parse_(el):
     try:
         parser = parsers[root_tag]
     except KeyError:
-        logging.warning("Parser not implemented for xml tag: ", root_tag)
+        logging.warning(f"Parser not implemented for xml tag: {root_tag}")
         raise ERSParsingError
     try:
         res = parser(el)
-    except :
+    except:
         raise ERSParsingError
     return res
 
@@ -200,11 +192,11 @@ def parse(el):
     # DEL, RET elements with no child, no logs
     elif metadata is not None and child is None and logs is None and data is not None:
         return metadata, iter([data])
-    
+
     # RSP, QUE elements with only metadata
     elif metadata is not None and child is None and logs is None and data is None:
         return metadata, iter([])
-    
+
     else:
         raise ERSParsingError
 
@@ -217,7 +209,7 @@ def parse_xml_string(xml_string):
     return parse(el)
 
 
-def batch_parse(ers_xmls:List[str]):
+def batch_parse(ers_xmls: List[str]):
     """Parses a list of ERS messages and return 2 tables as DataFrames containing the
     information extracted from the messages.
 
@@ -234,60 +226,71 @@ def batch_parse(ers_xmls:List[str]):
     res_xml = []
 
     res_xml_default = {
-        'operation_number': None,
-        'operation_country': None,
-        'operation_datetime_utc': None,
-        'operation_type': None,
-        'ers_id': None,
-        'referenced_ers_id' : None,
-        'ers_datetime_utc': None,
-        'cfr': None,
-        'ircs': None,
-        'external_identification': None,
-        'vessel_name': None,
-        'flag_state': None,
-        'imo': None,
-        'xml_message': None,
-        'integration_datetime_utc': None}
-    
+        "operation_number": None,
+        "operation_country": None,
+        "operation_datetime_utc": None,
+        "operation_type": None,
+        "ers_id": None,
+        "referenced_ers_id": None,
+        "ers_datetime_utc": None,
+        "cfr": None,
+        "ircs": None,
+        "external_identification": None,
+        "vessel_name": None,
+        "flag_state": None,
+        "imo": None,
+        "xml_message": None,
+        "integration_datetime_utc": None,
+    }
+
     res_json_default = {
-        'operation_number': None,
-        'operation_country': None,
-        'operation_datetime_utc': None,
-        'operation_type': None,
-        'ers_id': None,
-        'referenced_ers_id': None,
-        'ers_datetime_utc': None,
-        'cfr': None,
-        'ircs': None,
-        'external_identification': None,
-        'vessel_name': None,
-        'flag_state': None,
-        'imo': None,
-        'log_type': None,
-        'value': None,
-        'integration_datetime_utc': None}
-        
-    
+        "operation_number": None,
+        "operation_country": None,
+        "operation_datetime_utc": None,
+        "operation_type": None,
+        "ers_id": None,
+        "referenced_ers_id": None,
+        "ers_datetime_utc": None,
+        "cfr": None,
+        "ircs": None,
+        "external_identification": None,
+        "vessel_name": None,
+        "flag_state": None,
+        "imo": None,
+        "log_type": None,
+        "value": None,
+        "integration_datetime_utc": None,
+    }
+
     for xml_message in tqdm.tqdm(ers_xmls):
         try:
             metadata, data_iterator = parse_xml_string(xml_message)
             now = datetime.utcnow()
-            raw = {**metadata, 
-                   "xml_message": xml_message, 
-                   "integration_datetime_utc": now}
+            raw = {
+                **metadata,
+                "xml_message": xml_message,
+                "integration_datetime_utc": now,
+            }
             for data in data_iterator:
-                res_json.append(pd.Series({
-                    **res_json_default, 
-                    **metadata, 
-                    **data, 
-                    "integration_datetime_utc": now
-                }))
+                res_json.append(
+                    pd.Series(
+                        {
+                            **res_json_default,
+                            **metadata,
+                            **data,
+                            "integration_datetime_utc": now,
+                        }
+                    )
+                )
             res_xml.append(pd.Series({**res_xml_default, **raw}))
-        except ERSParsingError as e:
+        except ERSParsingError:
             log_end = "..." if len(xml_message) > 40 else ""
-            logging.error("Parsing error - one ERS message will be ignored : " + xml_message[:40] + log_end)
-        except :
+            logging.error(
+                "Parsing error - one ERS message will be ignored : "
+                + xml_message[:40]
+                + log_end
+            )
+        except:
             logging.error("Error with message" + xml_message)
             raise
 
@@ -297,5 +300,5 @@ def batch_parse(ers_xmls:List[str]):
         ers_json = pd.concat(res_json, axis=1).T
     if len(res_xml) > 0:
         ers_xml = pd.concat(res_xml, axis=1).T
-        
+
     return ers_json, ers_xml

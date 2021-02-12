@@ -55,7 +55,7 @@ const DEPMessage = props => {
                                     </SubField>
                                     <SubField>
                                         <SubKey>Dimensions</SubKey>
-                                        <SubValue>{gear.size ? <>{gear.size}</> : <NoValue>-</NoValue>}</SubValue>
+                                        <SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
                                     </SubField>
                                 </SubFields>
                             </Gear>

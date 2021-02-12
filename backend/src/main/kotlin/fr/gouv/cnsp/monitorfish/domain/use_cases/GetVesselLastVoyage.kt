@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.*
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
@@ -22,7 +19,7 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
     fun execute(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): List<ERSMessage> {
         val lastDepartureDate = ersRepository.findLastDepartureDate(internalReferenceNumber, externalReferenceNumber, ircs)
 
-        return ersRepository
+        val messages = ersRepository
                 .findAllMessagesAfterDepartureDate(lastDepartureDate, internalReferenceNumber, externalReferenceNumber, ircs)
                 .sortedBy { it.operationDateTime }
                 .map {
@@ -33,29 +30,101 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                         logger.warn(e.message)
                     }
 
-                    when (it.messageType) {
-                        ERSMessageTypeMapping.FAR.name -> {
-                            setNamesFromCodes(it.message as FAR)
-                        }
-                        ERSMessageTypeMapping.DEP.name -> {
-                            setNamesFromCodes(it.message as DEP)
-                        }
-                        ERSMessageTypeMapping.DIS.name -> {
-                            setNamesFromCodes(it.message as DIS)
-                        }
-                        ERSMessageTypeMapping.LAN.name -> {
-                            setNamesFromCodes(it.message as LAN)
-                        }
-                        ERSMessageTypeMapping.PNO.name -> {
-                            setNamesFromCodes(it.message as PNO)
-                        }
-                        ERSMessageTypeMapping.RTP.name -> {
-                            setNamesFromCodes(it.message as RTP)
+                    if(it.operationType == ERSOperationType.DAT || it.operationType == ERSOperationType.COR) {
+                        when (it.messageType) {
+                            ERSMessageTypeMapping.FAR.name -> {
+                                setNamesFromCodes(it.message as FAR)
+                            }
+                            ERSMessageTypeMapping.DEP.name -> {
+                                setNamesFromCodes(it.message as DEP)
+                            }
+                            ERSMessageTypeMapping.DIS.name -> {
+                                setNamesFromCodes(it.message as DIS)
+                            }
+                            ERSMessageTypeMapping.COE.name -> {
+                                SetNamesFromCodes(it.message as COE)
+                            }
+                            ERSMessageTypeMapping.COX.name -> {
+                                SetNamesFromCodes(it.message as COX)
+                            }
+                            ERSMessageTypeMapping.CRO.name -> {
+                                setNamesFromCodes(it.message as CRO)
+                            }
+                            ERSMessageTypeMapping.LAN.name -> {
+                                setNamesFromCodes(it.message as LAN)
+                            }
+                            ERSMessageTypeMapping.PNO.name -> {
+                                setNamesFromCodes(it.message as PNO)
+                            }
+                            ERSMessageTypeMapping.RTP.name -> {
+                                setNamesFromCodes(it.message as RTP)
+                            }
                         }
                     }
 
                     it
                 }
+
+        flagCorrectedMessages(messages)
+
+        return messages.filter {
+            it.operationType == ERSOperationType.DAT ||
+                    it.operationType == ERSOperationType.COR
+        }
+    }
+
+    private fun flagCorrectedMessages(messages: List<ERSMessage>) {
+        messages.forEach { ersMessage ->
+            if (ersMessage.operationType == ERSOperationType.COR &&
+                    !ersMessage.referencedErsId.isNullOrEmpty()) {
+                messages.find { message -> message.ersId == ersMessage.referencedErsId }?.isCorrected = true
+            } else if (ersMessage.operationType == ERSOperationType.RET &&
+                    !ersMessage.referencedErsId.isNullOrEmpty()) {
+                val foundOriginalMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
+                foundOriginalMessage?.acknowledge = ersMessage.message as Acknowledge
+                foundOriginalMessage?.acknowledge?.let {
+                    it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
+                }
+            }
+        }
+    }
+
+    private fun SetNamesFromCodes(message: COE) {
+        message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
+            try {
+                message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+    }
+
+    private fun SetNamesFromCodes(message: COX) {
+        message.targetSpeciesOnExit?.let { targetSpeciesOnEntry ->
+            try {
+                message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnEntry).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: CRO) {
+        message.targetSpeciesOnExit?.let { targetSpeciesOnEntry ->
+            try {
+                message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnEntry).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
+
+        message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
+            try {
+                message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
+            } catch (e: CodeNotFoundException) {
+                logger.warn(e.message)
+            }
+        }
     }
 
     private fun setNamesFromCodes(message: FAR) {

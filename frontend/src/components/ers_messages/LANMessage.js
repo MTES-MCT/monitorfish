@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
 import {getDate, getDateTime} from "../../utils";
-import ERSMessageSpecies from "./FARMessageSpecies";
-import {buildCatchArray, ERSMessagePNOPurposeType} from "../../domain/entities/ERS";
+import ERSMessageSpecies from "./ERSMessageSpecies";
+import {buildCatchArray, ERSMessagePNOPurposeType, ERSMessageSender} from "../../domain/entities/ERS";
 
 const LANMessage = props => {
     const [catches, setCatches] = useState([])
@@ -31,6 +31,10 @@ const LANMessage = props => {
                             <Field>
                                 <Key>Port de débarquement</Key>
                                 <Value>{props.message.port && props.message.portName ? <>{props.message.portName} ({props.message.port})</> : <NoValue>-</NoValue>}</Value>
+                            </Field>
+                            <Field>
+                                <Key>Émetteur du message</Key>
+                                <Value>{props.message.sender && props.message.sender ? <>{ERSMessageSender[props.message.sender]} ({props.message.sender})</> : <NoValue>-</NoValue>}</Value>
                             </Field>
                         </TableBody>
                     </Fields>

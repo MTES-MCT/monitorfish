@@ -5,17 +5,19 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.Species
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.DEP
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.Acknowledge
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.FAR
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.PNO
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCorrectedDummyERSMessage
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyERSMessage
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getRETDummyERSMessage
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
@@ -91,5 +93,82 @@ class GetVesselLastVoyageUTests {
         assertThat(pno.catchOnboard[2].speciesName).isEqualTo("CREVETTE ROYALE ROSE")
         assertThat(pno.port).isEqualTo("AEJAZ")
         assertThat(pno.portName).isEqualTo("Arzanah Island")
+    }
+
+    @Test
+    fun `execute Should flag a corrected message as true`() {
+        // Given
+        given(ersRepository.findLastDepartureDate(any(), any(), any())).willReturn(ZonedDateTime.now())
+        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getCorrectedDummyERSMessage())
+        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(ersMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+
+        // When
+        val ersMessages = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
+                .execute("FR224226850", "", "")
+
+        // Then
+        assertThat(ersMessages).hasSize(2)
+
+        assertThat(ersMessages[0].message).isInstanceOf(FAR::class.java)
+        assertThat(ersMessages[0].operationType).isEqualTo(ERSOperationType.DAT)
+        assertThat(ersMessages[0].isCorrected).isEqualTo(true)
+        val correctedFar = ersMessages[0].message as FAR
+        assertThat(correctedFar.catches).hasSize(2)
+
+        assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
+        assertThat(ersMessages[1].operationType).isEqualTo(ERSOperationType.COR)
+        assertThat(ersMessages[1].isCorrected).isEqualTo(false)
+        val far = ersMessages[1].message as FAR
+        assertThat(far.catches).hasSize(3)
+    }
+
+    @Test
+    fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
+        // Given
+        given(ersRepository.findLastDepartureDate(any(), any(), any())).willReturn(ZonedDateTime.now())
+        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getRETDummyERSMessage())
+        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(ersMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+
+        // When
+        val ersMessages = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
+                .execute("FR224226850", "", "")
+
+        // Then
+        assertThat(ersMessages).hasSize(2)
+
+        assertThat(ersMessages[0].message).isInstanceOf(FAR::class.java)
+        assertThat(ersMessages[0].acknowledge).isInstanceOf(Acknowledge::class.java)
+        assertThat(ersMessages[0].operationType).isEqualTo(ERSOperationType.DAT)
+        assertThat(ersMessages[0].isCorrected).isEqualTo(false)
+        val ack = ersMessages[0].acknowledge as Acknowledge
+        assertThat(ack.rejectionCause).isEqualTo("Oops")
+        assertThat(ack.returnStatus).isEqualTo("002")
+        assertThat(ack.isSuccess).isFalse
+        val correctedFar = ersMessages[0].message as FAR
+        assertThat(correctedFar.catches).hasSize(2)
+
+        assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
+        assertThat(ersMessages[1].operationType).isEqualTo(ERSOperationType.DAT)
+        assertThat(ersMessages[1].isCorrected).isEqualTo(false)
+        val ackTwo = ersMessages[1].acknowledge as Acknowledge
+        assertThat(ackTwo.rejectionCause).isNull()
+        assertThat(ackTwo.returnStatus).isEqualTo("000")
+        assertThat(ackTwo.isSuccess).isTrue
+        val far = ersMessages[1].message as FAR
+        assertThat(far.catches).hasSize(3)
     }
 }

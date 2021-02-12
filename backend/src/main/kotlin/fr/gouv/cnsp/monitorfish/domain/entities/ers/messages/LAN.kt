@@ -8,6 +8,7 @@ class LAN() : ERSMessageValue {
     var port: String? = null
     var portName: String? = null
     var catchLanded: List<Catch> = listOf()
+    var sender: String? = null
 
     @JsonProperty("landingDatetimeUtc")
     var landingDateTime: ZonedDateTime? = null

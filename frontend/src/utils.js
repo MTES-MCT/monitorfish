@@ -28,21 +28,39 @@ export let getCoordinates = (coordinates, projection) => {
 
     let sSplit = hourCoordinates.split('S')
     if (sSplit.length > 1) {
-        return [`${nSplit[0]} S`, nSplit[1]]
+        return [`${sSplit[0]} S`, sSplit[1]]
     }
 }
+
+export function getMonth(date) {
+    let month = date.getMonth() + 1
+    return month < 10 ? '0' + month : '' + month
+}
+
+export function getDay(date) {
+    let day = date.getDate()
+    return day < 10 ? '0' + day : '' + day
+}
+
 
 export let getDateTime = (dateString, withoutSeconds) => {
     if (dateString) {
         const date = new Date(dateString)
-        let time = date.toLocaleTimeString('fr-FR')
+        let timeOptions = withoutSeconds ? {
+                hour: '2-digit',
+                minute:'2-digit',
+                timeZone: 'UTC',
+            hourCycle: 'h24'} : {
+            hour: '2-digit',
+            minute:'2-digit',
+            second: '2-digit',
+            timeZone: 'UTC',
+            hourCycle: 'h24'}
+
+        let time = date.toLocaleTimeString([], timeOptions)
         time = time.replace(':', 'h')
 
-        if(withoutSeconds) {
-            time = time.substring(0, time.length - 3)
-        }
-
-        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} à ${time}`
+        return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()} à ${time}`
     }
 }
 
@@ -116,3 +134,16 @@ export const timeagoFrenchLocale = function(number, index) {
         ['il y a %s ans', 'dans %s ans'],
     ][index];
 }
+
+const accentsMap = {
+    a: 'á|à|ã|â|À|Á|Ã|Â',
+    e: 'é|è|ê|É|È|Ê',
+    i: 'í|ì|î|Í|Ì|Î',
+    o: 'ó|ò|ô|õ|Ó|Ò|Ô|Õ',
+    u: 'ú|ù|û|ü|Ú|Ù|Û|Ü',
+    c: 'ç|Ç',
+    n: 'ñ|Ñ',
+};
+
+export const removeAccents = text => Object.keys(accentsMap)
+    .reduce((acc, cur) => acc.replace(new RegExp(accentsMap[cur], 'g'), cur), text);

@@ -19,9 +19,9 @@ data class PositionEntity(
         @Column(name = "internal_reference_number")
         val internalReferenceNumber: String? = null,
         @Column(name = "mmsi")
-        val MMSI: String? = null,
+        val mmsi: String? = null,
         @Column(name = "ircs")
-        val IRCS: String? = null,
+        val ircs: String? = null,
         @Column(name = "external_reference_number")
         val externalReferenceNumber: String? = null,
         @Column(name = "vessel_name")
@@ -56,8 +56,8 @@ data class PositionEntity(
     fun toPosition() = Position(
             id = id,
             internalReferenceNumber = internalReferenceNumber,
-            IRCS = IRCS,
-            MMSI = MMSI,
+            ircs = ircs,
+            mmsi = mmsi,
             externalReferenceNumber = externalReferenceNumber,
             dateTime = dateTime,
             latitude = latitude,
@@ -75,8 +75,8 @@ data class PositionEntity(
                 fun fromPosition(position: Position): PositionEntity {
                         return PositionEntity(
                                 internalReferenceNumber = position.internalReferenceNumber,
-                                IRCS = position.IRCS,
-                                MMSI = position.MMSI,
+                                ircs = position.ircs,
+                                mmsi = position.mmsi,
                                 externalReferenceNumber = position.externalReferenceNumber,
                                 dateTime = position.dateTime,
                                 latitude = position.latitude,

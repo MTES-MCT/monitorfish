@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {COLORS} from "../constants/constants";
 import {ReactComponent as REGPaperSVG} from './icons/reg_paper.svg'
@@ -8,9 +8,12 @@ import {getDateTime} from "../utils";
 
 const RegulatoryZoneMetadata = props => {
     const [gears, setGears] = useState([])
+    const firstUpdate = useRef(true);
 
     useEffect(() => {
         if (props.regulatoryZoneMetadata && props.gears) {
+            firstUpdate.current = false;
+
             if(!props.regulatoryZoneMetadata.gears){
                 return setGears(null)
             }
@@ -28,17 +31,25 @@ const RegulatoryZoneMetadata = props => {
         }
     }, [props.gears, props.regulatoryZoneMetadata])
 
+    const getTitle = regulatory => `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+
     return (
         <Wrapper
-            firstUpdate={props.firstUpdate}
-            openBox={props.regulatoryZoneMetadataPanelIsOpen}
+            firstUpdate={firstUpdate.current}
+            regulatoryZoneMetadataPanelIsOpen={props.regulatoryZoneMetadataPanelIsOpen}
+            layersSidebarIsOpen={props.layersSidebarIsOpen}
+            regulatoryZoneMetadata={props.regulatoryZoneMetadata}
         >
             {
                 props.regulatoryZoneMetadataPanelIsOpen && props.regulatoryZoneMetadata ?
                     <>
                         <Header>
                             <REGPaperIcon/>
-                            <Title>Réglementation "<RegulatoryName><Ellipsis>{props.regulatoryZoneMetadata.zone}</Ellipsis></RegulatoryName>"</Title>
+                            <RegulatoryName title={getTitle(props.regulatoryZoneMetadata)}>
+                                <Ellipsis>
+                                    <Title>{getTitle(props.regulatoryZoneMetadata)}</Title>
+                                </Ellipsis>
+                            </RegulatoryName>
                             <CloseIcon onClick={() => props.callCloseRegulatoryZoneMetadata()}/>
                         </Header>
                         <Content>
@@ -55,8 +66,17 @@ const RegulatoryZoneMetadata = props => {
                                         </Field>
                                         <Field>
                                             <Key>Zone</Key>
-                                            <Value>{props.regulatoryZoneMetadata.zone ? props.regulatoryZoneMetadata.zone : <NoValue>-</NoValue>}</Value>
+                                            <Value>{props.regulatoryZoneMetadata.zone ? props.regulatoryZoneMetadata.zone.replace(/[_]/g, ' ') : <NoValue>-</NoValue>}</Value>
                                         </Field>
+                                        {
+                                            props.regulatoryZoneMetadata.deposit ?
+                                                <Field>
+                                                    <Key>Gisement</Key>
+                                                    <Value>{props.regulatoryZoneMetadata.deposit ? props.regulatoryZoneMetadata.deposit : <NoValue>-</NoValue>}</Value>
+                                                </Field> : null
+
+                                        }
+
                                     </Body>
                                 </Fields>
                             </Zone>
@@ -75,7 +95,7 @@ const RegulatoryZoneMetadata = props => {
                                                         {
                                                             props.regulatoryZoneMetadata.openingDate ? <>
                                                                     {getDateTime(props.regulatoryZoneMetadata.openingDate, true)}{' '}
-                                                                    <Gray>(CET)</Gray></>
+                                                                    <Gray>(UTC)</Gray></>
                                                                 : <NoValue>-</NoValue>
                                                         }
                                                     </Value>
@@ -89,7 +109,7 @@ const RegulatoryZoneMetadata = props => {
                                                         {
                                                             props.regulatoryZoneMetadata.closingDate ? <>
                                                                     {getDateTime(props.regulatoryZoneMetadata.closingDate, true)}{' '}
-                                                                    <Gray>(CET)</Gray></>
+                                                                    <Gray>(UTC)</Gray></>
                                                                 : <NoValue>-</NoValue>
                                                         }
                                                     </Value>
@@ -181,17 +201,18 @@ const Gray = styled.span`
 `
 
 const RegulatoryName = styled.span`
-    display: inline-flex;
-    padding: unset;
-    margin: unset;
-    line-height: initial;
+  padding: unset;
+  margin: unset;
+  line-height: initial;
 `
 
 const Ellipsis = styled.span`
-    max-width: 176px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  max-width: 290px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  display: inline-block;
 `
 
 const Header = styled.div`
@@ -214,8 +235,6 @@ const Content = styled.div`
 const Title = styled.span`
   margin-top: 2px;
   margin-left: 12px;
-  vertical-align: top;
-  display: inline-block;
   font-size: 13px;
 }
 `
@@ -225,7 +244,7 @@ const REGPaperIcon = styled(REGPaperSVG)`
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 10px;
+  width: 13px;
   float: right;
   margin-right: 7px;
   margin-top: 5px;
@@ -341,11 +360,21 @@ const Wrapper = styled.div`
     max-height: calc(100vh - 50px);
     padding: 10px;
     
-    animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
+    animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
     
+    @keyframes regulatory-metadata-box-opening-with-margin {
+        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
+        100% { min-height: 500px; opacity: 1; margin-left: 356px; }
+    }
+    
+    @keyframes regulatory-metadata-box-closing-with-margin {
+        0% { min-height: 500px; opacity: 1; margin-left: 371px; }
+        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
+    }
+       
     @keyframes regulatory-metadata-box-opening {
         0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 500px; opacity: 1; margin-left: 361px; }
+        100% { min-height: 500px; opacity: 1; margin-left: 356px; }
     }
     
     @keyframes regulatory-metadata-box-closing {

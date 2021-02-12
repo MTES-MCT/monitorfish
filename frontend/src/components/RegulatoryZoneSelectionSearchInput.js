@@ -2,9 +2,32 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {COLORS} from "../constants/constants";
 import {ReactComponent as SearchIconSVG} from "./icons/Loupe.svg";
+import {removeAccents} from "../utils";
 
 function findIfSearchStringIncludedInProperty(zone, propertiesToSearch, searchText) {
-    return zone[propertiesToSearch] ? zone[propertiesToSearch].toLowerCase().includes(searchText.toLowerCase()) : false;
+    return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false;
+}
+
+function getTextForSearch(text) {
+    return removeAccents(text)
+        .toLowerCase()
+        .replace(/[ ]/g, '')
+        .replace(/[_]/g, '')
+        .replace(/[-]/g, '')
+        .replace(/[']/g, '')
+        .replace(/["]/g, '')
+}
+
+function orderByAlphabeticalZone(foundRegulatoryZones) {
+    if(foundRegulatoryZones) {
+        Object.keys(foundRegulatoryZones).forEach(layer => {
+            foundRegulatoryZones[layer] = foundRegulatoryZones[layer].sort((a, b) => {
+                if (a.zone && b.zone) {
+                    return a.zone.localeCompare(b.zone)
+                }
+            })
+        })
+    }
 }
 
 const RegulatoryZoneSelectionSearchInput = props => {
@@ -15,10 +38,10 @@ const RegulatoryZoneSelectionSearchInput = props => {
     const [focusPlaceSearchText, setFocusPlaceSearchText] = useState(true);
 
     useEffect(() => {
-        if(props.openBox) {
+        if(props.layersSidebarIsOpen) {
             setFocusPlaceSearchText(true)
         }
-    }, [props.openBox])
+    }, [props.layersSidebarIsOpen])
 
     useEffect(() => {
         if (props.initSearchFields) {
@@ -58,6 +81,8 @@ const RegulatoryZoneSelectionSearchInput = props => {
             return
         }
 
+        props.resetSelectRegulatoryZone()
+
         let foundRegulatoryZones = {}
         Object.keys(searchFields).forEach(searchProperty => {
             if(searchFields[searchProperty].searchText.length > 0) {
@@ -80,6 +105,9 @@ const RegulatoryZoneSelectionSearchInput = props => {
                 }
             }
         })
+
+        orderByAlphabeticalZone(foundRegulatoryZones);
+
         props.setFoundRegulatoryZones(foundRegulatoryZones)
 
     }, [speciesSearchText, gearSearchText, placeSearchText, regulatoryReferencesSearchText])

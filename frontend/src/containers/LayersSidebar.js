@@ -10,7 +10,7 @@ import addRegulatoryZonesToMySelection from "../domain/use_cases/addRegulatoryZo
 import getAllRegulatoryZones from "../domain/use_cases/getAllRegulatoryZones";
 import removeRegulatoryZoneFromMySelection from "../domain/use_cases/removeRegulatoryZoneFromMySelection";
 import showLayer from "../domain/use_cases/showLayer";
-import hideLayer from "../domain/use_cases/hideLayer";
+import hideLayers from "../domain/use_cases/hideLayers";
 import RegulatoryZoneSelection from "../components/RegulatoryZoneSelection";
 import AdministrativeZoneSelection from "../components/AdministrativeZoneSelection";
 import RegulatoryZoneSelected from "../components/RegulatoryZoneSelected";
@@ -33,18 +33,19 @@ const LayersSidebar = () => {
     const gears = useSelector(state => state.gear.gears)
     const firstUpdate = useRef(true);
     const [regulatoryZones, setRegulatoryZones] = useState();
-    const [openBox, setOpenBox] = useState(false);
+    const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false);
     const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
+    const [hideZonesListWhenSearching, setHideZonesListWhenSearching] = useState(false)
 
     useEffect(() => {
-        if (openBox === true) {
+        if (layersSidebarIsOpen === true) {
             firstUpdate.current = false;
         }
 
-        if(!openBox) {
+        if(!layersSidebarIsOpen) {
             callCloseRegulatoryZoneMetadata()
         }
-    }, [openBox])
+    }, [layersSidebarIsOpen])
 
     useEffect(() => {
         dispatch(getAllRegulatoryZones())
@@ -71,7 +72,7 @@ const LayersSidebar = () => {
     }
 
     function callHideRegulatoryZone(regulatoryZone) {
-        dispatch(hideLayer({
+        dispatch(hideLayers({
             type: LayersEnum.REGULATORY,
             zone: regulatoryZone
         }))
@@ -84,7 +85,7 @@ const LayersSidebar = () => {
     }
 
     function callHideAdministrativeZone(administrativeZone) {
-        dispatch(hideLayer({
+        dispatch(hideLayers({
             type: administrativeZone
         }));
     }
@@ -99,13 +100,13 @@ const LayersSidebar = () => {
 
     return (
         <Sidebar
-            openBox={openBox}
+            layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon
                 title={"Couches réglementaires"}
-                openBox={openBox}
+                layersSidebarIsOpen={layersSidebarIsOpen}
                 regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-                onClick={() => setOpenBox(!openBox)}>
+                onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
                 <Layers/>
             </SidebarLayersIcon>
             <RegulatoryZoneSelection
@@ -116,7 +117,8 @@ const LayersSidebar = () => {
                 gears={gears}
                 regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
                 setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
-                openBox={openBox}
+                layersSidebarIsOpen={layersSidebarIsOpen}
+                setHideZonesListWhenSearching={setHideZonesListWhenSearching}
             />
             <Zones>
                 <RegulatoryZoneSelected
@@ -131,12 +133,14 @@ const LayersSidebar = () => {
                     gears={gears}
                     callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
                     regulatoryZoneMetadata={regulatoryZoneMetadata}
+                    hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />
                 <AdministrativeZoneSelection
                     administrativeZones={administrativeZones}
                     showedLayers={showedLayers}
                     callShowAdministrativeZone={callShowAdministrativeZone}
                     callHideAdministrativeZone={callHideAdministrativeZone}
+                    hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />
             </Zones>
             <RegulatoryZoneMetadata
@@ -145,6 +149,7 @@ const LayersSidebar = () => {
                 regulatoryZoneMetadata={regulatoryZoneMetadata}
                 callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
                 gears={gears}
+                layersSidebarIsOpen={layersSidebarIsOpen}
             />
         </Sidebar>
     )
@@ -158,7 +163,7 @@ const Sidebar = styled.div`
   border-radius: 1px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards;
+  animation: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '' : props.layersSidebarIsOpen ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards;
 
   @keyframes left-sidebar-opening {
     0%   { margin-left: -373px;   }
@@ -173,7 +178,7 @@ const Sidebar = styled.div`
 
 const Zones = styled.div`
   margin-top: 5px;
-  width: 340px;
+  width: 335px;
   color: ${COLORS.textWhite};
   text-decoration: none;
   background-color: ${COLORS.gray};
@@ -185,16 +190,16 @@ const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;
-  background: ${props => props.firstUpdate && !props.openBox ? COLORS.grayDarkerThree : props.openBox ? '#9A9A9A' : COLORS.grayDarkerThree };
+  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? '#9A9A9A' : COLORS.grayDarkerThree };
   padding: 2px 2px 2px 2px;
   margin-top: 0;
-  margin-left: ${props => props.firstUpdate && !props.openBox ? '190px' : props.openBox ? '187px' : '190px' };
+  margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px' };
   border-radius: 1px;
   height: 40px;
   width: 40px;
 
   :hover, :focus {
-      background: ${props => props.firstUpdate && !props.openBox ? COLORS.grayDarkerThree : props.openBox ? '#9A9A9A' : COLORS.grayDarkerThree };
+      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? '#9A9A9A' : COLORS.grayDarkerThree };
   }
 `
 

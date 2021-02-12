@@ -3,14 +3,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
-import java.time.ZonedDateTime
 import java.util.*
 
 data class VesselDataOutput(
         val internalReferenceNumber: String? = null,
         val IMO: String? = null,
-        val MMSI: String? = null,
-        val IRCS: String? = null,
+        val mmsi: String? = null,
+        val ircs: String? = null,
         val externalReferenceNumber: String? = null,
         val vesselName: String? = null,
         val flagState: CountryCode? = null,
@@ -39,9 +38,9 @@ data class VesselDataOutput(
         fun fromVessel(vessel: Vessel, positions: List<Position>): VesselDataOutput {
             return VesselDataOutput(
                     internalReferenceNumber = vessel.internalReferenceNumber,
-                    IMO = vessel.IMO,
-                    IRCS = vessel.IRCS,
-                    MMSI = vessel.MMSI,
+                    IMO = vessel.imo,
+                    ircs = vessel.ircs,
+                    mmsi = vessel.mmsi,
                     externalReferenceNumber = vessel.externalReferenceNumber,
                     vesselName = vessel.vesselName,
                     flagState = vessel.flagState,
@@ -68,8 +67,8 @@ data class VesselDataOutput(
                     positions = positions.map {
                         PositionDataOutput(
                                 internalReferenceNumber = it.internalReferenceNumber,
-                                IRCS = it.IRCS,
-                                MMSI = it.MMSI,
+                                ircs = it.ircs,
+                                mmsi = it.mmsi,
                                 externalReferenceNumber = it.externalReferenceNumber,
                                 dateTime = it.dateTime,
                                 latitude = it.latitude,

@@ -10,8 +10,8 @@ import Layers from "../entities/layers";
 import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";
-import showVesselTrackAndSidebar from "./showVesselTrackAndSidebar";
-import {updateVesselFeature} from "../reducers/Vessel";
+import {updateVesselFeatureAndIdentity} from "../reducers/Vessel";
+import {getVesselFeatureAndIdentity} from "../entities/vessel";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
     getVesselsLastPositionsFromAPI().then(vessels => {
@@ -30,12 +30,9 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
 
         dispatch(replaceVesselLayer(vesselLayer))
     }).catch(error => {
+        console.error(error)
         dispatch(setError(error));
     });
-
-    if(getState().vessel.selectedVesselFeature) {
-        dispatch(showVesselTrackAndSidebar(getState().vessel.selectedVesselFeature, false, true))
-    }
 }
 
 function buildFeature(currentVessel, index, getState, dispatch) {
@@ -45,14 +42,14 @@ function buildFeature(currentVessel, index, getState, dispatch) {
         geometry: new Point(transformedCoordinates),
         internalReferenceNumber: currentVessel.internalReferenceNumber,
         externalReferenceNumber: currentVessel.externalReferenceNumber,
-        MMSI: currentVessel.MMSI,
+        mmsi: currentVessel.mmsi,
         flagState: currentVessel.flagState,
         vesselName: currentVessel.vesselName,
         coordinates: toStringHDMS(transformedCoordinates),
         course: currentVessel.course,
         positionType: currentVessel.positionType,
         speed: currentVessel.speed,
-        IRCS: currentVessel.IRCS,
+        ircs: currentVessel.ircs,
         dateTime: currentVessel.dateTime
     });
 
@@ -60,9 +57,11 @@ function buildFeature(currentVessel, index, getState, dispatch) {
 
     let vesselNamesShowedOnMap = getState().map.vesselNamesHiddenByZoom === undefined ?
         false : getState().map.vesselNamesShowedOnMap && !getState().map.vesselNamesHiddenByZoom;
-    let newSelectedVesselFeature = setVesselIconStyle(currentVessel, iconFeature, getState().vessel.selectedVesselFeature, vesselNamesShowedOnMap)
+
+    let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
+    let newSelectedVesselFeature = setVesselIconStyle(currentVessel, iconFeature, vesselFeatureAndIdentity, vesselNamesShowedOnMap)
     if (newSelectedVesselFeature) {
-        dispatch(updateVesselFeature(newSelectedVesselFeature))
+        dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.vessel)))
     }
 
     return iconFeature;

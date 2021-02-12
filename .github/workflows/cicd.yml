@@ -49,6 +49,15 @@ jobs:
         java-version: 11
 
     - uses: actions/checkout@v2
+      
+    - name: NPM install with caching
+      uses: bahmutov/npm-install@v1.6.0
+      with:
+        # Working directory to specify subfolder in which dependencies are defined
+        working-directory: frontend/
+        useLockFile: true
+        # Custom install command to use
+        install-command: npm install
             
     - name: Unit test
       run: make test
@@ -57,7 +66,7 @@ jobs:
       run: make docker-build
 
     - name: Push docker image to registry
-      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'v')
+      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
         make docker-tag

@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
-import fr.gouv.cnsp.monitorfish.domain.exceptions.PositionsNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import kotlinx.coroutines.runBlocking
@@ -48,7 +47,7 @@ class GetVesselUTests {
     }
 
     @Test
-    fun `execute Should throw an exception When a vessel's position is not found`() {
+    fun `execute Should not throw an exception When a vessel's position is not found`() {
         // Given
         given(positionRepository.findVesselLastPositions(any(), any(), any())).willReturn(listOf())
 
@@ -60,8 +59,7 @@ class GetVesselUTests {
         }
 
         // Then
-        assertThat(throwable).isInstanceOf(PositionsNotFoundException::class.java)
-        assertThat(throwable.message).contains("No position found for vessel FR224226850")
+        assertThat(throwable).isNull()
     }
 
 }

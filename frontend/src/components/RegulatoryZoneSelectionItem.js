@@ -37,7 +37,7 @@ const RegulatoryZoneSelectionItem = props => {
             {props.regulatoryZoneName.replace(/[_]/g, ' ')}
         </Zone>
         {
-            props.regulatorySubZones ? props.regulatorySubZones.map((subZone, index) => {
+            props.regulatorySubZones ? props.regulatorySubZones.map((subZone) => {
                 let vectorLayerStyle
                 if(subZone.zone && subZone.layerName && subZone.gears && props.gears) {
                     let hash = getHash(`${subZone.layerName}:${subZone.zone}`)
@@ -48,7 +48,7 @@ const RegulatoryZoneSelectionItem = props => {
                 return (<SubZone
                     onClick={() => select(subZone)}
                     selected={globalIsSelected || (!globalIsSelected && isSelected(props.regulatoryZonesSelection[props.regulatoryZoneName], subZone))}
-                    key={index}>
+                    key={subZone.zone}>
                     <Rectangle vectorLayerStyle={vectorLayerStyle} />
                     <Name>{subZone.zone ? subZone.zone : 'AUCUN NOM'}</Name>
                 </SubZone>)

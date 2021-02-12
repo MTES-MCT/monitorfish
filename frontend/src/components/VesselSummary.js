@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 import { FingerprintSpinner } from 'react-epic-spinners'
+import {ReactComponent as NoVesselSVG} from '../components/icons/Picto_photo_navire_manquante.svg';
 
-import {getCoordinates, timeagoFrenchLocale} from "../utils";
+import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../utils";
 import {WSG84_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
 import * as timeago from 'timeago.js';
@@ -17,7 +18,9 @@ const VesselSummary = props => {
     useEffect(() => {
         if (props.vessel) {
             setVessel(props.vessel)
-            setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+            if(props.vessel.positions.length) {
+                setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+            }
 
             if(props.vessel.mmsi) {
                 setPhotoFallback(false)
@@ -46,7 +49,7 @@ const VesselSummary = props => {
             <PhotoZone>
                 {
                     photoFallback ?
-                        <DummyPhoto src={`boat_fishing.png`}/> :
+                        <NoVessel /> :
                         <>
                             {
                                 props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
@@ -58,26 +61,27 @@ const VesselSummary = props => {
             <ZoneWithoutBackground>
                 <LatLon>
                     <FieldName>Latitude</FieldName>
-                    <FieldValue>{getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0]}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.latitude && lastPosition.longitude ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0] : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Longitude</FieldName>
-                    <FieldValue>{getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1]}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.latitude && lastPosition.longitude ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1] : <NoValue>-</NoValue>}</FieldValue>
                 </LatLon>
                 <Course>
                     <FieldName>Route</FieldName>
-                    <FieldValue>{lastPosition.course ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.course ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Vitesse</FieldName>
-                    <FieldValue>{lastPosition.speed ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.speed ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
                     <FieldName>Type de signal</FieldName>
-                    <FieldValue>{lastPosition.positionType ? lastPosition.positionType : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && lastPosition.positionType ? lastPosition.positionType : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Dernier signal</FieldName>
                     <FieldValue>
                         {
-                            lastPosition.dateTime ? <>{timeago.format(lastPosition.dateTime, 'fr')}</>
+                            lastPosition && lastPosition.dateTime ? <>
+                                    {getDateTime(lastPosition.dateTime, true)}{' '}
+                                    <Gray>(UTC)</Gray></>
                                 : <NoValue>-</NoValue>
                         }
-
                     </FieldValue>
                 </Position>
             </ZoneWithoutBackground>
@@ -89,19 +93,19 @@ const VesselSummary = props => {
                             <Value>{props.vessel.internalReferenceNumber ? props.vessel.internalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>Marquage ext.</Key>
-                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Key>MMSI</Key>
+                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>
                 </Fields>
                 <Fields>
                     <TableBody>
                         <Field>
-                            <Key>MMSI</Key>
-                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
+                            <Key>Marquage ext.</Key>
+                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>CALL SIGN</Key>
+                            <Key>Call Sign (IRCS)</Key>
                             <Value>{props.vessel.ircs ? props.vessel.ircs : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>
@@ -168,6 +172,18 @@ const VesselSummary = props => {
     ) : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>;
 }
 
+const Gray = styled.span`
+  color: ${COLORS.textGray};
+  font-weight: 300;
+`
+
+const NoVessel = styled(NoVesselSVG)`
+  width: 60px;
+  background: ${COLORS.grayBackground};
+  padding: 92px 136px 92px 136px;
+  margin: 10px 0 5px 0;
+`
+
 const FieldName = styled.div`
   margin-top: 9px;
   color: ${COLORS.textGray};
@@ -215,27 +231,12 @@ const Photo = styled.img`
   right: auto;
 `
 
-const DummyPhoto = styled.img`
-  margin: 15px 0 10px 0;
-  max-height: 130px;
-  left: auto;
-  right: auto;
-  opacity: 0.3;
-`
-
 const Zone = styled.div`
   margin: 5px 5px 10px 5px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
   background: ${COLORS.background};
-`
-
-const ZoneWithoutBackground = styled.div`
-  margin: 5px 5px 10px 5px;
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
 `
 
 const Fields = styled.table`
@@ -281,7 +282,7 @@ const TrimmedValue = styled.td`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;    
-  max-width: 110px; 
+  max-width: 120px; 
 `
 
 const Value = styled.td`
@@ -301,31 +302,39 @@ const NoValue = styled.span`
   line-height: normal;
 `
 
+const ZoneWithoutBackground = styled.div`
+  margin: 5px 5px 10px 5px;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 1;
+`
+
 const LatLon = styled.div`
-  width: 133px;
   order: 1;
   background: ${COLORS.background};
   margin: 0;
   padding: 1px 10px 10px 10px;
   text-align: center;
+  flex-grow: 1;
 `
 
 const Course = styled.div`
-  width: 133px;
   order: 2;
   background: ${COLORS.background};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;
+  flex-grow: 1;
 `
 
 const Position = styled.div`
-  width: 133px;
   order: 3;
   background: ${COLORS.background};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;
+  flex-grow: 1;
 `
 
 export default VesselSummary

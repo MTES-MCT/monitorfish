@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "comlink": "^4.3.0",
+    "i18n-iso-countries": "^6.4.0",
     "immer": "^8.0.0",
     "mini.css": "^3.0.1",
     "ol": "^6.5.0",
@@ -16,6 +17,7 @@
     "react-country-flag": "^2.3.0",
     "react-dom": "^16.13.1",
     "react-epic-spinners": "^0.5.0",
+    "react-highlight-words": "^0.16.0",
     "react-redux": "^7.2.2",
     "react-scripts": "3.4.3",
     "react-toast-notifications": "^2.4.0",
@@ -47,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20"
   }
 }

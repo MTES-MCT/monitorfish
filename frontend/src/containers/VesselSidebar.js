@@ -7,17 +7,15 @@ import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
 import VesselIdentity from "../components/VesselIdentity";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
-import {setSearchVesselWhileVesselSelected} from "../domain/reducers/Vessel";
 
 const VesselSidebar = () => {
-    const dispatch = useDispatch()
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)
-    const searchVesselWhileVesselSelected = useSelector(state => state.vessel.searchVesselWhileVesselSelected)
+    const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
 
     const [openBox, setOpenBox] = useState(false);
     const [vessel, setVessel] = useState(null);
@@ -42,20 +40,19 @@ const VesselSidebar = () => {
     useEffect(() => {
         if (vesselState.selectedVessel) {
             setVessel(vesselState.selectedVessel)
-            dispatch(setSearchVesselWhileVesselSelected(false))
         }
     }, [vesselState.selectedVessel])
 
     return (
         <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
             {
-                <GrayOverlay isOverlayed={searchVesselWhileVesselSelected && !firstUpdate.current}/>
+                <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
             }
             {
                 vessel && !vesselState.loadingVessel ? (vessel.internalReferenceNumber ||
                     vessel.externalReferenceNumber ||
-                    vessel.MMSI ||
-                    vessel.IRCS) ? <div>
+                    vessel.ircs ||
+                    vessel.mmsi) ? <div>
                     <div>
                         <TabList>
                             <Tab isActive={index === 1} onClick={() => setIndex(1)}>
@@ -71,7 +68,7 @@ const VesselSidebar = () => {
                                 <ControlsIcon /> Contrôles
                             </Tab>
                             <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(4)}>
-                                <ObservationsIcon /> Observations
+                                <ObservationsIcon /> Ciblage
                             </Tab>
                             <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(5)}>
                                 <VMSIcon /> VMS/ERS
@@ -105,8 +102,7 @@ const VesselSidebar = () => {
                     </div>
                 </div> : <VesselNotFound>
                         <VesselNotFoundText>
-                            <VesselNotFoundImage src="boat_fishing_not_found.png"/>
-                            <p>Nous n'avons pas trouvé ce navire dans notre base de donnée...</p>
+                            Nous n'avons pas d'information sur ce navire...
                         </VesselNotFoundText>
                     </VesselNotFound> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
             }
@@ -133,19 +129,15 @@ const GrayOverlay = styled.div`
   }
 `
 
-const VesselNotFoundImage = styled.img`
-  height: 150px;
-`
-
 const VesselNotFound = styled.div`
   padding: 5px 10px 10px 10px;
   right: 0;
 `
 
 const VesselNotFoundText = styled.div`
-  padding: 5px 10px 10px 10px;
+  padding: 10px 10px 5px 10px;
   display: table-cell;
-  font-size: 13px;
+  font-size: 15px;
   vertical-align: middle;
   height: inherit;
   color: ${COLORS.textGray};

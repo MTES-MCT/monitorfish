@@ -25,9 +25,9 @@ const VesselCard = props => {
                 </LatLon>
                 <Course>
                     <FieldName>Route</FieldName>
-                    <FieldValue>{props.vessel.getProperties().course ? <>{props.vessel.getProperties().course}°</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course ? <>{props.vessel.getProperties().course}°</> : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Vitesse</FieldName>
-                    <FieldValue>{props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
                     <FieldName>Type de signal</FieldName>
@@ -66,7 +66,7 @@ const VesselCard = props => {
                             </Field>
                             <Field>
                                 <Key>Call Sign (IRCS)</Key>
-                                <Value>{props.vessel.getProperties().IRCS ? props.vessel.getProperties().IRCS : <NoValue>-</NoValue>}</Value>
+                                <Value>{props.vessel.getProperties().ircs ? props.vessel.getProperties().ircs : <NoValue>-</NoValue>}</Value>
                             </Field>
                         </Body>
                     </Fields>
@@ -131,7 +131,7 @@ const Value = styled.td`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;
-  max-width: 90px;
+  max-width: 95px;
 `
 
 const TrianglePointer = styled.div`

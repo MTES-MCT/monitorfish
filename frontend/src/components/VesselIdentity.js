@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
+import countries from "i18n-iso-countries";
+import {getDay, getMonth} from "../utils";
+countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselIdentity = props => {
-    const [photoFallback, setPhotoFallback] = useState(false)
     const [gears, setGears] = useState([])
 
     const showLicenceExpirationDate = licenceExpirationDate => {
         if (licenceExpirationDate) {
             const date = new Date(licenceExpirationDate)
-            return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+            return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()}`
         }
     }
 
@@ -37,19 +39,19 @@ const VesselIdentity = props => {
                             <Value>{props.vessel.internalReferenceNumber ? props.vessel.internalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>Marquage ext.</Key>
-                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Key>MMSI</Key>
+                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>
                 </Fields>
                 <Fields>
                     <TableBody>
                         <Field>
-                            <Key>MMSI</Key>
-                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
+                            <Key>Marquage ext.</Key>
+                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
-                            <Key>CALL SIGN</Key>
+                            <Key>Call Sign (IRCS)</Key>
                             <Value>{props.vessel.ircs ? props.vessel.ircs : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>
@@ -60,7 +62,7 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Nationalité</Key>
-                            <TrimmedValue>{props.vessel.flagState ? props.vessel.flagState : <NoValue>-</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{props.vessel.flagState ? countries.getName(props.vessel.flagState, "fr") : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Quartier</Key>
@@ -129,10 +131,6 @@ const VesselIdentity = props => {
                         </Field>
                         <Field>
                             <Key/>
-                        </Field>
-                        <Field>
-                            <Key>Poids autorisés en pontée</Key>
-                            <Value>{ props.vessel.weightAuthorizedOnDeck ? <>{props.vessel.weightAuthorizedOnDeck} kg</> : <NoValue>-</NoValue> }</Value>
                         </Field>
                         <Field>
                             <Key>Appartenance à une liste</Key>
@@ -301,7 +299,7 @@ const TrimmedValue = styled.td`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;    
-  max-width: 110px; 
+  max-width: 120px; 
 `
 
 const Value = styled.td`

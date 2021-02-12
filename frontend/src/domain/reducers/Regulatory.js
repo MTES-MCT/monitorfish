@@ -19,9 +19,15 @@ const layerSlice = createSlice({
             window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
         },
         removeRegulatoryZonesFromSelection(state, action) {
-            state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
-                return !(subZone.layerName === action.payload.layerName && subZone.zone === action.payload.zone)
-            })
+            if(action.payload.zone) {
+                state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
+                    return !(subZone.layerName === action.payload.layerName && subZone.zone === action.payload.zone)
+                })
+            } else {
+                state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
+                    return !(subZone.layerName === action.payload.layerName)
+                })
+            }
 
             if (!state.selectedRegulatoryZones[action.payload.layerName].length) {
                 delete state.selectedRegulatoryZones[action.payload.layerName]
@@ -43,6 +49,7 @@ const layerSlice = createSlice({
         },
         closeRegulatoryZoneMetadataPanel(state) {
             state.regulatoryZoneMetadataPanelIsOpen = false
+            state.regulatoryZoneMetadata = null
         }
     }
 })

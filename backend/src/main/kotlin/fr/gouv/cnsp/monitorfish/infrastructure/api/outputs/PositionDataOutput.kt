@@ -7,8 +7,8 @@ import java.time.ZonedDateTime
 
 data class PositionDataOutput(
         val internalReferenceNumber: String ? = null,
-        val MMSI: String? = null,
-        val IRCS: String? = null,
+        val mmsi: String? = null,
+        val ircs: String? = null,
         val externalReferenceNumber: String? = null,
         val vesselName: String? = null,
         val flagState: CountryCode? = null,
@@ -25,8 +25,8 @@ data class PositionDataOutput(
         fun fromPosition(position: Position): PositionDataOutput {
             return PositionDataOutput(
                     internalReferenceNumber = position.internalReferenceNumber,
-                    IRCS = position.IRCS,
-                    MMSI = position.MMSI,
+                    ircs = position.ircs,
+                    mmsi = position.mmsi,
                     externalReferenceNumber = position.externalReferenceNumber,
                     dateTime = position.dateTime,
                     latitude = position.latitude,

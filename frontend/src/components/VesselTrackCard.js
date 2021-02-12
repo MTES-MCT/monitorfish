@@ -1,6 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import {getCoordinates, timeagoFrenchLocale} from "../utils";
+import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../utils";
 import {OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {COLORS} from "../constants/constants";
 import * as timeago from 'timeago.js';
@@ -11,6 +11,13 @@ const VesselTrackCard = props => {
         <>
             <VesselCardHeader>
                 <VesselCardTitle>POSITION</VesselCardTitle>
+                <TimeAgo>
+                    {
+                        props.vessel.getProperties().dateTime ? <>
+                                {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+                            : <NoValue>-</NoValue>
+                    }
+                </TimeAgo>
             </VesselCardHeader>
             <VesselCardBody>
                 <LatLon>
@@ -21,9 +28,9 @@ const VesselTrackCard = props => {
                 </LatLon>
                 <Course>
                     <FieldName>Route</FieldName>
-                    <FieldValue>{props.vessel.getProperties().course ? <>{props.vessel.getProperties().course}°</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course ? <>{props.vessel.getProperties().course}°</> : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Vitesse</FieldName>
-                    <FieldValue>{props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
                     <FieldName>Type de signal</FieldName>
@@ -32,10 +39,10 @@ const VesselTrackCard = props => {
                     <FieldValue>
                         {
                             props.vessel.getProperties().dateTime ? <>
-                                    {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+                                    {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
+                                    <Gray>(UTC)</Gray></>
                                 : <NoValue>-</NoValue>
                         }
-
                     </FieldValue>
                 </Position>
             </VesselCardBody>
@@ -45,6 +52,11 @@ const VesselTrackCard = props => {
         </>
     )
 }
+
+const Gray = styled.span`
+  color: ${COLORS.textGray};
+  font-weight: 300;
+`
 
 const TrianglePointer = styled.div`
   margin-left: auto;
@@ -60,7 +72,7 @@ const TriangleShadow = styled.div`
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.grayBackground} transparent transparent transparent;
-  margin-left: 150px;
+  margin-left: 170px;
   margin-top: -1px;
   clear: top;
 `
@@ -87,7 +99,7 @@ const FieldValue = styled.div`
 `
 
 const LatLon = styled.div`
-  width: 100px;
+  flex-grow: 1;
   order: 1;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
@@ -95,7 +107,7 @@ const LatLon = styled.div`
 `
 
 const Course = styled.div`
-  width: 70px;
+  flex-grow: 1;
   order: 2;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
@@ -103,7 +115,7 @@ const Course = styled.div`
 `
 
 const Position = styled.div`
-  width: 120px;
+  flex-grow: 1;
   order: 3;
   background: ${COLORS.background};
   margin: 5px 5px 5px 5px;
@@ -113,8 +125,7 @@ const Position = styled.div`
 const VesselCardHeader = styled.div`
   background: ${COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
-  padding: 5px 5px 5px 5px;
-  text-align: center;
+  padding: 4px 5px 6px 5px;
 `
 
 const VesselCardTitle = styled.span`
@@ -124,8 +135,18 @@ const VesselCardTitle = styled.span`
   font-size: 0.9em;
 `
 
+const TimeAgo = styled.span`
+  float: right;
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 4px;
+  font-size: 13px;
+`
+
 const VesselCardBody = styled.div`
   display: flex;
+  flex: 1 1 1;
   text-align: center;
 `
 

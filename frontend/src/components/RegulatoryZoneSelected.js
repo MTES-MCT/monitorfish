@@ -21,6 +21,25 @@ const RegulatoryZoneSelected = props => {
         }
     }
 
+    const callRemoveRegulatoryZoneFromMySelection = (regulatoryZone, numberOfZones) => {
+        decreaseNumberOfZonesOpened(numberOfZones)
+        props.callRemoveRegulatoryZoneFromMySelection(regulatoryZone)
+    }
+
+    useEffect(() => {
+        if(props.regulatoryZoneMetadata) {
+            setShowRegulatoryZonesSelected(true)
+        }
+    }, [props.regulatoryZoneMetadata])
+
+    useEffect(() => {
+        if(props.hideZonesListWhenSearching) {
+            setShowRegulatoryZonesSelected(false)
+        } else {
+            setShowRegulatoryZonesSelected(true)
+        }
+    }, [props.hideZonesListWhenSearching])
+
     return (
         <>
             <RegulatoryZoneSelectedTitle
@@ -36,12 +55,12 @@ const RegulatoryZoneSelected = props => {
             >
                 {
                     props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0 ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
-                        return (<ListItem key={index}>
+                        return (<ListItem key={regulatoryZoneName}>
                             <RegulatoryZoneSelectedLayer
                                 increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
                                 decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
                                 isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
-                                callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
+                                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                                 regulatoryZoneName={regulatoryZoneName}
                                 regulatorySubZones={props.selectedRegulatoryZones[regulatoryZoneName]}
                                 callShowRegulatoryZone={props.callShowRegulatoryZone}
@@ -51,6 +70,7 @@ const RegulatoryZoneSelected = props => {
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showedLayers={props.showedLayers}
                                 gears={props.gears}
+                                isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}
                             />
                         </ListItem>)
                     }) : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
@@ -113,7 +133,7 @@ const RegulatoryZoneSelectedList = styled.ul`
   height: ${props => {
         if(props.layerLength) {
             if(props.zoneLength > 0) {
-                return props.layerLength * 36 + props.zoneLength * 36
+                return props.layerLength * 37 + props.zoneLength * 38.5
             } else {
                 return props.layerLength * 37
             }
@@ -122,7 +142,17 @@ const RegulatoryZoneSelectedList = styled.ul`
         }
     }}px;
   max-height: 550px;
-  overflow-y: auto;
+  overflow-y: ${props => {
+            if(props.layerLength) {
+                if(props.zoneLength > 0) {
+                    return props.layerLength + props.zoneLength > 13 ? 'auto' : 'hidden' 
+                }
+                
+                return 'hidden'
+            } else {
+               return 'hidden'
+            }
+        }};
   overflow-x: hidden;
   color: ${COLORS.grayDarkerThree};
   

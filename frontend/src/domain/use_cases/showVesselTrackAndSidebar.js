@@ -7,11 +7,8 @@ import {
 } from "../../layers/styles/featuresStyles";
 import {
     loadingVessel, openVesselSidebar, setSelectedVessel,
-    setSelectedVesselTrackVector,
+    setSelectedVesselTrackVector, setVesselPositionIsUpdating,
 } from "../reducers/Vessel";
-import {Vector} from "ol/layer";
-import VectorSource from "ol/source/Vector";
-import Layers from "../entities/layers";
 import {transform} from "ol/proj";
 import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
 import {arraysEqual, calculatePointsDistance, calculateSplitPointCoords} from "../../utils";
@@ -22,62 +19,70 @@ import LineString from "ol/geom/LineString";
 import {Style} from "ol/style";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
-import {animateToVessel, setUsingSearch} from "../reducers/Map";
+import {animateToVessel} from "../reducers/Map";
 import {setError} from "../reducers/Global";
+import {Vector} from "ol/layer";
+import VectorSource from "ol/source/Vector";
+import Layers from "../entities/layers";
 
-const showVesselTrackAndSidebar = (feature, fromSearch, updateShowedVessel) => (dispatch, getState) => {
-    if(getState().vessel.selectedVesselFeature === feature) {
-        if(getState().vessel.selectedVessel && !updateShowedVessel) {
+const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateShowedVessel) => (dispatch, getState) => {
+    let alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
+    if(!updateShowedVessel &&
+        alreadySelectedVessel &&
+        alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature) {
+        if(getState().vessel.selectedVessel) {
             dispatch(openVesselSidebar())
         }
+
         return
     }
 
     removePreviousSelectedFeature(getState);
+    if(vesselFeatureAndIdentity.feature && !updateShowedVessel) {
+        dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
+    }
+
     if(!updateShowedVessel) {
-        dispatch(loadingVessel(feature))
+        dispatch(loadingVessel(vesselFeatureAndIdentity))
     }
 
-    if (fromSearch) {
-        dispatch(setUsingSearch())
-        dispatch(animateToVessel(feature));
-    }
-
-    if(feature) {
-        dispatch(animateToVessel(feature));
-    }
     dispatch(openVesselSidebar())
 
     getVesselFromAPI(
-        feature.getProperties().internalReferenceNumber,
-        feature.getProperties().externalReferenceNumber,
-        feature.getProperties().IRCS)
+        vesselFeatureAndIdentity.vessel.internalReferenceNumber,
+        vesselFeatureAndIdentity.vessel.externalReferenceNumber,
+        vesselFeatureAndIdentity.vessel.ircs)
         .then(vessel => {
             dispatch(setSelectedVessel(vessel))
-            let vesselTrackLines = buildVesselTrackLines(vessel)
 
-            let circlePoints = buildCirclePoints(vesselTrackLines, vessel.positions);
-            circlePoints.forEach(circlePoint => {
-                vesselTrackLines.push(circlePoint)
-            })
-
-            let arrowPoints = buildArrowPoints(vesselTrackLines)
-            arrowPoints.forEach(arrowPoint => {
-                vesselTrackLines.push(arrowPoint)
-            })
-
-            let vesselTrackVector = new Vector({
-                source: new VectorSource({
-                    features: vesselTrackLines
-                }),
-                className: Layers.VESSEL_TRACK
-            });
-
-            dispatch(setSelectedVesselTrackVector(vesselTrackVector))
+            if(vessel.positions && vessel.positions.length) {
+                let vesselTrackVector = buildVesselTrackVector(vessel)
+                dispatch(setSelectedVesselTrackVector(vesselTrackVector))
+            }
         }).catch(error => {
             dispatch(setError(error));
         });
+}
 
+function buildVesselTrackVector(vessel) {
+    let vesselTrackLines = buildVesselTrackLines(vessel)
+
+    let circlePoints = buildCirclePoints(vesselTrackLines, vessel.positions);
+    circlePoints.forEach(circlePoint => {
+        vesselTrackLines.push(circlePoint)
+    })
+
+    let arrowPoints = buildArrowPoints(vesselTrackLines)
+    arrowPoints.forEach(arrowPoint => {
+        vesselTrackLines.push(arrowPoint)
+    })
+
+    return new Vector({
+        source: new VectorSource({
+            features: vesselTrackLines
+        }),
+        className: Layers.VESSEL_TRACK
+    })
 }
 
 function buildCirclePoints(vesselTrackLines, positions) {
@@ -86,23 +91,26 @@ function buildCirclePoints(vesselTrackLines, positions) {
             return
         }
 
-        let position = positions.filter(position => {
+        let firstPointCoordinatesOfLine = feature.getGeometry().getCoordinates()[0];
+        let positionsOnLine = positions.filter(position => {
             let point = new transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-            return arraysEqual(feature.getGeometry().getCoordinates()[0], point)
+            return arraysEqual(firstPointCoordinatesOfLine, point)
         })
-        if(position.length > 0) {
-            position = position[0]
+
+        let firstPositionOnLine
+        if(positionsOnLine.length > 0) {
+            firstPositionOnLine = positionsOnLine[0]
         } else {
-            position = null
+            firstPositionOnLine = null
         }
 
         const circleFeature = new Feature({
             geometry: new Point(feature.getGeometry().getCoordinates()[1]),
             name: LayersEnum.VESSEL_TRACK + ':position:' + index,
-            course: position ? position.course : null,
-            positionType: position ? position.positionType : null,
-            speed: position ? position.speed : null,
-            dateTime: position ? position.dateTime : null
+            course: firstPositionOnLine ? firstPositionOnLine.course : null,
+            positionType: firstPositionOnLine ? firstPositionOnLine.positionType : null,
+            speed: firstPositionOnLine ? firstPositionOnLine.speed : null,
+            dateTime: firstPositionOnLine ? firstPositionOnLine.dateTime : null
         });
 
         circleFeature.setId(LayersEnum.VESSEL_TRACK + ':position:' + index)
@@ -165,10 +173,10 @@ function buildVesselTrackLines(vessel) {
 }
 
 function removePreviousSelectedFeature(getState) {
-    let previousSelectedFeature = getState().vessel.selectedVesselFeature
-    if (previousSelectedFeature) {
-        let stylesWithoutVesselSelector = previousSelectedFeature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
-        previousSelectedFeature.setStyle([...stylesWithoutVesselSelector]);
+    let previousSelectedFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
+    if (previousSelectedFeatureAndIdentity && previousSelectedFeatureAndIdentity.feature) {
+        let stylesWithoutVesselSelector = previousSelectedFeatureAndIdentity.feature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
+        previousSelectedFeatureAndIdentity.feature.setStyle([...stylesWithoutVesselSelector]);
     }
 }
 

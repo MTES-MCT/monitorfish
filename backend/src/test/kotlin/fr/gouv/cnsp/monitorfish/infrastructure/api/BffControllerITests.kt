@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
@@ -9,6 +10,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.SearchVessels
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -19,6 +22,7 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -29,6 +33,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
+@Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [(BffController::class)])
 class BffControllerITests {
@@ -45,6 +50,12 @@ class BffControllerITests {
     @MockBean
     private lateinit var getAllGears: GetAllGears
 
+    @MockBean
+    private lateinit var searchVessels: SearchVessels
+
+    @Autowired
+    private lateinit var meterRegistry: MeterRegistry
+
     @Test
     fun `Should get all positions`() {
         // Given
@@ -57,10 +68,10 @@ class BffControllerITests {
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
-                .andExpect(jsonPath("$[0].mmsi", equalTo(position.MMSI)))
+                .andExpect(jsonPath("$[0].mmsi", equalTo(position.mmsi)))
                 .andExpect(jsonPath("$[0].externalReferenceNumber", equalTo(position.externalReferenceNumber)))
                 .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo(position.internalReferenceNumber)))
-                .andExpect(jsonPath("$[0].ircs", equalTo(position.IRCS)))
+                .andExpect(jsonPath("$[0].ircs", equalTo(position.ircs)))
                 .andExpect(jsonPath("$[0].flagState", equalTo(position.flagState)))
                 .andExpect(jsonPath("$[0].latitude", equalTo(position.latitude)))
                 .andExpect(jsonPath("$[0].longitude", equalTo(position.longitude)))
@@ -77,7 +88,7 @@ class BffControllerITests {
     private infix fun <T> BDDMockito.BDDMyOngoingStubbing<T>.willReturn(block: () -> T) = willReturn(block())
 
     @Test
-    fun `Should get vessels's last positions`() {
+    fun `Should get vessels's last positions and data`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
@@ -85,11 +96,11 @@ class BffControllerITests {
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any(), any(), any()) } willReturn {
             Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                listOf(firstPosition, secondPosition, thirdPosition))
+                    listOf(firstPosition, secondPosition, thirdPosition))
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/search?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4"))
+        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.declaredFishingGears[0]", equalTo("Trémails")))
@@ -117,5 +128,28 @@ class BffControllerITests {
                 .andExpect(jsonPath("$[0].code", equalTo("CHL")))
                 .andExpect(jsonPath("$[0].name", equalTo("SUPER CHALUT")))
                 .andExpect(jsonPath("$[0].category", equalTo("CHALUT")))
+    }
+
+    @Test
+    fun `Should search for a vessel`() {
+        // Given
+        given(this.searchVessels.execute(any())).willReturn(listOf(
+                Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                Vessel(internalReferenceNumber = "GBR21555445", vesselName = "ANOTHER VESSEL", flagState = CountryCode.GB, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing")))
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/search?searched=VESSEL"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(2)))
+                .andExpect(jsonPath("$[0].flagState", equalTo("FR")))
+                .andExpect(jsonPath("$[0].vesselName", equalTo("MY AWESOME VESSEL")))
+                .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$[1].flagState", equalTo("GB")))
+                .andExpect(jsonPath("$[1].vesselName", equalTo("ANOTHER VESSEL")))
+                .andExpect(jsonPath("$[1].internalReferenceNumber", equalTo("GBR21555445")))
+
+        Mockito.verify(searchVessels).execute("VESSEL")
+
     }
 }

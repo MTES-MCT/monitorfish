@@ -44,6 +44,16 @@ const RegulatoryZoneSelection = props => {
         }
     }, [showRegulatorySection])
 
+    const resetSelectRegulatoryZone = () => {
+        setRegulatoryZonesSelection({})
+    }
+
+    useEffect(() => {
+        if(foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0) {
+            props.setHideZonesListWhenSearching({})
+        }
+    }, [foundRegulatoryZones, showRegulatorySection])
+
     const toggleSelectRegulatoryZone = (regulatoryZoneName, regulatorySubZones) => {
         let existingSelectedZones = {...regulatoryZonesSelection}
 
@@ -101,7 +111,8 @@ const RegulatoryZoneSelection = props => {
             gears={props.gears}
             initSearchFields={initSearchFields}
             setInitSearchFields={setInitSearchFields}
-            openBox={props.openBox}
+            layersSidebarIsOpen={props.layersSidebarIsOpen}
+            resetSelectRegulatoryZone={resetSelectRegulatoryZone}
         />
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}
@@ -125,13 +136,14 @@ const RegulatoryZoneSelection = props => {
 }
 
 const Search = styled.div`
-  width: 360px;
+  width: 355px;
 `
 
 const TitleText = styled.span`
   margin-top: 10px;
   font-size: 13px;
   display: inline-block;
+  font-weight: 400;
 `
 
 const RegulatoryZoneAddButton = styled.div`
@@ -162,13 +174,13 @@ const RegulatoryZoneAddButton = styled.div`
 
 const RegulatoryZoneTitle = styled.div`
   height: 40px;
-  background: ${COLORS.grayDarker};
+  background: white;
   color: ${COLORS.grayDarkerTwo};
   font-size: 0.8em;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 300;
   text-align: left;
-  padding-left: 15px;
+  padding-left: 10px;
   user-select: none;
   width: 345px;
 `

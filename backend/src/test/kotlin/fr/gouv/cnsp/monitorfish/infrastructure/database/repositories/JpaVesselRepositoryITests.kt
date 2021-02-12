@@ -31,25 +31,54 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
         assertThat(vessel.internalReferenceNumber).isNull()
         assertThat(vessel.externalReferenceNumber).isNull()
-        assertThat(vessel.MMSI).isNull()
-        assertThat(vessel.IRCS).isNull()
+        assertThat(vessel.mmsi).isNull()
+        assertThat(vessel.ircs).isNull()
     }
 
     @Test
     @Transactional
     fun `findVessel Should return a vessel When the CFR is given`() {
         // When
-        val vessel = jpaVesselRepository.findVessel("FR209143000", "", "")
+        val vessel = jpaVesselRepository.findVessel("GBR000B14430", "", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("FR209143000")
+        assertThat(vessel.internalReferenceNumber).isEqualTo("GBR000B14430")
     }
 
     @Test
     @Transactional
     fun `findVessel Should return a vessel When the external marking is given`() {
         // When
-        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "07019871338", "")
+        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "AR865", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("FR209143000")
+        assertThat(vessel.internalReferenceNumber).isEqualTo("GBR000B14430")
+    }
+
+    @Test
+    @Transactional
+    fun `search Should return a vessel When part of the CFR is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("GBR")
+
+        assertThat(vessels).hasSize(1)
+        assertThat(vessels.first().internalReferenceNumber).isEqualTo("GBR000B14430")
+    }
+
+    @Test
+    @Transactional
+    fun `search Should return no vessel When no search string is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("")
+
+        assertThat(vessels).hasSize(0)
+    }
+
+    @Test
+    @Transactional
+    fun `search Should return a vessel When part of the vessel name is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("LE b")
+
+        assertThat(vessels).hasSize(1)
+        assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
     }
 }

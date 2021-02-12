@@ -9,7 +9,11 @@ const images = require.context('../../../public/flags', false, /\.png$/);
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
-export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselNamesShowedOnMap) => {
+function degreesToRadian(vessel) {
+    return vessel.course * Math.PI / 180;
+}
+
+export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdentity, vesselNamesShowedOnMap) => {
     let selectedVesselFeatureToUpdate = null;
     const vesselDate = new Date(vessel.dateTime);
     const nowMinusThreeHours = new Date();
@@ -22,7 +26,7 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselN
             src: 'boat_mf.png',
             offset: [0, 0],
             imgSize: [14, 14],
-            rotation: vessel.course,
+            rotation: degreesToRadian(vessel),
             opacity: opacity
         }) : new CircleStyle({
             radius: 4,
@@ -34,15 +38,20 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeature, vesselN
     styles.push(iconStyle)
 
     if (vesselNamesShowedOnMap) {
-        styles.push(getVesselNameStyle(iconFeature))
+        getSVG(iconFeature).then(svg => {
+            styles.push(getVesselNameStyle(iconFeature, svg))
+        })
     }
 
-    if (vessel.internalReferenceNumber && selectedFeature && vessel.internalReferenceNumber === selectedFeature.getProperties().internalReferenceNumber) {
+    if (vessel.internalReferenceNumber &&
+        selectedFeatureAndIdentity &&
+        selectedFeatureAndIdentity.feature &&
+        vessel.internalReferenceNumber === selectedFeatureAndIdentity.feature.getProperties().internalReferenceNumber) {
         styles.push(selectedVesselStyle)
         selectedVesselFeatureToUpdate = iconFeature
     }
 
-   iconFeature.setStyle(styles);
+    iconFeature.setStyle(styles);
     return selectedVesselFeatureToUpdate
 }
 
@@ -55,8 +64,8 @@ export const selectedVesselStyle =  new Style({
     zIndex: VESSEL_SELECTOR_STYLE
 })
 
-const getSVG = feature => {
-    //const flag = feature.getProperties().flagState ? Flags.byId[feature.getProperties().flagState.toLowerCase()].data : null
+export const getSVG = feature => new Promise(function (resolve) {
+    let imageElement = new Image();
     const flag = images(`./${feature.getProperties().flagState.toLowerCase()}.png`)
     const textWidth = getTextWidth(feature.getProperties().vesselName) + 10 + (flag ? 18 : 0)
 
@@ -67,16 +76,17 @@ const getSVG = feature => {
             <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${feature.getProperties().vesselName}</text>
         </svg>`;
 
-    let imageElement = new Image();
+    imageElement.addEventListener('load', function animationendListener() {
+        imageElement.removeEventListener("load", animationendListener);
+        resolve(imageElement);
+    },{once: true});
     imageElement.src = 'data:image/svg+xml,' + escape(iconSVG);
+})
 
-    return imageElement
-}
-
-export const getVesselNameStyle = feature => new Style({
+export const getVesselNameStyle = (feature, image) => new Style({
     image: new Icon({
         anchorOrigin: IconOrigin.TOP_RIGHT,
-        img: getSVG(feature),
+        img: image,
         imgSize: [getTextWidth(feature.getProperties().vesselName)*4, 36],
         offset: [-getTextWidth(feature.getProperties().vesselName)*2 - 10, 11]
     }),
@@ -86,7 +96,7 @@ export const getVesselNameStyle = feature => new Style({
 export const setCircleStyle = (color, arrowFeature) => {
     const arrowStyle = new Style({
         image: new CircleStyle({
-            radius: 3,
+            radius: 4,
             fill: new Fill({
                 color: color
             })
@@ -101,13 +111,13 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
             src: trackArrow,
             offset: [0, 0],
             imgSize: [20, 34],
-            scale: 0.6,
+            scale: 0.7,
             rotation: arrowFeature.getProperties().course
         }),
     });
 
     arrowFeature.setStyle((feature, resolution) => {
-        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/4));
+        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/7));
         return arrowStyle;
     });
 }

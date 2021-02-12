@@ -8,7 +8,6 @@ import {ReactComponent as REGPaperDarkSVG} from './icons/reg_paper_dark.svg'
 import {COLORS} from "../constants/constants";
 
 const RegulatoryZoneSelectedZone = props => {
-    const firstUpdate = useRef(true);
     const [showSubZone, setShowSubZone] = useState(undefined);
     const [metadataIsShown, setMetadataIsShown] = useState(false)
 
@@ -26,23 +25,38 @@ const RegulatoryZoneSelectedZone = props => {
         if(props.regulatoryZoneMetadata &&
             props.subZone &&
             (props.subZone.layerName !== props.regulatoryZoneMetadata.layerName ||
-            props.subZone.zone !== props.regulatoryZoneMetadata.zone)) {
+                props.subZone.zone !== props.regulatoryZoneMetadata.zone)) {
+            setMetadataIsShown(false)
+        } else if(props.regulatoryZoneMetadata &&
+            props.subZone &&
+            (props.subZone.layerName === props.regulatoryZoneMetadata.layerName &&
+                props.subZone.zone === props.regulatoryZoneMetadata.zone)) {
+            setMetadataIsShown(true)
+        }
+        else if (!props.regulatoryZoneMetadata && props.subZone) {
             setMetadataIsShown(false)
         }
     }, [props.regulatoryZoneMetadata, props.subZone])
 
     useEffect(() => {
-        if (showSubZone === undefined) {
-            setShowSubZone(props.isShowOnInit)
+        if(props.showWholeLayer) {
+            if(!props.zoneIsShown && props.showWholeLayer.show) {
+                setShowSubZone(true)
+            } else if(props.zoneIsShown && !props.showWholeLayer.show) {
+                setShowSubZone(false)
+            }
         }
-    }, [props.isShownOnInit])
+    }, [props.showWholeLayer])
 
     useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
+        if(props.zoneIsShown) {
+            setShowSubZone(true)
+        } else if(!props.zoneIsShown) {
+            setShowSubZone(false)
         }
+    }, [props.zoneIsShown])
 
+    useEffect(() => {
         if (showSubZone && props.isReadyToShowRegulatoryZones) {
             props.callShowRegulatoryZone(props.subZone)
         } else {
@@ -65,7 +79,7 @@ const RegulatoryZoneSelectedZone = props => {
                         <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/>
                 }
                 { showSubZone ? <ShowIcon title="Cacher la zone" onClick={() => setShowSubZone(!showSubZone)} /> : <HideIcon title="Afficher la zone" onClick={() => setShowSubZone(!showSubZone)} />}
-                <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone)}/>
+                <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone, 1)}/>
             </Icons>
 
         </SubZone>
@@ -88,10 +102,10 @@ const Icons = styled.span`
 `
 
 const SubZone = styled.span`
-  width: 88%;
+  width: 94%;
   display: flex;
   line-height: 1.9em;
-  padding-left: 30px;
+  padding-left: 31px;
   padding-top: 4px;
   padding-bottom: 4px;
   user-select: none;

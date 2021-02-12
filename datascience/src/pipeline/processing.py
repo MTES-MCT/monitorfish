@@ -1,5 +1,5 @@
 from typing import List
-
+import json
 import numpy as np
 import pandas as pd
 
@@ -119,6 +119,13 @@ def lst2pgarr(alist: List) -> str:
         + "}"
     )
     return res
+
+
+def dict2json(d):
+    """Converts python dictionnary to json string. This is required when inserting 
+    a pandas DataFrame column containing dictionnaries into a Postgresql JSONB column.
+    """
+    return json.dumps(d, ensure_ascii=False)
 
 
 def python_lists_to_psql_arrays(df: pd.DataFrame, array_cols: List) -> pd.DataFrame:

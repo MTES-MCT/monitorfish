@@ -1,5 +1,21 @@
-from src.utils.ers import try_float, tagged_children
-from .childless_parsers import ()
+import xml
+
+from src.utils.ers import (try_float, 
+                           tagged_children, 
+                           make_datetime_json_serializable, 
+                           get_root_tag)
+
+from src.pipeline.parsers.childless_parsers import (
+    parse_ras,
+    parse_pro,
+    parse_spe,
+    parse_pos,
+    parse_gea
+)
+
+
+def default_log_parser(el: xml.etree.ElementTree.Element):
+    return {"log_type": get_root_tag(el)}
 
 
 def parse_dep(dep):
@@ -9,24 +25,24 @@ def parse_dep(dep):
     departure_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
-        "departure_datetime_utc": departure_datetime_utc,
-        "departure_port": dep.get("PO"),
-        "anticipated_activity": dep.get("AA"),
+        "departureDatetimeUtc": departure_datetime_utc,
+        "departurePort": dep.get("PO"),
+        "anticipatedActivity": dep.get("AA"),
     }
 
     children = tagged_children(dep)
 
     if "GEA" in children:
         gear = [parse_gea(gea) for gea in children["GEA"]]
-        value["gear_onboard"] = gear
+        value["gearOnboard"] = gear
 
     if "SPE" in children:
         species_onboard = [parse_spe(spe) for spe in children["SPE"]]
-        value["species_onboard"] = species_onboard
+        value["speciesOnboard"] = species_onboard
 
     data = {"log_type": "DEP", "value": value}
 
-    return None, None, None, data
+    return data
 
 
 def parse_far(far):
@@ -34,7 +50,7 @@ def parse_far(far):
     time = far.get("TI")
     far_datetime_utc = make_datetime_json_serializable(date, time)
 
-    value = {"far_datetime_utc": far_datetime_utc}
+    value = {"farDatetimeUtc": far_datetime_utc}
 
     children = tagged_children(far)
 
@@ -57,7 +73,7 @@ def parse_far(far):
 
     data = {"log_type": "FAR", "value": value}
 
-    return None, None, None, data
+    return data
 
 
 def parse_dis(dis):
@@ -66,7 +82,7 @@ def parse_dis(dis):
     discard_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
-        "discard_datetime_utc": discard_datetime_utc
+        "discardDatetimeUtc": discard_datetime_utc
     }
 
     children = tagged_children(dis)
@@ -80,8 +96,95 @@ def parse_dis(dis):
         "value": value
     }
 
-    return None, None, None, data
+    return data
 
+
+def parse_coe(coe):
+    date = coe.get("DA")
+    time = coe.get("TI")
+    effort_zone_entry_datetime_utc = make_datetime_json_serializable(date, time)
+
+    children = tagged_children(coe)
+
+    value = {
+        "effortZoneEntryDatetimeUtc": effort_zone_entry_datetime_utc,
+        "targetSpeciesOnEntry": coe.get("TS")
+    }
+
+    if "RAS" in children:
+        assert len(children["RAS"]) == 1
+        ras = children["RAS"][0]
+        ras_data = parse_ras(ras)
+        value["faoZoneEntered"] = ras_data["faoZone"]
+        value["economicZoneEntered"] = ras_data["economicZone"]
+        value["statisticalRectangleEntered"] = ras_data["statisticalRectangle"]
+        value["effortZoneEntered"] = ras_data["effortZone"]
+
+    if "POS" in children:
+        assert len(children["POS"]) == 1
+        pos = children["POS"][0]
+        lat, lon = parse_pos(pos)
+        value["latitudeEntered"] = try_float(lat)
+        value["longitudeEntered"] = try_float(lon)
+
+    data = {"log_type": "COE", "value": value}
+
+    return data
+
+
+def parse_cox(cox):
+    date = cox.get("DA")
+    time = cox.get("TI")
+    effort_zone_exit_datetime_utc = make_datetime_json_serializable(date, time)
+
+    children = tagged_children(cox)
+
+    value = {
+        "effortZoneExitDatetimeUtc": effort_zone_exit_datetime_utc,
+        "targetSpeciesOnExit": cox.get("TS")
+    }
+
+    if "RAS" in children:
+        assert len(children["RAS"]) == 1
+        ras = children["RAS"][0]
+        ras_data = parse_ras(ras)
+        value["faoZoneExited"] = ras_data["faoZone"]
+        value["economicZoneExited"] = ras_data["economicZone"]
+        value["statisticalRectangleExited"] = ras_data["statisticalRectangle"]
+        value["effortZoneExited"] = ras_data["effortZone"]
+
+    if "POS" in children:
+        assert len(children["POS"]) == 1
+        pos = children["POS"][0]
+        lat, lon = parse_pos(pos)
+        value["latitudeExited"] = try_float(lat)
+        value["longitudeExited"] = try_float(lon)
+
+    data = {"log_type": "COX", "value": value}
+
+    return data
+
+
+def parse_cro(cro):
+    children = tagged_children(cro)
+
+    value = {}
+    
+    if "COE" in children:
+        assert len(children["COE"]) == 1
+        coe = children["COE"][0]
+        coe_data = parse_coe(coe)
+        value = coe_data["value"]
+        
+    if "COX" in children:
+        assert len(children["COX"]) == 1
+        cox = children["COX"][0]
+        cox_data = parse_cox(cox)
+        cox_value = cox_data["value"]
+        value = {**value, **cox_value}
+
+    data = {"log_type": "CRO", "value": value}
+    return data
 
 def parse_pno(pno):
     date = pno.get("PD")
@@ -94,10 +197,10 @@ def parse_pno(pno):
     children = tagged_children(pno)
 
     value = {
-        "predicted_arrival_datetime_utc": predicted_arrival_datetime_utc,
+        "predictedArrivalDatetimeUtc": predicted_arrival_datetime_utc,
         "port": pno.get("PO"),
         "purpose": pno.get("PC"),
-        "trip_start_date": trip_start_date,
+        "tripStartDate": trip_start_date,
     }
 
     if "RAS" in children:
@@ -108,7 +211,7 @@ def parse_pno(pno):
 
     if "SPE" in children:
         catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catch_onboard"] = catches
+        value["catchOnboard"] = catches
 
     if "POS" in children:
         assert len(children["POS"]) == 1
@@ -119,7 +222,7 @@ def parse_pno(pno):
 
     data = {"log_type": "PNO", "value": value}
 
-    return None, None, None, data
+    return data
 
 
 def parse_lan(lan):
@@ -128,31 +231,32 @@ def parse_lan(lan):
     landing_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
-        "landing_datetime_utc": landing_datetime_utc,
+        "landingDatetimeUtc": landing_datetime_utc,
         "port": lan.get("PO"),
+        "sender": lan.get("TS")
     }
     
     children = tagged_children(lan)
 
     if "SPE" in children:
         catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catch_landed"] = catches
+        value["catchLanded"] = catches
 
     data = {
         "log_type": "LAN",
         "value": value
     }
 
-    return None, None, None, data
+    return data
 
 
 def parse_eof(eof):
     date = eof.get("DA")
     time = eof.get("TI")
     end_of_fishing_datetime_utc = make_datetime_json_serializable(date, time)
-    value = {"end_of_fishing_datetime_utc": end_of_fishing_datetime_utc}
+    value = {"endOfFishingDatetimeUtc": end_of_fishing_datetime_utc}
     data = {"log_type": "EOF", "value": value}
-    return None, None, None, data
+    return data
 
 
 def parse_rtp(rtp):
@@ -161,20 +265,20 @@ def parse_rtp(rtp):
     return_datetime_utc = make_datetime_json_serializable(date, time)
 
     value = {
-        "return_datetime_utc": return_datetime_utc,
+        "returnDatetimeUtc": return_datetime_utc,
         "port": rtp.get("PO"),
-        "reason_of_return": rtp.get("RE")
+        "reasonOfReturn": rtp.get("RE")
     }
 
     children = tagged_children(rtp)
 
     if "GEA" in children:
         gear = [parse_gea(gea) for gea in children["GEA"]]
-        value["gear_onboard"] = gear
+        value["gearOnboard"] = gear
 
     data = {
         "log_type": "RTP",
         "value": value
     }
 
-    return None, None, None, data
+    return data

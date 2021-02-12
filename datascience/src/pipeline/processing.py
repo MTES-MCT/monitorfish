@@ -1,5 +1,6 @@
-from typing import List
 import json
+from typing import List
+
 import numpy as np
 import pandas as pd
 
@@ -122,7 +123,7 @@ def lst2pgarr(alist: List) -> str:
 
 
 def dict2json(d):
-    """Converts python dictionnary to json string. This is required when inserting 
+    """Converts python dictionnary to json string. This is required when inserting
     a pandas DataFrame column containing dictionnaries into a Postgresql JSONB column.
     """
     return json.dumps(d, ensure_ascii=False)

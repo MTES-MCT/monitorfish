@@ -4,11 +4,12 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 from datetime import datetime
 from functools import partial
+from typing import List, Union
 from xml.etree.ElementTree import ParseError
+
 import tqdm
 import pandas as pd
 
-from typing import List, Union
 from src.utils.ers import (
     remove_namespace,
     get_root_tag,
@@ -20,31 +21,37 @@ from src.utils.ers import (
     xml_tag_structure_func_factory
 )
 
+from src.pipeline.parsers.log_parsers import (
+    parse_dep,
+    parse_far,
+    parse_dis,
+    parse_pno,
+    parse_lan,
+    parse_eof,
+    parse_rtp, 
+    parse_coe, 
+    parse_cox, 
+    parse_cro,
+    default_log_parser
+)
 
-def minimal_parser(
-    el: xml.etree.ElementTree.Element,
-    metadata_key: Union[str, None] = None,
-    pass_child: bool = False,
-    data_key: Union[str, None] = None):
-    
+
+class ERSParsingError(Exception):
+    """Raised when an ERS message cannot be parsed."""
+    pass
+
+
+def simple_parser(el: xml.etree.ElementTree.Element, pass_child: bool = False):
     root_tag = get_root_tag(el)
-    
-    if metadata_key:
-        metadata = {metadata_key: root_tag}
-    else:
-        metadata = None
+    metadata = {"operation_type": root_tag}
 
     if pass_child:
         child = get_first_child(el, assert_child_single=True)
     else:
         child = None
 
-    if data_key:
-        data = {data_key: root_tag}
-    else:
-        data = None
+    data = None
     logs = None
-
     return metadata, child, logs, data
 
 
@@ -68,7 +75,7 @@ def parse_ops(ops):
 def parse_cor(cor):
     metadata = {
         'operation_type': 'COR',
-        'ers_id_to_delete_or_correct': cor.get('RN')
+        'referenced_ers_id': cor.get('RN')
         }
     child = get_first_child(cor, assert_child_single=True)
     return metadata, child, None, None
@@ -77,9 +84,28 @@ def parse_cor(cor):
 def parse_del(del_):
     metadata = {
         'operation_type': 'DEL',
-        'ers_id_to_delete_or_correct': del_.get('RN')
+        'referenced_ers_id': del_.get('RN')
         }
-    return metadata, None, None, None
+    
+    return metadata, None, None, {"value": None}
+
+
+def parse_ret(ret):
+    metadata = {
+        'operation_type': 'RET',
+        'referenced_ers_id': ret.get('ON')
+        }
+    
+    data = {
+        "returnStatus": ret.get("RS"),
+    }
+    
+    rejectionCause = ret.get("RE")
+    
+    if rejectionCause :
+        data["rejectionCause"] = rejectionCause
+    
+    return metadata, None, None, {"value": data}
 
 
 def parse_ers(ers):
@@ -91,7 +117,7 @@ def parse_ers(ers):
     metadata = {"ers_id": ers.get("RN"), "ers_datetime_utc": ers_datetime}
 
     children = list(ers)
-    child = get_first_child(children)
+    child = get_first_child(children, )
 
     return metadata, child, None, None
 
@@ -105,263 +131,25 @@ def parse_log(log):
         "external_identification": log.get("XR"),
         "vessel_name": log.get("NA"),
         "flag_state": log.get("FS"),
-        "imo": log.get("IM"),
+        "imo": log.get("IM")
     }
+    
+    elogs = [child for child in list(log) if remove_namespace(child.tag) == "ELOG"]
+    if len(elogs) == 1:
+        elog = elogs[0]
+        metadata["trip_number"] = elog.get("TN")
+
 
     return metadata, None, logs, None
 
 
-def parse_gea(gea):
-
-    data = {"gear": gea.get("GE"), "mesh": try_float(gea.get("ME"))}
-
-    return data
-
-
-def parse_ras(ras):
-    fao_ids = [
-        ras.get("FA"),
-        ras.get("SA"),
-        ras.get("ID"),
-        ras.get("SD"),
-        ras.get("UI"),
-    ]
-
-    fao_ids = [i for i in fao_ids if i]
-    fao_zone = ".".join(fao_ids)
-
-    data = {
-        "fao_zone": fao_zone,
-        "economic_zone": ras.get("EZ"),
-        "statistical_rectangle": ras.get("SR"),
-        "effort_zone": ras.get("FE"),
-    }
-
-    return data
-
-
-def parse_pro(pro):
-    data = {
-        "presentation": pro.get("PR"),
-        "packaging": pro.get("TY"),
-        "freshness": pro.get("FF"),
-        "preservation_state": pro.get("PS"),
-    }
-    return data
-
-
-def parse_spe(spe):
-    data = {
-        "species": spe.get("SN"),
-        "weight": try_float(spe.get("WT")),
-        "nb_fish": try_float(spe.get("NF")),
-    }
-
-    children = tagged_children(spe)
-
-    if "RAS" in children:
-        assert len(children["RAS"]) == 1
-        ras = children["RAS"][0]
-        ras_data = parse_ras(ras)
-        data = {**data, **ras_data}
-
-    if "PRO" in children:
-        assert len(children["PRO"]) == 1
-        pro = children["PRO"][0]
-        pro_data = parse_pro(pro)
-        data = {**data, **pro_data}
-
-    return data
-
-
-def parse_pos(pos):
-    return try_float(pos.get("LT")), try_float(pos.get("LG"))
-
-
-def parse_dep(dep):
-    date = dep.get("DA")
-    time = dep.get("TI")
-    # cannot use DateTime because the data needs to be json serializable
-    departure_datetime_utc = make_datetime_json_serializable(date, time)
-
-    value = {
-        "departure_datetime_utc": departure_datetime_utc,
-        "departure_port": dep.get("PO"),
-        "anticipated_activity": dep.get("AA"),
-    }
-
-    children = tagged_children(dep)
-
-    if "GEA" in children:
-        gear = [parse_gea(gea) for gea in children["GEA"]]
-        value["gear_onboard"] = gear
-
-    if "SPE" in children:
-        species_onboard = [parse_spe(spe) for spe in children["SPE"]]
-        value["species_onboard"] = species_onboard
-
-    data = {"log_type": "DEP", "value": value}
-
-    return None, None, None, data
-
-
-def parse_far(far):
-    date = far.get("DA")
-    time = far.get("TI")
-    far_datetime_utc = make_datetime_json_serializable(date, time)
-
-    value = {"far_datetime_utc": far_datetime_utc}
-
-    children = tagged_children(far)
-
-    if "GEA" in children:
-        assert len(children["GEA"]) == 1
-        gear_el = children["GEA"][0]
-        gear = parse_gea(gear_el)
-        value = {**value, **gear}
-
-    if "SPE" in children:
-        catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catches"] = catches
-
-    if "POS" in children:
-        assert len(children["POS"]) == 1
-        pos = children["POS"][0]
-        lat, lon = parse_pos(pos)
-        value["latitude"] = try_float(lat)
-        value["longitude"] = try_float(lon)
-
-    data = {"log_type": "FAR", "value": value}
-
-    return None, None, None, data
-
-
-def parse_dis(dis):
-    date = dis.get("DA")
-    time = dis.get("TI")
-    discard_datetime_utc = make_datetime_json_serializable(date, time)
-
-    value = {
-        "discard_datetime_utc": discard_datetime_utc
-    }
-
-    children = tagged_children(dis)
-
-    if "SPE" in children:
-        catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catches"] = catches
-
-    data = {
-        "log_type": "DIS",
-        "value": value
-    }
-
-    return None, None, None, data
-
-
-def parse_pno(pno):
-    date = pno.get("PD")
-    time = pno.get("PT")
-    predicted_arrival_datetime_utc = make_datetime_json_serializable(date, time)
-
-    start_date = pno.get("DS")
-    trip_start_date = make_datetime_json_serializable(start_date, None)
-
-    children = tagged_children(pno)
-
-    value = {
-        "predicted_arrival_datetime_utc": predicted_arrival_datetime_utc,
-        "port": pno.get("PO"),
-        "purpose": pno.get("PC"),
-        "trip_start_date": trip_start_date,
-    }
-
-    if "RAS" in children:
-        assert len(children["RAS"]) == 1
-        ras = children["RAS"][0]
-        ras_data = parse_ras(ras)
-        value = {**value, **ras_data}
-
-    if "SPE" in children:
-        catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catch_onboard"] = catches
-
-    if "POS" in children:
-        assert len(children["POS"]) == 1
-        pos = children["POS"][0]
-        lat, lon = parse_pos(pos)
-        value["latitude"] = try_float(lat)
-        value["longitude"] = try_float(lon)
-
-    data = {"log_type": "PNO", "value": value}
-
-    return None, None, None, data
-
-
-def parse_lan(lan):
-    date = lan.get("DA")
-    time = lan.get("TI")
-    landing_datetime_utc = make_datetime_json_serializable(date, time)
-
-    value = {
-        "landing_datetime_utc": landing_datetime_utc,
-        "port": lan.get("PO"),
-    }
-    
-    children = tagged_children(lan)
-
-    if "SPE" in children:
-        catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catch_landed"] = catches
-
-    data = {
-        "log_type": "LAN",
-        "value": value
-    }
-
-    return None, None, None, data
-
-
-def parse_eof(eof):
-    date = eof.get("DA")
-    time = eof.get("TI")
-    end_of_fishing_datetime_utc = make_datetime_json_serializable(date, time)
-    value = {"end_of_fishing_datetime_utc": end_of_fishing_datetime_utc}
-    data = {"log_type": "EOF", "value": value}
-    return None, None, None, data
-
-
-def parse_rtp(rtp):
-    date = rtp.get("DA")
-    time = rtp.get("TI")
-    return_datetime_utc = make_datetime_json_serializable(date, time)
-
-    value = {
-        "return_datetime_utc": return_datetime_utc,
-        "port": rtp.get("PO"),
-        "reason_of_return": rtp.get("RE")
-    }
-
-    children = tagged_children(rtp)
-
-    if "GEA" in children:
-        gear = [parse_gea(gea) for gea in children["GEA"]]
-        value["gear_onboard"] = gear
-
-    data = {
-        "log_type": "RTP",
-        "value": value
-    }
-
-    return None, None, None, data
-
 parsers = {
-    "DAT": partial(minimal_parser, metadata_key="operation_type", pass_child=True),
+    "DAT": partial(simple_parser, pass_child=True),
     "COR": parse_cor,
     "DEL": parse_del,
-    "RET": partial(minimal_parser, metadata_key="operation_type", pass_child=False),
-    "QUE": partial(minimal_parser, metadata_key="operation_type", pass_child=False),
-    "RSP": partial(minimal_parser, metadata_key="operation_type", pass_child=False),
+    "RET": parse_ret,
+    "QUE": partial(simple_parser, pass_child=False),
+    "RSP": partial(simple_parser, pass_child=False),
     "OPS": parse_ops,
     "ERS": parse_ers,
     "LOG": parse_log,
@@ -372,14 +160,14 @@ parsers = {
     "PNO": parse_pno,
     "RTP": parse_rtp,
     "LAN": parse_lan,
-    "RLC": partial(minimal_parser, data_key="log_type", pass_child=False),
-    "TRA": partial(minimal_parser, data_key="log_type", pass_child=False),
-    "COE": partial(minimal_parser, data_key="log_type", pass_child=False),
-    "COX": partial(minimal_parser, data_key="log_type", pass_child=False),
-    "CRO": partial(minimal_parser, data_key="log_type", pass_child=False),
-    "TRZ": partial(minimal_parser, data_key="log_type", pass_child=False),
-    "INS": partial(minimal_parser, data_key="log_type", pass_child=False),
-    "PNT": partial(minimal_parser, data_key="log_type", pass_child=False)
+    "RLC": default_log_parser,
+    "TRA": default_log_parser,
+    "COE": parse_coe,
+    "COX": parse_cox,
+    "CRO": parse_cro,
+    "TRZ": default_log_parser,
+    "INS": default_log_parser,
+    "PNT": default_log_parser
 }
 
 
@@ -387,43 +175,45 @@ def parse_(el):
     root_tag = get_root_tag(el)
     try:
         parser = parsers[root_tag]
-    except:
+    except KeyError:
         logging.warning("Parser not implemented for xml tag: ", root_tag)
-        return {}
-    return parser(el)
+        raise ERSParsingError
+    try:
+        res = parser(el)
+    except :
+        raise ERSParsingError
+    return res
 
 
 def parse(el):
     metadata, child, logs, data = parse_(el)
 
-    if child is not None and not logs and data is None:
+    # OPS, DAT, COR and ERS elements with metadata and a child element to parse
+    if metadata is not None and child is not None and logs is None and data is None:
         child_metadata, data_iter = parse(child)
         return {**metadata, **child_metadata}, data_iter
 
-    elif logs and child is None and data is None:
+    # LOG elements with FAR, LAN, PNO... children
+    elif metadata is not None and child is None and logs is not None and data is None:
+        return metadata, map(parse_, logs)
 
-        def data_iter():
-            for log in logs:
-                _, _, _, data = parse_(log)
-                yield data
-
-        return metadata, data_iter()
-
-    elif child is None and not logs:
-        return metadata, iter([{"value": None}])
+    # DEL, RET elements with no child, no logs
+    elif metadata is not None and child is None and logs is None and data is not None:
+        return metadata, iter([data])
+    
+    # RSP, QUE elements with only metadata
+    elif metadata is not None and child is None and logs is None and data is None:
+        return metadata, iter([])
+    
     else:
-        logging.error("Parsing error")
-        return {}
+        raise ERSParsingError
 
 
 def parse_xml_string(xml_string):
     try:
         el = ET.fromstring(xml_string.strip("¿"))
     except ParseError:
-        logging.warning(
-            f"XML message '{xml_string[:20]}...' could not be parsed, returning empty data."
-        )
-        return {}
+        raise ERSParsingError
     return parse(el)
 
 
@@ -449,7 +239,8 @@ def batch_parse(ers_xmls:List[str]):
         'operation_datetime_utc': None,
         'operation_type': None,
         'ers_id': None,
-        'ers_id_to_delete_or_correcters_datetime_utc': None,
+        'referenced_ers_id' : None,
+        'ers_datetime_utc': None,
         'cfr': None,
         'ircs': None,
         'external_identification': None,
@@ -457,8 +248,7 @@ def batch_parse(ers_xmls:List[str]):
         'flag_state': None,
         'imo': None,
         'xml_message': None,
-        'raw_integration_datetime_utc': None,
-        'parsed_integration_datetime_utc': None}
+        'integration_datetime_utc': None}
     
     res_json_default = {
         'operation_number': None,
@@ -466,7 +256,7 @@ def batch_parse(ers_xmls:List[str]):
         'operation_datetime_utc': None,
         'operation_type': None,
         'ers_id': None,
-        'ers_id_to_delete_or_correct': None,
+        'referenced_ers_id': None,
         'ers_datetime_utc': None,
         'cfr': None,
         'ircs': None,
@@ -476,29 +266,36 @@ def batch_parse(ers_xmls:List[str]):
         'imo': None,
         'log_type': None,
         'value': None,
-        'parsed_integration_datetime_utc': None}
+        'integration_datetime_utc': None}
         
     
     for xml_message in tqdm.tqdm(ers_xmls):
-        now = datetime.utcnow()
-        raw = {"xml_message": xml_message, "xml_integration_datetime_utc": now}
         try:
             metadata, data_iterator = parse_xml_string(xml_message)
-            raw = {**metadata, **raw}
+            now = datetime.utcnow()
+            raw = {**metadata, 
+                   "xml_message": xml_message, 
+                   "integration_datetime_utc": now}
             for data in data_iterator:
                 res_json.append(pd.Series({
                     **res_json_default, 
                     **metadata, 
                     **data, 
-                    "parsed_integration_datetime_utc": now
+                    "integration_datetime_utc": now
                 }))
-                raw["parsed_integration_datetime_utc"] = now
-        except Exception as e:
-            raise e
-            logging.error("Parsing error - one ERS message will be ignored.")
-        res_xml.append(pd.Series({**res_xml_default, **raw}))
+            res_xml.append(pd.Series({**res_xml_default, **raw}))
+        except ERSParsingError as e:
+            log_end = "..." if len(xml_message) > 40 else ""
+            logging.error("Parsing error - one ERS message will be ignored : " + xml_message[:40] + log_end)
+        except :
+            logging.error("Error with message" + xml_message)
+            raise
 
-    ers_json = pd.concat(res_json, axis=1).T
-    ers_xml = pd.concat(res_xml, axis=1).T    
-
+    ers_json = pd.DataFrame(columns=pd.Index(res_json_default))
+    ers_xml = pd.DataFrame(columns=pd.Index(res_xml_default))
+    if len(res_json) > 0:
+        ers_json = pd.concat(res_json, axis=1).T
+    if len(res_xml) > 0:
+        ers_xml = pd.concat(res_xml, axis=1).T
+        
     return ers_json, ers_xml

@@ -14,10 +14,10 @@ def parse_ras(ras):
     fao_zone = ".".join(fao_ids)
 
     data = {
-        "fao_zone": fao_zone,
-        "economic_zone": ras.get("EZ"),
-        "statistical_rectangle": ras.get("SR"),
-        "effort_zone": ras.get("FE"),
+        "faoZone": fao_zone,
+        "economicZone": ras.get("EZ"),
+        "statisticalRectangle": ras.get("SR"),
+        "effortZone": ras.get("FE"),
     }
 
     return data
@@ -28,7 +28,8 @@ def parse_pro(pro):
         "presentation": pro.get("PR"),
         "packaging": pro.get("TY"),
         "freshness": pro.get("FF"),
-        "preservation_state": pro.get("PS"),
+        "preservationState": pro.get("PS"),
+        "conversionFactor": try_float(pro.get("CF"))
     }
     return data
 
@@ -37,7 +38,7 @@ def parse_spe(spe):
     data = {
         "species": spe.get("SN"),
         "weight": try_float(spe.get("WT")),
-        "nb_fish": try_float(spe.get("NF")),
+        "nbFish": try_float(spe.get("NF")),
     }
 
     children = tagged_children(spe)
@@ -63,6 +64,6 @@ def parse_pos(pos):
 
 def parse_gea(gea):
 
-    data = {"gear": gea.get("GE"), "mesh": try_float(gea.get("ME"))}
+    data = {"gear": gea.get("GE"), "mesh": try_float(gea.get("ME")), "dimensions": try_float(gea.get("GC"))}
 
     return data

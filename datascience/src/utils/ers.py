@@ -2,6 +2,7 @@ from datetime import datetime
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 from typing import Union
+import logging
 
 NS = {"ers": "http://ec.europa.eu/fisheries/schema/ers/v3"}
 
@@ -85,7 +86,9 @@ def get_first_child(xml_element, assert_child_single=True):
     return children[0]
 
 
-def make_datetime(date:str, time:Union[str, None]):
+def make_datetime(date:str, time:Union[str, None]=None):
+    """Takes date a "2020-12-24" string and, optionnally, a time "16:49" string, 
+    Returns a datetime object"""
     datetime_string = date
     datetime_format = "%Y-%m-%d"
 
@@ -104,12 +107,12 @@ def make_datetime(date:str, time:Union[str, None]):
     return res
 
 
-def make_datetime_json_serializable(date:str, time:Union[str, None]):
-    if date:
-        res = date
-        if time:
-            res += " " + time
-        return res
+def make_datetime_json_serializable(date:str, time:Union[str, None]=None):
+    dt = make_datetime(date, time)
+    if dt:
+        return dt.isoformat()+"Z"
+    else:
+        return None
 
 
 def try_float(s:str):

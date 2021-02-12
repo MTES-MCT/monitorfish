@@ -4,11 +4,15 @@ import pandas as pd
 import prefect
 from prefect import Flow, Parameter, task
 from sqlalchemy import (Boolean, Date, DateTime, Float, Integer, MetaData,
-                        String, Table, JSON)
+                        String, Table, select, func, Text)
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.exc import InvalidRequestError
+
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
 from src.read_query import read_query
 from src.utils.database import psql_insert_copy
+from src.pipeline.processing import dict2json
 
 RAW_XML_TABLE = {"dam": "raw_jpe_dam_xml", "dpma": "raw_jpe_dpma_xml"}
 
@@ -42,56 +46,179 @@ def parse_xml(raw_xml: Iterator[pd.DataFrame]) -> Iterator[pd.DataFrame]:
         parsed, parsed_with_xml = batch_parse(raw_xml_chunk.xml_message.values)
         yield parsed, parsed_with_xml
 
-
+        
 @task
-def load_parsed_xml(parsed_xml: Iterator[pd.DataFrame], data_source: str = "dam"):
-    """Load parsed JPE data into monitorfish_remote_i database.
+def clean(parsed_data):
+    logger = prefect.context.get("logger")
+    for i, (ers_json, ers_xml) in enumerate(parsed_data):
+        logger.info(f"Removing QUE and RSP messages from chunk {i}.")
+        cleaned_ers_json = ers_json[ers_json.operation_type.isin(['DAT', 'DEL', 'COR', 'RET'])]
+        cleaned_ers_xml = ers_xml[ers_xml.operation_type.isin(['DAT', 'DEL', 'COR', 'RET'])]
+        yield cleaned_ers_json, cleaned_ers_xml
 
-    parsed_xml: iterator that yields chunks of parsed data to load into DB.
-    data_source : "dam" or "dpma"
+        
+def remove_already_existing_messages(ers_messages_table, ers_json, ers_xml, connection, logger):
+    try:
+        assert("operation_number" in [c.name for c in ers_messages_table.columns])
+    except AssertionError as e:
+        logger.error("Missing primary key column 'operation_number' in ers_messages table." + 
+                     "This is required to avoid inserting duplicated data into the table." +
+                     "Check database migrations.")
+        
+    n_messages = len(ers_xml)
+    n_logs = len(ers_json)
+    n_operations = ers_xml.operation_number.nunique()
+    
+    # Extract existing keys in ers_messages table
+    s = select([ers_messages_table.c.operation_number])
+    existing_operation_numbers = connection.execute(s).fetchall()
+    existing_operation_numbers = [x[0] for x in existing_operation_numbers]
+    
+    # Remove keys already present in the database from dataframes
+    cleaned_ers_json = ers_json[~ers_json.operation_number.isin(existing_operation_numbers)]
+    cleaned_ers_xml = ers_xml[~ers_xml.operation_number.isin(existing_operation_numbers)]
+    
+    n_messages_cleaned = len(cleaned_ers_xml)
+    n_logs_cleaned = len(cleaned_ers_json)
+    n_operations_cleaned = cleaned_ers_xml.operation_number.nunique()
+    
+    log = (
+        f"From {n_messages} xml messages with {n_operations} distinct operation numbers " + 
+        f"containing {n_logs} logs, {n_messages_cleaned} xml messages with {n_operations_cleaned} " + 
+        f"distinct operation numbers containing {n_logs_cleaned} logs are new and will be inserted " +
+        "in the database.")
+    
+    logger.info(log)
+    return cleaned_ers_json, cleaned_ers_xml
+
+
+def delete(table, logger, connection):
+    count_statement = select([func.count()]).select_from(table)
+    n = connection.execute(count_statement).fetchall()[0][0]
+    if logger:
+        logger.info(f"Found existing table {table.name} with {n} rows.")
+        logger.info(f"Deleting table {table.name}...")
+    connection.execute(table.delete())
+    count_statement = select([func.count()]).select_from(table)
+    n = connection.execute(count_statement).fetchall()[0][0]
+    if logger:
+        logger.info(f"Rows after deletion: {n}.")
+
+        
+@task
+def load_ers(parsed_data, if_exists: str="append"):
+    """Loads parsed ERS data into public.ers and public.ers_messages tables.
+    
+    Args:
+        parsed (Iterator) : iterator of pandas DataFrames (output of `parse_xml` task)
+        if_exists (str) : one of 
+            append : append data to existing tables
+            replace : delete all data from existing tables then insert data
     """
-    table_name = "ers"
+    schema = "public"
+    ers_table_name = "ers"
+    ers_messages_table_name = "ers_messages"
+#     schema = "processed"
+#     ers_table_name = "ers"
+#     ers_messages_table_name = "ers_messages"
+    
     engine = create_engine("monitorfish_remote_i")
     logger = prefect.context.get("logger")
-
+    
     with engine.begin() as connection:
-        meta = MetaData()
+        meta = MetaData(schema=schema)
         meta.bind = connection
-        table = Table(table_name, meta, schema="processed")
-        if table.exists():
-            logger.info(f"Deleting from existing table {table_name}.")
-            table.delete()
-        else:
-            logger.info(f"Creating table {table_name}.")
+        try:
+            meta.reflect(only=[ers_table_name, ers_messages_table_name])
+            ers_table = Table(ers_table_name, meta, mustexist=True)
+            ers_messages_table = Table(ers_messages_table_name, meta, mustexist=True)
+        except InvalidRequestError:
+            logger.error("ers and ers_messages tables must exist. Make appropriate migrations and try again.")
+            raise
 
-        for i, (parsed, parsed_with_xml) in enumerate(parsed_xml):
-            logger.info(f"Inserting chunk {i}")
-            parsed.to_sql(
-                name=table_name,
+        if if_exists == "replace":
+            delete(ers_table, logger, connection)
+            delete(ers_messages_table, logger, connection)
+        
+        for i, (ers_json, ers_xml) in enumerate(parsed_data):
+
+            logger.info(f"Inserting chunk {i}")            
+            # Drop rows for which the operation number already exists in the ers_messages database
+            ers_json, ers_xml = remove_already_existing_messages(ers_messages_table, 
+                                                                 ers_json, 
+                                                                 ers_xml, 
+                                                                 connection, 
+                                                                 logger)
+            if len(ers_xml) == 0 :
+                logger.warning("No messages to insert.")
+                continue
+            
+            logger.info(f"Inserting {len(ers_xml)} messages.")
+            
+            ers_xml.to_sql(
+            name=ers_messages_table_name,
+            con=connection,
+            schema=schema,
+            index=False,
+            method=psql_insert_copy,
+            if_exists="append",
+            dtype={
+                'operation_number': String(17),
+                'operation_country': String(3),
+                'operation_datetime_utc': DateTime,
+                'operation_type': String(3),
+                'ers_id': String(17),
+                'referenced_ers_id': String(17),
+                'ers_datetime_utc': DateTime,
+                'cfr': String(12),
+                'ircs': String(7),
+                'external_identification': String(14),
+                'vessel_name': String(100),
+                'flag_state': String(3),
+                'imo': String(20),
+                'xml_message': Text(),
+                'integration_datetime_utc': DateTime}
+            )
+            
+            if len(ers_json) == 0:
+                continue
+
+            ers_json['value'] = ers_json.value.map(dict2json)
+            ers_json.to_sql(
+                name=ers_table_name,
                 con=connection,
-                schema="processed",
+                schema=schema,
                 index=False,
                 method=psql_insert_copy,
                 if_exists="append",
                 dtype={
-                    "operation_number": String(17),
-                    "operation_country": String(3),
-                    "operation_datetime_utc": DateTime,
-                    "operation_type": String(3),
-                    "ers_id": String(17),
-                    "ers_datetime_utc": DateTime,
-                    "cfr": String(12),
-                    "ircs": String(7),
-                    "external_identification": String(14),
-                    "vessel_name": String(100),
-                    "flag_state": String(3),
-                    "imo": String(100)
-                },
+                    'operation_number': String(17),
+                    'operation_country': String(3),
+                    'operation_datetime_utc': DateTime,
+                    'operation_type': String(3),
+                    'ers_id': String(17),
+                    'referenced_ers_id': String(17),
+                    'ers_datetime_utc': DateTime,
+                    'cfr': String(12),
+                    'ircs': String(7),
+                    'external_identification': String(14),
+                    'vessel_name': String(100),
+                    'flag_state': String(3),
+                    'imo': String(20),
+                    'log_type': String(3),
+                    'value': JSONB,
+                    'integration_datetime_utc': DateTime},
             )
-
 
 with Flow("Extract parse load ERS messages") as f:
     data_source = Parameter("data_source", default="dam")
+    if_exists = Parameter("if_exists", default="append")
     raw_xml = extract_raw_xml(data_source=data_source)
-    parsed_xml = parse_xml(raw_xml)
-    load_parsed_xml(parsed_xml, data_source=data_source)
+    parsed_data = parse_xml(raw_xml)
+    cleaned_data = clean(parsed_data)
+    load_ers(cleaned_data, if_exists=if_exists)
+
+
+    
+if __name__ == "__main__":
+    f.run(if_exists="replace")

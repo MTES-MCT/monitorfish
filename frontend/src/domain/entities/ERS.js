@@ -49,6 +49,10 @@ export const ERSMessageActivityType = {
     FSH: 'Pêche',
 }
 
+export const ERSMessageSender = {
+    MAS: 'Capitaine',
+}
+
 export const ERSMessagePNOPurposeType = {
     LAN: 'Débarquement',
 }

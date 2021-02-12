@@ -1,13 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.ers
 
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.Acknowledge
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.ERSMessageValue
 import java.time.ZonedDateTime
 
 class ERSMessage(
         val ersId: String,
         val operationNumber: String,
-        val tripNumber: Int,
-        val ersIdToDeleteOrCorrect: String? = null,
+        val tripNumber: Int? = null,
+        val referencedErsId: String? = null,
+        var isCorrected: Boolean? = false,
         val operationType: ERSOperationType,
         val operationDateTime: ZonedDateTime? = null,
         val internalReferenceNumber: String? = null,
@@ -18,5 +20,6 @@ class ERSMessage(
         val imo: String? = null,
         val messageType: String,
         val parsedIntegrationDateTime: ZonedDateTime? = null,
+        var acknowledge: Acknowledge? = null,
         val message: ERSMessageValue? = null,
         var rawMessage: String? = null)

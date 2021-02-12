@@ -66,6 +66,7 @@ const Species = styled.div`
   display: flex;
   height: ${props => props.height}px;
   min-height: 20px;
+  max-height: 90px;
   align-items: center;
   justify-content: center;
   color: ${COLORS.grayDarkerThree};

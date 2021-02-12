@@ -8,7 +8,7 @@ import {ReactComponent as WarningSVG} from '../../components/icons/Point_exclama
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
-const FARMessageSpecies = props => {
+const ERSMessageSpecies = props => {
     const [isOpen, setIsOpen] = useState(false)
 
     const getSpeciesName = species => {
@@ -298,4 +298,4 @@ const NoValue = styled.span`
 `
 
 
-export default FARMessageSpecies
+export default ERSMessageSpecies

@@ -34,7 +34,7 @@ const LANMessage = props => {
                             </Field>
                             <Field>
                                 <Key>Émetteur du message</Key>
-                                <Value>{props.message.sender && props.message.sender ? <>{ERSMessageSender[props.message.sender]} ({props.message.sender})</> : <NoValue>-</NoValue>}</Value>
+                                <Value>{props.message.sender ? <>{ERSMessageSender[props.message.sender]} ({props.message.sender})</> : <NoValue>-</NoValue>}</Value>
                             </Field>
                         </TableBody>
                     </Fields>

@@ -49,7 +49,7 @@ const DEPMessageResume = props => {
                                             }
                                         </SubValue><br/>
                                         <SubKey>Maillage</SubKey><SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
-                                        <SubKey>Dimensions</SubKey><SubValue>{gear.size ? <>{gear.size} mm</> : <NoValue>-</NoValue>}</SubValue>
+                                        <SubKey>Dimensions</SubKey><SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
                                         <br/>
                                     </Gear>
                                 }) : <NoValue>Pas d'engins à bord</NoValue>}

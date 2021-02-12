@@ -16,6 +16,7 @@ class Catch() {
     var effortZone: String? = null
     var presentation: String? = null
     var economicZone: String? = null
+    var conversionFactor: Double? = null
     var preservationState: String? = null
     var statisticalRectangle: String? = null
 }

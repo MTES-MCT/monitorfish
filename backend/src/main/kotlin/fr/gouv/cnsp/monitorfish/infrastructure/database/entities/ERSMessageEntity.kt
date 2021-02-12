@@ -22,7 +22,7 @@ data class ERSMessageEntity(
         @Column(name = "ers_id")
         val ersId: String,
         @Column(name = "referenced_ers_id")
-        val ersIdToDeleteOrCorrect: String? = null,
+        val referencedErsId: String? = null,
         @Column(name = "ers_datetime_utc")
         val ersDateTime: Instant? = null,
         @Column(name = "cfr")

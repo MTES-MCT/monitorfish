@@ -7,4 +7,5 @@ class Gear() {
     var gear: String? = null
     var gearName: String? = null
     var mesh: Double? = null
+    var dimensions: String? = null
 }

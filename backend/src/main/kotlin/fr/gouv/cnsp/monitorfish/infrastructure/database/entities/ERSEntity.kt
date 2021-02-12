@@ -9,7 +9,6 @@ import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import java.time.Instant
 import java.time.ZoneOffset.UTC
-import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
@@ -25,7 +24,7 @@ data class ERSEntity(
         @Column(name = "operation_number")
         val operationNumber: String,
         @Column(name = "trip_number")
-        val tripNumber: Int,
+        val tripNumber: Int? = null,
         @Column(name = "operation_country")
         val operationCountry: String? = null,
         @Column(name = "operation_datetime_utc")
@@ -36,7 +35,7 @@ data class ERSEntity(
         @Column(name = "ers_id")
         val ersId: String,
         @Column(name = "referenced_ers_id")
-        val ersIdToDeleteOrCorrect: String? = null,
+        val referencedErsId: String? = null,
         @Column(name = "ers_datetime_utc")
         val ersDateTime: Instant? = null,
         @Column(name = "cfr")
@@ -61,7 +60,7 @@ data class ERSEntity(
 
         fun toERSMessage(mapper: ObjectMapper) = ERSMessage(
                 internalReferenceNumber = internalReferenceNumber,
-                ersIdToDeleteOrCorrect = ersIdToDeleteOrCorrect,
+                referencedErsId = referencedErsId,
                 externalReferenceNumber = externalReferenceNumber,
                 ircs = ircs,
                 operationDateTime = operationDateTime.atZone(UTC),
@@ -73,5 +72,5 @@ data class ERSEntity(
                 flagState = flagState,
                 imo = imo,
                 messageType = messageType,
-                message = getERSMessageValueFromJSON(mapper, message, messageType))
+                message = getERSMessageValueFromJSON(mapper, message, messageType, operationType))
 }

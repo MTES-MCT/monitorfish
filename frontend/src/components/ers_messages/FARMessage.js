@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
 import {getCoordinates, getDateTime} from "../../utils";
 import {WSG84_PROJECTION} from "../../domain/entities/map";
-import FARMessageSpecies from "./FARMessageSpecies";
+import ERSMessageSpecies from "./ERSMessageSpecies";
 import {buildCatchArray} from "../../domain/entities/ERS";
 
 const FARMessage = props => {
@@ -32,11 +32,11 @@ const FARMessage = props => {
                             <Field>
                                 <Key>Position opération</Key>
                                 <Value>
-                                    <Key>Lat.</Key> { props.message.latitude && props.message.longitude ?
+                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitude && props.message.longitude ?
                                     getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[0] :
                                     <NoValue>-</NoValue> }
                                     <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude ?
-                                    getCoordinates([props.message.latitude, props.message.latitude], WSG84_PROJECTION)[1] :
+                                    getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[1] :
                                     <NoValue>-</NoValue>}
                                 </Value>
                             </Field>
@@ -68,7 +68,7 @@ const FARMessage = props => {
                 <SpeciesList>
                     {
                         catches.map((speciesCatch, index) => {
-                            return <FARMessageSpecies
+                            return <ERSMessageSpecies
                                 index={index + 1}
                                 hasManyProperties={speciesCatch.properties.length > 1}
                                 isLast={catches.length === index + 1}
@@ -82,6 +82,13 @@ const FARMessage = props => {
     </>
 }
 
+
+const FirstInlineKey = styled.div`
+  color: ${COLORS.textGray};
+  display: inline-block;
+  padding: 0px 5px 0px 0;
+  font-size: 13px;
+`
 const Gray = styled.span`
   color: ${COLORS.grayDarkerThree};
   font-weight: 300;

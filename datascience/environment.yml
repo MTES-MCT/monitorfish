@@ -29,3 +29,4 @@ dependencies:
   - pyarrow
   - tqdm
   - h3-py
+  - scrapy

@@ -31,7 +31,7 @@ const FARMessageResume = props => {
     }
 
     const increaseChartHeight = height => {
-        setChartHeight(chartHeight + height)
+        setChartHeight(chartHeight + (height + 2))
     }
 
     return <Wrapper>
@@ -91,11 +91,11 @@ const ERSMessageContent = styled.div`
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-opening` : null} {
     0%   { height: 0; opacity: 0; }
-    100% { height: ${props => props.chartHeight + 40}px; opacity: 1; }
+    100% { height: ${props => props.chartHeight}px; opacity: 1; }
   }
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-closing` : null} {
-    0%   { opacity: 1; height: ${props => props.chartHeight + 40}px; }
+    0%   { opacity: 1; height: ${props => props.chartHeight}px; }
     100% { opacity: 0; height: 0; }
   }
 `

@@ -244,18 +244,6 @@ const Zone = styled.div`
   background: ${COLORS.background};
 `
 
-// TODO Keep for the fishery tab
-const ZoneTitle = styled.div`
-  color: ${COLORS.textGray};
-  background: ${COLORS.grayDarker};
-  padding: 10px 10px 10px 20px;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-  flex-grow: 1;
-  width: 400px;
-  margin-bottom: 5px;
-`
-
 const Fields = styled.table`
   padding: 10px 5px 5px 20px; 
   width: inherit;

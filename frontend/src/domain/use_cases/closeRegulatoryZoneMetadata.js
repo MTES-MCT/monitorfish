@@ -1,6 +1,6 @@
 import {closeRegulatoryZoneMetadataPanel} from "../reducers/Regulatory";
 
-const closeRegulatoryZoneMetadata = () => (dispatch) => {
+const closeRegulatoryZoneMetadata = () => dispatch => {
     dispatch(closeRegulatoryZoneMetadataPanel())
 }
 

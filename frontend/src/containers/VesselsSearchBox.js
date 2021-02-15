@@ -13,20 +13,21 @@ import searchVessels from "../domain/use_cases/searchVessels";
 import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
 import countries from "i18n-iso-countries";
 import focusOnVesselSearch, {focusState} from "../domain/use_cases/focusOnVesselSearch";
+
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselsSearchBox = () => {
     const layers = useSelector(state => state.layer.layers)
     const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
-    const selectedVesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
     const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
+    const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
     const dispatch = useDispatch()
 
     const [searchText, setSearchText] = useState('');
     const [vesselsHasBeenUpdated, setVesselsHasBeenUpdated] = useState(false);
     const [foundVesselsOnMap, setFoundVesselsOnMap] = useState([]);
     const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([]);
-    const [selectedVessel, setSelectedVessel] = useState(null);
+    const [selectedVesselFeatureAndIdentity, setSelectedVesselFeatureAndIdentity] = useState(null);
     const firstUpdate = useRef(true);
 
     const wrapperRef = useRef(null);
@@ -45,22 +46,25 @@ const VesselsSearchBox = () => {
             // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [wrapperRef, selectedVessel]);
+    }, [wrapperRef, selectedVesselFeatureAndIdentity]);
 
     useEffect(() => {
         let isUpdatedVessel = false
-        if(selectedVessel &&
-            selectedVessel.vessel &&
-            selectedVesselFeatureAndIdentity &&
-            selectedVesselFeatureAndIdentity.vessel === selectedVesselFeatureAndIdentity.vessel) {
+        if(selectedVesselFeatureAndIdentity &&
+            selectedVesselFeatureAndIdentity.identity &&
+            vesselFeatureAndIdentity &&
+            vesselFeatureAndIdentity.identity === selectedVesselFeatureAndIdentity.identity) {
             isUpdatedVessel = true
             setVesselsHasBeenUpdated(true)
-        } else {
-            setVesselsHasBeenUpdated(false)
+            dispatch(focusOnVesselSearch(null, isUpdatedVessel))
+
+            return
         }
+
+        setVesselsHasBeenUpdated(false)
         dispatch(focusOnVesselSearch(null, isUpdatedVessel))
-        setSelectedVessel(selectedVesselFeatureAndIdentity)
-    }, [selectedVesselFeatureAndIdentity])
+        setSelectedVesselFeatureAndIdentity(vesselFeatureAndIdentity)
+    }, [vesselFeatureAndIdentity])
 
     function getTextForSearch(text) {
         return text
@@ -127,9 +131,9 @@ const VesselsSearchBox = () => {
     }, [])
 
     useEffect(() => {
-        if (selectedVessel && selectedVessel.vessel) {
+        if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
             if(!vesselsHasBeenUpdated) {
-                dispatch(showVesselTrackAndSidebar(selectedVessel, true, false));
+                dispatch(showVesselTrackAndSidebar(selectedVesselFeatureAndIdentity, true, false));
 
                 setSearchText('')
                 setFoundVesselsFromAPI([])
@@ -138,7 +142,7 @@ const VesselsSearchBox = () => {
         } else {
             dispatch(unselectVessel())
         }
-    }, [selectedVessel])
+    }, [selectedVesselFeatureAndIdentity])
 
     function getListItem(id, flagState, internalReferenceNumber, externalReferenceNumber, ircs, mmsi, vesselName, vessel) {
         return (
@@ -146,7 +150,8 @@ const VesselsSearchBox = () => {
                 onClick={() => {
                     dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT))
                     setVesselsHasBeenUpdated(false)
-                    setSelectedVessel(vessel)
+                    setSelectedVesselFeatureAndIdentity(vessel)
+                    setSearchText('')
                 }}
                 key={id}>
                 <div>
@@ -215,31 +220,31 @@ const VesselsSearchBox = () => {
         <Wrapper ref={wrapperRef}>
             <SearchBoxField>
                 {
-                    !isFocusedOnVesselSearch && selectedVessel && selectedVessel.vessel ? <SelectedVessel
+                    !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity ? <SelectedVessel
                         onClick={() => {
                             if(vesselSidebarIsOpen) {
                                 dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_TITLE))
                             }
                         }}
                         vesselSidebarIsOpen={vesselSidebarIsOpen}
-                        vesselName={selectedVessel.vessel.vesselName}
+                        vesselName={selectedVesselFeatureAndIdentity.identity.vesselName}
                         isFocusedOnVesselSearch={isFocusedOnVesselSearch}
                     >
-                        {selectedVessel.vessel.flagState ? <Flag
-                            title={countries.getName(selectedVessel.vessel.flagState, "fr")}
-                            src={`flags/${selectedVessel.vessel.flagState.toLowerCase()}.svg`} /> : null}
+                        {selectedVesselFeatureAndIdentity.identity.flagState ? <Flag
+                            title={countries.getName(selectedVesselFeatureAndIdentity.identity.flagState, "fr")}
+                            src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`} /> : null}
                         <VesselName>
-                            {selectedVessel.vessel.vesselName}
+                            {selectedVesselFeatureAndIdentity.identity.vesselName}
                             {' '}
                             {
-                                selectedVessel.vessel.flagState ? <>({selectedVessel.vessel.flagState})</> : null
+                                selectedVesselFeatureAndIdentity.identity.flagState ? <>({selectedVesselFeatureAndIdentity.identity.flagState})</> : null
                             }
                         </VesselName>
                         <CloseIcon onClick={() => {
-                            setSelectedVessel(null)
+                            setSelectedVesselFeatureAndIdentity(null)
                         }}/>
                     </SelectedVessel> : <SearchBoxInput
-                        ref={input => selectedVessel ? input && input.focus() : null}
+                        ref={input => selectedVesselFeatureAndIdentity ? input && input.focus() : null}
                         type="text"
                         firstUpdate={firstUpdate}
                         value={searchText}
@@ -250,7 +255,7 @@ const VesselsSearchBox = () => {
                     />
                 }
                 {
-                    !isFocusedOnVesselSearch && selectedVessel ? null : <SearchIcon />
+                    !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity ? null : <SearchIcon />
                 }
             </SearchBoxField>
             {
@@ -471,6 +476,5 @@ const ListItem = styled.li`
     background: ${COLORS.grayBackground};
   }
 `
-
 
 export default VesselsSearchBox

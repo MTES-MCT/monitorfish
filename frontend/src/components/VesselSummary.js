@@ -173,7 +173,7 @@ const VesselSummary = props => {
 }
 
 const Gray = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.grayDarkerThree};
   font-weight: 300;
 `
 

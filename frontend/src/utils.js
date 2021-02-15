@@ -42,6 +42,12 @@ export function getDay(date) {
     return day < 10 ? '0' + day : '' + day
 }
 
+export let getDate = dateString => {
+    if (dateString) {
+        const date = new Date(dateString)
+        return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()}`
+    }
+}
 
 export let getDateTime = (dateString, withoutSeconds) => {
     if (dateString) {

@@ -1,13 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetLastPositions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.SearchVessels
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.GearDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PositionDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselIdentityDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselDataOutput
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
+import fr.gouv.cnsp.monitorfish.domain.use_cases.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -26,18 +21,22 @@ import java.util.concurrent.atomic.AtomicInteger
 class BffController(
         private val getLastPositions: GetLastPositions,
         private val getVessel: GetVessel,
+        private val getVesselLastVoyage: GetVesselLastVoyage,
         private val getAllGears: GetAllGears,
+        private val getAllSpecies: GetAllSpecies,
         private val searchVessels: SearchVessels,
         meterRegistry: MeterRegistry) {
 
-    val timer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
-    val gauge = meterRegistry.gauge("ws_vessels_stored_in_last_positions", AtomicInteger(0))
+    // TODO Move this the it's own infrastructure Metric class
+    val vesselsTimer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
+    val ersTimer = meterRegistry.timer("ws_ers_requests_latency_seconds_summary");
+    val vesselsGauge = meterRegistry.gauge("ws_vessels_stored_in_last_positions", AtomicInteger(0))
 
     @GetMapping("/v1/vessels")
     @ApiOperation("Get all vessels' last position")
     fun getVessels(): List<PositionDataOutput> {
         val positions = getLastPositions.execute()
-        gauge?.set(positions.size)
+        vesselsGauge?.set(positions.size)
 
         return positions.map { position ->
             position.let {
@@ -48,19 +47,19 @@ class BffController(
 
     @GetMapping("/v1/vessels/find")
     @ApiOperation("Get vessel's last positions and data")
-    fun getVessel(@ApiParam("Vessel internal reference number (CFR)", required = false)
+    fun getVessel(@ApiParam("Vessel internal reference number (CFR)")
                     @RequestParam(name = "internalReferenceNumber")
                     internalReferenceNumber: String,
-                    @ApiParam("Vessel external reference number", required = false)
+                    @ApiParam("Vessel external reference number")
                     @RequestParam(name = "externalReferenceNumber")
                     externalReferenceNumber: String,
-                    @ApiParam("Vessel IRCS", required = false)
+                    @ApiParam("Vessel IRCS")
                     @RequestParam(name = "IRCS")
                     IRCS: String): VesselDataOutput {
         return runBlocking {
             val start = System.currentTimeMillis()
             val (vessel, positions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
-            timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+            vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
             VesselDataOutput.fromVessel(vessel, positions)
         }
@@ -76,13 +75,37 @@ class BffController(
         }
     }
 
+    @GetMapping("/v1/ers/find")
+    @ApiOperation("Get vessel's ERS messages")
+    fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)")
+                  @RequestParam(name = "internalReferenceNumber")
+                  internalReferenceNumber: String,
+                  @ApiParam("Vessel external reference number")
+                  @RequestParam(name = "externalReferenceNumber")
+                  externalReferenceNumber: String,
+                  @ApiParam("Vessel IRCS")
+                  @RequestParam(name = "IRCS")
+                  IRCS: String): List<ERSMessage> {
+        val start = System.currentTimeMillis()
+        val ersMessages = getVesselLastVoyage.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
+        ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+
+        return ersMessages
+    }
+
     @GetMapping("/v1/gears")
     @ApiOperation("Get FAO fishing gear codes")
     fun getGears(): List<GearDataOutput> {
         return getAllGears.execute().map { gear ->
-            gear.let {
-                GearDataOutput.fromGear(gear)
-            }
+            GearDataOutput.fromGear(gear)
+        }
+    }
+
+    @GetMapping("/v1/species")
+    @ApiOperation("Get FAO species codes")
+    fun getSpecies(): List<SpeciesDataOutput> {
+        return getAllSpecies.execute().map { species ->
+            SpeciesDataOutput.fromSpecies(species)
         }
     }
 }

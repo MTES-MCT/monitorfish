@@ -8,12 +8,16 @@ const globalSlice = createSlice({
     reducers: {
         setError(state, action) {
             state.error = action.payload
+        },
+        removeError(state) {
+            state.error = null
         }
     }
 })
 
 export const {
     setError,
+    removeError
 } = globalSlice.actions
 
 export default globalSlice.reducer

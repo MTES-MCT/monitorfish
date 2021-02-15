@@ -6,11 +6,18 @@
 > Improve monitoring and controlling of the activities of fishing vessels
 
 **Notice**: To clone the repo without downloading large layers files, execute: `GIT_LFS_SKIP_SMUDGE=1 git clone <REPO>` as we use [Git LFS](https://git-lfs.github.com/) to manage large layers files.
-## Frontend
+## Stack
 
-Stack:
+Frontend:
 - Openlayers
 - React
+
+Backend:
+- Kotlin
+- Spring Boot
+- Flyway (database migration)
+- PostgreSQL with PostGIS/TimescaleDB
+- Tomcat (version 9.0.37)
 
 ## Install
 
@@ -21,29 +28,18 @@ make install
 
 ## Run
 
-To run the frontend for development purpose, execute:
+To run the frontend for development purpose, open a terminal and execute:
 ```shell
 make run-front
 ```
 
-## Backend
-
-Stack:
-- Kotlin
-- Spring Boot
-- Flyway (DB Migration)
-- PostgreSQL with PostGIS/TimescaleDB
-
-### Run
-
+To run the backend for development purpose (with hot-reload), open another terminal and execute:
 > During the first run, dependencies will be downloaded
-
-To run the backend for development purpose (with hot-reload), execute:
 ```shell
 make run-back
 ```
 
-Then, insert the GIS layers to the postgres database by executing:
+Then, insert the GIS layers to the postgres database by executing (make sure you have `psql` installed):
 ```shell
 ./infra/remote/postgis_insert_layers.sh
 ```
@@ -57,7 +53,7 @@ export DB_USER=postgres
 export DB_PASSWORD=postgres
 ```
 
-And add to Geoserver the layers by executing (make sure to remove your proxy if you have one configured with `unset HTTP_PROXY` and `unset http_proxy`):
+Finally add to Geoserver the layers by executing (make sure to remove your proxy if you have one configured with `unset HTTP_PROXY` and `unset http_proxy`):
 ```shell
 ./infra/init/geoserver_init_layers.sh
 ```

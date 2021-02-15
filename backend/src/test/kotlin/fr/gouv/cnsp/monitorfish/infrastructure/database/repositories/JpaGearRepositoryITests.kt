@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -21,6 +23,7 @@ class JpaGearRepositoryITests : AbstractDBTests() {
     @BeforeEach
     fun setup() {
         cacheManager.getCache("gear")?.clear()
+        cacheManager.getCache("gears")?.clear()
     }
 
     @Test
@@ -33,5 +36,23 @@ class JpaGearRepositoryITests : AbstractDBTests() {
         assertThat(gears.first().code).isEqualTo("MIS")
         assertThat(gears.first().name).isEqualTo("Engin divers")
         assertThat(gears.first().category).isEqualTo("Engin inconnu")
+    }
+
+    @Test
+    @Transactional
+    fun `find Should return a gear`() {
+        // When
+        val gear = jpaGearRepository.find("OTB")
+
+        assertThat(gear.name).isEqualTo("Chaluts de fond à panneaux")
+    }
+
+    @Test
+    @Transactional
+    fun `find Should throw an exception When there is no gear found`() {
+        // When
+        val throwable = catchThrowable { jpaGearRepository.find("BAD_GEAR") }
+
+        assertThat(throwable).isInstanceOf(CodeNotFoundException::class.java)
     }
 }

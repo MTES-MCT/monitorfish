@@ -7,10 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetLastPositions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetVessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.SearchVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
@@ -49,6 +46,12 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var getAllGears: GetAllGears
+
+    @MockBean
+    private lateinit var getAllSpecies: GetAllSpecies
+
+    @MockBean
+    private lateinit var getVesselLastVoyage: GetVesselLastVoyage
 
     @MockBean
     private lateinit var searchVessels: SearchVessels
@@ -150,6 +153,23 @@ class BffControllerITests {
                 .andExpect(jsonPath("$[1].internalReferenceNumber", equalTo("GBR21555445")))
 
         Mockito.verify(searchVessels).execute("VESSEL")
+    }
 
+    @Test
+    fun `Should find the ERS messages of vessels`() {
+        // Given
+        given(this.getVesselLastVoyage.execute(any(), any(), any())).willReturn(TestUtils.getDummyERSMessage())
+
+        // When
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(3)))
+                .andExpect(jsonPath("$[0].messageType", equalTo("DEP")))
+                .andExpect(jsonPath("$[0].tripNumber", equalTo(345)))
+                .andExpect(jsonPath("$[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
+
+
+        Mockito.verify(getVesselLastVoyage).execute("FR224226850", "123", "IEF4")
     }
 }

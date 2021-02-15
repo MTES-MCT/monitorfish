@@ -6,8 +6,8 @@ import {
     VESSEL_SELECTOR_STYLE
 } from "../../layers/styles/featuresStyles";
 import {
-    loadingVessel, openVesselSidebar, setSelectedVessel,
-    setSelectedVesselTrackVector, setVesselPositionIsUpdating,
+    loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel,
+    setSelectedVesselTrackVector,
 } from "../reducers/Vessel";
 import {transform} from "ol/proj";
 import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
@@ -20,7 +20,7 @@ import {Style} from "ol/style";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import {animateToVessel} from "../reducers/Map";
-import {setError} from "../reducers/Global";
+import {removeError, setError} from "../reducers/Global";
 import {Vector} from "ol/layer";
 import VectorSource from "ol/source/Vector";
 import Layers from "../entities/layers";
@@ -40,6 +40,7 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
     removePreviousSelectedFeature(getState);
     if(vesselFeatureAndIdentity.feature && !updateShowedVessel) {
         dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
+        dispatch(removeError())
     }
 
     if(!updateShowedVessel) {
@@ -49,10 +50,11 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
     dispatch(openVesselSidebar())
 
     getVesselFromAPI(
-        vesselFeatureAndIdentity.vessel.internalReferenceNumber,
-        vesselFeatureAndIdentity.vessel.externalReferenceNumber,
-        vesselFeatureAndIdentity.vessel.ircs)
+        vesselFeatureAndIdentity.identity.internalReferenceNumber,
+        vesselFeatureAndIdentity.identity.externalReferenceNumber,
+        vesselFeatureAndIdentity.identity.ircs)
         .then(vessel => {
+            dispatch(removeError());
             dispatch(setSelectedVessel(vessel))
 
             if(vessel.positions && vessel.positions.length) {
@@ -60,7 +62,9 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
                 dispatch(setSelectedVesselTrackVector(vesselTrackVector))
             }
         }).catch(error => {
+            console.error(error)
             dispatch(setError(error));
+            dispatch(resetLoadingVessel())
         });
 }
 

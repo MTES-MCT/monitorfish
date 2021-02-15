@@ -3,6 +3,8 @@
   MonitorFish
 </h1>
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MTES-MCT_monitorfish&metric=alert_status)](https://sonarcloud.io/dashboard?id=MTES-MCT_monitorfish)
+
 > Improve monitoring and controlling of the activities of fishing vessels
 
 **Notice**: To clone the repo without downloading large layers files, execute: `GIT_LFS_SKIP_SMUDGE=1 git clone <REPO>` as we use [Git LFS](https://git-lfs.github.com/) to manage large layers files.

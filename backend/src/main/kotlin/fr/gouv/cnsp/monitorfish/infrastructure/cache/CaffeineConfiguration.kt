@@ -16,14 +16,34 @@ import java.util.concurrent.TimeUnit
 class CaffeineConfiguration {
     val vessels = "vessel"
     val searchVessels = "search_vessels"
+    val gears = "gears"
     val gear = "gear"
+    val ports = "ports"
+    val port = "port"
+    val allSpecies = "all_species"
+    val species = "species"
+    val ers = "ers"
+    val ersRawMessage = "ers_raw_message"
     val vesselTrack = "vessel_track"
     val vesselsPosition = "vessels_position"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
+        val oneWeek = 10080
+
+        val ersCache = buildCache(ers, ticker, 5)
+        val ersRawMessageCache = buildCache(ersRawMessage, ticker, oneWeek)
         val vesselCache = buildCache(vessels, ticker, 180)
-        val gearCache = buildCache(gear, ticker, 360)
+
+        val gearsCache = buildCache(gears, ticker, oneWeek)
+        val gearCache = buildCache(gear, ticker, oneWeek)
+
+        val allSpeciesCache = buildCache(allSpecies, ticker, oneWeek)
+        val speciesCache = buildCache(species, ticker, oneWeek)
+
+        val portsCache = buildCache(ports, ticker, oneWeek)
+        val portCache = buildCache(port, ticker, oneWeek)
+
         val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
         val vesselsPositionCache = buildCache(vesselsPosition, ticker, 1)
         val searchVesselsCache = buildCache(searchVessels, ticker, 180)
@@ -33,8 +53,15 @@ class CaffeineConfiguration {
                 vesselCache,
                 vesselTrackCache,
                 vesselsPositionCache,
+                gearsCache,
                 gearCache,
-                searchVesselsCache))
+                portsCache,
+                portCache,
+                allSpeciesCache,
+                speciesCache,
+                searchVesselsCache,
+                ersCache,
+                ersRawMessageCache))
 
         return manager
     }

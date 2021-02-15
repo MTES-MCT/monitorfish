@@ -3,10 +3,13 @@ from prefect import Flow, task
 from prefect.engine.results import LocalResult
 from prefect.engine.serializers import PandasSerializer
 from sqlalchemy import ARRAY, Boolean, Column, Date, Float, Integer, String
+
 from src.db_config import create_engine
-from src.pipeline.processing import (combine_overlapping_columns,
-                                     concatenate_columns,
-                                     python_lists_to_psql_arrays)
+from src.pipeline.processing import (
+    combine_overlapping_columns,
+    concatenate_columns,
+    python_lists_to_psql_arrays,
+)
 from src.read_query import read_saved_query
 from src.utils.database import psql_insert_copy
 

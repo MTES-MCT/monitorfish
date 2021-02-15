@@ -2,8 +2,9 @@ import logging
 import os
 from functools import wraps
 
-import config
 import sqlalchemy as sa
+
+import config
 
 db_env = {
     "ocani": {
@@ -37,7 +38,7 @@ db_env = {
         "sid": "MONITORFISH_LOCAL_NAME",
         "usr": "MONITORFISH_LOCAL_USER",
         "pwd": "MONITORFISH_LOCAL_PWD",
-    }
+    },
 }
 
 

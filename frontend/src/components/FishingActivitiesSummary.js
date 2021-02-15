@@ -62,7 +62,7 @@ const FishingActivitiesSummary = props => {
                 farMessages.forEach(message => {
                     message.message.catches.forEach(speciesCatch => {
                         if (speciesToWeightFARObject[speciesCatch.species]) {
-                            speciesToWeightFARObject[speciesCatch.species].weight += speciesCatch.weight
+                            speciesToWeightFARObject[speciesCatch.species].weight += parseFloat(speciesCatch.weight)
                         } else {
                             speciesToWeightFARObject[speciesCatch.species] = {
                                 species: speciesCatch.species,
@@ -79,7 +79,7 @@ const FishingActivitiesSummary = props => {
             if(depMessage) {
                 let totalDEPWeight = getTotalDEPWeightFromMessages(depMessage)
                 setTotalDEPWeight(totalDEPWeight)
-                totalFARAndDEPWeight += totalDEPWeight
+                totalFARAndDEPWeight += parseFloat(totalDEPWeight)
             }
 
             if(disMessages && disMessages.length) {
@@ -90,7 +90,7 @@ const FishingActivitiesSummary = props => {
                 disMessages.forEach(message => {
                     message.message.catches.forEach(speciesCatch => {
                         if (speciesToWeightDISObject[speciesCatch.species]) {
-                            speciesToWeightDISObject[speciesCatch.species].weight += speciesCatch.weight
+                            speciesToWeightDISObject[speciesCatch.species].weight += parseFloat(speciesCatch.weight)
                         } else {
                             speciesToWeightDISObject[speciesCatch.species] = {
                                 species: speciesCatch.species,
@@ -110,7 +110,7 @@ const FishingActivitiesSummary = props => {
                 let speciesToWeightLANObject = {}
                 lanMessage.message.catchLanded.forEach(speciesCatch => {
                     if (speciesToWeightLANObject[speciesCatch.species]) {
-                        speciesToWeightLANObject[speciesCatch.species].weight += speciesCatch.weight
+                        speciesToWeightLANObject[speciesCatch.species].weight += parseFloat(speciesCatch.weight)
                     } else {
                         speciesToWeightLANObject[speciesCatch.species] = {
                             species: speciesCatch.species,
@@ -129,7 +129,7 @@ const FishingActivitiesSummary = props => {
                 let speciesToWeightPNOObject = {}
                 pnoMessage.message.catchOnboard.forEach(speciesCatch => {
                     if (speciesToWeightPNOObject[speciesCatch.species]) {
-                        speciesToWeightPNOObject[speciesCatch.species].weight += speciesCatch.weight
+                        speciesToWeightPNOObject[speciesCatch.species].weight += parseFloat(speciesCatch.weight)
                     } else {
                         speciesToWeightPNOObject[speciesCatch.species] = {
                             species: speciesCatch.species,
@@ -168,25 +168,25 @@ const FishingActivitiesSummary = props => {
             }, 0)
 
             return accumulator + sumOfCatches
-        }, 0);
+        }, 0).toFixed(2)
     }
 
     function getTotalDEPWeightFromMessages(ersMessage) {
         return ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
             return subAccumulator + speciesCatch.weight
-        }, 0)
+        }, 0).toFixed(2)
     }
 
     function getTotalLANWeightFromMessages(ersMessage) {
         return ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
             return subAccumulator + speciesCatch.weight
-        }, 0)
+        }, 0).toFixed(2)
     }
 
     function getTotalPNOWeightFromMessages(ersMessage) {
         return ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
             return subAccumulator + speciesCatch.weight
-        }, 0)
+        }, 0).toFixed(2)
     }
 
     function getTotalDISWeightFromMessages(ersMessages) {
@@ -197,7 +197,7 @@ const FishingActivitiesSummary = props => {
                 }, 0)
 
                 return accumulator + sumOfCatches
-            }, 0);
+            }, 0).toFixed(2)
     }
 
     return <>

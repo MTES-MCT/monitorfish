@@ -57,11 +57,13 @@ const ERSMessage = props => {
     }
 
     const openXML = xml => {
+        /* without adding tags
         xml = xml.replace('<ers:OPS', '<ers:OPS xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" ' +
             'xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" ' +
             'xmlns:tns="http://ec.europa.eu/fisheries/schema/ers/wsdl/v3" ' +
             'xmlns:ers="http://ec.europa.eu/fisheries/schema/ers/v3" ' +
             'xmlns:xsd="http://www.w3.org/2001/XMLSchema"')
+            */
         let blob = new Blob([xml], { type: 'text/xml' });
         let url = URL.createObjectURL(blob);
         window.open(url);

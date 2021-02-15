@@ -74,25 +74,12 @@ def clean(parsed_data):
 
 
 def remove_already_existing_messages(
-    ers_messages_table, ers_json, ers_xml, connection, logger
+    existing_operation_numbers, ers_json, ers_xml, connection, logger
 ):
-    try:
-        assert "operation_number" in [c.name for c in ers_messages_table.columns]
-    except AssertionError:
-        logger.error(
-            "Missing primary key column 'operation_number' in ers_messages table."
-            + "This is required to avoid inserting duplicated data into the table."
-            + "Check database migrations."
-        )
 
     n_messages = len(ers_xml)
     n_logs = len(ers_json)
     n_operations = ers_xml.operation_number.nunique()
-
-    # Extract existing keys in ers_messages table
-    s = select([ers_messages_table.c.operation_number])
-    existing_operation_numbers = connection.execute(s).fetchall()
-    existing_operation_numbers = [x[0] for x in existing_operation_numbers]
 
     # Remove keys already present in the database from dataframes
     cleaned_ers_json = ers_json[
@@ -101,6 +88,10 @@ def remove_already_existing_messages(
     cleaned_ers_xml = ers_xml[
         ~ers_xml.operation_number.isin(existing_operation_numbers)
     ]
+    
+    new_operation_numbers = set(cleaned_ers_xml.operation_number)
+    
+    existing_operation_numbers = existing_operation_numbers.union(new_operation_numbers)
 
     n_messages_cleaned = len(cleaned_ers_xml)
     n_logs_cleaned = len(cleaned_ers_json)
@@ -114,7 +105,7 @@ def remove_already_existing_messages(
     )
 
     logger.info(log)
-    return cleaned_ers_json, cleaned_ers_xml
+    return cleaned_ers_json, cleaned_ers_xml, existing_operation_numbers
 
 
 def delete(table, logger, connection):
@@ -154,9 +145,11 @@ def load_ers(parsed_data, if_exists: str = "append"):
         meta = MetaData(schema=schema)
         meta.bind = connection
         try:
+            logger.info("Searching for ers and ers_messages tables...")
             meta.reflect(only=[ers_table_name, ers_messages_table_name])
             ers_table = Table(ers_table_name, meta, mustexist=True)
             ers_messages_table = Table(ers_messages_table_name, meta, mustexist=True)
+            logger.info("ers and ers_messages tables found.")
         except InvalidRequestError:
             logger.error(
                 "ers and ers_messages tables must exist. Make appropriate migrations and try again."
@@ -164,15 +157,31 @@ def load_ers(parsed_data, if_exists: str = "append"):
             raise
 
         if if_exists == "replace":
+            logger.info("Deleting ers tables.")
             delete(ers_table, logger, connection)
             delete(ers_messages_table, logger, connection)
+
+        # Extract existing operation numbers in ers_messages table
+        try:
+            assert "operation_number" in [c.name for c in ers_messages_table.columns]
+        except AssertionError:
+            logger.error(
+                "Missing primary key column 'operation_number' in ers_messages table."
+                + "This is required to avoid inserting duplicated data into the table."
+                + "Check database migrations."
+            )
+        logger.info("Fetching existing operation numbers in database.")
+        s = select([ers_messages_table.c.operation_number])
+        existing_operation_numbers = connection.execute(s).fetchall()
+        existing_operation_numbers = [x[0] for x in existing_operation_numbers]
+        existing_operation_numbers = set(existing_operation_numbers)
 
         for i, (ers_json, ers_xml) in enumerate(parsed_data):
 
             logger.info(f"Inserting chunk {i}")
             # Drop rows for which the operation number already exists in the ers_messages database
-            ers_json, ers_xml = remove_already_existing_messages(
-                ers_messages_table, ers_json, ers_xml, connection, logger
+            ers_json, ers_xml, existing_operation_numbers = remove_already_existing_messages(
+                existing_operation_numbers, ers_json, ers_xml, connection, logger
             )
             if len(ers_xml) == 0:
                 logger.warning("No messages to insert.")

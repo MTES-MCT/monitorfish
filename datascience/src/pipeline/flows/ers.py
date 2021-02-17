@@ -88,9 +88,9 @@ def remove_already_existing_messages(
     cleaned_ers_xml = ers_xml[
         ~ers_xml.operation_number.isin(existing_operation_numbers)
     ]
-    
+
     new_operation_numbers = set(cleaned_ers_xml.operation_number)
-    
+
     existing_operation_numbers = existing_operation_numbers.union(new_operation_numbers)
 
     n_messages_cleaned = len(cleaned_ers_xml)
@@ -180,7 +180,11 @@ def load_ers(parsed_data, if_exists: str = "append"):
 
             logger.info(f"Inserting chunk {i}")
             # Drop rows for which the operation number already exists in the ers_messages database
-            ers_json, ers_xml, existing_operation_numbers = remove_already_existing_messages(
+            (
+                ers_json,
+                ers_xml,
+                existing_operation_numbers,
+            ) = remove_already_existing_messages(
                 existing_operation_numbers, ers_json, ers_xml, connection, logger
             )
             if len(ers_xml) == 0:

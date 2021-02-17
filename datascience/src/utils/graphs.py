@@ -75,16 +75,16 @@ def compare_2_columns_availability(df: pd.DataFrame, col_name_1: str, col_name_2
 
 class pcolor:
     """Helper class for formatted printing.
-    
-    Example : print(pcolor.BOLD + 'Hello World !' + pcolor.END)"""
-    PURPLE = '\033[95m'
-    CYAN = '\033[96m'
-    DARKCYAN = '\033[36m'
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    END = '\033[0m'
 
+    Example : print(pcolor.BOLD + 'Hello World !' + pcolor.END)"""
+
+    PURPLE = "\033[95m"
+    CYAN = "\033[96m"
+    DARKCYAN = "\033[36m"
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    RED = "\033[91m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+    END = "\033[0m"

@@ -1,10 +1,9 @@
-import logging
 import os
-from functools import wraps
 
 import sqlalchemy as sa
+from dotenv import load_dotenv
 
-import config
+load_dotenv()
 
 db_env = {
     "ocani": {

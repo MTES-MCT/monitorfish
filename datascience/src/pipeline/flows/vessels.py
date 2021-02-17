@@ -2,7 +2,7 @@ import pandas as pd
 from prefect import Flow, task
 from prefect.engine.results import LocalResult
 from prefect.engine.serializers import PandasSerializer
-from sqlalchemy import ARRAY, Boolean, Column, Date, Float, Integer, String
+from sqlalchemy import ARRAY, Date, Float, Integer, String
 
 from src.db_config import create_engine
 from src.pipeline.processing import (

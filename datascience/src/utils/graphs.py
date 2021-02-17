@@ -38,7 +38,10 @@ def compare_2_columns_values(df: pd.DataFrame, col_name_1: str, col_name_2: str)
         orientation="h",
         labels={
             "index": "",
-            "value": f"Nombre d'entrées pour lesquelles {col_name_1} et {col_name_2} sont renseignées",
+            "value": (
+                f"Nombre d'entrées pour lesquelles {col_name_1} "
+                + f"et {col_name_2} sont renseignées"
+            ),
             "is_equal": "",
         },
         color_discrete_sequence=["blue", "green"],

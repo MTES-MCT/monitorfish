@@ -4,17 +4,18 @@ from time import sleep
 
 import pandas as pd
 import requests
+from dotenv import load_dotenv
 from prefect import Flow, Parameter, task
 
-import config
 from src.db_config import create_engine
-from src.pipeline.processing import combine_overlapping_columns, concatenate_columns
-from src.read_query import read_saved_query, read_table
-from src.utils.database import psql_insert_copy
+from src.pipeline.processing import combine_overlapping_columns
+from src.read_query import read_table
 from src.utils.geocode import geocode
 
+load_dotenv()
 
-######################### Helper functions ############################################
+
+# ******************************** Helper functions **********************************
 def make_date(date_string: str):
     try:
         yy = int(date_string[:2])
@@ -50,7 +51,7 @@ def make_lat_lon(lat_lon: str):
         return None
 
 
-########### Flow to extract data from csv files downloaded on UNECE website ###########
+# ********* Flow to extract data from csv files downloaded on UNECE website ***********
 # Source : https://unece.org/trade/cefact/codes-trade
 
 
@@ -150,7 +151,7 @@ with Flow("Create UNECE ports codes table") as flow_make_unece_ports:
     load_unece(locations)
 
 
-### Flow to extract data from csv file downloaded from CIRCABC Master Data Register ###
+# ** Flow to extract data from csv file downloaded from CIRCABC Master Data Register **
 
 
 @task
@@ -218,7 +219,7 @@ with Flow("Create CIRCABC ports codes table") as flow_make_circabc_ports:
     load_circabc(locations)
 
 
-############### Flow to extract ports from CIRCABC and UNECE and merge ################
+# ************** Flow to extract ports from CIRCABC and UNECE and merge ***************
 
 
 @task
@@ -288,7 +289,7 @@ with Flow(
     load_port_codes(ports)
 
 
-############# Geocoding to improve the precision of latitude longitude#################
+# ************* Geocoding to improve the precision of latitude longitude **************
 
 
 def geocode_row(row):
@@ -346,7 +347,7 @@ with Flow("Geocode ports") as flow_geocode_ports:
     load_geocoded_ports(geocoded_ports)
 
 
-### Flow : take geocoded position if available, fall back to CIRCABC/UNECE position ###
+# ** Flow : take geocoded position if available, fall back to CIRCABC/UNECE position **
 
 
 @task

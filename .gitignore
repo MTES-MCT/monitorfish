@@ -1,4 +1,4 @@
-# Database secrets
+# Env variables
 datascience/.env
 
 # Notebooks
@@ -8,6 +8,10 @@ datascience/.env
 /datascience/.cache
 .ipynb_checkpoints/
 .jupyter/
+
+# Coverage reports
+datascience/htmlcov/
+datascience/.coverage
 
 # Local data
 /datascience/data

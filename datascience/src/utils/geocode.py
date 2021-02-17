@@ -2,8 +2,9 @@ import os
 
 import pandas as pd
 import requests
+from dotenv import load_dotenv
 
-import config
+load_dotenv()
 
 
 def geocode(query_string=None, country_code_iso2=None, **kwargs):
@@ -22,7 +23,8 @@ def geocode(query_string=None, country_code_iso2=None, **kwargs):
     if query_string is not None and not pd.isna(query_string):
         if kwargs:
             print(
-                "Keyword arguments cannot be used in combination with text query. Keyword arguments will be ignored."
+                "Keyword arguments cannot be used in combination with text query. "
+                + "Keyword arguments will be ignored."
             )
 
         params["q"] = query_string
@@ -32,7 +34,8 @@ def geocode(query_string=None, country_code_iso2=None, **kwargs):
 
     else:
         print(
-            "You must provide either a query string or at least 1 of the allowed keyword arguments."
+            "You must provide either a query string or at least 1 of the allowed "
+            + "keyword arguments."
         )
         return None, None
 

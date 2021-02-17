@@ -3,19 +3,7 @@ from typing import Iterator, Union
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, task
-from sqlalchemy import (
-    Boolean,
-    Date,
-    DateTime,
-    Float,
-    Integer,
-    MetaData,
-    String,
-    Table,
-    Text,
-    func,
-    select,
-)
+from sqlalchemy import DateTime, MetaData, String, Table, Text, func, select
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import InvalidRequestError
 
@@ -32,9 +20,9 @@ RAW_XML_TABLE = {"dam": "raw_jpe_dam_xml", "dpma": "raw_jpe_dpma_xml"}
 def extract_raw_xml(
     data_source: str = "dam", chunksize: Union[None, int] = 10000
 ) -> Iterator[pd.DataFrame]:
-    """Extract raw XML messages from the monitorfish_remote_i database (dump made end of 2020).
-    Data is extracted in chunks and return as an iterator that yields results as
-    pandas DataFrames.
+    """Extract raw XML messages from the monitorfish_remote_i database
+    (dump made end of 2020). Data is extracted in chunks and return as
+    an iterator that yields results as pandas DataFrames.
 
     data_source : "dam" or "dpma"
     """
@@ -98,10 +86,10 @@ def remove_already_existing_messages(
     n_operations_cleaned = cleaned_ers_xml.operation_number.nunique()
 
     log = (
-        f"From {n_messages} xml messages with {n_operations} distinct operation numbers "
-        + f"containing {n_logs} logs, {n_messages_cleaned} xml messages with {n_operations_cleaned} "
-        + f"distinct operation numbers containing {n_logs_cleaned} logs are new and will be inserted "
-        + "in the database."
+        f"From {n_messages} xml messages with {n_operations} distinct operation "
+        + f"numbers containing {n_logs} logs, {n_messages_cleaned} xml messages with "
+        + f"{n_operations_cleaned} distinct operation numbers containing "
+        + f"{n_logs_cleaned} logs are new and will be inserted in the database."
     )
 
     logger.info(log)
@@ -152,7 +140,8 @@ def load_ers(parsed_data, if_exists: str = "append"):
             logger.info("ers and ers_messages tables found.")
         except InvalidRequestError:
             logger.error(
-                "ers and ers_messages tables must exist. Make appropriate migrations and try again."
+                "ers and ers_messages tables must exist. Make appropriate "
+                + "migrations and try again."
             )
             raise
 
@@ -179,7 +168,8 @@ def load_ers(parsed_data, if_exists: str = "append"):
         for i, (ers_json, ers_xml) in enumerate(parsed_data):
 
             logger.info(f"Inserting chunk {i}")
-            # Drop rows for which the operation number already exists in the ers_messages database
+            # Drop rows for which the operation number already exists in the
+            # ers_messages database
             (
                 ers_json,
                 ers_xml,

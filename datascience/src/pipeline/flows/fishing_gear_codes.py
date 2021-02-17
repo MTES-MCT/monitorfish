@@ -1,4 +1,3 @@
-import pandas as pd
 from prefect import Flow, task
 from sqlalchemy import String
 

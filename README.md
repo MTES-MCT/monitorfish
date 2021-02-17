@@ -105,8 +105,7 @@ Data processing and ETL (Extract, Transform, Load) operations are done in a dock
 ### Tests
 To run the test suite, `cd` into `datascience` and run
 ```
-make test-dataprocessing
-```
+make test-data-pipeline
 
 ### Data
 Data is currently not open and can only be accessed from inside the RIE network.

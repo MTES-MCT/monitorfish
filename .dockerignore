@@ -1,0 +1,22 @@
+# git repo
+.git
+
+# Env variables
+datascience/.env
+
+# Notebooks
+/datascience/notebooks
+/datascience/.local
+/datascience/.ipython
+/datascience/.cache
+.ipynb_checkpoints/
+.jupyter/
+
+# Local data
+/datascience/data
+
+# Python
+*.pyc
+
+# IDEs
+.vscode

@@ -40,6 +40,8 @@ run-local-app:
 	cd infra/local && sudo docker-compose up -d
 
 # DATA commands
+build-pipeline:
+	docker build -f infra/docker/Dockerfile.DataPipeline . -t monitorfish-pipeline
 run-jupyter-notebook:
 	docker-compose -f datascience/docker-compose.yml up --force-recreate
 run-jupyter-notebook-no-proxy:

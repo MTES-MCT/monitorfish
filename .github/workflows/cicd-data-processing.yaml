@@ -1,25 +1,20 @@
-name: CI/CD Back & Front
+name: CI/CD data processing pipeline
 
 on:
-  push:
+  [push]:
     paths:
-    - '**.kt'
-    - '**.js'
-    - '**.ts'
-    - '**.yml'
+    - 'datascience/**'
     - '.github/workflows/cicd.yml'
-    - 'infra/configurations/**.properties'
-    - 'infra/docker/DockerfileBuildApp'
-    - '**.sql'
-    - 'backend/pom.xml'
+    - 'infra/docker/Dockerfile.DataPipeline'
 
 jobs:
   build:
-    name: Test, build and Package
+    name: Build & test docker image
     runs-on: ubuntu-18.04
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
     steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v2    
 
     - name: Get last release version
       id: lastrelease
@@ -27,47 +22,27 @@ jobs:
       with:
         repository: mtes-mct/monitorfish
 
-    - name: Set ENV profile as LOCAL when it is on master branch
-      if: github.ref == 'refs/heads/master'
-      run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
-
-    - name: Set ENV profile as PROD when it is a release
+    - name: Set ENV_PROFILE as PROD when it is a release
       if: startsWith(github.ref, 'refs/tags/v')
       run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
 
-    - name: Set VERSION env
+    - name: Set VERSION
       run: |
         if [ "${ENV_PROFILE}" != "prod" ]; then\
             echo "VERSION=${{ steps.lastrelease.outputs.release }}_SNAPSHOT" >> $GITHUB_ENV
         else\
             echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
         fi
-    
-    - name: Setup Java JDK
-      uses: actions/setup-java@v1.4.2
-      with:
-        java-version: 11
 
-    - uses: actions/checkout@v2
-      
-    - name: NPM install with caching
-      uses: bahmutov/npm-install@v1.6.0
-      with:
-        # Working directory to specify subfolder in which dependencies are defined
-        working-directory: frontend/
-        useLockFile: true
-        # Custom install command to use
-        install-command: npm install
-            
-    - name: Unit test
-      run: make test
+#     - name: Build docker image
+#       run: make docker-build-pipeline
+                
+#     - name: Test docker image
+#       run: make test-pipeline
 
-    - name: Build docker image
-      run: make docker-build
-
-    - name: Push docker image to registry
-      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
-        make docker-tag
-        make docker-push
+#     - name: Push docker image to registry
+#       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
+#       run: |
+#         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+#         make docker-tag
+#         make docker-push

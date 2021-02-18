@@ -18,6 +18,7 @@ datascience/.coverage
 
 # Python
 *.pyc
+datascience/.python-version
 
 # IDEs
 .vscode

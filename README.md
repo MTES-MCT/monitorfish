@@ -88,16 +88,19 @@ Data processing and ETL (Extract, Transform, Load) operations are done in a dock
         apt-get update
         apt-get install libpq-dev build-essential libaio1 
         ```
-    * [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client/downloads.html)
-* Python dependencies are managed by [Poetry](https://python-poetry.org/). Dependencies are separated between :
+    * [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client/downloads.html).
+* The project runs on python 3.8.7. To manage python versions, we suggest you use [pyenv](https://github.com/pyenv/pyenv). See the official documentation for installation instructions.
+* Python dependencies are separated between :
     * production dependencies, listed in *requirements.txt*, are the dependencies of the dockerized python service which runs ETL jobs
     * development dependencies, listed in *requirements-dev.txt*, which are commonly use in data analysis
+* In the dockerized service that runs ETL jobs, these dependencies are `pip` installed in a virtual environment.
+* For development, we suggest managing Python dependencies with [poetry](https://python-poetry.org/.
+    * To install poetry, run:
+        ```
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 
-    To install the development environment :
-    * install the above requirements
-    * install Poetry
-    * clone the repo
-    * `cd` into `datascience` run
+        ```
+    * Then install python dependencies with :
         ```
         poetry install
         ```

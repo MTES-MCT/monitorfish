@@ -20,7 +20,7 @@ RAW_XML_TABLE = {"dam": "raw_jpe_dam_xml", "dpma": "raw_jpe_dpma_xml"}
 def extract_raw_xml(
     data_source: str = "dam", chunksize: Union[None, int] = 10000
 ) -> Iterator[pd.DataFrame]:
-    """Extract raw XML messages from the monitorfish_remote_i database
+    """Extract raw XML messages from the monitorfish_remote database
     (dump made end of 2020). Data is extracted in chunks and return as
     an iterator that yields results as pandas DataFrames.
 
@@ -30,7 +30,7 @@ def extract_raw_xml(
     table = RAW_XML_TABLE[data_source]
 
     raw_xml = read_query(
-        "monitorfish_remote_i",
+        "monitorfish_remote",
         f"SELECT xml_message FROM raw.{table}",
         chunksize=chunksize,
     )
@@ -126,7 +126,7 @@ def load_ers(parsed_data, if_exists: str = "append"):
     #     ers_table_name = "ers"
     #     ers_messages_table_name = "ers_messages"
 
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     logger = prefect.context.get("logger")
 
     with engine.begin() as connection:

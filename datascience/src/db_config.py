@@ -6,23 +6,23 @@ from dotenv import load_dotenv
 load_dotenv()
 
 db_env = {
-    "ocani": {
+    "ocan": {
         "client": "ORACLE_CLIENT",
         "host": "ORACLE_HOST",
         "port": "ORACLE_PORT",
-        "sid": "ORACLE_OCANI_SID",
-        "usr": "ORACLE_OCANI_USER",
-        "pwd": "ORACLE_OCANI_PASSWORD",
+        "sid": "ORACLE_OCAN_SID",
+        "usr": "ORACLE_OCAN_USER",
+        "pwd": "ORACLE_OCAN_PASSWORD",
     },
-    "fmcit": {
+    "fmc": {
         "client": "ORACLE_CLIENT",
         "host": "ORACLE_HOST",
         "port": "ORACLE_PORT",
-        "sid": "ORACLE_FMCIT_SID",
-        "usr": "ORACLE_FMCIT_USER",
-        "pwd": "ORACLE_FMCIT_PASSWORD",
+        "sid": "ORACLE_FMC_SID",
+        "usr": "ORACLE_FMC_USER",
+        "pwd": "ORACLE_FMC_PASSWORD",
     },
-    "monitorfish_remote_i": {
+    "monitorfish_remote": {
         "client": "MONITORFISH_REMOTE_DB_CLIENT",
         "host": "MONITORFISH_REMOTE_DB_HOST",
         "port": "MONITORFISH_REMOTE_DB_PORT",
@@ -46,7 +46,7 @@ def create_engine(db: str, **kwargs) -> sa.engine.Engine:
 
     Args:
         db (str): Database name. Possible values :
-            'ocani', 'fmcit', 'monitorfish_remote_i', 'monistorfish_local'
+            'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local'
 
     Returns:
         sa.engine.Engine: sqlalchemy engine for selected database.

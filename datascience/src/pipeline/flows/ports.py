@@ -134,7 +134,7 @@ def clean_unece(locations):
 
 @task
 def load_unece(locations):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     locations.to_sql(
         "unece_port_codes",
         engine,
@@ -202,7 +202,7 @@ def clean_circabc(locations):
 
 @task
 def load_circabc(locations):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     locations.to_sql(
         "circabc_port_codes",
         engine,
@@ -224,13 +224,13 @@ with Flow("Create CIRCABC ports codes table") as flow_make_circabc_ports:
 
 @task
 def extract_unece_ports():
-    unece_ports = read_table("monitorfish_remote_i", "external", "unece_port_codes")
+    unece_ports = read_table("monitorfish_remote", "external", "unece_port_codes")
     return unece_ports
 
 
 @task
 def extract_circabc_ports():
-    circabc_ports = read_table("monitorfish_remote_i", "external", "circabc_port_codes")
+    circabc_ports = read_table("monitorfish_remote", "external", "circabc_port_codes")
     return circabc_ports
 
 
@@ -269,7 +269,7 @@ def combine_columns_into_value(ports):
 
 @task
 def load_port_codes(ports):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     ports.to_sql(
         "port_codes",
         engine,
@@ -318,7 +318,7 @@ def geocode_row(row):
 
 @task
 def extract_port_codes():
-    ports = read_table("monitorfish_remote_i", "interim", "port_codes")
+    ports = read_table("monitorfish_remote", "interim", "port_codes")
     return ports
 
 
@@ -331,7 +331,7 @@ def geocode_ports(ports):
 
 @task
 def load_geocoded_ports(geocoded_ports):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     geocoded_ports.to_sql(
         "geocoded_ports",
         engine,
@@ -352,7 +352,7 @@ with Flow("Geocode ports") as flow_geocode_ports:
 
 @task
 def extract_geocoded_ports():
-    geocoded_ports = read_table("monitorfish_remote_i", "interim", "geocoded_ports")
+    geocoded_ports = read_table("monitorfish_remote", "interim", "geocoded_ports")
     return geocoded_ports
 
 
@@ -372,7 +372,7 @@ def merge_lat_lon(geocoded_ports):
 
 @task
 def load_ports(ports):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     ports.to_sql("ports", engine, schema="public", if_exists="replace", index=False)
 
 

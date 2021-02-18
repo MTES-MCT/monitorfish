@@ -9,7 +9,7 @@ from src.utils.database import psql_insert_copy
 
 @task
 def extract_species():
-    return read_saved_query("fmcit", "pipeline/queries/fmc/species.sql")
+    return read_saved_query("fmc", "pipeline/queries/fmc/species.sql")
 
 
 @task
@@ -17,7 +17,7 @@ def load_species(species: pd.DataFrame):
 
     schema = "public"
     table_name = "species"
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
 
     if engine.has_table(table_name=table_name, schema=schema):
         table_already_exists = True

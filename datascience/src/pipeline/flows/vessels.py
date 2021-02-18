@@ -24,27 +24,27 @@ result = LocalResult(
 
 @task
 def extract_fr_vessels():
-    return read_saved_query("ocani", "pipeline/queries/ocan/navires_fr.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/navires_fr.sql")
 
 
 @task
 def extract_cee_vessels():
-    return read_saved_query("ocani", "pipeline/queries/ocan/navires_cee_peche.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/navires_cee_peche.sql")
 
 
 @task
 def extract_non_cee_vessels():
-    return read_saved_query("ocani", "pipeline/queries/ocan/navires_hors_cee_peche.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/navires_hors_cee_peche.sql")
 
 
 @task
 def extract_floats():
-    return read_saved_query("ocani", "pipeline/queries/ocan/flotteurs.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/flotteurs.sql")
 
 
 @task
 def extract_nav_licences():
-    return read_saved_query("ocani", "pipeline/queries/gina/permis_navigation.sql")
+    return read_saved_query("ocan", "pipeline/queries/gina/permis_navigation.sql")
 
 
 @task
@@ -228,7 +228,7 @@ def load_vessels(all_vessels):
         ],
     )
 
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
 
     with engine.begin() as connection:
 

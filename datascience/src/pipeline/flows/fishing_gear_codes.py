@@ -8,7 +8,7 @@ from src.read_query import read_saved_query
 @task
 def extract_fishing_gear_codes():
     fishing_gear_codes = read_saved_query(
-        "ocani", "pipeline/queries/ocan/codes_engins.sql"
+        "ocan", "pipeline/queries/ocan/codes_engins.sql"
     )
 
     return fishing_gear_codes
@@ -56,7 +56,7 @@ def load_fishing_gear_codes(fishing_gear_codes):
         ["fishing_gear_code", "fishing_gear", "fishing_gear_category"]
     ]
 
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
 
     with engine.begin() as connection:
         fishing_gear_codes.to_sql(

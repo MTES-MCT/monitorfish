@@ -40,34 +40,38 @@ run-local-app:
 	cd infra/local && sudo docker-compose up -d
 
 # DATA commands
-build-pipeline:
+install-datascience:
+	cd datascience && poetry install
+docker-build-pipeline:
 	docker build -f infra/docker/Dockerfile.DataPipeline . -t monitorfish-pipeline
-test-data-pipeline:
+run-notebook:
+	cd datascience && poetry run jupyter notebook
+test-datascience:
 	cd datascience && poetry run coverage run -m unittest discover && poetry run coverage report && poetry run coverage html
-run-jupyter-notebook:
-	docker-compose -f datascience/docker-compose.yml up --force-recreate
-run-jupyter-notebook-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate
-run-jupyter-notebook-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate
-run-data-science-env:
-	docker-compose -f datascience/docker-compose.yml up --force-recreate -d
-	docker exec -it monitorfish_data_science bash
-run-data-science-env-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate -d
-	docker exec -it monitorfish_data_science bash
-run-data-science-env-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate -d
-	docker exec -it monitorfish_data_science_dam_si bash
-update-data-science-env:
-	docker-compose -f datascience/docker-compose.yml up --force-recreate -d
-	docker container exec monitorfish_data_science conda env update -n base -f "work/datascience/environment.yml"
-	docker container commit monitorfish_data_science monitorfish_data_science
-update-data-science-env-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate -d
-	docker container exec monitorfish_data_science conda env update -n base -f "work/datascience/environment.yml"
-	docker container commit monitorfish_data_science monitorfish_data_science
-update-data-science-env-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate -d
-	docker container exec monitorfish_data_science_dam_si conda env update -n base -f "work/datascience/environment.yml"
-	docker container commit monitorfish_data_science_dam_si monitorfish_data_science_dam_si
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "datascience"
+name = "src"
 version = "0.1.0"
 description = ""
 authors = ["Vincent <vincent.chery@m4x.org>"]

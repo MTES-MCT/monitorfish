@@ -43,7 +43,7 @@ run-local-app:
 build-pipeline:
 	docker build -f infra/docker/Dockerfile.DataPipeline . -t monitorfish-pipeline
 test-data-pipeline:
-	cd datascience && coverage run -m unittest discover && coverage report && coverage html
+	cd datascience && poetry run coverage run -m unittest discover && poetry run coverage report && poetry run coverage html
 run-jupyter-notebook:
 	docker-compose -f datascience/docker-compose.yml up --force-recreate
 run-jupyter-notebook-no-proxy:

@@ -94,7 +94,7 @@ Data processing and ETL (Extract, Transform, Load) operations are done in a dock
     * production dependencies, listed in *requirements.txt*, are the dependencies of the dockerized python service which runs ETL jobs
     * development dependencies, listed in *requirements-dev.txt*, which are commonly use in data analysis
 * In the dockerized service that runs ETL jobs, these dependencies are `pip` installed in a virtual environment.
-* For development, we suggest managing Python dependencies with [poetry](https://python-poetry.org/.
+* For development, we suggest managing Python dependencies with [poetry](https://python-poetry.org/).
     * To install poetry, run:
         ```
         curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
@@ -104,6 +104,14 @@ Data processing and ETL (Extract, Transform, Load) operations are done in a dock
         ```
         poetry install
         ```
+    * To install pre-commit hooks (isort, black and flake8 are configured in the pyproject.toml), run
+        ```
+        
+        ``` 
+
+### Jupyter notebook & Jupyter Lab
+
+Jupyter notebook is installed as a development dependency.
 
 ### Tests
 To run tests on the data pipeline, run

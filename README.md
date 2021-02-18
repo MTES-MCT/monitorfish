@@ -106,7 +106,7 @@ Data processing and ETL (Extract, Transform, Load) operations are done in a dock
         ```
     * To install pre-commit hooks (isort, black and flake8 are configured in the pyproject.toml), run
         ```
-        
+        poetry run pre-commit install
         ``` 
 
 ### Jupyter notebook & Jupyter Lab

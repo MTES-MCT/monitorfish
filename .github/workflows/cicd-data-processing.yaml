@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'datascience/**'
-    - '.github/workflows/cicd.yml'
+    - '.github/workflows/*'
     - 'infra/docker/Dockerfile.DataPipeline'
 
 jobs:

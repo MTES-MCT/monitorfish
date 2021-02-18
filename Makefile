@@ -40,13 +40,19 @@ run-local-app:
 	cd infra/local && sudo docker-compose up -d
 
 # DATA commands
-install-datascience:
+install-pipeline:
 	cd datascience && poetry install
 docker-build-pipeline:
-	docker build -f infra/docker/Dockerfile.DataPipeline . -t monitorfish-pipeline
+	@docker build -f "infra/docker/Dockerfile.DataPipeline" . -t monitorfish-pipeline:$(VERSION)
+docker-test-pipeline:
+	@docker run monitorfish-pipeline:$(VERSION) coverage run -m unittest discover
+docker-tag-pipeline:
+	@docker tag monitorfish-pipeline:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
+docker-push-pipeline:
+	@docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 run-notebook:
 	cd datascience && poetry run jupyter notebook
-test-datascience:
+test-pipeline:
 	cd datascience && poetry run coverage run -m unittest discover && poetry run coverage report && poetry run coverage html
 
 

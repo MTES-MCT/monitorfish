@@ -17,6 +17,11 @@ datascience/.env
 
 # Python
 *.pyc
+__pycache__
+
+# Coverage reports
+htmlcov
+.coverage
 
 # IDEs
 .vscode

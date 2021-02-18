@@ -1,7 +1,7 @@
 name: CI/CD data processing pipeline
 
 on:
-  [push]:
+  push:
     paths:
     - 'datascience/**'
     - '.github/workflows/cicd.yml'

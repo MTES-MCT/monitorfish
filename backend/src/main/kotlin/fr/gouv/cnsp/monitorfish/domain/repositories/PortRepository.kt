@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 
 interface PortRepository {
     fun findAll() : List<Port>
-
     @Throws(CodeNotFoundException::class)
     fun find(code: String): Port
 }

@@ -4,6 +4,7 @@ import {COLORS} from "../../constants/constants";
 import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
 import {getDateTime} from "../../utils";
 import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+import {AlertTypes} from "../../domain/entities/alerts";
 
 const LANMessageResume = props => {
     const [isOpen, setIsOpen] = useState(false)
@@ -37,9 +38,21 @@ const LANMessageResume = props => {
         setChartHeight(chartHeight + height)
     }
 
+    const getWeightOverToleranceInfo = () => {
+        if (props.catchesOverToleranceAlert) {
+            return AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
+                props.catchesOverToleranceAlert.percentOfTolerance,
+                props.catchesOverToleranceAlert.minimumWeightThreshold)
+        }
+
+        return ""
+    }
+
     return <Wrapper>
         <ERSMessageResumeHeader
-            title={props.hasNoMessage ? null : ""}
+            isAlert={!!props.catchesOverToleranceAlert}
+            title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
+            onHoverText={getWeightOverToleranceInfo()}
             hasNoMessage={props.hasNoMessage}
             showERSMessages={props.showERSMessages}
             messageType={ERSMessageTypeEnum.LAN.code.toString()}
@@ -85,6 +98,13 @@ const LANMessageResume = props => {
                                             speciesCatch.speciesName ?
                                                 <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
                                         }
+                                        {
+                                            props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length ?
+                                                props.catchesOverToleranceAlert.catchesOverTolerance.some(catchWithAlert => catchWithAlert.lan.species === speciesCatch.species) ? <OverWeightTolerance title={getWeightOverToleranceInfo()}>
+                                                    <OverWeightToleranceText>10 %</OverWeightToleranceText>
+                                                </OverWeightTolerance> : null
+                                                : null
+                                        }
                                     </SubValue><br/>
                                     <Weights>
                                         <Weight>
@@ -107,6 +127,22 @@ const LANMessageResume = props => {
         }
     </Wrapper>
 }
+
+const OverWeightToleranceText = styled.span`
+  vertical-align: text-top;
+  line-height: 9px;
+  margin: 0 0 0 3px;
+`
+
+const OverWeightTolerance = styled.span`
+  border-radius: 11px;
+  background: #E1000F;
+  font-size: 11px;
+  color: ${COLORS.background};
+  margin: 7px 7px 7px 5px;
+  height: 17px;
+  padding: 3px 5px 0px 2px;
+`
 
 const Weights = styled.div`
   display: flex;

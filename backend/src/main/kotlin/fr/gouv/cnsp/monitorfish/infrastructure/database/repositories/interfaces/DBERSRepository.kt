@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ERSEntity
 import org.hibernate.annotations.DynamicUpdate
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -11,17 +12,17 @@ import javax.transaction.Transactional
 
 @DynamicUpdate
 interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExecutor<ERSEntity> {
-    @Query("select e.operation_datetime_utc from ers e where" +
-            " e.cfr = ?1 and e.log_type = 'DEP' order by e.operation_datetime_utc desc limit 1", nativeQuery = true)
-    fun findLastDepartureDateByInternalReferenceNumber(internalReferenceNumber: String): Instant
+    @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
+            "from ERSEntity e where e.internalReferenceNumber = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")
+    fun findLastDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
 
-    @Query("select e.operation_datetime_utc from ers e where" +
-            " e.external_identification = ?1 and e.log_type = 'DEP' order by e.operation_datetime_utc desc limit 1", nativeQuery = true)
-    fun findLastDepartureDateByExternalReferenceNumber(externalReferenceNumber: String): Instant
+    @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
+            "from ERSEntity e where e.externalReferenceNumber = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")
+    fun findLastDepartureDateByExternalReferenceNumber(externalReferenceNumber: String, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
 
-    @Query("select e.operation_datetime_utc from ers e where" +
-            " e.ircs = ?1 and e.log_type = 'DEP' order by e.operation_datetime_utc desc limit 1", nativeQuery = true)
-    fun findLastDepartureDateByIRCS(ircs: String): Instant
+    @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
+            "from ERSEntity e where e.ircs = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")
+    fun findLastDepartureDateByIRCS(ircs: String, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
 
     @Query("select * from ers e where e.cfr = ?1 and e.operation_datetime_utc >= ?2 order by e.operation_datetime_utc desc", nativeQuery = true)
     fun findERSMessagesAfterOperationDateTime(internalReferenceNumber: String, dateTime: Instant): List<ERSEntity>

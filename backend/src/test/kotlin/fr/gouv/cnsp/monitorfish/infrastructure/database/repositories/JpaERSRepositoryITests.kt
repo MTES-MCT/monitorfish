@@ -257,7 +257,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLANAndPNOMessagesNotAnalyzedBy Should LAN and the associated PNO`() {
+    fun `findLANAndPNOMessagesNotAnalyzedBy Should return the LAN and the associated PNO`() {
         // When
         val messages = jpaERSRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
 

@@ -10,8 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaGearRepository(@Autowired
-                        private val dbGearRepository: DBGearRepository) : GearRepository {
+class JpaGearRepository(private val dbGearRepository: DBGearRepository) : GearRepository {
 
     @Cacheable(value = ["gears"])
     override fun findAll(): List<Gear> {

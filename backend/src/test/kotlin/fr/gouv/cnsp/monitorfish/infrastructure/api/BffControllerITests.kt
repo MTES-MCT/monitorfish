@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.ERSMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
@@ -158,16 +159,17 @@ class BffControllerITests {
     @Test
     fun `Should find the ERS messages of vessels`() {
         // Given
-        given(this.getVesselLastVoyage.execute(any(), any(), any())).willReturn(TestUtils.getDummyERSMessage())
+        given(this.getVesselLastVoyage.execute(any(), any(), any())).willReturn(ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
 
         // When
         mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4"))
                 // Then
                 .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(3)))
-                .andExpect(jsonPath("$[0].messageType", equalTo("DEP")))
-                .andExpect(jsonPath("$[0].tripNumber", equalTo(345)))
-                .andExpect(jsonPath("$[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
+                .andExpect(jsonPath("$.length()", equalTo(2)))
+                .andExpect(jsonPath("$.ersMessages.length()", equalTo(3)))
+                .andExpect(jsonPath("$.ersMessages[0].messageType", equalTo("DEP")))
+                .andExpect(jsonPath("$.ersMessages[0].tripNumber", equalTo(345)))
+                .andExpect(jsonPath("$.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
 
         Mockito.verify(getVesselLastVoyage).execute("FR224226850", "123", "IEF4")

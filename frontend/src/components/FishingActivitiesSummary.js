@@ -8,6 +8,7 @@ import DISMessageResume from "./ers_messages_resumes/DISMessageResume";
 import FARMessageResume from "./ers_messages_resumes/FARMessageResume";
 import PNOMessageResume from "./ers_messages_resumes/PNOMessageResume";
 import LANMessageResume from "./ers_messages_resumes/LANMessageResume";
+import {AlertTypes} from "../domain/entities/alerts";
 
 const FishingActivitiesSummary = props => {
     const [depMessage, setDEPMessage] = useState(null)
@@ -31,24 +32,26 @@ const FishingActivitiesSummary = props => {
     const [faoZones, setFAOZones] = useState([])
 
     useEffect(() => {
-        if(props.fishingActivities && props.fishingActivities.length) {
-            let depMessage = props.fishingActivities
+        if(props.fishingActivities && props.fishingActivities.ersMessages && props.fishingActivities.ersMessages.length) {
+            let ersMessages = props.fishingActivities.ersMessages
+
+            let depMessage = ersMessages
                 .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
             setDEPMessage(depMessage)
 
-            let lanMessage = props.fishingActivities
+            let lanMessage = ersMessages
                 .find(message => message.messageType === ERSMessageTypeEnum.LAN.code)
             setLANMessage(lanMessage)
 
-            let disMessages = props.fishingActivities
+            let disMessages = ersMessages
                 .filter(message => message.messageType === ERSMessageTypeEnum.DIS.code)
             setDISMessages(disMessages)
 
-            let pnoMessage = props.fishingActivities
+            let pnoMessage = ersMessages
                 .find(message => message.messageType === ERSMessageTypeEnum.PNO.code)
             setPNOMessage(pnoMessage)
 
-            let farMessages = props.fishingActivities
+            let farMessages = ersMessages
                 .filter(message => message.messageType === ERSMessageTypeEnum.FAR.code)
             setFARMessages(farMessages)
 
@@ -200,6 +203,14 @@ const FishingActivitiesSummary = props => {
             }, 0).toFixed(2)
     }
 
+    const getCatchesOverToleranceAlert = () => {
+        if(props.fishingActivities.alerts && props.fishingActivities.alerts.length) {
+            return props.fishingActivities.alerts.find(alert => alert.name === AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
+        }
+
+        return null
+    }
+
     return <>
         { props.fishingActivities ?
                 <Body>
@@ -247,7 +258,7 @@ const FishingActivitiesSummary = props => {
                             <Arrow onClick={() => props.showERSMessages()}/>
                         </Title>
                         {
-                            props.fishingActivities && props.fishingActivities.length ?
+                            props.fishingActivities && props.fishingActivities.ersMessages && props.fishingActivities.ersMessages.length ?
                                 <ERSMessages>
                                     {depMessage ? <DEPMessageResume
                                         showERSMessages={props.showERSMessages}
@@ -281,6 +292,7 @@ const FishingActivitiesSummary = props => {
                                     }
 
                                     {lanMessage ? <LANMessageResume
+                                        catchesOverToleranceAlert={getCatchesOverToleranceAlert()}
                                         totalLANWeight={totalLANWeight}
                                         totalPNOWeight={totalPNOWeight}
                                         speciesToWeightOfFAR={speciesToWeightOfFAR}

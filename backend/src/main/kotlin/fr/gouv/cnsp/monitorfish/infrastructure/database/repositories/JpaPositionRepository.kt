@@ -11,8 +11,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaPositionRepository(@Autowired
-                            private val dbPositionRepository: DBPositionRepository) : PositionRepository {
+class JpaPositionRepository(private val dbPositionRepository: DBPositionRepository) : PositionRepository {
 
     private val logger: Logger = LoggerFactory.getLogger(JpaPositionRepository::class.java)
 

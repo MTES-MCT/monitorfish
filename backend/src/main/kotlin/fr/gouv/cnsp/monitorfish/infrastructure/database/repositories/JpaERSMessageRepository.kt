@@ -9,8 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaERSMessageRepository(@Autowired
-                              private val dbersMessageRepository: DBERSMessageRepository) : ERSMessageRepository {
+class JpaERSMessageRepository(private val dbersMessageRepository: DBERSMessageRepository) : ERSMessageRepository {
 
     @Cacheable(value = ["ers_raw_message"])
     override fun findRawMessage(operationNumber: String): String? {

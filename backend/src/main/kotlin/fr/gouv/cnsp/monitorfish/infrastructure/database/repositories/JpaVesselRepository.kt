@@ -11,8 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaVesselRepository(@Autowired
-                          private val dbVesselRepository: DBVesselRepository) : VesselRepository {
+class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : VesselRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
 
     @Cacheable(value = ["vessel"])

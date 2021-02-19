@@ -1,8 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.*
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.ERSMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -13,14 +15,20 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                           private val gearRepository: GearRepository,
                           private val speciesRepository: SpeciesRepository,
                           private val portRepository: PortRepository,
+                          private val alertRepository: AlertRepository,
                           private val ersMessageRepository: ERSMessageRepository) {
     private val logger = LoggerFactory.getLogger(GetVesselLastVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): List<ERSMessage> {
-        val lastDepartureDate = ersRepository.findLastDepartureDate(internalReferenceNumber, externalReferenceNumber, ircs)
+    fun execute(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): ERSMessagesAndAlerts {
+        val lastDepartureDateAndTripNumber = ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, externalReferenceNumber, ircs)
+
+        val alerts = alertRepository.findAlertsOfRules(
+                listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+                internalReferenceNumber,
+                lastDepartureDateAndTripNumber.tripNumber)
 
         val messages = ersRepository
-                .findAllMessagesAfterDepartureDate(lastDepartureDate, internalReferenceNumber, externalReferenceNumber, ircs)
+                .findAllMessagesAfterDepartureDate(lastDepartureDateAndTripNumber.lastDepartureDate, internalReferenceNumber, externalReferenceNumber, ircs)
                 .sortedBy { it.operationDateTime }
                 .map {
                     try {
@@ -42,10 +50,10 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                                 setNamesFromCodes(it.message as DIS)
                             }
                             ERSMessageTypeMapping.COE.name -> {
-                                SetNamesFromCodes(it.message as COE)
+                                setNamesFromCodes(it.message as COE)
                             }
                             ERSMessageTypeMapping.COX.name -> {
-                                SetNamesFromCodes(it.message as COX)
+                                setNamesFromCodes(it.message as COX)
                             }
                             ERSMessageTypeMapping.CRO.name -> {
                                 setNamesFromCodes(it.message as CRO)
@@ -65,19 +73,27 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                     it
                 }
 
-        flagCorrectedMessages(messages)
+        flagCorrectedAndAcknowledgedMessages(messages)
 
-        return messages.filter {
+        val ersMessages = messages.filter {
             it.operationType == ERSOperationType.DAT ||
                     it.operationType == ERSOperationType.COR
         }
+
+        return ERSMessagesAndAlerts(ersMessages, alerts)
     }
 
-    private fun flagCorrectedMessages(messages: List<ERSMessage>) {
+    private fun flagCorrectedAndAcknowledgedMessages(messages: List<ERSMessage>) {
         messages.forEach { ersMessage ->
             if (ersMessage.operationType == ERSOperationType.COR &&
                     !ersMessage.referencedErsId.isNullOrEmpty()) {
-                messages.find { message -> message.ersId == ersMessage.referencedErsId }?.isCorrected = true
+                val correctedMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
+
+                if(correctedMessage != null) {
+                    correctedMessage.isCorrected = true
+                } else {
+                    logger.warn("Original message ${ersMessage.referencedErsId} corrected by message COR ${ersMessage.operationNumber} is not found.")
+                }
             } else if (ersMessage.operationType == ERSOperationType.RET &&
                     !ersMessage.referencedErsId.isNullOrEmpty()) {
                 val foundOriginalMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
@@ -89,7 +105,7 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
         }
     }
 
-    private fun SetNamesFromCodes(message: COE) {
+    private fun setNamesFromCodes(message: COE) {
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
             try {
                 message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
@@ -99,7 +115,7 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
         }
     }
 
-    private fun SetNamesFromCodes(message: COX) {
+    private fun setNamesFromCodes(message: COX) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnEntry ->
             try {
                 message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnEntry).name

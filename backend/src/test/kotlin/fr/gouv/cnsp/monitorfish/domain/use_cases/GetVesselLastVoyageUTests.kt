@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
@@ -38,12 +39,15 @@ class GetVesselLastVoyageUTests {
     private lateinit var gearRepository: GearRepository
 
     @MockBean
+    private lateinit var alertRepository: AlertRepository
+
+    @MockBean
     private lateinit var ersMessageRepository: ERSMessageRepository
 
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
-        given(ersRepository.findLastDepartureDate(any(), any(), any())).willReturn(ZonedDateTime.now())
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
         given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -55,7 +59,7 @@ class GetVesselLastVoyageUTests {
         given(ersMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
+        val (ersMessages, _) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
                 .execute("FR224226850", "", "")
 
         // Then
@@ -98,7 +102,7 @@ class GetVesselLastVoyageUTests {
     @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
-        given(ersRepository.findLastDepartureDate(any(), any(), any())).willReturn(ZonedDateTime.now())
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
         given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getCorrectedDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -110,7 +114,7 @@ class GetVesselLastVoyageUTests {
         given(ersMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
+        val (ersMessages, _) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
                 .execute("FR224226850", "", "")
 
         // Then
@@ -132,7 +136,7 @@ class GetVesselLastVoyageUTests {
     @Test
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
-        given(ersRepository.findLastDepartureDate(any(), any(), any())).willReturn(ZonedDateTime.now())
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
         given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getRETDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -144,7 +148,7 @@ class GetVesselLastVoyageUTests {
         given(ersMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
+        val (ersMessages, _) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
                 .execute("FR224226850", "", "")
 
         // Then

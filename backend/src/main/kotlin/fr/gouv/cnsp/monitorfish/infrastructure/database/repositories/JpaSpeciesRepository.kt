@@ -10,8 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaSpeciesRepository(@Autowired
-                           private val dbSpeciesRepository: DBSpeciesRepository) : SpeciesRepository {
+class JpaSpeciesRepository(private val dbSpeciesRepository: DBSpeciesRepository) : SpeciesRepository {
 
     @Cacheable(value = ["all_species"])
     override fun findAll(): List<Species> {

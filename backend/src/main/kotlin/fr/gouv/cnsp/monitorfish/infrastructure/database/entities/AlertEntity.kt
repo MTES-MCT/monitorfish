@@ -1,0 +1,59 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
+import java.time.ZonedDateTime
+import java.util.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
+
+@Entity
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType::class)
+@Table(name = "alerts")
+data class AlertEntity(
+        @Id
+        @Column(name = "alert_id")
+        val id: UUID,
+        @Column(name = "name", nullable = false)
+        val name: String,
+        @Column(name = "internal_reference_number", nullable = false)
+        val internalReferenceNumber: String? = null,
+        @Column(name = "external_reference_number", nullable = false)
+        val externalReferenceNumber: String? = null,
+        @Column(name = "ircs", nullable = false)
+        val ircs: String? = null,
+        @Column(name = "creation_date", nullable = false)
+        val creationDate: ZonedDateTime,
+        @Type(type = "jsonb")
+        @Column(name = "value", nullable = false, columnDefinition = "jsonb")
+        val value: String) {
+
+        fun toAlert(mapper: ObjectMapper) : Alert {
+            return Alert(
+                    id = id,
+                    name = name,
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = ircs,
+                    creationDate = creationDate,
+                    value = mapper.readValue(value, AlertType::class.java)
+            )
+        }
+
+        companion object {
+                fun fromAlert(alert: Alert, mapper: ObjectMapper) = AlertEntity(
+                        id = alert.id,
+                        name = alert.name,
+                        internalReferenceNumber = alert.internalReferenceNumber,
+                        externalReferenceNumber = alert.externalReferenceNumber,
+                        ircs = alert.ircs,
+                        creationDate = alert.creationDate,
+                        value = mapper.writeValueAsString(alert.value))
+        }
+}

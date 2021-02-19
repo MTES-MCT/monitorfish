@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+
 
 @Import(MapperConfiguration::class)
 @RunWith(SpringRunner::class)
@@ -31,6 +33,11 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @BeforeEach
     fun setup() {
         cacheManager.getCache("ers")?.clear()
+    }
+
+    @AfterEach
+    fun after() {
+        jpaERSRepository.deleteAll()
     }
 
     @Test
@@ -250,9 +257,11 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(messages).hasSize(3)
 
         assertThat(messages.any {
-            it.first.operationType == ERSOperationType.DAT && it.first.ersId == lanMessageBeingCorrected }).isFalse
+            it.first.operationType == ERSOperationType.DAT && it.first.ersId == lanMessageBeingCorrected
+        }).isFalse
         assertThat(messages.any {
-            it.first.operationType == ERSOperationType.COR && it.first.referencedErsId == lanMessageBeingCorrected }).isTrue
+            it.first.operationType == ERSOperationType.COR && it.first.referencedErsId == lanMessageBeingCorrected
+        }).isTrue
     }
 
     @Test

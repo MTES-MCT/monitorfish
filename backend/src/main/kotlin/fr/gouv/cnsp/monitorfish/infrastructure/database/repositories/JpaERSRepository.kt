@@ -114,6 +114,10 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
                 .get().toERSMessage(mapper)
     }
 
+    override fun deleteAll() {
+        dbERSRepository.deleteAll()
+    }
+
     private fun getCorrectedMessageIfAvailable(pnoMessage: ERSEntity, messages: List<ERSEntity>): Boolean {
         return if (pnoMessage.operationType == ERSOperationType.DAT) {
             !messages.any { it.operationType == ERSOperationType.COR && it.referencedErsId == pnoMessage.ersId }

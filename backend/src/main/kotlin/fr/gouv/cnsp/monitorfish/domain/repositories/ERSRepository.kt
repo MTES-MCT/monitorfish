@@ -15,4 +15,6 @@ interface ERSRepository {
     fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<ERSMessage, ERSMessage?>>
     fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
     fun findById(id: Long): ERSMessage
+    // For test purpose
+    fun deleteAll()
 }

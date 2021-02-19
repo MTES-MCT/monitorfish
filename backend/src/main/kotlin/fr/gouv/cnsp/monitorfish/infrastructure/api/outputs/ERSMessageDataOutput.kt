@@ -30,6 +30,8 @@ data class ERSMessageDataOutput(
                 referencedErsId = ersMessage.referencedErsId,
                 externalReferenceNumber = ersMessage.externalReferenceNumber,
                 ircs = ersMessage.ircs,
+                isCorrected = ersMessage.isCorrected,
+                acknowledge = ersMessage.acknowledge,
                 operationDateTime = ersMessage.operationDateTime,
                 vesselName = ersMessage.vesselName,
                 operationType = ersMessage.operationType,
@@ -39,7 +41,8 @@ data class ERSMessageDataOutput(
                 flagState = ersMessage.flagState,
                 imo = ersMessage.imo,
                 messageType = ersMessage.messageType,
-                message = ersMessage.message
+                message = ersMessage.message,
+                rawMessage = ersMessage.rawMessage
         )
     }
 }

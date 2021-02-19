@@ -35,39 +35,42 @@ class JpaERSRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should return the last departure date When the CFR is given`() {
+    fun `findLastDepartureDateAndTripNumber Should return the last departure date When the CFR is given`() {
         // When
-        val departureDate = jpaERSRepository.findLastDepartureDate("GBR000B14430", "", "")
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("GBR000B14430", "", "")
 
         // Then
-        assertThat(departureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should return the last departure date When the external marker is given`() {
+    fun `findLastDepartureDateAndTripNumber Should return the last departure date When the external marker is given`() {
         // When
-        val departureDate = jpaERSRepository.findLastDepartureDate("", "AR865", "")
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("", "AR865", "")
 
         // Then
-        assertThat(departureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should return the last departure date When the IRCS is given`() {
+    fun `findLastDepartureDateAndTripNumber Should return the last departure date When the IRCS is given`() {
         // When
-        val departureDate = jpaERSRepository.findLastDepartureDate("", "", "MVGM5")
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("", "", "MVGM5")
 
         // Then
-        assertThat(departureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should throw an exception When no parameter is given`() {
+    fun `findLastDepartureDateAndTripNumber Should throw an exception When no parameter is given`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDate("", "", "") }
+        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("", "", "") }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
@@ -76,9 +79,9 @@ class JpaERSRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should throw an exception When the vessel could not be found`() {
+    fun `findLastDepartureDateAndTripNumber Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDate("ARGH", "", "") }
+        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("ARGH", "", "") }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)

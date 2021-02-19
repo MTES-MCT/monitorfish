@@ -11,7 +11,7 @@ const vesselSlice = createSlice({
         vesselSidebarIsOpen: false,
         vesselSidebarTabIndexToShow: 1,
         isFocusedOnVesselSearch: false,
-        fishingActivities: []
+        fishingActivities: {}
     },
     reducers: {
         setSelectedVesselTrackVector(state, action) {

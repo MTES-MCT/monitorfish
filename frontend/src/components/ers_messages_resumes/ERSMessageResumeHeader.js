@@ -24,8 +24,8 @@ const ERSMessageResumeHeader = props => {
                     <ERSMessageName hasNoMessage={props.hasNoMessage}>
                         { ERSMessageTypeEnum[props.messageType].name }
                     </ERSMessageName>
-                    <ERSMessageResumeText>
-                        { props.hasNoMessage ? <Gray>Aucun message</Gray> : props.title }
+                    <ERSMessageResumeText title={props.onHoverText}>
+                        { props.hasNoMessage ? <Gray>Aucun message</Gray> : <>{props.title}{props.isAlert ? <Red /> : null}</> }
                     </ERSMessageResumeText>
                     {
                         props.hasNoMessage ? null : <ShowThisMessage onClick={() => props.showERSMessages(props.messageType)}/>
@@ -34,6 +34,15 @@ const ERSMessageResumeHeader = props => {
             </Wrapper> : null }
     </>
 }
+
+const Red = styled.span`
+  height: 8px;
+  width: 8px;
+  margin-left: 5px;
+  background-color: #E1000F;
+  border-radius: 50%;
+  display: inline-block;
+`
 
 const ShowThisMessage = styled(ArrowSVG)`
   vertical-align: sub;

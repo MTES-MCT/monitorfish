@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
@@ -13,8 +14,8 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
-import java.lang.IllegalArgumentException
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -24,25 +25,34 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
 
     private val logger = LoggerFactory.getLogger(FrontController::class.java)
 
-    override fun findLastDepartureDate(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): ZonedDateTime {
+    override fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): LastDepartureDateAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                return dbERSRepository.findLastDepartureDateByInternalReferenceNumber(internalReferenceNumber)
-                        .atZone(UTC)
+                val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByInternalReferenceNumber(
+                        internalReferenceNumber, PageRequest.of(0,1)).first()
+                return LastDepartureDateAndTripNumber(
+                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
+                        lastDepartureDateAndTripNumber.tripNumber)
             }
 
             if(externalReferenceNumber.isNotEmpty()) {
-                return dbERSRepository.findLastDepartureDateByExternalReferenceNumber(externalReferenceNumber)
-                        .atZone(UTC)
+                val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByExternalReferenceNumber(
+                        externalReferenceNumber, PageRequest.of(0,1)).first()
+                return LastDepartureDateAndTripNumber(
+                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
+                        lastDepartureDateAndTripNumber.tripNumber)
             }
 
             if(ircs.isNotEmpty()) {
-                return dbERSRepository.findLastDepartureDateByIRCS(ircs)
-                        .atZone(UTC)
+                val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByIRCS(
+                        ircs, PageRequest.of(0,1)).first()
+                return LastDepartureDateAndTripNumber(
+                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
+                        lastDepartureDateAndTripNumber.tripNumber)
             }
 
             throw IllegalArgumentException("No CFR, External marker nor IRCS given to find the vessel.")
-        } catch (e: EmptyResultDataAccessException) {
+        } catch (e: NoSuchElementException) {
             throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber, externalReferenceNumber, ircs), e)
         } catch (e: IllegalArgumentException) {
             throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber, externalReferenceNumber, ircs), e)

@@ -52,10 +52,12 @@ class ExecutePnoAndLanWeightToleranceRule(private val ersRepository: ERSReposito
             }
         }
 
-        logger.info("PNO_LAN_WEIGHT_TOLERANCE: ERS messages marked as processed")
         val listOfLanAndPnoIds = lanAndPnos.map { listOf(it.first, it.second) }.flatten()
                 .mapNotNull { it?.id }
-        ersRepository.updateERSMessagesAsProcessedByRule(listOfLanAndPnoIds, RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)
+        if(listOfLanAndPnoIds.isNotEmpty()) {
+            ersRepository.updateERSMessagesAsProcessedByRule(listOfLanAndPnoIds, RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)
+            logger.info("PNO_LAN_WEIGHT_TOLERANCE: ${listOfLanAndPnoIds.size} ERS messages marked as processed")
+        }
     }
 
     private fun buildAlert(lan: ERSMessage, pno: ERSMessage, value: PNOAndLANWeightTolerance, catchesOverTolerance: List<PNOAndLANCatches>) : Alert {
@@ -72,6 +74,7 @@ class ExecutePnoAndLanWeightToleranceRule(private val ersRepository: ERSReposito
                 internalReferenceNumber = lan.internalReferenceNumber,
                 externalReferenceNumber = lan.externalReferenceNumber,
                 ircs = lan.ircs,
+                tripNumber = lan.tripNumber,
                 creationDate = ZonedDateTime.now(),
                 value = toleranceAlert)
     }

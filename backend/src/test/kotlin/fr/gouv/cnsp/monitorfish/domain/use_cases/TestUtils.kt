@@ -64,7 +64,7 @@ object TestUtils {
         farToCorrect.mesh = 120.0
 
         return listOf(
-                ERSMessage(id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646811", operationType = ERSOperationType.DAT, messageType = "FAR",
+                ERSMessage(id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = 345, ersId = "9065646811", operationType = ERSOperationType.DAT, messageType = "FAR",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
                 ERSMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "", referencedErsId = "9065646811", operationType = ERSOperationType.COR, messageType = "FAR",
                         message = farToCorrect, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))

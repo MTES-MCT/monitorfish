@@ -30,6 +30,8 @@ data class AlertEntity(
         val ircs: String? = null,
         @Column(name = "creation_date", nullable = false)
         val creationDate: ZonedDateTime,
+        @Column(name = "trip_number")
+        val tripNumber: Int? = null,
         @Type(type = "jsonb")
         @Column(name = "value", nullable = false, columnDefinition = "jsonb")
         val value: String) {
@@ -42,6 +44,7 @@ data class AlertEntity(
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = ircs,
                     creationDate = creationDate,
+                    tripNumber = tripNumber,
                     value = mapper.readValue(value, AlertType::class.java)
             )
         }
@@ -54,6 +57,7 @@ data class AlertEntity(
                         externalReferenceNumber = alert.externalReferenceNumber,
                         ircs = alert.ircs,
                         creationDate = alert.creationDate,
+                        tripNumber = alert.tripNumber,
                         value = mapper.writeValueAsString(alert.value))
         }
 }

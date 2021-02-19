@@ -85,12 +85,12 @@ class BffController(
                   externalReferenceNumber: String,
                   @ApiParam("Vessel IRCS")
                   @RequestParam(name = "IRCS")
-                  IRCS: String): List<ERSMessage> {
+                  IRCS: String): List<ERSMessageDataOutput> {
         val start = System.currentTimeMillis()
         val ersMessages = getVesselLastVoyage.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
         ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
-        return ersMessages
+        return ersMessages.map { ERSMessageDataOutput.fromERSMessage(it) }
     }
 
     @GetMapping("/v1/gears")

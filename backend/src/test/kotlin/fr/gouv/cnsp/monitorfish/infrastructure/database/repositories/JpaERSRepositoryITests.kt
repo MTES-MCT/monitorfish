@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -16,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+
 
 @Import(MapperConfiguration::class)
 @RunWith(SpringRunner::class)
@@ -32,41 +35,49 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         cacheManager.getCache("ers")?.clear()
     }
 
-    @Test
-    @Transactional
-    fun `findLastDepartureDate Should return the last departure date When the CFR is given`() {
-        // When
-        val departureDate = jpaERSRepository.findLastDepartureDate("GBR000B14430", "", "")
-
-        // Then
-        assertThat(departureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+    @AfterEach
+    fun after() {
+        jpaERSRepository.deleteAll()
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should return the last departure date When the external marker is given`() {
+    fun `findLastDepartureDateAndTripNumber Should return the last departure date When the CFR is given`() {
         // When
-        val departureDate = jpaERSRepository.findLastDepartureDate("", "AR865", "")
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("GBR000B14430", "", "")
 
         // Then
-        assertThat(departureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should return the last departure date When the IRCS is given`() {
+    fun `findLastDepartureDateAndTripNumber Should return the last departure date When the external marker is given`() {
         // When
-        val departureDate = jpaERSRepository.findLastDepartureDate("", "", "MVGM5")
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("", "AR865", "")
 
         // Then
-        assertThat(departureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should throw an exception When no parameter is given`() {
+    fun `findLastDepartureDateAndTripNumber Should return the last departure date When the IRCS is given`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDate("", "", "") }
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("", "", "MVGM5")
+
+        // Then
+        assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
+    }
+
+    @Test
+    @Transactional
+    fun `findLastDepartureDateAndTripNumber Should throw an exception When no parameter is given`() {
+        // When
+        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("", "", "") }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
@@ -75,9 +86,9 @@ class JpaERSRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastDepartureDate Should throw an exception When the vessel could not be found`() {
+    fun `findLastDepartureDateAndTripNumber Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDate("ARGH", "", "") }
+        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("ARGH", "", "") }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
@@ -145,11 +156,17 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(disMessage.catches.first().numberFish).isEqualTo(1.0)
         assertThat(disMessage.catches.first().species).isEqualTo("NEP")
 
+        // RET
+        assertThat(messages[6].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[6].operationType).isEqualTo(ERSOperationType.RET)
+        val ackMessage2 = messages[6].message as Acknowledge
+        assertThat(ackMessage2.returnStatus).isEqualTo("000")
+
         // FAR
-        assertThat(messages[6].operationType).isEqualTo(ERSOperationType.COR)
-        assertThat(messages[6].referencedErsId).isNotNull
-        assertThat(messages[6].message).isInstanceOf(FAR::class.java)
-        val farMessageOneCorrected = messages[6].message as FAR
+        assertThat(messages[7].operationType).isEqualTo(ERSOperationType.COR)
+        assertThat(messages[7].referencedErsId).isNotNull
+        assertThat(messages[7].message).isInstanceOf(FAR::class.java)
+        val farMessageOneCorrected = messages[7].message as FAR
         assertThat(farMessageOneCorrected.gear).isEqualTo("GTN")
         assertThat(farMessageOneCorrected.mesh).isEqualTo(150.0)
         assertThat(farMessageOneCorrected.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z[UTC]")
@@ -162,11 +179,6 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOneCorrected.catches.first().economicZone).isEqualTo("FRA")
         assertThat(farMessageOneCorrected.catches.first().statisticalRectangle).isEqualTo("23E6")
 
-        // RET
-        assertThat(messages[7].message).isInstanceOf(Acknowledge::class.java)
-        assertThat(messages[7].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage2 = messages[7].message as Acknowledge
-        assertThat(ackMessage2.returnStatus).isEqualTo("000")
 
         // FAR
         assertThat(messages[8].message).isInstanceOf(FAR::class.java)
@@ -220,5 +232,66 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.departurePort).isEqualTo("AEJAZ")
         assertThat(depMessage.anticipatedActivity).isEqualTo("FSH")
         assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
+    }
+
+    @Test
+    @Transactional
+    fun `findLANAndPNOMessagesNotAnalyzedBy Should not return already analyzed LAN by rule PNO_LAN_WEIGHT_TOLERANCE`() {
+        // When
+        val messages = jpaERSRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
+
+        // Then
+        assertThat(messages).hasSize(2)
+    }
+
+    @Test
+    @Transactional
+    fun `findLANAndPNOMessagesNotAnalyzedBy Should return the corrected LAN and not the previous one`() {
+        // Given
+        val lanMessageBeingCorrected = "OOF20190430059907"
+
+        // When
+        val messages = jpaERSRepository.findLANAndPNOMessagesNotAnalyzedBy("FAKE_RULE_NAME")
+
+        // Then, the origin LAN message is not present (3 messages in place of 4)
+        assertThat(messages).hasSize(3)
+
+        assertThat(messages.any {
+            it.first.operationType == ERSOperationType.DAT && it.first.ersId == lanMessageBeingCorrected
+        }).isFalse
+        assertThat(messages.any {
+            it.first.operationType == ERSOperationType.COR && it.first.referencedErsId == lanMessageBeingCorrected
+        }).isTrue
+    }
+
+    @Test
+    @Transactional
+    fun `findLANAndPNOMessagesNotAnalyzedBy Should return the LAN and the associated PNO`() {
+        // When
+        val messages = jpaERSRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
+
+        // Then, for the first pair of result
+        assertThat(messages.first().first.internalReferenceNumber).isEqualTo("GBR000B14430")
+        assertThat(messages.first().second?.internalReferenceNumber).isEqualTo("GBR000B14430")
+        assertThat(messages.first().first.tripNumber).isEqualTo(9463714)
+        assertThat(messages.first().second?.tripNumber).isEqualTo(9463714)
+        assertThat(messages.first().first.messageType).isEqualTo(ERSMessageTypeMapping.LAN.name)
+        assertThat(messages.first().second?.messageType).isEqualTo(ERSMessageTypeMapping.PNO.name)
+    }
+
+    @Test
+    @Transactional
+    fun `updateERSMessagesAsProcessedByRule Should update multiple message processed by a rule`() {
+        // When
+        jpaERSRepository.updateERSMessagesAsProcessedByRule(listOf(2, 10), "PNO_LAN_WEIGHT_TOLERANCE")
+
+        // Then
+        val firstMessageUpdated = jpaERSRepository.findById(2)
+        assertThat(firstMessageUpdated.analyzedByRules).hasSize(1)
+        assertThat(firstMessageUpdated.analyzedByRules.first()).isEqualTo("PNO_LAN_WEIGHT_TOLERANCE")
+
+        val secondMessageUpdated = jpaERSRepository.findById(10)
+        assertThat(secondMessageUpdated.analyzedByRules).hasSize(1)
+        assertThat(secondMessageUpdated.analyzedByRules.first()).isEqualTo("PNO_LAN_WEIGHT_TOLERANCE")
     }
 }

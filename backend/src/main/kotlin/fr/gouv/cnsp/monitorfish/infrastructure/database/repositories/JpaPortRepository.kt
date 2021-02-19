@@ -10,8 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaPortRepository(@Autowired
-                        private val dbPortRepository: DBPortRepository) : PortRepository {
+class JpaPortRepository(private val dbPortRepository: DBPortRepository) : PortRepository {
 
     @Cacheable(value = ["ports"])
     override fun findAll(): List<Port> {

@@ -27,7 +27,7 @@ const ERSMessages = props => {
     const [selectedOptions, setSelectedOptions] = useState(null);
 
     useEffect(() => {
-        setFishingActivities(props.fishingActivities)
+        setFishingActivities(props.fishingActivities.ersMessages)
     }, [props.fishingActivities])
 
     useEffect(() => {

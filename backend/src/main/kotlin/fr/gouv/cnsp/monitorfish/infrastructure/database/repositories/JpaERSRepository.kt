@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
@@ -26,6 +26,7 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
                        private val mapper: ObjectMapper) : ERSRepository {
 
     private val logger = LoggerFactory.getLogger(FrontController::class.java)
+    private val postgresChunkSize = 5000
 
     override fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): LastDepartureDateAndTripNumber {
         try {
@@ -108,7 +109,9 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
     }
 
     override fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String) {
-        dbERSRepository.updateERSMessagesAsProcessedByRule(ids, ruleType)
+        ids.chunked(postgresChunkSize).forEach {
+            dbERSRepository.updateERSMessagesAsProcessedByRule(it, ruleType)
+        }
     }
 
     override fun findById(id: Long): ERSMessage {

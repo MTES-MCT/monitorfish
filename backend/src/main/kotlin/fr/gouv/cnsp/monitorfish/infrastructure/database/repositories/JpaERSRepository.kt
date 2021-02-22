@@ -15,9 +15,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+import javax.transaction.Transactional
 
 @Repository
 class JpaERSRepository(private val dbERSRepository: DBERSRepository,
@@ -114,6 +116,8 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
                 .get().toERSMessage(mapper)
     }
 
+    @Modifying
+    @Transactional
     override fun deleteAll() {
         dbERSRepository.deleteAll()
     }

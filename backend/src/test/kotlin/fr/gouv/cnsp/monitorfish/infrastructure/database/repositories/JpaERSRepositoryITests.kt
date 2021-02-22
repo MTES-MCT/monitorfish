@@ -18,9 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
-
 
 @Import(MapperConfiguration::class)
 @RunWith(SpringRunner::class)
@@ -32,13 +29,9 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @Autowired
     lateinit var cacheManager: CacheManager
 
-    @PersistenceContext
-    lateinit var entityManager: EntityManager
-
     @BeforeEach
     fun setup() {
         cacheManager.getCache("ers")?.clear()
-        entityManager.clear()
     }
 
     @AfterEach

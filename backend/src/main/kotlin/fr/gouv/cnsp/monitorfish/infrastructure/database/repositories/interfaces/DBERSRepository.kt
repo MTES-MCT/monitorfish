@@ -33,7 +33,7 @@ interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExe
             "and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)", nativeQuery = true)
     fun findAllLANAndPNONotProcessedByRule(ruleType: String): List<ERSEntity>
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query("update ers set analyzed_by_rules = array_append(analyzed_by_rules, :ruleType) where id in (:ids)", nativeQuery = true)
     fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)

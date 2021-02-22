@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
+import org.springframework.transaction.annotation.Propagation
 import java.time.Instant
 import javax.transaction.Transactional
 
@@ -33,7 +34,7 @@ interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExe
             "and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)", nativeQuery = true)
     fun findAllLANAndPNONotProcessedByRule(ruleType: String): List<ERSEntity>
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query("update ers set analyzed_by_rules = array_append(analyzed_by_rules, :ruleType) where id in (:ids)", nativeQuery = true)
     fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)

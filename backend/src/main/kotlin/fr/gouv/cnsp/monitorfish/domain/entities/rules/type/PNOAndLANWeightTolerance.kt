@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.rules.type
 
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.InputSource
 import java.lang.IllegalArgumentException
+import kotlin.math.absoluteValue
 
 class PNOAndLANWeightTolerance (
         var percentOfTolerance: Double? = null,
@@ -15,7 +16,7 @@ class PNOAndLANWeightTolerance (
     }
 
     fun getPercentBetweenLANAndPNO(lanWeight: Double, pnoWeight: Double): Double {
-        return (pnoWeight * 100) / lanWeight - 100
+        return ((pnoWeight * 100) / lanWeight - 100).absoluteValue
     }
 
     fun isAboveMinimumWeightThreshold(lanWeight: Double): Boolean {

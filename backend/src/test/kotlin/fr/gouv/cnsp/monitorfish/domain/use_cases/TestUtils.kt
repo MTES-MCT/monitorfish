@@ -149,7 +149,7 @@ object TestUtils {
         val firstPno = PNO()
         firstPno.catchOnboard = listOf(
                 catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
-                catchTwo.copy(weight = catchOne.weight?.plus(0.5)),
+                catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
                 catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
                 catchFour)
 

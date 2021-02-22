@@ -140,7 +140,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchOnboard.first().effortZone).isEqualTo("C")
         assertThat(pnoMessage.catchOnboard.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
-        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11")
+        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11T00:00Z[UTC]")
         assertThat(pnoMessage.predictedArrivalDateTime.toString()).isEqualTo("2019-10-21T08:16Z[UTC]")
 
         // EOF

@@ -1,9 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.ers.messages
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
-import java.time.LocalDate
 import java.time.ZonedDateTime
 
 class PNO() : ERSMessageValue {
@@ -21,6 +19,5 @@ class PNO() : ERSMessageValue {
     @JsonProperty("predictedArrivalDatetimeUtc")
     var predictedArrivalDateTime: ZonedDateTime? = null
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
-    var tripStartDate: LocalDate? = null
+    var tripStartDate: ZonedDateTime? = null
 }

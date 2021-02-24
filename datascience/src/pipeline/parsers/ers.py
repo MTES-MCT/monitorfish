@@ -1,10 +1,9 @@
 import logging
 import xml
 import xml.etree.ElementTree as ET
-from collections import Counter
 from datetime import datetime
 from functools import partial
-from typing import List, Union
+from typing import List
 from xml.etree.ElementTree import ParseError
 
 import pandas as pd
@@ -23,16 +22,7 @@ from src.pipeline.parsers.log_parsers import (
     parse_pno,
     parse_rtp,
 )
-from src.utils.ers import (
-    get_first_child,
-    get_root_tag,
-    make_datetime,
-    make_datetime_json_serializable,
-    remove_namespace,
-    tagged_children,
-    try_float,
-    xml_tag_structure_func_factory,
-)
+from src.utils.ers import get_first_child, get_root_tag, make_datetime, remove_namespace
 
 
 class ERSParsingError(Exception):

@@ -1,3 +1,6 @@
+# git repo
+.git
+
 # Env variables
 datascience/.env
 
@@ -9,16 +12,16 @@ datascience/.env
 .ipynb_checkpoints/
 .jupyter/
 
-# Coverage reports
-datascience/htmlcov/
-datascience/.coverage
-
 # Local data
 /datascience/data
 
 # Python
 *.pyc
-datascience/.python-version
+__pycache__
+
+# Coverage reports
+htmlcov
+.coverage
 
 # IDEs
 .vscode

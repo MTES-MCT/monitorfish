@@ -21,13 +21,23 @@ test: check-clean-archi
 test-front:
 	cd frontend && npm test
 	
-# CI commands
+# CI commands - app
 docker-build:
 	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) --build-arg VERSION=$(VERSION) --build-arg GITHUB_SHA=$(GITHUB_SHA)
 docker-tag:
 	docker tag monitorfish-app:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-push:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
+
+# CI commands - data pipeline
+docker-build-pipeline:
+	docker build -f "infra/docker/Dockerfile.DataPipeline" . -t monitorfish-pipeline:$(VERSION)
+docker-test-pipeline:
+	docker run monitorfish-pipeline:$(VERSION) coverage run -m unittest discover
+docker-tag-pipeline:
+	docker tag monitorfish-pipeline:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
+docker-push-pipeline:
+	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 
 # RUN commands
 init-local-sig:
@@ -38,32 +48,17 @@ restart-remote-app:
 	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
 run-local-app:
 	cd infra/local && sudo docker-compose up -d
+docker-run-pipeline-server:
+	datascience/scripts/start-server.sh
+docker-run-pipeline-flows:
+	datascience/scripts/start-flows.sh
+docker-stop-pipeline:
+	datascience/scripts/stop-server.sh
 
 # DATA commands
-run-jupyter-notebook:
-	docker-compose -f datascience/docker-compose.yml up --force-recreate
-run-jupyter-notebook-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate
-run-jupyter-notebook-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate
-run-data-science-env:
-	docker-compose -f datascience/docker-compose.yml up --force-recreate -d
-	docker exec -it monitorfish_data_science bash
-run-data-science-env-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate -d
-	docker exec -it monitorfish_data_science bash
-run-data-science-env-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate -d
-	docker exec -it monitorfish_data_science_dam_si bash
-update-data-science-env:
-	docker-compose -f datascience/docker-compose.yml up --force-recreate -d
-	docker container exec monitorfish_data_science conda env update -n base -f "work/datascience/environment.yml"
-	docker container commit monitorfish_data_science monitorfish_data_science
-update-data-science-env-no-proxy:
-	docker-compose -f datascience/docker-compose-no-proxy.yml up --force-recreate -d
-	docker container exec monitorfish_data_science conda env update -n base -f "work/datascience/environment.yml"
-	docker container commit monitorfish_data_science monitorfish_data_science
-update-data-science-env-dam-si:
-	docker-compose -f datascience/docker-compose-dam-si.yml up --force-recreate -d
-	docker container exec monitorfish_data_science_dam_si conda env update -n base -f "work/datascience/environment.yml"
-	docker container commit monitorfish_data_science_dam_si monitorfish_data_science_dam_si
+install-pipeline:
+	cd datascience && poetry install
+run-notebook:
+	cd datascience && poetry run jupyter notebook
+test-pipeline:
+	cd datascience && poetry run coverage run -m unittest discover && poetry run coverage report && poetry run coverage html

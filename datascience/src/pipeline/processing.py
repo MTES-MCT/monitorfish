@@ -1,7 +1,6 @@
 import json
 from typing import List
 
-import numpy as np
 import pandas as pd
 
 
@@ -103,7 +102,8 @@ def lst2pgarr(alist: List) -> str:
     """Converts a python list [1, 2, "a", "b"] to a string with Postgresql array
     syntax {1,2,a,b}.
     This transformation is required on DataFrame columns that contain python lists
-     before bulk inserting the DataFrame into Postgresql with the psql_insert_copy method.
+    before bulk inserting the DataFrame into Postgresql with the psql_insert_copy
+    method.
 
     Elements in the list are converted to string type, then stripped of leading and
     trailing blank spaces, and finally filtered to keep only non empty strings.

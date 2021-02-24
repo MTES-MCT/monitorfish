@@ -1,0 +1,48 @@
+name: CI/CD data processing pipeline
+
+on:
+  push:
+    paths:
+    - 'datascience/**'
+    - '.github/workflows/*'
+    - 'infra/docker/Dockerfile.DataPipeline'
+
+jobs:
+  build:
+    name: Build & test docker image
+    runs-on: ubuntu-18.04
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v2    
+
+    - name: Get last release version
+      id: lastrelease
+      uses: pozetroninc/github-action-get-latest-release@master
+      with:
+        repository: mtes-mct/monitorfish
+
+    - name: Set ENV_PROFILE as PROD when it is a release
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
+
+    - name: Set VERSION
+      run: |
+        if [ "${ENV_PROFILE}" != "prod" ]; then\
+            echo "VERSION=${{ steps.lastrelease.outputs.release }}_SNAPSHOT" >> $GITHUB_ENV
+        else\
+            echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
+        fi
+
+    - name: Build docker image
+      run: make docker-build-pipeline
+                
+    - name: Test docker image
+      run: make docker-test-pipeline
+
+    - name: Push docker image to registry
+      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
+      run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+        make docker-tag-pipeline
+        make docker-push-pipeline

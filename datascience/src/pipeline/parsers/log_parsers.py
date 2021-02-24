@@ -3,7 +3,6 @@ import xml
 from src.pipeline.parsers.childless_parsers import (
     parse_gea,
     parse_pos,
-    parse_pro,
     parse_ras,
     parse_spe,
 )

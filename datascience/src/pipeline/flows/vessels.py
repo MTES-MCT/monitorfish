@@ -1,7 +1,8 @@
 import pandas as pd
 from prefect import Flow, task
-from prefect.engine.results import LocalResult
-from prefect.engine.serializers import PandasSerializer
+
+# from prefect.engine.results import LocalResult
+# from prefect.engine.serializers import PandasSerializer
 from sqlalchemy import ARRAY, Date, Float, Integer, String
 
 from src.db_config import create_engine
@@ -13,13 +14,13 @@ from src.pipeline.processing import (
 from src.read_query import read_saved_query
 from src.utils.database import psql_insert_copy
 
-serializer = PandasSerializer(file_type="csv", serialize_kwargs={"index": False})
+# serializer = PandasSerializer(file_type="csv", serialize_kwargs={"index": False})
 
-result = LocalResult(
-    dir="/home/jovyan/work/datascience/data/pipeline/vessels",
-    location="{task_name}_{date:%Y-%m-%d-%H:%M:%S}.csv",
-    serializer=serializer,
-)
+# result = LocalResult(
+#     dir="/home/jovyan/work/datascience/data/pipeline/vessels",
+#     location="{task_name}_{date:%Y-%m-%d-%H:%M:%S}.csv",
+#     serializer=serializer,
+# )
 
 
 @task
@@ -273,7 +274,7 @@ def load_vessels(all_vessels):
         connection.execute(f"ALTER TABLE {schema}.{table} ADD PRIMARY KEY (id);")
 
 
-with Flow("Extract vessels characteristics", result=result) as flow:
+with Flow("Extract vessels characteristics") as flow:
     # Extract
     fr_vessels = extract_fr_vessels()
     cee_vessels = extract_cee_vessels()

@@ -4,7 +4,7 @@ ENV TINI_VERSION v0.19.0
 ENV USER="monitorfish-pipeline"
 ENV VIRTUAL_ENV=/opt/venv
 
-# Add tini init to handle zombie processes
+# Add `tini` init
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
@@ -40,9 +40,16 @@ RUN python3 -m venv $VIRTUAL_ENV && \
         setuptools \
         wheel && \
     pip install -r /tmp/requirements.txt
+# Make library importable
+ENV PYTHONPATH=/home/${USER}
 
 COPY datascience/ .
+COPY infra/configurations/pipeline/backend.toml ./.prefect/backend.toml
+
+RUN chown -R ${USER} . && \
+    chmod +x scripts/*.sh
 
 USER ${USER}
+
 ENTRYPOINT ["/tini", "--"]
-CMD ["bash"]
+CMD ["bash", "scripts/start-server.sh"]

@@ -2,9 +2,6 @@ import datetime
 import os
 import unittest
 
-import numpy as np
-import pandas as pd
-
 from config import ROOT_DIRECTORY
 from src.pipeline.parsers.ers import ERSParsingError, parse_xml_string
 

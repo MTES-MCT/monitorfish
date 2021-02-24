@@ -1,8 +1,9 @@
 import pandas as pd
 from prefect import Flow, task
-from prefect.engine.results import LocalResult
-from prefect.engine.serializers import PandasSerializer
-from sqlalchemy import ARRAY, Boolean, Column, Date, Float, Integer, String
+
+# from prefect.engine.results import LocalResult
+# from prefect.engine.serializers import PandasSerializer
+from sqlalchemy import ARRAY, Date, Float, Integer, String
 
 from src.db_config import create_engine
 from src.pipeline.processing import (
@@ -13,38 +14,38 @@ from src.pipeline.processing import (
 from src.read_query import read_saved_query
 from src.utils.database import psql_insert_copy
 
-serializer = PandasSerializer(file_type="csv", serialize_kwargs={"index": False})
+# serializer = PandasSerializer(file_type="csv", serialize_kwargs={"index": False})
 
-result = LocalResult(
-    dir="/home/jovyan/work/datascience/data/pipeline/vessels",
-    location="{task_name}_{date:%Y-%m-%d-%H:%M:%S}.csv",
-    serializer=serializer,
-)
+# result = LocalResult(
+#     dir="/home/jovyan/work/datascience/data/pipeline/vessels",
+#     location="{task_name}_{date:%Y-%m-%d-%H:%M:%S}.csv",
+#     serializer=serializer,
+# )
 
 
 @task
 def extract_fr_vessels():
-    return read_saved_query("ocani", "pipeline/queries/ocan/navires_fr.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/navires_fr.sql")
 
 
 @task
 def extract_cee_vessels():
-    return read_saved_query("ocani", "pipeline/queries/ocan/navires_cee_peche.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/navires_cee_peche.sql")
 
 
 @task
 def extract_non_cee_vessels():
-    return read_saved_query("ocani", "pipeline/queries/ocan/navires_hors_cee_peche.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/navires_hors_cee_peche.sql")
 
 
 @task
 def extract_floats():
-    return read_saved_query("ocani", "pipeline/queries/ocan/flotteurs.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/flotteurs.sql")
 
 
 @task
 def extract_nav_licences():
-    return read_saved_query("ocani", "pipeline/queries/gina/permis_navigation.sql")
+    return read_saved_query("ocan", "pipeline/queries/gina/permis_navigation.sql")
 
 
 @task
@@ -228,7 +229,7 @@ def load_vessels(all_vessels):
         ],
     )
 
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
 
     with engine.begin() as connection:
 
@@ -273,7 +274,7 @@ def load_vessels(all_vessels):
         connection.execute(f"ALTER TABLE {schema}.{table} ADD PRIMARY KEY (id);")
 
 
-with Flow("Extract vessels characteristics", result=result) as flow:
+with Flow("Extract vessels characteristics") as flow:
     # Extract
     fr_vessels = extract_fr_vessels()
     cee_vessels = extract_cee_vessels()

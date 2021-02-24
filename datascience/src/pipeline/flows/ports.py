@@ -4,17 +4,18 @@ from time import sleep
 
 import pandas as pd
 import requests
+from dotenv import load_dotenv
 from prefect import Flow, Parameter, task
 
-import config
 from src.db_config import create_engine
-from src.pipeline.processing import combine_overlapping_columns, concatenate_columns
-from src.read_query import read_saved_query, read_table
-from src.utils.database import psql_insert_copy
+from src.pipeline.processing import combine_overlapping_columns
+from src.read_query import read_table
 from src.utils.geocode import geocode
 
+load_dotenv()
 
-######################### Helper functions ############################################
+
+# ******************************** Helper functions **********************************
 def make_date(date_string: str):
     try:
         yy = int(date_string[:2])
@@ -50,7 +51,7 @@ def make_lat_lon(lat_lon: str):
         return None
 
 
-########### Flow to extract data from csv files downloaded on UNECE website ###########
+# ********* Flow to extract data from csv files downloaded on UNECE website ***********
 # Source : https://unece.org/trade/cefact/codes-trade
 
 
@@ -133,7 +134,7 @@ def clean_unece(locations):
 
 @task
 def load_unece(locations):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     locations.to_sql(
         "unece_port_codes",
         engine,
@@ -150,7 +151,7 @@ with Flow("Create UNECE ports codes table") as flow_make_unece_ports:
     load_unece(locations)
 
 
-### Flow to extract data from csv file downloaded from CIRCABC Master Data Register ###
+# ** Flow to extract data from csv file downloaded from CIRCABC Master Data Register **
 
 
 @task
@@ -201,7 +202,7 @@ def clean_circabc(locations):
 
 @task
 def load_circabc(locations):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     locations.to_sql(
         "circabc_port_codes",
         engine,
@@ -218,18 +219,18 @@ with Flow("Create CIRCABC ports codes table") as flow_make_circabc_ports:
     load_circabc(locations)
 
 
-############### Flow to extract ports from CIRCABC and UNECE and merge ################
+# ************** Flow to extract ports from CIRCABC and UNECE and merge ***************
 
 
 @task
 def extract_unece_ports():
-    unece_ports = read_table("monitorfish_remote_i", "external", "unece_port_codes")
+    unece_ports = read_table("monitorfish_remote", "external", "unece_port_codes")
     return unece_ports
 
 
 @task
 def extract_circabc_ports():
-    circabc_ports = read_table("monitorfish_remote_i", "external", "circabc_port_codes")
+    circabc_ports = read_table("monitorfish_remote", "external", "circabc_port_codes")
     return circabc_ports
 
 
@@ -268,7 +269,7 @@ def combine_columns_into_value(ports):
 
 @task
 def load_port_codes(ports):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     ports.to_sql(
         "port_codes",
         engine,
@@ -288,7 +289,7 @@ with Flow(
     load_port_codes(ports)
 
 
-############# Geocoding to improve the precision of latitude longitude#################
+# ************* Geocoding to improve the precision of latitude longitude **************
 
 
 def geocode_row(row):
@@ -317,7 +318,7 @@ def geocode_row(row):
 
 @task
 def extract_port_codes():
-    ports = read_table("monitorfish_remote_i", "interim", "port_codes")
+    ports = read_table("monitorfish_remote", "interim", "port_codes")
     return ports
 
 
@@ -330,7 +331,7 @@ def geocode_ports(ports):
 
 @task
 def load_geocoded_ports(geocoded_ports):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     geocoded_ports.to_sql(
         "geocoded_ports",
         engine,
@@ -346,12 +347,12 @@ with Flow("Geocode ports") as flow_geocode_ports:
     load_geocoded_ports(geocoded_ports)
 
 
-### Flow : take geocoded position if available, fall back to CIRCABC/UNECE position ###
+# ** Flow : take geocoded position if available, fall back to CIRCABC/UNECE position **
 
 
 @task
 def extract_geocoded_ports():
-    geocoded_ports = read_table("monitorfish_remote_i", "interim", "geocoded_ports")
+    geocoded_ports = read_table("monitorfish_remote", "interim", "geocoded_ports")
     return geocoded_ports
 
 
@@ -371,7 +372,7 @@ def merge_lat_lon(geocoded_ports):
 
 @task
 def load_ports(ports):
-    engine = create_engine("monitorfish_remote_i")
+    engine = create_engine("monitorfish_remote")
     ports.to_sql("ports", engine, schema="public", if_exists="replace", index=False)
 
 

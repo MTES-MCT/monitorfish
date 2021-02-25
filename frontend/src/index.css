@@ -95,3 +95,65 @@ code {
   background: #515151
 }
 
+button, [type="button"], [type="submit"], [type="reset"], a.button, label.button, .button, a[role="button"], label[role="button"], [role="button"], [role="button"]:hover {
+  background: unset;
+  color: unset;
+  border: unset;
+  text-decoration: unset;
+}
+
+.rs-radio-wrapper::before {
+  background: #F0F0F0 0% 0% no-repeat padding-box;
+  border: 2px solid #E0E0E0;
+}
+
+.rs-radio-checked .rs-radio-wrapper .rs-radio-inner::before {
+  background: #F0F0F0 0% 0% no-repeat padding-box;
+  border: 2px solid #969696;
+}
+
+.rs-radio-wrapper .rs-radio-inner::after {
+  background: #969696;
+  width: 6px;
+  height: 6px;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+
+.rs-radio-wrapper .rs-radio-inner::before {
+  background: #F0F0F0 0% 0% no-repeat padding-box;
+  border: 2px solid #E0E0E0;
+}
+
+.rs-radio-wrapper::before, .rs-radio-wrapper .rs-radio-inner::before, .rs-radio-wrapper {
+  width: 10px;
+  height: 10px;
+}
+
+.rs-radio-checker > label {
+  font-size: 13px;
+  color: #515151;
+  padding: unset unset unset 7px;
+}
+
+.rs-radio-checker {
+  padding-top: 8px;
+  padding-bottom: 0;
+  padding-left: 22px;
+  min-height: 0;
+  line-height: 1;
+  position: relative;
+}
+
+.rs-radio-group {
+  text-align: left;
+  margin-right: 0;
+}
+
+.rs-radio-inline {
+  margin: 0;
+}
+
+.rs-radio-group[role="button"] {
+  padding: unset;
+}

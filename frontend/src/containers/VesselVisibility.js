@@ -2,14 +2,16 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {useDispatch, useSelector} from "react-redux";
 
-import {ReactComponent as VesselSVG} from '../components/icons/Navire-affichage-box.svg';
+import {ReactComponent as VesselSVG} from '../components/icons/Icone_navire.svg';
 import {COLORS} from "../constants/constants";
 import LastPositionsSlider from "../components/LastPositionsSlider";
-import {setVesselsLastPositionVisibility} from "../domain/reducers/Map";
+import {setVesselsLastPositionVisibility, setVesselTrackDepth} from "../domain/reducers/Map";
+import TrackDepthRadio from "../components/TrackDepthRadio";
 
-const LastPositions = () => {
+const VesselVisibility = () => {
     const dispatch = useDispatch()
     const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
+    const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
     const firstUpdate = useRef(true);
     const [lastPositionsBoxIsOpen, setLastPositionsBoxIsOpen] = useState(false);
 
@@ -24,6 +26,10 @@ const LastPositions = () => {
             opacityReduced: opacityReduced,
             hidden: hidden
         }))
+    }
+
+    const updateVesselTrackDepth = (depth) => {
+        dispatch(setVesselTrackDepth(depth))
     }
 
     return (
@@ -49,13 +55,20 @@ const LastPositions = () => {
                 <LastPositionLegend>
                     Ces seuils permettent de régler l'affichage, l'estompage et le masquage des dernières positions des navires.
                 </LastPositionLegend>
+                <LastPositionsHeader>
+                    Paramétrer la longueur par défaut des pistes
+                </LastPositionsHeader>
+                <TrackDepthRadio
+                    updateVesselTrackDepth={updateVesselTrackDepth}
+                    vesselTrackDepth={vesselTrackDepth}
+                />
             </LastPositionsBox>
         </>
     )
 }
 
 const LastPositionLegend = styled.div`
-  margin: 5px 5px 5px 25px;
+  margin: 5px 5px 15px 25px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
   text-align: left;
@@ -124,7 +137,7 @@ const LastPositionsIcon = styled.button`
   display: inline-block;
   color: #05055E;
   background: ${COLORS.grayDarkerThree};
-  padding: 6px 3px 0 0;
+  padding: 3px 0px 0 3px;
   top: 60px;
   z-index: 9999;
   right: 2px;
@@ -141,4 +154,4 @@ const Vessel = styled(VesselSVG)`
   height: 25px;
 `
 
-export default LastPositions
+export default VesselVisibility

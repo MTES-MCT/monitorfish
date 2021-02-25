@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {getLocalStorageState} from "../../utils";
+import {VesselTrackDepth} from "../entities/vesselTrackDepth";
 
 const vesselNamesShowedOnMapLocalStorageKey = 'vesselNamesShowedOnMap'
 const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
+const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
 const savedMapViewLocalStorageKey = 'mapView'
 
 const mapSlice = createSlice({
@@ -12,6 +14,7 @@ const mapSlice = createSlice({
             opacityReduced: 6,
             hidden: 48
         }, vesselsLastPositionVisibilityLocalStorageKey),
+        vesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
         animateToVessel: null,
         vesselNamesShowedOnMap: getLocalStorageState(false, vesselNamesShowedOnMapLocalStorageKey),
         vesselNamesHiddenByZoom: undefined,
@@ -46,6 +49,10 @@ const mapSlice = createSlice({
             window.localStorage.setItem(vesselsLastPositionVisibilityLocalStorageKey, JSON.stringify(action.payload))
             state.vesselsLastPositionVisibility = action.payload
         },
+        setVesselTrackDepth(state, action) {
+            window.localStorage.setItem(vesselTrackDepthLocalStorageKey, JSON.stringify(action.payload))
+            state.vesselTrackDepth = action.payload
+        },
     }
 })
 
@@ -56,7 +63,8 @@ export const {
     isMoving,
     resetAnimateToVessel,
     setView,
-    setVesselsLastPositionVisibility
+    setVesselsLastPositionVisibility,
+    setVesselTrackDepth
 } = mapSlice.actions
 
 export default mapSlice.reducer

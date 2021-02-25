@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
@@ -54,10 +55,13 @@ class BffController(
                     externalReferenceNumber: String,
                     @ApiParam("Vessel IRCS")
                     @RequestParam(name = "IRCS")
-                    IRCS: String): VesselDataOutput {
+                    IRCS: String,
+                    @ApiParam("Vessel track depth")
+                    @RequestParam(name = "trackDepth")
+                    trackDepth: VesselTrackDepth): VesselDataOutput {
         return runBlocking {
             val start = System.currentTimeMillis()
-            val (vessel, positions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
+            val (vessel, positions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS, trackDepth)
             vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
             VesselDataOutput.fromVessel(vessel, positions)

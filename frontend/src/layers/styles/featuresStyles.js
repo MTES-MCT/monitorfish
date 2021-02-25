@@ -29,8 +29,9 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdenti
         }) : new CircleStyle({
             radius: 4,
             fill: new Fill({
-                color: `rgba(5, 5, 94, ${opacity})`
-            })
+                color: `rgb(5, 5, 94)`
+            }),
+            opacity: opacity
         }),
         zIndex: VESSEL_ICON_STYLE
     });
@@ -66,7 +67,7 @@ export function getVesselIconOpacity(vesselsLastPositionVisibility, dateTime) {
     if (vesselDate < vesselIsHidden) {
         opacity = 0
     } else if (vesselDate < vesselIsOpacityReduced) {
-        opacity = 0.3
+        opacity = 0.2
     }
 
     return opacity;

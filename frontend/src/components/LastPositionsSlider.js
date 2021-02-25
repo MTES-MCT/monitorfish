@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const LastPositionsSlider = props => {
     const [value, setValue] = useState(null)
+    // Hours
     const labels = [48, 24, 12, 6, 3, 2, 1];
 
     useEffect(() => {

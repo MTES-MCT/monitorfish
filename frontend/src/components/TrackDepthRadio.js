@@ -67,7 +67,7 @@ const Columns = styled.div`
 `
 
 const RadioWrapper = styled.div`
-  padding: 2px 0 1px 0;
+  padding: 10px 0 15px 0;
   font-size: 13px;
 `
 

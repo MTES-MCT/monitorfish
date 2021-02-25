@@ -156,4 +156,27 @@ button, [type="button"], [type="submit"], [type="reset"], a.button, label.button
 
 .rs-radio-group[role="button"] {
   padding: unset;
+  margin-top: 0;
+}
+
+.rs-checkbox-checker > label {
+  font-size: 13px;
+  color: #969696;
+}
+
+.rs-checkbox-checker {
+  padding-top: 10px;
+  padding-bottom: 0;
+  padding-left: 30px;
+  min-height: 26px;
+}
+
+.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before {
+  border-color: #969696;
+  background-color: #F0F0F0;
+}
+
+.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::after {
+  border: solid #969696;
+  border-width: 0 2px 2px 0;
 }

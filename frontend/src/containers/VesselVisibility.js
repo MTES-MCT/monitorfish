@@ -5,21 +5,47 @@ import {useDispatch, useSelector} from "react-redux";
 import {ReactComponent as VesselSVG} from '../components/icons/Icone_navire.svg';
 import {COLORS} from "../constants/constants";
 import LastPositionsSlider from "../components/LastPositionsSlider";
-import {setVesselsLastPositionVisibility, setVesselTrackDepth} from "../domain/reducers/Map";
+import {
+    setVesselLabel,
+    setVesselLabelsShowedOnMap,
+    setVesselsLastPositionVisibility,
+    setVesselTrackDepth
+} from "../domain/reducers/Map";
 import TrackDepthRadio from "../components/TrackDepthRadio";
+import VesselLabelRadio from "../components/VesselLabelRadio";
+import VesselLabelCheckbox from "../components/VesselLabelCheckbox";
 
 const VesselVisibility = () => {
     const dispatch = useDispatch()
     const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
     const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
+    const vesselLabel = useSelector(state => state.map.vesselLabel)
+    const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
     const firstUpdate = useRef(true);
-    const [lastPositionsBoxIsOpen, setLastPositionsBoxIsOpen] = useState(false);
+    const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false);
+
+    const wrapperRef = useRef(null);
 
     useEffect(() => {
-        if (lastPositionsBoxIsOpen === true) {
+        function handleClickOutside(event) {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                setVesselVisibilityBoxIsOpen(false)
+            }
+        }
+
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [wrapperRef]);
+
+    useEffect(() => {
+        if (vesselVisibilityBoxIsOpen === true) {
             firstUpdate.current = false;
         }
-    }, [lastPositionsBoxIsOpen])
+    }, [vesselVisibilityBoxIsOpen])
 
     const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
         dispatch(setVesselsLastPositionVisibility({
@@ -28,23 +54,31 @@ const VesselVisibility = () => {
         }))
     }
 
-    const updateVesselTrackDepth = (depth) => {
+    const updateVesselTrackDepth = depth => {
         dispatch(setVesselTrackDepth(depth))
     }
 
+    const updateVesselLabel = label => {
+        dispatch(setVesselLabel(label))
+    }
+
+    const updateVesselLabelsShowedOnMap = isShowed => {
+        dispatch(setVesselLabelsShowedOnMap(isShowed))
+    }
+
     return (
-        <>
-            <LastPositionsIcon
+        <div ref={wrapperRef}>
+            <VesselVisibilityIcon
                 title={"Affichage des dernières positions"}
-                onClick={() => setLastPositionsBoxIsOpen(!lastPositionsBoxIsOpen)}>
+                onClick={() => setVesselVisibilityBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
                 <Vessel/>
-            </LastPositionsIcon>
-            <LastPositionsBox
-                lastPositionsBoxIsOpen={lastPositionsBoxIsOpen}
+            </VesselVisibilityIcon>
+            <VesselVisibilityBox
+                lastPositionsBoxIsOpen={vesselVisibilityBoxIsOpen}
                 firstUpdate={firstUpdate.current}>
-                <LastPositionsHeader>
+                <Header>
                     Gérer l'affichage des dernières positions
-                </LastPositionsHeader>
+                </Header>
                 <LastPositionInfo>
                     <VesselHidden /> navires estompés <VesselShowed /> navires normaux
                 </LastPositionInfo>
@@ -55,22 +89,50 @@ const VesselVisibility = () => {
                 <LastPositionLegend>
                     Ces seuils permettent de régler l'affichage, l'estompage et le masquage des dernières positions des navires.
                 </LastPositionLegend>
-                <LastPositionsHeader>
+                <Header>
                     Paramétrer la longueur par défaut des pistes
-                </LastPositionsHeader>
+                </Header>
                 <TrackDepthRadio
                     updateVesselTrackDepth={updateVesselTrackDepth}
                     vesselTrackDepth={vesselTrackDepth}
                 />
-            </LastPositionsBox>
-        </>
+                <Header>
+                    Gérer l'affichage des étiquettes des navires
+                </Header>
+                <VesselLabel>
+                    Choisir le libellé des étiquettes des navires
+                </VesselLabel>
+                <VesselLabelRadio
+                    updateVesselLabel={updateVesselLabel}
+                    vesselLabel={vesselLabel}
+                />
+                <ShowVesselLabel>
+                    <VesselLabelCheckbox
+                        updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
+                        vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
+                    />
+                </ShowVesselLabel>
+            </VesselVisibilityBox>
+        </div>
     )
 }
+
+const ShowVesselLabel = styled.div`
+  background: ${COLORS.grayBackground};
+  padding: 0 0 0 13px;
+`
+
+const VesselLabel = styled.div`
+  margin: 15px 5px 0 25px;
+  font-size: 13px;
+  color: ${COLORS.textGray};
+  text-align: left;
+`
 
 const LastPositionLegend = styled.div`
   margin: 5px 5px 15px 25px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.textGray};
   text-align: left;
 `
 
@@ -101,7 +163,7 @@ const LastPositionInfo = styled.div`
   color: ${COLORS.grayDarkerThree};
 `
 
-const LastPositionsHeader = styled.div`
+const Header = styled.div`
   background: ${COLORS.textGray};
   color: ${COLORS.grayBackground};
   padding: 9px 0 7px 15px;
@@ -109,11 +171,10 @@ const LastPositionsHeader = styled.div`
   text-align: left;
 `
 
-const LastPositionsBox = styled.div`
+const VesselVisibilityBox = styled.div`
   width: 406px;
   background: ${COLORS.background};
   margin-right: -420px;
-  padding-bottom: 15px;
   top: 68px;
   right: 12px;
   border-radius: 1px;
@@ -132,7 +193,7 @@ const LastPositionsBox = styled.div`
   }
 `
 
-const LastPositionsIcon = styled.button`
+const VesselVisibilityIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;

@@ -13,13 +13,12 @@ import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {
     selectedVesselStyle,
     VESSEL_SELECTOR_STYLE,
-    VESSEL_NAME_STYLE, getVesselNameStyle, getSVG
+    VESSEL_NAME_STYLE, getVesselNameStyle, getSVG, VESSEL_ICON_STYLE, getVesselIconOpacity
 } from "../layers/styles/featuresStyles";
 import MapAttributionsBox from "../components/MapAttributionsBox";
 import Overlay from "ol/Overlay";
 import VesselCard from "../components/VesselCard";
 import VesselTrackCard from "../components/VesselTrackCard";
-import ShowVesselsNamesBox from "./ShowVesselsNamesBox";
 import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {hideVesselNames, isMoving, resetAnimateToVessel, setView} from "../domain/reducers/Map";
@@ -43,6 +42,7 @@ const MapWrapper = () => {
     const vessel = useSelector(state => state.vessel)
     const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
     const mapState = useSelector(state => state.map)
+    const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
     const dispatch = useDispatch()
 
     const [map, setMap] = useState()
@@ -245,6 +245,24 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
+        if(vesselsLastPositionVisibility && map) {
+            const vesselsLayer = map.getLayers().getArray()
+                .find(layer => layer.className_ === LayersEnum.VESSELS)
+
+            if(vesselsLayer) {
+                vesselsLayer.getSource().getFeatures().forEach(feature => {
+                    let opacity  = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+                    let foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+                    if(foundStyle) {
+                        foundStyle.getImage().setOpacity(opacity)
+                    }
+                })
+                vesselsLayer.getSource().changed()
+            }
+        }
+    }, [vesselsLastPositionVisibility])
+
+    useEffect(() => {
         if(vessel.selectedVessel && vessel.selectedVessel.positions && vessel.selectedVessel.positions.length) {
             const vesselsLayer = map.getLayers().getArray()
                 .find(layer => layer.className_ === LayersEnum.VESSELS)
@@ -416,25 +434,26 @@ const MapWrapper = () => {
                 return
             }
 
-            if (layer.layers && mapState.vesselNamesShowedOnMap
+            if (layer.layers && mapState.vesselLabelsShowedOnMap
                 && !mapState.vesselNamesHiddenByZoom && isVesselNameMinimumZoom()) {
-                addVesselNameToAllFeatures(extent);
-            } else if (layer.layers && mapState.vesselNamesShowedOnMap
+                removeVesselNameToAllFeatures();
+                addVesselNameToAllFeatures(extent, mapState.vesselLabel);
+            } else if (layer.layers && mapState.vesselLabelsShowedOnMap
                 && mapState.vesselNamesHiddenByZoom && isVesselNameMaximumZoom()) {
                 removeVesselNameToAllFeatures();
-            } else if (layer.layers && !mapState.vesselNamesShowedOnMap) {
+            } else if (layer.layers && !mapState.vesselLabelsShowedOnMap) {
                 removeVesselNameToAllFeatures();
             }
         }
-    }, [mapState.vesselNamesShowedOnMap, map, mapState.vesselNamesHiddenByZoom, mapState.isMoving])
+    }, [mapState.vesselLabelsShowedOnMap, map, mapState.vesselNamesHiddenByZoom, mapState.isMoving, mapState.vesselLabel])
 
-    function addVesselNameToAllFeatures(extent) {
+    function addVesselNameToAllFeatures(extent, vesselLabel) {
         layer.layers
             .filter(layer => layer.className_ === LayersEnum.VESSELS)
             .forEach(vesselsLayer => {
                 vesselsLayer.getSource().forEachFeatureIntersectingExtent(extent, feature => {
-                    getSVG(feature).then(svg => {
-                        let style = getVesselNameStyle(feature, svg)
+                    getSVG(feature, vesselLabel).then(object => {
+                        let style = getVesselNameStyle(object.showedText, object.imageElement)
                         feature.setStyle([...feature.getStyle(), style])
                     })
                 })
@@ -537,7 +556,6 @@ const MapWrapper = () => {
             }
 
             <MapAttributionsBox />
-            <ShowVesselsNamesBox />
         </div>
     )
 }

@@ -31772,3 +31772,7 @@ FRA000651332	CH651332	\N	FIAX	HERA	FR	FR	DE	\N	48.8359999999999985	-1.6029999999
 
 update last_positions set date_time = now() - random() * INTERVAL '24 hours' where
 internal_reference_number in (SELECT internal_reference_number FROM last_positions ORDER BY RANDOM() LIMIT 20000);
+
+update last_positions set date_time = now() - random() * INTERVAL '6 hours' where
+internal_reference_number = 'GBR000B14430';
+

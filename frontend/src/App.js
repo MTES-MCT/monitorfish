@@ -10,6 +10,7 @@ import VesselsSearchBox from "./containers/VesselsSearchBox";
 import VesselSidebar from "./containers/VesselSidebar";
 import LayersSidebar from "./containers/LayersSidebar";
 import APIWorker from "./api/APIWorker";
+import LastPositions from "./containers/LastPositions";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                   <VesselsSearchBox/>
                   <MapWrapper />
                   <LayersSidebar />
+                  <LastPositions />
                   <VesselSidebar />
 
                   <APIWorker />

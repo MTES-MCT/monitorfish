@@ -13,7 +13,7 @@ import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/entities/map";
 import {
     selectedVesselStyle,
     VESSEL_SELECTOR_STYLE,
-    VESSEL_NAME_STYLE, getVesselNameStyle, getSVG
+    VESSEL_NAME_STYLE, getVesselNameStyle, getSVG, VESSEL_ICON_STYLE, getVesselIconOpacity
 } from "../layers/styles/featuresStyles";
 import MapAttributionsBox from "../components/MapAttributionsBox";
 import Overlay from "ol/Overlay";
@@ -43,6 +43,7 @@ const MapWrapper = () => {
     const vessel = useSelector(state => state.vessel)
     const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
     const mapState = useSelector(state => state.map)
+    const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
     const dispatch = useDispatch()
 
     const [map, setMap] = useState()
@@ -243,6 +244,22 @@ const MapWrapper = () => {
 
         map.getLayers().remove(layerToRemove)
     }
+
+    useEffect(() => {
+        if(vesselsLastPositionVisibility && map) {
+            const vesselsLayer = map.getLayers().getArray()
+                .find(layer => layer.className_ === LayersEnum.VESSELS)
+
+            vesselsLayer.getSource().getFeatures().forEach(feature => {
+                let opacity  = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+                let foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+                if(foundStyle) {
+                    foundStyle.getImage().setOpacity(opacity)
+                }
+            })
+            vesselsLayer.getSource().changed();
+        }
+    }, [vesselsLastPositionVisibility])
 
     useEffect(() => {
         if(vessel.selectedVessel && vessel.selectedVessel.positions && vessel.selectedVessel.positions.length) {

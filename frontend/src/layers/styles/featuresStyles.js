@@ -6,6 +6,7 @@ import {getTextWidth} from "../../utils";
 import {COLORS} from "../../constants/constants";
 const images = require.context('../../../public/flags', false, /\.png$/);
 
+export const VESSEL_ICON_STYLE = 10
 export const VESSEL_NAME_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
@@ -13,13 +14,10 @@ function degreesToRadian(vessel) {
     return vessel.course * Math.PI / 180;
 }
 
-export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdentity, vesselNamesShowedOnMap) => {
+export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdentity, vesselNamesShowedOnMap, vesselsLastPositionVisibility) => {
     let selectedVesselFeatureToUpdate = null;
-    const vesselDate = new Date(vessel.dateTime);
-    const nowMinusThreeHours = new Date();
-    nowMinusThreeHours.setHours(nowMinusThreeHours.getHours() - 3);
+    let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime);
 
-    let opacity = vesselDate < nowMinusThreeHours ? 0.3 : 1;
     let styles = []
     const iconStyle = new Style({
         image: vessel.speed > 0.1 ? new Icon({
@@ -33,7 +31,8 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdenti
             fill: new Fill({
                 color: `rgba(5, 5, 94, ${opacity})`
             })
-        })
+        }),
+        zIndex: VESSEL_ICON_STYLE
     });
     styles.push(iconStyle)
 
@@ -53,6 +52,24 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdenti
 
     iconFeature.setStyle(styles);
     return selectedVesselFeatureToUpdate
+}
+
+export function getVesselIconOpacity(vesselsLastPositionVisibility, dateTime) {
+    const vesselDate = new Date(dateTime);
+
+    const vesselIsHidden = new Date();
+    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden);
+    const vesselIsOpacityReduced = new Date();
+    vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced);
+
+    let opacity = 1
+    if (vesselDate < vesselIsHidden) {
+        opacity = 0
+    } else if (vesselDate < vesselIsOpacityReduced) {
+        opacity = 0.3
+    }
+
+    return opacity;
 }
 
 export const selectedVesselStyle =  new Style({

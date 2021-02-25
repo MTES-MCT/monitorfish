@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry

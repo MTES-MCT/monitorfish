@@ -52,7 +52,8 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
     getVesselFromAPI(
         vesselFeatureAndIdentity.identity.internalReferenceNumber,
         vesselFeatureAndIdentity.identity.externalReferenceNumber,
-        vesselFeatureAndIdentity.identity.ircs)
+        vesselFeatureAndIdentity.identity.ircs,
+        getState().map.vesselTrackDepth)
         .then(vessel => {
             dispatch(removeError());
             dispatch(setSelectedVessel(vessel))

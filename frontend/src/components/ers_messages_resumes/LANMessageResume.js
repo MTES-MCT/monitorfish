@@ -99,7 +99,7 @@ const LANMessageResume = props => {
                                                 <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
                                         }
                                         {
-                                            props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length ?
+                                            props.catchesOverToleranceAlert && props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length ?
                                                 props.catchesOverToleranceAlert.catchesOverTolerance.some(catchWithAlert => catchWithAlert.lan.species === speciesCatch.species) ? <OverWeightTolerance title={getWeightOverToleranceInfo()}>
                                                     <OverWeightToleranceText>10 %</OverWeightToleranceText>
                                                 </OverWeightTolerance> : null

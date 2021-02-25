@@ -7,5 +7,6 @@ export const COLORS = {
     grayDarkerThree: '#515151',
     textBueGray: '#848DAE',
     textGray: '#969696',
-    textWhite: '#EDEDF5'
+    textWhite: '#EDEDF5',
+    grayVesselHidden: '#B2B2B2'
 };

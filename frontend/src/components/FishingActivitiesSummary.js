@@ -112,6 +112,7 @@ const FishingActivitiesSummary = props => {
 
                 let speciesToWeightLANObject = {}
                 lanMessage.message.catchLanded.forEach(speciesCatch => {
+                    // TODO Regarder le calcul de la somme du LAN pour chaue espèce, ça semble trop élevé en env de DEV
                     if (speciesToWeightLANObject[speciesCatch.species]) {
                         speciesToWeightLANObject[speciesCatch.species].weight += parseFloat(speciesCatch.weight)
                     } else {

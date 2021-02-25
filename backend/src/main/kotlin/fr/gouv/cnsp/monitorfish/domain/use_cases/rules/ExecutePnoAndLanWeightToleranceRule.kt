@@ -18,12 +18,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 import java.util.*
+import javax.transaction.Transactional
 
 @UseCase
 class ExecutePnoAndLanWeightToleranceRule(private val ersRepository: ERSRepository,
                                           private val alertRepository: AlertRepository) {
     private val logger: Logger = LoggerFactory.getLogger(ExecutePnoAndLanWeightToleranceRule::class.java)
 
+    @Transactional
     fun execute(rule: Rule) {
         rule.value as PNOAndLANWeightTolerance
         val lanAndPnos = ersRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)

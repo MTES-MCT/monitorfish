@@ -8,13 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZonedDateTime
 
 @Repository
 class JpaLastPositionRepository(private val dbLastPositionRepository: DBLastPositionRepository) : LastPositionRepository {
 
     @Cacheable(value = ["vessels_position"])
     override fun findAll(): List<Position> {
-        return dbLastPositionRepository.findAll()
+        val nowMinus48Hours = ZonedDateTime.now().minusHours(48)
+        return dbLastPositionRepository.findAllByDateTimeGreaterThanEqual(nowMinus48Hours)
                 // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
                 .filterNotNull()
                 .map(LastPositionEntity::toPosition)

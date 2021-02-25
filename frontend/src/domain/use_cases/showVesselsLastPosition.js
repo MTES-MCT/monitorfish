@@ -59,7 +59,8 @@ function buildFeature(currentVessel, index, getState, dispatch) {
         false : getState().map.vesselNamesShowedOnMap && !getState().map.vesselNamesHiddenByZoom;
 
     let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
-    let newSelectedVesselFeature = setVesselIconStyle(currentVessel, iconFeature, vesselFeatureAndIdentity, vesselNamesShowedOnMap)
+    let vesselsLastPositionVisibility = getState().map.vesselsLastPositionVisibility
+    let newSelectedVesselFeature = setVesselIconStyle(currentVessel, iconFeature, vesselFeatureAndIdentity, vesselNamesShowedOnMap, vesselsLastPositionVisibility)
     if (newSelectedVesselFeature) {
         dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))
     }

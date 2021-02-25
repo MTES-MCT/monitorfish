@@ -23,6 +23,7 @@
     "react-select": "^4.1.0",
     "react-toast-notifications": "^2.4.0",
     "redux": "^4.0.5",
+    "rsuite": "^4.8.9",
     "styled-components": "^5.2.1",
     "timeago.js": "^4.0.2",
     "worker-loader": "^3.0.6"

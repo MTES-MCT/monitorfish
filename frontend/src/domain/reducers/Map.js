@@ -2,11 +2,16 @@ import { createSlice } from '@reduxjs/toolkit'
 import {getLocalStorageState} from "../../utils";
 
 const vesselNamesShowedOnMapLocalStorageKey = 'vesselNamesShowedOnMap'
+const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
 const savedMapViewLocalStorageKey = 'mapView'
 
 const mapSlice = createSlice({
     name: 'map',
     initialState: {
+        vesselsLastPositionVisibility: getLocalStorageState({
+            opacityReduced: 6,
+            hidden: 48
+        }, vesselsLastPositionVisibilityLocalStorageKey),
         animateToVessel: null,
         vesselNamesShowedOnMap: getLocalStorageState(false, vesselNamesShowedOnMapLocalStorageKey),
         vesselNamesHiddenByZoom: undefined,
@@ -36,7 +41,11 @@ const mapSlice = createSlice({
         },
         isMoving(state) {
             state.isMoving = !state.isMoving
-        }
+        },
+        setVesselsLastPositionVisibility(state, action) {
+            window.localStorage.setItem(vesselsLastPositionVisibilityLocalStorageKey, JSON.stringify(action.payload))
+            state.vesselsLastPositionVisibility = action.payload
+        },
     }
 })
 
@@ -46,7 +55,8 @@ export const {
     hideVesselNames,
     isMoving,
     resetAnimateToVessel,
-    setView
+    setView,
+    setVesselsLastPositionVisibility
 } = mapSlice.actions
 
 export default mapSlice.reducer

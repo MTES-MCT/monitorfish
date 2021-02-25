@@ -31769,3 +31769,6 @@ FRA000561949	DP561949	\N	FIMA	AN DAOUZEG ABOSTOL	FR	FR	DE	\N	49.9269999999999996
 FRA000651332	CH651332	\N	FIAX	HERA	FR	FR	DE	\N	48.8359999999999985	-1.60299999999999998	0	28	2021-01-15 08:13:00	VMS
 \.
 
+
+update last_positions set date_time = now() - random() * INTERVAL '24 hours' where
+internal_reference_number in (SELECT internal_reference_number FROM last_positions ORDER BY RANDOM() LIMIT 20000);

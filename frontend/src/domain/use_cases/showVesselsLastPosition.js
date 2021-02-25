@@ -55,12 +55,20 @@ function buildFeature(currentVessel, index, getState, dispatch) {
 
     iconFeature.setId(`${LayersEnum.VESSELS}:${index}`)
 
-    let vesselNamesShowedOnMap = getState().map.vesselNamesHiddenByZoom === undefined ?
-        false : getState().map.vesselNamesShowedOnMap && !getState().map.vesselNamesHiddenByZoom;
+    let vesselLabelsShowedOnMap = getState().map.vesselNamesHiddenByZoom === undefined ?
+        false : getState().map.vesselLabelsShowedOnMap && !getState().map.vesselNamesHiddenByZoom;
 
     let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     let vesselsLastPositionVisibility = getState().map.vesselsLastPositionVisibility
-    let newSelectedVesselFeature = setVesselIconStyle(currentVessel, iconFeature, vesselFeatureAndIdentity, vesselNamesShowedOnMap, vesselsLastPositionVisibility)
+    let vesselLabel = getState().map.vesselLabel
+    let newSelectedVesselFeature = setVesselIconStyle(
+        currentVessel,
+        iconFeature,
+        vesselFeatureAndIdentity,
+        vesselLabelsShowedOnMap,
+        vesselsLastPositionVisibility,
+        vesselLabel)
+
     if (newSelectedVesselFeature) {
         dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))
     }

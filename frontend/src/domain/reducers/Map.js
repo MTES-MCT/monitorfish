@@ -1,10 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 import {getLocalStorageState} from "../../utils";
 import {VesselTrackDepth} from "../entities/vesselTrackDepth";
+import {vesselLabel} from "../entities/vesselLabel";
 
-const vesselNamesShowedOnMapLocalStorageKey = 'vesselNamesShowedOnMap'
+const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
 const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
 const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
+const vesselLabelLocalStorageKey = 'vesselLabel'
 const savedMapViewLocalStorageKey = 'mapView'
 
 const mapSlice = createSlice({
@@ -15,8 +17,9 @@ const mapSlice = createSlice({
             hidden: 48
         }, vesselsLastPositionVisibilityLocalStorageKey),
         vesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
+        vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
+        vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
         animateToVessel: null,
-        vesselNamesShowedOnMap: getLocalStorageState(false, vesselNamesShowedOnMapLocalStorageKey),
         vesselNamesHiddenByZoom: undefined,
         isMoving: false,
         view: getLocalStorageState({
@@ -31,9 +34,9 @@ const mapSlice = createSlice({
         resetAnimateToVessel(state) {
             state.animateToVessel = null
         },
-        setVesselNamesShowedOnMap(state, action) {
-            window.localStorage.setItem(vesselNamesShowedOnMapLocalStorageKey, JSON.stringify(action.payload))
-            state.vesselNamesShowedOnMap = action.payload
+        setVesselLabelsShowedOnMap(state, action) {
+            window.localStorage.setItem(vesselLabelsShowedOnMapLocalStorageKey, JSON.stringify(action.payload))
+            state.vesselLabelsShowedOnMap = action.payload
         },
         setView(state, action) {
             window.localStorage.setItem(savedMapViewLocalStorageKey, JSON.stringify(action.payload))
@@ -53,18 +56,23 @@ const mapSlice = createSlice({
             window.localStorage.setItem(vesselTrackDepthLocalStorageKey, JSON.stringify(action.payload))
             state.vesselTrackDepth = action.payload
         },
+        setVesselLabel(state, action) {
+            window.localStorage.setItem(vesselLabelLocalStorageKey, JSON.stringify(action.payload))
+            state.vesselLabel = action.payload
+        },
     }
 })
 
 export const {
     animateToVessel,
-    setVesselNamesShowedOnMap,
+    setVesselLabelsShowedOnMap,
     hideVesselNames,
     isMoving,
     resetAnimateToVessel,
     setView,
     setVesselsLastPositionVisibility,
-    setVesselTrackDepth
+    setVesselTrackDepth,
+    setVesselLabel
 } = mapSlice.actions
 
 export default mapSlice.reducer

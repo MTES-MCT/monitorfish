@@ -1,4 +1,8 @@
 body {
+  all: initial;
+  * {
+    all: unset;
+  }
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -7,7 +11,87 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  -webkit-box-sizing: revert;
+  box-sizing: revert;
+}
+*::before,
+*::after {
+  -webkit-box-sizing: revert;
+  box-sizing: revert;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.rs-slider-mark {
+  font-size: 13px;
+  color: #969696;
+}
+
+.rs-slider-bar {
+  height: 2px;
+  background: linear-gradient(to right, #E0E0E0, #515151);
+}
+
+.rs-slider-progress-bar {
+  height: 2px;
+  background: none;
+}
+
+.rs-slider-graduator > ul > li:nth-child(1)::before {
+  background: #E0E0E0;
+}
+
+.rs-slider-graduator > ul > li:nth-child(2)::before {
+  background: #cacaca;
+}
+
+.rs-slider-graduator > ul > li:nth-child(3)::before {
+  background: #aaaaaa;
+}
+
+.rs-slider-graduator > ul > li:nth-child(4)::before {
+  background: #959595;
+}
+
+.rs-slider-graduator > ul > li:nth-child(5)::before {
+  background: #818181;
+}
+
+.rs-slider-graduator > ul > li:nth-child(6)::before {
+  background: #646464;
+}
+
+.rs-slider-graduator > ul > li:last-child::after {
+  background: #515151;
+}
+
+.rs-slider-graduator > ul > li:last-child::after, .rs-slider-graduator > ul > li::before {
+  top: -3px;
+  border: none;
+}
+
+.rs-slider-handle::before {
+  background: #B2B2B2;
+  border: unset;
+  top: -6px;
+  margin-left: -5px;
+  width: 16px;
+  height: 16px;
+}
+
+.rs-slider-graduator {
+  margin-left: -5px;
+}
+
+.rs-slider-graduated > div:nth-child(2)::before {
+  background: #B2B2B2;
+}
+
+.rs-slider-graduated > div:nth-child(3)::before {
+  background: #515151
+}
+

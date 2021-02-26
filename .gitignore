@@ -1,5 +1,6 @@
 # Env variables
 datascience/.env
+github_token.txt
 
 # Notebooks
 /datascience/notebooks
@@ -22,3 +23,6 @@ datascience/.python-version
 
 # IDEs
 .vscode
+
+# Doc
+docs/redmine_wiki/*

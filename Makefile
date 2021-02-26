@@ -52,8 +52,10 @@ docker-run-pipeline-server:
 	datascience/scripts/start-server.sh
 docker-run-pipeline-flows:
 	datascience/scripts/start-flows.sh
-docker-stop-pipeline:
+docker-stop-pipeline-server:
 	datascience/scripts/stop-server.sh
+docker-stop-pipeline-flows:
+	docker container stop monitorfish-pipeline-flows; docker container rm monitorfish-pipeline-flows;
 
 # DATA commands
 install-pipeline:

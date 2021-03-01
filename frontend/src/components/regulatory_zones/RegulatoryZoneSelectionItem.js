@@ -50,7 +50,7 @@ const RegulatoryZoneSelectionItem = props => {
                     selected={globalIsSelected || (!globalIsSelected && isSelected(props.regulatoryZonesSelection[props.regulatoryZoneName], subZone))}
                     key={subZone.zone}>
                     <Rectangle vectorLayerStyle={vectorLayerStyle} />
-                    <Name>{subZone.zone ? subZone.zone : 'AUCUN NOM'}</Name>
+                    <Name>{subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}</Name>
                 </SubZone>)
             }) : null
         }

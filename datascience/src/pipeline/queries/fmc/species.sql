@@ -1,9 +1,9 @@
 SELECT 
     spe.idc_pch_espece as id,
     spe.code_fao as species_code,
-    spe.libelle as species_name,
+    INITCAP(spe.libelle) as species_name,
     spe_code_group.code as species_group_code,
-    spe_code_group.libelle as species_group_name,
+    INITCAP(spe_code_group.libelle) as species_group_name,
     spe.source
 FROM COMMUNFMC.C_PCH_CODE_ESPECE spe
 LEFT JOIN COMMUNFMC.C_PCH_GROUPE_ESPECE spe_group

@@ -22,12 +22,16 @@ const VesselLabelCheckbox = props => {
                             setValue(isChecked)
                         }}
 
-                    >Afficher les étiquettes des navires</Checkbox>
+                    >{' '} <ShowLabelText>Afficher les étiquettes des navires</ShowLabelText></Checkbox>
                 </RadioWrapper> : null
             }
         </>
     );
 }
+
+const ShowLabelText = styled.span`
+  margin-left: 5px;
+`
 
 const RadioWrapper = styled.div`
   padding: 0px 0 0 4px;

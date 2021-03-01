@@ -6,11 +6,13 @@ import './index.css';
 import App from './App';
 import { Provider } from 'react-redux'
 import Store from "./Store";
+import GlobalFonts from "./fonts/fonts";
 
 ReactDOM.render(
   <React.StrictMode>
       <Provider store={Store}>
-        <App />
+          <GlobalFonts/>
+          <App />
       </Provider>
   </React.StrictMode>,
   document.getElementById('root')

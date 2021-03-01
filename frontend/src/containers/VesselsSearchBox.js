@@ -248,7 +248,7 @@ const VesselsSearchBox = () => {
                         type="text"
                         firstUpdate={firstUpdate}
                         value={searchText}
-                        placeholder={'Rechercher un navire (nom, CFR, MMSI, etc.)...'}
+                        placeholder={'Rechercher un navire...'}
                         onChange={e => setSearchText(e.target.value)}
                         isFocusedOnVesselSearch={isFocusedOnVesselSearch}
                         vesselSidebarIsOpen={vesselSidebarIsOpen}
@@ -324,7 +324,7 @@ const CallSign = styled.div`
 const MMSI = styled.div`
   font-size: 13px;
   flex: 1;
-  min-width: 130px;
+  min-width: 140px;
 `
 
 const ExtNum = styled.div`
@@ -336,7 +336,7 @@ const ExtNum = styled.div`
 const CFR = styled.div`
   font-size: 13px;
   flex: 1;
-  min-width: 130px;
+  min-width: 140px;
 `
 
 

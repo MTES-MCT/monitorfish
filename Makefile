@@ -52,8 +52,11 @@ docker-run-pipeline-server:
 	infra/remote/data-pipeline/start-server.sh
 docker-run-pipeline-flows:
 	infra/remote/data-pipeline/start-flows.sh
-docker-stop-pipeline:
+docker-stop-pipeline-server:
 	infra/remote/data-pipeline/stop-server.sh
+docker-stop-pipeline-flows:
+	docker container stop monitorfish-pipeline-flows; docker container rm monitorfish-pipeline-flows;
+
 
 # DATA commands
 install-pipeline:

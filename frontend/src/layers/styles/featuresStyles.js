@@ -29,16 +29,15 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdenti
             offset: [0, 0],
             imgSize: [14, 14],
             rotation: degreesToRadian(vessel),
-            opacity: opacity
         }) : new CircleStyle({
             radius: 4,
             fill: new Fill({
                 color: `rgb(5, 5, 94)`
             }),
-            opacity: opacity
         }),
         zIndex: VESSEL_ICON_STYLE
     });
+    iconStyle.getImage().setOpacity(opacity)
     styles.push(iconStyle)
 
     if (vesselLabelsShowedOnMap) {

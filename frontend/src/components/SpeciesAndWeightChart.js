@@ -8,22 +8,23 @@ const SpeciesAndWeightChart = props => {
     useEffect(() => {
         if(props.speciesAndWeightArray && props.increaseChartHeight) {
             let speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
-                let height = speciesAndWeight.weight ? speciesAndWeight.weight * 0.04 : 20
+                let height = speciesAndWeight.weight ? speciesAndWeight.weight * 0.04 : 22
 
-                speciesAndWeight.height = height >= 22 ? height : 22
+                speciesAndWeight.height = height < 22 ? 22 : height
+                speciesAndWeight.height = speciesAndWeight.height > 90 ? 90 : speciesAndWeight.height
                 return speciesAndWeight
             })
 
             setSpeciesAndWeightArray(speciesAndWeightArray)
             let totalHeight = speciesAndWeightArray.reduce((subAccumulator, speciesCatch) => {
-                return subAccumulator + speciesCatch.height
+                return subAccumulator + speciesCatch.height + 2
             }, 0)
             props.increaseChartHeight(totalHeight)
         }
     }, [props.speciesAndWeightArray])
 
     const getPercentOfTotalFARWeight = speciesAndWeight => {
-        return ((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1)
+        return parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
     }
 
     return <>
@@ -34,7 +35,7 @@ const SpeciesAndWeightChart = props => {
                         height={speciesAndWeight.height}
                         isLast={index === props.speciesAndWeightArray.length - 1}
                     >
-                        <WeightText>{speciesAndWeight.weight} kg {props.compareWithTotalWeight ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray> : null}</WeightText>
+                        <WeightText>{parseFloat(speciesAndWeight.weight.toFixed(1))} kg {props.compareWithTotalWeight ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray> : null}</WeightText>
                     </Weight>
                     <Species
                         height={speciesAndWeight.height}

@@ -15,15 +15,20 @@ const DEPMessageResume = props => {
         }
     }, [isOpen])
 
-    const getDEPMessageResumeTitle = depMessage => {
-        return <>{depMessage.departurePortName ? depMessage.departurePortName : depMessage.departurePort}
-            {' '}le {getDateTime(depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
+    const getDEPMessageResumeTitleText = () => {
+        return `${props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort} le ${getDateTime(props.depMessage.departureDatetimeUtc, true)} (UTC)`
+    }
+
+    const getDEPMessageResumeTitle = () => {
+        return <>{props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort}
+            {' '}le {getDateTime(props.depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
     }
 
     return <>
         <Wrapper>
             <ERSMessageResumeHeader
-                title={props.hasNoMessage ? null : getDEPMessageResumeTitle(props.depMessage)}
+                onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
+                title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}
                 hasNoMessage={props.hasNoMessage}
                 showERSMessages={props.showERSMessages}
                 messageType={ERSMessageTypeEnum.DEP.code.toString()}
@@ -40,7 +45,7 @@ const DEPMessageResume = props => {
                         <Zone>
                             {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length ?
                                 props.depMessage.gearOnboard.map((gear, index) => {
-                                    return <Gear key={gear.gear}>
+                                    return <Gear key={gear.gear} isFirst={index === "0"}>
                                         <SubKey>Engin à bord {index + 1}</SubKey>{' '}
                                         <SubValue>
                                             {
@@ -66,7 +71,7 @@ const DEPMessageResume = props => {
                                         }
                                                     {''} - {speciesCatch.weight} kg<br/>
                                     </span>
-                                            }) : <NoValue>-</NoValue>}</Value>
+                                            }) : <NoValue>aucune</NoValue>}</Value>
                                     </Field>
                                 </TableBody>
                             </Fields>
@@ -79,6 +84,7 @@ const DEPMessageResume = props => {
 
 const Gear = styled.div`
   margin-left: 5px;
+  margin-top: ${props => props.isFirst ? '15px' : '5px'};
 `
 
 const SubKey = styled.span`
@@ -96,14 +102,13 @@ const SubValue = styled.span`
 const TableBody = styled.tbody``
 
 const Zone = styled.div`
-  margin: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   text-align: left;
-  display: flex;
-  flex-wrap: wrap;
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 5px 5px; 
+  padding: 10px 5px 5px 5px; 
   width: inherit;
   display: table;
   margin: 0;
@@ -146,7 +151,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.grayDarkerTwo};
   font-weight: 300;
   line-height: normal;
 `

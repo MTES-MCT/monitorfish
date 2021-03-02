@@ -28,8 +28,9 @@ html {
   background: inherit;
 }
 
-.ol-control button:hover, .ol-control button:focus {
+.ol-control button, .ol-control button:hover, .ol-control button:focus {
   background-color: #515151;
+  border-radius: unset;
 }
 
 button:hover, button:focus {
@@ -93,11 +94,34 @@ input:focus {
 .highlight {
   margin: 0;
   padding: 0;
-  background-color: #E0E0E0;
+  background-color: #D6D6D6;
   color: rgb(81, 81, 81);
 }
 
 input:not([type]), [type="text"], [type="email"], [type="number"], [type="search"], [type="password"], [type="url"], [type="tel"], [type="checkbox"], [type="radio"], textarea, select {
   margin: 0;
   padding: 0;
+}
+
+.ol-scale-line {
+  position: absolute;
+  bottom: 10px;
+  left: 242px;
+  display: inline-block;
+  margin: 1px;
+  padding: 2px 0 5px 2px;
+  color: white;
+  font-size: 0.9em;
+  text-decoration: none;
+  text-align: center;
+  height: 1.275em;
+  background-color: #515151;
+  border: none;
+  border-radius: unset;
+}
+
+.ol-scale-line-inner {
+  margin: 3px 4px 4px 2px;
+  line-height: 11px;
+  padding-bottom: 4px;
 }

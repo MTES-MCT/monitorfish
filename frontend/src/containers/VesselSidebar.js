@@ -181,7 +181,7 @@ const ErrorText = styled.div`
 const Panel = styled.div`
   padding: 0;
   overflow-y: auto;
-  background: #F0F0F0;
+  background: ${COLORS.grayBackground};
   max-height: 86vh;
 `
 

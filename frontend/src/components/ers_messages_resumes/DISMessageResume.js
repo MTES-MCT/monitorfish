@@ -30,12 +30,17 @@ const DISMessageResume = props => {
         setChartHeight(chartHeight + height)
     }
 
+    const getDISMessageResumeTitleText = () => {
+        return `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalDISWeight} kg rejetés au total`
+    }
+
     const getDISMessageResumeTitle = () => {
         return <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalDISWeight} kg rejetés au total</>
     }
 
     return <Wrapper>
         <ERSMessageResumeHeader
+            onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
             title={props.hasNoMessage ? null : getDISMessageResumeTitle()}
             hasNoMessage={props.hasNoMessage}
             showERSMessages={props.showERSMessages}
@@ -91,11 +96,11 @@ const ERSMessageContent = styled.div`
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-opening` : null} {
     0%   { height: 0; opacity: 0; }
-    100% { height: ${props => props.chartHeight + 40}px; opacity: 1; }
+    100% { height: ${props => props.chartHeight + 20}px; opacity: 1; }
   }
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-closing` : null} {
-    0%   { opacity: 1; height: ${props => props.chartHeight + 40}px; }
+    0%   { opacity: 1; height: ${props => props.chartHeight + 20}px; }
     100% { opacity: 0; height: 0; }
   }
 `

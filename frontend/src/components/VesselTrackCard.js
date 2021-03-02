@@ -125,13 +125,12 @@ const Position = styled.div`
 const VesselCardHeader = styled.div`
   background: ${COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
-  padding: 4px 5px 6px 5px;
+  padding: 5px 5px 6px 5px;
 `
 
 const VesselCardTitle = styled.span`
   margin-left: 5px;
   display: inline-block;
-  vertical-align: middle;
   font-size: 0.9em;
 `
 

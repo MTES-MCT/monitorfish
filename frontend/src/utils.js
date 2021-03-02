@@ -44,14 +44,16 @@ export function getDay(date) {
 
 export let getDate = dateString => {
     if (dateString) {
-        const date = new Date(dateString)
+        let date = new Date(dateString)
+        // Convert to UTC date
+        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()))
         return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()}`
     }
 }
 
 export let getDateTime = (dateString, withoutSeconds) => {
     if (dateString) {
-        const date = new Date(dateString)
+        let date = new Date(dateString)
         let timeOptions = withoutSeconds ? {
                 hour: '2-digit',
                 minute:'2-digit',
@@ -65,7 +67,10 @@ export let getDateTime = (dateString, withoutSeconds) => {
 
         let time = date.toLocaleTimeString([], timeOptions)
         time = time.replace(':', 'h')
+        time = time.replace('24', '00')
 
+        // Convert to UTC date
+        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()))
         return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()} à ${time}`
     }
 }

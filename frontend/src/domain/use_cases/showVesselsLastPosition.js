@@ -15,27 +15,30 @@ import {getVesselFeatureAndIdentity} from "../entities/vessel";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
     getVesselsLastPositionsFromAPI().then(vessels => {
-        let vesselsFeatures = vessels
+        let vesselsFeaturesPromise = vessels
             .filter(vessel => vessel)
             .map((currentVessel, index) => {
-                return buildFeature(currentVessel, index, getState, dispatch);
+                return buildFeature(currentVessel, index, getState, dispatch)
+                    .then(feature => feature)
             })
 
-        let vesselLayer = getState().layer.layers.find(layer => layer.className_ === Layers.VESSELS)
-        vesselLayer.setSource(
-            new VectorSource({
-                features: vesselsFeatures
-            })
-        )
+        Promise.all(vesselsFeaturesPromise).then(vesselsFeatures => {
+            let vesselLayer = getState().layer.layers.find(layer => layer.className_ === Layers.VESSELS)
+            vesselLayer.setSource(
+                new VectorSource({
+                    features: vesselsFeatures
+                })
+            )
 
-        dispatch(replaceVesselLayer(vesselLayer))
+            dispatch(replaceVesselLayer(vesselLayer))
+        })
     }).catch(error => {
         console.error(error)
         dispatch(setError(error));
     });
 }
 
-function buildFeature(currentVessel, index, getState, dispatch) {
+const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(resolve =>  {
     const transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
     const iconFeature = new Feature({
@@ -61,19 +64,21 @@ function buildFeature(currentVessel, index, getState, dispatch) {
     let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     let vesselsLastPositionVisibility = getState().map.vesselsLastPositionVisibility
     let vesselLabel = getState().map.vesselLabel
-    let newSelectedVesselFeature = setVesselIconStyle(
+
+    setVesselIconStyle(
         currentVessel,
         iconFeature,
         vesselFeatureAndIdentity,
         vesselLabelsShowedOnMap,
         vesselsLastPositionVisibility,
         vesselLabel)
+        .then(newSelectedVesselFeature => {
+            if (newSelectedVesselFeature) {
+                dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))
+            }
 
-    if (newSelectedVesselFeature) {
-        dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))
-    }
-
-    return iconFeature;
-}
+            resolve(iconFeature)
+    })
+})
 
 export default showVesselsLastPosition

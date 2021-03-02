@@ -18,9 +18,9 @@ function degreesToRadian(vessel) {
     return vessel.course * Math.PI / 180;
 }
 
-export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdentity, vesselLabelsShowedOnMap, vesselsLastPositionVisibility, vesselLabel) => {
-    let selectedVesselFeatureToUpdate = null;
-    let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime);
+export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdentity, vesselLabelsShowedOnMap, vesselsLastPositionVisibility, vesselLabel) => new Promise(resolve =>  {
+    let selectedVesselFeatureToUpdate = null
+    let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime)
 
     let styles = []
     const iconStyle = new Style({
@@ -37,14 +37,9 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdenti
         }),
         zIndex: VESSEL_ICON_STYLE
     });
+
     iconStyle.getImage().setOpacity(opacity)
     styles.push(iconStyle)
-
-    if (vesselLabelsShowedOnMap) {
-        getSVG(iconFeature, vesselLabel).then(object => {
-            styles.push(getVesselNameStyle(object.showedText, object.imageElement))
-        })
-    }
 
     if (vessel.internalReferenceNumber &&
         selectedFeatureAndIdentity &&
@@ -54,9 +49,18 @@ export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdenti
         selectedVesselFeatureToUpdate = iconFeature
     }
 
-    iconFeature.setStyle(styles);
-    return selectedVesselFeatureToUpdate
-}
+    if (vesselLabelsShowedOnMap) {
+        getSVG(iconFeature, vesselLabel).then(object => {
+            styles.push(getVesselNameStyle(object.showedText, object.imageElement))
+
+            iconFeature.setStyle(styles)
+            resolve(selectedVesselFeatureToUpdate)
+        })
+    } else {
+        iconFeature.setStyle(styles)
+        resolve(selectedVesselFeatureToUpdate)
+    }
+})
 
 export function getVesselIconOpacity(vesselsLastPositionVisibility, dateTime) {
     const vesselDate = new Date(dateTime);
@@ -105,7 +109,6 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
         }
     }
     let textWidth = getTextWidth(showedText) + 10 + (flag ? 18 : 0)
-
 
     let iconSVG = `
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">

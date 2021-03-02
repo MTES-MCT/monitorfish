@@ -125,3 +125,7 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
   line-height: 11px;
   padding-bottom: 4px;
 }
+
+a:hover, a:focus {
+  color: #515151;
+}

@@ -222,7 +222,7 @@ const Position = styled.div`
 const VesselCardHeader = styled.div`
   background: ${COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
-  padding: 5px 5px 5px 5px;
+  padding: 4px 5px 5px 5px;
 `
 
 const VesselCardTitle = styled.span`

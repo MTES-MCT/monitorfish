@@ -22,10 +22,12 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
     fun execute(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): ERSMessagesAndAlerts {
         val lastDepartureDateAndTripNumber = ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, externalReferenceNumber, ircs)
 
-        val alerts = alertRepository.findAlertsOfRules(
-                listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
-                internalReferenceNumber,
-                lastDepartureDateAndTripNumber.tripNumber)
+        val alerts = lastDepartureDateAndTripNumber.tripNumber?.let {
+            alertRepository.findAlertsOfRules(
+                    listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+                    internalReferenceNumber,
+                    it)
+        } ?: listOf()
 
         val messages = ersRepository
                 .findAllMessagesAfterDepartureDate(lastDepartureDateAndTripNumber.lastDepartureDate, internalReferenceNumber, externalReferenceNumber, ircs)

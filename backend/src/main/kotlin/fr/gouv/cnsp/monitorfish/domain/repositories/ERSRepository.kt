@@ -2,9 +2,12 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import java.time.ZonedDateTime
+import kotlin.jvm.Throws
 
 interface ERSRepository {
+    @Throws(NoERSLastDepartureDateFound::class)
     fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String,
                                            externalReferenceNumber: String,
                                            ircs: String): LastDepartureDateAndTripNumber

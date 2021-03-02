@@ -3,8 +3,12 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.JpaVesselRepository
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.lang.IllegalArgumentException
 import java.util.*
 import javax.persistence.*
 
@@ -34,9 +38,7 @@ data class VesselEntity(
         @Column(name = "vessel_name")
         val vesselName: String? = null,
         @Column(name = "flag_state")
-        @Enumerated(EnumType.STRING)
-        val flagState: CountryCode? = null,
-
+        val flagState: String? = null,
         @Column(name = "width")
         val width: Double? = null,
         @Column(name = "length")
@@ -83,13 +85,20 @@ data class VesselEntity(
         @Type(type = "list-array")
         val fisherEmails: List<String>? = null) {
 
-    fun toVessel() = Vessel(
+        fun toVessel() = Vessel(
             internalReferenceNumber = internalReferenceNumber,
             ircs = ircs,
             mmsi = mmsi,
             externalReferenceNumber = externalReferenceNumber,
             vesselName = vesselName,
-            flagState = flagState,
+            flagState = flagState?.let {
+                try {
+                    CountryCode.valueOf(flagState)
+                } catch (e: IllegalArgumentException) {
+                        logger.warn(e.message)
+                        CountryCode.UNDEFINED
+                }
+            },
             width = width,
             length = length,
             district = district,
@@ -112,6 +121,8 @@ data class VesselEntity(
     )
 
         companion object {
+                private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)
+
                 fun fromVessel(vessel: Vessel): VesselEntity {
                         return VesselEntity(
                                 internalReferenceNumber = vessel.internalReferenceNumber,
@@ -119,7 +130,7 @@ data class VesselEntity(
                                 mmsi = vessel.mmsi,
                                 externalReferenceNumber = vessel.externalReferenceNumber,
                                 vesselName = vessel.vesselName,
-                                flagState = vessel.flagState,
+                                flagState = vessel.flagState?.alpha2,
                                 width = vessel.width,
                                 length = vessel.length,
                                 district = vessel.district,

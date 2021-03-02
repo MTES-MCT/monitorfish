@@ -100,7 +100,7 @@ class GetVesselLastVoyageUTests {
     }
 
     @Test
-    fun `execute Should return an empty list of laerts When the trim number is not found`() {
+    fun `execute Should return an empty list of alerts When the trim number is not found`() {
         // Given
         given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), null))
         given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getDummyERSMessage())

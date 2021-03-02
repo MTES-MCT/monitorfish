@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -80,5 +81,15 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
         assertThat(vessels).hasSize(1)
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
+    }
+
+    @Test
+    @Transactional
+    fun `search Should return an UNDEFINED flag state When a wrong flag state is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("FRA000461560")
+
+        assertThat(vessels).hasSize(1)
+        assertThat(vessels.first().flagState).isEqualTo(CountryCode.UNDEFINED)
     }
 }

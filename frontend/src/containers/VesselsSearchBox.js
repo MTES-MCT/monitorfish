@@ -237,7 +237,7 @@ const VesselsSearchBox = () => {
                             {selectedVesselFeatureAndIdentity.identity.vesselName}
                             {' '}
                             {
-                                selectedVesselFeatureAndIdentity.identity.flagState ? <>({selectedVesselFeatureAndIdentity.identity.flagState})</> : null
+                                selectedVesselFeatureAndIdentity.identity.flagState && selectedVesselFeatureAndIdentity.identity.flagState !== 'UNDEFINED' ? <>({selectedVesselFeatureAndIdentity.identity.flagState})</> : <>(INCONNU)</>
                             }
                         </VesselName>
                         <CloseIcon onClick={() => {

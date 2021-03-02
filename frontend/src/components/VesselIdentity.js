@@ -62,7 +62,7 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Nationalité</Key>
-                            <TrimmedValue>{props.vessel.flagState ? countries.getName(props.vessel.flagState, "fr") : <NoValue>-</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{props.vessel.flagState && countries.getName(props.vessel.flagState, "fr") ? countries.getName(props.vessel.flagState, "fr") : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Quartier</Key>

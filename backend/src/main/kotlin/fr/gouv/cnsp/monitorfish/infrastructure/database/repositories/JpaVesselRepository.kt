@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
+import java.lang.IllegalArgumentException
 
 @Repository
 class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : VesselRepository {

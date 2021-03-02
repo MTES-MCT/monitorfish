@@ -57,13 +57,6 @@ const ERSMessage = props => {
     }
 
     const openXML = xml => {
-        /* without adding tags
-        xml = xml.replace('<ers:OPS', '<ers:OPS xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" ' +
-            'xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" ' +
-            'xmlns:tns="http://ec.europa.eu/fisheries/schema/ers/wsdl/v3" ' +
-            'xmlns:ers="http://ec.europa.eu/fisheries/schema/ers/v3" ' +
-            'xmlns:xsd="http://www.w3.org/2001/XMLSchema"')
-            */
         let blob = new Blob([xml], { type: 'text/xml' });
         let url = URL.createObjectURL(blob);
         window.open(url);
@@ -173,13 +166,13 @@ const ERSMessage = props => {
 
 const OKMessageText = styled.span`
   vertical-align: text-top;
-  line-height: 0.9em;
+  line-height: 11px;
   margin: 0 3px 0 3px;
 `
 
 const CorrectedMessageText = styled.span`
   vertical-align: text-top;
-  line-height: 8px;
+  line-height: 11px;
   margin: 0 3px 0 3px;
 `
 
@@ -223,7 +216,7 @@ const Key = styled.span`
 const Acknowledge = styled.div`
   text-align: center;
   background: ${COLORS.background};
-  padding: 5px 10px 9px 10px;
+  padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
@@ -233,7 +226,7 @@ const Acknowledge = styled.div`
 const VoyageNumber = styled.div`
   text-align: center;
   background: ${COLORS.background};
-  padding: 5px 10px 9px 10px;
+  padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
@@ -243,7 +236,7 @@ const VoyageNumber = styled.div`
 const ReceptionDateTime = styled.div`
   text-align: center;
   background: ${COLORS.background};
-  padding: 5px 10px 9px 10px;
+  padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
@@ -253,7 +246,7 @@ const ReceptionDateTime = styled.div`
 const EmissionDateTime = styled.div`
   text-align: center;
   background: ${COLORS.background};
-  padding: 5px 10px 9px 10px;
+  padding: 5px 9px 9px 9px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
   flex-grow: 3;

@@ -100,6 +100,28 @@ class GetVesselLastVoyageUTests {
     }
 
     @Test
+    fun `execute Should return an empty list of laerts When the trim number is not found`() {
+        // Given
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), null))
+        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getDummyERSMessage())
+        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(ersMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+
+        // When
+        val (_, alerts) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
+                .execute("FR224226850", "", "")
+
+        // Then
+        assertThat(alerts).hasSize(0)
+    }
+
+    @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
         given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))

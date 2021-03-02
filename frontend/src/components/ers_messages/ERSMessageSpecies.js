@@ -168,14 +168,6 @@ const Species = styled.li`
   color: ${COLORS.textGray};
 `
 
-const SpeciesNumber = styled.span`
-  color: ${COLORS.textGray};
-  margin: 5px 5px 5px 0;
-  padding: 2px 4px 2px 0;
-  font-size: 13px;
-  vertical-align: -moz-middle-with-baseline;
-`
-
 const Title = styled.div`
   height: 35px;
   width: inherit;
@@ -198,11 +190,11 @@ const Content = styled.div`
 
   @keyframes ${props => props.name ? `list-zones-${props.name}-opening` : null} {
     0%   { height: 0; }
-    100% { height: ${props => props.length > 1 ? props.length * 82 + 30 : 82}px; }
+    100% { height: ${props => props.length > 1 ? props.length * 90 + 30 : 90}px; }
   }
 
   @keyframes ${props => props.name ? `list-zones-${props.name}-closing` : null} {
-    0%   { height: ${props => props.length > 1 ? props.length * 82 + 30 : 82}px; }
+    0%   { height: ${props => props.length > 1 ? props.length * 90 + 30 : 90}px; }
     100% { height: 0; }
   }
 `

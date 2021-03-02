@@ -116,7 +116,7 @@ const VesselsSearchBox = () => {
             let foundVesselsOnMap = getFoundVesselsOnMap(vesselsLayer);
             setFoundVesselsOnMap(foundVesselsOnMap)
 
-            dispatch(searchVessels(searchText)).then(foundVesselsFromAPI => {
+            dispatch(searchVessels(searchText.toUpperCase())).then(foundVesselsFromAPI => {
                 let distinctFoundVessels = removeDuplicatedFoundVessels(foundVesselsFromAPI, foundVesselsOnMap)
                 setFoundVesselsFromAPI(distinctFoundVessels)
             })

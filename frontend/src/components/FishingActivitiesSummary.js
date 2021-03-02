@@ -165,43 +165,43 @@ const FishingActivitiesSummary = props => {
     }, [props.fishingActivities])
 
     function getTotalFARWeightFromMessages(ersMessages) {
-        return ersMessages
+        return parseFloat(ersMessages
             .reduce((accumulator, ersMessage) => {
             let sumOfCatches = ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
                 return subAccumulator + speciesCatch.weight
             }, 0)
 
             return accumulator + sumOfCatches
-        }, 0).toFixed(2)
+        }, 0).toFixed(1))
     }
 
     function getTotalDEPWeightFromMessages(ersMessage) {
-        return ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
+        return parseFloat(ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
             return subAccumulator + speciesCatch.weight
-        }, 0).toFixed(2)
+        }, 0).toFixed(1))
     }
 
     function getTotalLANWeightFromMessages(ersMessage) {
-        return ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
+        return parseFloat(ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
             return subAccumulator + speciesCatch.weight
-        }, 0).toFixed(2)
+        }, 0).toFixed(1))
     }
 
     function getTotalPNOWeightFromMessages(ersMessage) {
-        return ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
+        return parseFloat(ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
             return subAccumulator + speciesCatch.weight
-        }, 0).toFixed(2)
+        }, 0).toFixed(1))
     }
 
     function getTotalDISWeightFromMessages(ersMessages) {
-        return ersMessages
+        return parseFloat(ersMessages
             .reduce((accumulator, ersMessage) => {
                 let sumOfCatches = ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
                     return subAccumulator + speciesCatch.weight
                 }, 0)
 
                 return accumulator + sumOfCatches
-            }, 0).toFixed(2)
+            }, 0).toFixed(1))
     }
 
     const getCatchesOverToleranceAlert = () => {
@@ -252,9 +252,9 @@ const FishingActivitiesSummary = props => {
                         </Title>
                     </Zone>
                     <Zone>
-                        <Title>
-                            <Text>Résumé de la marée</Text>
-                            <TextValue>{props.fishingActivities.fleetSegment ? props.fishingActivities.fleetSegment : <NoValue>-</NoValue>}</TextValue>
+                        <Title hasTwoLines={true}>
+                            <Text hasTwoLines={true}>Résumé de la marée</Text>
+                            <TextValue hasTwoLines={true}>{props.fishingActivities.fleetSegment ? props.fishingActivities.fleetSegment : <NoValue>-</NoValue>}</TextValue>
                             <SeeAll onClick={() => props.showERSMessages()}>Voir tous<br/> les messages</SeeAll>
                             <Arrow onClick={() => props.showERSMessages()}/>
                         </Title>
@@ -339,7 +339,8 @@ const ERSMessages = styled.ul`
 const Text = styled.div`
   color: ${COLORS.textGray};
   font-size: 13px;
-  font-weight: normal;
+  font-weight: 500;
+  padding-top: ${props => props.hasTwoLines ? '6px': '0'};
 `
 
 const TextValue = styled.div`
@@ -347,6 +348,7 @@ const TextValue = styled.div`
   color: ${COLORS.grayDarkerThree};
   margin: 0;
   padding-left: 20px;
+  padding-top: ${props => props.hasTwoLines ? '6px': '0'};
 `
 
 const Body = styled.div`
@@ -359,7 +361,7 @@ const TableBody = styled.tbody``
 const Title = styled.div`
   color: ${COLORS.textGray};
   background: ${COLORS.grayDarker};
-  padding: 10px 10px 10px 20px;
+  padding: ${props => props.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;'}
   font-size: 0.8rem;
   flex-shrink: 0;
   flex-grow: 2;
@@ -420,7 +422,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.grayDarkerTwo};
   font-weight: 300;
   line-height: normal;
 `

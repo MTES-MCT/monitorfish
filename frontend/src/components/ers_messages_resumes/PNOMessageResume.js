@@ -49,12 +49,16 @@ const PNOMessageResume = props => {
     }
 
     const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) => {
-        return ((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1)
+        return parseFloat(((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1))
+    }
+
+    const getPNOMessageResumeTitleText = () => {
+        return `${props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}, prévu le ${getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)} (UTC)`
     }
 
     const getPNOMessageResumeTitle = () => {
         return <>{props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}
-            {' '} prévu le {getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)}  <Gray>(UTC)</Gray></>
+            ,{' '} prévu le {getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)}  <Gray>(UTC)</Gray></>
     }
 
     const increaseHeight = height => {
@@ -63,6 +67,7 @@ const PNOMessageResume = props => {
 
     return <Wrapper>
         <ERSMessageResumeHeader
+            onHoverText={props.hasNoMessage ? null : getPNOMessageResumeTitleText()}
             title={props.hasNoMessage ? null : getPNOMessageResumeTitle()}
             hasNoMessage={props.hasNoMessage}
             showERSMessages={props.showERSMessages}
@@ -185,7 +190,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.grayDarkerTwo};
   font-weight: 300;
   line-height: normal;
 `

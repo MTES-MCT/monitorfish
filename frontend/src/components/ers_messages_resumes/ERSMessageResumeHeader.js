@@ -24,7 +24,7 @@ const ERSMessageResumeHeader = props => {
                     <ERSMessageName hasNoMessage={props.hasNoMessage}>
                         { ERSMessageTypeEnum[props.messageType].name }
                     </ERSMessageName>
-                    <ERSMessageResumeText title={props.onHoverText}>
+                    <ERSMessageResumeText title={props.onHoverText ? props.onHoverText : ''}>
                         { props.hasNoMessage ? <Gray>Aucun message</Gray> : <>{props.title}{props.isAlert ? <Red /> : null}</> }
                     </ERSMessageResumeText>
                     {
@@ -62,11 +62,17 @@ const ERSMessageResumeText = styled.span`
   padding: 2px 4px 2px 0;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
+  max-width: 320px;
+  display: inline-block;
+  line-break: auto;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;
 `
 
 const ERSMessageName = styled.span`
   color: ${COLORS.textGray};
-  margin: 5px 5px 5px ${props => props.hasNoMessage ? '27px': '0px'};
+  margin: 5px 0 5px ${props => props.hasNoMessage ? '27px': '0px'};
   padding: 2px 4px 2px 4px;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;

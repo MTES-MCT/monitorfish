@@ -28,6 +28,7 @@ import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMe
 import LayerDetailsBox from "../components/LayerDetailsBox";
 import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
 import Point from "ol/geom/Point";
+import ScaleLine from "ol/control/ScaleLine";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
@@ -105,7 +106,7 @@ const MapWrapper = () => {
                 zoom: 6,
                 minZoom: 3
             }),
-            controls: [],
+            controls: [new ScaleLine({units: 'nautical'})],
         })
 
         if(window.location.hash !== '') {

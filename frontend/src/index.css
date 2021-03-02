@@ -26,7 +26,7 @@ code {
 
 .rs-slider-bar {
   height: 2px;
-  background: linear-gradient(to right, #E0E0E0, #515151);
+  background: linear-gradient(to right, #D6D6D6, #515151);
 }
 
 .rs-slider-progress-bar {
@@ -35,7 +35,7 @@ code {
 }
 
 .rs-slider-graduator > ul > li:nth-child(1)::before {
-  background: #E0E0E0;
+  background: #D6D6D6;
 }
 
 .rs-slider-graduator > ul > li:nth-child(2)::before {
@@ -93,15 +93,16 @@ button, [type="button"], [type="submit"], [type="reset"], a.button, label.button
   color: unset;
   border: unset;
   text-decoration: unset;
+  border-radius: unset;
 }
 
 .rs-radio-wrapper::before {
-  background: #F0F0F0 0% 0% no-repeat padding-box;
-  border: 2px solid #E0E0E0;
+  background: #EDEDED 0% 0% no-repeat padding-box;
+  border: 2px solid #D6D6D6;
 }
 
 .rs-radio-checked .rs-radio-wrapper .rs-radio-inner::before {
-  background: #F0F0F0 0% 0% no-repeat padding-box;
+  background: #EDEDED 0% 0% no-repeat padding-box;
   border: 2px solid #969696;
 }
 
@@ -114,8 +115,8 @@ button, [type="button"], [type="submit"], [type="reset"], a.button, label.button
 }
 
 .rs-radio-wrapper .rs-radio-inner::before {
-  background: #F0F0F0 0% 0% no-repeat padding-box;
-  border: 2px solid #E0E0E0;
+  background: #EDEDED 0% 0% no-repeat padding-box;
+  border: 2px solid #D6D6D6;
 }
 
 .rs-radio-wrapper::before, .rs-radio-wrapper .rs-radio-inner::before, .rs-radio-wrapper {
@@ -166,7 +167,7 @@ button, [type="button"], [type="submit"], [type="reset"], a.button, label.button
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before {
   border-color: #969696;
-  background-color: #F0F0F0;
+  background-color: #EDEDED;
 }
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::after {

@@ -302,13 +302,13 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.grayDarkerTwo};
   font-weight: 300;
   line-height: normal;
 `
 
 const NoPersonalData = styled.div`
-  color: ${COLORS.textBueGray};
+  color: ${COLORS.grayDarkerTwo};
   font-weight: 300;
 `
 

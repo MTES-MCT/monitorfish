@@ -1,8 +1,8 @@
 export const COLORS = {
     background: '#FFFFFF',
-    grayBackground: '#F0F0F0',
+    grayBackground: '#EDEDED',
     gray: '#EEEEEE',
-    grayDarker: '#E0E0E0',
+    grayDarker: '#D6D6D6',
     grayDarkerTwo: '#9A9A9A',
     grayDarkerThree: '#515151',
     textBueGray: '#848DAE',

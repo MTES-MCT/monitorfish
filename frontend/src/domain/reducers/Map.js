@@ -20,6 +20,7 @@ const mapSlice = createSlice({
         vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
         vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
         animateToVessel: null,
+        animateToRegulatoryLayer: null,
         vesselNamesHiddenByZoom: undefined,
         isMoving: false,
         view: getLocalStorageState({
@@ -30,6 +31,12 @@ const mapSlice = createSlice({
     reducers: {
         animateToVessel(state, action) {
             state.animateToVessel = action.payload
+        },
+        animateToRegulatoryLayer(state, action) {
+            state.animateToRegulatoryLayer = action.payload
+        },
+        resetAnimateToRegulatoryLayer(state) {
+            state.animateToRegulatoryLayer = null
         },
         resetAnimateToVessel(state) {
             state.animateToVessel = null
@@ -65,10 +72,12 @@ const mapSlice = createSlice({
 
 export const {
     animateToVessel,
+    resetAnimateToVessel,
+    animateToRegulatoryLayer,
+    resetAnimateToRegulatoryLayer,
     setVesselLabelsShowedOnMap,
     hideVesselNames,
     isMoving,
-    resetAnimateToVessel,
     setView,
     setVesselsLastPositionVisibility,
     setVesselTrackDepth,

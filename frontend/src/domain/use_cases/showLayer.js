@@ -9,7 +9,8 @@ import {all, bbox as bboxStrategy} from "ol/loadingstrategy";
 import {getHash} from "../../utils";
 import {getAdministrativeZoneFromAPI, getRegulatoryZoneFromAPI} from "../../api/fetch";
 import {setError} from "../reducers/Global";
-import {getArea} from "ol/extent";
+import {getArea, getCenter} from "ol/extent";
+import {animateToRegulatoryLayer} from "../reducers/Map";
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -73,6 +74,13 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
                         name: `${type}:${regulatoryZoneProperties.layerName}:${regulatoryZoneProperties.zone}`,
                         area: getArea(vectorSource.getExtent())
                     }))
+                    const center = getCenter(vectorSource.getExtent())
+                    if(center && center.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])) {
+                        dispatch(animateToRegulatoryLayer({
+                            name: `${type}:${regulatoryZoneProperties.layerName}:${regulatoryZoneProperties.zone}`,
+                            center: center
+                        }))
+                    }
                 }).catch(e => {
                     vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
                     vectorSource.removeLoadedExtent(extent);

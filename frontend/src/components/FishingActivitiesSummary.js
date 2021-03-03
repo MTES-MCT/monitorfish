@@ -98,7 +98,8 @@ const FishingActivitiesSummary = props => {
                             speciesToWeightDISObject[speciesCatch.species] = {
                                 species: speciesCatch.species,
                                 weight: speciesCatch.weight,
-                                speciesName: speciesCatch.speciesName
+                                speciesName: speciesCatch.speciesName,
+                                totalWeight: totalDISWeight
                             }
                         }
                     })

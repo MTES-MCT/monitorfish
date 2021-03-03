@@ -58,7 +58,7 @@ const DISMessageResume = props => {
                     <Zone>
                         <SpeciesAndWeightChart
                             increaseChartHeight={increaseChartHeight}
-                            compareWithTotalWeight={false}
+                            compareWithTotalWeight={true}
                             speciesAndWeightArray={speciesAndWeightArray}
                         />
                     </Zone>
@@ -90,7 +90,7 @@ const ERSMessageContent = styled.div`
   height: 0;
   opacity: 0;
   overflow: hidden;
-  padding: 0 0 0 20px;
+  padding-left: 20px;
   border-bottom: 1px solid ${COLORS.gray};
   animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-opening` : `list-resume-${props.name}-closing`} 0.2s ease forwards;
 

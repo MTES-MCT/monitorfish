@@ -8,9 +8,9 @@ const SpeciesAndWeightChart = props => {
     useEffect(() => {
         if(props.speciesAndWeightArray && props.increaseChartHeight) {
             let speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
-                let height = speciesAndWeight.weight ? speciesAndWeight.weight * 0.04 : 22
+                let heightInLog = speciesAndWeight.weight ? Math.log10(getPercentOfTotalFARWeight(speciesAndWeight)) : 22
 
-                speciesAndWeight.height = height < 22 ? 22 : height
+                speciesAndWeight.height = heightInLog <= 0 ? 22 : heightInLog * 45
                 speciesAndWeight.height = speciesAndWeight.height > 90 ? 90 : speciesAndWeight.height
                 return speciesAndWeight
             })

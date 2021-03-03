@@ -15,8 +15,8 @@ function throwIrretrievableAdministrativeZoneError(e, type) {
     throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
 }
 
-function throwIrretrievableRegulatoryZoneError(e, regulatoryZone) {
-    throw Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.layerName}/${regulatoryZone.zone} : ${e}`)
+function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {
+    return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.layerName}/${regulatoryZone.zone} : ${e}`)
 }
 
 export function getVesselsLastPositionsFromAPI() {
@@ -141,18 +141,18 @@ export function getRegulatoryZoneFromAPI(type, regulatoryZone) {
                     return response.json().then(response => {
                         return response
                     }).catch(e => {
-                        throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
+                        throw getIrretrievableRegulatoryZoneError(e, regulatoryZone);
                     })
                 } else {
                     response.text().then(response => {
-                        throwIrretrievableRegulatoryZoneError(response, regulatoryZone);
+                        throw getIrretrievableRegulatoryZoneError(response, regulatoryZone);
                     })
                 }
             }).catch(e => {
-                throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
+                throw getIrretrievableRegulatoryZoneError(e, regulatoryZone);
             })
     } catch (e) {
-        throwIrretrievableRegulatoryZoneError(e, regulatoryZone);
+        return Promise.reject(getIrretrievableRegulatoryZoneError(e, regulatoryZone))
     }
 }
 

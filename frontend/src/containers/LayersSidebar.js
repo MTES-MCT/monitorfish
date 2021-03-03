@@ -18,6 +18,7 @@ import {COLORS} from "../constants/constants";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
 import closeRegulatoryZoneMetadata from "../domain/use_cases/closeRegulatoryZoneMetadata";
 import RegulatoryZoneMetadata from "../components/regulatory_zones/RegulatoryZoneMetadata";
+import zoomInSubZone from "../domain/use_cases/zoomInSubZone";
 
 const LayersSidebar = () => {
     const dispatch = useDispatch()
@@ -98,6 +99,10 @@ const LayersSidebar = () => {
         dispatch(closeRegulatoryZoneMetadata())
     }
 
+    function callZoomInSubZone(subZone) {
+        dispatch(zoomInSubZone(subZone))
+    }
+
     return (
         <Sidebar
             layersSidebarIsOpen={layersSidebarIsOpen}
@@ -132,6 +137,7 @@ const LayersSidebar = () => {
                     selectedRegulatoryZones={selectedRegulatoryZones}
                     gears={gears}
                     callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+                    callZoomInSubZone={callZoomInSubZone}
                     regulatoryZoneMetadata={regulatoryZoneMetadata}
                     hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />

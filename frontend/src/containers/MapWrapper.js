@@ -21,7 +21,13 @@ import VesselCard from "../components/VesselCard";
 import VesselTrackCard from "../components/VesselTrackCard";
 import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
 import {useDispatch, useSelector} from "react-redux";
-import {hideVesselNames, isMoving, resetAnimateToVessel, setView} from "../domain/reducers/Map";
+import {
+    hideVesselNames,
+    isMoving,
+    resetAnimateToRegulatoryLayer,
+    resetAnimateToVessel,
+    setView
+} from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
 import {updateVesselFeatureAndIdentity} from "../domain/reducers/Vessel";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
@@ -29,6 +35,8 @@ import LayerDetailsBox from "../components/LayerDetailsBox";
 import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
 import Point from "ol/geom/Point";
 import ScaleLine from "ol/control/ScaleLine";
+import {getLength} from "ol/sphere";
+import LineString from "ol/geom/LineString";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
@@ -47,6 +55,8 @@ const MapWrapper = () => {
     const dispatch = useDispatch()
 
     const [map, setMap] = useState()
+    const [isAnimating, setIsAnimating] = useState(false)
+    const [initRenderIsDone, setInitRenderIsDone] = useState(false)
     const [shouldUpdateView, setShouldUpdateView] = useState(true)
     const [cursorCoordinates, setCursorCoordinates] = useState()
     const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
@@ -112,12 +122,12 @@ const MapWrapper = () => {
         if(window.location.hash !== '') {
             let hash = window.location.hash.replace('@', '');
             let viewParts = hash.split(',');
-            if (viewParts.length === 3) {
+            if (viewParts.length === 3 && !Number.isNaN(viewParts[0]) && !Number.isNaN(viewParts[1]) && !Number.isNaN(viewParts[2])) {
                 initialMap.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])]);
                 initialMap.getView().setZoom(parseFloat(viewParts[2]));
             }
         } else if(mapState) {
-            if(mapState.view && mapState.view.center && mapState.view.zoom) {
+            if(mapState.view && mapState.view.center && mapState.view.center[0] && mapState.view.center[1] && mapState.view.zoom) {
                 initialMap.getView().setCenter(mapState.view.center);
                 initialMap.getView().setZoom(mapState.view.zoom);
             }
@@ -148,6 +158,11 @@ const MapWrapper = () => {
         })
 
         setMap(initialMap)
+
+        // Wait 8 seconds to not apply any animate() before this init phase
+        setTimeout(() => {
+            setInitRenderIsDone(true)
+        }, 8000)
     }, [])
 
     useEffect(() => {
@@ -342,6 +357,23 @@ const MapWrapper = () => {
 
         map.getLayers().remove(layerToRemove)
     }
+
+    useEffect(() => {
+        if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
+            setIsAnimating(true)
+            map.getView().animate({
+                center: [
+                    mapState.animateToRegulatoryLayer.center[0],
+                    mapState.animateToRegulatoryLayer.center[1]
+                ],
+                duration: 1000,
+                zoom: 8
+            }, () => {
+                setIsAnimating(false)
+                dispatch(resetAnimateToRegulatoryLayer())
+            })
+        }
+    }, [mapState.animateToRegulatoryLayer, map])
 
     useEffect(() => {
         if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {

@@ -56,6 +56,10 @@ const RegulatoryZoneSelectedZone = props => {
         }
     }, [props.zoneIsShown])
 
+    const zoomInSubZone = subZone => {
+        props.callZoomInSubZone(subZone)
+    }
+
     useEffect(() => {
         if (showSubZone && props.isReadyToShowRegulatoryZones) {
             props.callShowRegulatoryZone(props.subZone)
@@ -66,7 +70,7 @@ const RegulatoryZoneSelectedZone = props => {
 
     return (
         <SubZone>
-            <Rectangle vectorLayerStyle={props.vectorLayerStyle}/>
+            <Rectangle onClick={() => zoomInSubZone(props.subZone)} vectorLayerStyle={props.vectorLayerStyle}/>
             <SubZoneText
                 title={props.subZone.zone ? props.subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
                 onClick={() => setShowSubZone(!showSubZone)}>

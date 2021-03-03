@@ -89,6 +89,7 @@ const RegulatoryZoneSelectedLayer = props => {
                                 callHideRegulatoryZone={props.callHideRegulatoryZone}
                                 callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
                                 callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
+                                callZoomInSubZone={props.callZoomInSubZone}
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showWholeLayer={showWholeLayer}
                                 zoneIsShown={props.showedLayers

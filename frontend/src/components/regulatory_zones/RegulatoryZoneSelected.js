@@ -68,6 +68,7 @@ const RegulatoryZoneSelected = props => {
                                 callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
                                 callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
+                                callZoomInSubZone={props.callZoomInSubZone}
                                 showedLayers={props.showedLayers}
                                 gears={props.gears}
                                 isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}

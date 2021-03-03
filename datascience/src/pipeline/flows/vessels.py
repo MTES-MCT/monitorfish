@@ -45,7 +45,7 @@ def extract_floats():
 
 @task
 def extract_nav_licences():
-    return read_saved_query("ocan", "pipeline/queries/gina/permis_navigation.sql")
+    return read_saved_query("ocan", "pipeline/queries/ocan/permis_navigation.sql")
 
 
 @task
@@ -100,15 +100,17 @@ def merge_licences(floats, licences):
 def concat_columns_into_list(all_vessels):
 
     concat_cols = {
-        "fisher_phones": [
-            "fisher_phone_1_nf",
-            "fisher_phone_2_nf",
-            "fisher_phone_3_nf",
-            "fisher_phone_4_nf",
-            "fisher_phone_5_nf",
-            "fisher_phone_nf",
+        "proprietor_phones": ["proprietor_phone_1_nf", "proprietor_phone_2_nf"],
+        "proprietor_emails": ["proprietor_email_nf", "proprietor_email_ncp"],
+        "operator_phones": ["operator_phone_1_nf", "operator_phone_2_nf"],
+        "operator_emails": ["operator_email_ncp", "operator_email_nf"],
+        "vessel_phones": [
+            "vessel_phone_1_nf",
+            "vessel_phone_2_nf",
+            "vessel_phone_3_nf",
+            "vessel_phone_4_nf",
         ],
-        "fisher_emails": ["fisher_email_1_nf", "fisher_email_2_nf", "fisher_email_nf"],
+        "vessel_emails": ["vessel_email_1_nf", "vessel_email_2_nf"],
         "declared_fishing_gears": [
             "fishing_gear_main_ncp",
             "fishing_gear_main_nep",
@@ -118,8 +120,6 @@ def concat_columns_into_list(all_vessels):
             "fishing_gear_third_ncp",
             "fishing_gear_third_nfp",
         ],
-        "shipowner_emails": ["shipowner_email_ncp", "shipowner_email_nf"],
-        "shipowner_phones": ["shipowner_phone_1_nf", "shipowner_phone_nf"],
     }
     cols_to_drop = []
     res = all_vessels.copy(deep=True)
@@ -135,7 +135,7 @@ def concat_columns_into_list(all_vessels):
 def combine_columns_into_value(all_vessels):
     combine_cols = {
         "gauge": ["gauge_nf", "gauge_ncp"],
-        "shipowner_name": ["shipowner_name_nf", "shipowner_name_ncp"],
+        "operator_name": ["operator_name_nf", "operator_name_ncp"],
         "length": ["length_nf", "length_ncp"],
         "power": ["power_nf", "power_ncp"],
         "district": ["district_f", "district_ncp"],
@@ -168,7 +168,7 @@ def rename_columns(all_vessels):
         "vessel_name_f": "vessel_name",
         "width_nf": "width",
         "district_code_f": "district_code",
-        "fisher_name_nf": "fisher_name",
+        "proprietor_name_nf": "proprietor_name",
     }
 
     all_vessels = all_vessels.rename(columns=renamed_columns)
@@ -197,17 +197,16 @@ def drop_sort_columns(all_vessels):
         "sailing_category",
         "sailing_type",
         "declared_fishing_gears",
-        "weight_authorized_on_deck",
         "nav_licence_expiration_date",
-        "shipowner_name",
-        "shipowner_phones",
-        "shipowner_emails",
-        "fisher_name",
-        "fisher_phones",
-        "fisher_emails",
+        "proprietor_name",
+        "proprietor_phones",
+        "proprietor_emails",
+        "operator_name",
+        "operator_phones",
+        "operator_emails",
+        "vessel_phones",
+        "vessel_emails",
     ]
-
-    all_vessels["weight_authorized_on_deck"] = None
 
     return all_vessels[columns]
 
@@ -222,10 +221,10 @@ def load_vessels(all_vessels):
         all_vessels,
         [
             "declared_fishing_gears",
-            "shipowner_phones",
-            "shipowner_emails",
-            "fisher_phones",
-            "fisher_emails",
+            "operator_phones",
+            "operator_emails",
+            "proprietor_phones",
+            "proprietor_emails",
         ],
     )
 
@@ -260,14 +259,15 @@ def load_vessels(all_vessels):
                 "sailing_category": String(200),
                 "sailing_type": String(200),
                 "declared_fishing_gears": ARRAY(String(100)),
-                "weight_authorized_on_deck": Float,
                 "nav_licence_expiration_date": Date,
-                "shipowner_name": String(200),
-                "shipowner_phones": ARRAY(String(100)),
-                "shipowner_emails": ARRAY(String(100)),
-                "fisher_name": String(200),
-                "fisher_phones": ARRAY(String(100)),
-                "fisher_emails": ARRAY(String(100)),
+                "proprietor_name": String(200),
+                "proprietor_phones": ARRAY(String(100)),
+                "proprietor_emails": ARRAY(String(100)),
+                "operator_name": String(200),
+                "operator_phones": ARRAY(String(100)),
+                "operator_emails": ARRAY(String(100)),
+                "vessel_phones": ARRAY(String(100)),
+                "vessel_emails": ARRAY(String(100)),
             },
         )
 

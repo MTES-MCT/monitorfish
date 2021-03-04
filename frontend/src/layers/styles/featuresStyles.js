@@ -18,23 +18,33 @@ function degreesToRadian(vessel) {
     return vessel.course * Math.PI / 180;
 }
 
-export const setVesselIconStyle = (vessel, iconFeature, selectedFeatureAndIdentity, vesselLabelsShowedOnMap, vesselsLastPositionVisibility, vesselLabel) => new Promise(resolve =>  {
+export function getVesselImage(vessel, isLight) {
+    return vessel.speed > 0.1 ? new Icon({
+        src: isLight ? 'boat_mf_light.png' : 'boat_mf.png',
+        offset: [0, 0],
+        imgSize: [14, 14],
+        rotation: degreesToRadian(vessel),
+    }) : new CircleStyle({
+        radius: 4,
+        fill: new Fill({
+            color: isLight ? `rgb(237, 237, 237)` : `rgb(5, 5, 94)`
+        }),
+    });
+}
+
+export const setVesselIconStyle = (vessel,
+                                   iconFeature,
+                                   selectedFeatureAndIdentity,
+                                   vesselLabelsShowedOnMap,
+                                   vesselsLastPositionVisibility,
+                                   vesselLabel,
+                                   isLight) => new Promise(resolve =>  {
     let selectedVesselFeatureToUpdate = null
     let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime)
 
     let styles = []
     const iconStyle = new Style({
-        image: vessel.speed > 0.1 ? new Icon({
-            src: 'boat_mf.png',
-            offset: [0, 0],
-            imgSize: [14, 14],
-            rotation: degreesToRadian(vessel),
-        }) : new CircleStyle({
-            radius: 4,
-            fill: new Fill({
-                color: `rgb(5, 5, 94)`
-            }),
-        }),
+        image: getVesselImage(vessel, isLight),
         zIndex: VESSEL_ICON_STYLE
     });
 

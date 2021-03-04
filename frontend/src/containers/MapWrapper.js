@@ -4,16 +4,22 @@ import styled from 'styled-components';
 import Map from 'ol/Map'
 import View from 'ol/View'
 import VectorTileLayer from 'ol/layer/Tile'
+import TileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
-import LayersEnum from "../domain/entities/layers";
+import LayersEnum, {vesselIconIsLight} from "../domain/entities/layers";
 import MapCoordinatesBox from "../components/MapCoordinatesBox";
-import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../domain/entities/map";
+import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 import {
+    getSVG,
+    getVesselIconOpacity,
+    getVesselImage,
+    getVesselNameStyle,
     selectedVesselStyle,
-    VESSEL_SELECTOR_STYLE,
-    VESSEL_NAME_STYLE, getVesselNameStyle, getSVG, VESSEL_ICON_STYLE, getVesselIconOpacity
+    VESSEL_ICON_STYLE,
+    VESSEL_NAME_STYLE,
+    VESSEL_SELECTOR_STYLE
 } from "../layers/styles/featuresStyles";
 import MapAttributionsBox from "../components/MapAttributionsBox";
 import Overlay from "ol/Overlay";
@@ -35,8 +41,8 @@ import LayerDetailsBox from "../components/LayerDetailsBox";
 import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
 import Point from "ol/geom/Point";
 import ScaleLine from "ol/control/ScaleLine";
-import {getLength} from "ol/sphere";
-import LineString from "ol/geom/LineString";
+import XYZ from "ol/source/XYZ";
+import {MapboxVector} from "ol/layer";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
@@ -54,6 +60,34 @@ const MapWrapper = () => {
     const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
     const dispatch = useDispatch()
 
+    const [baseLayersObjects] = useState({
+        OSM: new VectorTileLayer({
+            source: new OSM({
+                attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+            }),
+            className: LayersEnum.BASE_LAYER
+        }),
+        SATELLITE: new TileLayer({
+            source: new XYZ({
+                url: 'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=' +
+                    'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
+                maxZoom: 19
+            }),
+            className: LayersEnum.BASE_LAYER
+        }),
+        LIGHT: new MapboxVector({
+            styleUrl: 'mapbox://styles/mapbox/light-v10',
+            accessToken:
+                'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
+            className: LayersEnum.BASE_LAYER
+        }),
+        DARK: new MapboxVector({
+            styleUrl: 'mapbox://styles/monitorfish/cklv7vc0f1ej817o5ivmkjmrs',
+            accessToken:
+                'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
+            className: LayersEnum.BASE_LAYER
+        })
+    })
     const [map, setMap] = useState()
     const [isAnimating, setIsAnimating] = useState(false)
     const [initRenderIsDone, setInitRenderIsDone] = useState(false)
@@ -78,92 +112,124 @@ const MapWrapper = () => {
     });
 
     useEffect(() => {
-        const vesselCardOverlay = new Overlay({
-            element: document.getElementById(vesselCardID),
-            autoPan: true,
-            autoPanAnimation: {
-                duration: 400,
-            },
-            className: 'ol-overlay-container ol-selectable'
-        });
+        if(mapState.selectedBaseLayer && baseLayersObjects[mapState.selectedBaseLayer] && !map) {
+            const vesselCardOverlay = new Overlay({
+                element: document.getElementById(vesselCardID),
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 400,
+                },
+                className: 'ol-overlay-container ol-selectable'
+            });
 
-        const vesselTrackCardOverlay = new Overlay({
-            element: document.getElementById(vesselTrackCardID),
-            autoPan: true,
-            autoPanAnimation: {
-                duration: 400,
-            },
-            className: 'ol-overlay-container ol-selectable'
-        });
+            const vesselTrackCardOverlay = new Overlay({
+                element: document.getElementById(vesselTrackCardID),
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 400,
+                },
+                className: 'ol-overlay-container ol-selectable'
+            });
 
-        const OSMLayer = new VectorTileLayer({
-            source: new OSM({
-                attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-            }),
-        })
+            const centeredOnFrance = [2.99049, 46.82801];
+            const initialMap = new Map({
+                target: mapElement.current,
+                layers: [
+                    baseLayersObjects[mapState.selectedBaseLayer]
+                ],
+                renderer: (['webgl', 'canvas']),
+                overlays: [vesselCardOverlay, vesselTrackCardOverlay],
+                view: new View({
+                    projection: OPENLAYERS_PROJECTION,
+                    center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+                    zoom: 6,
+                    minZoom: 3
+                }),
+                controls: [new ScaleLine({units: 'nautical'})],
+            })
 
-        const centeredOnFrance = [2.99049, 46.82801];
-        const initialMap = new Map({
-            target: mapElement.current,
-            layers: [
-                OSMLayer
-            ],
-            renderer: (['webgl', 'canvas']),
-            overlays: [vesselCardOverlay, vesselTrackCardOverlay],
-            view: new View({
-                projection: OPENLAYERS_PROJECTION,
-                center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-                zoom: 6,
-                minZoom: 3
-            }),
-            controls: [new ScaleLine({units: 'nautical'})],
-        })
-
-        if(window.location.hash !== '') {
-            let hash = window.location.hash.replace('@', '');
-            let viewParts = hash.split(',');
-            if (viewParts.length === 3 && !Number.isNaN(viewParts[0]) && !Number.isNaN(viewParts[1]) && !Number.isNaN(viewParts[2])) {
-                initialMap.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])]);
-                initialMap.getView().setZoom(parseFloat(viewParts[2]));
+            if(window.location.hash !== '') {
+                let hash = window.location.hash.replace('@', '');
+                let viewParts = hash.split(',');
+                if (viewParts.length === 3 && !Number.isNaN(viewParts[0]) && !Number.isNaN(viewParts[1]) && !Number.isNaN(viewParts[2])) {
+                    initialMap.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])]);
+                    initialMap.getView().setZoom(parseFloat(viewParts[2]));
+                }
+            } else if(mapState) {
+                if(mapState.view && mapState.view.center && mapState.view.center[0] && mapState.view.center[1] && mapState.view.zoom) {
+                    initialMap.getView().setCenter(mapState.view.center);
+                    initialMap.getView().setZoom(mapState.view.zoom);
+                }
             }
-        } else if(mapState) {
-            if(mapState.view && mapState.view.center && mapState.view.center[0] && mapState.view.center[1] && mapState.view.zoom) {
-                initialMap.getView().setCenter(mapState.view.center);
-                initialMap.getView().setZoom(mapState.view.zoom);
+
+            initialMap.on('click', handleMapClick)
+            initialMap.on('pointermove', event => {
+                if (event.dragging || timeoutForPointerMove) {
+                    timeoutForPointerMove && (lastEventForPointerMove = event);
+                    return;
+                }
+
+                timeoutForPointerMove = setTimeout(() => {
+                    timeoutForPointerMove = null;
+                    handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay)
+                }, 100);
+            })
+            initialMap.on('moveend', event => {
+                if (timeoutForMove) {
+                    timeoutForMove && (lastEventForMove = event);
+                    return;
+                }
+
+                timeoutForMove = setTimeout(() => {
+                    timeoutForMove = null;
+                    handleMovingAndZoom()
+                }, 100);
+            })
+
+            setMap(initialMap)
+
+            // Wait 8 seconds to not apply any animate() before this init phase
+            setTimeout(() => {
+                setInitRenderIsDone(true)
+            }, 8000)
+        }
+    }, [mapState.selectedBaseLayer])
+
+    useEffect(() => {
+        if(mapState.selectedBaseLayer && baseLayersObjects[mapState.selectedBaseLayer] && map && layer.layers.length) {
+            const layerToRemove = map.getLayers().getArray()
+                .find(layer => layer.className_ === LayersEnum.BASE_LAYER)
+
+            if (!layerToRemove) {
+                return
+            }
+
+            map.getLayers().insertAt(0, baseLayersObjects[mapState.selectedBaseLayer])
+            setTimeout(() => {
+                map.getLayers().remove(layerToRemove)
+            }, 500)
+
+            const vesselsLayer = map.getLayers().getArray()
+                .find(layer => layer.className_ === LayersEnum.VESSELS)
+
+            const isLight = vesselIconIsLight(mapState.selectedBaseLayer)
+            if(vesselsLayer) {
+                vesselsLayer.getSource().getFeatures().forEach(feature => {
+                    let foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+                    if(foundStyle) {
+                        let vesselImage = getVesselImage({
+                            speed: feature.getProperties().speed,
+                            course: feature.getProperties().course
+                        }, isLight);
+                        foundStyle.setImage(vesselImage)
+                        let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+                        foundStyle.getImage().setOpacity(opacity)
+                    }
+                })
+                vesselsLayer.getSource().changed()
             }
         }
-
-        initialMap.on('click', handleMapClick)
-        initialMap.on('pointermove', event => {
-            if (event.dragging || timeoutForPointerMove) {
-                timeoutForPointerMove && (lastEventForPointerMove = event);
-                return;
-            }
-
-            timeoutForPointerMove = setTimeout(() => {
-                timeoutForPointerMove = null;
-                handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay)
-            }, 100);
-        })
-        initialMap.on('moveend', event => {
-            if (timeoutForMove) {
-                timeoutForMove && (lastEventForMove = event);
-                return;
-            }
-
-            timeoutForMove = setTimeout(() => {
-                timeoutForMove = null;
-                handleMovingAndZoom()
-            }, 100);
-        })
-
-        setMap(initialMap)
-
-        // Wait 8 seconds to not apply any animate() before this init phase
-        setTimeout(() => {
-            setInitRenderIsDone(true)
-        }, 8000)
-    }, [])
+    }, [mapState.selectedBaseLayer])
 
     useEffect(() => {
         if (map && layer.layers.length) {
@@ -535,7 +601,7 @@ const MapWrapper = () => {
     }
 
     function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay) {
-        if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
+        if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS)) {
             setVesselFeatureToShowOnCard(feature)
 
             document.getElementById(vesselCardID).style.display = 'block';
@@ -543,7 +609,7 @@ const MapWrapper = () => {
 
             vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates());
             mapRef.current.getTarget().style.cursor = 'pointer'
-        } else if (feature && feature.getId() && feature.getId().includes(`${LayersEnum.VESSEL_TRACK}:position`)) {
+        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK}:position`)) {
             setVesselFeatureToShowOnCard(feature)
 
             document.getElementById(vesselTrackCardID).style.display = 'block';
@@ -551,7 +617,7 @@ const MapWrapper = () => {
 
             mapRef.current.getTarget().style.cursor = 'pointer'
             vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates());
-        } else if (feature && feature.getId() && feature.getId().includes(`${LayersEnum.REGULATORY}`)) {
+        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY}`)) {
             setRegulatoryFeatureToShowOnCard(feature)
             mapRef.current.getTarget().style.cursor = 'pointer'
         } else {
@@ -559,7 +625,9 @@ const MapWrapper = () => {
             document.getElementById(vesselTrackCardID).style.display = 'none';
             setVesselFeatureToShowOnCard(null)
             setRegulatoryFeatureToShowOnCard(null)
-            mapRef.current.getTarget().style.cursor = ''
+            if(mapRef.current.getTarget().style) {
+                mapRef.current.getTarget().style.cursor = ''
+            }
         }
     }
 

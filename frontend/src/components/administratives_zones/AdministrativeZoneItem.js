@@ -39,14 +39,14 @@ const Row = styled.span`
 
 const ShowIcon = styled(ShowIconSVG)`
   width: 21px;
-  padding: 0 15px 0 0;
+  padding: 0 18px 0 0;
   height: 1.5em;
   float: right;
 `
 
 const HideIcon = styled(HideIconSVG)`
   width: 21px;
-  padding: 0 15px 0 0;
+  padding: 0 18px 0 0;
   height: 1.5em;
   float: right;
 `

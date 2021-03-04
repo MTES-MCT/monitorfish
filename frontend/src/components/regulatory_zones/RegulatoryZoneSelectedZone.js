@@ -103,6 +103,7 @@ const Rectangle = styled.div`
 const Icons = styled.span`
   float: right;
   display: flex;
+  margin-right: 23px;
 `
 
 const SubZone = styled.span`

@@ -4,7 +4,7 @@ import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import {toStringHDMS} from "ol/coordinate";
-import LayersEnum from "../entities/layers";
+import LayersEnum, {vesselIconIsLight} from "../entities/layers";
 import {setVesselIconStyle} from "../../layers/styles/featuresStyles";
 import Layers from "../entities/layers";
 import VectorSource from "ol/source/Vector";
@@ -61,6 +61,7 @@ const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(r
     let vesselLabelsShowedOnMap = getState().map.vesselNamesHiddenByZoom === undefined ?
         false : getState().map.vesselLabelsShowedOnMap && !getState().map.vesselNamesHiddenByZoom;
 
+    let isLight = vesselIconIsLight(getState().map.selectedBaseLayer)
     let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     let vesselsLastPositionVisibility = getState().map.vesselsLastPositionVisibility
     let vesselLabel = getState().map.vesselLabel
@@ -71,7 +72,8 @@ const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(r
         vesselFeatureAndIdentity,
         vesselLabelsShowedOnMap,
         vesselsLastPositionVisibility,
-        vesselLabel)
+        vesselLabel,
+        isLight)
         .then(newSelectedVesselFeature => {
             if (newSelectedVesselFeature) {
                 dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))

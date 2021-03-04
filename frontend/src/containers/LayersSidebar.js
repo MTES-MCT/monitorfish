@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setError} from "../domain/reducers/Global";
 
 import {ReactComponent as LayersSVG} from '../components/icons/Couches.svg';
-import LayersEnum from "../domain/entities/layers";
+import LayersEnum, {baseLayers} from "../domain/entities/layers";
 
 import addRegulatoryZonesToMySelection from "../domain/use_cases/addRegulatoryZonesToMySelection";
 import getAllRegulatoryZones from "../domain/use_cases/getAllRegulatoryZones";
@@ -19,10 +19,13 @@ import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMe
 import closeRegulatoryZoneMetadata from "../domain/use_cases/closeRegulatoryZoneMetadata";
 import RegulatoryZoneMetadata from "../components/regulatory_zones/RegulatoryZoneMetadata";
 import zoomInSubZone from "../domain/use_cases/zoomInSubZone";
+import {selectBaseLayer} from "../domain/reducers/Map";
+import BaseLayerSelection from "../components/base_layers/BaseLayerSelection";
 
 const LayersSidebar = () => {
     const dispatch = useDispatch()
     const showedLayers = useSelector(state => state.layer.showedLayers)
+    const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
     const administrativeZones = useSelector(state => state.layer.administrativeZones)
     const {
         isReadyToShowRegulatoryZones,
@@ -103,6 +106,10 @@ const LayersSidebar = () => {
         dispatch(zoomInSubZone(subZone))
     }
 
+    function callSelectBaseLayer(baseLayer) {
+        dispatch(selectBaseLayer(baseLayer))
+    }
+
     return (
         <Sidebar
             layersSidebarIsOpen={layersSidebarIsOpen}
@@ -147,6 +154,11 @@ const LayersSidebar = () => {
                     callShowAdministrativeZone={callShowAdministrativeZone}
                     callHideAdministrativeZone={callHideAdministrativeZone}
                     hideZonesListWhenSearching={hideZonesListWhenSearching}
+                />
+                <BaseLayerSelection
+                    baseLayers={Object.keys(baseLayers)}
+                    selectedBaseLayer={selectedBaseLayer}
+                    callSelectBaseLayer={callSelectBaseLayer}
                 />
             </Zones>
             <RegulatoryZoneMetadata

@@ -1,4 +1,5 @@
 export default {
+    BASE_LAYER: 'ol-layer',
     VESSELS: 'vessels',
     REGULATORY: 'regulatory_areas',
     EEZ: 'eez_areas',
@@ -10,3 +11,25 @@ export default {
     COAST_LINES: 'coast_lines',
     VESSEL_TRACK: 'vessel_track'
 }
+
+export const baseLayers = {
+    OSM: {
+        code: "OSM",
+        text: "Open Street Map"
+    },
+    SATELLITE: {
+        code: "SATELLITE",
+        text: "Satellite"
+    },
+    LIGHT: {
+        code: "LIGHT",
+        text: "Fond de carte clair"
+    },
+    DARK: {
+        code: "DARK",
+        text: "Fond de carte sombre"
+    },
+}
+
+export const vesselIconIsLight = selectedBaseLayer => selectedBaseLayer === baseLayers.DARK.code ||
+    selectedBaseLayer === baseLayers.SATELLITE.code

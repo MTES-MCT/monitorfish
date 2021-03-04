@@ -129,3 +129,21 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
 a:hover, a:focus {
   color: #515151;
 }
+
+.base-layers-selection > .rs-radio > .rs-radio-checker > label > .rs-radio-wrapper {
+  float: right;
+  position: relative;
+  top: 0;
+  margin-bottom: 9px;
+  margin-left: 180px;
+}
+
+.base-layers-selection > .rs-radio > .rs-radio-checker {
+  padding-left: 0;
+  padding-top: 3px;
+}
+
+.base-layers-selection > .rs-radio > .rs-radio-checker > label {
+  width: 300px;
+  display: inline-block;
+}

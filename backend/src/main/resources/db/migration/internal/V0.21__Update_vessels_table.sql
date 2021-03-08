@@ -13,5 +13,4 @@ ALTER TABLE vessels
   ADD COLUMN proprietor_emails varchar(100)[],
   ADD COLUMN operator_name varchar(200),
   ADD COLUMN operator_phones varchar(100)[],
-  ADD COLUMN operator_emails varchar(100)[],
-);
+  ADD COLUMN operator_emails varchar(100)[];

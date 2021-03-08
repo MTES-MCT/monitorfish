@@ -167,13 +167,13 @@ const VesselIdentity = props => {
                             </Value>
                         </Field>
                         <Field>
-                            <Key>Coordonnées pêcheur</Key>
+                            <Key>Coordonnées propriétaire</Key>
                             <Value>
                                 <PersonalData>
-                                    { props.vessel.fisherName ? <>
-                                        {props.vessel.fisherName}
-                                        <span>{ props.vessel.fisherPhones ? <><br/>{props.vessel.fisherPhones.join(", ")}</> : '' }</span>
-                                        { props.vessel.fisherEmails ? <><br/>{props.vessel.fisherEmails.join(", ")}</> : '' }
+                                    { props.vessel.proprietorName ? <>
+                                        {props.vessel.proprietorName}
+                                        <span>{ props.vessel.proprietorPhones ? <><br/>{props.vessel.proprietorPhones.join(", ")}</> : '' }</span>
+                                        { props.vessel.proprietorEmails ? <><br/>{props.vessel.proprietorEmails.join(", ")}</> : '' }
                                     </> : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
@@ -183,10 +183,23 @@ const VesselIdentity = props => {
                             <Key>Coordonnées armateur</Key>
                             <Value>
                                 <PersonalData>
-                                    { props.vessel.shipownerName ? <>
-                                        {props.vessel.shipownerName}
-                                        <span>{ props.vessel.shipownerPhones ? <><br/>{props.vessel.shipownerPhones.join(", ")}</> : '' }</span>
-                                        { props.vessel.shipownerEmails ? <><br/>{props.vessel.shipownerEmails.join(", ")}</> : '' }
+                                    { props.vessel.operatorName ? <>
+                                        {props.vessel.operatorName}
+                                        <span>{ props.vessel.operatorPhones ? <><br/>{props.vessel.operatorPhones.join(", ")}</> : '' }</span>
+                                        { props.vessel.operatorEmails ? <><br/>{props.vessel.operatorEmails.join(", ")}</> : '' }
+                                    </> : <NoPersonalData>-</NoPersonalData>
+                                    }
+                                </PersonalData>
+                            </Value>
+                        </Field>
+                        <Field>
+                            <Key>Contact navire</Key>
+                            <Value>
+                                <PersonalData>
+                                    { props.vessel.vesselPhones || props.vessel.vesselEmails ? 
+                                    <> 
+                                        { props.vessel.vesselPhones ? <>{props.vessel.vesselPhones.join(", ")}<br/></> : '' }
+                                        { props.vessel.vesselEmails ? <>{props.vessel.vesselEmails.join(", ")}</> : '' }
                                     </> : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>

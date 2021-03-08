@@ -62,28 +62,31 @@ data class VesselEntity(
         @Column(name = "declared_fishing_gears", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
         val declaredFishingGears:  List<String>? = null,
-        @Column(name = "weight_authorized_on_deck")
-        val weightAuthorizedOnDeck: Double? = null,
         @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
         val navigationLicenceExpirationDate: Date? = null,
 
-        @Column(name = "shipowner_name")
-        val shipownerName: String? = null,
-        @Column(name = "shipowner_phones", columnDefinition = "varchar(100)[]")
+        @Column(name = "operator_name")
+        val operatorName: String? = null,
+        @Column(name = "operator_phones", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val shipownerPhones:  List<String>? = null,
-        @Column(name = "shipowner_emails", columnDefinition = "varchar(100)[]")
+        val operatorPhones:  List<String>? = null,
+        @Column(name = "operator_emails", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val shipownerEmails:  List<String>? = null,
-
-        @Column(name = "fisher_name")
-        val fisherName: String? = null,
-        @Column(name = "fisher_phones", columnDefinition = "varchar(100)[]")
+        val operatorEmails:  List<String>? = null,
+        @Column(name = "proprietor_name")
+        val proprietorName: String? = null,
+        @Column(name = "proprietor_phones", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val fisherPhones: List<String>? = null,
-        @Column(name = "fisher_emails", columnDefinition = "varchar(100)[]")
+        val proprietorPhones: List<String>? = null,
+        @Column(name = "proprietor_emails", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val fisherEmails: List<String>? = null) {
+        val proprietorEmails: List<String>? = null, 
+        @Column(name = "vessel_phones", columnDefinition = "varchar(100)[]")
+        @Type(type = "list-array")
+        val vesselPhones: List<String>? = null,
+        @Column(name = "vessel_emails", columnDefinition = "varchar(100)[]")
+        @Type(type = "list-array")
+        val vesselEmails: List<String>? = null) {
 
         fun toVessel() = Vessel(
             internalReferenceNumber = internalReferenceNumber,
@@ -110,15 +113,15 @@ data class VesselEntity(
             sailingCategory = sailingCategory,
             sailingType = sailingType,
             declaredFishingGears = declaredFishingGears,
-            weightAuthorizedOnDeck = weightAuthorizedOnDeck,
             navigationLicenceExpirationDate = navigationLicenceExpirationDate,
-            shipownerName = shipownerName,
-            shipownerPhones = shipownerPhones,
-            shipownerEmails = shipownerEmails,
-            fisherName = fisherName,
-            fisherPhones = fisherPhones,
-            fisherEmails = fisherEmails
-    )
+            operatorName = operatorName,
+            operatorPhones = operatorPhones,
+            operatorEmails = operatorEmails,
+            proprietorName = proprietorName,
+            proprietorPhones = proprietorPhones,
+            proprietorEmails = proprietorEmails,
+            vesselPhones = vesselPhones,
+            vesselEmails = vesselEmails)
 
         companion object {
                 private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)
@@ -142,14 +145,15 @@ data class VesselEntity(
                                 sailingCategory = vessel.sailingCategory,
                                 sailingType = vessel.sailingType,
                                 declaredFishingGears = vessel.declaredFishingGears,
-                                weightAuthorizedOnDeck = vessel.weightAuthorizedOnDeck,
                                 navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
-                                shipownerName = vessel.shipownerName,
-                                shipownerPhones = vessel.shipownerPhones,
-                                shipownerEmails = vessel.shipownerEmails,
-                                fisherName = vessel.fisherName,
-                                fisherPhones = vessel.fisherPhones,
-                                fisherEmails = vessel.fisherEmails,
+                                operatorName = vessel.operatorName,
+                                operatorPhones = vessel.operatorPhones,
+                                operatorEmails = vessel.operatorEmails,
+                                proprietorName = vessel.proprietorName,
+                                proprietorPhones = vessel.proprietorPhones,
+                                proprietorEmails = vessel.proprietorEmails,
+                                vesselPhones = vessel.vesselPhones,
+                                vesselEmails = vessel.vesselEmails
                         )
                 }
         }

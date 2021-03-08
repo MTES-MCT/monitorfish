@@ -101,23 +101,23 @@ SELECT
 	nf.largeur AS width_nf,
 	nf.jauge_londres AS gauge_nf,
 	nf.puissance_propulsive AS power_nf,
-	nf.num_telephone AS fisher_phone_1_nf,
-	nf.email1 AS fisher_email_nf,
-	nf.email2 AS fisher_email_1_nf,
-	nf.tel_fixe_2_contact_navire AS fisher_phone_2_nf,
-	nf.tel_fixe_3_contact_navire AS fisher_phone_3_nf,
-	nf.tel_mobile_contact_navire AS fisher_phone_nf,
+	nf.num_telephone AS vessel_phone_1_nf,
+	nf.tel_fixe_2_contact_navire AS vessel_phone_2_nf,
+	nf.tel_fixe_3_contact_navire AS vessel_phone_3_nf,
+	nf.tel_mobile_contact_navire AS vessel_phone_4_nf,
+	LOWER(nf.email1) AS vessel_email_1_nf,
+	LOWER(nf.email2) AS vessel_email_2_nf,
 	ctn.libelle_minus AS vessel_type_nf,
-	cpt.libelle AS registry_port_nf,
+	INITCAP(cpt.libelle) AS registry_port_nf,
 	pa.sailing_types as sailing_types_nf,
-    adm_fisher.name AS fisher_name_nf,
-    adm_fisher.email AS fisher_email_2_nf,
-    adm_fisher.phone AS fisher_phone_4_nf,
-    adm_fisher.mobile_phone AS fisher_phone_5_nf,
-    adm_shipowner.name AS shipowner_name_nf,
-    adm_shipowner.email AS shipowner_email_nf,
-    adm_shipowner.phone AS shipowner_phone_nf,
-    adm_shipowner.mobile_phone AS shipowner_phone_1_nf,
+    INITCAP(adm_operator.name) AS operator_name_nf,
+    LOWER(adm_operator.email) AS operator_email_nf,
+    adm_operator.phone AS operator_phone_1_nf,
+    adm_operator.mobile_phone AS operator_phone_2_nf,
+    INITCAP(adm_proprietor.name) AS proprietor_name_nf,
+    LOWER(adm_proprietor.email) AS proprietor_email_nf,
+    adm_proprietor.phone AS proprietor_phone_1_nf,
+    adm_proprietor.mobile_phone AS proprietor_phone_2_nf,
     nfp.id_nav_navire_francais AS id_nav_navire_francais_nfp,
     nfp.fishing_gear_main AS fishing_gear_main_nfp,
     nfp.fishing_gear_secondary AS fishing_gear_secondary_nfp,
@@ -131,9 +131,9 @@ LEFT JOIN COMMUN.C_CODE_QUARTIER cq
 ON cq.idc_quartier = nf.idc_quartier
 LEFT JOIN pa
 ON pa.id_nav_flotteur = nf.id_nav_flotteur AND nf.id_adm_interv_exploitant = pa.id_adm_intervenant
-LEFT JOIN adm adm_fisher
-ON adm_fisher.id_adm = nf.id_adm_interv_exploitant
-LEFT JOIN adm adm_shipowner
-ON adm_shipowner.id_adm = nf.id_adm_interv_proprietaire
+LEFT JOIN adm adm_operator
+ON adm_operator.id_adm = nf.id_adm_interv_exploitant
+LEFT JOIN adm adm_proprietor
+ON adm_proprietor.id_adm = nf.id_adm_interv_proprietaire
 LEFT JOIN nfp
 ON nfp.id_nav_navire_francais = nf.id_nav_navire_francais

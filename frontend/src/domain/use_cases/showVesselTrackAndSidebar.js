@@ -92,10 +92,6 @@ function buildVesselTrackVector(vessel) {
 
 function buildCirclePoints(vesselTrackLines, positions) {
     return vesselTrackLines.map((feature, index) => {
-        if (index === vesselTrackLines.length - 1) {
-            return
-        }
-
         let firstPointCoordinatesOfLine = feature.getGeometry().getCoordinates()[0];
         let positionsOnLine = positions.filter(position => {
             let point = new transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
@@ -110,7 +106,7 @@ function buildCirclePoints(vesselTrackLines, positions) {
         }
 
         const circleFeature = new Feature({
-            geometry: new Point(feature.getGeometry().getCoordinates()[1]),
+            geometry: new Point(feature.getGeometry().getCoordinates()[0]),
             name: LayersEnum.VESSEL_TRACK + ':position:' + index,
             course: firstPositionOnLine ? firstPositionOnLine.course : null,
             positionType: firstPositionOnLine ? firstPositionOnLine.positionType : null,

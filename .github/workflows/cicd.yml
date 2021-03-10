@@ -32,7 +32,7 @@ jobs:
       run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
 
     - name: Set ENV profile as PROD when it is a release
-      if: startsWith(github.ref, 'refs/tags/v')
+      if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
       run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
 
     - name: Set VERSION env

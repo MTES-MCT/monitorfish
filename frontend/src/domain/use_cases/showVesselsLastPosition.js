@@ -42,7 +42,7 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
 const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(resolve =>  {
     const transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-    const iconFeature = new Feature({
+    const feature = new Feature({
         geometry: new Point(transformedCoordinates),
         internalReferenceNumber: currentVessel.internalReferenceNumber,
         externalReferenceNumber: currentVessel.externalReferenceNumber,
@@ -57,32 +57,35 @@ const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(r
         dateTime: currentVessel.dateTime
     });
 
-    iconFeature.setId(`${LayersEnum.VESSELS}:${index}`)
+    feature.setId(`${LayersEnum.VESSELS}:${index}`)
 
+    let selectedVesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     let vesselLabelsShowedOnMap = getState().map.vesselNamesHiddenByZoom === undefined ?
         false : getState().map.vesselLabelsShowedOnMap && !getState().map.vesselNamesHiddenByZoom;
-
     let isLight = vesselIconIsLight(getState().map.selectedBaseLayer)
-    let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     let temporaryVesselsToHighLightOnMap = getState().vessel.temporaryVesselsToHighLightOnMap
     let vesselsLastPositionVisibility = getState().map.vesselsLastPositionVisibility
     let vesselLabel = getState().map.vesselLabel
 
+    const options = {
+        selectedVesselFeatureAndIdentity: selectedVesselFeatureAndIdentity,
+        vesselLabelsShowedOnMap: vesselLabelsShowedOnMap,
+        vesselsLastPositionVisibility: vesselsLastPositionVisibility,
+        vesselLabel: vesselLabel,
+        isLight: isLight,
+        temporaryVesselsToHighLightOnMap: temporaryVesselsToHighLightOnMap,
+    }
+
     setVesselIconStyle(
         currentVessel,
-        iconFeature,
-        vesselFeatureAndIdentity,
-        vesselLabelsShowedOnMap,
-        vesselsLastPositionVisibility,
-        vesselLabel,
-        isLight,
-        temporaryVesselsToHighLightOnMap)
+        feature,
+        options)
         .then(newSelectedVesselFeature => {
             if (newSelectedVesselFeature) {
-                dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))
+                dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, selectedVesselFeatureAndIdentity.identity)))
             }
 
-            resolve(iconFeature)
+            resolve(feature)
     })
 })
 

@@ -5,7 +5,6 @@ import 'mini.css';
 import './index.css';
 import 'ol/ol.css';
 import './App.css';
-import 'mini.css';
 
 import App from './App';
 import { Provider } from 'react-redux'

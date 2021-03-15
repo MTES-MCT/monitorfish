@@ -32,19 +32,24 @@ export function getVesselImage(vessel, isLight) {
     });
 }
 
+function vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel) {
+    return !temporaryVesselsToHighLightOnMap.some((vesselToHighLight) => {
+        return vessel.externalReferenceNumber === vesselToHighLight.externalReferenceNumber ||
+            vessel.internalReferenceNumber === vesselToHighLight.internalReferenceNumber ||
+            vessel.ircs === vesselToHighLight.ircs
+    });
+}
+
 export const setVesselIconStyle = (vessel,
                                    iconFeature,
-                                   selectedFeatureAndIdentity,
-                                   vesselLabelsShowedOnMap,
-                                   vesselsLastPositionVisibility,
-                                   vesselLabel,
-                                   isLight) => new Promise(resolve =>  {
+                                   options) => new Promise(resolve =>  {
     let selectedVesselFeatureToUpdate = null
-    let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime)
+
+    let opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, vessel.dateTime, options.temporaryVesselsToHighLightOnMap, vessel)
 
     let styles = []
     const iconStyle = new Style({
-        image: getVesselImage(vessel, isLight),
+        image: getVesselImage(vessel, options.isLight),
         zIndex: VESSEL_ICON_STYLE
     });
 
@@ -52,15 +57,15 @@ export const setVesselIconStyle = (vessel,
     styles.push(iconStyle)
 
     if (vessel.internalReferenceNumber &&
-        selectedFeatureAndIdentity &&
-        selectedFeatureAndIdentity.feature &&
-        vessel.internalReferenceNumber === selectedFeatureAndIdentity.feature.getProperties().internalReferenceNumber) {
+        options.selectedVesselFeatureAndIdentity &&
+        options.selectedVesselFeatureAndIdentity.feature &&
+        vessel.internalReferenceNumber === options.selectedVesselFeatureAndIdentity.feature.getProperties().internalReferenceNumber) {
         styles.push(selectedVesselStyle)
         selectedVesselFeatureToUpdate = iconFeature
     }
 
-    if (vesselLabelsShowedOnMap) {
-        getSVG(iconFeature, vesselLabel).then(object => {
+    if (options.vesselLabelsShowedOnMap) {
+        getSVG(iconFeature, options.vesselLabel).then(object => {
             styles.push(getVesselNameStyle(object.showedText, object.imageElement))
 
             iconFeature.setStyle(styles)
@@ -72,7 +77,11 @@ export const setVesselIconStyle = (vessel,
     }
 })
 
-export function getVesselIconOpacity(vesselsLastPositionVisibility, dateTime) {
+export function getVesselIconOpacity(vesselsLastPositionVisibility,
+                                     dateTime,
+                                     temporaryVesselsToHighLightOnMap,
+                                     vessel) {
+
     const vesselDate = new Date(dateTime);
 
     const vesselIsHidden = new Date();
@@ -81,13 +90,19 @@ export function getVesselIconOpacity(vesselsLastPositionVisibility, dateTime) {
     vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced);
 
     let opacity = 1
-    if (vesselDate < vesselIsHidden) {
+    if(temporaryVesselsToHighLightOnMap &&
+        temporaryVesselsToHighLightOnMap.length &&
+        vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel)) {
         opacity = 0
-    } else if (vesselDate < vesselIsOpacityReduced) {
-        opacity = 0.2
+    } else {
+        if (vesselDate < vesselIsHidden) {
+            opacity = 0
+        } else if (vesselDate < vesselIsOpacityReduced) {
+            opacity = 0.2
+        }
     }
 
-    return opacity;
+    return opacity
 }
 
 export const selectedVesselStyle =  new Style({

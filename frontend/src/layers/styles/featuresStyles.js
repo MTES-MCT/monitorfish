@@ -6,8 +6,6 @@ import {getTextWidth} from "../../utils";
 import {COLORS} from "../../constants/constants";
 import {vesselLabel as vesselLabelEnum} from "../../domain/entities/vesselLabel";
 import countries from "i18n-iso-countries";
-import {useEffect} from "react";
-import LayersEnum from "../../domain/entities/layers";
 
 const images = require.context('../../../public/flags', false, /\.png$/);
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
@@ -44,19 +42,14 @@ function vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLi
 
 export const setVesselIconStyle = (vessel,
                                    iconFeature,
-                                   selectedFeatureAndIdentity,
-                                   vesselLabelsShowedOnMap,
-                                   vesselsLastPositionVisibility,
-                                   vesselLabel,
-                                   isLight,
-                                   temporaryVesselsToHighLightOnMap) => new Promise(resolve =>  {
+                                   options) => new Promise(resolve =>  {
     let selectedVesselFeatureToUpdate = null
 
-    let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime, temporaryVesselsToHighLightOnMap, vessel)
+    let opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, vessel.dateTime, options.temporaryVesselsToHighLightOnMap, vessel)
 
     let styles = []
     const iconStyle = new Style({
-        image: getVesselImage(vessel, isLight),
+        image: getVesselImage(vessel, options.isLight),
         zIndex: VESSEL_ICON_STYLE
     });
 
@@ -64,15 +57,15 @@ export const setVesselIconStyle = (vessel,
     styles.push(iconStyle)
 
     if (vessel.internalReferenceNumber &&
-        selectedFeatureAndIdentity &&
-        selectedFeatureAndIdentity.feature &&
-        vessel.internalReferenceNumber === selectedFeatureAndIdentity.feature.getProperties().internalReferenceNumber) {
+        options.selectedVesselFeatureAndIdentity &&
+        options.selectedVesselFeatureAndIdentity.feature &&
+        vessel.internalReferenceNumber === options.selectedVesselFeatureAndIdentity.feature.getProperties().internalReferenceNumber) {
         styles.push(selectedVesselStyle)
         selectedVesselFeatureToUpdate = iconFeature
     }
 
-    if (vesselLabelsShowedOnMap) {
-        getSVG(iconFeature, vesselLabel).then(object => {
+    if (options.vesselLabelsShowedOnMap) {
+        getSVG(iconFeature, options.vesselLabel).then(object => {
             styles.push(getVesselNameStyle(object.showedText, object.imageElement))
 
             iconFeature.setStyle(styles)

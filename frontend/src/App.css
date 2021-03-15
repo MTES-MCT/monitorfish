@@ -192,9 +192,6 @@ a:hover, a:focus {
   font-size: 13px;
   font-weight: normal;
   color: #515151;
-}
-
-.rs-table-cell-content {
   padding: 9px 8px;
 }
 
@@ -272,7 +269,6 @@ a:hover, a:focus {
 .rs-picker-toggle-clean, .rs-picker-toggle-caret {
   color: #969696;
 }
-
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before, .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::before {
   border-color: #969696;

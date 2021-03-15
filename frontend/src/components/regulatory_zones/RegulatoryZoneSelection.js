@@ -183,13 +183,17 @@ const RegulatoryZoneTitle = styled.div`
   padding-left: 10px;
   user-select: none;
   width: 345px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
 `
 
 const SearchIcon = styled(SearchIconSVG)`
   width: 40px;
   height: 40px;
   float: right;
-  background: ${COLORS.grayDarkerThree}
+  background: ${COLORS.grayDarkerThree};  
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 `
 
 export default RegulatoryZoneSelection

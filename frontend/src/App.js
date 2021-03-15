@@ -1,7 +1,3 @@
-import 'ol/ol.css';
-import './App.css';
-import 'mini.css';
-
 import React from 'react';
 import styled from "styled-components";
 import { ToastProvider } from 'react-toast-notifications'
@@ -11,6 +7,7 @@ import VesselSidebar from "./containers/VesselSidebar";
 import LayersSidebar from "./containers/LayersSidebar";
 import APIWorker from "./api/APIWorker";
 import VesselVisibility from "./containers/VesselVisibility";
+import VesselList from "./containers/VesselList";
 
 function App() {
   return (
@@ -23,6 +20,7 @@ function App() {
                   <VesselsSearchBox/>
                   <MapWrapper />
                   <LayersSidebar />
+                  <VesselList />
                   <VesselVisibility />
                   <VesselSidebar />
 

@@ -5,13 +5,14 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import {toStringHDMS} from "ol/coordinate";
 import LayersEnum, {vesselIconIsLight} from "../entities/layers";
-import {setVesselIconStyle} from "../../layers/styles/featuresStyles";
+import {setVesselIconStyle, VESSEL_ICON_STYLE} from "../../layers/styles/featuresStyles";
 import Layers from "../entities/layers";
 import VectorSource from "ol/source/Vector";
 import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";
 import {updateVesselFeatureAndIdentity} from "../reducers/Vessel";
 import {getVesselFeatureAndIdentity} from "../entities/vessel";
+import {useEffect} from "react";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
     getVesselsLastPositionsFromAPI().then(vessels => {
@@ -63,6 +64,7 @@ const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(r
 
     let isLight = vesselIconIsLight(getState().map.selectedBaseLayer)
     let vesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
+    let temporaryVesselsToHighLightOnMap = getState().vessel.temporaryVesselsToHighLightOnMap
     let vesselsLastPositionVisibility = getState().map.vesselsLastPositionVisibility
     let vesselLabel = getState().map.vesselLabel
 
@@ -73,7 +75,8 @@ const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(r
         vesselLabelsShowedOnMap,
         vesselsLastPositionVisibility,
         vesselLabel,
-        isLight)
+        isLight,
+        temporaryVesselsToHighLightOnMap)
         .then(newSelectedVesselFeature => {
             if (newSelectedVesselFeature) {
                 dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, vesselFeatureAndIdentity.identity)))

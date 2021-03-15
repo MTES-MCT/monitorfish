@@ -35,11 +35,22 @@ const LayersSidebar = () => {
         regulatoryZoneMetadata
     } = useSelector(state => state.regulatory)
     const gears = useSelector(state => state.gear.gears)
+    const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+
     const firstUpdate = useRef(true);
     const [regulatoryZones, setRegulatoryZones] = useState();
     const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false);
     const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
     const [hideZonesListWhenSearching, setHideZonesListWhenSearching] = useState(false)
+    const [isShowed, setIsShowed] = useState(true)
+
+    useEffect(() => {
+        if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+            setIsShowed(false)
+        } else {
+            setIsShowed(true)
+        }
+    }, [temporaryVesselsToHighLightOnMap])
 
     useEffect(() => {
         if (layersSidebarIsOpen === true) {
@@ -112,6 +123,7 @@ const LayersSidebar = () => {
 
     return (
         <Sidebar
+            isShowed={isShowed}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon
@@ -177,11 +189,22 @@ const Sidebar = styled.div`
   margin-left: -373px;
   top: 10px;
   left: 12px;
-  z-index: 9999;
-  border-radius: 1px;
+  z-index: 999;
+  border-radius: 2px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '' : props.layersSidebarIsOpen ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards;
+  animation: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '' : props.layersSidebarIsOpen ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards,
+  ${props => props.isShowed ? `left-sidebar-visible` : `left-sidebar-hiding`} 0.5s ease forwards;
+
+  @keyframes left-sidebar-visible {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes left-sidebar-hiding {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
 
   @keyframes left-sidebar-opening {
     0%   { margin-left: -373px;   }
@@ -202,6 +225,7 @@ const Zones = styled.div`
   background-color: ${COLORS.gray};
   padding: 1px 10px 10px 10px;
   max-height: calc(100vh - 50px);
+  border-radius: 2px;
 `
 
 const SidebarLayersIcon = styled.button`
@@ -212,7 +236,7 @@ const SidebarLayersIcon = styled.button`
   padding: 2px 2px 2px 2px;
   margin-top: 0;
   margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px' };
-  border-radius: 1px;
+  border-radius: 2px;
   height: 40px;
   width: 40px;
 

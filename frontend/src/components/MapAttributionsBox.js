@@ -42,7 +42,7 @@ const List = styled.ul`
   background-color: ${COLORS.grayBackground};
   height: 1.5em;
   border: none;
-  border-radius: unset;
+  border-radius: 0;
   margin: 2px;
   padding: 4px 5px 0px 5px;
 `

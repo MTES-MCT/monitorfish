@@ -21,6 +21,7 @@ const VesselsSearchBox = () => {
     const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
     const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
     const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
+    const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
     const dispatch = useDispatch()
 
     const [searchText, setSearchText] = useState('');
@@ -29,6 +30,7 @@ const VesselsSearchBox = () => {
     const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([]);
     const [selectedVesselFeatureAndIdentity, setSelectedVesselFeatureAndIdentity] = useState(null);
     const firstUpdate = useRef(true);
+    const [isShowed, setIsShowed] = useState(true)
 
     const wrapperRef = useRef(null);
 
@@ -65,6 +67,14 @@ const VesselsSearchBox = () => {
         dispatch(focusOnVesselSearch(null, isUpdatedVessel))
         setSelectedVesselFeatureAndIdentity(vesselFeatureAndIdentity)
     }, [vesselFeatureAndIdentity])
+
+    useEffect(() => {
+        if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+            setIsShowed(false)
+        } else {
+            setIsShowed(true)
+        }
+    }, [temporaryVesselsToHighLightOnMap])
 
     function getTextForSearch(text) {
         return text
@@ -217,7 +227,7 @@ const VesselsSearchBox = () => {
     }
 
     return (
-        <Wrapper ref={wrapperRef}>
+        <Wrapper isShowed={isShowed} ref={wrapperRef}>
             <SearchBoxField>
                 {
                     !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity ? <SelectedVessel
@@ -372,18 +382,30 @@ const Wrapper = styled.div`
   display: inline-block;
   top: 10px;
   right: 7px;
-  z-index: 9999999;
+  z-index: 999;
   color: ${COLORS.textWhite};
   text-decoration: none;
   border: none;
   background-color: rgba(255,255,255,0.1);
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 3px 3px 0 3px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   
-  :hover {
+  animation: ${props => props.isShowed ? `vessel-search-box-opening` : `vessel-search-box-closing`} 0.2s ease forwards;
+
+  @keyframes vessel-search-box-opening {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes vessel-search-box-closing {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  :hover, :focus {
     background-color: rgba(255,255,255,0.2);
   }
 `;
@@ -391,6 +413,8 @@ const Wrapper = styled.div`
 const Results = styled.div`
   background: white;
   color: ${COLORS.grayDarkerThree};
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 `;
 
 const SearchBoxField = styled.div`
@@ -402,6 +426,8 @@ const SearchBoxInput = styled.input`
   background-color: white;
   border: none;
   border-radius: 0;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
   color: ${COLORS.grayDarkerThree};
   font-size: 0.8em;
   height: 40px;
@@ -427,6 +453,8 @@ const SelectedVessel = styled.div`
   background-color: ${COLORS.grayDarkerThree};
   border: none;
   border-radius: 0;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
   color: ${COLORS.grayBackground};
   height: 40px;
   width: 485px;
@@ -453,6 +481,8 @@ const SearchIcon = styled(SearchIconSVG)`
   float: right;
   background: ${COLORS.grayDarkerThree};
   cursor: pointer;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 `
 
 const List = styled.ul`
@@ -462,6 +492,8 @@ const List = styled.ul`
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: 311px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 `
 
 const ListItem = styled.li`

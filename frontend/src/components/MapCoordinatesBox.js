@@ -21,7 +21,7 @@ const Coordinates = styled.span`
   height: 1.275em;
   background-color: ${COLORS.grayDarkerThree};
   border: none;
-  border-radius: unset;
+  border-radius: 2px;
   width: 195px;
 `
 

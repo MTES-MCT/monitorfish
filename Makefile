@@ -48,14 +48,16 @@ restart-remote-app:
 	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
 run-local-app:
 	cd infra/local && sudo docker-compose up -d
-docker-run-pipeline-server:
+run-pipeline-server:
 	infra/remote/data-pipeline/start-server.sh
-docker-run-pipeline-flows:
+run-pipeline-flows:
 	infra/remote/data-pipeline/start-flows.sh
-docker-stop-pipeline-server:
+stop-pipeline-server:
 	infra/remote/data-pipeline/stop-server.sh
-docker-stop-pipeline-flows:
+stop-pipeline-flows:
 	docker container stop monitorfish-pipeline-flows; docker container rm monitorfish-pipeline-flows;
+update-pipeline: docker-stop-pipeline-flows docker-stop-pipeline-server
+    docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:v0.1.0_snapshot
 
 
 # DATA commands

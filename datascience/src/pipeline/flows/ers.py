@@ -3,13 +3,14 @@ from typing import Iterator, Union
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, task
-from sqlalchemy import DateTime, MetaData, String, Table, Text, func, select
+from sqlalchemy import DateTime, MetaData, String, Table, Text, select
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
 from src.pipeline.processing import dict2json
+from src.pipeline.utils import delete
 from src.read_query import read_query
 from src.utils.database import psql_insert_copy
 
@@ -96,19 +97,6 @@ def remove_already_existing_messages(
     return cleaned_ers_json, cleaned_ers_xml, existing_operation_numbers
 
 
-def delete(table, logger, connection):
-    count_statement = select([func.count()]).select_from(table)
-    n = connection.execute(count_statement).fetchall()[0][0]
-    if logger:
-        logger.info(f"Found existing table {table.name} with {n} rows.")
-        logger.info(f"Deleting table {table.name}...")
-    connection.execute(table.delete())
-    count_statement = select([func.count()]).select_from(table)
-    n = connection.execute(count_statement).fetchall()[0][0]
-    if logger:
-        logger.info(f"Rows after deletion: {n}.")
-
-
 @task
 def load_ers(parsed_data, if_exists: str = "append"):
     """Loads parsed ERS data into public.ers and public.ers_messages tables.
@@ -147,8 +135,8 @@ def load_ers(parsed_data, if_exists: str = "append"):
 
         if if_exists == "replace":
             logger.info("Deleting ers tables.")
-            delete(ers_table, logger, connection)
-            delete(ers_messages_table, logger, connection)
+            delete(ers_table, connection, logger)
+            delete(ers_messages_table, connection, logger)
 
         # Extract existing operation numbers in ers_messages table
         try:

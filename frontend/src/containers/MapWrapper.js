@@ -10,7 +10,7 @@ import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
 import LayersEnum, {vesselIconIsLight} from "../domain/entities/layers";
 import MapCoordinatesBox from "../components/MapCoordinatesBox";
-import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
+import {Interactions, OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 import {
     getSVG,
     getVesselIconOpacity,
@@ -31,8 +31,8 @@ import {
     hideVesselNames,
     isMoving,
     resetAnimateToRegulatoryLayer,
-    resetAnimateToVessel,
-    setView
+    resetAnimateToVessel, resetInteraction,
+    setView, setZoneSelected
 } from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
 import {updateVesselFeatureAndIdentity} from "../domain/reducers/Vessel";
@@ -43,6 +43,13 @@ import Point from "ol/geom/Point";
 import ScaleLine from "ol/control/ScaleLine";
 import XYZ from "ol/source/XYZ";
 import {MapboxVector} from "ol/layer";
+import Draw, {createBox} from "ol/interaction/Draw";
+import VectorSource from "ol/source/Vector";
+import Style from "ol/style/Style";
+import Stroke from "ol/style/Stroke";
+import Fill from "ol/style/Fill";
+import Circle from "ol/geom/Circle";
+import RegularShape from "ol/style/RegularShape";
 
 const MIN_ZOOM_VESSEL_NAMES = 9;
 
@@ -50,6 +57,7 @@ const tileBaseLayer = 'ol-layer';
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
 let lastEventForPointerMove, timeoutForPointerMove, lastEventForMove, timeoutForMove;
+const hitPixelTolerance = 3;
 
 const MapWrapper = () => {
     const layer = useSelector(state => state.layer)
@@ -327,7 +335,74 @@ const MapWrapper = () => {
     }
 
     useEffect(() => {
-        if(vesselsLastPositionVisibility && map) {
+        if(mapState.interaction && map) {
+            const source = new VectorSource({wrapX: false})
+
+            let type = null
+            switch (mapState.interaction) {
+                case Interactions.SQUARE: type = 'Circle'; break;
+                case Interactions.POLYGON: type = 'Polygon'; break;
+                default: console.error("No interaction type specified"); return;
+            }
+
+            const draw = new Draw({
+                source:  source,
+                type: type,
+                style: new Style({
+                    image: new RegularShape({
+                        fill: new Fill({
+                            color: '#515151'
+                        }),
+                        points: 4,
+                        radius1: 15,
+                        radius2: 1
+                    }),
+                    stroke: new Stroke({
+                        color: '#515151',
+                        lineDash: [5, 5]
+                    }),
+                    fill: new Fill({
+                        color: 'rgb(255, 255, 255, 0.3)'
+                    }),
+
+                }),
+                geometryFunction: mapState.interaction === Interactions.SQUARE ? createBox() : null
+            });
+            map.addInteraction(draw)
+
+            draw.on('drawend', event => {
+                dispatch(setZoneSelected(event.feature))
+                dispatch(resetInteraction())
+                map.removeInteraction(draw)
+            })
+        }
+    }, [mapState.interaction])
+
+    useEffect(() => {
+        if(vessel.temporaryVesselsToHighLightOnMap && vessel.temporaryVesselsToHighLightOnMap.length && map) {
+            const vesselsLayer = map.getLayers().getArray()
+                .find(layer => layer.className_ === LayersEnum.VESSELS)
+
+            if(vesselsLayer) {
+                vesselsLayer.getSource().getFeatures().filter(feature => {
+                    return !vessel.temporaryVesselsToHighLightOnMap.some((vessel) => {
+                        return feature.getProperties().externalReferenceNumber === vessel.externalReferenceNumber ||
+                            feature.getProperties().internalReferenceNumber === vessel.internalReferenceNumber ||
+                            feature.getProperties().ircs === vessel.ircs
+                    })
+                }).map(featureToHide => {
+                    let foundStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+                    if(foundStyle) {
+                        foundStyle.getImage().setOpacity(0)
+                    }
+                })
+                vesselsLayer.getSource().changed()
+            }
+        }
+    }, [vessel.temporaryVesselsToHighLightOnMap])
+
+    useEffect(() => {
+        if(vesselsLastPositionVisibility && (!vessel.temporaryVesselsToHighLightOnMap || !vessel.temporaryVesselsToHighLightOnMap.length) && map) {
             const vesselsLayer = map.getLayers().getArray()
                 .find(layer => layer.className_ === LayersEnum.VESSELS)
 
@@ -342,7 +417,7 @@ const MapWrapper = () => {
                 vesselsLayer.getSource().changed()
             }
         }
-    }, [vesselsLastPositionVisibility])
+    }, [vesselsLastPositionVisibility, vessel.temporaryVesselsToHighLightOnMap])
 
     useEffect(() => {
         if(vessel.selectedVessel && vessel.selectedVessel.positions && vessel.selectedVessel.positions.length) {
@@ -560,9 +635,7 @@ const MapWrapper = () => {
     }
 
     const handleMapClick = event => {
-        const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => {
-            return feature;
-        });
+        const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, {hitTolerance: hitPixelTolerance});
 
         if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
             let vessel = getVesselIdentityFromFeature(feature)
@@ -592,9 +665,7 @@ const MapWrapper = () => {
 
     const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay) => {
         const pixel = mapRef.current.getEventPixel(event.originalEvent);
-        const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => {
-            return feature;
-        });
+        const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, {hitTolerance: hitPixelTolerance});
 
         showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay);
         showCoordinatesInDMS(event)
@@ -668,7 +739,7 @@ const VesselCardOverlay = styled.div`
   width: 370px;
   text-align: left;
   background-color: ${COLORS.grayBackground};
-  border-radius: 1px;
+  border-radius: 2px;
   z-index: 200;
 `
 
@@ -679,7 +750,7 @@ const VesselTrackCardOverlay = styled.div`
   width: 350px;
   text-align: left;
   background-color: ${COLORS.grayBackground};
-  border-radius: 1px;
+  border-radius: 2px;
   z-index: 300;
 `
 

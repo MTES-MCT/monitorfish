@@ -223,7 +223,7 @@ const Header = styled.div`
 `
 
 const Content = styled.div`
-  border-radius: 1px;
+  border-radius: 2px;
   color: ${COLORS.grayDarker};
   background: ${COLORS.background};
   margin-top: 6px;
@@ -343,7 +343,7 @@ const NoValue = styled.span`
 `
 
 const Wrapper = styled.div`
-    border-radius: 1px;
+    border-radius: 2px;
     width: 350px;
     position: absolute;
     display: block;

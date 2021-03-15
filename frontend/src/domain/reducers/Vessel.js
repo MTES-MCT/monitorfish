@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const vesselSlice = createSlice({
     name: 'vessel',
     initialState: {
+        temporaryVesselsToHighLightOnMap: [],
         selectedVesselTrackVector: null,
         selectedVesselFeatureAndIdentity: null,
         selectedVessel: null,
@@ -59,6 +60,12 @@ const vesselSlice = createSlice({
         setFishingActivities(state, action) {
             state.fishingActivities = action.payload
             state.loadingVessel = null
+        },
+        setTemporaryVesselsToHighLightOnMap(state, action) {
+            state.temporaryVesselsToHighLightOnMap = action.payload
+        },
+        resetTemporaryVesselsToHighLightOnMap(state) {
+            state.temporaryVesselsToHighLightOnMap = []
         }
     }
 })
@@ -74,7 +81,9 @@ export const {
     updateVesselFeatureAndIdentity,
     setFishingActivities,
     loadingFisheriesActivities,
-    setFocusOnVesselSearch
+    setFocusOnVesselSearch,
+    setTemporaryVesselsToHighLightOnMap,
+    resetTemporaryVesselsToHighLightOnMap
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

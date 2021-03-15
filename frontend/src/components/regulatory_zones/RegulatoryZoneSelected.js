@@ -45,6 +45,7 @@ const RegulatoryZoneSelected = props => {
             <RegulatoryZoneSelectedTitle
                 onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}
                 regulatoryZonesAddedToMySelection={props.regulatoryZonesAddedToMySelection}
+                showRegulatoryZonesSelected={showRegulatoryZonesSelected}
             >
                 Mes zones réglementaires <ChevronIcon isOpen={showRegulatoryZonesSelected}/>
             </RegulatoryZoneSelectedTitle>
@@ -92,6 +93,10 @@ const RegulatoryZoneSelectedTitle = styled.div`
   padding-top: 8px;
   margin-top: 9px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: ${props => props.showRegulatoryZonesSelected ? '0' : '2px'};
+  border-bottom-right-radius: ${props => props.showRegulatoryZonesSelected ? '0' : '2px'};
   background: ${COLORS.grayDarker};
   
   animation: ${props => props.regulatoryZonesAddedToMySelection ? 'blink' : ''} 0.3s ease forwards;
@@ -130,6 +135,8 @@ const RegulatoryZoneSelectedList = styled.ul`
   margin: 0;
   background-color: ${COLORS.background};
   border-radius: 0;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
   padding: 0;
   height: ${props => {
         if(props.layerLength) {

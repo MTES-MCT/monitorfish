@@ -25,6 +25,8 @@ const mapSlice = createSlice({
         animateToRegulatoryLayer: null,
         vesselNamesHiddenByZoom: undefined,
         isMoving: false,
+        interaction: null,
+        zoneSelected: null,
         selectedBaseLayer: getLocalStorageState(baseLayers.OSM.code, baseLayerLocalStorageKey),
         view: getLocalStorageState({
             zoom: null,
@@ -74,6 +76,18 @@ const mapSlice = createSlice({
             window.localStorage.setItem(baseLayerLocalStorageKey, JSON.stringify(action.payload))
             state.selectedBaseLayer = action.payload
         },
+        setInteraction(state, action) {
+            state.interaction = action.payload
+        },
+        resetInteraction(state) {
+            state.interaction = null
+        },
+        setZoneSelected(state, action) {
+            state.zoneSelected = action.payload
+        },
+        resetZoneSelected(state) {
+            state.zoneSelected = null
+        }
     }
 })
 
@@ -89,7 +103,11 @@ export const {
     setVesselsLastPositionVisibility,
     setVesselTrackDepth,
     setVesselLabel,
-    selectBaseLayer
+    selectBaseLayer,
+    setInteraction,
+    resetInteraction,
+    setZoneSelected,
+    resetZoneSelected
 } = mapSlice.actions
 
 export default mapSlice.reducer

@@ -88,12 +88,19 @@ code {
   background: #515151
 }
 
-button, [type="button"], [type="submit"], [type="reset"], a.button, label.button, .button, a[role="button"], label[role="button"], [role="button"], [role="button"]:hover {
+button, [type="button"], [type="submit"], [type="reset"], a.button, label.button, .button, a[role="button"], label[role="button"], [role="button"], [role="button"]:hover, [role="button"]:focus {
   background: unset;
   color: unset;
   border: unset;
   text-decoration: unset;
   border-radius: unset;
+  margin: unset;
+  padding: unset;
+}
+
+button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type="submit"]:hover, [type="submit"]:focus, [type="reset"]:hover, [type="reset"]:focus, a.button:hover, a.button:focus, label.button:hover, label.button:focus, .button:hover, .button:focus, a[role="button"]:hover, a[role="button"]:focus, label[role="button"]:hover, label[role="button"]:focus, [role="button"]:hover, [role="button"]:focus {
+  background: unset;
+  border-color: unset;
 }
 
 .rs-radio-wrapper::before {
@@ -155,14 +162,15 @@ button, [type="button"], [type="submit"], [type="reset"], a.button, label.button
 
 .rs-checkbox-checker > label {
   font-size: 13px;
-  color: #969696;
+  color: #515151;
 }
 
 .rs-checkbox-checker {
-  padding-top: 10px;
+  padding-top: 5px;
   padding-bottom: 0;
-  padding-left: 30px;
+  padding-left: 36px;
   min-height: 26px;
+  line-height: unset;
 }
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before {

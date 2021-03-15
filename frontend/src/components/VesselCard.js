@@ -52,7 +52,7 @@ const VesselCard = props => {
                             </Field>
                             <Field>
                                 <Key>MMSI</Key>
-                                <Value>{props.vessel.getProperties().MMSI ? props.vessel.getProperties().MMSI : <NoValue>-</NoValue>}</Value>
+                                <Value>{props.vessel.getProperties().mmsi ? props.vessel.getProperties().mmsi : <NoValue>-</NoValue>}</Value>
                             </Field>
                         </Body>
                     </Fields>
@@ -223,6 +223,8 @@ const VesselCardHeader = styled.div`
   background: ${COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
   padding: 4px 5px 5px 5px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 `
 
 const VesselCardTitle = styled.span`

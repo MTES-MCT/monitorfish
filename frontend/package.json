@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "comlink": "^4.3.0",
+    "export-to-csv": "^0.2.1",
     "i18n-iso-countries": "^6.4.0",
     "immer": "^8.0.0",
     "mini.css": "^3.0.1",

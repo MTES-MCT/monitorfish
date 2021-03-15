@@ -6,6 +6,8 @@ import {getTextWidth} from "../../utils";
 import {COLORS} from "../../constants/constants";
 import {vesselLabel as vesselLabelEnum} from "../../domain/entities/vesselLabel";
 import countries from "i18n-iso-countries";
+import {useEffect} from "react";
+import LayersEnum from "../../domain/entities/layers";
 
 const images = require.context('../../../public/flags', false, /\.png$/);
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
@@ -32,15 +34,25 @@ export function getVesselImage(vessel, isLight) {
     });
 }
 
+function vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel) {
+    return !temporaryVesselsToHighLightOnMap.some((vesselToHighLight) => {
+        return vessel.externalReferenceNumber === vesselToHighLight.externalReferenceNumber ||
+            vessel.internalReferenceNumber === vesselToHighLight.internalReferenceNumber ||
+            vessel.ircs === vesselToHighLight.ircs
+    });
+}
+
 export const setVesselIconStyle = (vessel,
                                    iconFeature,
                                    selectedFeatureAndIdentity,
                                    vesselLabelsShowedOnMap,
                                    vesselsLastPositionVisibility,
                                    vesselLabel,
-                                   isLight) => new Promise(resolve =>  {
+                                   isLight,
+                                   temporaryVesselsToHighLightOnMap) => new Promise(resolve =>  {
     let selectedVesselFeatureToUpdate = null
-    let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime)
+
+    let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, vessel.dateTime, temporaryVesselsToHighLightOnMap, vessel)
 
     let styles = []
     const iconStyle = new Style({
@@ -72,7 +84,11 @@ export const setVesselIconStyle = (vessel,
     }
 })
 
-export function getVesselIconOpacity(vesselsLastPositionVisibility, dateTime) {
+export function getVesselIconOpacity(vesselsLastPositionVisibility,
+                                     dateTime,
+                                     temporaryVesselsToHighLightOnMap,
+                                     vessel) {
+
     const vesselDate = new Date(dateTime);
 
     const vesselIsHidden = new Date();
@@ -81,13 +97,19 @@ export function getVesselIconOpacity(vesselsLastPositionVisibility, dateTime) {
     vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced);
 
     let opacity = 1
-    if (vesselDate < vesselIsHidden) {
+    if(temporaryVesselsToHighLightOnMap &&
+        temporaryVesselsToHighLightOnMap.length &&
+        vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel)) {
         opacity = 0
-    } else if (vesselDate < vesselIsOpacityReduced) {
-        opacity = 0.2
+    } else {
+        if (vesselDate < vesselIsHidden) {
+            opacity = 0
+        } else if (vesselDate < vesselIsOpacityReduced) {
+            opacity = 0.2
+        }
     }
 
-    return opacity;
+    return opacity
 }
 
 export const selectedVesselStyle =  new Style({

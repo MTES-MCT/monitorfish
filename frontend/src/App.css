@@ -30,7 +30,7 @@ html {
 
 .ol-control button, .ol-control button:hover, .ol-control button:focus {
   background-color: #515151;
-  border-radius: unset;
+  border-radius: 2px;
 }
 
 button:hover, button:focus {
@@ -117,7 +117,7 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
   height: 1.275em;
   background-color: #515151;
   border: none;
-  border-radius: unset;
+  border-radius: 2px;
 }
 
 .ol-scale-line-inner {
@@ -146,4 +146,141 @@ a:hover, a:focus {
 .base-layers-selection > .rs-radio > .rs-radio-checker > label {
   width: 300px;
   display: inline-block;
+}
+
+.rs-modal-content {
+  padding: 0;
+  border-radius: 2px;
+}
+
+.rs-modal-body {
+  padding: 20px 25px 20px 25px;
+  margin-top: 0;
+}
+
+.rs-modal-header {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  padding: 5px 14px 8px 14px;
+  background: #515151;
+}
+
+.rs-modal-header .rs-modal-title {
+  color: #F0F0F0;
+  font-size: 23px;
+  font-weight: normal;
+}
+
+.rs-table-cell-header, .rs-table-cell[role="columnheader"], .rs-table-cell-header:focus, .rs-table-cell[role="columnheader"]:focus,  .rs-table-cell-header:hover, .rs-table-cell[role="columnheader"]:hover {
+  background: #EDEDED;
+  color: white;
+}
+
+.rs-table-hover .rs-table-row-header:hover .rs-table-cell-group, .rs-table-hover .rs-table-row-header:hover .rs-table-cell {
+  background: #EDEDED;
+}
+
+.rs-table-cell[role="columnheader"] > .rs-table-cell-content {
+  color: #9A9A9A;
+}
+
+.rs-table-cell {
+  border: 1px solid #E0E0E0;
+}
+
+.rs-table-cell-content {
+  font-size: 13px;
+  font-weight: normal;
+  color: #515151;
+  padding: 9px 8px;
+}
+
+.rs-table-cell-content > input {
+  border: none;
+  width: inherit;
+  background: none;
+  padding-left: 15px;
+  font-size: 13px;
+  font-weight: normal;
+  color: #515151;
+}
+
+.rs-table-scrollbar-handle, .rs-table-scrollbar-handle:hover, .rs-table-scrollbar-handle:focus {
+  position: absolute;
+  background-color: #575757;
+  border-radius: 4px;
+}
+
+.rs-table-cell-content > .rs-checkbox {
+  margin-top: -10px;
+  margin-left: -10px;
+}
+
+.rs-modal-header-close {
+  background: unset;
+  right: 10px !important;
+  top: 9px !important;
+  font-size: 15px !important;
+  color: #EDEDED !important;
+}
+
+.rs-picker-default .rs-btn, .rs-picker-input .rs-btn, .rs-picker-default .rs-picker-toggle, .rs-picker-input .rs-picker-toggle {
+  background: unset !important;
+}
+
+.rs-picker-tag-wrapper {
+  padding-bottom: 0;
+}
+
+.rs-picker-input {
+  vertical-align: top;
+  border-radius: 2px;
+}
+
+.rs-picker-toggle {
+  border-radius: 2px;
+}
+
+.rs-picker-toggle-placeholder {
+  font-size: 13px;
+}
+
+.rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  color: #969696;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.rs-picker-tag > .rs-picker-toggle {
+  width: 115px;
+}
+
+.rs-picker-select-menu-item.rs-picker-select-menu-item-active, .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
+.rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover, .rs-picker-select-menu-item.rs-picker-select-menu-item-focus, .rs-picker-select-menu-item {
+  color: #969696;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.rs-picker-select-menu-items {
+  overflow-y: unset;
+}
+
+.rs-picker-toggle-clean, .rs-picker-toggle-caret {
+  color: #969696;
+}
+
+.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before, .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::before {
+  border-color: #969696;
+  background-color: #EDEDED;
+}
+
+.rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::after {
+  border: solid #969696;
+  border-width: 0 0 2px;
+  -webkit-transform: rotate(0deg) scale(1);
+  transform: rotate(0deg) scale(1);
+  width: 8px;
+  margin-top: -1px;
+  margin-left: 5px;
 }

@@ -10,7 +10,7 @@ const BaseLayerSelection = props => {
 
     return (
         <>
-            <SectionTitle onClick={() => setShowBaseLayers(!showBaseLayers)}>
+            <SectionTitle onClick={() => setShowBaseLayers(!showBaseLayers)} showBaseLayers={showBaseLayers}>
                 Fonds de carte <ChevronIcon isOpen={showBaseLayers}/>
             </SectionTitle>
             <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={props.baseLayers.length}>
@@ -44,6 +44,10 @@ const SectionTitle = styled.div`
   text-align: left;
   padding-left: 15px;
   user-select: none;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: ${props => props.showBaseLayers ? '0' : '2px'};
+  border-bottom-right-radius: ${props => props.showBaseLayers ? '0' : '2px'};
 `
 
 const BaseLayersList = styled.ul`
@@ -65,6 +69,9 @@ const BaseLayersList = styled.ul`
     0%   { height: ${props => props.baseLayersLength ? `${36 * props.baseLayersLength}px` : '175px'}; }
     100% { height: 0;   }
   }
+  
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 `
 
 const ListItem = styled.li`

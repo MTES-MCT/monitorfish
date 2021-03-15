@@ -126,6 +126,8 @@ const VesselCardHeader = styled.div`
   background: ${COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
   padding: 5px 5px 6px 5px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 `
 
 const VesselCardTitle = styled.span`

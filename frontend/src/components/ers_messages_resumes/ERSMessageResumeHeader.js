@@ -62,7 +62,7 @@ const ERSMessageResumeText = styled.span`
   padding: 2px 4px 2px 0;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
-  max-width: 320px;
+  max-width: 310px;
   display: inline-block;
   line-break: auto;
   text-overflow: ellipsis;

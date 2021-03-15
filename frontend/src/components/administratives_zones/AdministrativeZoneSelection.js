@@ -18,7 +18,7 @@ const AdministrativeZoneSelection = props => {
 
     return (
         <>
-            <SectionTitle onClick={() => setShowZones(!showZones)}>
+            <SectionTitle onClick={() => setShowZones(!showZones)} showZones={showZones}>
                 Zones administratives <ChevronIcon isOpen={showZones}/>
             </SectionTitle>
             <ZonesList showZones={showZones} zonesLength={props.administrativeZones.length}>
@@ -53,6 +53,10 @@ const SectionTitle = styled.div`
   text-align: left;
   padding-left: 15px;
   user-select: none;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: ${props => props.showZones ? '0' : '2px'};
+  border-bottom-right-radius: ${props => props.showZones ? '0' : '2px'};
 `
 
 const ZonesList = styled.ul`
@@ -74,6 +78,9 @@ const ZonesList = styled.ul`
     0%   { height: ${props => props.zonesLength ? `${36 * props.zonesLength}px` : '175px'}; }
     100% { height: 0;   }
   }
+  
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 `
 
 const ListItem = styled.li`

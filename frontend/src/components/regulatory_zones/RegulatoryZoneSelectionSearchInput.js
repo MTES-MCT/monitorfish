@@ -269,7 +269,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
 const SearchBox = styled.div`
   background: ${COLORS.background};
   top: 0.5em;
-  z-index: 999999;
+  z-index: 999;
   color: ${COLORS.grayDarkerThree};
   text-decoration: none;
   border: none;

@@ -30,7 +30,8 @@ const VesselLabelCheckbox = props => {
 }
 
 const ShowLabelText = styled.span`
-  margin-left: 5px;
+  margin-left: 0;
+  color: #969696;
 `
 
 const RadioWrapper = styled.div`

@@ -216,7 +216,7 @@ const Wrapper = styled.div`
   right: 10px;
   width: 500px;
   max-height: 93vh;
-  z-index: 999999;
+  z-index: 999;
   padding: 0;
   background: white;
   overflow: hidden;

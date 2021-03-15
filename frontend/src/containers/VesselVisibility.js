@@ -21,8 +21,11 @@ const VesselVisibility = () => {
     const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
     const vesselLabel = useSelector(state => state.map.vesselLabel)
     const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
+    const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+
     const firstUpdate = useRef(true);
     const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false);
+    const [isShowed, setIsShowed] = useState(true)
 
     const wrapperRef = useRef(null);
 
@@ -47,6 +50,14 @@ const VesselVisibility = () => {
         }
     }, [vesselVisibilityBoxIsOpen])
 
+    useEffect(() => {
+        if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+            setIsShowed(false)
+        } else {
+            setIsShowed(true)
+        }
+    }, [temporaryVesselsToHighLightOnMap])
+
     const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
         dispatch(setVesselsLastPositionVisibility({
             opacityReduced: opacityReduced,
@@ -67,7 +78,7 @@ const VesselVisibility = () => {
     }
 
     return (
-        <div ref={wrapperRef}>
+        <Wrapper isShowed={isShowed} ref={wrapperRef}>
             <VesselVisibilityIcon
                 title={"Affichage des dernières positions"}
                 onClick={() => setVesselVisibilityBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
@@ -76,7 +87,7 @@ const VesselVisibility = () => {
             <VesselVisibilityBox
                 lastPositionsBoxIsOpen={vesselVisibilityBoxIsOpen}
                 firstUpdate={firstUpdate.current}>
-                <Header>
+                <Header isFirst={true}>
                     Gérer l'affichage des dernières positions
                 </Header>
                 <LastPositionInfo>
@@ -89,14 +100,14 @@ const VesselVisibility = () => {
                 <LastPositionLegend>
                     Ces seuils permettent de régler l'affichage, l'estompage et le masquage des dernières positions des navires.
                 </LastPositionLegend>
-                <Header>
+                <Header isFirst={false}>
                     Paramétrer la longueur par défaut des pistes
                 </Header>
                 <TrackDepthRadio
                     updateVesselTrackDepth={updateVesselTrackDepth}
                     vesselTrackDepth={vesselTrackDepth}
                 />
-                <Header>
+                <Header isFirst={false}>
                     Gérer l'affichage des étiquettes des navires
                 </Header>
                 <VesselLabel>
@@ -113,17 +124,33 @@ const VesselVisibility = () => {
                     />
                 </ShowVesselLabel>
             </VesselVisibilityBox>
-        </div>
+        </Wrapper>
     )
 }
 
+const Wrapper = styled.div`
+  animation: ${props => props.isShowed ? `vessel-visibility-opening` : `vessel-visibility-closing`} 0.2s ease forwards;
+
+  @keyframes vessel-visibility-opening {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes vessel-visibility-closing {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+`
+
 const ShowVesselLabel = styled.div`
   background: ${COLORS.grayBackground};
-  padding: 0 0 0 13px;
+  padding: 0 0 5px 13px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 `
 
 const VesselLabel = styled.div`
-  margin: 15px 5px 0 25px;
+  margin: 15px 5px 0 20px;
   font-size: 13px;
   color: ${COLORS.textGray};
   text-align: left;
@@ -169,15 +196,17 @@ const Header = styled.div`
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;
+  border-top-left-radius: ${props => props.isFirst ? '2px' : '0'};
+  border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
 `
 
 const VesselVisibilityBox = styled.div`
   width: 406px;
   background: ${COLORS.background};
   margin-right: -420px;
-  top: 68px;
+  top: 110px;
   right: 12px;
-  border-radius: 1px;
+  border-radius: 2px;
   position: absolute;
   display: inline-block;
   animation: ${props => props.firstUpdate && !props.lastPositionsBoxIsOpen ? '' : props.lastPositionsBoxIsOpen ? 'last-positions-box-opening' : 'last-positions-box-closing'} 0.5s ease forwards;
@@ -199,11 +228,14 @@ const VesselVisibilityIcon = styled.button`
   color: #05055E;
   background: ${COLORS.grayDarkerThree};
   padding: 3px 0px 0 3px;
-  top: 60px;
-  z-index: 9999;
+  top: 102px;
+  z-index: 99;
   right: 2px;
   height: 40px;
   width: 40px;
+  border-radius: 2px;
+  margin-right: 8px;
+  margin-top: 8px;
 
   :hover, :focus {
       background: ${COLORS.grayDarkerThree};

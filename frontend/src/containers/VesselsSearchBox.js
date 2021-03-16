@@ -382,7 +382,7 @@ const Wrapper = styled.div`
   display: inline-block;
   top: 10px;
   right: 7px;
-  z-index: 999;
+  z-index: 1000;
   color: ${COLORS.textWhite};
   text-decoration: none;
   border: none;

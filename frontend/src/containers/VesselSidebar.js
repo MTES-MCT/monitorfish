@@ -14,6 +14,7 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import FishingActivities from "../components/FishingActivities";
 import getFishingActivities from "../domain/use_cases/getFishingActivities";
 import {removeError} from "../domain/reducers/Global";
+import {resetNextFishingActivities, setFishingActivities} from "../domain/reducers/Vessel";
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()
@@ -49,7 +50,7 @@ const VesselSidebar = () => {
 
             if(index === 3) {
                 if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-                    dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+                    dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity, true))
                 }
             }
         }
@@ -57,7 +58,7 @@ const VesselSidebar = () => {
 
     const showFishingActivities = () => {
         if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-            dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+            dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity, false))
             setIndex(3)
         }
     }
@@ -66,6 +67,13 @@ const VesselSidebar = () => {
         if(vessel) {
             dispatch(removeError())
             setIndex(tabNumber)
+        }
+    }
+
+    const updateFishingActivities = nextFishingActivities => {
+        if(nextFishingActivities) {
+            dispatch(setFishingActivities(nextFishingActivities))
+            dispatch(resetNextFishingActivities())
         }
     }
 
@@ -116,7 +124,11 @@ const VesselSidebar = () => {
                                     />
                                 </Panel>
                                 <Panel className={index === 3 ? '' : 'hide'}>
-                                    <FishingActivities fishingActivities={vesselState.fishingActivities}/>
+                                    <FishingActivities
+                                        fishingActivities={vesselState.fishingActivities}
+                                        nextFishingActivities={vesselState.nextFishingActivities}
+                                        updateFishingActivities={updateFishingActivities}
+                                    />
                                 </Panel>
                                 <Panel className={index === 4 ? '' : 'hide'}>
                                     <h1>TODO</h1>
@@ -153,10 +165,11 @@ const GrayOverlay = styled.div`
   opacity: 0;
   background: ${COLORS.grayDarkerThree};
   animation: ${props => props.isOverlayed ? 'opacity-up' : 'opacity-down' } 0.5s ease forwards;
+  z-index: 11;
 
   @keyframes opacity-up {
     0%   { opacity: 0;   }
-    100% { opacity: 0.5; z-index: 0; }
+    100% { opacity: 0.5; z-index: 11; }
   }
     @keyframes opacity-down {
     0%   { opacity: 0.5;   }

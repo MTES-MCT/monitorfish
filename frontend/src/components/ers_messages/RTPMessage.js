@@ -80,6 +80,7 @@ const SubField = styled.div`
 
 const Gear = styled.div`
   width: -moz-available;
+  width: -webkit-fill-available;
   margin: 5px;
 `
 

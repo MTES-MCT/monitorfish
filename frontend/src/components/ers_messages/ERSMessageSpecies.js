@@ -146,7 +146,7 @@ const TitleText = styled.span`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;    
-  max-width: 190px; 
+  max-width: 185px; 
 `
 
 const Weight = styled.span`
@@ -162,7 +162,6 @@ const Species = styled.li`
   background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
-  max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
   color: ${COLORS.textGray};
@@ -178,6 +177,7 @@ const Title = styled.div`
  
   display: flex;
   flex-wrap: wrap;
+  overflow: hidden;
 `
 
 const Content = styled.div`

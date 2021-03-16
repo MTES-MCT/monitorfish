@@ -12,6 +12,6 @@ docker container rm monitorfish-pipeline-server;
     docker container rm monitorfish-pipeline-server;
     docker run -t --rm --network=host --name monitorfish-pipeline-server \
     -u monitorfish-pipeline:$(getent group docker | cut --delimiter=":" -f3) \
-    -v /var/run/docker.sock:/var/run/docker.sock monitorfish-pipeline:${VERSION} \
+    -v /var/run/docker.sock:/var/run/docker.sock docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:v0.1.0_snapshot \
     prefect server stop;
  )

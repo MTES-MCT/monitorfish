@@ -94,8 +94,6 @@ nf AS (
 )
 
 SELECT
-
-	nf.id_nav_navire_francais AS id_nav_navire_francais_nf,
 	nf.id_nav_flotteur AS id_nav_flotteur_nf,
 	nf.longueur_hors_tout AS length_nf,
 	nf.largeur AS width_nf,
@@ -118,7 +116,6 @@ SELECT
     LOWER(adm_proprietor.email) AS proprietor_email_nf,
     adm_proprietor.phone AS proprietor_phone_1_nf,
     adm_proprietor.mobile_phone AS proprietor_phone_2_nf,
-    nfp.id_nav_navire_francais AS id_nav_navire_francais_nfp,
     nfp.fishing_gear_main AS fishing_gear_main_nfp,
     nfp.fishing_gear_secondary AS fishing_gear_secondary_nfp,
     nfp.fishing_gear_third AS fishing_gear_third_nfp

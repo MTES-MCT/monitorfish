@@ -1,9 +1,9 @@
+import numpy as np
 import pandas as pd
+import prefect
 from prefect import Flow, task
-
-# from prefect.engine.results import LocalResult
-# from prefect.engine.serializers import PandasSerializer
-from sqlalchemy import ARRAY, Date, Float, Integer, String
+from sqlalchemy import ARRAY, Date, Float, Integer, MetaData, String, Table
+from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
 from src.pipeline.processing import (
@@ -11,45 +11,133 @@ from src.pipeline.processing import (
     concatenate_columns,
     python_lists_to_psql_arrays,
 )
+from src.pipeline.utils import delete
 from src.read_query import read_saved_query
 from src.utils.database import psql_insert_copy
-
-# serializer = PandasSerializer(file_type="csv", serialize_kwargs={"index": False})
-
-# result = LocalResult(
-#     dir="/home/jovyan/work/datascience/data/pipeline/vessels",
-#     location="{task_name}_{date:%Y-%m-%d-%H:%M:%S}.csv",
-#     serializer=serializer,
-# )
 
 
 @task
 def extract_fr_vessels():
-    return read_saved_query("ocan", "pipeline/queries/ocan/navires_fr.sql")
+    res = read_saved_query("ocan", "pipeline/queries/ocan/navires_fr.sql")
+
+    # Sparse data type takes up less memory
+    sparse_columns = {
+        "length_nf": pd.SparseDtype("float", None),
+        "width_nf": pd.SparseDtype("float", None),
+        "gauge_nf": pd.SparseDtype("float", None),
+        "power_nf": pd.SparseDtype("float", None),
+    }
+
+    for c, t in sparse_columns.items():
+        res[c] = res[c].astype(t)
+
+    # For string data, pd.SparseDtype does not reduce memory usage much.
+    # Using pd.Categorical reduces memory usage much more.
+    categorical_columns = [
+        "vessel_phone_1_nf",
+        "vessel_phone_2_nf",
+        "vessel_phone_3_nf",
+        "vessel_phone_4_nf",
+        "vessel_email_1_nf",
+        "vessel_email_2_nf",
+        "operator_name_nf",
+        "operator_email_nf",
+        "operator_phone_1_nf",
+        "operator_phone_2_nf",
+        "proprietor_name_nf",
+        "proprietor_email_nf",
+        "proprietor_phone_1_nf",
+        "proprietor_phone_2_nf",
+        "vessel_type_nf",
+        "registry_port_nf",
+        "sailing_types_nf",
+        "fishing_gear_main_nfp",
+        "fishing_gear_secondary_nfp",
+        "fishing_gear_third_nfp",
+    ]
+
+    for c in categorical_columns:
+        res[c] = res[c].astype("category")
+
+    return res
 
 
 @task
 def extract_cee_vessels():
-    return read_saved_query("ocan", "pipeline/queries/ocan/navires_cee_peche.sql")
+    res = read_saved_query("ocan", "pipeline/queries/ocan/navires_cee_peche.sql")
+    categorical_columns = [
+        "fishing_gear_main_ncp",
+        "fishing_gear_secondary_ncp",
+        "fishing_gear_third_ncp",
+        "vessel_type_ncp",
+        "district_ncp",
+        "operator_name_ncp",
+        "operator_email_ncp",
+        "proprietor_email_ncp",
+    ]
+
+    for c in categorical_columns:
+        res[c] = res[c].astype("category")
+
+    sparse_columns = {
+        "length_ncp": pd.SparseDtype("float", None),
+        "gauge_ncp": pd.SparseDtype("float", None),
+        "power_ncp": pd.SparseDtype("float", None),
+    }
+
+    for c, t in sparse_columns.items():
+        res[c] = res[c].astype(t)
+
+    return res
 
 
 @task
 def extract_non_cee_vessels():
-    return read_saved_query("ocan", "pipeline/queries/ocan/navires_hors_cee_peche.sql")
+    res = read_saved_query("ocan", "pipeline/queries/ocan/navires_hors_cee_peche.sql")
+
+    categorical_columns = ["fishing_gear_main_nep"]
+    for c in categorical_columns:
+        res[c] = res[c].astype("category")
+
+    return res
 
 
 @task
 def extract_floats():
-    return read_saved_query("ocan", "pipeline/queries/ocan/flotteurs.sql")
+    res = read_saved_query("ocan", "pipeline/queries/ocan/flotteurs.sql")
+
+    categorical_columns = [
+        "imo_f",
+        "cfr_f",
+        "external_immatriculation_f",
+        "vessel_name_f",
+        "ircs_f",
+        "mmsi_f",
+        "flag_state_f",
+        "district_code_f",
+        "district_f",
+    ]
+
+    for c in categorical_columns:
+        res[c] = res[c].astype("category")
+
+    return res
 
 
 @task
 def extract_nav_licences():
-    return read_saved_query("ocan", "pipeline/queries/ocan/permis_navigation.sql")
+    res = read_saved_query("ocan", "pipeline/queries/ocan/permis_navigation.sql")
+
+    categorical_columns = ["sailing_category", "nav_licence_expiration_date"]
+
+    for c in categorical_columns:
+        res[c] = res[c].astype("category")
+
+    return res
 
 
 @task
-def merge_fr(floats, fr_vessels):
+def merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences):
     res = pd.merge(
         floats,
         fr_vessels,
@@ -57,37 +145,25 @@ def merge_fr(floats, fr_vessels):
         left_on="id_nav_flotteur_f",
         right_on="id_nav_flotteur_nf",
     )
-    return res
 
-
-@task
-def merge_cee(floats, cee_vessels):
     res = pd.merge(
-        floats,
+        res,
         cee_vessels,
         how="left",
         left_on="id_nav_flotteur_f",
         right_on="id_nav_flotteur_ncp",
     )
-    return res
 
-
-@task
-def merge_non_cee(floats, non_cee_vessels):
     res = pd.merge(
-        floats,
+        res,
         non_cee_vessels,
         how="left",
         left_on="id_nav_flotteur_f",
         right_on="id_nav_flotteur_nep",
     )
-    return res
 
-
-@task
-def merge_licences(floats, licences):
     res = pd.merge(
-        floats,
+        res,
         licences,
         how="left",
         left_on="id_nav_flotteur_f",
@@ -97,8 +173,12 @@ def merge_licences(floats, licences):
 
 
 @task
-def concat_columns_into_list(all_vessels):
+def clean(all_vessels):
 
+    logger = prefect.context.get("logger")
+
+    # Concatenate several columns into lists when several values can be kept.
+    logger.info("Combining columns into lists: emails, phone numbers...")
     concat_cols = {
         "proprietor_phones": ["proprietor_phone_1_nf", "proprietor_phone_2_nf"],
         "proprietor_emails": ["proprietor_email_nf", "proprietor_email_ncp"],
@@ -127,12 +207,10 @@ def concat_columns_into_list(all_vessels):
         res.loc[:, col_name] = concatenate_columns(res, cols_list)
         cols_to_drop += cols_list
     res = res.drop(columns=cols_to_drop)
+    logger.info("Columns combined into lists.")
 
-    return res
-
-
-@task
-def combine_columns_into_value(all_vessels):
+    # Combine several columns into one value when only one value must be kept.
+    logger.info("Combining columns into single values: names, characteristics...")
     combine_cols = {
         "gauge": ["gauge_nf", "gauge_ncp"],
         "operator_name": ["operator_name_nf", "operator_name_ncp"],
@@ -143,18 +221,14 @@ def combine_columns_into_value(all_vessels):
     }
 
     cols_to_drop = []
-    res = all_vessels.copy(deep=True)
     for col_name, cols_list in combine_cols.items():
         res.loc[:, col_name] = combine_overlapping_columns(res, cols_list)
         cols_to_drop += cols_list
     res = res.drop(columns=cols_to_drop)
+    logger.info("Columns combined into single values.")
 
-    return res
-
-
-@task
-def rename_columns(all_vessels):
-
+    # Rename columns as required in the final data format
+    logger.info("Renaming columns...")
     renamed_columns = {
         "cfr_f": "cfr",
         "flag_state_f": "flag_state",
@@ -171,12 +245,12 @@ def rename_columns(all_vessels):
         "proprietor_name_nf": "proprietor_name",
     }
 
-    all_vessels = all_vessels.rename(columns=renamed_columns)
-    return all_vessels
+    res = res.rename(columns=renamed_columns)
+    logger.info("Columns renamed.")
 
+    # Sort columns
+    logger.info("Sorting columns...")
 
-@task
-def drop_sort_columns(all_vessels):
     columns = [
         "id",
         "imo",
@@ -207,8 +281,9 @@ def drop_sort_columns(all_vessels):
         "vessel_phones",
         "vessel_emails",
     ]
-
-    return all_vessels[columns]
+    res = res[columns]
+    logger.info("Columns sorted.")
+    return res
 
 
 @task()
@@ -225,53 +300,75 @@ def load_vessels(all_vessels):
             "operator_emails",
             "proprietor_phones",
             "proprietor_emails",
+            "vessel_phones",
+            "vessel_emails",
         ],
     )
 
     engine = create_engine("monitorfish_remote")
+    logger = prefect.context.get("logger")
 
     with engine.begin() as connection:
+        meta = MetaData(schema=schema)
+        meta.bind = connection
+        try:
+            logger.info("Searching for vessels table...")
+            meta.reflect(only=[table])
+            vessels_table = Table(table, meta, mustexist=True)
+            logger.info("vessels table found.")
+        except InvalidRequestError:
+            logger.error(
+                "vessels table must exist. Make appropriate migrations and try again."
+            )
+            raise
 
-        all_vessels.to_sql(
-            name=table,
-            con=connection,
-            schema=schema,
-            index=False,
-            method=psql_insert_copy,
-            if_exists="replace",
-            dtype={
-                "id": Integer,
-                "imo": String(100),
-                "cfr": String(100),
-                "external_immatriculation": String(100),
-                "mmsi": String(100),
-                "ircs": String(100),
-                "vessel_name": String(100),
-                "flag_state": String(100),
-                "width": Float,
-                "length": Float,
-                "district": String(100),
-                "district_code": String(2),
-                "gauge": Float,
-                "registry_port": String(200),
-                "power": Float,
-                "vessel_type": String(200),
-                "sailing_category": String(200),
-                "sailing_type": String(200),
-                "declared_fishing_gears": ARRAY(String(100)),
-                "nav_licence_expiration_date": Date,
-                "proprietor_name": String(200),
-                "proprietor_phones": ARRAY(String(100)),
-                "proprietor_emails": ARRAY(String(100)),
-                "operator_name": String(200),
-                "operator_phones": ARRAY(String(100)),
-                "operator_emails": ARRAY(String(100)),
-                "vessel_phones": ARRAY(String(100)),
-                "vessel_emails": ARRAY(String(100)),
-            },
-        )
+        logger.info("Deleting all rows from vessels table.")
+        delete(vessels_table, connection, logger)
 
-        connection.execute(f"ALTER TABLE {schema}.{table} ADD PRIMARY KEY (id);")
+        # Sparse and Categorical data columns must be converted back to the original,
+        # dense data types before being inserted into the database.
+        # Doing so on the whole Dataframe takes too much memory, so the sparse /
+        # categorically typed Dataframe is chunked into small pieces, and each chunk
+        # is converted back to dense data and inserted into the database one at a time,
+        # thus limiting the increase in memory usage.
+        chunks = np.array_split(all_vessels, 150)
+        for i, chunk in enumerate(chunks):
+            logger.info(f"Inserting chunk {i}.")
+            chunk = chunk.astype(
+                {
+                    "imo": str,
+                    "cfr": str,
+                    "external_immatriculation": str,
+                    "mmsi": str,
+                    "ircs": str,
+                    "vessel_name": str,
+                    "flag_state": str,
+                    "width": float,
+                    "length": float,
+                    "district": str,
+                    "district_code": str,
+                    "gauge": float,
+                    "registry_port": str,
+                    "power": float,
+                    "vessel_type": str,
+                    "sailing_category": str,
+                    "sailing_type": str,
+                    "proprietor_name": str,
+                    "operator_name": str,
+                    "nav_licence_expiration_date": "datetime64[ns]",
+                }
+            )
+
+            chunk["width"] = np.asarray(chunk["width"])
+
+            chunk.to_sql(
+                name=table,
+                con=connection,
+                schema=schema,
+                index=False,
+                method=psql_insert_copy,
+                if_exists="append",
+            )
 
 
 with Flow("Extract vessels characteristics") as flow:
@@ -281,16 +378,11 @@ with Flow("Extract vessels characteristics") as flow:
     non_cee_vessels = extract_non_cee_vessels()
     floats = extract_floats()
     licences = extract_nav_licences()
-
     # Transform
-    fr_vessels_floats = merge_fr(floats, fr_vessels)
-    fr_cee_vessels_floats = merge_cee(fr_vessels_floats, cee_vessels)
-    all_vessels = merge_non_cee(fr_cee_vessels_floats, non_cee_vessels)
-    all_vessels = merge_licences(all_vessels, licences)
-    all_vessels = concat_columns_into_list(all_vessels)
-    all_vessels = combine_columns_into_value(all_vessels)
-    all_vessels = rename_columns(all_vessels)
-    all_vessels = drop_sort_columns(all_vessels)
+    all_vessels = merge_vessels(
+        floats, fr_vessels, cee_vessels, non_cee_vessels, licences
+    )
+    all_vessels = clean(all_vessels)
 
     # Load
     load_vessels(all_vessels)

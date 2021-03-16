@@ -8,11 +8,14 @@ import {getDateTime} from "../../utils";
 
 const RegulatoryZoneMetadata = props => {
     const [gears, setGears] = useState([])
-    const firstUpdate = useRef(true);
+    const firstUpdate = useRef(true)
+    const [regulatoryReferences, setRegulatoryReferences] = useState([])
 
     useEffect(() => {
         if (props.regulatoryZoneMetadata && props.gears) {
             firstUpdate.current = false;
+
+            setRegulatoryReferences(JSON.parse(props.regulatoryZoneMetadata.regulatoryReferences))
 
             if(!props.regulatoryZoneMetadata.gears){
                 return setGears(null)
@@ -186,7 +189,20 @@ const RegulatoryZoneMetadata = props => {
                                         </> : null
                                 }
                                 <KeyWithLineBreak>Références réglementaires</KeyWithLineBreak>
-                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.regulatoryReferences ? props.regulatoryZoneMetadata.regulatoryReferences : <NoValue>-</NoValue>} </ValueWithLineBreak>
+                                <ValueWithLineBreak>
+                                    {
+                                        regulatoryReferences && regulatoryReferences.length ?
+                                            <ul>
+                                                {
+                                                    regulatoryReferences.map(regulatoryReference => {
+                                                        return <Reference>
+                                                            <a href={regulatoryReference.url}>{regulatoryReference.reference}</a>
+                                                        </Reference>
+                                                    })
+                                                }
+                                            </ul> : <NoValue>-</NoValue>
+                                    }
+                                </ValueWithLineBreak>
                             </ZoneWithLineBreak>
                         </Content>
                     </> : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
@@ -194,6 +210,12 @@ const RegulatoryZoneMetadata = props => {
         </Wrapper>
     )
 }
+
+const Reference = styled.li`
+  list-style-type: "→";
+  padding-left: 10px;
+  font-size: 13px;
+`
 
 const Gray = styled.span`
   color: ${COLORS.grayDarkerThree};

@@ -1,1 +1,0 @@
-reverse_proxy_config: "{{ lookup('template', 'templates/reverse_proxy_config.j2') }}"

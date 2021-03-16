@@ -57,7 +57,9 @@ const LANMessageResume = props => {
             showERSMessages={props.showERSMessages}
             messageType={ERSMessageTypeEnum.LAN.code.toString()}
             setIsOpen={setIsOpen}
-            isOpen={isOpen}/>
+            isOpen={isOpen}
+            isLastItem={true}
+        />
         {
             props.hasNoMessage ? null :
                 <ERSMessageContent
@@ -158,12 +160,14 @@ const Gray = styled.span`
   font-size: 13px;
   text-align: center;
   width: -moz-available;
+  width: -webkit-fill-available;
 `
 
 const Species = styled.div`
   margin-top: 10px;
   margin-left: 5px;
   width: -moz-available;
+  width: -webkit-fill-available;
 `
 
 const SubKey = styled.span`
@@ -241,7 +245,6 @@ const Wrapper = styled.li`
   background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
-  max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
   color: ${COLORS.textGray};
@@ -254,14 +257,14 @@ const ERSMessageContent = styled.div`
   overflow: hidden;
   padding: 0 0 0 20px;
   border-bottom: 1px solid ${COLORS.gray};
-  animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-opening` : `list-resume-${props.name}-closing`} 0.2s ease forwards;
+  animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-${props.id}-opening` : `list-resume-${props.name}-${props.id}-closing`} 0.2s ease forwards;
 
-  @keyframes ${props => props.name ? `list-resume-${props.name}-opening` : null} {
+  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-opening` : null} {
     0%   { height: 0; opacity: 0; }
     100% { height: ${props => props.chartHeight + 100}px; opacity: 1; }
   }
 
-  @keyframes ${props => props.name ? `list-resume-${props.name}-closing` : null} {
+  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-closing` : null} {
     0%   { opacity: 1; height: ${props => props.chartHeight + 100}px; }
     100% { opacity: 0; height: 0; }
   }

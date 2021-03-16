@@ -17,7 +17,10 @@ const ERSMessageResumeHeader = props => {
     return <>
         { props.messageType ?
             <Wrapper>
-                <ERSMessageTitle onClick={() => props.setIsOpen(!props.isOpen)} hasNoMessage={props.hasNoMessage}>
+                <ERSMessageTitle
+                    onClick={() => props.setIsOpen(!props.isOpen)}
+                    hasNoMessage={props.hasNoMessage}
+                    isLastItem={props.isLastItem}>
                     {
                         props.hasNoMessage ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
                     }
@@ -62,6 +65,7 @@ const ERSMessageResumeText = styled.span`
   padding: 2px 4px 2px 0;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
+  vertical-align: -webkit-baseline-middle;
   max-width: 310px;
   display: inline-block;
   line-break: auto;
@@ -76,6 +80,7 @@ const ERSMessageName = styled.span`
   padding: 2px 4px 2px 4px;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
+  vertical-align: -webkit-baseline-middle;
   text-transform: uppercase;
 `
 
@@ -84,7 +89,6 @@ const Wrapper = styled.div`
   background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
-  max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
   color: ${COLORS.textGray};
@@ -96,7 +100,7 @@ const ERSMessageTitle = styled.div`
   padding: 0 0 0 20px;
   user-select: none;
   ${props => !props.hasNoMessage ? 'cursor: pointer;' : null}}
-  border-bottom: 1px solid ${COLORS.gray};
+  ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

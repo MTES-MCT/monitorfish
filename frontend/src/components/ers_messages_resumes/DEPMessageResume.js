@@ -37,6 +37,7 @@ const DEPMessageResume = props => {
             {
                 props.hasNoMessage ? null :
                     <ERSMessageContent
+                        id={props.id}
                         speciesOnboard={(props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length > 0) ? props.depMessage.speciesOnboard.length : 1}
                         gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
                         firstUpdate={firstUpdate}
@@ -166,7 +167,6 @@ const Wrapper = styled.li`
   background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
-  max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
   color: ${COLORS.textGray};
@@ -179,14 +179,14 @@ const ERSMessageContent = styled.div`
   overflow: hidden;
   padding: 0 0 0 20px;
   border-bottom: 1px solid ${COLORS.gray};
-  animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-opening` : `list-resume-${props.name}-closing`} 0.2s ease forwards;
+  animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-${props.id}-opening` : `list-resume-${props.name}-${props.id}-closing`} 0.2s ease forwards;
 
-  @keyframes ${props => props.name ? `list-resume-${props.name}-opening` : null} {
+  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-opening` : null} {
     0%   { height: 0; opacity: 0; }
     100% { height: ${props => props.speciesOnboard * 22 + props.gearOnboard * 50 + 30}px; opacity: 1; }
   }
 
-  @keyframes ${props => props.name ? `list-resume-${props.name}-closing` : null} {
+  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-closing` : null} {
     0%   { opacity: 1; height: ${props => props.speciesOnboard * 22 + props.gearOnboard * 50 + 30}px; }
     100% { opacity: 0; height: 0; }
   }

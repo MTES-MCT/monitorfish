@@ -1,28 +1,31 @@
 import {getVesselERSMessagesFromAPI} from "../../api/fetch";
 import {removeError, setError} from "../reducers/Global";
-import {loadingFisheriesActivities, resetLoadingVessel, setFishingActivities} from "../reducers/Vessel";
+import {
+    loadingFisheriesActivities,
+    resetLoadingVessel,
+    setFishingActivities,
+    setNextFishingActivities
+} from "../reducers/Vessel";
 
 const getFishingActivities = vesselIdentity => (dispatch, getState) => {
     if(vesselIdentity){
         let currentFishingActivities = getState().vessel.fishingActivities
-        if(currentFishingActivities && currentFishingActivities.length) {
-            if(vesselIdentity.internalReferenceNumber &&
-                currentFishingActivities.some(ersMessage => ersMessage.internalReferenceNumber === vesselIdentity.internalReferenceNumber)) {
-                return
-            }
-            if(vesselIdentity.externalReferenceNumber &&
-                currentFishingActivities.some(ersMessage => ersMessage.externalReferenceNumber === vesselIdentity.externalReferenceNumber)) {
-                return
-            }
-            if(vesselIdentity.ircs &&
-                currentFishingActivities.some(ersMessage => ersMessage.ircs === vesselIdentity.ircs)) {
-                return
-            }
-        }
+        let isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(vesselIdentity, currentFishingActivities)
 
-        dispatch(loadingFisheriesActivities())
+        if(!isSameVesselAsCurrentlyShowed) {
+            dispatch(loadingFisheriesActivities())
+        }
         getVesselERSMessagesFromAPI(vesselIdentity).then(fishingActivities => {
-            dispatch(setFishingActivities(fishingActivities))
+            if(isSameVesselAsCurrentlyShowed) {
+                if((currentFishingActivities.alerts && fishingActivities.alerts &&
+                    fishingActivities.alerts.length > currentFishingActivities.alerts.length) ||
+                    (currentFishingActivities.ersMessages && fishingActivities.ersMessages &&
+                        fishingActivities.ersMessages.length > currentFishingActivities.ersMessages.length)) {
+                    dispatch(setNextFishingActivities(fishingActivities))
+                }
+            } else {
+                dispatch(setFishingActivities(fishingActivities))
+            }
             dispatch(removeError());
         }).catch(error => {
             console.error(error)
@@ -30,6 +33,26 @@ const getFishingActivities = vesselIdentity => (dispatch, getState) => {
             dispatch(resetLoadingVessel())
         });
     }
+}
+
+const getIsSameVesselAsCurrentlyShowed = (vesselIdentity, currentFishingActivities) => {
+    if(currentFishingActivities && currentFishingActivities.ersMessages && currentFishingActivities.ersMessages.length) {
+        if(vesselIdentity.internalReferenceNumber &&
+            currentFishingActivities.ersMessages.some(ersMessage => ersMessage.internalReferenceNumber === vesselIdentity.internalReferenceNumber)) {
+            return true
+        }
+        if(vesselIdentity.externalReferenceNumber &&
+            currentFishingActivities.ersMessages.some(ersMessage => ersMessage.externalReferenceNumber === vesselIdentity.externalReferenceNumber)) {
+            return true
+        }
+        if(vesselIdentity.ircs &&
+            currentFishingActivities.ersMessages.some(ersMessage => ersMessage.ircs === vesselIdentity.ircs)) {
+            return true
+        }
+
+    }
+
+    return false
 }
 
 export default getFishingActivities

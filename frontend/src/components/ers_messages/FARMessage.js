@@ -104,6 +104,8 @@ const SubField = styled.div`
 
 const Gear = styled.div`
   margin: 0 5px 5px 5px;
+  width: -moz-available;
+  width: -webkit-fill-available;
 `
 
 const SubKey = styled.span`
@@ -131,6 +133,7 @@ const SpeciesList = styled.ul`
   margin: 10px 0 0 0;
   padding: 0;
   width: -moz-available;
+  width: -webkit-fill-available;
 `
 
 const TableBody = styled.tbody``

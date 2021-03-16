@@ -136,17 +136,7 @@ const VesselIdentity = props => {
                             <Key>Appartenance à une liste</Key>
                             <Value><NoValue>-</NoValue></Value>
                         </Field>
-                        <Field>
-                            <Key>Présence de pinger</Key>
-                            <Value>
-                                {
-                                    props.vessel.pinger != null ? <>
-                                        <PingerInput type="button" className={props.vessel.pinger ? 'primary' : ''} value="OUI"/>
-                                        <PingerInput type="button" className={!props.vessel.pinger ? 'primary' : ''} value="NON"/>
-                                    </> : <NoValue>-</NoValue>
-                                }
-                            </Value>
-                        </Field>
+                        
                     </TableBody>
                 </Fields>
             </Zone>

@@ -260,6 +260,7 @@ const ControlsIcon = styled(ControlsSVG)`
 
 const ObservationsIcon = styled(ObservationsSVG)`
   width: 30px;
+  margin: 0 5px 0 5px;
 `
 
 const VMSIcon = styled(VMSSVG)`

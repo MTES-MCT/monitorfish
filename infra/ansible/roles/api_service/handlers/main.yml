@@ -1,6 +1,0 @@
-- name: restart api-xxx service
-  become: yes
-  systemd:
-    name: "{{ api_container_name }}-{{ current_env }}.service"
-    state: restarted
-    daemon_reload: yes

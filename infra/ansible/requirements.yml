@@ -1,4 +1,0 @@
----
-roles:
-- name: johanmeiring.sftp-server
-  version: v3.1.2

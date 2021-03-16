@@ -1,4 +1,0 @@
----
-- name: Login to Github Package registry
-  shell: "echo {{ vault_github_docker_password }} | docker login {{ docker_registry_url }} --username {{ vault_github_docker_user }} --password-stdin"
-  

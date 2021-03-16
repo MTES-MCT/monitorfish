@@ -282,6 +282,7 @@ const ERSMessageHeaderText = styled.span`
   padding: 3px 4px 2px 0;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
+  vertical-align: -webkit-baseline-middle;
 `
 
 const ERSMessageName = styled.span`
@@ -298,6 +299,7 @@ const ERSMessageType = styled.span`
   padding: 1px 2px 1px 2px;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
+  vertical-align: -webkit-baseline-middle;
   width: 31px;
   display: inline-block;
   text-align: center;

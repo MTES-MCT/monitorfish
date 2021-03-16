@@ -20,7 +20,7 @@ test: check-clean-archi
 	cd frontend && CI=true npm test
 test-front:
 	cd frontend && npm test
-	
+
 # CI commands - app
 docker-build:
 	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) --build-arg VERSION=$(VERSION) --build-arg GITHUB_SHA=$(GITHUB_SHA)
@@ -48,14 +48,17 @@ restart-remote-app:
 	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
 run-local-app:
 	cd infra/local && sudo docker-compose up -d
-docker-run-pipeline-server:
-	datascience/scripts/start-server.sh
-docker-run-pipeline-flows:
-	datascience/scripts/start-flows.sh
-docker-stop-pipeline-server:
-	datascience/scripts/stop-server.sh
-docker-stop-pipeline-flows:
+run-pipeline-server:
+	infra/remote/data-pipeline/start-server.sh
+run-pipeline-flows:
+	infra/remote/data-pipeline/start-flows.sh
+stop-pipeline-server:
+	infra/remote/data-pipeline/stop-server.sh
+stop-pipeline-flows:
 	docker container stop monitorfish-pipeline-flows; docker container rm monitorfish-pipeline-flows;
+update-pipeline: docker-stop-pipeline-flows docker-stop-pipeline-server
+    docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:v0.1.0_snapshot
+
 
 # DATA commands
 install-pipeline:

@@ -24,9 +24,5 @@ datascience/.python-version
 # IDEs
 .vscode
 
-<<<<<<< HEAD
 # Doc
 docs/redmine_wiki/*
-=======
-github_token.txt
->>>>>>> Add pipeline run scripts in infra folder

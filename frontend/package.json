@@ -12,6 +12,7 @@
     "i18n-iso-countries": "^6.4.0",
     "immer": "^8.0.0",
     "mini.css": "^3.0.1",
+    "nouislider-react": "^3.4.0",
     "ol": "^6.5.0",
     "ol-mapbox-style": "^6.1.4",
     "react": "^16.13.1",

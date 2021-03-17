@@ -19,14 +19,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.noUi-origin {
+  visibility: hidden;
+}
+
 .rs-slider-mark {
   font-size: 13px;
   color: #969696;
 }
 
+.rs-slider {
+  position: absolute;
+  width: 341px;
+  margin-top: -19px;
+}
+
 .rs-slider-bar {
-  height: 2px;
-  background: linear-gradient(to right, #D6D6D6, #515151);
+  height: 0;
 }
 
 .rs-slider-progress-bar {
@@ -34,33 +43,35 @@ code {
   background: none;
 }
 
-.rs-slider-graduator > ul > li:nth-child(1)::before {
-  background: #D6D6D6;
+.noUi-target {
+  background: none;
+  border-radius: unset;
+  border: none;
+  box-shadow: none;
 }
 
-.rs-slider-graduator > ul > li:nth-child(2)::before {
-  background: #cacaca;
+.noUi-connects {
+  border-radius: 0;
+  border: none;
+  height: 3px;
 }
 
-.rs-slider-graduator > ul > li:nth-child(3)::before {
-  background: #aaaaaa;
+.noUi-connect:nth-child(1) {
+  background: #E0E0E0;
 }
 
-.rs-slider-graduator > ul > li:nth-child(4)::before {
-  background: #959595;
+.noUi-connect:nth-child(2) {
+  background: #B2B2B2;
 }
 
-.rs-slider-graduator > ul > li:nth-child(5)::before {
-  background: #818181;
-}
-
-.rs-slider-graduator > ul > li:nth-child(6)::before {
-  background: #646464;
-}
-
-.rs-slider-graduator > ul > li:last-child::after {
+.noUi-connect:nth-child(3) {
   background: #515151;
 }
+
+.rs-slider-graduator > ul > li::before {
+  visibility: hidden;
+}
+
 
 .rs-slider-graduator > ul > li:last-child::after, .rs-slider-graduator > ul > li::before {
   top: -3px;
@@ -78,14 +89,17 @@ code {
 
 .rs-slider-graduator {
   margin-left: -5px;
+  margin-top: -10px;
 }
 
 .rs-slider-graduated > div:nth-child(2)::before {
   background: #B2B2B2;
+  z-index: 99;
 }
 
 .rs-slider-graduated > div:nth-child(3)::before {
-  background: #515151
+  background: #515151;
+  z-index: 99;
 }
 
 button, [type="button"], [type="submit"], [type="reset"], a.button, label.button, .button, a[role="button"], label[role="button"], [role="button"], [role="button"]:hover, [role="button"]:focus {

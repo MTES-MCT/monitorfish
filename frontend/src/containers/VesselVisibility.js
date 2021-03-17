@@ -91,7 +91,7 @@ const VesselVisibility = () => {
                     Gérer l'affichage des dernières positions
                 </Header>
                 <LastPositionInfo>
-                    <VesselHidden /> navires estompés <VesselShowed /> navires normaux
+                    <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
                 </LastPositionInfo>
                 <LastPositionsSlider
                     updateVesselsLastPositionVisibility={updateVesselsLastPositionVisibility}
@@ -165,9 +165,20 @@ const LastPositionLegend = styled.div`
 
 const VesselHidden = styled.span`
   border-radius: 50%;
+  background: #E0E0E0;
+  border: unset;
+  margin-right: 5px;
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+`
+
+const VesselAlmostHidden = styled.span`
+  border-radius: 50%;
   background: ${COLORS.grayVesselHidden};
   border: unset;
   margin-right: 5px;
+  margin-left: 15px;
   width: 8px;
   height: 8px;
   display: inline-block;

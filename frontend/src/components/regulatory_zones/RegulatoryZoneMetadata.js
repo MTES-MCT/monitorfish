@@ -196,7 +196,7 @@ const RegulatoryZoneMetadata = props => {
                                                 {
                                                     regulatoryReferences.map(regulatoryReference => {
                                                         return <Reference>
-                                                            <a href={regulatoryReference.url}>{regulatoryReference.reference}</a>
+                                                            <a target="_blank" href={regulatoryReference.url}>{regulatoryReference.reference}</a>
                                                         </Reference>
                                                     })
                                                 }

@@ -169,7 +169,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOneCorrected.gear).isEqualTo("GTN")
         assertThat(farMessageOneCorrected.mesh).isEqualTo(150.0)
         assertThat(farMessageOneCorrected.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z[UTC]")
-        assertThat(farMessageOneCorrected.catches).hasSize(4)
+        assertThat(farMessageOneCorrected.catches).hasSize(19)
         assertThat(farMessageOneCorrected.catches.first().weight).isEqualTo(1500.0)
         assertThat(farMessageOneCorrected.catches.first().numberFish).isEqualTo(null)
         assertThat(farMessageOneCorrected.catches.first().species).isEqualTo("BON")

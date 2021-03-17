@@ -8,6 +8,7 @@ import {getDateTime} from "../../utils";
 
 const RegulatoryZoneMetadata = props => {
     const [gears, setGears] = useState([])
+    const [prohibitedGears, setProhibitedGears] = useState([])
     const firstUpdate = useRef(true)
     const [regulatoryReferences, setRegulatoryReferences] = useState([])
 
@@ -21,6 +22,10 @@ const RegulatoryZoneMetadata = props => {
                 return setGears(null)
             }
 
+            if(!props.regulatoryZoneMetadata.prohibitedGears){
+                return setProhibitedGears(null)
+            }
+
             let gearCodesArray = props.regulatoryZoneMetadata.gears.replace(/ /g, '').split(',')
             let gears = gearCodesArray.map(gearCode => {
                 let foundGear = props.gears.find(gear => gear.code === gearCode)
@@ -29,8 +34,17 @@ const RegulatoryZoneMetadata = props => {
                     code: gearCode
                 }
             })
-
             setGears(gears)
+
+            let prohibitedGearCodesArray = props.regulatoryZoneMetadata.prohibitedGears.replace(/ /g, '').split(',')
+            let prohibitedGears = prohibitedGearCodesArray.map(gearCode => {
+                let foundGear = props.gears.find(gear => gear.code === gearCode)
+                return {
+                    name: foundGear ? foundGear.name : null,
+                    code: gearCode
+                }
+            })
+            setProhibitedGears(prohibitedGears)
         }
     }, [props.gears, props.regulatoryZoneMetadata])
 
@@ -139,6 +153,16 @@ const RegulatoryZoneMetadata = props => {
 
                                     }) : <NoValue>-</NoValue>
                                 }
+                                <KeyWithLineBreak>Engin(s) interdit(s)</KeyWithLineBreak>
+                                {
+                                    prohibitedGears ?
+                                        prohibitedGears.map(gear => {
+                                            return gear.name ?
+                                                <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                                                : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+
+                                        }) : <NoValue>-</NoValue>
+                                }
                                 <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
                                 <ValueWithLineBreak>{props.regulatoryZoneMetadata.technicalMeasures ? props.regulatoryZoneMetadata.technicalMeasures : <NoValue>-</NoValue>} </ValueWithLineBreak>
                             </ZoneWithLineBreak>
@@ -147,6 +171,13 @@ const RegulatoryZoneMetadata = props => {
                                 {
                                     props.regulatoryZoneMetadata.species ?
                                         props.regulatoryZoneMetadata.species.replace(/ /g, '').split(',').map(species => {
+                                            return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
+                                        }) : <NoValue>-</NoValue>
+                                }
+                                <KeyWithLineBreak>Espèce(s) interdite(s)</KeyWithLineBreak>
+                                {
+                                    props.regulatoryZoneMetadata.prohibitedSpecies ?
+                                        props.regulatoryZoneMetadata.prohibitedSpecies.replace(/ /g, '').split(',').map(species => {
                                             return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
                                         }) : <NoValue>-</NoValue>
                                 }

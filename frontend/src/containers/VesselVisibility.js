@@ -164,35 +164,35 @@ const LastPositionLegend = styled.div`
 `
 
 const VesselHidden = styled.span`
-  border-radius: 50%;
   background: #E0E0E0;
   border: unset;
   margin-right: 5px;
   width: 8px;
-  height: 8px;
+  height: 3px;
   display: inline-block;
+  margin-bottom: 1px;
 `
 
 const VesselAlmostHidden = styled.span`
-  border-radius: 50%;
   background: ${COLORS.grayVesselHidden};
   border: unset;
   margin-right: 5px;
-  margin-left: 15px;
+  margin-left: 25px;
   width: 8px;
-  height: 8px;
+  height: 3px;
   display: inline-block;
+  margin-bottom: 1px;
 `
 
 const VesselShowed = styled.span`
-  border-radius: 50%;
   background: ${COLORS.grayDarkerThree};
   border: unset;
   margin-right: 5px;
-  margin-left: 15px;
+  margin-left: 25px;
   width: 8px;
-  height: 8px;
+  height: 3px;
   display: inline-block;
+  margin-bottom: 1px;
 `
 
 const LastPositionInfo = styled.div`

@@ -16,6 +16,17 @@ const LastPositionsSlider = props => {
         }
     }, [props.vesselsLastPositionVisibility])
 
+    function updateValue(nextValue) {
+        if (nextValue[0] !== value[0] || nextValue[1] !== value[1]) {
+            nextValue = [
+                parseInt(nextValue[0]),
+                parseInt(nextValue[1])
+            ]
+            setValue(nextValue)
+            props.updateVesselsLastPositionVisibility(labels[nextValue[0]], labels[nextValue[1]])
+        }
+    }
+
     return (
         <>
             { value ?
@@ -27,12 +38,7 @@ const LastPositionsSlider = props => {
                         }}
                         start={value}
                         connect={[true, true, true]}
-                        onSlide={(render, handle, nextValue) => {
-                            if(nextValue[0] !== value[0] || nextValue[1] !== value[1]) {
-                                setValue(nextValue)
-                                props.updateVesselsLastPositionVisibility(labels[nextValue[0]], labels[nextValue[1]])
-                            }
-                        }}
+                        onSlide={(render, handle, nextValue) => updateValue(nextValue)}
                         behaviour="tap"
                     />
                     <RangeSlider
@@ -42,12 +48,7 @@ const LastPositionsSlider = props => {
                         defaultValue={value}
                         graduated
                         tooltip={false}
-                        onChange={nextValue => {
-                            if(nextValue[0] !== value[0] || nextValue[1] !== value[1]) {
-                                setValue(nextValue)
-                                props.updateVesselsLastPositionVisibility(labels[nextValue[0]], labels[nextValue[1]])
-                            }
-                        }}
+                        onChange={nextValue => updateValue(nextValue)}
                         renderMark={mark => {
                             switch (mark) {
                                 case 0: return '48h'

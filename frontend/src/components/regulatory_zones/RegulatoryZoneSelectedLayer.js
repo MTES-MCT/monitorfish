@@ -58,7 +58,7 @@ const RegulatoryZoneSelectedLayer = props => {
     return (
         <Row>
             <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
-                <Text onClick={() => setIsOpen(!isOpen)}>
+                <Text title={props.regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
                     <ChevronIcon isOpen={isOpen}/>
                     {props.regulatoryZoneName.replace(/[_]/g, ' ')}
                 </Text>
@@ -111,6 +111,8 @@ const Text = styled.span`
   padding-left: 10px;
   width: 79%;
   display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 const CloseIcon = styled(CloseIconSVG)`

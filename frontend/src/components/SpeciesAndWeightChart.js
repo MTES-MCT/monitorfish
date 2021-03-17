@@ -10,7 +10,8 @@ const SpeciesAndWeightChart = props => {
             let speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
                 let heightInLog = speciesAndWeight.weight ? Math.log10(getPercentOfTotalFARWeight(speciesAndWeight)) : 22
 
-                speciesAndWeight.height = heightInLog <= 0 ? 22 : heightInLog * 45
+                speciesAndWeight.height = heightInLog * 50
+                speciesAndWeight.height = speciesAndWeight.height <= 22 ? 22 : speciesAndWeight.height
                 speciesAndWeight.height = speciesAndWeight.height > 90 ? 90 : speciesAndWeight.height
                 return speciesAndWeight
             })

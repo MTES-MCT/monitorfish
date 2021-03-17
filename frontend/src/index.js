@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'rsuite/dist/styles/rsuite-default.css';
 import 'mini.css';
+import "nouislider/distribute/nouislider.css";
 import './index.css';
 import 'ol/ol.css';
 import './App.css';

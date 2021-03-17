@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { RangeSlider } from 'rsuite';
 import styled from "styled-components";
+import Nouislider from "nouislider-react";
 
 const LastPositionsSlider = props => {
     const [value, setValue] = useState(null)
@@ -19,6 +20,21 @@ const LastPositionsSlider = props => {
         <>
             { value ?
                 <SliderWrapper>
+                    <Nouislider
+                        range={{
+                            min: [0, 1],
+                            max: [6]
+                        }}
+                        start={value}
+                        connect={[true, true, true]}
+                        onSlide={(render, handle, nextValue) => {
+                            if(nextValue[0] !== value[0] || nextValue[1] !== value[1]) {
+                                setValue(nextValue)
+                                props.updateVesselsLastPositionVisibility(labels[nextValue[0]], labels[nextValue[1]])
+                            }
+                        }}
+                        behaviour="tap"
+                    />
                     <RangeSlider
                         min={0}
                         max={labels.length - 1}
@@ -26,9 +42,11 @@ const LastPositionsSlider = props => {
                         defaultValue={value}
                         graduated
                         tooltip={false}
-                        onChange={v => {
-                            setValue(v)
-                            props.updateVesselsLastPositionVisibility(labels[v[0]], labels[v[1]])
+                        onChange={nextValue => {
+                            if(nextValue[0] !== value[0] || nextValue[1] !== value[1]) {
+                                setValue(nextValue)
+                                props.updateVesselsLastPositionVisibility(labels[nextValue[0]], labels[nextValue[1]])
+                            }
                         }}
                         renderMark={mark => {
                             switch (mark) {
@@ -51,7 +69,9 @@ const LastPositionsSlider = props => {
 
 const SliderWrapper = styled.div`
   padding: 2px 35px 15px 30px;
+  height: 30px;
   font-size: 13px;
+  position: relative;
 `
 
 export default LastPositionsSlider

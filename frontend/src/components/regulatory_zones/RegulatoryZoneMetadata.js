@@ -145,8 +145,7 @@ const RegulatoryZoneMetadata = props => {
                             <ZoneWithLineBreak>
                                 <KeyWithLineBreak>Engin(s)</KeyWithLineBreak>
                                 {
-                                    gears ?
-                                    gears.map(gear => {
+                                    gears && gears.length ? gears.map(gear => {
                                         return gear.name ?
                                             <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
                                             : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
@@ -155,7 +154,7 @@ const RegulatoryZoneMetadata = props => {
                                 }
                                 <KeyWithLineBreak>Engin(s) interdit(s)</KeyWithLineBreak>
                                 {
-                                    prohibitedGears ?
+                                    prohibitedGears && prohibitedGears.length ?
                                         prohibitedGears.map(gear => {
                                             return gear.name ?
                                                 <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>

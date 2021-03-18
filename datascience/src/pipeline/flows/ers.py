@@ -1,108 +1,259 @@
-from typing import Iterator, Union
+import copy
+import logging
+import os
+import pathlib
+from typing import Generator, Union
+from zipfile import ZipFile
 
 import pandas as pd
 import prefect
+import sqlalchemy
 from prefect import Flow, Parameter, task
-from sqlalchemy import DateTime, MetaData, String, Table, Text, select
+from sqlalchemy import DateTime, MetaData, String, Table, select, text
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
 from src.pipeline.processing import dict2json
-from src.pipeline.utils import delete
+from src.pipeline.utils import delete, grouper, move
 from src.read_query import read_query
-from src.utils.database import psql_insert_copy
+from src.utils.database import get_table, psql_insert_copy
 
-RAW_XML_TABLE = {"dam": "raw_jpe_dam_xml", "dpma": "raw_jpe_dpma_xml"}
+ERS_DIRECTORY = pathlib.Path("../../../data/raw/ers/dam/")
+RECEIVED_DIRECTORY = ERS_DIRECTORY / "received"
+TREATED_DIRECTORY = ERS_DIRECTORY / "treated"
+NON_TREATED_DIRECTORY = ERS_DIRECTORY / "non_treated"
+ERROR_DIRECTORY = ERS_DIRECTORY / "error"
 
 
-@task
-def extract_raw_xml(
-    data_source: str = "dam", chunksize: Union[None, int] = 10000
-) -> Iterator[pd.DataFrame]:
-    """Extract raw XML messages from the monitorfish_remote database
-    (dump made end of 2020). Data is extracted in chunks and return as
-    an iterator that yields results as pandas DataFrames.
-
-    data_source : "dam" or "dpma"
+def list_years_months_zipfiles(
+    input_dir: pathlib.Path,
+    treated_dir: pathlib.Path,
+    non_treated_dir: pathlib.Path,
+    error_dir: pathlib.Path,
+    logger: logging.Logger,
+) -> Generator[dict, None, None]:
+    """Scans input_dir, in which ers zipfiles are expected to be arranged in a
+     hierarchy folders like : year / month / zipfiles.
+    Yields founds zipfiles along with the corresponding paths of :
+    - input_directory where the zipfile is located
+    - treated_directory where the zipfile will be transfered after integration into the
+    monitorfish database
+    - non_treated_directory where the zipfile will be transfered if it is a FLUX type
+    of message (currently not handled)
+    - error_directory if an error occurs during the treatment of messages.
     """
 
-    table = RAW_XML_TABLE[data_source]
+    expected_months = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+    ]
 
-    raw_xml = read_query(
-        "monitorfish_remote",
-        f"SELECT xml_message FROM raw.{table}",
-        chunksize=chunksize,
+    expected_years = list(map(str, range(2000, 2050)))
+
+    years = os.listdir(input_dir)
+
+    for year in years:
+        if year not in expected_years:
+            logger.warning(f"Unexpected year {year}. Skipping directory.")
+            continue
+
+        logger.info(f"Starting extraction of ERS messages for year {year}.")
+        months = os.listdir(input_dir / year)
+
+        for month in months:
+            if month not in expected_months:
+                logger.warning(f"Unexpected month {month}. Skipping directory.")
+                continue
+
+            logger.info(f"Starting extraction of ERS messages for {year}/{month}.")
+
+            zipfile_input_dir = input_dir / year / month
+            zipfile_treated_dir = treated_dir / year / month
+            zipfile_non_treated_dir = non_treated_dir / year / month
+            zipfile_error_dir = error_dir / year / month
+
+            files = os.listdir(zipfile_input_dir)
+
+            zipfiles = list(filter(lambda s: s[-4:] == ".zip", files))
+            non_zipfiles = list(filter(lambda s: s[-4:] != ".zip", files))
+
+            if len(non_zipfiles) > 0:
+                logger.warning(
+                    f"Non zip files found in {year} / {month}."
+                    + "Moving files to error_directory."
+                )
+                for non_zipfile in non_zipfiles:
+                    move(zipfile_input_dir / non_zipfile, zipfile_error_dir)
+
+            for zipfile in zipfiles:
+                yield {
+                    "full_name": zipfile,
+                    "input_dir": zipfile_input_dir,
+                    "treated_dir": zipfile_treated_dir,
+                    "non_treated_dir": zipfile_non_treated_dir,
+                    "error_dir": zipfile_error_dir,
+                }
+
+
+def get_message_type(zipfile_name: str) -> str:
+    """For zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
+    extract the message type, which may be one of :
+    - ERS3 (a set of messages in ERS3 format)
+    - ERS3_ACK (a set of acknowledgement statuses from BIA for ERS3 messages)
+    - UN (a set of FLUX messages)"""
+    name_parts = zipfile_name.split("_")
+    message_type = "_".join(name_parts[:-1])
+    return message_type
+
+
+@task
+def extract_ers():
+
+    logger = prefect.context.get("logger")
+
+    for zipfile in list_years_months_zipfiles(
+        RECEIVED_DIRECTORY,
+        TREATED_DIRECTORY,
+        NON_TREATED_DIRECTORY,
+        ERROR_DIRECTORY,
+        logger,
+    ):
+
+        logger.info(f"Extracting zipfile {zipfile['full_name']}.")
+        message_type = get_message_type(zipfile["full_name"])
+
+        # Handle ERS3 messages and acknoledgement statuses
+        if message_type in ["ERS3", "ERS3_ACK"]:
+            with ZipFile(zipfile["input_dir"] / zipfile["full_name"]) as zipobj:
+                xml_filenames = zipobj.namelist()
+                xml_messages = []
+                for xml_filename in xml_filenames:
+                    with zipobj.open(xml_filename, mode="r") as f:
+                        xml_messages.append(f.read().decode("utf-8"))
+                raw_ers = copy.deepcopy(zipfile)
+                raw_ers["xml_messages"] = xml_messages
+                yield raw_ers
+
+        # Handle FLUX messages (move them to non_treated_directory
+        # as there is currently no parser available)
+        elif message_type in ["UN"]:
+            logger.info(
+                f"Skipping zipfile {zipfile['full_name']} of type {message_type} "
+                + "which is currently not handled. "
+                + f"Moving {zipfile['full_name']} to non-treated directory."
+            )
+            move(
+                zipfile["input_dir"] / zipfile["full_name"], zipfile["non_treated_dir"]
+            )
+
+        # Move unexpected file types to error directory
+        else:
+            logger.error(
+                f"Unexpected message type '{message_type}' ({zipfile}). "
+                + f"Moving {zipfile} to error directory."
+            )
+            move(zipfile["input_dir"] / zipfile["full_name"], zipfile["error_dir"])
+
+
+@task
+def parse_xml(raw_ers_iter: Generator[dict, None, None]) -> Generator[dict, None, None]:
+    logger = prefect.context.get("logger")
+    for raw_ers in raw_ers_iter:
+        logger.info(f"Parsing messages of zipfile {raw_ers['full_name']}")
+        parsed_batch = batch_parse(raw_ers["xml_messages"])
+        parsed_ers = copy.deepcopy(raw_ers)
+        parsed_ers.pop("xml_messages")
+        parsed_ers = {**parsed_ers, **parsed_batch}
+        yield parsed_ers
+
+
+@task
+def clean(parsed_ers_iter: Generator[dict, None, None]) -> Generator[dict, None, None]:
+    logger = prefect.context.get("logger")
+    for parsed_ers in parsed_ers_iter:
+        logger.info(
+            "Removing QUE and RSP messages from messages of "
+            + f"zipfile {parsed_ers['full_name']}."
+        )
+        ers = copy.deepcopy(parsed_ers)
+        ers["parsed"] = ers["parsed"][
+            ers["parsed"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
+        ]
+        ers["parsed_with_xml"] = ers["parsed_with_xml"][
+            ers["parsed_with_xml"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
+        ]
+        yield ers
+
+
+def drop_rows_already_in_table(
+    df: pd.DataFrame,
+    df_column_name: str,
+    table: sqlalchemy.Table,
+    table_column_name: str,
+    connection: sqlalchemy.engine.base.Connection,
+    logger: logging.Logger,
+) -> pd.DataFrame:
+    """Removes rows from the input DataFrame `df` in which the column `df_column_name`
+    contains values that are already present in the column `table_column_name` of the
+    table `table`, and returns the filtered DataFrame."""
+
+    df_n_rows = len(df)
+    df_ids = tuple(df[df_column_name].unique())
+    df_n_ids = len(df_ids)
+
+    statement = select([getattr(table.c, table_column_name)]).where(
+        getattr(table.c, table_column_name).in_(df_ids)
     )
 
-    return raw_xml
+    df_ids_already_in_table = tuple(
+        pd.read_sql(statement, connection)[table_column_name]
+    )
 
+    # Remove keys already present in the database table from df
+    res = df[~df[df_column_name].isin(df_ids_already_in_table)]
 
-@task
-def parse_xml(raw_xml: Iterator[pd.DataFrame]) -> Iterator[pd.DataFrame]:
-    logger = prefect.context.get("logger")
-    for i, raw_xml_chunk in enumerate(raw_xml):
-        logger.info(f"Parsing chunk {i}")
-        parsed, parsed_with_xml = batch_parse(raw_xml_chunk.xml_message.values)
-        yield parsed, parsed_with_xml
+    # Remove possible duplicate ids in df
+    res = res[~res[df_column_name].duplicated()]
 
-
-@task
-def clean(parsed_data):
-    logger = prefect.context.get("logger")
-    for i, (ers_json, ers_xml) in enumerate(parsed_data):
-        logger.info(f"Removing QUE and RSP messages from chunk {i}.")
-        cleaned_ers_json = ers_json[
-            ers_json.operation_type.isin(["DAT", "DEL", "COR", "RET"])
-        ]
-        cleaned_ers_xml = ers_xml[
-            ers_xml.operation_type.isin(["DAT", "DEL", "COR", "RET"])
-        ]
-        yield cleaned_ers_json, cleaned_ers_xml
-
-
-def remove_already_existing_messages(
-    existing_operation_numbers, ers_json, ers_xml, connection, logger
-):
-
-    n_messages = len(ers_xml)
-    n_logs = len(ers_json)
-    n_operations = ers_xml.operation_number.nunique()
-
-    # Remove keys already present in the database from dataframes
-    cleaned_ers_json = ers_json[
-        ~ers_json.operation_number.isin(existing_operation_numbers)
-    ]
-    cleaned_ers_xml = ers_xml[
-        ~ers_xml.operation_number.isin(existing_operation_numbers)
-    ]
-
-    new_operation_numbers = set(cleaned_ers_xml.operation_number)
-
-    existing_operation_numbers = existing_operation_numbers.union(new_operation_numbers)
-
-    n_messages_cleaned = len(cleaned_ers_xml)
-    n_logs_cleaned = len(cleaned_ers_json)
-    n_operations_cleaned = cleaned_ers_xml.operation_number.nunique()
+    res_n_rows = len(res)
+    res_n_ids = res[df_column_name].nunique()
 
     log = (
-        f"From {n_messages} xml messages with {n_operations} distinct operation "
-        + f"numbers containing {n_logs} logs, {n_messages_cleaned} xml messages with "
-        + f"{n_operations_cleaned} distinct operation numbers containing "
-        + f"{n_logs_cleaned} logs are new and will be inserted in the database."
+        f"From {df_n_rows} rows with {df_n_ids} distinct {df_column_name} values, "
+        + f"{res_n_rows} rows with {res_n_ids} distinct {df_column_name} values "
+        + "are new and will be inserted in the database."
     )
 
     logger.info(log)
-    return cleaned_ers_json, cleaned_ers_xml, existing_operation_numbers
+    return res
 
 
 @task
-def load_ers(parsed_data, if_exists: str = "append"):
+def load_ers(ers_iter: Generator[dict, None, None]):
     """Loads parsed ERS data into public.ers and public.ers_messages tables.
 
     Args:
-        parsed (Iterator) : iterator of pandas DataFrames (output of `parse_xml` task)
+        parsed (Iterator) : iterator of dictionaries (output of `clean` task)
         if_exists (str) : one of
             append : append data to existing tables
             replace : delete all data from existing tables then insert data
@@ -110,133 +261,76 @@ def load_ers(parsed_data, if_exists: str = "append"):
     schema = "public"
     ers_table_name = "ers"
     ers_messages_table_name = "ers_messages"
-    #     schema = "processed"
-    #     ers_table_name = "ers"
-    #     ers_messages_table_name = "ers_messages"
-
     engine = create_engine("monitorfish_remote")
     logger = prefect.context.get("logger")
 
-    with engine.begin() as connection:
-        meta = MetaData(schema=schema)
-        meta.bind = connection
-        try:
-            logger.info("Searching for ers and ers_messages tables...")
-            meta.reflect(only=[ers_table_name, ers_messages_table_name])
-            ers_table = Table(ers_table_name, meta, mustexist=True)
-            ers_messages_table = Table(ers_messages_table_name, meta, mustexist=True)
-            logger.info("ers and ers_messages tables found.")
-        except InvalidRequestError:
-            logger.error(
-                "ers and ers_messages tables must exist. Make appropriate "
-                + "migrations and try again."
-            )
-            raise
+    # Check that ers tables exist
+    get_table(ers_table_name, schema, engine, logger)
+    ers_messages_table = get_table(ers_messages_table_name, schema, engine, logger)
 
-        if if_exists == "replace":
-            logger.info("Deleting ers tables.")
-            delete(ers_table, connection, logger)
-            delete(ers_messages_table, connection, logger)
+    for ers in ers_iter:
+        with engine.begin() as connection:
+            parsed = ers["parsed"]
+            parsed_with_xml = ers["parsed_with_xml"]
 
-        # Extract existing operation numbers in ers_messages table
-        try:
-            assert "operation_number" in [c.name for c in ers_messages_table.columns]
-        except AssertionError:
-            logger.error(
-                "Missing primary key column 'operation_number' in ers_messages table."
-                + "This is required to avoid inserting duplicated data into the table."
-                + "Check database migrations."
-            )
-        logger.info("Fetching existing operation numbers in database.")
-        s = select([ers_messages_table.c.operation_number])
-        existing_operation_numbers = connection.execute(s).fetchall()
-        existing_operation_numbers = [x[0] for x in existing_operation_numbers]
-        existing_operation_numbers = set(existing_operation_numbers)
-
-        for i, (ers_json, ers_xml) in enumerate(parsed_data):
-
-            logger.info(f"Inserting chunk {i}")
             # Drop rows for which the operation number already exists in the
             # ers_messages database
-            (
-                ers_json,
-                ers_xml,
-                existing_operation_numbers,
-            ) = remove_already_existing_messages(
-                existing_operation_numbers, ers_json, ers_xml, connection, logger
-            )
-            if len(ers_xml) == 0:
-                logger.warning("No messages to insert.")
-                continue
 
-            logger.info(f"Inserting {len(ers_xml)} messages.")
-
-            ers_xml.to_sql(
-                name=ers_messages_table_name,
-                con=connection,
-                schema=schema,
-                index=False,
-                method=psql_insert_copy,
-                if_exists="append",
-                dtype={
-                    "operation_number": String(17),
-                    "operation_country": String(3),
-                    "operation_datetime_utc": DateTime,
-                    "operation_type": String(3),
-                    "ers_id": String(17),
-                    "referenced_ers_id": String(17),
-                    "ers_datetime_utc": DateTime,
-                    "cfr": String(12),
-                    "ircs": String(7),
-                    "external_identification": String(14),
-                    "vessel_name": String(100),
-                    "flag_state": String(3),
-                    "imo": String(20),
-                    "xml_message": Text(),
-                    "integration_datetime_utc": DateTime,
-                },
+            parsed = drop_rows_already_in_table(
+                df=parsed,
+                df_column_name="operation_number",
+                table=ers_messages_table,
+                table_column_name="operation_number",
+                connection=connection,
+                logger=logger,
             )
 
-            if len(ers_json) == 0:
-                continue
-
-            ers_json["value"] = ers_json.value.map(dict2json)
-            ers_json.to_sql(
-                name=ers_table_name,
-                con=connection,
-                schema=schema,
-                index=False,
-                method=psql_insert_copy,
-                if_exists="append",
-                dtype={
-                    "operation_number": String(17),
-                    "operation_country": String(3),
-                    "operation_datetime_utc": DateTime,
-                    "operation_type": String(3),
-                    "ers_id": String(17),
-                    "referenced_ers_id": String(17),
-                    "ers_datetime_utc": DateTime,
-                    "cfr": String(12),
-                    "ircs": String(7),
-                    "external_identification": String(14),
-                    "vessel_name": String(100),
-                    "flag_state": String(3),
-                    "imo": String(20),
-                    "log_type": String(3),
-                    "value": JSONB,
-                    "integration_datetime_utc": DateTime,
-                },
+            parsed_with_xml = drop_rows_already_in_table(
+                df=parsed_with_xml,
+                df_column_name="operation_number",
+                table=ers_messages_table,
+                table_column_name="operation_number",
+                connection=connection,
+                logger=logger,
             )
 
+            if len(parsed_with_xml) > 0:
+                n_lines = len(parsed_with_xml)
+                logger.info(f"Inserting {n_lines} messages in ers_messages table.")
 
-with Flow("Extract parse load ERS messages") as f:
-    data_source = Parameter("data_source", default="dam")
-    if_exists = Parameter("if_exists", default="append")
-    raw_xml = extract_raw_xml(data_source=data_source)
+                parsed_with_xml.to_sql(
+                    name=ers_messages_table_name,
+                    con=connection,
+                    schema=schema,
+                    index=False,
+                    method=psql_insert_copy,
+                    if_exists="append",
+                )
+
+            if len(parsed) > 0:
+                n_lines = len(parsed)
+                logger.info(f"Inserting {n_lines} messages in ers table.")
+
+                # Serialize dicts to prepare for insertion as json in database
+                parsed["value"] = parsed.value.map(dict2json)
+
+                parsed.to_sql(
+                    name=ers_table_name,
+                    con=connection,
+                    schema=schema,
+                    index=False,
+                    method=psql_insert_copy,
+                    if_exists="append",
+                )
+
+            if ers["batch_generated_errors"]:
+                move(ers["input_dir"] / ers["full_name"], ers["error_dir"])
+            else:
+                move(ers["input_dir"] / ers["full_name"], ers["treated_dir"])
+
+
+with Flow("Extract parse load ERS messages") as flow:
+    raw_xml = extract_ers()
     parsed_data = parse_xml(raw_xml)
     cleaned_data = clean(parsed_data)
-    load_ers(cleaned_data, if_exists=if_exists)
-
-
-if __name__ == "__main__":
-    f.run(if_exists="replace")
+    load_ers(cleaned_data)

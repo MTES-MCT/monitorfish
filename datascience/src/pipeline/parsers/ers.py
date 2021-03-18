@@ -7,7 +7,6 @@ from typing import List
 from xml.etree.ElementTree import ParseError
 
 import pandas as pd
-import tqdm
 
 from src.pipeline.parsers.log_parsers import (
     default_log_parser,
@@ -214,6 +213,7 @@ def batch_parse(ers_xmls: List[str]):
     """
     res_json = []
     res_xml = []
+    batch_generated_errors = False
 
     res_xml_default = {
         "operation_number": None,
@@ -252,7 +252,7 @@ def batch_parse(ers_xmls: List[str]):
         "integration_datetime_utc": None,
     }
 
-    for xml_message in tqdm.tqdm(ers_xmls):
+    for xml_message in ers_xmls:
         try:
             metadata, data_iterator = parse_xml_string(xml_message)
             now = datetime.utcnow()
@@ -280,15 +280,20 @@ def batch_parse(ers_xmls: List[str]):
                 + xml_message[:40]
                 + log_end
             )
+            batch_generated_errors = True
         except:
-            logging.error("Error with message" + xml_message)
-            raise
+            logging.error("Unkonwn error with message " + xml_message)
+            batch_generated_errors = True
 
-    ers_json = pd.DataFrame(columns=pd.Index(res_json_default))
-    ers_xml = pd.DataFrame(columns=pd.Index(res_xml_default))
+    parsed = pd.DataFrame(columns=pd.Index(res_json_default))
+    parsed_with_xml = pd.DataFrame(columns=pd.Index(res_xml_default))
     if len(res_json) > 0:
-        ers_json = pd.concat(res_json, axis=1).T
+        parsed = pd.concat(res_json, axis=1).T
     if len(res_xml) > 0:
-        ers_xml = pd.concat(res_xml, axis=1).T
+        parsed_with_xml = pd.concat(res_xml, axis=1).T
 
-    return ers_json, ers_xml
+    return {
+        "parsed": parsed,
+        "parsed_with_xml": parsed_with_xml,
+        "batch_generated_errors": batch_generated_errors,
+    }

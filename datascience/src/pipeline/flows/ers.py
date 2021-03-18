@@ -12,6 +12,7 @@ from prefect import Flow, Parameter, task
 from sqlalchemy import DateTime, MetaData, String, Table, select, text
 from sqlalchemy.dialects.postgresql import JSONB
 
+from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
 from src.pipeline.processing import dict2json
@@ -19,11 +20,10 @@ from src.pipeline.utils import delete, grouper, move
 from src.read_query import read_query
 from src.utils.database import get_table, psql_insert_copy
 
-ERS_DIRECTORY = pathlib.Path("../../../data/raw/ers/dam/")
-RECEIVED_DIRECTORY = ERS_DIRECTORY / "received"
-TREATED_DIRECTORY = ERS_DIRECTORY / "treated"
-NON_TREATED_DIRECTORY = ERS_DIRECTORY / "non_treated"
-ERROR_DIRECTORY = ERS_DIRECTORY / "error"
+RECEIVED_DIRECTORY = ERS_FILES_LOCATION / "received"
+TREATED_DIRECTORY = ERS_FILES_LOCATION / "treated"
+NON_TREATED_DIRECTORY = ERS_FILES_LOCATION / "non_treated"
+ERROR_DIRECTORY = ERS_FILES_LOCATION / "error"
 
 
 def list_years_months_zipfiles(

@@ -1,12 +1,45 @@
 import csv
+import logging
 from io import StringIO
-from typing import List
+from typing import List, Tuple
 
 import pandas as pd
+import sqlalchemy
 from sqlalchemy import MetaData, Table, inspect
+from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
 from src.read_query import read_query
+
+
+def get_table(
+    table_name: str,
+    schema: str,
+    engine: sqlalchemy.engine.base.Engine,
+    logger: logging.Logger,
+) -> sqlalchemy.Table:
+    """Performs reflection to get a sqlalchemy Table object with metadata reflecting
+    the table found in the databse. Returns resulting Table object.
+
+    If the table is not found in the database, raises an error.
+    """
+
+    meta = MetaData(schema=schema)
+    meta.bind = engine
+    meta.reflect(only=[table_name])
+    try:
+        logger.info(f"Searching for table {schema}.{table_name}...")
+        meta.reflect(only=[table_name])
+        table = Table(table_name, meta, mustexist=True)
+        logger.info(f"Table {schema}.{table_name} found.")
+    except InvalidRequestError:
+        logger.error(
+            f"Table {schema}.{table_name} must exist. Make appropriate migrations "
+            + "and try again."
+        )
+        raise
+
+    return table
 
 
 def get_tables_sizes(db: str, table_names: List[str]) -> pd.DataFrame:

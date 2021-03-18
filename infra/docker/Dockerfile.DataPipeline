@@ -44,7 +44,6 @@ RUN python3 -m venv $VIRTUAL_ENV && \
 ENV PYTHONPATH=/home/${USER}
 
 COPY datascience/ .
-COPY infra/configurations/pipeline/backend.toml ./.prefect/backend.toml
 
 RUN chown -R ${USER} . && \
     chmod +x scripts/*.sh

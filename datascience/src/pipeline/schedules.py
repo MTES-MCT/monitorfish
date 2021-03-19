@@ -16,7 +16,7 @@ heartbeat.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
 vessels.flow.schedule = CronSchedule("0 2 * * *")
 fishing_gear_codes.flow.schedule = CronSchedule("0 3 * * *")
 species.flow.schedule = CronSchedule("0 4 * * *")
-ers.flow.schedule = IntervalSchedule(interval=timedelta(minutes=5))
+ers.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [

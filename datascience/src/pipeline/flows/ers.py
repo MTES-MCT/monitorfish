@@ -2,7 +2,7 @@ import copy
 import logging
 import os
 import pathlib
-from typing import Generator, Union
+from typing import List, Union
 from zipfile import ZipFile
 
 import pandas as pd
@@ -15,7 +15,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
-from src.pipeline.processing import dict2json
+from src.pipeline.processing import dict2json, drop_rows_already_in_table
 from src.pipeline.utils import delete, grouper, move
 from src.read_query import read_query
 from src.utils.database import get_table, psql_insert_copy
@@ -26,13 +26,30 @@ NON_TREATED_DIRECTORY = ERS_FILES_LOCATION / "non_treated"
 ERROR_DIRECTORY = ERS_FILES_LOCATION / "error"
 
 
-def list_years_months_zipfiles(
+####################################### HELPERS #######################################
+
+
+def get_message_type(zipfile_name: str) -> str:
+    """For zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
+    extract the message type, which may be one of :
+    - ERS3 (a set of messages in ERS3 format)
+    - ERS3_ACK (a set of acknowledgement statuses from BIA for ERS3 messages)
+    - UN (a set of FLUX messages)"""
+    name_parts = zipfile_name.split("_")
+    message_type = "_".join(name_parts[:-1])
+    return message_type
+
+
+######################################## TASKS ########################################
+
+
+@task
+def extract_zipfiles(
     input_dir: pathlib.Path,
     treated_dir: pathlib.Path,
     non_treated_dir: pathlib.Path,
     error_dir: pathlib.Path,
-    logger: logging.Logger,
-) -> Generator[dict, None, None]:
+) -> List[dict]:
     """Scans input_dir, in which ers zipfiles are expected to be arranged in a
      hierarchy folders like : year / month / zipfiles.
     Yields founds zipfiles along with the corresponding paths of :
@@ -43,6 +60,8 @@ def list_years_months_zipfiles(
     of message (currently not handled)
     - error_directory if an error occurs during the treatment of messages.
     """
+
+    logger = prefect.context.get("logger")
 
     expected_months = [
         "1",
@@ -71,6 +90,9 @@ def list_years_months_zipfiles(
     expected_years = list(map(str, range(2000, 2050)))
 
     years = os.listdir(input_dir)
+
+    res = []
+    n = 0
 
     for year in years:
         if year not in expected_years:
@@ -106,38 +128,27 @@ def list_years_months_zipfiles(
                     move(zipfile_input_dir / non_zipfile, zipfile_error_dir)
 
             for zipfile in zipfiles:
-                yield {
-                    "full_name": zipfile,
-                    "input_dir": zipfile_input_dir,
-                    "treated_dir": zipfile_treated_dir,
-                    "non_treated_dir": zipfile_non_treated_dir,
-                    "error_dir": zipfile_error_dir,
-                }
+                res.append(
+                    {
+                        "full_name": zipfile,
+                        "input_dir": zipfile_input_dir,
+                        "treated_dir": zipfile_treated_dir,
+                        "non_treated_dir": zipfile_non_treated_dir,
+                        "error_dir": zipfile_error_dir,
+                    }
+                )
+                n += 1
+                if n == 200:
+                    return res
 
-
-def get_message_type(zipfile_name: str) -> str:
-    """For zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
-    extract the message type, which may be one of :
-    - ERS3 (a set of messages in ERS3 format)
-    - ERS3_ACK (a set of acknowledgement statuses from BIA for ERS3 messages)
-    - UN (a set of FLUX messages)"""
-    name_parts = zipfile_name.split("_")
-    message_type = "_".join(name_parts[:-1])
-    return message_type
+    return res
 
 
 @task
-def extract_ers():
+def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
 
-    logger = prefect.context.get("logger")
-
-    for zipfile in list_years_months_zipfiles(
-        RECEIVED_DIRECTORY,
-        TREATED_DIRECTORY,
-        NON_TREATED_DIRECTORY,
-        ERROR_DIRECTORY,
-        logger,
-    ):
+    if zipfile:
+        logger = prefect.context.get("logger")
 
         logger.info(f"Extracting zipfile {zipfile['full_name']}.")
         message_type = get_message_type(zipfile["full_name"])
@@ -150,9 +161,8 @@ def extract_ers():
                 for xml_filename in xml_filenames:
                     with zipobj.open(xml_filename, mode="r") as f:
                         xml_messages.append(f.read().decode("utf-8"))
-                raw_ers = copy.deepcopy(zipfile)
-                raw_ers["xml_messages"] = xml_messages
-                yield raw_ers
+                zipfile["xml_messages"] = xml_messages
+                return zipfile
 
         # Handle FLUX messages (move them to non_treated_directory
         # as there is currently no parser available)
@@ -176,87 +186,43 @@ def extract_ers():
 
 
 @task
-def parse_xml(raw_ers_iter: Generator[dict, None, None]) -> Generator[dict, None, None]:
+def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = prefect.context.get("logger")
-    for raw_ers in raw_ers_iter:
-        logger.info(f"Parsing messages of zipfile {raw_ers['full_name']}")
-        parsed_batch = batch_parse(raw_ers["xml_messages"])
-        parsed_ers = copy.deepcopy(raw_ers)
-        parsed_ers.pop("xml_messages")
-        parsed_ers = {**parsed_ers, **parsed_batch}
-        yield parsed_ers
+    if zipfile:
+        logger.info(f"Parsing messages of zipfile {zipfile['full_name']}")
+        parsed_batch = batch_parse(zipfile["xml_messages"])
+        zipfile.pop("xml_messages")
+        zipfile = {**zipfile, **parsed_batch}
+        return zipfile
+    else:
+        pass
 
 
 @task
-def clean(parsed_ers_iter: Generator[dict, None, None]) -> Generator[dict, None, None]:
+def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = prefect.context.get("logger")
-    for parsed_ers in parsed_ers_iter:
+    if zipfile:
         logger.info(
             "Removing QUE and RSP messages from messages of "
-            + f"zipfile {parsed_ers['full_name']}."
+            + f"zipfile {zipfile['full_name']}."
         )
-        ers = copy.deepcopy(parsed_ers)
-        ers["parsed"] = ers["parsed"][
-            ers["parsed"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
+        zipfile["parsed"] = zipfile["parsed"][
+            zipfile["parsed"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
         ]
-        ers["parsed_with_xml"] = ers["parsed_with_xml"][
-            ers["parsed_with_xml"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
+        zipfile["parsed_with_xml"] = zipfile["parsed_with_xml"][
+            zipfile["parsed_with_xml"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
         ]
-        yield ers
-
-
-def drop_rows_already_in_table(
-    df: pd.DataFrame,
-    df_column_name: str,
-    table: sqlalchemy.Table,
-    table_column_name: str,
-    connection: sqlalchemy.engine.base.Connection,
-    logger: logging.Logger,
-) -> pd.DataFrame:
-    """Removes rows from the input DataFrame `df` in which the column `df_column_name`
-    contains values that are already present in the column `table_column_name` of the
-    table `table`, and returns the filtered DataFrame."""
-
-    df_n_rows = len(df)
-    df_ids = tuple(df[df_column_name].unique())
-    df_n_ids = len(df_ids)
-
-    statement = select([getattr(table.c, table_column_name)]).where(
-        getattr(table.c, table_column_name).in_(df_ids)
-    )
-
-    df_ids_already_in_table = tuple(
-        pd.read_sql(statement, connection)[table_column_name]
-    )
-
-    # Remove keys already present in the database table from df
-    res = df[~df[df_column_name].isin(df_ids_already_in_table)]
-
-    # Remove possible duplicate ids in df
-    res = res[~res[df_column_name].duplicated()]
-
-    res_n_rows = len(res)
-    res_n_ids = res[df_column_name].nunique()
-
-    log = (
-        f"From {df_n_rows} rows with {df_n_ids} distinct {df_column_name} values, "
-        + f"{res_n_rows} rows with {res_n_ids} distinct {df_column_name} values "
-        + "are new and will be inserted in the database."
-    )
-
-    logger.info(log)
-    return res
+        return zipfile
+    else:
+        pass
 
 
 @task
-def load_ers(ers_iter: Generator[dict, None, None]):
-    """Loads parsed ERS data into public.ers and public.ers_messages tables.
+def load_ers(cleaned_data: List[dict]):
+    """Loads ERS data into public.ers and public.ers_messages tables.
 
     Args:
-        parsed (Iterator) : iterator of dictionaries (output of `clean` task)
-        if_exists (str) : one of
-            append : append data to existing tables
-            replace : delete all data from existing tables then insert data
+        cleaned_data (list) : list of dictionaries (output of `clean` task)
     """
     schema = "public"
     ers_table_name = "ers"
@@ -268,7 +234,10 @@ def load_ers(ers_iter: Generator[dict, None, None]):
     get_table(ers_table_name, schema, engine, logger)
     ers_messages_table = get_table(ers_messages_table_name, schema, engine, logger)
 
-    for ers in ers_iter:
+    cleaned_data = list(filter(lambda x: True if x else False, cleaned_data))
+
+    for ers in cleaned_data:
+
         with engine.begin() as connection:
             parsed = ers["parsed"]
             parsed_with_xml = ers["parsed_with_xml"]
@@ -330,7 +299,13 @@ def load_ers(ers_iter: Generator[dict, None, None]):
 
 
 with Flow("Extract parse load ERS messages") as flow:
-    raw_xml = extract_ers()
-    parsed_data = parse_xml(raw_xml)
-    cleaned_data = clean(parsed_data)
-    load_ers(cleaned_data)
+    zipfiles = extract_zipfiles(
+        RECEIVED_DIRECTORY,
+        TREATED_DIRECTORY,
+        NON_TREATED_DIRECTORY,
+        ERROR_DIRECTORY,
+    )
+    zipfiles = extract_xmls_from_zipfile.map(zipfiles)
+    zipfiles = parse_xmls.map(zipfiles)
+    zipfiles = clean.map(zipfiles)
+    load_ers(zipfiles)

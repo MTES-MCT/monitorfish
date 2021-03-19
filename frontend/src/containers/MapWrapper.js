@@ -73,7 +73,7 @@ const MapWrapper = () => {
             source: new OSM({
                 attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
             }),
-            className: LayersEnum.BASE_LAYER
+            className: LayersEnum.BASE_LAYER.code
         }),
         SATELLITE: new TileLayer({
             source: new XYZ({
@@ -81,19 +81,19 @@ const MapWrapper = () => {
                     'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
                 maxZoom: 19
             }),
-            className: LayersEnum.BASE_LAYER
+            className: LayersEnum.BASE_LAYER.code
         }),
         LIGHT: new MapboxVector({
             styleUrl: 'mapbox://styles/mapbox/light-v10',
             accessToken:
                 'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
-            className: LayersEnum.BASE_LAYER
+            className: LayersEnum.BASE_LAYER.code
         }),
         DARK: new MapboxVector({
             styleUrl: 'mapbox://styles/monitorfish/cklv7vc0f1ej817o5ivmkjmrs',
             accessToken:
                 'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
-            className: LayersEnum.BASE_LAYER
+            className: LayersEnum.BASE_LAYER.code
         })
     })
     const [map, setMap] = useState()
@@ -206,7 +206,7 @@ const MapWrapper = () => {
     useEffect(() => {
         if(mapState.selectedBaseLayer && baseLayersObjects[mapState.selectedBaseLayer] && map && layer.layers.length) {
             const layerToRemove = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.BASE_LAYER)
+                .find(layer => layer.className_ === LayersEnum.BASE_LAYER.code)
 
             if (!layerToRemove) {
                 return
@@ -218,7 +218,7 @@ const MapWrapper = () => {
             }, 500)
 
             const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS)
+                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
 
             const isLight = vesselIconIsLight(mapState.selectedBaseLayer)
             if(vesselsLayer) {
@@ -257,7 +257,7 @@ const MapWrapper = () => {
             return !layer.layers.some(layer_ => showedLayer === layer_)
         })
             .filter(layer => layer.className_ !== tileBaseLayer)
-            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK)
+            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK.code)
 
         if(layersToRemove.length) {
             return
@@ -299,7 +299,7 @@ const MapWrapper = () => {
             }
 
             // Replace vessel layer
-            if (layerToInsert.className_ === LayersEnum.VESSELS) {
+            if (layerToInsert.className_ === LayersEnum.VESSELS.code) {
                 removeCurrentVesselLayer()
                 map.getLayers().push(layerToInsert);
                 return
@@ -316,7 +316,7 @@ const MapWrapper = () => {
             return !layer.layers.some(layer_ => showedLayer === layer_)
         })
             .filter(layer => layer.className_ !== tileBaseLayer)
-            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK)
+            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK.code)
 
         layersToRemove.map(layerToRemove => {
             map.getLayers().remove(layerToRemove);
@@ -325,7 +325,7 @@ const MapWrapper = () => {
 
     function removeCurrentVesselLayer() {
         const layerToRemove = map.getLayers().getArray()
-            .find(layer => layer.className_ === LayersEnum.VESSELS)
+            .find(layer => layer.className_ === LayersEnum.VESSELS.code)
 
         if (!layerToRemove) {
             return
@@ -381,7 +381,7 @@ const MapWrapper = () => {
     useEffect(() => {
         if(vessel.temporaryVesselsToHighLightOnMap && vessel.temporaryVesselsToHighLightOnMap.length && map) {
             const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS)
+                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
 
             if(vesselsLayer) {
                 vesselsLayer.getSource().getFeatures().filter(feature => {
@@ -404,7 +404,7 @@ const MapWrapper = () => {
     useEffect(() => {
         if(vesselsLastPositionVisibility && (!vessel.temporaryVesselsToHighLightOnMap || !vessel.temporaryVesselsToHighLightOnMap.length) && map) {
             const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS)
+                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
 
             if(vesselsLayer) {
                 vesselsLayer.getSource().getFeatures().forEach(feature => {
@@ -422,7 +422,7 @@ const MapWrapper = () => {
     useEffect(() => {
         if(vessel.selectedVessel && vessel.selectedVessel.positions && vessel.selectedVessel.positions.length) {
             const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS)
+                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
 
             const featureToModify = vesselsLayer.getSource().getFeatures().find(feature => {
                 const properties = feature.getProperties()
@@ -473,10 +473,10 @@ const MapWrapper = () => {
     useEffect(() => {
         if (map) {
             let metadataIsShowedPropertyName = "metadataIsShowed";
-            let regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY))
+            let regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
             if (regulatoryZoneMetadata) {
                 let layerToAddProperty = regulatoryLayers.find(layer => {
-                    return layer.className_ === `${LayersEnum.REGULATORY}:${regulatoryZoneMetadata.layerName}:${regulatoryZoneMetadata.zone}`
+                    return layer.className_ === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.layerName}:${regulatoryZoneMetadata.zone}`
                 })
 
                 if (layerToAddProperty) {
@@ -490,7 +490,7 @@ const MapWrapper = () => {
 
     function removeCurrentVesselTrackLayer() {
         const layerToRemove = map.getLayers().getArray()
-            .find(layer => layer.className_ === LayersEnum.VESSEL_TRACK)
+            .find(layer => layer.className_ === LayersEnum.VESSEL_TRACK.code)
 
         if (!layerToRemove) {
             return
@@ -555,7 +555,7 @@ const MapWrapper = () => {
 
     function removeVesselNameToAllFeatures() {
         layer.layers
-            .filter(layer => layer.className_ === LayersEnum.VESSELS)
+            .filter(layer => layer.className_ === LayersEnum.VESSELS.code)
             .forEach(vesselsLayer => {
                 vesselsLayer.getSource().getFeatures().map(feature => {
                     let stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_NAME_STYLE)
@@ -623,7 +623,7 @@ const MapWrapper = () => {
 
     function addVesselNameToAllFeatures(extent, vesselLabel) {
         layer.layers
-            .filter(layer => layer.className_ === LayersEnum.VESSELS)
+            .filter(layer => layer.className_ === LayersEnum.VESSELS.code)
             .forEach(vesselsLayer => {
                 vesselsLayer.getSource().forEachFeatureIntersectingExtent(extent, feature => {
                     getSVG(feature, vesselLabel).then(object => {
@@ -637,10 +637,10 @@ const MapWrapper = () => {
     const handleMapClick = event => {
         const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, {hitTolerance: hitPixelTolerance});
 
-        if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS)) {
+        if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS.code)) {
             let vessel = getVesselIdentityFromFeature(feature)
             dispatch(showVesselTrackAndSidebar(getVesselFeatureAndIdentity(feature, vessel), false, false))
-        } else if(feature && feature.getId() && feature.getId().includes(LayersEnum.REGULATORY)) {
+        } else if(feature && feature.getId() && feature.getId().includes(LayersEnum.REGULATORY.code)) {
             let zone = {
                 layerName: feature.getProperties().layer_name,
                 zone: feature.getProperties().zones
@@ -672,7 +672,7 @@ const MapWrapper = () => {
     }
 
     function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay) {
-        if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS)) {
+        if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
             setVesselFeatureToShowOnCard(feature)
 
             document.getElementById(vesselCardID).style.display = 'block';
@@ -680,7 +680,7 @@ const MapWrapper = () => {
 
             vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates());
             mapRef.current.getTarget().style.cursor = 'pointer'
-        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK}:position`)) {
+        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
             setVesselFeatureToShowOnCard(feature)
 
             document.getElementById(vesselTrackCardID).style.display = 'block';
@@ -688,7 +688,7 @@ const MapWrapper = () => {
 
             mapRef.current.getTarget().style.cursor = 'pointer'
             vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates());
-        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY}`)) {
+        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
             setRegulatoryFeatureToShowOnCard(feature)
             mapRef.current.getTarget().style.cursor = 'pointer'
         } else {

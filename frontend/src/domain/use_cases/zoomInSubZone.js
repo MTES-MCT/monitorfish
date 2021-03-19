@@ -4,7 +4,7 @@ import {getCenter} from "ol/extent";
 
 const zoomInSubZone = subZone => (dispatch, getState) => {
     if (subZone) {
-        const layerName = `${Layers.REGULATORY}:${subZone.layerName}:${subZone.zone}`
+        const layerName = `${Layers.REGULATORY.code}:${subZone.layerName}:${subZone.zone}`
         const layerToZoomIn = getState().layer.layers.find(layer => layer.className_ === layerName)
 
         if(layerToZoomIn) {

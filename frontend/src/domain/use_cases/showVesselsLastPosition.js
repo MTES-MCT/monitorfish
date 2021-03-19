@@ -12,7 +12,6 @@ import {replaceVesselLayer} from "../reducers/Layer";
 import {setError} from "../reducers/Global";
 import {updateVesselFeatureAndIdentity} from "../reducers/Vessel";
 import {getVesselFeatureAndIdentity} from "../entities/vessel";
-import {useEffect} from "react";
 
 const showVesselsLastPosition = () => (dispatch, getState) => {
     getVesselsLastPositionsFromAPI().then(vessels => {
@@ -24,7 +23,7 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
             })
 
         Promise.all(vesselsFeaturesPromise).then(vesselsFeatures => {
-            let vesselLayer = getState().layer.layers.find(layer => layer.className_ === Layers.VESSELS)
+            let vesselLayer = getState().layer.layers.find(layer => layer.className_ === Layers.VESSELS.code)
             vesselLayer.setSource(
                 new VectorSource({
                     features: vesselsFeatures
@@ -57,7 +56,7 @@ const buildFeature = (currentVessel, index, getState, dispatch) => new Promise(r
         dateTime: currentVessel.dateTime
     });
 
-    feature.setId(`${LayersEnum.VESSELS}:${index}`)
+    feature.setId(`${LayersEnum.VESSELS.code}:${index}`)
 
     let selectedVesselFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     let vesselLabelsShowedOnMap = getState().map.vesselNamesHiddenByZoom === undefined ?

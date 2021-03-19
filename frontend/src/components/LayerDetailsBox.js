@@ -13,7 +13,7 @@ const LayerDetailsBox = props => {
         if(props.regulatory && props.regulatory.getProperties().zones && props.regulatory.getProperties().layer_name && props.regulatory.getProperties().engins && props.gears) {
             let hash = getHash(`${props.regulatory.getProperties().layer_name}:${props.regulatory.getProperties().zones}`)
             let gearCategory = getGearCategory(props.regulatory.getProperties().engins, props.gears);
-            setVectorLayerStyle(getVectorLayerStyle(Layers.REGULATORY)(null, hash, gearCategory))
+            setVectorLayerStyle(getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
         }
     }, [props.regulatory, props.gears])
 

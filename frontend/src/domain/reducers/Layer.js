@@ -14,15 +14,8 @@ const layerSlice = createSlice({
             new VectorLayer({
                 renderBuffer: 7,
                 source: new VectorSource(),
-                className: Layers.VESSELS
+                className: Layers.VESSELS.code
             })
-        ],
-        administrativeZones: [
-            { layer: Layers.EEZ, layerName: 'Zones ZEE' },
-            { layer: Layers.FAO, layerName: 'Zones FAO/CIEM' },
-            { layer: Layers.THREE_MILES, layerName: '3 Milles' },
-            { layer: Layers.SIX_MILES, layerName: '6 Milles' },
-            { layer: Layers.TWELVE_MILES, layerName: '12 Milles' },
         ],
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
         lastShowedFeatures: [],
@@ -30,7 +23,7 @@ const layerSlice = createSlice({
     },
     reducers: {
         replaceVesselLayer(state, action) {
-            const arrayWithoutVessels = state.layers.filter(layer => layer.className_ !== LayersEnum.VESSELS)
+            const arrayWithoutVessels = state.layers.filter(layer => layer.className_ !== LayersEnum.VESSELS.code)
             state.layers = [...arrayWithoutVessels, action.payload]
         },
         addLayer(state, action) {
@@ -47,11 +40,11 @@ const layerSlice = createSlice({
             state.layers = action.payload
         },
         addShowedLayer(state, action) {
-            if(action.payload.type !== Layers.VESSELS) {
+            if(action.payload.type !== Layers.VESSELS.code) {
                 let found = false
-                if (action.payload.type === LayersEnum.REGULATORY) {
+                if (action.payload.type === LayersEnum.REGULATORY.code) {
                     found = state.showedLayers
-                        .filter(layer => layer.type === LayersEnum.REGULATORY)
+                        .filter(layer => layer.type === LayersEnum.REGULATORY.code)
                         .some(layer => (
                             layer.zone.layerName === action.payload.zone.layerName &&
                             layer.zone.zone === action.payload.zone.zone
@@ -67,18 +60,18 @@ const layerSlice = createSlice({
             }
         },
         removeShowedLayer(state, action) {
-            if(action.payload.type !== Layers.VESSELS) {
-                if (action.payload.type === LayersEnum.REGULATORY) {
+            if(action.payload.type !== Layers.VESSELS.code) {
+                if (action.payload.type === LayersEnum.REGULATORY.code) {
                     if(action.payload.zone.zone) {
                         state.showedLayers = state.showedLayers
                             .filter(layer => !(
-                                layer.type === LayersEnum.REGULATORY &&
+                                layer.type === LayersEnum.REGULATORY.code &&
                                 layer.zone.layerName === action.payload.zone.layerName &&
                                 layer.zone.zone === action.payload.zone.zone))
                     } else {
                         state.showedLayers = state.showedLayers
                             .filter(layer => !(
-                                layer.type === LayersEnum.REGULATORY &&
+                                layer.type === LayersEnum.REGULATORY.code &&
                                 layer.zone.layerName === action.payload.zone.layerName))
                     }
                 } else {

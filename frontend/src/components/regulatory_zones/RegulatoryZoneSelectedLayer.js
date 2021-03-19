@@ -21,7 +21,7 @@ const RegulatoryZoneSelectedLayer = props => {
     useEffect(() => {
         if(props.showedLayers && props.regulatoryZoneName) {
             let showLayer = props.showedLayers
-                .filter(layer => layer.type === LayersEnum.REGULATORY)
+                .filter(layer => layer.type === LayersEnum.REGULATORY.code)
                 .some(layer => layer.zone.layerName === props.regulatoryZoneName)
 
             setAtLeastOneLayerIsShowed(showLayer)
@@ -75,7 +75,7 @@ const RegulatoryZoneSelectedLayer = props => {
                         if(subZone.zone && subZone.layerName && subZone.gears && props.gears) {
                             let hash = getHash(`${subZone.layerName}:${subZone.zone}`)
                             let gearCategory = getGearCategory(subZone.gears, props.gears);
-                            vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY)(null, hash, gearCategory)
+                            vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
                         }
 
                         return (
@@ -93,7 +93,7 @@ const RegulatoryZoneSelectedLayer = props => {
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showWholeLayer={showWholeLayer}
                                 zoneIsShown={props.showedLayers
-                                    .filter(layer => layer.type === LayersEnum.REGULATORY)
+                                    .filter(layer => layer.type === LayersEnum.REGULATORY.code)
                                     .some(layer =>
                                         layer.zone.layerName === subZone.layerName &&
                                         layer.zone.zone === subZone.zone)}
@@ -133,7 +133,6 @@ const HideIcon = styled(HideIconSVG)`
   margin-top: 9px;
   margin-left: 6px;
 `
-
 
 const Zone = styled.span`
   width: 100%;

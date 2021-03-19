@@ -1,7 +1,10 @@
 import json
+import logging
 from typing import List
 
 import pandas as pd
+import sqlalchemy
+from sqlalchemy import select
 
 
 def is_a_value(x) -> bool:
@@ -150,4 +153,47 @@ def python_lists_to_psql_arrays(df: pd.DataFrame, array_cols: List) -> pd.DataFr
     """
     res = df.copy(deep=True)
     res[array_cols] = res[array_cols].applymap(lst2pgarr)
+    return res
+
+
+def drop_rows_already_in_table(
+    df: pd.DataFrame,
+    df_column_name: str,
+    table: sqlalchemy.Table,
+    table_column_name: str,
+    connection: sqlalchemy.engine.base.Connection,
+    logger: logging.Logger,
+) -> pd.DataFrame:
+    """Removes rows from the input DataFrame `df` in which the column `df_column_name`
+    contains values that are already present in the column `table_column_name` of the
+    table `table`, and returns the filtered DataFrame."""
+
+    df_n_rows = len(df)
+    df_ids = tuple(df[df_column_name].unique())
+    df_n_ids = len(df_ids)
+
+    statement = select([getattr(table.c, table_column_name)]).where(
+        getattr(table.c, table_column_name).in_(df_ids)
+    )
+
+    df_ids_already_in_table = tuple(
+        pd.read_sql(statement, connection)[table_column_name]
+    )
+
+    # Remove keys already present in the database table from df
+    res = df[~df[df_column_name].isin(df_ids_already_in_table)]
+
+    # Remove possible duplicate ids in df
+    res = res[~res[df_column_name].duplicated()]
+
+    res_n_rows = len(res)
+    res_n_ids = res[df_column_name].nunique()
+
+    log = (
+        f"From {df_n_rows} rows with {df_n_ids} distinct {df_column_name} values, "
+        + f"{res_n_rows} rows with {res_n_ids} distinct {df_column_name} values "
+        + "are new and will be inserted in the database."
+    )
+
+    logger.info(log)
     return res

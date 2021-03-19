@@ -7,7 +7,7 @@ import {getColorWithAlpha} from "../../utils";
 
 export const getVectorLayerStyle = type => {
     switch (type) {
-        case Layers.EEZ: return feature => new Style({
+        case Layers.EEZ.code: return feature => new Style({
             stroke: new Stroke({
                 color: '#767AB2',
                 width: 1,
@@ -19,7 +19,7 @@ export const getVectorLayerStyle = type => {
                 stroke: new Stroke({color: 'rgba(255,255,255,0.9)', width: 2})
             })
         })
-        case Layers.FAO: return feature => new Style({
+        case Layers.FAO.code: return feature => new Style({
             stroke: new Stroke({
                 color: '#767AB2',
                 width: 1,
@@ -31,31 +31,25 @@ export const getVectorLayerStyle = type => {
                 stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
             })
         })
-        case Layers.THREE_MILES: return feature => new Style({
+        case Layers.THREE_MILES.code: return feature => new Style({
             stroke: new Stroke({
                 color: 'rgba(5, 5, 94, 0.5)',
                 width: 2,
             })
         })
-        case Layers.SIX_MILES: return feature => new Style({
+        case Layers.SIX_MILES.code: return feature => new Style({
             stroke: new Stroke({
                 color: 'rgba(5, 5, 94, 0.5)',
                 width: 2,
             })
         })
-        case Layers.TWELVE_MILES: return feature => new Style({
+        case Layers.TWELVE_MILES.code: return feature => new Style({
             stroke: new Stroke({
                 color: 'rgba(5, 5, 94, 0.5)',
                 width: 2,
             })
         })
-        case Layers.ONE_HUNDRED_MILES: return feature => new Style({
-            stroke: new Stroke({
-                color: 'rgba(5, 5, 94, 0.5)',
-                width: 2,
-            })
-        })
-        case Layers.REGULATORY: return (feature, hash, gearCategory) => {
+        case Layers.REGULATORY.code: return (feature, hash, gearCategory) => {
             let lastNumber = hash.toString().slice(-1)
 
             let metadataIsShowed = null
@@ -130,6 +124,15 @@ export const getVectorLayerStyle = type => {
                 }
             }
         }
+       default: return () => new Style({
+            stroke: new Stroke({
+                color: 'rgba(5, 5, 94, 0.5)',
+                width: 2,
+            }),
+           fill: new Fill({
+               color: 'rgba(5, 5, 94, 0.2)',
+           }),
+        })
     }
 }
 

@@ -42,7 +42,7 @@ const RegulatoryZoneSelectionItem = props => {
                 if(subZone.zone && subZone.layerName && subZone.gears && props.gears) {
                     let hash = getHash(`${subZone.layerName}:${subZone.zone}`)
                     let gearCategory = getGearCategory(subZone.gears, props.gears);
-                    vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY)(null, hash, gearCategory)
+                    vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
                 }
 
                 return (<SubZone

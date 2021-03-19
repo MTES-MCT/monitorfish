@@ -86,7 +86,7 @@ function buildVesselTrackVector(vessel) {
         source: new VectorSource({
             features: vesselTrackLines
         }),
-        className: Layers.VESSEL_TRACK
+        className: Layers.VESSEL_TRACK.code
     })
 }
 
@@ -107,14 +107,14 @@ function buildCirclePoints(vesselTrackLines, positions) {
 
         const circleFeature = new Feature({
             geometry: new Point(feature.getGeometry().getCoordinates()[0]),
-            name: LayersEnum.VESSEL_TRACK + ':position:' + index,
+            name: LayersEnum.VESSEL_TRACK.code + ':position:' + index,
             course: firstPositionOnLine ? firstPositionOnLine.course : null,
             positionType: firstPositionOnLine ? firstPositionOnLine.positionType : null,
             speed: firstPositionOnLine ? firstPositionOnLine.speed : null,
             dateTime: firstPositionOnLine ? firstPositionOnLine.dateTime : null
         });
 
-        circleFeature.setId(LayersEnum.VESSEL_TRACK + ':position:' + index)
+        circleFeature.setId(LayersEnum.VESSEL_TRACK.code + ':position:' + index)
         setCircleStyle(getTrackColor(feature.getProperties().speed), circleFeature);
 
         return circleFeature
@@ -128,11 +128,11 @@ function buildArrowPoints(vesselTrackLines) {
 
         const arrowFeature = new Feature({
             geometry: new Point(newPoint),
-            name: LayersEnum.VESSEL_TRACK + ':arrow:' + index,
+            name: LayersEnum.VESSEL_TRACK.code + ':arrow:' + index,
             course: feature.getProperties().course
         });
 
-        arrowFeature.setId(LayersEnum.VESSEL_TRACK + ':arrow:' + index)
+        arrowFeature.setId(LayersEnum.VESSEL_TRACK.code + ':arrow:' + index)
         setArrowStyle(getTrackArrow(feature.getProperties().speed), arrowFeature);
 
         return arrowFeature

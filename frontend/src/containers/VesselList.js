@@ -54,7 +54,7 @@ const VesselList = () => {
 
     useEffect(() => {
         if(layers && !makeVesselListToNotUpdate) {
-            const vesselsLayer = layers.find(layer => layer.className_ === LayersEnum.VESSELS)
+            const vesselsLayer = layers.find(layer => layer.className_ === LayersEnum.VESSELS.code)
             const vesselsFeatures = vesselsLayer.getSource().getFeatures()
 
             if(vesselsFeatures && vesselsFeatures.length) {

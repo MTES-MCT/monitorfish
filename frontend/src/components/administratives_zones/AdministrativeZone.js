@@ -2,8 +2,9 @@ import React, {useEffect, useRef, useState} from "react";
 import {ReactComponent as ShowIconSVG} from "../icons/oeil_affiche.svg";
 import {ReactComponent as HideIconSVG} from "../icons/oeil_masque.svg";
 import styled from "styled-components";
+import {COLORS} from "../../constants/constants";
 
-const AdministrativeZoneItem = props => {
+const AdministrativeZone = props => {
     const firstUpdate = useRef(true);
     const [showLayer_, setShowLayer] = useState(undefined);
 
@@ -20,35 +21,50 @@ const AdministrativeZoneItem = props => {
         }
 
         if(showLayer_) {
-            props.callShowAdministrativeZone(props.layer.layer)
+            props.callShowAdministrativeZone(props.layer.code)
         } else {
-            props.callHideAdministrativeZone(props.layer.layer)
+            props.callHideAdministrativeZone(props.layer.code)
         }
     }, [showLayer_])
 
-    return <>{ props.layer ? <Row className={``} onClick={() => setShowLayer(!showLayer_)}>{props.layer.layerName} { showLayer_ ? <ShowIcon /> : <HideIcon />}</Row> : null}</>
+    return <>{
+        props.layer ?
+                <Row isGrouped={props.isGrouped} onClick={() => setShowLayer(!showLayer_)}>
+                    <LayerName title={props.layer.name}>{props.layer.name}</LayerName>
+                    { showLayer_ ? <ShowIcon /> : <HideIcon />}
+                </Row> : null
+    }</>
 }
 
+const LayerName = styled.span`
+  width: 85%;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`
+
 const Row = styled.span`
-  width: 100%;
+  width: ${props => props.isGrouped ? '303px' : '97%'};;
   display: block;
   line-height: 1.9em;
   padding-left: 10px;
   user-select: none;
+  padding-left: 10px;
+  margin-left: ${props => props.isGrouped ? '20px' : '0'};
 `
 
 const ShowIcon = styled(ShowIconSVG)`
   width: 21px;
-  padding: 0 18px 0 0;
+  padding: 0 7px 0 0;
   height: 1.5em;
   float: right;
 `
 
 const HideIcon = styled(HideIconSVG)`
   width: 21px;
-  padding: 0 18px 0 0;
+  padding: 0 7px 0 0;
   height: 1.5em;
   float: right;
 `
 
-export default AdministrativeZoneItem
+export default AdministrativeZone

@@ -26,13 +26,12 @@ const showLayer = layerToShow => (dispatch, getState) => {
         const getVectorLayerClosure = getVectorLayer(dispatch)
 
         switch (layerToShow.type) {
-            case Layers.EEZ: dispatch(addLayer(getVectorLayerClosure(Layers.EEZ))); break;
-            case Layers.FAO: dispatch(addLayer(getVectorLayerClosure(Layers.FAO))); break;
-            case Layers.THREE_MILES: dispatch(addLayer(getVectorLayerClosure(Layers.THREE_MILES))); break;
-            case Layers.SIX_MILES: dispatch(addLayer(getVectorLayerClosure(Layers.SIX_MILES))); break;
-            case Layers.TWELVE_MILES: dispatch(addLayer(getVectorLayerClosure(Layers.TWELVE_MILES))); break;
-            case Layers.ONE_HUNDRED_MILES: dispatch(addLayer(getVectorLayerClosure(Layers.ONE_HUNDRED_MILES))); break;
-            case Layers.REGULATORY: {
+            case Layers.EEZ.code: dispatch(addLayer(getVectorLayerClosure(Layers.EEZ.code))); break;
+            case Layers.FAO.code: dispatch(addLayer(getVectorLayerClosure(Layers.FAO.code))); break;
+            case Layers.THREE_MILES.code: dispatch(addLayer(getVectorLayerClosure(Layers.THREE_MILES.code))); break;
+            case Layers.SIX_MILES.code: dispatch(addLayer(getVectorLayerClosure(Layers.SIX_MILES.code))); break;
+            case Layers.TWELVE_MILES.code: dispatch(addLayer(getVectorLayerClosure(Layers.TWELVE_MILES.code))); break;
+            case Layers.REGULATORY.code: {
                 if (!layerToShow.zone) {
                     console.error("No regulatory layer to show.")
                     return
@@ -40,10 +39,11 @@ const showLayer = layerToShow => (dispatch, getState) => {
 
                 let hash = getHash(`${layerToShow.zone.layerName}:${layerToShow.zone.zone}`)
                 let gearCategory = getGearCategory(layerToShow.zone.gears, getState().gear.gears);
-                let vectorLayer = getVectorLayerClosure(Layers.REGULATORY, layerToShow.zone, hash, gearCategory);
+                let vectorLayer = getVectorLayerClosure(Layers.REGULATORY.code, layerToShow.zone, hash, gearCategory);
                 dispatch(addLayer(vectorLayer));
                 break;
             }
+            default: dispatch(addLayer(getVectorLayerClosure(layerToShow.type))); break;
         }
 
         dispatch(addShowedLayer(layerToShow))
@@ -53,7 +53,7 @@ const showLayer = layerToShow => (dispatch, getState) => {
 const getVectorLayer = dispatch => (type, regulatoryZone, hash, gearCategory) => new VectorLayer({
     source: getVectorSource(dispatch)(type, regulatoryZone, dispatch),
     renderMode: 'image',
-    className: regulatoryZone ? `${Layers.REGULATORY}:${regulatoryZone.layerName}:${regulatoryZone.zone}` : type,
+    className: regulatoryZone ? `${Layers.REGULATORY.code}:${regulatoryZone.layerName}:${regulatoryZone.zone}` : type,
     style: feature => {
         return [getVectorLayerStyle(type)(feature, hash, gearCategory)]
     }

@@ -122,7 +122,7 @@ const VesselsSearchBox = () => {
 
     useEffect(() => {
         if (searchText.length > 1) {
-            let vesselsLayer = layers.find(layer => layer.className_ === LayersEnum.VESSELS)
+            let vesselsLayer = layers.find(layer => layer.className_ === LayersEnum.VESSELS.code)
             let foundVesselsOnMap = getFoundVesselsOnMap(vesselsLayer);
             setFoundVesselsOnMap(foundVesselsOnMap)
 

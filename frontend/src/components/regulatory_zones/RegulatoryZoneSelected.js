@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
 import RegulatoryZoneSelectedLayer from "./RegulatoryZoneSelectedLayer";
@@ -7,6 +7,7 @@ import {COLORS} from "../../constants/constants";
 const RegulatoryZoneSelected = props => {
     const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false);
     const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
+    const firstUpdate = useRef(true);
 
     function increaseNumberOfZonesOpened(number) {
         setNumberOfZonesOpened(numberOfZonesOpened + number)
@@ -33,10 +34,14 @@ const RegulatoryZoneSelected = props => {
     }, [props.regulatoryZoneMetadata])
 
     useEffect(() => {
-        if(props.hideZonesListWhenSearching) {
-            setShowRegulatoryZonesSelected(false)
+        if(firstUpdate) {
+            firstUpdate.current = false
         } else {
-            setShowRegulatoryZonesSelected(true)
+            if(props.hideZonesListWhenSearching) {
+                setShowRegulatoryZonesSelected(false)
+            } else {
+                setShowRegulatoryZonesSelected(true)
+            }
         }
     }, [props.hideZonesListWhenSearching])
 

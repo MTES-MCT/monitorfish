@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setError} from "../domain/reducers/Global";
 
 import {ReactComponent as LayersSVG} from '../components/icons/Couches.svg';
-import LayersEnum, {baseLayers} from "../domain/entities/layers";
+import LayersEnum, {baseLayers, layersType} from "../domain/entities/layers";
 
 import addRegulatoryZonesToMySelection from "../domain/use_cases/addRegulatoryZonesToMySelection";
 import getAllRegulatoryZones from "../domain/use_cases/getAllRegulatoryZones";
@@ -12,7 +12,7 @@ import removeRegulatoryZoneFromMySelection from "../domain/use_cases/removeRegul
 import showLayer from "../domain/use_cases/showLayer";
 import hideLayers from "../domain/use_cases/hideLayers";
 import RegulatoryZoneSelection from "../components/regulatory_zones/RegulatoryZoneSelection";
-import AdministrativeZoneSelection from "../components/administratives_zones/AdministrativeZoneSelection";
+import AdministrativeZones from "../components/administratives_zones/AdministrativeZones";
 import RegulatoryZoneSelected from "../components/regulatory_zones/RegulatoryZoneSelected";
 import {COLORS} from "../constants/constants";
 import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
@@ -26,7 +26,6 @@ const LayersSidebar = () => {
     const dispatch = useDispatch()
     const showedLayers = useSelector(state => state.layer.showedLayers)
     const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
-    const administrativeZones = useSelector(state => state.layer.administrativeZones)
     const {
         isReadyToShowRegulatoryZones,
         regulatoryZoneMetadataPanelIsOpen,
@@ -39,6 +38,7 @@ const LayersSidebar = () => {
 
     const firstUpdate = useRef(true);
     const [regulatoryZones, setRegulatoryZones] = useState();
+    const [administrativeZones, setAdministrativeZones] = useState([])
     const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false);
     const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
     const [hideZonesListWhenSearching, setHideZonesListWhenSearching] = useState(false)
@@ -63,6 +63,11 @@ const LayersSidebar = () => {
     }, [layersSidebarIsOpen])
 
     useEffect(() => {
+        const administrativeZones = Object.keys(LayersEnum)
+            .map(layerName => LayersEnum[layerName])
+            .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+        setAdministrativeZones(administrativeZones)
+
         dispatch(getAllRegulatoryZones())
             .then(regulatoryZones => setRegulatoryZones(regulatoryZones))
             .catch(error => {
@@ -81,14 +86,14 @@ const LayersSidebar = () => {
 
     function callShowRegulatoryZone(regulatoryZone) {
         dispatch(showLayer({
-            type: LayersEnum.REGULATORY,
+            type: LayersEnum.REGULATORY.code,
             zone: regulatoryZone,
         }))
     }
 
     function callHideRegulatoryZone(regulatoryZone) {
         dispatch(hideLayers({
-            type: LayersEnum.REGULATORY,
+            type: LayersEnum.REGULATORY.code,
             zone: regulatoryZone
         }))
     }
@@ -160,7 +165,7 @@ const LayersSidebar = () => {
                     regulatoryZoneMetadata={regulatoryZoneMetadata}
                     hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />
-                <AdministrativeZoneSelection
+                <AdministrativeZones
                     administrativeZones={administrativeZones}
                     showedLayers={showedLayers}
                     callShowAdministrativeZone={callShowAdministrativeZone}

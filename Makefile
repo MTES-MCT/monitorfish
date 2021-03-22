@@ -48,17 +48,22 @@ restart-remote-app:
 	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
 run-local-app:
 	cd infra/local && sudo docker-compose up -d
-run-pipeline-server:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:v0.1.0_snapshot
-	infra/remote/data-pipeline/start-server.sh
-run-pipeline-flows:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:v0.1.0_snapshot && \
+run-pipeline-server-prod:
+	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH-VERSION)
+	infra/remote/data-pipeline/prod/start-server.sh
+run-pipeline-server-int:
+	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH-VERSION)
+	infra/remote/data-pipeline/int/start-server.sh
+run-pipeline-flows-prod:
+	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH-VERSION) && \
+	infra/remote/data-pipeline/start-flows.sh
+run-pipeline-flows-int:
+	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH-VERSION) && \
 	infra/remote/data-pipeline/start-flows.sh
 stop-pipeline-server:
 	infra/remote/data-pipeline/stop-server.sh
 stop-pipeline-flows:
 	docker container stop monitorfish-pipeline-flows; docker container rm monitorfish-pipeline-flows;
-
 
 # DATA commands
 install-pipeline:

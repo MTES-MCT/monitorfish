@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "rsuite/lib/Modal";
 import {COLORS} from "../constants/constants";
@@ -92,7 +92,12 @@ function orderToCSVColumnOrder(valuesChecked, filteredVesselObject) {
 const DownloadVesselListModal = props => {
     const [indeterminate, setIndeterminate] = useState(false)
     const [checkAll, setCheckAll] = useState(true)
-    const [valuesChecked, setValuesChecked] = useState(Object.keys(options).map(value => options[value].code))
+    const [valuesChecked, setValuesChecked] = useState([])
+
+    useEffect(() => {
+        let values = Object.keys(options).map(value => options[value].code)
+        setValuesChecked(values ? values : [])
+    }, [])
 
     const handleCheckAll = (value, checked) => {
         const nextValue = checked ? Object.keys(options).map(value => options[value].code) : [];

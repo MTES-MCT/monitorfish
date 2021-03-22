@@ -37,6 +37,10 @@ def register_flow(f: prefect.Flow) -> None:
 
 
 if __name__ == "__main__":
+
+    prefect.config.flows.checkpointing = False
+    prefect.config.tasks.checkpointing = False
+
     # Initialize a client, which can interact with the Prefect orchestrator.
     # The communication with the orchestrator is done through the Prefect GraphQL API.
     # This API is served on localhost:4200.

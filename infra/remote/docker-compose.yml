@@ -15,7 +15,7 @@ services:
     restart: always
 
   app:
-    image: docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(MONITORFISH-VERSION)
+    image: docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(MONITORFISH_VERSION)
     environment:
       - ENV_DB_URL=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
       - HOST_IP=127.0.0.1

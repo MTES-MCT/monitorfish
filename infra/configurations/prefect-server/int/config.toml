@@ -1,0 +1,3 @@
+[server]
+  [server.ui]
+    apollo_url="http://prefect-test.csam.e2.rie.gouv.fr/graphql"

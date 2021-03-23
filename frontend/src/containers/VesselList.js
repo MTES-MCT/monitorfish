@@ -14,13 +14,17 @@ import Tag from "rsuite/lib/Tag";
 import SelectPicker from "rsuite/lib/SelectPicker";
 import {removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected} from "../domain/reducers/Map";
 import {Interactions, OPENLAYERS_PROJECTION} from "../domain/entities/map";
-import {resetTemporaryVesselsToHighLightOnMap, setTemporaryVesselsToHighLightOnMap} from "../domain/reducers/Vessel";
+import {
+    resetTemporaryVesselsToHighLightOnMap,
+    setTemporaryVesselsToHighLightOnMap
+} from "../domain/reducers/Vessel";
 import VesselListTable from "../components/VesselListTable";
 import DownloadVesselListModal from "../components/DownloadVesselListModal";
 import countries from "i18n-iso-countries";
 import {getCoordinates} from "../utils";
 import getAdministrativeZoneGeometry from "../domain/use_cases/getAdministrativeZoneGeometry";
 import {getAdministrativeSubZonesFromAPI} from "../api/fetch";
+import {setError} from "../domain/reducers/Global";
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
@@ -73,7 +77,10 @@ const VesselList = () => {
                                 isSubZone: true
                             }
                         })
-                    })
+                    }).catch(error => {
+                        console.error(error)
+                        dispatch(setError(error))
+                    });
                 }
 
                 let nextZone = {...zone}

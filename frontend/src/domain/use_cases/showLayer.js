@@ -51,7 +51,7 @@ const showLayer = layerToShow => (dispatch, getState) => {
 }
 
 const getVectorLayer = dispatch => (type, regulatoryZone, hash, gearCategory) => new VectorLayer({
-    source: getVectorSource(dispatch)(type, regulatoryZone, dispatch),
+    source: getVectorSource(dispatch)(type, regulatoryZone),
     renderMode: 'image',
     className: regulatoryZone ? `${Layers.REGULATORY.code}:${regulatoryZone.layerName}:${regulatoryZone.zone}` : type,
     style: feature => {

@@ -26,7 +26,7 @@ const mapSlice = createSlice({
         vesselNamesHiddenByZoom: undefined,
         isMoving: false,
         interaction: null,
-        zoneSelected: null,
+        zonesSelected: [],
         selectedBaseLayer: getLocalStorageState(baseLayers.OSM.code, baseLayerLocalStorageKey),
         view: getLocalStorageState({
             zoom: null,
@@ -82,11 +82,19 @@ const mapSlice = createSlice({
         resetInteraction(state) {
             state.interaction = null
         },
-        setZoneSelected(state, action) {
-            state.zoneSelected = action.payload
+        addZoneSelected(state, action) {
+            state.zonesSelected = state.zonesSelected.concat(action.payload)
         },
-        resetZoneSelected(state) {
-            state.zoneSelected = null
+        removeZoneSelected(state, action) {
+            state.zonesSelected = state.zonesSelected.filter(zoneSelected => {
+                return zoneSelected.name !== action.payload
+            })
+        },
+        setZonesSelected(state, action) {
+            state.zonesSelected = action.payload
+        },
+        resetZonesSelected(state) {
+            state.zonesSelected = []
         }
     }
 })
@@ -106,8 +114,10 @@ export const {
     selectBaseLayer,
     setInteraction,
     resetInteraction,
-    setZoneSelected,
-    resetZoneSelected
+    addZoneSelected,
+    setZonesSelected,
+    removeZoneSelected,
+    resetZonesSelected
 } = mapSlice.actions
 
 export default mapSlice.reducer

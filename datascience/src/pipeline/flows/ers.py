@@ -43,7 +43,7 @@ def get_message_type(zipfile_name: str) -> str:
 ######################################## TASKS ########################################
 
 
-@task
+@task(checkpoint=False)
 def extract_zipfiles(
     input_dir: pathlib.Path,
     treated_dir: pathlib.Path,
@@ -144,7 +144,7 @@ def extract_zipfiles(
     return res
 
 
-@task
+@task(checkpoint=False)
 def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
 
     if zipfile:
@@ -185,7 +185,7 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
             move(zipfile["input_dir"] / zipfile["full_name"], zipfile["error_dir"])
 
 
-@task
+@task(checkpoint=False)
 def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = prefect.context.get("logger")
     if zipfile:
@@ -198,7 +198,7 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
         pass
 
 
-@task
+@task(checkpoint=False)
 def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = prefect.context.get("logger")
     if zipfile:
@@ -217,7 +217,7 @@ def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
         pass
 
 
-@task
+@task(checkpoint=False)
 def load_ers(cleaned_data: List[dict]):
     """Loads ERS data into public.ers and public.ers_messages tables.
 

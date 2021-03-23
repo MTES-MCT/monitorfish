@@ -14,9 +14,6 @@ function App() {
       <>
           <ToastProvider placement="bottom-right">
               <Wrapper>
-                  <Logo>
-                      <img src="monitorfish.png" style={{width: 30, height: 30}} alt='MonitorFish'/>
-                  </Logo>
                   <VesselsSearchBox/>
                   <MapWrapper />
                   <LayersSidebar />

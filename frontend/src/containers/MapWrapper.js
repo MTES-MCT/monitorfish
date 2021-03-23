@@ -79,22 +79,19 @@ const MapWrapper = () => {
         }),
         SATELLITE: new TileLayer({
             source: new XYZ({
-                url: 'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=' +
-                    'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
+                url: 'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=' + process.env.REACT_APP_MAPBOX_KEY,
                 maxZoom: 19
             }),
             className: LayersEnum.BASE_LAYER.code
         }),
         LIGHT: new MapboxVector({
             styleUrl: 'mapbox://styles/mapbox/light-v10',
-            accessToken:
-                'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
+            accessToken: process.env.REACT_APP_MAPBOX_KEY,
             className: LayersEnum.BASE_LAYER.code
         }),
         DARK: new MapboxVector({
             styleUrl: 'mapbox://styles/monitorfish/cklv7vc0f1ej817o5ivmkjmrs',
-            accessToken:
-                'pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ',
+            accessToken: process.env.REACT_APP_MAPBOX_KEY,
             className: LayersEnum.BASE_LAYER.code
         })
     })

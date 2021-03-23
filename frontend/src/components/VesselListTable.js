@@ -96,7 +96,7 @@ const VesselListTable = props => {
             <Table
                 virtualized
                 height={510}
-                width={1147}
+                width={1187}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -173,12 +173,12 @@ const VesselListTable = props => {
                     <Cell dataKey="longitude" />
                 </Column>
 
-                <Column width={40}>
+                <Column sortable width={60}>
                     <HeaderCell>Cap</HeaderCell>
                     <Cell dataKey="course" />
                 </Column>
 
-                <Column width={60}>
+                <Column sortable width={80}>
                     <HeaderCell>Vitesse</HeaderCell>
                     <Cell dataKey="speed" />
                 </Column>

@@ -1,15 +1,20 @@
+import io
 import os
 from datetime import date
 from time import sleep
 
 import pandas as pd
+import prefect
 import requests
 from dotenv import load_dotenv
 from prefect import Flow, Parameter, task
 
+from config import LIBRARY_LOCATION, PORTS_URL
 from src.db_config import create_engine
 from src.pipeline.processing import combine_overlapping_columns
+from src.pipeline.utils import delete
 from src.read_query import read_table
+from src.utils.database import get_table, psql_insert_copy
 from src.utils.geocode import geocode
 
 load_dotenv()
@@ -55,7 +60,7 @@ def make_lat_lon(lat_lon: str):
 # Source : https://unece.org/trade/cefact/codes-trade
 
 
-@task
+@task(checkpoint=False)
 def extract_unece_locations(csv_directory_path):
     csv_files = os.listdir(csv_directory_path)
     csv_filepaths = [
@@ -92,7 +97,7 @@ def extract_unece_locations(csv_directory_path):
     return locations
 
 
-@task
+@task(checkpoint=False)
 def clean_unece(locations):
     # Remove duplicate locodes by taking only the most recent one
     locations["relevant_date_yymm"] = locations.relevant_date_yymm.map(make_date)
@@ -132,7 +137,7 @@ def clean_unece(locations):
     return locations
 
 
-@task
+@task(checkpoint=False)
 def load_unece(locations):
     engine = create_engine("monitorfish_remote")
     locations.to_sql(
@@ -154,14 +159,14 @@ with Flow("Create UNECE ports codes table") as flow_make_unece_ports:
 # ** Flow to extract data from csv file downloaded from CIRCABC Master Data Register **
 
 
-@task
+@task(checkpoint=False)
 def extract_circabc_locations(csv_filepath):
     locations = pd.read_csv(csv_filepath, encoding="utf-8", header=[0])
 
     return locations
 
 
-@task
+@task(checkpoint=False)
 def clean_circabc(locations):
     # Extract latitude longitude from string value like "9060N 18060W"
     positions = locations.apply(
@@ -200,7 +205,7 @@ def clean_circabc(locations):
     return locations
 
 
-@task
+@task(checkpoint=False)
 def load_circabc(locations):
     engine = create_engine("monitorfish_remote")
     locations.to_sql(
@@ -222,19 +227,19 @@ with Flow("Create CIRCABC ports codes table") as flow_make_circabc_ports:
 # ************** Flow to extract ports from CIRCABC and UNECE and merge ***************
 
 
-@task
+@task(checkpoint=False)
 def extract_unece_ports():
     unece_ports = read_table("monitorfish_remote", "external", "unece_port_codes")
     return unece_ports
 
 
-@task
+@task(checkpoint=False)
 def extract_circabc_ports():
     circabc_ports = read_table("monitorfish_remote", "external", "circabc_port_codes")
     return circabc_ports
 
 
-@task
+@task(checkpoint=False)
 def merge_circabc_unece(circabc_ports, unece_ports):
 
     keep_unece_cols = ["region", "locode", "latitude", "longitude"]
@@ -250,7 +255,7 @@ def merge_circabc_unece(circabc_ports, unece_ports):
     return ports
 
 
-@task
+@task(checkpoint=False)
 def combine_columns_into_value(ports):
     combine_cols = {
         "latitude": ["latitude_circabc", "latitude_unece"],
@@ -267,7 +272,7 @@ def combine_columns_into_value(ports):
     return res
 
 
-@task
+@task(checkpoint=False)
 def load_port_codes(ports):
     engine = create_engine("monitorfish_remote")
     ports.to_sql(
@@ -316,20 +321,20 @@ def geocode_row(row):
     return pd.Series([lat, lon], index=["geocoded_latitude", "geocoded_longitude"])
 
 
-@task
+@task(checkpoint=False)
 def extract_port_codes():
     ports = read_table("monitorfish_remote", "interim", "port_codes")
     return ports
 
 
-@task
+@task(checkpoint=False)
 def geocode_ports(ports):
     positions = ports.apply(geocode_row, axis=1, result_type="expand")
     geocoded_ports = ports.join(positions)
     return geocoded_ports
 
 
-@task
+@task(checkpoint=False)
 def load_geocoded_ports(geocoded_ports):
     engine = create_engine("monitorfish_remote")
     geocoded_ports.to_sql(
@@ -347,16 +352,20 @@ with Flow("Geocode ports") as flow_geocode_ports:
     load_geocoded_ports(geocoded_ports)
 
 
-# ** Flow : take geocoded position if available, fall back to CIRCABC/UNECE position **
+# **************** Flow : combine all data together & add manual fixes ****************
+# Locations : take geocoded position if available, fall back to CIRCABC/UNECE position
+# Manual fixes : add a few missing ports
+# The result of this flow can be uploaded to data.gouv.fr on the CNSP profile
+# https://www.data.gouv.fr/fr/users/centre-national-de-surveillance-des-peches-cnsp/
 
 
-@task
+@task(checkpoint=False)
 def extract_geocoded_ports():
     geocoded_ports = read_table("monitorfish_remote", "interim", "geocoded_ports")
     return geocoded_ports
 
 
-@task
+@task(checkpoint=False)
 def merge_lat_lon(geocoded_ports):
     combine_cols = {
         "latitude": ["geocoded_latitude", "latitude"],
@@ -370,17 +379,93 @@ def merge_lat_lon(geocoded_ports):
     return res
 
 
-@task
+@task(checkpoint=False)
+def add_manual_fixes(ports):
+    fixes = pd.read_csv(LIBRARY_LOCATION / "pipeline/data/manually_added_ports.csv")
+    return pd.concat([fixes, ports])
+
+
+@task(checkpoint=False)
 def load_ports(ports):
     engine = create_engine("monitorfish_remote")
-    ports.to_sql("ports", engine, schema="public", if_exists="replace", index=False)
+    ports.to_sql(
+        "ports",
+        engine,
+        schema="processed",
+        index=False,
+        method=psql_insert_copy,
+        if_exists="replace",
+    )
 
 
-with Flow("Load ports from interim.geocoded_ports to public.ports") as flow_load_ports:
+with Flow(
+    "Load ports from interim.geocoded_ports to processed.ports"
+) as flow_load_ports:
     geocoded_ports = extract_geocoded_ports()
     ports = merge_lat_lon(geocoded_ports)
+    ports = add_manual_fixes(ports)
     load_ports(ports)
 
 
-if __name__ == "__main__":
-    flow_geocode_ports.run()
+# **** Flow to extract ports from data.gouv.fr and upload to Monitorfish database ****
+
+
+@task(checkpoint=False)
+def extract_datagouv_ports(ports_url: str = PORTS_URL):
+    r = requests.get(ports_url)
+    f = io.StringIO(r.text)
+
+    dtype = {
+        "country_code_iso2": str,
+        "locode": str,
+        "port_name": str,
+        "is_fiching_port": str,
+        "is_landing_place": str,
+        "is_commercial_port": str,
+        "region": str,
+        "latitude": float,
+        "longitude": float,
+    }
+
+    use_cols = [
+        "country_code_iso2",
+        "region",
+        "locode",
+        "port_name",
+        "latitude",
+        "longitude",
+    ]
+
+    ports = pd.read_csv(f, dtype=dtype, usecols=use_cols)
+    return ports
+
+
+@task(checkpoint=False)
+def load_ports_to_monitorfish(ports):
+
+    schema = "public"
+    table_name = "ports"
+    e = create_engine("monitorfish_remote")
+    logger = prefect.context.get("logger")
+
+    ports_table = get_table(table_name, schema, e, logger)
+
+    with e.begin() as connection:
+
+        # Delete all rows from table
+        delete(ports_table, connection, logger)
+
+        # Insert data into table
+        ports.to_sql(
+            name=table_name,
+            con=connection,
+            schema=schema,
+            index=False,
+            method=psql_insert_copy,
+            if_exists="append",
+        )
+
+
+with Flow("Extract ports from data.gouv.fr and load to Monitorfish") as flow:
+    ports = extract_datagouv_ports()
+    load_ports_to_monitorfish(ports)

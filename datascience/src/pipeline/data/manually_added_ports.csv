@@ -1,0 +1,4 @@
+country_code_iso2,locode,port_name,is_fiching_port,is_landing_place,is_commercial_port,region,latitude,longitude
+ES,ESCEL,Celeiro,Y,,,,43.678848,-7.596791
+FR,FRMM8,Saintes-Maries-de-la-Mer,Y,,,13,43.4522771,4.4287172
+FR,FRGN2,Saint-Guenole,Y,,,29,48.2505993,-4.4637537

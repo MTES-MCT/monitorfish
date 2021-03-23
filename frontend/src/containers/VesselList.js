@@ -58,6 +58,7 @@ const VesselList = () => {
         const nextZonesPromises = Object.keys(LayersEnum)
             .map(layerName => LayersEnum[layerName])
             .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+            .filter(layer => layer.isIntersectable)
             .map(zone => {
                 if(zone.containsMultipleZones) {
                     return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
@@ -301,6 +302,19 @@ const VesselList = () => {
         ]
     }
 
+    const compare = (a, b) => {
+        let nameA = a.toUpperCase();
+        let nameB = b.toUpperCase();
+
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    }
+
     return (
         <>
             <Wrapper isShowed={isShowed}>
@@ -381,6 +395,17 @@ const VesselList = () => {
                                                 {tag.name}
                                             </Tag>
                                         ));
+                                    }}
+                                    sort={isGroup => {
+                                        if (isGroup) {
+                                            return (a, b) => {
+                                                return compare(a.groupTitle, b.groupTitle);
+                                            };
+                                        }
+
+                                        return (a, b) => {
+                                            return compare(a.value, b.value);
+                                        };
                                     }}
                                     virtualized
                                 />
@@ -584,13 +609,6 @@ const BoxFilter = styled(BoxFilterSVG)`
   height: 30px;
   cursor: pointer;
   margin-left: 10px;
-  vertical-align: text-bottom;
-`
-
-const LittleBox = styled(BoxFilterSVG)`
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
   vertical-align: text-bottom;
 `
 

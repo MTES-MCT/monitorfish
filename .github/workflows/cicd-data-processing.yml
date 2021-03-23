@@ -6,6 +6,15 @@ on:
     - 'datascience/**'
     - '.github/workflows/*'
     - 'infra/docker/Dockerfile.DataPipeline'
+    - '**.kt'
+    - '**.js'
+    - '**.ts'
+    - '**.yml'
+    - '.github/workflows/cicd.yml'
+    - 'infra/configurations/**.properties'
+    - 'infra/docker/DockerfileBuildApp'
+    - '**.sql'
+    - 'backend/pom.xml'
 
 jobs:
   build:

@@ -3,6 +3,9 @@ name: CI/CD Back & Front
 on:
   push:
     paths:
+    - 'datascience/**'
+    - '.github/workflows/*'
+    - 'infra/docker/Dockerfile.DataPipeline'
     - '**.kt'
     - '**.js'
     - '**.ts'

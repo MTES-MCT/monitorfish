@@ -360,3 +360,16 @@ curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspac
   }
 }
 EOF
+
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "aem_areas",
+    "nativeName": "aem_areas",
+    "title": "AEM areas",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF

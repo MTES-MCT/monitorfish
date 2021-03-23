@@ -24,10 +24,6 @@ flows_to_register = [
     vessels.flow,
     fishing_gear_codes.flow,
     species.flow,
-    ports.flow_make_circabc_ports,
-    ports.flow_make_unece_ports,
-    ports.flow_combine_circabc_unece_ports,
-    ports.flow_geocode_ports,
-    ports.flow_load_ports,
     ers.flow,
+    ports.flow,
 ]

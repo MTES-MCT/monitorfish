@@ -26,6 +26,7 @@ PGCLIENTENCODING=LATIN1 psql -d cnsp -U adl -f sig/layersdata/1241_mer_mediterra
 PGCLIENTENCODING=LATIN1 psql -d cnsp -U adl -f sig/layersdata/1241_mer_noire.sql
 
 PGCLIENTENCODING=LATIN1 psql -d cnsp -U adl -f sig/layersdata/cormoran_areas.sql
+PGCLIENTENCODING=LATIN1 psql -d cnsp -U adl -f sig/layersdata/aem_areas.sql
 
 PGCLIENTENCODING=LATIN1 psql -d cnsp -U adl -f sig/layersdata/fao_CCAMLR_areas.sql
 PGCLIENTENCODING=LATIN1 psql -d cnsp -U adl -f sig/layersdata/fao_ICCAT_areas.sql

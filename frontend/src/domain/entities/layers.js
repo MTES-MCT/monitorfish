@@ -28,7 +28,8 @@ export default {
         group: null,
         type: layersType.BASE_LAYER,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: false
     },
     VESSELS: {
         code: 'vessels',
@@ -36,7 +37,8 @@ export default {
         group: null,
         type: layersType.VESSEL,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: false
     },
     VESSEL_TRACK: {
         code: 'vessel_track',
@@ -44,7 +46,8 @@ export default {
         group: null,
         type: layersType.VESSEL,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: false
     },
     REGULATORY: {
         code: 'regulatory_areas',
@@ -52,15 +55,17 @@ export default {
         group: null,
         type: layersType.REGULATORY,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: false
     },
     EEZ: {
         code: 'eez_areas',
         name: 'Zones ZEE',
         group: null,
         type: layersType.ADMINISTRATIVE,
-        containsMultipleZones: false,
-        subZoneFieldKey: null
+        containsMultipleZones: true,
+        subZoneFieldKey: 'union',
+        isIntersectable: true
     },
     FAO: {
         code: 'fao_areas',
@@ -68,7 +73,17 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
-        subZoneFieldKey: 'f_division'
+        subZoneFieldKey: 'f_division',
+        isIntersectable: true
+    },
+    AEM: {
+        code: 'aem_areas',
+        name: 'Zones AEM',
+        group: null,
+        type: layersType.ADMINISTRATIVE,
+        containsMultipleZones: false,
+        subZoneFieldKey: 'name',
+        isIntersectable: false
     },
     THREE_MILES: {
         code: '3_miles_areas',
@@ -76,7 +91,8 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: false
     },
     SIX_MILES: {
         code: '6_miles_areas',
@@ -84,7 +100,8 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: false
     },
     TWELVE_MILES: {
         code: '12_miles_areas',
@@ -92,7 +109,8 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: false
     },
     eaux_occidentales_australes: {
         code: '1241_eaux_occidentales_australes_areas',
@@ -100,7 +118,8 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     eaux_occidentales_septentrionales: {
         code: '1241_eaux_occidentales_septentrionales_areas',
@@ -108,7 +127,8 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     eaux_union_dans_oi_et_atl_ouest: {
         code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
@@ -116,7 +136,8 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     mer_baltique: {
         code: '1241_mer_baltique_areas',
@@ -124,7 +145,8 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     mer_du_nord: {
         code: '1241_mer_du_nord_areas',
@@ -132,7 +154,8 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     mer_mediterranee: {
         code: '1241_mer_mediterranee_areas',
@@ -140,7 +163,8 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     mer_noire: {
         code: '1241_mer_noire_areas',
@@ -148,7 +172,8 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     cormoran: {
         code: 'cormoran_areas',
@@ -156,7 +181,8 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
-        subZoneFieldKey: 'zonex'
+        subZoneFieldKey: 'zonex',
+        isIntersectable: true
     },
     CCAMLR: {
         code: 'fao_ccamlr_areas',
@@ -164,7 +190,8 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     ICCAT: {
         code: 'fao_iccat_areas',
@@ -172,7 +199,8 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     IOTC: {
         code: 'fao_iotc_areas',
@@ -180,7 +208,8 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     NEAFC: {
         code: 'fao_neafc_areas',
@@ -188,7 +217,8 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     SIOFA: {
         code: 'fao_siofa_areas',
@@ -196,15 +226,17 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
-        subZoneFieldKey: null
+        subZoneFieldKey: null,
+        isIntersectable: true
     },
     rectangles_stat: {
         code: 'rectangles_stat_areas',
         name: 'Rectangles stat',
         group: null,
         type: layersType.ADMINISTRATIVE,
-        containsMultipleZones: false,
-        subZoneFieldKey: null
+        containsMultipleZones: true,
+        subZoneFieldKey: 'icesname',
+        isIntersectable: true
     },
     situation_atlant: {
         code: 'situ_atlant_areas',
@@ -212,7 +244,8 @@ export default {
         group: layersGroups.VMS_SITUATION,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
-        subZoneFieldKey: 'libelle'
+        subZoneFieldKey: 'libelle',
+        isIntersectable: true
     },
     situation_med: {
         code: 'situ_med_areas',
@@ -220,7 +253,8 @@ export default {
         group: layersGroups.VMS_SITUATION,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
-        subZoneFieldKey: 'libelle'
+        subZoneFieldKey: 'libelle',
+        isIntersectable: true
     },
     situation_memn: {
         code: 'situ_memn_areas',
@@ -228,7 +262,8 @@ export default {
         group: layersGroups.VMS_SITUATION,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
-        subZoneFieldKey: 'libelle'
+        subZoneFieldKey: 'libelle',
+        isIntersectable: true
     },
     situation_outre_mer: {
         code: 'situ_outre_mer_areas',
@@ -236,7 +271,8 @@ export default {
         group: layersGroups.VMS_SITUATION,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
-        subZoneFieldKey: 'libelle'
+        subZoneFieldKey: 'libelle',
+        isIntersectable: true
     },
 }
 

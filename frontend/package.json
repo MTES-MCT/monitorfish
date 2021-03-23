@@ -37,6 +37,7 @@
     "start": "sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "build": "sh -ac '. ../infra/configurations/frontend/.env.${REACT_APP_ENV}; react-scripts build'",
     "build:dev": "REACT_APP_ENV=dev npm run build",
+    "build:prod": "REACT_APP_ENV=prod npm run build",
     "build:local": "REACT_APP_ENV=local npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

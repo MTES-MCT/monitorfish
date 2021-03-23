@@ -14,7 +14,7 @@ export const getVectorLayerStyle = type => {
             }),
             text: new Text({
                 font: '12px Avenir',
-                text: `${feature.get('union')}`,
+                text: `${feature.get(Layers.EEZ.subZoneFieldKey) ? feature.get(Layers.EEZ.subZoneFieldKey) : ''}`,
                 fill: new Fill({color: '#05055E'}),
                 stroke: new Stroke({color: 'rgba(255,255,255,0.9)', width: 2})
             })
@@ -26,7 +26,91 @@ export const getVectorLayerStyle = type => {
             }),
             text: new Text({
                 font: '12px Avenir',
-                text: `${feature.get('f_division') ? feature.get('f_division') : ''}`,
+                text: `${feature.get(Layers.FAO.subZoneFieldKey) ? feature.get(Layers.FAO.subZoneFieldKey) : ''}`,
+                fill: new Fill({color: '#05055E'}),
+                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+            })
+        })
+        case Layers.AEM.code: return feature => new Style({
+            stroke: new Stroke({
+                color: '#767AB2',
+                width: 1,
+            }),
+            text: new Text({
+                font: '12px Avenir',
+                text: `${feature.get(Layers.AEM.subZoneFieldKey) ? feature.get(Layers.AEM.subZoneFieldKey) : ''}`,
+                fill: new Fill({color: '#05055E'}),
+                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+            })
+        })
+        case Layers.cormoran.code: return feature => new Style({
+            stroke: new Stroke({
+                color: '#767AB2',
+                width: 1,
+            }),
+            text: new Text({
+                font: '12px Avenir',
+                text: `${feature.get(Layers.cormoran.subZoneFieldKey) ? feature.get(Layers.cormoran.subZoneFieldKey) : ''}`,
+                fill: new Fill({color: '#05055E'}),
+                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+            })
+        })
+        case Layers.situation_atlant.code: return feature => new Style({
+            stroke: new Stroke({
+                color: '#767AB2',
+                width: 1,
+            }),
+            text: new Text({
+                font: '12px Avenir',
+                text: `${feature.get(Layers.situation_atlant.subZoneFieldKey) ? feature.get(Layers.situation_atlant.subZoneFieldKey) : ''}`,
+                fill: new Fill({color: '#05055E'}),
+                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+            })
+        })
+        case Layers.situation_med.code: return feature => new Style({
+            stroke: new Stroke({
+                color: '#767AB2',
+                width: 1,
+            }),
+            text: new Text({
+                font: '12px Avenir',
+                text: `${feature.get(Layers.situation_med.subZoneFieldKey) ? feature.get(Layers.situation_med.subZoneFieldKey) : ''}`,
+                fill: new Fill({color: '#05055E'}),
+                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+            })
+        })
+        case Layers.situation_memn.code: return feature => new Style({
+            stroke: new Stroke({
+                color: '#767AB2',
+                width: 1,
+            }),
+            text: new Text({
+                font: '12px Avenir',
+                text: `${feature.get(Layers.situation_memn.subZoneFieldKey) ? feature.get(Layers.situation_memn.subZoneFieldKey) : ''}`,
+                fill: new Fill({color: '#05055E'}),
+                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+            })
+        })
+        case Layers.situation_outre_mer.code: return feature => new Style({
+            stroke: new Stroke({
+                color: '#767AB2',
+                width: 1,
+            }),
+            text: new Text({
+                font: '12px Avenir',
+                text: `${feature.get(Layers.situation_outre_mer.subZoneFieldKey) ? feature.get(Layers.situation_outre_mer.subZoneFieldKey) : ''}`,
+                fill: new Fill({color: '#05055E'}),
+                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
+            })
+        })
+        case Layers.rectangles_stat.code: return feature => new Style({
+            stroke: new Stroke({
+                color: '#767AB2',
+                width: 1,
+            }),
+            text: new Text({
+                font: '12px Avenir',
+                text: `${feature.get(Layers.rectangles_stat.subZoneFieldKey) ? feature.get(Layers.rectangles_stat.subZoneFieldKey) : ''}`,
                 fill: new Fill({color: '#05055E'}),
                 stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
             })

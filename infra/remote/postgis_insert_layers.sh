@@ -19,6 +19,7 @@ PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f sig/laye
 PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f sig/layersdata/1241_mer_noire.sql
 
 PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f sig/layersdata/cormoran_areas.sql
+PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f sig/layersdata/aem_areas.sql
 
 PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f sig/layersdata/fao_CCAMLR_areas.sql
 PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f sig/layersdata/fao_ICCAT_areas.sql

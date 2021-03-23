@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "rsuite/lib/Modal";
 import {COLORS} from "../constants/constants";
@@ -7,7 +7,7 @@ import CheckboxGroup from "rsuite/lib/CheckboxGroup";
 import {Radio} from "rsuite";
 import { ExportToCsv } from 'export-to-csv';
 import countries from "i18n-iso-countries";
-import {getDateTime} from "../utils";
+import {getDate, getDateTime} from "../utils";
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
@@ -19,7 +19,7 @@ const optionsCSV = {
     showTitle: false,
     useTextFile: false,
     useBom: true,
-    useKeysAsHeaders: true,
+    useKeysAsHeaders: true
 };
 
 const csvExporter = new ExportToCsv(optionsCSV);
@@ -92,7 +92,12 @@ function orderToCSVColumnOrder(valuesChecked, filteredVesselObject) {
 const DownloadVesselListModal = props => {
     const [indeterminate, setIndeterminate] = useState(false)
     const [checkAll, setCheckAll] = useState(true)
-    const [valuesChecked, setValuesChecked] = useState(Object.keys(options).map(value => options[value].code))
+    const [valuesChecked, setValuesChecked] = useState([])
+
+    useEffect(() => {
+        let values = Object.keys(options).map(value => options[value].code)
+        setValuesChecked(values ? values : [])
+    }, [])
 
     const handleCheckAll = (value, checked) => {
         const nextValue = checked ? Object.keys(options).map(value => options[value].code) : [];
@@ -124,6 +129,8 @@ const DownloadVesselListModal = props => {
             return orderToCSVColumnOrder(valuesChecked, filteredVesselObject)
         })
 
+        const date = new Date()
+        csvExporter.options.filename = `export_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1  }`
         csvExporter.generateCsv(objectsToExports)
     }
 

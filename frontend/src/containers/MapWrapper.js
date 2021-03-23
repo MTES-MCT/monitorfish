@@ -8,7 +8,7 @@ import TileLayer from 'ol/layer/Tile'
 import {OSM} from 'ol/source';
 import {transform} from 'ol/proj'
 import {toStringHDMS} from 'ol/coordinate';
-import LayersEnum, {vesselIconIsLight} from "../domain/entities/layers";
+import LayersEnum, {layersType as LayersType, vesselIconIsLight} from "../domain/entities/layers";
 import MapCoordinatesBox from "../components/MapCoordinatesBox";
 import {Interactions, OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 import {
@@ -28,11 +28,13 @@ import VesselTrackCard from "../components/VesselTrackCard";
 import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    addZoneSelected,
     hideVesselNames,
     isMoving,
     resetAnimateToRegulatoryLayer,
-    resetAnimateToVessel, resetInteraction,
-    setView, setZoneSelected
+    resetAnimateToVessel,
+    resetInteraction,
+    setView
 } from "../domain/reducers/Map";
 import {COLORS} from "../constants/constants";
 import {updateVesselFeatureAndIdentity} from "../domain/reducers/Vessel";
@@ -371,7 +373,11 @@ const MapWrapper = () => {
             map.addInteraction(draw)
 
             draw.on('drawend', event => {
-                dispatch(setZoneSelected(event.feature))
+                dispatch(addZoneSelected({
+                    name: "Tracé libre",
+                    code: LayersType.FREE_DRAW,
+                    feature: event.feature
+                }))
                 dispatch(resetInteraction())
                 map.removeInteraction(draw)
             })

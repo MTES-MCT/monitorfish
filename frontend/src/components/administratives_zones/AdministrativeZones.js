@@ -24,9 +24,9 @@ const AdministrativeZones = props => {
     }, [props.hideZonesListWhenSearching])
 
     useEffect(() => {
-        let zones = []
+        let nextZones = []
         if(props.administrativeZones && props.administrativeZones.length) {
-            zones = props.administrativeZones
+            nextZones = props.administrativeZones
                 .filter(zone => !zone.group)
                 .map(zone => [zone])
 
@@ -35,11 +35,10 @@ const AdministrativeZones = props => {
                 .map(zone => zone.group))]
 
             groups.forEach(group => {
-                zones.push(props.administrativeZones
+                nextZones.push(props.administrativeZones
                     .filter(zone => zone.group && zone.group === group))
             })
-            setZones(zones)
-            console.log(zones.length)
+            setZones(nextZones)
         }
     }, [props.administrativeZones])
 

@@ -252,7 +252,7 @@ a:hover, a:focus {
 }
 
 .rs-picker-tag > .rs-picker-toggle {
-  width: 115px;
+  width: 125px;
 }
 
 .rs-picker-select-menu-item.rs-picker-select-menu-item-active, .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
@@ -283,4 +283,20 @@ a:hover, a:focus {
   width: 8px;
   margin-top: -1px;
   margin-left: 5px;
+}
+
+.rs-picker-check-menu {
+  width: 280px;
+}
+
+.rs-picker-tag .rs-tag {
+  max-width: calc(100% - 25px) !important;
+}
+
+.rs-picker-check-menu-group[role="listitem"] {
+  height: 48px !important;
+}
+
+.rs-picker-check-menu-items .rs-picker-check-menu-group:not(:first-child) {
+  padding-top: 0px !important;
 }

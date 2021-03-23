@@ -104,32 +104,44 @@ export function getAllRegulatoryZonesFromAPI() {
 
 }
 
-
-export function getAdministrativeZoneFromAPI(type, extent) {
-    return fetch(getAdministrativeZoneURL(type, extent))
+export function getAdministrativeZoneFromAPI(administrativeZone, extent, subZone) {
+    return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone))
         .then(response => {
             if (response.status === HTTP_OK) {
                 return response.json().then(response => {
                     return response
                 }).catch(e => {
-                    throwIrretrievableAdministrativeZoneError(e, type);
+                    throwIrretrievableAdministrativeZoneError(e, administrativeZone);
                 })
             } else {
                 response.text().then(response => {
-                    throwIrretrievableAdministrativeZoneError(response, type);
+                    throwIrretrievableAdministrativeZoneError(response, administrativeZone);
                 })
             }
         }).catch(e => {
-            throwIrretrievableAdministrativeZoneError(e, type);
+            throwIrretrievableAdministrativeZoneError(e, administrativeZone);
         })
 }
 
-export function getAdministrativeZoneURL(type, extent) {
+export function getAdministrativeZoneURL(type, extent, subZone) {
+    let extentFilter = ''
+    if(extent) {
+        extentFilter = `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
+    }
+
+    let subZoneFilter = ''
+    if(subZone) {
+        let filter = `${subZone.replace(/'/g, '\'\'')}`;
+
+        subZoneFilter = `&featureID=` + filter
+            .replace(/'/g, '%27')
+            .replace(/ /g, '%20')
+    }
+
     return (
         `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
         `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-        `outputFormat=application/json&srsname=${WSG84_PROJECTION}&` +
-        `bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
+        `outputFormat=application/json&srsname=${WSG84_PROJECTION}` + extentFilter + subZoneFilter
     );
 }
 
@@ -244,3 +256,35 @@ export function getVesselERSMessagesFromAPI(vesselIdentity) {
             .then(ers => ers)
 }
 
+export function getAdministrativeSubZonesFromAPI(type) {
+    let query
+    if(type === Layers.FAO.code) {
+        let filter = `f_level='DIVISION'`
+
+        query = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
+            `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
+            `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
+            filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    } else {
+        query = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
+            `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
+            `outputFormat=application/json&srsname=${WSG84_PROJECTION}`;
+    }
+
+    return fetch(query)
+        .then(response => {
+            if (response.status === HTTP_OK) {
+                return response.json().then(response => {
+                    return response
+                }).catch(e => {
+                    throwIrretrievableAdministrativeZoneError(e, type);
+                })
+            } else {
+                response.text().then(response => {
+                    throwIrretrievableAdministrativeZoneError(response, type);
+                })
+            }
+        }).catch(e => {
+            throwIrretrievableAdministrativeZoneError(e, type);
+        })
+}

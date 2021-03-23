@@ -56,10 +56,10 @@ run-pipeline-server-int:
 	infra/remote/data-pipeline/int/start-server.sh
 run-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/start-flows.sh
+	infra/remote/data-pipeline/prod/start-flows.sh
 run-pipeline-flows-int:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/start-flows.sh
+	infra/remote/data-pipeline/int/start-flows.sh
 stop-pipeline-server:
 	infra/remote/data-pipeline/stop-server.sh
 stop-pipeline-flows:

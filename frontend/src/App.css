@@ -292,3 +292,11 @@ a:hover, a:focus {
 .rs-picker-tag .rs-tag {
   max-width: calc(100% - 25px) !important;
 }
+
+.rs-picker-check-menu-group[role="listitem"] {
+  height: 48px !important;
+}
+
+.rs-picker-check-menu-items .rs-picker-check-menu-group:not(:first-child) {
+  padding-top: 0px !important;
+}

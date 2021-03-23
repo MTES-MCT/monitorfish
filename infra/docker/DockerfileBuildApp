@@ -30,7 +30,7 @@ RUN mvn clean package -DskipTests=true
 FROM ubuntu:18.04 as buildFront
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV REACT_APP_ENV $ENV_PROFILE
+ENV REACT_APP_ENV=dev
 
 RUN apt-get update &&\
     apt-get install  --no-install-recommends -y \

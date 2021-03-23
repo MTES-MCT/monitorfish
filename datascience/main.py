@@ -6,7 +6,7 @@ from src.pipeline.schedules import flows_to_register
 PROJECT_NAME = "Monitorfish"
 
 
-def create_project_if_not_exists(client: prefect.Client) -> None:
+def create_project_if_not_exists(client: prefect.Client, project_name: str) -> None:
     """Checks whether a project named "Monitorfish" already exists in Prefect Server.
     If not, the project is created.
 
@@ -20,20 +20,20 @@ def create_project_if_not_exists(client: prefect.Client) -> None:
     projects = r["data"]["project"]
     if len(projects) == 0:
         print("Monitorfish project does not exists, it will be created.")
-        client.create_project(PROJECT_NAME)
+        client.create_project(project_name)
     elif len(projects) == 1:
         print("Monitorfish project already exists. Skipping project creation.")
     else:
         raise ValueError("Several projects with the name 'Monitorfish' were found.")
 
 
-def register_flow(f: prefect.Flow) -> None:
+def register_flow(f: prefect.Flow, project_name: str) -> None:
     """Registers f to "Monitorfich" project.
 
     Args:
         f (prefect.Flow): Prefect flow
     """
-    f.register(PROJECT_NAME, idempotency_key=f.serialized_hash())
+    f.register(project_name, idempotency_key=f.serialized_hash())
 
 
 if __name__ == "__main__":
@@ -45,13 +45,13 @@ if __name__ == "__main__":
 
     # Create the project "Monitorfish" in the orchestrator if it does not yet exist
     print("Create project")
-    create_project_if_not_exists(client)
+    create_project_if_not_exists(client, PROJECT_NAME)
 
     # Register all flows
     print("Register flows")
     for f in flows_to_register:
         print(f"Register flow {f.name}")
-        register_flow(f)
+        register_flow(f, PROJECT_NAME)
 
     # Start local "agent" process
     # This process queries the Prefect GraphQL API every second to ask if any new flows

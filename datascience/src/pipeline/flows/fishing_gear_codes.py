@@ -1,11 +1,14 @@
+import prefect
 from prefect import Flow, task
 from sqlalchemy import String
 
 from src.db_config import create_engine
+from src.pipeline.utils import delete
 from src.read_query import read_saved_query
+from src.utils.database import get_table, psql_insert_copy
 
 
-@task
+@task(checkpoint=False)
 def extract_fishing_gear_codes():
     fishing_gear_codes = read_saved_query(
         "ocan", "pipeline/queries/ocan/codes_engins.sql"
@@ -14,30 +17,31 @@ def extract_fishing_gear_codes():
     return fishing_gear_codes
 
 
-@task
-def fill_missing_categories(fishing_gear_codes):
+@task(checkpoint=False)
+def clean(fishing_gear_codes):
 
     fishing_gear_codes = fishing_gear_codes.set_index("fishing_gear_code")
 
-    missing_categories = set(
-        fishing_gear_codes[fishing_gear_codes["fishing_gear_category"].isna()].index
-    )
+    # Manual changes
+    name_changes = {
+        "TBS": "Chaluts de fond à crevettes",
+        "TMS": "Chaluts pélagiques à crevettes",
+    }
 
-    backup_categories = {
+    for (gear_code, name) in name_changes.items():
+        fishing_gear_codes.loc[gear_code, "fishing_gear"] = name
+
+    category_changes = {
         "OTP": "Chaluts",
         "NS": "Engin inconnu",
         "DRM": "Dragues",
         "OTS": "Engin inconnu",
         "SUX": "Filets tournants",
+        "PS1": "Filets tournants",
+        "PS2": "Filets tournants",
     }
 
-    to_fill_categories = {
-        gear_code: category
-        for gear_code, category in backup_categories.items()
-        if gear_code in missing_categories
-    }
-
-    for (gear_code, category) in to_fill_categories.items():
+    for (gear_code, category) in category_changes.items():
         fishing_gear_codes.loc[gear_code, "fishing_gear_category"] = category
 
     fishing_gear_codes = fishing_gear_codes.reset_index()
@@ -45,43 +49,34 @@ def fill_missing_categories(fishing_gear_codes):
     return fishing_gear_codes
 
 
-@task
+@task(checkpoint=False)
 def load_fishing_gear_codes(fishing_gear_codes):
 
-    schema = "public"
-    table = "fishing_gear_codes"
+    logger = prefect.context.get("logger")
 
-    # Ensure column order
-    fishing_gear_codes = fishing_gear_codes[
-        ["fishing_gear_code", "fishing_gear", "fishing_gear_category"]
-    ]
+    schema = "public"
+    table_name = "fishing_gear_codes"
 
     engine = create_engine("monitorfish_remote")
+    gears_table = get_table(table_name, schema, engine, logger)
 
     with engine.begin() as connection:
+
+        # Delete all rows from table
+        delete(gears_table, connection, logger)
+
+        # Insert data into
         fishing_gear_codes.to_sql(
-            name=table,
+            name=table_name,
             con=connection,
             schema=schema,
-            if_exists="replace",
             index=False,
-            dtype={
-                "fishing_gear_code": String(100),
-                "fishing_gear": String(200),
-                "fishing_gear_category": String(200),
-            },
-        )
-
-        connection.execute(
-            f"ALTER TABLE {schema}.{table} ADD PRIMARY KEY (fishing_gear_code);"
+            method=psql_insert_copy,
+            if_exists="append",
         )
 
 
 with Flow("Update fishing gears reference") as flow:
     fishing_gear_codes = extract_fishing_gear_codes()
-    fishing_gear_codes = fill_missing_categories(fishing_gear_codes)
+    fishing_gear_codes = clean(fishing_gear_codes)
     load_fishing_gear_codes(fishing_gear_codes)
-
-
-if __name__ == "__main__":
-    flow.run()

@@ -32,6 +32,8 @@ FROM ubuntu:18.04 as buildFront
 ENV DEBIAN_FRONTEND=noninteractive
 ENV REACT_APP_ENV=dev
 
+RUN echo ${REACT_APP_ENV}
+
 RUN apt-get update &&\
     apt-get install  --no-install-recommends -y \
                    curl \
@@ -95,5 +97,7 @@ ENV STATIC_FILES_PATH /home/monitorfish/public
 
 # Default profile is for local. Can be overiden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
 ENV SPRING_PROFILES_ACTIVE ${ENV_PROFILE}
+
+RUN echo ${ENV_PROFILE}
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}-exec.jar"

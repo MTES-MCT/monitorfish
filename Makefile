@@ -45,9 +45,9 @@ init-local-sig:
 init-remote-sig:
 	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 restart-remote-app:
-	cd infra/remote && sudo docker-compose pull && sudo docker-compose up -d --build app
+	cd infra/remote && docker-compose pull && docker-compose up -d --build app
 run-local-app:
-	cd infra/local && sudo docker-compose up -d
+	cd infra/local && docker-compose up -d
 run-pipeline-server-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION)
 	infra/remote/data-pipeline/prod/start-server.sh

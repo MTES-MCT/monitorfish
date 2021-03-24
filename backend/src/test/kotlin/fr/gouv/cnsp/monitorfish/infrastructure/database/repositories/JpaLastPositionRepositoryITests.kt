@@ -75,4 +75,30 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         }
         assertThat(position.dateTime).isEqualTo(now)
     }
+
+    @Test
+    @Transactional
+    fun `find Should get no Position When there is no position saved`() {
+        // When
+        val optional = jpaLastPositionRepository.find("", "", "")
+
+        // Then
+        assertThat(optional.isEmpty).isTrue
+    }
+
+    @Test
+    @Transactional
+    fun `find Should get a position`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val onePosition = Position(null, "", "", "224226850", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
+
+        // When
+        jpaLastPositionRepository.upsert(onePosition)
+        val optional = jpaLastPositionRepository.find("", "", "224226850")
+
+        // Then
+        assertThat(optional.isPresent).isTrue
+        assertThat(optional.get().ircs).isEqualTo("224226850")
+    }
 }

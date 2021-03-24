@@ -9,7 +9,7 @@ import requests
 from dotenv import load_dotenv
 from prefect import Flow, Parameter, task
 
-from config import LIBRARY_LOCATION, PORTS_URL
+from config import LIBRARY_LOCATION, PORTS_URL, PROXIES
 from src.db_config import create_engine
 from src.pipeline.processing import combine_overlapping_columns
 from src.pipeline.utils import delete
@@ -411,8 +411,8 @@ with Flow(
 
 
 @task(checkpoint=False)
-def extract_datagouv_ports(ports_url: str = PORTS_URL):
-    r = requests.get(ports_url)
+def extract_datagouv_ports(ports_url: str = PORTS_URL, proxies: dict = None):
+    r = requests.get(ports_url, proxies=proxies)
     f = io.StringIO(r.text)
 
     dtype = {
@@ -467,5 +467,5 @@ def load_ports_to_monitorfish(ports):
 
 
 with Flow("Extract ports from data.gouv.fr and load to Monitorfish") as flow:
-    ports = extract_datagouv_ports()
+    ports = extract_datagouv_ports(ports_url=PORTS_URL, proxies=PROXIES)
     load_ports_to_monitorfish(ports)

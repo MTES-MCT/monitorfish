@@ -25,10 +25,12 @@ class ParseAndSavePosition(private val positionRepository: PositionRepository, p
                 position.externalReferenceNumber ?: "",
                 position.ircs ?: "")
 
-        if(lastPositionSaved.isPresent && lastPositionSaved.get().dateTime.isBefore(position.dateTime)) {
+        if(lastPositionSaved.isEmpty) {
+            lastPositionRepository.upsert(position)
+        } else if(lastPositionSaved.isPresent && lastPositionSaved.get().dateTime.isBefore(position.dateTime)) {
             lastPositionRepository.upsert(position)
         } else {
-            logger.info("Position $position not saved to the last position table: this is not the latest position for this vessel.")
+            logger.info("Position $position not saved to the last position table: this is not the latest position datetime for this vessel.")
         }
 
         logger.debug("Saved new position $position")

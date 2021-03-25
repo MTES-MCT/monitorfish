@@ -93,7 +93,8 @@ const VesselList = () => {
             })
 
         Promise.all(nextZonesPromises).then((nextZones) => {
-            setZonesFilter(nextZones.flat())
+            let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
+            setZonesFilter(nextZonesWithoutNulls)
         });
 
 

@@ -32,12 +32,12 @@ export let getCoordinates = (coordinates, projection) => {
     }
 }
 
-export function getMonth(date) {
+function getMonth(date) {
     let month = date.getMonth() + 1
     return month < 10 ? '0' + month : '' + month
 }
 
-export function getDay(date) {
+function getDay(date) {
     let day = date.getDate()
     return day < 10 ? '0' + day : '' + day
 }
@@ -45,8 +45,6 @@ export function getDay(date) {
 export let getDate = dateString => {
     if (dateString) {
         let date = new Date(dateString)
-        // Convert to UTC date
-        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()))
         return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()}`
     }
 }
@@ -69,8 +67,6 @@ export let getDateTime = (dateString, withoutSeconds) => {
         time = time.replace(':', 'h')
         time = time.replace('24', '00')
 
-        // Convert to UTC date
-        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()))
         return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()} à ${time}`
     }
 }

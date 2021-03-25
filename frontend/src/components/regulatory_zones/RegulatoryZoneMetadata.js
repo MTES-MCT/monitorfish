@@ -19,32 +19,32 @@ const RegulatoryZoneMetadata = props => {
             setRegulatoryReferences(JSON.parse(props.regulatoryZoneMetadata.regulatoryReferences))
 
             if(!props.regulatoryZoneMetadata.gears){
-                return setGears(null)
+                setGears(null)
+            } else {
+                let gearCodesArray = props.regulatoryZoneMetadata.gears.replace(/ /g, '').split(',')
+                let gears = gearCodesArray.map(gearCode => {
+                    let foundGear = props.gears.find(gear => gear.code === gearCode)
+                    return {
+                        name: foundGear ? foundGear.name : null,
+                        code: gearCode
+                    }
+                })
+                setGears(gears)
             }
 
             if(!props.regulatoryZoneMetadata.prohibitedGears){
-                return setProhibitedGears(null)
+                setProhibitedGears(null)
+            } else {
+                let prohibitedGearCodesArray = props.regulatoryZoneMetadata.prohibitedGears.replace(/ /g, '').split(',')
+                let prohibitedGears = prohibitedGearCodesArray.map(gearCode => {
+                    let foundGear = props.gears.find(gear => gear.code === gearCode)
+                    return {
+                        name: foundGear ? foundGear.name : null,
+                        code: gearCode
+                    }
+                })
+                setProhibitedGears(prohibitedGears)
             }
-
-            let gearCodesArray = props.regulatoryZoneMetadata.gears.replace(/ /g, '').split(',')
-            let gears = gearCodesArray.map(gearCode => {
-                let foundGear = props.gears.find(gear => gear.code === gearCode)
-                return {
-                    name: foundGear ? foundGear.name : null,
-                    code: gearCode
-                }
-            })
-            setGears(gears)
-
-            let prohibitedGearCodesArray = props.regulatoryZoneMetadata.prohibitedGears.replace(/ /g, '').split(',')
-            let prohibitedGears = prohibitedGearCodesArray.map(gearCode => {
-                let foundGear = props.gears.find(gear => gear.code === gearCode)
-                return {
-                    name: foundGear ? foundGear.name : null,
-                    code: gearCode
-                }
-            })
-            setProhibitedGears(prohibitedGears)
         }
     }, [props.gears, props.regulatoryZoneMetadata])
 

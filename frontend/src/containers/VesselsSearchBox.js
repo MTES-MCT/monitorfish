@@ -17,7 +17,7 @@ import focusOnVesselSearch, {focusState} from "../domain/use_cases/focusOnVessel
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselsSearchBox = () => {
-    const layers = useSelector(state => state.layer.layers)
+    const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
     const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
     const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
     const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
@@ -97,8 +97,8 @@ const VesselsSearchBox = () => {
                 getTextForSearch(feature.getProperties().vesselName).includes(getTextForSearch(searchText)))
     }
 
-    function getFoundVesselsOnMap(vesselsLayer) {
-        let vessels = vesselsLayer.getSource().getFeatures().map(feature => {
+    function getFoundVesselsOnMap() {
+        let vessels = vesselsLayerSource.getFeatures().map(feature => {
             if (findMatchingFeature(feature)) {
                 return feature
             }
@@ -122,8 +122,7 @@ const VesselsSearchBox = () => {
 
     useEffect(() => {
         if (searchText.length > 1) {
-            let vesselsLayer = layers.find(layer => layer.className_ === LayersEnum.VESSELS.code)
-            let foundVesselsOnMap = getFoundVesselsOnMap(vesselsLayer);
+            let foundVesselsOnMap = getFoundVesselsOnMap();
             setFoundVesselsOnMap(foundVesselsOnMap)
 
             dispatch(searchVessels(searchText.toUpperCase())).then(foundVesselsFromAPI => {

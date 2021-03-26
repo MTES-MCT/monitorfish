@@ -96,7 +96,7 @@ const VesselListTable = props => {
             <Table
                 virtualized
                 height={510}
-                width={1187}
+                width={1200}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -131,7 +131,7 @@ const VesselListTable = props => {
                     <Cell dataKey="vesselName" />
                 </Column>
 
-                <Column sortable width={100}>
+                <Column sortable width={110}>
                     <HeaderCell>Marq. Ext.</HeaderCell>
                     <Cell dataKey="externalReferenceNumber" />
                 </Column>

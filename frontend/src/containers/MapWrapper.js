@@ -1,105 +1,54 @@
-import React, {useEffect, useRef, useState} from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
 
 import Map from 'ol/Map'
 import View from 'ol/View'
-import VectorTileLayer from 'ol/layer/Tile'
-import TileLayer from 'ol/layer/Tile'
-import {OSM} from 'ol/source';
-import {transform} from 'ol/proj'
-import {toStringHDMS} from 'ol/coordinate';
-import LayersEnum, {layersType as LayersType, vesselIconIsLight} from "../domain/entities/layers";
-import MapCoordinatesBox from "../components/MapCoordinatesBox";
-import {Interactions, OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
+import { transform } from 'ol/proj'
+import LayersEnum from '../domain/entities/layers'
+import MapCoordinatesBox from '../components/MapCoordinatesBox'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import MapAttributionsBox from '../components/MapAttributionsBox'
+import Overlay from 'ol/Overlay'
+import VesselCard from '../components/VesselCard'
+import VesselTrackCard from '../components/VesselTrackCard'
+import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
+import { useDispatch, useSelector } from 'react-redux'
 import {
-    getSVG,
-    getVesselIconOpacity,
-    getVesselImage,
-    getVesselNameStyle,
-    selectedVesselStyle,
-    VESSEL_ICON_STYLE,
-    VESSEL_NAME_STYLE,
-    VESSEL_SELECTOR_STYLE
-} from "../layers/styles/featuresStyles";
-import MapAttributionsBox from "../components/MapAttributionsBox";
-import Overlay from "ol/Overlay";
-import VesselCard from "../components/VesselCard";
-import VesselTrackCard from "../components/VesselTrackCard";
-import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
-import {useDispatch, useSelector} from "react-redux";
-import {
-    addZoneSelected,
     hideVesselNames,
     isMoving,
     resetAnimateToRegulatoryLayer,
     resetAnimateToVessel,
-    resetInteraction,
     setView
-} from "../domain/reducers/Map";
-import {COLORS} from "../constants/constants";
-import {updateVesselFeatureAndIdentity} from "../domain/reducers/Vessel";
-import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
-import LayerDetailsBox from "../components/LayerDetailsBox";
-import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
-import Point from "ol/geom/Point";
-import ScaleLine from "ol/control/ScaleLine";
-import XYZ from "ol/source/XYZ";
-import {MapboxVector} from "ol/layer";
-import Draw, {createBox} from "ol/interaction/Draw";
-import VectorSource from "ol/source/Vector";
-import Style from "ol/style/Style";
-import Stroke from "ol/style/Stroke";
-import Fill from "ol/style/Fill";
-import Circle from "ol/geom/Circle";
-import RegularShape from "ol/style/RegularShape";
+} from '../domain/reducers/Map'
+import { COLORS } from '../constants/constants'
+import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
+import LayerDetailsBox from '../components/LayerDetailsBox'
+import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../domain/entities/vessel'
+import ScaleLine from 'ol/control/ScaleLine'
+import VesselTrackLayer from '../layers/VesselTrackLayer'
+import VesselsLayer, { MIN_ZOOM_VESSEL_NAMES } from '../layers/VesselsLayer'
+import BaseLayer from '../layers/BaseLayer'
+import DrawLayer from '../layers/DrawLayer'
+import RegulatoryLayers from '../layers/RegulatoryLayers'
+import { getCoordinates } from '../utils'
 
-const MIN_ZOOM_VESSEL_NAMES = 9;
-
-const tileBaseLayer = 'ol-layer';
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
-let lastEventForPointerMove, timeoutForPointerMove, lastEventForMove, timeoutForMove;
+let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove;
 const hitPixelTolerance = 3;
 
 const MapWrapper = () => {
     const layer = useSelector(state => state.layer)
     const gears = useSelector(state => state.gear.gears)
     const vessel = useSelector(state => state.vessel)
-    const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
     const mapState = useSelector(state => state.map)
-    const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
     const dispatch = useDispatch()
 
-    const [baseLayersObjects] = useState({
-        OSM: new VectorTileLayer({
-            source: new OSM({
-                attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-            }),
-            className: LayersEnum.BASE_LAYER.code
-        }),
-        SATELLITE: new TileLayer({
-            source: new XYZ({
-                url: 'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=' + process.env.REACT_APP_MAPBOX_KEY,
-                maxZoom: 19
-            }),
-            className: LayersEnum.BASE_LAYER.code
-        }),
-        LIGHT: new MapboxVector({
-            styleUrl: 'mapbox://styles/mapbox/light-v10',
-            accessToken: process.env.REACT_APP_MAPBOX_KEY,
-            className: LayersEnum.BASE_LAYER.code
-        }),
-        DARK: new MapboxVector({
-            styleUrl: 'mapbox://styles/monitorfish/cklv7vc0f1ej817o5ivmkjmrs',
-            accessToken: process.env.REACT_APP_MAPBOX_KEY,
-            className: LayersEnum.BASE_LAYER.code
-        })
-    })
     const [map, setMap] = useState()
     const [isAnimating, setIsAnimating] = useState(false)
     const [initRenderIsDone, setInitRenderIsDone] = useState(false)
     const [shouldUpdateView, setShouldUpdateView] = useState(true)
-    const [cursorCoordinates, setCursorCoordinates] = useState()
+    const [cursorCoordinates, setCursorCoordinates] = useState('')
     const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
     const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
     const mapElement = useRef()
@@ -119,7 +68,7 @@ const MapWrapper = () => {
     });
 
     useEffect(() => {
-        if(mapState.selectedBaseLayer && baseLayersObjects[mapState.selectedBaseLayer] && !map) {
+        if(!map) {
             const vesselCardOverlay = new Overlay({
                 element: document.getElementById(vesselCardID),
                 autoPan: true,
@@ -141,9 +90,7 @@ const MapWrapper = () => {
             const centeredOnFrance = [2.99049, 46.82801];
             const initialMap = new Map({
                 target: mapElement.current,
-                layers: [
-                    baseLayersObjects[mapState.selectedBaseLayer]
-                ],
+                layers: [],
                 renderer: (['webgl', 'canvas']),
                 overlays: [vesselCardOverlay, vesselTrackCardOverlay],
                 view: new View({
@@ -172,18 +119,19 @@ const MapWrapper = () => {
             initialMap.on('click', handleMapClick)
             initialMap.on('pointermove', event => {
                 if (event.dragging || timeoutForPointerMove) {
-                    timeoutForPointerMove && (lastEventForPointerMove = event);
+                    if(timeoutForPointerMove) {
+                        lastEventForPointerMove = event
+                    }
                     return;
                 }
 
                 timeoutForPointerMove = setTimeout(() => {
                     timeoutForPointerMove = null;
-                    handlePointerMove(event, vesselCardOverlay, vesselTrackCardOverlay)
+                    handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay)
                 }, 100);
             })
             initialMap.on('moveend', event => {
                 if (timeoutForMove) {
-                    timeoutForMove && (lastEventForMove = event);
                     return;
                 }
 
@@ -201,306 +149,6 @@ const MapWrapper = () => {
             }, 8000)
         }
     }, [mapState.selectedBaseLayer])
-
-    useEffect(() => {
-        if(mapState.selectedBaseLayer && baseLayersObjects[mapState.selectedBaseLayer] && map && layer.layers.length) {
-            const layerToRemove = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.BASE_LAYER.code)
-
-            if (!layerToRemove) {
-                return
-            }
-
-            map.getLayers().insertAt(0, baseLayersObjects[mapState.selectedBaseLayer])
-            setTimeout(() => {
-                map.getLayers().remove(layerToRemove)
-            }, 500)
-
-            const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
-
-            const isLight = vesselIconIsLight(mapState.selectedBaseLayer)
-            if(vesselsLayer) {
-                vesselsLayer.getSource().getFeatures().forEach(feature => {
-                    let foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-                    if(foundStyle) {
-                        let vesselImage = getVesselImage({
-                            speed: feature.getProperties().speed,
-                            course: feature.getProperties().course
-                        }, isLight);
-                        foundStyle.setImage(vesselImage)
-                        let opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
-                        foundStyle.getImage().setOpacity(opacity)
-                    }
-                })
-                vesselsLayer.getSource().changed()
-            }
-        }
-    }, [mapState.selectedBaseLayer])
-
-    useEffect(() => {
-        if (map && layer.layers.length) {
-            reorganizeLayers();
-        }
-    }, [layer.layers, map, layer.layersAndAreas])
-
-    useEffect(() => {
-        if (map && layer.layers.length) {
-            addLayersToMap();
-            removeLayersToMap();
-        }
-    }, [layer.layers])
-
-    function reorganizeLayers() {
-        const layersToRemove = map.getLayers().getArray().filter(showedLayer => {
-            return !layer.layers.some(layer_ => showedLayer === layer_)
-        })
-            .filter(layer => layer.className_ !== tileBaseLayer)
-            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK.code)
-
-        if(layersToRemove.length) {
-            return
-        }
-
-        const layersToInsert = layer.layers.filter(layer => {
-            return !map.getLayers().getArray().some(layer_ => layer === layer_)
-        })
-
-        if(layersToInsert.length === 0 && layer.layersAndAreas.length > 1) {
-            let sortedLayersToArea = [...layer.layersAndAreas].sort((a, b) => a.area - b.area).reverse()
-
-            sortedLayersToArea.forEach((layerAndArea, index) => {
-                index = index + 1
-                let layer = map.getLayers().getArray().find(layer => layer.className_ === layerAndArea.name)
-
-                if(layer) {
-                    map.getLayers().remove(layer);
-                    map.getLayers().insertAt(index, layer);
-                }
-            })
-        }
-    }
-
-    function addLayersToMap() {
-        const layersToInsert = layer.layers.filter(layer => {
-            return !map.getLayers().getArray().some(layer_ => layer === layer_)
-        })
-
-        layersToInsert.map(layerToInsert => {
-            if (!layerToInsert) {
-                return
-            }
-
-            // Add vessel layer
-            if (map.getLayers().getLength() === 1) {
-                map.getLayers().push(layerToInsert);
-                return
-            }
-
-            // Replace vessel layer
-            if (layerToInsert.className_ === LayersEnum.VESSELS.code) {
-                removeCurrentVesselLayer()
-                map.getLayers().push(layerToInsert);
-                return
-            }
-
-            // Add other layers
-            let index = map.getLayers().getLength() - 1
-            map.getLayers().insertAt(index, layerToInsert);
-        })
-    }
-
-    function removeLayersToMap() {
-        const layersToRemove = map.getLayers().getArray().filter(showedLayer => {
-            return !layer.layers.some(layer_ => showedLayer === layer_)
-        })
-            .filter(layer => layer.className_ !== tileBaseLayer)
-            .filter(layer => layer.className_ !== LayersEnum.VESSEL_TRACK.code)
-
-        layersToRemove.map(layerToRemove => {
-            map.getLayers().remove(layerToRemove);
-        })
-    }
-
-    function removeCurrentVesselLayer() {
-        const layerToRemove = map.getLayers().getArray()
-            .find(layer => layer.className_ === LayersEnum.VESSELS.code)
-
-        if (!layerToRemove) {
-            return
-        }
-
-        map.getLayers().remove(layerToRemove)
-    }
-
-    useEffect(() => {
-        if(mapState.interaction && map) {
-            const source = new VectorSource({wrapX: false})
-
-            let type = null
-            switch (mapState.interaction) {
-                case Interactions.SQUARE: type = 'Circle'; break;
-                case Interactions.POLYGON: type = 'Polygon'; break;
-                default: console.error("No interaction type specified"); return;
-            }
-
-            const draw = new Draw({
-                source:  source,
-                type: type,
-                style: new Style({
-                    image: new RegularShape({
-                        fill: new Fill({
-                            color: '#515151'
-                        }),
-                        points: 4,
-                        radius1: 15,
-                        radius2: 1
-                    }),
-                    stroke: new Stroke({
-                        color: '#515151',
-                        lineDash: [5, 5]
-                    }),
-                    fill: new Fill({
-                        color: 'rgb(255, 255, 255, 0.3)'
-                    }),
-
-                }),
-                geometryFunction: mapState.interaction === Interactions.SQUARE ? createBox() : null
-            });
-            map.addInteraction(draw)
-
-            draw.on('drawend', event => {
-                dispatch(addZoneSelected({
-                    name: "Tracé libre",
-                    code: LayersType.FREE_DRAW,
-                    feature: event.feature
-                }))
-                dispatch(resetInteraction())
-                map.removeInteraction(draw)
-            })
-        }
-    }, [mapState.interaction])
-
-    useEffect(() => {
-        if(vessel.temporaryVesselsToHighLightOnMap && vessel.temporaryVesselsToHighLightOnMap.length && map) {
-            const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
-
-            if(vesselsLayer) {
-                vesselsLayer.getSource().getFeatures().filter(feature => {
-                    return !vessel.temporaryVesselsToHighLightOnMap.some((vessel) => {
-                        return feature.getProperties().externalReferenceNumber === vessel.externalReferenceNumber ||
-                            feature.getProperties().internalReferenceNumber === vessel.internalReferenceNumber ||
-                            feature.getProperties().ircs === vessel.ircs
-                    })
-                }).map(featureToHide => {
-                    let foundStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-                    if(foundStyle) {
-                        foundStyle.getImage().setOpacity(0)
-                    }
-                })
-                vesselsLayer.getSource().changed()
-            }
-        }
-    }, [vessel.temporaryVesselsToHighLightOnMap])
-
-    useEffect(() => {
-        if(vesselsLastPositionVisibility && (!vessel.temporaryVesselsToHighLightOnMap || !vessel.temporaryVesselsToHighLightOnMap.length) && map) {
-            const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
-
-            if(vesselsLayer) {
-                vesselsLayer.getSource().getFeatures().forEach(feature => {
-                    let opacity  = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
-                    let foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-                    if(foundStyle) {
-                        foundStyle.getImage().setOpacity(opacity)
-                    }
-                })
-                vesselsLayer.getSource().changed()
-            }
-        }
-    }, [vesselsLastPositionVisibility, vessel.temporaryVesselsToHighLightOnMap])
-
-    useEffect(() => {
-        if(vessel.selectedVessel && vessel.selectedVessel.positions && vessel.selectedVessel.positions.length) {
-            const vesselsLayer = map.getLayers().getArray()
-                .find(layer => layer.className_ === LayersEnum.VESSELS.code)
-
-            const featureToModify = vesselsLayer.getSource().getFeatures().find(feature => {
-                const properties = feature.getProperties()
-                return properties.externalReferenceNumber === vessel.selectedVessel.externalReferenceNumber &&
-                    properties.internalReferenceNumber === vessel.selectedVessel.internalReferenceNumber &&
-                    properties.ircs === vessel.selectedVessel.ircs
-            })
-
-            if(featureToModify) {
-                const lastPosition = vessel.selectedVessel.positions[vessel.selectedVessel.positions.length - 1]
-                const newCoordinates = new transform([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-
-                featureToModify.setGeometry(new Point(newCoordinates))
-            }
-        }
-    }, [vessel.selectedVessel])
-
-    useEffect(() => {
-        if (map && vessel.selectedVesselTrackVector) {
-            removeCurrentVesselTrackLayer();
-
-            let belowVesselLayer = map.getLayers().getLength() - 1;
-            map.getLayers().insertAt(belowVesselLayer, vessel.selectedVesselTrackVector);
-        } else if (map && !vessel.selectedVesselTrackVector) {
-            removeCurrentVesselTrackLayer();
-        }
-    }, [vessel.selectedVesselTrackVector, map])
-
-    function addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName) {
-        const features = layerToAddProperty.getSource().getFeatures()
-        if (features.length) {
-            layerToAddProperty.getSource().getFeatures()
-                .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
-        } else if (layer.lastShowedFeatures.length) {
-            layer.lastShowedFeatures
-                .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
-        }
-    }
-
-    function removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName) {
-        regulatoryLayers.forEach(layer => {
-            layer.getSource().getFeatures()
-                .filter(feature => feature.getProperties().metadataIsShowed)
-                .forEach(feature => feature.set(metadataIsShowedPropertyName, false))
-        })
-    }
-
-    useEffect(() => {
-        if (map) {
-            let metadataIsShowedPropertyName = "metadataIsShowed";
-            let regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
-            if (regulatoryZoneMetadata) {
-                let layerToAddProperty = regulatoryLayers.find(layer => {
-                    return layer.className_ === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.layerName}:${regulatoryZoneMetadata.zone}`
-                })
-
-                if (layerToAddProperty) {
-                    addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName);
-                }
-            } else {
-                removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName);
-            }
-        }
-    }, [regulatoryZoneMetadata, layer.lastShowedFeatures])
-
-    function removeCurrentVesselTrackLayer() {
-        const layerToRemove = map.getLayers().getArray()
-            .find(layer => layer.className_ === LayersEnum.VESSEL_TRACK.code)
-
-        if (!layerToRemove) {
-            return
-        }
-
-        map.getLayers().remove(layerToRemove)
-    }
 
     useEffect(() => {
         if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
@@ -556,15 +204,12 @@ const MapWrapper = () => {
         }
     }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
 
-    function removeVesselNameToAllFeatures() {
-        layer.layers
-            .filter(layer => layer.className_ === LayersEnum.VESSELS.code)
-            .forEach(vesselsLayer => {
-                vesselsLayer.getSource().getFeatures().map(feature => {
-                    let stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_NAME_STYLE)
-                    feature.setStyle([...stylesWithoutVesselName]);
-                })
-            })
+    function isVesselNameMinimumZoom() {
+        return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES;
+    }
+
+    function isVesselNameMaximumZoom() {
+        return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES;
     }
 
     const handleMovingAndZoom = () => {
@@ -595,48 +240,6 @@ const MapWrapper = () => {
         window.history.pushState(view, 'map', url);
     }
 
-    function isVesselNameMinimumZoom() {
-        return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES;
-    }
-
-    function isVesselNameMaximumZoom() {
-        return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES;
-    }
-
-    useEffect(() => {
-        if (map) {
-            let extent = mapRef.current.getView().calculateExtent(mapRef.current.getSize());
-
-            if(mapState.vesselNamesHiddenByZoom === undefined) {
-                return
-            }
-
-            if (layer.layers && mapState.vesselLabelsShowedOnMap
-                && !mapState.vesselNamesHiddenByZoom && isVesselNameMinimumZoom()) {
-                removeVesselNameToAllFeatures();
-                addVesselNameToAllFeatures(extent, mapState.vesselLabel);
-            } else if (layer.layers && mapState.vesselLabelsShowedOnMap
-                && mapState.vesselNamesHiddenByZoom && isVesselNameMaximumZoom()) {
-                removeVesselNameToAllFeatures();
-            } else if (layer.layers && !mapState.vesselLabelsShowedOnMap) {
-                removeVesselNameToAllFeatures();
-            }
-        }
-    }, [mapState.vesselLabelsShowedOnMap, map, mapState.vesselNamesHiddenByZoom, mapState.isMoving, mapState.vesselLabel])
-
-    function addVesselNameToAllFeatures(extent, vesselLabel) {
-        layer.layers
-            .filter(layer => layer.className_ === LayersEnum.VESSELS.code)
-            .forEach(vesselsLayer => {
-                vesselsLayer.getSource().forEachFeatureIntersectingExtent(extent, feature => {
-                    getSVG(feature, vesselLabel).then(object => {
-                        let style = getVesselNameStyle(object.showedText, object.imageElement)
-                        feature.setStyle([...feature.getStyle(), style])
-                    })
-                })
-            })
-    }
-
     const handleMapClick = event => {
         const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, {hitTolerance: hitPixelTolerance});
 
@@ -652,26 +255,14 @@ const MapWrapper = () => {
         }
     }
 
-    useEffect(() => {
-        if(vessel.selectedVesselFeatureAndIdentity &&
-            vessel.selectedVesselFeatureAndIdentity.feature &&
-            !vessel.removeSelectedIconToFeature) {
-            let style = vessel.selectedVesselFeatureAndIdentity.feature.getStyle()
-            let vesselAlreadyWithSelectorStyle = vessel.selectedVesselFeatureAndIdentity.feature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
-            if (!vesselAlreadyWithSelectorStyle) {
-                vessel.selectedVesselFeatureAndIdentity.feature.setStyle([...style, selectedVesselStyle]);
-                let vesselIdentity = getVesselIdentityFromFeature(vessel.selectedVesselFeatureAndIdentity.feature)
-                dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(vessel.selectedVesselFeatureAndIdentity.feature, vesselIdentity)))
-            }
-        }
-    }, [vessel.selectedVesselFeatureAndIdentity])
-
     const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay) => {
-        const pixel = mapRef.current.getEventPixel(event.originalEvent);
-        const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, {hitTolerance: hitPixelTolerance});
+        if(event) {
+            const pixel = mapRef.current.getEventPixel(event.originalEvent);
+            const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, {hitTolerance: hitPixelTolerance});
 
-        showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay);
-        showCoordinatesInDMS(event)
+            showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay);
+            showCoordinatesInDMS(event)
+        }
     }
 
     function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay) {
@@ -707,14 +298,19 @@ const MapWrapper = () => {
 
     async function showCoordinatesInDMS(event) {
         const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel);
-        const transformedCoordinates = transform(clickedCoordinates, OPENLAYERS_PROJECTION, WSG84_PROJECTION)
-        const stringHDMS = toStringHDMS(transformedCoordinates)
-        setCursorCoordinates(stringHDMS)
+        const coordinates = getCoordinates(clickedCoordinates, OPENLAYERS_PROJECTION)
+        setCursorCoordinates(`${coordinates[0]} ${coordinates[1]}`)
     }
 
     return (
         <div>
             <MapContainer ref={mapElement} />
+            <BaseLayer map={map} />
+            <VesselTrackLayer map={map} />
+            <VesselsLayer map={map} mapRef={mapRef}/>
+            <DrawLayer map={map} />
+            <RegulatoryLayers map={map} />
+
             <VesselCardOverlay id={vesselCardID}>
                 {
                     vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null

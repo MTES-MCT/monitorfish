@@ -79,6 +79,16 @@ tbody {
   margin-top: 300px;
 }
 
+.update-vessels .fingerprint-spinner {
+  border: 1px solid transparent !important;
+  border-top-color: #515151 !important;
+}
+
+.update-vessels > .spinner-ring {
+  border: 1px solid transparent !important;
+  border-top-color: #515151 !important;
+}
+
 a:focus {
   outline: none;
 }

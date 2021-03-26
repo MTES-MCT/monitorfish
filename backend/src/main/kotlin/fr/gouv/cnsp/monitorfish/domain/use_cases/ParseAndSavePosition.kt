@@ -19,7 +19,20 @@ class ParseAndSavePosition(private val positionRepository: PositionRepository, p
             logger.warn("No internal reference number for position $position")
         }
         positionRepository.save(position)
-        lastPositionRepository.upsert(position)
+
+        val lastPositionSaved = lastPositionRepository.find(
+                position.internalReferenceNumber ?: "",
+                position.externalReferenceNumber ?: "",
+                position.ircs ?: "")
+
+        if(lastPositionSaved.isEmpty) {
+            lastPositionRepository.upsert(position)
+        } else if(lastPositionSaved.isPresent && lastPositionSaved.get().dateTime.isBefore(position.dateTime)) {
+            lastPositionRepository.upsert(position)
+        } else {
+            logger.info("Position $position not saved to the last position table: this is not the latest position datetime for this vessel.")
+        }
+
         logger.debug("Saved new position $position")
     }
 }

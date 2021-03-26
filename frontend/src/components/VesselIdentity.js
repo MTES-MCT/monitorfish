@@ -2,17 +2,14 @@ import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {COLORS} from "../constants/constants";
 import countries from "i18n-iso-countries";
-import {getDay, getMonth} from "../utils";
+import { getDate, getDay, getMonth } from '../utils'
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselIdentity = props => {
     const [gears, setGears] = useState([])
 
     const showLicenceExpirationDate = licenceExpirationDate => {
-        if (licenceExpirationDate) {
-            const date = new Date(licenceExpirationDate)
-            return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()}`
-        }
+        return getDate(licenceExpirationDate)
     }
 
     useEffect(() => {

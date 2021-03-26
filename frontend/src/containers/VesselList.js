@@ -24,13 +24,15 @@ import countries from "i18n-iso-countries";
 import {getCoordinates} from "../utils";
 import getAdministrativeZoneGeometry from "../domain/use_cases/getAdministrativeZoneGeometry";
 import {getAdministrativeSubZonesFromAPI} from "../api/fetch";
-import {setError} from "../domain/reducers/Global";
+import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselList = () => {
     const dispatch = useDispatch()
     const layers = useSelector(state => state.layer.layers)
+    const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
+    const vesselsFromApi = useSelector(state => state.vessel.vessels)
     const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
     const firstUpdate = useRef(true);
@@ -79,7 +81,6 @@ const VesselList = () => {
                         })
                     }).catch(error => {
                         console.error(error)
-                        dispatch(setError(error))
                     });
                 }
 
@@ -93,48 +94,48 @@ const VesselList = () => {
             })
 
         Promise.all(nextZonesPromises).then((nextZones) => {
-            setZonesFilter(nextZones.flat())
+            let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
+            setZonesFilter(nextZonesWithoutNulls)
         });
-
-
     }, [vesselListModalIsOpen])
 
     useEffect(() => {
-        if(layers && !makeVesselListToNotUpdate) {
-            const vesselsLayer = layers.find(layer => layer.className_ === LayersEnum.VESSELS.code)
-            const vesselsFeatures = vesselsLayer.getSource().getFeatures()
+        if(layers && !makeVesselListToNotUpdate && vesselsLayerSource) {
+            if(vesselsLayerSource) {
+                vesselsLayerSource.once(VESSELS_UPDATE_EVENT, ({ features }) => {
+                    if(features && features.length) {
+                        const vessels = features.map(vessel => {
+                            let coordinates = [...vessel.getGeometry().getCoordinates()]
 
-            if(vesselsFeatures && vesselsFeatures.length) {
-                const vessels = vesselsFeatures.map(vessel => {
-                    let coordinates = [...vessel.getGeometry().getCoordinates()]
+                            return {
+                                targetNumber: undefined,
+                                id: vessel.id_,
+                                checked: true,
+                                vesselName: vessel.getProperties().vesselName,
+                                course: vessel.getProperties().course,
+                                speed: vessel.getProperties().speed,
+                                flagState: vessel.getProperties().flagState.toLowerCase(),
+                                mmsi: vessel.getProperties().mmsi,
+                                internalReferenceNumber: vessel.getProperties().internalReferenceNumber,
+                                externalReferenceNumber: vessel.getProperties().externalReferenceNumber,
+                                ircs: vessel.getProperties().ircs,
+                                dateTimeTimestamp: new Date(vessel.getProperties().dateTime).getTime(),
+                                dateTime: vessel.getProperties().dateTime,
+                                latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
+                                longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
+                                olCoordinates: coordinates,
+                                gears: vessel.getProperties().gears,
+                            }
+                        })
 
-                    return {
-                        targetNumber: undefined,
-                        id: vessel.id_,
-                        checked: true,
-                        vesselName: vessel.getProperties().vesselName,
-                        course: vessel.getProperties().course,
-                        speed: vessel.getProperties().speed,
-                        flagState: vessel.getProperties().flagState.toLowerCase(),
-                        mmsi: vessel.getProperties().mmsi,
-                        internalReferenceNumber: vessel.getProperties().internalReferenceNumber,
-                        externalReferenceNumber: vessel.getProperties().externalReferenceNumber,
-                        ircs: vessel.getProperties().ircs,
-                        dateTimeTimestamp: new Date(vessel.getProperties().dateTime).getTime(),
-                        dateTime: vessel.getProperties().dateTime,
-                        latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
-                        longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
-                        olCoordinates: coordinates,
-                        gears: vessel.getProperties().gears,
+                        setVessels(vessels)
+                        setVesselsCountTotal(vessels.length)
+                        setMakeVesselListToNotUpdate(true)
                     }
                 })
-
-                setVessels(vessels)
-                setVesselsCountTotal(vessels.length)
-                setMakeVesselListToNotUpdate(true)
             }
         }
-    }, [layers])
+    }, [layers, vesselsFromApi])
 
     useEffect(() => {
         if(vessels && vessels.length) {

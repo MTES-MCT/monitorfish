@@ -39,7 +39,7 @@
     "build:dev": "REACT_APP_ENV=dev npm run build",
     "build:prod": "REACT_APP_ENV=prod npm run build",
     "build:local": "REACT_APP_ENV=local npm run build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

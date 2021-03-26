@@ -23,12 +23,32 @@ export let getCoordinates = (coordinates, projection) => {
     const hourCoordinates = toStringHDMS(transformedCoordinates)
     let nSplit = hourCoordinates.split('N')
     if (nSplit.length > 1) {
-        return [`${nSplit[0]} N`, nSplit[1]]
+        let degreeSplit = nSplit[1].split('°')
+        if(degreeSplit.length) {
+            let degree = degreeSplit[0].trim()
+            switch (degree.length) {
+                case 1: degree = `00${degree}`; break
+                case 2: degree = `0${degree}`; break
+                default: break
+            }
+
+            return [`${nSplit[0]} N`, `${degree}° ${degreeSplit[1]}`]
+        }
     }
 
     let sSplit = hourCoordinates.split('S')
     if (sSplit.length > 1) {
-        return [`${sSplit[0]} S`, sSplit[1]]
+        let degreeSplit = sSplit[1].split('°')
+        if(degreeSplit.length) {
+            let degree = degreeSplit[0].trim()
+            switch (degree.length) {
+                case 1: degree = `00${degree}`; break
+                case 2: degree = `0${degree}`; break
+                default: break
+            }
+
+            return [`${sSplit[0]} N`, `${degree}° ${degreeSplit[1]}`]
+        }
     }
 }
 

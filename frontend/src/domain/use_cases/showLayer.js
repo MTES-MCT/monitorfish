@@ -1,16 +1,15 @@
-import Layers from "../entities/layers";
-import VectorLayer from "ol/layer/Vector";
-import {addLayer, addShowedLayer, pushLayerAndArea, setLastShowedFeatures} from "../reducers/Layer";
-import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
-import VectorSource from "ol/source/Vector";
-import GeoJSON from "ol/format/GeoJSON";
-import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../entities/map";
-import {all, bbox as bboxStrategy} from "ol/loadingstrategy";
-import {getHash} from "../../utils";
-import {getAdministrativeZoneFromAPI, getRegulatoryZoneFromAPI} from "../../api/fetch";
-import {setError} from "../reducers/Global";
-import {getArea, getCenter} from "ol/extent";
-import {animateToRegulatoryLayer} from "../reducers/Map";
+import Layers from '../entities/layers'
+import VectorLayer from 'ol/layer/Vector'
+import { addLayer, addShowedLayer, pushLayerAndArea, setLastShowedFeatures } from '../reducers/Layer'
+import { getVectorLayerStyle } from '../../layers/styles/vectorLayerStyles'
+import VectorSource from 'ol/source/Vector'
+import GeoJSON from 'ol/format/GeoJSON'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
+import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
+import { getHash } from '../../utils'
+import { getAdministrativeZoneFromAPI, getRegulatoryZoneFromAPI } from '../../api/fetch'
+import { getArea, getCenter } from 'ol/extent'
+import { animateToRegulatoryLayer } from '../reducers/Map'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -99,7 +98,6 @@ const getVectorSource = dispatch => (type, regulatoryZoneProperties) => {
 
     vectorSource.once(IRRETRIEVABLE_FEATURES_EVENT, event => {
         console.error(event.error)
-        dispatch(setError(event.error))
     })
 
     return vectorSource

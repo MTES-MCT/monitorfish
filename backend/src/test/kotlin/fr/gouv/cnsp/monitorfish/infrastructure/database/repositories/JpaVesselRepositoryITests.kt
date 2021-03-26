@@ -49,9 +49,9 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findVessel Should return a vessel When the external marking is given`() {
         // When
-        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "AR865", "")
+        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "GR56", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("GBR000B14430")
+        assertThat(vessel.internalReferenceNumber).isEqualTo("FRA000461560")
     }
 
     @Test

@@ -102,7 +102,11 @@ const VesselSummary = props => {
                     <TableBody>
                         <Field>
                             <Key>Marquage ext.</Key>
-                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Value>{props.vessel.externalReferenceNumber
+                              ? props.vessel.externalReferenceNumber
+                              : lastPosition.externalReferenceNumber
+                                ? lastPosition.externalReferenceNumber
+                                : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key>Call Sign (IRCS)</Key>

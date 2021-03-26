@@ -27,7 +27,7 @@ export function getVesselImage(vessel, isLight) {
     }) : new CircleStyle({
         radius: 4,
         fill: new Fill({
-            color: isLight ? `rgb(237, 237, 237)` : `rgb(5, 5, 94)`
+            color: isLight ? `#DCDDE8` : `rgb(5, 5, 94)`
         }),
     });
 }
@@ -65,8 +65,10 @@ export const setVesselIconStyle = (vessel,
     }
 
     if (options.vesselLabelsShowedOnMap) {
-        getSVG(iconFeature, options.vesselLabel).then(object => {
-            styles.push(getVesselNameStyle(object.showedText, object.imageElement))
+        return getSVG(iconFeature, options.vesselLabel).then(svg => {
+            if(svg) {
+                styles.push(getVesselNameStyle(svg.showedText, svg.imageElement))
+            }
 
             iconFeature.setStyle(styles)
             resolve(selectedVesselFeatureToUpdate)
@@ -148,7 +150,11 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
             imageElement: imageElement,
             showedText: showedText
         });
-    },{once: true});
+    },{ once: true });
+    imageElement.addEventListener('error', function animationendListener() {
+        imageElement.removeEventListener("error", animationendListener);
+        resolve(null);
+    },{ once: true });
     imageElement.src = 'data:image/svg+xml,' + escape(iconSVG);
 })
 

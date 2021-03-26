@@ -4,8 +4,9 @@ const vesselSlice = createSlice({
     name: 'vessel',
     initialState: {
         temporaryVesselsToHighLightOnMap: [],
-        selectedVesselTrackVector: null,
         selectedVesselFeatureAndIdentity: null,
+        vessels: [],
+        vesselsLayerSource: null,
         selectedVessel: null,
         removeSelectedIconToFeature: false,
         loadingVessel: null,
@@ -16,12 +17,14 @@ const vesselSlice = createSlice({
         nextFishingActivities: null
     },
     reducers: {
-        setSelectedVesselTrackVector(state, action) {
-            state.selectedVesselTrackVector = action.payload
+        setVessels(state, action) {
+            state.vessels = action.payload
+        },
+        setVesselsLayerSource(state, action) {
+            state.vesselsLayerSource = action.payload
         },
         loadingVessel(state, action) {
             state.selectedVesselFeatureAndIdentity = action.payload
-            state.selectedVesselTrackVector = null
             state.selectedVessel = null
             state.loadingVessel = true
         },
@@ -39,7 +42,6 @@ const vesselSlice = createSlice({
         },
         closeVesselBox(state) {
             state.vesselSidebarIsOpen = false
-            state.selectedVesselTrackVector = null
             state.selectedVessel = null
             state.selectedVesselFeatureAndIdentity = null
         },
@@ -78,9 +80,10 @@ const vesselSlice = createSlice({
 })
 
 export const {
+    setVessels,
+    setVesselsLayerSource,
     loadingVessel,
     resetLoadingVessel,
-    setSelectedVesselTrackVector,
     setSelectedVessel,
     resetSelectedVessel,
     openVesselSidebar,

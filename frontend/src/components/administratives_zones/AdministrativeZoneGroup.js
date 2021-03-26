@@ -1,10 +1,8 @@
-import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIconSVG} from "../icons/oeil_affiche.svg";
-import {ReactComponent as HideIconSVG} from "../icons/oeil_masque.svg";
-import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import AdministrativeZone from "./AdministrativeZone";
-import {ReactComponent as ChevronIconSVG} from "../icons/Chevron_simple_gris.svg";
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
+import AdministrativeZone from './AdministrativeZone'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 const AdministrativeZoneGroup = props => {
     const [isOpen, setIsOpen] = useState(false)

@@ -10,22 +10,12 @@ const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 const layerSlice = createSlice({
     name: 'layer',
     initialState: {
-        layers: [
-            new VectorLayer({
-                renderBuffer: 7,
-                source: new VectorSource(),
-                className: Layers.VESSELS.code
-            })
-        ],
+        layers: [],
         showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
         lastShowedFeatures: [],
         layersAndAreas: []
     },
     reducers: {
-        replaceVesselLayer(state, action) {
-            const arrayWithoutVessels = state.layers.filter(layer => layer.className_ !== LayersEnum.VESSELS.code)
-            state.layers = [...arrayWithoutVessels, action.payload]
-        },
         addLayer(state, action) {
             state.layers = state.layers.concat(action.payload)
         },
@@ -99,7 +89,6 @@ const layerSlice = createSlice({
 })
 
 export const {
-    replaceVesselLayer,
     addLayer,
     removeLayer,
     removeLayers,

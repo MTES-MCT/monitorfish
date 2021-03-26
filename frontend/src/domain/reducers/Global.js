@@ -4,8 +4,15 @@ const globalSlice = createSlice({
     name: 'global',
     initialState: {
         error: null,
+        isUpdatingVessels: false
     },
     reducers: {
+        setIsUpdatingVessels(state) {
+            state.isUpdatingVessels = true
+        },
+        resetIsUpdatingVessels(state) {
+            state.isUpdatingVessels = false
+        },
         setError(state, action) {
             state.error = action.payload
         },
@@ -17,7 +24,9 @@ const globalSlice = createSlice({
 
 export const {
     setError,
-    removeError
+    removeError,
+    setIsUpdatingVessels,
+    resetIsUpdatingVessels
 } = globalSlice.actions
 
 export default globalSlice.reducer

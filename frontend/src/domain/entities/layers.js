@@ -38,7 +38,8 @@ export default {
         type: layersType.VESSEL,
         containsMultipleZones: false,
         subZoneFieldKey: null,
-        isIntersectable: false
+        isIntersectable: false,
+        zIndex: 1000
     },
     VESSEL_TRACK: {
         code: 'vessel_track',
@@ -47,7 +48,8 @@ export default {
         type: layersType.VESSEL,
         containsMultipleZones: false,
         subZoneFieldKey: null,
-        isIntersectable: false
+        isIntersectable: false,
+        zIndex: 999
     },
     REGULATORY: {
         code: 'regulatory_areas',

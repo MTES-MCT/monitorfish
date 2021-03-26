@@ -3,7 +3,6 @@ import GeoJSON from "ol/format/GeoJSON";
 import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../entities/map";
 import {getAdministrativeZoneFromAPI} from "../../api/fetch";
 import {all} from "ol/loadingstrategy";
-import {setError} from "../reducers/Global";
 import {addZoneSelected} from "../reducers/Map";
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
@@ -41,7 +40,6 @@ const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zone
 
     vectorSource.once(IRRETRIEVABLE_FEATURES_EVENT, event => {
         console.error(event.error)
-        dispatch(setError(event.error))
     })
 }
 

@@ -8,7 +8,7 @@ from config import LIBRARY_LOCATION
 from .db_config import create_engine
 
 
-def read_saved_query(db: str, sql_filepath: str) -> pd.DataFrame:
+def read_saved_query(db: str, sql_filepath: str, **kwargs) -> pd.DataFrame:
     """Run saved SQLquery on a database. Supported databases :
     - 'ocan' : OCAN database
     - 'fmc': FMC database
@@ -22,6 +22,7 @@ def read_saved_query(db: str, sql_filepath: str) -> pd.DataFrame:
             'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
         sql_filepath (str): path to .sql file, starting from datascience library folder.
             example : "pipeline/queries/ocan/nav_fr_peche.sql"
+            kwargs : passed to pd.read_sql
 
     Returns:
         pd.DataFrame: Query results
@@ -30,10 +31,12 @@ def read_saved_query(db: str, sql_filepath: str) -> pd.DataFrame:
     sql_filepath = os.path.join(LIBRARY_LOCATION, sql_filepath)
     with open(sql_filepath, "r") as sql_file:
         query = sql_file.read()
-    return pd.read_sql(query, engine)
+    return pd.read_sql(query, engine, **kwargs)
 
 
-def read_query(db: str, query: str, chunksize: Union[None, str] = None) -> pd.DataFrame:
+def read_query(
+    db: str, query: str, chunksize: Union[None, str] = None, **kwargs
+) -> pd.DataFrame:
     """Run SQLquery on a database. Supported databases :
     - 'ocan' : OCAN database
     - 'fmc': FMC database
@@ -46,12 +49,13 @@ def read_query(db: str, query: str, chunksize: Union[None, str] = None) -> pd.Da
         db (str): Database name. Possible values :
             'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
         query (str): Query string
+        kwargs : passed to pd.read_sql
 
     Returns:
         pd.DataFrame: Query results
     """
     engine = create_engine(db=db, execution_options=dict(stream_results=True))
-    return pd.read_sql(query, engine, chunksize=chunksize)
+    return pd.read_sql(query, engine, chunksize=chunksize, **kwargs)
 
 
 def read_table(db: str, schema: str, table_name: str):

@@ -4,13 +4,15 @@ import pandas as pd
 import prefect
 from prefect import Flow, task
 
-from src.db_config import create_engine
 from src.pipeline.processing import (
     df_to_dict_series,
     python_lists_to_psql_arrays,
     to_json,
     zeros_ones_to_bools,
 )
+from sqlalchemy.exc import InvalidRequestError
+
+from src.db_config import create_engine
 from src.pipeline.utils import delete
 from src.read_query import read_saved_query
 from src.utils.database import get_table, psql_insert_copy
@@ -170,7 +172,13 @@ def load_controls(controls):
     table_name = "controls"
 
     engine = create_engine("monitorfish_remote")
-    controls_table = get_table(table_name, schema, engine, logger)
+    try:
+        controls_table = get_table(table_name, schema, engine, logger)
+    except InvalidRequestError:
+        logger.error(
+            "controls table must exist. Make appropriate migrations and try again."
+        )
+        raise
 
     with engine.begin() as connection:
 
@@ -193,3 +201,4 @@ with Flow("Extract clean and load controls data") as flow:
     controls = extract_controls()
     controls = transform_controls(controls)
     load_controls(controls)
+

@@ -3,10 +3,14 @@ from typing import Union
 import pandas as pd
 import prefect
 from prefect import Flow, task
-from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
-from src.pipeline.processing import df_to_dict_series, zeros_ones_to_bools
+from src.pipeline.processing import (
+    df_to_dict_series,
+    python_lists_to_psql_arrays,
+    to_json,
+    zeros_ones_to_bools,
+)
 from src.pipeline.utils import delete
 from src.read_query import read_saved_query
 from src.utils.database import get_table, psql_insert_copy
@@ -135,10 +139,8 @@ def transform_controls(controls):
 
     # Then group the 3 dictionnaries containing the data of the 3 gear controls into a
     # numpy array of dictionnaries
-    controls["gear_controls"] = (
-        controls[["gear_1", "gear_2", "gear_3"]]
-        .fillna("")
-        .apply(lambda row: row.values, axis=1)
+    controls["gear_controls"] = controls[["gear_1", "gear_2", "gear_3"]].apply(
+        lambda row: list(row.dropna()), axis=1
     )
 
     # Finally drop the unneeded temporary columns with the 3 dictionnaries
@@ -159,17 +161,16 @@ def load_controls(controls):
 
     logger = prefect.context.get("logger")
 
+    # Convert infraction_ids list to Postgres array-compatible string
+    controls = python_lists_to_psql_arrays(controls, ["infraction_ids"])
+
+    controls["gear_controls"] = controls.gear_controls.map(to_json)
+
     schema = "public"
     table_name = "controls"
 
     engine = create_engine("monitorfish_remote")
-    try:
-        controls_table = get_table(table_name, schema, engine, logger)
-    except InvalidRequestError:
-        logger.error(
-            "controls table must exist. Make appropriate migrations and try again."
-        )
-        raise
+    controls_table = get_table(table_name, schema, engine, logger)
 
     with engine.begin() as connection:
 
@@ -191,4 +192,4 @@ def load_controls(controls):
 with Flow("Extract clean and load controls data") as flow:
     controls = extract_controls()
     controls = transform_controls(controls)
-#     load_controls(controls)
+    load_controls(controls)

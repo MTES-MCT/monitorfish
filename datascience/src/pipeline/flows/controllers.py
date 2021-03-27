@@ -9,37 +9,30 @@ from src.utils.database import get_table, psql_insert_copy
 
 
 @task(checkpoint=False)
-def extract_infractions():
-    infractions = read_saved_query("fmc", "pipeline/queries/fmc/natinf.sql")
+def extract_controllers():
+    controllers = read_saved_query("fmc", "pipeline/queries/fmc/controllers.sql")
 
-    return infractions
-
-
-@task(checkpoint=False)
-def clean_infractions(infractions):
-    infractions.loc[:, "infraction"] = infractions.infraction.map(str.capitalize)
-
-    return infractions
+    return controllers
 
 
 @task(checkpoint=False)
-def load_infractions(infractions):
+def load_controllers(controllers):
 
     logger = prefect.context.get("logger")
 
     schema = "public"
-    table_name = "infractions"
+    table_name = "controllers"
 
     engine = create_engine("monitorfish_remote")
-    infractions_table = get_table(table_name, schema, engine, logger)
+    controllers_table = get_table(table_name, schema, engine, logger)
 
     with engine.begin() as connection:
 
         # Delete all rows from table
-        delete(infractions_table, connection, logger)
+        delete(controllers_table, connection, logger)
 
         # Insert data into
-        infractions.to_sql(
+        controllers.to_sql(
             name=table_name,
             con=connection,
             schema=schema,
@@ -49,7 +42,6 @@ def load_infractions(infractions):
         )
 
 
-with Flow("Update infractions reference") as flow:
-    infractions = extract_infractions()
-    infractions = clean_infractions(infractions)
-    load_infractions(infractions)
+with Flow("Update controllers reference") as flow:
+    controllers = extract_controllers()
+    load_controllers(controllers)

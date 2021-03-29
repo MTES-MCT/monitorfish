@@ -1,136 +1,146 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from 'styled-components';
-import {useDispatch, useSelector} from "react-redux";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {ReactComponent as VesselSVG} from '../components/icons/Icone_navire.svg';
-import {COLORS} from "../constants/constants";
-import LastPositionsSlider from "../components/LastPositionsSlider";
+import { ReactComponent as VesselSVG } from '../components/icons/Icone_navire.svg'
+import { COLORS } from '../constants/constants'
+import LastPositionsSlider from '../components/LastPositionsSlider'
 import {
-    setVesselLabel,
-    setVesselLabelsShowedOnMap,
-    setVesselsLastPositionVisibility,
-    setVesselTrackDepth
-} from "../domain/reducers/Map";
-import TrackDepthRadio from "../components/TrackDepthRadio";
-import VesselLabelRadio from "../components/VesselLabelRadio";
-import VesselLabelCheckbox from "../components/VesselLabelCheckbox";
+  setVesselLabel,
+  setVesselLabelsShowedOnMap,
+  setVesselsLastPositionVisibility,
+  setVesselTrackDepth
+} from '../domain/reducers/Map'
+import TrackDepthRadio from '../components/TrackDepthRadio'
+import VesselLabelRadio from '../components/VesselLabelRadio'
+import VesselLabelCheckbox from '../components/VesselLabelCheckbox'
+import { expandRightMenu } from '../domain/reducers/Global'
+import unselectVessel from '../domain/use_cases/unselectVessel'
 
 const VesselVisibility = () => {
-    const dispatch = useDispatch()
-    const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
-    const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
-    const vesselLabel = useSelector(state => state.map.vesselLabel)
-    const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
-    const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+  const dispatch = useDispatch()
+  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
+  const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
+  const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
+  const vesselLabel = useSelector(state => state.map.vesselLabel)
+  const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
+  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
-    const firstUpdate = useRef(true);
-    const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false);
-    const [isShowed, setIsShowed] = useState(true)
+  const firstUpdate = useRef(true)
+  const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
+  const [isShowed, setIsShowed] = useState(true)
 
-    const wrapperRef = useRef(null);
+  const wrapperRef = useRef(null)
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                setVesselVisibilityBoxIsOpen(false)
-            }
-        }
-
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [wrapperRef]);
-
-    useEffect(() => {
-        if (vesselVisibilityBoxIsOpen === true) {
-            firstUpdate.current = false;
-        }
-    }, [vesselVisibilityBoxIsOpen])
-
-    useEffect(() => {
-        if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-            setIsShowed(false)
-        } else {
-            setIsShowed(true)
-        }
-    }, [temporaryVesselsToHighLightOnMap])
-
-    const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
-        dispatch(setVesselsLastPositionVisibility({
-            opacityReduced: opacityReduced,
-            hidden: hidden
-        }))
+  useEffect(() => {
+    function handleClickOutside (event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setVesselVisibilityBoxIsOpen(false)
+      }
     }
 
-    const updateVesselTrackDepth = depth => {
-        dispatch(setVesselTrackDepth(depth))
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside)
     }
+  }, [wrapperRef])
 
-    const updateVesselLabel = label => {
-        dispatch(setVesselLabel(label))
+  useEffect(() => {
+    if (vesselVisibilityBoxIsOpen === true) {
+      dispatch(unselectVessel())
+      firstUpdate.current = false
     }
+  }, [vesselVisibilityBoxIsOpen])
 
-    const updateVesselLabelsShowedOnMap = isShowed => {
-        dispatch(setVesselLabelsShowedOnMap(isShowed))
+  useEffect(() => {
+    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+      setIsShowed(false)
+    } else {
+      setIsShowed(true)
     }
+  }, [temporaryVesselsToHighLightOnMap])
 
-    return (
-        <Wrapper isShowed={isShowed} ref={wrapperRef}>
-            <VesselVisibilityIcon
-                title={"Affichage des dernières positions"}
-                onClick={() => setVesselVisibilityBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
-                <Vessel/>
-            </VesselVisibilityIcon>
-            <VesselVisibilityBox
-                lastPositionsBoxIsOpen={vesselVisibilityBoxIsOpen}
-                firstUpdate={firstUpdate.current}>
-                <Header isFirst={true}>
-                    Gérer l'affichage des dernières positions
-                </Header>
-                <LastPositionInfo>
-                    <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
-                </LastPositionInfo>
-                <LastPositionsSlider
-                    updateVesselsLastPositionVisibility={updateVesselsLastPositionVisibility}
-                    vesselsLastPositionVisibility={vesselsLastPositionVisibility}
-                />
-                <LastPositionLegend>
-                    Ces seuils permettent de régler l'affichage, l'estompage et le masquage des dernières positions des navires.
-                </LastPositionLegend>
-                <Header isFirst={false}>
-                    Paramétrer la longueur par défaut des pistes
-                </Header>
-                <TrackDepthRadio
-                    updateVesselTrackDepth={updateVesselTrackDepth}
-                    vesselTrackDepth={vesselTrackDepth}
-                />
-                <Header isFirst={false}>
-                    Gérer l'affichage des étiquettes des navires
-                </Header>
-                <VesselLabel>
-                    Choisir le libellé des étiquettes des navires
-                </VesselLabel>
-                <VesselLabelRadio
-                    updateVesselLabel={updateVesselLabel}
-                    vesselLabel={vesselLabel}
-                />
-                <ShowVesselLabel>
-                    <VesselLabelCheckbox
-                        updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
-                        vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
-                    />
-                </ShowVesselLabel>
-            </VesselVisibilityBox>
-        </Wrapper>
-    )
+  const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
+    dispatch(setVesselsLastPositionVisibility({
+      opacityReduced: opacityReduced,
+      hidden: hidden
+    }))
+  }
+
+  const updateVesselTrackDepth = depth => {
+    dispatch(setVesselTrackDepth(depth))
+  }
+
+  const updateVesselLabel = label => {
+    dispatch(setVesselLabel(label))
+  }
+
+  const updateVesselLabelsShowedOnMap = isShowed => {
+    dispatch(setVesselLabelsShowedOnMap(isShowed))
+  }
+
+  return (
+    <Wrapper isShowed={isShowed} ref={wrapperRef}>
+      <VesselVisibilityIcon
+        rightMenuIsOpen={rightMenuIsOpen}
+        selectedVessel={selectedVessel}
+        onMouseEnter={() => dispatch(expandRightMenu())}
+        title={'Affichage des dernières positions'}
+        onClick={() => setVesselVisibilityBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
+        <Vessel
+          rightMenuIsOpen={rightMenuIsOpen}
+          selectedVessel={selectedVessel}/>
+      </VesselVisibilityIcon>
+      <VesselVisibilityBox
+        lastPositionsBoxIsOpen={vesselVisibilityBoxIsOpen}
+        firstUpdate={firstUpdate.current}>
+        <Header isFirst={true}>
+          Gérer l'affichage des dernières positions
+        </Header>
+        <LastPositionInfo>
+          <VesselHidden/> navires masqués <VesselAlmostHidden/> navires estompés <VesselShowed/> navires normaux
+        </LastPositionInfo>
+        <LastPositionsSlider
+          updateVesselsLastPositionVisibility={updateVesselsLastPositionVisibility}
+          vesselsLastPositionVisibility={vesselsLastPositionVisibility}
+        />
+        <LastPositionLegend>
+          Ces seuils permettent de régler l'affichage, l'estompage et le masquage des dernières positions des navires.
+        </LastPositionLegend>
+        <Header isFirst={false}>
+          Paramétrer la longueur par défaut des pistes
+        </Header>
+        <TrackDepthRadio
+          updateVesselTrackDepth={updateVesselTrackDepth}
+          vesselTrackDepth={vesselTrackDepth}
+        />
+        <Header isFirst={false}>
+          Gérer l'affichage des étiquettes des navires
+        </Header>
+        <VesselLabel>
+          Choisir le libellé des étiquettes des navires
+        </VesselLabel>
+        <VesselLabelRadio
+          updateVesselLabel={updateVesselLabel}
+          vesselLabel={vesselLabel}
+        />
+        <ShowVesselLabel>
+          <VesselLabelCheckbox
+            updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
+            vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
+          />
+        </ShowVesselLabel>
+      </VesselVisibilityBox>
+    </Wrapper>
+  )
 }
 
 const Wrapper = styled.div`
   animation: ${props => props.isShowed ? `vessel-visibility-opening` : `vessel-visibility-closing`} 0.2s ease forwards;
-
+  display: contents;
   @keyframes vessel-visibility-opening {
     0%   { opacity: 0; }
     100% { opacity: 1; }
@@ -216,11 +226,12 @@ const VesselVisibilityBox = styled.div`
   background: ${COLORS.background};
   margin-right: -420px;
   top: 110px;
-  right: 12px;
+  right: 10px;
   border-radius: 2px;
   position: absolute;
   display: inline-block;
   animation: ${props => props.firstUpdate && !props.lastPositionsBoxIsOpen ? '' : props.lastPositionsBoxIsOpen ? 'last-positions-box-opening' : 'last-positions-box-closing'} 0.5s ease forwards;
+  z-index: 1000;
 
   @keyframes last-positions-box-opening {
     0%   { margin-right: -420px; opacity: 0;  }
@@ -241,12 +252,39 @@ const VesselVisibilityIcon = styled.button`
   padding: 3px 0px 0 3px;
   top: 102px;
   z-index: 99;
-  right: 2px;
+  right: 10px;
   height: 40px;
   width: 40px;
   border-radius: 2px;
-  margin-right: 8px;
   margin-top: 8px;
+  
+  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-visibility-icon-closing' : 'vessel-visibility-icon-opening'} 0.3s ease forwards;
+  
+  @keyframes vessel-visibility-icon-opening {
+    0%   {
+      width: 5px;
+      border-radius: 1px;
+      right: 0;
+     }
+    100% {
+      width: 40px;
+      border-radius: 2px;
+      right: 10px;
+    }
+  }
+
+  @keyframes vessel-visibility-icon-closing {
+    0% {
+      width: 40px;
+      border-radius: 2px;
+      right: 10px;
+    }
+    100%   {
+      width: 5px;
+      border-radius: 1px;
+      right: 0;
+    }
+  }
 
   :hover, :focus {
       background: ${COLORS.grayDarkerThree};
@@ -256,6 +294,25 @@ const VesselVisibilityIcon = styled.button`
 const Vessel = styled(VesselSVG)`
   width: 25px;
   height: 25px;
+  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'visibility-icon-hidden' : 'visibility-icon-visible'} 0.2s ease forwards;
+  
+  @keyframes visibility-icon-visible {
+    0%   {
+      opacity: 0;
+     }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes visibility-icon-hidden {
+    0% {
+      opacity: 1;
+    }
+    100%   {
+      opacity: 0;
+    }
+  }
 `
 
 export default VesselVisibility

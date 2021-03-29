@@ -20,6 +20,7 @@ const VesselSidebar = () => {
     const dispatch = useDispatch()
 
     const error = useSelector(state => state.global.error)
+    const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)
     const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
@@ -78,7 +79,11 @@ const VesselSidebar = () => {
     }
 
     return (
-        <Wrapper openBox={openBox} firstUpdate={firstUpdate.current}>
+        <Wrapper
+          openBox={openBox}
+          firstUpdate={firstUpdate.current}
+          rightMenuIsOpen={rightMenuIsOpen}
+        >
             {
                 <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
             }
@@ -225,7 +230,7 @@ const TabList = styled.div`
 
 const Wrapper = styled.div`
   position: absolute;
-  top: 52px;
+  top: 50px;
   right: 10px;
   width: 500px;
   max-height: 93vh;
@@ -237,7 +242,8 @@ const Wrapper = styled.div`
   margin-right: -510px;
   border-top: 1px solid ${COLORS.grayDarkerTwo};
  
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-box-opening' : 'vessel-box-closing'} 0.5s ease forwards;
+  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-box-opening' : 'vessel-box-closing'} 0.5s ease forwards,
+  ${props => props.rightMenuIsOpen && props.openBox ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 
   @keyframes vessel-box-opening {
     0%   { margin-right: -510px;   }
@@ -247,6 +253,16 @@ const Wrapper = styled.div`
   @keyframes vessel-box-closing {
     0% { margin-right: 0; }
     100%   { margin-right: -510px;   }
+  }
+  
+  @keyframes vessel-box-opening-with-right-menu-hover {
+    0%   { right: 10px;   }
+    100% { right: 55px; }
+  }
+
+  @keyframes vessel-box-closing-with-right-menu-hover {
+    0% { right: 55px; }
+    100%   { right: 10px;   }
   }
 `
 

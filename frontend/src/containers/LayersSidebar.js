@@ -237,7 +237,7 @@ const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;
-  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? '#9A9A9A' : COLORS.grayDarkerThree };
+  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree };
   padding: 2px 2px 2px 2px;
   margin-top: 0;
   margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px' };
@@ -246,7 +246,7 @@ const SidebarLayersIcon = styled.button`
   width: 40px;
 
   :hover, :focus {
-      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? '#9A9A9A' : COLORS.grayDarkerThree };
+      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree };
   }
 `
 

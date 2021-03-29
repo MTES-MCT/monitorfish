@@ -1,308 +1,326 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from 'styled-components';
-import Highlighter from "react-highlight-words";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import Highlighter from 'react-highlight-words'
 
-import {ReactComponent as SearchIconSVG} from "../components/icons/Loupe.svg";
-import LayersEnum from "../domain/entities/layers";
-import showVesselTrackAndSidebar from "../domain/use_cases/showVesselTrackAndSidebar";
-import {useDispatch, useSelector} from "react-redux";
-import {COLORS} from "../constants/constants";
-import {ReactComponent as CloseIconSVG} from "../components/icons/Croix_grise.svg";
-import unselectVessel from "../domain/use_cases/unselectVessel";
-import searchVessels from "../domain/use_cases/searchVessels";
-import {getVesselFeatureAndIdentity, getVesselIdentityFromFeature} from "../domain/entities/vessel";
-import countries from "i18n-iso-countries";
-import focusOnVesselSearch, {focusState} from "../domain/use_cases/focusOnVesselSearch";
+import { ReactComponent as SearchIconSVG } from '../components/icons/Loupe.svg'
+import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
+import { useDispatch, useSelector } from 'react-redux'
+import { COLORS } from '../constants/constants'
+import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
+import unselectVessel from '../domain/use_cases/unselectVessel'
+import searchVessels from '../domain/use_cases/searchVessels'
+import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../domain/entities/vessel'
+import countries from 'i18n-iso-countries'
+import focusOnVesselSearch, { focusState } from '../domain/use_cases/focusOnVesselSearch'
+import { expandRightMenu } from '../domain/reducers/Global'
 
-countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
+countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const VesselsSearchBox = () => {
-    const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
-    const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
-    const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
-    const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
-    const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
-    const dispatch = useDispatch()
+  const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
+  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
+  const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
+  const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
+  const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
+  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const dispatch = useDispatch()
 
-    const [searchText, setSearchText] = useState('');
-    const [vesselsHasBeenUpdated, setVesselsHasBeenUpdated] = useState(false);
-    const [foundVesselsOnMap, setFoundVesselsOnMap] = useState([]);
-    const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([]);
-    const [selectedVesselFeatureAndIdentity, setSelectedVesselFeatureAndIdentity] = useState(null);
-    const firstUpdate = useRef(true);
-    const [isShowed, setIsShowed] = useState(true)
+  const [searchText, setSearchText] = useState('')
+  const [vesselsHasBeenUpdated, setVesselsHasBeenUpdated] = useState(false)
+  const [foundVesselsOnMap, setFoundVesselsOnMap] = useState([])
+  const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([])
+  const [selectedVesselFeatureAndIdentity, setSelectedVesselFeatureAndIdentity] = useState(null)
+  const firstUpdate = useRef(true)
+  const [isShowed, setIsShowed] = useState(true)
 
-    const wrapperRef = useRef(null);
+  const wrapperRef = useRef(null)
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                dispatch(focusOnVesselSearch())
-                setSearchText('')
-            }
-        }
-
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [wrapperRef, selectedVesselFeatureAndIdentity]);
-
-    useEffect(() => {
-        let isUpdatedVessel = false
-        if(selectedVesselFeatureAndIdentity &&
-            selectedVesselFeatureAndIdentity.identity &&
-            vesselFeatureAndIdentity &&
-            vesselFeatureAndIdentity.identity === selectedVesselFeatureAndIdentity.identity) {
-            isUpdatedVessel = true
-            setVesselsHasBeenUpdated(true)
-            dispatch(focusOnVesselSearch(null, isUpdatedVessel))
-
-            return
-        }
-
-        setVesselsHasBeenUpdated(false)
-        dispatch(focusOnVesselSearch(null, isUpdatedVessel))
-        setSelectedVesselFeatureAndIdentity(vesselFeatureAndIdentity)
-    }, [vesselFeatureAndIdentity])
-
-    useEffect(() => {
-        if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-            setIsShowed(false)
-        } else {
-            setIsShowed(true)
-        }
-    }, [temporaryVesselsToHighLightOnMap])
-
-    function getTextForSearch(text) {
-        return text
-            .toLowerCase()
-            .replace(/[ ]/g, '')
-            .replace(/[']/g, '')
-            .replace(/["]/g, '')
+  useEffect(() => {
+    function handleClickOutside (event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        dispatch(focusOnVesselSearch())
+        setSearchText('')
+      }
     }
 
-    function findMatchingFeature(feature) {
-        return (feature.getProperties().internalReferenceNumber &&
-            getTextForSearch(feature.getProperties().internalReferenceNumber).includes(getTextForSearch(searchText))) ||
-            (feature.getProperties().externalReferenceNumber &&
-                getTextForSearch(feature.getProperties().externalReferenceNumber).includes(getTextForSearch(searchText))) ||
-            (feature.getProperties().mmsi &&
-                getTextForSearch(feature.getProperties().mmsi).includes(getTextForSearch(searchText))) ||
-            (feature.getProperties().ircs &&
-                getTextForSearch(feature.getProperties().ircs).includes(getTextForSearch(searchText))) ||
-            (feature.getProperties().vesselName &&
-                getTextForSearch(feature.getProperties().vesselName).includes(getTextForSearch(searchText)))
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [wrapperRef, selectedVesselFeatureAndIdentity])
+
+  useEffect(() => {
+    let doNotFocus = false
+    if (selectedVesselFeatureAndIdentity &&
+      selectedVesselFeatureAndIdentity.identity &&
+      vesselFeatureAndIdentity &&
+      vesselFeatureAndIdentity.identity === selectedVesselFeatureAndIdentity.identity) {
+      doNotFocus = true
+      setVesselsHasBeenUpdated(true)
+      dispatch(focusOnVesselSearch(null, doNotFocus))
+
+      return
     }
 
-    function getFoundVesselsOnMap() {
-        let vessels = vesselsLayerSource.getFeatures().map(feature => {
-            if (findMatchingFeature(feature)) {
-                return feature
-            }
-        }).filter(vessel => vessel)
+    setVesselsHasBeenUpdated(false)
+    dispatch(focusOnVesselSearch(null, doNotFocus))
+    setSelectedVesselFeatureAndIdentity(vesselFeatureAndIdentity)
+  }, [vesselFeatureAndIdentity])
 
-        const firstThirtyVessels = vessels.slice(0, 30);
-
-        return firstThirtyVessels
+  useEffect(() => {
+    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+      setIsShowed(false)
+    } else {
+      setIsShowed(true)
     }
+  }, [temporaryVesselsToHighLightOnMap])
 
-    function removeDuplicatedFoundVessels(foundVesselsFromAPI, foundVesselsOnMap) {
-        return foundVesselsFromAPI.filter(vessel => {
-            return !(foundVesselsOnMap.some(vesselFromMap =>
-                    vesselFromMap.getProperties().internalReferenceNumber === vessel.internalReferenceNumber) &&
-                foundVesselsOnMap.some(vesselFromMap =>
-                    vesselFromMap.getProperties().externalReferenceNumber === vessel.externalReferenceNumber) &&
-                foundVesselsOnMap.some(vesselFromMap =>
-                    vesselFromMap.getProperties().ircs === vessel.ircs))
-        });
+  function getTextForSearch (text) {
+    return text
+      .toLowerCase()
+      .replace(/[ ]/g, '')
+      .replace(/[']/g, '')
+      .replace(/["]/g, '')
+  }
+
+  function findMatchingFeature (feature) {
+    return (feature.getProperties().internalReferenceNumber &&
+      getTextForSearch(feature.getProperties().internalReferenceNumber).includes(getTextForSearch(searchText))) ||
+      (feature.getProperties().externalReferenceNumber &&
+        getTextForSearch(feature.getProperties().externalReferenceNumber).includes(getTextForSearch(searchText))) ||
+      (feature.getProperties().mmsi &&
+        getTextForSearch(feature.getProperties().mmsi).includes(getTextForSearch(searchText))) ||
+      (feature.getProperties().ircs &&
+        getTextForSearch(feature.getProperties().ircs).includes(getTextForSearch(searchText))) ||
+      (feature.getProperties().vesselName &&
+        getTextForSearch(feature.getProperties().vesselName).includes(getTextForSearch(searchText)))
+  }
+
+  function getFoundVesselsOnMap () {
+    let vessels = vesselsLayerSource.getFeatures().map(feature => {
+      if (findMatchingFeature(feature)) {
+        return feature
+      }
+    }).filter(vessel => vessel)
+
+    const firstThirtyVessels = vessels.slice(0, 30)
+
+    return firstThirtyVessels
+  }
+
+  function removeDuplicatedFoundVessels (foundVesselsFromAPI, foundVesselsOnMap) {
+    return foundVesselsFromAPI.filter(vessel => {
+      return !(foundVesselsOnMap.some(vesselFromMap =>
+        vesselFromMap.getProperties().internalReferenceNumber === vessel.internalReferenceNumber) &&
+        foundVesselsOnMap.some(vesselFromMap =>
+          vesselFromMap.getProperties().externalReferenceNumber === vessel.externalReferenceNumber) &&
+        foundVesselsOnMap.some(vesselFromMap =>
+          vesselFromMap.getProperties().ircs === vessel.ircs))
+    })
+  }
+
+  useEffect(() => {
+    if (searchText.length > 1) {
+      let foundVesselsOnMap = getFoundVesselsOnMap()
+      setFoundVesselsOnMap(foundVesselsOnMap)
+
+      dispatch(searchVessels(searchText.toUpperCase())).then(foundVesselsFromAPI => {
+        let distinctFoundVessels = removeDuplicatedFoundVessels(foundVesselsFromAPI, foundVesselsOnMap)
+        setFoundVesselsFromAPI(distinctFoundVessels)
+      })
+    } else {
+      setFoundVesselsOnMap([])
+      setFoundVesselsFromAPI([])
     }
+  }, [searchText, setFoundVesselsOnMap, selectedVesselFeatureAndIdentity])
 
-    useEffect(() => {
-        if (searchText.length > 1) {
-            let foundVesselsOnMap = getFoundVesselsOnMap();
-            setFoundVesselsOnMap(foundVesselsOnMap)
+  useEffect(() => {
+    firstUpdate.current = false
+  }, [])
 
-            dispatch(searchVessels(searchText.toUpperCase())).then(foundVesselsFromAPI => {
-                let distinctFoundVessels = removeDuplicatedFoundVessels(foundVesselsFromAPI, foundVesselsOnMap)
-                setFoundVesselsFromAPI(distinctFoundVessels)
-            })
-        } else {
-            setFoundVesselsOnMap([])
-            setFoundVesselsFromAPI([])
-        }
-    }, [searchText, setFoundVesselsOnMap, selectedVesselFeatureAndIdentity])
+  useEffect(() => {
+    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
+      if (!vesselsHasBeenUpdated) {
+        dispatch(showVesselTrackAndSidebar(selectedVesselFeatureAndIdentity, true, false))
 
-    useEffect(() => {
-            firstUpdate.current = false
-    }, [])
-
-    useEffect(() => {
-        if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
-            if(!vesselsHasBeenUpdated) {
-                dispatch(showVesselTrackAndSidebar(selectedVesselFeatureAndIdentity, true, false));
-
-                setSearchText('')
-                setFoundVesselsFromAPI([])
-                setFoundVesselsOnMap([])
-            }
-        } else {
-            dispatch(unselectVessel())
-        }
-    }, [selectedVesselFeatureAndIdentity])
-
-    function getListItem(id, flagState, internalReferenceNumber, externalReferenceNumber, ircs, mmsi, vesselName, vessel) {
-        return (
-            <ListItem
-                onClick={() => {
-                    dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT))
-                    setVesselsHasBeenUpdated(false)
-                    setSelectedVesselFeatureAndIdentity(vessel)
-                    setSearchText('')
-                }}
-                key={id}>
-                <div>
-                    {flagState ?
-                        <Flag rel="preload"
-                              title={countries.getName(flagState, "fr")}
-                              src={`flags/${flagState.toLowerCase()}.svg`}/> : null}
-                    <Name>
-                        <Highlighter
-                            highlightClassName="highlight"
-                            searchWords={[searchText]}
-                            autoEscape={true}
-                            textToHighlight={vesselName ? vesselName : 'SANS NOM'}
-                        />
-                    </Name>
-                </div>
-                <Information>
-                    <CFR>
-                        <Highlighter
-                            highlightClassName="highlight"
-                            searchWords={[searchText]}
-                            autoEscape={true}
-                            textToHighlight={internalReferenceNumber ? internalReferenceNumber : ''}
-                        />
-                        {internalReferenceNumber ? null : <Light>Inconnu</Light>}
-                        {' '}<Light>(CFR)</Light>
-                    </CFR>
-                    <ExtNum>
-                        <Highlighter
-                            highlightClassName="highlight"
-                            searchWords={[searchText]}
-                            autoEscape={true}
-                            textToHighlight={externalReferenceNumber ? externalReferenceNumber : ''}
-                        />
-                        {externalReferenceNumber ? null : <Light>Inconnu</Light>}
-                        {' '}<Light>(Marq. Ext.)</Light>
-                    </ExtNum>
-                </Information>
-                <Information>
-                    <MMSI>
-                        <Highlighter
-                            highlightClassName="highlight"
-                            searchWords={[searchText]}
-                            autoEscape={true}
-                            textToHighlight={mmsi ? mmsi : ''}
-                        />
-                        {mmsi ? null : <Light>Inconnu</Light>}
-                        {' '}<Light>(MMSI)</Light>
-                    </MMSI>
-                    <CallSign>
-                        <Highlighter
-                            highlightClassName="highlight"
-                            searchWords={[searchText]}
-                            autoEscape={true}
-                            textToHighlight={ircs ? ircs : ''}
-                        />
-                        {ircs ? null : <Light>Inconnu</Light>}
-                        {' '}<Light>(Call Sign)</Light>
-                    </CallSign>
-                </Information>
-            </ListItem>
-        );
+        setSearchText('')
+        setFoundVesselsFromAPI([])
+        setFoundVesselsOnMap([])
+      }
+    } else {
+      dispatch(unselectVessel())
     }
+  }, [selectedVesselFeatureAndIdentity])
 
+  function getListItem (id, flagState, internalReferenceNumber, externalReferenceNumber, ircs, mmsi, vesselName, vessel) {
     return (
-        <Wrapper isShowed={isShowed} ref={wrapperRef}>
-            <SearchBoxField>
-                {
-                    !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity ? <SelectedVessel
-                        onClick={() => {
-                            if(vesselSidebarIsOpen) {
-                                dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_TITLE))
-                            }
-                        }}
-                        vesselSidebarIsOpen={vesselSidebarIsOpen}
-                        vesselName={selectedVesselFeatureAndIdentity.identity.vesselName}
-                        isFocusedOnVesselSearch={isFocusedOnVesselSearch}
-                    >
-                        {selectedVesselFeatureAndIdentity.identity.flagState ? <Flag
-                            title={countries.getName(selectedVesselFeatureAndIdentity.identity.flagState, "fr")}
-                            src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`} /> : null}
-                        <VesselName>
-                            {selectedVesselFeatureAndIdentity.identity.vesselName}
-                            {' '}
-                            {
-                                selectedVesselFeatureAndIdentity.identity.flagState && selectedVesselFeatureAndIdentity.identity.flagState !== 'UNDEFINED' ? <>({selectedVesselFeatureAndIdentity.identity.flagState})</> : <>(INCONNU)</>
-                            }
-                        </VesselName>
-                        <CloseIcon onClick={() => {
-                            setSelectedVesselFeatureAndIdentity(null)
-                        }}/>
-                    </SelectedVessel> : <SearchBoxInput
-                        ref={input => selectedVesselFeatureAndIdentity ? input && input.focus() : null}
-                        type="text"
-                        firstUpdate={firstUpdate}
-                        value={searchText}
-                        placeholder={'Rechercher un navire...'}
-                        onChange={e => setSearchText(e.target.value)}
-                        isFocusedOnVesselSearch={isFocusedOnVesselSearch}
-                        vesselSidebarIsOpen={vesselSidebarIsOpen}
-                    />
-                }
-                {
-                    !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity ? null : <SearchIcon />
-                }
-            </SearchBoxField>
-            {
-                (foundVesselsOnMap && foundVesselsOnMap.length) ||
-                (foundVesselsFromAPI && foundVesselsFromAPI.length) ? <Results>
-                    <List>
-                        {
-                            foundVesselsOnMap.map((feature, index) => {
-                                let vessel = getVesselIdentityFromFeature(feature)
+      <ListItem
+        onClick={() => {
+          dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT))
+          setVesselsHasBeenUpdated(false)
+          setSelectedVesselFeatureAndIdentity(vessel)
+          setSearchText('')
+        }}
+        key={id}>
+        <div>
+          {flagState ?
+            <Flag rel="preload"
+                  title={countries.getName(flagState, 'fr')}
+                  src={`flags/${flagState.toLowerCase()}.svg`}/> : null}
+          <Name>
+            <Highlighter
+              highlightClassName="highlight"
+              searchWords={[searchText]}
+              autoEscape={true}
+              textToHighlight={vesselName ? vesselName : 'SANS NOM'}
+            />
+          </Name>
+        </div>
+        <Information>
+          <CFR>
+            <Highlighter
+              highlightClassName="highlight"
+              searchWords={[searchText]}
+              autoEscape={true}
+              textToHighlight={internalReferenceNumber ? internalReferenceNumber : ''}
+            />
+            {internalReferenceNumber ? null : <Light>Inconnu</Light>}
+            {' '}<Light>(CFR)</Light>
+          </CFR>
+          <ExtNum>
+            <Highlighter
+              highlightClassName="highlight"
+              searchWords={[searchText]}
+              autoEscape={true}
+              textToHighlight={externalReferenceNumber ? externalReferenceNumber : ''}
+            />
+            {externalReferenceNumber ? null : <Light>Inconnu</Light>}
+            {' '}<Light>(Marq. Ext.)</Light>
+          </ExtNum>
+        </Information>
+        <Information>
+          <MMSI>
+            <Highlighter
+              highlightClassName="highlight"
+              searchWords={[searchText]}
+              autoEscape={true}
+              textToHighlight={mmsi ? mmsi : ''}
+            />
+            {mmsi ? null : <Light>Inconnu</Light>}
+            {' '}<Light>(MMSI)</Light>
+          </MMSI>
+          <CallSign>
+            <Highlighter
+              highlightClassName="highlight"
+              searchWords={[searchText]}
+              autoEscape={true}
+              textToHighlight={ircs ? ircs : ''}
+            />
+            {ircs ? null : <Light>Inconnu</Light>}
+            {' '}<Light>(Call Sign)</Light>
+          </CallSign>
+        </Information>
+      </ListItem>
+    )
+  }
 
-                                return getListItem(
-                                    feature.id_,
-                                    feature.getProperties().flagState,
-                                    feature.getProperties().internalReferenceNumber,
-                                    feature.getProperties().externalReferenceNumber,
-                                    feature.getProperties().ircs,
-                                    feature.getProperties().mmsi,
-                                    feature.getProperties().vesselName,
-                                    getVesselFeatureAndIdentity(feature, vessel))
-                            })
-                        }
-                        {
-                            foundVesselsFromAPI.map((vessel, index) => {
-                                return getListItem(
-                                    index,
-                                    vessel.flagState,
-                                    vessel.internalReferenceNumber,
-                                    vessel.externalReferenceNumber,
-                                    vessel.ircs,
-                                    vessel.mmsi,
-                                    vessel.vesselName,
-                                    getVesselFeatureAndIdentity(null, vessel))
-                            })
-                        }
-                    </List>
-                </Results> : ''
-            }
-        </Wrapper>)
+  return (
+    <>
+      <Wrapper
+        rightMenuIsOpen={rightMenuIsOpen}
+        vesselSidebarIsOpen={vesselSidebarIsOpen}
+        isShowed={isShowed}
+        selectedVesselFeatureAndIdentity={selectedVesselFeatureAndIdentity}
+        ref={wrapperRef}>
+        <SearchBoxField>
+          {
+            !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity ?
+              <SelectedVessel
+                onClick={() => {
+                  if (vesselSidebarIsOpen) {
+                    dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_TITLE))
+                  }
+                }}
+                vesselSidebarIsOpen={vesselSidebarIsOpen}
+                vesselName={selectedVesselFeatureAndIdentity.identity.vesselName}
+                isFocusedOnVesselSearch={isFocusedOnVesselSearch}
+              >
+                {selectedVesselFeatureAndIdentity.identity.flagState ? <Flag
+                  title={countries.getName(selectedVesselFeatureAndIdentity.identity.flagState, 'fr')}
+                  src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`}/> : null}
+                <VesselName>
+                  {selectedVesselFeatureAndIdentity.identity.vesselName}
+                  {' '}
+                  {
+                    selectedVesselFeatureAndIdentity.identity.flagState && selectedVesselFeatureAndIdentity.identity.flagState !== 'UNDEFINED' ? <>({selectedVesselFeatureAndIdentity.identity.flagState})</> : <>(INCONNU)</>
+                  }
+                </VesselName>
+                <CloseIcon onClick={() => {
+                  setSelectedVesselFeatureAndIdentity(null)
+                }}/>
+              </SelectedVessel> : <SearchBoxInput
+                ref={input => selectedVesselFeatureAndIdentity ? input && input.focus() : null}
+                type="text"
+                firstUpdate={firstUpdate}
+                value={searchText}
+                placeholder={'Rechercher un navire...'}
+                onChange={e => setSearchText(e.target.value)}
+                isFocusedOnVesselSearch={isFocusedOnVesselSearch}
+                vesselSidebarIsOpen={vesselSidebarIsOpen}
+              />
+          }
+        </SearchBoxField>
+        {
+          (foundVesselsOnMap && foundVesselsOnMap.length) ||
+          (foundVesselsFromAPI && foundVesselsFromAPI.length) ? <Results>
+            <List>
+              {
+                foundVesselsOnMap.map((feature, index) => {
+                  let vessel = getVesselIdentityFromFeature(feature)
+
+                  return getListItem(
+                    feature.id_,
+                    feature.getProperties().flagState,
+                    feature.getProperties().internalReferenceNumber,
+                    feature.getProperties().externalReferenceNumber,
+                    feature.getProperties().ircs,
+                    feature.getProperties().mmsi,
+                    feature.getProperties().vesselName,
+                    getVesselFeatureAndIdentity(feature, vessel))
+                })
+              }
+              {
+                foundVesselsFromAPI.map((vessel, index) => {
+                  return getListItem(
+                    index,
+                    vessel.flagState,
+                    vessel.internalReferenceNumber,
+                    vessel.externalReferenceNumber,
+                    vessel.ircs,
+                    vessel.mmsi,
+                    vessel.vesselName,
+                    getVesselFeatureAndIdentity(null, vessel))
+                })
+              }
+            </List>
+          </Results> : ''
+        }
+      </Wrapper>
+      <SearchButton
+        title={'Rechercher un navire'}
+        onMouseEnter={() => dispatch(expandRightMenu())}
+        onClick={() => dispatch(focusOnVesselSearch(focusState.CLICK_SEARCH_ICON, !selectedVessel))}
+        rightMenuIsOpen={rightMenuIsOpen}
+        isShowed={isShowed}
+        selectedVessel={selectedVessel}>
+        <SearchIcon
+          rightMenuIsOpen={rightMenuIsOpen}
+          selectedVessel={selectedVessel}/>
+      </SearchButton>
+    </>)
 }
 
 const Light = styled.span`
@@ -348,7 +366,6 @@ const CFR = styled.div`
   min-width: 140px;
 `
 
-
 const Flag = styled.img`
     font-size: 25px;
     margin-left: 5px;
@@ -380,19 +397,24 @@ const Wrapper = styled.div`
   position: absolute;
   display: inline-block;
   top: 10px;
-  right: 7px;
+  right: 55px;
   z-index: 1000;
   color: ${COLORS.textWhite};
   text-decoration: none;
   border: none;
-  background-color: rgba(255,255,255,0.1);
+  background-color: none;
   border-radius: 2px;
-  padding: 3px 3px 0 3px;
+  padding: 0 0 0 0;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   
-  animation: ${props => props.isShowed ? `vessel-search-box-opening` : `vessel-search-box-closing`} 0.2s ease forwards;
+  animation: ${props => props.isShowed ? `vessel-search-box-opening` : `vessel-search-box-closing`} 0.2s ease forwards,
+    ${props => props.selectedVesselFeatureAndIdentity 
+      ? props.rightMenuIsOpen && props.vesselSidebarIsOpen 
+        ? 'vessel-search-box-opening-with-right-menu-hover' 
+        : 'vessel-search-box-closing-with-right-menu-hover' 
+      : null} 0.3s ease forwards;
 
   @keyframes vessel-search-box-opening {
     0%   { opacity: 0; }
@@ -404,17 +426,28 @@ const Wrapper = styled.div`
     100% { opacity: 0; }
   }
   
-  :hover, :focus {
-    background-color: rgba(255,255,255,0.2);
+  @keyframes vessel-search-box-opening-with-right-menu-hover {
+    0%   { right: 10px;   }
+    100% { right: 55px; }
   }
-`;
+
+  @keyframes vessel-search-box-closing-with-right-menu-hover {
+    0% { right: 55px; }
+    100%   { right: 10px;   }
+  }
+  
+  :hover, :focus {
+    background-color: none;
+  }
+`
 
 const Results = styled.div`
   background: white;
   color: ${COLORS.grayDarkerThree};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
-`;
+  width: 320px;
+`
 
 const SearchBoxField = styled.div`
   display: flex;
@@ -425,26 +458,25 @@ const SearchBoxInput = styled.input`
   background-color: white;
   border: none;
   border-radius: 0;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
+  border-radius: 2px;
   color: ${COLORS.grayDarkerThree};
   font-size: 0.8em;
   height: 40px;
-  width: ${props => props.isFocusedOnVesselSearch || props.vesselSidebarIsOpen ? '460px' : '300px'};
+  width: ${props => props.isFocusedOnVesselSearch || props.vesselSidebarIsOpen ? '500px' : '320px'};
   padding: 0 5px 0 10px;
   flex: 3;
   
   animation: ${props => props.isFocusedOnVesselSearch && !props.vesselSidebarIsOpen ? 'vessel-search-closing' : ''}  0.7s ease forwards;
 
   @keyframes vessel-search-closing {
-    0% { width: 460px; }
-    100%   { width: 300px;   }
+    0% { width: 500px; }
+    100%   { width: 320px;   }
   }
   
   :hover, :focus {
     border-bottom: 1px ${COLORS.gray} solid;
   }
-`;
+`
 
 const SelectedVessel = styled.div`
   font-weight: bolder;
@@ -473,15 +505,85 @@ const SelectedVessel = styled.div`
   }
 `
 
-const SearchIcon = styled(SearchIconSVG)`
+const SearchButton = styled.button`
   opacity: 1;
   width: 40px;
   height: 40px;
-  float: right;
-  background: ${COLORS.grayDarkerThree};
+  right: 10px;
+  top: 10px;
+  z-index: 99;
+  background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
   cursor: pointer;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-radius: 2px;
+  position: absolute;
+  
+  animation: ${props => props.isShowed ? `vessel-search-button-showed` : `vessel-search-button-hidden`} 0.2s ease forwards,
+  ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-search-icon-closing' : 'vessel-search-icon-opening'} 0.3s ease forwards;
+
+  @keyframes vessel-search-button-showed {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes vessel-search-button-hidden {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+    
+  @keyframes vessel-search-icon-opening {
+    0%   {
+      width: 5px;
+      border-radius: 1px;
+      right: 0;
+       fill: green;
+     }
+    100% {
+      width: 40px;
+      border-radius: 2px;
+      right: 10px;
+    }
+  }
+
+  @keyframes vessel-search-icon-closing {
+    0% {
+      width: 40px;
+      border-radius: 2px;
+      right: 10px;
+    }
+    100%   {
+      width: 5px;
+      border-radius: 1px;
+      right: 0;
+    }
+  }
+  
+  :hover, :focus {
+      background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
+  }
+`
+
+const SearchIcon = styled(SearchIconSVG)`
+  width: 40px;
+  height: 40px;
+  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-search-icon-hidden' : 'vessel-search-icon-visible'} 0.2s ease forwards;
+  
+  @keyframes vessel-search-icon-visible {
+    0%   {
+      opacity: 0;
+     }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes vessel-search-icon-hidden {
+    0% {
+      opacity: 1;
+    }
+    100%   {
+      opacity: 0;
+    }
+  }
 `
 
 const List = styled.ul`

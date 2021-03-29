@@ -25,14 +25,18 @@ import {getCoordinates} from "../utils";
 import getAdministrativeZoneGeometry from "../domain/use_cases/getAdministrativeZoneGeometry";
 import {getAdministrativeSubZonesFromAPI} from "../api/fetch";
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
+import { expandRightMenu } from '../domain/reducers/Global'
+import unselectVessel from '../domain/use_cases/unselectVessel'
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselList = () => {
     const dispatch = useDispatch()
+    const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
     const layers = useSelector(state => state.layer.layers)
     const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
     const vesselsFromApi = useSelector(state => state.vessel.vessels)
+    const selectedVessel = useSelector(state => state.vessel.selectedVessel)
     const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
     const firstUpdate = useRef(true);
@@ -58,6 +62,7 @@ const VesselList = () => {
 
     useEffect(() => {
         if (vesselListModalIsOpen === true) {
+            dispatch(unselectVessel())
             firstUpdate.current = false
         }
 
@@ -327,9 +332,15 @@ const VesselList = () => {
         <>
             <Wrapper isShowed={isShowed}>
                 <VesselListIcon
+                    selectedVessel={selectedVessel}
+                    onMouseEnter={() => dispatch(expandRightMenu())}
+                    rightMenuIsOpen={rightMenuIsOpen}
                     title={"Liste des navires avec VMS"}
                     onClick={() => setVesselListModalIsOpen(true)}>
-                    <Vessel/>
+                    <Vessel
+                      selectedVessel={selectedVessel}
+                      rightMenuIsOpen={rightMenuIsOpen}
+                    />
                 </VesselListIcon>
                 <Modal
                     full
@@ -594,12 +605,39 @@ const VesselListIcon = styled.button`
   padding: 8px 0px 0 1px;
   top: 60px;
   z-index: 99;
-  right: 2px;
   height: 40px;
   width: 40px;
   border-radius: 2px;
-  margin-right: 8px;
+  right: 10px;
   margin-top: 8px;
+  
+  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-list-icon-closing' : 'vessel-list-icon-opening'} 0.3s ease forwards;
+  
+  @keyframes vessel-list-icon-opening {
+    0%   {
+      width: 5px;
+      border-radius: 1px;
+      right: 0;
+     }
+    100% {
+      width: 40px;
+      border-radius: 2px;
+      right: 10px;
+    }
+  }
+
+  @keyframes vessel-list-icon-closing {
+    0% {
+      width: 40px;
+      border-radius: 2px;
+      right: 10px;
+    }
+    100%   {
+      width: 5px;
+      border-radius: 1px;
+      right: 0;
+    }
+  }
 
   :hover, :focus {
       background: ${COLORS.grayDarkerThree};
@@ -609,7 +647,26 @@ const VesselListIcon = styled.button`
 const Vessel = styled(VesselListSVG)`
   width: 25px;
   height: 25px;
+  animation: ${props => !props.isTitle ? props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-icon-hidden' : 'vessel-icon-visible' : null} 0.2s ease forwards;
   ${props => props.isTitle ? 'vertical-align: text-bottom;' : null}
+  
+  @keyframes vessel-icon-visible {
+    0%   {
+      opacity: 0;
+     }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes vessel-icon-hidden {
+    0% {
+      opacity: 1;
+    }
+    100%   {
+      opacity: 0;
+    }
+  }
 `
 
 const BoxFilter = styled(BoxFilterSVG)`

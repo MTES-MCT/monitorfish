@@ -9,14 +9,16 @@ import APIWorker from './api/APIWorker'
 import VesselVisibility from './containers/VesselVisibility'
 import VesselList from './containers/VesselList'
 import UpdatingVesselLoader from './containers/UpdatingVesselLoader'
+import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
 
 function App () {
   return (
     <>
       <ToastProvider placement="bottom-right">
         <Wrapper>
-          <VesselsSearchBox/>
           <MapWrapper/>
+          <VesselsSearchBox/>
+          <RightMenuOnHoverZone />
           <LayersSidebar/>
           <VesselList/>
           <VesselVisibility/>
@@ -37,16 +39,6 @@ const Wrapper = styled.div`
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
-`
-
-const Logo = styled.div`
-  width: auto;
-  overflow: auto;
-  bottom: 5px;
-  right: 10px;
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
 `
 
 export default App

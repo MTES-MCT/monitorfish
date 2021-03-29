@@ -71,7 +71,6 @@ const VesselsLayer = ({ map, mapRef }) => {
       Promise.all(vesselsFeaturesPromise).then(vesselsFeatures => {
         vectorSource.clear(true)
         vectorSource.addFeatures(vesselsFeatures)
-        console.log(vesselsFeatures)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
           features: vesselsFeatures

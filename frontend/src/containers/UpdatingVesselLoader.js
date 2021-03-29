@@ -35,8 +35,8 @@ const Vessel = styled(VesselSVG)`
 
 const Wrapper = styled.div`
   position: absolute;
-  top: 34px;
-  left: ${props => props.selectedVessel ? '72%' : '80%'};
+  top: 30px;
+  right: ${props => props.selectedVessel ? '510px' : '370px'};
   width: 30px;
   transform: translate(-50%, -50%);
 `

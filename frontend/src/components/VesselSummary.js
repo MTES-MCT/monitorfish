@@ -104,7 +104,7 @@ const VesselSummary = props => {
                             <Key>Marquage ext.</Key>
                             <Value>{props.vessel.externalReferenceNumber
                               ? props.vessel.externalReferenceNumber
-                              : lastPosition.externalReferenceNumber
+                              : lastPosition && lastPosition.externalReferenceNumber
                                 ? lastPosition.externalReferenceNumber
                                 : <NoValue>-</NoValue>}</Value>
                         </Field>

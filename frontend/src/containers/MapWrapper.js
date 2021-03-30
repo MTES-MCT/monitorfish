@@ -31,6 +31,7 @@ import BaseLayer from '../layers/BaseLayer'
 import DrawLayer from '../layers/DrawLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
 import { getCoordinates } from '../utils'
+import AdministrativeLayers from '../layers/AdministrativeLayers'
 
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
@@ -38,7 +39,6 @@ let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove;
 const hitPixelTolerance = 3;
 
 const MapWrapper = () => {
-    const layer = useSelector(state => state.layer)
     const gears = useSelector(state => state.gear.gears)
     const vessel = useSelector(state => state.vessel)
     const mapState = useSelector(state => state.map)
@@ -152,18 +152,32 @@ const MapWrapper = () => {
 
     useEffect(() => {
         if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
-            setIsAnimating(true)
-            map.getView().animate({
-                center: [
-                    mapState.animateToRegulatoryLayer.center[0],
-                    mapState.animateToRegulatoryLayer.center[1]
-                ],
-                duration: 1000,
-                zoom: 8
-            }, () => {
-                setIsAnimating(false)
-                dispatch(resetAnimateToRegulatoryLayer())
-            })
+            if(map.getView().getZoom() < 8) {
+                setIsAnimating(true)
+                map.getView().animate({
+                    center: [
+                        mapState.animateToRegulatoryLayer.center[0],
+                        mapState.animateToRegulatoryLayer.center[1]
+                    ],
+                    duration: 1000,
+                    zoom: 8
+                }, () => {
+                    setIsAnimating(false)
+                    dispatch(resetAnimateToRegulatoryLayer())
+                })
+            } else {
+                setIsAnimating(true)
+                map.getView().animate({
+                    center: [
+                        mapState.animateToRegulatoryLayer.center[0],
+                        mapState.animateToRegulatoryLayer.center[1]
+                    ],
+                    duration: 1000,
+                }, () => {
+                    setIsAnimating(false)
+                    dispatch(resetAnimateToRegulatoryLayer())
+                })
+            }
         }
     }, [mapState.animateToRegulatoryLayer, map])
 
@@ -310,6 +324,7 @@ const MapWrapper = () => {
             <VesselsLayer map={map} mapRef={mapRef}/>
             <DrawLayer map={map} />
             <RegulatoryLayers map={map} />
+            <AdministrativeLayers map={map} />
 
             <VesselCardOverlay id={vesselCardID}>
                 {

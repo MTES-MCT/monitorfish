@@ -9,7 +9,6 @@ import XYZ from 'ol/source/XYZ'
 
 const BaseLayer = ({ map }) => {
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
-  const layers = useSelector(state => state.layer.layers)
 
   const [baseLayersObjects] = useState({
     OSM: new VectorTileLayer({
@@ -48,7 +47,7 @@ const BaseLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    if(selectedBaseLayer && baseLayersObjects[selectedBaseLayer] && map && layers.length) {
+    if(map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
       const layerToRemove = map.getLayers().getArray()
         .find(layer => layer.className_ === LayersEnum.BASE_LAYER.code)
 

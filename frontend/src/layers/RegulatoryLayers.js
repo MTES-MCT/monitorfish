@@ -8,14 +8,14 @@ const RegulatoryLayers = ({ map }) => {
 
   useEffect(() => {
     if (map && layer.layers.length) {
-      reorganizeLayers();
+      reorganizeRegulatoryLayers();
     }
   }, [layer.layers, map, layer.layersAndAreas])
 
   useEffect(() => {
     if (map && layer.layers) {
-      addLayersToMap();
-      removeLayersToMap();
+      addRegulatoryLayersToMap();
+      removeRegulatoryLayersToMap();
     }
   }, [layer.layers])
 
@@ -55,7 +55,7 @@ const RegulatoryLayers = ({ map }) => {
     })
   }
 
-  function reorganizeLayers() {
+  function reorganizeRegulatoryLayers() {
     if(layer.layersAndAreas.length > 1) {
       let sortedLayersToArea = [...layer.layersAndAreas].sort((a, b) => a.area - b.area).reverse()
 
@@ -70,11 +70,13 @@ const RegulatoryLayers = ({ map }) => {
     }
   }
 
-  function addLayersToMap() {
+  function addRegulatoryLayersToMap() {
     if(layer.layers.length) {
-      const layersToInsert = layer.layers.filter(layer => {
-        return !map.getLayers().getArray().some(layer_ => layer === layer_)
-      })
+      const layersToInsert = layer.layers
+        .filter(layer => {
+          return !map.getLayers().getArray().some(layer_ => layer === layer_)
+        })
+        .filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
 
       layersToInsert.map(layerToInsert => {
         if (!layerToInsert) {
@@ -86,7 +88,7 @@ const RegulatoryLayers = ({ map }) => {
     }
   }
 
-  function removeLayersToMap() {
+  function removeRegulatoryLayersToMap() {
     let layers = layer.layers.length ? layer.layers : []
     const layersToRemove = map.getLayers().getArray()
       .filter(showedLayer => !layers.some(layer_ => showedLayer === layer_))

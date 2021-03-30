@@ -1,6 +1,8 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 import {getLocalStorageState} from "../../utils";
+import Layers from '../entities/layers'
+import LayersEnum from '../entities/layers'
 
 const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
 
@@ -70,7 +72,11 @@ export const {
     setLoadingRegulatoryZoneMetadata,
     resetLoadingRegulatoryZoneMetadata,
     setRegulatoryZoneMetadata,
-    closeRegulatoryZoneMetadataPanel
+    closeRegulatoryZoneMetadataPanel,
+    removeLayers,
+    pushLayerAndArea,
+    removeLayerAndArea,
+    setLastShowedFeatures
 } = layerSlice.actions
 
 export default layerSlice.reducer

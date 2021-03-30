@@ -33,7 +33,6 @@ countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 const VesselList = () => {
     const dispatch = useDispatch()
     const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-    const layers = useSelector(state => state.layer.layers)
     const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
     const vesselsFromApi = useSelector(state => state.vessel.vessels)
     const selectedVessel = useSelector(state => state.vessel.selectedVessel)
@@ -105,7 +104,7 @@ const VesselList = () => {
     }, [vesselListModalIsOpen])
 
     useEffect(() => {
-        if(layers && !makeVesselListToNotUpdate && vesselsLayerSource) {
+        if(!makeVesselListToNotUpdate && vesselsLayerSource) {
             if(vesselsLayerSource) {
                 vesselsLayerSource.once(VESSELS_UPDATE_EVENT, ({ features }) => {
                     if(features && features.length) {
@@ -140,7 +139,7 @@ const VesselList = () => {
                 })
             }
         }
-    }, [layers, vesselsFromApi])
+    }, [vesselsLayerSource, vesselsFromApi])
 
     useEffect(() => {
         if(vessels && vessels.length) {

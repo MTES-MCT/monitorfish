@@ -7,7 +7,7 @@ import VectorSource from "ol/source/Vector";
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
-const layerSlice = createSlice({
+const regulatorySlice = createSlice({
     name: 'layer',
     initialState: {
         layers: [],
@@ -98,6 +98,6 @@ export const {
     pushLayerAndArea,
     removeLayerAndArea,
     setLastShowedFeatures
-} = layerSlice.actions
+} = regulatorySlice.actions
 
-export default layerSlice.reducer
+export default regulatorySlice.reducer

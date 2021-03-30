@@ -53,6 +53,8 @@ const getVectorLayer = dispatch => (type, regulatoryZone, hash, gearCategory) =>
     source: getVectorSource(dispatch)(type, regulatoryZone),
     renderMode: 'image',
     className: regulatoryZone ? `${Layers.REGULATORY.code}:${regulatoryZone.layerName}:${regulatoryZone.zone}` : type,
+    updateWhileAnimating: true,
+    updateWhileInteracting: true,
     style: feature => {
         return [getVectorLayerStyle(type)(feature, hash, gearCategory)]
     }

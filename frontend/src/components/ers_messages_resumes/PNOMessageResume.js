@@ -78,6 +78,7 @@ const PNOMessageResume = props => {
         {
             props.hasNoMessage ? null :
                 <ERSMessageContent
+                    id={props.id}
                     chartHeight={chartHeight}
                     firstUpdate={firstUpdate}
                     isOpen={isOpen}

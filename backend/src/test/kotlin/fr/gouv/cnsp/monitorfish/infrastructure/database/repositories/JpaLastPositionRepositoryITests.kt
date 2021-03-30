@@ -59,21 +59,22 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     }
 
     @Test
-    @Transactional
     fun `upsert Should update a given position When the vessel is already saved`() {
         // Given
         val now = ZonedDateTime.now()
-        val onePosition = Position(null, "FR224226850", "224226850", null, "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
+        val onePosition = Position(null, null, "", null, "ARSH PE 0592", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now)
+        val secondPosition = Position(null, null, "", null, "ARSH PE 0592", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusMinutes(2))
 
         // When
         jpaLastPositionRepository.upsert(onePosition)
+        jpaLastPositionRepository.upsert(secondPosition)
         val lastPositions = jpaLastPositionRepository.findAll()
 
         // Then
         val position = lastPositions.single {
-            it.internalReferenceNumber == "FR224226850"
+            it.externalReferenceNumber == "ARSH PE 0592"
         }
-        assertThat(position.dateTime).isEqualTo(now)
+        assertThat(position.dateTime).isEqualTo(now.minusMinutes(2))
     }
 
     @Test

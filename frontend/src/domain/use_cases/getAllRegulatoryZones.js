@@ -7,7 +7,7 @@ import {setError} from "../reducers/Global";
 const worker = new Worker();
 const MapperWorker = Comlink.wrap(worker);
 
-const getAllRegulatoryZones = (dispatch) => async () => {
+const getAllRegulatoryZones = dispatch => async () => {
     const worker = await new MapperWorker()
 
     return getAllRegulatoryZonesFromAPI()

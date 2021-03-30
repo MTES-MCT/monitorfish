@@ -50,6 +50,7 @@ const DISMessageResume = props => {
         {
             props.hasNoMessage ? null :
                 <ERSMessageContent
+                    id={props.id}
                     chartHeight={chartHeight}
                     species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
                     firstUpdate={firstUpdate}

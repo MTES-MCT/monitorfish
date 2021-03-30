@@ -152,8 +152,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.grayDarkerTwo};
-  font-weight: 300;
+  color: ${COLORS.grayDarkerThree};
   line-height: normal;
 `
 

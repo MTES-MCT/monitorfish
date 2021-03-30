@@ -78,9 +78,19 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `find Should get no Position When there is no position saved`() {
+    fun `find Should get no Position When there is no position saved for empty fields`() {
         // When
         val optional = jpaLastPositionRepository.find("", "", "")
+
+        // Then
+        assertThat(optional.isEmpty).isTrue
+    }
+
+    @Test
+    @Transactional
+    fun `find Should get no Position When there is no position saved for a wrong field`() {
+        // When
+        val optional = jpaLastPositionRepository.find("NOT_THERE", "", "")
 
         // Then
         assertThat(optional.isEmpty).isTrue
@@ -101,4 +111,5 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(optional.isPresent).isTrue
         assertThat(optional.get().ircs).isEqualTo("224226850")
     }
+
 }

@@ -67,6 +67,7 @@ const PNOMessageResume = props => {
 
     return <Wrapper>
         <ERSMessageResumeHeader
+            id={props.id}
             onHoverText={props.hasNoMessage ? null : getPNOMessageResumeTitleText()}
             title={props.hasNoMessage ? null : getPNOMessageResumeTitle()}
             hasNoMessage={props.hasNoMessage}

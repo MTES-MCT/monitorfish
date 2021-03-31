@@ -80,6 +80,7 @@ const PNOMessageResume = props => {
                 <ERSMessageContent
                     id={props.id}
                     chartHeight={chartHeight}
+                    speciesNotLandedSize={speciesNotLandedArray && speciesNotLandedArray.length ? 55 : 0}
                     firstUpdate={firstUpdate}
                     isOpen={isOpen}
                     name={ERSMessageTypeEnum.PNO.code.toString()}>
@@ -225,11 +226,11 @@ const ERSMessageContent = styled.div`
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-opening` : null} {
     0%   { height: 0; opacity: 0; }
-    100% { height: ${props => props.chartHeight + 160}px; opacity: 1; }
+    100% { height: ${props => props.chartHeight + 105 + props.speciesNotLandedSize}px; opacity: 1; }
   }
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-closing` : null} {
-    0%   { opacity: 1; height: ${props => props.chartHeight + 160}px; }
+    0%   { opacity: 1; height: ${props => props.chartHeight + 105 + props.speciesNotLandedSize}px; }
     100% { opacity: 0; height: 0; }
   }
 `

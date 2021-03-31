@@ -111,16 +111,16 @@ const LANMessageResume = props => {
                                     </SubValue><br/>
                                     <Weights>
                                         <Weight>
-                                            <SubKey>Poids FAR</SubKey><SubValue>{props.speciesToWeightOfFAR && props.speciesToWeightOfFAR[speciesCatch.species] ?
-                                            <>{props.speciesToWeightOfFAR[speciesCatch.species].weight} kg</> : <NoValue>-</NoValue>}</SubValue>
+                                            <SubKey>Poids FAR</SubKey><SubValueWeight>{props.speciesToWeightOfFAR && props.speciesToWeightOfFAR[speciesCatch.species] ?
+                                            <span title={`${props.speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfFAR[speciesCatch.species].weight} kg</span> : <NoValue>-</NoValue>}</SubValueWeight>
                                         </Weight>
                                         <Weight>
-                                            <SubKey>Poids PNO</SubKey><SubValue>{props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species] ?
-                                            <>{props.speciesToWeightOfPNO[speciesCatch.species].weight} kg</> : <NoValue>-</NoValue>}</SubValue>
+                                            <SubKey>Poids PNO</SubKey><SubValueWeight>{props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species] ?
+                                            <span title={`${props.speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfPNO[speciesCatch.species].weight} kg</span> : <NoValue>-</NoValue>}</SubValueWeight>
                                         </Weight>
                                         <Weight>
-                                            <SubKey>Poids LAN</SubKey><SubValue>{props.speciesToWeightOfLAN && props.speciesToWeightOfLAN[speciesCatch.species] ?
-                                            <>{props.speciesToWeightOfLAN[speciesCatch.species].weight} kg</> : <NoValue>-</NoValue>}</SubValue>
+                                            <SubKey>Poids LAN</SubKey><SubValueWeight>{props.speciesToWeightOfLAN && props.speciesToWeightOfLAN[speciesCatch.species] ?
+                                            <span title={`${props.speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfLAN[speciesCatch.species].weight} kg</span> : <NoValue>-</NoValue>}</SubValueWeight>
                                         </Weight>
                                     </Weights>
                                 </Species>
@@ -181,6 +181,18 @@ const SubValue = styled.span`
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
   margin-right: 10px;
+`
+
+const SubValueWeight = styled.span`
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
+  margin-right: 10px;
+  max-width: 50px;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: bottom;
 `
 
 const TableBody = styled.tbody``
@@ -262,11 +274,11 @@ const ERSMessageContent = styled.div`
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-opening` : null} {
     0%   { height: 0; opacity: 0; }
-    100% { height: ${props => props.chartHeight + 100}px; opacity: 1; }
+    100% { height: ${props => props.chartHeight + 120}px; opacity: 1; }
   }
 
   @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-closing` : null} {
-    0%   { opacity: 1; height: ${props => props.chartHeight + 100}px; }
+    0%   { opacity: 1; height: ${props => props.chartHeight + 120}px; }
     100% { opacity: 0; height: 0; }
   }
 `

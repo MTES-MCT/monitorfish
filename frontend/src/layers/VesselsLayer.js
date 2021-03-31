@@ -51,7 +51,6 @@ const VesselsLayer = ({ map, mapRef }) => {
     updateWhileInteracting: true
   }))
 
-
   useEffect(() => {
     if(map) {
       dispatch(setVesselsLayerSource(vectorSource))
@@ -134,10 +133,11 @@ const VesselsLayer = ({ map, mapRef }) => {
     if(selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
       const featureToModify = vectorSource.getFeatures().find(feature => {
         const properties = feature.getProperties()
-        return properties.externalReferenceNumber === selectedVessel.externalReferenceNumber &&
-          properties.internalReferenceNumber === selectedVessel.internalReferenceNumber &&
+        return properties.externalReferenceNumber === selectedVessel.externalReferenceNumber ||
+          properties.internalReferenceNumber === selectedVessel.internalReferenceNumber ||
           properties.ircs === selectedVessel.ircs
       })
+
 
       if(featureToModify) {
         moveFeatureToNewPosition(featureToModify)

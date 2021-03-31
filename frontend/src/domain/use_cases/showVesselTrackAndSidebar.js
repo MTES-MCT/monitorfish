@@ -1,29 +1,8 @@
-import {getVesselFromAPI} from "../../api/fetch";
-import LayersEnum from "../entities/layers";
-import {
-    setArrowStyle,
-    setCircleStyle,
-    VESSEL_SELECTOR_STYLE
-} from "../../layers/styles/featuresStyles";
-import {
-    loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel,
-    setSelectedVesselTrackVector,
-} from "../reducers/Vessel";
-import {transform} from "ol/proj";
-import {WSG84_PROJECTION, OPENLAYERS_PROJECTION} from "../entities/map";
-import {arraysEqual, calculatePointsDistance, calculateSplitPointCoords} from "../../utils";
-import Feature from "ol/Feature";
-import Point from "ol/geom/Point";
-import {getTrackArrow, getTrackColor} from "../entities/vesselTrack";
-import LineString from "ol/geom/LineString";
-import {Style} from "ol/style";
-import Fill from "ol/style/Fill";
-import Stroke from "ol/style/Stroke";
-import {animateToVessel} from "../reducers/Map";
-import {removeError, setError} from "../reducers/Global";
-import {Vector} from "ol/layer";
-import VectorSource from "ol/source/Vector";
-import Layers from "../entities/layers";
+import { getVesselFromAPI } from '../../api/fetch'
+import { VESSEL_SELECTOR_STYLE } from '../../layers/styles/featuresStyles'
+import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel, } from '../reducers/Vessel'
+import { animateToVessel } from '../reducers/Map'
+import { removeError, setError } from '../reducers/Global'
 
 const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateShowedVessel) => (dispatch, getState) => {
     let alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
@@ -37,7 +16,7 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
         return
     }
 
-    removePreviousSelectedFeature(getState);
+    removePreviousSelectedFeature(getState)
     if(vesselFeatureAndIdentity.feature && !updateShowedVessel) {
         dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
         dispatch(removeError())
@@ -55,11 +34,11 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
         vesselFeatureAndIdentity.identity.ircs,
         getState().map.vesselTrackDepth)
         .then(vessel => {
-            dispatch(removeError());
+            dispatch(removeError())
             dispatch(setSelectedVessel(vessel))
         }).catch(error => {
             console.error(error)
-            dispatch(setError(error));
+            dispatch(setError(error))
             dispatch(resetLoadingVessel())
         });
 }
@@ -68,7 +47,7 @@ function removePreviousSelectedFeature(getState) {
     let previousSelectedFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
     if (previousSelectedFeatureAndIdentity && previousSelectedFeatureAndIdentity.feature) {
         let stylesWithoutVesselSelector = previousSelectedFeatureAndIdentity.feature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
-        previousSelectedFeatureAndIdentity.feature.setStyle([...stylesWithoutVesselSelector]);
+        previousSelectedFeatureAndIdentity.feature.setStyle([...stylesWithoutVesselSelector])
     }
 }
 

@@ -202,7 +202,7 @@ a:hover, a:focus {
   font-size: 13px;
   font-weight: normal;
   color: #515151;
-  padding: 9px 8px;
+  padding: 9px 7px;
 }
 
 .rs-table-cell-content > input {
@@ -309,4 +309,35 @@ a:hover, a:focus {
 
 .rs-picker-check-menu-items .rs-picker-check-menu-group:not(:first-child) {
   padding-top: 0px !important;
+}
+
+.rs-checkbox-wrapper .rs-checkbox-inner::before {
+  border: 2px solid #969696 !important;
+  background: #EDEDED 0% 0% no-repeat padding-box !important;
+  border-radius: 1px !important;
+}
+
+.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::after, .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::after {
+  margin-top: 3px !important;
+  margin-left: 6px !important;
+}
+
+.rs-table-cell-header .rs-table-cell-content {
+  padding: 10px 7px;
+}
+
+.rs-table-cell-header-icon-sort {
+  color: #9A9A9A;
+  line-height: 1.66666667;
+  position: absolute;
+  right: 9px;
+  top: 10px;
+}
+
+.rs-table-cell-header-icon-sort-asc::after {
+  color: #9A9A9A;
+}
+
+.rs-table-cell-header-icon-sort-desc::after {
+  color: #9A9A9A;
 }

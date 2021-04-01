@@ -97,13 +97,23 @@ const VesselsLayer = ({ map, mapRef }) => {
     vectorSource.changed()
   }, [selectedBaseLayer])
 
+  function matchVesselIdentifiers(feature, vessel) {
+    return (feature.getProperties().externalReferenceNumber
+      ? feature.getProperties().externalReferenceNumber === vessel.externalReferenceNumber
+      : false) ||
+      (feature.getProperties().internalReferenceNumber
+        ? feature.getProperties().internalReferenceNumber === vessel.internalReferenceNumber
+        : false) ||
+      (feature.getProperties().ircs
+        ? feature.getProperties().ircs === vessel.ircs
+        : false)
+  }
+
   useEffect(() => {
     if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {
       vectorSource.getFeatures().filter(feature => {
         return !temporaryVesselsToHighLightOnMap.some(vessel => {
-          return feature.getProperties().externalReferenceNumber === vessel.externalReferenceNumber ||
-            feature.getProperties().internalReferenceNumber === vessel.internalReferenceNumber ||
-            feature.getProperties().ircs === vessel.ircs
+          return matchVesselIdentifiers(feature, vessel)
         })
       }).map(featureToHide => {
         let foundStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
@@ -132,10 +142,7 @@ const VesselsLayer = ({ map, mapRef }) => {
   useEffect(() => {
     if(selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
       const featureToModify = vectorSource.getFeatures().find(feature => {
-        const properties = feature.getProperties()
-        return properties.externalReferenceNumber === selectedVessel.externalReferenceNumber ||
-          properties.internalReferenceNumber === selectedVessel.internalReferenceNumber ||
-          properties.ircs === selectedVessel.ircs
+        return matchVesselIdentifiers(feature, selectedVessel)
       })
 
 
@@ -186,12 +193,18 @@ const VesselsLayer = ({ map, mapRef }) => {
 
   function addVesselLabelToAllFeatures(extent, vesselLabel) {
     vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
-      getSVG(feature, vesselLabel).then(svg => {
-        if(svg) {
-          let style = getVesselNameStyle(svg.showedText, svg.imageElement)
-          feature.setStyle([...feature.getStyle(), style])
-        }
-      })
+      const vesselDate = new Date(feature.getProperties().dateTime)
+      const vesselIsHidden = new Date()
+      vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
+
+      if(vesselDate > vesselIsHidden) {
+        getSVG(feature, vesselLabel).then(svg => {
+          if(svg) {
+            let style = getVesselNameStyle(svg.showedText, svg.imageElement)
+            feature.setStyle([...feature.getStyle(), style])
+          }
+        })
+      }
     })
   }
 

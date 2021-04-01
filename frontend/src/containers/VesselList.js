@@ -27,6 +27,7 @@ import {getAdministrativeSubZonesFromAPI} from "../api/fetch";
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
+import MultiCascader from 'rsuite/lib/MultiCascader'
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
@@ -57,6 +58,7 @@ const VesselList = () => {
     const [countriesFiltered, setCountriesFiltered] = useState([])
     const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
     const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
+    const [zoneGroups, setZoneGroups] = useState([])
     const zonesSelected = useSelector(state => state.map.zonesSelected)
 
     useEffect(() => {
@@ -99,6 +101,18 @@ const VesselList = () => {
 
         Promise.all(nextZonesPromises).then((nextZones) => {
             let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
+
+            const groups = [...new Set(nextZonesWithoutNulls.map(zone => zone.group))]
+            setZoneGroups(groups)
+
+            nextZonesWithoutNulls = groups.map(group => {
+                return {
+                    "value": group,
+                    "label": group,
+                    "children": nextZonesWithoutNulls.filter(zone => zone.group === group)
+                }
+            })
+
             setZonesFilter(nextZonesWithoutNulls)
         });
     }, [vesselListModalIsOpen])
@@ -235,14 +249,6 @@ const VesselList = () => {
         setDownloadVesselListModalIsOpen(true)
     }
 
-    const callGetAdministrativeZoneGeometry = (administrativeZones, administrativeZone) => {
-        if(administrativeZone.isSubZone) {
-            dispatch(getAdministrativeZoneGeometry(administrativeZone.groupCode, administrativeZone.code, administrativeZone.name))
-        } else {
-            dispatch(getAdministrativeZoneGeometry(administrativeZone.code, null, administrativeZone.name))
-        }
-    }
-
     useEffect(() => {
         if(zonesSelected && zonesSelected.length) {
             setVesselListModalIsOpen(true)
@@ -258,6 +264,30 @@ const VesselList = () => {
             setIsShowed(true)
         }
     }, [temporaryVesselsToHighLightOnMap])
+
+    useEffect(() => {
+        if(administrativeZonesFiltered && zonesSelected &&
+          administrativeZonesFiltered.length > zonesSelected.length) {
+
+            let zonesGeometryToFetch = administrativeZonesFiltered
+              .filter(zonesFiltered => !zonesSelected.some(alreadyFetchedZone => alreadyFetchedZone.code === zonesFiltered))
+              .map(zoneName =>
+                zonesFilter
+                  .map(group => group.children)
+                  .flat()
+                  .filter(zone => zone)
+                  .find(zone => zone.code === zoneName))
+
+            zonesGeometryToFetch
+              .forEach(zoneToFetch => {
+                  if(zoneToFetch.isSubZone) {
+                      dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name))
+                  } else {
+                      dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name))
+                  }
+              })
+        }
+    }, [administrativeZonesFiltered])
 
     useEffect(() => {
         if(zonesSelected && zonesSelected.length &&
@@ -312,19 +342,6 @@ const VesselList = () => {
                 value: 24
             }
         ]
-    }
-
-    const compare = (a, b) => {
-        let nameA = a.toUpperCase();
-        let nameB = b.toUpperCase();
-
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
     }
 
     return (
@@ -390,44 +407,19 @@ const VesselList = () => {
                                 }}
                             />
                             <ZoneFilter>
-                                <TagPicker
-                                    style={{ width: 180, margin: '2px 10px 0 10px', verticalAlign: 'top'}}
-                                    data={zonesFilter}
-                                    value={administrativeZonesFiltered}
-                                    onClean={() => setAdministrativeZonesFiltered([])}
-                                    onChange={change => setAdministrativeZonesFiltered(change)}
-                                    groupBy="group"
-                                    preventOverflow
-                                    placeholder="Zone"
-                                    renderMenuItem={(name, item) => {
-                                        return (
-                                            <Label>
-                                                {item.name}
-                                            </Label>
-                                        );
-                                    }}
-                                    onSelect={(change, item) => callGetAdministrativeZoneGeometry(change, item)}
-                                    renderValue={(values, items, tags) => {
-                                        return items.map((tag, index) => (
-                                            <Tag key={index}>
-                                                {tag.name}
-                                            </Tag>
-                                        ));
-                                    }}
-                                    sort={isGroup => {
-                                        if (isGroup) {
-                                            return (a, b) => {
-                                                return compare(a.groupTitle, b.groupTitle);
-                                            };
-                                        }
-
-                                        return (a, b) => {
-                                            return compare(a.value, b.value);
-                                        };
-                                    }}
-                                    virtualized
+                                <MultiCascader
+                                  data={zonesFilter}
+                                  style={{ width: 230, verticalAlign: 'top', margin: '2px 10px 0 10px' }}
+                                  placeholder="Filtrer avec une zone existante"
+                                  menuWidth={250}
+                                  uncheckableItemValues={zoneGroups}
+                                  value={administrativeZonesFiltered}
+                                  onClean={() => setAdministrativeZonesFiltered([])}
+                                  onChange={change => setAdministrativeZonesFiltered(change)}
                                 />
+                                <CustomZone>
                                 ou définir une zone
+                                </CustomZone>
                                 <BoxFilter onClick={() => selectBox()}/>
                                 <PolygonFilter onClick={() => selectPolygon()}/>
                                 {
@@ -479,6 +471,10 @@ const VesselList = () => {
         </>
     )
 }
+
+const CustomZone = styled.span`
+  margin-left: 50px;
+`
 
 const ZoneSelected = styled.span`
   background: ${COLORS.grayBackground};
@@ -696,3 +692,43 @@ const PolygonFilter = styled(PolygonFilterSVG)`
 `
 
 export default VesselList
+
+/*
+<TagPicker
+                                    style={{ width: 200, margin: '2px 10px 0 10px', verticalAlign: 'top'}}
+                                    data={zonesFilter}
+                                    value={administrativeZonesFiltered}
+                                    onClean={() => setAdministrativeZonesFiltered([])}
+                                    onChange={change => setAdministrativeZonesFiltered(change)}
+                                    groupBy="group"
+                                    preventOverflow
+                                    placeholder="Filtrer avec une zone existante"
+                                    renderMenuItem={(name, item) => {
+                                        return (
+                                            <Label>
+                                                {item.name}
+                                            </Label>
+                                        );
+                                    }}
+                                    onSelect={(change, item) => callGetAdministrativeZoneGeometry(change, item)}
+                                    renderValue={(values, items, tags) => {
+                                        return items.map((tag, index) => (
+                                            <Tag key={index}>
+                                                {tag.name}
+                                            </Tag>
+                                        ));
+                                    }}
+                                    sort={isGroup => {
+                                        if (isGroup) {
+                                            return (a, b) => {
+                                                return compare(a.groupTitle, b.groupTitle);
+                                            };
+                                        }
+
+                                        return (a, b) => {
+                                            return compare(a.value, b.value);
+                                        };
+                                    }}
+                                    virtualized
+                                />
+ */

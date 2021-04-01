@@ -68,7 +68,7 @@ const VesselListTable = props => {
 
     const getVessels = () => {
         if (sortColumn && sortType) {
-            return props.filteredVessels.sort((a, b) => {
+            return props.filteredVessels.slice().sort((a, b) => {
                 let x = a[sortColumn]
                 let y = b[sortColumn]
                 if (typeof x === 'string') {

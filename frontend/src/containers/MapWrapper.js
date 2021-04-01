@@ -143,10 +143,10 @@ const MapWrapper = () => {
 
             setMap(initialMap)
 
-            // Wait 8 seconds to not apply any animate() before this init phase
+            // Wait 15 seconds to not apply any animate() before this init phase
             setTimeout(() => {
                 setInitRenderIsDone(true)
-            }, 8000)
+            }, 15000)
         }
     }, [mapState.selectedBaseLayer])
 

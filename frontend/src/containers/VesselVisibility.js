@@ -95,7 +95,7 @@ const VesselVisibility = () => {
           selectedVessel={selectedVessel}/>
       </VesselVisibilityIcon>
       <VesselVisibilityBox
-        lastPositionsBoxIsOpen={vesselVisibilityBoxIsOpen}
+        vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}
         firstUpdate={firstUpdate.current}>
         <Header isFirst={true}>
           Gérer l'affichage des dernières positions
@@ -140,7 +140,6 @@ const VesselVisibility = () => {
 
 const Wrapper = styled.div`
   animation: ${props => props.isShowed ? `vessel-visibility-opening` : `vessel-visibility-closing`} 0.2s ease forwards;
-  display: contents;
   @keyframes vessel-visibility-opening {
     0%   { opacity: 0; }
     100% { opacity: 1; }
@@ -230,15 +229,15 @@ const VesselVisibilityBox = styled.div`
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.firstUpdate && !props.lastPositionsBoxIsOpen ? '' : props.lastPositionsBoxIsOpen ? 'last-positions-box-opening' : 'last-positions-box-closing'} 0.5s ease forwards;
+  animation: ${props => props.firstUpdate && !props.vesselVisibilityBoxIsOpen ? '' : props.vesselVisibilityBoxIsOpen ? 'vessel-visibility-box-opening' : 'vessel-visibility-box-closing'} 0.5s ease forwards;
   z-index: 1000;
 
-  @keyframes last-positions-box-opening {
+  @keyframes vessel-visibility-box-opening {
     0%   { margin-right: -420px; opacity: 0;  }
     100% { margin-right: 45px; opacity: 1; }
   }
 
-  @keyframes last-positions-box-closing {
+  @keyframes vessel-visibility-box-closing {
     0% { margin-right: 45px; opacity: 1; }
     100%   { margin-right: -420px; opacity: 0;  }
   }

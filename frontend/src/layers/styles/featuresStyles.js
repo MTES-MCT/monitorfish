@@ -34,9 +34,15 @@ export function getVesselImage(vessel, isLight) {
 
 function vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel) {
     return !temporaryVesselsToHighLightOnMap.some((vesselToHighLight) => {
-        return vessel.externalReferenceNumber === vesselToHighLight.externalReferenceNumber ||
-            vessel.internalReferenceNumber === vesselToHighLight.internalReferenceNumber ||
-            vessel.ircs === vesselToHighLight.ircs
+        return (vessel.externalReferenceNumber
+          ? vessel.externalReferenceNumber === vesselToHighLight.externalReferenceNumber
+          : false) ||
+          (vessel.internalReferenceNumber
+            ? vessel.internalReferenceNumber === vesselToHighLight.internalReferenceNumber
+            : false) ||
+            (vessel.ircs
+              ? vessel.ircs === vesselToHighLight.ircs
+              : false)
     });
 }
 
@@ -65,18 +71,24 @@ export const setVesselIconStyle = (vessel,
     }
 
     if (options.vesselLabelsShowedOnMap) {
-        return getSVG(iconFeature, options.vesselLabel).then(svg => {
-            if(svg) {
-                styles.push(getVesselNameStyle(svg.showedText, svg.imageElement))
-            }
+        const vesselDate = new Date(vessel.dateTime)
+        const vesselIsHidden = new Date()
+        vesselIsHidden.setHours(vesselIsHidden.getHours() - options.vesselsLastPositionVisibility.hidden)
 
-            iconFeature.setStyle(styles)
-            resolve(selectedVesselFeatureToUpdate)
-        })
-    } else {
-        iconFeature.setStyle(styles)
-        resolve(selectedVesselFeatureToUpdate)
+        if(vesselDate > vesselIsHidden) {
+            return getSVG(iconFeature, options.vesselLabel).then(svg => {
+                if(svg) {
+                    styles.push(getVesselNameStyle(svg.showedText, svg.imageElement))
+                }
+
+                iconFeature.setStyle(styles)
+                resolve(selectedVesselFeatureToUpdate)
+            })
+        }
     }
+
+    iconFeature.setStyle(styles)
+    resolve(selectedVesselFeatureToUpdate)
 })
 
 export function getVesselIconOpacity(vesselsLastPositionVisibility,
@@ -139,7 +151,7 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
 
     let iconSVG = `
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
-            <rect x="0" y="0" width="${textWidth}" height="16" rx="8px" fill="#FFFFFF" />
+            <rect x="0" y="0" width="${textWidth}px" height="16" rx="8px" fill="#FFFFFF" />
             <image xlink:href="${flag}" width="14px" x="5px" height="16px"/>
             <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${showedText}</text>
         </svg>`;
@@ -162,8 +174,8 @@ export const getVesselNameStyle = (showedText, image) => new Style({
     image: new Icon({
         anchorOrigin: IconOrigin.TOP_RIGHT,
         img: image,
-        imgSize: [getTextWidth(showedText)*4, 36],
-        offset: [-getTextWidth(showedText)*2 - 10, 11]
+        imgSize: [getTextWidth(showedText)*4 + 40, 36],
+        offset: [-getTextWidth(showedText)*2 - 30, 11]
     }),
     zIndex: VESSEL_NAME_STYLE
 })

@@ -96,14 +96,42 @@ class BffControllerITests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any(), any(), any(), any()) } willReturn {
-            Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                    listOf(firstPosition, secondPosition, thirdPosition))
+            Pair(false, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    listOf(firstPosition, secondPosition, thirdPosition)))
         }
 
         // When
         mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS"))
                 // Then
                 .andExpect(status().isOk)
+                .andExpect(jsonPath("$.declaredFishingGears[0]", equalTo("Trémails")))
+                .andExpect(jsonPath("$.vesselType", equalTo("Fishing")))
+                .andExpect(jsonPath("$.flagState", equalTo("FR")))
+                .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
+                .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.positions.length()", equalTo(3)))
+
+        runBlocking {
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS)
+        }
+    }
+
+    @Test
+    fun `Should get vessels's last positions and data with a FOUND header When the DEP message was not found`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        givenSuspended { getVessel.execute(any(), any(), any(), any()) } willReturn {
+            Pair(true, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    listOf(firstPosition, secondPosition, thirdPosition)))
+        }
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS"))
+                // Then
+                .andExpect(status().isAccepted)
                 .andExpect(jsonPath("$.declaredFishingGears[0]", equalTo("Trémails")))
                 .andExpect(jsonPath("$.vesselType", equalTo("Fishing")))
                 .andExpect(jsonPath("$.flagState", equalTo("FR")))

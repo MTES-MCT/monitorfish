@@ -15,6 +15,7 @@ import FishingActivities from "../components/FishingActivities";
 import getFishingActivities from "../domain/use_cases/getFishingActivities";
 import {removeError} from "../domain/reducers/Global";
 import {resetNextFishingActivities, setFishingActivities} from "../domain/reducers/Vessel";
+import NoDEPFoundError from "../errors/NoDEPFoundError";
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()
@@ -115,7 +116,7 @@ const VesselSidebar = () => {
                         </TabList>
 
                         {
-                            !vesselState.loadingVessel && !error ? <>
+                            !vesselState.loadingVessel && !error || (error && error.name === NoDEPFoundError.name) ? <>
                                 <Panel className={index === 1 ? '' : 'hide'}>
                                     <VesselSummary
                                         vessel={vessel}

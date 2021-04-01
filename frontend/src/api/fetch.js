@@ -2,6 +2,7 @@ import Layers from "../domain/entities/layers"
 import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 
 const HTTP_OK = 200
+const ACCEPTED = 202
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
@@ -49,7 +50,19 @@ export function getVesselFromAPI(internalReferenceNumber, externalReferenceNumbe
     return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${IRCS}&trackDepth=${trackDepth}`)
         .then(response => {
             if (response.status === HTTP_OK) {
-                return response.json()
+                return response.json().then(vessel => {
+                    return {
+                        vessel: vessel,
+                        trackDepthHasBeenModified: false
+                    }
+                })
+            } else if (response.status === ACCEPTED) {
+                return response.json().then(vessel => {
+                    return {
+                        vessel: vessel,
+                        trackDepthHasBeenModified: true
+                    }
+                })
             } else {
                 response.text().then(text => {
                     console.error(text)

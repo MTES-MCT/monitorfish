@@ -7,6 +7,7 @@ import getAllGearCodes from "../domain/use_cases/getAllGearCodes";
 import updateVesselTrackAndSidebar from "../domain/use_cases/updateVesselTrackAndSidebar";
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers/Global'
+import NoDEPFoundError from '../errors/NoDEPFoundError'
 
 export const ONE_MINUTE = 60000
 
@@ -41,10 +42,18 @@ const APIWorker = () => {
 
     useEffect(() => {
         if (error) {
-            addToast(error.message.split(':')[0], {
-                appearance: 'warning',
-                autoDismiss: true,
-            })
+            if(error.name === NoDEPFoundError.name) {
+                addToast(error.message.split(':')[0], {
+                    appearance: 'info',
+                    autoDismiss: true,
+                })
+            } else {
+                addToast(error.message.split(':')[0], {
+                    appearance: 'warning',
+                    autoDismiss: true,
+                })
+            }
+
         }
     }, [error])
 

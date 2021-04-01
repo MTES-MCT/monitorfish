@@ -49,8 +49,9 @@ class GetVesselUTests {
         }
 
         // Then
-        assertThat(pair.second.first().dateTime).isEqualTo(now.minusHours(4))
-        assertThat(pair.second.last().dateTime).isEqualTo(now.minusHours(1))
+        assertThat(pair.first).isFalse
+        assertThat(pair.second.second.first().dateTime).isEqualTo(now.minusHours(4))
+        assertThat(pair.second.second.last().dateTime).isEqualTo(now.minusHours(1))
     }
 
     @Test
@@ -71,8 +72,9 @@ class GetVesselUTests {
         }
 
         // Then
-        assertThat(pair.second.first().dateTime).isEqualTo(now.minusHours(4))
-        assertThat(pair.second.last().dateTime).isEqualTo(now.minusHours(1))
+        assertThat(pair.first).isTrue
+        assertThat(pair.second.second.first().dateTime).isEqualTo(now.minusHours(4))
+        assertThat(pair.second.second.last().dateTime).isEqualTo(now.minusHours(1))
     }
 
     @Test

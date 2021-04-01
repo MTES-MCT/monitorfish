@@ -8,6 +8,8 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -58,13 +60,16 @@ class BffController(
                     IRCS: String,
                     @ApiParam("Vessel track depth")
                     @RequestParam(name = "trackDepth")
-                    trackDepth: VesselTrackDepth): VesselDataOutput {
+                    trackDepth: VesselTrackDepth): ResponseEntity<VesselDataOutput> {
         return runBlocking {
             val start = System.currentTimeMillis()
-            val (vessel, positions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS, trackDepth)
-            vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+            val (vesselTrackHasBeenModified, VesselAndPositions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS, trackDepth)
+            val (vessel, positions) = VesselAndPositions
+            val returnCode = if(vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-            VesselDataOutput.fromVessel(vessel, positions)
+            vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS)
+
+            ResponseEntity.status(returnCode).body(VesselDataOutput.fromVessel(vessel, positions))
         }
     }
 

@@ -23,7 +23,8 @@ class GetVessel(private val vesselRepository: VesselRepository,
     suspend fun execute(internalReferenceNumber: String,
                         externalReferenceNumber: String,
                         ircs: String,
-                        trackDepth: VesselTrackDepth): Pair<Vessel, List<Position>> {
+                        trackDepth: VesselTrackDepth): Pair<Boolean, Pair<Vessel, List<Position>>> {
+        var vesselTrackDepthHasBeenModified = false
 
         val from = when (trackDepth) {
             VesselTrackDepth.TWELVE_HOURS -> ZonedDateTime.now().minusHours(12)
@@ -35,6 +36,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
                             ircs).lastDepartureDate
                 } catch (e: NoERSLastDepartureDateFound) {
                     logger.warn(e.message)
+                    vesselTrackDepthHasBeenModified = true
                     ZonedDateTime.now().minusDays(1)
                 }
             }
@@ -54,7 +56,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
             }
             val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }
 
-            Pair(vesselFuture.await(), positionsFuture.await())
+            Pair(vesselTrackDepthHasBeenModified, Pair(vesselFuture.await(), positionsFuture.await()))
         }
     }
 }

@@ -3,6 +3,7 @@ import { VESSEL_SELECTOR_STYLE } from '../../layers/styles/featuresStyles'
 import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel, } from '../reducers/Vessel'
 import { animateToVessel } from '../reducers/Map'
 import { removeError, setError } from '../reducers/Global'
+import NoDEPFoundError from "../../errors/NoDEPFoundError";
 
 const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateShowedVessel) => (dispatch, getState) => {
     let alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
@@ -33,9 +34,15 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
         vesselFeatureAndIdentity.identity.externalReferenceNumber,
         vesselFeatureAndIdentity.identity.ircs,
         getState().map.vesselTrackDepth)
-        .then(vessel => {
-            dispatch(removeError())
-            dispatch(setSelectedVessel(vessel))
+        .then(vesselAndTrackDepthModified => {
+            if(vesselAndTrackDepthModified.trackDepthHasBeenModified) {
+                dispatch(setError(new NoDEPFoundError("Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
+                  "les positions des dernières 24 heures.")))
+            } else {
+                dispatch(removeError())
+            }
+
+            dispatch(setSelectedVessel(vesselAndTrackDepthModified.vessel))
         }).catch(error => {
             console.error(error)
             dispatch(setError(error))

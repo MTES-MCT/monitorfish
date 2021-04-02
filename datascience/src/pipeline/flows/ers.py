@@ -16,9 +16,8 @@ from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
 from src.pipeline.processing import drop_rows_already_in_table, to_json
-from src.pipeline.utils import delete, grouper, move
+from src.pipeline.utils import delete, get_table, grouper, move, psql_insert_copy
 from src.read_query import read_query
-from src.utils.database import get_table, psql_insert_copy
 
 RECEIVED_DIRECTORY = ERS_FILES_LOCATION / "received"
 TREATED_DIRECTORY = ERS_FILES_LOCATION / "treated"

@@ -27,7 +27,7 @@ export function getVesselImage(vessel, isLight) {
     }) : new CircleStyle({
         radius: 4,
         fill: new Fill({
-            color: isLight ? `#DCDDE8` : `rgb(5, 5, 94)`
+            color: isLight ? `#9B9B9B` : `rgb(5, 5, 94)`
         }),
     });
 }

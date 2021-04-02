@@ -116,7 +116,7 @@ const VesselSidebar = () => {
                         </TabList>
 
                         {
-                            !vesselState.loadingVessel && !error || (error && error.name === NoDEPFoundError.name) ? <>
+                            !vesselState.loadingVessel && !error || (error && error.name === 'NoDEPFoundError') ? <>
                                 <Panel className={index === 1 ? '' : 'hide'}>
                                     <VesselSummary
                                         vessel={vessel}

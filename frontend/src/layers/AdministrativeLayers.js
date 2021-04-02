@@ -27,7 +27,7 @@ const AdministrativeLayers = ({ map }) => {
           return
         }
 
-        map.getLayers().push(layerToInsert);
+        map.getLayers().push(layerToInsert)
       })
     }
   }

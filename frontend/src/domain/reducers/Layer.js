@@ -1,9 +1,7 @@
-import LayersEnum from "../entities/layers";
-import Layers from "../entities/layers";
-import {createSlice} from '@reduxjs/toolkit'
-import {getLocalStorageState} from "../../utils";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
+import LayersEnum from '../entities/layers'
+import Layers from '../entities/layers'
+import { createSlice } from '@reduxjs/toolkit'
+import { getLocalStorageState } from '../../utils'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 

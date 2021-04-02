@@ -25,11 +25,6 @@ const showLayer = layerToShow => (dispatch, getState) => {
         const getVectorLayerClosure = getVectorLayer(dispatch)
 
         switch (layerToShow.type) {
-            case Layers.EEZ.code: dispatch(addLayer(getVectorLayerClosure(Layers.EEZ.code))); break;
-            case Layers.FAO.code: dispatch(addLayer(getVectorLayerClosure(Layers.FAO.code))); break;
-            case Layers.THREE_MILES.code: dispatch(addLayer(getVectorLayerClosure(Layers.THREE_MILES.code))); break;
-            case Layers.SIX_MILES.code: dispatch(addLayer(getVectorLayerClosure(Layers.SIX_MILES.code))); break;
-            case Layers.TWELVE_MILES.code: dispatch(addLayer(getVectorLayerClosure(Layers.TWELVE_MILES.code))); break;
             case Layers.REGULATORY.code: {
                 if (!layerToShow.zone) {
                     console.error("No regulatory layer to show.")

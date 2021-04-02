@@ -20,6 +20,8 @@ const VesselSummary = props => {
             setVessel(props.vessel)
             if(props.vessel.positions.length) {
                 setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+            } else {
+                setLastPosition(null)
             }
 
             if(props.vessel.mmsi) {

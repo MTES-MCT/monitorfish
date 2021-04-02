@@ -12,9 +12,8 @@ from prefect import Flow, Parameter, task
 from config import LIBRARY_LOCATION, PORTS_URL, PROXIES
 from src.db_config import create_engine
 from src.pipeline.processing import combine_overlapping_columns
-from src.pipeline.utils import delete
+from src.pipeline.utils import delete, get_table, psql_insert_copy
 from src.read_query import read_table
-from src.utils.database import get_table, psql_insert_copy
 from src.utils.geocode import geocode
 
 load_dotenv()

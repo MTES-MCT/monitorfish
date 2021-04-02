@@ -11,9 +11,8 @@ from src.pipeline.processing import (
     concatenate_columns,
     python_lists_to_psql_arrays,
 )
-from src.pipeline.utils import delete
+from src.pipeline.utils import delete, psql_insert_copy
 from src.read_query import read_saved_query
-from src.utils.database import psql_insert_copy
 
 
 @task

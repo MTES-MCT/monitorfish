@@ -42,7 +42,7 @@ const APIWorker = () => {
 
     useEffect(() => {
         if (error) {
-            if(error.name === NoDEPFoundError.name) {
+            if(error.name === 'NoDEPFoundError') {
                 addToast(error.message.split(':')[0], {
                     appearance: 'info',
                     autoDismiss: true,

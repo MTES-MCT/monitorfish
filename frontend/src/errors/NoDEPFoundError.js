@@ -6,7 +6,7 @@ export default class NoDEPFoundError extends Error {
       Error.captureStackTrace(this, NoDEPFoundError);
     }
     this.name = 'NoDEPFoundError';
-    this.machin = message;
+    this.message = message;
     this.date = new Date();
   }
 }

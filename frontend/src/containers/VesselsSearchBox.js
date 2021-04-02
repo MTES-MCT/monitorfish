@@ -113,12 +113,16 @@ const VesselsSearchBox = () => {
 
   function removeDuplicatedFoundVessels (foundVesselsFromAPI, foundVesselsOnMap) {
     return foundVesselsFromAPI.filter(vessel => {
-      return !(foundVesselsOnMap.some(vesselFromMap =>
-        vesselFromMap.getProperties().internalReferenceNumber === vessel.internalReferenceNumber) &&
-        foundVesselsOnMap.some(vesselFromMap =>
-          vesselFromMap.getProperties().externalReferenceNumber === vessel.externalReferenceNumber) &&
-        foundVesselsOnMap.some(vesselFromMap =>
-          vesselFromMap.getProperties().ircs === vessel.ircs))
+      return !(
+        (vessel.internalReferenceNumber
+          ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().internalReferenceNumber === vessel.internalReferenceNumber)
+          : false) ||
+        (vessel.externalReferenceNumber
+         ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().externalReferenceNumber === vessel.externalReferenceNumber)
+         : false) ||
+        (vessel.ircs
+         ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().ircs === vessel.ircs)
+         : false))
     })
   }
 

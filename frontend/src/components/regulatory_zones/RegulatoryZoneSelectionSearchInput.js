@@ -100,7 +100,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
 
                 if(foundRegulatoryZones && Object.keys(foundRegulatoryZones).length === 0) {
                     foundRegulatoryZones = searchFieldFoundRegulatoryZones
-                } else {
+                } else if(foundRegulatoryZones) {
                     foundRegulatoryZones = getMergedRegulatoryZones(foundRegulatoryZones, searchFieldFoundRegulatoryZones);
                 }
             }

@@ -22,4 +22,16 @@ describe('utils', () => {
         // Then
         expect(formattedDate).toEqual("25/03/2021 à 00h07")
     })
+
+    it('getDateTime Should respect another timezone given', async () => {
+        // Given
+        let date = "2021-04-06T23:10:00Z"
+
+        // When
+        let formattedDate = getDateTime(date, true)
+
+        // Then
+        expect(formattedDate).toEqual("06/04/2021 à 23h10")
+    })
+
 })

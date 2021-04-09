@@ -5,6 +5,7 @@ import java.time.ZonedDateTime
 import java.util.*
 
 data class Vessel(
+        val id: Int? = null,
         val internalReferenceNumber: String? = null,
         val imo: String? = null,
         val mmsi: String? = null,

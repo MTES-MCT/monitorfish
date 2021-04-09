@@ -26,6 +26,7 @@ class CaffeineConfiguration {
     val ersRawMessage = "ers_raw_message"
     val vesselTrack = "vessel_track"
     val vesselsPosition = "vessels_position"
+    val infractions = "infractions"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
@@ -44,6 +45,8 @@ class CaffeineConfiguration {
         val portsCache = buildCache(ports, ticker, oneWeek)
         val portCache = buildCache(port, ticker, oneWeek)
 
+        val infractionsCache = buildCache(infractions, ticker, oneWeek)
+
         val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
         val vesselsPositionCache = buildCache(vesselsPosition, ticker, 1)
         val searchVesselsCache = buildCache(searchVessels, ticker, 180)
@@ -61,7 +64,8 @@ class CaffeineConfiguration {
                 speciesCache,
                 searchVesselsCache,
                 ersCache,
-                ersRawMessageCache))
+                ersRawMessageCache,
+                infractionsCache))
 
         return manager
     }

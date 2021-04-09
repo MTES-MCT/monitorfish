@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.Control
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.ControlAndInfractionIds
 import java.time.ZonedDateTime
 
 interface ControlRepository {
-    fun findVesselControls(vesselId: Int): List<Control>
+    fun findVesselControlsAfterDateTime(vesselId: Int, afterDateTime: ZonedDateTime): List<ControlAndInfractionIds>
 }

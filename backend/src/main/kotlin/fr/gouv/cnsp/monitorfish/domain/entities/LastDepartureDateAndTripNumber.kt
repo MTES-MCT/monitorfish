@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.entities.wrappers
+package fr.gouv.cnsp.monitorfish.domain.entities
 
 import java.time.ZonedDateTime
 

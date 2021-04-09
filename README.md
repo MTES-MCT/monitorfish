@@ -105,7 +105,7 @@ Data processing and ETL (Extract, Transform, Load) operations are done in a dock
         curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 
         ```
-    * Then install python dependencies with :
+    * Then, within the `datascience` folder, install python dependencies with :
         ```
         poetry install
         ```

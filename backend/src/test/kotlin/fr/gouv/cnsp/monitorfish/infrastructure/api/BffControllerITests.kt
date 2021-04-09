@@ -4,7 +4,9 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.*
-import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.ERSMessagesAndAlerts
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
+import fr.gouv.cnsp.monitorfish.domain.entities.ERSMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
@@ -53,6 +55,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var searchVessels: SearchVessels
+
+    @MockBean
+    private lateinit var getVesselControls: GetVesselControls
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -198,5 +203,31 @@ class BffControllerITests {
 
 
         Mockito.verify(getVesselLastVoyage).execute("FR224226850", "123", "IEF4")
+    }
+
+    @Test
+    fun `Should get all controls for a vessel`() {
+        // Given
+        given(this.getVesselControls.execute(any(), any())).willReturn(ControlResumeAndControls(
+                1,
+                1,
+                3,
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                listOf(Control(1, 1, Controller(1, "Controlleur")))))
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/123/controls?afterDateTime=2020-05-04T03:04:05.000Z"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.numberOfSeizures", equalTo(1)))
+                .andExpect(jsonPath("$.numberOfSeaControls", equalTo(1)))
+                .andExpect(jsonPath("$.controls.length()", equalTo(1)))
+
+        Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
     }
 }

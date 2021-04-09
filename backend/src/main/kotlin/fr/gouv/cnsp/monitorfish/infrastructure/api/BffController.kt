@@ -8,14 +8,14 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff")
@@ -74,6 +74,24 @@ class BffController(
         }
     }
 
+    companion object {
+        const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
+    }
+
+    @GetMapping("/v1/vessels/{vesselId}/controls")
+    @ApiOperation("Get vessel's controls")
+    fun getVesselControls(@PathParam("Vessel id")
+                          @PathVariable(name = "vesselId")
+                          vesselId: String,
+                          @ApiParam("Control after date time")
+                          @RequestParam(name = "afterDateTime")
+                          @DateTimeFormat(pattern = zoneDateTimePattern)
+                          afterDateTime: ZonedDateTime) : ControlResumeAndControlsDataOutput {
+        val controlResumeAndControls = getVesselControls.execute(vesselId.toInt(), afterDateTime)
+
+        return ControlResumeAndControlsDataOutput.fromControlResumeAndControls(controlResumeAndControls)
+    }
+
     @GetMapping("/v1/vessels/search")
     @ApiOperation("Search vessels")
     fun searchVessel(@ApiParam("Vessel internal reference number (CFR), external marker, IRCS, MMSI or name", required = true)
@@ -115,16 +133,6 @@ class BffController(
     fun getSpecies(): List<SpeciesDataOutput> {
         return getAllSpecies.execute().map { species ->
             SpeciesDataOutput.fromSpecies(species)
-        }
-    }
-
-    @GetMapping("/v1/controls/find")
-    @ApiOperation("Get vessel's controls")
-    fun getVesselControls(@ApiParam("Control id")
-                    @RequestParam(name = "vesselId")
-                    vesselId: Int) : List<ControlDataOutput> {
-        return getVesselControls.execute(vesselId).map { control ->
-            ControlDataOutput.fromControl(control)
         }
     }
 }

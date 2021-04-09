@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository

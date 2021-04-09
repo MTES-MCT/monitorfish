@@ -1,8 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.ERSMessagesAndAlerts
+import fr.gouv.cnsp.monitorfish.domain.entities.ERSMessagesAndAlerts
 
 data class ERSMessagesAndAlertsDataOutput(
         val ersMessages: List<ERSMessageDataOutput>,

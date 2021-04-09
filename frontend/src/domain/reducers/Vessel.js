@@ -14,7 +14,9 @@ const vesselSlice = createSlice({
         vesselSidebarTabIndexToShow: 1,
         isFocusedOnVesselSearch: false,
         fishingActivities: {},
-        nextFishingActivities: null
+        nextFishingActivities: null,
+        controlResumeAndControls: {},
+        nextControlResumeAndControls: null,
     },
     reducers: {
         setVessels(state, action) {
@@ -70,6 +72,19 @@ const vesselSlice = createSlice({
         resetNextFishingActivities(state) {
             state.nextFishingActivities = null
         },
+        setControlResumeAndControls(state, action) {
+            state.controlResumeAndControls = action.payload
+            state.loadingVessel = null
+        },
+        loadingControls(state) {
+            state.loadingVessel = true
+        },
+        setNextControlResumeAndControls(state, action) {
+            state.nextControlResumeAndControls = action.payload
+        },
+        resetNextControlResumeAndControls(state) {
+            state.nextControlResumeAndControls = null
+        },
         setTemporaryVesselsToHighLightOnMap(state, action) {
             state.temporaryVesselsToHighLightOnMap = action.payload
         },
@@ -92,7 +107,11 @@ export const {
     setFishingActivities,
     setNextFishingActivities,
     resetNextFishingActivities,
+    setControlResumeAndControls,
+    setNextControlResumeAndControls,
+    resetNextControlResumeAndControls,
     loadingFisheriesActivities,
+    loadingControls,
     setFocusOnVesselSearch,
     setTemporaryVesselsToHighLightOnMap,
     resetTemporaryVesselsToHighLightOnMap

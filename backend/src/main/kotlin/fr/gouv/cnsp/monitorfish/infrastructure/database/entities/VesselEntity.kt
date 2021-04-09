@@ -3,12 +3,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
-import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.JpaVesselRepository
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.lang.IllegalArgumentException
 import java.util.*
 import javax.persistence.*
 
@@ -89,6 +87,7 @@ data class VesselEntity(
         val vesselEmails: List<String>? = null) {
 
         fun toVessel() = Vessel(
+            id = id,
             internalReferenceNumber = internalReferenceNumber,
             ircs = ircs,
             mmsi = mmsi,
@@ -128,6 +127,7 @@ data class VesselEntity(
 
                 fun fromVessel(vessel: Vessel): VesselEntity {
                         return VesselEntity(
+                                id = vessel.id,
                                 internalReferenceNumber = vessel.internalReferenceNumber,
                                 ircs = vessel.ircs,
                                 mmsi = vessel.mmsi,

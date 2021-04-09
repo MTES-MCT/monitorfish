@@ -53,19 +53,19 @@ export let getCoordinates = (coordinates, projection) => {
 }
 
 function getMonth(date) {
-    let month = date.getMonth() + 1
+    let month = date.getUTCMonth() + 1
     return month < 10 ? '0' + month : '' + month
 }
 
 function getDay(date) {
-    let day = date.getDate()
+    let day = date.getUTCDate()
     return day < 10 ? '0' + day : '' + day
 }
 
 export let getDate = dateString => {
     if (dateString) {
         let date = new Date(dateString)
-        return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()}`
+        return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()}`
     }
 }
 
@@ -87,7 +87,7 @@ export let getDateTime = (dateString, withoutSeconds) => {
         time = time.replace(':', 'h')
         time = time.replace('24', '00')
 
-        return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()} à ${time}`
+        return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()} à ${time}`
     }
 }
 

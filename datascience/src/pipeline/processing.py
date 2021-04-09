@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import List
+from typing import List, Union
 
 import pandas as pd
 import sqlalchemy
@@ -101,6 +101,47 @@ def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd
     return res
 
 
+def df_to_dict_series(
+    df: pd.DataFrame, dropna_cols: Union[List, None], result_colname: str = "json_col"
+):
+    """Converts a pandas DataFrame into a Series with the same index as the input
+    DataFrame and whose values are dictionnaries like :
+
+        {'column_1' : value, 'column_2': value}
+
+    Args:
+        df (pd.DataFrame): input DataFrame
+        dropna_cols (Union[List, None]): optionnal, list of columns for which rows
+            containing Na values should be dropped
+        result_colname (Union[str, None]): optionnal, name of result Series
+
+
+    Returns:
+        pd.Series: pandas Series
+    """
+    res = df.copy(deep=True)
+    if dropna_cols:
+        res = res.dropna(subset=dropna_cols)
+
+    res = pd.read_json(res.to_json(orient="index"), orient="index", typ="Series")
+    res.name = result_colname
+
+    return res
+
+
+def zeros_ones_to_bools(df: pd.DataFrame) -> pd.DataFrame:
+    """Converts a pandas DataFrame containing "0", "1" and None values
+    to a DataFrame with False, True and None values respectively.
+
+    Useful to convert boolean data extracted from Oracle databases, since Oracle does
+    not have a boolean data type and boolean data is often stored as "0"s and "1"s.
+    """
+    # /!\ Simply converting to float and then to bool results in None values being
+    # converted into True
+    # The conversion to 'category' makes it possible to preserve None values.
+    return df.astype(float).astype("category").astype(bool)
+
+
 def lst2pgarr(alist: List) -> str:
     """Converts a python list [1, 2, "a", "b"] to a string with Postgresql array
     syntax {1,2,a,b}.
@@ -125,11 +166,12 @@ def lst2pgarr(alist: List) -> str:
     return res
 
 
-def dict2json(d):
-    """Converts python dictionnary to json string. This is required when inserting
-    a pandas DataFrame column containing dictionnaries into a Postgresql JSONB column.
+def to_json(x: Union[dict, list]) -> str:
+    """Converts python dictionnary or list to json string. This is required when
+    inserting a pandas DataFrame column containing dictionnaries into a Postgresql
+    JSONB column.
     """
-    return json.dumps(d, ensure_ascii=False)
+    return json.dumps(x, ensure_ascii=False)
 
 
 def python_lists_to_psql_arrays(df: pd.DataFrame, array_cols: List) -> pd.DataFrame:

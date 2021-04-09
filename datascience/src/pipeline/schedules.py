@@ -7,6 +7,7 @@ from src.pipeline.flows import (
     controls,
     ers,
     fishing_gear_codes,
+    fleet_segments,
     heartbeat,
     infractions,
     ports,
@@ -32,4 +33,5 @@ flows_to_register = [
     species.flow,
     ers.flow,
     ports.flow,
+    fleet_segments.flow,
 ]

@@ -1,14 +1,19 @@
 import os
+from pathlib import Path
 from typing import Union
 
 import pandas as pd
 
-from config import LIBRARY_LOCATION
+from config import QUERIES_LOCATION
 
 from .db_config import create_engine
 
 
+<<<<<<< HEAD
 def read_saved_query(db: str, sql_filepath: str, **kwargs) -> pd.DataFrame:
+=======
+def read_saved_query(db: str, sql_filepath: Union[str, Path]) -> pd.DataFrame:
+>>>>>>> WIP fleet segments flow
     """Run saved SQLquery on a database. Supported databases :
     - 'ocan' : OCAN database
     - 'fmc': FMC database
@@ -20,15 +25,20 @@ def read_saved_query(db: str, sql_filepath: str, **kwargs) -> pd.DataFrame:
     Args:
         db (str): Database name. Possible values :
             'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
+<<<<<<< HEAD
         sql_filepath (str): path to .sql file, starting from datascience library folder.
             example : "pipeline/queries/ocan/nav_fr_peche.sql"
             kwargs : passed to pd.read_sql
+=======
+        sql_filepath (str): path to .sql file, starting from the saved queries folder.
+            example : "ocan/nav_fr_peche.sql"
+>>>>>>> WIP fleet segments flow
 
     Returns:
         pd.DataFrame: Query results
     """
     engine = create_engine(db=db)
-    sql_filepath = os.path.join(LIBRARY_LOCATION, sql_filepath)
+    sql_filepath = QUERIES_LOCATION / sql_filepath
     with open(sql_filepath, "r") as sql_file:
         query = sql_file.read()
     return pd.read_sql(query, engine, **kwargs)

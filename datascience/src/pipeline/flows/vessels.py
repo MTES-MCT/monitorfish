@@ -17,7 +17,7 @@ from src.read_query import read_saved_query
 
 @task
 def extract_fr_vessels():
-    res = read_saved_query("ocan", "pipeline/queries/ocan/navires_fr.sql")
+    res = read_saved_query("ocan", "ocan/navires_fr.sql")
 
     # Sparse data type takes up less memory
     sparse_columns = {
@@ -63,7 +63,7 @@ def extract_fr_vessels():
 
 @task
 def extract_cee_vessels():
-    res = read_saved_query("ocan", "pipeline/queries/ocan/navires_cee_peche.sql")
+    res = read_saved_query("ocan", "ocan/navires_cee_peche.sql")
     categorical_columns = [
         "fishing_gear_main_ncp",
         "fishing_gear_secondary_ncp",
@@ -92,7 +92,7 @@ def extract_cee_vessels():
 
 @task
 def extract_non_cee_vessels():
-    res = read_saved_query("ocan", "pipeline/queries/ocan/navires_hors_cee_peche.sql")
+    res = read_saved_query("ocan", "ocan/navires_hors_cee_peche.sql")
 
     categorical_columns = ["fishing_gear_main_nep"]
     for c in categorical_columns:
@@ -103,7 +103,7 @@ def extract_non_cee_vessels():
 
 @task
 def extract_floats():
-    res = read_saved_query("ocan", "pipeline/queries/ocan/flotteurs.sql")
+    res = read_saved_query("ocan", "ocan/flotteurs.sql")
 
     categorical_columns = [
         "imo_f",
@@ -125,7 +125,7 @@ def extract_floats():
 
 @task
 def extract_nav_licences():
-    res = read_saved_query("ocan", "pipeline/queries/ocan/permis_navigation.sql")
+    res = read_saved_query("ocan", "ocan/permis_navigation.sql")
 
     categorical_columns = ["sailing_category", "nav_licence_expiration_date"]
 

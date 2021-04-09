@@ -99,47 +99,47 @@ def transform_controls(controls):
     logger.info("Transforming gears control data columns to dictionnary")
     col_maps = [
         {
-            "input_cols": [
-                "gear_1_code",
-                "gear_1_was_controlled",
-                "declared_mesh_1",
-                "controlled_mesh_1",
-            ],
-            "index_col": "gear_1_code",
+            "column_names_to_json_keys": {
+                "gear_1_code": "gearCode",
+                "gear_1_was_controlled": "gearWasControlled",
+                "declared_mesh_1": "declaredMesh",
+                "controlled_mesh_1": "controlledMesh",
+            },
             "result_col": "gear_1",
         },
         {
-            "input_cols": [
-                "gear_2_code",
-                "gear_2_was_controlled",
-                "declared_mesh_2",
-                "controlled_mesh_2",
-            ],
-            "index_col": "gear_2_code",
+            "column_names_to_json_keys": {
+                "gear_2_code": "gearCode",
+                "gear_2_was_controlled": "gearWasControlled",
+                "declared_mesh_2": "declaredMesh",
+                "controlled_mesh_2": "controlledMesh",
+            },
             "result_col": "gear_2",
         },
         {
-            "input_cols": [
-                "gear_3_code",
-                "gear_3_was_controlled",
-                "declared_mesh_3",
-                "controlled_mesh_3",
-            ],
-            "index_col": "gear_3_code",
+            "column_names_to_json_keys": {
+                "gear_3_code": "gearCode",
+                "gear_3_was_controlled": "gearWasControlled",
+                "declared_mesh_3": "declaredMesh",
+                "controlled_mesh_3": "controlledMesh",
+            },
             "result_col": "gear_3",
         },
     ]
 
     for col_map in col_maps:
 
-        gear_data = df_to_dict_series(
-            df=controls[col_map["input_cols"]],
-            dropna_cols=[col_map["index_col"]],
+        gear_data_df = controls[col_map["column_names_to_json_keys"].keys()]
+        gear_data_df = gear_data_df.rename(columns=col_map["column_names_to_json_keys"])
+
+        gear_data_series = df_to_dict_series(
+            df=gear_data_df,
+            dropna_cols=["gearCode"],
             result_colname=col_map["result_col"],
         )
 
-        controls = controls.join(gear_data)
-        controls = controls.drop(columns=col_map["input_cols"])
+        controls = controls.join(gear_data_series)
+        controls = controls.drop(columns=col_map["column_names_to_json_keys"].keys())
 
     # Then group the 3 dictionnaries containing the data of the 3 gear controls into a
     # numpy array of dictionnaries

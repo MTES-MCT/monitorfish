@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import java.time.ZonedDateTime

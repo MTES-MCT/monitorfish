@@ -27,8 +27,7 @@ jobs:
       with:
         repository: mtes-mct/monitorfish
 
-    - name: Set ENV profile as LOCAL when it is on master branch
-      if: github.ref == 'refs/heads/master'
+    - name: Set ENV profile as dev by default
       run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
 
     - name: Set ENV profile as PROD when it is a release

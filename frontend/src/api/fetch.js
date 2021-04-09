@@ -7,6 +7,7 @@ const ACCEPTED = 202
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const ERS_ERROR_MESSAGE = "Nous n'avons pas trouvé de message JPE pour ce navire"
+const CONTROLS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles pour ce navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
 const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
@@ -267,6 +268,25 @@ export function getVesselERSMessagesFromAPI(vesselIdentity) {
                 throw Error(ERS_ERROR_MESSAGE)
             })
             .then(ers => ers)
+}
+
+export function getVesselControlsFromAPI(vesselId, fromDate) {
+    return fetch(`/bff/v1/vessels/${vesselId}/controls?afterDateTime=${fromDate.toISOString()}`)
+      .then(response => {
+          if (response.status === HTTP_OK) {
+              return response.json()
+          } else {
+              response.text().then(text => {
+                  console.error(text)
+              })
+              throw Error(CONTROLS_ERROR_MESSAGE)
+          }
+      })
+      .catch(error => {
+          console.error(error)
+          throw Error(CONTROLS_ERROR_MESSAGE)
+      })
+      .then(controls => controls)
 }
 
 export function getAdministrativeSubZonesFromAPI(type) {

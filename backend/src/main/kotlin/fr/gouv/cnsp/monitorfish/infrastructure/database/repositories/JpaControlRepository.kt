@@ -1,21 +1,20 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.Control
+import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ControlEntity
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.ControlAndInfractionIds
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBControlRepository
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
-import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 @Repository
-class JpaControlRepository(private val dbControlRepository: DBControlRepository) : ControlRepository {
+class JpaControlRepository(private val dbControlRepository: DBControlRepository,
+                           private val mapper: ObjectMapper) : ControlRepository {
 
-    override fun findVesselControls(vesselId: Int): List<Control> {
-        return dbControlRepository.findAllByVesselIdEquals(vesselId).map {
-            it.toControl()
-        }
+    override fun findVesselControlsAfterDateTime(vesselId: Int, afterDateTime: ZonedDateTime): List<ControlAndInfractionIds> {
+        return dbControlRepository.findAllByVesselIdEqualsAndControlDatetimeUtcAfter(vesselId, afterDateTime.toInstant())
+                .map { control ->
+                    ControlAndInfractionIds(control.toControl(mapper), control.infractionIds ?: listOf())
+                }
     }
-
 }

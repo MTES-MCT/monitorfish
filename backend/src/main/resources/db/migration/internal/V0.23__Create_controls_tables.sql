@@ -1,7 +1,7 @@
 -- Add controllers table
 
-CREATE TABLE IF NOT EXISTS public.controllers(
-    id INTEGER,
+CREATE TABLE IF NOT EXISTS public.controllers (
+    id INTEGER PRIMARY KEY,
     controller CHARACTER VARYING(50),
     controller_type CHARACTER VARYING(10),
     administration CHARACTER VARYING(50)
@@ -11,13 +11,13 @@ CREATE INDEX ON public.controllers (id);
 
 -- Add infractions table
 
-CREATE TABLE IF NOT EXISTS public.infractions(
-    id INTEGER PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS public.infractions (
+    id INTEGER,
     natinf_code CHARACTER VARYING(20),
     regulation CHARACTER VARYING(100),
     infraction_category CHARACTER VARYING(50),
     infraction TEXT
-    );
+);
 
 CREATE INDEX ON public.infractions (id);
 
@@ -47,10 +47,10 @@ CREATE TABLE IF NOT EXISTS public.controls (
     seizure BOOLEAN,
     seizure_comments TEXT,
     post_control_comments TEXT,
-    gear_controls JSONB
+    gear_controls JSONB,
+    FOREIGN KEY (controller_id) REFERENCES controllers(id)
 );
 
 CREATE INDEX ON public.controls (id);
 CREATE INDEX ON public.controls (vessel_id, control_datetime_utc DESC);
 CREATE INDEX ON public.controls (controller_id, control_datetime_utc DESC);
-

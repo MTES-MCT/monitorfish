@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.*
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
-import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.ERSMessagesAndAlerts
+import fr.gouv.cnsp.monitorfish.domain.entities.ERSMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*

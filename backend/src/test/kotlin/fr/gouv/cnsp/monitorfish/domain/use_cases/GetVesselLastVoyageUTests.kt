@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.wrappers.LastDepartureDateAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType

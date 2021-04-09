@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.ers.Gear as GearERS
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.IHasImplementation as IRulesHasImplementation
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.IHasImplementation as IAlertsHasImplementation
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
@@ -28,7 +28,7 @@ class MapperConfiguration {
         mapper.propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
 
         mapper.registerSubtypes(NamedType(Catch::class.java, "catch"))
-        mapper.registerSubtypes(NamedType(Gear::class.java, "gear"))
+        mapper.registerSubtypes(NamedType(GearERS::class.java, "gear"))
 
         registerRulesSubType(mapper, RuleTypeMapping::class.java)
         registerAlertsSubType(mapper, AlertTypeMapping::class.java)

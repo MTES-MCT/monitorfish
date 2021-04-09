@@ -14,8 +14,15 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import FishingActivities from "../components/FishingActivities";
 import getFishingActivities from "../domain/use_cases/getFishingActivities";
 import {removeError} from "../domain/reducers/Global";
-import {resetNextFishingActivities, setFishingActivities} from "../domain/reducers/Vessel";
+import {
+    resetNextControlResumeAndControls,
+    resetNextFishingActivities,
+    setControlResumeAndControls,
+    setFishingActivities
+} from '../domain/reducers/Vessel'
 import NoDEPFoundError from "../errors/NoDEPFoundError";
+import getControls from '../domain/use_cases/getControls'
+import VesselControls from '../components/VesselControls'
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()
@@ -26,10 +33,11 @@ const VesselSidebar = () => {
     const gears = useSelector(state => state.gear.gears)
     const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
 
-    const [openBox, setOpenBox] = useState(false);
-    const [vessel, setVessel] = useState(null);
+    const [controlsFromDate, setControlFromDate] = useState(new Date(new Date().getUTCFullYear() - 5, 0, 1))
+    const [openBox, setOpenBox] = useState(false)
+    const [vessel, setVessel] = useState(null)
     const [index, setIndex] = useState(1)
-    const firstUpdate = useRef(true);
+    const firstUpdate = useRef(true)
 
     useEffect(() => {
         if (openBox === true) {
@@ -52,16 +60,25 @@ const VesselSidebar = () => {
 
             if(index === 3) {
                 if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-                    dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity, true))
+                    dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
                 }
+            } else if (index === 4) {
+                dispatch(getControls(vesselState.selectedVessel.id, controlsFromDate))
             }
         }
     }, [vesselState.selectedVessel])
 
     const showFishingActivities = () => {
         if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-            dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity, false))
+            dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
             setIndex(3)
+        }
+    }
+
+    const showControls = () => {
+        if(vessel && vessel.id) {
+            dispatch(getControls(vessel.id, controlsFromDate))
+            setIndex(4)
         }
     }
 
@@ -72,10 +89,23 @@ const VesselSidebar = () => {
         }
     }
 
+    useEffect(() => {
+        if(vessel && controlsFromDate) {
+            dispatch(getControls(vessel.id, controlsFromDate))
+        }
+    }, [controlsFromDate])
+
     const updateFishingActivities = nextFishingActivities => {
         if(nextFishingActivities) {
             dispatch(setFishingActivities(nextFishingActivities))
             dispatch(resetNextFishingActivities())
+        }
+    }
+
+    const updateControlResumeAndControls = nextControlResumeAndControls => {
+        if(nextControlResumeAndControls) {
+            dispatch(setControlResumeAndControls(nextControlResumeAndControls))
+            dispatch(resetNextControlResumeAndControls())
         }
     }
 
@@ -104,13 +134,13 @@ const VesselSidebar = () => {
                             <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
                                 <FisheriesIcon /> <br/> Pêche
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 4} onClick={() => setIndex(3)}>
+                            <Tab type="button" isActive={index === 4} onClick={() => showControls()}>
                                 <ControlsIcon /> Contrôles
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(4)}>
+                            <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
                                 <ObservationsIcon /> Ciblage
                             </Tab>
-                            <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(5)}>
+                            <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(6)}>
                                 <VMSIcon /> VMS/ERS
                             </Tab>
                         </TabList>
@@ -137,7 +167,13 @@ const VesselSidebar = () => {
                                     />
                                 </Panel>
                                 <Panel className={index === 4 ? '' : 'hide'}>
-                                    <h1>TODO</h1>
+                                    <VesselControls
+                                      setControlFromDate={setControlFromDate}
+                                      controlsFromDate={controlsFromDate}
+                                      controlResumeAndControls={vesselState.controlResumeAndControls}
+                                      nextControlResumeAndControls={vesselState.nextControlResumeAndControls}
+                                      updateControlResumeAndControls={updateControlResumeAndControls}
+                                    />
                                 </Panel>
                                 <Panel className={index === 5 ? '' : 'hide'}>
                                     <h1>TODO</h1>

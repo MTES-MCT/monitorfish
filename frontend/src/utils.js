@@ -87,7 +87,7 @@ export let getDateTime = (dateString, withoutSeconds) => {
         time = time.replace(':', 'h')
         time = time.replace('24', '00')
 
-        return `${getDay(date)}/${getMonth(date)}/${date.getFullYear()} à ${time}`
+        return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()} à ${time}`
     }
 }
 

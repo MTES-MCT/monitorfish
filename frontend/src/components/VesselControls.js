@@ -86,7 +86,7 @@ const VesselControls = props => {
                           </Text>
                       </Title>
                       {
-                          yearsToControls ?
+                          yearsToControls && Object.keys(yearsToControls).length ?
                             <List>
                                 {
                                     Object.keys(yearsToControls)
@@ -100,7 +100,9 @@ const VesselControls = props => {
                                           />
                                     })
                                 }
-                            </List> : null
+                            </List> : <NoControls>
+                                Aucun contrôle { props.controlsFromDate ? <>depuis {props.controlsFromDate.getUTCFullYear()}</> : null}
+                            </NoControls>
                       }
                   </Zone>
                   <SeeMoreBackground>
@@ -117,6 +119,14 @@ const VesselControls = props => {
         }
         </>
 }
+
+const NoControls = styled.div`
+  text-align: center;
+  padding: 10px 0 10px 0;
+  color: ${COLORS.grayDarkerThree};
+  font-size: 13px;
+  width: 100%
+`
 
 const SeeMoreBackground = styled.div`
   background: ${COLORS.background};

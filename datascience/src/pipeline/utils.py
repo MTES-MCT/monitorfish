@@ -29,7 +29,6 @@ def get_table(
 
     meta = MetaData(schema=schema)
     meta.bind = engine
-    meta.reflect(only=[table_name])
     try:
         logger.info(f"Searching for table {schema}.{table_name}...")
         meta.reflect(only=[table_name])

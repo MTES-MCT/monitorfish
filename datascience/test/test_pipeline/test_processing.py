@@ -1,16 +1,19 @@
+import datetime
 import unittest
 
 import numpy as np
 import pandas as pd
+import pytz
 
 from src.pipeline.processing import (
     combine_overlapping_columns,
     concatenate_columns,
     concatenate_values,
+    df_values_to_psql_arrays,
     first_valid_value,
     is_a_value,
-    lst2pgarr,
-    python_lists_to_psql_arrays,
+    to_json,
+    to_pgarr,
 )
 
 
@@ -77,32 +80,118 @@ class TestProcessingMethods(unittest.TestCase):
         self.assertEqual(res.values[5], None)
         self.assertEqual(res.values[6], None)
 
-    def test_lst2pgarr(self):
+    def test_to_json(self):
+
+        # Test basic dicts and lists serialization
+        a = [1, 2, 3]
+        b = {"a": 1, "b": 2}
+
+        # Test None and np.nan serialization
+        c = None
+        d = np.nan
+        e = [1, 2, 3, None, np.nan]
+        f = [1, 2, {"a": 1, "b": None, "c": np.nan}]
+        e = {"a": 1, 2: "b"}
+        f = {"a": {"b": [1, None, np.nan], "c": 4}, "b": 2}
+
+        # Test numpy array serialization
+        g = np.array([1, 2, 3])
+        h = np.array([[1, 2, 3], [4, 5, 6]])
+
+        # Test date and datetime serialization
+        i = datetime.datetime(2020, 3, 11, 20, 5, 12)
+        utc_tz = pytz.timezone("utc")
+        j = utc_tz.localize(datetime.datetime(2020, 3, 11, 20, 5, 12))
+        est_tz = pytz.timezone("est")
+        k = est_tz.localize(datetime.datetime(2020, 3, 11, 20, 5, 12))
+
+        # Test nested dict containing None, np.nan, pandas `NaT`
+        m = {
+            "a": {
+                "int": 1,
+                "None": None,
+                "np.nan": np.nan,
+                "pandas NaT": pd._libs.tslibs.nattype.NaTType(),
+                "numpy array": np.array([1, 2, 3]),
+                "datetime": datetime.datetime(2020, 3, 11, 20, 5, 12),
+                "datetime_tz_est": est_tz.localize(
+                    datetime.datetime(2020, 3, 11, 20, 5, 12)
+                ),
+            }
+        }
+
+        res_a = to_json(a)
+        res_b = to_json(b)
+        res_c = to_json(c)
+        res_d = to_json(d)
+        res_e = to_json(e)
+        res_f = to_json(f)
+        res_e = to_json(e)
+        res_f = to_json(f)
+        res_g = to_json(g)
+        res_h = to_json(h)
+        res_i = to_json(i)
+        res_j = to_json(j)
+        res_k = to_json(k)
+        res_m = to_json(m)
+
+        self.assertEqual(res_a, "[1, 2, 3]")
+        self.assertEqual(res_b, '{"a": 1, "b": 2}')
+        self.assertEqual(res_c, "null")
+        self.assertEqual(res_d, "NaN")
+        self.assertEqual(res_e, '{"a": 1, "2": "b"}')
+        self.assertEqual(res_f, '{"a": {"b": [1, null, NaN], "c": 4}, "b": 2}')
+        self.assertEqual(res_e, '{"a": 1, "2": "b"}')
+        self.assertEqual(res_f, '{"a": {"b": [1, null, NaN], "c": 4}, "b": 2}')
+        self.assertEqual(res_g, "[1, 2, 3]")
+        self.assertEqual(res_h, "[[1, 2, 3], [4, 5, 6]]")
+        self.assertEqual(res_i, '"2020-03-11T20:05:12Z"')
+        self.assertEqual(res_j, '"2020-03-11T20:05:12Z"')
+        self.assertEqual(res_k, '"2020-03-12T01:05:12Z"')
+        self.assertEqual(
+            res_m,
+            '{"a": {"int": 1, "None": null, "np.nan": NaN, "pandas NaT": null, '
+            '"numpy array": [1, 2, 3], "datetime": "2020-03-11T20:05:12Z", '
+            '"datetime_tz_est": "2020-03-12T01:05:12Z"}}',
+        )
+
+    def test_to_pgarr(self):
         a = [1, 2, 3]
         b = ["a", "b", "c"]
         c = [1, "a", None]
         d = []
+        e = None
 
-        res_a = lst2pgarr(a)
-        res_b = lst2pgarr(b)
-        res_c = lst2pgarr(c)
-        res_d = lst2pgarr(d)
+        res_a = to_pgarr(a)
+        res_b = to_pgarr(b)
+        res_c = to_pgarr(c)
+        res_d = to_pgarr(d)
+        with self.assertRaises(ValueError):
+            to_pgarr(e)
+
+        res_e = to_pgarr(e, handle_errors=True)
 
         self.assertEqual(res_a, "{1,2,3}")
         self.assertEqual(res_b, "{a,b,c}")
         self.assertEqual(res_c, "{1,a,None}")
         self.assertEqual(res_d, "{}")
+        self.assertIsNone(res_e)
 
-    def test_python_lists_to_psql_arrays(self):
+    def test_df_values_to_psql_arrays(self):
         df = pd.DataFrame(
             {
                 "a": [1, 2, 3, 4],
                 "b": [[1, 2], ["a", "b"], [1, 3], ["a", "a"]],
-                "c": [[1, 2], [], ["", " "], [" ", 5]],
+                "c": [None, [], ["", " "], [" ", 5]],
             }
         )
-        res = python_lists_to_psql_arrays(df, ["b", "c"])
 
-        self.assertTrue((res["a"] == [1, 2, 3, 4]).all())
+        with self.assertRaises(ValueError):
+            df_values_to_psql_arrays(df[["b", "c"]])
+        res = df_values_to_psql_arrays(
+            df[["b", "c"]], handle_errors=True, value_on_error="caught"
+        )
+
+        self.assertEqual(list(res), ["b", "c"])
         self.assertTrue((res["b"] == ["{1,2}", "{a,b}", "{1,3}", "{a,a}"]).all())
-        self.assertTrue((res["c"] == ["{1,2}", "{}", "{}", "{5}"]).all())
+        self.assertTrue((res["c"] == ["caught", "{}", "{}", "{5}"]).all())

@@ -9,7 +9,7 @@ from src.read_query import read_saved_query
 
 @task
 def extract_species():
-    return read_saved_query("fmc", "pipeline/queries/fmc/species.sql")
+    return read_saved_query("fmc", "fmc/species.sql")
 
 
 @task

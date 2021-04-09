@@ -9,9 +9,7 @@ from src.read_query import read_saved_query
 
 @task(checkpoint=False)
 def extract_fishing_gear_codes():
-    fishing_gear_codes = read_saved_query(
-        "ocan", "pipeline/queries/ocan/codes_engins.sql"
-    )
+    fishing_gear_codes = read_saved_query("ocan", "ocan/codes_engins.sql")
 
     return fishing_gear_codes
 

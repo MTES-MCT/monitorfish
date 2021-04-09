@@ -45,8 +45,8 @@ const VesselControls = props => {
                   <Zone>
                       <Title>
                           <Text>
-                              Résumé des actions de contrôle depuis { props.controlsFromDate ? <>{props.controlsFromDate.getUTCFullYear()}
-                            {' '}(sur { new Date().getFullYear() - props.controlsFromDate.getUTCFullYear() } ans)</> : <NoValue>-</NoValue> }
+                              Résumé des actions de contrôle depuis { props.controlsFromDate ? <>{props.controlsFromDate.getUTCFullYear() + 1}
+                            {' '}(sur { new Date().getFullYear() - props.controlsFromDate.getUTCFullYear() - 1 } ans)</> : <NoValue>-</NoValue> }
                           </Text>
                       </Title>
                       <Fields>
@@ -101,7 +101,7 @@ const VesselControls = props => {
                                     })
                                 }
                             </List> : <NoControls>
-                                Aucun contrôle { props.controlsFromDate ? <>depuis {props.controlsFromDate.getUTCFullYear()}</> : null}
+                                Aucun contrôle { props.controlsFromDate ? <>depuis {props.controlsFromDate.getUTCFullYear() + 1}</> : null}
                             </NoControls>
                       }
                   </Zone>

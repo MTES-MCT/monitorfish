@@ -57,6 +57,7 @@ const VesselSidebar = () => {
     useEffect(() => {
         if (vesselState.selectedVessel) {
             setVessel(vesselState.selectedVessel)
+            setControlFromDate(new Date(new Date().getUTCFullYear() - 5, 0, 1))
 
             if(index === 3) {
                 if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
@@ -91,7 +92,7 @@ const VesselSidebar = () => {
 
     useEffect(() => {
         if(vessel && controlsFromDate) {
-            dispatch(getControls(vessel.id, controlsFromDate))
+            dispatch(getControls(vessel.id, controlsFromDate, true))
         }
     }, [controlsFromDate])
 

@@ -33,11 +33,11 @@ data class ControlEntity(
         @Column(name = "control_type")
         var controlType: String? = null,
         @Column(name = "control_datetime_utc")
-        var controlDatetimeUtc: Instant,
+        var controlDatetimeUtc: Instant? = null,
         @Column(name = "input_start_datetime_utc")
-        var inputStartDatetimeUtc: Instant,
+        var inputStartDatetimeUtc: Instant? = null,
         @Column(name = "input_end_datetime_utc")
-        var inputEndDatetimeUtc: Instant,
+        var inputEndDatetimeUtc: Instant? = null,
         @Column(name = "facade")
         var facade: String? = null,
         @Column(name = "longitude")
@@ -80,9 +80,9 @@ data class ControlEntity(
             vesselId = vesselId,
             controller = controller.toController(),
             controlType = controlType,
-            controlDatetimeUtc = controlDatetimeUtc.atZone(UTC),
-            inputStartDatetimeUtc = inputStartDatetimeUtc.atZone(UTC),
-            inputEndDatetimeUtc = inputEndDatetimeUtc.atZone(UTC),
+            controlDatetimeUtc = controlDatetimeUtc?.atZone(UTC),
+            inputStartDatetimeUtc = inputStartDatetimeUtc?.atZone(UTC),
+            inputEndDatetimeUtc = inputEndDatetimeUtc?.atZone(UTC),
             facade = facade,
             longitude = longitude,
             latitude = latitude,

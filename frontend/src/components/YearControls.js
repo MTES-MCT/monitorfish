@@ -188,7 +188,7 @@ const YearControls = props => {
                                 }
                               <Key width={135}>Contexte du contrôle</Key>
                               <SubValue>
-                              { control.cooperative ? 'Coopératif' : 'Non coopératif' }
+                              { control.cooperative === false ? 'Coopératif' : 'Non coopératif' }
                               </SubValue>
                             </More> : null
                         }

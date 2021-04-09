@@ -7,7 +7,7 @@ import {
     setNextControlResumeAndControls
 } from '../reducers/Vessel'
 
-const getControls = (vesselId, fromDate) => (dispatch, getState) => {
+const getControls = (vesselId, fromDate, userRequest) => (dispatch, getState) => {
     if(vesselId) {
         let currentControlResumeAndControls = getState().vessel.controlResumeAndControls
         let isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(vesselId, currentControlResumeAndControls)
@@ -17,7 +17,7 @@ const getControls = (vesselId, fromDate) => (dispatch, getState) => {
         }
 
         getVesselControlsFromAPI(vesselId, fromDate).then(controlResumeAndControls => {
-            if(isSameVesselAsCurrentlyShowed) {
+            if(isSameVesselAsCurrentlyShowed && !userRequest) {
                 if(currentControlResumeAndControls.controls && controlResumeAndControls.controls &&
                     controlResumeAndControls.controls.length > currentControlResumeAndControls.controls.length) {
                     dispatch(setNextControlResumeAndControls(controlResumeAndControls))

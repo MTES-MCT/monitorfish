@@ -66,11 +66,12 @@ const FishingActivitiesSummary = props => {
                     message.message.catches.forEach(speciesCatch => {
                         if (speciesToWeightFARObject[speciesCatch.species]) {
                             speciesToWeightFARObject[speciesCatch.species].weight = parseFloat((
-                                speciesToWeightFARObject[speciesCatch.species].weight + parseFloat(speciesCatch.weight)).toFixed(1))
+                                speciesToWeightFARObject[speciesCatch.species].weight +
+                                (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
                         } else {
                             speciesToWeightFARObject[speciesCatch.species] = {
                                 species: speciesCatch.species,
-                                weight: parseFloat(speciesCatch.weight.toFixed(1)),
+                                weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
                                 speciesName: speciesCatch.speciesName,
                                 totalWeight: totalFARWeight
                             }
@@ -95,11 +96,12 @@ const FishingActivitiesSummary = props => {
                     message.message.catches.forEach(speciesCatch => {
                         if (speciesToWeightDISObject[speciesCatch.species]) {
                             speciesToWeightDISObject[speciesCatch.species].weight = parseFloat((
-                                speciesToWeightDISObject[speciesCatch.species].weight + parseFloat(speciesCatch.weight)).toFixed(1))
+                                speciesToWeightDISObject[speciesCatch.species].weight +
+                              (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
                         } else {
                             speciesToWeightDISObject[speciesCatch.species] = {
                                 species: speciesCatch.species,
-                                weight: parseFloat(speciesCatch.weight.toFixed(1)),
+                                weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
                                 speciesName: speciesCatch.speciesName,
                                 totalWeight: totalDISWeight
                             }
@@ -118,11 +120,12 @@ const FishingActivitiesSummary = props => {
                     // TODO Regarder le calcul de la somme du LAN pour chaue espèce, ça semble trop élevé en env de DEV
                     if (speciesToWeightLANObject[speciesCatch.species]) {
                         speciesToWeightLANObject[speciesCatch.species].weight = parseFloat((
-                            speciesToWeightLANObject[speciesCatch.species].weight + parseFloat(speciesCatch.weight)).toFixed(1))
+                            speciesToWeightLANObject[speciesCatch.species].weight +
+                            (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
                     } else {
                         speciesToWeightLANObject[speciesCatch.species] = {
                             species: speciesCatch.species,
-                            weight: parseFloat(speciesCatch.weight.toFixed(1)),
+                            weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
                             speciesName: speciesCatch.speciesName
                         }
                     }
@@ -138,11 +141,12 @@ const FishingActivitiesSummary = props => {
                 pnoMessage.message.catchOnboard.forEach(speciesCatch => {
                     if (speciesToWeightPNOObject[speciesCatch.species]) {
                         speciesToWeightPNOObject[speciesCatch.species].weight = parseFloat((
-                            speciesToWeightPNOObject[speciesCatch.species].weight + parseFloat(speciesCatch.weight)).toFixed(1))
+                            speciesToWeightPNOObject[speciesCatch.species].weight +
+                           (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
                     } else {
                         speciesToWeightPNOObject[speciesCatch.species] = {
                             species: speciesCatch.species,
-                            weight: parseFloat(speciesCatch.weight.toFixed(1)),
+                            weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
                             speciesName: speciesCatch.speciesName,
                             totalWeight: totalFARAndDEPWeight
                         }
@@ -173,7 +177,7 @@ const FishingActivitiesSummary = props => {
         return parseFloat(ersMessages
             .reduce((accumulator, ersMessage) => {
                 let sumOfCatches = ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
-                    return subAccumulator + speciesCatch.weight
+                    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
                 }, 0)
 
                 return accumulator + sumOfCatches
@@ -182,19 +186,19 @@ const FishingActivitiesSummary = props => {
 
     function getTotalDEPWeightFromMessages(ersMessage) {
         return parseFloat(ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
-            return subAccumulator + speciesCatch.weight
+            return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
         }, 0).toFixed(1))
     }
 
     function getTotalLANWeightFromMessages(ersMessage) {
         return parseFloat(ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
-            return subAccumulator + speciesCatch.weight
+            return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
         }, 0).toFixed(1))
     }
 
     function getTotalPNOWeightFromMessages(ersMessage) {
         return parseFloat(ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
-            return subAccumulator + speciesCatch.weight
+            return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
         }, 0).toFixed(1))
     }
 
@@ -202,7 +206,7 @@ const FishingActivitiesSummary = props => {
         return parseFloat(ersMessages
             .reduce((accumulator, ersMessage) => {
                 let sumOfCatches = ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
-                    return subAccumulator + speciesCatch.weight
+                    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
                 }, 0)
 
                 return accumulator + sumOfCatches

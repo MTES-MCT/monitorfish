@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import { layersType as LayersType } from '../domain/entities/layers'
 import { Interactions } from '../domain/entities/map'
 import Draw, { createBox } from 'ol/interaction/Draw'
-import Style from 'ol/style/Style'
-import RegularShape from 'ol/style/RegularShape'
+import { Icon, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import { addZoneSelected, resetInteraction } from '../domain/reducers/Map'
@@ -29,13 +29,10 @@ const DrawLayer = ({ map }) => {
         source:  source,
         type: type,
         style: new Style({
-          image: new RegularShape({
-            fill: new Fill({
-              color: '#515151'
-            }),
-            points: 4,
-            radius1: 15,
-            radius2: 1
+          image: new Icon({
+            opacity: 1,
+            src: `Pointeur_selection_zone.svg`,
+            scale: 1
           }),
           stroke: new Stroke({
             color: '#515151',

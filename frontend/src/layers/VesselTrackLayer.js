@@ -10,7 +10,7 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import LayersEnum from '../domain/entities/layers'
 import { setArrowStyle, setCircleStyle } from './styles/featuresStyles'
-import { getTrackArrow, getTrackColor } from '../domain/entities/vesselTrack'
+import { getTrackTypeFromSpeed } from '../domain/entities/vesselTrack'
 import LineString from 'ol/geom/LineString'
 import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
@@ -88,7 +88,8 @@ const VesselTrackLayer = ({ map }) => {
       });
 
       circleFeature.setId(LayersEnum.VESSEL_TRACK.code + ':position:' + index)
-      setCircleStyle(getTrackColor(feature.getProperties().speed), circleFeature);
+      const trackColor = getTrackTypeFromSpeed(feature.getProperties().speed).color
+      setCircleStyle(trackColor, circleFeature);
 
       return circleFeature
     }).filter(circlePoint => circlePoint)
@@ -106,7 +107,8 @@ const VesselTrackLayer = ({ map }) => {
       });
 
       arrowFeature.setId(LayersEnum.VESSEL_TRACK.code + ':arrow:' + index)
-      setArrowStyle(getTrackArrow(feature.getProperties().speed), arrowFeature);
+      let trackArrow = getTrackTypeFromSpeed(feature.getProperties().speed).arrow
+      setArrowStyle(trackArrow, arrowFeature);
 
       return arrowFeature
     }).filter(arrowPoint => arrowPoint);
@@ -127,19 +129,21 @@ const VesselTrackLayer = ({ map }) => {
 
         const dx = secondPoint[0] - firstPoint[0];
         const dy = secondPoint[1] - firstPoint[1];
-        const rotation = Math.atan2(dy, dx);
+        const rotation = Math.atan2(dy, dx)
+
+        let trackType = getTrackTypeFromSpeed(position.speed)
 
         const feature = new Feature({
           geometry: new LineString([firstPoint, secondPoint]),
+          trackType: trackType,
           course: -rotation,
           speed: position.speed
         })
 
-        let trackColor = getTrackColor(position.speed);
-
+        feature.setId(`${LayersEnum.VESSEL_TRACK.code}:line:${index}`)
         feature.setStyle(new Style({
-          fill: new Fill({color: trackColor, weight: 4}),
-          stroke: new Stroke({color: trackColor, width: 3})
+          fill: new Fill({color: trackType.color, weight: 4}),
+          stroke: new Stroke({color: trackType.color, width: 3})
         }))
 
         return feature

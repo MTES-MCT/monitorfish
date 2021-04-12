@@ -32,9 +32,12 @@ import DrawLayer from '../layers/DrawLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
 import { getCoordinates } from '../utils'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
+import TrackTypeCard from '../components/TrackTypeCard'
+import { trackTypes } from '../domain/entities/vesselTrack'
 
 const vesselCardID = 'vessel-card';
 const vesselTrackCardID = 'vessel-track-card';
+const trackTypeCardID = 'track-line-card';
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove;
 const hitPixelTolerance = 3;
 
@@ -50,6 +53,7 @@ const MapWrapper = () => {
     const [shouldUpdateView, setShouldUpdateView] = useState(true)
     const [cursorCoordinates, setCursorCoordinates] = useState('')
     const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
+    const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
     const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
     const mapElement = useRef()
     const mapRef = useRef()
@@ -87,12 +91,21 @@ const MapWrapper = () => {
                 className: 'ol-overlay-container ol-selectable'
             });
 
+            const trackTypeCardOverlay = new Overlay({
+                element: document.getElementById(trackTypeCardID),
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 400,
+                },
+                className: 'ol-overlay-container ol-selectable'
+            });
+
             const centeredOnFrance = [2.99049, 46.82801];
             const initialMap = new Map({
                 target: mapElement.current,
                 layers: [],
                 renderer: (['webgl', 'canvas']),
-                overlays: [vesselCardOverlay, vesselTrackCardOverlay],
+                overlays: [vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay],
                 view: new View({
                     projection: OPENLAYERS_PROJECTION,
                     center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
@@ -127,7 +140,7 @@ const MapWrapper = () => {
 
                 timeoutForPointerMove = setTimeout(() => {
                     timeoutForPointerMove = null;
-                    handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay)
+                    handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
                 }, 100);
             })
             initialMap.on('moveend', event => {
@@ -269,22 +282,23 @@ const MapWrapper = () => {
         }
     }
 
-    const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay) => {
+    const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) => {
         if(event) {
             const pixel = mapRef.current.getEventPixel(event.originalEvent);
             const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, {hitTolerance: hitPixelTolerance});
 
-            showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay);
+            showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay);
             showCoordinatesInDMS(event)
         }
     }
 
-    function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay) {
+    function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
         if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
             setVesselFeatureToShowOnCard(feature)
 
             document.getElementById(vesselCardID).style.display = 'block';
             document.getElementById(vesselTrackCardID).style.display = 'none';
+            document.getElementById(trackTypeCardID).style.display = 'none';
 
             vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates());
             mapRef.current.getTarget().style.cursor = 'pointer'
@@ -293,17 +307,30 @@ const MapWrapper = () => {
 
             document.getElementById(vesselTrackCardID).style.display = 'block';
             document.getElementById(vesselCardID).style.display = 'none';
+            document.getElementById(trackTypeCardID).style.display = 'none';
 
             mapRef.current.getTarget().style.cursor = 'pointer'
             vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates());
+        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
+            setTrackTypeToShowOnCard(feature.getProperties().trackType)
+
+            document.getElementById(trackTypeCardID).style.display = 'block';
+            document.getElementById(vesselTrackCardID).style.display = 'none';
+            document.getElementById(vesselCardID).style.display = 'none';
+
+            mapRef.current.getTarget().style.cursor = 'pointer'
+            trackTypeCardOverlay.setPosition(coordinates);
         } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
             setRegulatoryFeatureToShowOnCard(feature)
             mapRef.current.getTarget().style.cursor = 'pointer'
         } else {
             document.getElementById(vesselCardID).style.display = 'none';
             document.getElementById(vesselTrackCardID).style.display = 'none';
+            document.getElementById(trackTypeCardID).style.display = 'none';
+
             setVesselFeatureToShowOnCard(null)
             setRegulatoryFeatureToShowOnCard(null)
+            setTrackTypeToShowOnCard(null)
             if(mapRef.current.getTarget().style) {
                 mapRef.current.getTarget().style.cursor = ''
             }
@@ -336,6 +363,11 @@ const MapWrapper = () => {
                     vesselFeatureToShowOnCard ? <VesselTrackCard vessel={vesselFeatureToShowOnCard} /> : null
                 }
             </VesselTrackCardOverlay>
+            <TrackTypeCardOverlay id={trackTypeCardID} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>
+                {
+                    trackTypeToShowOnCard ? <TrackTypeCard isBig={trackTypeToShowOnCard === trackTypes.SEARCHING} trackType={trackTypeToShowOnCard} /> : null
+                }
+            </TrackTypeCardOverlay>
             <MapCoordinatesBox coordinates={cursorCoordinates}/>
             {
                 regulatoryFeatureToShowOnCard ? <LayerDetailsBox gears={gears} regulatory={regulatoryFeatureToShowOnCard}/> : null
@@ -366,6 +398,17 @@ const VesselTrackCardOverlay = styled.div`
   background-color: ${COLORS.grayBackground};
   border-radius: 2px;
   z-index: 300;
+`
+
+const TrackTypeCardOverlay = styled.div`
+  position: absolute;
+  top: -39px;
+  left: ${props => props.isBig ? '-170px' : '-100px'};
+  width: ${props => props.isBig ? '340px' : '200px'};;
+  text-align: left;
+  background-color: ${COLORS.grayBackground};
+  border-radius: 2px;
+  z-index: 100;
 `
 
 const MapContainer = styled.div`

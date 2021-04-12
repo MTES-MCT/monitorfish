@@ -183,7 +183,7 @@ export const getVesselNameStyle = (showedText, image) => new Style({
 export const setCircleStyle = (color, arrowFeature) => {
     const arrowStyle = new Style({
         image: new CircleStyle({
-            radius: 4,
+            radius: 3,
             fill: new Fill({
                 color: color
             })
@@ -204,7 +204,7 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
     });
 
     arrowFeature.setStyle((feature, resolution) => {
-        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/7));
+        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/6));
         return arrowStyle;
     });
 }

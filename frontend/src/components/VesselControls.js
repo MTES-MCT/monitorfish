@@ -13,6 +13,14 @@ const VesselControls = props => {
         if(props.controlResumeAndControls && props.controlResumeAndControls.controls) {
             let nextYearsToControls = {}
 
+            if(props.controlsFromDate) {
+                let fromYear = props.controlsFromDate.getUTCFullYear() + 1
+                while (fromYear < new Date().getUTCFullYear()) {
+                    nextYearsToControls[fromYear] = []
+                    fromYear += 1
+                }
+            }
+
             props.controlResumeAndControls.controls.forEach(control => {
                 const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
 

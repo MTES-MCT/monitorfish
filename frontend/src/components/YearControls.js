@@ -28,8 +28,18 @@ const YearControls = props => {
                 }
                 <Year>{props.year}</Year>
                 <YearResume>
-                    { props.yearControls.length } contrôle{ props.yearControls.length > 1 ? 's' : ''},
-                    {' '}{ numberOfInfractions ? <>{numberOfInfractions} infractions <Red/></> : <>pas d'infraction <Green /></>}
+                    {
+                      props.yearControls.length
+                        ? <>{ props.yearControls.length } contrôle{ props.yearControls.length > 1 ? 's' : ''}</>
+                        : 'Pas de contrôle'
+                    }
+                    {
+                      props.yearControls.length
+                        ? numberOfInfractions
+                          ? <>, {numberOfInfractions} infractions <Red/></>
+                          : <>, pas d'infraction <Green /></>
+                        : null
+                    }
                 </YearResume>
             </Text>
         </YearTitle>

@@ -35,7 +35,7 @@ const showVesselTrackAndSidebar = (vesselFeatureAndIdentity, fromSearch, updateS
         vesselFeatureAndIdentity.identity.ircs,
         getState().map.vesselTrackDepth)
         .then(vesselAndTrackDepthModified => {
-            if(vesselAndTrackDepthModified.trackDepthHasBeenModified) {
+            if(vesselAndTrackDepthModified.trackDepthHasBeenModified && !updateShowedVessel) {
                 dispatch(setError(new NoDEPFoundError("Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
                   "les positions des dernières 24 heures.")))
             } else {

@@ -46,11 +46,13 @@ const APIWorker = () => {
                 addToast(error.message.split(':')[0], {
                     appearance: 'info',
                     autoDismiss: true,
+                    autoDismissTimeout: 10000
                 })
             } else {
                 addToast(error.message.split(':')[0], {
                     appearance: 'warning',
                     autoDismiss: true,
+                    autoDismissTimeout: 10000
                 })
             }
 

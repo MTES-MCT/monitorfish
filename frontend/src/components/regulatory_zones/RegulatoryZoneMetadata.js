@@ -70,214 +70,250 @@ const RegulatoryZoneMetadata = props => {
                             <CloseIcon onClick={() => props.callCloseRegulatoryZoneMetadata()}/>
                         </Header>
                         <Content>
-                            <Zone>
-                                <Fields>
-                                    <Body>
-                                        <Field>
-                                            <Key>Façade</Key>
-                                            <Value>{props.regulatoryZoneMetadata.seafront ? props.regulatoryZoneMetadata.seafront : <NoValue>-</NoValue>}</Value>
-                                        </Field>
-                                        <Field>
-                                            <Key>Région</Key>
-                                            <Value>{props.regulatoryZoneMetadata.region ? props.regulatoryZoneMetadata.region : <NoValue>-</NoValue>}</Value>
-                                        </Field>
-                                        <Field>
-                                            <Key>Zone</Key>
-                                            <Value>{props.regulatoryZoneMetadata.zone ? props.regulatoryZoneMetadata.zone.replace(/[_]/g, ' ') : <NoValue>-</NoValue>}</Value>
-                                        </Field>
-                                        {
-                                            props.regulatoryZoneMetadata.deposit ?
-                                                <Field>
-                                                    <Key>Gisement</Key>
-                                                    <Value>{props.regulatoryZoneMetadata.deposit}</Value>
-                                                </Field> : null
-
-                                        }
-
-                                    </Body>
-                                </Fields>
-                            </Zone>
-                            <Zone>
-                                <Fields>
-                                    <Body>
-                                        {
-                                            props.regulatoryZoneMetadata.period ?
+                            {
+                                props.regulatoryZoneMetadata.seafront
+                                || props.regulatoryZoneMetadata.region
+                                || props.regulatoryZoneMetadata.zone
+                                || props.regulatoryZoneMetadata.deposit
+                                  ? <Zone>
+                                      <Fields>
+                                          <Body>
                                               <Field>
-                                                  <Key>Période(s)</Key>
-                                                  <Value>{props.regulatoryZoneMetadata.period}</Value>
-                                              </Field> : null
-                                        }
-                                        {
-                                            props.regulatoryZoneMetadata.openingDate ?
-                                                <Field>
-                                                    <Key>Dates d'ouvertures</Key>
-                                                    <Value>
-                                                        <>
-                                                            {getDateTime(props.regulatoryZoneMetadata.openingDate, true)}{' '}
-                                                            <Gray>(UTC)</Gray>
-                                                        </>
-                                                    </Value>
-                                                </Field> : null
-                                        }
-                                        {
-                                            props.regulatoryZoneMetadata.closingDate ?
-                                                <Field>
-                                                    <Key>Dates de fermetures</Key>
-                                                    <Value>
-                                                        <>
-                                                            {getDateTime(props.regulatoryZoneMetadata.closingDate, true)}{' '}
-                                                            <Gray>(UTC)</Gray>
-                                                        </>
-                                                    </Value>
-                                                </Field> : null
-                                        }
-                                        {
-                                            props.regulatoryZoneMetadata.state ?
-                                                <Field>
-                                                    <Key>État</Key>
-                                                    <Value>{props.regulatoryZoneMetadata.state}</Value>
-                                                </Field> : null
-                                        }
-                                    </Body>
-                                </Fields>
-                            </Zone>
-                            <ZoneWithLineBreak>
-                                {
-                                    gears && gears.length ?
-                                      <>
-                                          <KeyWithLineBreak>Engin(s)</KeyWithLineBreak>
-                                          {
-                                              gears.map(gear => {
-                                                  return gear.name ?
-                                                    <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                                                    : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+                                                  <Key>Façade</Key>
+                                                  <Value>{props.regulatoryZoneMetadata.seafront ? props.regulatoryZoneMetadata.seafront : <NoValue>-</NoValue>}</Value>
+                                              </Field>
+                                              <Field>
+                                                  <Key>Région</Key>
+                                                  <Value>{props.regulatoryZoneMetadata.region ? props.regulatoryZoneMetadata.region : <NoValue>-</NoValue>}</Value>
+                                              </Field>
+                                              <Field>
+                                                  <Key>Zone</Key>
+                                                  <Value>{props.regulatoryZoneMetadata.zone ? props.regulatoryZoneMetadata.zone.replace(/[_]/g, ' ') : <NoValue>-</NoValue>}</Value>
+                                              </Field>
+                                              {
+                                                  props.regulatoryZoneMetadata.deposit ?
+                                                    <Field>
+                                                        <Key>Gisement</Key>
+                                                        <Value>{props.regulatoryZoneMetadata.deposit}</Value>
+                                                    </Field> : null
 
-                                              })
-                                          }
-                                      </> : null
-                                }
-                                {
-                                    prohibitedGears && prohibitedGears.length ?
-                                      <>
-                                          <KeyWithLineBreak>Engin(s) interdit(s)</KeyWithLineBreak>
-                                          {
-                                              prohibitedGears.map(gear => {
-                                                  return gear.name ?
-                                                    <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                                                    : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+                                              }
+                                          </Body>
+                                      </Fields>
+                                  </Zone>
+                                  : null
+                            }
+                            {
+                                props.regulatoryZoneMetadata.period
+                                || props.regulatoryZoneMetadata.openingDate
+                                || props.regulatoryZoneMetadata.closingDate
+                                || props.regulatoryZoneMetadata.state
+                                  ? <Zone>
+                                      <Fields>
+                                          <Body>
+                                              {
+                                                  props.regulatoryZoneMetadata.period ?
+                                                    <Field>
+                                                        <Key>Période(s)</Key>
+                                                        <Value>{props.regulatoryZoneMetadata.period}</Value>
+                                                    </Field> : null
+                                              }
+                                              {
+                                                  props.regulatoryZoneMetadata.openingDate ?
+                                                    <Field>
+                                                        <Key>Dates d'ouvertures</Key>
+                                                        <Value>
+                                                            <>
+                                                                {getDateTime(props.regulatoryZoneMetadata.openingDate, true)}{' '}
+                                                                <Gray>(UTC)</Gray>
+                                                            </>
+                                                        </Value>
+                                                    </Field> : null
+                                              }
+                                              {
+                                                  props.regulatoryZoneMetadata.closingDate ?
+                                                    <Field>
+                                                        <Key>Dates de fermetures</Key>
+                                                        <Value>
+                                                            <>
+                                                                {getDateTime(props.regulatoryZoneMetadata.closingDate, true)}{' '}
+                                                                <Gray>(UTC)</Gray>
+                                                            </>
+                                                        </Value>
+                                                    </Field> : null
+                                              }
+                                              {
+                                                  props.regulatoryZoneMetadata.state ?
+                                                    <Field>
+                                                        <Key>État</Key>
+                                                        <Value>{props.regulatoryZoneMetadata.state}</Value>
+                                                    </Field> : null
+                                              }
+                                          </Body>
+                                      </Fields>
+                                  </Zone>
+                                  : null
+                            }
+                            {
+                                (gears && gears.length)
+                                  || (prohibitedGears && prohibitedGears.length)
+                                  || props.regulatoryZoneMetadata.technicalMeasures
+                                    ? <ZoneWithLineBreak>
+                                      {
+                                          gears && gears.length ?
+                                            <>
+                                                <KeyWithLineBreak>Engin(s)</KeyWithLineBreak>
+                                                {
+                                                    gears.map(gear => {
+                                                        return gear.name ?
+                                                          <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                                                          : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
 
-                                              })
-                                          }
-                                      </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.technicalMeasures ?
-                                      <>
-                                        <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
-                                        <ValueWithLineBreak>{props.regulatoryZoneMetadata.technicalMeasures} </ValueWithLineBreak>
-                                      </>
-                                      : null
-                                }
-                            </ZoneWithLineBreak>
-                            <ZoneWithLineBreak>
-                                {
-                                    props.regulatoryZoneMetadata.species ?
-                                      <>
-                                          <KeyWithLineBreak>Espèce(s)</KeyWithLineBreak>
-                                          {
-                                              props.regulatoryZoneMetadata.species.replace(/ /g, '').split(',').map(species => {
-                                              return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
-                                              })
-                                          }
-                                      </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.prohibitedSpecies ?
-                                      <>
-                                          <KeyWithLineBreak>Espèce(s) interdite(s)</KeyWithLineBreak>
-                                          {
-                                              props.regulatoryZoneMetadata.prohibitedSpecies.replace(/ /g, '').split(',').map(species => {
-                                                  return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
-                                              })
-                                          }
-                                      </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.size ?
-                                      <>
-                                        <KeyWithLineBreak>Tailles</KeyWithLineBreak>
-                                        <ValueWithLineBreak>{props.regulatoryZoneMetadata.size}</ValueWithLineBreak>
-                                      </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.size ?
-                                      <>
-                                          <KeyWithLineBreak>Quantités</KeyWithLineBreak>
-                                          <ValueWithLineBreak>{props.regulatoryZoneMetadata.quantity}</ValueWithLineBreak>
-                                      </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.bycatch ?
-                                        <>
-                                            <KeyWithLineBreak>Captures accessoires</KeyWithLineBreak>
-                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.bycatch} </ValueWithLineBreak>
-                                        </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.rejections ?
-                                        <>
-                                            <KeyWithLineBreak>Rejets</KeyWithLineBreak>
-                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.rejections} </ValueWithLineBreak>
-                                        </> : null
-                                }
-                            </ZoneWithLineBreak>
-                            <ZoneWithLineBreak>
-                                {
-                                    props.regulatoryZoneMetadata.mandatoryDocuments ?
-                                      <>
-                                          <KeyWithLineBreak>Documents obligatoires</KeyWithLineBreak>
-                                          <ValueWithLineBreak>{props.regulatoryZoneMetadata.mandatoryDocuments}</ValueWithLineBreak>
-                                      </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.obligations ?
-                                        <>
-                                            <KeyWithLineBreak>Autres obligations</KeyWithLineBreak>
-                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.obligations}</ValueWithLineBreak>
-                                        </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.prohibitions ?
-                                      <>
-                                          <KeyWithLineBreak>Interdictions</KeyWithLineBreak>
-                                          <ValueWithLineBreak>{props.regulatoryZoneMetadata.prohibitions}</ValueWithLineBreak>
-                                      </> : null
-                                }
-                                {
-                                    props.regulatoryZoneMetadata.permissions ?
-                                        <>
-                                            <KeyWithLineBreak>Autorisations</KeyWithLineBreak>
-                                            <ValueWithLineBreak>{props.regulatoryZoneMetadata.permissions} </ValueWithLineBreak>
-                                        </> : null
-                                }
-                                {
-                                    regulatoryReferences && regulatoryReferences.length ?
-                                      <>
-                                          <KeyWithLineBreak>Références réglementaires</KeyWithLineBreak>
-                                          <ValueWithLineBreak>
-                                              <ul>
-                                                  {
-                                                      regulatoryReferences.map(regulatoryReference => {
-                                                          return <Reference key={regulatoryReference.url}>
-                                                              <a target="_blank" href={regulatoryReference.url}>{regulatoryReference.reference}</a>
-                                                          </Reference>
-                                                      })
-                                                  }
-                                              </ul>
-                                          </ValueWithLineBreak>
-                                      </> : null
-                                }
-                            </ZoneWithLineBreak>
+                                                    })
+                                                }
+                                            </> : null
+                                      }
+                                      {
+                                          prohibitedGears && prohibitedGears.length ?
+                                            <>
+                                                <KeyWithLineBreak>Engin(s) interdit(s)</KeyWithLineBreak>
+                                                {
+                                                    prohibitedGears.map(gear => {
+                                                        return gear.name ?
+                                                          <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                                                          : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+
+                                                    })
+                                                }
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.technicalMeasures ?
+                                            <>
+                                                <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.technicalMeasures} </ValueWithLineBreak>
+                                            </>
+                                            : null
+                                      }
+                                  </ZoneWithLineBreak>
+                                  : null
+                            }
+                            {
+                                props.regulatoryZoneMetadata.species
+                                || props.regulatoryZoneMetadata.prohibitedSpecies
+                                || props.regulatoryZoneMetadata.size
+                                || props.regulatoryZoneMetadata.quantity
+                                || props.regulatoryZoneMetadata.bycatch
+                                || props.regulatoryZoneMetadata.rejections
+                                  ? <ZoneWithLineBreak>
+                                      {
+                                          props.regulatoryZoneMetadata.species ?
+                                            <>
+                                                <KeyWithLineBreak>Espèce(s)</KeyWithLineBreak>
+                                                {
+                                                    props.regulatoryZoneMetadata.species.replace(/ /g, '').split(',').map(species => {
+                                                        return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
+                                                    })
+                                                }
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.prohibitedSpecies ?
+                                            <>
+                                                <KeyWithLineBreak>Espèce(s) interdite(s)</KeyWithLineBreak>
+                                                {
+                                                    props.regulatoryZoneMetadata.prohibitedSpecies.replace(/ /g, '').split(',').map(species => {
+                                                        return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
+                                                    })
+                                                }
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.size ?
+                                            <>
+                                                <KeyWithLineBreak>Tailles</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.size}</ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.quantity ?
+                                            <>
+                                                <KeyWithLineBreak>Quantités</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.quantity}</ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.bycatch ?
+                                            <>
+                                                <KeyWithLineBreak>Captures accessoires</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.bycatch} </ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.rejections ?
+                                            <>
+                                                <KeyWithLineBreak>Rejets</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.rejections} </ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                  </ZoneWithLineBreak>
+                                  : null
+                            }
+                            {
+                                props.regulatoryZoneMetadata.mandatoryDocuments
+                                || props.regulatoryZoneMetadata.obligations
+                                || props.regulatoryZoneMetadata.prohibitions
+                                || props.regulatoryZoneMetadata.permissions
+                                || (regulatoryReferences && regulatoryReferences.length)
+                                  ? <ZoneWithLineBreak>
+                                      {
+                                          props.regulatoryZoneMetadata.mandatoryDocuments ?
+                                            <>
+                                                <KeyWithLineBreak>Documents obligatoires</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.mandatoryDocuments}</ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.obligations ?
+                                            <>
+                                                <KeyWithLineBreak>Autres obligations</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.obligations}</ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.prohibitions ?
+                                            <>
+                                                <KeyWithLineBreak>Interdictions</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.prohibitions}</ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                      {
+                                          props.regulatoryZoneMetadata.permissions ?
+                                            <>
+                                                <KeyWithLineBreak>Autorisations</KeyWithLineBreak>
+                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.permissions} </ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                      {
+                                          regulatoryReferences && regulatoryReferences.length ?
+                                            <>
+                                                <KeyWithLineBreak>Références réglementaires</KeyWithLineBreak>
+                                                <ValueWithLineBreak>
+                                                    <ul>
+                                                        {
+                                                            regulatoryReferences.map(regulatoryReference => {
+                                                                return <Reference key={regulatoryReference.url}>
+                                                                    <a target="_blank" href={regulatoryReference.url}>{regulatoryReference.reference}</a>
+                                                                </Reference>
+                                                            })
+                                                        }
+                                                    </ul>
+                                                </ValueWithLineBreak>
+                                            </> : null
+                                      }
+                                  </ZoneWithLineBreak>
+                                  : null
+                            }
                         </Content>
                     </> : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
             }
@@ -323,7 +359,7 @@ const Content = styled.div`
   color: ${COLORS.grayDarker};
   background: ${COLORS.background};
   margin-top: 6px;
-  min-height: 420px;
+  min-height: 470px;
   overflow-y: auto;
   max-height: 85vh;
 `

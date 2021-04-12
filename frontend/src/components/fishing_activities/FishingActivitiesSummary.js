@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../constants/constants";
-import {ERSMessageType as ERSMessageTypeEnum} from "../domain/entities/ERS";
-import {ReactComponent as ArrowSVG} from './icons/Picto_fleche-pleine-droite.svg'
-import DEPMessageResume from "./ers_messages_resumes/DEPMessageResume";
-import DISMessageResume from "./ers_messages_resumes/DISMessageResume";
-import FARMessageResume from "./ers_messages_resumes/FARMessageResume";
-import PNOMessageResume from "./ers_messages_resumes/PNOMessageResume";
-import LANMessageResume from "./ers_messages_resumes/LANMessageResume";
-import {AlertTypes} from "../domain/entities/alerts";
+import {COLORS} from "../../constants/constants";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+import {ReactComponent as ArrowSVG} from '../icons/Picto_fleche-pleine-droite.svg'
+import DEPMessageResume from "../ers_messages_resumes/DEPMessageResume";
+import DISMessageResume from "../ers_messages_resumes/DISMessageResume";
+import FARMessageResume from "../ers_messages_resumes/FARMessageResume";
+import PNOMessageResume from "../ers_messages_resumes/PNOMessageResume";
+import LANMessageResume from "../ers_messages_resumes/LANMessageResume";
+import {AlertTypes} from "../../domain/entities/alerts";
 
 const FishingActivitiesSummary = props => {
     const [depMessage, setDEPMessage] = useState(null)

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../constants/constants'
-import { ReactComponent as GyroSVG } from './icons/Gyrophare_controles_gris.svg'
-import { ReactComponent as WarningSVG } from './icons/Attention_controles.svg'
+import { COLORS } from '../../constants/constants'
+import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg'
+import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
 import YearControls from './YearControls'
 
 const VesselControls = props => {
@@ -71,7 +71,7 @@ const VesselControls = props => {
                                   <Warning /> Nombre d'infractions
                               </ResumeText>
                               <ControlResumeNumberElement>pêche <Number>{!isNaN(props.controlResumeAndControls.numberOfFishingInfractions) ? props.controlResumeAndControls.numberOfFishingInfractions : <NoValue>-</NoValue>}</Number></ControlResumeNumberElement>
-                              <ControlResumeNumberElement>sécurité <Number>{ !isNaN(props.controlResumeAndControls.numberOfSecurityInfractions) ? props.controlResumeAndControls.numberOfFishingInfractions : <NoValue>-</NoValue> }</Number></ControlResumeNumberElement>
+                              <ControlResumeNumberElement>sécurité <Number>{ !isNaN(props.controlResumeAndControls.numberOfSecurityInfractions) ? props.controlResumeAndControls.numberOfSecurityInfractions : <NoValue>-</NoValue> }</Number></ControlResumeNumberElement>
                           </ControlResumeLine>
                           <ResumeBox>
                               <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfDiversions }>{ !isNaN(props.controlResumeAndControls.numberOfDiversions) ? props.controlResumeAndControls.numberOfDiversions : <NoValue>-</NoValue> }</ResumeBoxNumber>

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../constants/constants";
-import ERSMessage from "./ers_messages/ERSMessage";
-import {ReactComponent as ArrowSVG} from './icons/Picto_fleche-pleine-droite.svg'
-import {ReactComponent as SortSVG} from './icons/ascendant-descendant.svg'
+import {COLORS} from "../../constants/constants";
+import ERSMessage from "./ERSMessage";
+import {ReactComponent as ArrowSVG} from '../icons/Picto_fleche-pleine-droite.svg'
+import {ReactComponent as SortSVG} from '../icons/ascendant-descendant.svg'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 

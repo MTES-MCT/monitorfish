@@ -27,10 +27,14 @@ const FARMessageResume = props => {
     }, [isOpen])
 
     const getFARMessageResumeTitleText = () =>
-        `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalFARWeight} kg pêchés au total`
+      props.totalFARWeight > 0
+        ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalFARWeight} kg pêchés au total`
+        : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucune capture`
 
     const getFARMessageResumeTitle = () => {
-        return <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalFARWeight} kg pêchés au total</>
+        return props.totalFARWeight > 0
+          ? <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalFARWeight} kg pêchés au total</>
+          : <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - aucune capture</>
     }
 
     const increaseChartHeight = height => {

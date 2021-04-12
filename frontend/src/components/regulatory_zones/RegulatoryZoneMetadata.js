@@ -142,13 +142,15 @@ const RegulatoryZoneMetadata = props => {
                                                         </Value>
                                                     </Field> : null
                                               }
+                                              {/*
+                                              // TODO Re-add the regulatory state when the field is fixed for all data
                                               {
                                                   props.regulatoryZoneMetadata.state ?
                                                     <Field>
                                                         <Key>État</Key>
                                                         <Value>{props.regulatoryZoneMetadata.state}</Value>
                                                     </Field> : null
-                                              }
+                                              }*/}
                                           </Body>
                                       </Fields>
                                   </Zone>

@@ -126,7 +126,7 @@ export const buildCatchArray = catches => {
             accumulator.push({
                 species: ersCatch.species,
                 speciesName: ersCatch.speciesName,
-                weight: ersCatch.weight,
+                weight: ersCatch.weight ? ersCatch.weight : 0,
                 properties: [
                     getPropertiesObject(ersCatch)
                 ]
@@ -145,7 +145,7 @@ export const buildCatchArray = catches => {
             if(foundPropertyIndex === notFound) {
                 accumulator[sameSpeciesIndex].properties.push(getPropertiesObject(ersCatch))
             } else {
-                accumulator[sameSpeciesIndex].weight += parseFloat(ersCatch.weight)
+                accumulator[sameSpeciesIndex].weight += ersCatch.weight ? parseFloat(ersCatch.weight) : 0
             }
         }
 

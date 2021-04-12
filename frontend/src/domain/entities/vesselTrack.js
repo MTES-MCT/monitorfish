@@ -1,19 +1,30 @@
-export function getTrackColor(speed) {
-    if (speed >= 0 && speed <= 3) {
-        return '#05055E'
-    } else if (speed > 3 && speed <= 6) {
-        return '#C08416'
-    } else {
-        return '#3A9885'
-    }
+export const trackTypes = {
+    'TRANSIT': {
+        code: 'TRANSIT',
+        color: '#3A9885',
+        arrow: 'arrow_green.png',
+        description: 'En transit (vitesse > 6 Nds)'
+    },
+    'SEARCHING': {
+        code: 'SEARCHING',
+        color: '#C08416',
+        arrow: 'arrow_yellow.png',
+        description: 'En recherche de pêche (vitesse entre 3 et 6 Nds)'
+    },
+    'FISHING': {
+        code: 'FISHING',
+        color: '#05055E',
+        arrow: 'arrow_blue.png',
+        description: 'En pêche (vitesse < 3 Nds)'
+    },
 }
 
-export function getTrackArrow(speed) {
+export function getTrackTypeFromSpeed(speed) {
     if (speed >= 0 && speed <= 3) {
-        return 'arrow_blue.png'
+        return trackTypes.FISHING
     } else if (speed > 3 && speed <= 6) {
-        return 'arrow_yellow.png'
+        return trackTypes.SEARCHING
     } else {
-        return 'arrow_green.png'
+        return trackTypes.TRANSIT
     }
 }

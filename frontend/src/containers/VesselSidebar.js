@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
 import VesselSummary from "../components/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
-import FishingActivities from "../components/FishingActivities";
+import FishingActivities from "../components/fishing_activities/FishingActivities";
 import getFishingActivities from "../domain/use_cases/getFishingActivities";
 import {removeError} from "../domain/reducers/Global";
 import {
@@ -22,7 +22,7 @@ import {
 } from '../domain/reducers/Vessel'
 import NoDEPFoundError from "../errors/NoDEPFoundError";
 import getControls from '../domain/use_cases/getControls'
-import VesselControls from '../components/VesselControls'
+import VesselControls from '../components/controls/VesselControls'
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../constants/constants'
-import { ReactComponent as ChevronIconSVG } from './icons/Chevron_simple_gris.svg'
+import { COLORS } from '../../constants/constants'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import Control from './Control'
 
 const YearControls = props => {

@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import styled from "styled-components";
 
 import FishingActivitiesSummary from "./FishingActivitiesSummary";
-import ERSMessages from "./ERSMessages";
-import {COLORS} from "../constants/constants";
+import ERSMessages from "../ers_messages/ERSMessages";
+import {COLORS} from "../../constants/constants";
 
 const FishingActivities = props => {
     const [fishingViewIndex, setFishingViewIndex] = useState(1)

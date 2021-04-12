@@ -1,5 +1,5 @@
 export const controlType = {
-  SEA: 'Contrôle en mer',
+  SEA: 'Contrôle à la mer',
   LAND: 'Contrôle à la débarque',
   AERIAL: 'Contrôle aérien',
 }

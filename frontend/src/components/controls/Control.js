@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../constants/constants'
-import { ReactComponent as GyroGreenSVG } from './icons/Gyrophare_controles_vert.svg'
-import { ReactComponent as GyroRedSVG } from './icons/Gyrophare_controles_rouge.svg'
-import { getCoordinates, getDate } from '../utils'
-import { WSG84_PROJECTION } from '../domain/entities/map'
-import { controlType } from '../domain/entities/controls'
+import { COLORS } from '../../constants/constants'
+import { ReactComponent as GyroGreenSVG } from '../icons/Gyrophare_controles_vert.svg'
+import { ReactComponent as GyroRedSVG } from '../icons/Gyrophare_controles_rouge.svg'
+import { getCoordinates, getDate } from '../../utils'
+import { WSG84_PROJECTION } from '../../domain/entities/map'
+import { controlType } from '../../domain/entities/controls'
 
 const Control = props => {
     const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
@@ -151,7 +151,7 @@ const Control = props => {
                                     </SubField>
                                     <SubField>
                                         <SubKey>Maillage mesuré</SubKey>
-                                        <SubValue>{gear.controledMesh ? <>{gear.controledMesh}</> : <NoValue>-</NoValue>}</SubValue>
+                                        <SubValue>{gear.controlledMesh ? <>{gear.controlledMesh}</> : <NoValue>-</NoValue>}</SubValue>
                                     </SubField>
                                 </SubFields>
                             </Gear>

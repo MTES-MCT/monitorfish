@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
 import styled from 'styled-components';
 import * as timeago from 'timeago.js';
-import {timeagoFrenchLocale} from "../utils";
-import {ReactComponent as TargetSVG} from './icons/target.svg';
-import {ReactComponent as FlagSVG} from './icons/flag.svg';
+import {timeagoFrenchLocale} from "../../utils";
+import {ReactComponent as TargetSVG} from '../icons/target.svg';
+import {ReactComponent as FlagSVG} from '../icons/flag.svg';
 import Table from "rsuite/lib/Table";
 import Checkbox from "rsuite/lib/Checkbox";
 import countries from "i18n-iso-countries";
@@ -21,7 +21,8 @@ export const TargetCell = ({ rowData, dataKey, onChange, ...props }) => {
                 className="rs-input"
                 value={rowData[dataKey]}
                 onChange={event => {
-                    onChange && onChange(rowData.id, dataKey, parseInt(event.target.value));
+                    let value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : ''
+                    onChange && onChange(rowData.id, dataKey, value);
                 }}
             />
         </Cell>
@@ -71,12 +72,19 @@ const VesselListTable = props => {
             return props.filteredVessels.slice().sort((a, b) => {
                 let x = a[sortColumn]
                 let y = b[sortColumn]
-                if (typeof x === 'string') {
+
+                if (typeof x === 'string' && typeof y === 'string') {
                     x = x.charCodeAt()
-                }
-                if (typeof y === 'string') {
                     y = y.charCodeAt()
                 }
+
+                if (x === '') {
+                    return 1
+                }
+                if (y === '') {
+                    return -1
+                }
+
                 if (sortType === 'asc') {
                     return x - y
                 } else {
@@ -96,7 +104,7 @@ const VesselListTable = props => {
             <Table
                 virtualized
                 height={510}
-                width={1200}
+                width={1210}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -168,7 +176,7 @@ const VesselListTable = props => {
                     <Cell dataKey="latitude" />
                 </Column>
 
-                <Column width={100}>
+                <Column width={110}>
                     <HeaderCell>Longitude</HeaderCell>
                     <Cell dataKey="longitude" />
                 </Column>

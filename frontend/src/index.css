@@ -180,11 +180,11 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 }
 
 .rs-checkbox-checker {
-  padding-top: 5px;
   padding-bottom: 0;
   padding-left: 36px;
-  min-height: 31px;
-  line-height: unset;
+  padding-top: 10px;
+  min-height: 0;
+  line-height: 1;
 }
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before {

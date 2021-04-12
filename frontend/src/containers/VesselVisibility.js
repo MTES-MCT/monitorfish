@@ -153,7 +153,7 @@ const Wrapper = styled.div`
 
 const ShowVesselLabel = styled.div`
   background: ${COLORS.grayBackground};
-  padding: 0 0 5px 13px;
+  padding: 0 0 9px 13px;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 `

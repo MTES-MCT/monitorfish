@@ -12,6 +12,12 @@ html {
   left: .5em;
 }
 
+.checkbox-hidden > div >label > .rs-checkbox-wrapper {
+  opacity: 0 !important;
+  margin-left: -40px;
+  position: inherit;
+}
+
 .collapsed {
   display: none;
 }

@@ -86,8 +86,10 @@ const LANMessageResume = props => {
                                 <Field>
                                     <Key>Poids débarqué</Key>
                                     <Value>
-                                        {props.totalLANWeight ? props.totalLANWeight : <NoValue>-</NoValue>} kg sur les {''}
-                                        {props.totalPNOWeight ? props.totalPNOWeight : <NoValue>-</NoValue>} kg annoncés dans le PNO
+                                        {props.totalLANWeight ? props.totalLANWeight : <NoValue>-</NoValue>} kg
+                                        {
+                                            props.totalPNOWeight ? <> sur les {props.totalPNOWeight} kg annoncés dans le PNO</> : null
+                                        }
                                     </Value>
                                 </Field>
                             </TableBody>
@@ -114,10 +116,16 @@ const LANMessageResume = props => {
                                             <SubKey>Poids FAR</SubKey><SubValueWeight>{props.speciesToWeightOfFAR && props.speciesToWeightOfFAR[speciesCatch.species] ?
                                             <span title={`${props.speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfFAR[speciesCatch.species].weight} kg</span> : <NoValue>-</NoValue>}</SubValueWeight>
                                         </Weight>
-                                        <Weight>
-                                            <SubKey>Poids PNO</SubKey><SubValueWeight>{props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species] ?
-                                            <span title={`${props.speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfPNO[speciesCatch.species].weight} kg</span> : <NoValue>-</NoValue>}</SubValueWeight>
-                                        </Weight>
+                                        {
+                                            props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]
+                                              ? <Weight>
+                                                  <SubKey>Poids PNO</SubKey>
+                                                  <SubValueWeight>
+                                                      <span title={`${props.speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfPNO[speciesCatch.species].weight} kg</span>
+                                                  </SubValueWeight>
+                                              </Weight>
+                                              : null
+                                        }
                                         <Weight>
                                             <SubKey>Poids LAN</SubKey><SubValueWeight>{props.speciesToWeightOfLAN && props.speciesToWeightOfLAN[speciesCatch.species] ?
                                             <span title={`${props.speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfLAN[speciesCatch.species].weight} kg</span> : <NoValue>-</NoValue>}</SubValueWeight>

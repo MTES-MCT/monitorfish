@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "rsuite/lib/Modal";
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 import Checkbox from "rsuite/lib/Checkbox";
 import CheckboxGroup from "rsuite/lib/CheckboxGroup";
 import {Radio} from "rsuite";
 import { ExportToCsv } from 'export-to-csv';
 import countries from "i18n-iso-countries";
-import {getDate, getDateTime} from "../utils";
+import {getDate, getDateTime} from "../../utils";
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
@@ -179,6 +179,7 @@ const DownloadVesselListModal = props => {
                 </CheckboxGroup>
                 <SelectAll>
                     <Checkbox
+                        className={'checkbox-hidden'}
                         indeterminate={indeterminate}
                         checked={checkAll}
                         onChange={handleCheckAll}
@@ -188,8 +189,6 @@ const DownloadVesselListModal = props => {
                         </SelectAllText>
                     </Checkbox>
                 </SelectAll>
-                <Description>Format de fichier</Description>
-                <Radio checked value="csv">csv</Radio>
             </Modal.Body>
             <Modal.Footer>
                 <DownloadButton
@@ -208,6 +207,8 @@ const Columns = styled.div`
 
 const SelectAllText = styled.span`
   color: ${COLORS.textGray};
+  text-decoration: underline;
+  text-decoration-color: ${COLORS.textGray};
 `
 
 const SelectAll = styled.div`
@@ -228,7 +229,7 @@ const Description = styled.div`
 
 const DownloadButton = styled.button`
   background: ${COLORS.grayDarkerThree};
-  padding: 5px;
+  padding: 5px 12px 5px 12px;
   margin: 20px 20px 20px 10px;
   font-size: 13px;
   color: ${COLORS.grayBackground};

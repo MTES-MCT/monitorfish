@@ -18,8 +18,8 @@ import {
     resetTemporaryVesselsToHighLightOnMap,
     setTemporaryVesselsToHighLightOnMap
 } from "../domain/reducers/Vessel";
-import VesselListTable from "../components/VesselListTable";
-import DownloadVesselListModal from "../components/DownloadVesselListModal";
+import VesselListTable from "../components/vessel_list/VesselListTable";
+import DownloadVesselListModal from "../components/vessel_list/DownloadVesselListModal";
 import countries from "i18n-iso-countries";
 import {getCoordinates} from "../utils";
 import getAdministrativeZoneGeometry from "../domain/use_cases/getAdministrativeZoneGeometry";
@@ -55,8 +55,8 @@ const VesselList = () => {
     const [zonesFilter, setZonesFilter] = useState([])
 
     // Filters
-    const [countriesFiltered, setCountriesFiltered] = useState([])
     const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
+    const [countriesFiltered, setCountriesFiltered] = useState([])
     const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
     const [zoneGroups, setZoneGroups] = useState([])
     const zonesSelected = useSelector(state => state.map.zonesSelected)
@@ -126,7 +126,7 @@ const VesselList = () => {
                             let coordinates = [...vessel.getGeometry().getCoordinates()]
 
                             return {
-                                targetNumber: undefined,
+                                targetNumber: '',
                                 id: vessel.id_,
                                 checked: true,
                                 vesselName: vessel.getProperties().vesselName,
@@ -197,6 +197,7 @@ const VesselList = () => {
     }, [allVesselsChecked])
 
     const handleChange = (id, key, value) => {
+        console.log(id, key, value)
         const nextVessels = Object.assign([], vessels)
 
         nextVessels.find(item => item.id === id)[key] = value
@@ -232,7 +233,7 @@ const VesselList = () => {
     }
 
     const highLightOnMap = () => {
-        dispatch(setTemporaryVesselsToHighLightOnMap(filteredVessels))
+        dispatch(setTemporaryVesselsToHighLightOnMap(filteredVessels.filter(vessel => vessel.checked)))
         setVesselListModalIsOpen(false)
     }
 
@@ -480,9 +481,9 @@ const ZoneSelected = styled.span`
   background: ${COLORS.grayBackground};
   border-radius: 2px;
   color: ${COLORS.textGray};
-  margin-left: 10px;
+  margin-left: 0;
   font-size: 13px;
-  padding: 3px 3px 3px 5px;
+  padding: 6px 3px 5px 7px;
   vertical-align: super;
 `
 
@@ -506,7 +507,7 @@ const BackToVesselListButton = styled.button`
   top: 20px;
   left: auto;
   background: ${COLORS.grayDarkerThree};
-  padding: 5px;
+  padding: 5px 12px 5px 12px;
   font-size: 13px;
   color: ${COLORS.grayBackground};
   border-radius: 2px;
@@ -530,7 +531,7 @@ const BackToVesselListButton = styled.button`
 
 const ShowOnMapButton = styled.button`
   border: 1px solid ${COLORS.grayDarkerThree};
-  padding: 5px;
+  padding: 5px 12px 5px 12px;
   margin: 20px 0 20px 0;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
@@ -543,7 +544,7 @@ const ShowOnMapButton = styled.button`
 
 const DownloadButton = styled.button`
   background: ${COLORS.grayDarkerThree};
-  padding: 5px;
+  padding: 5px 12px 5px 12px;
   margin: 20px 20px 20px 10px;
   font-size: 13px;
   color: ${COLORS.grayBackground};
@@ -565,7 +566,7 @@ const TimeAgoSelect = styled.div`
   width: 120px;
   display: inline-block;
   margin-right: 20px;
-  margin-left: 5px;
+  margin-left: 10px;
 `
 
 const Label = styled.span`
@@ -668,7 +669,7 @@ const BoxFilter = styled(BoxFilterSVG)`
   width: 30px;
   height: 30px;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 5px;
   vertical-align: text-bottom;
 `
 
@@ -686,49 +687,9 @@ const PolygonFilter = styled(PolygonFilterSVG)`
   width: 30px;
   height: 30px;
   cursor: pointer;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
   vertical-align: text-bottom;
 `
 
 export default VesselList
-
-/*
-<TagPicker
-                                    style={{ width: 200, margin: '2px 10px 0 10px', verticalAlign: 'top'}}
-                                    data={zonesFilter}
-                                    value={administrativeZonesFiltered}
-                                    onClean={() => setAdministrativeZonesFiltered([])}
-                                    onChange={change => setAdministrativeZonesFiltered(change)}
-                                    groupBy="group"
-                                    preventOverflow
-                                    placeholder="Filtrer avec une zone existante"
-                                    renderMenuItem={(name, item) => {
-                                        return (
-                                            <Label>
-                                                {item.name}
-                                            </Label>
-                                        );
-                                    }}
-                                    onSelect={(change, item) => callGetAdministrativeZoneGeometry(change, item)}
-                                    renderValue={(values, items, tags) => {
-                                        return items.map((tag, index) => (
-                                            <Tag key={index}>
-                                                {tag.name}
-                                            </Tag>
-                                        ));
-                                    }}
-                                    sort={isGroup => {
-                                        if (isGroup) {
-                                            return (a, b) => {
-                                                return compare(a.groupTitle, b.groupTitle);
-                                            };
-                                        }
-
-                                        return (a, b) => {
-                                            return compare(a.value, b.value);
-                                        };
-                                    }}
-                                    virtualized
-                                />
- */

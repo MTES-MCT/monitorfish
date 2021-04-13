@@ -73,18 +73,20 @@ const VesselControls = props => {
                               <ControlResumeNumberElement>pêche <Number>{!isNaN(props.controlResumeAndControls.numberOfFishingInfractions) ? props.controlResumeAndControls.numberOfFishingInfractions : <NoValue>-</NoValue>}</Number></ControlResumeNumberElement>
                               <ControlResumeNumberElement>sécurité <Number>{ !isNaN(props.controlResumeAndControls.numberOfSecurityInfractions) ? props.controlResumeAndControls.numberOfSecurityInfractions : <NoValue>-</NoValue> }</Number></ControlResumeNumberElement>
                           </ControlResumeLine>
-                          <ResumeBox>
-                              <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfDiversions }>{ !isNaN(props.controlResumeAndControls.numberOfDiversions) ? props.controlResumeAndControls.numberOfDiversions : <NoValue>-</NoValue> }</ResumeBoxNumber>
-                              <ResumeBoxText>Déroutement</ResumeBoxText>
-                          </ResumeBox>
-                          <ResumeBox>
-                              <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfEscortsToQuay }>{ !isNaN(props.controlResumeAndControls.numberOfEscortsToQuay) ? props.controlResumeAndControls.numberOfEscortsToQuay : <NoValue>-</NoValue> }</ResumeBoxNumber>
-                              <ResumeBoxText>Reconduite à quai</ResumeBoxText>
-                          </ResumeBox>
-                          <ResumeBox>
-                              <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfSeizures }>{ !isNaN(props.controlResumeAndControls.numberOfSeizures) ? props.controlResumeAndControls.numberOfSeizures : <NoValue>-</NoValue>}</ResumeBoxNumber>
-                              <ResumeBoxText>Appréhension</ResumeBoxText>
-                          </ResumeBox>
+                          <ResumesBoxes>
+                              <ResumeBox>
+                                  <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfDiversions }>{ !isNaN(props.controlResumeAndControls.numberOfDiversions) ? props.controlResumeAndControls.numberOfDiversions : <NoValue>-</NoValue> }</ResumeBoxNumber>
+                                  <ResumeBoxText>Déroutement</ResumeBoxText>
+                              </ResumeBox>
+                              <ResumeBox>
+                                  <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfEscortsToQuay }>{ !isNaN(props.controlResumeAndControls.numberOfEscortsToQuay) ? props.controlResumeAndControls.numberOfEscortsToQuay : <NoValue>-</NoValue> }</ResumeBoxNumber>
+                                  <ResumeBoxText>Reconduite à quai</ResumeBoxText>
+                              </ResumeBox>
+                              <ResumeBox>
+                                  <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfSeizures }>{ !isNaN(props.controlResumeAndControls.numberOfSeizures) ? props.controlResumeAndControls.numberOfSeizures : <NoValue>-</NoValue>}</ResumeBoxNumber>
+                                  <ResumeBoxText>Appréhension</ResumeBoxText>
+                              </ResumeBox>
+                          </ResumesBoxes>
                       </Fields>
                   </Zone>
                   <Zone>
@@ -127,6 +129,12 @@ const VesselControls = props => {
         }
         </>
 }
+
+const ResumesBoxes = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-right: 15px;
+`
 
 const NoControls = styled.div`
   text-align: center;
@@ -179,7 +187,7 @@ const ResumeBoxNumber = styled.span`
   border-radius: 11px;
   height: 16px;
   display: inline-block;
-  line-height: 15px;
+  line-height: 14px;
   width: 16px;
   text-align: center;
   font-weight: bolder;
@@ -192,7 +200,7 @@ const ResumeBox = styled.span`
   font-size: 13px;
   height: 22px;
   display: inline-block;
-  margin: 8px 15px 10px 0;
+  margin: 8px 5px 10px 0;
 `
 
 const Number = styled.span`
@@ -297,16 +305,15 @@ const ControlResumeLine = styled.div`
   font-size: 13px;
   color: ${COLORS.textGray};
   display: flex;
-  flex: 1 1 1 1;
   width: 100%;
 `
 
 const ResumeText = styled.span`
-  margin: 5px 10px 0 0;
+  margin: 5px 0 0 0;
 `
 
 const ControlResumeNumberElement = styled.span`
-  margin: 5px 10px 0 15px;
+  margin: 5px 10px 0 14px;
 `
 
 const Gyro = styled(GyroSVG)`

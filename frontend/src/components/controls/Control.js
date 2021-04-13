@@ -55,7 +55,7 @@ const Control = props => {
                       <SubValue>{props.control.latitude ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[0]}</> : <NoValue>-</NoValue>}</SubValue>
                   </SubField><br/>
                   <SubField>
-                      <Key width={47}>Lon.</Key>
+                      <Key width={25}>Lon.</Key>
                       <SubValue>{props.control.longitude ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[1]}</> : <NoValue>-</NoValue>}</SubValue>
                   </SubField>
               </SubFields> : null
@@ -81,7 +81,7 @@ const Control = props => {
         </SubFields>
         <Key width={47}>Résultat</Key>
         <SubValue>
-            { props.control.infractions && props.control.infractions.length ? `${props.control.infractions.length} infractions` : `pas d'infraction` }
+            { props.control.infractions && props.control.infractions.length ? `${props.control.infractions.length} infraction${props.control.infractions.length > 1 ? 's' : ''}` : `pas d'infraction` }
         </SubValue><br/>
         {
             props.control.seizure ?
@@ -258,7 +258,7 @@ const SubFields = styled.div`
 `
 
 const SubField = styled.div`
-  flex: 1 1 0;
+  flex: 0 1 0;
 `
 
 const Wrapper = styled.div`

@@ -146,7 +146,7 @@ const TitleText = styled.span`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;    
-  max-width: 185px; 
+  max-width: 180px; 
 `
 
 const Weight = styled.span`

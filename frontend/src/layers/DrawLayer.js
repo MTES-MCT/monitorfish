@@ -32,7 +32,7 @@ const DrawLayer = ({ map }) => {
           image: new Icon({
             opacity: 1,
             src: `Pointeur_selection_zone.svg`,
-            scale: 1
+            scale: 1.5
           }),
           stroke: new Stroke({
             color: '#515151',

@@ -4,7 +4,6 @@ import Modal from "rsuite/lib/Modal";
 import {COLORS} from "../../constants/constants";
 import Checkbox from "rsuite/lib/Checkbox";
 import CheckboxGroup from "rsuite/lib/CheckboxGroup";
-import {Radio} from "rsuite";
 import { ExportToCsv } from 'export-to-csv';
 import countries from "i18n-iso-countries";
 import {getDate, getDateTime} from "../../utils";
@@ -185,7 +184,7 @@ const DownloadVesselListModal = props => {
                         onChange={handleCheckAll}
                     >
                         <SelectAllText>
-                            Tout sélectionner
+                            Tout {checkAll ? 'dé' : ''}sélectionner
                         </SelectAllText>
                     </Checkbox>
                 </SelectAll>

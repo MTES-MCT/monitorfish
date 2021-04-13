@@ -204,7 +204,7 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
     });
 
     arrowFeature.setStyle((feature, resolution) => {
-        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/6));
+        arrowStyle.getImage().setScale(1 / Math.pow(resolution, 1/5));
         return arrowStyle;
     });
 }

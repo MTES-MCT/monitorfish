@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ReactComponent as VesselListSVG} from '../components/icons/Icone_liste_navires.svg';
 import {ReactComponent as BoxFilterSVG} from '../components/icons/Filtre_zone_rectangle.svg';
 import {ReactComponent as PolygonFilterSVG} from '../components/icons/Filtre_zone_polygone.svg';
-import {ReactComponent as CloseIconSVG} from '../components/icons/Croix_grise_clair.svg';
+import {ReactComponent as CloseIconSVG} from '../components/icons/Croix_grise.svg';
 import {COLORS} from "../constants/constants";
 import LayersEnum, {layersType as LayersType, layersType} from "../domain/entities/layers";
 import Modal from "rsuite/lib/Modal";
@@ -197,7 +197,6 @@ const VesselList = () => {
     }, [allVesselsChecked])
 
     const handleChange = (id, key, value) => {
-        console.log(id, key, value)
         const nextVessels = Object.assign([], vessels)
 
         nextVessels.find(item => item.id === id)[key] = value
@@ -427,7 +426,7 @@ const VesselList = () => {
                                     zonesSelected && zonesSelected.length && zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW) ?
                                         zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map(zoneSelected => {
                                             return <ZoneSelected>
-                                                Effacer la zone définie
+                                                <DeleteZoneText>Effacer la zone définie</DeleteZoneText>
                                                 <CloseIcon onClick={() => callRemoveZoneSelected(zoneSelected)}/>
                                             </ZoneSelected>
                                         }) : null
@@ -473,6 +472,12 @@ const VesselList = () => {
     )
 }
 
+const DeleteZoneText = styled.span`
+  padding-bottom: 5px;
+  vertical-align: middle;
+  height: 30px;
+  display: inline-block;
+`
 const CustomZone = styled.span`
   margin-left: 50px;
 `
@@ -483,8 +488,10 @@ const ZoneSelected = styled.span`
   color: ${COLORS.textGray};
   margin-left: 0;
   font-size: 13px;
-  padding: 6px 3px 5px 7px;
-  vertical-align: super;
+  padding: 0px 3px 0px 7px;
+  vertical-align: top;
+  height: 30px;
+  display: inline-block;
 `
 
 const Wrapper = styled.div`
@@ -675,12 +682,12 @@ const BoxFilter = styled(BoxFilterSVG)`
 
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
-  height: 13px;
-  margin-left: 5px;
   vertical-align: text-bottom;
-  margin-bottom: 2px;
-  margin-right: 3px;
   cursor: pointer;
+  border-left: 1px solid white;
+  height: 30px;
+  margin: 0 6px 0 7px;
+  padding-left: 7px;
 `
 
 const PolygonFilter = styled(PolygonFilterSVG)`

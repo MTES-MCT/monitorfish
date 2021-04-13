@@ -104,7 +104,7 @@ const VesselListTable = props => {
             <Table
                 virtualized
                 height={510}
-                width={1210}
+                width={1207}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}

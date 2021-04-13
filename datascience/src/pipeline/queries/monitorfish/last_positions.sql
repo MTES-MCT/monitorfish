@@ -7,15 +7,12 @@ WITH last_54_hours_positions AS (
         ircs,
         vessel_name,
         flag_state,
-        from_country,
-        destination_country,
         trip_number,
         latitude,
         longitude,
         speed,
         course,
         date_time,
-        position_type,
         ROW_NUMBER() OVER (
             PARTITION BY internal_reference_number, external_reference_number 
             ORDER BY id DESC) AS rk
@@ -34,15 +31,12 @@ last_two_positions AS (
         ircs,
         vessel_name,
         flag_state,
-        from_country,
-        destination_country,
         trip_number,
         latitude,
         longitude,
         speed,
         course,
         date_time,
-        position_type,
         rk
     FROM last_54_hours_positions
     WHERE rk <=2
@@ -79,9 +73,8 @@ vessels_ AS (
 )
 
 SELECT
-    pos.id,
-    pos.internal_reference_number,
-    pos.external_reference_number,
+    pos.internal_reference_number AS cfr,
+    pos.external_reference_number AS external_immatriculation,
     vessels_.mmsi,
     pos.ircs,
     pos.vessel_name,
@@ -91,15 +84,12 @@ SELECT
     vessels_.registry_port,
     vessels_.width,
     vessels_.length,
-    pos.from_country,
-    pos.destination_country,
-    pos.trip_number,
+    pos.trip_number AS vms_trip_number,
     pos.latitude,
     pos.longitude,
     pos.speed,
     pos.course,
-    pos.date_time,
-    pos.position_type,
+    pos.date_time AS last_position_datetime_utc,
     per.emission_period
 FROM last_positions pos
 LEFT JOIN emission_periods per

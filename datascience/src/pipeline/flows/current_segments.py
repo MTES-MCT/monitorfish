@@ -31,14 +31,14 @@ def catch_zone_isin_fao_zone(
 
 # ********************************** Tasks and flow **********************************
 @task(checkpoint=False)
-def extract_catches():
+def extract_catches():  # pragma: no cover
     return extract(
         db_name="monitorfish_remote", query_filepath="monitorfish/current_catches.sql"
     )
 
 
 @task(checkpoint=False)
-def extract_segments():
+def extract_segments():  # pragma: no cover
     return extract(
         db_name="monitorfish_remote", query_filepath="monitorfish/fleet_segments.sql"
     )
@@ -142,7 +142,7 @@ def merge_segments_catches(catches, current_segments):
     species_onboard = catches[catch_columns]
     species_onboard = species_onboard.rename(columns={"fao_zone": "faoZone"})
     species_onboard = df_to_dict_series(
-        species_onboard, dropna_cols=["species"], result_colname="species_onboard"
+        species_onboard.dropna(subset=["species"]), result_colname="species_onboard"
     )
     species_onboard = catches[["cfr"]].join(species_onboard)
     species_onboard = species_onboard.dropna(subset=["species_onboard"])
@@ -156,12 +156,13 @@ def merge_segments_catches(catches, current_segments):
     # Join departure, catches and segments information into a single table with 1 line
     # by vessel
     res = last_deps.join(species_onboard).join(current_segments).reset_index()
+    res = res.fillna({"total_weight_onboard": 0})
 
     return res
 
 
 @task(checkpoint=False)
-def load_current_segments(vessels_segments):
+def load_current_segments(vessels_segments):  # pragma: no cover
     logger = prefect.context.get("logger")
     load(
         vessels_segments,
@@ -180,7 +181,7 @@ def load_current_segments(vessels_segments):
 with Flow(
     "Extract the last DEP of each vessel in the `ers` table, "
     "load into the `current_segments` table"
-) as flow:
+) as flow:  # pragma: no cover
 
     catches = extract_catches()
     segments = extract_segments()

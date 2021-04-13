@@ -30,13 +30,10 @@ vessels.flow.schedule = CronSchedule("0 2 * * *")
 flows_to_register = [
     controllers.flow,
     controls.flow,
-    current_segments.flow,
     ers.flow,
     fishing_gear_codes.flow,
-    fleet_segments.flow,
     heartbeat.flow,
     infractions.flow,
-    last_positions.flow,
     ports.flow,
     species.flow,
     vessels.flow,

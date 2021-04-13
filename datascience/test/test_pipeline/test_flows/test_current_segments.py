@@ -116,6 +116,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
             columns=pd.Index(
                 [
                     "cfr",
+                    "last_ers_datetime_utc",
                     "departure_datetime_utc",
                     "trip_number",
                     "gear_onboard",
@@ -128,6 +129,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
             data=[
                 [
                     "Vessel_A",
+                    datetime.datetime(2021, 2, 3, 13, 58, 21),
                     datetime.datetime(2021, 2, 3, 13, 56, 21),
                     20210003.0,
                     [{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}],
@@ -138,6 +140,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 ],
                 [
                     "Vessel_A",
+                    datetime.datetime(2021, 2, 3, 13, 58, 21),
                     datetime.datetime(2021, 2, 3, 13, 56, 21),
                     20210003.0,
                     [{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}],
@@ -148,6 +151,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 ],
                 [
                     "Vessel_B",
+                    datetime.datetime(2020, 12, 3, 15, 58, 21),
                     datetime.datetime(2020, 12, 3, 15, 56, 21),
                     20200053.0,
                     [{"gear": "OTM", "mesh": 70.0, "dimensions": 45.0}],
@@ -172,6 +176,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
             list(res),
             [
                 "cfr",
+                "last_ers_datetime_utc",
                 "departure_datetime_utc",
                 "trip_number",
                 "gear_onboard",
@@ -186,6 +191,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
         expected_other_values = [
             [
                 "Vessel_A",
+                datetime.datetime(2021, 2, 3, 13, 58, 21),
                 datetime.datetime(2021, 2, 3, 13, 56, 21),
                 20210003.0,
                 [{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}],
@@ -207,6 +213,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
             ],
             [
                 "Vessel_B",
+                datetime.datetime(2020, 12, 3, 15, 58, 21),
                 datetime.datetime(2020, 12, 3, 15, 56, 21),
                 20200053.0,
                 [{"gear": "OTM", "mesh": 70.0, "dimensions": 45.0}],

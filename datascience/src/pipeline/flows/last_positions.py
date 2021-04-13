@@ -1,12 +1,8 @@
-# from functools import partial
+import pandas as pd
+from prefect import Flow, task
 
-# import prefect
-# from prefect import Flow, task
-
-# from src.db_config import create_engine
-# from src.pipeline.generic_tasks import extract, load
-# from src.read_query import read_saved_query
-# from src.utils.database import get_table, psql_insert_copy
+from src.pipeline.generic_tasks import extract, load
+from src.read_query import read_saved_query
 
 # engins du DEP
 # taille du bateau
@@ -17,24 +13,22 @@
 # segment de flotte
 
 
-# @task
-# def extract_last_departures():
-#     partial(
-#     extract,
-#     db_name="monitorfish_remote",
-#     query_filepath="monitorfish/last_departures.sql"
-# )
+@task
+def extract_current_segments():
+    return extract(
+        db_name="monitorfish_remote", query_filepath="monitorfish/current_segments.sql"
+    )
 
 
-# @task(checkpoint=False)
-# def extract_last_positions():
-#     return read_saved_query(
-#         "monitorfish_remote", "monitorfish/last_positions.sql"
-#     )
+@task(checkpoint=False)
+def extract_last_positions():
+    return extract(
+        db_name="monitorfish_remote", query_filepath="monitorfish/last_positions.sql"
+    )
 
 
-# @task(checkpoint=False)
-# def extract_vessels():
-#     return read_saved_query(
-#         "monitorfish_remote", "monitorfish/vessels.sql"
-#     )
+@task(checkpoint=False)
+def merge(last_positions, current_segments):
+    res = pd.merge(last_positions, current_segments, on="cfr", how="left")
+    res = res.fillna({"total_weight_onboard": 0.0})
+    return res

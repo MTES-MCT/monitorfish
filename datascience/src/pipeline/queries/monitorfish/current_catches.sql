@@ -87,36 +87,3 @@ SELECT
 FROM last_deps
 LEFT JOIN summed_catches
 ON last_deps.cfr = summed_catches.cfr
-
-
--- summed_catches AS (
---     SELECT
---         cfr,
---         jsonb_build_object(
---             'species', species,
---             'gear', gear,
---             'faozone', fao_zone,
---             'weight', SUM(weight)
---         ) as catch
---     FROM corrected_catches
---     GROUP BY cfr, species, gear, fao_zone
--- ),
-
--- vessels_catches AS (
---     SELECT
---         cfr,
---         jsonb_agg(catch) as catches
---     FROM summed_catches
---     GROUP BY cfr
--- )
-
-
--- SELECT 
---     last_deps.cfr,
---     departure_datetime_utc,
---     trip_number,
---     gear_onboard,
---     vessels_catches.catches
--- FROM last_deps
--- LEFT JOIN vessels_catches
--- ON last_deps.cfr = vessels_catches.cfr

@@ -106,9 +106,7 @@ def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd
     return res
 
 
-def df_to_dict_series(
-    df: pd.DataFrame, dropna_cols: Union[List, None], result_colname: str = "json_col"
-):
+def df_to_dict_series(df: pd.DataFrame, result_colname: str = "json_col"):
     """Converts a pandas DataFrame into a Series with the same index as the input
     DataFrame and whose values are dictionnaries like :
 
@@ -116,17 +114,12 @@ def df_to_dict_series(
 
     Args:
         df (pd.DataFrame): input DataFrame
-        dropna_cols (Union[List, None]): optionnal, list of columns for which rows
-            containing Na values should be dropped
         result_colname (Union[str, None]): optionnal, name of result Series
 
     Returns:
         pd.Series: pandas Series
     """
     res = df.copy(deep=True)
-    if dropna_cols:
-        res = res.dropna(subset=dropna_cols)
-
     res = pd.read_json(res.to_json(orient="index"), orient="index", typ="Series")
     res.name = result_colname
 
@@ -275,7 +268,7 @@ def df_values_to_psql_arrays(
         to_pgarr, handle_errors=handle_errors, value_on_error=value_on_error
     )
 
-    return df.applymap(serialize)
+    return df.applymap(serialize, na_action="ignore").fillna("{}")
 
 
 def drop_rows_already_in_table(

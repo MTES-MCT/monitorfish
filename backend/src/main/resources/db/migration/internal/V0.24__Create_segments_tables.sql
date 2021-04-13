@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.fleet_segments (
     target_species VARCHAR(3)[],
     bycatch_species VARCHAR(3)[],
     flag_states VARCHAR(3)[]
-)
+);
 
 -- Current segments of each vessel
 CREATE TABLE if not exists public.current_segments (

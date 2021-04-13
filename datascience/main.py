@@ -33,7 +33,7 @@ def register_flow(f: prefect.Flow, project_name: str) -> None:
     Args:
         f (prefect.Flow): Prefect flow
     """
-    f.register(project_name, idempotency_key=f.serialized_hash())
+    f.register(project_name)
 
 
 if __name__ == "__main__":

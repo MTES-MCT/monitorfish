@@ -11,7 +11,7 @@ from sqlalchemy.exc import InvalidRequestError
 from src.db_config import create_engine
 from src.pipeline.processing import (
     df_to_dict_series,
-    python_lists_to_psql_arrays,
+    df_values_to_psql_arrays,
     to_json,
     zeros_ones_to_bools,
 )
@@ -166,7 +166,8 @@ def load_controls(controls):
     logger = prefect.context.get("logger")
 
     # Convert infraction_ids list to Postgres array-compatible string
-    controls = python_lists_to_psql_arrays(controls, ["infraction_ids"])
+    controls["infraction_ids"] = (
+        df_values_to_psql_arrays(controls["infraction_ids"]))
 
     controls["gear_controls"] = controls.gear_controls.map(to_json)
 

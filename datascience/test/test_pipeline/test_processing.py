@@ -207,11 +207,11 @@ class TestProcessingMethods(unittest.TestCase):
         self.assertEqual(res_a, "[1, 2, 3]")
         self.assertEqual(res_b, '{"a": 1, "b": 2}')
         self.assertEqual(res_c, "null")
-        self.assertEqual(res_d, "NaN")
+        self.assertEqual(res_d, "null")
         self.assertEqual(res_e, '{"a": 1, "2": "b"}')
-        self.assertEqual(res_f, '{"a": {"b": [1, null, NaN], "c": 4}, "b": 2}')
+        self.assertEqual(res_f, '{"a": {"b": [1, null, null], "c": 4}, "b": 2}')
         self.assertEqual(res_e, '{"a": 1, "2": "b"}')
-        self.assertEqual(res_f, '{"a": {"b": [1, null, NaN], "c": 4}, "b": 2}')
+        self.assertEqual(res_f, '{"a": {"b": [1, null, null], "c": 4}, "b": 2}')
         self.assertEqual(res_g, "[1, 2, 3]")
         self.assertEqual(res_h, "[[1, 2, 3], [4, 5, 6]]")
         self.assertEqual(res_i, '"2020-03-11T20:05:12Z"')
@@ -220,7 +220,7 @@ class TestProcessingMethods(unittest.TestCase):
         self.assertEqual(res_m, '"2020-12-05"')
         self.assertEqual(
             res_n,
-            '{"a": {"int": 1, "None": null, "np.nan": NaN, "pandas NaT": null, '
+            '{"a": {"int": 1, "None": null, "np.nan": null, "pandas NaT": null, '
             '"numpy array": [1, 2, 3], "date": "2020-12-05", '
             '"datetime": "2020-03-11T20:05:12Z", '
             '"datetime_tz_est": "2020-03-12T01:05:12Z"}}',
@@ -246,7 +246,7 @@ class TestProcessingMethods(unittest.TestCase):
             ["1", "2", "3.0", "4", "5"],
             ["[1, 2, 3]", '{"a": 1, "b": null}', "null", "null", '"null"'],
             [
-                '{"a": [1, 2, 3], "b": {"a": 1, "b": null, "c": NaN}}',
+                '{"a": [1, 2, 3], "b": {"a": 1, "b": null, "c": null}}',
                 "2",
                 "3.0",
                 '"null"',
@@ -378,8 +378,8 @@ class TestProcessingMethods(unittest.TestCase):
                 "some other value",
                 "{1,2,5}",
                 "{1,5,7}",
-                '{"a": 1, "b": null, "c": NaN}',
-                '{"a": 1, "b": ["2021-01-23T12:56:07Z", NaN]}',
+                '{"a": 1, "b": null, "c": null}',
+                '{"a": 1, "b": ["2021-01-23T12:56:07Z", null]}',
             ],
         ]
 

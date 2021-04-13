@@ -29,6 +29,24 @@ last_deps AS (
     WHERE rk=1
 ),
 
+ordered_ers AS (
+    SELECT
+        cfr,
+        operation_datetime_utc,
+        ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY operation_datetime_utc DESC) as rk
+    FROM public.ers
+    WHERE operation_type IN ('DAT', 'COR')
+    AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+),
+
+last_ers AS (
+    SELECT 
+        cfr,
+        operation_datetime_utc
+    FROM ordered_ers
+    WHERE rk=1
+),
+
 
 catches AS (
     SELECT
@@ -76,7 +94,8 @@ summed_catches AS (
 
 
 SELECT
-    last_deps.cfr,
+    COALESCE(last_ers.cfr, last_deps.cfr) AS cfr,
+    last_ers.operation_datetime_utc AS last_ers_datetime_utc,
     departure_datetime_utc,
     trip_number,
     gear_onboard,
@@ -84,6 +103,8 @@ SELECT
     gear,
     fao_zone,
     weight
-FROM last_deps
+FROM last_ers
+FULL OUTER JOIN last_deps
+ON last_ers.cfr = last_deps.cfr
 LEFT JOIN summed_catches
-ON last_deps.cfr = summed_catches.cfr
+ON last_ers.cfr = summed_catches.cfr

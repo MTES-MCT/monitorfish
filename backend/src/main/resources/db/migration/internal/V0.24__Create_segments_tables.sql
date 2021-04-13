@@ -10,9 +10,10 @@ CREATE TABLE IF NOT EXISTS public.fleet_segments (
     flag_states VARCHAR(3)[]
 )
 
--- Seg
-CREATE TABLE if not exists public.vessels_current_segments (
+-- Current segments of each vessel
+CREATE TABLE if not exists public.current_segments (
     cfr VARCHAR(12) PRIMARY KEY,
+    last_ers_datetime_utc TIMESTAMP,
     departure_datetime_utc TIMESTAMP,
     trip_number DOUBLE PRECISION,
     gear_onboard JSONB,
@@ -20,3 +21,4 @@ CREATE TABLE if not exists public.vessels_current_segments (
     segments varchar(50)[],
     total_weight_onboard DOUBLE PRECISION
 );
+

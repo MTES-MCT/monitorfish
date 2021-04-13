@@ -148,14 +148,21 @@ def merge_segments_catches(catches, current_segments):
     species_onboard = species_onboard.dropna(subset=["species_onboard"])
     species_onboard = species_onboard.groupby("cfr")["species_onboard"].apply(list)
 
-    # Keep one line by vessel for data related to the last departure of each vessel
-    last_deps_columns = ["cfr", "departure_datetime_utc", "trip_number", "gear_onboard"]
-    last_deps = catches[last_deps_columns].groupby("cfr").head(1)
-    last_deps = last_deps.set_index("cfr")
+    # Keep one line by vessel for data related to the last ers messages of each vessel
+    last_ers_columns = [
+        "cfr",
+        "last_ers_datetime_utc",
+        "departure_datetime_utc",
+        "trip_number",
+        "gear_onboard",
+    ]
+
+    last_ers = catches[last_ers_columns].groupby("cfr").head(1)
+    last_ers = last_ers.set_index("cfr")
 
     # Join departure, catches and segments information into a single table with 1 line
     # by vessel
-    res = last_deps.join(species_onboard).join(current_segments).reset_index()
+    res = last_ers.join(species_onboard).join(current_segments).reset_index()
     res = res.fillna({"total_weight_onboard": 0})
 
     return res

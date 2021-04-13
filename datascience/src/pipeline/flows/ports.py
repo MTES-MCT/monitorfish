@@ -413,6 +413,7 @@ with Flow(
 @task(checkpoint=False)
 def extract_datagouv_ports(ports_url: str = PORTS_URL, proxies: dict = None):
     r = requests.get(ports_url, proxies=proxies)
+    r.encoding = "utf8"
     f = io.StringIO(r.text)
 
     dtype = {

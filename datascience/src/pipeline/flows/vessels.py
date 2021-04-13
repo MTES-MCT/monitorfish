@@ -9,7 +9,7 @@ from src.db_config import create_engine
 from src.pipeline.processing import (
     combine_overlapping_columns,
     concatenate_columns,
-    python_lists_to_psql_arrays,
+    df_values_to_psql_arrays,
 )
 from src.pipeline.utils import delete, psql_insert_copy
 from src.read_query import read_saved_query
@@ -291,9 +291,7 @@ def load_vessels(all_vessels):
     schema = "public"
     table = "vessels"
 
-    all_vessels = python_lists_to_psql_arrays(
-        all_vessels,
-        [
+    pg_array_cols = [
             "declared_fishing_gears",
             "operator_phones",
             "operator_emails",
@@ -301,8 +299,9 @@ def load_vessels(all_vessels):
             "proprietor_emails",
             "vessel_phones",
             "vessel_emails",
-        ],
-    )
+        ]
+
+    all_vessels[pg_array_cols] = df_values_to_psql_arrays(all_vessels[pg_array_cols])
 
     engine = create_engine("monitorfish_remote")
     logger = prefect.context.get("logger")

@@ -195,6 +195,43 @@ def to_pgarr(
     )
 
 
+def df_values_to_psql_arrays(
+    df: pd.DataFrame,
+    handle_errors: bool = False,
+    value_on_error: Union[str, None] = None,
+) -> pd.DataFrame:
+    """Returns a `pandas.DataFrame` with all values serialized as strings
+    with Postgresql array syntax. All values must be of type list, set or numpy array.
+    Other values raise errors, which may be handled if handle_errors is set to True.
+
+    See `to_pgarr` for details on error handling.
+
+    This is required before bulk loading a pandas.DataFrame into a Postgresql table
+    with the psql_insert_copy method.
+
+    Example :
+
+    >> df_to_psql_arrays(pd.DataFrame({'a': [[1, 2], ['a', 'b']]}))
+    | a       |
+    |---------|
+    | {1,2,3} |
+    | {a,b}   |
+
+    Args:
+        df (pd.DataFrame): pandas DataFrame
+
+    Returns:
+        pd.DataFrame: pandas DataFrame with the same shape and index, all values
+            serialized as strings with Postgresql array syntax.
+    """
+
+    serialize = partial(
+        to_pgarr, handle_errors=handle_errors, value_on_error=value_on_error
+    )
+
+    return df.applymap(serialize, na_action="ignore").fillna("{}")
+
+
 def json_converter(x):
     """Converter for types not natively handled by json.dumps"""
     if isinstance(x, np.ndarray):
@@ -237,43 +274,6 @@ def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
             serialized as json strings.
     """
     return df.applymap(to_json, na_action="ignore").fillna("null")
-
-
-def df_values_to_psql_arrays(
-    df: pd.DataFrame,
-    handle_errors: bool = False,
-    value_on_error: Union[str, None] = None,
-) -> pd.DataFrame:
-    """Returns a `pandas.DataFrame` with all values serialized as strings
-    with Postgresql array syntax. All values must be of type list, set or numpy array.
-    Other values raise errors, which may be handled if handle_errors is set to True.
-
-    See `to_pgarr` for details on error handling.
-
-    This is required before bulk loading a pandas.DataFrame into a Postgresql table
-    with the psql_insert_copy method.
-
-    Example :
-
-    >> df_to_psql_arrays(pd.DataFrame({'a': [[1, 2], ['a', 'b']]}))
-    | a       |
-    |---------|
-    | {1,2,3} |
-    | {a,b}   |
-
-    Args:
-        df (pd.DataFrame): pandas DataFrame
-
-    Returns:
-        pd.DataFrame: pandas DataFrame with the same shape and index, all values
-            serialized as strings with Postgresql array syntax.
-    """
-
-    serialize = partial(
-        to_pgarr, handle_errors=handle_errors, value_on_error=value_on_error
-    )
-
-    return df.applymap(serialize, na_action="ignore").fillna("{}")
 
 
 def drop_rows_already_in_table(

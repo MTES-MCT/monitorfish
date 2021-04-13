@@ -1,5 +1,4 @@
 import datetime
-import json
 import logging
 from functools import partial
 from time import sleep
@@ -8,6 +7,7 @@ from typing import Any, Iterable, List, Union
 import numpy as np
 import pandas as pd
 import pytz
+import simplejson
 import sqlalchemy
 from sqlalchemy import select
 
@@ -213,7 +213,12 @@ def json_converter(x):
 
 def to_json(x: Any) -> str:
     """Converts python object to json string."""
-    return json.dumps(x, ensure_ascii=False, default=json_converter)
+
+    res = simplejson.dumps(
+        x, ensure_ascii=False, default=json_converter, ignore_nan=True
+    )
+
+    return res
 
 
 def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:

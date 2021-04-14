@@ -3,10 +3,7 @@ from typing import Union
 import pandas as pd
 import prefect
 from prefect import Flow, task
-
-
 from sqlalchemy.exc import InvalidRequestError
-
 
 from src.db_config import create_engine
 from src.pipeline.processing import (
@@ -15,9 +12,8 @@ from src.pipeline.processing import (
     to_json,
     zeros_ones_to_bools,
 )
-from src.pipeline.utils import delete
+from src.pipeline.utils import delete, get_table, psql_insert_copy
 from src.read_query import read_saved_query
-from src.utils.database import get_table, psql_insert_copy
 
 # ********************************** Tasks and flow ***********************************
 
@@ -166,8 +162,7 @@ def load_controls(controls):
     logger = prefect.context.get("logger")
 
     # Convert infraction_ids list to Postgres array-compatible string
-    controls["infraction_ids"] = (
-        df_values_to_psql_arrays(controls["infraction_ids"]))
+    controls["infraction_ids"] = df_values_to_psql_arrays(controls["infraction_ids"])
 
     controls["gear_controls"] = controls.gear_controls.map(to_json)
 

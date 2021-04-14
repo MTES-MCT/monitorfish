@@ -3,9 +3,8 @@ import prefect
 from prefect import Flow, task
 
 from src.db_config import create_engine
-from src.pipeline.utils import delete
+from src.pipeline.utils import delete, get_table, psql_insert_copy
 from src.read_query import read_saved_query
-from src.utils.database import get_table, psql_insert_copy
 
 
 @task(checkpoint=False)

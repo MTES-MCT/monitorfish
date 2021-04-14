@@ -70,21 +70,6 @@ def concatenate_columns(df: pd.DataFrame, input_col_names: List) -> pd.Series:
     return res
 
 
-def first_valid_value(row: pd.Series):
-    """Returns the value that is_a_value in the input pandas Series.
-
-    Args:
-        row (pd.Series): pandas Series
-
-    Returns:
-        : the first valid value in the Series
-    """
-    for x in row.values:
-        if is_a_value(x):
-            return x
-    return None
-
-
 def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd.Series:
     """Combines several columns into one by taking the first_valid_value in each row,
     in the order of the ordered_cols_list.

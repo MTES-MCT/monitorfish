@@ -16,7 +16,6 @@ from src.pipeline.processing import (
     df_values_to_json,
     df_values_to_psql_arrays,
     drop_rows_already_in_table,
-    first_valid_value,
     is_a_value,
     prepare_df_for_loading,
     to_json,
@@ -59,14 +58,6 @@ class TestProcessingMethods(unittest.TestCase):
         self.assertEqual(res3[0], [])
         self.assertEqual(res3[1], [])
         self.assertEqual(res3[2], [])
-
-    def test_first_valid_value_1(self):
-        row = pd.Series([None, np.nan, None, "a", 1, 2, None, "c"])
-        self.assertEqual(first_valid_value(row), "a")
-
-    def test_first_valid_value_2(self):
-        row = pd.Series([None, np.nan, None])
-        self.assertEqual(first_valid_value(row), None)
 
     def test_combine_overlapping_columns(self):
         df = pd.DataFrame(

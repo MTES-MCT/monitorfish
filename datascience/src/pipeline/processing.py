@@ -100,9 +100,12 @@ def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd
             taken in the ordered_cols_list columns.
     """
     non_null_rows = df[ordered_cols_list].dropna(how="all")
-    res_non_null_rows = non_null_rows.apply(first_valid_value, axis=1)
+    first_non_null_values_idx = np.argmax(non_null_rows.notnull().values, axis=1)
+
+    res_values = np.choose(first_non_null_values_idx, non_null_rows.values.T)
+
     res = pd.Series(index=df.index, data=[None] * len(df))
-    res[res_non_null_rows.index] = res_non_null_rows.values
+    res[non_null_rows.index] = res_values
     return res
 
 

@@ -288,8 +288,6 @@ class TestProcessingMethods(unittest.TestCase):
 
         self.assertEqual(res.values.tolist(), expected_values)
 
-        print(res.values.tolist())
-
     @patch("src.pipeline.processing.pd")
     def test_drop_rows_already_in_table(self, mock_pandas):
 

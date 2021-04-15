@@ -17,14 +17,40 @@ from src.read_query import read_saved_query
 
 
 def extract(
-    db_name: str, query_filepath: Union[Path, str], dtypes: Union[None, dict] = None
+    db_name: str, 
+    query_filepath: Union[Path, str], 
+    dtypes: Union[None, dict] = None, 
+    parse_dates: Union[list, dict, None]= None
 ) -> pd.DataFrame:
+    """[summary]
 
-    res = read_saved_query(db_name, query_filepath)
+    Args:
+        db_name (str): name of the databse to extract from : "fmc", "ocan", 
+            "monitorfish_local" or "monitorfish_remote"
+        query_filepath (Union[Path, str]): path to .sql file, starting from the saved
+            queries folder. example : "ocan/nav_fr_peche.sql"
+        dtypes (Union[None, dict], optional): If specified, use {col: dtype, …}, where 
+            col is a column label and dtype is a numpy.dtype or Python type to cast
+            one or more of the DataFrame’s columns to column-specific types. 
+            Defaults to None.
+        parse_dates (Union[list, dict, None], optional):         
+            - List of column names to parse as dates.
+            - Dict of ``{column_name: format string}`` where format string is
+            strftime compatible in case of parsing string times or is one of
+            (D, s, ns, ms, us) in case of parsing integer timestamps.
+            - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
+            to the keyword arguments of :func:`pandas.to_datetime`
+            
+            Defaults to None.
+
+    Returns:
+        pd.DataFrame: [description]
+    """
+
+    res = read_saved_query(db_name, query_filepath, parse_dates=parse_dates)
 
     if dtypes:
-        for c, t in dtypes.items():
-            res[c] = res[c].astype(t)
+        res = res.astype(dtypes)
 
     return res
 

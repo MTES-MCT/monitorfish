@@ -13,7 +13,7 @@ from src.pipeline.processing import (
     zeros_ones_to_bools,
 )
 from src.pipeline.utils import delete, get_table, psql_insert_copy
-from src.read_query import read_saved_query
+from src.pipeline.generic_tasks import extract, load
 
 # ********************************** Tasks and flow ***********************************
 
@@ -23,20 +23,20 @@ def extract_controls():
 
     logger = prefect.context.get("logger")
 
+    # Extract controls data
     logger.info("Extracting controls data")
-    controls = read_saved_query("fmc", "pipeline/queries/fmc/controles.sql")
 
-    # Force date parsing to deal with values outside of the allowed range
-    # ("3019-01-02" ...)
-    logger.info("Forcing date parsing")
-    date_columns = [
-        "control_datetime_utc",
-        "input_start_datetime_utc",
-        "input_end_datetime_utc",
-    ]
+    parse_dates = {
+        "control_datetime_utc": "coerce",
+        "input_start_datetime_utc": "coerce",
+        "input_end_datetime_utc": "coerce",
+    }
 
-    for date_column in date_columns:
-        controls[date_column] = pd.to_datetime(controls[date_column], errors="coerce")
+    controls = extract(
+        db_name="fmc", 
+        query_filepath="fmc/controles.sql",
+        parse_dates=parse_dates
+        )
 
     # Transform boolean values stored as "0"s and "1"s in Oracle to booleans
     logger.info("Converting '0's and '1' to booleans")
@@ -158,35 +158,16 @@ def transform_controls(controls):
 
 @task(checkpoint=False)
 def load_controls(controls):
-
-    logger = prefect.context.get("logger")
-
-    # Convert infraction_ids list to Postgres array-compatible string
-    controls["infraction_ids"] = df_values_to_psql_arrays(controls["infraction_ids"])
-
-    controls["gear_controls"] = controls.gear_controls.map(to_json)
-
-    schema = "public"
-    table_name = "controls"
-
-    engine = create_engine("monitorfish_remote")
-    controls_table = get_table(table_name, schema, engine, logger)
-
-    with engine.begin() as connection:
-
-        # Delete all rows from table
-        delete(controls_table, connection, logger)
-
-        # Insert data into
-        logger.info(f"Inserting data into {schema}.{table_name} table")
-        controls.to_sql(
-            name=table_name,
-            con=connection,
-            schema=schema,
-            index=False,
-            method=psql_insert_copy,
-            if_exists="append",
-        )
+    load(
+        controls,
+        table_name="controls",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        pg_array_columns=["infraction_ids"],
+        jsonb_columns=["gear_controls"],
+        delete_before_insert=True,
+    )
 
 
 with Flow("Extract clean and load controls data") as flow:

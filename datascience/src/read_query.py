@@ -9,7 +9,11 @@ from config import QUERIES_LOCATION
 from .db_config import create_engine
 
 
-def read_saved_query(db: str, sql_filepath: Union[str, Path], **kwargs) -> pd.DataFrame:
+def read_saved_query(
+    db: str, 
+    sql_filepath: Union[str, Path], 
+    parse_dates: Union[list, dict, None]= None, 
+    **kwargs) -> pd.DataFrame:
     """Run saved SQLquery on a database. Supported databases :
     - 'ocan' : OCAN database
     - 'fmc': FMC database
@@ -23,6 +27,13 @@ def read_saved_query(db: str, sql_filepath: Union[str, Path], **kwargs) -> pd.Da
             'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
         sql_filepath (str): path to .sql file, starting from the saved queries folder.
             example : "ocan/nav_fr_peche.sql"
+        parse_dates (Union[list, dict, None], optional):         
+            - List of column names to parse as dates.
+            - Dict of ``{column_name: format string}`` where format string is
+            strftime compatible in case of parsing string times or is one of
+            (D, s, ns, ms, us) in case of parsing integer timestamps.
+            - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
+            to the keyword arguments of :func:`pandas.to_datetime`
         kwargs : passed to pd.read_sql
 
     Returns:
@@ -32,7 +43,7 @@ def read_saved_query(db: str, sql_filepath: Union[str, Path], **kwargs) -> pd.Da
     sql_filepath = QUERIES_LOCATION / sql_filepath
     with open(sql_filepath, "r") as sql_file:
         query = sql_file.read()
-    return pd.read_sql(query, engine, **kwargs)
+    return pd.read_sql(query, engine, parse_dates=parse_dates, **kwargs)
 
 
 def read_query(

@@ -3,7 +3,7 @@ from pathlib import Path
 ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
-TEST_DATA_DIRECTORY = ROOT_DIRECTORY / Path("tests/test_data")
+TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 
 #
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")

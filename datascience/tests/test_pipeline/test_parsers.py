@@ -2,15 +2,15 @@ import datetime
 import os
 import unittest
 
-from config import TEST_DATA_DIRECTORY
+from config import TEST_DATA_LOCATION
 from src.pipeline.parsers.ers import ERSParsingError, parse_xml_string
 
-ERS_TEST_DATA_DIRECTORY = TEST_DATA_DIRECTORY / "ers"
+XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "ers/xml_messages"
 
 
 class TestLogParsers(unittest.TestCase):
     def parse_file(self, test_file: str, has_data: bool = False):
-        with open(os.path.join(ERS_TEST_DATA_DIRECTORY, test_file), "r") as f:
+        with open(os.path.join(XML_TEST_DATA_LOCATION, test_file), "r") as f:
             xml_string = f.read()
         metadata, data_iter = parse_xml_string(xml_string)
         data_list = list(data_iter)

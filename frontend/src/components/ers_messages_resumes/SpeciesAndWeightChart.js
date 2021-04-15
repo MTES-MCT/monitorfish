@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 
 const SpeciesAndWeightChart = props => {
     const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])

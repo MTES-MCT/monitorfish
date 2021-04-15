@@ -51,22 +51,38 @@ class BffController(
     @GetMapping("/v1/vessels/find")
     @ApiOperation("Get vessel's last positions and data")
     fun getVessel(@ApiParam("Vessel internal reference number (CFR)")
-                    @RequestParam(name = "internalReferenceNumber")
-                    internalReferenceNumber: String,
-                    @ApiParam("Vessel external reference number")
-                    @RequestParam(name = "externalReferenceNumber")
-                    externalReferenceNumber: String,
-                    @ApiParam("Vessel IRCS")
-                    @RequestParam(name = "IRCS")
-                    IRCS: String,
-                    @ApiParam("Vessel track depth")
-                    @RequestParam(name = "trackDepth")
-                    trackDepth: VesselTrackDepth): ResponseEntity<VesselDataOutput> {
+                  @RequestParam(name = "internalReferenceNumber")
+                  internalReferenceNumber: String,
+                  @ApiParam("Vessel external reference number")
+                  @RequestParam(name = "externalReferenceNumber")
+                  externalReferenceNumber: String,
+                  @ApiParam("Vessel IRCS")
+                  @RequestParam(name = "IRCS")
+                  IRCS: String,
+                  @ApiParam("Vessel track depth")
+                  @RequestParam(name = "trackDepth")
+                  trackDepth: VesselTrackDepth,
+                  @ApiParam("from date")
+                  @RequestParam(name = "afterDateTime", required = false)
+                  @DateTimeFormat(pattern = zoneDateTimePattern)
+                  afterDateTime: ZonedDateTime?,
+                  @ApiParam("to date")
+                  @RequestParam(name = "beforeDateTime", required = false)
+                  @DateTimeFormat(pattern = zoneDateTimePattern)
+                  beforeDateTime: ZonedDateTime?): ResponseEntity<VesselDataOutput> {
         return runBlocking {
             val start = System.currentTimeMillis()
-            val (vesselTrackHasBeenModified, VesselAndPositions) = getVessel.execute(internalReferenceNumber, externalReferenceNumber, IRCS, trackDepth)
+
+            val (vesselTrackHasBeenModified, VesselAndPositions) = getVessel.execute(
+                    internalReferenceNumber,
+                    externalReferenceNumber,
+                    IRCS,
+                    trackDepth,
+                    afterDateTime,
+                    beforeDateTime)
+
             val (vessel, positions) = VesselAndPositions
-            val returnCode = if(vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
+            val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
             vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS)
 
@@ -86,7 +102,7 @@ class BffController(
                           @ApiParam("Control after date time")
                           @RequestParam(name = "afterDateTime")
                           @DateTimeFormat(pattern = zoneDateTimePattern)
-                          afterDateTime: ZonedDateTime) : ControlResumeAndControlsDataOutput {
+                          afterDateTime: ZonedDateTime): ControlResumeAndControlsDataOutput {
         val controlResumeAndControls = getVesselControls.execute(vesselId.toInt(), afterDateTime)
 
         return ControlResumeAndControlsDataOutput.fromControlResumeAndControls(controlResumeAndControls)
@@ -95,8 +111,8 @@ class BffController(
     @GetMapping("/v1/vessels/search")
     @ApiOperation("Search vessels")
     fun searchVessel(@ApiParam("Vessel internal reference number (CFR), external marker, IRCS, MMSI or name", required = true)
-                      @RequestParam(name = "searched")
-                      searched: String): List<VesselIdentityDataOutput> {
+                     @RequestParam(name = "searched")
+                     searched: String): List<VesselIdentityDataOutput> {
         return searchVessels.execute(searched).map {
             VesselIdentityDataOutput.fromVessel(it)
         }
@@ -105,14 +121,14 @@ class BffController(
     @GetMapping("/v1/ers/find")
     @ApiOperation("Get vessel's ERS messages")
     fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)")
-                  @RequestParam(name = "internalReferenceNumber")
-                  internalReferenceNumber: String,
-                  @ApiParam("Vessel external reference number")
-                  @RequestParam(name = "externalReferenceNumber")
-                  externalReferenceNumber: String,
-                  @ApiParam("Vessel IRCS")
-                  @RequestParam(name = "IRCS")
-                  IRCS: String): ERSMessagesAndAlertsDataOutput {
+                             @RequestParam(name = "internalReferenceNumber")
+                             internalReferenceNumber: String,
+                             @ApiParam("Vessel external reference number")
+                             @RequestParam(name = "externalReferenceNumber")
+                             externalReferenceNumber: String,
+                             @ApiParam("Vessel IRCS")
+                             @RequestParam(name = "IRCS")
+                             IRCS: String): ERSMessagesAndAlertsDataOutput {
         val start = System.currentTimeMillis()
         val ersMessagesAndAlerts = getVesselLastVoyage.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
         ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);

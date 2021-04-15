@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 import { FingerprintSpinner } from 'react-epic-spinners'
-import {ReactComponent as NoVesselSVG} from '../components/icons/Picto_photo_navire_manquante.svg';
+import {ReactComponent as NoVesselSVG} from '../icons/Picto_photo_navire_manquante.svg';
 
-import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../utils";
-import {WSG84_PROJECTION} from "../domain/entities/map";
-import {COLORS} from "../constants/constants";
+import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../../utils";
+import {WSG84_PROJECTION} from "../../domain/entities/map";
+import {COLORS} from "../../constants/constants";
 import * as timeago from 'timeago.js';
+import NoDEPFoundError from '../../errors/NoDEPFoundError'
 timeago.register('fr', timeagoFrenchLocale);
 
 const VesselSummary = props => {
@@ -16,7 +17,7 @@ const VesselSummary = props => {
     const [gears, setGears] = useState([])
 
     useEffect(() => {
-        if (props.vessel) {
+        if (props.vessel && (!props.error || props.error && props.error.name === NoDEPFoundError.name)) {
             setVessel(props.vessel)
             if(props.vessel.positions.length) {
                 setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
@@ -30,7 +31,7 @@ const VesselSummary = props => {
                 setPhotoFallback(true)
             }
         }
-    }, [props.vessel])
+    }, [props.vessel, props.error])
 
     useEffect(() => {
         if(props.gears && props.vessel && props.vessel.declaredFishingGears) {

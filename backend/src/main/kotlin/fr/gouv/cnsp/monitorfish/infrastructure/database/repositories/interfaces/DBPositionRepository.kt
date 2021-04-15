@@ -29,9 +29,10 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "from positions p " +
             "where p.internal_reference_number = :internalReferenceNumber " +
             "and p.date_time >= :from " +
+            "and p.date_time <= :to " +
             "order by p.date_time DESC ",
             nativeQuery = true)
-    fun findLastByInternalReferenceNumber(internalReferenceNumber: String, from: ZonedDateTime): List<PositionEntity>
+    fun findLastByInternalReferenceNumber(internalReferenceNumber: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
 
     @Query(value = "select distinct " +
             "p.internal_reference_number, " +
@@ -53,9 +54,10 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "from positions p " +
             "where p.external_reference_number = :externalReferenceNumber " +
             "and p.date_time >= :from " +
+            "and p.date_time <= :to " +
             "order by p.date_time DESC ",
             nativeQuery = true)
-    fun findLastByExternalReferenceNumber(externalReferenceNumber: String, from: ZonedDateTime): List<PositionEntity>
+    fun findLastByExternalReferenceNumber(externalReferenceNumber: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
 
     @Query(value = "select distinct " +
             "p.internal_reference_number, " +
@@ -77,7 +79,8 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "from positions p " +
             "where p.ircs = :ircs " +
             "and p.date_time >= :from " +
+            "and p.date_time <= :to " +
             "order by p.date_time DESC",
             nativeQuery = true)
-    fun findLastByIrcs(ircs: String, from: ZonedDateTime): List<PositionEntity>
+    fun findLastByIrcs(ircs: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
 }

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Radio, RadioGroup} from 'rsuite';
 import styled from "styled-components";
-import {VesselTrackDepth} from "../domain/entities/vesselTrackDepth";
+import {VesselTrackDepth} from "../../domain/entities/vesselTrackDepth";
 
 const TrackDepthRadio = props => {
     const [value, setValue] = useState(null)
@@ -49,17 +49,11 @@ const TrackDepthRadio = props => {
     );
 }
 
-const ColumnOne = styled.div`
+const ColumnOne = styled.div``
 
-`
+const ColumnTwo = styled.div``
 
-const ColumnTwo = styled.div`
-
-`
-
-const ColumnThree = styled.div`
-
-`
+const ColumnThree = styled.div``
 
 const Columns = styled.div`
   margin-left: 10px;

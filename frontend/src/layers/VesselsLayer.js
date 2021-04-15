@@ -11,14 +11,24 @@ import Point from 'ol/geom/Point'
 import {
   getSVG,
   getVesselIconOpacity,
-  getVesselImage, getVesselNameStyle, selectedVesselStyle,
+  getVesselImage,
+  getVesselNameStyle,
+  selectedVesselStyle,
   setVesselIconStyle,
-  VESSEL_ICON_STYLE, VESSEL_NAME_STYLE,
+  VESSEL_ICON_STYLE,
+  VESSEL_NAME_STYLE,
   VESSEL_SELECTOR_STYLE
 } from './styles/featuresStyles'
 import { toStringHDMS } from 'ol/coordinate'
-import { setVesselsLayerSource, updateVesselFeatureAndIdentity } from '../domain/reducers/Vessel'
-import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../domain/entities/vessel'
+import {
+  setVesselsLayerSource,
+  updateVesselFeatureAndIdentity
+} from '../domain/reducers/Vessel'
+import {
+  getVesselFeatureAndIdentity,
+  getVesselIdentityFromFeature,
+  vesselAndVesselFeatureAreEquals
+} from '../domain/entities/vessel'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_NAMES = 9
@@ -36,6 +46,8 @@ const VesselsLayer = ({ map, mapRef }) => {
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
   const vesselLabel = useSelector(state => state.map.vesselLabel)
+
+  const [selectedVesselLastPosition, setSelectedVesselLastPosition] = useState(null)
 
   const dispatch = useDispatch()
 
@@ -97,23 +109,11 @@ const VesselsLayer = ({ map, mapRef }) => {
     vectorSource.changed()
   }, [selectedBaseLayer])
 
-  function matchVesselIdentifiers(feature, vessel) {
-    return (feature.getProperties().externalReferenceNumber
-      ? feature.getProperties().externalReferenceNumber === vessel.externalReferenceNumber
-      : false) ||
-      (feature.getProperties().internalReferenceNumber
-        ? feature.getProperties().internalReferenceNumber === vessel.internalReferenceNumber
-        : false) ||
-      (feature.getProperties().ircs
-        ? feature.getProperties().ircs === vessel.ircs
-        : false)
-  }
-
   useEffect(() => {
     if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {
       vectorSource.getFeatures().filter(feature => {
         return !temporaryVesselsToHighLightOnMap.some(vessel => {
-          return matchVesselIdentifiers(feature, vessel)
+          return vesselAndVesselFeatureAreEquals(vessel, feature)
         })
       }).map(featureToHide => {
         let foundStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
@@ -142,15 +142,26 @@ const VesselsLayer = ({ map, mapRef }) => {
   useEffect(() => {
     if(selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
       const featureToModify = vectorSource.getFeatures().find(feature => {
-        return matchVesselIdentifiers(feature, selectedVessel)
+        return vesselAndVesselFeatureAreEquals(selectedVessel, feature)
       })
-
 
       if(featureToModify) {
         moveFeatureToNewPosition(featureToModify)
       }
     }
   }, [selectedVessel])
+
+  useEffect(() => {
+    if(!selectedVessel && selectedVesselLastPosition) {
+      const featureToModify = vectorSource.getFeatures().find(feature => {
+        return vesselAndVesselFeatureAreEquals(selectedVesselLastPosition, feature)
+      })
+
+      featureToModify.setGeometry(selectedVesselLastPosition.geometry)
+      setSelectedVesselLastPosition(null)
+    }
+  }, [selectedVessel])
+
 
   useEffect(() => {
     if(selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature && !removeSelectedIconToFeature) {
@@ -219,11 +230,26 @@ const VesselsLayer = ({ map, mapRef }) => {
     const lastPosition = selectedVessel.positions[selectedVessel.positions.length - 1]
     const newCoordinates = new transform([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
+    setSelectedVesselLastPosition({
+      internalReferenceNumber: featureToModify.getProperties().internalReferenceNumber,
+      externalReferenceNumber: featureToModify.getProperties().externalReferenceNumber,
+      ircs: featureToModify.getProperties().ircs,
+      geometry: featureToModify.getGeometry()
+    })
+    featureToModify.getStyle().push(selectedVesselStyle)
     featureToModify.setGeometry(new Point(newCoordinates))
   }
 
   const buildFeature = (currentVessel, index) => new Promise(resolve =>  {
-    const transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    let transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+
+    if (currentVessel &&
+      selectedVesselFeatureAndIdentity &&
+      selectedVesselFeatureAndIdentity.feature &&
+      vesselAndVesselFeatureAreEquals(currentVessel, selectedVesselFeatureAndIdentity.feature)) {
+      const lastPosition = selectedVessel.positions[selectedVessel.positions.length - 1]
+      transformedCoordinates = new transform([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    }
 
     const feature = new Feature({
       geometry: new Point(transformedCoordinates),

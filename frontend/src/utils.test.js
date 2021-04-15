@@ -1,4 +1,5 @@
-import { getDateTime } from './utils'
+import { getDateTime, getCoordinates } from './utils'
+import { WSG84_PROJECTION } from './domain/entities/map'
 
 describe('utils', () => {
     it('getDateTime Should respect the timezone given fur UTC', async () => {
@@ -32,6 +33,16 @@ describe('utils', () => {
 
         // Then
         expect(formattedDate).toEqual("06/04/2021 à 23h10")
+    })
+
+    it('getCoordinates Should get coordinates for a 0 longitude', async () => {
+        // When
+        let coordinates = getCoordinates([49.6167, 0], WSG84_PROJECTION)
+
+        // Then
+        expect(coordinates).not.toBeUndefined()
+        expect(coordinates[0]).toEqual('0° 00′ 00″')
+        expect(coordinates[1]).toEqual('049°  37′ 01″ E')
     })
 
 })

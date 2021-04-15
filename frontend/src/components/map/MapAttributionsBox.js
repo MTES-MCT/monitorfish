@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 
 const MapAttributionsBox = () => {
     const [isVisible, setIsVisible] = useState(false);

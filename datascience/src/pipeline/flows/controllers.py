@@ -6,7 +6,7 @@ from src.pipeline.generic_tasks import extract, load
 
 @task(checkpoint=False)
 def extract_controllers():
-    return extract(db_name="fmc", query_filepath="fmc/controllers.sql", dtypes=None)
+    return extract(db_name="fmc", query_filepath="fmc/controllers.sql")
 
 
 @task(checkpoint=False)

@@ -49,4 +49,4 @@ profile = "black"
 
 [tool.coverage.run]
 source = ['src']
-omit = ["src/utils/geocode"]
+

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../constants/constants";
+import {COLORS} from "../../constants/constants";
 import countries from "i18n-iso-countries";
-import { getDate, getDay, getMonth } from '../utils'
+import { getDate, getDay, getMonth } from '../../utils'
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselIdentity = props => {

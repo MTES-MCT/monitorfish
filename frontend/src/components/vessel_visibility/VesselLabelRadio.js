@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Radio, RadioGroup} from 'rsuite';
 import styled from "styled-components";
-import {vesselLabel} from "../domain/entities/vesselLabel";
+import {vesselLabel} from "../../domain/entities/vesselLabel";
 
 const VesselLabelRadio = props => {
     const [value, setValue] = useState(null)

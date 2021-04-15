@@ -8,6 +8,7 @@ import updateVesselTrackAndSidebar from "../domain/use_cases/updateVesselTrackAn
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers/Global'
 import NoDEPFoundError from '../errors/NoDEPFoundError'
+import { exceptionsWithInfoToast } from '../domain/entities/errors'
 
 export const ONE_MINUTE = 60000
 
@@ -42,7 +43,7 @@ const APIWorker = () => {
 
     useEffect(() => {
         if (error) {
-            if(error.name === 'NoDEPFoundError') {
+            if(exceptionsWithInfoToast.includes(error.name)) {
                 addToast(error.message.split(':')[0], {
                     appearance: 'info',
                     autoDismiss: true,

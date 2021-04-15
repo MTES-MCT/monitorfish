@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
-import {COLORS} from "../constants/constants";
-import {getHash} from "../utils";
-import {getGearCategory} from "../domain/use_cases/showLayer";
-import {getVectorLayerStyle} from "../layers/styles/vectorLayerStyles";
-import Layers from "../domain/entities/layers";
+import {COLORS} from "../../constants/constants";
+import {getHash} from "../../utils";
+import {getGearCategory} from "../../domain/use_cases/showLayer";
+import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
+import Layers from "../../domain/entities/layers";
 
 const LayerDetailsBox = props => {
     const [vectorLayerStyle, setVectorLayerStyle] = useState(null)

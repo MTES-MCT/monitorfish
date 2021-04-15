@@ -6,6 +6,7 @@ import {getTextWidth} from "../../utils";
 import {COLORS} from "../../constants/constants";
 import {vesselLabel as vesselLabelEnum} from "../../domain/entities/vesselLabel";
 import countries from "i18n-iso-countries";
+import { vesselAndVesselFeatureAreEquals, vesselsAreEquals } from '../../domain/entities/vessel'
 
 const images = require.context('../../../public/flags', false, /\.png$/);
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
@@ -34,15 +35,7 @@ export function getVesselImage(vessel, isLight) {
 
 function vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel) {
     return !temporaryVesselsToHighLightOnMap.some((vesselToHighLight) => {
-        return (vessel.externalReferenceNumber
-          ? vessel.externalReferenceNumber === vesselToHighLight.externalReferenceNumber
-          : false) ||
-          (vessel.internalReferenceNumber
-            ? vessel.internalReferenceNumber === vesselToHighLight.internalReferenceNumber
-            : false) ||
-            (vessel.ircs
-              ? vessel.ircs === vesselToHighLight.ircs
-              : false)
+        return vesselsAreEquals(vessel, vesselToHighLight)
     });
 }
 
@@ -62,10 +55,10 @@ export const setVesselIconStyle = (vessel,
     iconStyle.getImage().setOpacity(opacity)
     styles.push(iconStyle)
 
-    if (vessel.internalReferenceNumber &&
+    if (vessel &&
         options.selectedVesselFeatureAndIdentity &&
         options.selectedVesselFeatureAndIdentity.feature &&
-        vessel.internalReferenceNumber === options.selectedVesselFeatureAndIdentity.feature.getProperties().internalReferenceNumber) {
+        vesselAndVesselFeatureAreEquals(vessel, options.selectedVesselFeatureAndIdentity.feature)) {
         styles.push(selectedVesselStyle)
         selectedVesselFeatureToUpdate = iconFeature
     }

@@ -4,16 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ReactComponent as VesselSVG } from '../components/icons/Icone_navire.svg'
 import { COLORS } from '../constants/constants'
-import LastPositionsSlider from '../components/LastPositionsSlider'
+import LastPositionsSlider from '../components/vessel_visibility/LastPositionsSlider'
 import {
   setVesselLabel,
   setVesselLabelsShowedOnMap,
   setVesselsLastPositionVisibility,
   setVesselTrackDepth
 } from '../domain/reducers/Map'
-import TrackDepthRadio from '../components/TrackDepthRadio'
-import VesselLabelRadio from '../components/VesselLabelRadio'
-import VesselLabelCheckbox from '../components/VesselLabelCheckbox'
+import TrackDepthRadio from '../components/vessel_visibility/TrackDepthRadio'
+import VesselLabelRadio from '../components/vessel_visibility/VesselLabelRadio'
+import VesselLabelCheckbox from '../components/vessel_visibility/VesselLabelCheckbox'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 

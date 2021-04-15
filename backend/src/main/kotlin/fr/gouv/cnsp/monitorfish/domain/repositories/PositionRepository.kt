@@ -9,6 +9,7 @@ interface PositionRepository {
     fun findVesselLastPositions(internalReferenceNumber: String,
                                 externalReferenceNumber: String,
                                 ircs: String,
-                                from: ZonedDateTime): List<Position>
+                                from: ZonedDateTime,
+                                to: ZonedDateTime): List<Position>
     fun save(position: Position)
 }

@@ -10,4 +10,5 @@ enum class VesselTrackDepth {
     TWO_WEEK,
     THREE_WEEK,
     ONE_MONTH,
+    CUSTOM
 }

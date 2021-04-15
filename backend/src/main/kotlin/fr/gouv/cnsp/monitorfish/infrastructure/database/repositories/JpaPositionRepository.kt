@@ -26,20 +26,21 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
     override fun findVesselLastPositions(internalReferenceNumber: String,
                                          externalReferenceNumber: String,
                                          ircs: String,
-                                         from: ZonedDateTime): List<Position> {
+                                         from: ZonedDateTime,
+                                         to: ZonedDateTime): List<Position> {
 
         if(internalReferenceNumber.isNotEmpty()) {
-            return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from)
+            return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
                     .map(PositionEntity::toPosition)
         }
 
         if(externalReferenceNumber.isNotEmpty()) {
-            return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from)
+            return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
                     .map(PositionEntity::toPosition)
         }
 
         if(ircs.isNotEmpty()) {
-            return dbPositionRepository.findLastByIrcs(ircs, from)
+            return dbPositionRepository.findLastByIrcs(ircs, from, to)
                     .map(PositionEntity::toPosition)
         }
 

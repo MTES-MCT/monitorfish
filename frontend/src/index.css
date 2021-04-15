@@ -152,12 +152,16 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 }
 
 .rs-radio-checker {
-  padding-top: 8px;
+  padding-top: 2px;
   padding-bottom: 0;
   padding-left: 29px;
   min-height: 0;
   line-height: 1;
   position: relative;
+}
+
+.rs-radio-inline > .rs-radio-checker  {
+  padding-top: 2px;
 }
 
 .rs-radio-group {
@@ -197,6 +201,62 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
   border-width: 0 2px 2px 0;
 }
 
+.rs-radio-wrapper {
+  top: 5px;
+}
+
 label {
   padding: unset;
+}
+
+.rs-picker-menu {
+  z-index: 9999 !important;
+}
+
+.rs-picker-default:not(.rs-picker-disabled) .rs-btn:hover, .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle:hover, .rs-picker-default:not(.rs-picker-disabled) .rs-btn.active, .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle.active {
+  border-color: #969696 !important;
+}
+
+.rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
+  border: 1px solid #969696 !important;
+}
+
+.rs-picker-toggle.rs-btn-sm {
+  border-radius: 2px !important;
+}
+
+.rs-calendar, .rs-calendar-header,.rs-calendar-table-cell-content {
+  box-sizing: border-box !important;
+}
+
+.rs-calendar-table-cell-content {
+  border-radius: 2px !important;
+}
+
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  color: #F0F0F0;
+  border-color: #515151;
+  background-color: #515151;
+}
+
+.rs-calendar-table-cell-in-range::before {
+  background-color: #E0E0E0;
+}
+
+.rs-picker-toolbar-right-btn-ok {
+  padding: 8px 12px;
+  padding: 5px 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #515151;
+}
+
+.rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled, .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover, .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover:active {
+  background-color: #515151;
+}
+
+.rs-picker-toolbar-right-btn-ok:not(.rs-btn-disabled):hover {
+  background-color: #515151;
 }

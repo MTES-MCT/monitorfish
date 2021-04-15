@@ -7,5 +7,6 @@ export const VesselTrackDepth = {
     ONE_WEEK: 'ONE_WEEK',
     TWO_WEEK: 'TWO_WEEK',
     THREE_WEEK: 'THREE_WEEK',
-    ONE_MONTH: 'ONE_MONTH'
+    ONE_MONTH: 'ONE_MONTH',
+    CUSTOM: 'CUSTOM'
 }

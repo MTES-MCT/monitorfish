@@ -1,5 +1,3 @@
-
-
 export const AlertTypes = {
     PNO_LAN_WEIGHT_TOLERANCE_ALERT: {
         code: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',

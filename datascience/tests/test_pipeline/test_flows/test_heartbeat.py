@@ -5,4 +5,4 @@ from src.pipeline.flows.heartbeat import flow
 
 class TestHeartbeatFlow(unittest.TestCase):
     def test_flow(self):
-        pass
+        flow.run()

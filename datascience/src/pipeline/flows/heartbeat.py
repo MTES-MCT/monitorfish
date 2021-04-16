@@ -13,7 +13,3 @@ def print_time():
 
 with Flow("Heartbeat") as flow:
     print_time()
-
-
-if __name__ == "__main__":
-    flow.run()

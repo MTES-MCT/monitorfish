@@ -293,7 +293,7 @@ def load_ers(cleaned_data: List[dict]):
 
             if ers["batch_generated_errors"]:
                 logger.error(
-                    "Errors occurred during parsing of some of the messages. " \
+                    "Errors occurred during parsing of some of the messages. "
                     f"Moving {ers['full_name']} to error directory."
                 )
                 move(ers["input_dir"] / ers["full_name"], ers["error_dir"])

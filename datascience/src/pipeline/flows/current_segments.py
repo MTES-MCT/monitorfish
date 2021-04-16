@@ -188,7 +188,7 @@ def load_current_segments(vessels_segments):  # pragma: no cover
 with Flow(
     "Extract the last DEP of each vessel in the `ers` table, "
     "load into the `current_segments` table"
-) as flow:  # pragma: no cover
+) as flow:
 
     catches = extract_catches()
     segments = extract_segments()

@@ -22,7 +22,8 @@ def extract(
     dtypes: Union[None, dict] = None, 
     parse_dates: Union[list, dict, None]= None
 ) -> pd.DataFrame:
-    """[summary]
+    """Run SQL query against the indicated database and return the result as a 
+    `pandas.DataFrame`.
 
     Args:
         db_name (str): name of the databse to extract from : "fmc", "ocan", 

@@ -7,9 +7,7 @@ from dotenv import load_dotenv
 from prefect import Flow, Parameter, task
 
 from config import FLEET_SEGMENTS_URL, LIBRARY_LOCATION, PROXIES
-from src.db_config import create_engine
 from src.pipeline.generic_tasks import load
-from src.pipeline.utils import delete, get_table, psql_insert_copy
 
 load_dotenv()
 
@@ -21,15 +19,6 @@ def extract_segments():
 
 @task(checkpoint=False)
 def load_segments(segments):
-    pg_array_columns = [
-        "dirm",
-        "gears",
-        "fao_areas",
-        "target_species",
-        "bycatch_species",
-        "flag_states",
-    ]
-
     load(
         segments,
         table_name="fleet_segments",
@@ -37,7 +26,14 @@ def load_segments(segments):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         delete_before_insert=True,
-        pg_array_columns=pg_array_columns,
+        pg_array_columns=[
+            "dirm",
+            "gears",
+            "fao_areas",
+            "target_species",
+            "bycatch_species",
+            "flag_states",
+        ]
     )
 
 

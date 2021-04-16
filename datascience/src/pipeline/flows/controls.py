@@ -6,6 +6,7 @@ from prefect import Flow, task
 from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
+from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
     df_to_dict_series,
     df_values_to_psql_arrays,
@@ -13,7 +14,6 @@ from src.pipeline.processing import (
     zeros_ones_to_bools,
 )
 from src.pipeline.utils import delete, get_table, psql_insert_copy
-from src.pipeline.generic_tasks import extract, load
 
 # ********************************** Tasks and flow ***********************************
 
@@ -33,10 +33,8 @@ def extract_controls():
     }
 
     controls = extract(
-        db_name="fmc", 
-        query_filepath="fmc/controles.sql",
-        parse_dates=parse_dates
-        )
+        db_name="fmc", query_filepath="fmc/controles.sql", parse_dates=parse_dates
+    )
 
     # Transform boolean values stored as "0"s and "1"s in Oracle to booleans
     logger.info("Converting '0's and '1' to booleans")

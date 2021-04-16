@@ -292,14 +292,14 @@ def load_vessels(all_vessels):
     table = "vessels"
 
     pg_array_cols = [
-            "declared_fishing_gears",
-            "operator_phones",
-            "operator_emails",
-            "proprietor_phones",
-            "proprietor_emails",
-            "vessel_phones",
-            "vessel_emails",
-        ]
+        "declared_fishing_gears",
+        "operator_phones",
+        "operator_emails",
+        "proprietor_phones",
+        "proprietor_emails",
+        "vessel_phones",
+        "vessel_emails",
+    ]
 
     all_vessels[pg_array_cols] = df_values_to_psql_arrays(all_vessels[pg_array_cols])
 

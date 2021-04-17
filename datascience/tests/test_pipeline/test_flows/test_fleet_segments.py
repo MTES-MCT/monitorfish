@@ -11,7 +11,3 @@ class TestFleetSegmentsFlow(unittest.TestCase):
     def test_flow(self, mock_load):
         flow.run()
         mock_load.assert_called_once()
-
-
-if __name__ == "__main__":
-    unittest.main()

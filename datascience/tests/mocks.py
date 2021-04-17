@@ -22,6 +22,11 @@ def mock_extract_side_effect(
 
         mock_pd.read_sql.side_effect = read_sql_mock
 
-        return extract(db_name, query_filepath, dtypes, parse_dates)
+        return extract(
+            db_name=db_name,
+            query_filepath=query_filepath,
+            dtypes=None,
+            parse_dates=parse_dates,
+        )
 
     return mock_extract_side_effect_(db_name, query_filepath, dtypes, parse_dates)

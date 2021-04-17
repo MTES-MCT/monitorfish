@@ -10,7 +10,7 @@ def extract_fishing_gear_codes():
 
 
 @task(checkpoint=False)
-def clean(fishing_gear_codes):
+def clean_fishing_gear_codes(fishing_gear_codes):
 
     fishing_gear_codes = fishing_gear_codes.set_index("fishing_gear_code")
 
@@ -55,5 +55,5 @@ def load_fishing_gear_codes(fishing_gear_codes):
 
 with Flow("Update fishing gears reference") as flow:
     fishing_gear_codes = extract_fishing_gear_codes()
-    fishing_gear_codes = clean(fishing_gear_codes)
+    fishing_gear_codes = clean_fishing_gear_codes(fishing_gear_codes)
     load_fishing_gear_codes(fishing_gear_codes)

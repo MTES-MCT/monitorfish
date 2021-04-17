@@ -44,7 +44,7 @@ def clean(fishing_gear_codes):
 @task(checkpoint=False)
 def load_fishing_gear_codes(fishing_gear_codes):
     load(
-        controls,
+        fishing_gear_codes,
         table_name="fishing_gear_codes",
         schema="public",
         db_name="monitorfish_remote",

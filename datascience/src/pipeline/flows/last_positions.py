@@ -5,7 +5,7 @@ from prefect import Flow, task
 from src.pipeline.generic_tasks import extract, load
 
 
-@task
+@task(checkpoint=False)
 def extract_current_segments():
     return extract(
         db_name="monitorfish_remote", query_filepath="monitorfish/current_segments.sql"

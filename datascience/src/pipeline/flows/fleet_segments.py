@@ -33,7 +33,7 @@ def load_segments(segments):
             "target_species",
             "bycatch_species",
             "flag_states",
-        ]
+        ],
     )
 
 

@@ -11,7 +11,7 @@ def mock_extract_side_effect(
     query_filepath: Union[Path, str],
     dtypes: Union[None, dict] = None,
     parse_dates: Union[list, dict, None] = None,
-    ):
+):
     @patch("src.read_query.pd")
     @patch("src.read_query.create_engine")
     def mock_extract_side_effect_(

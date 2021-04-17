@@ -8,7 +8,6 @@ from tests.mocks import mock_extract_side_effect
 
 
 class TestControllersFlow(unittest.TestCase):
-
     @patch("src.pipeline.flows.controllers.extract")
     def test_extract_controllers(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect

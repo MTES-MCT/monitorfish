@@ -3,15 +3,6 @@ import prefect
 from prefect import Flow, task
 
 from src.pipeline.generic_tasks import extract, load
-from src.read_query import read_saved_query
-
-# engins du DEP
-# taille du bateau
-# s'il a le JPE ou non
-# MMSI
-# quartier du navire
-# cadencement
-# segment de flotte
 
 
 @task
@@ -38,14 +29,12 @@ def merge(last_positions, current_segments):
 @task(checkpoint=False)
 def load_last_positions(last_positions):
 
-    logger = prefect.context.get("logger")
-
     load(
         last_positions,
         table_name="last_positions",
         schema="public",
         db_name="monitorfish_remote",
-        logger=logger,
+        logger=prefect.context.get("logger"),
         delete_before_insert=True,
         pg_array_columns=["segments"],
         handle_array_conversion_errors=True,

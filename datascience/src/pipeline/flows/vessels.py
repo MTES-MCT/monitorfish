@@ -15,7 +15,7 @@ from src.pipeline.utils import delete, psql_insert_copy
 from src.read_query import read_saved_query
 
 
-@task
+@task(checkpoint=False)
 def extract_fr_vessels():
     res = read_saved_query("ocan", "ocan/navires_fr.sql")
 
@@ -61,7 +61,7 @@ def extract_fr_vessels():
     return res
 
 
-@task
+@task(checkpoint=False)
 def extract_cee_vessels():
     res = read_saved_query("ocan", "ocan/navires_cee_peche.sql")
     categorical_columns = [
@@ -90,7 +90,7 @@ def extract_cee_vessels():
     return res
 
 
-@task
+@task(checkpoint=False)
 def extract_non_cee_vessels():
     res = read_saved_query("ocan", "ocan/navires_hors_cee_peche.sql")
 
@@ -101,7 +101,7 @@ def extract_non_cee_vessels():
     return res
 
 
-@task
+@task(checkpoint=False)
 def extract_floats():
     res = read_saved_query("ocan", "ocan/flotteurs.sql")
 
@@ -123,7 +123,7 @@ def extract_floats():
     return res
 
 
-@task
+@task(checkpoint=False)
 def extract_nav_licences():
     res = read_saved_query("ocan", "ocan/permis_navigation.sql")
 
@@ -135,7 +135,7 @@ def extract_nav_licences():
     return res
 
 
-@task
+@task(checkpoint=False)
 def merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences):
     res = pd.merge(
         floats,
@@ -171,7 +171,7 @@ def merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences):
     return res
 
 
-@task
+@task(checkpoint=False)
 def clean(all_vessels):
 
     logger = prefect.context.get("logger")
@@ -285,7 +285,7 @@ def clean(all_vessels):
     return res
 
 
-@task()
+@task(checkpoint=False)
 def load_vessels(all_vessels):
 
     schema = "public"

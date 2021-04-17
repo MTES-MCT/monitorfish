@@ -4,7 +4,7 @@ import prefect
 from prefect import Flow, task
 
 
-@task
+@task(checkpoint=False)
 def print_time():
     utc_datetime_now = datetime.utcnow().strftime("%d/%m/%Y %H:%M")
     logger = prefect.context.get("logger")

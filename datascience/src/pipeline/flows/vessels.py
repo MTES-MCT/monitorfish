@@ -6,133 +6,101 @@ from sqlalchemy import ARRAY, Date, Float, Integer, MetaData, String, Table
 from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
+from src.pipeline.generic_tasks import extract
 from src.pipeline.processing import (
     combine_overlapping_columns,
     concatenate_columns,
     df_values_to_psql_arrays,
 )
 from src.pipeline.utils import delete, psql_insert_copy
-from src.read_query import read_saved_query
 
 
 @task(checkpoint=False)
 def extract_fr_vessels():
-    res = read_saved_query("ocan", "ocan/navires_fr.sql")
 
-    # Sparse data type takes up less memory
-    sparse_columns = {
+    # Sparse data type takes up less memory - especially for float data type
+    # For string data, pd.SparseDtype does not reduce memory usage much. Using
+    # pd.Categorical reduces memory usage much more.
+
+    dtypes = {
         "length_nf": pd.SparseDtype("float", None),
         "width_nf": pd.SparseDtype("float", None),
         "gauge_nf": pd.SparseDtype("float", None),
         "power_nf": pd.SparseDtype("float", None),
+        "vessel_phone_1_nf": "category",
+        "vessel_phone_2_nf": "category",
+        "vessel_phone_3_nf": "category",
+        "vessel_phone_4_nf": "category",
+        "vessel_email_1_nf": "category",
+        "vessel_email_2_nf": "category",
+        "operator_name_nf": "category",
+        "operator_email_nf": "category",
+        "operator_phone_1_nf": "category",
+        "operator_phone_2_nf": "category",
+        "proprietor_name_nf": "category",
+        "proprietor_email_nf": "category",
+        "proprietor_phone_1_nf": "category",
+        "proprietor_phone_2_nf": "category",
+        "vessel_type_nf": "category",
+        "registry_port_nf": "category",
+        "sailing_types_nf": "category",
+        "fishing_gear_main_nfp": "category",
+        "fishing_gear_secondary_nfp": "category",
+        "fishing_gear_third_nfp": "category",
     }
 
-    for c, t in sparse_columns.items():
-        res[c] = res[c].astype(t)
-
-    # For string data, pd.SparseDtype does not reduce memory usage much.
-    # Using pd.Categorical reduces memory usage much more.
-    categorical_columns = [
-        "vessel_phone_1_nf",
-        "vessel_phone_2_nf",
-        "vessel_phone_3_nf",
-        "vessel_phone_4_nf",
-        "vessel_email_1_nf",
-        "vessel_email_2_nf",
-        "operator_name_nf",
-        "operator_email_nf",
-        "operator_phone_1_nf",
-        "operator_phone_2_nf",
-        "proprietor_name_nf",
-        "proprietor_email_nf",
-        "proprietor_phone_1_nf",
-        "proprietor_phone_2_nf",
-        "vessel_type_nf",
-        "registry_port_nf",
-        "sailing_types_nf",
-        "fishing_gear_main_nfp",
-        "fishing_gear_secondary_nfp",
-        "fishing_gear_third_nfp",
-    ]
-
-    for c in categorical_columns:
-        res[c] = res[c].astype("category")
-
-    return res
+    return extract("ocan", "ocan/navires_fr.sql", dtypes=dtypes)
 
 
 @task(checkpoint=False)
 def extract_cee_vessels():
-    res = read_saved_query("ocan", "ocan/navires_cee_peche.sql")
-    categorical_columns = [
-        "fishing_gear_main_ncp",
-        "fishing_gear_secondary_ncp",
-        "fishing_gear_third_ncp",
-        "vessel_type_ncp",
-        "district_ncp",
-        "operator_name_ncp",
-        "operator_email_ncp",
-        "proprietor_email_ncp",
-    ]
 
-    for c in categorical_columns:
-        res[c] = res[c].astype("category")
-
-    sparse_columns = {
+    dtypes = {
+        "fishing_gear_main_ncp": "category",
+        "fishing_gear_secondary_ncp": "category",
+        "fishing_gear_third_ncp": "category",
+        "vessel_type_ncp": "category",
+        "district_ncp": "category",
+        "operator_name_ncp": "category",
+        "operator_email_ncp": "category",
+        "proprietor_email_ncp": "category",
         "length_ncp": pd.SparseDtype("float", None),
         "gauge_ncp": pd.SparseDtype("float", None),
         "power_ncp": pd.SparseDtype("float", None),
     }
 
-    for c, t in sparse_columns.items():
-        res[c] = res[c].astype(t)
-
-    return res
+    return extract("ocan", "ocan/navires_cee_peche.sql", dtypes=dtypes)
 
 
 @task(checkpoint=False)
 def extract_non_cee_vessels():
-    res = read_saved_query("ocan", "ocan/navires_hors_cee_peche.sql")
-
-    categorical_columns = ["fishing_gear_main_nep"]
-    for c in categorical_columns:
-        res[c] = res[c].astype("category")
-
-    return res
+    dtypes = {"fishing_gear_main_nep": "category"}
+    return extract("ocan", "ocan/navires_hors_cee_peche.sql", dtypes=dtypes)
 
 
 @task(checkpoint=False)
 def extract_floats():
-    res = read_saved_query("ocan", "ocan/flotteurs.sql")
 
-    categorical_columns = [
-        "imo_f",
-        "cfr_f",
-        "external_immatriculation_f",
-        "vessel_name_f",
-        "ircs_f",
-        "mmsi_f",
-        "flag_state_f",
-        "district_code_f",
-        "district_f",
-    ]
+    dtypes = {
+        "imo_f": "category",
+        "cfr_f": "category",
+        "external_immatriculation_f": "category",
+        "vessel_name_f": "category",
+        "ircs_f": "category",
+        "mmsi_f": "category",
+        "flag_state_f": "category",
+        "district_code_f": "category",
+        "district_f": "category",
+    }
 
-    for c in categorical_columns:
-        res[c] = res[c].astype("category")
-
-    return res
+    return extract("ocan", "ocan/flotteurs.sql", dtypes=dtypes)
 
 
 @task(checkpoint=False)
 def extract_nav_licences():
-    res = read_saved_query("ocan", "ocan/permis_navigation.sql")
+    dtypes = {"sailing_category": "category", "nav_licence_expiration_date": "category"}
 
-    categorical_columns = ["sailing_category", "nav_licence_expiration_date"]
-
-    for c in categorical_columns:
-        res[c] = res[c].astype("category")
-
-    return res
+    return extract("ocan", "ocan/permis_navigation.sql", dtypes=dtypes)
 
 
 @task(checkpoint=False)
@@ -172,7 +140,7 @@ def merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences):
 
 
 @task(checkpoint=False)
-def clean(all_vessels):
+def clean_vessels(all_vessels):
 
     logger = prefect.context.get("logger")
 
@@ -376,15 +344,12 @@ with Flow("Extract vessels characteristics") as flow:
     non_cee_vessels = extract_non_cee_vessels()
     floats = extract_floats()
     licences = extract_nav_licences()
+
     # Transform
     all_vessels = merge_vessels(
         floats, fr_vessels, cee_vessels, non_cee_vessels, licences
     )
-    all_vessels = clean(all_vessels)
+    all_vessels = clean_vessels(all_vessels)
 
     # Load
     load_vessels(all_vessels)
-
-
-if __name__ == "__main__":
-    flow.run()

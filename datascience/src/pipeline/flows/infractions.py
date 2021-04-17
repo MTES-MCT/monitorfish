@@ -4,6 +4,7 @@ from prefect import Flow, task
 
 from src.pipeline.generic_tasks import extract, load
 
+
 @task(checkpoint=False)
 def extract_infractions():
     return extract("fmc", "fmc/natinf.sql")
@@ -23,7 +24,7 @@ def load_infractions(infractions):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True
+        delete_before_insert=True,
     )
 
 

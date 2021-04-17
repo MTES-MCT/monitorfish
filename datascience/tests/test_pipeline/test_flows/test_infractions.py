@@ -4,12 +4,11 @@ from unittest.mock import patch
 import pandas as pd
 
 from src.pipeline.flows.infractions import (
-    flow, 
-    extract_infractions, 
     clean_infractions,
-    load_infractions
+    extract_infractions,
+    flow,
+    load_infractions,
 )
-
 from tests.mocks import mock_extract_side_effect
 
 
@@ -23,10 +22,10 @@ class TestInfractionsFlow(unittest.TestCase):
     def test_clean_infractions(self):
         infractions = pd.DataFrame(
             {
-                "infraction" : [
-                    "INFRACTION_1", 
-                    "Infraction numéro 2", 
-                    "T.y.p.e d'infraction"
+                "infraction": [
+                    "INFRACTION_1",
+                    "Infraction numéro 2",
+                    "T.y.p.e d'infraction",
                 ]
             }
         )
@@ -35,7 +34,7 @@ class TestInfractionsFlow(unittest.TestCase):
 
         self.assertEqual(
             cleaned_infractions.values.tolist(),
-            [["Infraction_1"], ["Infraction numéro 2"], ["T.y.p.e d'infraction"]]
+            [["Infraction_1"], ["Infraction numéro 2"], ["T.y.p.e d'infraction"]],
         )
 
     @patch("src.pipeline.flows.infractions.load", autospec=True)

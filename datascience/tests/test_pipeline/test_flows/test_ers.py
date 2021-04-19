@@ -61,6 +61,7 @@ class TestERSFlow(unittest.TestCase):
                 / "unexpected_files/received/2021/1/unexpected_non_zipfile.txt"
             ),
             ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/error/2021/1",
+            if_exists="replace",
         )
 
         self.assertEqual(len(zipfiles), 5)
@@ -133,6 +134,7 @@ class TestERSFlow(unittest.TestCase):
         mock_move.assert_called_once_with(
             ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles/UN_dummy.zip",
             ZIPFILES_TEST_DATA_LOCATION / "non_treated",
+            if_exists="replace",
         )
 
     @patch("src.pipeline.flows.ers.move")
@@ -150,6 +152,7 @@ class TestERSFlow(unittest.TestCase):
         mock_move.assert_called_once_with(
             ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles/unexpected.zip",
             ZIPFILES_TEST_DATA_LOCATION / "error",
+            if_exists="replace",
         )
 
     @patch("src.pipeline.flows.ers.batch_parse")

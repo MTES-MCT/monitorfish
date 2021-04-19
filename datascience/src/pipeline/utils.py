@@ -90,9 +90,20 @@ def psql_insert_copy(table, conn, keys, data_iter):
         cur.copy_expert(sql=sql, file=s_buf)
 
 
-def move(src_fp: pathlib.Path, dest_dirpath: pathlib.Path) -> None:
+def move(
+    src_fp: pathlib.Path, dest_dirpath: pathlib.Path, if_exists: str = "raise"
+) -> None:
     """Moves a file to another directory. If the destination directory
     does not exist, it is created, as well as all intermediate directories."""
     if not dest_dirpath.exists():
         os.makedirs(dest_dirpath)
-    shutil.move(src_fp.as_posix(), dest_dirpath.as_posix())
+    try:
+        shutil.move(src_fp.as_posix(), dest_dirpath.as_posix())
+    except shutil.Error:
+        if if_exists == "raise":
+            raise
+        elif if_exists == "replace":
+            os.remove(dest_dirpath / src_fp.name)
+            shutil.move(src_fp.as_posix(), dest_dirpath.as_posix())
+        else:
+            raise ValueError(f"if_exists must be 'raise' or 'replace', got {if_exists}")

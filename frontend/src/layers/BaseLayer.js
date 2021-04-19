@@ -41,13 +41,21 @@ const BaseLayer = ({ map }) => {
   })
 
   useEffect(() => {
-    if(map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
-      map.getLayers().push(baseLayersObjects[selectedBaseLayer])
-    }
+    addLayerToMap()
   }, [map])
 
   useEffect(() => {
-    if(map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
+    showAnotherBaseLayer()
+  }, [selectedBaseLayer])
+
+  function addLayerToMap () {
+    if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
+      map.getLayers().push(baseLayersObjects[selectedBaseLayer])
+    }
+  }
+
+  function showAnotherBaseLayer () {
+    if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
       const layerToRemove = map.getLayers().getArray()
         .find(layer => layer.className_ === LayersEnum.BASE_LAYER.code)
 
@@ -60,7 +68,7 @@ const BaseLayer = ({ map }) => {
         map.getLayers().remove(layerToRemove)
       }, 300)
     }
-  }, [selectedBaseLayer])
+  }
 
   return null
 

@@ -30,22 +30,30 @@ const VesselTrackLayer = ({ map }) => {
   }))
 
   useEffect(() => {
-    if(map) {
-      map.getLayers().push(layer)
-    }
+    addLayerToMap()
   }, [map])
 
   useEffect(() => {
-    if(map && selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
+    showVesselTrack()
+  }, [selectedVessel, map])
+
+  function addLayerToMap () {
+    if (map) {
+      map.getLayers().push(layer)
+    }
+  }
+
+  function showVesselTrack () {
+    if (map && selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
 
       let vesselTrackVector = buildVesselTrackVector(selectedVessel)
       vectorSource.clear(true)
       vectorSource.addFeatures(vesselTrackVector)
 
-    } else if(map && !selectedVessel) {
+    } else if (map && !selectedVessel) {
       vectorSource.clear(true)
     }
-  }, [selectedVessel, map])
+  }
 
   function buildVesselTrackVector(vessel) {
     let vesselTrackLines = buildVesselTrackLines(vessel)

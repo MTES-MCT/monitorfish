@@ -7,21 +7,27 @@ const RegulatoryLayers = ({ map }) => {
   const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
 
   useEffect(() => {
-    if (map && layer.layers.length) {
-      reorganizeRegulatoryLayers();
-    }
+    sortRegulatoryLayersFromAreas()
   }, [layer.layers, map, layer.layersAndAreas])
 
   useEffect(() => {
-    if (map && layer.layers) {
-      addRegulatoryLayersToMap();
-      removeRegulatoryLayersToMap();
-    }
+    addOrRemoveRegulatoryLayersToMap()
   }, [layer.layers])
 
   useEffect(() => {
+    addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers()
+  }, [regulatoryZoneMetadata, layer.lastShowedFeatures])
+
+  function addOrRemoveRegulatoryLayersToMap () {
+    if (map && layer.layers) {
+      addRegulatoryLayersToMap()
+      removeRegulatoryLayersToMap()
+    }
+  }
+
+  function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
     if (map) {
-      let metadataIsShowedPropertyName = "metadataIsShowed";
+      let metadataIsShowedPropertyName = 'metadataIsShowed'
       let regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
       if (regulatoryZoneMetadata) {
         let layerToAddProperty = regulatoryLayers.find(layer => {
@@ -29,13 +35,13 @@ const RegulatoryLayers = ({ map }) => {
         })
 
         if (layerToAddProperty) {
-          addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName);
+          addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName)
         }
       } else {
-        removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName);
+        removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName)
       }
     }
-  }, [regulatoryZoneMetadata, layer.lastShowedFeatures])
+  }
 
   function addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName) {
     const features = layerToAddProperty.getSource().getFeatures()
@@ -55,8 +61,8 @@ const RegulatoryLayers = ({ map }) => {
     })
   }
 
-  function reorganizeRegulatoryLayers() {
-    if(layer.layersAndAreas.length > 1) {
+  function sortRegulatoryLayersFromAreas() {
+    if(map && layer.layers.length && layer.layersAndAreas.length > 1) {
       let sortedLayersToArea = [...layer.layersAndAreas].sort((a, b) => a.area - b.area).reverse()
 
       sortedLayersToArea.forEach((layerAndArea, index) => {

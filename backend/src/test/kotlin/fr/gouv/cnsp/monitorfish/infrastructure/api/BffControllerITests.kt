@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
@@ -11,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito
@@ -100,7 +102,7 @@ class BffControllerITests {
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        givenSuspended { getVessel.execute(any(), any(), any(), any()) } willReturn {
+        givenSuspended { getVessel.execute(any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
             Pair(false, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                     listOf(firstPosition, secondPosition, thirdPosition)))
         }
@@ -117,7 +119,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS)
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, null, null)
         }
     }
 
@@ -128,7 +130,7 @@ class BffControllerITests {
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        givenSuspended { getVessel.execute(any(), any(), any(), any()) } willReturn {
+        givenSuspended { getVessel.execute(any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
             Pair(true, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                     listOf(firstPosition, secondPosition, thirdPosition)))
         }
@@ -145,7 +147,42 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS)
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, null, null)
+        }
+    }
+
+    @Test
+    fun `Should get vessels's last positions and data When from and to date parameters are set`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), any()) } willReturn {
+            Pair(false, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    listOf(firstPosition, secondPosition, thirdPosition)))
+        }
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123" +
+                "&IRCS=IEF4&trackDepth=CUSTOM&afterDateTime=2021-03-24T22:07:00.000Z&beforeDateTime=2021-04-24T22:07:00.000Z"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.declaredFishingGears[0]", equalTo("Trémails")))
+                .andExpect(jsonPath("$.vesselType", equalTo("Fishing")))
+                .andExpect(jsonPath("$.flagState", equalTo("FR")))
+                .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
+                .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.positions.length()", equalTo(3)))
+
+        runBlocking {
+            Mockito.verify(getVessel).execute(
+                    "FR224226850",
+                    "123",
+                    "IEF4",
+                    VesselTrackDepth.CUSTOM,
+                    ZonedDateTime.parse("2021-03-24T22:07:00Z"),
+                    ZonedDateTime.parse("2021-04-24T22:07:00Z"))
         }
     }
 

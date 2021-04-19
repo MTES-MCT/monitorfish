@@ -50,6 +50,25 @@ export let getCoordinates = (coordinates, projection) => {
             return [`${sSplit[0]} N`, `${degree}° ${degreeSplit[1]}`]
         }
     }
+
+    let split = hourCoordinates.split('″')
+    if (split.length > 2) {
+        let degreeSplit = split[1].split('°')
+        if(degreeSplit.length) {
+            let degree = degreeSplit[0].trim()
+            switch (degree.length) {
+                case 1: degree = `00${degree}`; break
+                case 2: degree = `0${degree}`; break
+                default: break
+            }
+
+            return [`0° 00′ 00″`, `${degree}° ${degreeSplit[1]}″${split[2]}`]
+        }
+    }
+
+
+
+
 }
 
 function getMonth(date) {

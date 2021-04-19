@@ -52,11 +52,11 @@ const Control = props => {
               <SubFields>
                   <SubField>
                       <Key width={47}>Lat.</Key>
-                      <SubValue>{props.control.latitude ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[0]}</> : <NoValue>-</NoValue>}</SubValue>
+                      <SubValue>{(props.control.latitude || props.control.latitude === 0) && (props.control.longitude || props.control.longitude === 0) ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[0]}</> : <NoValue>-</NoValue>}</SubValue>
                   </SubField><br/>
                   <SubField>
                       <Key width={25}>Lon.</Key>
-                      <SubValue>{props.control.longitude ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[1]}</> : <NoValue>-</NoValue>}</SubValue>
+                      <SubValue>{(props.control.latitude || props.control.latitude === 0) && (props.control.longitude || props.control.longitude === 0) ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[1]}</> : <NoValue>-</NoValue>}</SubValue>
                   </SubField>
               </SubFields> : null
         }

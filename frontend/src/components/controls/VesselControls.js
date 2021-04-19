@@ -10,7 +10,7 @@ const VesselControls = props => {
     const [yearsToControls, setYearsToControls] = useState({})
 
     useEffect(() => {
-        if(props.controlResumeAndControls && props.controlResumeAndControls.controls) {
+        if(props.controlResumeAndControls && props.controlResumeAndControls.controls && props.controlResumeAndControls.controls.length) {
             let nextYearsToControls = {}
 
             if(props.controlsFromDate) {
@@ -22,9 +22,9 @@ const VesselControls = props => {
             }
 
             props.controlResumeAndControls.controls.forEach(control => {
-                const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
+                if(control && control.controlDatetimeUtc) {
+                    const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
 
-                if(control.controlDatetimeUtc) {
                     if(nextYearsToControls[year] && nextYearsToControls[year].length) {
                         nextYearsToControls[year] = nextYearsToControls[year].concat(control)
                     } else {
@@ -34,6 +34,8 @@ const VesselControls = props => {
             })
 
             setYearsToControls(nextYearsToControls)
+        } else {
+            setYearsToControls(null)
         }
     }, [props.controlResumeAndControls])
 
@@ -96,7 +98,7 @@ const VesselControls = props => {
                           </Text>
                       </Title>
                       {
-                          yearsToControls && Object.keys(yearsToControls).length ?
+                          yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ?
                             <List>
                                 {
                                     Object.keys(yearsToControls)

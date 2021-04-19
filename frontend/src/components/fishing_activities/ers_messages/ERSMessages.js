@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
+import {COLORS} from "../../../constants/constants";
 import ERSMessage from "./ERSMessage";
-import {ReactComponent as ArrowSVG} from '../icons/Picto_fleche-pleine-droite.svg'
-import {ReactComponent as SortSVG} from '../icons/ascendant-descendant.svg'
+import {ReactComponent as ArrowSVG} from '../../icons/Picto_fleche-pleine-droite.svg'
+import {ReactComponent as SortSVG} from '../../icons/ascendant-descendant.svg'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 
@@ -74,13 +74,15 @@ const ERSMessages = props => {
             }}),
         placeholder: base => ({ ...base, fontSize: 13 }),
         singleValue: base => ({ ...base, fontSize: 13 }),
+        menuPortal: base => ({ ...base, zIndex: 9999 })
     };
 
     return <Wrapper>
         <Arrow onClick={() => props.showFishingActivitiesSummary()}/><Previous onClick={() => props.showFishingActivitiesSummary()}>Revenir au résumé</Previous>
         <Filters>
             <Select
-                placeholder="Filtrer les messages"
+              menuPortalTarget={document.body}
+              placeholder="Filtrer les messages"
                 closeMenuOnSelect={true}
                 components={animatedComponents}
                 defaultValue={selectedOptions}
@@ -131,7 +133,7 @@ const Arrow = styled(ArrowSVG)`
 
 const NoMessage = styled.div`
   text-align: center;
-  margin-top: 10px;
+  margin-top: 40px;
   padding-bottom: 30px;
   font-size: 13px;
   color: ${COLORS.textGray};

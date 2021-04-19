@@ -2,10 +2,10 @@ import React, {useState} from "react";
 import styled from "styled-components";
 
 import FishingActivitiesSummary from "./FishingActivitiesSummary";
-import ERSMessages from "../ers_messages/ERSMessages";
+import ERSMessages from "./ers_messages/ERSMessages";
 import {COLORS} from "../../constants/constants";
 
-const FishingActivities = props => {
+const VesselFishingActivities = props => {
     const [fishingViewIndex, setFishingViewIndex] = useState(1)
     const [messageTypeFilter, setMessageTypeFilter] = useState(null)
 
@@ -99,4 +99,4 @@ const UpdateFishingActivitiesButton = styled.div`
 }
 `
 
-export default FishingActivities
+export default VesselFishingActivities

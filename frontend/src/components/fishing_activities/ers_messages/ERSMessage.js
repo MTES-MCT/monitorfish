@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
-import {ReactComponent as XMLSVG} from '../icons/Picto_XML.svg'
-import {ReactComponent as AckOkSVG} from '../icons/Message_JPE_acquitté.svg'
-import {ReactComponent as AckNOkSVG} from '../icons/Message_JPE_non_acquitté.svg'
-import {getDateTime} from "../../utils";
+import {COLORS} from "../../../constants/constants";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
+import {ReactComponent as XMLSVG} from '../../icons/Picto_XML.svg'
+import {ReactComponent as AckOkSVG} from '../../icons/Message_JPE_acquitté.svg'
+import {ReactComponent as AckNOkSVG} from '../../icons/Message_JPE_non_acquitté.svg'
+import {getDateTime} from "../../../utils";
 import DEPMessage from "./DEPMessage";
 import FARMessage from "./FARMessage";
 import EOFMessage from "./EOFMessage";

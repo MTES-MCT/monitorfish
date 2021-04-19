@@ -1,9 +1,9 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getDateTime} from "../../utils";
+import {COLORS} from "../../../constants/constants";
+import {getDateTime} from "../../../utils";
 import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
 
 const DEPMessageResume = props => {
     const [isOpen, setIsOpen] = useState(false)

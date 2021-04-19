@@ -1,12 +1,13 @@
 import Layers from "../domain/entities/layers"
 import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from "../domain/entities/map";
 
-const HTTP_OK = 200
+const OK = 200
+const NOT_FOUND = 404
 const ACCEPTED = 202
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
-const ERS_ERROR_MESSAGE = "Nous n'avons pas trouvé de message JPE pour ce navire"
+const ERS_ERROR_MESSAGE = "Nous n'avons pas pu chercher les messages JPE de ce navire"
 const CONTROLS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles pour ce navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -24,7 +25,7 @@ function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {
 export function getVesselsLastPositionsFromAPI() {
     return fetch('/bff/v1/vessels')
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json()
             } else {
                 response.text().then(text => {
@@ -56,7 +57,7 @@ export function getVesselFromAPI(
 
     return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${IRCS}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json().then(vessel => {
                     return {
                         vessel: vessel,
@@ -89,7 +90,7 @@ export function searchVesselsFromAPI(searched) {
 
     return fetch(`/bff/v1/vessels/search?searched=${searched}`)
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json()
             } else {
                 response.text().then(text => {
@@ -108,7 +109,7 @@ export function getAllRegulatoryZonesFromAPI() {
     return fetch(`${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
         `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`)
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json()
             } else {
                 response.text().then(text => {
@@ -127,7 +128,7 @@ export function getAllRegulatoryZonesFromAPI() {
 export function getAdministrativeZoneFromAPI(administrativeZone, extent, subZone) {
     return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone))
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json().then(response => {
                     return response
                 }).catch(e => {
@@ -169,7 +170,7 @@ export function getRegulatoryZoneFromAPI(type, regulatoryZone) {
     try {
         return fetch(getRegulatoryZoneURL(type, regulatoryZone))
             .then(response => {
-                if (response.status === HTTP_OK) {
+                if (response.status === OK) {
                     return response.json().then(response => {
                         return response
                     }).catch(e => {
@@ -216,7 +217,7 @@ export function getRegulatoryZoneMetadataFromAPI(regulatorySubZone) {
 
     return fetch(url)
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json().then(response => {
                     if (response.features.length === 1) {
                         return response.features[0].properties
@@ -239,7 +240,7 @@ export function getRegulatoryZoneMetadataFromAPI(regulatorySubZone) {
 export function getAllGearCodesFromAPI() {
     return fetch(`/bff/v1/gears`)
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json()
             } else {
                 response.text().then(text => {
@@ -260,8 +261,13 @@ export function getVesselERSMessagesFromAPI(vesselIdentity) {
 
     return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}`)
             .then(response => {
-                if (response.status === HTTP_OK) {
+                if (response.status === OK) {
                     return response.json()
+                } else if(response.status === NOT_FOUND) {
+                    response.text().then(text => {
+                        console.info(text)
+                    })
+                    return null
                 } else {
                     response.text().then(text => {
                         console.error(text)
@@ -279,7 +285,7 @@ export function getVesselERSMessagesFromAPI(vesselIdentity) {
 export function getVesselControlsFromAPI(vesselId, fromDate) {
     return fetch(`/bff/v1/vessels/${vesselId}/controls?afterDateTime=${fromDate.toISOString()}`)
       .then(response => {
-          if (response.status === HTTP_OK) {
+          if (response.status === OK) {
               return response.json()
           } else {
               response.text().then(text => {
@@ -312,7 +318,7 @@ export function getAdministrativeSubZonesFromAPI(type) {
 
     return fetch(query)
         .then(response => {
-            if (response.status === HTTP_OK) {
+            if (response.status === OK) {
                 return response.json().then(response => {
                     return response
                 }).catch(e => {

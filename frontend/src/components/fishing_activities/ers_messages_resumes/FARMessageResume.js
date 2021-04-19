@@ -1,9 +1,9 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
+import {COLORS} from "../../../constants/constants";
 import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
 import SpeciesAndWeightChart from "./SpeciesAndWeightChart";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
 
 const FARMessageResume = props => {
     const [isOpen, setIsOpen] = useState(false)

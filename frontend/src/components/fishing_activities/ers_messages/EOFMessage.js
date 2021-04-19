@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getDateTime} from "../../utils";
+import {COLORS} from "../../../constants/constants";
+import {getDateTime} from "../../../utils";
 
 const EOFMessage = props => {
 

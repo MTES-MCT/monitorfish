@@ -1,9 +1,9 @@
 import React, {useEffect, useRef} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
-import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
-import {ReactComponent as ArrowSVG} from './../icons/Picto_fleche-pleine-droite.svg'
+import {COLORS} from "../../../constants/constants";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
+import {ReactComponent as ChevronIconSVG} from '../../icons/Chevron_simple_gris.svg'
+import {ReactComponent as ArrowSVG} from '../../icons/Picto_fleche-pleine-droite.svg'
 
 const ERSMessageResumeHeader = props => {
     const firstUpdate = useRef(true);

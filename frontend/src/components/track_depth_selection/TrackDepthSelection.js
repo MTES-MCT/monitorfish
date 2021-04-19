@@ -34,14 +34,19 @@ const TrackDepthSelection = props => {
       }
     }, [trackDepthRadioSelection])
 
+  const convertToUTCDay = datesSelection => {
+    datesSelection[0].setMinutes(datesSelection[0].getMinutes() - datesSelection[0].getTimezoneOffset())
+    datesSelection[1].setMinutes(datesSelection[1].getMinutes() - datesSelection[1].getTimezoneOffset())
+  }
+
   useEffect(() => {
-    console.log(datesSelection)
     if(datesSelection && datesSelection.length > 1) {
       if(firstUpdate.current){
         firstUpdate.current = false
         return
       }
 
+      convertToUTCDay(datesSelection)
       props.showVesselTrackWithTrackDepth(VesselTrackDepth.CUSTOM, datesSelection[0], datesSelection[1])
       setTrackDepthRadioSelection(null)
     } else if(!trackDepthRadioSelection) {
@@ -53,7 +58,7 @@ const TrackDepthSelection = props => {
       <>
           <TrackDepthSelectionButton
             openBox={props.openBox}
-            firstUpdate={props.firstUpdate.current}
+            firstUpdate={firstUpdate.current}
             rightMenuIsOpen={props.rightMenuIsOpen}
             trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
             onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
@@ -62,7 +67,7 @@ const TrackDepthSelection = props => {
           </TrackDepthSelectionButton>
           <TrackDepthSelectionContent
             openBox={props.openBox}
-            firstUpdate={props.firstUpdate.current}
+            firstUpdate={firstUpdate.current}
             rightMenuIsOpen={props.rightMenuIsOpen}
             trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
           >
@@ -124,17 +129,17 @@ const TrackDepthSelectionContent = styled.div`
   font-size: 13px;
   color: ${COLORS.textGray};
 
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-track-depth-selection-opening' : 'vessel-track-depth-selection-closing'} 0.5s ease forwards,
+  animation: ${props => props.firstUpdate ? '' : props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-track-depth-selection-opening' : 'vessel-track-depth-selection-closing'} 0.5s ease forwards,
   ${props => props.rightMenuIsOpen && props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 
   @keyframes vessel-track-depth-selection-opening {
-    0%   { margin-right: 217px; opacity: 0;   }
-    100% { margin-right: 540px; opacity: 1; }
+    0%   { margin-right: 217px; opacity: 0; visibility: hidden; }
+    100% { margin-right: 540px; opacity: 1; visibility: visible; }
   }
 
   @keyframes vessel-track-depth-selection-closing {
-    0% { margin-right: 540px; opacity: 1; }
-    100%   { margin-right: 217px; opacity: 0;   }
+    0% { margin-right: 540px; opacity: 1; visibility: visible; }
+    100%   { margin-right: 217px; opacity: 0; visibility: hidden;   }
   }
 `
 

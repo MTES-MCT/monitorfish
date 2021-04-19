@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getCoordinates, getDateTime} from "../../utils";
-import {WSG84_PROJECTION} from "../../domain/entities/map";
+import {COLORS} from "../../../constants/constants";
+import {getCoordinates, getDateTime} from "../../../utils";
+import {WSG84_PROJECTION} from "../../../domain/entities/map";
 import ERSMessageSpecies from "./ERSMessageSpecies";
-import {buildCatchArray} from "../../domain/entities/ERS";
+import {buildCatchArray} from "../../../domain/entities/ERS";
 
 const FARMessage = props => {
     const [catches, setCatches] = useState([])

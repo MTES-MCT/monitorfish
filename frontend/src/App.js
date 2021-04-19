@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
-import MapWrapper from './containers/MapWrapper'
+import Map from './containers/Map'
 import VesselsSearchBox from './containers/VesselsSearchBox'
 import VesselSidebar from './containers/VesselSidebar'
 import LayersSidebar from './containers/LayersSidebar'
@@ -16,7 +16,7 @@ function App () {
     <>
       <ToastProvider placement="bottom-right">
         <Wrapper>
-          <MapWrapper/>
+          <Map/>
           <VesselsSearchBox/>
           <RightMenuOnHoverZone />
           <LayersSidebar/>

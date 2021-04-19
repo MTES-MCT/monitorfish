@@ -29,6 +29,10 @@ export function vesselAndVesselFeatureAreEquals(vessel, feature) {
 }
 
 export function vesselsAreEquals(firstVessel, secondVessel) {
+    if(!firstVessel || !secondVessel) {
+        return false
+    }
+
     return (firstVessel.internalReferenceNumber
       ? firstVessel.internalReferenceNumber === secondVessel.internalReferenceNumber
       : false) ||

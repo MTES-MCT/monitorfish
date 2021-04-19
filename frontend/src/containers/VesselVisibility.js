@@ -149,6 +149,7 @@ const Wrapper = styled.div`
     0%   { opacity: 1; }
     100% { opacity: 0; }
   }
+  z-index: 1000;
 `
 
 const ShowVesselLabel = styled.div`
@@ -230,7 +231,6 @@ const VesselVisibilityBox = styled.div`
   position: absolute;
   display: inline-block;
   animation: ${props => props.firstUpdate && !props.vesselVisibilityBoxIsOpen ? '' : props.vesselVisibilityBoxIsOpen ? 'vessel-visibility-box-opening' : 'vessel-visibility-box-closing'} 0.5s ease forwards;
-  z-index: 1000;
 
   @keyframes vessel-visibility-box-opening {
     0%   { margin-right: -420px; opacity: 0;  }

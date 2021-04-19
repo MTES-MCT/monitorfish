@@ -3,10 +3,27 @@ import styled from "styled-components";
 import {COLORS} from "../../constants/constants";
 import countries from "i18n-iso-countries";
 import { getDate, getDay, getMonth } from '../../utils'
+import { vesselsAreEquals } from '../../domain/entities/vessel'
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
 const VesselIdentity = props => {
     const [gears, setGears] = useState([])
+    const [vessel, setVessel] = useState(null);
+    const [lastPosition, setLastPosition] = useState(null);
+
+    useEffect(() => {
+        if (props.vessel) {
+            if(props.vessel.positions.length) {
+                setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+            } else {
+                if(!vesselsAreEquals(props.vessel, vessel)) {
+                    setLastPosition(null)
+                }
+            }
+
+            setVessel(props.vessel)
+        }
+    }, [props.vessel])
 
     const showLicenceExpirationDate = licenceExpirationDate => {
         return getDate(licenceExpirationDate)
@@ -23,21 +40,39 @@ const VesselIdentity = props => {
             })
 
             setGears(gears)
+        } else {
+            setGears([])
         }
     }, [props.gears, props.vessel])
 
-    return (
-        <Body>
+    function getVesselOrLastPositionProperty (propertyName) {
+        if(vessel && vessel[propertyName]) {
+            return vessel[propertyName]
+        } else if (lastPosition && lastPosition[propertyName]) {
+            return lastPosition[propertyName]
+        } else {
+            return <NoValue>-</NoValue>
+        }
+    }
+
+    return ( vessel
+        ? <Body>
             <Zone>
                 <Fields>
                     <TableBody>
                         <Field>
                             <Key>CFR</Key>
-                            <Value>{props.vessel.internalReferenceNumber ? props.vessel.internalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Value>
+                                {
+                                    getVesselOrLastPositionProperty('internalReferenceNumber')
+                                }
+                            </Value>
                         </Field>
                         <Field>
                             <Key>MMSI</Key>
-                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
+                            <Value>{
+                                getVesselOrLastPositionProperty('mmsi')
+                            }</Value>
                         </Field>
                     </TableBody>
                 </Fields>
@@ -45,11 +80,19 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Marquage ext.</Key>
-                            <Value>{props.vessel.externalReferenceNumber ? props.vessel.externalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Value>
+                                {
+                                    getVesselOrLastPositionProperty('externalReferenceNumber')
+                                }
+                            </Value>
                         </Field>
                         <Field>
                             <Key>Call Sign (IRCS)</Key>
-                            <Value>{props.vessel.ircs ? props.vessel.ircs : <NoValue>-</NoValue>}</Value>
+                            <Value>
+                                {
+                                    getVesselOrLastPositionProperty('ircs')
+                                }
+                            </Value>
                         </Field>
                     </TableBody>
                 </Fields>
@@ -59,15 +102,15 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Nationalité</Key>
-                            <TrimmedValue>{props.vessel.flagState && countries.getName(props.vessel.flagState, "fr") ? countries.getName(props.vessel.flagState, "fr") : <NoValue>-</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{vessel.flagState && countries.getName(vessel.flagState, "fr") ? countries.getName(vessel.flagState, "fr") : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Quartier</Key>
-                            <TrimmedValue>{props.vessel.district ? <>{props.vessel.district} {props.vessel.districtCode ? <>({props.vessel.districtCode})</> : ''}</> : <NoValue>-</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{vessel.district ? <>{vessel.district} {vessel.districtCode ? <>({vessel.districtCode})</> : ''}</> : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Port d'attache</Key>
-                            <TrimmedValue>{props.vessel.registryPort ? props.vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{vessel.registryPort ? vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                     </TableBody>
                 </Fields>
@@ -76,16 +119,16 @@ const VesselIdentity = props => {
                         <Field>
                             <Key>Taille</Key>
                             <Value>
-                                {props.vessel.length ? props.vessel.length : <NoValue>-</NoValue>} x {props.vessel.width ? props.vessel.width : <NoValue>-</NoValue>}
+                                {vessel.length ? vessel.length : <NoValue>-</NoValue>} x {vessel.width ? vessel.width : <NoValue>-</NoValue>}
                             </Value>
                         </Field>
                         <Field>
                             <Key>Jauge</Key>
-                            <Value>{props.vessel.gauge ? <>{props.vessel.gauge} GT</> : <NoValue>-</NoValue>}</Value>
+                            <Value>{vessel.gauge ? <>{vessel.gauge} GT</> : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key>Moteur</Key>
-                            <Value>{props.vessel.power ? <>{props.vessel.power} kW</> : <NoValue>-</NoValue>}</Value>
+                            <Value>{vessel.power ? <>{vessel.power} kW</> : <NoValue>-</NoValue>}</Value>
                         </Field>
                     </TableBody>
                 </Fields>
@@ -95,15 +138,15 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Type de navire</Key>
-                            <Value>{props.vessel.vesselType ? props.vessel.vesselType : <NoValue>-</NoValue>}</Value>
+                            <Value>{vessel.vesselType ? vessel.vesselType : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key>Catégorie de navigation</Key>
-                            <Value>{props.vessel.sailingCategory ? props.vessel.sailingCategory : <NoValue>-</NoValue>}</Value>
+                            <Value>{vessel.sailingCategory ? vessel.sailingCategory : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key>Genre de navigation</Key>
-                            <Value>{props.vessel.sailingType ? props.vessel.sailingType : <NoValue>-</NoValue>}</Value>
+                            <Value>{vessel.sailingType ? vessel.sailingType : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>
                             <Key/>
@@ -144,9 +187,9 @@ const VesselIdentity = props => {
                             <Key>Permis de navigation</Key>
                             <Value>
                                 {
-                                    props.vessel.navigationLicenceExpirationDate ? <>
-                                            Exp le {showLicenceExpirationDate(props.vessel.navigationLicenceExpirationDate)}
-                                            { new Date(props.vessel.navigationLicenceExpirationDate) >= Date.now() ? <LicenceActive /> : <LicenceExpired />}
+                                    vessel.navigationLicenceExpirationDate ? <>
+                                            Exp le {showLicenceExpirationDate(vessel.navigationLicenceExpirationDate)}
+                                            { new Date(vessel.navigationLicenceExpirationDate) >= Date.now() ? <LicenceActive /> : <LicenceExpired />}
                                         </>
                                         : <NoValue>-</NoValue>
                                 }
@@ -157,10 +200,10 @@ const VesselIdentity = props => {
                             <Key>Coordonnées propriétaire</Key>
                             <Value>
                                 <PersonalData>
-                                    { props.vessel.proprietorName ? <>
-                                        {props.vessel.proprietorName}
-                                        <span>{ props.vessel.proprietorPhones ? <><br/>{props.vessel.proprietorPhones.join(", ")}</> : '' }</span>
-                                        { props.vessel.proprietorEmails ? <><br/>{props.vessel.proprietorEmails.join(", ")}</> : '' }
+                                    { vessel.proprietorName ? <>
+                                        {vessel.proprietorName}
+                                        <span>{ vessel.proprietorPhones ? <><br/>{vessel.proprietorPhones.join(", ")}</> : '' }</span>
+                                        { vessel.proprietorEmails ? <><br/>{vessel.proprietorEmails.join(", ")}</> : '' }
                                     </> : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
@@ -170,10 +213,10 @@ const VesselIdentity = props => {
                             <Key>Coordonnées armateur</Key>
                             <Value>
                                 <PersonalData>
-                                    { props.vessel.operatorName ? <>
-                                        {props.vessel.operatorName}
-                                        <span>{ props.vessel.operatorPhones ? <><br/>{props.vessel.operatorPhones.join(", ")}</> : '' }</span>
-                                        { props.vessel.operatorEmails ? <><br/>{props.vessel.operatorEmails.join(", ")}</> : '' }
+                                    { vessel.operatorName ? <>
+                                        {vessel.operatorName}
+                                        <span>{ vessel.operatorPhones ? <><br/>{vessel.operatorPhones.join(", ")}</> : '' }</span>
+                                        { vessel.operatorEmails ? <><br/>{vessel.operatorEmails.join(", ")}</> : '' }
                                     </> : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
@@ -183,10 +226,10 @@ const VesselIdentity = props => {
                             <Key>Contact navire</Key>
                             <Value>
                                 <PersonalData>
-                                    { props.vessel.vesselPhones || props.vessel.vesselEmails ? 
+                                    { vessel.vesselPhones || vessel.vesselEmails ?
                                     <> 
-                                        { props.vessel.vesselPhones ? <>{props.vessel.vesselPhones.join(", ")}<br/></> : '' }
-                                        { props.vessel.vesselEmails ? <>{props.vessel.vesselEmails.join(", ")}</> : '' }
+                                        { vessel.vesselPhones ? <>{vessel.vesselPhones.join(", ")}<br/></> : '' }
+                                        { vessel.vesselEmails ? <>{vessel.vesselEmails.join(", ")}</> : '' }
                                     </> : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
@@ -195,7 +238,7 @@ const VesselIdentity = props => {
                     </TableBody>
                 </Fields>
             </Zone>
-        </Body>
+        </Body> : null
     )
 }
 

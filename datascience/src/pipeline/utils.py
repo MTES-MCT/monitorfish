@@ -4,10 +4,7 @@ import os
 import pathlib
 import shutil
 from io import StringIO
-from itertools import zip_longest
-from typing import Iterable, Union
 
-import prefect
 import sqlalchemy
 from sqlalchemy import MetaData, Table, func, select
 from sqlalchemy.exc import InvalidRequestError
@@ -91,12 +88,6 @@ def psql_insert_copy(table, conn, keys, data_iter):
 
         sql = "COPY {} ({}) FROM STDIN WITH CSV".format(table_name, columns)
         cur.copy_expert(sql=sql, file=s_buf)
-
-
-def grouper(iterable: Iterable, n: int, fillvalue: Union[None, str] = None) -> Iterable:
-    """Collect data into fixed-length chunks or blocks"""
-    args = [iter(iterable)] * n
-    return zip_longest(*args, fillvalue=fillvalue)
 
 
 def move(src_fp: pathlib.Path, dest_dirpath: pathlib.Path) -> None:

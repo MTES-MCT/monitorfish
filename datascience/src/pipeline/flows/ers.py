@@ -117,7 +117,11 @@ def extract_zipfiles(
                     + "Moving files to error_directory."
                 )
                 for non_zipfile in non_zipfiles:
-                    move(zipfile_input_dir / non_zipfile, zipfile_error_dir)
+                    move(
+                        zipfile_input_dir / non_zipfile,
+                        zipfile_error_dir,
+                        if_exists="replace",
+                    )
 
             for zipfile in zipfiles:
                 res.append(
@@ -165,7 +169,9 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
                 + f"Moving {zipfile['full_name']} to non-treated directory."
             )
             move(
-                zipfile["input_dir"] / zipfile["full_name"], zipfile["non_treated_dir"]
+                zipfile["input_dir"] / zipfile["full_name"],
+                zipfile["non_treated_dir"],
+                if_exists="replace",
             )
 
         # Move unexpected file types to error directory
@@ -174,7 +180,11 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
                 f"Unexpected message type '{message_type}' ({zipfile}). "
                 + f"Moving {zipfile} to error directory."
             )
-            move(zipfile["input_dir"] / zipfile["full_name"], zipfile["error_dir"])
+            move(
+                zipfile["input_dir"] / zipfile["full_name"],
+                zipfile["error_dir"],
+                if_exists="replace",
+            )
 
 
 @task(checkpoint=False)
@@ -289,9 +299,17 @@ def load_ers(cleaned_data: List[dict]):
                     "Errors occurred during parsing of some of the messages. "
                     f"Moving {ers['full_name']} to error directory."
                 )
-                move(ers["input_dir"] / ers["full_name"], ers["error_dir"])
+                move(
+                    ers["input_dir"] / ers["full_name"],
+                    ers["error_dir"],
+                    if_exists="replace",
+                )
             else:
-                move(ers["input_dir"] / ers["full_name"], ers["treated_dir"])
+                move(
+                    ers["input_dir"] / ers["full_name"],
+                    ers["treated_dir"],
+                    if_exists="replace",
+                )
 
 
 with Flow("Extract parse load ERS messages") as flow:

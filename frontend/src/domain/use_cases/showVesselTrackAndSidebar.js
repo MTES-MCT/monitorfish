@@ -12,9 +12,7 @@ const showVesselTrackAndSidebar = (
   updateShowedVessel,
   vesselTrackDepthObject) => (dispatch, getState) => {
     let alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
-    if(!updateShowedVessel &&
-        alreadySelectedVessel &&
-        alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature) {
+    if(alreadyShownVessel(updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity)) {
         if(getState().vessel.selectedVessel) {
             dispatch(openVesselSidebar())
         }
@@ -23,14 +21,8 @@ const showVesselTrackAndSidebar = (
     }
 
     removePreviousSelectedFeature(getState)
-    if(vesselFeatureAndIdentity.feature && !updateShowedVessel) {
-        dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
-        dispatch(removeError())
-    }
 
-    if(!updateShowedVessel) {
-        dispatch(loadingVessel(vesselFeatureAndIdentity))
-    }
+    setLoadingAndAnimateToFeature(vesselFeatureAndIdentity, updateShowedVessel, dispatch)
 
     dispatch(openVesselSidebar())
 
@@ -70,6 +62,23 @@ const showVesselTrackAndSidebar = (
 function applySelectedStyleToVesselFeature (feature) {
     if(feature) {
         feature.setStyle([...feature.getStyle(), selectedVesselStyle])
+    }
+}
+
+function alreadyShownVessel (updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity) {
+    return !updateShowedVessel &&
+      alreadySelectedVessel &&
+      alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature
+}
+
+function setLoadingAndAnimateToFeature (vesselFeatureAndIdentity, updateShowedVessel, dispatch) {
+    if(!updateShowedVessel) {
+        if (vesselFeatureAndIdentity.feature) {
+            dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
+            dispatch(removeError())
+        }
+
+        dispatch(loadingVessel(vesselFeatureAndIdentity))
     }
 }
 

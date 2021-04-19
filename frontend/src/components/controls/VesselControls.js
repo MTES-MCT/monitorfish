@@ -98,7 +98,7 @@ const VesselControls = props => {
                           </Text>
                       </Title>
                       {
-                          yearsToControls && Object.keys(yearsToControls).length ?
+                          yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ?
                             <List>
                                 {
                                     Object.keys(yearsToControls)

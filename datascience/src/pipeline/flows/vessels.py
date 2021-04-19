@@ -6,7 +6,7 @@ from sqlalchemy import ARRAY, Date, Float, Integer, MetaData, String, Table
 from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
-from src.pipeline.generic_tasks import extract
+from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
     combine_overlapping_columns,
     concatenate_columns,
@@ -255,86 +255,50 @@ def clean_vessels(all_vessels):
 
 @task(checkpoint=False)
 def load_vessels(all_vessels):
+    all_vessels = all_vessels.astype(
+        {
+            "imo": str,
+            "cfr": str,
+            "external_immatriculation": str,
+            "mmsi": str,
+            "ircs": str,
+            "vessel_name": str,
+            "flag_state": str,
+            "width": float,
+            "length": float,
+            "district": str,
+            "district_code": str,
+            "gauge": float,
+            "registry_port": str,
+            "power": float,
+            "vessel_type": str,
+            "sailing_category": str,
+            "sailing_type": str,
+            "proprietor_name": str,
+            "operator_name": str,
+            "nav_licence_expiration_date": "datetime64[ns]",
+        }
+    )
 
-    schema = "public"
-    table = "vessels"
+    all_vessels["width"] = np.asarray(all_vessels["width"])
 
-    pg_array_cols = [
-        "declared_fishing_gears",
-        "operator_phones",
-        "operator_emails",
-        "proprietor_phones",
-        "proprietor_emails",
-        "vessel_phones",
-        "vessel_emails",
-    ]
-
-    all_vessels[pg_array_cols] = df_values_to_psql_arrays(all_vessels[pg_array_cols])
-
-    engine = create_engine("monitorfish_remote")
-    logger = prefect.context.get("logger")
-
-    with engine.begin() as connection:
-        meta = MetaData(schema=schema)
-        meta.bind = connection
-        try:
-            logger.info("Searching for vessels table...")
-            meta.reflect(only=[table])
-            vessels_table = Table(table, meta, mustexist=True)
-            logger.info("vessels table found.")
-        except InvalidRequestError:
-            logger.error(
-                "vessels table must exist. Make appropriate migrations and try again."
-            )
-            raise
-
-        logger.info("Deleting all rows from vessels table.")
-        delete(vessels_table, connection, logger)
-
-        # Sparse and Categorical data columns must be converted back to the original,
-        # dense data types before being inserted into the database.
-        # Doing so on the whole Dataframe takes too much memory, so the sparse /
-        # categorically typed Dataframe is chunked into small pieces, and each chunk
-        # is converted back to dense data and inserted into the database one at a time,
-        # thus limiting the increase in memory usage.
-        chunks = np.array_split(all_vessels, 150)
-        for i, chunk in enumerate(chunks):
-            logger.info(f"Inserting chunk {i}.")
-            chunk = chunk.astype(
-                {
-                    "imo": str,
-                    "cfr": str,
-                    "external_immatriculation": str,
-                    "mmsi": str,
-                    "ircs": str,
-                    "vessel_name": str,
-                    "flag_state": str,
-                    "width": float,
-                    "length": float,
-                    "district": str,
-                    "district_code": str,
-                    "gauge": float,
-                    "registry_port": str,
-                    "power": float,
-                    "vessel_type": str,
-                    "sailing_category": str,
-                    "sailing_type": str,
-                    "proprietor_name": str,
-                    "operator_name": str,
-                    "nav_licence_expiration_date": "datetime64[ns]",
-                }
-            )
-
-            chunk["width"] = np.asarray(chunk["width"])
-
-            chunk.to_sql(
-                name=table,
-                con=connection,
-                schema=schema,
-                index=False,
-                method=psql_insert_copy,
-                if_exists="append",
-            )
+    load(
+        all_vessels,
+        table_name="vessels",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        delete_before_insert=True,
+        pg_array_columns=[
+            "declared_fishing_gears",
+            "operator_phones",
+            "operator_emails",
+            "proprietor_phones",
+            "proprietor_emails",
+            "vessel_phones",
+            "vessel_emails",
+        ],
+    )
 
 
 with Flow("Extract vessels characteristics") as flow:

@@ -21,42 +21,13 @@ from src.pipeline.utils import delete, get_table, psql_insert_copy
 @task(checkpoint=False)
 def extract_controls():
 
-    logger = prefect.context.get("logger")
-
-    # Extract controls data
-    logger.info("Extracting controls data")
-
     parse_dates = {
         "control_datetime_utc": "coerce",
         "input_start_datetime_utc": "coerce",
         "input_end_datetime_utc": "coerce",
     }
 
-    controls = extract(
-        db_name="fmc", query_filepath="fmc/controles.sql", parse_dates=parse_dates
-    )
-
-    # Transform boolean values stored as "0"s and "1"s in Oracle to booleans
-    logger.info("Converting '0's and '1' to booleans")
-    bool_cols = [
-        "mission_order",
-        "vessel_targeted",
-        "cnsp_called_unit",
-        "infraction",
-        "cooperative",
-        "diversion",
-        "escort_to_quay",
-        "seizure",
-        "gear_1_was_controlled",
-        "gear_2_was_controlled",
-        "gear_3_was_controlled",
-    ]
-
-    controls[bool_cols] = zeros_ones_to_bools(controls[bool_cols])
-
-    # Use categorical dtype to minimize memory usage
-    logger.info("Converting to categorical dtypes to minimize memory usage")
-    dtype = {
+    dtypes = {
         "controller_id": "category",
         "control_type": "category",
         "facade": "category",
@@ -77,18 +48,41 @@ def extract_controls():
         "gear_3_was_controlled": "category",
     }
 
-    controls = controls.astype(dtype)
-
-    return controls
+    return extract(
+        db_name="fmc",
+        query_filepath="fmc/controles.sql",
+        parse_dates=parse_dates,
+        dtypes=dtypes,
+    )
 
 
 @task(checkpoint=False)
 def transform_controls(controls):
 
     logger = prefect.context.get("logger")
+
     # ---------------------------------------------------------------------------------
-    # 1. Transform gear control data
-    # First build a dictionnary of control data for each of the 3 gears controlled
+    # Transform boolean values stored as "0"s and "1"s in Oracle to booleans
+    logger.info("Converting '0's and '1' to booleans")
+    bool_cols = [
+        "mission_order",
+        "vessel_targeted",
+        "cnsp_called_unit",
+        "infraction",
+        "cooperative",
+        "diversion",
+        "escort_to_quay",
+        "seizure",
+        "gear_1_was_controlled",
+        "gear_2_was_controlled",
+        "gear_3_was_controlled",
+    ]
+
+    controls[bool_cols] = zeros_ones_to_bools(controls[bool_cols])
+
+    # ---------------------------------------------------------------------------------
+    # Transform gear control data
+    # 1. First build a dictionnary of control data for each of the 3 gears controlled
 
     logger.info("Transforming gears control data columns to dictionnary")
     col_maps = [
@@ -127,25 +121,24 @@ def transform_controls(controls):
         gear_data_df = gear_data_df.rename(columns=col_map["column_names_to_json_keys"])
 
         gear_data_series = df_to_dict_series(
-            df=gear_data_df,
-            dropna_cols=["gearCode"],
+            df=gear_data_df.dropna(subset=["gearCode"]),
             result_colname=col_map["result_col"],
         )
 
         controls = controls.join(gear_data_series)
         controls = controls.drop(columns=col_map["column_names_to_json_keys"].keys())
 
-    # Then group the 3 dictionnaries containing the data of the 3 gear controls into a
-    # numpy array of dictionnaries
+    # 2. Then group the 3 dictionnaries containing the data of the 3 gear controls into
+    # a numpy array of dictionnaries
     controls["gear_controls"] = controls[["gear_1", "gear_2", "gear_3"]].apply(
         lambda row: list(row.dropna()), axis=1
     )
 
-    # Finally drop the unneeded temporary columns with the 3 dictionnaries
+    # 3. Finally drop the unneeded temporary columns with the 3 dictionnaries
     controls = controls.drop(columns=["gear_1", "gear_2", "gear_3"])
 
     # ---------------------------------------------------------------------------------
-    # 2. Transform the list of infraction ids from string to list
+    # Transform the list of infraction ids from string to list
     logger.info("Transforming infraction ids from string to list")
     controls["infraction_ids"] = controls.infraction_ids.fillna("").map(
         lambda s: s.split(", ")

@@ -1,25 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-
-import Map from 'ol/Map'
+import OpenLayerMap from 'ol/Map'
 import View from 'ol/View'
 import { transform } from 'ol/proj'
 import LayersEnum from '../domain/entities/layers'
 import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import MapAttributionsBox from '../components/map/MapAttributionsBox'
-import Overlay from 'ol/Overlay'
 import VesselCard from '../components/cards/VesselCard'
 import VesselTrackCard from '../components/cards/VesselTrackCard'
 import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-    hideVesselNames,
-    isMoving,
-    resetAnimateToRegulatoryLayer,
-    resetAnimateToVessel,
-    setView
-} from '../domain/reducers/Map'
+import { hideVesselNames, isMoving, resetAnimateToRegulatoryLayer, resetAnimateToVessel } from '../domain/reducers/Map'
 import { COLORS } from '../constants/constants'
 import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
 import LayerDetailsBox from '../components/map/LayerDetailsBox'
@@ -34,14 +26,13 @@ import { getCoordinates } from '../utils'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
 import TrackTypeCard from '../components/cards/TrackTypeCard'
 import { trackTypes } from '../domain/entities/vesselTrack'
+import { getOverlays, trackTypeCardID, vesselCardID, vesselTrackCardID } from '../components/overlays/overlays'
+import MapHistory from './MapHistory'
 
-const vesselCardID = 'vessel-card';
-const vesselTrackCardID = 'vessel-track-card';
-const trackTypeCardID = 'track-line-card';
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove;
 const hitPixelTolerance = 3;
 
-const MapWrapper = () => {
+const Map = () => {
     const gears = useSelector(state => state.gear.gears)
     const vessel = useSelector(state => state.vessel)
     const mapState = useSelector(state => state.map)
@@ -49,59 +40,35 @@ const MapWrapper = () => {
 
     const [map, setMap] = useState()
     const [isAnimating, setIsAnimating] = useState(false)
-    const [initRenderIsDone, setInitRenderIsDone] = useState(false)
     const [shouldUpdateView, setShouldUpdateView] = useState(true)
+    const [initRenderIsDone, setInitRenderIsDone] = useState(false)
     const [cursorCoordinates, setCursorCoordinates] = useState('')
     const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
     const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
     const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
+    const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
     const mapElement = useRef()
     const mapRef = useRef()
     mapRef.current = map
 
-    window.addEventListener('popstate', event => {
-        if (event.state === null) {
-            return
-        }
-
-        if(mapRef.current) {
-            mapRef.current.getView().setCenter(event.state.center)
-            mapRef.current.getView().setZoom(event.state.zoom)
-            setShouldUpdateView(false)
-        }
-    });
+    useEffect(() => {
+        initMap()
+    }, [mapState.selectedBaseLayer])
 
     useEffect(() => {
-        if(!map) {
-            const vesselCardOverlay = new Overlay({
-                element: document.getElementById(vesselCardID),
-                autoPan: true,
-                autoPanAnimation: {
-                    duration: 400,
-                },
-                className: 'ol-overlay-container ol-selectable'
-            });
+        animateToRegulatoryLayer()
+    }, [mapState.animateToRegulatoryLayer, map])
 
-            const vesselTrackCardOverlay = new Overlay({
-                element: document.getElementById(vesselTrackCardID),
-                autoPan: true,
-                autoPanAnimation: {
-                    duration: 400,
-                },
-                className: 'ol-overlay-container ol-selectable'
-            });
+    useEffect(() => {
+        animateToVessel()
+    }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
 
-            const trackTypeCardOverlay = new Overlay({
-                element: document.getElementById(trackTypeCardID),
-                autoPan: true,
-                autoPanAnimation: {
-                    duration: 400,
-                },
-                className: 'ol-overlay-container ol-selectable'
-            });
+    function initMap () {
+        if (!map) {
+            const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
 
-            const centeredOnFrance = [2.99049, 46.82801];
-            const initialMap = new Map({
+            const centeredOnFrance = [2.99049, 46.82801]
+            const initialMap = new OpenLayerMap({
                 target: mapElement.current,
                 layers: [],
                 renderer: (['webgl', 'canvas']),
@@ -112,47 +79,16 @@ const MapWrapper = () => {
                     zoom: 6,
                     minZoom: 3
                 }),
-                controls: [new ScaleLine({units: 'nautical'})],
+                controls: [new ScaleLine({ units: 'nautical' })],
             })
-
-            if(window.location.hash !== '') {
-                let hash = window.location.hash.replace('@', '');
-                let viewParts = hash.split(',');
-                if (viewParts.length === 3 && !Number.isNaN(viewParts[0]) && !Number.isNaN(viewParts[1]) && !Number.isNaN(viewParts[2])) {
-                    initialMap.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])]);
-                    initialMap.getView().setZoom(parseFloat(viewParts[2]));
-                }
-            } else if(mapState) {
-                if(mapState.view && mapState.view.center && mapState.view.center[0] && mapState.view.center[1] && mapState.view.zoom) {
-                    initialMap.getView().setCenter(mapState.view.center);
-                    initialMap.getView().setZoom(mapState.view.zoom);
-                }
-            }
 
             initialMap.on('click', handleMapClick)
-            initialMap.on('pointermove', event => {
-                if (event.dragging || timeoutForPointerMove) {
-                    if(timeoutForPointerMove) {
-                        lastEventForPointerMove = event
-                    }
-                    return;
-                }
-
-                timeoutForPointerMove = setTimeout(() => {
-                    timeoutForPointerMove = null;
-                    handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
-                }, 100);
-            })
-            initialMap.on('moveend', event => {
-                if (timeoutForMove) {
-                    return;
-                }
-
-                timeoutForMove = setTimeout(() => {
-                    timeoutForMove = null;
-                    handleMovingAndZoom()
-                }, 100);
-            })
+            initialMap.on('pointermove', event => throttleAndHandlePointerMove(
+              event,
+              vesselCardOverlay,
+              vesselTrackCardOverlay,
+              trackTypeCardOverlay))
+            initialMap.on('moveend', () => throttleAndHandleMovingAndZoom())
 
             setMap(initialMap)
 
@@ -161,11 +97,36 @@ const MapWrapper = () => {
                 setInitRenderIsDone(true)
             }, 15000)
         }
-    }, [mapState.selectedBaseLayer])
+    }
 
-    useEffect(() => {
+    function throttleAndHandleMovingAndZoom () {
+        if (timeoutForMove) {
+            return
+        }
+
+        timeoutForMove = setTimeout(() => {
+            timeoutForMove = null
+            handleMovingAndZoom()
+        }, 100)
+    }
+
+    function throttleAndHandlePointerMove (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
+        if (event.dragging || timeoutForPointerMove) {
+            if (timeoutForPointerMove) {
+                lastEventForPointerMove = event
+            }
+            return
+        }
+
+        timeoutForPointerMove = setTimeout(() => {
+            timeoutForPointerMove = null
+            handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
+        }, 100)
+    }
+
+    function animateToRegulatoryLayer () {
         if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
-            if(map.getView().getZoom() < 8) {
+            if (map.getView().getZoom() < 8) {
                 setIsAnimating(true)
                 map.getView().animate({
                     center: [
@@ -192,11 +153,11 @@ const MapWrapper = () => {
                 })
             }
         }
-    }, [mapState.animateToRegulatoryLayer, map])
+    }
 
-    useEffect(() => {
+    function animateToVessel () {
         if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
-            if(map.getView().getZoom() >= 8) {
+            if (map.getView().getZoom() >= 8) {
                 const resolution = map.getView().getResolution()
                 map.getView().animate({
                     center: [
@@ -224,12 +185,12 @@ const MapWrapper = () => {
                         duration: 500,
                         zoom: undefined
                     })
-                });
+                })
             }
 
             dispatch(resetAnimateToVessel())
         }
-    }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
+    }
 
     function isVesselNameMinimumZoom() {
         return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES;
@@ -241,30 +202,16 @@ const MapWrapper = () => {
 
     const handleMovingAndZoom = () => {
         dispatch(isMoving())
-        updateViewHistory(shouldUpdateView, mapRef, dispatch);
+        if (!shouldUpdateView) {
+            setShouldUpdateView(true)
+        }
+        setHistoryMoveTrigger({ dummyUpdate: true })
 
         if (isVesselNameMinimumZoom()) {
             dispatch(hideVesselNames(false));
         } else if (isVesselNameMaximumZoom()) {
             dispatch(hideVesselNames(true));
         }
-    }
-
-    function updateViewHistory(shouldUpdateView, mapRef, dispatch) {
-        if (!shouldUpdateView) {
-            setShouldUpdateView(true)
-            return
-        }
-
-        const center = mapRef.current.getView().getCenter();
-        let view = {
-            zoom: mapRef.current.getView().getZoom().toFixed(2),
-            center: center,
-        };
-        let url = `@${center[0].toFixed(2)},${center[1].toFixed(2)},${mapRef.current.getView().getZoom().toFixed(2)}`
-
-        dispatch(setView(view))
-        window.history.pushState(view, 'map', url);
     }
 
     const handleMapClick = event => {
@@ -322,6 +269,7 @@ const MapWrapper = () => {
             trackTypeCardOverlay.setPosition(coordinates);
         } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
             setRegulatoryFeatureToShowOnCard(feature)
+
             mapRef.current.getTarget().style.cursor = 'pointer'
         } else {
             document.getElementById(vesselCardID).style.display = 'none';
@@ -337,7 +285,7 @@ const MapWrapper = () => {
         }
     }
 
-    async function showCoordinatesInDMS(event) {
+    function showCoordinatesInDMS(event) {
         const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel);
         const coordinates = getCoordinates(clickedCoordinates, OPENLAYERS_PROJECTION)
         setCursorCoordinates(`${coordinates[0]} ${coordinates[1]}`)
@@ -346,6 +294,13 @@ const MapWrapper = () => {
     return (
         <div>
             <MapContainer ref={mapElement} />
+            <MapHistory
+              map={map}
+              mapRef={mapRef}
+              shouldUpdateView={shouldUpdateView}
+              setShouldUpdateView={setShouldUpdateView}
+              historyMoveTrigger={historyMoveTrigger}
+            />
             <BaseLayer map={map} />
             <VesselTrackLayer map={map} />
             <VesselsLayer map={map} mapRef={mapRef}/>
@@ -418,4 +373,4 @@ const MapContainer = styled.div`
   overflow-x: hidden;
 `
 
-export default MapWrapper
+export default Map

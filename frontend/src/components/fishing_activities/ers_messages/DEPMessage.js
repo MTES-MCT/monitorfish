@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getDateTime} from "../../utils";
-import {ERSMessageActivityType} from "../../domain/entities/ERS";
+import {COLORS} from "../../../constants/constants";
+import {getDateTime} from "../../../utils";
+import {ERSMessageActivityType} from "../../../domain/entities/ERS";
 
 const DEPMessage = props => {
 

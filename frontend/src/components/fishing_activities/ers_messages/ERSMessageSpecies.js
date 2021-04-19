@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {ReactComponent as ChevronIconSVG} from "../icons/Chevron_simple_gris.svg";
-import {ERSSpeciesPresentation, ERSSpeciesPreservationState} from "../../domain/entities/ERS";
+import {COLORS} from "../../../constants/constants";
+import {ReactComponent as ChevronIconSVG} from "../../icons/Chevron_simple_gris.svg";
+import {ERSSpeciesPresentation, ERSSpeciesPreservationState} from "../../../domain/entities/ERS";
 import countries from "i18n-iso-countries";
-import {ReactComponent as WarningSVG} from '../../components/icons/Point_exclamation_info.svg';
+import {ReactComponent as WarningSVG} from '../../icons/Point_exclamation_info.svg';
 
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 

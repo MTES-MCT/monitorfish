@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
+import {COLORS} from "../../../constants/constants";
 import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
 import SpeciesAndWeightChart from "./SpeciesAndWeightChart";
-import {getDateTime} from "../../utils";
-import {ERSMessagePNOPurposeType, ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
+import {getDateTime} from "../../../utils";
+import {ERSMessagePNOPurposeType, ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
 
 const PNOMessageResume = props => {
     const [isOpen, setIsOpen] = useState(false)

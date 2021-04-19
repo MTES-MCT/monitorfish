@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getDate, getDateTime} from "../../utils";
+import {COLORS} from "../../../constants/constants";
+import {getCoordinates, getDateTime} from "../../../utils";
+import {WSG84_PROJECTION} from "../../../domain/entities/map";
 import ERSMessageSpecies from "./ERSMessageSpecies";
-import {buildCatchArray, ERSMessagePNOPurposeType, ERSMessageSender} from "../../domain/entities/ERS";
+import {buildCatchArray} from "../../../domain/entities/ERS";
 
-const LANMessage = props => {
+const DISMessage = props => {
     const [catches, setCatches] = useState([])
 
     useEffect(() => {
-        if (props.message && props.message.catchLanded) {
-            let catches = buildCatchArray(props.message.catchLanded)
+        if (props.message && props.message.catches) {
+            let catches = buildCatchArray(props.message.catches)
 
             setCatches(catches)
         } else {
@@ -25,16 +26,19 @@ const LANMessage = props => {
                     <Fields>
                         <TableBody>
                             <Field>
-                                <Key>Date de fin de débarquement</Key>
-                                <Value>{props.message.landingDatetimeUtc ? <>{getDateTime(props.message.landingDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
+                                <Key>Date opération</Key>
+                                <Value>{props.message.discardDatetimeUtc ? <>{getDateTime(props.message.discardDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
-                                <Key>Port de débarquement</Key>
-                                <Value>{props.message.port && props.message.portName ? <>{props.message.portName} ({props.message.port})</> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Émetteur du message</Key>
-                                <Value>{props.message.sender ? <>{ERSMessageSender[props.message.sender]} ({props.message.sender})</> : <NoValue>-</NoValue>}</Value>
+                                <Key>Position opération</Key>
+                                <Value>
+                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitude && props.message.longitude ?
+                                    getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[0] :
+                                    <NoValue>-</NoValue> }
+                                    <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude ?
+                                    getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[1] :
+                                    <NoValue>-</NoValue>}
+                                </Value>
                             </Field>
                         </TableBody>
                     </Fields>
@@ -44,9 +48,10 @@ const LANMessage = props => {
                         catches.map((speciesCatch, index) => {
                             return <ERSMessageSpecies
                                 index={index + 1}
+                                hasManyProperties={speciesCatch.properties.length > 1}
                                 isLast={catches.length === index + 1}
                                 species={speciesCatch}
-                                key={'LAN' + speciesCatch.species}
+                                key={'FAR' + speciesCatch.species}
                             />
                         })
                     }
@@ -55,6 +60,13 @@ const LANMessage = props => {
     </>
 }
 
+
+const FirstInlineKey = styled.div`
+  color: ${COLORS.textGray};
+  display: inline-block;
+  padding: 0px 5px 0px 0;
+  font-size: 13px;
+`
 const Gray = styled.span`
   color: ${COLORS.grayDarkerThree};
   font-weight: 300;
@@ -96,6 +108,13 @@ const Field = styled.tr`
   line-height: 0.5em;
 `
 
+const InlineKey = styled.div`
+  color: ${COLORS.textGray};
+  display: inline-block;
+  padding: 0px 5px 0px 10px;
+  font-size: 13px;
+`
+
 const Key = styled.th`
   color: ${COLORS.textGray};
   flex: initial;
@@ -126,8 +145,6 @@ const NoValue = styled.span`
   color: ${COLORS.grayDarkerTwo};
   font-weight: 300;
   line-height: normal;
-  width: 50px;
-  display: inline-block;
 `
 
-export default LANMessage
+export default DISMessage

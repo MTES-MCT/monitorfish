@@ -76,6 +76,10 @@ const vesselSlice = createSlice({
             state.fishingActivities = action.payload
             state.loadingVessel = null
         },
+        resetFishingActivities(state) {
+            state.fishingActivities = null
+            state.loadingVessel = null
+        },
         setNextFishingActivities(state, action) {
             state.nextFishingActivities = action.payload
         },
@@ -125,6 +129,7 @@ export const {
     closeVesselSidebar,
     updateVesselFeatureAndIdentity,
     setFishingActivities,
+    resetFishingActivities,
     setNextFishingActivities,
     resetNextFishingActivities,
     setControlResumeAndControls,

@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getCoordinates, getDateTime} from "../../utils";
-import {WSG84_PROJECTION} from "../../domain/entities/map";
+import {COLORS} from "../../../constants/constants";
+import {getCoordinates, getDateTime} from "../../../utils";
+import {WSG84_PROJECTION} from "../../../domain/entities/map";
 import countries from "i18n-iso-countries";
+
 countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
-const COEMessage = props => {
+const CROMessage = props => {
+
     return <>
         { props.message ?
             <>
@@ -26,10 +28,6 @@ const COEMessage = props => {
                                     <InlineKey>Lon.</InlineKey> { props.message.latitudeEntered && props.message.longitudeEntered ?
                                     getCoordinates([props.message.latitudeEntered, props.message.longitudeEntered], WSG84_PROJECTION)[1] :
                                     <NoValue>-</NoValue>}<br/>
-                                    <FirstInlineKey>ZEE</FirstInlineKey> {props.message.economicZoneEntered ? <>{countries.getName(props.message.economicZoneEntered, 'fr')} ({props.message.economicZoneEntered})</> :
-                                    <NoValue>-</NoValue>}<br/>
-                                    <FirstInlineKey>Zone FAO</FirstInlineKey>{props.message.faoZoneEntered ? props.message.faoZoneEntered : <NoValue>-</NoValue>}<br/>
-                                    <FirstInlineKey>Rect. stat.</FirstInlineKey>{props.message.statisticalRectangleEntered ? props.message.statisticalRectangleEntered : <NoValue>-</NoValue>}<br/>
                                 </Value>
                             </Field>
                         </TableBody>
@@ -39,10 +37,19 @@ const COEMessage = props => {
                     <Fields>
                         <TableBody>
                             <Field>
-                                <Key>Espèces ciblées</Key>
-                                <Value>{props.message.targetSpeciesOnEntry && props.message.targetSpeciesNameOnEntry ?
-                                    <>{props.message.targetSpeciesNameOnEntry} ({props.message.targetSpeciesOnEntry})</> : props.message.targetSpeciesOnEntry ?
-                                        props.message.targetSpeciesOnEntry : <NoValue>-</NoValue>}</Value>
+                                <Key>Date de sortie</Key>
+                                <Value>{props.message.effortZoneExitDatetimeUtc ? <>{getDateTime(props.message.effortZoneExitDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
+                            </Field>
+                            <Field>
+                                <Key>Position de sortie</Key>
+                                <Value>
+                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitudeExited && props.message.longitudeExited ?
+                                    getCoordinates([props.message.latitudeExited, props.message.longitudeExited], WSG84_PROJECTION)[0] :
+                                    <NoValue>-</NoValue> }
+                                    <InlineKey>Lon.</InlineKey> { props.message.latitudeExited && props.message.longitudeExited ?
+                                    getCoordinates([props.message.latitudeExited, props.message.longitudeExited], WSG84_PROJECTION)[1] :
+                                    <NoValue>-</NoValue>}<br/>
+                                </Value>
                             </Field>
                         </TableBody>
                     </Fields>
@@ -132,4 +139,4 @@ const NoValue = styled.span`
   display: inline-block;
 `
 
-export default COEMessage
+export default CROMessage

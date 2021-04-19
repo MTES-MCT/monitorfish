@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {useToasts} from 'react-toast-notifications'
 
 import showAllVessels from "../domain/use_cases/showVesselsLastPosition";
@@ -7,8 +7,7 @@ import getAllGearCodes from "../domain/use_cases/getAllGearCodes";
 import updateVesselTrackAndSidebar from "../domain/use_cases/updateVesselTrackAndSidebar";
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers/Global'
-import NoDEPFoundError from '../errors/NoDEPFoundError'
-import { exceptionsWithInfoToast } from '../domain/entities/errors'
+import { errorType, exceptionsWithInfoToast } from '../domain/entities/errors'
 
 export const ONE_MINUTE = 60000
 
@@ -43,9 +42,13 @@ const APIWorker = () => {
 
     useEffect(() => {
         if (error) {
-            if(exceptionsWithInfoToast.includes(error.name)) {
+            if(error.type && error.type === errorType.INFO_AND_HIDDEN) {
+                return
+            }
+
+            if (error.type) {
                 addToast(error.message.split(':')[0], {
-                    appearance: 'info',
+                    appearance: error.type,
                     autoDismiss: true,
                     autoDismissTimeout: 10000
                 })
@@ -56,7 +59,6 @@ const APIWorker = () => {
                     autoDismissTimeout: 10000
                 })
             }
-
         }
     }, [error])
 

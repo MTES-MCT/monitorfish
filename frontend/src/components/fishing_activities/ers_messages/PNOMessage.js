@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getDate, getDateTime} from "../../utils";
+import {COLORS} from "../../../constants/constants";
+import {getDate, getDateTime} from "../../../utils";
 import ERSMessageSpecies from "./ERSMessageSpecies";
-import {buildCatchArray, ERSMessagePNOPurposeType} from "../../domain/entities/ERS";
+import {buildCatchArray, ERSMessagePNOPurposeType} from "../../../domain/entities/ERS";
 
 const PNOMessage = props => {
     const [catches, setCatches] = useState([])

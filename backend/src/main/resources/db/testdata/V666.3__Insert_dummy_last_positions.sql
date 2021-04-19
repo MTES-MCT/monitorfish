@@ -31774,4 +31774,6 @@ update last_positions set date_time = now() - random() * INTERVAL '24 hours' whe
 internal_reference_number in (SELECT internal_reference_number FROM last_positions ORDER BY RANDOM() LIMIT 20000);
 
 update last_positions set date_time = now() where internal_reference_number = 'GBR000B14430';
+update last_positions set date_time = now() where internal_reference_number = 'FRA000738677';
+
 

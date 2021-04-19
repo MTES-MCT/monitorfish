@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
+import {COLORS} from "../../../constants/constants";
 import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import {getDateTime} from "../../utils";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../domain/entities/ERS";
-import {AlertTypes} from "../../domain/entities/alerts";
+import {getDateTime} from "../../../utils";
+import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
+import {AlertTypes} from "../../../domain/entities/alerts";
 
 const LANMessageResume = props => {
     const [isOpen, setIsOpen] = useState(false)

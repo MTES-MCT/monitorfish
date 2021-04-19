@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
-import { FingerprintSpinner } from 'react-epic-spinners'
 import {ReactComponent as NoVesselSVG} from '../icons/Picto_photo_navire_manquante.svg';
 
 import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../../utils";
 import {WSG84_PROJECTION} from "../../domain/entities/map";
 import {COLORS} from "../../constants/constants";
 import * as timeago from 'timeago.js';
-import NoDEPFoundError from '../../errors/NoDEPFoundError'
+import { vesselsAreEquals } from '../../domain/entities/vessel'
 timeago.register('fr', timeagoFrenchLocale);
 
 const VesselSummary = props => {
@@ -17,12 +16,13 @@ const VesselSummary = props => {
     const [gears, setGears] = useState([])
 
     useEffect(() => {
-        if (props.vessel && (!props.error || props.error && props.error.name === NoDEPFoundError.name)) {
-            setVessel(props.vessel)
+        if (props.vessel) {
             if(props.vessel.positions.length) {
                 setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
             } else {
-                setLastPosition(null)
+                if(!vesselsAreEquals(props.vessel, vessel)) {
+                    setLastPosition(null)
+                }
             }
 
             if(props.vessel.mmsi) {
@@ -30,6 +30,8 @@ const VesselSummary = props => {
             } else {
                 setPhotoFallback(true)
             }
+
+            setVessel(props.vessel)
         }
     }, [props.vessel, props.error])
 
@@ -44,8 +46,20 @@ const VesselSummary = props => {
             })
 
             setGears(gears)
+        } else {
+            setGears([])
         }
     }, [props.gears, props.vessel])
+
+    function getVesselOrLastPositionProperty (propertyName) {
+        if(vessel && vessel[propertyName]) {
+            return vessel[propertyName]
+        } else if (lastPosition && lastPosition[propertyName]) {
+            return lastPosition[propertyName]
+        } else {
+            return <NoValue>-</NoValue>
+        }
+    }
 
     return vessel ? (
         <Body>
@@ -55,7 +69,7 @@ const VesselSummary = props => {
                         <NoVessel /> :
                         <>
                             {
-                                props.vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                                vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
                                     : null
                             }
                         </>
@@ -64,15 +78,15 @@ const VesselSummary = props => {
             <ZoneWithoutBackground>
                 <LatLon>
                     <FieldName>Latitude</FieldName>
-                    <FieldValue>{lastPosition && lastPosition.latitude && lastPosition.longitude ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0] : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude) ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0] : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Longitude</FieldName>
-                    <FieldValue>{lastPosition && lastPosition.latitude && lastPosition.longitude ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1] : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude) ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1] : <NoValue>-</NoValue>}</FieldValue>
                 </LatLon>
                 <Course>
                     <FieldName>Route</FieldName>
-                    <FieldValue>{lastPosition && lastPosition.course ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && !isNaN(lastPosition.course) ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Vitesse</FieldName>
-                    <FieldValue>{lastPosition && lastPosition.speed ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && !isNaN(lastPosition.speed)? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
                     <FieldName>Type de signal</FieldName>
@@ -93,11 +107,19 @@ const VesselSummary = props => {
                     <TableBody>
                         <Field>
                             <Key>CFR</Key>
-                            <Value>{props.vessel.internalReferenceNumber ? props.vessel.internalReferenceNumber : <NoValue>-</NoValue>}</Value>
+                            <Value>
+                                {
+                                    getVesselOrLastPositionProperty('internalReferenceNumber')
+                                }
+                            </Value>
                         </Field>
                         <Field>
                             <Key>MMSI</Key>
-                            <Value>{props.vessel.mmsi ? props.vessel.mmsi : <NoValue>-</NoValue>}</Value>
+                            <Value>
+                                {
+                                    getVesselOrLastPositionProperty('mmsi')
+                                }
+                            </Value>
                         </Field>
                     </TableBody>
                 </Fields>
@@ -105,15 +127,19 @@ const VesselSummary = props => {
                     <TableBody>
                         <Field>
                             <Key>Marquage ext.</Key>
-                            <Value>{props.vessel.externalReferenceNumber
-                              ? props.vessel.externalReferenceNumber
-                              : lastPosition && lastPosition.externalReferenceNumber
-                                ? lastPosition.externalReferenceNumber
-                                : <NoValue>-</NoValue>}</Value>
+                            <Value>
+                                {
+                                    getVesselOrLastPositionProperty('externalReferenceNumber')
+                                }
+                            </Value>
                         </Field>
                         <Field>
                             <Key>Call Sign (IRCS)</Key>
-                            <Value>{props.vessel.ircs ? props.vessel.ircs : <NoValue>-</NoValue>}</Value>
+                            <Value>
+                                {
+                                    getVesselOrLastPositionProperty('ircs')
+                                }
+                            </Value>
                         </Field>
                     </TableBody>
                 </Fields>
@@ -123,7 +149,7 @@ const VesselSummary = props => {
                     <TableBody>
                         <Field>
                             <Key>Segment de flotte</Key>
-                            <TrimmedValue>{props.vessel.fleetSegment ? props.vessel.fleetSegment : <NoValue>à venir</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{vessel.fleetSegment ? vessel.fleetSegment : <NoValue>à venir</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Engins à bord (PME)</Key>
@@ -169,14 +195,14 @@ const VesselSummary = props => {
                     <BodyWithTopPadding>
                         <Field>
                             <Key>Dernier contrôle</Key>
-                            <Value>{props.vessel.lastControl ? props.vessel.lastControl : <NoValue>à venir</NoValue>}</Value>
+                            <Value>{vessel.lastControl ? vessel.lastControl : <NoValue>à venir</NoValue>}</Value>
                         </Field>
 
                     </BodyWithTopPadding>
                 </Fields>
             </Zone>
         </Body>
-    ) : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>;
+    ) : null
 }
 
 const Gray = styled.span`

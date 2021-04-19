@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { afterToday } from 'rsuite/lib/DateRangePicker'
 import styled from "styled-components";
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
@@ -15,7 +15,6 @@ const TrackDepthDateRange = props => {
             value={props.dates}
             onChange={nextValue => {
                 props.setDate(nextValue);
-                console.log(nextValue);
             }}
             ranges={[]}
             format="DD-MM-YYYY"

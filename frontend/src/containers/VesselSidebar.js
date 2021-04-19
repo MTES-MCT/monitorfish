@@ -52,20 +52,27 @@ const VesselSidebar = () => {
     }, [openSidebar])
 
     useEffect(() => {
-        if(error &&
-          showedError &&
-          error.name === showedError.name) {
+        if(isSameShowedError(error, showedError)) {
             return
         }
 
-        if(error && !error.showEmptyComponentFields) {
+        if(isShowedError()) {
             setShowedError(error)
             return
         }
 
-
         setShowedError(null)
     }, [error])
+
+    function isSameShowedError (error, showedError) {
+        return error &&
+          showedError &&
+          error.name === showedError.name
+    }
+
+    function isShowedError () {
+        return error && !error.showEmptyComponentFields
+    }
 
     useEffect(() => {
         if (vesselState.vesselSidebarIsOpen) {

@@ -9,11 +9,15 @@ const AdministrativeLayers = ({ map }) => {
     .filter(layer => layer.type === layersType.ADMINISTRATIVE)
 
   useEffect(() => {
-    if (map && layer.layers) {
-      addAdministrativeLayersToMap();
-      removeAdministrativeLayersToMap();
-    }
+    addOrRemoveAdministrativeLayers()
   }, [layer.layers])
+
+  function addOrRemoveAdministrativeLayers () {
+    if (map && layer.layers) {
+      addAdministrativeLayersToMap()
+      removeAdministrativeLayersToMap()
+    }
+  }
 
   function addAdministrativeLayersToMap() {
     if(layer.layers.length) {

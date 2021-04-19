@@ -15,18 +15,28 @@ const DrawLayer = ({ map }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if(map && interaction) {
+    drawOnMap()
+  }, [map, interaction])
+
+  function drawOnMap () {
+    if (map && interaction) {
       const source = new VectorSource({ wrapX: false })
 
       let type = null
       switch (interaction) {
-        case Interactions.SQUARE: type = 'Circle'; break;
-        case Interactions.POLYGON: type = 'Polygon'; break;
-        default: console.error("No interaction type specified"); return;
+        case Interactions.SQUARE:
+          type = 'Circle'
+          break
+        case Interactions.POLYGON:
+          type = 'Polygon'
+          break
+        default:
+          console.error('No interaction type specified')
+          return
       }
 
       const draw = new Draw({
-        source:  source,
+        source: source,
         type: type,
         style: new Style({
           image: new Icon({
@@ -49,7 +59,7 @@ const DrawLayer = ({ map }) => {
 
       draw.on('drawend', event => {
         dispatch(addZoneSelected({
-          name: "Tracé libre",
+          name: 'Tracé libre',
           code: LayersType.FREE_DRAW,
           feature: event.feature
         }))
@@ -57,8 +67,7 @@ const DrawLayer = ({ map }) => {
         map.removeInteraction(draw)
       })
     }
-  }, [map, interaction])
-
+  }
 
   return null
 }

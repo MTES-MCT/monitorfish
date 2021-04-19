@@ -1,11 +1,12 @@
 import {getVesselERSMessagesFromAPI} from "../../api/fetch";
 import {removeError, setError} from "../reducers/Global";
 import {
-    loadingFisheriesActivities,
+    loadingFisheriesActivities, resetFishingActivities,
     resetLoadingVessel,
     setFishingActivities,
     setNextFishingActivities
-} from "../reducers/Vessel";
+} from '../reducers/Vessel'
+import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 
 const getFishingActivities = vesselIdentity => (dispatch, getState) => {
     if(vesselIdentity){
@@ -16,6 +17,16 @@ const getFishingActivities = vesselIdentity => (dispatch, getState) => {
             dispatch(loadingFisheriesActivities())
         }
         getVesselERSMessagesFromAPI(vesselIdentity).then(fishingActivities => {
+            if(!fishingActivities) {
+
+                dispatch(setFishingActivities({
+                    ersMessages: [],
+                    alerts: []
+                }))
+                dispatch(setError(new NoERSMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
+                return
+            }
+
             if(isSameVesselAsCurrentlyShowed) {
                 if((currentFishingActivities.alerts && fishingActivities.alerts &&
                     fishingActivities.alerts.length > currentFishingActivities.alerts.length) ||

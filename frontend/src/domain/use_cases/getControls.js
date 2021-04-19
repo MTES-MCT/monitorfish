@@ -6,6 +6,7 @@ import {
     setControlResumeAndControls,
     setNextControlResumeAndControls
 } from '../reducers/Vessel'
+import NoControlsFoundError from '../../errors/NoControlsFoundError'
 
 const getControls = (vesselId, fromDate, userRequest) => (dispatch, getState) => {
     if(vesselId) {
@@ -31,6 +32,12 @@ const getControls = (vesselId, fromDate, userRequest) => (dispatch, getState) =>
             dispatch(setError(error))
             dispatch(resetLoadingVessel())
         });
+    } else {
+        dispatch(setError(new NoControlsFoundError("Ce navire n'a aucun contrôle")))
+        dispatch(setControlResumeAndControls({
+            controls: []
+        }))
+
     }
 }
 

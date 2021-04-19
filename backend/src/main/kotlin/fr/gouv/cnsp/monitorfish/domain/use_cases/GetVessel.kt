@@ -23,8 +23,19 @@ class GetVessel(private val vesselRepository: VesselRepository,
     suspend fun execute(internalReferenceNumber: String,
                         externalReferenceNumber: String,
                         ircs: String,
-                        trackDepth: VesselTrackDepth): Pair<Boolean, Pair<Vessel, List<Position>>> {
+                        trackDepth: VesselTrackDepth,
+                        fromDateTime: ZonedDateTime? = null,
+                        toDateTime: ZonedDateTime? = null): Pair<Boolean, Pair<Vessel, List<Position>>> {
         var vesselTrackDepthHasBeenModified = false
+
+        if(trackDepth == VesselTrackDepth.CUSTOM) {
+            requireNotNull(fromDateTime) {
+                "begin date must be not null when requesting custom track depth"
+            }
+            requireNotNull(toDateTime) {
+                "end date must be not null when requesting custom track depth"
+            }
+        }
 
         val from = when (trackDepth) {
             VesselTrackDepth.TWELVE_HOURS -> ZonedDateTime.now().minusHours(12)
@@ -47,11 +58,17 @@ class GetVessel(private val vesselRepository: VesselRepository,
             VesselTrackDepth.TWO_WEEK -> ZonedDateTime.now().minusWeeks(2)
             VesselTrackDepth.THREE_WEEK -> ZonedDateTime.now().minusWeeks(3)
             VesselTrackDepth.ONE_MONTH -> ZonedDateTime.now().minusMonths(1)
+            VesselTrackDepth.CUSTOM -> fromDateTime
+        }
+
+        val to = when (trackDepth) {
+            VesselTrackDepth.CUSTOM -> toDateTime
+            else -> ZonedDateTime.now()
         }
 
         return coroutineScope {
             val positionsFuture = async {
-                positionRepository.findVesselLastPositions(internalReferenceNumber, externalReferenceNumber, ircs, from)
+                positionRepository.findVesselLastPositions(internalReferenceNumber, externalReferenceNumber, ircs, from!!, to!!)
                         .sortedBy { it.dateTime }
             }
             val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }

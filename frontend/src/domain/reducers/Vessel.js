@@ -17,6 +17,11 @@ const vesselSlice = createSlice({
         nextFishingActivities: null,
         controlResumeAndControls: {},
         nextControlResumeAndControls: null,
+        temporaryTrackDepth: {
+            trackDepth: null,
+            afterDateTimeRange: null,
+            beforeDateTimeRange: null,
+        },
     },
     reducers: {
         setVessels(state, action) {
@@ -42,10 +47,15 @@ const vesselSlice = createSlice({
             state.vesselSidebarTabIndexToShow = action.payload ? action.payload : 1
             state.vesselSidebarIsOpen = true
         },
-        closeVesselBox(state) {
+        closeVesselSidebar(state) {
             state.vesselSidebarIsOpen = false
             state.selectedVessel = null
             state.selectedVesselFeatureAndIdentity = null
+            state.temporaryTrackDepth = {
+                trackDepth: null,
+                afterDateTime: null,
+                beforeDateTime: null,
+            }
         },
         updateVesselFeatureAndIdentity(state, action) {
             state.selectedVesselFeatureAndIdentity = action.payload
@@ -64,6 +74,10 @@ const vesselSlice = createSlice({
         },
         setFishingActivities(state, action) {
             state.fishingActivities = action.payload
+            state.loadingVessel = null
+        },
+        resetFishingActivities(state) {
+            state.fishingActivities = null
             state.loadingVessel = null
         },
         setNextFishingActivities(state, action) {
@@ -90,6 +104,16 @@ const vesselSlice = createSlice({
         },
         resetTemporaryVesselsToHighLightOnMap(state) {
             state.temporaryVesselsToHighLightOnMap = []
+        },
+        setTemporaryTrackDepth(state, action) {
+            state.temporaryTrackDepth = action.payload
+        },
+        resetTemporaryTrackDepth(state) {
+            state.temporaryTrackDepth = {
+                trackDepth: null,
+                afterDateTime: null,
+                beforeDateTime: null,
+            }
         }
     }
 })
@@ -102,9 +126,10 @@ export const {
     setSelectedVessel,
     resetSelectedVessel,
     openVesselSidebar,
-    closeVesselBox,
+    closeVesselSidebar,
     updateVesselFeatureAndIdentity,
     setFishingActivities,
+    resetFishingActivities,
     setNextFishingActivities,
     resetNextFishingActivities,
     setControlResumeAndControls,
@@ -114,7 +139,9 @@ export const {
     loadingControls,
     setFocusOnVesselSearch,
     setTemporaryVesselsToHighLightOnMap,
-    resetTemporaryVesselsToHighLightOnMap
+    resetTemporaryVesselsToHighLightOnMap,
+    setTemporaryTrackDepth,
+    resetTemporaryTrackDepth
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

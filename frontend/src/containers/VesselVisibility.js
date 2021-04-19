@@ -4,16 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ReactComponent as VesselSVG } from '../components/icons/Icone_navire.svg'
 import { COLORS } from '../constants/constants'
-import LastPositionsSlider from '../components/LastPositionsSlider'
+import LastPositionsSlider from '../components/vessel_visibility/LastPositionsSlider'
 import {
   setVesselLabel,
   setVesselLabelsShowedOnMap,
   setVesselsLastPositionVisibility,
   setVesselTrackDepth
 } from '../domain/reducers/Map'
-import TrackDepthRadio from '../components/TrackDepthRadio'
-import VesselLabelRadio from '../components/VesselLabelRadio'
-import VesselLabelCheckbox from '../components/VesselLabelCheckbox'
+import TrackDepthRadio from '../components/vessel_visibility/TrackDepthRadio'
+import VesselLabelRadio from '../components/vessel_visibility/VesselLabelRadio'
+import VesselLabelCheckbox from '../components/vessel_visibility/VesselLabelCheckbox'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 
@@ -149,6 +149,7 @@ const Wrapper = styled.div`
     0%   { opacity: 1; }
     100% { opacity: 0; }
   }
+  z-index: 1000;
 `
 
 const ShowVesselLabel = styled.div`
@@ -230,7 +231,6 @@ const VesselVisibilityBox = styled.div`
   position: absolute;
   display: inline-block;
   animation: ${props => props.firstUpdate && !props.vesselVisibilityBoxIsOpen ? '' : props.vesselVisibilityBoxIsOpen ? 'vessel-visibility-box-opening' : 'vessel-visibility-box-closing'} 0.5s ease forwards;
-  z-index: 1000;
 
   @keyframes vessel-visibility-box-opening {
     0%   { margin-right: -420px; opacity: 0;  }

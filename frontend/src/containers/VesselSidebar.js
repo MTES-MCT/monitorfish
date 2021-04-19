@@ -6,23 +6,25 @@ import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_peche.sv
 import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles.svg';
 import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_ciblage.svg';
 import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
-import VesselIdentity from "../components/VesselIdentity";
+import VesselIdentity from "../components/vessel_sidebar/VesselIdentity";
 import {useDispatch, useSelector} from "react-redux";
 import {COLORS} from "../constants/constants";
-import VesselSummary from "../components/VesselSummary";
+import VesselSummary from "../components/vessel_sidebar/VesselSummary";
 import { FingerprintSpinner } from 'react-epic-spinners'
-import FishingActivities from "../components/fishing_activities/FishingActivities";
+import VesselFishingActivities from "../components/fishing_activities/VesselFishingActivities";
 import getFishingActivities from "../domain/use_cases/getFishingActivities";
 import {removeError} from "../domain/reducers/Global";
 import {
     resetNextControlResumeAndControls,
     resetNextFishingActivities,
     setControlResumeAndControls,
-    setFishingActivities
+    setFishingActivities, setTemporaryTrackDepth
 } from '../domain/reducers/Vessel'
-import NoDEPFoundError from "../errors/NoDEPFoundError";
 import getControls from '../domain/use_cases/getControls'
 import VesselControls from '../components/controls/VesselControls'
+import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
+import TrackDepthSelection from '../components/track_depth_selection/TrackDepthSelection'
+import TrackExport from '../components/track_export/TrackExport'
 
 const VesselSidebar = () => {
     const dispatch = useDispatch()
@@ -32,25 +34,52 @@ const VesselSidebar = () => {
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)
     const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
+    const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
 
     const [controlsFromDate, setControlFromDate] = useState(new Date(new Date().getUTCFullYear() - 5, 0, 1))
-    const [openBox, setOpenBox] = useState(false)
+    const [openSidebar, setOpenSidebar] = useState(false)
     const [vessel, setVessel] = useState(null)
     const [index, setIndex] = useState(1)
     const firstUpdate = useRef(true)
+    const [showedError, setShowedError] = useState(null)
+
+    const [trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen] = useState(false)
 
     useEffect(() => {
-        if (openBox === true) {
+        if (openSidebar === true) {
             firstUpdate.current = false;
         }
-    }, [openBox])
+    }, [openSidebar])
+
+    useEffect(() => {
+        if(isSameShowedError(error, showedError)) {
+            return
+        }
+
+        if(isShowedError()) {
+            setShowedError(error)
+            return
+        }
+
+        setShowedError(null)
+    }, [error])
+
+    function isSameShowedError (error, showedError) {
+        return error &&
+          showedError &&
+          error.name === showedError.name
+    }
+
+    function isShowedError () {
+        return error && !error.showEmptyComponentFields
+    }
 
     useEffect(() => {
         if (vesselState.vesselSidebarIsOpen) {
-            setOpenBox(true)
+            setOpenSidebar(true)
             setIndex(vesselState.vesselSidebarTabIndexToShow)
         } else {
-            setOpenBox(false)
+            setOpenSidebar(false)
         }
     }, [vesselState.vesselSidebarIsOpen, vesselState.vesselSidebarTabIndexToShow])
 
@@ -76,7 +105,7 @@ const VesselSidebar = () => {
     }
 
     const showControls = () => {
-        if(vessel && vessel.id) {
+        if(vessel) {
             dispatch(getControls(vessel.id, controlsFromDate))
             setIndex(4)
         }
@@ -109,94 +138,128 @@ const VesselSidebar = () => {
         }
     }
 
+    const showVesselTrackWithTrackDepth = (trackDepth, afterDateTime, beforeDateTime) => {
+        const trackDepthObject = {
+            trackDepth: trackDepth,
+            afterDateTime: afterDateTime,
+            beforeDateTime: beforeDateTime
+        }
+
+        dispatch(setTemporaryTrackDepth(trackDepthObject))
+        if(vesselState.selectedVesselFeatureAndIdentity && trackDepth) {
+            dispatch(showVesselTrackAndSidebar(
+              vesselState.selectedVesselFeatureAndIdentity,
+              false,
+              true,
+              trackDepthObject))
+        }
+    }
+
     return (
-        <Wrapper
-          openBox={openBox}
-          firstUpdate={firstUpdate.current}
-          rightMenuIsOpen={rightMenuIsOpen}
-        >
-            {
-                <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
-            }
-            {
-                vessel ? (vessel.internalReferenceNumber ||
-                    vessel.externalReferenceNumber ||
-                    vessel.ircs ||
-                    vessel.mmsi) ? <div>
-                    <div>
-                        <TabList>
-                            <Tab isActive={index === 1} onClick={() => showTab(1)}>
-                                <SummaryIcon /> Résumé
-                            </Tab>
-                            <Tab isActive={index === 2} onClick={() => showTab(2)}>
-                                <VesselIDIcon /> Identité
-                            </Tab>
-                            <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
-                                <FisheriesIcon /> <br/> Pêche
-                            </Tab>
-                            <Tab type="button" isActive={index === 4} onClick={() => showControls()}>
-                                <ControlsIcon /> Contrôles
-                            </Tab>
-                            <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
-                                <ObservationsIcon /> Ciblage
-                            </Tab>
-                            <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(6)}>
-                                <VMSIcon /> VMS/ERS
-                            </Tab>
-                        </TabList>
+      <>
+          {
+              vessel
+                ? <TrackDepthSelection
+                  openBox={openSidebar}
+                  init={!vesselState.vesselSidebarIsOpen ? {} : null}
+                  firstUpdate={firstUpdate.current}
+                  rightMenuIsOpen={rightMenuIsOpen}
+                  vesselTrackDepth={vesselTrackDepth}
+                  trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
+                  showVesselTrackWithTrackDepth={showVesselTrackWithTrackDepth}
+                  setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
+                />
+                : null
+          }
+          {
+              vessel && vessel.positions
+                ? <TrackExport
+                  positions={vessel.positions}
+                  openBox={openSidebar}
+                  firstUpdate={firstUpdate.current}
+                  rightMenuIsOpen={rightMenuIsOpen}
+                />
+                : null
+          }
+            <Wrapper
+              openBox={openSidebar}
+              firstUpdate={firstUpdate.current}
+              rightMenuIsOpen={rightMenuIsOpen}
+            >
+                {
+                    <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
+                }
+                {
+                    vessel ? <div>
+                        <div>
+                            <TabList>
+                                <Tab isActive={index === 1} onClick={() => showTab(1)}>
+                                    <SummaryIcon /> <br/> Résumé
+                                </Tab>
+                                <Tab isActive={index === 2} onClick={() => showTab(2)}>
+                                    <VesselIDIcon /> <br/> Identité
+                                </Tab>
+                                <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
+                                    <FisheriesIcon /> <br/> Pêche
+                                </Tab>
+                                <Tab type="button" isActive={index === 4} onClick={() => showControls()}>
+                                    <ControlsIcon /> <br/>  Contrôles
+                                </Tab>
+                                <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
+                                    <ObservationsIcon /> <br/> Ciblage
+                                </Tab>
+                                <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(6)}>
+                                    <VMSIcon /> <br/> VMS/ERS
+                                </Tab>
+                            </TabList>
+                            {
+                                !vesselState.loadingVessel
+                                  ? <>
+                                    <Panel className={index === 1 ? '' : 'hide'}>
+                                        <VesselSummary
+                                          vessel={vessel}
+                                          gears={gears}
+                                        />
+                                    </Panel>
+                                    <Panel className={index === 2 ? '' : 'hide'}>
+                                        <VesselIdentity
+                                          vessel={vessel}
+                                          gears={gears}
+                                        />
+                                    </Panel>
+                                    <Panel className={index === 3 ? '' : 'hide'}>
+                                        <VesselFishingActivities
+                                            fishingActivities={vesselState.fishingActivities}
+                                            nextFishingActivities={vesselState.nextFishingActivities}
+                                            updateFishingActivities={updateFishingActivities}
+                                        />
+                                    </Panel>
+                                    <Panel className={index === 4 ? '' : 'hide'}>
+                                        <VesselControls
+                                          setControlFromDate={setControlFromDate}
+                                          controlsFromDate={controlsFromDate}
+                                          controlResumeAndControls={vesselState.controlResumeAndControls}
+                                          nextControlResumeAndControls={vesselState.nextControlResumeAndControls}
+                                          updateControlResumeAndControls={updateControlResumeAndControls}
+                                        />
+                                    </Panel>
+                                    <Panel className={index === 5 ? '' : 'hide'}>
 
-                        {
-                            !vesselState.loadingVessel && !error || (error && error.name === 'NoDEPFoundError') ? <>
-                                <Panel className={index === 1 ? '' : 'hide'}>
-                                    <VesselSummary
-                                        vessel={vessel}
-                                        gears={gears}
-                                    />
-                                </Panel>
-                                <Panel className={index === 2 ? '' : 'hide'}>
-                                    <VesselIdentity
-                                        vessel={vessel}
-                                        gears={gears}
-                                    />
-                                </Panel>
-                                <Panel className={index === 3 ? '' : 'hide'}>
-                                    <FishingActivities
-                                        fishingActivities={vesselState.fishingActivities}
-                                        nextFishingActivities={vesselState.nextFishingActivities}
-                                        updateFishingActivities={updateFishingActivities}
-                                    />
-                                </Panel>
-                                <Panel className={index === 4 ? '' : 'hide'}>
-                                    <VesselControls
-                                      setControlFromDate={setControlFromDate}
-                                      controlsFromDate={controlsFromDate}
-                                      controlResumeAndControls={vesselState.controlResumeAndControls}
-                                      nextControlResumeAndControls={vesselState.nextControlResumeAndControls}
-                                      updateControlResumeAndControls={updateControlResumeAndControls}
-                                    />
-                                </Panel>
-                                <Panel className={index === 5 ? '' : 'hide'}>
-                                    <h1>TODO</h1>
-                                </Panel>
-                                <Panel className={index === 6 ? '' : 'hide'}>
-                                    <h1>TODO</h1>
-                                </Panel>
-                            </> : error ? <Error>
-                                <ErrorText>
-                                    { error.message }
-                                </ErrorText>
-                            </Error> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
-                        }
+                                    </Panel>
+                                    <Panel className={index === 6 ? '' : 'hide'}>
 
-                    </div>
-                </div> : <Error>
-                        <ErrorText>
-                            Nous n'avons pas d'information sur ce navire...
-                        </ErrorText>
-                    </Error> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
-            }
-
-        </Wrapper>
+                                    </Panel>
+                                </> : showedError ? <Error>
+                                    <ErrorText>
+                                        { showedError.message }
+                                    </ErrorText>
+                                </Error> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+                            }
+                        </div>
+                    </div> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+                }
+            </Wrapper>
+          </>
     )
 }
 
@@ -220,12 +283,13 @@ const GrayOverlay = styled.div`
 `
 
 const Error = styled.div`
+  height: 50px;
   padding: 5px 10px 10px 10px;
   right: 0;
 `
 
 const ErrorText = styled.div`
-  padding: 10px 10px 5px 10px;
+  padding: 5px 10px 5px 10px;
   display: table-cell;
   font-size: 15px;
   vertical-align: middle;

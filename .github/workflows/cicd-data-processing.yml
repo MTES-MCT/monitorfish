@@ -34,10 +34,3 @@ jobs:
             echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
         fi
 
-    - name: Set PUSH
-    - run : |
-        if [ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') ]; then\
-            echo "PUSH=true" >> $GITHUB_ENV
-        else\
-            echo "PUSH=false" >> $GITHUB_ENV
-        fi

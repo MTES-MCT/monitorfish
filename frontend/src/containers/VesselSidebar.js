@@ -193,22 +193,22 @@ const VesselSidebar = () => {
                     vessel ? <div>
                         <div>
                             <TabList>
-                                <Tab isActive={index === 1} onClick={() => showTab(1)}>
+                                <Tab data-cy={"vessel-menu-resume"} isActive={index === 1} onClick={() => showTab(1)}>
                                     <SummaryIcon /> <br/> Résumé
                                 </Tab>
-                                <Tab isActive={index === 2} onClick={() => showTab(2)}>
+                                <Tab data-cy={"vessel-menu-identity"} isActive={index === 2} onClick={() => showTab(2)}>
                                     <VesselIDIcon /> <br/> Identité
                                 </Tab>
-                                <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
+                                <Tab data-cy={"vessel-menu-fishing"} type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
                                     <FisheriesIcon /> <br/> Pêche
                                 </Tab>
-                                <Tab type="button" isActive={index === 4} onClick={() => showControls()}>
+                                <Tab data-cy={"vessel-menu-controls"} type="button" isActive={index === 4} onClick={() => showControls()}>
                                     <ControlsIcon /> <br/>  Contrôles
                                 </Tab>
-                                <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
+                                <Tab data-cy={"vessel-menu-target"} type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
                                     <ObservationsIcon /> <br/> Ciblage
                                 </Tab>
-                                <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(6)}>
+                                <Tab data-cy={"vessel-menu-vms"} type="button" disabled isActive={index === 6} onClick={() => setIndex(6)}>
                                     <VMSIcon /> <br/> VMS/ERS
                                 </Tab>
                             </TabList>

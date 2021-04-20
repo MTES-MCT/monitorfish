@@ -255,7 +255,7 @@ const VesselsSearchBox = () => {
                 {selectedVesselFeatureAndIdentity.identity.flagState ? <Flag
                   title={countries.getName(selectedVesselFeatureAndIdentity.identity.flagState, 'fr')}
                   src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`}/> : null}
-                <VesselName>
+                <VesselName data-cy={"vessel-name"}>
                   {selectedVesselFeatureAndIdentity.identity.vesselName}
                   {' '}
                   {

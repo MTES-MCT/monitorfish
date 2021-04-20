@@ -12,7 +12,7 @@ const Control = props => {
     const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 
     return props.control ? <Wrapper key={props.index} isLastItem={props.isLastItem}>
-        <Title>
+        <Title data-cy={"vessel-controls-title"}>
             {
                 props.control.infractions && props.control.infractions.length ? <GyroRed /> : <GyroGreen />
             }

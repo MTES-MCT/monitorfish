@@ -234,7 +234,7 @@ const FishingActivitiesSummary = props => {
                         <TableBody>
                             <Field>
                                 <Key>Engins à bord (JPE)</Key>
-                                <Value>{depMessage &&
+                                <Value data-cy={"vessel-fishing-gears"}>{depMessage &&
                                 depMessage.message &&
                                 depMessage.message.gearOnboard &&
                                 depMessage.message.gearOnboard.length ?
@@ -269,7 +269,7 @@ const FishingActivitiesSummary = props => {
                         <TextValue
                             hasTwoLines={true}>{props.fishingActivities.fleetSegment ? props.fishingActivities.fleetSegment :
                             <NoValue>-</NoValue>}</TextValue>
-                        <SeeAll onClick={() => props.showERSMessages()}>Voir tous<br/> les messages</SeeAll>
+                        <SeeAll data-cy={"vessel-fishing-see-all"} onClick={() => props.showERSMessages()}>Voir tous<br/> les messages</SeeAll>
                         <Arrow onClick={() => props.showERSMessages()}/>
                     </Title>
                     {

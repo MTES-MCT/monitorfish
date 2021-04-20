@@ -64,6 +64,12 @@ jobs:
     - name: Build docker image
       run: make docker-build
 
+    - name: Run docker images
+      run: make docker-compose up
+
+    - name: Cypress run
+      uses: cypress-io/github-action@v2
+
     - name: Push docker image to registry
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
       run: |

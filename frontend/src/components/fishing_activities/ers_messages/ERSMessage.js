@@ -111,7 +111,7 @@ const ERSMessage = props => {
             <Wrapper>
                 <Header>
                     <ERSMessageType>{getErsMessageType()}</ERSMessageType>
-                    <ERSMessageHeaderText>
+                    <ERSMessageHeaderText data-cy={"vessel-fishing-dep-message"}>
                         {getERSMessageHeaderTitle(props.message)}
                     </ERSMessageHeaderText>
                     {

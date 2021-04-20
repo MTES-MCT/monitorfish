@@ -27,7 +27,7 @@ const ERSMessageResumeHeader = props => {
                     <ERSMessageName hasNoMessage={props.hasNoMessage}>
                         { ERSMessageTypeEnum[props.messageType].name }
                     </ERSMessageName>
-                    <ERSMessageResumeText title={props.onHoverText ? props.onHoverText : ''}>
+                    <ERSMessageResumeText title={props.onHoverText ? props.onHoverText : ''} data-cy={"vessel-fishing-resume-title"}>
                         { props.hasNoMessage ? <Gray>Aucun message</Gray> : <>{props.title}{props.isAlert ? <Red /> : null}</> }
                     </ERSMessageResumeText>
                     {

@@ -27,7 +27,7 @@ const YearControls = props => {
                     props.yearControls.length ? <ChevronIcon isOpen={isOpen}/> : null
                 }
                 <Year>{props.year}</Year>
-                <YearResume>
+                <YearResume data-cy={"vessel-controls-year"}>
                     {
                       props.yearControls.length
                         ? <>{ props.yearControls.length } contrôle{ props.yearControls.length > 1 ? 's' : ''}</>

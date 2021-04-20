@@ -61,7 +61,9 @@ jobs:
         builder: ${{ steps.buildx.outputs.name }}
         file: infra/docker/Dockerfile.DataPipeline
         push: ${{ env.PUSH }}
-        tags: ${{ env.VERSION }}
+        tags: 
+          mtes-mct/monitorfish/monitorfish-pipeline:${{ env.VERSION }}
+          localhost:5000/monitorfish-pipeline:${{ env.VERSION }}
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new
 

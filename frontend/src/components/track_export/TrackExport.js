@@ -87,7 +87,7 @@ const TrackExport = props => {
   useEffect(() => {
     if(props.positions && props.positions.length) {
       const nextPositions = props.positions.map(position => {
-        let coordinates = getCoordinates([position.latitude, position.longitude], WSG84_PROJECTION)
+        let coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION)
 
         return {
           vesselName: position.vesselName ? position.vesselName : '',

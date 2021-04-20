@@ -21,10 +21,10 @@ const COEMessage = props => {
                                 <Key>Position d'entrée</Key>
                                 <Value>
                                     <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitudeEntered && props.message.longitudeEntered ?
-                                    getCoordinates([props.message.latitudeEntered, props.message.longitudeEntered], WSG84_PROJECTION)[0] :
+                                    getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[0] :
                                     <NoValue>-</NoValue> }
                                     <InlineKey>Lon.</InlineKey> { props.message.latitudeEntered && props.message.longitudeEntered ?
-                                    getCoordinates([props.message.latitudeEntered, props.message.longitudeEntered], WSG84_PROJECTION)[1] :
+                                    getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[1] :
                                     <NoValue>-</NoValue>}<br/>
                                     <FirstInlineKey>ZEE</FirstInlineKey> {props.message.economicZoneEntered ? <>{countries.getName(props.message.economicZoneEntered, 'fr')} ({props.message.economicZoneEntered})</> :
                                     <NoValue>-</NoValue>}<br/>

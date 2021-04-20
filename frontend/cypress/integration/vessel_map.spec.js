@@ -57,7 +57,7 @@ context('VesselSidebar', () => {
 
   })
 
-  it.only('Controls Should contain the controls resume', () => {
+  it('Controls Should contain the controls resume', () => {
     // Given
     cy.get('.vessels').click(460, 480)
     cy.wait(200)

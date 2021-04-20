@@ -45,7 +45,7 @@ const YearControls = props => {
         </YearTitle>
         <List
           isOpen={isOpen}
-          name={props.yearControls.length ? props.yearControls[0].controlDatetimeUtc : props.year}>
+          name={props.yearControls.length && props.yearControls[0] ? props.yearControls[0].controlDatetimeUtc : props.year}>
             {
                 props.yearControls.length ?
                   props.yearControls.map((control, index) => {

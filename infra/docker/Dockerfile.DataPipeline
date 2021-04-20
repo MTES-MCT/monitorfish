@@ -50,4 +50,4 @@ RUN chown -R ${USER} .
 USER ${USER}
 
 ENTRYPOINT ["/tini", "--"]
-CMD ["bash", "scripts/start-server.sh"]
+CMD ["python", "main.py"]

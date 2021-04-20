@@ -45,8 +45,7 @@ ENV PYTHONPATH=/home/${USER}
 
 COPY datascience/ .
 
-RUN chown -R ${USER} . && \
-    chmod +x scripts/*.sh
+RUN chown -R ${USER} .
 
 USER ${USER}
 

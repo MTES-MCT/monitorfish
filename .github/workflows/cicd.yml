@@ -65,7 +65,7 @@ jobs:
       run: make docker-build
 
     - name: Run docker images
-      run: make docker-compose up
+      run: make docker-compose-up
 
     - name: Cypress run
       uses: cypress-io/github-action@v2

@@ -23,10 +23,10 @@ const COXMessage = props => {
                                 <Key>Position de sortie</Key>
                                 <Value>
                                     <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitudeExited && props.message.longitudeExited ?
-                                    getCoordinates([props.message.latitudeExited, props.message.longitudeExited], WSG84_PROJECTION)[0] :
+                                    getCoordinates([props.message.longitudeExited, props.message.latitudeExited], WSG84_PROJECTION)[0] :
                                     <NoValue>-</NoValue> }
                                     <InlineKey>Lon.</InlineKey> { props.message.latitudeExited && props.message.longitudeExited ?
-                                    getCoordinates([props.message.latitudeExited, props.message.longitudeExited], WSG84_PROJECTION)[1] :
+                                    getCoordinates([props.message.longitudeExited, props.message.latitudeExited], WSG84_PROJECTION)[1] :
                                     <NoValue>-</NoValue>}<br/>
                                     <FirstInlineKey>ZEE</FirstInlineKey> {props.message.economicZoneExited ? <>{countries.getName(props.message.economicZoneExited, 'fr')} ({props.message.economicZoneExited})</> :
                                     <NoValue>-</NoValue>}<br/>

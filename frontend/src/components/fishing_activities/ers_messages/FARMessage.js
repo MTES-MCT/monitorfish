@@ -33,10 +33,10 @@ const FARMessage = props => {
                                 <Key>Position opération</Key>
                                 <Value>
                                     <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitude && props.message.longitude ?
-                                    getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[0] :
+                                    getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[0] :
                                     <NoValue>-</NoValue> }
                                     <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude ?
-                                    getCoordinates([props.message.latitude, props.message.longitude], WSG84_PROJECTION)[1] :
+                                    getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[1] :
                                     <NoValue>-</NoValue>}
                                 </Value>
                             </Field>

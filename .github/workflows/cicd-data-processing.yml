@@ -25,3 +25,19 @@ jobs:
     - name: Set ENV_PROFILE as PROD when it is a release
       if: startsWith(github.ref, 'refs/tags/v')
       run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
+
+    - name: Set VERSION
+      run: |
+        if [ "${ENV_PROFILE}" != "prod" ]; then\
+            echo "VERSION=${{ steps.lastrelease.outputs.release }}_SNAPSHOT" >> $GITHUB_ENV
+        else\
+            echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
+        fi
+
+    - name: Set PUSH
+    - run : |
+        if [ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') ]; then\
+            echo "PUSH=true" >> $GITHUB_ENV
+        else\
+            echo "PUSH=false" >> $GITHUB_ENV
+        fi

@@ -42,14 +42,6 @@ jobs:
             echo "PUSH=false" >> $GITHUB_ENV
         fi
 
-    - name: Set tags
-      run : |
-        if [[ ${{ github.ref }} == refs/heads/master || ${{ github.ref }} == 'refs/tags/v'* ]]; then\
-            echo "TAGS=[]" >> $GITHUB_ENV
-        else\
-            echo "PUSH=false" >> $GITHUB_ENV
-        fi
-
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@master

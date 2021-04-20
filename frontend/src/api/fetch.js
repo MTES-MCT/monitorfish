@@ -219,7 +219,7 @@ export function getRegulatoryZoneMetadataFromAPI(regulatorySubZone) {
         .then(response => {
             if (response.status === OK) {
                 return response.json().then(response => {
-                    if (response.features.length === 1) {
+                    if (response.features.length === 1 && response.features[0]) {
                         return response.features[0].properties
                     } else {
                         throw Error("We found multiple layers for this layer")

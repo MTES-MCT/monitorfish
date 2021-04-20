@@ -51,7 +51,7 @@ const AdministrativeZones = props => {
                 zones && zones.length ? <ZonesList showZones={showZones} zonesLength={zones.length}>
                     {
                         zones.map((layers, index) => {
-                            if(layers.length === 1) {
+                            if(layers.length === 1 && layers[0]) {
                                 return <ListItem key={layers[0].code}>
                                     <AdministrativeZone
                                         isShownOnInit={props.showedLayers.some(layer_ => layer_.type === layers[0].code)}

@@ -9,7 +9,7 @@ const AdministrativeZoneGroup = props => {
 
     return <>
         {
-            props.layers && props.layers.length ?
+            props.layers && props.layers.length && props.layers[0] ?
                 <Row>
                     <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
                         <Text isOpen={isOpen} title={props.layers[0].group.name.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>

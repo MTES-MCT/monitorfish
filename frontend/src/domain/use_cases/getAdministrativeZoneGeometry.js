@@ -25,7 +25,7 @@ const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zone
 
     getAdministrativeZoneFromAPI(administrativeZoneCode, null, subZoneCode).then(administrativeZoneFeature => {
         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(administrativeZoneFeature))
-        if(vectorSource.getFeatures().length === 1) {
+        if(vectorSource.getFeatures().length === 1 && vectorSource.getFeatures()[0]) {
             dispatch(addZoneSelected({
                 name: zoneName,
                 code: subZoneCode ? subZoneCode : administrativeZoneCode,

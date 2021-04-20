@@ -80,7 +80,7 @@ const VesselTrackLayer = ({ map }) => {
       })
 
       let firstPositionOnLine
-      if(positionsOnLine.length > 0) {
+      if(positionsOnLine.length > 0 && positionsOnLine[0]) {
         firstPositionOnLine = positionsOnLine[0]
       } else {
         firstPositionOnLine = null

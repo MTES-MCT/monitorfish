@@ -282,7 +282,7 @@ const FishingActivitiesSummary = props => {
                                     <DEPMessageResume hasNoMessage={true}/>
                                 }
 
-                                {farMessages && farMessages.length ? <FARMessageResume
+                                {farMessages && farMessages.length && farMessages[0] ? <FARMessageResume
                                         id={farMessages[0].ersId}
                                         showERSMessages={props.showERSMessages}
                                         totalFARWeight={totalFARWeight}
@@ -291,7 +291,7 @@ const FishingActivitiesSummary = props => {
                                     <FARMessageResume hasNoMessage={true}/>
                                 }
 
-                                {disMessages && disMessages.length ? <DISMessageResume
+                                {disMessages && disMessages.length && disMessages[0] ? <DISMessageResume
                                         id={disMessages[0].ersId}
                                         totalDISWeight={totalDISWeight}
                                         numberOfMessages={disMessages ? disMessages.length : 0}

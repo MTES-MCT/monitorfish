@@ -33,6 +33,8 @@ https://download.oracle.com/otn_software/linux/instantclient/\
 
 # Create and "activate" venv by prepending it to PATH then install python dependencies
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Install python dependencies
 COPY datascience/requirements.txt /tmp/requirements.txt
 RUN python3 -m venv $VIRTUAL_ENV && \
     pip install -U \
@@ -40,15 +42,14 @@ RUN python3 -m venv $VIRTUAL_ENV && \
         setuptools \
         wheel && \
     pip install -r /tmp/requirements.txt
+
 # Make library importable
 ENV PYTHONPATH=/home/${USER}
 
+# Add source
 COPY datascience/ .
 
-RUN chown -R ${USER} . && \
-    chmod +x scripts/*.sh
-
+RUN chown -R ${USER} .
 USER ${USER}
-
 ENTRYPOINT ["/tini", "--"]
-CMD ["bash", "scripts/start-server.sh"]
+CMD ["python", "main.py"]

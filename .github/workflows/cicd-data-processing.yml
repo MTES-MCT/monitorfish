@@ -41,7 +41,7 @@ jobs:
     - name: Cache Docker layers
       uses: actions/cache@v2
       with:
-        path: /tmp/.buildx-cache
+        path: /tmp/.buildx-cache-pipeline
         key: ${{ runner.os }}-single-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-single-buildx
@@ -55,16 +55,16 @@ jobs:
         file: infra/docker/Dockerfile.DataPipeline
         push: false
         tags: monitorfish-pipeline:${{ env.VERSION }}
-        cache-from: type=local,src=/tmp/.buildx-cache
-        cache-to: type=local,dest=/tmp/.buildx-cache-new
+        cache-from: type=local,src=/tmp/.buildx-cache-pipeline
+        cache-to: type=local,dest=/tmp/.buildx-cache-pipeline-new
 
       # Temp fix
       # https://github.com/docker/build-push-action/issues/252
       # https://github.com/moby/buildkit/issues/1896
     - name: Move cache
       run: |
-        rm -rf /tmp/.buildx-cache
-        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+        rm -rf /tmp/.buildx-cache-pipeline
+        mv /tmp/.buildx-cache-pipeline-new /tmp/.buildx-cache-pipeline
 
     - name: Test docker image
       run: make docker-test-pipeline

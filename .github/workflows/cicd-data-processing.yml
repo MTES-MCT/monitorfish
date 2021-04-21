@@ -46,12 +46,6 @@ jobs:
         restore-keys: |
           monitorfish-cache
 
-    - name: Inspect cache directory
-      run : |
-        ls -la /tmp/.buildx-cache
-        cat /tmp/.buildx-cache/index.json
-        ls -la /tmp/.buildx-cache/blobs/sha256
-
     - name: Build image
       uses: docker/build-push-action@v2
       with:

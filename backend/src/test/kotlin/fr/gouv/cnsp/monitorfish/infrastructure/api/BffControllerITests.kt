@@ -8,11 +8,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
 import fr.gouv.cnsp.monitorfish.domain.entities.ERSMessagesAndAlerts
+import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito
@@ -68,7 +68,7 @@ class BffControllerITests {
     fun `Should get all positions`() {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"));
-        val position = Position(0, "MMSI", null, null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
+        val position = LastPosition(0, "MMSI", null, null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When
@@ -226,10 +226,10 @@ class BffControllerITests {
     @Test
     fun `Should find the ERS messages of vessels`() {
         // Given
-        given(this.getVesselLastVoyage.execute(any(), any(), any())).willReturn(ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        given(this.getVesselLastVoyage.execute(any())).willReturn(ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4"))
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -239,7 +239,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
 
-        Mockito.verify(getVesselLastVoyage).execute("FR224226850", "123", "IEF4")
+        Mockito.verify(getVesselLastVoyage).execute("FR224226850")
     }
 
     @Test

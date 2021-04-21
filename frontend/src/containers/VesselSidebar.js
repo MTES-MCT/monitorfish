@@ -219,6 +219,7 @@ const VesselSidebar = () => {
                                         <VesselSummary
                                           vessel={vessel}
                                           gears={gears}
+                                          vesselLastPositionFeature={vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature}
                                         />
                                     </Panel>
                                     <Panel className={index === 2 ? '' : 'hide'}>

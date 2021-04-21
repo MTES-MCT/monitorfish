@@ -40,11 +40,8 @@ jobs:
 
     - name: Inspect cache directory
       run : |
-        echo ################### \
-        ls \
-        echo ################### \
-        echo $(ls)
-
+        echo "Hello there!"
+ 
     - name: Cache Docker layers
       uses: actions/cache@v2
       with:

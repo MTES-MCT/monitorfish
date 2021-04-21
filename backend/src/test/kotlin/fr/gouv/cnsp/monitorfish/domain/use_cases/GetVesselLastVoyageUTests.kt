@@ -47,8 +47,8 @@ class GetVesselLastVoyageUTests {
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
-        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getDummyERSMessage())
+        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
+        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any())).willReturn(getDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -60,7 +60,7 @@ class GetVesselLastVoyageUTests {
 
         // When
         val (ersMessages, _) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
-                .execute("FR224226850", "", "")
+                .execute("FR224226850")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -102,8 +102,8 @@ class GetVesselLastVoyageUTests {
     @Test
     fun `execute Should return an empty list of alerts When the trim number is not found`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), null))
-        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getDummyERSMessage())
+        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), null))
+        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any())).willReturn(getDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -115,7 +115,7 @@ class GetVesselLastVoyageUTests {
 
         // When
         val (_, alerts) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
-                .execute("FR224226850", "", "")
+                .execute("FR224226850")
 
         // Then
         assertThat(alerts).hasSize(0)
@@ -124,8 +124,8 @@ class GetVesselLastVoyageUTests {
     @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
-        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getCorrectedDummyERSMessage())
+        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
+        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any())).willReturn(getCorrectedDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -137,7 +137,7 @@ class GetVesselLastVoyageUTests {
 
         // When
         val (ersMessages, _) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
-                .execute("FR224226850", "", "")
+                .execute("FR224226850")
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -158,8 +158,8 @@ class GetVesselLastVoyageUTests {
     @Test
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
-        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any(), any(), any())).willReturn(getRETDummyERSMessage())
+        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
+        given(ersRepository.findAllMessagesAfterDepartureDate(any(), any())).willReturn(getRETDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -171,7 +171,7 @@ class GetVesselLastVoyageUTests {
 
         // When
         val (ersMessages, _) = GetVesselLastVoyage(ersRepository, gearRepository, speciesRepository, portRepository, alertRepository, ersMessageRepository)
-                .execute("FR224226850", "", "")
+                .execute("FR224226850")
 
         // Then
         assertThat(ersMessages).hasSize(2)

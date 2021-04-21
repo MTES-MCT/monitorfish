@@ -15,6 +15,17 @@ const VesselCard = props => {
                         <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`} />{' '}</> : null
                 }
                 <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
+                {
+                    props.vessel.getProperties().lastErsDateTime
+                      ? <ERS>
+                          <ERSOK/>
+                          <MessageText>JPE</MessageText>
+                      </ERS>
+                      : <ERS>
+                          <NoERS/>
+                          <MessageText>JPE</MessageText>
+                      </ERS>
+                }
             </VesselCardHeader>
             <VesselCardBody>
                 <LatLon>
@@ -30,15 +41,20 @@ const VesselCard = props => {
                     <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
-                    <FieldName>Type de signal</FieldName>
-                    <FieldValue>{props.vessel.getProperties().positionType ? props.vessel.getProperties().positionType : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Dernier signal</FieldName>
+                    <FieldName>Dernier signal VMS</FieldName>
                     <FieldValue>
                         {
                             props.vessel.getProperties().dateTime ? <>{timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
                                 : <NoValue>-</NoValue>
                         }
-
+                    </FieldValue>
+                    <FieldName>Cadencement</FieldName>
+                    <FieldValue>
+                        {
+                            props.vessel.getProperties().emissionPeriod
+                              ? <>1 signal toutes les {props.vessel.getProperties().emissionPeriod / 60} min</>
+                              : <NoValue>-</NoValue>
+                        }
                     </FieldValue>
                 </Position>
             </VesselCardBody>
@@ -72,6 +88,27 @@ const VesselCard = props => {
                     </Fields>
                 </ColumnTwo>
             </VesselCardBottom>
+            <VesselCardBottom>
+                <ColumnOne>
+                    <Fields>
+                        <Body>
+                            <Field>
+                                <Key>Taille du navire</Key>
+                                <Value>
+                                    {
+                                        props.vessel.getProperties().length ? props.vessel.getProperties().length : <NoValue>-</NoValue>
+                                    }
+                                    {' '}x{' '}
+                                    {
+                                        props.vessel.getProperties().width ? props.vessel.getProperties().width : <NoValue>-</NoValue>
+                                    }
+                                </Value>
+                            </Field>
+                        </Body>
+                    </Fields>
+                </ColumnOne>
+
+            </VesselCardBottom>
             <TrianglePointer>
                 <TriangleShadow />
             </TrianglePointer>
@@ -79,13 +116,49 @@ const VesselCard = props => {
     )
 }
 
+const MessageText = styled.span`
+  vertical-align: text-top;
+  line-height: 11px;
+  margin: 0 3px 0 3px;
+`
+
+const NoERS = styled.span`
+  height: 14px;
+  margin-left: 3px;
+  width: 14px;
+  background-color: #E1000F;
+  border-radius: 50%;
+  display: inline-block;
+`
+
+const ERSOK = styled.span`
+  height: 14px;
+  margin-left: 3px;
+  width: 14px;
+  background-color: #8CC61F;
+  border-radius: 50%;
+  display: inline-block;
+`
+
+const ERS = styled.span`
+  border-radius: 11px;
+  background: ${COLORS.grayBackground};
+  font-size: 11px;
+  color: ${COLORS.grayDarkerThree};
+  margin: 3px 7px 7px 3px;
+  height: 17px;
+  padding: 3px 5px 0px 2px;
+  right: 0;
+  position: absolute;
+  display: inline;
+`
+
 const Flag = styled.img`
     font-size: 1.5em;
-    margin-left: 5px;
     display: inline-block;
-    width: 1em;                      
-    height: 1em;                      
     vertical-align: middle;
+    height: 24px;
+    margin-top: -5px;
 `
 
 const Body = styled.tbody``
@@ -194,7 +267,7 @@ const FieldValue = styled.div`
 `
 
 const LatLon = styled.div`
-  width: 120px;
+  width: 102px;
   order: 1;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
@@ -202,7 +275,7 @@ const LatLon = styled.div`
 `
 
 const Course = styled.div`
-  width: 115px;
+  width: 70px;
   order: 2;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
@@ -210,7 +283,7 @@ const Course = styled.div`
 `
 
 const Position = styled.div`
-  width: 115px;
+  width: 195px;
   order: 3;
   background: ${COLORS.background};
   margin: 5px 5px 5px 5px;
@@ -231,6 +304,7 @@ const VesselCardTitle = styled.span`
   margin-left: 5px;
   display: inline-block;
   vertical-align: middle;
+  margin-top: -5px;
 `
 
 const VesselCardBody = styled.div`

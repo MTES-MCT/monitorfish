@@ -42,9 +42,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /tmp/.buildx-cache
-        key: monitorfish-cache
+        key: ${{ runner.os }}-single-buildx-${{ github.sha }}
         restore-keys: |
-          monitorfish-cache
+          ${{ runner.os }}-single-buildx
 
     - name: Build image
       uses: docker/build-push-action@v2

@@ -167,7 +167,7 @@ const VesselSummary = props => {
                             <Key>Segments de flotte</Key>
                             <TrimmedValue>
                                 {
-                                    props.vesselLastPositionFeature.getProperties().segments
+                                    props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments
                                       ? props.vesselLastPositionFeature.getProperties().segments.join(", ")
                                       : <NoValue>-</NoValue>
                                 }

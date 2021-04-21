@@ -1,1 +1,1 @@
-print("dummy")
+print("dummy dummy")

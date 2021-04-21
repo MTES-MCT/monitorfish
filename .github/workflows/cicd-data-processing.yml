@@ -42,9 +42,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+        key: monitorfish-cache
         restore-keys: |
-          ${{ runner.os }}-single-buildx
+          monitorfish-cache
 
     - name: Inspect cache directory
       run : |

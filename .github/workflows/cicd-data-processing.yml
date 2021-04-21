@@ -50,8 +50,7 @@ jobs:
       run : |
         ls -la /tmp/.buildx-cache
         cat /tmp/.buildx-cache/index.json
-        ls -la /tmp/.buildx-cache/blobs
-        ls -la /tmp/.buildx-cache/ingest
+        ls -la /tmp/.buildx-cache/blobs/sha256
 
     - name: Build image
       uses: docker/build-push-action@v2

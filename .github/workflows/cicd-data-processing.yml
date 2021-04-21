@@ -47,7 +47,11 @@ jobs:
           ${{ runner.os }}-single-buildx
 
     - name: Inspect cache directory
-      run : ls -la /tmp/.buildx-cache
+      run : |
+        ls -la /tmp/.buildx-cache
+        cat /tmp/.buildx-cache/index.json
+        ls -la blobs
+        ls -la ingest
 
     - name: Build image
       uses: docker/build-push-action@v2

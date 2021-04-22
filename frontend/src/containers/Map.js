@@ -217,10 +217,10 @@ const Map = () => {
     const handleMapClick = event => {
         const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, {hitTolerance: hitPixelTolerance});
 
-        if (feature && feature.getId() && feature.getId().includes(LayersEnum.VESSELS.code)) {
+        if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
             let vessel = getVesselIdentityFromFeature(feature)
             dispatch(showVesselTrackAndSidebar(getVesselFeatureAndIdentity(feature, vessel), false, false))
-        } else if(feature && feature.getId() && feature.getId().includes(LayersEnum.REGULATORY.code)) {
+        } else if(feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
             let zone = {
                 layerName: feature.getProperties().layer_name,
                 zone: feature.getProperties().zones

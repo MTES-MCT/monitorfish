@@ -84,7 +84,7 @@ jobs:
         tags: monitorfish-app:${{ env.VERSION }}
         cache-from: type=local,src=/tmp/.buildx-cache-app
         cache-to: type=local,dest=/tmp/.buildx-cache-app-new
-        build-arg: |
+        build-args: |
           VERSION=${{ env.VERSION }}
           ENV_PROFILE=${{ env.ENV_PROFILE }}
           GITHUB_SHA=${{ env.GITHUB_SHA }}

@@ -8,13 +8,9 @@ import kotlin.jvm.Throws
 
 interface ERSRepository {
     @Throws(NoERSLastDepartureDateFound::class)
-    fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String,
-                                           externalReferenceNumber: String,
-                                           ircs: String): LastDepartureDateAndTripNumber
+    fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String): LastDepartureDateAndTripNumber
     fun findAllMessagesAfterDepartureDate(dateTime: ZonedDateTime,
-                                          internalReferenceNumber: String,
-                                          externalReferenceNumber: String,
-                                          ircs: String): List<ERSMessage>
+                                          internalReferenceNumber: String): List<ERSMessage>
     fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<ERSMessage, ERSMessage?>>
     fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
     fun findById(id: Long): ERSMessage

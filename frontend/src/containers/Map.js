@@ -335,9 +335,9 @@ const Map = () => {
 
 const VesselCardOverlay = styled.div`
   position: absolute;
-  top: -236px;
+  top: -277px;
   left: -185px;
-  width: 370px;
+  width: 387px;
   text-align: left;
   background-color: ${COLORS.grayBackground};
   border-radius: 2px;

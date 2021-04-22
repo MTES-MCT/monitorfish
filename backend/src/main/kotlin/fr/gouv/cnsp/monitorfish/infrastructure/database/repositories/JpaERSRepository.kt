@@ -25,10 +25,9 @@ import javax.transaction.Transactional
 class JpaERSRepository(private val dbERSRepository: DBERSRepository,
                        private val mapper: ObjectMapper) : ERSRepository {
 
-    private val logger = LoggerFactory.getLogger(FrontController::class.java)
     private val postgresChunkSize = 5000
 
-    override fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): LastDepartureDateAndTripNumber {
+    override fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String): LastDepartureDateAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByInternalReferenceNumber(
@@ -38,39 +37,20 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
                         lastDepartureDateAndTripNumber.tripNumber)
             }
 
-            if(externalReferenceNumber.isNotEmpty()) {
-                val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByExternalReferenceNumber(
-                        externalReferenceNumber, PageRequest.of(0,1)).first()
-                return LastDepartureDateAndTripNumber(
-                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
-                        lastDepartureDateAndTripNumber.tripNumber)
-            }
-
-            if(ircs.isNotEmpty()) {
-                val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByIRCS(
-                        ircs, PageRequest.of(0,1)).first()
-                return LastDepartureDateAndTripNumber(
-                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
-                        lastDepartureDateAndTripNumber.tripNumber)
-            }
-
-            throw IllegalArgumentException("No CFR, External marker nor IRCS given to find the vessel.")
+            throw IllegalArgumentException("No CFR given to find the vessel.")
         } catch (e: NoSuchElementException) {
-            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber, externalReferenceNumber, ircs), e)
+            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
         } catch (e: IllegalArgumentException) {
-            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber, externalReferenceNumber, ircs), e)
+            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
         }
     }
 
-    private fun getDepartureDateExceptionMessage(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String) =
-            "No departure date (DEP) found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\"," +
-                    "externalReferenceNumber: \"$externalReferenceNumber\", ircs: \"$ircs\")"
+    private fun getDepartureDateExceptionMessage(internalReferenceNumber: String) =
+            "No departure date (DEP) found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     @Cacheable(value = ["ers"])
     override fun findAllMessagesAfterDepartureDate(dateTime: ZonedDateTime,
-                                                   internalReferenceNumber: String,
-                                                   externalReferenceNumber: String,
-                                                   ircs: String): List<ERSMessage> {
+                                                   internalReferenceNumber: String): List<ERSMessage> {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 return dbERSRepository.findERSMessagesAfterOperationDateTime(internalReferenceNumber, dateTime.toInstant()).map {
@@ -78,11 +58,11 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
                 }
             }
 
-            throw IllegalArgumentException("No CFR, External marker nor IRCS given to find the vessel.")
+            throw IllegalArgumentException("No CFR given to find the vessel.")
         } catch (e: EmptyResultDataAccessException) {
-            throw NoERSMessagesFound(getAllMessagesExceptionMessage(internalReferenceNumber, externalReferenceNumber, ircs), e)
+            throw NoERSMessagesFound(getAllMessagesExceptionMessage(internalReferenceNumber), e)
         } catch (e: IllegalArgumentException) {
-            throw NoERSMessagesFound(getAllMessagesExceptionMessage(internalReferenceNumber, externalReferenceNumber, ircs), e)
+            throw NoERSMessagesFound(getAllMessagesExceptionMessage(internalReferenceNumber), e)
         }
     }
 
@@ -133,7 +113,6 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
-    private fun getAllMessagesExceptionMessage(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String) =
-            "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\"," +
-                    "externalReferenceNumber: \"$externalReferenceNumber\", ircs: \"$ircs\")"
+    private fun getAllMessagesExceptionMessage(internalReferenceNumber: String) =
+            "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 }

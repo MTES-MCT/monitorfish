@@ -37,13 +37,13 @@ class BffController(
 
     @GetMapping("/v1/vessels")
     @ApiOperation("Get all vessels' last position")
-    fun getVessels(): List<PositionDataOutput> {
+    fun getVessels(): List<LastPositionDataOutput> {
         val positions = getLastPositions.execute()
         vesselsGauge?.set(positions.size)
 
         return positions.map { position ->
             position.let {
-                PositionDataOutput.fromPosition(position)
+                LastPositionDataOutput.fromLastPosition(position)
             }
         }
     }
@@ -120,17 +120,11 @@ class BffController(
 
     @GetMapping("/v1/ers/find")
     @ApiOperation("Get vessel's ERS messages")
-    fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)")
+    fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
                              @RequestParam(name = "internalReferenceNumber")
-                             internalReferenceNumber: String,
-                             @ApiParam("Vessel external reference number")
-                             @RequestParam(name = "externalReferenceNumber")
-                             externalReferenceNumber: String,
-                             @ApiParam("Vessel IRCS")
-                             @RequestParam(name = "IRCS")
-                             IRCS: String): ERSMessagesAndAlertsDataOutput {
+                             internalReferenceNumber: String): ERSMessagesAndAlertsDataOutput {
         val start = System.currentTimeMillis()
-        val ersMessagesAndAlerts = getVesselLastVoyage.execute(internalReferenceNumber, externalReferenceNumber, IRCS)
+        val ersMessagesAndAlerts = getVesselLastVoyage.execute(internalReferenceNumber)
         ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
         return ERSMessagesAndAlertsDataOutput.fromERSMessagesAndAlerts(ersMessagesAndAlerts)

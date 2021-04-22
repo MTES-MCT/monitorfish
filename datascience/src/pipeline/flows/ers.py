@@ -1,24 +1,16 @@
-import copy
-import logging
 import os
 import pathlib
 from typing import List, Union
 from zipfile import ZipFile
 
-import pandas as pd
 import prefect
-import sqlalchemy
-from prefect import Flow, Parameter, task
-from sqlalchemy import DateTime, MetaData, String, Table, select, text
-from sqlalchemy.dialects.postgresql import JSONB
+from prefect import Flow, task
 
 from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
 from src.pipeline.processing import drop_rows_already_in_table, to_json
-from src.pipeline.utils import delete, grouper, move
-from src.read_query import read_query
-from src.utils.database import get_table, psql_insert_copy
+from src.pipeline.utils import get_table, move, psql_insert_copy
 
 RECEIVED_DIRECTORY = ERS_FILES_LOCATION / "received"
 TREATED_DIRECTORY = ERS_FILES_LOCATION / "treated"
@@ -125,7 +117,11 @@ def extract_zipfiles(
                     + "Moving files to error_directory."
                 )
                 for non_zipfile in non_zipfiles:
-                    move(zipfile_input_dir / non_zipfile, zipfile_error_dir)
+                    move(
+                        zipfile_input_dir / non_zipfile,
+                        zipfile_error_dir,
+                        if_exists="replace",
+                    )
 
             for zipfile in zipfiles:
                 res.append(
@@ -173,7 +169,9 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
                 + f"Moving {zipfile['full_name']} to non-treated directory."
             )
             move(
-                zipfile["input_dir"] / zipfile["full_name"], zipfile["non_treated_dir"]
+                zipfile["input_dir"] / zipfile["full_name"],
+                zipfile["non_treated_dir"],
+                if_exists="replace",
             )
 
         # Move unexpected file types to error directory
@@ -182,7 +180,11 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
                 f"Unexpected message type '{message_type}' ({zipfile}). "
                 + f"Moving {zipfile} to error directory."
             )
-            move(zipfile["input_dir"] / zipfile["full_name"], zipfile["error_dir"])
+            move(
+                zipfile["input_dir"] / zipfile["full_name"],
+                zipfile["error_dir"],
+                if_exists="replace",
+            )
 
 
 @task(checkpoint=False)
@@ -293,9 +295,21 @@ def load_ers(cleaned_data: List[dict]):
                 )
 
             if ers["batch_generated_errors"]:
-                move(ers["input_dir"] / ers["full_name"], ers["error_dir"])
+                logger.error(
+                    "Errors occurred during parsing of some of the messages. "
+                    f"Moving {ers['full_name']} to error directory."
+                )
+                move(
+                    ers["input_dir"] / ers["full_name"],
+                    ers["error_dir"],
+                    if_exists="replace",
+                )
             else:
-                move(ers["input_dir"] / ers["full_name"], ers["treated_dir"])
+                move(
+                    ers["input_dir"] / ers["full_name"],
+                    ers["treated_dir"],
+                    if_exists="replace",
+                )
 
 
 with Flow("Extract parse load ERS messages") as flow:

@@ -37,7 +37,7 @@ jobs:
     - name: Set VERSION env
       run: |
         if [ "${ENV_PROFILE}" != "prod" ]; then\
-            echo "VERSION=${{ steps.lastrelease.outputs.release }}_SNAPSHOT" >> $GITHUB_ENV
+            echo "VERSION=${{ steps.lastrelease.outputs.release }}_snapshot" >> $GITHUB_ENV
         else\
             echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
         fi

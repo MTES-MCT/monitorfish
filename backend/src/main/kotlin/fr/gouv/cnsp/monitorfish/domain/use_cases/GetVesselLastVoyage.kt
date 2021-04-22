@@ -19,8 +19,8 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                           private val ersMessageRepository: ERSMessageRepository) {
     private val logger = LoggerFactory.getLogger(GetVesselLastVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): ERSMessagesAndAlerts {
-        val lastDepartureDateAndTripNumber = ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, externalReferenceNumber, ircs)
+    fun execute(internalReferenceNumber: String): ERSMessagesAndAlerts {
+        val lastDepartureDateAndTripNumber = ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber)
 
         val alerts = lastDepartureDateAndTripNumber.tripNumber?.let {
             alertRepository.findAlertsOfRules(
@@ -30,7 +30,7 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
         } ?: listOf()
 
         val messages = ersRepository
-                .findAllMessagesAfterDepartureDate(lastDepartureDateAndTripNumber.lastDepartureDate, internalReferenceNumber, externalReferenceNumber, ircs)
+                .findAllMessagesAfterDepartureDate(lastDepartureDateAndTripNumber.lastDepartureDate, internalReferenceNumber)
                 .sortedBy { it.operationDateTime }
                 .map {
                     try {

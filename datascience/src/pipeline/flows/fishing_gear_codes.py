@@ -1,24 +1,16 @@
 import prefect
 from prefect import Flow, task
-from sqlalchemy import String
 
-from src.db_config import create_engine
-from src.pipeline.utils import delete
-from src.read_query import read_saved_query
-from src.utils.database import get_table, psql_insert_copy
+from src.pipeline.generic_tasks import extract, load
 
 
 @task(checkpoint=False)
 def extract_fishing_gear_codes():
-    fishing_gear_codes = read_saved_query(
-        "ocan", "pipeline/queries/ocan/codes_engins.sql"
-    )
-
-    return fishing_gear_codes
+    return extract("ocan", "ocan/codes_engins.sql")
 
 
 @task(checkpoint=False)
-def clean(fishing_gear_codes):
+def clean_fishing_gear_codes(fishing_gear_codes):
 
     fishing_gear_codes = fishing_gear_codes.set_index("fishing_gear_code")
 
@@ -51,32 +43,17 @@ def clean(fishing_gear_codes):
 
 @task(checkpoint=False)
 def load_fishing_gear_codes(fishing_gear_codes):
-
-    logger = prefect.context.get("logger")
-
-    schema = "public"
-    table_name = "fishing_gear_codes"
-
-    engine = create_engine("monitorfish_remote")
-    gears_table = get_table(table_name, schema, engine, logger)
-
-    with engine.begin() as connection:
-
-        # Delete all rows from table
-        delete(gears_table, connection, logger)
-
-        # Insert data into
-        fishing_gear_codes.to_sql(
-            name=table_name,
-            con=connection,
-            schema=schema,
-            index=False,
-            method=psql_insert_copy,
-            if_exists="append",
-        )
+    load(
+        fishing_gear_codes,
+        table_name="fishing_gear_codes",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        delete_before_insert=True,
+    )
 
 
 with Flow("Update fishing gears reference") as flow:
     fishing_gear_codes = extract_fishing_gear_codes()
-    fishing_gear_codes = clean(fishing_gear_codes)
+    fishing_gear_codes = clean_fishing_gear_codes(fishing_gear_codes)
     load_fishing_gear_codes(fishing_gear_codes)

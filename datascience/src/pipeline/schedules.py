@@ -5,31 +5,39 @@ from prefect.schedules import CronSchedule, IntervalSchedule
 from src.pipeline.flows import (
     controllers,
     controls,
+    current_segments,
     ers,
     fishing_gear_codes,
+    fleet_segments,
     heartbeat,
     infractions,
+    last_positions,
     ports,
     species,
     vessels,
 )
 
 ################################ Define flow schedules ################################
-heartbeat.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
-vessels.flow.schedule = CronSchedule("0 2 * * *")
-fishing_gear_codes.flow.schedule = CronSchedule("0 3 * * *")
-species.flow.schedule = CronSchedule("0 4 * * *")
+current_segments.flow.schedule = IntervalSchedule(interval=timedelta(minutes=10))
 ers.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
+fishing_gear_codes.flow.schedule = CronSchedule("0 3 * * *")
+heartbeat.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
+last_positions.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
+species.flow.schedule = CronSchedule("0 4 * * *")
+vessels.flow.schedule = CronSchedule("0 2 * * *")
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [
     controllers.flow,
     controls.flow,
-    infractions.flow,
-    heartbeat.flow,
-    vessels.flow,
-    fishing_gear_codes.flow,
-    species.flow,
+    current_segments.flow,
     ers.flow,
+    fishing_gear_codes.flow,
+    fleet_segments.flow,
+    heartbeat.flow,
+    infractions.flow,
+    last_positions.flow,
     ports.flow,
+    species.flow,
+    vessels.flow,
 ]

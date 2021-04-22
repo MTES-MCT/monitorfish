@@ -14,6 +14,7 @@ const VesselSummary = props => {
     const [vessel, setVessel] = useState(null);
     const [lastPosition, setLastPosition] = useState(null);
     const [gears, setGears] = useState([])
+    const [faoZones, setFaoZones] = useState([])
 
     useEffect(() => {
         if (props.vessel) {
@@ -31,17 +32,27 @@ const VesselSummary = props => {
                 setPhotoFallback(true)
             }
 
+            if(props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().speciesOnboard) {
+                const faoZones = props.vesselLastPositionFeature.getProperties().speciesOnboard.map(species => {
+                    return species.faoZone
+                })
+
+                setFaoZones([...new Set(faoZones)])
+            } else {
+                setFaoZones([])
+            }
+
             setVessel(props.vessel)
         }
     }, [props.vessel, props.error])
 
     useEffect(() => {
-        if(props.gears && props.vessel && props.vessel.declaredFishingGears) {
-            const gears = props.vessel.declaredFishingGears.map(declaredGearCode => {
-                let foundGear = props.gears.find(gear => gear.code === declaredGearCode)
+        if(props.gears && props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().gearOnboard) {
+            const gears = props.vesselLastPositionFeature.getProperties().gearOnboard.map(gearERS => {
+                let foundGear = props.gears.find(gear => gear.code === gearERS.gear)
                 return {
                     name: foundGear ? foundGear.name : null,
-                    code: declaredGearCode
+                    code: gearERS.gear
                 }
             })
 
@@ -89,9 +100,7 @@ const VesselSummary = props => {
                     <FieldValue>{lastPosition && !isNaN(lastPosition.speed)? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
-                    <FieldName>Type de signal</FieldName>
-                    <FieldValue>{lastPosition && lastPosition.positionType ? lastPosition.positionType : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Dernier signal</FieldName>
+                    <FieldName>Dernier signal VMS</FieldName>
                     <FieldValue>
                         {
                             lastPosition && lastPosition.dateTime ? <>
@@ -100,7 +109,14 @@ const VesselSummary = props => {
                                 : <NoValue>-</NoValue>
                         }
                     </FieldValue>
-                </Position>
+                    <FieldName>Dernier cadencement</FieldName>
+                    <FieldValue>
+                        {
+                            props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().emissionPeriod
+                              ? <>1 signal toutes les {props.vesselLastPositionFeature.getProperties().emissionPeriod / 60} minutes</>
+                              : <NoValue>-</NoValue>
+                        }
+                    </FieldValue>                </Position>
             </ZoneWithoutBackground>
             <Zone>
                 <Fields>
@@ -148,11 +164,17 @@ const VesselSummary = props => {
                 <Fields>
                     <TableBody>
                         <Field>
-                            <Key>Segment de flotte</Key>
-                            <TrimmedValue>{vessel.fleetSegment ? vessel.fleetSegment : <NoValue>à venir</NoValue>}</TrimmedValue>
+                            <Key>Segments de flotte</Key>
+                            <TrimmedValue>
+                                {
+                                    props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments
+                                      ? props.vesselLastPositionFeature.getProperties().segments.join(", ")
+                                      : <NoValue>-</NoValue>
+                                }
+                            </TrimmedValue>
                         </Field>
                         <Field>
-                            <Key>Engins à bord (PME)</Key>
+                            <Key>Engins à bord (JPE)</Key>
                             <Value>
                                 {
                                     gears ?
@@ -166,8 +188,14 @@ const VesselSummary = props => {
                             </Value>
                         </Field>
                         <Field>
-                            <Key>Zones de la marée</Key>
-                            <TrimmedValue><NoValue>à venir</NoValue></TrimmedValue>
+                            <Key>Zones de la marée (FAR)</Key>
+                            <TrimmedValue>
+                                {
+                                    faoZones && faoZones.length
+                                      ? faoZones.join(", ")
+                                      : <NoValue>Aucune zone de pêche reçue</NoValue>
+                                }
+                            </TrimmedValue>
                         </Field>
                     </TableBody>
                 </Fields>

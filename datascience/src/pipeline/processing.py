@@ -1,8 +1,13 @@
-import json
+import datetime
 import logging
-from typing import List, Union
+from functools import partial
+from time import sleep
+from typing import Any, Iterable, List, Union
 
+import numpy as np
 import pandas as pd
+import pytz
+import simplejson
 import sqlalchemy
 from sqlalchemy import select
 
@@ -65,21 +70,6 @@ def concatenate_columns(df: pd.DataFrame, input_col_names: List) -> pd.Series:
     return res
 
 
-def first_valid_value(row: pd.Series):
-    """Returns the value that is_a_value in the input pandas Series.
-
-    Args:
-        row (pd.Series): pandas Series
-
-    Returns:
-        : the first valid value in the Series
-    """
-    for x in row.values:
-        if is_a_value(x):
-            return x
-    return None
-
-
 def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd.Series:
     """Combines several columns into one by taking the first_valid_value in each row,
     in the order of the ordered_cols_list.
@@ -95,15 +85,16 @@ def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd
             taken in the ordered_cols_list columns.
     """
     non_null_rows = df[ordered_cols_list].dropna(how="all")
-    res_non_null_rows = non_null_rows.apply(first_valid_value, axis=1)
+    first_non_null_values_idx = np.argmax(non_null_rows.notnull().values, axis=1)
+
+    res_values = np.choose(first_non_null_values_idx, non_null_rows.values.T)
+
     res = pd.Series(index=df.index, data=[None] * len(df))
-    res[res_non_null_rows.index] = res_non_null_rows.values
+    res[non_null_rows.index] = res_values
     return res
 
 
-def df_to_dict_series(
-    df: pd.DataFrame, dropna_cols: Union[List, None], result_colname: str = "json_col"
-):
+def df_to_dict_series(df: pd.DataFrame, result_colname: str = "json_col"):
     """Converts a pandas DataFrame into a Series with the same index as the input
     DataFrame and whose values are dictionnaries like :
 
@@ -111,18 +102,12 @@ def df_to_dict_series(
 
     Args:
         df (pd.DataFrame): input DataFrame
-        dropna_cols (Union[List, None]): optionnal, list of columns for which rows
-            containing Na values should be dropped
         result_colname (Union[str, None]): optionnal, name of result Series
-
 
     Returns:
         pd.Series: pandas Series
     """
     res = df.copy(deep=True)
-    if dropna_cols:
-        res = res.dropna(subset=dropna_cols)
-
     res = pd.read_json(res.to_json(orient="index"), orient="index", typ="Series")
     res.name = result_colname
 
@@ -142,60 +127,141 @@ def zeros_ones_to_bools(df: pd.DataFrame) -> pd.DataFrame:
     return df.astype(float).astype("category").astype(bool)
 
 
-def lst2pgarr(alist: List) -> str:
-    """Converts a python list [1, 2, "a", "b"] to a string with Postgresql array
-    syntax {1,2,a,b}.
-    This transformation is required on DataFrame columns that contain python lists
-    before bulk inserting the DataFrame into Postgresql with the psql_insert_copy
-    method.
+def to_pgarr(
+    x: Union[list, set, np.ndarray],
+    handle_errors: bool = False,
+    value_on_error: Union[str, None] = None,
+) -> Union[str, None]:
+    """Converts a python `list`, `set` or `numpy.ndarray` to a string with Postgresql
+    array syntax.
 
-    Elements in the list are converted to string type, then stripped of leading and
-    trailing blank spaces, and finally filtered to keep only non empty strings.
+    Elements of the list-like input argument are converted to `string` type, then
+    stripped of leading and trailing blank spaces, and finally filtered to keep only
+    non empty strings.
+
+    If the input is not a `list`, a `set` or a `numpy.ndarray`:
+        - if `handle_errors` is False (default), raises a `ValueError`
+        - if `handle_errors` is True, then `value_on_error` is returned
+
+    This transformation is required on the elements of a DataFrame's columns that
+    contain collections before bulk inserting the DataFrame into Postgresql with
+    the psql_insert_copy method.
+
+    Examples:
+    >> to_pgarr([1, 2, "a ", "b", "", " "])
+    "{1,2,'a','b'}"
+
+    >> to_pgarr(None)
+    ValueError
+
+    >> to_pgarr(None, handle_errors=True, value_on_error="{}")
+    "{}"
+
+    >> to_pgarr(np.nan, handle_errors=True, value_on_error=None)
 
     Args:
-        alist (List): python list
+        x (list, set or numpy.ndarray) : iterable to serialize as Postgres array
+        handle_errors (bool): if True, returns value_on_error instead of raising
+            ValueError when the input is of an unexpected type
+        value_on_error (str or None): value to return on errors, if `handle_errors`
+            is True
 
     Returns:
         str: string with Postgresql Array compatible syntax
     """
-    res = (
-        "{"
-        + ",".join(filter(lambda x: len(x) > 0, map(str.strip, map(str, alist))))
-        + "}"
+    try:
+        assert isinstance(x, (list, set, np.ndarray))
+
+    except AssertionError:
+        if handle_errors:
+            return value_on_error
+        else:
+            raise ValueError(f"Unexpected type for x: {type(x)}.")
+
+    return (
+        "{" + ",".join(filter(lambda x: len(x) > 0, map(str.strip, map(str, x)))) + "}"
     )
-    return res
 
 
-def to_json(x: Union[dict, list]) -> str:
-    """Converts python dictionnary or list to json string. This is required when
-    inserting a pandas DataFrame column containing dictionnaries into a Postgresql
-    JSONB column.
-    """
-    return json.dumps(x, ensure_ascii=False)
+def df_values_to_psql_arrays(
+    df: pd.DataFrame,
+    handle_errors: bool = False,
+    value_on_error: Union[str, None] = None,
+) -> pd.DataFrame:
+    """Returns a `pandas.DataFrame` with all values serialized as strings
+    with Postgresql array syntax. All values must be of type list, set or numpy array.
+    Other values raise errors, which may be handled if handle_errors is set to True.
 
+    See `to_pgarr` for details on error handling.
 
-def python_lists_to_psql_arrays(df: pd.DataFrame, array_cols: List) -> pd.DataFrame:
-    """Transforms columns that contain python lists
-    into columns that contain strings with Postgresql array syntax
-    This is required before bulk loading into a Postgresql table with
-    the psql_insert_copy method.
+    This is required before bulk loading a pandas.DataFrame into a Postgresql table
+    with the psql_insert_copy method.
 
-    Takes a DataFrame df and a list of column names array_cols which
-    need to be tranformed.
+    Example :
 
-    Returns a DataFrame with array_cols transformed and all other columns
-    unchanged.
+    >> df_to_psql_arrays(pd.DataFrame({'a': [[1, 2], ['a', 'b']]}))
+    | a       |
+    |---------|
+    | {1,2,3} |
+    | {a,b}   |
 
     Args:
         df (pd.DataFrame): pandas DataFrame
-        array_cols (List): list of column names to transform
 
     Returns:
-        pd.DataFrame: [description]
+        pd.DataFrame: pandas DataFrame with the same shape and index, all values
+            serialized as strings with Postgresql array syntax.
     """
-    res = df.copy(deep=True)
-    res[array_cols] = res[array_cols].applymap(lst2pgarr)
+
+    serialize = partial(
+        to_pgarr, handle_errors=handle_errors, value_on_error=value_on_error
+    )
+
+    return df.applymap(serialize, na_action="ignore").fillna("{}")
+
+
+def json_converter(x):
+    """Converter for types not natively handled by json.dumps"""
+    if isinstance(x, np.ndarray):
+        return x.tolist()
+    if isinstance(x, pd._libs.tslibs.nattype.NaTType):
+        return None
+    if isinstance(x, datetime.datetime):
+        if x.tzinfo:
+            x = x.replace(tzinfo=pytz.timezone("UTC")) - x.utcoffset()
+            return x.isoformat().replace("+00:00", "Z")  # UTC, ISO format
+        else:
+            return x.isoformat() + "Z"
+    elif isinstance(x, datetime.date):
+        return x.isoformat()
+
+
+def to_json(x: Any) -> str:
+    """Converts python object to json string."""
+
+    res = simplejson.dumps(
+        x, ensure_ascii=False, default=json_converter, ignore_nan=True
+    )
+
     return res
+
+
+def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
+    """Returns a `pandas.DataFrame` with all values serialized to json string.
+
+    This is required before bulk loading into a Postgresql table with
+    the psql_insert_copy method.
+
+    See `to_json` function for details.
+
+    Args:
+        df (pd.DataFrame): pandas DataFrame
+
+    Returns:
+        pd.DataFrame: pandas DataFrame with the same shape and index, all values
+            serialized as json strings.
+    """
+    return df.applymap(to_json, na_action="ignore").fillna("null")
 
 
 def drop_rows_already_in_table(
@@ -239,3 +305,31 @@ def drop_rows_already_in_table(
 
     logger.info(log)
     return res
+
+
+def prepare_df_for_loading(
+    df: pd.DataFrame,
+    logger: logging.Logger,
+    pg_array_columns: Union[None, list] = None,
+    handle_array_conversion_errors: bool = True,
+    value_on_array_conversion_error="{}",
+    jsonb_columns: Union[None, list] = None,
+):
+
+    df_ = df.copy(deep=True)
+
+    # Serialize columns to be loaded into JSONB columns
+    if jsonb_columns:
+        logger.info("Serializing json columns")
+        df_[jsonb_columns] = df_values_to_json(df_[jsonb_columns])
+
+    # Serialize columns to be loaded into Postgres ARRAY columns
+    if pg_array_columns:
+        logger.info("Serializing postgresql array columns")
+        df_[pg_array_columns] = df_values_to_psql_arrays(
+            df_[pg_array_columns],
+            handle_errors=handle_array_conversion_errors,
+            value_on_error=value_on_array_conversion_error,
+        )
+
+    return df_

@@ -304,7 +304,20 @@ const VesselsLayer = ({ map, mapRef }) => {
       positionType: currentVessel.positionType,
       speed: currentVessel.speed,
       ircs: currentVessel.ircs,
-      dateTime: currentVessel.dateTime
+      dateTime: currentVessel.dateTime,
+      emissionPeriod: currentVessel.emissionPeriod,
+      lastErsDateTime: currentVessel.lastErsDateTime,
+      departureDateTime: currentVessel.departureDateTime,
+      width: currentVessel.width,
+      length: currentVessel.length,
+      registryPortLocode: currentVessel.registryPortLocode,
+      registryPortName: currentVessel.registryPortName,
+      district: currentVessel.district,
+      districtCode: currentVessel.districtCode,
+      gearOnboard: currentVessel.gearOnboard,
+      segments: currentVessel.segments,
+      speciesOnboard: currentVessel.speciesOnboard,
+      totalWeightOnboard: currentVessel.totalWeightOnboard,
     });
 
     feature.setId(`${LayersEnum.VESSELS.code}:${index}`)

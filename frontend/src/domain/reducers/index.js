@@ -3,6 +3,7 @@ import global from './Global'
 import map from './Map'
 import vessel from './Vessel'
 import gear from './Gear'
+import fleetSegment from './FleetSegment'
 import regulatory from './Regulatory'
 import { combineReducers } from "@reduxjs/toolkit"
 
@@ -12,5 +13,6 @@ export default combineReducers({
     global: global,
     vessel: vessel,
     gear: gear,
+    fleetSegment: fleetSegment,
     regulatory: regulatory
 })

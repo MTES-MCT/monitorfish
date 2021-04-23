@@ -28,6 +28,7 @@ class BffController(
         private val getAllSpecies: GetAllSpecies,
         private val searchVessels: SearchVessels,
         private val getVesselControls: GetVesselControls,
+        private val getAllFleetSegments: GetAllFleetSegments,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -143,6 +144,14 @@ class BffController(
     fun getSpecies(): List<SpeciesDataOutput> {
         return getAllSpecies.execute().map { species ->
             SpeciesDataOutput.fromSpecies(species)
+        }
+    }
+
+    @GetMapping("/v1/fleet_segments")
+    @ApiOperation("Get fleet segments")
+    fun getFleetSegments(): List<FleetSegmentDataOutput> {
+        return getAllFleetSegments.execute().map { fleetSegment ->
+            FleetSegmentDataOutput.fromFleetSegment(fleetSegment)
         }
     }
 }

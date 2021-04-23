@@ -33,6 +33,7 @@ const VesselSidebar = () => {
     const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
     const vesselState = useSelector(state => state.vessel)
     const gears = useSelector(state => state.gear.gears)
+    const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
     const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
     const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
 
@@ -219,7 +220,10 @@ const VesselSidebar = () => {
                                         <VesselSummary
                                           vessel={vessel}
                                           gears={gears}
-                                          vesselLastPositionFeature={vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature}
+                                          fleetSegments={fleetSegments}
+                                          vesselLastPositionFeature={
+                                              vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature
+                                          }
                                         />
                                     </Panel>
                                     <Panel className={index === 2 ? '' : 'hide'}>

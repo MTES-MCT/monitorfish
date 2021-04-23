@@ -1,0 +1,11 @@
+package fr.gouv.cnsp.monitorfish.domain.entities
+
+data class FleetSegment(
+        val segment: String,
+        val segmentName: String,
+        val dirm: List<String>,
+        val gears: List<String>,
+        val faoAreas: List<String>,
+        val targetSpecies: List<String>,
+        val bycatchSpecies: List<String>,
+)

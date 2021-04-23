@@ -61,6 +61,9 @@ class BffControllerITests {
     @MockBean
     private lateinit var getVesselControls: GetVesselControls
 
+    @MockBean
+    private lateinit var getAllFleetSegments: GetAllFleetSegments
+
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
 
@@ -266,5 +269,19 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.controls.length()", equalTo(1)))
 
         Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
+    }
+
+    @Test
+    fun `Should get all fleet segments`() {
+        // Given
+        given(this.getAllFleetSegments.execute()).willReturn(listOf(FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf())))
+
+        // When
+        mockMvc.perform(get("/bff/v1/fleet_segments"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(1)))
+                .andExpect(jsonPath("$[0].segment", equalTo("SW1")))
+                .andExpect(jsonPath("$[0].dirm[0]", equalTo("NAMO")))
     }
 }

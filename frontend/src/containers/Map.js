@@ -28,6 +28,7 @@ import TrackTypeCard from '../components/cards/TrackTypeCard'
 import { trackTypes } from '../domain/entities/vesselTrack'
 import { getOverlays, trackTypeCardID, vesselCardID, vesselTrackCardID } from '../components/overlays/overlays'
 import MapHistory from './MapHistory'
+import Zoom from 'ol/control/Zoom'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove;
 const hitPixelTolerance = 3;
@@ -79,7 +80,12 @@ const Map = () => {
                     zoom: 6,
                     minZoom: 3
                 }),
-                controls: [new ScaleLine({ units: 'nautical' })],
+                controls: [
+                  new ScaleLine({ units: 'nautical' }),
+                  new Zoom({
+                      className: "zoom"
+                  })
+                ],
             })
 
             initialMap.on('click', handleMapClick)

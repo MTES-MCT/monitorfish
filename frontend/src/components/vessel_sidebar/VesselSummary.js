@@ -101,14 +101,20 @@ const VesselSummary = props => {
             let gears = segment.gears && segment.gears.length ? segment.gears.join(', ') : 'aucun'
             let faoAreas = segment.faoAreas && segment.faoAreas.length ? segment.faoAreas.join(', ') : 'aucune'
             let dirm = segment.dirm && segment.dirm.length ? segment.dirm.join(', ') : 'aucune'
-            let targetSpecies = segment.targetSpecies && segment.targetSpecies.length ? segment.targetSpecies.join(', ') : 'aucune'
-            let bycatchSpecies = segment.bycatchSpecies && segment.bycatchSpecies.length ? segment.bycatchSpecies.join(', ') : 'aucun'
+
+            let targetSpeciesArray = []
+            if(segment.targetSpecies && segment.targetSpecies.length) {
+                targetSpeciesArray = targetSpeciesArray.concat(segment.targetSpecies)
+            }
+            if(segment.bycatchSpecies && segment.bycatchSpecies.length) {
+                targetSpeciesArray = targetSpeciesArray.concat(segment.bycatchSpecies)
+            }
+            let targetSpecies = targetSpeciesArray && targetSpeciesArray.length ? targetSpeciesArray.join(', ') : 'aucune'
 
             return `Engins: ${gears}
 Zones FAO: ${faoAreas}
 Espèces: ${targetSpecies}
-DIRM: ${dirm}
-Rejets: ${bycatchSpecies}`
+Façade: ${dirm}`
         } else {
             return 'Segment de flotte inconnu'
         }
@@ -443,7 +449,6 @@ const Info = styled(InfoSVG)`
   vertical-align: text-bottom;
   margin-bottom: 2px;
   margin-left: ${props => props.isInfoSegment ? '5px' : '2px'};
-  cursor: help;
 `
 
 export default VesselSummary

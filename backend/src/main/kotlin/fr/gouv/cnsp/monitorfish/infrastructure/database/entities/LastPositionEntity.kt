@@ -48,11 +48,11 @@ data class LastPositionEntity(
         val tripNumber: Int? = null,
 
         @Column(name = "latitude")
-        val latitude: Double,
+        val latitude: Double? = null,
         @Column(name = "longitude")
-        val longitude: Double,
+        val longitude: Double? = null,
         @Column(name = "speed")
-        val speed: Double,
+        val speed: Double? = null,
         @Column(name = "course")
         val course: Double? = null,
         @Column(name = "last_position_datetime_utc")

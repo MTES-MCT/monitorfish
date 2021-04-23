@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from src.pipeline.flows.current_segments import (
-    catch_zone_isin_fao_zone,
+    catch_zone_isin_fao_area,
     compute_current_segments,
     merge_segments_catches,
     unnest,
@@ -13,14 +13,14 @@ from src.pipeline.flows.current_segments import (
 
 
 class TestCurrentSegmentsFlow(unittest.TestCase):
-    def test_catch_zone_isin_fao_zone(self):
-        self.assertTrue(catch_zone_isin_fao_zone("27", "27"))
-        self.assertTrue(catch_zone_isin_fao_zone("27.7", "27"))
-        self.assertTrue(catch_zone_isin_fao_zone("27.7", None))
-        self.assertFalse(catch_zone_isin_fao_zone(None, "27.7"))
-        self.assertFalse(catch_zone_isin_fao_zone("27", "27.7"))
+    def test_catch_zone_isin_fao_area(self):
+        self.assertTrue(catch_zone_isin_fao_area("27", "27"))
+        self.assertTrue(catch_zone_isin_fao_area("27.7", "27"))
+        self.assertTrue(catch_zone_isin_fao_area("27.7", None))
+        self.assertFalse(catch_zone_isin_fao_area(None, "27.7"))
+        self.assertFalse(catch_zone_isin_fao_area("27", "27.7"))
 
-        self.assertTrue(catch_zone_isin_fao_zone(None, None))
+        self.assertTrue(catch_zone_isin_fao_area(None, None))
 
     def test_unnest(self):
         segments_definitions = [
@@ -41,7 +41,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
 
         segments = pd.DataFrame(
             data=segments_definitions,
-            columns=pd.Index(["segment", "gears", "fao_zones", "species"]),
+            columns=pd.Index(["segment", "gears", "fao_areas", "species"]),
         )
 
         res = unnest.run(segments)
@@ -75,7 +75,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 ["E", "PTB", None, None],
                 ["F", None, None, "TUR"],
             ],
-            columns=["segment", "gear", "fao_zone", "species"],
+            columns=["segment", "gear", "fao_area", "species"],
         )
 
         vessels_catches = pd.DataFrame(
@@ -86,7 +86,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 ["vessel_4", "OTM", "27.7.b.4", "HKE", 13.4],
                 ["vessel_4", "OTB", "27.4.b.1", "HKE", 1234],
             ],
-            columns=["cfr", "gear", "fao_zone", "species", "weight"],
+            columns=["cfr", "gear", "fao_area", "species", "weight"],
         )
 
         res = compute_current_segments.run(vessels_catches, segments_definitions)
@@ -122,7 +122,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                     "gear_onboard",
                     "species",
                     "gear",
-                    "fao_zone",
+                    "fao_area",
                     "weight",
                 ]
             ),

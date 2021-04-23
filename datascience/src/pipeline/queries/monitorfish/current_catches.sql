@@ -57,7 +57,7 @@ catches AS (
         (ers.value)->>'gear' as gear,
         jsonb_array_elements((ers.value)->'catches')->>'species' as species,
         (jsonb_array_elements((ers.value)->'catches')->>'weight')::DOUBLE PRECISION as weight,
-        jsonb_array_elements((ers.value)->'catches')->>'faoZone' as fao_zone
+        jsonb_array_elements((ers.value)->'catches')->>'faoZone' as fao_area
     FROM public.ers
     JOIN last_deps
     ON ers.cfr = last_deps.cfr
@@ -75,7 +75,7 @@ corrected_catches AS (
         species,
         weight,
         gear,
-        fao_zone
+        fao_area
     FROM catches
     WHERE ers_id NOT IN (SELECT referenced_ers_id FROM catches WHERE operation_type = 'COR')
 ),
@@ -86,10 +86,10 @@ summed_catches AS (
         cfr,
         species,
         gear,
-        fao_zone,
+        fao_area,
         SUM(weight) as weight
     FROM corrected_catches
-    GROUP BY cfr, species, gear, fao_zone
+    GROUP BY cfr, species, gear, fao_area
 )
 
 
@@ -101,7 +101,7 @@ SELECT
     gear_onboard,
     species,
     gear,
-    fao_zone,
+    fao_area,
     weight
 FROM last_ers
 FULL OUTER JOIN last_deps

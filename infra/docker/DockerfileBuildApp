@@ -15,14 +15,15 @@ ARG GITHUB_SHA
 ARG VERSION
 
 WORKDIR /tmp/
+COPY backend/pom.xml /tmp/pom.xml
+RUN mvn dependency:go-offline -B
+
 COPY backend/ /tmp/
 COPY backend/pom.xml /tmp/POM_WITH_ENV_VARS
-
 RUN sed -e 's/COMMIT_TO_CHANGE/${GITHUB_SHA}/' \
         -e 's/VERSION_TO_CHANGE/${VERSION}/' \
         POM_WITH_ENV_VARS > pom.xml
 
-RUN mvn dependency:go-offline -B
 RUN mvn clean package -DskipTests=true
 
 ###########################

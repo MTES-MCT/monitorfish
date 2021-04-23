@@ -10,23 +10,23 @@ from src.read_query import read_saved_query
 
 
 # ************************************** Helpers **************************************
-def catch_zone_isin_fao_zone(
-    catch_zone: Union[None, str], fao_zone: Union[None, str]
+def catch_zone_isin_fao_area(
+    catch_zone: Union[None, str], fao_area: Union[None, str]
 ) -> bool:
     """Return
-    - True if a catch zone (e.g. '27.7.b') is in a given fao_zone (e.g. '27.7.b' or
+    - True if a catch zone (e.g. '27.7.b') is in a given fao_area (e.g. '27.7.b' or
     '27')
-    - False if a catch zone (e.g. '27.7.b') is NOT in a given fao_zone (e.g. '28.6' or
+    - False if a catch zone (e.g. '27.7.b') is NOT in a given fao_area (e.g. '28.6' or
     '27.7.b.4')
-    - True if the fao_zone if None (whatever the value of the catch_zone)
-    - False if the fao_zone is not None and the catch_zone is None
+    - True if the fao_area if None (whatever the value of the catch_zone)
+    - False if the fao_area is not None and the catch_zone is None
     """
-    if fao_zone is None:
+    if fao_area is None:
         return True
     elif catch_zone is None:
         return False
     else:
-        return fao_zone in catch_zone
+        return fao_area in catch_zone
 
 
 # ********************************** Tasks and flow **********************************
@@ -48,17 +48,17 @@ def extract_segments():  # pragma: no cover
 def unnest(segments):
     return (
         segments.explode("gears")
-        .explode("fao_zones")
+        .explode("fao_areas")
         .explode("species")
-        .rename(columns={"fao_zones": "fao_zone", "gears": "gear"})
+        .rename(columns={"fao_areas": "fao_area", "gears": "gear"})
     )
 
 
 @task(checkpoint=False)
 def compute_current_segments(catches, segments):
 
-    catches_ = catches[["cfr", "gear", "fao_zone", "species", "weight"]]
-    segments_ = segments[["segment", "gear", "fao_zone", "species"]]
+    catches_ = catches[["cfr", "gear", "fao_area", "species", "weight"]]
+    segments_ = segments[["segment", "gear", "fao_area", "species"]]
 
     # Merge catches and segments on gear and species
     current_segments_gear_species = pd.merge(
@@ -88,7 +88,7 @@ def compute_current_segments(catches, segments):
     # Match catches to all segments that have no criterion on species nor on gears
     segments_no_gear_no_species = segments_[
         segments_[["gear", "species"]].isna().all(axis=1)
-    ][["segment", "fao_zone"]]
+    ][["segment", "fao_area"]]
 
     current_segments_no_gear_no_species = pd.merge(
         segments_no_gear_no_species,
@@ -108,14 +108,14 @@ def compute_current_segments(catches, segments):
     )
 
     # Matched (catches, segments) now need to be filtered to keep only the matches
-    # that satisfy the fao_zone criterion. A catch made in '27.7.b' will satisfy
-    # the fao criterion of a segment whose fao_zone is '27.7', so we check that the
+    # that satisfy the fao_area criterion. A catch made in '27.7.b' will satisfy
+    # the fao criterion of a segment whose fao_area is '27.7', so we check that the
     # fao zone of the segment is a substring of the fao zone of the catch.
     current_segments = current_segments[
         (
             current_segments.apply(
-                lambda row: catch_zone_isin_fao_zone(
-                    row.fao_zone_of_catch, row.fao_zone_of_segment
+                lambda row: catch_zone_isin_fao_area(
+                    row.fao_area_of_catch, row.fao_area_of_segment
                 ),
                 axis=1,
             )
@@ -138,9 +138,9 @@ def merge_segments_catches(catches, current_segments):
 
     # Group catch data of each vessel in a list of dicts like
     # [{"gear": "DRB", "species": "SCE", "faoZone": "27.7", "weight": 156.2}, ...]
-    catch_columns = ["gear", "fao_zone", "species", "weight"]
+    catch_columns = ["gear", "fao_area", "species", "weight"]
     species_onboard = catches[catch_columns]
-    species_onboard = species_onboard.rename(columns={"fao_zone": "faoZone"})
+    species_onboard = species_onboard.rename(columns={"fao_area": "faoZone"})
     species_onboard = df_to_dict_series(
         species_onboard.dropna(subset=["species"]), result_colname="species_onboard"
     )

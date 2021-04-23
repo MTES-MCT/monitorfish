@@ -4,6 +4,7 @@ import {COLORS} from "../../../constants/constants";
 import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
 import {ReactComponent as ChevronIconSVG} from '../../icons/Chevron_simple_gris.svg'
 import {ReactComponent as ArrowSVG} from '../../icons/Picto_fleche-pleine-droite.svg'
+import {ReactComponent as NotAcknowledgedSVG} from '../../icons/Message_non_acquitte.svg'
 
 const ERSMessageResumeHeader = props => {
     const firstUpdate = useRef(true);
@@ -24,7 +25,15 @@ const ERSMessageResumeHeader = props => {
                     {
                         props.hasNoMessage ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
                     }
-                    <ERSMessageName hasNoMessage={props.hasNoMessage}>
+                    <ERSMessageName
+                      isNotAcknowledged={props.isNotAcknowledged}
+                      hasNoMessage={props.hasNoMessage}
+                      title={props.rejectionCause}>
+                      {
+                        props.isNotAcknowledged
+                          ? <NotAcknowledged />
+                          : null
+                      }
                         { ERSMessageTypeEnum[props.messageType].name }
                     </ERSMessageName>
                     <ERSMessageResumeText title={props.onHoverText ? props.onHoverText : ''}>
@@ -54,6 +63,13 @@ const ShowThisMessage = styled(ArrowSVG)`
   cursor: pointer;
 `
 
+const NotAcknowledged = styled(NotAcknowledgedSVG)`
+  width: 12px;
+  vertical-align: text-bottom;
+  margin-right: 5px;
+  margin-bottom: 1px;
+`
+
 const Gray = styled.span`
   color: ${COLORS.grayDarkerThree};
   font-weight: 300;
@@ -75,7 +91,7 @@ const ERSMessageResumeText = styled.span`
 `
 
 const ERSMessageName = styled.span`
-  color: ${COLORS.textGray};
+  color: ${props => props.isNotAcknowledged ? COLORS.red : COLORS.textGray};
   margin: 5px 0 5px ${props => props.hasNoMessage ? '27px': '0px'};
   padding: 2px 4px 2px 4px;
   font-size: 13px;

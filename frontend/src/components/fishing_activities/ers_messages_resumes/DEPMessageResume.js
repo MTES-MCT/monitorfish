@@ -27,6 +27,8 @@ const DEPMessageResume = props => {
     return <>
         <Wrapper>
             <ERSMessageResumeHeader
+                isNotAcknowledged={props.isNotAcknowledged}
+                rejectionCause={props.rejectionCause}
                 onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
                 title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}
                 hasNoMessage={props.hasNoMessage}

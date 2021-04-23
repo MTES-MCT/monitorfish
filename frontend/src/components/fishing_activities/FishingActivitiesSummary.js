@@ -278,7 +278,9 @@ const FishingActivitiesSummary = props => {
                                 {depMessage ? <DEPMessageResume
                                         id={depMessage.ersId}
                                         showERSMessages={props.showERSMessages}
-                                        depMessage={depMessage.message}/> :
+                                        depMessage={depMessage.message}
+                                        isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
+                                        rejectionCause={depMessage.acknowledge && depMessage.acknowledge.rejectionCause ? depMessage.acknowledge.rejectionCause : null}/> :
                                     <DEPMessageResume hasNoMessage={true}/>
                                 }
 

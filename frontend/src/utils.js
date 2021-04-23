@@ -21,6 +21,7 @@ export let calculateSplitPointCoords = (startNode, nextNode, distanceBetweenNode
 export let getCoordinates = (coordinates, projection) => {
     const transformedCoordinates = transform(coordinates, projection, WSG84_PROJECTION)
     const hourCoordinates = toStringHDMS(transformedCoordinates)
+
     let nSplit = hourCoordinates.split('N')
     if (nSplit.length > 1) {
         let degreeSplit = nSplit[1].split('°')
@@ -47,7 +48,7 @@ export let getCoordinates = (coordinates, projection) => {
                 default: break
             }
 
-            return [`${sSplit[0]} N`, `${degree}° ${degreeSplit[1]}`]
+            return [`${sSplit[0]} S`, `${degree}° ${degreeSplit[1]}`]
         }
     }
 

@@ -35,7 +35,7 @@ describe('utils', () => {
         expect(formattedDate).toEqual("06/04/2021 à 23h10")
     })
 
-    it('getCoordinates Should get coordinates for a dummy lat/lon', async () => {
+    it('getCoordinates Should get coordinates for a dummy lon/lat', async () => {
         // When
         let coordinates = getCoordinates([-4.276, 46.947], WSG84_PROJECTION)
 
@@ -43,6 +43,16 @@ describe('utils', () => {
         expect(coordinates).not.toBeUndefined()
         expect(coordinates[0]).toEqual('46° 56′ 50″  N')
         expect(coordinates[1]).toEqual('004°  16′ 34″ W')
+    })
+
+    it('getCoordinates Should get S coordinates for a dummy lon/lat', async () => {
+        // When
+        let coordinates = getCoordinates([4.591, -33.56], WSG84_PROJECTION)
+
+        // Then
+        expect(coordinates).not.toBeUndefined()
+        expect(coordinates[0]).toEqual('33° 33′ 37″  S')
+        expect(coordinates[1]).toEqual('004°  35′ 28″ E')
     })
 
     it('getCoordinates Should get coordinates for a 0 longitude', async () => {

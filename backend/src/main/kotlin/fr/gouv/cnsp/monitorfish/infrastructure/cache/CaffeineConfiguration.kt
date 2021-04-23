@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.concurrent.TimeUnit
 
-
 @EnableCaching
 @Configuration
 class CaffeineConfiguration {
@@ -27,12 +26,13 @@ class CaffeineConfiguration {
     val vesselTrack = "vessel_track"
     val vesselsPosition = "vessels_position"
     val infractions = "infractions"
+    val fleetSegments = "fleet_segments"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
         val oneWeek = 10080
 
-        val ersCache = buildCache(ers, ticker, 5)
+        val ersCache = buildCache(ers, ticker, 2)
         val ersRawMessageCache = buildCache(ersRawMessage, ticker, oneWeek)
         val vesselCache = buildCache(vessels, ticker, 180)
 
@@ -44,6 +44,7 @@ class CaffeineConfiguration {
 
         val portsCache = buildCache(ports, ticker, oneWeek)
         val portCache = buildCache(port, ticker, oneWeek)
+        val fleetSegmentsCache = buildCache(fleetSegments, ticker, oneWeek)
 
         val infractionsCache = buildCache(infractions, ticker, oneWeek)
 
@@ -65,7 +66,8 @@ class CaffeineConfiguration {
                 searchVesselsCache,
                 ersCache,
                 ersRawMessageCache,
-                infractionsCache))
+                infractionsCache,
+                fleetSegmentsCache))
 
         return manager
     }

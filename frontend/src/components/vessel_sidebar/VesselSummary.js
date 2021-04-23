@@ -6,6 +6,9 @@ import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../../utils";
 import {WSG84_PROJECTION} from "../../domain/entities/map";
 import {COLORS} from "../../constants/constants";
 import * as timeago from 'timeago.js';
+import {ReactComponent as InfoSVG} from '../icons/Information.svg';
+
+
 import { vesselsAreEquals } from '../../domain/entities/vessel'
 timeago.register('fr', timeagoFrenchLocale);
 
@@ -15,6 +18,7 @@ const VesselSummary = props => {
     const [lastPosition, setLastPosition] = useState(null);
     const [gears, setGears] = useState([])
     const [faoZones, setFaoZones] = useState([])
+    const [fleetSegments, setFleetSegments] = useState([])
 
     useEffect(() => {
         if (props.vessel) {
@@ -61,6 +65,54 @@ const VesselSummary = props => {
             setGears([])
         }
     }, [props.gears, props.vessel])
+
+    useEffect(() => {
+        console.log(props.fleetSegments)
+        if(props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments &&
+          props.vesselLastPositionFeature.getProperties().segments.length) {
+            if(props.fleetSegments && props.fleetSegments.length) {
+                let nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
+                    let found = props.fleetSegments.find(segmentWithProperties => segmentWithProperties.segment === segment)
+
+                    if(found) {
+                        return found
+                    } else {
+                        return {
+                            segment: segment
+                        }
+                    }
+                }).filter(segment => segment)
+                setFleetSegments(nextFleetSegments)
+            } else {
+                let nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
+                    return {
+                        segment: segment
+                    }
+                })
+                setFleetSegments(nextFleetSegments)
+            }
+        } else {
+            setFleetSegments([])
+        }
+    }, [props.fleetSegments, props.vesselLastPositionFeature])
+
+    function getSegmentInfo (segment) {
+        if(segment.gears || segment.faoAreas || segment.targetSpecies || segment.dirm || segment.bycatchSpecies) {
+            let gears = segment.gears && segment.gears.length ? segment.gears.join(', ') : 'aucun'
+            let faoAreas = segment.faoAreas && segment.faoAreas.length ? segment.faoAreas.join(', ') : 'aucune'
+            let dirm = segment.dirm && segment.dirm.length ? segment.dirm.join(', ') : 'aucune'
+            let targetSpecies = segment.targetSpecies && segment.targetSpecies.length ? segment.targetSpecies.join(', ') : 'aucune'
+            let bycatchSpecies = segment.bycatchSpecies && segment.bycatchSpecies.length ? segment.bycatchSpecies.join(', ') : 'aucun'
+
+            return `Engins: ${gears}
+Zones FAO: ${faoAreas}
+Espèces: ${targetSpecies}
+DIRM: ${dirm}
+Rejets: ${bycatchSpecies}`
+        } else {
+            return 'Segment de flotte inconnu'
+        }
+    }
 
     function getVesselOrLastPositionProperty (propertyName) {
         if(vessel && vessel[propertyName]) {
@@ -133,14 +185,15 @@ const VesselSummary = props => {
                                 : <NoValue>-</NoValue>
                         }
                     </FieldValue>
-                    <FieldName>Dernier cadencement</FieldName>
+                    <FieldName>Dernier cadencement <Info title={"Cette valeur est calculée à partir des 2 dernières positions VMS reçues"}/></FieldName>
                     <FieldValue>
                         {
                             props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().emissionPeriod
                               ? <>1 signal toutes les {props.vesselLastPositionFeature.getProperties().emissionPeriod / 60} minutes</>
                               : <NoValue>-</NoValue>
                         }
-                    </FieldValue>                </Position>
+                    </FieldValue>
+                </Position>
             </ZoneWithoutBackground>
             <Zone>
                 <Fields>
@@ -191,10 +244,14 @@ const VesselSummary = props => {
                             <Key>Segments de flotte</Key>
                             <Value>
                                 {
-                                    props.vesselLastPositionFeature &&
-                                    props.vesselLastPositionFeature.getProperties().segments &&
-                                    props.vesselLastPositionFeature.getProperties().segments.length
-                                      ? props.vesselLastPositionFeature.getProperties().segments.join(", ")
+                                    fleetSegments && fleetSegments.length
+                                      ? fleetSegments.map((segment, index) => {
+                                          return <>
+                                              {segment.segment}
+                                              <Info isInfoSegment={true} title={getSegmentInfo(segment)}/>
+                                              {fleetSegments.length === index + 1 ? '' : ', '}
+                                              </>
+                                      })
                                       : <NoValue>-</NoValue>
                                 }
                             </Value>
@@ -218,24 +275,6 @@ const VesselSummary = props => {
                             </Value>
                         </Field>
                     </TableBody>
-                </Fields>
-            </Zone>
-            <Zone>
-                <Fields>
-                    <BodyWithoutTopPadding>
-                        <Field>
-                            <Key>Message DEP</Key>
-                            <Value><NoValue>à venir</NoValue></Value>
-                        </Field>
-                        <Field>
-                            <Key>Mesages FAR</Key>
-                            <Value><NoValue>à venir</NoValue></Value>
-                        </Field>
-                        <Field>
-                            <Key>Dernier message</Key>
-                            <Value><NoValue>à venir</NoValue></Value>
-                        </Field>
-                    </BodyWithoutTopPadding>
                 </Fields>
             </Zone>
             <Zone>
@@ -299,10 +338,6 @@ const BodyWithTopPadding = styled.tbody`
   padding: 5px 5px 1px 5px;
 `
 
-const BodyWithoutTopPadding = styled.tbody`
-  padding: 0 5px 1px 5px;
-`
-
 const TableBody = styled.tbody``
 
 const Photo = styled.img`
@@ -349,21 +384,6 @@ const Key = styled.th`
   height: 0.5em;
   font-size: 13px;
   font-weight: normal;
-`
-
-const TrimmedValue = styled.td`
-  font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
-  margin: 0;
-  text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 120px; 
 `
 
 const Value = styled.td`
@@ -416,6 +436,14 @@ const Position = styled.div`
   padding: 1px 10px 10px 10px;
   text-align: center;
   flex-grow: 1;
+`
+
+const Info = styled(InfoSVG)`
+  width: 14px;
+  vertical-align: text-bottom;
+  margin-bottom: 2px;
+  margin-left: ${props => props.isInfoSegment ? '5px' : '2px'};
+  cursor: help;
 `
 
 export default VesselSummary

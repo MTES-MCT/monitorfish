@@ -13,6 +13,7 @@ const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires da
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
 const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const GEAR_CODES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les codes des engins de pêches"
+const FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les segments de flotte"
 
 function throwIrretrievableAdministrativeZoneError(e, type) {
     throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -332,4 +333,21 @@ export function getAdministrativeSubZonesFromAPI(type) {
         }).catch(e => {
             throwIrretrievableAdministrativeZoneError(e, type);
         })
+}
+
+export function getAllFleetSegmentFromAPI() {
+    return fetch(`/bff/v1/fleet_segments`)
+      .then(response => {
+          if (response.status === OK) {
+              return response.json()
+          } else {
+              response.text().then(text => {
+                  console.error(text)
+              })
+              throw Error(FLEET_SEGMENT_ERROR_MESSAGE)
+          }
+      }).catch(error => {
+          console.error(error)
+          throw Error(FLEET_SEGMENT_ERROR_MESSAGE)
+      })
 }

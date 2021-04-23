@@ -83,15 +83,15 @@ const ERSMessages = props => {
             <Select
               menuPortalTarget={document.body}
               placeholder="Filtrer les messages"
-                closeMenuOnSelect={true}
-                components={animatedComponents}
-                defaultValue={selectedOptions}
-                value={selectedOptions}
-                onChange={setSelectedOptions}
-                isMulti
-                options={options}
-                styles={selectStyles}
-                isSearchable={false}
+              closeMenuOnSelect={true}
+              components={animatedComponents}
+              defaultValue={selectedOptions}
+              value={selectedOptions}
+              onChange={setSelectedOptions}
+              isMulti
+              options={options}
+              styles={selectStyles}
+              isSearchable={false}
             />
             <InverseDate ascendingSort={ascendingSort} onClick={() => inverseSort()}/>
         </Filters>

@@ -152,9 +152,9 @@ const ERSMessage = props => {
                             {!props.message.acknowledge || props.message.acknowledge.isSuccess === null ?
                                 <Gray>-</Gray> : null}
                             {props.message.acknowledge && props.message.acknowledge.isSuccess === true ?
-                                <AckOkSVG/> : null}
+                                <AckOk/> : null}
                             {props.message.acknowledge && props.message.acknowledge.isSuccess === false ?
-                                <AckNOkSVG title={props.message.acknowledge.rejectionCause}/> : null}
+                                <AckNOk title={props.message.acknowledge.rejectionCause}/> : null}
                         </Acknowledge>
                     </ERSMessageMetadata>
                     {getERSMessage(props.message)}
@@ -236,7 +236,7 @@ const VoyageNumber = styled.div`
 const ReceptionDateTime = styled.div`
   text-align: center;
   background: ${COLORS.background};
-  padding: 5px 9px 9px 9px;
+  padding: 5px 8px 9px 8px;
   margin-left: 10px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
@@ -246,7 +246,7 @@ const ReceptionDateTime = styled.div`
 const EmissionDateTime = styled.div`
   text-align: center;
   background: ${COLORS.background};
-  padding: 5px 9px 9px 9px;
+  padding: 5px 8px 9px 8px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
   flex-grow: 3;
@@ -314,6 +314,14 @@ const XML = styled(XMLSVG)`
   tspan {
     font-size: 9px;
   }
+`
+
+const AckNOk = styled(AckNOkSVG)`
+  margin-top: 3px;
+`
+
+const AckOk = styled(AckOkSVG)`
+  margin-top: 3px;
 `
 
 export default ERSMessage

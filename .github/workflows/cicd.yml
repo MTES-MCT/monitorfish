@@ -83,7 +83,7 @@ jobs:
         push: false
         tags: monitorfish-app:${{ env.VERSION }}
         cache-from: type=local,src=/tmp/.buildx-cache-app
-        cache-to: type=local,dest=/tmp/.buildx-cache-app-new
+        cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-app-new
         build-args: |
           VERSION=${{ env.VERSION }}
           ENV_PROFILE=${{ env.ENV_PROFILE }}

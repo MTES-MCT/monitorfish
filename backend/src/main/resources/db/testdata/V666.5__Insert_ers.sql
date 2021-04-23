@@ -300,7 +300,7 @@ VALUES ('OOF20190126059903', 9463713, 'OOF', '2019-01-26T11:45:00Z', 'DAT', 'OOF
        ('OOF20191011059900', 9463715, 'OOF', '2019-10-11T02:06:00Z', 'DAT', 'OOF20191011059900', null,
         '2019-10-11T02:06:00Z',
         'GBR000B14430', 'MVGM5', 'AR865', 'CABO ORTEGAL', 'FRA', null, 'DEP',
-        '{"gearOnboard": [{"gear": "GTN", "mesh": 100.0}], "departurePort": "AEJAZ", "anticipatedActivity": "FSH", "tripStartDate": "2019-10-11T00:00Z", "departureDatetimeUtc": "2019-10-11T01:40Z"}',
+        '{"gearOnboard": [{"gear": "GTN", "mesh": 100.0}, {"gear": "GTN", "mesh": 85.0}], "departurePort": "AEJAZ", "anticipatedActivity": "FSH", "tripStartDate": "2019-10-11T00:00Z", "departureDatetimeUtc": "2019-10-11T01:40Z"}',
         '2021-01-18T07:17:28.888437Z'),
        ('OOF20191015059904', 9463715, 'OOF', '2019-10-15T11:23:00Z', 'DAT', 'OOF20191015059904', null,
         '2019-10-15T11:23:00Z',

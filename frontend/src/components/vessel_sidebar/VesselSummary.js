@@ -72,6 +72,30 @@ const VesselSummary = props => {
         }
     }
 
+    function getGears () {
+        if(gears && gears.length) {
+            const uniqueGears = gears.reduce((acc, current) => {
+                const found = acc.find(item =>
+                  item.code === current.code &&
+                  item.name === current.name);
+                if (!found) {
+                    return acc.concat([current]);
+                } else {
+                    return acc;
+                }
+            }, [])
+
+            return uniqueGears.map(gear => {
+                  return gear.name ?
+                    <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                    : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+
+              })
+        }
+
+        return <NoValue>-</NoValue>
+    }
+
     return vessel ? (
         <Body>
             <PhotoZone>
@@ -165,37 +189,33 @@ const VesselSummary = props => {
                     <TableBody>
                         <Field>
                             <Key>Segments de flotte</Key>
-                            <TrimmedValue>
+                            <Value>
                                 {
-                                    props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments
+                                    props.vesselLastPositionFeature &&
+                                    props.vesselLastPositionFeature.getProperties().segments &&
+                                    props.vesselLastPositionFeature.getProperties().segments.length
                                       ? props.vesselLastPositionFeature.getProperties().segments.join(", ")
                                       : <NoValue>-</NoValue>
                                 }
-                            </TrimmedValue>
+                            </Value>
                         </Field>
                         <Field>
                             <Key>Engins à bord (JPE)</Key>
                             <Value>
                                 {
-                                    gears ?
-                                        gears.map(gear => {
-                                            return gear.name ?
-                                                <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                                                : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-
-                                        }) : <NoValue>-</NoValue>
+                                    getGears()
                                 }
                             </Value>
                         </Field>
                         <Field>
                             <Key>Zones de la marée (FAR)</Key>
-                            <TrimmedValue>
+                            <Value>
                                 {
                                     faoZones && faoZones.length
                                       ? faoZones.join(", ")
                                       : <NoValue>Aucune zone de pêche reçue</NoValue>
                                 }
-                            </TrimmedValue>
+                            </Value>
                         </Field>
                     </TableBody>
                 </Fields>

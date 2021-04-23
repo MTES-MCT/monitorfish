@@ -221,6 +221,32 @@ const FishingActivitiesSummary = props => {
         return null
     }
 
+    function getGears () {
+        if(depMessage &&
+          depMessage.message &&
+          depMessage.message.gearOnboard &&
+          depMessage.message.gearOnboard.length) {
+            const uniqueGears = depMessage.message.gearOnboard.reduce((acc, current) => {
+                const found = acc.find(item =>
+                  item.gear === current.gear &&
+                  item.gearName === current.gearName);
+                if (!found) {
+                    return acc.concat([current]);
+                } else {
+                    return acc;
+                }
+            }, [])
+
+            return uniqueGears.map(gear => {
+                return gear.gearName ?
+                  <span key={gear.gear}>{gear.gearName} ({gear.gear})<br/></span> :
+                  <span key={gear.gear}>{gear.gear}<br/></span>
+            })
+        }
+
+        return <NoValue>-</NoValue>
+    }
+
     return <>
         {props.fishingActivities ?
             <Body>
@@ -234,15 +260,11 @@ const FishingActivitiesSummary = props => {
                         <TableBody>
                             <Field>
                                 <Key>Engins à bord (JPE)</Key>
-                                <Value>{depMessage &&
-                                depMessage.message &&
-                                depMessage.message.gearOnboard &&
-                                depMessage.message.gearOnboard.length ?
-                                    depMessage.message.gearOnboard.map(gear => {
-                                        return gear.gearName ?
-                                            <span key={gear.gear}>{gear.gearName} ({gear.gear})<br/></span> :
-                                            <span key={gear.gear}>{gear.gear}<br/></span>
-                                    }) : <NoValue>-</NoValue>}</Value>
+                                <Value>
+                                    {
+                                        getGears()
+                                    }
+                                </Value>
                             </Field>
                             <Field>
                                 <Key>Zones de la marée (JPE)</Key>

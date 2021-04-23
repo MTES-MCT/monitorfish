@@ -190,7 +190,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         // DEP
         assertThat(messages[11].message).isInstanceOf(DEP::class.java)
         val depMessage = messages[11].message as DEP
-        assertThat(depMessage.gearOnboard).hasSize(1)
+        assertThat(depMessage.gearOnboard).hasSize(2)
         assertThat(depMessage.gearOnboard.first().gear).isEqualTo("GTN")
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
         assertThat(depMessage.departurePort).isEqualTo("AEJAZ")

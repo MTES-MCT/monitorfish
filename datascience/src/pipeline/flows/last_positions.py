@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -15,7 +16,9 @@ def extract_current_segments():
 @task(checkpoint=False)
 def extract_last_positions():
     return extract(
-        db_name="monitorfish_remote", query_filepath="monitorfish/last_positions.sql"
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/last_positions.sql",
+        dtypes={"emission_period": str},
     )
 
 
@@ -23,6 +26,15 @@ def extract_last_positions():
 def merge(last_positions, current_segments):
     last_positions = pd.merge(last_positions, current_segments, on="cfr", how="outer")
     last_positions = last_positions.fillna({"total_weight_onboard": 0.0})
+
+    last_positions.loc[:, "trip_number"] = last_positions.trip_number.map(
+        lambda x: str(int(x)), na_action="ignore"
+    ).replace([np.nan], [None])
+
+    last_positions.loc[:, "emission_period"] = last_positions.emission_period.replace(
+        ["NaT", np.nan], [None, None]
+    )
+
     return last_positions
 
 

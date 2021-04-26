@@ -13,9 +13,13 @@ const hideLayers = layerToHide => (dispatch, getState) => {
                     layerToRemove = getState().layer.layers.find(layer => {
                         return layer.className_ === `${layerToHide.type}:${layerToHide.zone.layerName}:${layerToHide.zone.zone}`
                     })
-                } else {
+                } else if(layerToHide.zone.layerName) {
                     layersToRemove = getState().layer.layers.filter(layer => {
                         return layer.className_.includes(`${layerToHide.type}:${layerToHide.zone.layerName}`)
+                    })
+                } else {
+                    layersToRemove = getState().layer.layers.filter(layer => {
+                        return layer.className_.includes(`${layerToHide.type}:${layerToHide.zone}`)
                     })
                 }
                 break;

@@ -20,9 +20,17 @@ const AdministrativeZone = props => {
         }
 
         if(showLayer_) {
-            props.callShowAdministrativeZone(props.layer.code)
+            if(props.layer.showMultipleZonesInAdministrativeZones) {
+                props.callShowAdministrativeZone(props.layer.groupCode, props.layer.code)
+            } else {
+                props.callShowAdministrativeZone(props.layer.code)
+            }
         } else {
-            props.callHideAdministrativeZone(props.layer.code)
+            if(props.layer.showMultipleZonesInAdministrativeZones) {
+                props.callHideAdministrativeZone(props.layer.groupCode, props.layer.code)
+            } else {
+                props.callHideAdministrativeZone(props.layer.code)
+            }
         }
     }, [showLayer_])
 

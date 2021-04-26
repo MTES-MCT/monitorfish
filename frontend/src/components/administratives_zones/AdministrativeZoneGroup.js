@@ -24,7 +24,13 @@ const AdministrativeZoneGroup = props => {
                         { props.layers.map((layer, index) => {
                                 return <ListItem isLastItem={props.layers === index + 1} key={layer.code}>
                                     <AdministrativeZone
-                                    isShownOnInit={props.showedLayers.some(layer_ => layer_.type === layer.code)}
+                                      isShownOnInit={props.showedLayers.some(layer_ => {
+                                        if(layer_.zone) {
+                                          return layer_.type === layer.groupCode && layer_.zone === layer.code
+                                        } else {
+                                          return layer_.type === layer.code
+                                        }
+                                      })}
                                     layer={layer}
                                     callShowAdministrativeZone={props.callShowAdministrativeZone}
                                     callHideAdministrativeZone={props.callHideAdministrativeZone}

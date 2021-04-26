@@ -312,9 +312,9 @@ EOF
 curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "situ_atlant_areas",
-    "nativeName": "situ_atlant_areas",
-    "title": "situation atlantique areas",
+    "name": "situs_areas",
+    "nativeName": "situs_areas",
+    "title": "situation VMS",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
     "enabled": true,
@@ -325,35 +325,9 @@ EOF
 curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "situ_med_areas",
-    "nativeName": "situ_med_areas",
-    "title": "situ med areas",
-    "nativeCRS": "EPSG:4326",
-    "srs": "EPSG:4326",
-    "enabled": true,
-  }
-}
-EOF
-
-curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
-{
-  "featureType": {
-    "name": "situ_memn_areas",
-    "nativeName": "situ_memn_areas",
-    "title": "situ memn areas",
-    "nativeCRS": "EPSG:4326",
-    "srs": "EPSG:4326",
-    "enabled": true,
-  }
-}
-EOF
-
-curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
-{
-  "featureType": {
-    "name": "situ_outre_mer_areas",
-    "nativeName": "situ_outre_mer_areas",
-    "title": "situ outre mer areas",
+    "name": "brexit_areas",
+    "nativeName": "brexit_areas",
+    "title": "Brexit",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
     "enabled": true,

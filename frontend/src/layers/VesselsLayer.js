@@ -27,7 +27,7 @@ import {
 import {
   getVesselFeatureAndIdentity,
   getVesselIdentityFromFeature,
-  vesselAndVesselFeatureAreEquals
+  vesselAndVesselFeatureAreEquals, vesselsAreEquals
 } from '../domain/entities/vessel'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
@@ -152,8 +152,14 @@ const VesselsLayer = ({ map, mapRef }) => {
   function highLightVesselsOnMap () {
     if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {
       vectorSource.getFeatures().filter(feature => {
+        let vesselToCompare = {
+          internalReferenceNumber: feature.getProperties().internalReferenceNumber,
+          externalReferenceNumber: feature.getProperties().externalReferenceNumber,
+          ircs: feature.getProperties().ircs,
+        }
+
         return !temporaryVesselsToHighLightOnMap.some(vessel => {
-          return vesselAndVesselFeatureAreEquals(vessel, feature)
+          return vesselsAreEquals(vessel, vesselToCompare)
         })
       }).map(featureToHide => {
         let foundStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
@@ -233,23 +239,23 @@ const VesselsLayer = ({ map, mapRef }) => {
     }
   }
 
-  function isVesselNameMinimumZoom() {
+  function isVesselNameMinimumZoom () {
     return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES;
   }
 
-  function isVesselNameMaximumZoom() {
+  function isVesselNameMaximumZoom () {
     return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES;
   }
 
-  function addVesselLabelToAllFeatures(extent, vesselLabel) {
+  function addVesselLabelToAllFeatures (extent, vesselLabel) {
     vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
       const vesselDate = new Date(feature.getProperties().dateTime)
       const vesselIsHidden = new Date()
       vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
-      if(vesselDate > vesselIsHidden) {
+      if (vesselDate > vesselIsHidden) {
         getSVG(feature, vesselLabel).then(svg => {
-          if(svg) {
+          if (svg) {
             let style = getVesselNameStyle(svg.showedText, svg.imageElement)
             feature.setStyle([...feature.getStyle(), style])
           }
@@ -258,7 +264,7 @@ const VesselsLayer = ({ map, mapRef }) => {
     })
   }
 
-  function removeVesselLabelToAllFeatures() {
+  function removeVesselLabelToAllFeatures () {
     vectorSource.getFeatures().map(feature => {
       let stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_NAME_STYLE)
       feature.setStyle([...stylesWithoutVesselName]);
@@ -279,7 +285,7 @@ const VesselsLayer = ({ map, mapRef }) => {
     featureToModify.setGeometry(new Point(newCoordinates))
   }
 
-  const buildFeature = (currentVessel, index) => new Promise(resolve =>  {
+  const buildFeature = (currentVessel, index) => new Promise(resolve => {
     let transformedCoordinates = transform([currentVessel.longitude, currentVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
     if (currentVessel &&
@@ -287,7 +293,7 @@ const VesselsLayer = ({ map, mapRef }) => {
       selectedVesselFeatureAndIdentity.feature &&
       vesselAndVesselFeatureAreEquals(currentVessel, selectedVesselFeatureAndIdentity.feature)) {
       const lastPosition = selectedVessel.positions[selectedVessel.positions.length - 1]
-      if(lastPosition && lastPosition.longitude && lastPosition.latitude) {
+      if (lastPosition && lastPosition.longitude && lastPosition.latitude) {
         transformedCoordinates = new transform([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
       }
     }
@@ -337,12 +343,12 @@ const VesselsLayer = ({ map, mapRef }) => {
     }
 
     setVesselIconStyle(currentVessel, feature, options).then(newSelectedVesselFeature => {
-        if (newSelectedVesselFeature) {
-          dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, selectedVesselFeatureAndIdentity.identity)))
-        }
+      if (newSelectedVesselFeature) {
+        dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(newSelectedVesselFeature, selectedVesselFeatureAndIdentity.identity)))
+      }
 
-        resolve(feature)
-      })
+      resolve(feature)
+    })
   })
 
   return null

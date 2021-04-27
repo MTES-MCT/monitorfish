@@ -139,6 +139,10 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
             showedText = countries.getName(feature.getProperties().flagState, "fr")
             break
         }
+        case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
+            showedText = feature.getProperties().segments.join(', ')
+            break
+        }
     }
     let textWidth = getTextWidth(showedText) + 10 + (flag ? 18 : 0)
 

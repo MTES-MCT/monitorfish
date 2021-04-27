@@ -27,7 +27,7 @@ const VesselLabelRadio = props => {
                         <Radio value={vesselLabel.VESSEL_NATIONALITY}>Nationalité (nom)</Radio>
                         <Radio value={vesselLabel.VESSEL_NAME}>Nom du navire</Radio>
                         <Radio value={vesselLabel.VESSEL_INTERNAL_REFERENCE_NUMBER}>CFR</Radio>
-                        <Radio disabled={true} value={vesselLabel.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>
+                        <Radio value={vesselLabel.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>
                     </RadioGroup>
                 </RadioWrapper> : null
             }

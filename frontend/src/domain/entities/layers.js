@@ -86,6 +86,7 @@ export default {
         containsMultipleZones: true,
         showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: 'f_division',
+        subSubZoneFieldKey: 'f_subdivis',
         isIntersectable: true
     },
     AEM: {

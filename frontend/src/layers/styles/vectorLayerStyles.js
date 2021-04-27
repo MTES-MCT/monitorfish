@@ -26,7 +26,12 @@ export const getVectorLayerStyle = type => {
             }),
             text: new Text({
                 font: '12px Avenir',
-                text: `${feature.get(Layers.FAO.subZoneFieldKey) ? feature.get(Layers.FAO.subZoneFieldKey) : ''}`,
+                overflow: true,
+                text: `${feature.get(Layers.FAO.subSubZoneFieldKey) && feature.get(Layers.FAO.subSubZoneFieldKey)
+                  ? feature.get(Layers.FAO.subSubZoneFieldKey)
+                  : feature.get(Layers.FAO.subZoneFieldKey)
+                    ? feature.get(Layers.FAO.subZoneFieldKey)
+                    : ''}`,
                 fill: new Fill({color: '#05055E'}),
                 stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
             })

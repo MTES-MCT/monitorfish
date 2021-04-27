@@ -67,7 +67,6 @@ const VesselSummary = props => {
     }, [props.gears, props.vessel])
 
     useEffect(() => {
-        console.log(props.fleetSegments)
         if(props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments &&
           props.vesselLastPositionFeature.getProperties().segments.length) {
             if(props.fleetSegments && props.fleetSegments.length) {

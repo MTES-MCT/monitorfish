@@ -98,15 +98,17 @@ const LayersSidebar = () => {
         }))
     }
 
-    function callShowAdministrativeZone(administrativeZone) {
+    function callShowAdministrativeZone(administrativeZone, administrativeSubZone) {
         dispatch(showLayer({
-            type: administrativeZone
+            type: administrativeZone,
+            zone: administrativeSubZone
         }));
     }
 
-    function callHideAdministrativeZone(administrativeZone) {
+    function callHideAdministrativeZone(administrativeZone, administrativeSubZone) {
         dispatch(hideLayers({
-            type: administrativeZone
+            type: administrativeZone,
+            zone: administrativeSubZone
         }));
     }
 

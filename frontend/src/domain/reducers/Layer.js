@@ -37,6 +37,12 @@ const regulatorySlice = createSlice({
                             layer.zone.layerName === action.payload.zone.layerName &&
                             layer.zone.zone === action.payload.zone.zone
                     ))
+                } else if (action.payload.zone) {
+                    found = state.showedLayers
+                      .some(layer => (
+                        layer.type === action.payload.type &&
+                        layer.zone === action.payload.zone
+                      ))
                 } else {
                     found = state.showedLayers.some(layer => layer.type === action.payload.type)
                 }

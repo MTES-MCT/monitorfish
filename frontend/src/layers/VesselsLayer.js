@@ -31,7 +31,7 @@ import {
 } from '../domain/entities/vessel'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
-export const MIN_ZOOM_VESSEL_NAMES = 9
+export const MIN_ZOOM_VESSEL_NAMES = 7.5
 
 const VesselsLayer = ({ map, mapRef }) => {
   const vessels = useSelector(state => state.vessel.vessels)

@@ -27,7 +27,7 @@ export const getVectorLayerStyle = type => {
             text: new Text({
                 font: '12px Avenir',
                 overflow: true,
-                text: `${feature.get(Layers.FAO.subSubZoneFieldKey) && feature.get(Layers.FAO.subSubZoneFieldKey)
+                text: `${feature.get(Layers.FAO.subSubZoneFieldKey)
                   ? feature.get(Layers.FAO.subSubZoneFieldKey)
                   : feature.get(Layers.FAO.subZoneFieldKey)
                     ? feature.get(Layers.FAO.subZoneFieldKey)

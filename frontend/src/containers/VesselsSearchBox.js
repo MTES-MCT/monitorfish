@@ -391,9 +391,8 @@ const VesselName = styled.span`
 const CloseIcon = styled(CloseIconSVG)`
   width: 20px;
   float: right;
-  margin-right: 7px;
+  padding: 8px 7px 7px 7px;
   height: 1.5em;
-  margin-top: 8px;
   cursor: pointer;
 `
 

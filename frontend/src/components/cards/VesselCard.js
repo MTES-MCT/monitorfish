@@ -102,6 +102,7 @@ const VesselCard = props => {
                                     {
                                         props.vessel.getProperties().width ? props.vessel.getProperties().width : <NoValue>-</NoValue>
                                     }
+                                    {' '}m
                                 </Value>
                             </Field>
                         </Body>
@@ -267,7 +268,7 @@ const FieldValue = styled.div`
 `
 
 const LatLon = styled.div`
-  width: 102px;
+  width: 122px;
   order: 1;
   background: ${COLORS.background};
   margin: 5px 0 5px 5px;
@@ -283,7 +284,7 @@ const Course = styled.div`
 `
 
 const Position = styled.div`
-  width: 195px;
+  width: 175px;
   order: 3;
   background: ${COLORS.background};
   margin: 5px 5px 5px 5px;

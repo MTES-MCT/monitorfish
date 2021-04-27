@@ -64,7 +64,8 @@ const getVectorLayer = dispatch => (type, subZone, hash, gearCategory) => {
         updateWhileInteracting: true,
         style: feature => {
             return [getVectorLayerStyle(type)(feature, hash, gearCategory)]
-        }
+        },
+        declutter: true,
     })
 };
 

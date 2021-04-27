@@ -5,7 +5,11 @@ export const layersGroups = {
     },
     VMS_SITUATION: {
         code: "vms_situation",
-        name: "Situation VMS"
+        name: "Zones pour situation VMS"
+    },
+    VMS_SITUATION_BREXIT: {
+        code: "vms_situation_brexit",
+        name: "Zones pour situation VMS Brexit"
     },
     ORGP: {
         code: "orgp",
@@ -28,6 +32,7 @@ export default {
         group: null,
         type: layersType.BASE_LAYER,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: false
     },
@@ -37,6 +42,7 @@ export default {
         group: null,
         type: layersType.VESSEL,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: false,
         zIndex: 1000
@@ -47,6 +53,7 @@ export default {
         group: null,
         type: layersType.VESSEL,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: false,
         zIndex: 999
@@ -57,6 +64,7 @@ export default {
         group: null,
         type: layersType.REGULATORY,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: false
     },
@@ -66,6 +74,7 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: 'union',
         isIntersectable: true
     },
@@ -75,6 +84,7 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: 'f_division',
         isIntersectable: true
     },
@@ -84,6 +94,7 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: 'name',
         isIntersectable: false
     },
@@ -93,6 +104,7 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: false
     },
@@ -102,6 +114,7 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: false
     },
@@ -111,6 +124,7 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: false
     },
@@ -120,6 +134,7 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
@@ -129,51 +144,57 @@ export default {
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
     eaux_union_dans_oi_et_atl_ouest: {
         code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
-        name: 'Eaux union dans oi et atl ouest',
+        name: 'Eaux de l\'Union dans l\'OI et l\'Atl. ouest',
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
     mer_baltique: {
         code: '1241_mer_baltique_areas',
-        name: 'Mer baltique',
+        name: 'Mer Baltique',
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
     mer_du_nord: {
         code: '1241_mer_du_nord_areas',
-        name: 'Mer du nord',
+        name: 'Mer du Nord',
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
     mer_mediterranee: {
         code: '1241_mer_mediterranee_areas',
-        name: 'Mer mediterranee',
+        name: 'Mer Méditerranée',
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
     mer_noire: {
         code: '1241_mer_noire_areas',
-        name: 'Mer noire',
+        name: 'Mer Noire',
         group: layersGroups.TWELVE_FORTY_ONE,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
@@ -183,6 +204,7 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: 'zonex',
         isIntersectable: true
     },
@@ -192,6 +214,7 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
@@ -201,6 +224,7 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
@@ -210,6 +234,7 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
@@ -219,6 +244,7 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
@@ -228,6 +254,7 @@ export default {
         group: layersGroups.ORGP,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: false,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: null,
         isIntersectable: true
     },
@@ -237,43 +264,28 @@ export default {
         group: null,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
+        showMultipleZonesInAdministrativeZones: false,
         subZoneFieldKey: 'icesname',
         isIntersectable: true
     },
-    situation_atlant: {
-        code: 'situ_atlant_areas',
-        name: 'Situation atlantique',
+    situations: {
+        code: 'situs_areas',
+        name: 'Zones pour situation VMS',
         group: layersGroups.VMS_SITUATION,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
+        showMultipleZonesInAdministrativeZones: true,
         subZoneFieldKey: 'libelle',
         isIntersectable: true
     },
-    situation_med: {
-        code: 'situ_med_areas',
-        name: 'Situation med',
-        group: layersGroups.VMS_SITUATION,
+    brexit: {
+        code: 'brexit_areas',
+        name: 'Zones pour situation Brexit',
+        group: layersGroups.VMS_SITUATION_BREXIT,
         type: layersType.ADMINISTRATIVE,
         containsMultipleZones: true,
-        subZoneFieldKey: 'libelle',
-        isIntersectable: true
-    },
-    situation_memn: {
-        code: 'situ_memn_areas',
-        name: 'Situation MEMN',
-        group: layersGroups.VMS_SITUATION,
-        type: layersType.ADMINISTRATIVE,
-        containsMultipleZones: true,
-        subZoneFieldKey: 'libelle',
-        isIntersectable: true
-    },
-    situation_outre_mer: {
-        code: 'situ_outre_mer_areas',
-        name: 'Situation outre mer',
-        group: layersGroups.VMS_SITUATION,
-        type: layersType.ADMINISTRATIVE,
-        containsMultipleZones: true,
-        subZoneFieldKey: 'libelle',
+        showMultipleZonesInAdministrativeZones: true,
+        subZoneFieldKey: 'nom',
         isIntersectable: true
     },
 }

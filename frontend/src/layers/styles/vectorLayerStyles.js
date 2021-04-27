@@ -55,50 +55,26 @@ export const getVectorLayerStyle = type => {
                 stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
             })
         })
-        case Layers.situation_atlant.code: return feature => new Style({
+        case Layers.situations.code: return feature => new Style({
             stroke: new Stroke({
                 color: '#767AB2',
-                width: 1,
+                width: 2,
             }),
             text: new Text({
                 font: '12px Avenir',
-                text: `${feature.get(Layers.situation_atlant.subZoneFieldKey) ? feature.get(Layers.situation_atlant.subZoneFieldKey) : ''}`,
+                text: `${feature.get(Layers.situations.subZoneFieldKey) ? feature.get(Layers.situations.subZoneFieldKey) : ''}`,
                 fill: new Fill({color: '#05055E'}),
                 stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
             })
         })
-        case Layers.situation_med.code: return feature => new Style({
+        case Layers.brexit.code: return feature => new Style({
             stroke: new Stroke({
                 color: '#767AB2',
-                width: 1,
+                width: 2,
             }),
             text: new Text({
                 font: '12px Avenir',
-                text: `${feature.get(Layers.situation_med.subZoneFieldKey) ? feature.get(Layers.situation_med.subZoneFieldKey) : ''}`,
-                fill: new Fill({color: '#05055E'}),
-                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
-            })
-        })
-        case Layers.situation_memn.code: return feature => new Style({
-            stroke: new Stroke({
-                color: '#767AB2',
-                width: 1,
-            }),
-            text: new Text({
-                font: '12px Avenir',
-                text: `${feature.get(Layers.situation_memn.subZoneFieldKey) ? feature.get(Layers.situation_memn.subZoneFieldKey) : ''}`,
-                fill: new Fill({color: '#05055E'}),
-                stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
-            })
-        })
-        case Layers.situation_outre_mer.code: return feature => new Style({
-            stroke: new Stroke({
-                color: '#767AB2',
-                width: 1,
-            }),
-            text: new Text({
-                font: '12px Avenir',
-                text: `${feature.get(Layers.situation_outre_mer.subZoneFieldKey) ? feature.get(Layers.situation_outre_mer.subZoneFieldKey) : ''}`,
+                text: `${feature.get(Layers.brexit.subZoneFieldKey) ? feature.get(Layers.brexit.subZoneFieldKey) : ''}`,
                 fill: new Fill({color: '#05055E'}),
                 stroke: new Stroke({color: 'rgba(255,255,255,0.4)', width: 2})
             })

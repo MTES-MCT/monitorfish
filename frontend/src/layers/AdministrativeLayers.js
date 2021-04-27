@@ -24,7 +24,7 @@ const AdministrativeLayers = ({ map }) => {
       const layersToInsert = layer.layers
         .filter(layer => !map.getLayers().getArray().some(layer_ => layer === layer_))
         .filter(showedLayer => administrativeLayers
-          .some(administrativeLayer => administrativeLayer.code === showedLayer.className_))
+          .some(administrativeLayer => showedLayer.className_.includes(administrativeLayer.code)))
 
       layersToInsert.map(layerToInsert => {
         if (!layerToInsert) {
@@ -42,7 +42,7 @@ const AdministrativeLayers = ({ map }) => {
     const layersToRemove = map.getLayers().getArray()
       .filter(showedLayer => !layers.some(layer_ => showedLayer === layer_))
       .filter(showedLayer => administrativeLayers
-        .some(administrativeLayer => administrativeLayer.code === showedLayer.className_))
+        .some(administrativeLayer => showedLayer.className_.includes(administrativeLayer.code)))
 
     layersToRemove.map(layerToRemove => {
       map.getLayers().remove(layerToRemove)

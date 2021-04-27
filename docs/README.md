@@ -12,12 +12,12 @@ Shapefile links:
 Then, add the layers to the database:
 1. FAO layer
 ```
-PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f backend/src/main/resources/db/layersdata/Insert_fao_areas.sql
+PGCLIENTENCODING=UTF-8 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f backend/src/main/resources/db/layersdata/Insert_fao_areas.sql
 ```
 
 2. EEZ layer
 ```
-PGCLIENTENCODING=LATIN1 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f backend/src/main/resources/db/layersdata/Insert_eez_areas.sql
+PGCLIENTENCODING=UTF-8 psql -h 0.0.0.0 -d monitorfishdb -U postgres -f backend/src/main/resources/db/layersdata/Insert_eez_areas.sql
 ```
 
 ### Add a new layer

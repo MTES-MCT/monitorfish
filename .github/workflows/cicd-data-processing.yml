@@ -6,6 +6,8 @@ on:
     - 'datascience/**'
     - '.github/workflows/*'
     - 'infra/docker/Dockerfile.DataPipeline'
+  schedule:
+    - cron: */10 * * * *
 
 jobs:
   build:

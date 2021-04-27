@@ -148,7 +148,7 @@ const NoControls = styled.div`
 
 const SeeMoreBackground = styled.div`
   background: ${COLORS.background};
-  margin: 0px 5px 5px 5px;
+  margin: 0px 5px 10px 5px;
   padding: 5px 0 5px 0;
 `
 
@@ -270,7 +270,7 @@ const Text = styled.div`
 `
 
 const Body = styled.div`
-  padding: 5px 5px 1px 5px;
+  padding: 0 5px 1px 5px;
   overflow-x: hidden;
 `
 
@@ -286,7 +286,7 @@ const Title = styled.div`
 `
 
 const Zone = styled.div`
-  margin: 5px 5px 0 5px;
+  margin: 10px 5px 0 5px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;

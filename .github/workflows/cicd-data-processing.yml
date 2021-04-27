@@ -7,7 +7,7 @@ on:
     - '.github/workflows/*'
     - 'infra/docker/Dockerfile.DataPipeline'
   schedule:
-    - cron: */10 * * * *
+    - cron: "*/10 * * * *"
 
 jobs:
   build:

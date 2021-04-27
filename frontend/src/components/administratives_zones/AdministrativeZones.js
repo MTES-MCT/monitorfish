@@ -67,8 +67,6 @@ const AdministrativeZones = props => {
 
                   let nextSubZone = {...zone}
 
-                  nextSubZone.label = zone.name
-                  nextSubZone.value = zone.code
                   nextSubZone.group = zone.group ? zone.group.name : 'Administratives'
 
                   return nextSubZone

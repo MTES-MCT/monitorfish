@@ -144,14 +144,16 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
             break
         }
     }
+
     let textWidth = getTextWidth(showedText) + 10 + (flag ? 18 : 0)
 
-    let iconSVG = `
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
+    let iconSVG = showedText
+      ? `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
             <rect x="0" y="0" width="${textWidth}px" height="16" rx="8px" fill="#FFFFFF" />
             <image xlink:href="${flag}" width="14px" x="5px" height="16px"/>
             <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${showedText}</text>
-        </svg>`;
+        </svg>`
+      : '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"/>'
 
     imageElement.addEventListener('load', function animationendListener() {
         imageElement.removeEventListener("load", animationendListener);

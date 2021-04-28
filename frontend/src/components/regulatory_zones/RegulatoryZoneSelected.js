@@ -1,51 +1,51 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from 'styled-components';
-import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
-import RegulatoryZoneSelectedLayer from "./RegulatoryZoneSelectedLayer";
-import {COLORS} from "../../constants/constants";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import RegulatoryZoneSelectedLayer from './RegulatoryZoneSelectedLayer'
+import { COLORS } from '../../constants/constants'
 
 const RegulatoryZoneSelected = props => {
-    const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false);
-    const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
-    const firstUpdate = useRef(true);
+  const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false)
+  const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
+  const firstUpdate = useRef(true)
 
-    function increaseNumberOfZonesOpened(number) {
-        setNumberOfZonesOpened(numberOfZonesOpened + number)
+  function increaseNumberOfZonesOpened (number) {
+    setNumberOfZonesOpened(numberOfZonesOpened + number)
+  }
+
+  function decreaseNumberOfZonesOpened (number) {
+    const value = numberOfZonesOpened - number
+    if (value < 0) {
+      setNumberOfZonesOpened(0)
+    } else {
+      setNumberOfZonesOpened(value)
     }
+  }
 
-    function decreaseNumberOfZonesOpened(number) {
-        const value = numberOfZonesOpened - number
-        if (value < 0) {
-            setNumberOfZonesOpened(0)
-        } else {
-            setNumberOfZonesOpened(value)
-        }
+  const callRemoveRegulatoryZoneFromMySelection = (regulatoryZone, numberOfZones) => {
+    decreaseNumberOfZonesOpened(numberOfZones)
+    props.callRemoveRegulatoryZoneFromMySelection(regulatoryZone)
+  }
+
+  useEffect(() => {
+    if (props.regulatoryZoneMetadata) {
+      setShowRegulatoryZonesSelected(true)
     }
+  }, [props.regulatoryZoneMetadata])
 
-    const callRemoveRegulatoryZoneFromMySelection = (regulatoryZone, numberOfZones) => {
-        decreaseNumberOfZonesOpened(numberOfZones)
-        props.callRemoveRegulatoryZoneFromMySelection(regulatoryZone)
+  useEffect(() => {
+    if (firstUpdate) {
+      firstUpdate.current = false
+    } else {
+      if (props.hideZonesListWhenSearching) {
+        setShowRegulatoryZonesSelected(false)
+      } else {
+        setShowRegulatoryZonesSelected(true)
+      }
     }
+  }, [props.hideZonesListWhenSearching])
 
-    useEffect(() => {
-        if(props.regulatoryZoneMetadata) {
-            setShowRegulatoryZonesSelected(true)
-        }
-    }, [props.regulatoryZoneMetadata])
-
-    useEffect(() => {
-        if(firstUpdate) {
-            firstUpdate.current = false
-        } else {
-            if(props.hideZonesListWhenSearching) {
-                setShowRegulatoryZonesSelected(false)
-            } else {
-                setShowRegulatoryZonesSelected(true)
-            }
-        }
-    }, [props.hideZonesListWhenSearching])
-
-    return (
+  return (
         <>
             <RegulatoryZoneSelectedTitle
                 onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}
@@ -60,7 +60,8 @@ const RegulatoryZoneSelected = props => {
                 showRegulatoryZonesSelected={showRegulatoryZonesSelected}
             >
                 {
-                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0 ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
+                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0
+                      ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
                         return (<ListItem key={regulatoryZoneName}>
                             <RegulatoryZoneSelectedLayer
                                 increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
@@ -80,11 +81,12 @@ const RegulatoryZoneSelected = props => {
                                 isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}
                             />
                         </ListItem>)
-                    }) : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
+                      })
+                      : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
                 }
             </RegulatoryZoneSelectedList>
         </>
-    )
+  )
 }
 
 const NoZoneSelected = styled.div`
@@ -144,8 +146,8 @@ const RegulatoryZoneSelectedList = styled.ul`
   border-bottom-right-radius: 2px;
   padding: 0;
   height: ${props => {
-        if(props.layerLength) {
-            if(props.zoneLength > 0) {
+        if (props.layerLength) {
+            if (props.zoneLength > 0) {
                 return props.layerLength * 37 + props.zoneLength * 38.5
             } else {
                 return props.layerLength * 37

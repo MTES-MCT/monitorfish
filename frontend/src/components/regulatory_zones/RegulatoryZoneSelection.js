@@ -1,98 +1,99 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import RegulatoryZoneSelectionSearchInput from "./RegulatoryZoneSelectionSearchInput";
-import {ReactComponent as SearchIconSVG} from '../icons/Loupe.svg'
-import RegulatoryZoneSelectionList from "./RegulatoryZoneSelectionList";
-import {COLORS} from "../../constants/constants";
+import RegulatoryZoneSelectionSearchInput from './RegulatoryZoneSelectionSearchInput'
+import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
+import RegulatoryZoneSelectionList from './RegulatoryZoneSelectionList'
+import { COLORS } from '../../constants/constants'
 
-function useOutsideAlerter(ref, showRegulatorySearchInput, setShowRegulatorySection) {
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (ref.current && !ref.current.contains(event.target) && showRegulatorySearchInput) {
-                setShowRegulatorySection(false)
-            }
-        }
+function useOutsideAlerter (ref, showRegulatorySearchInput, setShowRegulatorySection) {
+  useEffect(() => {
+    function handleClickOutside (event) {
+      if (ref.current && !ref.current.contains(event.target) && showRegulatorySearchInput) {
+        setShowRegulatorySection(false)
+      }
+    }
 
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [ref, showRegulatorySearchInput]);
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [ref, showRegulatorySearchInput])
 }
 
 const RegulatoryZoneSelection = props => {
-    const [showRegulatorySection, setShowRegulatorySection] = useState(false);
-    const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({});
-    const [regulatoryZonesSelection, setRegulatoryZonesSelection] = useState({})
-    const [initSearchFields, setInitSearchFields] = useState(false)
+  const [showRegulatorySection, setShowRegulatorySection] = useState(false)
+  const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({})
+  const [regulatoryZonesSelection, setRegulatoryZonesSelection] = useState({})
+  const [initSearchFields, setInitSearchFields] = useState(false)
 
-    const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef, showRegulatorySection, setShowRegulatorySection);
+  const wrapperRef = useRef(null)
+  useOutsideAlerter(wrapperRef, showRegulatorySection, setShowRegulatorySection)
 
-    useEffect(() => {
-        if(showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
-            setShowRegulatorySection(false)
-        }
-    }, [props.regulatoryZoneMetadataPanelIsOpen])
-
-    useEffect(() => {
-        if(showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
-            props.callCloseRegulatoryZoneMetadata()
-        }
-    }, [showRegulatorySection])
-
-    const resetSelectRegulatoryZone = () => {
-        setRegulatoryZonesSelection({})
+  useEffect(() => {
+    if (showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
+      setShowRegulatorySection(false)
     }
+  }, [props.regulatoryZoneMetadataPanelIsOpen])
 
-    useEffect(() => {
-        if(foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0) {
-            props.setHideZonesListWhenSearching({})
-        }
-    }, [foundRegulatoryZones, showRegulatorySection])
+  useEffect(() => {
+    if (showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
+      props.callCloseRegulatoryZoneMetadata()
+    }
+  }, [showRegulatorySection])
 
-    const toggleSelectRegulatoryZone = (regulatoryZoneName, regulatorySubZones) => {
-        let existingSelectedZones = {...regulatoryZonesSelection}
+  const resetSelectRegulatoryZone = () => {
+    setRegulatoryZonesSelection({})
+  }
 
-        if(!regulatoryZonesSelection[regulatoryZoneName] || !regulatoryZonesSelection[regulatoryZoneName].length) {
-            existingSelectedZones[regulatoryZoneName] = regulatorySubZones
-            setRegulatoryZonesSelection(existingSelectedZones)
-        } else {
-            regulatorySubZones.forEach(regulatorySubZone => {
-                if(existingSelectedZones[regulatoryZoneName].some(item =>
-                    item.layerName === regulatorySubZone.layerName &&
+  useEffect(() => {
+    if (foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0) {
+      props.setHideZonesListWhenSearching({})
+    }
+  }, [foundRegulatoryZones, showRegulatorySection])
+
+  const toggleSelectRegulatoryZone = (regulatoryZoneName, regulatorySubZones) => {
+    const existingSelectedZones = { ...regulatoryZonesSelection }
+
+    if (!regulatoryZonesSelection[regulatoryZoneName] || !regulatoryZonesSelection[regulatoryZoneName].length) {
+      existingSelectedZones[regulatoryZoneName] = regulatorySubZones
+      setRegulatoryZonesSelection(existingSelectedZones)
+    } else {
+      regulatorySubZones.forEach(regulatorySubZone => {
+        if (existingSelectedZones[regulatoryZoneName].some(item =>
+          item.layerName === regulatorySubZone.layerName &&
                     item.zone === regulatorySubZone.zone)) {
-                    existingSelectedZones[regulatoryZoneName] = existingSelectedZones[regulatoryZoneName].filter(item =>
-                        !(item.layerName === regulatorySubZone.layerName &&
+          existingSelectedZones[regulatoryZoneName] = existingSelectedZones[regulatoryZoneName].filter(item =>
+            !(item.layerName === regulatorySubZone.layerName &&
                         item.zone === regulatorySubZone.zone))
-                    if(!existingSelectedZones[regulatoryZoneName].length) {
-                        delete existingSelectedZones[regulatoryZoneName]
-                    }
-                } else {
-                    existingSelectedZones[regulatoryZoneName] = existingSelectedZones[regulatoryZoneName].concat(regulatorySubZone)
-                }
-                setRegulatoryZonesSelection(existingSelectedZones)
-            })
+          if (!existingSelectedZones[regulatoryZoneName].length) {
+            delete existingSelectedZones[regulatoryZoneName]
+          }
+        } else {
+          existingSelectedZones[regulatoryZoneName] = existingSelectedZones[regulatoryZoneName].concat(regulatorySubZone)
         }
+        setRegulatoryZonesSelection(existingSelectedZones)
+      })
     }
+  }
 
-    function addRegulatoryZonesToMySelection(regulatoryZonesSelection) {
-        const numberOfZonesAdded = Object.keys(regulatoryZonesSelection)
-            .map(regulatoryLayerKey => regulatoryZonesSelection[regulatoryLayerKey].length)
-            .reduce((a, b) => a + b, 0)
-        props.setRegulatoryZonesAddedToMySelection(numberOfZonesAdded)
-        setTimeout(() => { props.setRegulatoryZonesAddedToMySelection(0) }, 2000);
-        props.callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)
-        setRegulatoryZonesSelection({})
-    }
+  function addRegulatoryZonesToMySelection (regulatoryZonesSelection) {
+    const numberOfZonesAdded = Object.keys(regulatoryZonesSelection)
+      .map(regulatoryLayerKey => regulatoryZonesSelection[regulatoryLayerKey].length)
+      .reduce((a, b) => a + b, 0)
+    props.setRegulatoryZonesAddedToMySelection(numberOfZonesAdded)
+    setTimeout(() => { props.setRegulatoryZonesAddedToMySelection(0) }, 2000)
+    props.callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)
+    setRegulatoryZonesSelection({})
+  }
 
-    return (<Search ref={wrapperRef}>
+  return (<Search ref={wrapperRef}>
             {
-                showRegulatorySection ? null
-                : <RegulatoryZoneTitle
+                showRegulatorySection
+                  ? null
+                  : <RegulatoryZoneTitle
                         onClick={() => setShowRegulatorySection(!showRegulatorySection)}
                         showRegulatorySection={showRegulatorySection}
                     >
@@ -128,11 +129,11 @@ const RegulatoryZoneSelection = props => {
             foundRegulatoryZones={foundRegulatoryZones}
         >
             {
-                props.regulatoryZonesAddedToMySelection ? `${props.regulatoryZonesAddedToMySelection} zones ajoutées` : `Ajouter à mes zones`
+                props.regulatoryZonesAddedToMySelection ? `${props.regulatoryZonesAddedToMySelection} zones ajoutées` : 'Ajouter à mes zones'
             }
         </RegulatoryZoneAddButton>
     </Search>
-    )
+  )
 }
 
 const Search = styled.div`

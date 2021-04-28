@@ -1,48 +1,49 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import {getHash} from "../../utils";
-import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
-import {getGearCategory} from "../../domain/use_cases/showLayer";
-import Layers from "../../domain/entities/layers"
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
+import { getHash } from '../../utils'
+import { getVectorLayerStyle } from '../../layers/styles/vectorLayerStyles'
+import { getGearCategory } from '../../domain/use_cases/showLayer'
+import Layers from '../../domain/entities/layers'
 
 const RegulatoryZoneSelectionItem = props => {
-    const [globalIsSelected, setGlobalIsSelected] = useState(undefined);
+  const [globalIsSelected, setGlobalIsSelected] = useState(undefined)
 
-    const select = subZone => {
-        if (!subZone) {
-            if(!globalIsSelected) {
-                props.toggleSelectRegulatoryZone(props.regulatoryZoneName, props.regulatorySubZones.filter(subZone => {
-                    return props.regulatoryZonesSelection[props.regulatoryZoneName] ? !props.regulatoryZonesSelection[props.regulatoryZoneName].some(selectedSubZone => selectedSubZone.zone === subZone.zone) : true
-                }))
-            } else {
-                props.toggleSelectRegulatoryZone(props.regulatoryZoneName, props.regulatorySubZones)
-            }
-            setGlobalIsSelected(!globalIsSelected)
-        } else {
-            props.toggleSelectRegulatoryZone(props.regulatoryZoneName, [subZone])
-        }
+  const select = subZone => {
+    if (!subZone) {
+      if (!globalIsSelected) {
+        props.toggleSelectRegulatoryZone(props.regulatoryZoneName, props.regulatorySubZones.filter(subZone => {
+          return props.regulatoryZonesSelection[props.regulatoryZoneName] ? !props.regulatoryZonesSelection[props.regulatoryZoneName].some(selectedSubZone => selectedSubZone.zone === subZone.zone) : true
+        }))
+      } else {
+        props.toggleSelectRegulatoryZone(props.regulatoryZoneName, props.regulatorySubZones)
+      }
+      setGlobalIsSelected(!globalIsSelected)
+    } else {
+      props.toggleSelectRegulatoryZone(props.regulatoryZoneName, [subZone])
     }
+  }
 
-    useEffect(() => {
-        setGlobalIsSelected(props.regulatoryZonesSelection[props.regulatoryZoneName] ? props.regulatoryZonesSelection[props.regulatoryZoneName].length === props.regulatorySubZones.length : false)
-    }, [props.regulatoryZonesSelection])
+  useEffect(() => {
+    setGlobalIsSelected(props.regulatoryZonesSelection[props.regulatoryZoneName] ? props.regulatoryZonesSelection[props.regulatoryZoneName].length === props.regulatorySubZones.length : false)
+  }, [props.regulatoryZonesSelection])
 
-    const isSelected = (regulatoryZone, subZone) => {
-        return regulatoryZone ? regulatoryZone.some(regulatoryZone => regulatoryZone.zone === subZone.zone) : false
-    }
+  const isSelected = (regulatoryZone, subZone) => {
+    return regulatoryZone ? regulatoryZone.some(regulatoryZone => regulatoryZone.zone === subZone.zone) : false
+  }
 
-    return (<Row>
+  return (<Row>
         <Zone selected={globalIsSelected} onClick={() => select()}>
             {props.regulatoryZoneName.replace(/[_]/g, ' ')}
         </Zone>
         {
-            props.regulatorySubZones ? props.regulatorySubZones.map((subZone) => {
+            props.regulatorySubZones
+              ? props.regulatorySubZones.map((subZone) => {
                 let vectorLayerStyle
-                if(subZone.zone && subZone.layerName && subZone.gears && props.gears) {
-                    let hash = getHash(`${subZone.layerName}:${subZone.zone}`)
-                    let gearCategory = getGearCategory(subZone.gears, props.gears);
-                    vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
+                if (subZone.zone && subZone.layerName && subZone.gears && props.gears) {
+                  const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
+                  const gearCategory = getGearCategory(subZone.gears, props.gears)
+                  vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
                 }
 
                 return (<SubZone
@@ -52,7 +53,8 @@ const RegulatoryZoneSelectionItem = props => {
                     <Rectangle vectorLayerStyle={vectorLayerStyle} />
                     <Name>{subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}</Name>
                 </SubZone>)
-            }) : null
+              })
+              : null
         }
             </Row>)
 }

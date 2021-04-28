@@ -1,36 +1,37 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
 
 const SpeciesAndWeightChart = props => {
-    const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
+  const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
 
-    useEffect(() => {
-        if(props.speciesAndWeightArray && props.increaseChartHeight) {
-            let speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
-                let heightInLog = speciesAndWeight.weight ? Math.log10(getPercentOfTotalFARWeight(speciesAndWeight)) : 22
+  useEffect(() => {
+    if (props.speciesAndWeightArray && props.increaseChartHeight) {
+      const speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
+        const heightInLog = speciesAndWeight.weight ? Math.log10(getPercentOfTotalFARWeight(speciesAndWeight)) : 22
 
-                speciesAndWeight.height = heightInLog * 50
-                speciesAndWeight.height = speciesAndWeight.height <= 22 ? 22 : speciesAndWeight.height
-                speciesAndWeight.height = speciesAndWeight.height > 90 ? 90 : speciesAndWeight.height
-                return speciesAndWeight
-            })
+        speciesAndWeight.height = heightInLog * 50
+        speciesAndWeight.height = speciesAndWeight.height <= 22 ? 22 : speciesAndWeight.height
+        speciesAndWeight.height = speciesAndWeight.height > 90 ? 90 : speciesAndWeight.height
+        return speciesAndWeight
+      })
 
-            setSpeciesAndWeightArray(speciesAndWeightArray)
-            let totalHeight = speciesAndWeightArray.reduce((subAccumulator, speciesCatch) => {
-                return subAccumulator + speciesCatch.height + 2
-            }, 0)
-            props.increaseChartHeight(totalHeight)
-        }
-    }, [props.speciesAndWeightArray])
-
-    const getPercentOfTotalFARWeight = speciesAndWeight => {
-        return parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
+      setSpeciesAndWeightArray(speciesAndWeightArray)
+      const totalHeight = speciesAndWeightArray.reduce((subAccumulator, speciesCatch) => {
+        return subAccumulator + speciesCatch.height + 2
+      }, 0)
+      props.increaseChartHeight(totalHeight)
     }
+  }, [props.speciesAndWeightArray])
 
-    return <>
+  const getPercentOfTotalFARWeight = speciesAndWeight => {
+    return parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
+  }
+
+  return <>
         {
-            speciesAndWeightArray && speciesAndWeightArray.length ? props.speciesAndWeightArray.map((speciesAndWeight, index) => {
+            speciesAndWeightArray && speciesAndWeightArray.length
+              ? props.speciesAndWeightArray.map((speciesAndWeight, index) => {
                 return <SpeciesAndWeight key={speciesAndWeight.species}>
                     <Weight
                         height={speciesAndWeight.height}
@@ -43,12 +44,14 @@ const SpeciesAndWeightChart = props => {
                         isLast={index === speciesAndWeightArray.length - 1}
                     >
                         {
-                            speciesAndWeight.speciesName ?
-                                <>{speciesAndWeight.speciesName} ({speciesAndWeight.species})</> : speciesAndWeight.species
+                            speciesAndWeight.speciesName
+                              ? <>{speciesAndWeight.speciesName} ({speciesAndWeight.species})</>
+                              : speciesAndWeight.species
                         }
                     </Species>
                 </SpeciesAndWeight>
-            }) : null
+              })
+              : null
         }
     </>
 }
@@ -74,7 +77,7 @@ const Species = styled.div`
   color: ${COLORS.grayDarkerThree};
   font-size: 13px;
   margin: 2px 0 0 10px;
-  ${props => props.isLast ? `margin-bottom: 2px ;` : ''}
+  ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
 `
 
 const WeightText = styled.span``

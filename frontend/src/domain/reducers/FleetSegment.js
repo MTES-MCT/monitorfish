@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const fleetSegmentSlice = createSlice({
-    name: 'fleetSegment',
-    initialState: {
-        fleetSegments: [],
-    },
-    reducers: {
-        setFleetSegments(state, action) {
-            state.fleetSegments = action.payload
-        },
+  name: 'fleetSegment',
+  initialState: {
+    fleetSegments: []
+  },
+  reducers: {
+    setFleetSegments (state, action) {
+      state.fleetSegments = action.payload
     }
+  }
 })
 
 export const {
-    setFleetSegments,
+  setFleetSegments
 } = fleetSegmentSlice.actions
 
 export default fleetSegmentSlice.reducer

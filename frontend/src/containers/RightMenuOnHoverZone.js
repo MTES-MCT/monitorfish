@@ -7,22 +7,22 @@ const RightMenuOnHoverZone = () => {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const dispatch = useDispatch()
 
-  const wrapperRef = useRef(null);
+  const wrapperRef = useRef(null)
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside (event) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         dispatch(contractRightMenu())
       }
     }
 
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [wrapperRef]);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [wrapperRef])
 
   return <>
     {
@@ -41,6 +41,5 @@ const Zone = styled.div`
   position: absolute;
   top: 0;
 `
-
 
 export default RightMenuOnHoverZone

@@ -1,47 +1,47 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import SpeciesAndWeightChart from "./SpeciesAndWeightChart";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import SpeciesAndWeightChart from './SpeciesAndWeightChart'
+import { ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
 
 const FARMessageResume = props => {
-    const [isOpen, setIsOpen] = useState(false)
-    const firstUpdate = useRef(true);
-    const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
-    const [chartHeight, setChartHeight] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+  const firstUpdate = useRef(true)
+  const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
+  const [chartHeight, setChartHeight] = useState(0)
 
-    useEffect(() => {
-        if(props.speciesToWeightOfFAR) {
-            let array = Object.keys(props.speciesToWeightOfFAR)
-                .map(species => props.speciesToWeightOfFAR[species])
-                .sort((a, b) => a.weight < b.weight)
-            setSpeciesAndWeightArray(array)
-        }
-    }, [props.speciesToWeightOfFAR])
-
-    useEffect(() => {
-        if(isOpen) {
-            firstUpdate.current = false
-        }
-    }, [isOpen])
-
-    const getFARMessageResumeTitleText = () =>
-      props.totalFARWeight > 0
-        ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalFARWeight} kg pêchés au total`
-        : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucune capture`
-
-    const getFARMessageResumeTitle = () => {
-        return props.totalFARWeight > 0
-          ? <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalFARWeight} kg pêchés au total</>
-          : <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - aucune capture</>
+  useEffect(() => {
+    if (props.speciesToWeightOfFAR) {
+      const array = Object.keys(props.speciesToWeightOfFAR)
+        .map(species => props.speciesToWeightOfFAR[species])
+        .sort((a, b) => a.weight < b.weight)
+      setSpeciesAndWeightArray(array)
     }
+  }, [props.speciesToWeightOfFAR])
 
-    const increaseChartHeight = height => {
-        setChartHeight(chartHeight + height)
+  useEffect(() => {
+    if (isOpen) {
+      firstUpdate.current = false
     }
+  }, [isOpen])
 
-    return <Wrapper>
+  const getFARMessageResumeTitleText = () =>
+    props.totalFARWeight > 0
+      ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalFARWeight} kg pêchés au total`
+      : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucune capture`
+
+  const getFARMessageResumeTitle = () => {
+    return props.totalFARWeight > 0
+      ? <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalFARWeight} kg pêchés au total</>
+      : <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - aucune capture</>
+  }
+
+  const increaseChartHeight = height => {
+    setChartHeight(chartHeight + height)
+  }
+
+  return <Wrapper>
         <ERSMessageResumeHeader
             onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
             title={props.hasNoMessage ? null : getFARMessageResumeTitle()}
@@ -51,8 +51,9 @@ const FARMessageResume = props => {
             setIsOpen={setIsOpen}
             isOpen={isOpen}/>
         {
-            props.hasNoMessage ? null :
-                <ERSMessageContent
+            props.hasNoMessage
+              ? null
+              : <ERSMessageContent
                     id={props.id}
                     chartHeight={chartHeight}
                     species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}

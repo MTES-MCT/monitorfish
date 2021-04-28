@@ -1,19 +1,20 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import RegulatoryZoneSelectionItem from "./RegulatoryZoneSelectionItem";
-import {COLORS} from "../../constants/constants";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import RegulatoryZoneSelectionItem from './RegulatoryZoneSelectionItem'
+import { COLORS } from '../../constants/constants'
 
 const RegulatoryZoneSelectionList = props => {
-    const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({})
+  const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({})
 
-    useEffect(() => {
-        setFoundRegulatoryZones(props.foundRegulatoryZones)
-    }, [props.foundRegulatoryZones])
+  useEffect(() => {
+    setFoundRegulatoryZones(props.foundRegulatoryZones)
+  }, [props.foundRegulatoryZones])
 
-    return (
+  return (
         <List showRegulatorySearchInput={props.showRegulatorySection} foundRegulatoryZones={foundRegulatoryZones}>
             {
-                foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0 ? Object.keys(foundRegulatoryZones).map((regulatoryZoneName) => {
+                foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0
+                  ? Object.keys(foundRegulatoryZones).map((regulatoryZoneName) => {
                     return (<ListItem key={regulatoryZoneName}>
                         <RegulatoryZoneSelectionItem
                             key={regulatoryZoneName}
@@ -24,10 +25,11 @@ const RegulatoryZoneSelectionList = props => {
                             gears={props.gears}
                         />
                     </ListItem>)
-                }) : null
+                  })
+                  : null
             }
         </List>
-    );
+  )
 }
 
 const List = styled.ul`

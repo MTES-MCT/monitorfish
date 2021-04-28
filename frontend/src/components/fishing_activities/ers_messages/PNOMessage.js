@@ -1,31 +1,31 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {getDate, getDateTime} from "../../../utils";
-import ERSMessageSpecies from "./ERSMessageSpecies";
-import {buildCatchArray, ERSMessagePNOPurposeType} from "../../../domain/entities/ERS";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { getDate, getDateTime } from '../../../utils'
+import ERSMessageSpecies from './ERSMessageSpecies'
+import { buildCatchArray, ERSMessagePNOPurposeType } from '../../../domain/entities/ERS'
 
 const PNOMessage = props => {
-    const [catches, setCatches] = useState([])
+  const [catches, setCatches] = useState([])
 
-    useEffect(() => {
-        if (props.message && props.message.catchOnboard) {
-            let catches = buildCatchArray(props.message.catchOnboard)
+  useEffect(() => {
+    if (props.message && props.message.catchOnboard) {
+      const catches = buildCatchArray(props.message.catchOnboard)
 
-            setCatches(catches)
-        } else {
-            setCatches([])
-        }
-    }, [props.message])
+      setCatches(catches)
+    } else {
+      setCatches([])
+    }
+  }, [props.message])
 
-    return <>
-        { props.message ?
-            <>
+  return <>
+        { props.message
+          ? <>
                 <Zone>
                     <Fields>
                         <TableBody>
                             <Field>
-                                <Key>Date prévue d'arrivée</Key>
+                                <Key>Date prévue d&apos;arrivée</Key>
                                 <Value>{props.message.predictedArrivalDatetimeUtc ? <>{getDateTime(props.message.predictedArrivalDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
@@ -33,7 +33,7 @@ const PNOMessage = props => {
                                 <Value>{props.message.tripStartDate ? <>{getDate(props.message.tripStartDate)}</> : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
-                                <Key>Port d'arrivée</Key>
+                                <Key>Port d&apos;arrivée</Key>
                                 <Value>{props.message.port && props.message.portName ? <>{props.message.portName} ({props.message.port})</> : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
@@ -46,7 +46,7 @@ const PNOMessage = props => {
                 <SpeciesList>
                     {
                         catches.map((speciesCatch, index) => {
-                            return <ERSMessageSpecies
+                          return <ERSMessageSpecies
                                 index={index + 1}
                                 isLast={catches.length === index + 1}
                                 species={speciesCatch}
@@ -55,7 +55,8 @@ const PNOMessage = props => {
                         })
                     }
                 </SpeciesList>
-            </> : null }
+            </>
+          : null }
     </>
 }
 

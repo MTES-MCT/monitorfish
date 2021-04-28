@@ -1,44 +1,44 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import SpeciesAndWeightChart from "./SpeciesAndWeightChart";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import SpeciesAndWeightChart from './SpeciesAndWeightChart'
+import { ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
 
 const DISMessageResume = props => {
-    const [isOpen, setIsOpen] = useState(false)
-    const firstUpdate = useRef(true);
-    const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
-    const [chartHeight, setChartHeight] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+  const firstUpdate = useRef(true)
+  const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
+  const [chartHeight, setChartHeight] = useState(0)
 
-    useEffect(() => {
-        if(props.speciesToWeightOfDIS) {
-            let array = Object.keys(props.speciesToWeightOfDIS)
-                .map(species => props.speciesToWeightOfDIS[species])
-                .sort((a, b) => a.weight < b.weight)
-            setSpeciesAndWeightArray(array)
-        }
-    }, [props.speciesToWeightOfDIS])
-
-    useEffect(() => {
-        if(isOpen) {
-            firstUpdate.current = false
-        }
-    }, [isOpen])
-
-    const increaseChartHeight = height => {
-        setChartHeight(chartHeight + height)
+  useEffect(() => {
+    if (props.speciesToWeightOfDIS) {
+      const array = Object.keys(props.speciesToWeightOfDIS)
+        .map(species => props.speciesToWeightOfDIS[species])
+        .sort((a, b) => a.weight < b.weight)
+      setSpeciesAndWeightArray(array)
     }
+  }, [props.speciesToWeightOfDIS])
 
-    const getDISMessageResumeTitleText = () => {
-        return `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalDISWeight} kg rejetés au total`
+  useEffect(() => {
+    if (isOpen) {
+      firstUpdate.current = false
     }
+  }, [isOpen])
 
-    const getDISMessageResumeTitle = () => {
-        return <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalDISWeight} kg rejetés au total</>
-    }
+  const increaseChartHeight = height => {
+    setChartHeight(chartHeight + height)
+  }
 
-    return <Wrapper>
+  const getDISMessageResumeTitleText = () => {
+    return `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalDISWeight} kg rejetés au total`
+  }
+
+  const getDISMessageResumeTitle = () => {
+    return <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalDISWeight} kg rejetés au total</>
+  }
+
+  return <Wrapper>
         <ERSMessageResumeHeader
             onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
             title={props.hasNoMessage ? null : getDISMessageResumeTitle()}
@@ -48,8 +48,9 @@ const DISMessageResume = props => {
             setIsOpen={setIsOpen}
             isOpen={isOpen}/>
         {
-            props.hasNoMessage ? null :
-                <ERSMessageContent
+            props.hasNoMessage
+              ? null
+              : <ERSMessageContent
                     id={props.id}
                     chartHeight={chartHeight}
                     species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}

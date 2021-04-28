@@ -1,27 +1,27 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {getCoordinates, getDateTime} from "../../../utils";
-import {WSG84_PROJECTION} from "../../../domain/entities/map";
-import ERSMessageSpecies from "./ERSMessageSpecies";
-import {buildCatchArray} from "../../../domain/entities/ERS";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { getCoordinates, getDateTime } from '../../../utils'
+import { WSG84_PROJECTION } from '../../../domain/entities/map'
+import ERSMessageSpecies from './ERSMessageSpecies'
+import { buildCatchArray } from '../../../domain/entities/ERS'
 
 const FARMessage = props => {
-    const [catches, setCatches] = useState([])
+  const [catches, setCatches] = useState([])
 
-    useEffect(() => {
-        if (props.message && props.message.catches) {
-            let catches = buildCatchArray(props.message.catches)
+  useEffect(() => {
+    if (props.message && props.message.catches) {
+      const catches = buildCatchArray(props.message.catches)
 
-            setCatches(catches)
-        } else {
-            setCatches([])
-        }
-    }, [props.message])
+      setCatches(catches)
+    } else {
+      setCatches([])
+    }
+  }, [props.message])
 
-    return <>
-        { props.message ?
-            <>
+  return <>
+        { props.message
+          ? <>
                 <Zone>
                     <Fields>
                         <TableBody>
@@ -32,24 +32,25 @@ const FARMessage = props => {
                             <Field>
                                 <Key>Position opération</Key>
                                 <Value>
-                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitude && props.message.longitude ?
-                                    getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[0] :
-                                    <NoValue>-</NoValue> }
-                                    <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude ?
-                                    getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[1] :
-                                    <NoValue>-</NoValue>}
+                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitude && props.message.longitude
+                                      ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[0]
+                                      : <NoValue>-</NoValue> }
+                                    <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude
+                                      ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[1]
+                                      : <NoValue>-</NoValue>}
                                 </Value>
                             </Field>
                         </TableBody>
                     </Fields>
                     {
-                        props.message.gear ?
-                            <Gear>
+                        props.message.gear
+                          ? <Gear>
                                 <SubKey>Engin à bord</SubKey>{' '}
                                 <SubValue>
                                     {
-                                        props.message.gearName ?
-                                            <>{props.message.gearName} ({props.message.gear})</> : props.message.gear
+                                        props.message.gearName
+                                          ? <>{props.message.gearName} ({props.message.gear})</>
+                                          : props.message.gear
                                     }
                                 </SubValue><br/>
                                 <SubFields>
@@ -62,13 +63,14 @@ const FARMessage = props => {
                                         <SubValue>{props.message.size ? <>{props.message.size}</> : <NoValue>-</NoValue>}</SubValue>
                                     </SubField>
                                 </SubFields>
-                            </Gear> : null
+                            </Gear>
+                          : null
                     }
                 </Zone>
                 <SpeciesList>
                     {
                         catches.map((speciesCatch, index) => {
-                            return <ERSMessageSpecies
+                          return <ERSMessageSpecies
                                 index={index + 1}
                                 hasManyProperties={speciesCatch.properties.length > 1}
                                 isLast={catches.length === index + 1}
@@ -78,10 +80,10 @@ const FARMessage = props => {
                         })
                     }
                 </SpeciesList>
-            </> : null }
+            </>
+          : null }
     </>
 }
-
 
 const FirstInlineKey = styled.div`
   color: ${COLORS.textGray};
@@ -118,15 +120,6 @@ const SubValue = styled.span`
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
   margin-right: 10px;
-`
-
-const GearName = styled.span`
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 190px;
-  display: inline-block;
-  vertical-align: top;
 `
 
 const SpeciesList = styled.ul`

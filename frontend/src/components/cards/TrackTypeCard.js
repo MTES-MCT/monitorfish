@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
 const TrackTypeCard = props => {
-    return (
+  return (
         <>
             <Body>
                 <Square color={props.trackType.color} />
@@ -13,7 +13,7 @@ const TrackTypeCard = props => {
                 <TriangleShadow isBig={props.isBig}/>
             </TrianglePointer>
         </>
-    )
+  )
 }
 
 const Text = styled.div`
@@ -46,7 +46,7 @@ const TriangleShadow = styled.div`
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.grayBackground} transparent transparent transparent;
-  margin-left: ${props => props.isBig ? '165px' : '95px' };
+  margin-left: ${props => props.isBig ? '165px' : '95px'};
   margin-top: -1px;
   clear: top;
 `

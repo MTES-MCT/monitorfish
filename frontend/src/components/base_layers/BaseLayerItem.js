@@ -1,44 +1,45 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {baseLayers} from "../../domain/entities/layers";
-import {Radio} from "rsuite";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { baseLayers } from '../../domain/entities/layers'
+import { Radio } from 'rsuite'
 
 const BaseLayerItem = props => {
-    const firstUpdate = useRef(true);
-    const [showLayer_, setShowLayer] = useState(undefined);
+  const firstUpdate = useRef(true)
+  const [showLayer_, setShowLayer] = useState(undefined)
 
-    useEffect(() => {
-        if (showLayer_ === undefined) {
-            setShowLayer(props.isShownOnInit)
-        }
-    }, [props.isShownOnInit, showLayer_])
+  useEffect(() => {
+    if (showLayer_ === undefined) {
+      setShowLayer(props.isShownOnInit)
+    }
+  }, [props.isShownOnInit, showLayer_])
 
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
 
-        if(showLayer_) {
-            props.callSelectBaseLayer(baseLayers[props.layer].code)
-        }
-    }, [showLayer_])
+    if (showLayer_) {
+      props.callSelectBaseLayer(baseLayers[props.layer].code)
+    }
+  }, [showLayer_])
 
-    return <>
-        {props.layer ?
-            <Row
-                className={`base-layers-selection`}
+  return <>
+        {props.layer
+          ? <Row
+                className={'base-layers-selection'}
             >
                     <Radio
                         onChange={() => {
-                            props.callSelectBaseLayer(baseLayers[props.layer].code)
+                          props.callSelectBaseLayer(baseLayers[props.layer].code)
                         }}
                         checked={props.isShownOnInit}
                         value={props.layer}>
                         {baseLayers[props.layer].text}
                     </Radio>
 
-            </Row> : null
+            </Row>
+          : null
         }
         </>
 }

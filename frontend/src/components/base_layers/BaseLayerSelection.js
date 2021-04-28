@@ -1,14 +1,14 @@
-import React, {useState} from "react";
-import styled from 'styled-components';
-import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
-import BaseLayerItem from "./BaseLayerItem";
-import {COLORS} from "../../constants/constants";
+import BaseLayerItem from './BaseLayerItem'
+import { COLORS } from '../../constants/constants'
 
 const BaseLayerSelection = props => {
-    const [showBaseLayers, setShowBaseLayers] = useState(false);
+  const [showBaseLayers, setShowBaseLayers] = useState(false)
 
-    return (
+  return (
         <>
             <SectionTitle onClick={() => setShowBaseLayers(!showBaseLayers)} showBaseLayers={showBaseLayers}>
                 Fonds de carte <ChevronIcon isOpen={showBaseLayers}/>
@@ -16,7 +16,7 @@ const BaseLayerSelection = props => {
             <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={props.baseLayers.length}>
                 {
                     props.baseLayers.map(layer => {
-                        return (<ListItem key={layer}>
+                      return (<ListItem key={layer}>
                             <BaseLayerItem
                                 isShownOnInit={props.selectedBaseLayer === layer}
                                 layer={layer}
@@ -27,7 +27,7 @@ const BaseLayerSelection = props => {
                 }
             </BaseLayersList>
         </>
-    )
+  )
 }
 
 const SectionTitle = styled.div`

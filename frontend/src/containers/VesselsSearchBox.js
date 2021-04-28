@@ -100,10 +100,12 @@ const VesselsSearchBox = () => {
   }
 
   function getFoundVesselsOnMap () {
-    let vessels = vesselsLayerSource.getFeatures().map(feature => {
+    const vessels = vesselsLayerSource.getFeatures().map(feature => {
       if (findMatchingFeature(feature)) {
         return feature
       }
+
+      return null
     }).filter(vessel => vessel)
 
     const firstThirtyVessels = vessels.slice(0, 30)
@@ -118,21 +120,21 @@ const VesselsSearchBox = () => {
           ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().internalReferenceNumber === vessel.internalReferenceNumber)
           : false) ||
         (vessel.externalReferenceNumber
-         ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().externalReferenceNumber === vessel.externalReferenceNumber)
-         : false) ||
+          ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().externalReferenceNumber === vessel.externalReferenceNumber)
+          : false) ||
         (vessel.ircs
-         ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().ircs === vessel.ircs)
-         : false))
+          ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().ircs === vessel.ircs)
+          : false))
     })
   }
 
   useEffect(() => {
     if (searchText.length > 1) {
-      let foundVesselsOnMap = getFoundVesselsOnMap()
+      const foundVesselsOnMap = getFoundVesselsOnMap()
       setFoundVesselsOnMap(foundVesselsOnMap)
 
       dispatch(searchVessels(searchText.toUpperCase())).then(foundVesselsFromAPI => {
-        let distinctFoundVessels = removeDuplicatedFoundVessels(foundVesselsFromAPI, foundVesselsOnMap)
+        const distinctFoundVessels = removeDuplicatedFoundVessels(foundVesselsFromAPI, foundVesselsOnMap)
         setFoundVesselsFromAPI(distinctFoundVessels)
       })
     } else {
@@ -170,16 +172,17 @@ const VesselsSearchBox = () => {
         }}
         key={id}>
         <div>
-          {flagState ?
-            <Flag rel="preload"
+          {flagState
+            ? <Flag rel="preload"
                   title={countries.getName(flagState, 'fr')}
-                  src={`flags/${flagState.toLowerCase()}.svg`}/> : null}
+                  src={`flags/${flagState.toLowerCase()}.svg`}/>
+            : null}
           <Name>
             <Highlighter
               highlightClassName="highlight"
               searchWords={[searchText]}
               autoEscape={true}
-              textToHighlight={vesselName ? vesselName : 'SANS NOM'}
+              textToHighlight={vesselName || 'SANS NOM'}
             />
           </Name>
         </div>
@@ -189,7 +192,7 @@ const VesselsSearchBox = () => {
               highlightClassName="highlight"
               searchWords={[searchText]}
               autoEscape={true}
-              textToHighlight={internalReferenceNumber ? internalReferenceNumber : ''}
+              textToHighlight={internalReferenceNumber || ''}
             />
             {internalReferenceNumber ? null : <Light>Inconnu</Light>}
             {' '}<Light>(CFR)</Light>
@@ -199,7 +202,7 @@ const VesselsSearchBox = () => {
               highlightClassName="highlight"
               searchWords={[searchText]}
               autoEscape={true}
-              textToHighlight={externalReferenceNumber ? externalReferenceNumber : ''}
+              textToHighlight={externalReferenceNumber || ''}
             />
             {externalReferenceNumber ? null : <Light>Inconnu</Light>}
             {' '}<Light>(Marq. Ext.)</Light>
@@ -211,7 +214,7 @@ const VesselsSearchBox = () => {
               highlightClassName="highlight"
               searchWords={[searchText]}
               autoEscape={true}
-              textToHighlight={mmsi ? mmsi : ''}
+              textToHighlight={mmsi || ''}
             />
             {mmsi ? null : <Light>Inconnu</Light>}
             {' '}<Light>(MMSI)</Light>
@@ -221,7 +224,7 @@ const VesselsSearchBox = () => {
               highlightClassName="highlight"
               searchWords={[searchText]}
               autoEscape={true}
-              textToHighlight={ircs ? ircs : ''}
+              textToHighlight={ircs || ''}
             />
             {ircs ? null : <Light>Inconnu</Light>}
             {' '}<Light>(Call Sign)</Light>
@@ -241,8 +244,8 @@ const VesselsSearchBox = () => {
         ref={wrapperRef}>
         <SearchBoxField>
           {
-            !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity ?
-              <SelectedVessel
+            !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity
+              ? <SelectedVessel
                 onClick={() => {
                   if (vesselSidebarIsOpen) {
                     dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_TITLE))
@@ -252,9 +255,11 @@ const VesselsSearchBox = () => {
                 vesselName={selectedVesselFeatureAndIdentity.identity.vesselName}
                 isFocusedOnVesselSearch={isFocusedOnVesselSearch}
               >
-                {selectedVesselFeatureAndIdentity.identity.flagState ? <Flag
+                {selectedVesselFeatureAndIdentity.identity.flagState
+                  ? <Flag
                   title={countries.getName(selectedVesselFeatureAndIdentity.identity.flagState, 'fr')}
-                  src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`}/> : null}
+                  src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`}/>
+                  : null}
                 <VesselName>
                   {selectedVesselFeatureAndIdentity.identity.vesselName}
                   {' '}
@@ -265,7 +270,8 @@ const VesselsSearchBox = () => {
                 <CloseIcon onClick={() => {
                   setSelectedVesselFeatureAndIdentity(null)
                 }}/>
-              </SelectedVessel> : <SearchBoxInput
+              </SelectedVessel>
+              : <SearchBoxInput
                 ref={input => selectedVesselFeatureAndIdentity ? input && input.focus() : null}
                 type="text"
                 firstUpdate={firstUpdate}
@@ -279,11 +285,12 @@ const VesselsSearchBox = () => {
         </SearchBoxField>
         {
           (foundVesselsOnMap && foundVesselsOnMap.length) ||
-          (foundVesselsFromAPI && foundVesselsFromAPI.length) ? <Results>
+          (foundVesselsFromAPI && foundVesselsFromAPI.length)
+            ? <Results>
             <List>
               {
                 foundVesselsOnMap.map((feature, index) => {
-                  let vessel = getVesselIdentityFromFeature(feature)
+                  const vessel = getVesselIdentityFromFeature(feature)
 
                   return getListItem(
                     feature.id_,
@@ -310,7 +317,8 @@ const VesselsSearchBox = () => {
                 })
               }
             </List>
-          </Results> : ''
+          </Results>
+            : ''
         }
       </Wrapper>
       <SearchButton
@@ -412,11 +420,11 @@ const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
   
-  animation: ${props => props.isShowed ? `vessel-search-box-opening` : `vessel-search-box-closing`} 0.2s ease forwards,
-    ${props => props.selectedVesselFeatureAndIdentity 
-      ? props.rightMenuIsOpen && props.vesselSidebarIsOpen 
-        ? 'vessel-search-box-opening-with-right-menu-hover' 
-        : 'vessel-search-box-closing-with-right-menu-hover' 
+  animation: ${props => props.isShowed ? 'vessel-search-box-opening' : 'vessel-search-box-closing'} 0.2s ease forwards,
+    ${props => props.selectedVesselFeatureAndIdentity
+      ? props.rightMenuIsOpen && props.vesselSidebarIsOpen
+        ? 'vessel-search-box-opening-with-right-menu-hover'
+        : 'vessel-search-box-closing-with-right-menu-hover'
       : null} 0.3s ease forwards;
 
   @keyframes vessel-search-box-opening {
@@ -520,7 +528,7 @@ const SearchButton = styled.button`
   border-radius: 2px;
   position: absolute;
   
-  animation: ${props => props.isShowed ? `vessel-search-button-showed` : `vessel-search-button-hidden`} 0.2s ease forwards,
+  animation: ${props => props.isShowed ? 'vessel-search-button-showed' : 'vessel-search-button-hidden'} 0.2s ease forwards,
   ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-search-icon-closing' : 'vessel-search-icon-opening'} 0.3s ease forwards;
 
   @keyframes vessel-search-button-showed {

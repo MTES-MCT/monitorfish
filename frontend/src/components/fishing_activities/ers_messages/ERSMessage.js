@@ -121,6 +121,12 @@ const ERSMessage = props => {
                         </CorrectedMessage> : null
                     }
                     {
+                        props.message.deleted ? <CorrectedMessage>
+                            <MessageCorrected/>
+                            <CorrectedMessageText>MESSAGE SUPPRIMÉ</CorrectedMessageText>
+                        </CorrectedMessage> : null
+                    }
+                    {
                         props.message.referencedErsId ? <CorrectedMessage>
                             <MessageOK/>
                             <OKMessageText>MESSAGE CORRIGÉ</OKMessageText>

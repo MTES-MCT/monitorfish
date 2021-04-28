@@ -302,6 +302,7 @@ const FishingActivitiesSummary = props => {
                                         showERSMessages={props.showERSMessages}
                                         depMessage={depMessage.message}
                                         isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
+                                        isDeleted={depMessage.deleted}
                                         rejectionCause={depMessage.acknowledge && depMessage.acknowledge.rejectionCause ? depMessage.acknowledge.rejectionCause : null}/> :
                                     <DEPMessageResume hasNoMessage={true}/>
                                 }
@@ -330,6 +331,8 @@ const FishingActivitiesSummary = props => {
                                         speciesToWeightOfPNO={speciesToWeightOfPNO}
                                         speciesToWeightOfFAR={speciesToWeightOfFAR}
                                         showERSMessages={props.showERSMessages}
+                                        isNotAcknowledged={pnoMessage.acknowledge && pnoMessage.acknowledge.isSuccess === false}
+                                        isDeleted={pnoMessage.deleted}
                                         pnoMessage={pnoMessage}/> :
                                     <PNOMessageResume hasNoMessage={true}/>
                                 }
@@ -343,6 +346,8 @@ const FishingActivitiesSummary = props => {
                                         speciesToWeightOfPNO={speciesToWeightOfPNO}
                                         speciesToWeightOfLAN={speciesToWeightOfLAN}
                                         showERSMessages={props.showERSMessages}
+                                        isNotAcknowledged={lanMessage.acknowledge && lanMessage.acknowledge.isSuccess === false}
+                                        isDeleted={lanMessage.deleted}
                                         lanMessage={lanMessage.message}/> :
                                     <LANMessageResume hasNoMessage={true}/>
                                 }

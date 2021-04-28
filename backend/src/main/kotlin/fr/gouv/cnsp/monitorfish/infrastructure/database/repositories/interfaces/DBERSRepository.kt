@@ -26,10 +26,12 @@ interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExe
     fun findLastDepartureDateByIRCS(ircs: String, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
 
     @Query("WITH dat_cor AS (select * from ers e where e.cfr = ?1 and e.operation_datetime_utc >= ?2 AND operation_type IN ('DAT', 'COR') order by e.operation_datetime_utc desc), " +
-            "ret AS (select * from ers e where e.referenced_ers_id IN (select ers_id FROM dat_cor) and e.operation_datetime_utc >= ?2 AND operation_type = 'RET' order by e.operation_datetime_utc desc) " +
+            "ret AS (select * from ers e where e.referenced_ers_id IN (select ers_id FROM dat_cor) and e.operation_datetime_utc >= ?2 AND operation_type = 'RET' order by e.operation_datetime_utc desc), " +
+            "del AS (select * from ers e where e.referenced_ers_id IN (select ers_id FROM dat_cor) and e.operation_datetime_utc >= ?2 AND operation_type = 'DEL' order by e.operation_datetime_utc desc) " +
             "SELECT * " +
             "FROM dat_cor " +
-            "UNION ALL SELECT * from ret", nativeQuery = true)
+            "UNION ALL SELECT * from ret " +
+            "UNION ALL SELECT * from del", nativeQuery = true)
     fun findERSMessagesAfterOperationDateTime(internalReferenceNumber: String, dateTime: Instant): List<ERSEntity>
 
     @Query("select * from ers where ers_id in " +

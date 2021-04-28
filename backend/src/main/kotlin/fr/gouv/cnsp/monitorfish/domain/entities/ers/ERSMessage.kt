@@ -22,6 +22,7 @@ class ERSMessage(
         val messageType: String? = null,
         val parsedIntegrationDateTime: ZonedDateTime? = null,
         var acknowledge: Acknowledge? = null,
+        var deleted: Boolean? = false,
         val message: ERSMessageValue? = null,
         val analyzedByRules: List<String>,
         var rawMessage: String? = null)

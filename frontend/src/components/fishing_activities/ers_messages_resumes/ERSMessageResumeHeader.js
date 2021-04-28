@@ -28,10 +28,16 @@ const ERSMessageResumeHeader = props => {
                     <ERSMessageName
                       isNotAcknowledged={props.isNotAcknowledged}
                       hasNoMessage={props.hasNoMessage}
-                      title={props.rejectionCause}>
+                      title={
+                        props.rejectionCause
+                          ? props.rejectionCause
+                          : props.isDeleted
+                            ? 'Message supprimé'
+                            : ''
+                      }>
                       {
-                        props.isNotAcknowledged
-                          ? <NotAcknowledged />
+                        props.isNotAcknowledged || props.isDeleted
+                          ? <NotAcknowledgedOrDeleted />
                           : null
                       }
                         { ERSMessageTypeEnum[props.messageType].name }
@@ -63,7 +69,7 @@ const ShowThisMessage = styled(ArrowSVG)`
   cursor: pointer;
 `
 
-const NotAcknowledged = styled(NotAcknowledgedSVG)`
+const NotAcknowledgedOrDeleted = styled(NotAcknowledgedSVG)`
   width: 12px;
   vertical-align: text-bottom;
   margin-right: 5px;

@@ -22,6 +22,7 @@ data class ERSMessageDataOutput(
         val imo: String? = null,
         val messageType: String? = null,
         var acknowledge: Acknowledge? = null,
+        var deleted: Boolean? = false,
         val message: ERSMessageValue? = null,
         var rawMessage: String? = null) {
     companion object {
@@ -32,6 +33,7 @@ data class ERSMessageDataOutput(
                 ircs = ersMessage.ircs,
                 isCorrected = ersMessage.isCorrected,
                 acknowledge = ersMessage.acknowledge,
+                deleted = ersMessage.deleted,
                 operationDateTime = ersMessage.operationDateTime,
                 vesselName = ersMessage.vesselName,
                 operationType = ersMessage.operationType,

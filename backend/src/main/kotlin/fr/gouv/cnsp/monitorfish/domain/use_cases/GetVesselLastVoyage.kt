@@ -75,7 +75,7 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                     it
                 }
 
-        flagCorrectedAndAcknowledgedMessages(messages)
+        flagCorrectedAcknowledgedAndDeletedMessages(messages)
 
         val ersMessages = messages.filter {
             it.operationType == ERSOperationType.DAT ||
@@ -85,29 +85,40 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
         return ERSMessagesAndAlerts(ersMessages, alerts)
     }
 
-    private fun flagCorrectedAndAcknowledgedMessages(messages: List<ERSMessage>) {
+    private fun flagCorrectedAcknowledgedAndDeletedMessages(messages: List<ERSMessage>) {
         messages.forEach { ersMessage ->
-            if (ersMessage.operationType == ERSOperationType.COR &&
-                    !ersMessage.referencedErsId.isNullOrEmpty()) {
-                val correctedMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
-
-                if(correctedMessage != null) {
-                    correctedMessage.isCorrected = true
-                } else {
-                    logger.warn("Original message ${ersMessage.referencedErsId} corrected by message COR ${ersMessage.operationNumber} is not found.")
-                }
-            } else if (ersMessage.operationType == ERSOperationType.RET &&
-                    !ersMessage.referencedErsId.isNullOrEmpty()) {
-                val foundOriginalMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
-                foundOriginalMessage?.acknowledge = ersMessage.message as Acknowledge
-                foundOriginalMessage?.acknowledge?.let {
-                    it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
-                }
-            } else if (ersMessage.operationType == ERSOperationType.DEL &&
-                    !ersMessage.referencedErsId.isNullOrEmpty()) {
-                val deletedMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
-                deletedMessage?.deleted = true
+            if (ersMessage.operationType == ERSOperationType.COR && !ersMessage.referencedErsId.isNullOrEmpty()) {
+                flagMessageAsCorrected(messages, ersMessage)
+            } else if (ersMessage.operationType == ERSOperationType.RET && !ersMessage.referencedErsId.isNullOrEmpty()) {
+                flagMessageAsAcknowledged(messages, ersMessage)
+            } else if (ersMessage.operationType == ERSOperationType.DEL && !ersMessage.referencedErsId.isNullOrEmpty()) {
+                flagMessageAsDeleted(messages, ersMessage)
             }
+        }
+    }
+
+    private fun flagMessageAsDeleted(messages: List<ERSMessage>, ersMessage: ERSMessage) {
+        val deletedMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
+
+        deletedMessage?.deleted = true
+    }
+
+    private fun flagMessageAsAcknowledged(messages: List<ERSMessage>, ersMessage: ERSMessage) {
+        val acknowledgedOrNotMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
+
+        acknowledgedOrNotMessage?.acknowledge = ersMessage.message as Acknowledge
+        acknowledgedOrNotMessage?.acknowledge?.let {
+            it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
+        }
+    }
+
+    private fun flagMessageAsCorrected(messages: List<ERSMessage>, ersMessage: ERSMessage) {
+        val correctedMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
+
+        if (correctedMessage != null) {
+            correctedMessage.isCorrected = true
+        } else {
+            logger.warn("Original message ${ersMessage.referencedErsId} corrected by message COR ${ersMessage.operationNumber} is not found.")
         }
     }
 

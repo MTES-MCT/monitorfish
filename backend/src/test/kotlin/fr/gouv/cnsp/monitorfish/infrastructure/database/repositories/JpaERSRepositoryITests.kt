@@ -221,7 +221,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         val ackMessage4 = messages[15].message as Acknowledge
         assertThat(ackMessage4.returnStatus).isEqualTo("000")
 
-        // RET
+        // DEL
         assertThat(messages[16].operationType).isEqualTo(ERSOperationType.DEL)
         assertThat(messages[16].referencedErsId).isEqualTo("OOF20190627059908")
     }

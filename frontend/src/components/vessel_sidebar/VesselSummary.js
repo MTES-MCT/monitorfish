@@ -1,168 +1,168 @@
-import React, {useEffect, useState} from "react";
-import styled from 'styled-components';
-import {ReactComponent as NoVesselSVG} from '../icons/Picto_photo_navire_manquante.svg';
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { ReactComponent as NoVesselSVG } from '../icons/Picto_photo_navire_manquante.svg'
 
-import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../../utils";
-import {WSG84_PROJECTION} from "../../domain/entities/map";
-import {COLORS} from "../../constants/constants";
-import * as timeago from 'timeago.js';
-import {ReactComponent as InfoSVG} from '../icons/Information.svg';
-
+import { getCoordinates, getDateTime, timeagoFrenchLocale } from '../../utils'
+import { WSG84_PROJECTION } from '../../domain/entities/map'
+import { COLORS } from '../../constants/constants'
+import * as timeago from 'timeago.js'
+import { ReactComponent as InfoSVG } from '../icons/Information.svg'
 
 import { vesselsAreEquals } from '../../domain/entities/vessel'
-timeago.register('fr', timeagoFrenchLocale);
+timeago.register('fr', timeagoFrenchLocale)
 
 const VesselSummary = props => {
-    const [photoFallback, setPhotoFallback] = useState(false)
-    const [vessel, setVessel] = useState(null);
-    const [lastPosition, setLastPosition] = useState(null);
-    const [gears, setGears] = useState([])
-    const [faoZones, setFaoZones] = useState([])
-    const [fleetSegments, setFleetSegments] = useState([])
+  const [photoFallback, setPhotoFallback] = useState(false)
+  const [vessel, setVessel] = useState(null)
+  const [lastPosition, setLastPosition] = useState(null)
+  const [gears, setGears] = useState([])
+  const [faoZones, setFaoZones] = useState([])
+  const [fleetSegments, setFleetSegments] = useState([])
 
-    useEffect(() => {
-        if (props.vessel) {
-            if(props.vessel.positions.length) {
-                setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
-            } else {
-                if(!vesselsAreEquals(props.vessel, vessel)) {
-                    setLastPosition(null)
-                }
-            }
-
-            if(props.vessel.mmsi) {
-                setPhotoFallback(false)
-            } else {
-                setPhotoFallback(true)
-            }
-
-            if(props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().speciesOnboard) {
-                const faoZones = props.vesselLastPositionFeature.getProperties().speciesOnboard.map(species => {
-                    return species.faoZone
-                })
-
-                setFaoZones([...new Set(faoZones)])
-            } else {
-                setFaoZones([])
-            }
-
-            setVessel(props.vessel)
+  useEffect(() => {
+    if (props.vessel) {
+      if (props.vessel.positions.length) {
+        setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+      } else {
+        if (!vesselsAreEquals(props.vessel, vessel)) {
+          setLastPosition(null)
         }
-    }, [props.vessel, props.error])
+      }
 
-    useEffect(() => {
-        if(props.gears && props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().gearOnboard) {
-            const gears = props.vesselLastPositionFeature.getProperties().gearOnboard.map(gearERS => {
-                let foundGear = props.gears.find(gear => gear.code === gearERS.gear)
-                return {
-                    name: foundGear ? foundGear.name : null,
-                    code: gearERS.gear
-                }
-            })
+      if (props.vessel.mmsi) {
+        setPhotoFallback(false)
+      } else {
+        setPhotoFallback(true)
+      }
 
-            setGears(gears)
-        } else {
-            setGears([])
+      if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().speciesOnboard) {
+        const faoZones = props.vesselLastPositionFeature.getProperties().speciesOnboard.map(species => {
+          return species.faoZone
+        })
+
+        setFaoZones([...new Set(faoZones)])
+      } else {
+        setFaoZones([])
+      }
+
+      setVessel(props.vessel)
+    }
+  }, [props.vessel, props.error])
+
+  useEffect(() => {
+    if (props.gears && props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().gearOnboard) {
+      const gears = props.vesselLastPositionFeature.getProperties().gearOnboard.map(gearERS => {
+        const foundGear = props.gears.find(gear => gear.code === gearERS.gear)
+        return {
+          name: foundGear ? foundGear.name : null,
+          code: gearERS.gear
         }
-    }, [props.gears, props.vessel])
+      })
 
-    useEffect(() => {
-        if(props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments &&
+      setGears(gears)
+    } else {
+      setGears([])
+    }
+  }, [props.gears, props.vessel])
+
+  useEffect(() => {
+    if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments &&
           props.vesselLastPositionFeature.getProperties().segments.length) {
-            if(props.fleetSegments && props.fleetSegments.length) {
-                let nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
-                    let found = props.fleetSegments.find(segmentWithProperties => segmentWithProperties.segment === segment)
+      if (props.fleetSegments && props.fleetSegments.length) {
+        const nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
+          const found = props.fleetSegments.find(segmentWithProperties => segmentWithProperties.segment === segment)
 
-                    if(found) {
-                        return found
-                    } else {
-                        return {
-                            segment: segment
-                        }
-                    }
-                }).filter(segment => segment)
-                setFleetSegments(nextFleetSegments)
-            } else {
-                let nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
-                    return {
-                        segment: segment
-                    }
-                })
-                setFleetSegments(nextFleetSegments)
+          if (found) {
+            return found
+          } else {
+            return {
+              segment: segment
             }
-        } else {
-            setFleetSegments([])
-        }
-    }, [props.fleetSegments, props.vesselLastPositionFeature])
+          }
+        }).filter(segment => segment)
+        setFleetSegments(nextFleetSegments)
+      } else {
+        const nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
+          return {
+            segment: segment
+          }
+        })
+        setFleetSegments(nextFleetSegments)
+      }
+    } else {
+      setFleetSegments([])
+    }
+  }, [props.fleetSegments, props.vesselLastPositionFeature])
 
-    function getSegmentInfo (segment) {
-        if(segment.gears || segment.faoAreas || segment.targetSpecies || segment.dirm || segment.bycatchSpecies) {
-            let gears = segment.gears && segment.gears.length ? segment.gears.join(', ') : 'aucun'
-            let faoAreas = segment.faoAreas && segment.faoAreas.length ? segment.faoAreas.join(', ') : 'aucune'
-            let dirm = segment.dirm && segment.dirm.length ? segment.dirm.join(', ') : 'aucune'
+  function getSegmentInfo (segment) {
+    if (segment.gears || segment.faoAreas || segment.targetSpecies || segment.dirm || segment.bycatchSpecies) {
+      const gears = segment.gears && segment.gears.length ? segment.gears.join(', ') : 'aucun'
+      const faoAreas = segment.faoAreas && segment.faoAreas.length ? segment.faoAreas.join(', ') : 'aucune'
+      const dirm = segment.dirm && segment.dirm.length ? segment.dirm.join(', ') : 'aucune'
 
-            let targetSpeciesArray = []
-            if(segment.targetSpecies && segment.targetSpecies.length) {
-                targetSpeciesArray = targetSpeciesArray.concat(segment.targetSpecies)
-            }
-            if(segment.bycatchSpecies && segment.bycatchSpecies.length) {
-                targetSpeciesArray = targetSpeciesArray.concat(segment.bycatchSpecies)
-            }
-            let targetSpecies = targetSpeciesArray && targetSpeciesArray.length ? targetSpeciesArray.join(', ') : 'aucune'
+      let targetSpeciesArray = []
+      if (segment.targetSpecies && segment.targetSpecies.length) {
+        targetSpeciesArray = targetSpeciesArray.concat(segment.targetSpecies)
+      }
+      if (segment.bycatchSpecies && segment.bycatchSpecies.length) {
+        targetSpeciesArray = targetSpeciesArray.concat(segment.bycatchSpecies)
+      }
+      const targetSpecies = targetSpeciesArray && targetSpeciesArray.length ? targetSpeciesArray.join(', ') : 'aucune'
 
-            return `Engins: ${gears}
+      return `Engins: ${gears}
 Zones FAO: ${faoAreas}
 Espèces: ${targetSpecies}
 Façade: ${dirm}`
+    } else {
+      return 'Segment de flotte inconnu'
+    }
+  }
+
+  function getVesselOrLastPositionProperty (propertyName) {
+    if (vessel && vessel[propertyName]) {
+      return vessel[propertyName]
+    } else if (lastPosition && lastPosition[propertyName]) {
+      return lastPosition[propertyName]
+    } else {
+      return <NoValue>-</NoValue>
+    }
+  }
+
+  function getGears () {
+    if (gears && gears.length) {
+      const uniqueGears = gears.reduce((acc, current) => {
+        const found = acc.find(item =>
+          item.code === current.code &&
+                  item.name === current.name)
+        if (!found) {
+          return acc.concat([current])
         } else {
-            return 'Segment de flotte inconnu'
+          return acc
         }
+      }, [])
+
+      return uniqueGears.map(gear => {
+        return gear.name
+          ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+          : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+      })
     }
 
-    function getVesselOrLastPositionProperty (propertyName) {
-        if(vessel && vessel[propertyName]) {
-            return vessel[propertyName]
-        } else if (lastPosition && lastPosition[propertyName]) {
-            return lastPosition[propertyName]
-        } else {
-            return <NoValue>-</NoValue>
-        }
-    }
+    return <NoValue>-</NoValue>
+  }
 
-    function getGears () {
-        if(gears && gears.length) {
-            const uniqueGears = gears.reduce((acc, current) => {
-                const found = acc.find(item =>
-                  item.code === current.code &&
-                  item.name === current.name);
-                if (!found) {
-                    return acc.concat([current]);
-                } else {
-                    return acc;
-                }
-            }, [])
-
-            return uniqueGears.map(gear => {
-                  return gear.name ?
-                    <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                    : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-
-              })
-        }
-
-        return <NoValue>-</NoValue>
-    }
-
-    return vessel ? (
+  return vessel
+    ? (
         <Body>
             <PhotoZone>
                 {
-                    photoFallback ?
-                        <NoVessel /> :
-                        <>
+                    photoFallback
+                      ? <NoVessel />
+                      : <>
                             {
-                                vessel.mmsi ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
-                                    : null
+                                vessel.mmsi
+                                  ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                                  : null
                             }
                         </>
                 }
@@ -178,19 +178,20 @@ Façade: ${dirm}`
                     <FieldName>Route</FieldName>
                     <FieldValue>{lastPosition && !isNaN(lastPosition.course) ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
                     <FieldName>Vitesse</FieldName>
-                    <FieldValue>{lastPosition && !isNaN(lastPosition.speed)? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+                    <FieldValue>{lastPosition && !isNaN(lastPosition.speed) ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
                 </Course>
                 <Position>
                     <FieldName>Dernier signal VMS</FieldName>
                     <FieldValue>
                         {
-                            lastPosition && lastPosition.dateTime ? <>
+                            lastPosition && lastPosition.dateTime
+                              ? <>
                                     {getDateTime(lastPosition.dateTime, true)}{' '}
                                     <Gray>(UTC)</Gray></>
-                                : <NoValue>-</NoValue>
+                              : <NoValue>-</NoValue>
                         }
                     </FieldValue>
-                    <FieldName>Dernier cadencement <Info title={"Cette valeur est calculée à partir des 2 dernières positions VMS reçues"}/></FieldName>
+                    <FieldName>Dernier cadencement <Info title={'Cette valeur est calculée à partir des 2 dernières positions VMS reçues'}/></FieldName>
                     <FieldValue>
                         {
                             props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().emissionPeriod
@@ -251,7 +252,7 @@ Façade: ${dirm}`
                                 {
                                     fleetSegments && fleetSegments.length
                                       ? fleetSegments.map((segment, index) => {
-                                          return <>
+                                        return <>
                                               {segment.segment}
                                               <Info isInfoSegment={true} title={getSegmentInfo(segment)}/>
                                               {fleetSegments.length === index + 1 ? '' : ', '}
@@ -274,7 +275,7 @@ Façade: ${dirm}`
                             <Value>
                                 {
                                     faoZones && faoZones.length
-                                      ? faoZones.join(", ")
+                                      ? faoZones.join(', ')
                                       : <NoValue>Aucune zone de pêche reçue</NoValue>
                                 }
                             </Value>
@@ -294,7 +295,8 @@ Façade: ${dirm}`
                 </Fields>
             </Zone>
         </Body>
-    ) : null
+      )
+    : null
 }
 
 const Gray = styled.span`

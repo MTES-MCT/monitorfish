@@ -1,71 +1,71 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import SpeciesAndWeightChart from "./SpeciesAndWeightChart";
-import {getDateTime} from "../../../utils";
-import {ERSMessagePNOPurposeType, ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import SpeciesAndWeightChart from './SpeciesAndWeightChart'
+import { getDateTime } from '../../../utils'
+import { ERSMessagePNOPurposeType, ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
 
 const PNOMessageResume = props => {
-    const [isOpen, setIsOpen] = useState(false)
-    const firstUpdate = useRef(true);
-    const [chartHeight, setChartHeight] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+  const firstUpdate = useRef(true)
+  const [chartHeight, setChartHeight] = useState(0)
 
-    const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
-    const [speciesNotLandedArray, setSpeciesNotLandedArray] = useState([])
-    const [totalWeightNotLanded, setTotalWeightNotLanded] = useState(null)
+  const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
+  const [speciesNotLandedArray, setSpeciesNotLandedArray] = useState([])
+  const [totalWeightNotLanded, setTotalWeightNotLanded] = useState(null)
 
-    useEffect(() => {
-        if(props.pnoMessage && props.speciesToWeightOfPNO && props.speciesToWeightOfFAR) {
-            let pnoSpeciesAndWeight = Object.keys(props.speciesToWeightOfPNO)
-                .map(speciesToWeightKey => props.speciesToWeightOfPNO[speciesToWeightKey])
-                .sort((a, b) => a.weight < b.weight)
-            setSpeciesAndWeightArray(pnoSpeciesAndWeight)
+  useEffect(() => {
+    if (props.pnoMessage && props.speciesToWeightOfPNO && props.speciesToWeightOfFAR) {
+      const pnoSpeciesAndWeight = Object.keys(props.speciesToWeightOfPNO)
+        .map(speciesToWeightKey => props.speciesToWeightOfPNO[speciesToWeightKey])
+        .sort((a, b) => a.weight < b.weight)
+      setSpeciesAndWeightArray(pnoSpeciesAndWeight)
 
-            let speciesNotLandedArray = Object.keys(props.speciesToWeightOfFAR)
-                .map(speciesToWeightKey => props.speciesToWeightOfFAR[speciesToWeightKey])
-                .filter(speciesToWeight => {
-                    return !props.pnoMessage.message.catchOnboard
-                        .some(landedSpecies => landedSpecies.species === speciesToWeight.species)
-                })
-                .sort((a, b) => a.weight < b.weight)
-            setSpeciesNotLandedArray(speciesNotLandedArray)
-            increaseHeight(speciesNotLandedArray.length ? speciesNotLandedArray.length * 18 : 0)
+      const speciesNotLandedArray = Object.keys(props.speciesToWeightOfFAR)
+        .map(speciesToWeightKey => props.speciesToWeightOfFAR[speciesToWeightKey])
+        .filter(speciesToWeight => {
+          return !props.pnoMessage.message.catchOnboard
+            .some(landedSpecies => landedSpecies.species === speciesToWeight.species)
+        })
+        .sort((a, b) => a.weight < b.weight)
+      setSpeciesNotLandedArray(speciesNotLandedArray)
+      increaseHeight(speciesNotLandedArray.length ? speciesNotLandedArray.length * 18 : 0)
 
-            setTotalWeightNotLanded(getTotalFARNotLandedWeight(speciesNotLandedArray))
-        }
-    }, [props.pnoMessage, props.speciesToWeightOfPNO, props.speciesToWeightOfFAR])
-
-    useEffect(() => {
-        if(isOpen) {
-            firstUpdate.current = false
-        }
-    }, [isOpen])
-
-    function getTotalFARNotLandedWeight(speciesNotLandedArray) {
-        return speciesNotLandedArray.reduce((subAccumulator, speciesCatch) => {
-            return subAccumulator + speciesCatch.weight
-        }, 0)
+      setTotalWeightNotLanded(getTotalFARNotLandedWeight(speciesNotLandedArray))
     }
+  }, [props.pnoMessage, props.speciesToWeightOfPNO, props.speciesToWeightOfFAR])
 
-    const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) => {
-        return parseFloat(((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1))
+  useEffect(() => {
+    if (isOpen) {
+      firstUpdate.current = false
     }
+  }, [isOpen])
 
-    const getPNOMessageResumeTitleText = () => {
-        return `${props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}, prévu le ${getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)} (UTC)`
-    }
+  function getTotalFARNotLandedWeight (speciesNotLandedArray) {
+    return speciesNotLandedArray.reduce((subAccumulator, speciesCatch) => {
+      return subAccumulator + speciesCatch.weight
+    }, 0)
+  }
 
-    const getPNOMessageResumeTitle = () => {
-        return <>{props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}
+  const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) => {
+    return parseFloat(((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1))
+  }
+
+  const getPNOMessageResumeTitleText = () => {
+    return `${props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}, prévu le ${getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)} (UTC)`
+  }
+
+  const getPNOMessageResumeTitle = () => {
+    return <>{props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}
             ,{' '} prévu le {getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)}  <Gray>(UTC)</Gray></>
-    }
+  }
 
-    const increaseHeight = height => {
-        setChartHeight(chartHeight + height)
-    }
+  const increaseHeight = height => {
+    setChartHeight(chartHeight + height)
+  }
 
-    return <Wrapper>
+  return <Wrapper>
         <ERSMessageResumeHeader
             isNotAcknowledged={props.isNotAcknowledged}
             isDeleted={props.isDeleted}
@@ -78,8 +78,9 @@ const PNOMessageResume = props => {
             setIsOpen={setIsOpen}
             isOpen={isOpen}/>
         {
-            props.hasNoMessage ? null :
-                <ERSMessageContent
+            props.hasNoMessage
+              ? null
+              : <ERSMessageContent
                     id={props.id}
                     chartHeight={chartHeight}
                     speciesNotLandedSize={speciesNotLandedArray && speciesNotLandedArray.length ? 55 : 0}
@@ -90,11 +91,11 @@ const PNOMessageResume = props => {
                         <Fields>
                             <TableBody>
                                 <Field>
-                                    <Key>Date d'envoi</Key>
+                                    <Key>Date d&apos;envoi</Key>
                                     <Value>{props.pnoMessage.operationDateTime ? <>Le {getDateTime(props.pnoMessage.operationDateTime, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
                                 </Field>
                                 <Field>
-                                    <Key>Port d'arrivée</Key>
+                                    <Key>Port d&apos;arrivée</Key>
                                     <Value>{props.pnoMessage.message.port && props.pnoMessage.message.portName ? <>{props.pnoMessage.message.portName} ({props.pnoMessage.message.port})</> : <NoValue>-</NoValue>}</Value>
                                 </Field>
                                 <Field>
@@ -109,20 +110,23 @@ const PNOMessageResume = props => {
                             speciesAndWeightArray={speciesAndWeightArray}
                         />
                         {
-                            speciesNotLandedArray && speciesNotLandedArray.length ?
-                                <SpeciesNotLanded>
+                            speciesNotLandedArray && speciesNotLandedArray.length
+                              ? <SpeciesNotLanded>
                                     Poids des captures non débarquées ({getPercentOfTotalWeight(totalWeightNotLanded, props.totalFARAndDEPWeight)}%)
-                                    {speciesNotLandedArray && speciesNotLandedArray.length ?
-                                        speciesNotLandedArray.map(speciesCatch => {
-                                            return <IndividualSpeciesNotLanded key={speciesCatch.species}>
+                                    {speciesNotLandedArray && speciesNotLandedArray.length
+                                      ? speciesNotLandedArray.map(speciesCatch => {
+                                        return <IndividualSpeciesNotLanded key={speciesCatch.species}>
                                                 {
-                                                    speciesCatch.speciesName ?
-                                                        <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
+                                                    speciesCatch.speciesName
+                                                      ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                                                      : speciesCatch.species
                                                 }
                                                 {''} - {speciesCatch.weight} kg<br/>
                                             </IndividualSpeciesNotLanded>
-                                        }) : <NoValue>-</NoValue>}
-                                </SpeciesNotLanded> : null
+                                      })
+                                      : <NoValue>-</NoValue>}
+                                </SpeciesNotLanded>
+                              : null
                         }
                     </Zone>
                 </ERSMessageContent>

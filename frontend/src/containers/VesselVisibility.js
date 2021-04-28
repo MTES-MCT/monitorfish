@@ -98,7 +98,7 @@ const VesselVisibility = () => {
         vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}
         firstUpdate={firstUpdate.current}>
         <Header isFirst={true}>
-          Gérer l'affichage des dernières positions
+          Gérer l&apos;affichage des dernières positions
         </Header>
         <LastPositionInfo>
           <VesselHidden/> navires masqués <VesselAlmostHidden/> navires estompés <VesselShowed/> navires normaux
@@ -108,7 +108,7 @@ const VesselVisibility = () => {
           vesselsLastPositionVisibility={vesselsLastPositionVisibility}
         />
         <LastPositionLegend>
-          Ces seuils permettent de régler l'affichage, l'estompage et le masquage des dernières positions des navires.
+          Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des navires.
         </LastPositionLegend>
         <Header isFirst={false}>
           Paramétrer la longueur par défaut des pistes
@@ -118,7 +118,7 @@ const VesselVisibility = () => {
           vesselTrackDepth={vesselTrackDepth}
         />
         <Header isFirst={false}>
-          Gérer l'affichage des étiquettes des navires
+          Gérer l&apos;affichage des étiquettes des navires
         </Header>
         <VesselLabel>
           Choisir le libellé des étiquettes des navires
@@ -139,7 +139,7 @@ const VesselVisibility = () => {
 }
 
 const Wrapper = styled.div`
-  animation: ${props => props.isShowed ? `vessel-visibility-opening` : `vessel-visibility-closing`} 0.2s ease forwards;
+  animation: ${props => props.isShowed ? 'vessel-visibility-opening' : 'vessel-visibility-closing'} 0.2s ease forwards;
   @keyframes vessel-visibility-opening {
     0%   { opacity: 0; }
     100% { opacity: 1; }

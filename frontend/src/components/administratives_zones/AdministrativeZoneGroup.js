@@ -5,12 +5,12 @@ import AdministrativeZone from './AdministrativeZone'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 const AdministrativeZoneGroup = props => {
-    const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
-    return <>
+  return <>
         {
-            props.layers && props.layers.length && props.layers[0] ?
-                <Row>
+            props.layers && props.layers.length && props.layers[0]
+              ? <Row>
                     <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
                         <Text isOpen={isOpen} title={props.layers[0].group.name.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
                             <ChevronIcon isOpen={isOpen}/>
@@ -22,10 +22,10 @@ const AdministrativeZoneGroup = props => {
                         name={props.layers[0].group.name.replace(/\s/g, '-')}
                         length={props.layers.length}>
                         { props.layers.map((layer, index) => {
-                                return <ListItem isLastItem={props.layers === index + 1} key={layer.code}>
+                          return <ListItem isLastItem={props.layers === index + 1} key={layer.code}>
                                     <AdministrativeZone
                                       isShownOnInit={props.showedLayers.some(layer_ => {
-                                        if(layer_.zone) {
+                                        if (layer_.zone) {
                                           return layer_.type === layer.groupCode && layer_.zone === layer.code
                                         } else {
                                           return layer_.type === layer.code
@@ -37,11 +37,11 @@ const AdministrativeZoneGroup = props => {
                                     isGrouped={true}
                                 />
                                 </ListItem>
-                            })
+                        })
                         }
                     </List>
                 </Row>
-                : null
+              : null
         }</>
 }
 

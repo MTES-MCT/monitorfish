@@ -1,9 +1,9 @@
-import React from "react";
-import styled from 'styled-components';
-import {COLORS} from "../../constants/constants";
+import React from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
 
 const MapCoordinatesBox = props => {
-    return (<Coordinates>{props.coordinates}</Coordinates>)
+  return (<Coordinates>{props.coordinates}</Coordinates>)
 }
 
 const Coordinates = styled.span`

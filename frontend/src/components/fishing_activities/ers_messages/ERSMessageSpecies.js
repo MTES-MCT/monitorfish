@@ -1,29 +1,29 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {ReactComponent as ChevronIconSVG} from "../../icons/Chevron_simple_gris.svg";
-import {ERSSpeciesPresentation, ERSSpeciesPreservationState} from "../../../domain/entities/ERS";
-import countries from "i18n-iso-countries";
-import {ReactComponent as WarningSVG} from '../../icons/Point_exclamation_info.svg';
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import { ERSSpeciesPresentation, ERSSpeciesPreservationState } from '../../../domain/entities/ERS'
+import countries from 'i18n-iso-countries'
+import { ReactComponent as WarningSVG } from '../../icons/Point_exclamation_info.svg'
 
-countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
+countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const ERSMessageSpecies = props => {
-    const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
-    const getSpeciesName = species => {
-        if (species.speciesName && species.species) {
-            return `${species.speciesName} (${species.species})`
-        } else if (species.species) {
-            return species.species
-        }
-
-        return "Aucun Nom"
+  const getSpeciesName = species => {
+    if (species.speciesName && species.species) {
+      return `${species.speciesName} (${species.species})`
+    } else if (species.species) {
+      return species.species
     }
 
-    return <>
-        {props.species ?
-            <Species>
+    return 'Aucun Nom'
+  }
+
+  return <>
+        {props.species
+          ? <Species>
                 <Title isLast={props.isLast} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
                     <TitleText title={getSpeciesName(props.species)}>
                         {getSpeciesName(props.species)}
@@ -37,14 +37,16 @@ const ERSMessageSpecies = props => {
                 <Content isOpen={isOpen} name={props.species.species}
                          length={props.species.properties ? props.species.properties.length : 1}>
                     {
-                        props.species.properties && props.species.properties.length > 1 ? <MultipleProperties>
+                        props.species.properties && props.species.properties.length > 1
+                          ? <MultipleProperties>
                             <Warning/> Plusieurs zones de pêche et/ou présentations pour cette espèce
-                        </MultipleProperties> : null
+                        </MultipleProperties>
+                          : null
                     }
                     {
-                        props.species.properties && props.species.properties.length ?
-                            props.species.properties.map((species, index) => {
-                                return <Property key={props.species.species + index}>
+                        props.species.properties && props.species.properties.length
+                          ? props.species.properties.map((species, index) => {
+                            return <Property key={props.species.species + index}>
                                     <Fields>
                                         <TableBody>
                                             <Field>
@@ -52,10 +54,11 @@ const ERSMessageSpecies = props => {
                                                 <TrimmedValue
                                                     title={`${ERSSpeciesPresentation[species.presentation]} (${species.presentation})`}>
                                                     {
-                                                        species.presentation && ERSSpeciesPresentation[species.presentation] ?
-                                                            <>{ERSSpeciesPresentation[species.presentation]} ({species.presentation})</> :
-                                                            species.presentation ? species.presentation :
-                                                                <NoValue>-</NoValue>
+                                                        species.presentation && ERSSpeciesPresentation[species.presentation]
+                                                          ? <>{ERSSpeciesPresentation[species.presentation]} ({species.presentation})</>
+                                                          : species.presentation
+                                                            ? species.presentation
+                                                            : <NoValue>-</NoValue>
                                                     }
                                                 </TrimmedValue>
                                             </Field>
@@ -64,17 +67,19 @@ const ERSMessageSpecies = props => {
                                                 <TrimmedValue
                                                     title={`${ERSSpeciesPreservationState[species.preservationState]} (${species.preservationState})`}>
                                                     {
-                                                        species.preservationState && ERSSpeciesPreservationState[species.preservationState] ?
-                                                            <>{ERSSpeciesPreservationState[species.preservationState]} ({species.preservationState})</> :
-                                                            species.preservationState ? species.preservationState :
-                                                                <NoValue>-</NoValue>
+                                                        species.preservationState && ERSSpeciesPreservationState[species.preservationState]
+                                                          ? <>{ERSSpeciesPreservationState[species.preservationState]} ({species.preservationState})</>
+                                                          : species.preservationState
+                                                            ? species.preservationState
+                                                            : <NoValue>-</NoValue>
                                                     }
                                                 </TrimmedValue>
                                             </Field>
                                             <Field>
                                                 <Key>Fact. conversion</Key>
-                                                <TrimmedValue>{species.conversionFactor ? species.conversionFactor :
-                                                    <NoValue>-</NoValue>}</TrimmedValue>
+                                                <TrimmedValue>{species.conversionFactor
+                                                  ? species.conversionFactor
+                                                  : <NoValue>-</NoValue>}</TrimmedValue>
                                             </Field>
                                         </TableBody>
                                     </Fields>
@@ -83,27 +88,32 @@ const ERSMessageSpecies = props => {
                                             <Field>
                                                 <Key>ZEE</Key>
                                                 <Value>
-                                                    {species.economicZone ? <>{countries.getName(species.economicZone, 'fr')} ({species.economicZone})</> :
-                                                        <NoValue>-</NoValue>}
+                                                    {species.economicZone
+                                                      ? <>{countries.getName(species.economicZone, 'fr')} ({species.economicZone})</>
+                                                      : <NoValue>-</NoValue>}
                                                 </Value>
                                             </Field>
                                             <Field>
                                                 <Key>Zone FAO</Key>
-                                                <Value>{species.faoZone ? <>{species.faoZone}</> :
-                                                    <NoValue>-</NoValue>}</Value>
+                                                <Value>{species.faoZone
+                                                  ? <>{species.faoZone}</>
+                                                  : <NoValue>-</NoValue>}</Value>
                                             </Field>
                                             <Field>
                                                 <Key>Rect. stat.</Key>
-                                                <Value>{species.statisticalRectangle ? <>{species.statisticalRectangle}</> :
-                                                    <NoValue>-</NoValue>}</Value>
+                                                <Value>{species.statisticalRectangle
+                                                  ? <>{species.statisticalRectangle}</>
+                                                  : <NoValue>-</NoValue>}</Value>
                                             </Field>
                                         </TableBody>
                                     </Fields>
                                 </Property>
-                            }) : null
+                          })
+                          : null
                     }
                 </Content>
-            </Species> : null}
+            </Species>
+          : null}
     </>
 }
 
@@ -288,6 +298,5 @@ const NoValue = styled.span`
   width: 50px;
   display: inline-block;
 `
-
 
 export default ERSMessageSpecies

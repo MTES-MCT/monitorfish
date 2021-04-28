@@ -9,34 +9,38 @@ import { WSG84_PROJECTION } from '../../domain/entities/map'
 import { controlType } from '../../domain/entities/controls'
 
 const Control = props => {
-    const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
+  const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 
-    return props.control ? <Wrapper key={props.index} isLastItem={props.isLastItem}>
+  return props.control
+    ? <Wrapper key={props.index} isLastItem={props.isLastItem}>
         <Title>
             {
                 props.control.infractions && props.control.infractions.length ? <GyroRed /> : <GyroGreen />
             }
             CONTRÔLE DU { getDate(props.control.controlDatetimeUtc) }
             {
-                props.control.seizure ?
-                  <ResumeBox>
+                props.control.seizure
+                  ? <ResumeBox>
                       <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
                       <ResumeBoxText>Appréhension</ResumeBoxText>
-                  </ResumeBox> : null
+                  </ResumeBox>
+                  : null
             }
             {
-                props.control.diversion ?
-                  <ResumeBox>
+                props.control.diversion
+                  ? <ResumeBox>
                       <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
                       <ResumeBoxText>Déroutement</ResumeBoxText>
-                  </ResumeBox> : null
+                  </ResumeBox>
+                  : null
             }
             {
-                props.control.escortToQuay ?
-                  <ResumeBox>
+                props.control.escortToQuay
+                  ? <ResumeBox>
                       <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
                       <ResumeBoxText>Reconduite à quai</ResumeBoxText>
-                  </ResumeBox> : null
+                  </ResumeBox>
+                  : null
             }
         </Title>
         <Key width={47}>Type</Key>
@@ -48,8 +52,8 @@ const Control = props => {
             {props.control.facade ? <>{props.control.facade}</> : <NoValue>-</NoValue>}
         </SubValue><br/>
         {
-            (props.control.controlType === controlType.AERIAL) || (props.control.controlType === controlType.SEA) ?
-              <SubFields>
+            (props.control.controlType === controlType.AERIAL) || (props.control.controlType === controlType.SEA)
+              ? <SubFields>
                   <SubField>
                       <Key width={47}>Lat.</Key>
                       <SubValue>{(props.control.latitude || props.control.latitude === 0) && (props.control.longitude || props.control.longitude === 0) ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[0]}</> : <NoValue>-</NoValue>}</SubValue>
@@ -58,16 +62,18 @@ const Control = props => {
                       <Key width={25}>Lon.</Key>
                       <SubValue>{(props.control.latitude || props.control.latitude === 0) && (props.control.longitude || props.control.longitude === 0) ? <>{getCoordinates([props.control.latitude, props.control.longitude], WSG84_PROJECTION)[1]}</> : <NoValue>-</NoValue>}</SubValue>
                   </SubField>
-              </SubFields> : null
+              </SubFields>
+              : null
         }
         {
-            props.control.controlType === controlType.LAND ?
-              <>
+            props.control.controlType === controlType.LAND
+              ? <>
                   <Key width={47}>Port</Key>
                   <SubValue>
                       {props.control.portName ? <>{props.control.portName} ({props.control.portLocode})</> : props.control.portLocode}
                   </SubValue>
-              </> : null
+              </>
+              : null
         }
         <SubFields>
             <SubField>
@@ -81,16 +87,17 @@ const Control = props => {
         </SubFields>
         <Key width={47}>Résultat</Key>
         <SubValue>
-            { props.control.infractions && props.control.infractions.length ? `${props.control.infractions.length} infraction${props.control.infractions.length > 1 ? 's' : ''}` : `pas d'infraction` }
+            { props.control.infractions && props.control.infractions.length ? `${props.control.infractions.length} infraction${props.control.infractions.length > 1 ? 's' : ''}` : 'pas d\'infraction' }
         </SubValue><br/>
         {
-            props.control.seizure ?
-              <>
+            props.control.seizure
+              ? <>
                   <Key width={80}>Appréhension</Key>
                   <SubValue>
                       { props.control.seizureComment }
                   </SubValue><br/>
-              </> : null
+              </>
+              : null
         }
         <Key width={80}>Observations</Key>
         <SubValue>
@@ -99,11 +106,11 @@ const Control = props => {
             </Comment>
         </SubValue>
         {
-            props.control.infractions && props.control.infractions.length ?
-              <Infractions>
+            props.control.infractions && props.control.infractions.length
+              ? <Infractions>
                   {
                       props.control.infractions.map((infraction, index) => {
-                          return <Infraction>
+                        return <Infraction key={infraction.infractionCategory + index}>
                               <Line>
                                   <InfractionKey>infraction {index + 1}</InfractionKey>
                                   <InfractionValue>
@@ -119,11 +126,12 @@ const Control = props => {
                           </Infraction>
                       })
                   }
-              </Infractions> : null
+              </Infractions>
+              : null
         }
         {
-            seeMoreIsOpen ?
-              <More>
+            seeMoreIsOpen
+              ? <More>
                   <Key width={135}>Contrôle sur OM</Key>
                   <SubValue>
                       { props.control.missionOrder ? 'Oui' : 'Non' }
@@ -137,9 +145,9 @@ const Control = props => {
                       { props.control.gearControls && props.control.gearControls.length ? 'Oui' : 'Non' }
                   </SubValue><br/>
                   {
-                      props.control.gearControls && props.control.gearControls.length ?
-                        props.control.gearControls.map((gear, index) => {
-                            return <Gear>
+                      props.control.gearControls && props.control.gearControls.length
+                        ? props.control.gearControls.map((gear, index) => {
+                          return <Gear key={gear.gearCode + index}>
                                 <Key width={100}>Engin {index + 1}</Key>
                                 <SubValue>
                                     {gear.gearName ? <>{gear.gearName} ({gear.gearCode})</> : gear.gearCode}
@@ -155,18 +163,21 @@ const Control = props => {
                                     </SubField>
                                 </SubFields>
                             </Gear>
-                        }) : null
+                        })
+                        : null
                   }
                   <Key width={135}>Contexte du contrôle</Key>
                   <SubValue>
                       { props.control.cooperative === false ? 'Coopératif' : 'Non coopératif' }
                   </SubValue>
-              </More> : null
+              </More>
+              : null
         }
         <SeeMore onClick={() => setSeeMoreIsOpen(!seeMoreIsOpen)}>
             Voir {seeMoreIsOpen ? 'moins' : 'plus'} de détails
         </SeeMore>
-    </Wrapper> : null
+    </Wrapper>
+    : null
 }
 
 const Comment = styled.div`
@@ -220,7 +231,7 @@ const ResumeBoxText = styled.span`
 `
 
 const ResumeBoxNumber = styled.span`
-  background: ${props => props.isRed ? COLORS.red : COLORS.grayDarkerThree };
+  background: ${props => props.isRed ? COLORS.red : COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
   border-radius: 11px;
   height: 16px;

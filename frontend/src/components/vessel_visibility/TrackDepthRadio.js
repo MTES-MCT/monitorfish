@@ -1,28 +1,28 @@
-import React, {useEffect, useState} from "react";
-import {Radio, RadioGroup} from 'rsuite';
-import styled from "styled-components";
-import {VesselTrackDepth} from "../../domain/entities/vesselTrackDepth";
+import React, { useEffect, useState } from 'react'
+import { Radio, RadioGroup } from 'rsuite'
+import styled from 'styled-components'
+import { VesselTrackDepth } from '../../domain/entities/vesselTrackDepth'
 
 const TrackDepthRadio = props => {
-    const [value, setValue] = useState(null)
+  const [value, setValue] = useState(null)
 
-    useEffect(() => {
-        if(props.vesselTrackDepth && !value) {
-            setValue(props.vesselTrackDepth)
-        }
-    }, [props.vesselTrackDepth])
+  useEffect(() => {
+    if (props.vesselTrackDepth && !value) {
+      setValue(props.vesselTrackDepth)
+    }
+  }, [props.vesselTrackDepth])
 
-    return (
+  return (
         <>
-            { value ?
-                <RadioWrapper>
+            { value
+              ? <RadioWrapper>
                     <RadioGroup
                         inline
                         name="trackDepthRadio"
                         value={value}
                         onChange={value => {
-                            setValue(value)
-                            props.updateVesselTrackDepth(value)
+                          setValue(value)
+                          props.updateVesselTrackDepth(value)
                         }}
                     >
                         <Columns>
@@ -43,10 +43,11 @@ const TrackDepthRadio = props => {
                             </ColumnThree>
                         </Columns>
                     </RadioGroup>
-                </RadioWrapper> : null
+                </RadioWrapper>
+              : null
             }
         </>
-    );
+  )
 }
 
 const ColumnOne = styled.div``

@@ -1,54 +1,54 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import {getDateTime} from "../../../utils";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
-import {AlertTypes} from "../../../domain/entities/alerts";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import { getDateTime } from '../../../utils'
+import { ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
+import { AlertTypes } from '../../../domain/entities/alerts'
 
 const LANMessageResume = props => {
-    const [isOpen, setIsOpen] = useState(false)
-    const firstUpdate = useRef(true);
-    const [chartHeight, setChartHeight] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+  const firstUpdate = useRef(true)
+  const [chartHeight, setChartHeight] = useState(0)
 
-    useEffect(() => {
-        if(props.lanMessage) {
-            let height = props.lanMessage.catchLanded.length > 0 ? props.lanMessage.catchLanded.length * 58 : 0
-            increaseHeight(height)
-        }
-    }, [props.lanMessage])
+  useEffect(() => {
+    if (props.lanMessage) {
+      const height = props.lanMessage.catchLanded.length > 0 ? props.lanMessage.catchLanded.length * 58 : 0
+      increaseHeight(height)
+    }
+  }, [props.lanMessage])
 
-    const getPortName = message => {
-        if (message.portName && message.port) {
-            return <>{message.portName} ({message.port})</>
-        } else if(message.port) {
-            return <>{message.port}</>
-        }
-
-        return <NoValue>-</NoValue>
+  const getPortName = message => {
+    if (message.portName && message.port) {
+      return <>{message.portName} ({message.port})</>
+    } else if (message.port) {
+      return <>{message.port}</>
     }
 
-    useEffect(() => {
-        if(isOpen) {
-            firstUpdate.current = false
-        }
-    }, [isOpen])
+    return <NoValue>-</NoValue>
+  }
 
-    const increaseHeight = height => {
-        setChartHeight(chartHeight + height)
+  useEffect(() => {
+    if (isOpen) {
+      firstUpdate.current = false
+    }
+  }, [isOpen])
+
+  const increaseHeight = height => {
+    setChartHeight(chartHeight + height)
+  }
+
+  const getWeightOverToleranceInfo = () => {
+    if (props.catchesOverToleranceAlert) {
+      return AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
+        props.catchesOverToleranceAlert.percentOfTolerance,
+        props.catchesOverToleranceAlert.minimumWeightThreshold)
     }
 
-    const getWeightOverToleranceInfo = () => {
-        if (props.catchesOverToleranceAlert) {
-            return AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
-                props.catchesOverToleranceAlert.percentOfTolerance,
-                props.catchesOverToleranceAlert.minimumWeightThreshold)
-        }
+    return ''
+  }
 
-        return ""
-    }
-
-    return <Wrapper>
+  return <Wrapper>
         <ERSMessageResumeHeader
             isNotAcknowledged={props.isNotAcknowledged}
             isDeleted={props.isDeleted}
@@ -63,8 +63,9 @@ const LANMessageResume = props => {
             isLastItem={true}
         />
         {
-            props.hasNoMessage ? null :
-                <ERSMessageContent
+            props.hasNoMessage
+              ? null
+              : <ERSMessageContent
                     id={props.id}
                     chartHeight={chartHeight}
                     firstUpdate={firstUpdate}
@@ -96,21 +97,24 @@ const LANMessageResume = props => {
                                 </Field>
                             </TableBody>
                         </Fields>
-                        {props.lanMessage.catchLanded && props.lanMessage.catchLanded.length ?
-                            props.lanMessage.catchLanded.map((speciesCatch, index) => {
-                                return <Species key={index}>
+                        {props.lanMessage.catchLanded && props.lanMessage.catchLanded.length
+                          ? props.lanMessage.catchLanded.map((speciesCatch, index) => {
+                            return <Species key={index}>
                                     <SubKey>Espèce {index + 1}</SubKey>{' '}
                                     <SubValue>
                                         {
-                                            speciesCatch.speciesName ?
-                                                <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
+                                            speciesCatch.speciesName
+                                              ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                                              : speciesCatch.species
                                         }
                                         {
-                                            props.catchesOverToleranceAlert && props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length ?
-                                                props.catchesOverToleranceAlert.catchesOverTolerance.some(catchWithAlert => catchWithAlert.lan.species === speciesCatch.species) ? <OverWeightTolerance title={getWeightOverToleranceInfo()}>
+                                            props.catchesOverToleranceAlert && props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length
+                                              ? props.catchesOverToleranceAlert.catchesOverTolerance.some(catchWithAlert => catchWithAlert.lan.species === speciesCatch.species)
+                                                ? <OverWeightTolerance title={getWeightOverToleranceInfo()}>
                                                     <OverWeightToleranceText>10 %</OverWeightToleranceText>
-                                                </OverWeightTolerance> : null
+                                                </OverWeightTolerance>
                                                 : null
+                                              : null
                                         }
                                     </SubValue><br/>
                                     <Weights>
@@ -140,7 +144,8 @@ const LANMessageResume = props => {
                                         </Weight>
                                     </Weights>
                                 </Species>
-                            }) : <Gray>Aucune capture à bord</Gray>}
+                          })
+                          : <Gray>Aucune capture à bord</Gray>}
                     </Zone>
                 </ERSMessageContent>
         }

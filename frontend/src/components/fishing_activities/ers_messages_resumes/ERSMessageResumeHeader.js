@@ -1,23 +1,23 @@
-import React, {useEffect, useRef} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
-import {ReactComponent as ChevronIconSVG} from '../../icons/Chevron_simple_gris.svg'
-import {ReactComponent as ArrowSVG} from '../../icons/Picto_fleche-pleine-droite.svg'
-import {ReactComponent as NotAcknowledgedSVG} from '../../icons/Message_non_acquitte.svg'
+import React, { useEffect, useRef } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import { ReactComponent as ArrowSVG } from '../../icons/Picto_fleche-pleine-droite.svg'
+import { ReactComponent as NotAcknowledgedSVG } from '../../icons/Message_non_acquitte.svg'
 
 const ERSMessageResumeHeader = props => {
-    const firstUpdate = useRef(true);
+  const firstUpdate = useRef(true)
 
-    useEffect(() => {
-        if(props.messageType && props.isOpen) {
-            firstUpdate.current = false
-        }
-    }, [props.messageType])
+  useEffect(() => {
+    if (props.messageType && props.isOpen) {
+      firstUpdate.current = false
+    }
+  }, [props.messageType])
 
-    return <>
-        { props.messageType ?
-            <Wrapper>
+  return <>
+        { props.messageType
+          ? <Wrapper>
                 <ERSMessageTitle
                     onClick={() => props.setIsOpen(!props.isOpen)}
                     hasNoMessage={props.hasNoMessage}
@@ -49,7 +49,8 @@ const ERSMessageResumeHeader = props => {
                         props.hasNoMessage ? null : <ShowThisMessage onClick={() => props.showERSMessages(props.messageType)}/>
                     }
                 </ERSMessageTitle>
-            </Wrapper> : null }
+            </Wrapper>
+          : null }
     </>
 }
 
@@ -98,7 +99,7 @@ const ERSMessageResumeText = styled.span`
 
 const ERSMessageName = styled.span`
   color: ${props => props.isNotAcknowledged ? COLORS.red : COLORS.textGray};
-  margin: 5px 0 5px ${props => props.hasNoMessage ? '27px': '0px'};
+  margin: 5px 0 5px ${props => props.hasNoMessage ? '27px' : '0px'};
   padding: 2px 4px 2px 4px;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
@@ -134,7 +135,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   
   animation: ${props => props.isOpen ? `chevron-${props.name}-resume-opening` : `chevron-${props.name}-resume-closing`} 0.2s ease forwards;
 
-  ${ props => `
+  ${props => `
       @keyframes chevron-${props.name}-resume-opening {
         0%   { transform: rotate(180deg); }
         100% { transform: rotate(0deg); }

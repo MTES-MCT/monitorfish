@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
@@ -41,7 +41,7 @@ const DrawLayer = ({ map }) => {
         style: new Style({
           image: new Icon({
             opacity: 1,
-            src: `Pointeur_selection_zone.svg`,
+            src: 'Pointeur_selection_zone.svg',
             scale: 1.5
           }),
           stroke: new Stroke({
@@ -50,7 +50,7 @@ const DrawLayer = ({ map }) => {
           }),
           fill: new Fill({
             color: 'rgb(255, 255, 255, 0.3)'
-          }),
+          })
 
         }),
         geometryFunction: interaction === Interactions.SQUARE ? createBox() : null

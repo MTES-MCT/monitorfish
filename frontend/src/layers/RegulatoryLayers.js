@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import LayersEnum from '../domain/entities/layers'
 
@@ -27,10 +27,10 @@ const RegulatoryLayers = ({ map }) => {
 
   function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
     if (map) {
-      let metadataIsShowedPropertyName = 'metadataIsShowed'
-      let regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
+      const metadataIsShowedPropertyName = 'metadataIsShowed'
+      const regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
       if (regulatoryZoneMetadata) {
-        let layerToAddProperty = regulatoryLayers.find(layer => {
+        const layerToAddProperty = regulatoryLayers.find(layer => {
           return layer.className_ === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.layerName}:${regulatoryZoneMetadata.zone}`
         })
 
@@ -43,7 +43,7 @@ const RegulatoryLayers = ({ map }) => {
     }
   }
 
-  function addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName) {
+  function addMetadataIsShowedProperty (layerToAddProperty, metadataIsShowedPropertyName) {
     const features = layerToAddProperty.getSource().getFeatures()
     if (features.length) {
       features.forEach(feature => feature.set(metadataIsShowedPropertyName, true))
@@ -53,7 +53,7 @@ const RegulatoryLayers = ({ map }) => {
     }
   }
 
-  function removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName) {
+  function removeMetadataIsShowedProperty (regulatoryLayers, metadataIsShowedPropertyName) {
     regulatoryLayers.forEach(layer => {
       layer.getSource().getFeatures()
         .filter(feature => feature.getProperties().metadataIsShowed)
@@ -61,52 +61,51 @@ const RegulatoryLayers = ({ map }) => {
     })
   }
 
-  function sortRegulatoryLayersFromAreas() {
-    if(map && layer.layers.length && layer.layersAndAreas.length > 1) {
-      let sortedLayersToArea = [...layer.layersAndAreas].sort((a, b) => a.area - b.area).reverse()
+  function sortRegulatoryLayersFromAreas () {
+    if (map && layer.layers.length && layer.layersAndAreas.length > 1) {
+      const sortedLayersToArea = [...layer.layersAndAreas].sort((a, b) => a.area - b.area).reverse()
 
       sortedLayersToArea.forEach((layerAndArea, index) => {
         index = index + 1
-        let layer = map.getLayers().getArray().find(layer => layer.className_ === layerAndArea.name)
+        const layer = map.getLayers().getArray().find(layer => layer.className_ === layerAndArea.name)
 
-        if(layer) {
+        if (layer) {
           layer.setZIndex(index)
         }
       })
     }
   }
 
-  function addRegulatoryLayersToMap() {
-    if(layer.layers.length) {
+  function addRegulatoryLayersToMap () {
+    if (layer.layers.length) {
       const layersToInsert = layer.layers
         .filter(layer => {
           return !map.getLayers().getArray().some(layer_ => layer === layer_)
         })
         .filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
 
-      layersToInsert.map(layerToInsert => {
+      layersToInsert.forEach(layerToInsert => {
         if (!layerToInsert) {
           return
         }
 
-        map.getLayers().push(layerToInsert);
+        map.getLayers().push(layerToInsert)
       })
     }
   }
 
-  function removeRegulatoryLayersToMap() {
-    let layers = layer.layers.length ? layer.layers : []
+  function removeRegulatoryLayersToMap () {
+    const layers = layer.layers.length ? layer.layers : []
     const layersToRemove = map.getLayers().getArray()
       .filter(showedLayer => !layers.some(layer_ => showedLayer === layer_))
       .filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
 
-    layersToRemove.map(layerToRemove => {
+    layersToRemove.forEach(layerToRemove => {
       map.getLayers().remove(layerToRemove)
     })
   }
 
   return null
-
 }
 
 export default RegulatoryLayers

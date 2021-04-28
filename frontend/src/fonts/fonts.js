@@ -1,13 +1,13 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components'
 
-import MarianneRegular from './Marianne/Marianne-Regular.woff';
-import MarianneMedium from './Marianne/Marianne-Medium.woff';
-import MarianneMediumItalic from './Marianne/Marianne-Medium_Italic.woff';
-import MarianneLight from './Marianne/Marianne-Light.woff';
-import MarianneLightItalic from './Marianne/Marianne-Light_Italic.woff';
-import MarianneBold from './Marianne/Marianne-Bold.woff';
-import MarianneBoldItalic from './Marianne/Marianne-Bold_Italic.woff';
-import MarianneItalic from './Marianne/Marianne-Regular_Italic.woff';
+import MarianneRegular from './Marianne/Marianne-Regular.woff'
+import MarianneMedium from './Marianne/Marianne-Medium.woff'
+import MarianneMediumItalic from './Marianne/Marianne-Medium_Italic.woff'
+import MarianneLight from './Marianne/Marianne-Light.woff'
+import MarianneLightItalic from './Marianne/Marianne-Light_Italic.woff'
+import MarianneBold from './Marianne/Marianne-Bold.woff'
+import MarianneBoldItalic from './Marianne/Marianne-Bold_Italic.woff'
+import MarianneItalic from './Marianne/Marianne-Regular_Italic.woff'
 
 export default createGlobalStyle`
     @font-face {
@@ -61,4 +61,4 @@ export default createGlobalStyle`
       font-style: italic;
       font-weight: bold;
     }
-  `;
+  `

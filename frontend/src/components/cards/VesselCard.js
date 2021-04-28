@@ -1,18 +1,20 @@
-import React from "react";
-import styled from 'styled-components';
-import {getCoordinates, timeagoFrenchLocale} from "../../utils";
-import {OPENLAYERS_PROJECTION} from "../../domain/entities/map";
-import {COLORS} from "../../constants/constants";
-import * as timeago from 'timeago.js';
-timeago.register('fr', timeagoFrenchLocale);
+import React from 'react'
+import styled from 'styled-components'
+import { getCoordinates, timeagoFrenchLocale } from '../../utils'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { COLORS } from '../../constants/constants'
+import * as timeago from 'timeago.js'
+timeago.register('fr', timeagoFrenchLocale)
 
 const VesselCard = props => {
-    return (
+  return (
         <>
             <VesselCardHeader>
                 {
-                    props.vessel.getProperties().flagState ? <>
-                        <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`} />{' '}</> : null
+                    props.vessel.getProperties().flagState
+                      ? <>
+                        <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`} />{' '}</>
+                      : null
                 }
                 <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
                 {
@@ -44,8 +46,9 @@ const VesselCard = props => {
                     <FieldName>Dernier signal VMS</FieldName>
                     <FieldValue>
                         {
-                            props.vessel.getProperties().dateTime ? <>{timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
-                                : <NoValue>-</NoValue>
+                            props.vessel.getProperties().dateTime
+                              ? <>{timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+                              : <NoValue>-</NoValue>
                         }
                     </FieldValue>
                     <FieldName>Cadencement</FieldName>
@@ -114,7 +117,7 @@ const VesselCard = props => {
                 <TriangleShadow />
             </TrianglePointer>
         </>
-    )
+  )
 }
 
 const MessageText = styled.span`

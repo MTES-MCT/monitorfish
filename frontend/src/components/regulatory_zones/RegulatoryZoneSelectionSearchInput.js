@@ -1,235 +1,236 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from 'styled-components';
-import {COLORS} from "../../constants/constants";
-import {ReactComponent as SearchIconSVG} from "../icons/Loupe.svg";
-import {removeAccents} from "../../utils";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
+import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
+import { removeAccents } from '../../utils'
 
-function findIfSearchStringIncludedInProperty(zone, propertiesToSearch, searchText) {
-    return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false;
+function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
+  return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false
 }
 
-function getTextForSearch(text) {
-    return removeAccents(text)
-        .toLowerCase()
-        .replace(/[ ]/g, '')
-        .replace(/[_]/g, '')
-        .replace(/[-]/g, '')
-        .replace(/[']/g, '')
-        .replace(/["]/g, '')
+function getTextForSearch (text) {
+  return removeAccents(text)
+    .toLowerCase()
+    .replace(/[ ]/g, '')
+    .replace(/[_]/g, '')
+    .replace(/[-]/g, '')
+    .replace(/[']/g, '')
+    .replace(/["]/g, '')
 }
 
-function orderByAlphabeticalZone(foundRegulatoryZones) {
-    if(foundRegulatoryZones) {
-        Object.keys(foundRegulatoryZones).forEach(layer => {
-            foundRegulatoryZones[layer] = foundRegulatoryZones[layer].sort((a, b) => {
-                if (a.zone && b.zone) {
-                    return a.zone.localeCompare(b.zone)
-                }
-            })
-        })
-    }
+function orderByAlphabeticalZone (foundRegulatoryZones) {
+  if (foundRegulatoryZones) {
+    Object.keys(foundRegulatoryZones).forEach(layer => {
+      foundRegulatoryZones[layer] = foundRegulatoryZones[layer].sort((a, b) => {
+        if (a.zone && b.zone) {
+          return a.zone.localeCompare(b.zone)
+        }
+
+        return null
+      })
+    })
+  }
 }
 
 const RegulatoryZoneSelectionSearchInput = props => {
-    const [placeSearchText, setPlaceSearchText] = useState('');
-    const [gearSearchText, setGearSearchText] = useState('');
-    const [speciesSearchText, setSpeciesSearchText] = useState('');
-    const [regulatoryReferencesSearchText, setRegulatoryReferenceSearchText] = useState('');
-    const [focusPlaceSearchText, setFocusPlaceSearchText] = useState(true);
+  const [placeSearchText, setPlaceSearchText] = useState('')
+  const [gearSearchText, setGearSearchText] = useState('')
+  const [speciesSearchText, setSpeciesSearchText] = useState('')
+  const [regulatoryReferencesSearchText, setRegulatoryReferenceSearchText] = useState('')
+  const [focusPlaceSearchText, setFocusPlaceSearchText] = useState(true)
 
-    useEffect(() => {
-        if(props.layersSidebarIsOpen) {
-            setFocusPlaceSearchText(true)
-        }
-    }, [props.layersSidebarIsOpen])
-
-    useEffect(() => {
-        if (props.initSearchFields) {
-            setPlaceSearchText('')
-            setGearSearchText('')
-            setSpeciesSearchText('')
-            setRegulatoryReferenceSearchText('')
-            props.setInitSearchFields(false)
-        }
-    }, [props.initSearchFields])
-
-    const searchFields = {
-        "placeSearchText": {
-            "searchText": placeSearchText,
-            "properties": ['layerName', 'zone', 'region', 'seafront']
-        },
-        "gearSearchText": {
-            "searchText": gearSearchText,
-            "properties": ['gears']
-        },
-        "speciesSearchText": {
-            "searchText": speciesSearchText,
-            "properties": ['species']
-        },
-        "regulatoryReferencesSearchText": {
-            "searchText": regulatoryReferencesSearchText,
-            "properties": ['regulatoryReferences']
-        }
+  useEffect(() => {
+    if (props.layersSidebarIsOpen) {
+      setFocusPlaceSearchText(true)
     }
+  }, [props.layersSidebarIsOpen])
 
-    useEffect(() => {
-        if(placeSearchText.length < 1 &&
+  useEffect(() => {
+    if (props.initSearchFields) {
+      setPlaceSearchText('')
+      setGearSearchText('')
+      setSpeciesSearchText('')
+      setRegulatoryReferenceSearchText('')
+      props.setInitSearchFields(false)
+    }
+  }, [props.initSearchFields])
+
+  const searchFields = {
+    placeSearchText: {
+      searchText: placeSearchText,
+      properties: ['layerName', 'zone', 'region', 'seafront']
+    },
+    gearSearchText: {
+      searchText: gearSearchText,
+      properties: ['gears']
+    },
+    speciesSearchText: {
+      searchText: speciesSearchText,
+      properties: ['species']
+    },
+    regulatoryReferencesSearchText: {
+      searchText: regulatoryReferencesSearchText,
+      properties: ['regulatoryReferences']
+    }
+  }
+
+  useEffect(() => {
+    if (placeSearchText.length < 1 &&
             gearSearchText.length < 1 &&
             regulatoryReferencesSearchText.length < 1 &&
             speciesSearchText.length < 1) {
-            props.setFoundRegulatoryZones({})
-            return
-        }
-
-        props.resetSelectRegulatoryZone()
-
-        let foundRegulatoryZones = {}
-        Object.keys(searchFields).forEach(searchProperty => {
-            if(searchFields[searchProperty].searchText.length > 0) {
-                let searchFieldFoundRegulatoryZones
-                if(searchFields[searchProperty].properties === searchFields.gearSearchText.properties) {
-                    searchFieldFoundRegulatoryZones = searchGears(
-                        searchFields[searchProperty].searchText,
-                        props.regulatoryZones)
-                } else {
-                    searchFieldFoundRegulatoryZones = search(
-                        searchFields[searchProperty].searchText,
-                        searchFields[searchProperty].properties,
-                        props.regulatoryZones)
-                }
-
-                if(foundRegulatoryZones && Object.keys(foundRegulatoryZones).length === 0) {
-                    foundRegulatoryZones = searchFieldFoundRegulatoryZones
-                } else if(foundRegulatoryZones) {
-                    foundRegulatoryZones = getMergedRegulatoryZones(foundRegulatoryZones, searchFieldFoundRegulatoryZones);
-                }
-            }
-        })
-
-        orderByAlphabeticalZone(foundRegulatoryZones);
-
-        props.setFoundRegulatoryZones(foundRegulatoryZones)
-
-    }, [speciesSearchText, gearSearchText, placeSearchText, regulatoryReferencesSearchText])
-
-    function getMergedRegulatoryZones(foundRegulatoryZones, searchFieldFoundRegulatoryZones) {
-        let mergedRegulatoryZones = {}
-
-        Object.keys(foundRegulatoryZones).forEach(regulatoryZone => {
-            foundRegulatoryZones[regulatoryZone].forEach(subZone => {
-                if (searchFieldFoundRegulatoryZones[regulatoryZone] &&
-                    searchFieldFoundRegulatoryZones[regulatoryZone].length &&
-                    searchFieldFoundRegulatoryZones[regulatoryZone].some(searchSubZone =>
-                        searchSubZone.layerName === subZone.layerName &&
-                        searchSubZone.zone === subZone.zone
-                    )) {
-                    mergedRegulatoryZones[regulatoryZone] = mergedRegulatoryZones[regulatoryZone] ? mergedRegulatoryZones[regulatoryZone].concat(subZone) : [].concat(subZone)
-                }
-            })
-        })
-
-        return mergedRegulatoryZones
+      props.setFoundRegulatoryZones({})
+      return
     }
 
-    function search(searchText, propertiesToSearch, regulatoryZones) {
-        if (regulatoryZones) {
-            let foundRegulatoryZones = {...regulatoryZones}
+    props.resetSelectRegulatoryZone()
 
-            Object.keys(foundRegulatoryZones)
-                .forEach(key => {
-                    foundRegulatoryZones[key] = foundRegulatoryZones[key]
-                        .filter(zone => {
-                            switch (propertiesToSearch.length) {
-                                case 1: {
-                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText)
-                                }
-                                case 2: {
-                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
+    let foundRegulatoryZones = {}
+    Object.keys(searchFields).forEach(searchProperty => {
+      if (searchFields[searchProperty].searchText.length > 0) {
+        let searchFieldFoundRegulatoryZones
+        if (searchFields[searchProperty].properties === searchFields.gearSearchText.properties) {
+          searchFieldFoundRegulatoryZones = searchGears(
+            searchFields[searchProperty].searchText,
+            props.regulatoryZones)
+        } else {
+          searchFieldFoundRegulatoryZones = search(
+            searchFields[searchProperty].searchText,
+            searchFields[searchProperty].properties,
+            props.regulatoryZones)
+        }
+
+        if (foundRegulatoryZones && Object.keys(foundRegulatoryZones).length === 0) {
+          foundRegulatoryZones = searchFieldFoundRegulatoryZones
+        } else if (foundRegulatoryZones) {
+          foundRegulatoryZones = getMergedRegulatoryZones(foundRegulatoryZones, searchFieldFoundRegulatoryZones)
+        }
+      }
+    })
+
+    orderByAlphabeticalZone(foundRegulatoryZones)
+
+    props.setFoundRegulatoryZones(foundRegulatoryZones)
+  }, [speciesSearchText, gearSearchText, placeSearchText, regulatoryReferencesSearchText])
+
+  function getMergedRegulatoryZones (foundRegulatoryZones, searchFieldFoundRegulatoryZones) {
+    const mergedRegulatoryZones = {}
+
+    Object.keys(foundRegulatoryZones).forEach(regulatoryZone => {
+      foundRegulatoryZones[regulatoryZone].forEach(subZone => {
+        if (searchFieldFoundRegulatoryZones[regulatoryZone] &&
+          searchFieldFoundRegulatoryZones[regulatoryZone].length &&
+          searchFieldFoundRegulatoryZones[regulatoryZone].some(searchSubZone =>
+            searchSubZone.layerName === subZone.layerName &&
+            searchSubZone.zone === subZone.zone
+          )) {
+          mergedRegulatoryZones[regulatoryZone] = mergedRegulatoryZones[regulatoryZone] ? mergedRegulatoryZones[regulatoryZone].concat(subZone) : [].concat(subZone)
+        }
+      })
+    })
+
+    return mergedRegulatoryZones
+  }
+
+  function search (searchText, propertiesToSearch, regulatoryZones) {
+    if (regulatoryZones) {
+      const foundRegulatoryZones = { ...regulatoryZones }
+
+      Object.keys(foundRegulatoryZones)
+        .forEach(key => {
+          foundRegulatoryZones[key] = foundRegulatoryZones[key]
+            .filter(zone => {
+              switch (propertiesToSearch.length) {
+                case 1: {
+                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText)
+                }
+                case 2: {
+                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
                                         findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText)
-                                }
-                                case 3: {
-                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
+                }
+                case 3: {
+                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
                                         findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
                                         findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText)
-                                }
-                                case 4: {
-                                    return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
+                }
+                case 4: {
+                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
                                         findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
                                         findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText) ||
                                         findIfSearchStringIncludedInProperty(zone, propertiesToSearch[3], searchText)
-                                }
-                                default: {
-                                    return false
-                                }
-                            }
-                        })
+                }
+                default: {
+                  return false
+                }
+              }
+            })
 
-                    if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
-                        delete foundRegulatoryZones[key]
-                    }
-                })
+          if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
+            delete foundRegulatoryZones[key]
+          }
+        })
 
-            return foundRegulatoryZones
-        }
+      return foundRegulatoryZones
     }
+  }
 
-    function searchGears(searchText, regulatoryZones) {
-        if (regulatoryZones && props.gears) {
-            let foundRegulatoryZones = {...regulatoryZones}
+  function searchGears (searchText, regulatoryZones) {
+    if (regulatoryZones && props.gears) {
+      const foundRegulatoryZones = { ...regulatoryZones }
 
-            let uniqueGearCodes = getUniqueGearCodesFromSearch(searchText);
+      const uniqueGearCodes = getUniqueGearCodesFromSearch(searchText)
 
-            Object.keys(foundRegulatoryZones)
-                .forEach(key => {
-                    foundRegulatoryZones[key] = foundRegulatoryZones[key]
-                        .filter(zone => {
-                            let gears = zone['gears']
-                            if(gears) {
-                                let gearsArray = gears.replace(/ /g, '').split(',')
-                                let found = gearCodeIsFoundInRegulatoryZone(gearsArray, uniqueGearCodes)
+      Object.keys(foundRegulatoryZones)
+        .forEach(key => {
+          foundRegulatoryZones[key] = foundRegulatoryZones[key]
+            .filter(zone => {
+              const gears = zone.gears
+              if (gears) {
+                const gearsArray = gears.replace(/ /g, '').split(',')
+                const found = gearCodeIsFoundInRegulatoryZone(gearsArray, uniqueGearCodes)
 
-                                return found || gears.toLowerCase().includes(searchText.toLowerCase())
-                            } else {
-                                return false
-                            }
-                        })
+                return found || gears.toLowerCase().includes(searchText.toLowerCase())
+              } else {
+                return false
+              }
+            })
 
-                    if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
-                        delete foundRegulatoryZones[key]
-                    }
-                })
+          if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
+            delete foundRegulatoryZones[key]
+          }
+        })
 
-            return foundRegulatoryZones
-        } else {
-            return {}
-        }
+      return foundRegulatoryZones
+    } else {
+      return {}
     }
+  }
 
-    function getUniqueGearCodesFromSearch(searchText) {
-        let foundGearCodes = props.gears
-            .filter(gear => gear.name.toLowerCase().includes(searchText.toLowerCase()))
-            .map(gear => gear.code)
-        return [...new Set(foundGearCodes)]
-    }
+  function getUniqueGearCodesFromSearch (searchText) {
+    const foundGearCodes = props.gears
+      .filter(gear => gear.name.toLowerCase().includes(searchText.toLowerCase()))
+      .map(gear => gear.code)
+    return [...new Set(foundGearCodes)]
+  }
 
-    function gearCodeIsFoundInRegulatoryZone(gears, uniqueGearCodes) {
-        return gears.some(gearCodeFromREG => {
-            if (uniqueGearCodes.some(foundGearCode => foundGearCode === gearCodeFromREG)) {
-                return true
-            }
-        });
-    }
+  function gearCodeIsFoundInRegulatoryZone (gears, uniqueGearCodes) {
+    return gears.some(gearCodeFromREG => {
+      return !!uniqueGearCodes.some(foundGearCode => foundGearCode === gearCodeFromREG)
+    })
+  }
 
-    return (
+  return (
         <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
             <SearchBoxField>
                 <Label>Zone</Label>
                 <SearchBoxInput
-                    ref={input => props.showRegulatorySearchInput
-                        && focusPlaceSearchText
-                        && !gearSearchText
-                        && !speciesSearchText
-                        && !regulatoryReferencesSearchText ? input && input.focus() : null}
+                    ref={input => props.showRegulatorySearchInput &&
+                        focusPlaceSearchText &&
+                        !gearSearchText &&
+                        !speciesSearchText &&
+                        !regulatoryReferencesSearchText
+                      ? input && input.focus()
+                      : null}
                     type="text"
                     value={placeSearchText}
                     placeholder={'Bretagne, Charente...'}
@@ -289,7 +290,7 @@ const SearchBox = styled.div`
     0%   { height: 120px; }
     100% { height: 0;   }
   }
-`;
+`
 
 const SearchBoxField = styled.div`
   display: flex;
@@ -322,7 +323,7 @@ const SearchBoxInput = styled.input`
   :hover, :focus {
     border-bottom: 1px ${COLORS.gray} solid;
   }
-`;
+`
 
 const SearchIcon = styled(SearchIconSVG)`
   opacity: ${props => props.showRegulatorySearchInput ? 1 : 0};

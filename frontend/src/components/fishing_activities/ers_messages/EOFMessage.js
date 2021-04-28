@@ -1,13 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {getDateTime} from "../../../utils";
+import React from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { getDateTime } from '../../../utils'
 
 const EOFMessage = props => {
-
-    return <>
-        { props.message ?
-            <>
+  return <>
+        { props.message
+          ? <>
                 <Zone>
                     <Fields>
                         <TableBody>
@@ -19,7 +18,8 @@ const EOFMessage = props => {
                         </TableBody>
                     </Fields>
                 </Zone>
-            </> : null }
+            </>
+          : null }
     </>
 }
 

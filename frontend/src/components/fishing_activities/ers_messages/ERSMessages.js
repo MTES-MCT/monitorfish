@@ -1,83 +1,88 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import ERSMessage from "./ERSMessage";
-import {ReactComponent as ArrowSVG} from '../../icons/Picto_fleche-pleine-droite.svg'
-import {ReactComponent as SortSVG} from '../../icons/ascendant-descendant.svg'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import ERSMessage from './ERSMessage'
+import { ReactComponent as ArrowSVG } from '../../icons/Picto_fleche-pleine-droite.svg'
+import { ReactComponent as SortSVG } from '../../icons/ascendant-descendant.svg'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 
-const animatedComponents = makeAnimated();
+const animatedComponents = makeAnimated()
 
 const options = [
-    { value: 'DEP', label: 'DEP' },
-    { value: 'COE', label: 'COE' },
-    { value: 'COX', label: 'COX' },
-    { value: 'FAR', label: 'FAR' },
-    { value: 'DIS', label: 'DIS/DIM' },
-    { value: 'EOF', label: 'EOF' },
-    { value: 'PNO', label: 'PNO' },
-    { value: 'RTP', label: 'RTP' },
-    { value: 'LAN', label: 'LAN' },
+  { value: 'DEP', label: 'DEP' },
+  { value: 'COE', label: 'COE' },
+  { value: 'COX', label: 'COX' },
+  { value: 'FAR', label: 'FAR' },
+  { value: 'DIS', label: 'DIS/DIM' },
+  { value: 'EOF', label: 'EOF' },
+  { value: 'PNO', label: 'PNO' },
+  { value: 'RTP', label: 'RTP' },
+  { value: 'LAN', label: 'LAN' }
 ]
 
 const ERSMessages = props => {
-    const [fishingActivities, setFishingActivities] = useState([])
-    const [ascendingSort, setAscendingSort] = useState(true)
-    const [selectedOptions, setSelectedOptions] = useState(null);
+  const [fishingActivities, setFishingActivities] = useState([])
+  const [ascendingSort, setAscendingSort] = useState(true)
+  const [selectedOptions, setSelectedOptions] = useState(null)
 
-    useEffect(() => {
-        setFishingActivities(props.fishingActivities.ersMessages)
-    }, [props.fishingActivities])
+  useEffect(() => {
+    setFishingActivities(props.fishingActivities.ersMessages)
+  }, [props.fishingActivities])
 
-    useEffect(() => {
-        let messageTypes = options.filter(options => options.value === props.messageTypeFilter)
-        setSelectedOptions(messageTypes)
-    }, [props.messageTypeFilter])
+  useEffect(() => {
+    const messageTypes = options.filter(options => options.value === props.messageTypeFilter)
+    setSelectedOptions(messageTypes)
+  }, [props.messageTypeFilter])
 
-    function inverseSort() {
-        let inversedSort = !ascendingSort
+  function inverseSort () {
+    const inversedSort = !ascendingSort
 
-        const sortedFishingActivities = [...fishingActivities].sort((a, b) => {
-            if(inversedSort) {
-                return new Date(a.operationDateTime) - new Date(b.operationDateTime)
-            } else {
-                return new Date(b.operationDateTime) - new Date(a.operationDateTime)
-            }
-        })
+    const sortedFishingActivities = [...fishingActivities].sort((a, b) => {
+      if (inversedSort) {
+        return new Date(a.operationDateTime) - new Date(b.operationDateTime)
+      } else {
+        return new Date(b.operationDateTime) - new Date(a.operationDateTime)
+      }
+    })
 
-        setAscendingSort(inversedSort)
-        setFishingActivities(sortedFishingActivities)
-    }
+    setAscendingSort(inversedSort)
+    setFishingActivities(sortedFishingActivities)
+  }
 
-    const selectStyles = {
-        container: (provided, state) => ({
-            ...provided,
-            padding: 0,
-            height: 'fit-content',
-            zIndex: 4
-        }),
-        control: base => ({ ...base, minHeight: 26, fontSize: 13, borderRadius: 'unset', borderColor: COLORS.grayDarker }),
-        option: base => ({ ...base, fontSize: 13 }),
-        menu: base => ({ ...base, margin: 0, padding: 0, maxHeight: 360 }),
-        menuList: base => ({ ...base, maxHeight: 360 }),
-        input: base => ({ padding: 0, margin: 0 }),
-        clearIndicator: base => ({ ...base, padding: 1, width: 18 }),
-        dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),
-        valueContainer: base => ({ ...base, minWidth: 130, fontSize: 13, padding: '0px 2px' }),
-        multiValue: base => ({ ...base, fontSize: 13, borderRadius: 12, background: COLORS.grayBackground }),
-        multiValueLabel: base => ({ ...base, paddingTop: 2, paddingBottom: 1, background: COLORS.grayBackground, color: COLORS.textGray, borderRadius: 12}),
-        multiValueRemove: base => ({ ...base, background: COLORS.grayBackground, color: COLORS.grayDarker, borderRadius: 12,
-            "&:hover": {
-                backgroundColor: COLORS.grayDarker,
-                color: COLORS.grayDarkerTwo
-            }}),
-        placeholder: base => ({ ...base, fontSize: 13 }),
-        singleValue: base => ({ ...base, fontSize: 13 }),
-        menuPortal: base => ({ ...base, zIndex: 9999 })
-    };
+  const selectStyles = {
+    container: (provided, state) => ({
+      ...provided,
+      padding: 0,
+      height: 'fit-content',
+      zIndex: 4
+    }),
+    control: base => ({ ...base, minHeight: 26, fontSize: 13, borderRadius: 'unset', borderColor: COLORS.grayDarker }),
+    option: base => ({ ...base, fontSize: 13 }),
+    menu: base => ({ ...base, margin: 0, padding: 0, maxHeight: 360 }),
+    menuList: base => ({ ...base, maxHeight: 360 }),
+    input: base => ({ padding: 0, margin: 0 }),
+    clearIndicator: base => ({ ...base, padding: 1, width: 18 }),
+    dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),
+    valueContainer: base => ({ ...base, minWidth: 130, fontSize: 13, padding: '0px 2px' }),
+    multiValue: base => ({ ...base, fontSize: 13, borderRadius: 12, background: COLORS.grayBackground }),
+    multiValueLabel: base => ({ ...base, paddingTop: 2, paddingBottom: 1, background: COLORS.grayBackground, color: COLORS.textGray, borderRadius: 12 }),
+    multiValueRemove: base => ({
+      ...base,
+      background: COLORS.grayBackground,
+      color: COLORS.grayDarker,
+      borderRadius: 12,
+      '&:hover': {
+        backgroundColor: COLORS.grayDarker,
+        color: COLORS.grayDarkerTwo
+      }
+    }),
+    placeholder: base => ({ ...base, fontSize: 13 }),
+    singleValue: base => ({ ...base, fontSize: 13 }),
+    menuPortal: base => ({ ...base, zIndex: 9999 })
+  }
 
-    return <Wrapper>
+  return <Wrapper>
         <Arrow onClick={() => props.showFishingActivitiesSummary()}/><Previous onClick={() => props.showFishingActivitiesSummary()}>Revenir au résumé</Previous>
         <Filters>
             <Select
@@ -95,18 +100,19 @@ const ERSMessages = props => {
             />
             <InverseDate ascendingSort={ascendingSort} onClick={() => inverseSort()}/>
         </Filters>
-        { fishingActivities && fishingActivities.length ?
-            fishingActivities
-                .filter(ersMessage => {
-                    if (selectedOptions && selectedOptions.length) {
-                        return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
-                    } else {
-                        return true
-                    }
-                })
-                .map(message => {
-                return <ERSMessage key={message.ersId} message={message}/>
-            }) : <NoMessage>Aucun message reçu</NoMessage> }
+        { fishingActivities && fishingActivities.length
+          ? fishingActivities
+            .filter(ersMessage => {
+              if (selectedOptions && selectedOptions.length) {
+                return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
+              } else {
+                return true
+              }
+            })
+            .map(message => {
+              return <ERSMessage key={message.ersId} message={message}/>
+            })
+          : <NoMessage>Aucun message reçu</NoMessage> }
     </Wrapper>
 }
 

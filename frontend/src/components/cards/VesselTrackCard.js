@@ -1,21 +1,22 @@
-import React from "react";
-import styled from 'styled-components';
-import {getCoordinates, getDateTime, timeagoFrenchLocale} from "../../utils";
-import {OPENLAYERS_PROJECTION} from "../../domain/entities/map";
-import {COLORS} from "../../constants/constants";
-import * as timeago from 'timeago.js';
-timeago.register('fr', timeagoFrenchLocale);
+import React from 'react'
+import styled from 'styled-components'
+import { getCoordinates, getDateTime, timeagoFrenchLocale } from '../../utils'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { COLORS } from '../../constants/constants'
+import * as timeago from 'timeago.js'
+timeago.register('fr', timeagoFrenchLocale)
 
 const VesselTrackCard = props => {
-    return (
+  return (
         <>
             <VesselCardHeader>
                 <VesselCardTitle>POSITION</VesselCardTitle>
                 <TimeAgo>
                     {
-                        props.vessel.getProperties().dateTime ? <>
+                        props.vessel.getProperties().dateTime
+                          ? <>
                                 {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
-                            : <NoValue>-</NoValue>
+                          : <NoValue>-</NoValue>
                     }
                 </TimeAgo>
             </VesselCardHeader>
@@ -38,10 +39,11 @@ const VesselTrackCard = props => {
                     <FieldName>Dernier signal</FieldName>
                     <FieldValue>
                         {
-                            props.vessel.getProperties().dateTime ? <>
+                            props.vessel.getProperties().dateTime
+                              ? <>
                                     {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
                                     <Gray>(UTC)</Gray></>
-                                : <NoValue>-</NoValue>
+                              : <NoValue>-</NoValue>
                         }
                     </FieldValue>
                 </Position>
@@ -50,7 +52,7 @@ const VesselTrackCard = props => {
                 <TriangleShadow />
             </TrianglePointer>
         </>
-    )
+  )
 }
 
 const Gray = styled.span`

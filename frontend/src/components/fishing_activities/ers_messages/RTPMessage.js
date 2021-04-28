@@ -1,24 +1,23 @@
-import React from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {getDateTime} from "../../../utils";
-import {ERSMessagePNOPurposeType} from "../../../domain/entities/ERS";
+import React from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { getDateTime } from '../../../utils'
+import { ERSMessagePNOPurposeType } from '../../../domain/entities/ERS'
 
 const RTPMessage = props => {
-
-    const getPortName = message => {
-        if (message.portName && message.port) {
-            return <>{message.portName} ({message.port})</>
-        } else if(message.port) {
-            return <>{message.port}</>
-        }
-
-        return <NoValue>-</NoValue>
+  const getPortName = message => {
+    if (message.portName && message.port) {
+      return <>{message.portName} ({message.port})</>
+    } else if (message.port) {
+      return <>{message.port}</>
     }
 
-    return <>
-        { props.message ?
-            <>
+    return <NoValue>-</NoValue>
+  }
+
+  return <>
+        { props.message
+          ? <>
                 <Zone>
                     <Fields>
                         <TableBody>
@@ -27,7 +26,7 @@ const RTPMessage = props => {
                                 <Value>{props.message.returnDatetimeUtc ? <>{getDateTime(props.message.returnDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
                             </Field>
                             <Field>
-                                <Key>Port d'arrivée</Key>
+                                <Key>Port d&apos;arrivée</Key>
                                 <Value>{getPortName(props.message)}</Value>
                             </Field>
                             <Field>
@@ -38,14 +37,15 @@ const RTPMessage = props => {
                     </Fields>
                 </Zone>
                 <Zone>
-                    {props.message.gearOnboard && props.message.gearOnboard.length ?
-                        props.message.gearOnboard.map((gear, index) => {
-                            return <Gear key={index}>
+                    {props.message.gearOnboard && props.message.gearOnboard.length
+                      ? props.message.gearOnboard.map((gear, index) => {
+                        return <Gear key={index}>
                                 <SubKey>Engin à bord {index + 1}</SubKey>{' '}
                                 <SubValue>
                                     {
-                                        gear.gearName ?
-                                            <>{gear.gearName} ({gear.gear})</> : gear.gear
+                                        gear.gearName
+                                          ? <>{gear.gearName} ({gear.gear})</>
+                                          : gear.gear
                                     }
                                 </SubValue><br/>
                                 <SubFields>
@@ -59,9 +59,11 @@ const RTPMessage = props => {
                                     </SubField>
                                 </SubFields>
                             </Gear>
-                        }) : <NoValue>-</NoValue>}
+                      })
+                      : <NoValue>-</NoValue>}
                 </Zone>
-            </> : null }
+            </>
+          : null }
     </>
 }
 

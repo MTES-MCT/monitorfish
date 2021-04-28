@@ -1,19 +1,19 @@
-import React, {useEffect} from "react";
-import styled from 'styled-components';
-import * as timeago from 'timeago.js';
-import {timeagoFrenchLocale} from "../../utils";
-import {ReactComponent as TargetSVG} from '../icons/target.svg';
-import {ReactComponent as FlagSVG} from '../icons/flag.svg';
-import Table from "rsuite/lib/Table";
-import Checkbox from "rsuite/lib/Checkbox";
-import countries from "i18n-iso-countries";
+import React from 'react'
+import styled from 'styled-components'
+import * as timeago from 'timeago.js'
+import { timeagoFrenchLocale } from '../../utils'
+import { ReactComponent as TargetSVG } from '../icons/target.svg'
+import { ReactComponent as FlagSVG } from '../icons/flag.svg'
+import Table from 'rsuite/lib/Table'
+import Checkbox from 'rsuite/lib/Checkbox'
+import countries from 'i18n-iso-countries'
 
-const { Column, HeaderCell, Cell } = Table;
-timeago.register('fr', timeagoFrenchLocale);
-countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
+const { Column, HeaderCell, Cell } = Table
+timeago.register('fr', timeagoFrenchLocale)
+countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 export const TargetCell = ({ rowData, dataKey, onChange, ...props }) => {
-    return (
+  return (
         <Cell key={rowData.id} {...props} className={'table-content-editing'}>
             <input
                 type="text"
@@ -21,29 +21,29 @@ export const TargetCell = ({ rowData, dataKey, onChange, ...props }) => {
                 className="rs-input"
                 value={rowData[dataKey]}
                 onChange={event => {
-                    let value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : ''
-                    onChange && onChange(rowData.id, dataKey, value);
+                  const value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : ''
+                  onChange && onChange(rowData.id, dataKey, value)
                 }}
             />
         </Cell>
-    )
+  )
 }
 
 export const CheckedCell = ({ rowData, dataKey, onClick, onChange, ...props }) => {
-    return (
+  return (
         <Cell {...props} className={'table-content-editing'}>
             <Checkbox
                 value={rowData[dataKey]}
                 checked={rowData[dataKey]}
                 onChange={value => {
-                    onChange && onChange(rowData.id, dataKey, !value);
+                  onChange && onChange(rowData.id, dataKey, !value)
                 }}
                 onClick={() => {
-                    onClick && onClick(rowData.id);
+                  onClick && onClick(rowData.id)
                 }}
             />
         </Cell>
-    )
+  )
 }
 
 const FlagCell = ({ rowData, dataKey, ...props }) => (
@@ -59,44 +59,44 @@ const TimeAgoCell = ({ rowData, dataKey, ...props }) => (
 )
 
 const VesselListTable = props => {
-    const [sortColumn, setSortColumn] = React.useState()
-    const [sortType, setSortType] = React.useState()
+  const [sortColumn, setSortColumn] = React.useState()
+  const [sortType, setSortType] = React.useState()
 
-    const handleSortColumn = (sortColumn, sortType) => {
-        setSortColumn(sortColumn)
-        setSortType(sortType)
-    }
+  const handleSortColumn = (sortColumn, sortType) => {
+    setSortColumn(sortColumn)
+    setSortType(sortType)
+  }
 
-    const getVessels = () => {
-        if (sortColumn && sortType) {
-            return props.filteredVessels.slice().sort((a, b) => {
-                let x = a[sortColumn]
-                let y = b[sortColumn]
+  const getVessels = () => {
+    if (sortColumn && sortType) {
+      return props.filteredVessels.slice().sort((a, b) => {
+        let x = a[sortColumn]
+        let y = b[sortColumn]
 
-                if (typeof x === 'string' && typeof y === 'string') {
-                    x = x.charCodeAt()
-                    y = y.charCodeAt()
-                }
-
-                if (x === '') {
-                    return 1
-                }
-                if (y === '') {
-                    return -1
-                }
-
-                if (sortType === 'asc') {
-                    return x - y
-                } else {
-                    return y - x
-                }
-            })
+        if (typeof x === 'string' && typeof y === 'string') {
+          x = x.charCodeAt()
+          y = y.charCodeAt()
         }
 
-        return props.filteredVessels
+        if (x === '') {
+          return 1
+        }
+        if (y === '') {
+          return -1
+        }
+
+        if (sortType === 'asc') {
+          return x - y
+        } else {
+          return y - x
+        }
+      })
     }
 
-    return (
+    return props.filteredVessels
+  }
+
+  return (
         <TableContent>
             <VesselsCount>
                 {props.vesselsCountShowed} navires sur {props.vesselsCountTotal}
@@ -116,12 +116,12 @@ const VesselListTable = props => {
                         <Checkbox
                             checked={props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length}
                             onChange={() => {
-                                let isChecked = props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
-                                if(isChecked === false) {
-                                    props.setAllVesselsChecked({globalCheckbox: true})
-                                } else {
-                                    props.setAllVesselsChecked({globalCheckbox: !props.allVesselsChecked.globalCheckbox})
-                                }
+                              const isChecked = props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
+                              if (isChecked === false) {
+                                props.setAllVesselsChecked({ globalCheckbox: true })
+                              } else {
+                                props.setAllVesselsChecked({ globalCheckbox: !props.allVesselsChecked.globalCheckbox })
+                              }
                             }} />
                     </HeaderCell>
                     <CheckedCell dataKey="checked" onChange={props.handleChange} />
@@ -192,7 +192,7 @@ const VesselListTable = props => {
                 </Column>
             </Table>
         </TableContent>
-    )
+  )
 }
 
 const Flag = styled.img`

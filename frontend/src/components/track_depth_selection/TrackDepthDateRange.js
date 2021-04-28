@@ -1,10 +1,9 @@
-import React from "react";
-import { afterToday } from 'rsuite/lib/DateRangePicker'
-import styled from "styled-components";
-import DateRangePicker from 'rsuite/lib/DateRangePicker'
+import React from 'react'
+import DateRangePicker, { afterToday } from 'rsuite/lib/DateRangePicker'
+import styled from 'styled-components'
 
 const TrackDepthDateRange = props => {
-    return (
+  return (
       <Wrapper>
           <DateRangePicker
             showOneCalendar
@@ -14,26 +13,26 @@ const TrackDepthDateRange = props => {
             disabledDate={afterToday()}
             value={props.dates}
             onChange={nextValue => {
-                props.setDate(nextValue);
+              props.setDate(nextValue)
             }}
             ranges={[]}
             format="DD-MM-YYYY"
             locale={{
-                sunday: 'Di',
-                monday: 'Lu',
-                tuesday: 'Ma',
-                wednesday: 'Me',
-                thursday: 'Je',
-                friday: 'Ve',
-                saturday: 'Sa',
-                ok: 'OK',
-                today: 'Aujourd\'hui',
-                yesterday: 'Hier',
-                last7Days: '7 derniers jours'
+              sunday: 'Di',
+              monday: 'Lu',
+              tuesday: 'Ma',
+              wednesday: 'Me',
+              thursday: 'Je',
+              friday: 'Ve',
+              saturday: 'Sa',
+              ok: 'OK',
+              today: 'Aujourd\'hui',
+              yesterday: 'Hier',
+              last7Days: '7 derniers jours'
             }}
           />
       </Wrapper>
-    );
+  )
 }
 
 const Wrapper = styled.div`

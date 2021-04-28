@@ -1,45 +1,46 @@
-import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIconSVG} from "../icons/oeil_affiche.svg";
-import {ReactComponent as HideIconSVG} from "../icons/oeil_masque.svg";
-import styled from "styled-components";
+import React, { useEffect, useRef, useState } from 'react'
+import { ReactComponent as ShowIconSVG } from '../icons/oeil_affiche.svg'
+import { ReactComponent as HideIconSVG } from '../icons/oeil_masque.svg'
+import styled from 'styled-components'
 
 const AdministrativeZone = props => {
-    const firstUpdate = useRef(true);
-    const [showLayer_, setShowLayer] = useState(undefined);
+  const firstUpdate = useRef(true)
+  const [showLayer_, setShowLayer] = useState(undefined)
 
-    useEffect(() => {
-        if (showLayer_ === undefined) {
-            setShowLayer(props.isShownOnInit)
-        }
-    }, [props.isShownOnInit, showLayer_])
+  useEffect(() => {
+    if (showLayer_ === undefined) {
+      setShowLayer(props.isShownOnInit)
+    }
+  }, [props.isShownOnInit, showLayer_])
 
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
 
-        if(showLayer_) {
-            if(props.layer.showMultipleZonesInAdministrativeZones) {
-                props.callShowAdministrativeZone(props.layer.groupCode, props.layer.code)
-            } else {
-                props.callShowAdministrativeZone(props.layer.code)
-            }
-        } else {
-            if(props.layer.showMultipleZonesInAdministrativeZones) {
-                props.callHideAdministrativeZone(props.layer.groupCode, props.layer.code)
-            } else {
-                props.callHideAdministrativeZone(props.layer.code)
-            }
-        }
-    }, [showLayer_])
+    if (showLayer_) {
+      if (props.layer.showMultipleZonesInAdministrativeZones) {
+        props.callShowAdministrativeZone(props.layer.groupCode, props.layer.code)
+      } else {
+        props.callShowAdministrativeZone(props.layer.code)
+      }
+    } else {
+      if (props.layer.showMultipleZonesInAdministrativeZones) {
+        props.callHideAdministrativeZone(props.layer.groupCode, props.layer.code)
+      } else {
+        props.callHideAdministrativeZone(props.layer.code)
+      }
+    }
+  }, [showLayer_])
 
-    return <>{
-        props.layer ?
-                <Row isGrouped={props.isGrouped} onClick={() => setShowLayer(!showLayer_)}>
+  return <>{
+        props.layer
+          ? <Row isGrouped={props.isGrouped} onClick={() => setShowLayer(!showLayer_)}>
                     <LayerName title={props.layer.name}>{props.layer.name}</LayerName>
                     { showLayer_ ? <ShowIcon /> : <HideIcon />}
-                </Row> : null
+                </Row>
+          : null
     }</>
 }
 

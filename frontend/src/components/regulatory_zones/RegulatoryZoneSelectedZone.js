@@ -1,74 +1,73 @@
-import React, {useEffect, useRef, useState} from "react";
-import {ReactComponent as ShowIconSVG} from "../icons/oeil_affiche.svg";
-import {ReactComponent as HideIconSVG} from "../icons/oeil_masque.svg";
-import styled from "styled-components";
-import {ReactComponent as CloseIconSVG} from '../icons/Croix_grise.svg'
-import {ReactComponent as REGPaperSVG} from '../icons/reg_paper.svg'
-import {ReactComponent as REGPaperDarkSVG} from '../icons/reg_paper_dark.svg'
-import {COLORS} from "../../constants/constants";
+import React, { useEffect, useState } from 'react'
+import { ReactComponent as ShowIconSVG } from '../icons/oeil_affiche.svg'
+import { ReactComponent as HideIconSVG } from '../icons/oeil_masque.svg'
+import styled from 'styled-components'
+import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
+import { ReactComponent as REGPaperSVG } from '../icons/reg_paper.svg'
+import { ReactComponent as REGPaperDarkSVG } from '../icons/reg_paper_dark.svg'
+import { COLORS } from '../../constants/constants'
 
 const RegulatoryZoneSelectedZone = props => {
-    const [showSubZone, setShowSubZone] = useState(undefined);
-    const [metadataIsShown, setMetadataIsShown] = useState(false)
+  const [showSubZone, setShowSubZone] = useState(undefined)
+  const [metadataIsShown, setMetadataIsShown] = useState(false)
 
-    const showRegulatoryMetadata = subZone => {
-        if(!metadataIsShown) {
-            props.callShowRegulatorySubZoneMetadata(subZone)
-            setMetadataIsShown(true)
-        } else {
-            props.callCloseRegulatoryZoneMetadata()
-            setMetadataIsShown(false)
-        }
+  const showRegulatoryMetadata = subZone => {
+    if (!metadataIsShown) {
+      props.callShowRegulatorySubZoneMetadata(subZone)
+      setMetadataIsShown(true)
+    } else {
+      props.callCloseRegulatoryZoneMetadata()
+      setMetadataIsShown(false)
     }
+  }
 
-    useEffect(() => {
-        if(props.regulatoryZoneMetadata &&
+  useEffect(() => {
+    if (props.regulatoryZoneMetadata &&
             props.subZone &&
             (props.subZone.layerName !== props.regulatoryZoneMetadata.layerName ||
                 props.subZone.zone !== props.regulatoryZoneMetadata.zone)) {
-            setMetadataIsShown(false)
-        } else if(props.regulatoryZoneMetadata &&
+      setMetadataIsShown(false)
+    } else if (props.regulatoryZoneMetadata &&
             props.subZone &&
             (props.subZone.layerName === props.regulatoryZoneMetadata.layerName &&
                 props.subZone.zone === props.regulatoryZoneMetadata.zone)) {
-            setMetadataIsShown(true)
-        }
-        else if (!props.regulatoryZoneMetadata && props.subZone) {
-            setMetadataIsShown(false)
-        }
-    }, [props.regulatoryZoneMetadata, props.subZone])
-
-    useEffect(() => {
-        if(props.showWholeLayer) {
-            if(!props.zoneIsShown && props.showWholeLayer.show) {
-                setShowSubZone(true)
-            } else if(props.zoneIsShown && !props.showWholeLayer.show) {
-                setShowSubZone(false)
-            }
-        }
-    }, [props.showWholeLayer])
-
-    useEffect(() => {
-        if(props.zoneIsShown) {
-            setShowSubZone(true)
-        } else if(!props.zoneIsShown) {
-            setShowSubZone(false)
-        }
-    }, [props.zoneIsShown])
-
-    const zoomInSubZone = subZone => {
-        props.callZoomInSubZone(subZone)
+      setMetadataIsShown(true)
+    } else if (!props.regulatoryZoneMetadata && props.subZone) {
+      setMetadataIsShown(false)
     }
+  }, [props.regulatoryZoneMetadata, props.subZone])
 
-    useEffect(() => {
-        if (showSubZone && props.isReadyToShowRegulatoryZones) {
-            props.callShowRegulatoryZone(props.subZone)
-        } else {
-            props.callHideRegulatoryZone(props.subZone)
-        }
-    }, [showSubZone, props.isReadyToShowRegulatoryZones])
+  useEffect(() => {
+    if (props.showWholeLayer) {
+      if (!props.zoneIsShown && props.showWholeLayer.show) {
+        setShowSubZone(true)
+      } else if (props.zoneIsShown && !props.showWholeLayer.show) {
+        setShowSubZone(false)
+      }
+    }
+  }, [props.showWholeLayer])
 
-    return (
+  useEffect(() => {
+    if (props.zoneIsShown) {
+      setShowSubZone(true)
+    } else if (!props.zoneIsShown) {
+      setShowSubZone(false)
+    }
+  }, [props.zoneIsShown])
+
+  const zoomInSubZone = subZone => {
+    props.callZoomInSubZone(subZone)
+  }
+
+  useEffect(() => {
+    if (showSubZone && props.isReadyToShowRegulatoryZones) {
+      props.callShowRegulatoryZone(props.subZone)
+    } else {
+      props.callHideRegulatoryZone(props.subZone)
+    }
+  }, [showSubZone, props.isReadyToShowRegulatoryZones])
+
+  return (
         <SubZone>
             <Rectangle onClick={() => zoomInSubZone(props.subZone)} vectorLayerStyle={props.vectorLayerStyle}/>
             <SubZoneText
@@ -78,16 +77,17 @@ const RegulatoryZoneSelectedZone = props => {
             </SubZoneText>
             <Icons>
                 {
-                    metadataIsShown ?
-                        <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/> :
-                        <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/>
+                    metadataIsShown
+                      ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/>
+                      : <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/>
                 }
                 { showSubZone ? <ShowIcon title="Cacher la zone" onClick={() => setShowSubZone(!showSubZone)} /> : <HideIcon title="Afficher la zone" onClick={() => setShowSubZone(!showSubZone)} />}
                 <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone, 1)}/>
             </Icons>
 
         </SubZone>
-        )}
+  )
+}
 
 const Rectangle = styled.div`
   width: 14px;

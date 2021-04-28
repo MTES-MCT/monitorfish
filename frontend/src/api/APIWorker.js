@@ -24,12 +24,15 @@ const APIWorker = () => {
         dispatch(getAllFleetSegments())
         dispatch(showAllVessels());
 
-        setInterval(() => {
+        const interval = setInterval(() => {
             dispatch(setIsUpdatingVessels())
             dispatch(showAllVessels());
             dispatch(updateVesselTrackAndSidebar())
         }, ONE_MINUTE)
 
+        return () => {
+            clearInterval(interval);
+        }
     }, [])
 
     useEffect(() => {

@@ -1,4 +1,9 @@
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
@@ -10,8 +15,8 @@ ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")
 
 # Proxies for pipeline flows requiring Internet access
 PROXIES = {
-    "http": "http://172.27.229.197:8090",
-    "https": "http://172.27.229.197:8090",
+    "http": os.environ.get("HTTP_PROXY"),
+    "https": os.environ.get("HTTPS_PROXY"),
 }
 
 # URLs to fetch data from

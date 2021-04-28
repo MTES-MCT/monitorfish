@@ -1,7 +1,7 @@
-import {searchVesselsFromAPI} from "../../api/fetch";
+import { searchVesselsFromAPI } from '../../api/fetch'
 
 const searchVessels = searched => () => {
-    return searchVesselsFromAPI(searched)
+  return searchVesselsFromAPI(searched)
 }
 
 export default searchVessels

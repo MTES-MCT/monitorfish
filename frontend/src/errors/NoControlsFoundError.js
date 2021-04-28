@@ -5,13 +5,13 @@ export default class NoControlsFoundError extends Error {
   type = errorType.INFO_AND_HIDDEN
   showEmptyComponentFields = true
 
-  constructor(message = '') {
-    super(message);
+  constructor (message = '') {
+    super(message)
 
-    if(Error.captureStackTrace) {
-      Error.captureStackTrace(this, NoControlsFoundError);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, NoControlsFoundError)
     }
-    this.message = message;
-    this.date = new Date();
+    this.message = message
+    this.date = new Date()
   }
 }

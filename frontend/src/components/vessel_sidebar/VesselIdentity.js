@@ -1,62 +1,62 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../constants/constants";
-import countries from "i18n-iso-countries";
-import { getDate, getDay, getMonth } from '../../utils'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
+import countries from 'i18n-iso-countries'
+import { getDate } from '../../utils'
 import { vesselsAreEquals } from '../../domain/entities/vessel'
-countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
+countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const VesselIdentity = props => {
-    const [gears, setGears] = useState([])
-    const [vessel, setVessel] = useState(null);
-    const [lastPosition, setLastPosition] = useState(null);
+  const [gears, setGears] = useState([])
+  const [vessel, setVessel] = useState(null)
+  const [lastPosition, setLastPosition] = useState(null)
 
-    useEffect(() => {
-        if (props.vessel) {
-            if(props.vessel.positions.length) {
-                setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
-            } else {
-                if(!vesselsAreEquals(props.vessel, vessel)) {
-                    setLastPosition(null)
-                }
-            }
-
-            setVessel(props.vessel)
+  useEffect(() => {
+    if (props.vessel) {
+      if (props.vessel.positions.length) {
+        setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+      } else {
+        if (!vesselsAreEquals(props.vessel, vessel)) {
+          setLastPosition(null)
         }
-    }, [props.vessel])
+      }
 
-    const showLicenceExpirationDate = licenceExpirationDate => {
-        return getDate(licenceExpirationDate)
+      setVessel(props.vessel)
     }
+  }, [props.vessel])
 
-    useEffect(() => {
-        if(props.gears && props.vessel && props.vessel.declaredFishingGears) {
-            const gears = props.vessel.declaredFishingGears.map(declaredGearCode => {
-                let foundGear = props.gears.find(gear => gear.code === declaredGearCode)
-                return {
-                    name: foundGear ? foundGear.name : null,
-                    code: declaredGearCode
-                }
-            })
+  const showLicenceExpirationDate = licenceExpirationDate => {
+    return getDate(licenceExpirationDate)
+  }
 
-            setGears(gears)
-        } else {
-            setGears([])
+  useEffect(() => {
+    if (props.gears && props.vessel && props.vessel.declaredFishingGears) {
+      const gears = props.vessel.declaredFishingGears.map(declaredGearCode => {
+        const foundGear = props.gears.find(gear => gear.code === declaredGearCode)
+        return {
+          name: foundGear ? foundGear.name : null,
+          code: declaredGearCode
         }
-    }, [props.gears, props.vessel])
+      })
 
-    function getVesselOrLastPositionProperty (propertyName) {
-        if(vessel && vessel[propertyName]) {
-            return vessel[propertyName]
-        } else if (lastPosition && lastPosition[propertyName]) {
-            return lastPosition[propertyName]
-        } else {
-            return <NoValue>-</NoValue>
-        }
+      setGears(gears)
+    } else {
+      setGears([])
     }
+  }, [props.gears, props.vessel])
 
-    return ( vessel
-        ? <Body>
+  function getVesselOrLastPositionProperty (propertyName) {
+    if (vessel && vessel[propertyName]) {
+      return vessel[propertyName]
+    } else if (lastPosition && lastPosition[propertyName]) {
+      return lastPosition[propertyName]
+    } else {
+      return <NoValue>-</NoValue>
+    }
+  }
+
+  return (vessel
+    ? <Body>
             <Zone>
                 <Fields>
                     <TableBody>
@@ -102,14 +102,14 @@ const VesselIdentity = props => {
                     <TableBody>
                         <Field>
                             <Key>Nationalité</Key>
-                            <TrimmedValue>{vessel.flagState && countries.getName(vessel.flagState, "fr") ? countries.getName(vessel.flagState, "fr") : <NoValue>-</NoValue>}</TrimmedValue>
+                            <TrimmedValue>{vessel.flagState && countries.getName(vessel.flagState, 'fr') ? countries.getName(vessel.flagState, 'fr') : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
                             <Key>Quartier</Key>
                             <TrimmedValue>{vessel.district ? <>{vessel.district} {vessel.districtCode ? <>({vessel.districtCode})</> : ''}</> : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                         <Field>
-                            <Key>Port d'attache</Key>
+                            <Key>Port d&apos;attache</Key>
                             <TrimmedValue>{vessel.registryPort ? vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
                         </Field>
                     </TableBody>
@@ -159,13 +159,13 @@ const VesselIdentity = props => {
                             <Key>Engins de pêche déclarés (PME)</Key>
                             <Value>
                                 {
-                                    gears ?
-                                        gears.map(gear => {
-                                            return gear.name ?
-                                                <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                                                : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-
-                                        }) : <NoValue>-</NoValue>
+                                    gears
+                                      ? gears.map(gear => {
+                                        return gear.name
+                                          ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                                          : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+                                      })
+                                      : <NoValue>-</NoValue>
                                 }
                             </Value>
                         </Field>
@@ -176,7 +176,7 @@ const VesselIdentity = props => {
                             <Key>Appartenance à une liste</Key>
                             <Value><NoValue>-</NoValue></Value>
                         </Field>
-                        
+
                     </TableBody>
                 </Fields>
             </Zone>
@@ -187,11 +187,12 @@ const VesselIdentity = props => {
                             <Key>Permis de navigation</Key>
                             <Value>
                                 {
-                                    vessel.navigationLicenceExpirationDate ? <>
+                                    vessel.navigationLicenceExpirationDate
+                                      ? <>
                                             Exp le {showLicenceExpirationDate(vessel.navigationLicenceExpirationDate)}
                                             { new Date(vessel.navigationLicenceExpirationDate) >= Date.now() ? <LicenceActive /> : <LicenceExpired />}
                                         </>
-                                        : <NoValue>-</NoValue>
+                                      : <NoValue>-</NoValue>
                                 }
 
                             </Value>
@@ -200,11 +201,13 @@ const VesselIdentity = props => {
                             <Key>Coordonnées propriétaire</Key>
                             <Value>
                                 <PersonalData>
-                                    { vessel.proprietorName ? <>
+                                    { vessel.proprietorName
+                                      ? <>
                                         {vessel.proprietorName}
-                                        <span>{ vessel.proprietorPhones ? <><br/>{vessel.proprietorPhones.join(", ")}</> : '' }</span>
-                                        { vessel.proprietorEmails ? <><br/>{vessel.proprietorEmails.join(", ")}</> : '' }
-                                    </> : <NoPersonalData>-</NoPersonalData>
+                                        <span>{ vessel.proprietorPhones ? <><br/>{vessel.proprietorPhones.join(', ')}</> : '' }</span>
+                                        { vessel.proprietorEmails ? <><br/>{vessel.proprietorEmails.join(', ')}</> : '' }
+                                    </>
+                                      : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
                             </Value>
@@ -213,11 +216,13 @@ const VesselIdentity = props => {
                             <Key>Coordonnées armateur</Key>
                             <Value>
                                 <PersonalData>
-                                    { vessel.operatorName ? <>
+                                    { vessel.operatorName
+                                      ? <>
                                         {vessel.operatorName}
-                                        <span>{ vessel.operatorPhones ? <><br/>{vessel.operatorPhones.join(", ")}</> : '' }</span>
-                                        { vessel.operatorEmails ? <><br/>{vessel.operatorEmails.join(", ")}</> : '' }
-                                    </> : <NoPersonalData>-</NoPersonalData>
+                                        <span>{ vessel.operatorPhones ? <><br/>{vessel.operatorPhones.join(', ')}</> : '' }</span>
+                                        { vessel.operatorEmails ? <><br/>{vessel.operatorEmails.join(', ')}</> : '' }
+                                    </>
+                                      : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
                             </Value>
@@ -226,11 +231,12 @@ const VesselIdentity = props => {
                             <Key>Contact navire</Key>
                             <Value>
                                 <PersonalData>
-                                    { vessel.vesselPhones || vessel.vesselEmails ?
-                                    <> 
-                                        { vessel.vesselPhones ? <>{vessel.vesselPhones.join(", ")}<br/></> : '' }
-                                        { vessel.vesselEmails ? <>{vessel.vesselEmails.join(", ")}</> : '' }
-                                    </> : <NoPersonalData>-</NoPersonalData>
+                                    { vessel.vesselPhones || vessel.vesselEmails
+                                      ? <>
+                                        { vessel.vesselPhones ? <>{vessel.vesselPhones.join(', ')}<br/></> : '' }
+                                        { vessel.vesselEmails ? <>{vessel.vesselEmails.join(', ')}</> : '' }
+                                    </>
+                                      : <NoPersonalData>-</NoPersonalData>
                                     }
                                 </PersonalData>
                             </Value>
@@ -238,8 +244,9 @@ const VesselIdentity = props => {
                     </TableBody>
                 </Fields>
             </Zone>
-        </Body> : null
-    )
+        </Body>
+    : null
+  )
 }
 
 const ValueWithLineBreak = styled.div`
@@ -272,12 +279,6 @@ const LicenceExpired = styled.span`
 `
 
 const TableBody = styled.tbody``
-
-const PingerInput = styled.input`
-  font-size: 0.9em;
-  padding: 0px 2px 0px 2px;
-  margin: -5px 2px 0 2px;
-`
 
 const Zone = styled.div`
   margin: 5px 5px 10px 5px;

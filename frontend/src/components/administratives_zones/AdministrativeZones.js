@@ -1,103 +1,104 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from 'styled-components';
-import {ReactComponent as ChevronIconSVG} from '../icons/Chevron_simple_gris.svg'
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
-import AdministrativeZone from "./AdministrativeZone";
-import {COLORS} from "../../constants/constants";
-import AdministrativeZoneGroup from "./AdministrativeZoneGroup";
+import AdministrativeZone from './AdministrativeZone'
+import { COLORS } from '../../constants/constants'
+import AdministrativeZoneGroup from './AdministrativeZoneGroup'
 import LayersEnum, { layersType } from '../../domain/entities/layers'
 import { getAdministrativeSubZonesFromAPI } from '../../api/fetch'
 
 const AdministrativeZones = props => {
-    const [showZones, setShowZones] = useState(false);
-    const [zones, setZones] = useState([]);
-    const firstUpdate = useRef(true);
+  const [showZones, setShowZones] = useState(false)
+  const [zones, setZones] = useState([])
+  const firstUpdate = useRef(true)
 
-    useEffect(() => {
-        if (firstUpdate) {
-            firstUpdate.current = false
-        } else {
-            if(props.hideZonesListWhenSearching) {
-                setShowZones(false)
-            } else {
-                setShowZones(true)
-            }
-        }
-    }, [props.hideZonesListWhenSearching])
+  useEffect(() => {
+    if (firstUpdate) {
+      firstUpdate.current = false
+    } else {
+      if (props.hideZonesListWhenSearching) {
+        setShowZones(false)
+      } else {
+        setShowZones(true)
+      }
+    }
+  }, [props.hideZonesListWhenSearching])
 
-    useEffect(() => {
-        let nextZones = []
-        if(props.administrativeZones && props.administrativeZones.length) {
-            nextZones = props.administrativeZones
-              .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
-              .filter(zone => !zone.group)
-              .map(zone => [zone])
+  useEffect(() => {
+    let nextZones = []
+    if (props.administrativeZones && props.administrativeZones.length) {
+      nextZones = props.administrativeZones
+        .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
+        .filter(zone => !zone.group)
+        .map(zone => [zone])
 
-            let groups = [...new Set(props.administrativeZones
-              .filter(zone => zone.group)
-              .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
-              .map(zone => zone.group))]
+      const groups = [...new Set(props.administrativeZones
+        .filter(zone => zone.group)
+        .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
+        .map(zone => zone.group))]
 
-            groups.forEach(group => {
-                nextZones.push(props.administrativeZones
-                  .filter(zone => zone.group && zone.group === group))
-            })
+      groups.forEach(group => {
+        nextZones.push(props.administrativeZones
+          .filter(zone => zone.group && zone.group === group))
+      })
 
-            const nextSubZonesPromises = Object.keys(LayersEnum)
-              .map(layerName => LayersEnum[layerName])
-              .filter(layer => layer.type === layersType.ADMINISTRATIVE)
-              .filter(layer => layer.showMultipleZonesInAdministrativeZones)
-              .map(zone => {
-                  if(zone.containsMultipleZones) {
-                      return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
-                          return subZonesFeatures.features.map(subZone => {
-                              return {
-                                  group: zone.group,
-                                  groupCode: zone.code,
-                                  name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : "Aucun nom",
-                                  code: subZone.id,
-                                  showMultipleZonesInAdministrativeZones: zone.showMultipleZonesInAdministrativeZones,
-                                  isSubZone: true
-                              }
-                          })
-                      }).catch(error => {
-                          console.error(error)
-                      });
-                  }
-
-                  let nextSubZone = {...zone}
-
-                  nextSubZone.group = zone.group ? zone.group.name : 'Administratives'
-
-                  return nextSubZone
+      const nextSubZonesPromises = Object.keys(LayersEnum)
+        .map(layerName => LayersEnum[layerName])
+        .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+        .filter(layer => layer.showMultipleZonesInAdministrativeZones)
+        .map(zone => {
+          if (zone.containsMultipleZones) {
+            return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
+              return subZonesFeatures.features.map(subZone => {
+                return {
+                  group: zone.group,
+                  groupCode: zone.code,
+                  name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
+                  code: subZone.id,
+                  showMultipleZonesInAdministrativeZones: zone.showMultipleZonesInAdministrativeZones,
+                  isSubZone: true
+                }
               })
+            }).catch(error => {
+              console.error(error)
+            })
+          }
 
-            Promise.all(nextSubZonesPromises).then((nextSubZones) => {
-                let nextSubZonesWithoutNulls = nextSubZones.flat().filter(zone => zone)
+          const nextSubZone = { ...zone }
 
-                const groups = [...new Set(nextSubZonesWithoutNulls.map(zone => zone.group))]
+          nextSubZone.group = zone.group ? zone.group.name : 'Administratives'
 
-                groups.forEach(group => {
-                    nextZones.push(nextSubZonesWithoutNulls.filter(zone => zone.group === group))
-                })
+          return nextSubZone
+        })
 
-                setZones(nextZones)
-            });
-            setZones(nextZones)
-        }
-    }, [props.administrativeZones])
+      Promise.all(nextSubZonesPromises).then((nextSubZones) => {
+        const nextSubZonesWithoutNulls = nextSubZones.flat().filter(zone => zone)
 
-    return (
+        const groups = [...new Set(nextSubZonesWithoutNulls.map(zone => zone.group))]
+
+        groups.forEach(group => {
+          nextZones.push(nextSubZonesWithoutNulls.filter(zone => zone.group === group))
+        })
+
+        setZones(nextZones)
+      })
+      setZones(nextZones)
+    }
+  }, [props.administrativeZones])
+
+  return (
         <>
             <SectionTitle onClick={() => setShowZones(!showZones)} showZones={showZones}>
                 Zones administratives <ChevronIcon isOpen={showZones}/>
             </SectionTitle>
             {
-                zones && zones.length ? <ZonesList showZones={showZones} zonesLength={zones.length}>
+                zones && zones.length
+                  ? <ZonesList showZones={showZones} zonesLength={zones.length}>
                     {
                         zones.map((layers, index) => {
-                            if(layers.length === 1 && layers[0]) {
-                                return <ListItem key={layers[0].code}>
+                          if (layers.length === 1 && layers[0]) {
+                            return <ListItem key={layers[0].code}>
                                     <AdministrativeZone
                                         isShownOnInit={props.showedLayers.some(layer_ => layer_.type === layers[0].code)}
                                         layer={layers[0]}
@@ -105,8 +106,8 @@ const AdministrativeZones = props => {
                                         callHideAdministrativeZone={props.callHideAdministrativeZone}
                                     />
                                 </ListItem>
-                            } else {
-                                return <ListItem key={layers[0].group.code}>
+                          } else {
+                            return <ListItem key={layers[0].group.code}>
                                     <AdministrativeZoneGroup
                                         isLastItem={zones.length === index + 1}
                                         layers={layers}
@@ -115,13 +116,14 @@ const AdministrativeZones = props => {
                                         callHideAdministrativeZone={props.callHideAdministrativeZone}
                                     />
                                 </ListItem>
-                            }
+                          }
                         })
                     }
-                </ZonesList> : null
+                </ZonesList>
+                  : null
             }
         </>
-    )
+  )
 }
 
 const SectionTitle = styled.div`

@@ -7,56 +7,59 @@ import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
 import YearControls from './YearControls'
 
 const VesselControls = props => {
-    const [yearsToControls, setYearsToControls] = useState({})
+  const [yearsToControls, setYearsToControls] = useState({})
 
-    useEffect(() => {
-        if(props.controlResumeAndControls && props.controlResumeAndControls.controls && props.controlResumeAndControls.controls.length) {
-            let nextYearsToControls = {}
+  useEffect(() => {
+    if (props.controlResumeAndControls && props.controlResumeAndControls.controls && props.controlResumeAndControls.controls.length) {
+      const nextYearsToControls = {}
 
-            if(props.controlsFromDate) {
-                let fromYear = props.controlsFromDate.getUTCFullYear() + 1
-                while (fromYear < new Date().getUTCFullYear()) {
-                    nextYearsToControls[fromYear] = []
-                    fromYear += 1
-                }
-            }
-
-            props.controlResumeAndControls.controls.forEach(control => {
-                if(control && control.controlDatetimeUtc) {
-                    const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
-
-                    if(nextYearsToControls[year] && nextYearsToControls[year].length) {
-                        nextYearsToControls[year] = nextYearsToControls[year].concat(control)
-                    } else {
-                        nextYearsToControls[year] = [control]
-                    }
-                }
-            })
-
-            setYearsToControls(nextYearsToControls)
-        } else {
-            setYearsToControls(null)
+      if (props.controlsFromDate) {
+        let fromYear = props.controlsFromDate.getUTCFullYear() + 1
+        while (fromYear < new Date().getUTCFullYear()) {
+          nextYearsToControls[fromYear] = []
+          fromYear += 1
         }
-    }, [props.controlResumeAndControls])
+      }
 
-    return <>
-        { props.nextControlResumeAndControls ?
-            <>
+      props.controlResumeAndControls.controls.forEach(control => {
+        if (control && control.controlDatetimeUtc) {
+          const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
+
+          if (nextYearsToControls[year] && nextYearsToControls[year].length) {
+            nextYearsToControls[year] = nextYearsToControls[year].concat(control)
+          } else {
+            nextYearsToControls[year] = [control]
+          }
+        }
+      })
+
+      setYearsToControls(nextYearsToControls)
+    } else {
+      setYearsToControls(null)
+    }
+  }, [props.controlResumeAndControls])
+
+  return <>
+        { props.nextControlResumeAndControls
+          ? <>
                 <UpdateControls/>
                 <UpdateControlsButton
                     onClick={() => props.updateControlResumeAndControls(props.nextControlResumeAndControls)}>
                     Nouveaux contrôles
                 </UpdateControlsButton>
-            </> : null
+            </>
+          : null
         }
         {
-            props.controlResumeAndControls ?
-              <Body>
+            props.controlResumeAndControls
+              ? <Body>
                   <Zone>
                       <Title>
                           <Text>
-                              Résumé des actions de contrôle depuis { props.controlsFromDate ? <>{props.controlsFromDate.getUTCFullYear() + 1}
-                            {' '}(sur { new Date().getFullYear() - props.controlsFromDate.getUTCFullYear() - 1 } ans)</> : <NoValue>-</NoValue> }
+                              Résumé des actions de contrôle depuis { props.controlsFromDate
+                            ? <>{props.controlsFromDate.getUTCFullYear() + 1}
+                            {' '}(sur { new Date().getFullYear() - props.controlsFromDate.getUTCFullYear() - 1 } ans)</>
+                            : <NoValue>-</NoValue> }
                           </Text>
                       </Title>
                       <Fields>
@@ -70,7 +73,7 @@ const VesselControls = props => {
                           </ControlResumeLine>
                           <ControlResumeLine>
                               <ResumeText>
-                                  <Warning /> Nombre d'infractions
+                                  <Warning /> Nombre d&apos;infractions
                               </ResumeText>
                               <ControlResumeNumberElement>pêche <Number>{!isNaN(props.controlResumeAndControls.numberOfFishingInfractions) ? props.controlResumeAndControls.numberOfFishingInfractions : <NoValue>-</NoValue>}</Number></ControlResumeNumberElement>
                               <ControlResumeNumberElement>sécurité <Number>{ !isNaN(props.controlResumeAndControls.numberOfSecurityInfractions) ? props.controlResumeAndControls.numberOfSecurityInfractions : <NoValue>-</NoValue> }</Number></ControlResumeNumberElement>
@@ -98,36 +101,38 @@ const VesselControls = props => {
                           </Text>
                       </Title>
                       {
-                          yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ?
-                            <List>
+                          yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length
+                            ? <List>
                                 {
                                     Object.keys(yearsToControls)
                                       .sort((a, b) => b - a)
                                       .map((year, index) => {
-                                          return <YearControls
+                                        return <YearControls
                                             key={year + index}
                                             year={year}
                                             yearControls={yearsToControls[year]}
                                             isLastItem={yearsToControls[year].length === index + 1}
                                           />
-                                    })
+                                      })
                                 }
-                            </List> : <NoControls>
+                            </List>
+                            : <NoControls>
                                 Aucun contrôle { props.controlsFromDate ? <>depuis {props.controlsFromDate.getUTCFullYear() + 1}</> : null}
                             </NoControls>
                       }
                   </Zone>
                   <SeeMoreBackground>
                       <SeeMore onClick={() => {
-                          let nextDate = new Date(props.controlsFromDate.getTime())
-                          nextDate.setMonth(nextDate.getMonth() - 12)
+                        const nextDate = new Date(props.controlsFromDate.getTime())
+                        nextDate.setMonth(nextDate.getMonth() - 12)
 
-                          props.setControlFromDate(nextDate)
+                        props.setControlFromDate(nextDate)
                       }}>
                           Afficher plus de contrôles
                       </SeeMore>
                   </SeeMoreBackground>
-              </Body> : null
+              </Body>
+              : null
         }
         </>
 }
@@ -184,7 +189,7 @@ const ResumeBoxText = styled.span`
 `
 
 const ResumeBoxNumber = styled.span`
-  background: ${props => props.isRed ? COLORS.red : COLORS.grayDarkerThree };
+  background: ${props => props.isRed ? COLORS.red : COLORS.grayDarkerThree};
   color: ${COLORS.grayBackground};
   border-radius: 11px;
   height: 16px;

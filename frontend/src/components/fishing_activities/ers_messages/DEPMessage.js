@@ -1,24 +1,23 @@
-import React from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {getDateTime} from "../../../utils";
-import {ERSMessageActivityType} from "../../../domain/entities/ERS";
+import React from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { getDateTime } from '../../../utils'
+import { ERSMessageActivityType } from '../../../domain/entities/ERS'
 
 const DEPMessage = props => {
-
-    const getPortName = message => {
-        if (message.departurePortName && message.departurePort) {
-            return <>{message.departurePortName} ({message.departurePort})</>
-        } else if(message.departurePort) {
-            return <>{message.departurePort}</>
-        }
-
-        return <NoValue>-</NoValue>
+  const getPortName = message => {
+    if (message.departurePortName && message.departurePort) {
+      return <>{message.departurePortName} ({message.departurePort})</>
+    } else if (message.departurePort) {
+      return <>{message.departurePort}</>
     }
 
-    return <>
-        { props.message ?
-            <>
+    return <NoValue>-</NoValue>
+  }
+
+  return <>
+        { props.message
+          ? <>
                 <Zone>
                     <Fields>
                         <TableBody>
@@ -38,14 +37,15 @@ const DEPMessage = props => {
                     </Fields>
                 </Zone>
                 <Zone>
-                    {props.message.gearOnboard && props.message.gearOnboard.length ?
-                        props.message.gearOnboard.map((gear, index) => {
-                            return <Gear key={index}>
+                    {props.message.gearOnboard && props.message.gearOnboard.length
+                      ? props.message.gearOnboard.map((gear, index) => {
+                        return <Gear key={index}>
                                 <SubKey>Engin à bord {index + 1}</SubKey>{' '}
                                 <SubValue>
                                     {
-                                        gear.gearName ?
-                                            <>{gear.gearName} ({gear.gear})</> : gear.gear
+                                        gear.gearName
+                                          ? <>{gear.gearName} ({gear.gear})</>
+                                          : gear.gear
                                     }
                                 </SubValue><br/>
                                 <SubFields>
@@ -59,28 +59,32 @@ const DEPMessage = props => {
                                     </SubField>
                                 </SubFields>
                             </Gear>
-                        }) : <NoValue>-</NoValue>}
+                      })
+                      : <NoValue>-</NoValue>}
                 </Zone>
                 <Zone>
                     <Fields>
                         <TableBody>
                             <Field>
                                 <Key>Captures à bord</Key>
-                                <Value>{props.message.speciesOnboard && props.message.speciesOnboard.length ?
-                                    props.message.speciesOnboard.map(speciesCatch => {
-                                        return <span key={speciesCatch.species}>
+                                <Value>{props.message.speciesOnboard && props.message.speciesOnboard.length
+                                  ? props.message.speciesOnboard.map(speciesCatch => {
+                                    return <span key={speciesCatch.species}>
                                         {
-                                            speciesCatch.speciesName ?
-                                                <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
+                                            speciesCatch.speciesName
+                                              ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                                              : speciesCatch.species
                                         }
                                             {''} - {speciesCatch.weight} kg<br/>
                                     </span>
-                                    }) : <NoValue>-</NoValue>}</Value>
+                                  })
+                                  : <NoValue>-</NoValue>}</Value>
                             </Field>
                         </TableBody>
                     </Fields>
                 </Zone>
-            </> : null }
+            </>
+          : null }
     </>
 }
 

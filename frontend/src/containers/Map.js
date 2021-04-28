@@ -30,274 +30,274 @@ import { getOverlays, trackTypeCardID, vesselCardID, vesselTrackCardID } from '.
 import MapHistory from './MapHistory'
 import Zoom from 'ol/control/Zoom'
 
-let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove;
-const hitPixelTolerance = 3;
+let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
+const hitPixelTolerance = 3
 
 const Map = () => {
-    const gears = useSelector(state => state.gear.gears)
-    const vessel = useSelector(state => state.vessel)
-    const mapState = useSelector(state => state.map)
-    const dispatch = useDispatch()
+  const gears = useSelector(state => state.gear.gears)
+  const vessel = useSelector(state => state.vessel)
+  const mapState = useSelector(state => state.map)
+  const dispatch = useDispatch()
 
-    const [map, setMap] = useState()
-    const [isAnimating, setIsAnimating] = useState(false)
-    const [shouldUpdateView, setShouldUpdateView] = useState(true)
-    const [initRenderIsDone, setInitRenderIsDone] = useState(false)
-    const [cursorCoordinates, setCursorCoordinates] = useState('')
-    const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
-    const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
-    const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
-    const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
-    const mapElement = useRef()
-    const mapRef = useRef()
-    mapRef.current = map
+  const [map, setMap] = useState()
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [shouldUpdateView, setShouldUpdateView] = useState(true)
+  const [initRenderIsDone, setInitRenderIsDone] = useState(false)
+  const [cursorCoordinates, setCursorCoordinates] = useState('')
+  const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
+  const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
+  const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
+  const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
+  const mapElement = useRef()
+  const mapRef = useRef()
+  mapRef.current = map
 
-    useEffect(() => {
-        initMap()
-    }, [mapState.selectedBaseLayer])
+  useEffect(() => {
+    initMap()
+  }, [mapState.selectedBaseLayer])
 
-    useEffect(() => {
-        animateToRegulatoryLayer()
-    }, [mapState.animateToRegulatoryLayer, map])
+  useEffect(() => {
+    animateToRegulatoryLayer()
+  }, [mapState.animateToRegulatoryLayer, map])
 
-    useEffect(() => {
-        animateToVessel()
-    }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
+  useEffect(() => {
+    animateToVessel()
+  }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
 
-    function initMap () {
-        if (!map) {
-            const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
+  function initMap () {
+    if (!map) {
+      const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
 
-            const centeredOnFrance = [2.99049, 46.82801]
-            const initialMap = new OpenLayerMap({
-                target: mapElement.current,
-                layers: [],
-                renderer: (['webgl', 'canvas']),
-                overlays: [vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay],
-                view: new View({
-                    projection: OPENLAYERS_PROJECTION,
-                    center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-                    zoom: 6,
-                    minZoom: 3
-                }),
-                controls: [
-                  new ScaleLine({ units: 'nautical' }),
-                  new Zoom({
-                      className: "zoom"
-                  })
-                ],
-            })
+      const centeredOnFrance = [2.99049, 46.82801]
+      const initialMap = new OpenLayerMap({
+        target: mapElement.current,
+        layers: [],
+        renderer: (['webgl', 'canvas']),
+        overlays: [vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay],
+        view: new View({
+          projection: OPENLAYERS_PROJECTION,
+          center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+          zoom: 6,
+          minZoom: 3
+        }),
+        controls: [
+          new ScaleLine({ units: 'nautical' }),
+          new Zoom({
+            className: 'zoom'
+          })
+        ]
+      })
 
-            initialMap.on('click', handleMapClick)
-            initialMap.on('pointermove', event => throttleAndHandlePointerMove(
-              event,
-              vesselCardOverlay,
-              vesselTrackCardOverlay,
-              trackTypeCardOverlay))
-            initialMap.on('moveend', () => throttleAndHandleMovingAndZoom())
+      initialMap.on('click', handleMapClick)
+      initialMap.on('pointermove', event => throttleAndHandlePointerMove(
+        event,
+        vesselCardOverlay,
+        vesselTrackCardOverlay,
+        trackTypeCardOverlay))
+      initialMap.on('moveend', () => throttleAndHandleMovingAndZoom())
 
-            setMap(initialMap)
+      setMap(initialMap)
 
-            // Wait 15 seconds to not apply any animate() before this init phase
-            setTimeout(() => {
-                setInitRenderIsDone(true)
-            }, 15000)
-        }
+      // Wait 15 seconds to not apply any animate() before this init phase
+      setTimeout(() => {
+        setInitRenderIsDone(true)
+      }, 15000)
+    }
+  }
+
+  function throttleAndHandleMovingAndZoom () {
+    if (timeoutForMove) {
+      return
     }
 
-    function throttleAndHandleMovingAndZoom () {
-        if (timeoutForMove) {
-            return
-        }
+    timeoutForMove = setTimeout(() => {
+      timeoutForMove = null
+      handleMovingAndZoom()
+    }, 100)
+  }
 
-        timeoutForMove = setTimeout(() => {
-            timeoutForMove = null
-            handleMovingAndZoom()
-        }, 100)
+  function throttleAndHandlePointerMove (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
+    if (event.dragging || timeoutForPointerMove) {
+      if (timeoutForPointerMove) {
+        lastEventForPointerMove = event
+      }
+      return
     }
 
-    function throttleAndHandlePointerMove (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
-        if (event.dragging || timeoutForPointerMove) {
-            if (timeoutForPointerMove) {
-                lastEventForPointerMove = event
-            }
-            return
-        }
+    timeoutForPointerMove = setTimeout(() => {
+      timeoutForPointerMove = null
+      handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
+    }, 100)
+  }
 
-        timeoutForPointerMove = setTimeout(() => {
-            timeoutForPointerMove = null
-            handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
-        }, 100)
+  function animateToRegulatoryLayer () {
+    if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
+      if (map.getView().getZoom() < 8) {
+        setIsAnimating(true)
+        map.getView().animate({
+          center: [
+            mapState.animateToRegulatoryLayer.center[0],
+            mapState.animateToRegulatoryLayer.center[1]
+          ],
+          duration: 1000,
+          zoom: 8
+        }, () => {
+          setIsAnimating(false)
+          dispatch(resetAnimateToRegulatoryLayer())
+        })
+      } else {
+        setIsAnimating(true)
+        map.getView().animate({
+          center: [
+            mapState.animateToRegulatoryLayer.center[0],
+            mapState.animateToRegulatoryLayer.center[1]
+          ],
+          duration: 1000
+        }, () => {
+          setIsAnimating(false)
+          dispatch(resetAnimateToRegulatoryLayer())
+        })
+      }
     }
+  }
 
-    function animateToRegulatoryLayer () {
-        if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
-            if (map.getView().getZoom() < 8) {
-                setIsAnimating(true)
-                map.getView().animate({
-                    center: [
-                        mapState.animateToRegulatoryLayer.center[0],
-                        mapState.animateToRegulatoryLayer.center[1]
-                    ],
-                    duration: 1000,
-                    zoom: 8
-                }, () => {
-                    setIsAnimating(false)
-                    dispatch(resetAnimateToRegulatoryLayer())
-                })
-            } else {
-                setIsAnimating(true)
-                map.getView().animate({
-                    center: [
-                        mapState.animateToRegulatoryLayer.center[0],
-                        mapState.animateToRegulatoryLayer.center[1]
-                    ],
-                    duration: 1000,
-                }, () => {
-                    setIsAnimating(false)
-                    dispatch(resetAnimateToRegulatoryLayer())
-                })
-            }
-        }
+  function animateToVessel () {
+    if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
+      if (map.getView().getZoom() >= 8) {
+        const resolution = map.getView().getResolution()
+        map.getView().animate({
+          center: [
+            mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
+            mapState.animateToVessel.getGeometry().getCoordinates()[1]
+          ],
+          duration: 1000,
+          zoom: undefined
+        })
+      } else {
+        map.getView().animate({
+          center: [
+            mapState.animateToVessel.getGeometry().getCoordinates()[0],
+            mapState.animateToVessel.getGeometry().getCoordinates()[1]
+          ],
+          duration: 800,
+          zoom: 8
+        }, () => {
+          const resolution = map.getView().getResolution()
+          map.getView().animate({
+            center: [
+              mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
+              mapState.animateToVessel.getGeometry().getCoordinates()[1]
+            ],
+            duration: 500,
+            zoom: undefined
+          })
+        })
+      }
+
+      dispatch(resetAnimateToVessel())
     }
+  }
 
-    function animateToVessel () {
-        if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
-            if (map.getView().getZoom() >= 8) {
-                const resolution = map.getView().getResolution()
-                map.getView().animate({
-                    center: [
-                        mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
-                        mapState.animateToVessel.getGeometry().getCoordinates()[1]
-                    ],
-                    duration: 1000,
-                    zoom: undefined
-                })
-            } else {
-                map.getView().animate({
-                    center: [
-                        mapState.animateToVessel.getGeometry().getCoordinates()[0],
-                        mapState.animateToVessel.getGeometry().getCoordinates()[1]
-                    ],
-                    duration: 800,
-                    zoom: 8
-                }, () => {
-                    const resolution = map.getView().getResolution()
-                    map.getView().animate({
-                        center: [
-                            mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
-                            mapState.animateToVessel.getGeometry().getCoordinates()[1]
-                        ],
-                        duration: 500,
-                        zoom: undefined
-                    })
-                })
-            }
+  function isVesselNameMinimumZoom () {
+    return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES
+  }
 
-            dispatch(resetAnimateToVessel())
-        }
+  function isVesselNameMaximumZoom () {
+    return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES
+  }
+
+  const handleMovingAndZoom = () => {
+    dispatch(isMoving())
+    if (!shouldUpdateView) {
+      setShouldUpdateView(true)
     }
+    setHistoryMoveTrigger({ dummyUpdate: true })
 
-    function isVesselNameMinimumZoom() {
-        return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES;
+    if (isVesselNameMinimumZoom()) {
+      dispatch(hideVesselNames(false))
+    } else if (isVesselNameMaximumZoom()) {
+      dispatch(hideVesselNames(true))
     }
+  }
 
-    function isVesselNameMaximumZoom() {
-        return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES;
+  const handleMapClick = event => {
+    const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: hitPixelTolerance })
+
+    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
+      const vessel = getVesselIdentityFromFeature(feature)
+      dispatch(showVesselTrackAndSidebar(getVesselFeatureAndIdentity(feature, vessel), false, false))
+    } else if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
+      const zone = {
+        layerName: feature.getProperties().layer_name,
+        zone: feature.getProperties().zones
+      }
+      dispatch(showRegulatoryZoneMetadata(zone))
     }
+  }
 
-    const handleMovingAndZoom = () => {
-        dispatch(isMoving())
-        if (!shouldUpdateView) {
-            setShouldUpdateView(true)
-        }
-        setHistoryMoveTrigger({ dummyUpdate: true })
+  const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) => {
+    if (event) {
+      const pixel = mapRef.current.getEventPixel(event.originalEvent)
+      const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: hitPixelTolerance })
 
-        if (isVesselNameMinimumZoom()) {
-            dispatch(hideVesselNames(false));
-        } else if (isVesselNameMaximumZoom()) {
-            dispatch(hideVesselNames(true));
-        }
+      showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
+      showCoordinatesInDMS(event)
     }
+  }
 
-    const handleMapClick = event => {
-        const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, {hitTolerance: hitPixelTolerance});
+  function showPointerAndCardIfVessel (feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
+    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
+      setVesselFeatureToShowOnCard(feature)
 
-        if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
-            let vessel = getVesselIdentityFromFeature(feature)
-            dispatch(showVesselTrackAndSidebar(getVesselFeatureAndIdentity(feature, vessel), false, false))
-        } else if(feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
-            let zone = {
-                layerName: feature.getProperties().layer_name,
-                zone: feature.getProperties().zones
-            }
-            dispatch(showRegulatoryZoneMetadata(zone))
-        }
+      document.getElementById(vesselCardID).style.display = 'block'
+      document.getElementById(vesselTrackCardID).style.display = 'none'
+      document.getElementById(trackTypeCardID).style.display = 'none'
+
+      vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates())
+      mapRef.current.getTarget().style.cursor = 'pointer'
+    } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
+      setVesselFeatureToShowOnCard(feature)
+
+      document.getElementById(vesselTrackCardID).style.display = 'block'
+      document.getElementById(vesselCardID).style.display = 'none'
+      document.getElementById(trackTypeCardID).style.display = 'none'
+
+      mapRef.current.getTarget().style.cursor = 'pointer'
+      vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates())
+    } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
+      setTrackTypeToShowOnCard(feature.getProperties().trackType)
+
+      document.getElementById(trackTypeCardID).style.display = 'block'
+      document.getElementById(vesselTrackCardID).style.display = 'none'
+      document.getElementById(vesselCardID).style.display = 'none'
+
+      mapRef.current.getTarget().style.cursor = 'pointer'
+      trackTypeCardOverlay.setPosition(coordinates)
+    } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
+      setRegulatoryFeatureToShowOnCard(feature)
+
+      mapRef.current.getTarget().style.cursor = 'pointer'
+    } else {
+      document.getElementById(vesselCardID).style.display = 'none'
+      document.getElementById(vesselTrackCardID).style.display = 'none'
+      document.getElementById(trackTypeCardID).style.display = 'none'
+
+      setVesselFeatureToShowOnCard(null)
+      setRegulatoryFeatureToShowOnCard(null)
+      setTrackTypeToShowOnCard(null)
+      if (mapRef.current.getTarget().style) {
+        mapRef.current.getTarget().style.cursor = ''
+      }
     }
+  }
 
-    const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) => {
-        if(event) {
-            const pixel = mapRef.current.getEventPixel(event.originalEvent);
-            const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, {hitTolerance: hitPixelTolerance});
+  function showCoordinatesInDMS (event) {
+    const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel)
+    const coordinates = getCoordinates(clickedCoordinates, OPENLAYERS_PROJECTION)
+    setCursorCoordinates(`${coordinates[0]} ${coordinates[1]}`)
+  }
 
-            showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay);
-            showCoordinatesInDMS(event)
-        }
-    }
-
-    function showPointerAndCardIfVessel(feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
-        if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
-            setVesselFeatureToShowOnCard(feature)
-
-            document.getElementById(vesselCardID).style.display = 'block';
-            document.getElementById(vesselTrackCardID).style.display = 'none';
-            document.getElementById(trackTypeCardID).style.display = 'none';
-
-            vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates());
-            mapRef.current.getTarget().style.cursor = 'pointer'
-        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
-            setVesselFeatureToShowOnCard(feature)
-
-            document.getElementById(vesselTrackCardID).style.display = 'block';
-            document.getElementById(vesselCardID).style.display = 'none';
-            document.getElementById(trackTypeCardID).style.display = 'none';
-
-            mapRef.current.getTarget().style.cursor = 'pointer'
-            vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates());
-        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
-            setTrackTypeToShowOnCard(feature.getProperties().trackType)
-
-            document.getElementById(trackTypeCardID).style.display = 'block';
-            document.getElementById(vesselTrackCardID).style.display = 'none';
-            document.getElementById(vesselCardID).style.display = 'none';
-
-            mapRef.current.getTarget().style.cursor = 'pointer'
-            trackTypeCardOverlay.setPosition(coordinates);
-        } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
-            setRegulatoryFeatureToShowOnCard(feature)
-
-            mapRef.current.getTarget().style.cursor = 'pointer'
-        } else {
-            document.getElementById(vesselCardID).style.display = 'none';
-            document.getElementById(vesselTrackCardID).style.display = 'none';
-            document.getElementById(trackTypeCardID).style.display = 'none';
-
-            setVesselFeatureToShowOnCard(null)
-            setRegulatoryFeatureToShowOnCard(null)
-            setTrackTypeToShowOnCard(null)
-            if(mapRef.current.getTarget().style) {
-                mapRef.current.getTarget().style.cursor = ''
-            }
-        }
-    }
-
-    function showCoordinatesInDMS(event) {
-        const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel);
-        const coordinates = getCoordinates(clickedCoordinates, OPENLAYERS_PROJECTION)
-        setCursorCoordinates(`${coordinates[0]} ${coordinates[1]}`)
-    }
-
-    return (
+  return (
         <div>
             <MapContainer ref={mapElement} />
             <MapHistory
@@ -336,7 +336,7 @@ const Map = () => {
 
             <MapAttributionsBox />
         </div>
-    )
+  )
 }
 
 const VesselCardOverlay = styled.div`

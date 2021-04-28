@@ -1,24 +1,24 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {ReactComponent as SummarySVG} from '../components/icons/Picto_resume.svg';
-import {ReactComponent as VesselIDSVG} from '../components/icons/Picto_identite.svg';
-import {ReactComponent as FisheriesSVG} from '../components/icons/Picto_peche.svg';
-import {ReactComponent as ControlsSVG} from '../components/icons/Picto_controles.svg';
-import {ReactComponent as ObservationsSVG} from '../components/icons/Picto_ciblage.svg';
-import {ReactComponent as VMSSVG} from '../components/icons/Picto_VMS_ERS.svg';
-import VesselIdentity from "../components/vessel_sidebar/VesselIdentity";
-import {useDispatch, useSelector} from "react-redux";
-import {COLORS} from "../constants/constants";
-import VesselSummary from "../components/vessel_sidebar/VesselSummary";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { ReactComponent as SummarySVG } from '../components/icons/Picto_resume.svg'
+import { ReactComponent as VesselIDSVG } from '../components/icons/Picto_identite.svg'
+import { ReactComponent as FisheriesSVG } from '../components/icons/Picto_peche.svg'
+import { ReactComponent as ControlsSVG } from '../components/icons/Picto_controles.svg'
+import { ReactComponent as ObservationsSVG } from '../components/icons/Picto_ciblage.svg'
+import { ReactComponent as VMSSVG } from '../components/icons/Picto_VMS_ERS.svg'
+import VesselIdentity from '../components/vessel_sidebar/VesselIdentity'
+import { useDispatch, useSelector } from 'react-redux'
+import { COLORS } from '../constants/constants'
+import VesselSummary from '../components/vessel_sidebar/VesselSummary'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import VesselFishingActivities from "../components/fishing_activities/VesselFishingActivities";
-import getFishingActivities from "../domain/use_cases/getFishingActivities";
-import {removeError} from "../domain/reducers/Global";
+import VesselFishingActivities from '../components/fishing_activities/VesselFishingActivities'
+import getFishingActivities from '../domain/use_cases/getFishingActivities'
+import { removeError } from '../domain/reducers/Global'
 import {
-    resetNextControlResumeAndControls,
-    resetNextFishingActivities,
-    setControlResumeAndControls,
-    setFishingActivities, setTemporaryTrackDepth
+  resetNextControlResumeAndControls,
+  resetNextFishingActivities,
+  setControlResumeAndControls,
+  setFishingActivities, setTemporaryTrackDepth
 } from '../domain/reducers/Vessel'
 import getControls from '../domain/use_cases/getControls'
 import VesselControls from '../components/controls/VesselControls'
@@ -27,136 +27,136 @@ import TrackDepthSelection from '../components/track_depth_selection/TrackDepthS
 import TrackExport from '../components/track_export/TrackExport'
 
 const VesselSidebar = () => {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-    const error = useSelector(state => state.global.error)
-    const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-    const vesselState = useSelector(state => state.vessel)
-    const gears = useSelector(state => state.gear.gears)
-    const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
-    const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
-    const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
+  const error = useSelector(state => state.global.error)
+  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
+  const vesselState = useSelector(state => state.vessel)
+  const gears = useSelector(state => state.gear.gears)
+  const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
+  const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
+  const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
 
-    const [controlsFromDate, setControlFromDate] = useState(new Date(new Date().getUTCFullYear() - 5, 0, 1))
-    const [openSidebar, setOpenSidebar] = useState(false)
-    const [vessel, setVessel] = useState(null)
-    const [index, setIndex] = useState(1)
-    const firstUpdate = useRef(true)
-    const [showedError, setShowedError] = useState(null)
+  const [controlsFromDate, setControlFromDate] = useState(new Date(new Date().getUTCFullYear() - 5, 0, 1))
+  const [openSidebar, setOpenSidebar] = useState(false)
+  const [vessel, setVessel] = useState(null)
+  const [index, setIndex] = useState(1)
+  const firstUpdate = useRef(true)
+  const [showedError, setShowedError] = useState(null)
 
-    const [trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen] = useState(false)
+  const [trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen] = useState(false)
 
-    useEffect(() => {
-        if (openSidebar === true) {
-            firstUpdate.current = false;
-        }
-    }, [openSidebar])
+  useEffect(() => {
+    if (openSidebar === true) {
+      firstUpdate.current = false
+    }
+  }, [openSidebar])
 
-    useEffect(() => {
-        if(isSameShowedError(error, showedError)) {
-            return
-        }
+  useEffect(() => {
+    if (isSameShowedError(error, showedError)) {
+      return
+    }
 
-        if(isShowedError()) {
-            setShowedError(error)
-            return
-        }
+    if (isShowedError()) {
+      setShowedError(error)
+      return
+    }
 
-        setShowedError(null)
-    }, [error])
+    setShowedError(null)
+  }, [error])
 
-    function isSameShowedError (error, showedError) {
-        return error &&
+  function isSameShowedError (error, showedError) {
+    return error &&
           showedError &&
           error.name === showedError.name
+  }
+
+  function isShowedError () {
+    return error && !error.showEmptyComponentFields
+  }
+
+  useEffect(() => {
+    if (vesselState.vesselSidebarIsOpen) {
+      setOpenSidebar(true)
+      setIndex(vesselState.vesselSidebarTabIndexToShow)
+    } else {
+      setOpenSidebar(false)
+    }
+  }, [vesselState.vesselSidebarIsOpen, vesselState.vesselSidebarTabIndexToShow])
+
+  useEffect(() => {
+    if (vesselState.selectedVessel) {
+      setVessel(vesselState.selectedVessel)
+
+      if (index === 3) {
+        if (vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
+          dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+        }
+      } else if (index === 4) {
+        dispatch(getControls(vesselState.selectedVessel.id, controlsFromDate))
+      }
+    }
+  }, [vesselState.selectedVessel])
+
+  const showFishingActivities = () => {
+    if (vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
+      dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+      setIndex(3)
+    }
+  }
+
+  const showControls = () => {
+    if (vessel) {
+      dispatch(getControls(vessel.id, controlsFromDate))
+      setIndex(4)
+    }
+  }
+
+  const showTab = tabNumber => {
+    if (vessel) {
+      dispatch(removeError())
+      setIndex(tabNumber)
+    }
+  }
+
+  useEffect(() => {
+    if (vessel && controlsFromDate) {
+      dispatch(getControls(vessel.id, controlsFromDate, true))
+    }
+  }, [controlsFromDate])
+
+  const updateFishingActivities = nextFishingActivities => {
+    if (nextFishingActivities) {
+      dispatch(setFishingActivities(nextFishingActivities))
+      dispatch(resetNextFishingActivities())
+    }
+  }
+
+  const updateControlResumeAndControls = nextControlResumeAndControls => {
+    if (nextControlResumeAndControls) {
+      dispatch(setControlResumeAndControls(nextControlResumeAndControls))
+      dispatch(resetNextControlResumeAndControls())
+    }
+  }
+
+  const showVesselTrackWithTrackDepth = (trackDepth, afterDateTime, beforeDateTime) => {
+    const trackDepthObject = {
+      trackDepth: trackDepth,
+      afterDateTime: afterDateTime,
+      beforeDateTime: beforeDateTime
     }
 
-    function isShowedError () {
-        return error && !error.showEmptyComponentFields
+    dispatch(setTemporaryTrackDepth(trackDepthObject))
+    if (vesselState.selectedVesselFeatureAndIdentity && trackDepth) {
+      dispatch(showVesselTrackAndSidebar(
+        vesselState.selectedVesselFeatureAndIdentity,
+        false,
+        true,
+        trackDepthObject))
     }
+  }
 
-    useEffect(() => {
-        if (vesselState.vesselSidebarIsOpen) {
-            setOpenSidebar(true)
-            setIndex(vesselState.vesselSidebarTabIndexToShow)
-        } else {
-            setOpenSidebar(false)
-        }
-    }, [vesselState.vesselSidebarIsOpen, vesselState.vesselSidebarTabIndexToShow])
-
-    useEffect(() => {
-        if (vesselState.selectedVessel) {
-            setVessel(vesselState.selectedVessel)
-
-            if(index === 3) {
-                if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-                    dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
-                }
-            } else if (index === 4) {
-                dispatch(getControls(vesselState.selectedVessel.id, controlsFromDate))
-            }
-        }
-    }, [vesselState.selectedVessel])
-
-    const showFishingActivities = () => {
-        if(vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-            dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
-            setIndex(3)
-        }
-    }
-
-    const showControls = () => {
-        if(vessel) {
-            dispatch(getControls(vessel.id, controlsFromDate))
-            setIndex(4)
-        }
-    }
-
-    const showTab = tabNumber => {
-        if(vessel) {
-            dispatch(removeError())
-            setIndex(tabNumber)
-        }
-    }
-
-    useEffect(() => {
-        if(vessel && controlsFromDate) {
-            dispatch(getControls(vessel.id, controlsFromDate, true))
-        }
-    }, [controlsFromDate])
-
-    const updateFishingActivities = nextFishingActivities => {
-        if(nextFishingActivities) {
-            dispatch(setFishingActivities(nextFishingActivities))
-            dispatch(resetNextFishingActivities())
-        }
-    }
-
-    const updateControlResumeAndControls = nextControlResumeAndControls => {
-        if(nextControlResumeAndControls) {
-            dispatch(setControlResumeAndControls(nextControlResumeAndControls))
-            dispatch(resetNextControlResumeAndControls())
-        }
-    }
-
-    const showVesselTrackWithTrackDepth = (trackDepth, afterDateTime, beforeDateTime) => {
-        const trackDepthObject = {
-            trackDepth: trackDepth,
-            afterDateTime: afterDateTime,
-            beforeDateTime: beforeDateTime
-        }
-
-        dispatch(setTemporaryTrackDepth(trackDepthObject))
-        if(vesselState.selectedVesselFeatureAndIdentity && trackDepth) {
-            dispatch(showVesselTrackAndSidebar(
-              vesselState.selectedVesselFeatureAndIdentity,
-              false,
-              true,
-              trackDepthObject))
-        }
-    }
-
-    return (
+  return (
       <>
           {
               vessel
@@ -191,7 +191,8 @@ const VesselSidebar = () => {
                     <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
                 }
                 {
-                    vessel ? <div>
+                    vessel
+                      ? <div>
                         <div>
                             <TabList>
                                 <Tab isActive={index === 1} onClick={() => showTab(1)}>
@@ -254,18 +255,22 @@ const VesselSidebar = () => {
                                     <Panel className={index === 6 ? '' : 'hide'}>
 
                                     </Panel>
-                                </> : showedError ? <Error>
+                                </>
+                                  : showedError
+                                    ? <Error>
                                     <ErrorText>
                                         { showedError.message }
                                     </ErrorText>
-                                </Error> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+                                </Error>
+                                    : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
                             }
                         </div>
-                    </div> : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+                    </div>
+                      : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
                 }
             </Wrapper>
           </>
-    )
+  )
 }
 
 const GrayOverlay = styled.div`
@@ -274,7 +279,7 @@ const GrayOverlay = styled.div`
   width: 100%;
   opacity: 0;
   background: ${COLORS.grayDarkerThree};
-  animation: ${props => props.isOverlayed ? 'opacity-up' : 'opacity-down' } 0.5s ease forwards;
+  animation: ${props => props.isOverlayed ? 'opacity-up' : 'opacity-down'} 0.5s ease forwards;
   z-index: 11;
 
   @keyframes opacity-up {

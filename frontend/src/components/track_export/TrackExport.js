@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS } from '../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as ExportSVG } from '../icons/Bouton_exporter_piste_navire.svg'
-import { ExportToCsv } from 'export-to-csv';
-import countries from "i18n-iso-countries";
+import { ExportToCsv } from 'export-to-csv'
+import countries from 'i18n-iso-countries'
 import { getCoordinates, getDate, getDateTime } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
 
-countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
+countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const optionsCSV = {
   fieldSeparator: ',',
@@ -18,47 +18,47 @@ const optionsCSV = {
   useTextFile: false,
   useBom: true,
   useKeysAsHeaders: true
-};
+}
 
-const csvExporter = new ExportToCsv(optionsCSV);
+const csvExporter = new ExportToCsv(optionsCSV)
 
 // These properties are ordered for the CSV column order
 const options = {
   vesselName: {
     code: 'vesselName',
-    name: 'Nom',
+    name: 'Nom'
   },
   externalReferenceNumber: {
     code: 'externalReferenceNumber',
-    name: 'Marq. Ext.',
+    name: 'Marq. Ext.'
   },
   ircs: {
     code: 'ircs',
-    name: 'C/S',
+    name: 'C/S'
   },
   mmsi: {
     code: 'mmsi',
-    name: 'MMSI',
+    name: 'MMSI'
   },
   internalReferenceNumber: {
     code: 'internalReferenceNumber',
-    name: 'CFR',
+    name: 'CFR'
   },
   flagState: {
     code: 'flagState',
-    name: 'Pavillon',
+    name: 'Pavillon'
   },
   dateTime: {
     code: 'dateTime',
-    name: 'GDH (UTC)',
+    name: 'GDH (UTC)'
   },
   latitude: {
     code: 'latitude',
-    name: 'Latitude',
+    name: 'Latitude'
   },
   longitude: {
     code: 'longitude',
-    name: 'Longitude',
+    name: 'Longitude'
   },
   course: {
     code: 'course',
@@ -70,7 +70,7 @@ const options = {
   }
 }
 
-function orderToCSVColumnOrder(positionsObject) {
+function orderToCSVColumnOrder (positionsObject) {
   return Object.keys(options)
     .reduce(
       (obj, key) => {
@@ -85,9 +85,9 @@ const TrackExport = props => {
   const [positions, setPositions] = useState([])
 
   useEffect(() => {
-    if(props.positions && props.positions.length) {
+    if (props.positions && props.positions.length) {
       const nextPositions = props.positions.map(position => {
-        let coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION)
+        const coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION)
 
         return {
           vesselName: position.vesselName ? position.vesselName : '',
@@ -100,7 +100,7 @@ const TrackExport = props => {
           ircs: position.ircs ? position.ircs : '',
           dateTime: position.dateTime ? getDateTime(position.dateTime, true) : '',
           latitude: coordinates[0] ? coordinates[0] : '',
-          longitude: coordinates[1] ? coordinates[1] : '',
+          longitude: coordinates[1] ? coordinates[1] : ''
         }
       })
 
@@ -109,18 +109,18 @@ const TrackExport = props => {
   }, [props.positions])
 
   const download = () => {
-    let objectsToExports = positions
+    const objectsToExports = positions
       .map(position => {
         return orderToCSVColumnOrder(position)
       })
 
-    let identifier = positions[0].internalReferenceNumber ? positions[0].internalReferenceNumber : positions[0].ircs
+    const identifier = positions[0].internalReferenceNumber ? positions[0].internalReferenceNumber : positions[0].ircs
     const date = new Date()
-    csvExporter.options.filename = `export_${identifier}_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1  }`
+    csvExporter.options.filename = `export_${identifier}_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1}`
     csvExporter.generateCsv(objectsToExports)
   }
 
-    return (
+  return (
       <TrackExportButton
         isClickable={props.positions && props.positions.length}
         openBox={props.openBox}
@@ -130,9 +130,8 @@ const TrackExport = props => {
       >
         <ExportIcon />
       </TrackExportButton>
-    )
+  )
 }
-
 
 const TrackExportButton = styled.div`
   top: 153px;

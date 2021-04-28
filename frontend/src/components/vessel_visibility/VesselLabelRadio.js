@@ -1,27 +1,27 @@
-import React, {useEffect, useState} from "react";
-import {Radio, RadioGroup} from 'rsuite';
-import styled from "styled-components";
-import {vesselLabel} from "../../domain/entities/vesselLabel";
+import React, { useEffect, useState } from 'react'
+import { Radio, RadioGroup } from 'rsuite'
+import styled from 'styled-components'
+import { vesselLabel } from '../../domain/entities/vesselLabel'
 
 const VesselLabelRadio = props => {
-    const [value, setValue] = useState(null)
+  const [value, setValue] = useState(null)
 
-    useEffect(() => {
-        if(props.vesselLabel && !value) {
-            setValue(props.vesselLabel)
-        }
-    }, [props.vesselLabel])
+  useEffect(() => {
+    if (props.vesselLabel && !value) {
+      setValue(props.vesselLabel)
+    }
+  }, [props.vesselLabel])
 
-    return (
+  return (
         <>
-            { value ?
-                <RadioWrapper>
+            { value
+              ? <RadioWrapper>
                     <RadioGroup
                         name="vesselLabelRadio"
                         value={value}
                         onChange={value => {
-                            setValue(value)
-                            props.updateVesselLabel(value)
+                          setValue(value)
+                          props.updateVesselLabel(value)
                         }}
                     >
                         <Radio value={vesselLabel.VESSEL_NATIONALITY}>Nationalité (nom)</Radio>
@@ -29,10 +29,11 @@ const VesselLabelRadio = props => {
                         <Radio value={vesselLabel.VESSEL_INTERNAL_REFERENCE_NUMBER}>CFR</Radio>
                         <Radio value={vesselLabel.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>
                     </RadioGroup>
-                </RadioWrapper> : null
+                </RadioWrapper>
+              : null
             }
         </>
-    );
+  )
 }
 
 const RadioWrapper = styled.div`

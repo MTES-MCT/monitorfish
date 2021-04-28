@@ -12,9 +12,9 @@ const UpdatingVesselLoader = () => {
   const [appIsLoaded, setAppIsLoaded] = useState(false)
 
   useEffect(() => {
-    if(isUpdatingVessels && !loadingApp && !appIsLoaded) {
+    if (isUpdatingVessels && !loadingApp && !appIsLoaded) {
       setLoadingApp(true)
-    } else if(!isUpdatingVessels && loadingApp && !appIsLoaded) {
+    } else if (!isUpdatingVessels && loadingApp && !appIsLoaded) {
       setLoadingApp(false)
       setAppIsLoaded(true)
     }
@@ -22,15 +22,16 @@ const UpdatingVesselLoader = () => {
 
   return (
     <>
-      { loadingApp ?
-        <FirstLoadWrapper>
+      { loadingApp
+        ? <FirstLoadWrapper>
           <FulfillingBouncingCircleSpinner
             color={COLORS.background}
             className={'update-vessels'}
             size={100}/>
           <BigVessel/>
           <Text>Chargement...</Text>
-        </FirstLoadWrapper> : null
+        </FirstLoadWrapper>
+        : null
       }
       <UpdateWrapper selectedVessel={selectedVessel}>
         {

@@ -103,6 +103,10 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                 foundOriginalMessage?.acknowledge?.let {
                     it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
                 }
+            } else if (ersMessage.operationType == ERSOperationType.DEL &&
+                    !ersMessage.referencedErsId.isNullOrEmpty()) {
+                val deletedMessage = messages.find { message -> message.ersId == ersMessage.referencedErsId }
+                deletedMessage?.deleted = true
             }
         }
     }

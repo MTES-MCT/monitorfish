@@ -50,6 +50,8 @@ const LANMessageResume = props => {
 
     return <Wrapper>
         <ERSMessageResumeHeader
+            isNotAcknowledged={props.isNotAcknowledged}
+            isDeleted={props.isDeleted}
             isAlert={!!props.catchesOverToleranceAlert}
             title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
             onHoverText={getWeightOverToleranceInfo()}

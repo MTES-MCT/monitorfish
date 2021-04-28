@@ -83,7 +83,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
                 .findAllMessagesAfterDepartureDate(lastDepartureDate, "GBR000B14430")
 
         // Then
-        assertThat(messages).hasSize(16)
+        assertThat(messages).hasSize(17)
 
         // LAN
         assertThat(messages[0].message).isInstanceOf(LAN::class.java)
@@ -220,6 +220,10 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(messages[15].operationType).isEqualTo(ERSOperationType.RET)
         val ackMessage4 = messages[15].message as Acknowledge
         assertThat(ackMessage4.returnStatus).isEqualTo("000")
+
+        // RET
+        assertThat(messages[16].operationType).isEqualTo(ERSOperationType.DEL)
+        assertThat(messages[16].referencedErsId).isEqualTo("OOF20190627059908")
     }
 
     @Test

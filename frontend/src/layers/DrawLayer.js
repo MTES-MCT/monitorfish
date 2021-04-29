@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import { layersType as LayersType } from '../domain/entities/layers'
-import { Interactions } from '../domain/entities/map'
+import { InteractionTypes } from '../domain/entities/map'
 import Draw, { createBox } from 'ol/interaction/Draw'
 import { Icon, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
@@ -24,10 +24,10 @@ const DrawLayer = ({ map }) => {
 
       let type = null
       switch (interaction) {
-        case Interactions.SQUARE:
+        case InteractionTypes.SQUARE:
           type = 'Circle'
           break
-        case Interactions.POLYGON:
+        case InteractionTypes.POLYGON:
           type = 'Polygon'
           break
         default:
@@ -53,7 +53,7 @@ const DrawLayer = ({ map }) => {
           })
 
         }),
-        geometryFunction: interaction === Interactions.SQUARE ? createBox() : null
+        geometryFunction: interaction === InteractionTypes.SQUARE ? createBox() : null
       })
       map.addInteraction(draw)
 

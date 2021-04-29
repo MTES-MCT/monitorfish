@@ -46,6 +46,7 @@ To run the backend for development purpose (with hot-reload), open another termi
 ```shell
 make run-back
 ```
+> You'll need to install `psql` to interact with the Postgres database
 
 Then, insert the GIS layers to the postgres database by executing (make sure you have `psql` installed):
 ```shell
@@ -54,7 +55,7 @@ Then, insert the GIS layers to the postgres database by executing (make sure you
 
 export the required environment variables:
 ```
-export DB_HOST=0.0.0.0
+export DB_HOST=db
 export DB_NAME=monitorfishdb
 export DB_SCHEMA=public
 export DB_USER=postgres

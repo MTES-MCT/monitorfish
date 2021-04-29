@@ -13,7 +13,7 @@ import TagPicker from 'rsuite/lib/TagPicker'
 import Tag from 'rsuite/lib/Tag'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../domain/reducers/Map'
-import { Interactions, OPENLAYERS_PROJECTION } from '../domain/entities/map'
+import { InteractionTypes, OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import {
   resetTemporaryVesselsToHighLightOnMap,
   setTemporaryVesselsToHighLightOnMap
@@ -223,12 +223,12 @@ const VesselList = () => {
 
   const selectBox = () => {
     setVesselListModalIsOpen(false)
-    dispatch(setInteraction(Interactions.SQUARE))
+    dispatch(setInteraction(InteractionTypes.SQUARE))
   }
 
   const selectPolygon = () => {
     setVesselListModalIsOpen(false)
-    dispatch(setInteraction(Interactions.POLYGON))
+    dispatch(setInteraction(InteractionTypes.POLYGON))
   }
 
   const highLightOnMap = () => {

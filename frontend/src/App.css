@@ -39,12 +39,17 @@ html {
   border-radius: 2px;
 }
 
+
 button:hover, button:focus {
   background: inherit;
 }
 
 .hide {
   display: none;
+}
+
+.visible {
+  visibility: visible;
 }
 
 .active-tab {

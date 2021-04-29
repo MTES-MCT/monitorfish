@@ -23,6 +23,13 @@ PROXIES = {
 PORTS_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/60fe965d-5888-493b-9321-24bc3b1f84db"
 )
+
 FLEET_SEGMENTS_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/41873d54-278f-4d2a-bdb2-77746c581fac"
 )
+
+ISSCAAP_GROUPS_URL = (
+    "https://www.data.gouv.fr/fr/datasets/r/d3024324-ff69-429b-848b-945cb8748005"
+)
+
+FAO_SPECIES_URL = "http://www.fao.org/fishery/static/ASFIS/ASFIS_sp.zip"

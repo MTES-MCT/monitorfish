@@ -58,6 +58,17 @@ export default {
     isIntersectable: false,
     zIndex: 999
   },
+  MEASURE: {
+    code: 'measure',
+    name: '',
+    group: null,
+    type: layersType.FREE_DRAW,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 1001
+  },
   REGULATORY: {
     code: 'regulatory_areas',
     name: '',

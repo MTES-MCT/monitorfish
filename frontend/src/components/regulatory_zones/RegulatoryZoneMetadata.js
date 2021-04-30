@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
+import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import {COLORS} from "../../constants/constants";
 import {ReactComponent as REGPaperSVG} from '../icons/reg_paper.svg'
@@ -193,7 +194,7 @@ const RegulatoryZoneMetadata = props => {
                                           props.regulatoryZoneMetadata.technicalMeasures ?
                                             <>
                                                 <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.technicalMeasures} </ValueWithLineBreak>
+                                                <MarkdownValue >{props.regulatoryZoneMetadata.technicalMeasures}</MarkdownValue>
                                             </>
                                             : null
                                       }
@@ -440,6 +441,17 @@ const ValueWithLineBreak = styled.div`
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
+`
+
+const MarkdownValue = styled(ReactMarkdown)`
+  color: ${COLORS.grayDarkerThree};
+  padding: 2px 5px 5px 0;
+  line-height: normal;
+  font-size: 13px;
+  p {
+    font-size: 13px;
+    margin: 0px;
+  }
 `
 
 const Key = styled.th`

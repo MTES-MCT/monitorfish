@@ -6,21 +6,22 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
 import Control from './Control'
 
 const YearControls = props => {
-    const [isOpen, setIsOpen] = useState(false)
-    const [numberOfInfractions, setNumberOfInfractions] = useState(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [numberOfInfractions, setNumberOfInfractions] = useState(null)
 
-    useEffect(() => {
-        if(props.yearControls && props.yearControls.length) {
-            let nextNumberOfInfractions = parseFloat(props.yearControls
-              .reduce((accumulator, control) => {
-                  return accumulator + control.infractions.length
-              }, 0).toFixed(1))
+  useEffect(() => {
+    if (props.yearControls && props.yearControls.length) {
+      const nextNumberOfInfractions = parseFloat(props.yearControls
+        .reduce((accumulator, control) => {
+          return accumulator + control.infractions.length
+        }, 0).toFixed(1))
 
-            setNumberOfInfractions(nextNumberOfInfractions)
-        }
-    }, [props.yearControls])
+      setNumberOfInfractions(nextNumberOfInfractions)
+    }
+  }, [props.yearControls])
 
-    return props.yearControls ? <Row>
+  return props.yearControls
+    ? <Row>
         <YearTitle isEmpty={props.yearControls.length === 0} isLastItem={props.isLastItem} isOpen={isOpen}>
             <Text isEmpty={props.yearControls.length === 0} isOpen={isOpen} title={props.year} onClick={() => setIsOpen(!isOpen)}>
                 {
@@ -37,7 +38,7 @@ const YearControls = props => {
                       props.yearControls.length
                         ? numberOfInfractions
                           ? <>, {numberOfInfractions} infractions <Red/></>
-                          : <>, pas d'infraction <Green /></>
+                          : <>, pas d&apos;infraction <Green /></>
                         : null
                     }
                 </YearResume>
@@ -47,16 +48,18 @@ const YearControls = props => {
           isOpen={isOpen}
           name={props.yearControls.length && props.yearControls[0] ? props.yearControls[0].controlDatetimeUtc : props.year}>
             {
-                props.yearControls.length ?
-                  props.yearControls.map((control, index) => {
-                      return <Control
+                props.yearControls.length
+                  ? props.yearControls.map((control, index) => {
+                    return <Control
                         key={index}
                         isLastItem={props.yearControls.length === index + 1}
                         control={control}/>
-                  }) : null
+                  })
+                  : null
             }
         </List>
-    </Row> : null
+    </Row>
+    : null
 }
 
 const Red = styled.span`
@@ -138,7 +141,7 @@ const List = styled.div`
   height: 0;
   overflow: hidden;
   opacity: 0;
-  animation: ${props => props.isOpen ? `list-controls-opening` : `list-controls-closing`} 0.2s ease forwards;
+  animation: ${props => props.isOpen ? 'list-controls-opening' : 'list-controls-closing'} 0.2s ease forwards;
 
   @keyframes list-controls-opening {
     0%   { opacity: 0; height: 0; }

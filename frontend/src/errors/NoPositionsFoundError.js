@@ -5,10 +5,10 @@ export default class NoPositionsFoundError extends Error {
   type = errorType.INFO
   showEmptyComponentFields = true
 
-  constructor(message = '') {
-    super(message);
+  constructor (message = '') {
+    super(message)
 
-    if(Error.captureStackTrace) {
+    if (Error.captureStackTrace) {
       Error.captureStackTrace(this, NoPositionsFoundError)
     }
     this.message = message

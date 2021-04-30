@@ -1,33 +1,34 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {getDateTime} from "../../../utils";
-import ERSMessageResumeHeader from "./ERSMessageResumeHeader";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { getDateTime } from '../../../utils'
+import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import { ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
 
 const DEPMessageResume = props => {
-    const [isOpen, setIsOpen] = useState(false)
-    const firstUpdate = useRef(true);
+  const [isOpen, setIsOpen] = useState(false)
+  const firstUpdate = useRef(true)
 
-    useEffect(() => {
-        if(isOpen) {
-            firstUpdate.current = false
-        }
-    }, [isOpen])
-
-    const getDEPMessageResumeTitleText = () => {
-        return `${props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort} le ${getDateTime(props.depMessage.departureDatetimeUtc, true)} (UTC)`
+  useEffect(() => {
+    if (isOpen) {
+      firstUpdate.current = false
     }
+  }, [isOpen])
 
-    const getDEPMessageResumeTitle = () => {
-        return <>{props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort}
+  const getDEPMessageResumeTitleText = () => {
+    return `${props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort} le ${getDateTime(props.depMessage.departureDatetimeUtc, true)} (UTC)`
+  }
+
+  const getDEPMessageResumeTitle = () => {
+    return <>{props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort}
             {' '}le {getDateTime(props.depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
-    }
+  }
 
-    return <>
+  return <>
         <Wrapper>
             <ERSMessageResumeHeader
                 isNotAcknowledged={props.isNotAcknowledged}
+                isDeleted={props.isDeleted}
                 rejectionCause={props.rejectionCause}
                 onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
                 title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}
@@ -37,8 +38,9 @@ const DEPMessageResume = props => {
                 setIsOpen={setIsOpen}
                 isOpen={isOpen}/>
             {
-                props.hasNoMessage ? null :
-                    <ERSMessageContent
+                props.hasNoMessage
+                  ? null
+                  : <ERSMessageContent
                         id={props.id}
                         speciesOnboard={(props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length > 0) ? props.depMessage.speciesOnboard.length : 1}
                         gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
@@ -46,35 +48,39 @@ const DEPMessageResume = props => {
                         isOpen={isOpen}
                         name={ERSMessageTypeEnum.DEP.code.toString()}>
                         <Zone>
-                            {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length ?
-                                props.depMessage.gearOnboard.map((gear, index) => {
-                                    return <Gear key={gear.gear} isFirst={index === "0"}>
+                            {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length
+                              ? props.depMessage.gearOnboard.map((gear, index) => {
+                                return <Gear key={gear.gear} isFirst={index === '0'}>
                                         <SubKey>Engin à bord {index + 1}</SubKey>{' '}
                                         <SubValue>
                                             {
-                                                gear.gearName ?
-                                                    <>{gear.gearName} ({gear.gear})</> : gear.species
+                                                gear.gearName
+                                                  ? <>{gear.gearName} ({gear.gear})</>
+                                                  : gear.species
                                             }
                                         </SubValue><br/>
                                         <SubKey>Maillage</SubKey><SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
                                         <SubKey>Dimensions</SubKey><SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
                                         <br/>
                                     </Gear>
-                                }) : <NoValue>Pas d'engins à bord</NoValue>}
+                              })
+                              : <NoValue>Pas d&apos;engins à bord</NoValue>}
                             <Fields>
                                 <TableBody>
                                     <Field>
                                         <Key>Captures à bord</Key>
-                                        <Value>{props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length ?
-                                            props.depMessage.speciesOnboard.map(speciesCatch => {
-                                                return <span key={speciesCatch.species}>
+                                        <Value>{props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length
+                                          ? props.depMessage.speciesOnboard.map(speciesCatch => {
+                                            return <span key={speciesCatch.species}>
                                         {
-                                            speciesCatch.speciesName ?
-                                                <>{speciesCatch.speciesName} ({speciesCatch.species})</> : speciesCatch.species
+                                            speciesCatch.speciesName
+                                              ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                                              : speciesCatch.species
                                         }
                                                     {''} - {speciesCatch.weight} kg<br/>
                                     </span>
-                                            }) : <NoValue>aucune</NoValue>}</Value>
+                                          })
+                                          : <NoValue>aucune</NoValue>}</Value>
                                     </Field>
                                 </TableBody>
                             </Fields>

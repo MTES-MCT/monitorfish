@@ -1,142 +1,156 @@
-import React from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {ERSMessageType as ERSMessageTypeEnum} from "../../../domain/entities/ERS";
-import {ReactComponent as XMLSVG} from '../../icons/Picto_XML.svg'
-import {ReactComponent as AckOkSVG} from '../../icons/Message_JPE_acquitté.svg'
-import {ReactComponent as AckNOkSVG} from '../../icons/Message_JPE_non_acquitté.svg'
-import {getDateTime} from "../../../utils";
-import DEPMessage from "./DEPMessage";
-import FARMessage from "./FARMessage";
-import EOFMessage from "./EOFMessage";
-import PNOMessage from "./PNOMessage";
-import RTPMessage from "./RTPMessage";
-import LANMessage from "./LANMessage";
-import COEMessage from "./COEMessage";
-import COXMessage from "./COXMessage";
-import CROMessage from "./CROMessage";
-import DISMessage from "./DISMessage";
+import React from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
+import { ReactComponent as XMLSVG } from '../../icons/Picto_XML.svg'
+import { ReactComponent as AckOkSVG } from '../../icons/Message_JPE_acquitté.svg'
+import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitté.svg'
+import { getDateTime } from '../../../utils'
+import DEPMessage from './DEPMessage'
+import FARMessage from './FARMessage'
+import EOFMessage from './EOFMessage'
+import PNOMessage from './PNOMessage'
+import RTPMessage from './RTPMessage'
+import LANMessage from './LANMessage'
+import COEMessage from './COEMessage'
+import COXMessage from './COXMessage'
+import CROMessage from './CROMessage'
+import DISMessage from './DISMessage'
 
 const ERSMessage = props => {
-    const getERSMessageHeaderTitle = message => {
-        switch (message.messageType) {
-            case ERSMessageTypeEnum.DEP.code.toString(): {
-                return <>
+  const getERSMessageHeaderTitle = message => {
+    switch (message.messageType) {
+      case ERSMessageTypeEnum.DEP.code.toString(): {
+        return <>
                     <ERSMessageName>{ERSMessageTypeEnum[message.messageType].name}</ERSMessageName>
                     {message.message.departurePortName ? message.message.departurePortName : message.message.departurePort}
                     {' '}le {getDateTime(message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
-            }
-            case ERSMessageTypeEnum.PNO.code.toString(): {
-                return 'Préavis (notification de retour au port)'
-            }
-            case ERSMessageTypeEnum.FAR.code.toString(): {
-                return 'Déclaration de capture'
-            }
-            case ERSMessageTypeEnum.COE.code.toString(): {
-                return 'Entrée dans une zone d\'effort'
-            }
-            case ERSMessageTypeEnum.COX.code.toString(): {
-                return 'Sortie d\'une zone d\'effort'
-            }
-            case ERSMessageTypeEnum.CRO.code.toString(): {
-                return 'Traversée d\'une zone d\'effort'
-            }
-            case ERSMessageTypeEnum.DIS.code.toString(): {
-                return 'Déclaration de rejets'
-            }
-            case ERSMessageTypeEnum.EOF.code.toString(): {
-                return 'Fin de pêche'
-            }
-            case ERSMessageTypeEnum.RTP.code.toString(): {
-                return 'Retour au port'
-            }
-            case ERSMessageTypeEnum.LAN.code.toString(): {
-                return 'Débarquement'
-            }
-        }
+      }
+      case ERSMessageTypeEnum.PNO.code.toString(): {
+        return 'Préavis (notification de retour au port)'
+      }
+      case ERSMessageTypeEnum.FAR.code.toString(): {
+        return 'Déclaration de capture'
+      }
+      case ERSMessageTypeEnum.COE.code.toString(): {
+        return 'Entrée dans une zone d\'effort'
+      }
+      case ERSMessageTypeEnum.COX.code.toString(): {
+        return 'Sortie d\'une zone d\'effort'
+      }
+      case ERSMessageTypeEnum.CRO.code.toString(): {
+        return 'Traversée d\'une zone d\'effort'
+      }
+      case ERSMessageTypeEnum.DIS.code.toString(): {
+        return 'Déclaration de rejets'
+      }
+      case ERSMessageTypeEnum.EOF.code.toString(): {
+        return 'Fin de pêche'
+      }
+      case ERSMessageTypeEnum.RTP.code.toString(): {
+        return 'Retour au port'
+      }
+      case ERSMessageTypeEnum.LAN.code.toString(): {
+        return 'Débarquement'
+      }
     }
+  }
 
-    const openXML = xml => {
-        let blob = new Blob([xml], { type: 'text/xml' });
-        let url = URL.createObjectURL(blob);
-        window.open(url);
-        URL.revokeObjectURL(url);
+  const openXML = xml => {
+    const blob = new Blob([xml], { type: 'text/xml' })
+    const url = URL.createObjectURL(blob)
+    window.open(url)
+    URL.revokeObjectURL(url)
+  }
+
+  const getERSMessage = ersMessage => {
+    switch (ersMessage.messageType) {
+      case ERSMessageTypeEnum.DEP.code.toString(): {
+        return <DEPMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.FAR.code.toString(): {
+        return <FARMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.DIS.code.toString(): {
+        return <DISMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.EOF.code.toString(): {
+        return <EOFMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.COE.code.toString(): {
+        return <COEMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.COX.code.toString(): {
+        return <COXMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.CRO.code.toString(): {
+        return <CROMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.PNO.code.toString(): {
+        return <PNOMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.RTP.code.toString(): {
+        return <RTPMessage message={ersMessage.message} />
+      }
+      case ERSMessageTypeEnum.LAN.code.toString(): {
+        return <LANMessage message={ersMessage.message} />
+      }
     }
+  }
 
-    const getERSMessage = ersMessage => {
-        switch (ersMessage.messageType) {
-            case ERSMessageTypeEnum.DEP.code.toString(): {
-                return <DEPMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.FAR.code.toString(): {
-                return <FARMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.DIS.code.toString(): {
-                return <DISMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.EOF.code.toString(): {
-                return <EOFMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.COE.code.toString(): {
-                return <COEMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.COX.code.toString(): {
-                return <COXMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.CRO.code.toString(): {
-                return <CROMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.PNO.code.toString(): {
-                return <PNOMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.RTP.code.toString(): {
-                return <RTPMessage message={ersMessage.message} />
-            }
-            case ERSMessageTypeEnum.LAN.code.toString(): {
-                return <LANMessage message={ersMessage.message} />
-            }
-        }
-    }
-
-    function getErsMessageType() {
-        if(props.message.messageType === ERSMessageTypeEnum.DIS.code &&
+  function getErsMessageType () {
+    if (props.message.messageType === ERSMessageTypeEnum.DIS.code &&
             props.message.message.catches.some(aCatch => aCatch.presentation === ERSMessageTypeEnum.DIM.code)) {
-            return ERSMessageTypeEnum.DIM.code
-        }
-        return props.message.messageType;
+      return ERSMessageTypeEnum.DIM.code
     }
+    return props.message.messageType
+  }
 
-    return <>
-        { props.message ?
-            <Wrapper>
+  return <>
+        { props.message
+          ? <Wrapper>
                 <Header>
                     <ERSMessageType>{getErsMessageType()}</ERSMessageType>
                     <ERSMessageHeaderText>
                         {getERSMessageHeaderTitle(props.message)}
                     </ERSMessageHeaderText>
                     {
-                        props.message.isCorrected ? <CorrectedMessage>
+                        props.message.isCorrected
+                          ? <CorrectedMessage>
                             <MessageCorrected/>
                             <CorrectedMessageText>ANCIEN MESSAGE</CorrectedMessageText>
-                        </CorrectedMessage> : null
+                        </CorrectedMessage>
+                          : null
                     }
                     {
-                        props.message.referencedErsId ? <CorrectedMessage>
+                        props.message.deleted
+                          ? <CorrectedMessage>
+                            <MessageCorrected/>
+                            <CorrectedMessageText>MESSAGE SUPPRIMÉ</CorrectedMessageText>
+                        </CorrectedMessage>
+                          : null
+                    }
+                    {
+                        props.message.referencedErsId
+                          ? <CorrectedMessage>
                             <MessageOK/>
                             <OKMessageText>MESSAGE CORRIGÉ</OKMessageText>
-                        </CorrectedMessage> : null
+                        </CorrectedMessage>
+                          : null
                     }
                     {
-                        props.message.rawMessage ? <XML
+                        props.message.rawMessage
+                          ? <XML
                             title="Ouvrir le message XML brut"
-                            style={{cursor: 'pointer'}}
-                            onClick={() => openXML(props.message.rawMessage)}/> : <XML/>
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => openXML(props.message.rawMessage)}/>
+                          : <XML/>
                     }
                 </Header>
                 <Body>
                     <ERSMessageMetadata>
                         <EmissionDateTime>
-                            <Key>Date d'émission</Key><br/>
+                            <Key>Date d&apos;émission</Key><br/>
                             {getDateTime(props.message.operationDateTime, true)}
                         </EmissionDateTime>
                         <ReceptionDateTime>
@@ -149,18 +163,21 @@ const ERSMessage = props => {
                         </VoyageNumber>
                         <Acknowledge>
                             <Key>Acq.</Key><br/>
-                            {!props.message.acknowledge || props.message.acknowledge.isSuccess === null ?
-                                <Gray>-</Gray> : null}
-                            {props.message.acknowledge && props.message.acknowledge.isSuccess === true ?
-                                <AckOk/> : null}
-                            {props.message.acknowledge && props.message.acknowledge.isSuccess === false ?
-                                <AckNOk title={props.message.acknowledge.rejectionCause}/> : null}
+                            {!props.message.acknowledge || props.message.acknowledge.isSuccess === null
+                              ? <Gray>-</Gray>
+                              : null}
+                            {props.message.acknowledge && props.message.acknowledge.isSuccess === true
+                              ? <AckOk/>
+                              : null}
+                            {props.message.acknowledge && props.message.acknowledge.isSuccess === false
+                              ? <AckNOk title={props.message.acknowledge.rejectionCause}/>
+                              : null}
                         </Acknowledge>
                     </ERSMessageMetadata>
                     {getERSMessage(props.message)}
                 </Body>
             </Wrapper>
-             : null }
+          : null }
     </>
 }
 

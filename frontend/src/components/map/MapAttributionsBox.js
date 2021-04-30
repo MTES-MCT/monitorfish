@@ -1,11 +1,11 @@
-import React, {useState} from "react";
-import styled from 'styled-components';
-import {COLORS} from "../../constants/constants";
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
 
 const MapAttributionsBox = () => {
-    const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
-    return (<Wrapper className={'ol-unselectable ol-control'}>
+  return (<Wrapper className={'ol-unselectable ol-control'}>
         <List className={isVisible ? '' : 'collapsed'}>
             <ListItem><Link href="https://www.openstreetmap.org/copyright" target="_blank" data-bcup-haslogintext="no">©
                 OpenStreetMap contributors</Link></ListItem>

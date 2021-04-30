@@ -12,6 +12,8 @@ on:
     - 'infra/docker/DockerfileBuildApp'
     - '**.sql'
     - 'backend/pom.xml'
+  schedule:
+    - cron: "38 11 */3 * *"
 
 jobs:
   build:

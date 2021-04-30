@@ -7,32 +7,32 @@ import { ReactComponent as ClockSVG } from '../icons/Bouton_regler_piste_navire.
 import { VesselTrackDepth } from '../../domain/entities/vesselTrackDepth'
 
 const TrackDepthSelection = props => {
-    const [datesSelection, setDateSelection] = useState([])
-    const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(null)
-    const firstUpdate = useRef(true)
+  const [datesSelection, setDateSelection] = useState([])
+  const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(null)
+  const firstUpdate = useRef(true)
 
-    useEffect(() => {
-      setDateSelection([])
+  useEffect(() => {
+    setDateSelection([])
+    setTrackDepthRadioSelection(props.vesselTrackDepth)
+  }, [props.init])
+
+  useEffect(() => {
+    if (props.vesselTrackDepth && !trackDepthRadioSelection) {
       setTrackDepthRadioSelection(props.vesselTrackDepth)
-    }, [props.init])
+    }
+  }, [props.vesselTrackDepth])
 
-    useEffect(() => {
-        if(props.vesselTrackDepth && !trackDepthRadioSelection) {
-            setTrackDepthRadioSelection(props.vesselTrackDepth)
-        }
-    }, [props.vesselTrackDepth])
-
-    useEffect(() => {
-      if(trackDepthRadioSelection) {
-        if(firstUpdate.current){
-          firstUpdate.current = false
-          return
-        }
-
-        props.showVesselTrackWithTrackDepth(trackDepthRadioSelection, null, null)
-        setDateSelection([])
+  useEffect(() => {
+    if (trackDepthRadioSelection) {
+      if (firstUpdate.current) {
+        firstUpdate.current = false
+        return
       }
-    }, [trackDepthRadioSelection])
+
+      props.showVesselTrackWithTrackDepth(trackDepthRadioSelection, null, null)
+      setDateSelection([])
+    }
+  }, [trackDepthRadioSelection])
 
   const convertToUTCDay = datesSelection => {
     datesSelection[0].setMinutes(datesSelection[0].getMinutes() - datesSelection[0].getTimezoneOffset())
@@ -40,8 +40,8 @@ const TrackDepthSelection = props => {
   }
 
   useEffect(() => {
-    if(datesSelection && datesSelection.length > 1) {
-      if(firstUpdate.current){
+    if (datesSelection && datesSelection.length > 1) {
+      if (firstUpdate.current) {
         firstUpdate.current = false
         return
       }
@@ -49,12 +49,12 @@ const TrackDepthSelection = props => {
       convertToUTCDay(datesSelection)
       props.showVesselTrackWithTrackDepth(VesselTrackDepth.CUSTOM, datesSelection[0], datesSelection[1])
       setTrackDepthRadioSelection(null)
-    } else if(!trackDepthRadioSelection) {
+    } else if (!trackDepthRadioSelection) {
       setTrackDepthRadioSelection(props.vesselTrackDepth)
     }
   }, [datesSelection])
 
-    return (
+  return (
       <>
           <TrackDepthSelectionButton
             openBox={props.openBox}
@@ -84,9 +84,8 @@ const TrackDepthSelection = props => {
               />
           </TrackDepthSelectionContent>
       </>
-    )
+  )
 }
-
 
 const TrackDepthSelectionButton = styled.div`
   top: 118px;

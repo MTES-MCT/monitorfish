@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import LayersEnum, { layersType } from '../domain/entities/layers'
+import Layers, { layersType } from '../domain/entities/layers'
 
 const AdministrativeLayers = ({ map }) => {
   const layer = useSelector(state => state.layer)
-  const administrativeLayers = Object.keys(LayersEnum)
-    .map(layerName => LayersEnum[layerName])
+  const administrativeLayers = Object.keys(Layers)
+    .map(layerName => Layers[layerName])
     .filter(layer => layer.type === layersType.ADMINISTRATIVE)
 
   useEffect(() => {
@@ -19,14 +19,14 @@ const AdministrativeLayers = ({ map }) => {
     }
   }
 
-  function addAdministrativeLayersToMap() {
-    if(layer.layers.length) {
+  function addAdministrativeLayersToMap () {
+    if (layer.layers.length) {
       const layersToInsert = layer.layers
         .filter(layer => !map.getLayers().getArray().some(layer_ => layer === layer_))
         .filter(showedLayer => administrativeLayers
           .some(administrativeLayer => showedLayer.className_.includes(administrativeLayer.code)))
 
-      layersToInsert.map(layerToInsert => {
+      layersToInsert.forEach(layerToInsert => {
         if (!layerToInsert) {
           return
         }
@@ -36,21 +36,20 @@ const AdministrativeLayers = ({ map }) => {
     }
   }
 
-  function removeAdministrativeLayersToMap() {
-    let layers = layer.layers.length ? layer.layers : []
+  function removeAdministrativeLayersToMap () {
+    const layers = layer.layers.length ? layer.layers : []
 
     const layersToRemove = map.getLayers().getArray()
       .filter(showedLayer => !layers.some(layer_ => showedLayer === layer_))
       .filter(showedLayer => administrativeLayers
         .some(administrativeLayer => showedLayer.className_.includes(administrativeLayer.code)))
 
-    layersToRemove.map(layerToRemove => {
+    layersToRemove.forEach(layerToRemove => {
       map.getLayers().remove(layerToRemove)
     })
   }
 
   return null
-
 }
 
 export default AdministrativeLayers

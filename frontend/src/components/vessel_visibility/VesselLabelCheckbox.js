@@ -1,32 +1,33 @@
-import React, {useEffect, useState} from "react";
-import {Checkbox} from 'rsuite';
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react'
+import { Checkbox } from 'rsuite'
+import styled from 'styled-components'
 
 const VesselLabelCheckbox = props => {
-    const [value, setValue] = useState(undefined)
+  const [value, setValue] = useState(undefined)
 
-    useEffect(() => {
-        if(props.vesselLabelsShowedOnMap !== undefined && value === undefined) {
-            setValue(props.vesselLabelsShowedOnMap)
-        }
-    }, [props.vesselLabelsShowedOnMap])
+  useEffect(() => {
+    if (props.vesselLabelsShowedOnMap !== undefined && value === undefined) {
+      setValue(props.vesselLabelsShowedOnMap)
+    }
+  }, [props.vesselLabelsShowedOnMap])
 
-    return (
+  return (
         <>
-            { value !== undefined ?
-                <RadioWrapper>
+            { value !== undefined
+              ? <RadioWrapper>
                     <Checkbox
                         checked={value}
                         onChange={(value, isChecked) => {
-                            props.updateVesselLabelsShowedOnMap(isChecked)
-                            setValue(isChecked)
+                          props.updateVesselLabelsShowedOnMap(isChecked)
+                          setValue(isChecked)
                         }}
 
                     >{' '} <ShowLabelText>Afficher les étiquettes des navires</ShowLabelText></Checkbox>
-                </RadioWrapper> : null
+                </RadioWrapper>
+              : null
             }
         </>
-    );
+  )
 }
 
 const ShowLabelText = styled.span`

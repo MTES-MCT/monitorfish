@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../constants/constants";
-import {getDate, getDateTime} from "../../../utils";
-import ERSMessageSpecies from "./ERSMessageSpecies";
-import {buildCatchArray, ERSMessagePNOPurposeType, ERSMessageSender} from "../../../domain/entities/ERS";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import { getDateTime } from '../../../utils'
+import ERSMessageSpecies from './ERSMessageSpecies'
+import { buildCatchArray, ERSMessageSender } from '../../../domain/entities/ERS'
 
 const LANMessage = props => {
-    const [catches, setCatches] = useState([])
+  const [catches, setCatches] = useState([])
 
-    useEffect(() => {
-        if (props.message && props.message.catchLanded) {
-            let catches = buildCatchArray(props.message.catchLanded)
+  useEffect(() => {
+    if (props.message && props.message.catchLanded) {
+      const catches = buildCatchArray(props.message.catchLanded)
 
-            setCatches(catches)
-        } else {
-            setCatches([])
-        }
-    }, [props.message])
+      setCatches(catches)
+    } else {
+      setCatches([])
+    }
+  }, [props.message])
 
-    return <>
-        { props.message ?
-            <>
+  return <>
+        { props.message
+          ? <>
                 <Zone>
                     <Fields>
                         <TableBody>
@@ -42,7 +42,7 @@ const LANMessage = props => {
                 <SpeciesList>
                     {
                         catches.map((speciesCatch, index) => {
-                            return <ERSMessageSpecies
+                          return <ERSMessageSpecies
                                 index={index + 1}
                                 isLast={catches.length === index + 1}
                                 species={speciesCatch}
@@ -51,7 +51,8 @@ const LANMessage = props => {
                         })
                     }
                 </SpeciesList>
-            </> : null }
+            </>
+          : null }
     </>
 }
 

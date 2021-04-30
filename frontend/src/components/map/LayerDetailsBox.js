@@ -1,34 +1,37 @@
-import React, {useEffect, useState} from "react";
-import styled from 'styled-components';
-import {COLORS} from "../../constants/constants";
-import {getHash} from "../../utils";
-import {getGearCategory} from "../../domain/use_cases/showLayer";
-import {getVectorLayerStyle} from "../../layers/styles/vectorLayerStyles";
-import Layers from "../../domain/entities/layers";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
+import { getHash } from '../../utils'
+import { getGearCategory } from '../../domain/use_cases/showLayer'
+import { getVectorLayerStyle } from '../../layers/styles/vectorLayerStyles'
+import Layers from '../../domain/entities/layers'
 
 const LayerDetailsBox = props => {
-    const [vectorLayerStyle, setVectorLayerStyle] = useState(null)
+  const [vectorLayerStyle, setVectorLayerStyle] = useState(null)
 
-    useEffect(() => {
-        if(props.regulatory && props.regulatory.getProperties().zones && props.regulatory.getProperties().layer_name && props.regulatory.getProperties().engins && props.gears) {
-            let hash = getHash(`${props.regulatory.getProperties().layer_name}:${props.regulatory.getProperties().zones}`)
-            let gearCategory = getGearCategory(props.regulatory.getProperties().engins, props.gears);
-            setVectorLayerStyle(getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
-        }
-    }, [props.regulatory, props.gears])
+  useEffect(() => {
+    if (props.regulatory && props.regulatory.getProperties().zones && props.regulatory.getProperties().layer_name && props.regulatory.getProperties().engins && props.gears) {
+      const hash = getHash(`${props.regulatory.getProperties().layer_name}:${props.regulatory.getProperties().zones}`)
+      const gearCategory = getGearCategory(props.regulatory.getProperties().engins, props.gears)
+      setVectorLayerStyle(getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
+    }
+  }, [props.regulatory, props.gears])
 
-    return (<Details>
+  return (<Details>
         {
-            props.regulatory ? <>
+            props.regulatory
+              ? <>
                 <Rectangle vectorLayerStyle={vectorLayerStyle} />
                 <Text>
                     {props.regulatory.getProperties().layer_name.replace(/[_]/g, ' ')}
                     {
-                        props.regulatory.getProperties().zones ?
-                            <ZoneName>{props.regulatory.getProperties().zones.replace(/[_]/g, ' ')}</ZoneName> : null
+                        props.regulatory.getProperties().zones
+                          ? <ZoneName>{props.regulatory.getProperties().zones.replace(/[_]/g, ' ')}</ZoneName>
+                          : null
                     }
                 </Text>
-            </> : null
+            </>
+              : null
         }
     </Details>)
 }

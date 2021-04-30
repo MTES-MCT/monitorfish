@@ -1,140 +1,140 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled from 'styled-components';
-import {useDispatch, useSelector} from "react-redux";
-import {setError} from "../domain/reducers/Global";
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { setError } from '../domain/reducers/Global'
 
-import {ReactComponent as LayersSVG} from '../components/icons/Couches.svg';
-import LayersEnum, {baseLayers, layersType} from "../domain/entities/layers";
+import { ReactComponent as LayersSVG } from '../components/icons/Couches.svg'
+import LayersEnum, { baseLayers, layersType } from '../domain/entities/layers'
 
-import addRegulatoryZonesToMySelection from "../domain/use_cases/addRegulatoryZonesToMySelection";
-import getAllRegulatoryZones from "../domain/use_cases/getAllRegulatoryZones";
-import removeRegulatoryZoneFromMySelection from "../domain/use_cases/removeRegulatoryZoneFromMySelection";
-import showLayer from "../domain/use_cases/showLayer";
-import hideLayers from "../domain/use_cases/hideLayers";
-import RegulatoryZoneSelection from "../components/regulatory_zones/RegulatoryZoneSelection";
-import AdministrativeZones from "../components/administratives_zones/AdministrativeZones";
-import RegulatoryZoneSelected from "../components/regulatory_zones/RegulatoryZoneSelected";
-import {COLORS} from "../constants/constants";
-import showRegulatoryZoneMetadata from "../domain/use_cases/showRegulatoryZoneMetadata";
-import closeRegulatoryZoneMetadata from "../domain/use_cases/closeRegulatoryZoneMetadata";
-import RegulatoryZoneMetadata from "../components/regulatory_zones/RegulatoryZoneMetadata";
-import zoomInSubZone from "../domain/use_cases/zoomInSubZone";
-import {selectBaseLayer} from "../domain/reducers/Map";
-import BaseLayerSelection from "../components/base_layers/BaseLayerSelection";
+import addRegulatoryZonesToMySelection from '../domain/use_cases/addRegulatoryZonesToMySelection'
+import getAllRegulatoryZones from '../domain/use_cases/getAllRegulatoryZones'
+import removeRegulatoryZoneFromMySelection from '../domain/use_cases/removeRegulatoryZoneFromMySelection'
+import showLayer from '../domain/use_cases/showLayer'
+import hideLayers from '../domain/use_cases/hideLayers'
+import RegulatoryZoneSelection from '../components/regulatory_zones/RegulatoryZoneSelection'
+import AdministrativeZones from '../components/administratives_zones/AdministrativeZones'
+import RegulatoryZoneSelected from '../components/regulatory_zones/RegulatoryZoneSelected'
+import { COLORS } from '../constants/constants'
+import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
+import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
+import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
+import zoomInSubZone from '../domain/use_cases/zoomInSubZone'
+import { selectBaseLayer } from '../domain/reducers/Map'
+import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
 
 const LayersSidebar = () => {
-    const dispatch = useDispatch()
-    const showedLayers = useSelector(state => state.layer.showedLayers)
-    const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
-    const {
-        isReadyToShowRegulatoryZones,
-        regulatoryZoneMetadataPanelIsOpen,
-        loadingRegulatoryZoneMetadata,
-        selectedRegulatoryZones,
-        regulatoryZoneMetadata
-    } = useSelector(state => state.regulatory)
-    const gears = useSelector(state => state.gear.gears)
-    const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+  const dispatch = useDispatch()
+  const showedLayers = useSelector(state => state.layer.showedLayers)
+  const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
+  const {
+    isReadyToShowRegulatoryZones,
+    regulatoryZoneMetadataPanelIsOpen,
+    loadingRegulatoryZoneMetadata,
+    selectedRegulatoryZones,
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
+  const gears = useSelector(state => state.gear.gears)
+  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
-    const firstUpdate = useRef(true);
-    const [regulatoryZones, setRegulatoryZones] = useState();
-    const [administrativeZones, setAdministrativeZones] = useState([])
-    const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false);
-    const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
-    const [hideZonesListWhenSearching, setHideZonesListWhenSearching] = useState(false)
-    const [isShowed, setIsShowed] = useState(true)
+  const firstUpdate = useRef(true)
+  const [regulatoryZones, setRegulatoryZones] = useState()
+  const [administrativeZones, setAdministrativeZones] = useState([])
+  const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false)
+  const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
+  const [hideZonesListWhenSearching, setHideZonesListWhenSearching] = useState(false)
+  const [isShowed, setIsShowed] = useState(true)
 
-    useEffect(() => {
-        if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-            setIsShowed(false)
-        } else {
-            setIsShowed(true)
-        }
-    }, [temporaryVesselsToHighLightOnMap])
+  useEffect(() => {
+    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+      setIsShowed(false)
+    } else {
+      setIsShowed(true)
+    }
+  }, [temporaryVesselsToHighLightOnMap])
 
-    useEffect(() => {
-        if (layersSidebarIsOpen === true) {
-            firstUpdate.current = false;
-        }
-
-        if(!layersSidebarIsOpen) {
-            callCloseRegulatoryZoneMetadata()
-        }
-    }, [layersSidebarIsOpen])
-
-    useEffect(() => {
-        const administrativeZones = Object.keys(LayersEnum)
-            .map(layerName => LayersEnum[layerName])
-            .filter(layer => layer.type === layersType.ADMINISTRATIVE)
-        setAdministrativeZones(administrativeZones)
-
-        dispatch(getAllRegulatoryZones(dispatch))
-            .then(regulatoryZones => setRegulatoryZones(regulatoryZones))
-            .catch(error => {
-                dispatch(setError(error));
-            });
-    }, [])
-
-    function callAddRegulatoryZonesToMySelection(regulatoryZonesSelection) {
-        dispatch(addRegulatoryZonesToMySelection(regulatoryZonesSelection))
+  useEffect(() => {
+    if (layersSidebarIsOpen === true) {
+      firstUpdate.current = false
     }
 
-    function callRemoveRegulatoryZoneFromMySelection(regulatoryZone) {
-        callHideRegulatoryZone(regulatoryZone)
-        dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
+    if (!layersSidebarIsOpen) {
+      callCloseRegulatoryZoneMetadata()
     }
+  }, [layersSidebarIsOpen])
 
-    function callShowRegulatoryZone(regulatoryZone) {
-        dispatch(showLayer({
-            type: LayersEnum.REGULATORY.code,
-            zone: regulatoryZone,
-        }))
-    }
+  useEffect(() => {
+    const administrativeZones = Object.keys(LayersEnum)
+      .map(layerName => LayersEnum[layerName])
+      .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+    setAdministrativeZones(administrativeZones)
 
-    function callHideRegulatoryZone(regulatoryZone) {
-        dispatch(hideLayers({
-            type: LayersEnum.REGULATORY.code,
-            zone: regulatoryZone
-        }))
-    }
+    dispatch(getAllRegulatoryZones(dispatch))
+      .then(regulatoryZones => setRegulatoryZones(regulatoryZones))
+      .catch(error => {
+        dispatch(setError(error))
+      })
+  }, [])
 
-    function callShowAdministrativeZone(administrativeZone, administrativeSubZone) {
-        dispatch(showLayer({
-            type: administrativeZone,
-            zone: administrativeSubZone
-        }));
-    }
+  function callAddRegulatoryZonesToMySelection (regulatoryZonesSelection) {
+    dispatch(addRegulatoryZonesToMySelection(regulatoryZonesSelection))
+  }
 
-    function callHideAdministrativeZone(administrativeZone, administrativeSubZone) {
-        dispatch(hideLayers({
-            type: administrativeZone,
-            zone: administrativeSubZone
-        }));
-    }
+  function callRemoveRegulatoryZoneFromMySelection (regulatoryZone) {
+    callHideRegulatoryZone(regulatoryZone)
+    dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
+  }
 
-    function callShowRegulatorySubZoneMetadata(regulatorySubZone) {
-        dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
-    }
+  function callShowRegulatoryZone (regulatoryZone) {
+    dispatch(showLayer({
+      type: LayersEnum.REGULATORY.code,
+      zone: regulatoryZone
+    }))
+  }
 
-    function callCloseRegulatoryZoneMetadata() {
-        dispatch(closeRegulatoryZoneMetadata())
-    }
+  function callHideRegulatoryZone (regulatoryZone) {
+    dispatch(hideLayers({
+      type: LayersEnum.REGULATORY.code,
+      zone: regulatoryZone
+    }))
+  }
 
-    function callZoomInSubZone(subZone) {
-        dispatch(zoomInSubZone(subZone))
-    }
+  function callShowAdministrativeZone (administrativeZone, administrativeSubZone) {
+    dispatch(showLayer({
+      type: administrativeZone,
+      zone: administrativeSubZone
+    }))
+  }
 
-    function callSelectBaseLayer(baseLayer) {
-        dispatch(selectBaseLayer(baseLayer))
-    }
+  function callHideAdministrativeZone (administrativeZone, administrativeSubZone) {
+    dispatch(hideLayers({
+      type: administrativeZone,
+      zone: administrativeSubZone
+    }))
+  }
 
-    return (
+  function callShowRegulatorySubZoneMetadata (regulatorySubZone) {
+    dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
+  }
+
+  function callCloseRegulatoryZoneMetadata () {
+    dispatch(closeRegulatoryZoneMetadata())
+  }
+
+  function callZoomInSubZone (subZone) {
+    dispatch(zoomInSubZone(subZone))
+  }
+
+  function callSelectBaseLayer (baseLayer) {
+    dispatch(selectBaseLayer(baseLayer))
+  }
+
+  return (
         <Sidebar
             isShowed={isShowed}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon
-                title={"Couches réglementaires"}
+                title={'Couches réglementaires'}
                 layersSidebarIsOpen={layersSidebarIsOpen}
                 regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
                 onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
@@ -189,7 +189,7 @@ const LayersSidebar = () => {
                 layersSidebarIsOpen={layersSidebarIsOpen}
             />
         </Sidebar>
-    )
+  )
 }
 
 const Sidebar = styled.div`
@@ -201,7 +201,7 @@ const Sidebar = styled.div`
   position: absolute;
   display: inline-block;
   animation: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '' : props.layersSidebarIsOpen ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards,
-  ${props => props.isShowed ? `left-sidebar-visible` : `left-sidebar-hiding`} 0.5s ease forwards;
+  ${props => props.isShowed ? 'left-sidebar-visible' : 'left-sidebar-hiding'} 0.5s ease forwards;
 
   @keyframes left-sidebar-visible {
     0%   { opacity: 0; }
@@ -239,16 +239,16 @@ const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;
-  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree };
+  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
   padding: 2px 2px 2px 2px;
   margin-top: 0;
-  margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px' };
+  margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px'};
   border-radius: 2px;
   height: 40px;
   width: 40px;
 
   :hover, :focus {
-      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree };
+      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
   }
 `
 

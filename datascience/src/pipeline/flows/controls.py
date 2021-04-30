@@ -21,11 +21,11 @@ from src.pipeline.utils import delete, get_table, psql_insert_copy
 @task(checkpoint=False)
 def extract_controls():
 
-    parse_dates = {
-        "control_datetime_utc": "coerce",
-        "input_start_datetime_utc": "coerce",
-        "input_end_datetime_utc": "coerce",
-    }
+    parse_dates = [
+        "control_datetime_utc",
+        "input_start_datetime_utc",
+        "input_end_datetime_utc",
+    ]
 
     dtypes = {
         "controller_id": "category",

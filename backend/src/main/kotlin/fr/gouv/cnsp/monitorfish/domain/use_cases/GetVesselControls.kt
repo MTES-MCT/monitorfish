@@ -20,10 +20,13 @@ class GetVesselControls(private val controlRepository: ControlRepository,
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
     fun execute(vesselId: Int, afterDateTime: ZonedDateTime): ControlResumeAndControls {
+        logger.info("Searching controls controls for vessel $vesselId after $afterDateTime")
         val controlAndInfractionIds = controlRepository.findVesselControlsAfterDateTime(vesselId, afterDateTime)
+        logger.info("Found ${controlAndInfractionIds.size} controls for vessel $vesselId")
 
         val controlWithInfractions =  controlAndInfractionIds.map {
             val infractions = infractionRepository.findInfractions(it.infractionIds)
+            logger.info("Found ${infractions.size} infractions for control ${it.control.id} of vessel $vesselId")
 
             it.control.portLocode?.let { port ->
                 try {

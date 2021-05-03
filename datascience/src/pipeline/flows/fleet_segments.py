@@ -1,15 +1,9 @@
-import io
-
 import pandas as pd
 import prefect
-import requests
-from dotenv import load_dotenv
-from prefect import Flow, Parameter, task
+from prefect import Flow, task
 
-from config import FLEET_SEGMENTS_URL, LIBRARY_LOCATION, PROXIES
+from config import LIBRARY_LOCATION
 from src.pipeline.generic_tasks import load
-
-load_dotenv()
 
 
 @task(checkpoint=False)

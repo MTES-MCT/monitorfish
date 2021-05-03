@@ -1,0 +1,15 @@
+id,species_group,comment
+1,Espèces eau profonde,Liste des espèces eau profondes définies dans l'annexe XI de l'AM_27-05-2016
+2,Bivalves,Liste des espèces de l'ordre Bivalvia
+3,Bivalves fouisseurs,Liste vide
+4,Bivalves autres que pectinidés,"Liste des espèces de l'ordre Bivalvia, exceptées les espèces de la famille des pectinidés"
+5,Oursins,Liste des espèces d'oursins
+6,Tuniciers,"Liste des espèces de groupe ISSCAAP ""Ascidiens et autres tuniciers"""
+7,Coquillages,Liste vide
+8,Coquillages filtreurs,Liste vide
+9,Echinodermes,"Liste des espèces de groupe ISSCAAP ""Oursins et autres échinodermes"""
+10,Gastéropodes,Liste des espèces de l'ordre Gastropoda
+11,Appâts,Liste vide
+12,Poissons bleus,Liste des espèces de l'AM 2729 1982 concernant la pêche au chalut en Vendée
+13,Poissons blancs,"Espèces de poissons blancs autorisées à la pêche au chalut dans les zones A, B et C de l'AP 78-1984 concernant la pêche au chalut en Vendée (interprétation : cf email de Paul Cosquer)"
+14,Holothuries,Liste des espèces de l'ordre Holothuroidea

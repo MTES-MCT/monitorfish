@@ -29,8 +29,9 @@ def clean_fishing_gear_codes(fishing_gear_codes):
         "DRM": "Dragues",
         "OTS": "Engin inconnu",
         "SUX": "Filets tournants",
-        "PS1": "Filets tournants",
-        "PS2": "Filets tournants",
+        "FG": "Engins divers",
+        "HAR": "Engins divers",
+        "FCN": "Engins divers",
     }
 
     for (gear_code, category) in category_changes.items():

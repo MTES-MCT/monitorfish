@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+import React, {useEffect, useRef, useState} from "react";
+import ReactMarkdown from 'react-markdown';
+import styled from 'styled-components';
+import {COLORS} from "../../constants/constants";
+import {ReactComponent as REGPaperSVG} from '../icons/reg_paper.svg'
+import {ReactComponent as CloseIconSVG} from '../icons/Croix_grise.svg'
+import {FingerprintSpinner} from "react-epic-spinners";
+import {getDateTime} from "../../utils";
+=======
 import React, { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components'
@@ -6,6 +16,7 @@ import { ReactComponent as REGPaperSVG } from '../icons/reg_paper.svg'
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { getDateTime } from '../../utils'
+>>>>>>> c21e84892d9c8f12c2821146799ce89166aeacf2
 
 const RegulatoryZoneMetadata = props => {
   const [gears, setGears] = useState([])

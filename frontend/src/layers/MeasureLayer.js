@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { MeasureTypes } from '../domain/entities/map'
+import { MeasureTypes, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Draw from 'ol/interaction/Draw'
 import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
@@ -17,9 +17,15 @@ import { resetMeasure } from '../domain/reducers/Map'
 import VectorLayer from 'ol/layer/Vector'
 import { COLORS } from '../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
+import Circle from 'ol/geom/Circle'
+import { fromCircle } from 'ol/geom/Polygon'
+import Feature from 'ol/Feature'
+import { getPointResolution, transform } from 'ol/proj'
+import { METERS_PER_UNIT } from 'ol/proj/Units'
 
 const MeasureLayer = ({ map }) => {
   const measureType = useSelector(state => state.map.measure)
+  const circleMeasureToAdd = useSelector(state => state.map.circleMeasureToAdd)
   const dispatch = useDispatch()
 
   const ref = useRef(null)
@@ -27,13 +33,12 @@ const MeasureLayer = ({ map }) => {
   const [overlays, setOverlays] = useState([])
   const [measuresLength, setMeasuresLength] = useState(0)
 
-  const [vectorSource] = useState(new VectorSource({ wrapX: false }))
+  const [drawObject, setDrawObject] = useState(null)
+
+  const [vectorSource] = useState(new VectorSource({ wrapX: false, projection: OPENLAYERS_PROJECTION }))
   const [vectorLayer] = useState(new VectorLayer({
     source: vectorSource,
     style: new Style({
-      fill: new Fill({
-        color: COLORS.grayDarkerThree
-      }),
       stroke: new Stroke({
         color: COLORS.grayDarkerThree,
         lineDash: [4, 4],
@@ -66,16 +71,84 @@ const MeasureLayer = ({ map }) => {
   useEffect(() => {
     if (measureType) {
       setMeasures(measures.concat(0))
+      setOverlays(overlays.concat(null))
       setMeasuresLength(measuresLength + 1)
     }
   }, [measureType])
 
+  useEffect(() => {
+    if (!measureType && drawObject) {
+      setTimeout(() => {
+        map.removeInteraction(drawObject)
+        setDrawObject(null)
+      }, 300)
+    }
+  }, [measureType])
+
+  useEffect(() => {
+    if (circleMeasureToAdd &&
+      circleMeasureToAdd.circleCoordinatesToAdd.length &&
+      circleMeasureToAdd.circleRadiusToAdd) {
+      console.log(measures, measuresLength)
+
+      const center = transform([circleMeasureToAdd.circleCoordinatesToAdd[1], circleMeasureToAdd.circleCoordinatesToAdd[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      const radiusInMeters = METERS_PER_UNIT.m * circleMeasureToAdd.circleRadiusToAdd * 1852
+      const viewProjection = map.getView().getProjection()
+      const pointResolution = getPointResolution(viewProjection, 1, center)
+      const radius = radiusInMeters / pointResolution
+      console.log(center, radiusInMeters, viewProjection, pointResolution, radius)
+
+      console.log(radiusInMeters)
+
+      const circleFeature = new Feature({
+        geometry: new Circle(center, radius),
+        style: new Style({
+          stroke: new Stroke({
+            color: COLORS.grayDarkerThree,
+            lineDash: [5, 5],
+            width: 2
+          }),
+          image: new CircleStyle({
+            radius: 2,
+            stroke: new Stroke({
+              color: COLORS.grayDarkerThree
+            }),
+            fill: new Fill({
+              color: COLORS.grayDarkerThree
+            })
+          })
+        })
+      })
+
+      circleFeature.setId(measuresLength)
+      vectorSource.addFeature(circleFeature)
+
+      const overlay = overlays[overlays.length - 1]
+      const tooltipCoordinates = circleFeature.getGeometry().getLastCoordinate()
+      overlay.setPosition(tooltipCoordinates)
+      overlay.setOffset([0, -7])
+
+      const nextMeasures = [...measures]
+      nextMeasures[nextMeasures.length - 1] = getNauticalMilesOfCircle(circleFeature.getGeometry())
+      setMeasures(nextMeasures)
+
+      setTimeout(() => {
+        map.removeInteraction(drawObject)
+      }, 300)
+    }
+  }, [circleMeasureToAdd])
+
   function deleteFeature (featureId) {
     const feature = vectorSource.getFeatureById(featureId)
-    vectorSource.removeFeature(feature)
+    if (feature) {
+      vectorSource.removeFeature(feature)
+    }
 
     const overlayToRemove = overlays[featureId - 1]
-    map.removeOverlay(overlayToRemove)
+
+    if (overlayToRemove) {
+      map.removeOverlay(overlayToRemove)
+    }
 
     const nextOverlays = [...overlays]
     nextOverlays[featureId - 1] = null
@@ -89,18 +162,15 @@ const MeasureLayer = ({ map }) => {
         case MeasureTypes.MULTILINE:
           type = 'LineString'
           break
-        default:
-          console.error('No interaction type specified')
-          return
+        case MeasureTypes.CIRCLE_RANGE:
+          type = 'Circle'
+          break
       }
 
       const draw = new Draw({
         source: vectorSource,
         type: type,
         style: new Style({
-          fill: new Fill({
-            color: COLORS.grayDarkerThree
-          }),
           stroke: new Stroke({
             color: COLORS.grayDarkerThree,
             lineDash: [5, 5],
@@ -119,30 +189,41 @@ const MeasureLayer = ({ map }) => {
       })
 
       map.addInteraction(draw)
+      setDrawObject(draw)
 
       const overlay = createMeasureTooltip()
+      const nextOverlays = overlays
+      nextOverlays[nextOverlays.length - 1] = overlay
+      setOverlays(nextOverlays)
+
       let listener
 
       draw.on('drawstart', event => {
         listener = startDrawing(event, listener, overlay)
       })
 
+      draw.on('drawabort', event => {
+        abortDrawing(event, overlay, listener)
+      })
+
       draw.on('drawend', event => {
-        endDrawing(event, overlay, listener, draw)
+        endDrawing(event, overlay, listener)
       })
     }
   }
 
-  function endDrawing (event, overlay, listener, draw) {
-    event.feature.setId(measuresLength)
-    overlay.setOffset([0, -7])
-    setOverlays(overlays.concat(overlay))
+  function abortDrawing (event, overlay, listener) {
     unByKey(listener)
     dispatch(resetMeasure())
+    map.removeOverlay(overlay)
+  }
 
-    setTimeout(() => {
-      map.removeInteraction(draw)
-    }, 300)
+  function endDrawing (event, overlay, listener) {
+    console.log(event.feature)
+    event.feature.setId(measuresLength)
+    overlay.setOffset([0, -7])
+    unByKey(listener)
+    dispatch(resetMeasure())
   }
 
   function startDrawing (event, listener, overlay) {
@@ -172,16 +253,30 @@ const MeasureLayer = ({ map }) => {
   function onNewPoint (event, tooltipCoordinates, overlay) {
     const geom = event.target
     if (geom instanceof LineString) {
-      const nextMeasureOutput = getNauticalMiles(geom)
+      const nextMeasureOutput = getNauticalMilesOfLine(geom)
+      tooltipCoordinates = geom.getLastCoordinate()
+      const nextMeasures = [...measures]
+      nextMeasures[nextMeasures.length - 1] = nextMeasureOutput
+      setMeasures(nextMeasures)
+    } else if (geom instanceof Circle) {
+      const nextMeasureOutput = getNauticalMilesOfCircle(geom)
       tooltipCoordinates = geom.getLastCoordinate()
       const nextMeasures = [...measures]
       nextMeasures[nextMeasures.length - 1] = nextMeasureOutput
       setMeasures(nextMeasures)
     }
+
     overlay.setPosition(tooltipCoordinates)
   }
 
-  const getNauticalMiles = line => {
+  const getNauticalMilesOfCircle = circle => {
+    const poly = fromCircle(circle)
+    const length = getLength(poly)
+    const radius = length / (2 * Math.PI)
+    return Math.round((radius / 1000) * 100 * 0.621371) / 100 + ' ' + 'nm'
+  }
+
+  const getNauticalMilesOfLine = line => {
     const length = getLength(line)
     return Math.round((length / 1000) * 100 * 0.621371) / 100 + ' ' + 'nm'
   }

@@ -27,6 +27,7 @@ const mapSlice = createSlice({
     isMoving: false,
     interaction: null,
     measure: null,
+    circleMeasureToAdd: null,
     zonesSelected: [],
     selectedBaseLayer: getLocalStorageState(baseLayers.OSM.code, baseLayerLocalStorageKey),
     view: getLocalStorageState({
@@ -89,6 +90,12 @@ const mapSlice = createSlice({
     resetMeasure (state) {
       state.measure = null
     },
+    setCircleMeasureToAdd (state, action) {
+      state.circleMeasureToAdd = action.payload
+    },
+    resetCircleMeasureToAdd (state) {
+      state.circleMeasureToAdd = null
+    },
     addZoneSelected (state, action) {
       state.zonesSelected = state.zonesSelected.concat(action.payload)
     },
@@ -123,6 +130,8 @@ export const {
   resetInteraction,
   setMeasure,
   resetMeasure,
+  setCircleMeasureToAdd,
+  resetCircleMeasureToAdd,
   addZoneSelected,
   setZonesSelected,
   removeZoneSelected,

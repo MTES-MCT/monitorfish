@@ -240,8 +240,8 @@ const MeasureLayer = ({ map }) => {
     const sketch = event.feature
     const tooltipCoordinates = event.coordinate
 
-    return sketch.getGeometry().on('change', event => {
-      onNewPoint(event, tooltipCoordinates, overlay)
+    return sketch.getGeometry().on('change', changeEvent => {
+      onNewPoint(changeEvent, tooltipCoordinates, overlay)
     })
   }
 

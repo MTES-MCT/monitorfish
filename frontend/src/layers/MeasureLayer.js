@@ -198,7 +198,7 @@ const MeasureLayer = ({ map }) => {
 
       let listener
       draw.on('drawstart', event => {
-        listener = startDrawing(event, listener, overlay)
+        listener = startDrawing(event, overlay)
       })
 
       draw.on('drawabort', event => {

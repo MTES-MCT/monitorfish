@@ -197,7 +197,6 @@ const MeasureLayer = ({ map }) => {
       setOverlays(nextOverlays)
 
       let listener
-
       draw.on('drawstart', event => {
         listener = startDrawing(event, listener, overlay)
       })
@@ -226,14 +225,13 @@ const MeasureLayer = ({ map }) => {
     dispatch(resetMeasure())
   }
 
-  function startDrawing (event, listener, overlay) {
+  function startDrawing (event, overlay) {
     const sketch = event.feature
     const tooltipCoordinates = event.coordinate
 
-    listener = sketch.getGeometry().on('change', event => {
+    return sketch.getGeometry().on('change', event => {
       onNewPoint(event, tooltipCoordinates, overlay)
     })
-    return listener
   }
 
   function createMeasureTooltip () {

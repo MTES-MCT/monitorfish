@@ -81,12 +81,16 @@ USER monitorfish
 
 EXPOSE 8880
 EXPOSE 5000
+EXPOSE 5001
 WORKDIR /home/monitorfish
 
 ENV JAVA_TOOL_OPTIONS "-Dcom.sun.management.jmxremote.ssl=false \
  -Dcom.sun.management.jmxremote.authenticate=false \
+ -Dcom.sun.management.jmxremote.password.file=/home/monitorfish/configurations/jmxremote.password \
+ -Dcom.sun.management.jmxremote.access.file=/home/monitorfish/configurations/jmxremote.access \
  -Dcom.sun.management.jmxremote.port=5000 \
- -Dcom.sun.management.jmxremote.rmi.port=5000 \
+ -Dcom.sun.management.jmxremote.rmi.port=5001 \
+ -Dcom.sun.management.jmxremote.registry.ssl=false"
  -Dcom.sun.management.jmxremote.host=0.0.0.0 \
  -Djava.rmi.server.hostname=0.0.0.0"
 
@@ -97,6 +101,9 @@ COPY infra/configurations /home/monitorfish/configurations/
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
 COPY --from=buildFront /tmp/frontend/build /home/monitorfish/public/
+
+# Add logs folder to be mounted as volume
+RUN mkdir /home/monitorfish/logs
 
 # Set up environement variable that define the root folder use for serving static files
 # It must point to the front (angular) files

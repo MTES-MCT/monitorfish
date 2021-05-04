@@ -186,11 +186,7 @@ export function getGearCategory (layerGears, gears) {
       .find(gear => {
         return layerGearsArray
           .some(gearCode => {
-            if (gearCode === gear.code) {
-              return true
-            }
-
-            return false
+            return gearCode === gear.code
           })
       })
   }

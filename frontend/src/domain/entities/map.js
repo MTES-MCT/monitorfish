@@ -7,5 +7,6 @@ export const InteractionTypes = {
 }
 
 export const MeasureTypes = {
-  MULTILINE: 'MULTILINE'
+  MULTILINE: 'MULTILINE',
+  CIRCLE_RANGE: 'CIRCLE_RANGE'
 }

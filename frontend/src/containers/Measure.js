@@ -84,6 +84,15 @@ const Measure = () => {
     return icon
   }
 
+  function openOrCloseMeasure () {
+    if(measure) {
+      dispatch(setMeasure(null))
+      setMeasureIsOpen(false)
+    } else {
+      setMeasureIsOpen(!measureIsOpen)
+    }
+  }
+
   return (
     <Wrapper isShowed={isShowed} ref={wrapperRef}>
       <MeasureWrapper
@@ -92,7 +101,7 @@ const Measure = () => {
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Mesurer une distance'}
-        onClick={() => setMeasureIsOpen(!measureIsOpen)}>
+        onClick={() => openOrCloseMeasure()}>
         {
           getMeasureIcon(measure)
         }
@@ -112,6 +121,7 @@ const Measure = () => {
         </MeasureItem>
       </MeasureOptions>
       <CircleRangeValue
+        firstUpdate={firstUpdate.current}
         isOpen={measure === MeasureTypes.CIRCLE_RANGE}>
         <Header isFirst={true}>
           Définir une valeur
@@ -239,7 +249,7 @@ const CircleRangeValue = styled.div`
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.isOpen ? 'circle-range-value-box-opening' : 'circle-range-value-box-closing'} 0.5s ease forwards;
+  animation: ${props => props.firstUpdate ? '' : props.isOpen ? 'circle-range-value-box-opening' : 'circle-range-value-box-closing'} 0.5s ease forwards;
 
   @keyframes circle-range-value-box-opening {
     0%   { margin-right: -320px; opacity: 0;  }
@@ -300,6 +310,7 @@ const MeasureOptions = styled.div`
   border-radius: 2px;
   position: absolute;
   display: inline-block;
+  opacity: 0;
   animation: ${props => props.firstUpdate && !props.measureBoxIsOpen ? '' : props.measureBoxIsOpen ? 'measure-box-opening' : 'measure-box-closing'} 0.5s ease forwards;
 
   @keyframes measure-box-opening {

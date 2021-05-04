@@ -18,9 +18,8 @@ import VectorLayer from 'ol/layer/Vector'
 import { COLORS } from '../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
 import Circle from 'ol/geom/Circle'
-import { fromCircle } from 'ol/geom/Polygon'
+import { circular, fromCircle } from 'ol/geom/Polygon'
 import Feature from 'ol/Feature'
-import { getPointResolution, transform } from 'ol/proj'
 import { METERS_PER_UNIT } from 'ol/proj/Units'
 
 const MeasureLayer = ({ map }) => {
@@ -57,9 +56,7 @@ const MeasureLayer = ({ map }) => {
   }))
 
   useEffect(() => {
-    if (map && vectorLayer) {
-      map.getLayers().push(vectorLayer)
-    }
+    addLayerToMap()
   }, [map, vectorLayer])
 
   useEffect(() => {
@@ -69,39 +66,54 @@ const MeasureLayer = ({ map }) => {
   }, [map, measuresLength])
 
   useEffect(() => {
-    if (measureType) {
-      setMeasures(measures.concat(0))
-      setOverlays(overlays.concat(null))
-      setMeasuresLength(measuresLength + 1)
-    }
+    addEmptyNextMeasure()
   }, [measureType])
 
   useEffect(() => {
+    removeInteraction()
+  }, [measureType])
+
+  useEffect(() => {
+    addCustomCircleMeasure()
+  }, [circleMeasureToAdd])
+
+  function addLayerToMap () {
+    if (map && vectorLayer) {
+      map.getLayers().push(vectorLayer)
+    }
+  }
+
+  function removeInteraction () {
     if (!measureType && drawObject) {
       setTimeout(() => {
         map.removeInteraction(drawObject)
         setDrawObject(null)
       }, 300)
     }
-  }, [measureType])
+  }
 
-  useEffect(() => {
+  function addEmptyNextMeasure () {
+    if (measureType) {
+      setMeasures(measures.concat(0))
+      setOverlays(overlays.concat(null))
+      setMeasuresLength(measuresLength + 1)
+    }
+  }
+
+  function addCustomCircleMeasure () {
+    const metersForOneNauticalMile = 1852
+    const longitude = 1
+    const latitude = 0
+    const numberOfVertices = 64
+
     if (circleMeasureToAdd &&
       circleMeasureToAdd.circleCoordinatesToAdd.length &&
       circleMeasureToAdd.circleRadiusToAdd) {
-      console.log(measures, measuresLength)
+      const radiusInMeters = METERS_PER_UNIT.m * circleMeasureToAdd.circleRadiusToAdd * metersForOneNauticalMile
 
-      const center = transform([circleMeasureToAdd.circleCoordinatesToAdd[1], circleMeasureToAdd.circleCoordinatesToAdd[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-      const radiusInMeters = METERS_PER_UNIT.m * circleMeasureToAdd.circleRadiusToAdd * 1852
-      const viewProjection = map.getView().getProjection()
-      const pointResolution = getPointResolution(viewProjection, 1, center)
-      const radius = radiusInMeters / pointResolution
-      console.log(center, radiusInMeters, viewProjection, pointResolution, radius)
-
-      console.log(radiusInMeters)
-
+      const coordinates = [circleMeasureToAdd.circleCoordinatesToAdd[longitude], circleMeasureToAdd.circleCoordinatesToAdd[latitude]]
       const circleFeature = new Feature({
-        geometry: new Circle(center, radius),
+        geometry: circular(coordinates, radiusInMeters, numberOfVertices).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION),
         style: new Style({
           stroke: new Stroke({
             color: COLORS.grayDarkerThree,
@@ -129,14 +141,14 @@ const MeasureLayer = ({ map }) => {
       overlay.setOffset([0, -7])
 
       const nextMeasures = [...measures]
-      nextMeasures[nextMeasures.length - 1] = getNauticalMilesOfCircle(circleFeature.getGeometry())
+      nextMeasures[nextMeasures.length - 1] = `r = ${circleMeasureToAdd.circleRadiusToAdd} nm`
       setMeasures(nextMeasures)
 
       setTimeout(() => {
         map.removeInteraction(drawObject)
       }, 300)
     }
-  }, [circleMeasureToAdd])
+  }
 
   function deleteFeature (featureId) {
     const feature = vectorSource.getFeatureById(featureId)
@@ -218,7 +230,6 @@ const MeasureLayer = ({ map }) => {
   }
 
   function endDrawing (event, overlay, listener) {
-    console.log(event.feature)
     event.feature.setId(measuresLength)
     overlay.setOffset([0, -7])
     unByKey(listener)
@@ -257,7 +268,7 @@ const MeasureLayer = ({ map }) => {
       nextMeasures[nextMeasures.length - 1] = nextMeasureOutput
       setMeasures(nextMeasures)
     } else if (geom instanceof Circle) {
-      const nextMeasureOutput = getNauticalMilesOfCircle(geom)
+      const nextMeasureOutput = getNauticalMilesRadiusOfCircle(geom)
       tooltipCoordinates = geom.getLastCoordinate()
       const nextMeasures = [...measures]
       nextMeasures[nextMeasures.length - 1] = nextMeasureOutput
@@ -267,16 +278,22 @@ const MeasureLayer = ({ map }) => {
     overlay.setPosition(tooltipCoordinates)
   }
 
-  const getNauticalMilesOfCircle = circle => {
-    const poly = fromCircle(circle)
-    const length = getLength(poly)
+  function getNauticalMilesRadiusFromPolygon (polygon) {
+    const length = getLength(polygon)
     const radius = length / (2 * Math.PI)
-    return Math.round((radius / 1000) * 100 * 0.621371) / 100 + ' ' + 'nm'
+
+    return `r = ${(Math.round((radius / 1000) * 100 * 0.539957) / 100)} nm`
+  }
+
+  const getNauticalMilesRadiusOfCircle = circle => {
+    const poly = fromCircle(circle)
+    return getNauticalMilesRadiusFromPolygon(poly)
   }
 
   const getNauticalMilesOfLine = line => {
     const length = getLength(line)
-    return Math.round((length / 1000) * 100 * 0.621371) / 100 + ' ' + 'nm'
+
+    return `${(Math.round((length / 1000) * 100 * 0.539957) / 100)} nm`
   }
 
   return (

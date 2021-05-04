@@ -81,6 +81,7 @@ const Map = () => {
           zoom: 6,
           minZoom: 3
         }),
+        units: 'm',
         controls: [
           new ScaleLine({ units: 'nautical' }),
           new Zoom({

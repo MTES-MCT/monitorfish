@@ -459,6 +459,7 @@ const VesselList = () => {
             <BackToVesselListButton
                 showBackToVesselListButton={showBackToVesselListButton}
                 onClick={() => goBackToVesselList()}
+                firstUpdate={firstUpdate.current}
             >
                 Revenir à la liste des navires
             </BackToVesselListButton>
@@ -518,7 +519,7 @@ const BackToVesselListButton = styled.button`
   color: ${COLORS.grayBackground};
   border-radius: 2px;
   margin-left: -90px;
-  animation: ${props => props.showBackToVesselListButton ? 'vessel-back-to-filter-button-opening' : 'vessel-back-to-filter-button-closing'} 0.2s ease forwards;
+  animation: ${props => props.firstUpdate ? '' : props.showBackToVesselListButton ? 'vessel-back-to-filter-button-opening' : 'vessel-back-to-filter-button-closing'} 0.2s ease forwards;
 
   @keyframes vessel-back-to-filter-button-opening {
     0%   { opacity: 0; }

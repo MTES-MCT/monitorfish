@@ -174,10 +174,11 @@ const FishingActivitiesSummary = props => {
   function getTotalFARWeightFromMessages (ersMessages) {
     return parseFloat(ersMessages
       .reduce((accumulator, ersMessage) => {
-        const sumOfCatches = ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
-          return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-        }, 0)
-
+        const sumOfCatches = ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
+          ? ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
+            return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+          }, 0)
+          : 0
         return accumulator + sumOfCatches
       }, 0).toFixed(1))
   }

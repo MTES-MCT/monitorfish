@@ -12,7 +12,6 @@ const FARMessage = props => {
   useEffect(() => {
     if (props.message && props.message.catches) {
       const catches = buildCatchArray(props.message.catches)
-
       setCatches(catches)
     } else {
       setCatches([])
@@ -69,15 +68,16 @@ const FARMessage = props => {
                 </Zone>
                 <SpeciesList>
                     {
-                        catches.map((speciesCatch, index) => {
-                          return <ERSMessageSpecies
-                                index={index + 1}
-                                hasManyProperties={speciesCatch.properties.length > 1}
-                                isLast={catches.length === index + 1}
-                                species={speciesCatch}
-                                key={'FAR' + speciesCatch.species}
-                            />
-                        })
+                        catches
+                          .map((speciesCatch, index) => {
+                            return <ERSMessageSpecies
+                                  index={index + 1}
+                                  hasManyProperties={speciesCatch.properties.length > 1}
+                                  isLast={catches.length === index + 1}
+                                  species={speciesCatch}
+                                  key={'FAR' + speciesCatch.species}
+                              />
+                          })
                     }
                 </SpeciesList>
             </>

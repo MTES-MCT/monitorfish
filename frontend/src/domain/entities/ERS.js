@@ -1,43 +1,66 @@
+import {
+  DEPMessage,
+  FARMessage,
+  EOFMessage,
+  PNOMessage,
+  RTPMessage,
+  LANMessage,
+  COEMessage,
+  COXMessage,
+  CROMessage,
+  DISMessage
+} from '../../components/fishing_activities/ers_messages/index.js'
+
 export const ERSMessageType = {
   DEP: {
     code: 'DEP',
-    name: 'Départ'
+    name: 'Départ',
+    component: DEPMessage
   },
   FAR: {
     code: 'FAR',
-    name: 'Captures'
+    name: 'Captures',
+    component: FARMessage
   },
   PNO: {
     code: 'PNO',
-    name: 'Préavis'
+    name: 'Préavis',
+    component: PNOMessage
   },
   LAN: {
     code: 'LAN',
-    name: 'Débarquement'
+    name: 'Débarquement',
+    component: LANMessage
   },
   RTP: {
     code: 'RTP',
-    name: 'Retour au port'
+    name: 'Retour au port',
+    component: RTPMessage
   },
   EOF: {
     code: 'EOF',
-    name: 'Fin de la marée'
+    name: 'Fin de la marée',
+    component: EOFMessage
   },
   COE: {
     code: 'COE',
-    name: 'Entrée dans une zone d\'effort'
+    name: 'Entrée dans une zone d\'effort',
+    component: COEMessage
   },
   COX: {
     code: 'COX',
-    name: 'Sortie d\'une zone d\'effort'
+    name: 'Sortie d\'une zone d\'effort',
+    component: COXMessage
   },
   CRO: {
     code: 'CRO',
-    name: 'Traversée d\'une zone d\'effort'
+    name: 'Traversée d\'une zone d\'effort',
+    component: CROMessage
   },
   DIS: {
     code: 'DIS',
-    name: 'Rejets'
+    name: 'Rejets',
+    component: DISMessage
   },
   DIM: {
     code: 'DIM',
@@ -148,7 +171,6 @@ export const buildCatchArray = catches => {
         accumulator[sameSpeciesIndex].weight += ersCatch.weight ? parseFloat(ersCatch.weight) : 0
       }
     }
-
-    return accumulator
+    return accumulator.sort((catchA, catchB) => catchB.weight - catchA.weight)
   }, [])
 }

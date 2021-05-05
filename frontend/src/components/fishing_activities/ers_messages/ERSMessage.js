@@ -6,16 +6,6 @@ import { ReactComponent as XMLSVG } from '../../icons/Picto_XML.svg'
 import { ReactComponent as AckOkSVG } from '../../icons/Message_JPE_acquitté.svg'
 import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitté.svg'
 import { getDateTime } from '../../../utils'
-import DEPMessage from './DEPMessage'
-import FARMessage from './FARMessage'
-import EOFMessage from './EOFMessage'
-import PNOMessage from './PNOMessage'
-import RTPMessage from './RTPMessage'
-import LANMessage from './LANMessage'
-import COEMessage from './COEMessage'
-import COXMessage from './COXMessage'
-import CROMessage from './CROMessage'
-import DISMessage from './DISMessage'
 
 const ERSMessage = props => {
   const getERSMessageHeaderTitle = message => {
@@ -64,38 +54,8 @@ const ERSMessage = props => {
   }
 
   const getERSMessage = ersMessage => {
-    switch (ersMessage.messageType) {
-      case ERSMessageTypeEnum.DEP.code.toString(): {
-        return <DEPMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.FAR.code.toString(): {
-        return <FARMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.DIS.code.toString(): {
-        return <DISMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.EOF.code.toString(): {
-        return <EOFMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.COE.code.toString(): {
-        return <COEMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.COX.code.toString(): {
-        return <COXMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.CRO.code.toString(): {
-        return <CROMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.PNO.code.toString(): {
-        return <PNOMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.RTP.code.toString(): {
-        return <RTPMessage message={ersMessage.message} />
-      }
-      case ERSMessageTypeEnum.LAN.code.toString(): {
-        return <LANMessage message={ersMessage.message} />
-      }
-    }
+    const Component = ERSMessageTypeEnum[ersMessage.messageType].component
+    return <Component message={ersMessage.message}/>
   }
 
   function getErsMessageType () {

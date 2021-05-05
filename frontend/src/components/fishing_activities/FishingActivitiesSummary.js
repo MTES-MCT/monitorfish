@@ -33,13 +33,22 @@ const FishingActivitiesSummary = props => {
   useEffect(() => {
     if (props.fishingActivities && props.fishingActivities.ersMessages && props.fishingActivities.ersMessages.length) {
       const ersMessages = props.fishingActivities.ersMessages
-
       const depMessage = ersMessages
         .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
       setDEPMessage(depMessage)
 
       const lanMessage = ersMessages
-        .find(message => message.messageType === ERSMessageTypeEnum.LAN.code)
+        .filter(message => message.messageType === ERSMessageTypeEnum.LAN.code)
+        .find(message => {
+          const depTripNumber = depMessage.tripNumber
+          if (depTripNumber) {
+            return depTripNumber === message.tripNumber
+          } else {
+            const landingDatetimeUtc = new Date(message.message.landingDatetimeUtc)
+            const departureDatetimeUtc = new Date(depMessage.message.departureDatetimeUtc)
+            return landingDatetimeUtc > departureDatetimeUtc
+          }
+        })
       setLANMessage(lanMessage)
 
       const disMessages = ersMessages

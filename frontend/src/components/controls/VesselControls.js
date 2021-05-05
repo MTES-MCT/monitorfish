@@ -5,9 +5,30 @@ import { COLORS } from '../../constants/constants'
 import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg'
 import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
 import YearControls from './YearControls'
+import { controlType } from '../../domain/entities/controls'
+import { getDate } from '../../utils'
 
 const VesselControls = props => {
   const [yearsToControls, setYearsToControls] = useState({})
+  const [lastControls, setLastControls] = useState([])
+
+  const lastControlType = (yearsToControls) => {
+    let lastSeaControl
+    let lastLandControl
+    const sortedLastYearControlList = Object.values(yearsToControls).flat()
+      .sort((a, b) => a.controlDatetimeUtc > b.controlDatetimeUtc)
+    let i = 0
+    while (i < sortedLastYearControlList.length && !(lastSeaControl && lastLandControl)) {
+      console.log(sortedLastYearControlList[i])
+      if (sortedLastYearControlList[i].controlType === controlType.SEA) {
+        lastSeaControl = sortedLastYearControlList[i]
+      } else if (sortedLastYearControlList[i].controlType === controlType.LAND) {
+        lastLandControl = sortedLastYearControlList[i]
+      }
+      i++
+    }
+    return [lastSeaControl, lastLandControl]
+  }
 
   useEffect(() => {
     if (props.controlResumeAndControls && props.controlResumeAndControls.controls && props.controlResumeAndControls.controls.length) {
@@ -32,8 +53,10 @@ const VesselControls = props => {
           }
         }
       })
-
+      const lastControls = lastControlType(nextYearsToControls)
+      console.log(lastControls)
       setYearsToControls(nextYearsToControls)
+      setLastControls(lastControls)
     } else {
       setYearsToControls(null)
     }
@@ -95,9 +118,26 @@ const VesselControls = props => {
                       </Fields>
                   </Zone>
                   <Zone>
+                    <Title2>
+                        Derniers Contrôles
+                    </Title2>
+                    {lastControls.map((lastControl, index) => {
+                      return (
+                      <Fields key={index}>
+                        <ControlResumeLine>
+                          <ResumeText>Dernier contrôle en mer <strong>le {getDate(lastControl.controlDatetimeUtc)}</strong></ResumeText>
+                        </ControlResumeLine>
+                        <ControlResumeLine>
+                          <LasControResumeElement>Unité <Number>{lastControl.controller && lastControl.controller.controller ? lastControl.controller.controller : <NoValue>-</NoValue>}</Number></LasControResumeElement>
+                          <LasControResumeElement>Infractions <Number>{lastControl.infraction ? <> {lastControl.infractions.length} infraction{lastControl.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</Number></LasControResumeElement>
+                        </ControlResumeLine>
+                      </Fields>)
+                    })}
+                  </Zone>
+                  <Zone>
                       <Title>
                           <Text>
-                              Contrôles
+                              Historique des contrôles
                           </Text>
                       </Title>
                       {
@@ -273,6 +313,7 @@ const Text = styled.div`
   font-weight: 500;
   padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
 `
+// Dans quel contexte est-qu'on peut avoir deux lignes ?
 
 const Body = styled.div`
   padding: 0 5px 1px 5px;
@@ -288,6 +329,19 @@ const Title = styled.div`
   flex-grow: 2;
   display: flex;
   width: 400px;
+`
+
+const Title2 = styled.div`
+  color: ${COLORS.textGray};
+  background: ${COLORS.grayDarker};
+  padding: 8.5px 10px 8px 20px;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  flex-grow: 2;
+  display: flex;
+  width: 400px;
+  font-size: 13px;
+  font-weight: 500;
 `
 
 const Zone = styled.div`
@@ -323,6 +377,10 @@ const ControlResumeNumberElement = styled.span`
   margin: 5px 10px 0 14px;
 `
 
+const LasControResumeElement = styled.span`
+  margin-right: 10px;
+`
+
 const Gyro = styled(GyroSVG)`
   width: 16px;
   vertical-align: top;
@@ -333,6 +391,24 @@ const Warning = styled(WarningSVG)`
   width: 16px;
   vertical-align: top;
   margin-right: 5px;
+`
+
+const Red = styled.span`
+  height: 8px;
+  width: 8px;
+  margin-left: 5px;
+  background-color: #E1000F;
+  border-radius: 50%;
+  display: inline-block;
+`
+
+const Green = styled.span`
+  height: 8px;
+  width: 8px;
+  margin-left: 5px;
+  background-color: #8CC63F;
+  border-radius: 50%;
+  display: inline-block;
 `
 
 export default VesselControls

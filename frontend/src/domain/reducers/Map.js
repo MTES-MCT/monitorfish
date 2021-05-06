@@ -10,6 +10,7 @@ const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
 const vesselLabelLocalStorageKey = 'vesselLabel'
 const savedMapViewLocalStorageKey = 'mapView'
 const baseLayerLocalStorageKey = 'baseLayer'
+const measuresLocalStorageKey = 'measures'
 
 const mapSlice = createSlice({
   name: 'map',
@@ -26,8 +27,9 @@ const mapSlice = createSlice({
     vesselNamesHiddenByZoom: undefined,
     isMoving: false,
     interaction: null,
-    measure: null,
+    measureTypeToAdd: null,
     circleMeasureToAdd: null,
+    measuresDrawed: getLocalStorageState([], measuresLocalStorageKey),
     zonesSelected: [],
     selectedBaseLayer: getLocalStorageState(baseLayers.OSM.code, baseLayerLocalStorageKey),
     view: getLocalStorageState({
@@ -84,11 +86,25 @@ const mapSlice = createSlice({
     resetInteraction (state) {
       state.interaction = null
     },
-    setMeasure (state, action) {
-      state.measure = action.payload
+    setMeasureTypeToAdd (state, action) {
+      state.measureTypeToAdd = action.payload
     },
-    resetMeasure (state) {
-      state.measure = null
+    resetMeasureTypeToAdd (state) {
+      state.measureTypeToAdd = null
+    },
+    addMeasureDrawed (state, action) {
+      const nextMeasuresDrawed = state.measuresDrawed.concat(action.payload)
+
+      window.localStorage.setItem(measuresLocalStorageKey, JSON.stringify(nextMeasuresDrawed))
+      state.measuresDrawed = nextMeasuresDrawed
+    },
+    removeMeasureDrawed (state, action) {
+      const nextMeasuresDrawed = state.measuresDrawed.filter(measure => {
+        return measure.feature.id !== action.payload
+      })
+
+      window.localStorage.setItem(measuresLocalStorageKey, JSON.stringify(nextMeasuresDrawed))
+      state.measuresDrawed = nextMeasuresDrawed
     },
     setCircleMeasureToAdd (state, action) {
       state.circleMeasureToAdd = action.payload
@@ -128,8 +144,10 @@ export const {
   selectBaseLayer,
   setInteraction,
   resetInteraction,
-  setMeasure,
-  resetMeasure,
+  setMeasureTypeToAdd,
+  resetMeasureTypeToAdd,
+  addMeasureDrawed,
+  removeMeasureDrawed,
   setCircleMeasureToAdd,
   resetCircleMeasureToAdd,
   addZoneSelected,

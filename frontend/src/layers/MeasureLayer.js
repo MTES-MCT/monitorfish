@@ -8,29 +8,32 @@ import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import CircleStyle from 'ol/style/Circle'
-import Overlay from 'ol/Overlay'
 import { unByKey } from 'ol/Observable'
 import LineString from 'ol/geom/LineString'
 import { getLength } from 'ol/sphere'
-import styled from 'styled-components'
-import { resetMeasure } from '../domain/reducers/Map'
+import { addMeasureDrawed, removeMeasureDrawed, resetMeasureTypeToAdd } from '../domain/reducers/Map'
 import VectorLayer from 'ol/layer/Vector'
 import { COLORS } from '../constants/constants'
-import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
 import Circle from 'ol/geom/Circle'
 import { circular, fromCircle } from 'ol/geom/Polygon'
 import Feature from 'ol/Feature'
 import { METERS_PER_UNIT } from 'ol/proj/Units'
+import GeoJSON from 'ol/format/GeoJSON'
+import MeasureOverlay from './MeasureOverlay'
 
 const MeasureLayer = ({ map }) => {
-  const measureType = useSelector(state => state.map.measure)
+  const measureType = useSelector(state => state.map.measureTypeToAdd)
+  const measuresDrawed = useSelector(state => state.map.measuresDrawed)
   const circleMeasureToAdd = useSelector(state => state.map.circleMeasureToAdd)
   const dispatch = useDispatch()
 
-  const ref = useRef(null)
   const [measures, setMeasures] = useState([])
-  const [overlays, setOverlays] = useState([])
-  const [measuresLength, setMeasuresLength] = useState(0)
+  const [measureInDrawing, _setMeasureInDrawing] = useState(null)
+  const measureInDrawingRef = useRef(measureInDrawing)
+  const setMeasureInDrawing = value => {
+    measureInDrawingRef.current = value
+    _setMeasureInDrawing(value)
+  }
 
   const [drawObject, setDrawObject] = useState(null)
 
@@ -60,13 +63,25 @@ const MeasureLayer = ({ map }) => {
   }, [map, vectorLayer])
 
   useEffect(() => {
-    if (measureType && measuresLength) {
-      drawOnMap()
+    if(measuresDrawed && map) {
+      measuresDrawed.forEach((measure, index) => {
+        let measureDrawed = measuresDrawed[index]
+
+        let feature = new GeoJSON({
+          featureProjection: 'EPSG:3857',
+        }).readFeature(measureDrawed.feature)
+
+        feature.setId(index + 1)
+        vectorSource.addFeature(feature)
+      })
     }
-  }, [map, measuresLength])
+  }, [measuresDrawed, map])
 
   useEffect(() => {
-    addEmptyNextMeasure()
+    if(measureType) {
+      addEmptyNextMeasure()
+      drawOnMap()
+    }
   }, [measureType])
 
   useEffect(() => {
@@ -76,6 +91,24 @@ const MeasureLayer = ({ map }) => {
   useEffect(() => {
     addCustomCircleMeasure()
   }, [circleMeasureToAdd])
+
+  useEffect(() => {
+    if(drawObject) {
+      let listener
+
+      drawObject.on('drawstart', event => {
+        listener = startDrawing(event)
+      })
+
+      drawObject.on('drawabort', event => {
+        abortDrawing(event, listener)
+      })
+
+      drawObject.on('drawend', event => {
+        endDrawing(event, listener)
+      })
+    }
+  }, [drawObject])
 
   function addLayerToMap () {
     if (map && vectorLayer) {
@@ -94,9 +127,11 @@ const MeasureLayer = ({ map }) => {
 
   function addEmptyNextMeasure () {
     if (measureType) {
-      setMeasures(measures.concat(0))
-      setOverlays(overlays.concat(null))
-      setMeasuresLength(measuresLength + 1)
+      setMeasureInDrawing({
+        feature: null,
+        measure: null,
+        coordinates: null
+      })
     }
   }
 
@@ -132,22 +167,31 @@ const MeasureLayer = ({ map }) => {
         })
       })
 
-      circleFeature.setId(measuresLength)
-      vectorSource.addFeature(circleFeature)
+      let id = getNextMeasureId()
+      circleFeature.setId(id)
 
-      const overlay = overlays[overlays.length - 1]
       const tooltipCoordinates = circleFeature.getGeometry().getLastCoordinate()
-      overlay.setPosition(tooltipCoordinates)
-      overlay.setOffset([0, -7])
-
-      const nextMeasures = [...measures]
-      nextMeasures[nextMeasures.length - 1] = `r = ${circleMeasureToAdd.circleRadiusToAdd} nm`
-      setMeasures(nextMeasures)
-
-      setTimeout(() => {
-        map.removeInteraction(drawObject)
-      }, 300)
+      dispatch(addMeasureDrawed({
+        feature: getGeoJSONFromFeature(circleFeature),
+        measure: `r = ${circleMeasureToAdd.circleRadiusToAdd} nm`,
+        coordinates: tooltipCoordinates
+      }))
     }
+  }
+
+  function getGeoJSONFromFeature (feature) {
+    let parser = new GeoJSON()
+    return parser.writeFeatureObject(feature, { featureProjection: 'EPSG:3857' })
+  }
+
+  function saveMeasure (feature, measure) {
+    let geoJSONFeature = getGeoJSONFromFeature(feature)
+
+    dispatch(addMeasureDrawed({
+      feature: geoJSONFeature,
+      measure: measure,
+      coordinates: feature.getGeometry().getLastCoordinate()
+    }))
   }
 
   function deleteFeature (featureId) {
@@ -156,15 +200,7 @@ const MeasureLayer = ({ map }) => {
       vectorSource.removeFeature(feature)
     }
 
-    const overlayToRemove = overlays[featureId - 1]
-
-    if (overlayToRemove) {
-      map.removeOverlay(overlayToRemove)
-    }
-
-    const nextOverlays = [...overlays]
-    nextOverlays[featureId - 1] = null
-    setOverlays(nextOverlays)
+    dispatch(removeMeasureDrawed(featureId))
   }
 
   function drawOnMap () {
@@ -179,110 +215,110 @@ const MeasureLayer = ({ map }) => {
           break
       }
 
-      const draw = new Draw({
-        source: vectorSource,
-        type: type,
-        style: new Style({
-          stroke: new Stroke({
-            color: COLORS.grayDarkerThree,
-            lineDash: [5, 5],
-            width: 2
-          }),
-          image: new CircleStyle({
-            radius: 2,
+      let draw = null
+      if(type) {
+        draw = new Draw({
+          source: vectorSource,
+          type: type,
+          style: new Style({
             stroke: new Stroke({
-              color: COLORS.grayDarkerThree
+              color: COLORS.grayDarkerThree,
+              lineDash: [5, 5],
+              width: 2
             }),
-            fill: new Fill({
-              color: COLORS.grayDarkerThree
+            image: new CircleStyle({
+              radius: 2,
+              stroke: new Stroke({
+                color: COLORS.grayDarkerThree
+              }),
+              fill: new Fill({
+                color: COLORS.grayDarkerThree
+              })
             })
           })
         })
-      })
 
-      map.addInteraction(draw)
-      setDrawObject(draw)
-
-      const overlay = createMeasureTooltip()
-      const nextOverlays = overlays
-      nextOverlays[nextOverlays.length - 1] = overlay
-      setOverlays(nextOverlays)
-
-      let listener
-      draw.on('drawstart', event => {
-        listener = startDrawing(event, overlay)
-      })
-
-      draw.on('drawabort', event => {
-        abortDrawing(event, overlay, listener)
-      })
-
-      draw.on('drawend', event => {
-        endDrawing(event, overlay, listener)
-      })
+        map.addInteraction(draw)
+        setDrawObject(draw)
+      }
     }
   }
 
-  function abortDrawing (event, overlay, listener) {
+  function abortDrawing (event, listener) {
     unByKey(listener)
-    dispatch(resetMeasure())
-    map.removeOverlay(overlay)
+    dispatch(resetMeasureTypeToAdd())
   }
 
-  function endDrawing (event, overlay, listener) {
-    event.feature.setId(measuresLength)
-    overlay.setOffset([0, -7])
-    unByKey(listener)
-    dispatch(resetMeasure())
+  function getNextMeasureId () {
+    let id = 1
+    if (measuresDrawed && measuresDrawed.length) {
+      id = measuresDrawed[0].feature.id
+      for (let i = 1; i < measuresDrawed.length; ++i) {
+        if (measuresDrawed[i].feature.id > id) {
+          id = measuresDrawed[i].feature.id
+        }
+      }
+
+      id = id + 1
+    }
+    return id
   }
 
-  function startDrawing (event, overlay) {
+  function endDrawing (event, listener) {
+    let id = getNextMeasureId()
+
+    event.feature.setId(id)
+    if (event.feature.getGeometry() instanceof Circle) {
+      event.feature.setGeometry(fromCircle(event.feature.getGeometry()))
+    }
+
+    saveMeasure(event.feature, measureInDrawingRef.current.measure)
+    setMeasureInDrawing(null)
+    unByKey(listener)
+    dispatch(resetMeasureTypeToAdd())
+  }
+
+  function startDrawing (event) {
     const sketch = event.feature
     const tooltipCoordinates = event.coordinate
 
+    setMeasureInDrawing({
+      measure: 0,
+      coordinates: event.feature.getGeometry().getLastCoordinate()
+    })
+
     return sketch.getGeometry().on('change', changeEvent => {
-      onNewPoint(changeEvent, tooltipCoordinates, overlay)
+      onNewPoint(changeEvent, tooltipCoordinates)
     })
   }
 
-  function createMeasureTooltip () {
-    const measureTooltipElement = ref.current.children[ref.current.children.length - 1]
-
-    const overlay = new Overlay({
-      element: measureTooltipElement,
-      offset: [0, -15],
-      positioning: 'bottom-center'
-    })
-
-    map.addOverlay(overlay)
-
-    return overlay
-  }
-
-  function onNewPoint (event, tooltipCoordinates, overlay) {
+  function onNewPoint (event, tooltipCoordinates) {
     const geom = event.target
+
     if (geom instanceof LineString) {
       const nextMeasureOutput = getNauticalMilesOfLine(geom)
       tooltipCoordinates = geom.getLastCoordinate()
-      const nextMeasures = [...measures]
-      nextMeasures[nextMeasures.length - 1] = nextMeasureOutput
-      setMeasures(nextMeasures)
+
+      setMeasureInDrawing({
+        measure: nextMeasureOutput,
+        coordinates: tooltipCoordinates
+      })
     } else if (geom instanceof Circle) {
       const nextMeasureOutput = getNauticalMilesRadiusOfCircle(geom)
       tooltipCoordinates = geom.getLastCoordinate()
-      const nextMeasures = [...measures]
-      nextMeasures[nextMeasures.length - 1] = nextMeasureOutput
-      setMeasures(nextMeasures)
-    }
 
-    overlay.setPosition(tooltipCoordinates)
+      setMeasureInDrawing({
+        measure: nextMeasureOutput,
+        coordinates: tooltipCoordinates
+      })
+    }
   }
 
   function getNauticalMilesRadiusFromPolygon (polygon) {
     const length = getLength(polygon)
     const radius = length / (2 * Math.PI)
 
-    return `r = ${(Math.round((radius / 1000) * 100 * 0.539957) / 100)} nm`
+    return `r = ${Math.round((radius / 1000) * 100 * 0.539957) / 100} nm`
   }
 
   const getNauticalMilesRadiusOfCircle = circle => {
@@ -293,80 +329,37 @@ const MeasureLayer = ({ map }) => {
   const getNauticalMilesOfLine = line => {
     const length = getLength(line)
 
-    return `${(Math.round((length / 1000) * 100 * 0.539957) / 100)} nm`
+    return `${Math.round((length / 1000) * 100 * 0.539957) / 100} nm`
   }
 
   return (
     <>
-      <MeasureTooltipElement ref={ref} >
-        {
-          [...Array(measuresLength).keys()].map((measure, index) => {
-            return <div key={index}>
-              <ZoneSelected>
-              <DeleteZoneText>{measures[index]}</DeleteZoneText>
-              <CloseIcon onClick={() => deleteFeature(index + 1)}/>
-            </ZoneSelected>
-            <TrianglePointer>
-              <TriangleShadow/>
-            </TrianglePointer>
-            </div>
-          })
-        }
-      </MeasureTooltipElement>
+      {
+        measuresDrawed.map((measure, index) => {
+          return <MeasureOverlay
+            id={measure.feature.id}
+            key={measure.feature.id}
+            map={map}
+            measure={measure.measure}
+            coordinates={measure.coordinates}
+            deleteFeature={deleteFeature}
+          />
+        })
+      }
 
+      <div>
+        {
+          measureInDrawing
+            ? <MeasureOverlay
+              map={map}
+              measure={measureInDrawing.measure}
+              coordinates={measureInDrawing.coordinates}
+            />
+            : null
+        }
+      </div>
     </>
   )
 }
-
-const TrianglePointer = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  height: auto; 
-  width: auto;
-`
-
-const TriangleShadow = styled.div`
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.grayBackground} transparent transparent transparent;
-  text-align: center;
-  margin: auto;
-  margin-top: -3px;
-`
-
-const MeasureTooltipElement = styled.div``
-
-const DeleteZoneText = styled.span`
-  padding-bottom: 5px;
-  vertical-align: middle;
-  height: 30px;
-  display: inline-block;
-  user-select: none;
-`
-
-const ZoneSelected = styled.span`
-  background: ${COLORS.grayBackground};
-  border-radius: 2px;
-  color: ${COLORS.textGray};
-  margin-left: 0;
-  font-size: 13px;
-  padding: 0px 3px 0px 7px;
-  vertical-align: top;
-  height: 30px;
-  display: inline-block;
-  user-select: none;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  vertical-align: text-bottom;
-  cursor: pointer;
-  border-left: 1px solid white;
-  height: 30px;
-  margin: 0 6px 0 7px;
-  padding-left: 7px;
-`
 
 export default MeasureLayer

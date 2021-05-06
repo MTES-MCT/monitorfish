@@ -226,4 +226,3 @@ export const measurementStyle = new Style({
     })
   })
 })
-

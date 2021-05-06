@@ -28,10 +28,6 @@ const Measurement = () => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    console.log(measurementTypeToAdd)
-  }, [measurementTypeToAdd])
-
-  useEffect(() => {
     function handleClickOutside (event) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setMeasurementIsOpen(false)
@@ -93,7 +89,6 @@ const Measurement = () => {
       dispatch(setMeasurementTypeToAdd(null))
       setMeasurementIsOpen(false)
     } else {
-      console.log("measurementTypeToAdd", measurementTypeToAdd)
       setMeasurementIsOpen(!measurementIsOpen)
     }
   }

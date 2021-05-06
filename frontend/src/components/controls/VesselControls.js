@@ -5,8 +5,8 @@ import { COLORS } from '../../constants/constants'
 import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg'
 import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
 import YearControls from './YearControls'
+import LastControl from './LastControl'
 import { controlType } from '../../domain/entities/controls'
-import { getDate } from '../../utils'
 
 const VesselControls = props => {
   const [yearsToControls, setYearsToControls] = useState({})
@@ -54,7 +54,6 @@ const VesselControls = props => {
         }
       })
       const lastControls = lastControlType(nextYearsToControls)
-      console.log(lastControls)
       setYearsToControls(nextYearsToControls)
       setLastControls(lastControls)
     } else {
@@ -121,18 +120,7 @@ const VesselControls = props => {
                     <Title2>
                         Derniers Contrôles
                     </Title2>
-                    {lastControls.map((lastControl, index) => {
-                      return (
-                      <Fields key={index}>
-                        <ControlResumeLine>
-                          <ResumeText>Dernier contrôle en mer <strong>le {getDate(lastControl.controlDatetimeUtc)}</strong></ResumeText>
-                        </ControlResumeLine>
-                        <ControlResumeLine>
-                          <LasControResumeElement>Unité <Number>{lastControl.controller && lastControl.controller.controller ? lastControl.controller.controller : <NoValue>-</NoValue>}</Number></LasControResumeElement>
-                          <LasControResumeElement>Infractions <Number>{lastControl.infraction ? <> {lastControl.infractions.length} infraction{lastControl.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</Number></LasControResumeElement>
-                        </ControlResumeLine>
-                      </Fields>)
-                    })}
+                    {lastControls.map((lastControl, index) => <LastControl key={index} control={lastControl}/>)}
                   </Zone>
                   <Zone>
                       <Title>

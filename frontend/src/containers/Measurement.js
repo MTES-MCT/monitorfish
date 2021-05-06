@@ -3,24 +3,24 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import CoordinateInput from 'react-coordinate-input'
 
-import { ReactComponent as MeasureSVG } from '../components/icons/Mesure.svg'
+import { ReactComponent as MeasurementSVG } from '../components/icons/Mesure.svg'
 import { ReactComponent as MultiLineSVG } from '../components/icons/Mesure_ligne_brisee.svg'
 import { ReactComponent as CircleRangeSVG } from '../components/icons/Mesure_rayon_action.svg'
 import { COLORS } from '../constants/constants'
-import { setCircleMeasureToAdd, setMeasureTypeToAdd } from '../domain/reducers/Map'
+import { setCircleMeasurementToAdd, setMeasurementTypeToAdd } from '../domain/reducers/Map'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
-import { MeasureTypes } from '../domain/entities/map'
+import { MeasurementTypes } from '../domain/entities/map'
 
-const Measure = () => {
+const Measurement = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const measureTypeToAdd = useSelector(state => state.map.measureTypeToAdd)
+  const measurementTypeToAdd = useSelector(state => state.map.measurementTypeToAdd)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
   const firstUpdate = useRef(true)
-  const [measureIsOpen, setMeasureIsOpen] = useState(false)
+  const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
   const [isShowed, setIsShowed] = useState(true)
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
@@ -28,13 +28,13 @@ const Measure = () => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    console.log(measureTypeToAdd)
-  }, [measureTypeToAdd])
+    console.log(measurementTypeToAdd)
+  }, [measurementTypeToAdd])
 
   useEffect(() => {
     function handleClickOutside (event) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        setMeasureIsOpen(false)
+        setMeasurementIsOpen(false)
       }
     }
 
@@ -47,12 +47,12 @@ const Measure = () => {
   }, [wrapperRef])
 
   useEffect(() => {
-    if (measureIsOpen === true) {
+    if (measurementIsOpen === true) {
       dispatch(unselectVessel())
       firstUpdate.current = false
       document.addEventListener('keydown', escapeFromKeyboard, false)
     }
-  }, [measureIsOpen])
+  }, [measurementIsOpen])
 
   useEffect(() => {
     if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
@@ -65,69 +65,69 @@ const Measure = () => {
   const escapeFromKeyboard = event => {
     const escapeCode = 27
     if (event.keyCode === escapeCode) {
-      dispatch(setMeasureTypeToAdd(null))
-      setMeasureIsOpen(false)
+      dispatch(setMeasurementTypeToAdd(null))
+      setMeasurementIsOpen(false)
     }
   }
 
-  const makeMeasure = measureType => {
-    dispatch(setMeasureTypeToAdd(measureType))
-    setMeasureIsOpen(false)
+  const makeMeasurement = measurementType => {
+    dispatch(setMeasurementTypeToAdd(measurementType))
+    setMeasurementIsOpen(false)
   }
 
-  const getMeasureIcon = measureType => {
-    let icon = <MeasureIcon
+  const getMeasurementIcon = measurementType => {
+    let icon = <MeasurementIcon
       rightMenuIsOpen={rightMenuIsOpen}
       selectedVessel={selectedVessel}/>
 
-    switch (measureType) {
-      case MeasureTypes.MULTILINE: icon = <MultiLineIcon/>; break
-      case MeasureTypes.CIRCLE_RANGE: icon = <CircleRangeIcon/>; break
+    switch (measurementType) {
+      case MeasurementTypes.MULTILINE: icon = <MultiLineIcon/>; break
+      case MeasurementTypes.CIRCLE_RANGE: icon = <CircleRangeIcon/>; break
     }
 
     return icon
   }
 
-  function openOrCloseMeasure () {
-    if (measureTypeToAdd) {
-      dispatch(setMeasureTypeToAdd(null))
-      setMeasureIsOpen(false)
+  function openOrCloseMeasurement () {
+    if (measurementTypeToAdd) {
+      dispatch(setMeasurementTypeToAdd(null))
+      setMeasurementIsOpen(false)
     } else {
-      console.log("measureTypeToAdd", measureTypeToAdd)
-      setMeasureIsOpen(!measureIsOpen)
+      console.log("measurementTypeToAdd", measurementTypeToAdd)
+      setMeasurementIsOpen(!measurementIsOpen)
     }
   }
 
   return (
     <Wrapper isShowed={isShowed} ref={wrapperRef}>
-      <MeasureWrapper
-        isMeasuring={measureTypeToAdd}
+      <MeasurementWrapper
+        isMeasuring={measurementTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Mesurer une distance'}
-        onClick={() => openOrCloseMeasure()}>
+        onClick={() => openOrCloseMeasurement()}>
         {
-          getMeasureIcon(measureTypeToAdd)
+          getMeasurementIcon(measurementTypeToAdd)
         }
-      </MeasureWrapper>
-      <MeasureOptions
-        measureBoxIsOpen={measureIsOpen}
+      </MeasurementWrapper>
+      <MeasurementOptions
+        measurementBoxIsOpen={measurementIsOpen}
         firstUpdate={firstUpdate.current}>
-        <MeasureItem
+        <MeasurementItem
           title={'Mesure d\'une distance avec lignes brisées'}
-          onClick={() => makeMeasure(MeasureTypes.MULTILINE)}>
+          onClick={() => makeMeasurement(MeasurementTypes.MULTILINE)}>
           <MultiLineIcon/>
-        </MeasureItem>
-        <MeasureItem
+        </MeasurementItem>
+        <MeasurementItem
           title={'Rayon d\'action'}
-          onClick={() => makeMeasure(MeasureTypes.CIRCLE_RANGE)}>
+          onClick={() => makeMeasurement(MeasurementTypes.CIRCLE_RANGE)}>
           <CircleRangeIcon/>
-        </MeasureItem>
-      </MeasureOptions>
+        </MeasurementItem>
+      </MeasurementOptions>
       <CircleRangeValue
         firstUpdate={firstUpdate.current}
-        isOpen={measureTypeToAdd === MeasureTypes.CIRCLE_RANGE}>
+        isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}>
         <Header isFirst={true}>
           Définir une valeur
         </Header>
@@ -149,22 +149,22 @@ const Measure = () => {
           <span>(Nm)</span><br/>
           <OkButton
             onClick={() => {
-              dispatch(setCircleMeasureToAdd({
+              dispatch(setCircleMeasurementToAdd({
                 circleCoordinatesToAdd: circleCoordinatesToAdd,
                 circleRadiusToAdd: circleRadiusToAdd
               }))
               setCircleCoordinatesToAdd([])
               setCircleRadiusToAdd('')
-              dispatch(setMeasureTypeToAdd(null))
-              setMeasureIsOpen(false)
+              dispatch(setMeasurementTypeToAdd(null))
+              setMeasurementIsOpen(false)
             }}
           >
             OK
           </OkButton>
           <CancelButton
             onClick={() => {
-              dispatch(setMeasureTypeToAdd(null))
-              setMeasureIsOpen(false)
+              dispatch(setMeasurementTypeToAdd(null))
+              setMeasurementIsOpen(false)
             }}>
             Annuler
           </CancelButton>
@@ -267,7 +267,7 @@ const CircleRangeValue = styled.div`
   }
 `
 
-const MeasureItem = styled.div`
+const MeasurementItem = styled.div`
   display: inline-block;
   color: #05055E;
   background: ${COLORS.textGray};
@@ -294,20 +294,20 @@ const CircleRangeIcon = styled(CircleRangeSVG)`
 `
 
 const Wrapper = styled.div`
-  animation: ${props => props.isShowed ? 'measure-opening' : 'measure-closing'} 0.2s ease forwards;
-  @keyframes measure-opening {
+  animation: ${props => props.isShowed ? 'measurement-opening' : 'measurement-closing'} 0.2s ease forwards;
+  @keyframes measurement-opening {
     0%   { opacity: 0; }
     100% { opacity: 1; }
   }
 
-  @keyframes measure-closing {
+  @keyframes measurement-closing {
     0%   { opacity: 1; }
     100% { opacity: 0; }
   }
   z-index: 1000;
 `
 
-const MeasureOptions = styled.div`
+const MeasurementOptions = styled.div`
   width: 175px;
   margin-right: -200px;
   top: 165px;
@@ -316,20 +316,20 @@ const MeasureOptions = styled.div`
   position: absolute;
   display: inline-block;
   opacity: 0;
-  animation: ${props => props.firstUpdate && !props.measureBoxIsOpen ? '' : props.measureBoxIsOpen ? 'measure-box-opening' : 'measure-box-closing'} 0.5s ease forwards;
+  animation: ${props => props.firstUpdate && !props.measurementBoxIsOpen ? '' : props.measurementBoxIsOpen ? 'measurement-box-opening' : 'measurement-box-closing'} 0.5s ease forwards;
 
-  @keyframes measure-box-opening {
+  @keyframes measurement-box-opening {
     0%   { margin-right: -200px; opacity: 0;  }
     100% { margin-right: 45px; opacity: 1; }
   }
 
-  @keyframes measure-box-closing {
+  @keyframes measurement-box-closing {
     0% { margin-right: 45px; opacity: 1; }
     100%   { margin-right: -200px; opacity: 0;  }
   }
 `
 
-const MeasureWrapper = styled.button`
+const MeasurementWrapper = styled.button`
   position: absolute;
   display: inline-block;
   color: #05055E;
@@ -342,9 +342,9 @@ const MeasureWrapper = styled.button`
   border-radius: 2px;
   margin-top: 8px;
   
-  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'measure-icon-closing' : 'measure-icon-opening'} 0.3s ease forwards;
+  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'measurement-icon-closing' : 'measurement-icon-opening'} 0.3s ease forwards;
   
-  @keyframes measure-icon-opening {
+  @keyframes measurement-icon-opening {
     0%   {
       width: 5px;
       border-radius: 1px;
@@ -357,7 +357,7 @@ const MeasureWrapper = styled.button`
     }
   }
 
-  @keyframes measure-icon-closing {
+  @keyframes measurement-icon-closing {
     0% {
       width: 40px;
       border-radius: 2px;
@@ -375,7 +375,7 @@ const MeasureWrapper = styled.button`
   }
 `
 
-const MeasureIcon = styled(MeasureSVG)`
+const MeasurementIcon = styled(MeasurementSVG)`
   width: 40px;
   animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'visibility-icon-hidden' : 'visibility-icon-visible'} 0.2s ease forwards;
   
@@ -398,4 +398,4 @@ const MeasureIcon = styled(MeasureSVG)`
   }
 `
 
-export default Measure
+export default Measurement

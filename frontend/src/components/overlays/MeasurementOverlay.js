@@ -1,13 +1,15 @@
 import React, { createRef, useEffect, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
-import { COLORS } from '../constants/constants'
-import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
+import { COLORS } from '../../constants/constants'
+import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 
-const MeasureOverlay = ({ map, measure, coordinates, deleteFeature, id }) => {
+const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }) => {
   const ref = createRef()
   const [overlay] = useState(new Overlay({
-    offset: [0, -15],
+    element: ref.current,
+    position: coordinates,
+    offset: [0, -7],
     positioning: 'bottom-center'
   }))
 
@@ -15,7 +17,6 @@ const MeasureOverlay = ({ map, measure, coordinates, deleteFeature, id }) => {
     if(map) {
       overlay.setElement(ref.current)
       overlay.setPosition(coordinates)
-      overlay.setOffset([0, -7])
 
       map.addOverlay(overlay)
 
@@ -23,19 +24,19 @@ const MeasureOverlay = ({ map, measure, coordinates, deleteFeature, id }) => {
         map.removeOverlay(overlay)
       }
     }
-  }, [measure, map])
+  }, [measurement, map])
 
   return (
     <div>
-      <MeasureTooltipElements ref={ref} >
+      <MeasurementTooltipElements ref={ref} >
         <ZoneSelected>
-            <ZoneText>{measure ? measure : null}</ZoneText>
+            <ZoneText>{measurement}</ZoneText>
             <CloseIcon onClick={() => deleteFeature(id)}/>
           </ZoneSelected>
           <TrianglePointer>
             <TriangleShadow/>
           </TrianglePointer>
-      </MeasureTooltipElements>
+      </MeasurementTooltipElements>
     </div>
   )
 }
@@ -58,7 +59,7 @@ const TriangleShadow = styled.div`
   margin-top: -3px;
 `
 
-const MeasureTooltipElements = styled.div``
+const MeasurementTooltipElements = styled.div``
 
 const ZoneText = styled.span`
   padding-bottom: 5px;
@@ -91,4 +92,4 @@ const CloseIcon = styled(CloseIconSVG)`
   padding-left: 7px;
 `
 
-export default MeasureOverlay
+export default MeasurementOverlay

@@ -5,7 +5,7 @@ import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg
 import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
 import { Title, StrongText, NoValue, Zone } from './Control.style'
 
-const ControlsResume = props => {
+const ControlsResumeZone = props => {
   const {
     resume,
     controlsFromDate
@@ -21,40 +21,42 @@ const ControlsResume = props => {
     StrongTextOfSeizures
   } = resume
 
-  const ResumeActionTitle = <Title>`Résumé des actions de contrôle depuis ${controlsFromDate
-    ? <>{controlsFromDate.getUTCFullYear() + 1}
-                {' '}(sur { new Date().getFullYear() - controlsFromDate.getUTCFullYear() - 1 } ans)</>
-    : <NoValue>-</NoValue>}`</Title>
+  const getText = value => {
+    return !isNaN(value) ? value : <NoValue>-</NoValue>
+  }
 
   return <Zone>
-    <ResumeActionTitle />
+    <Title>Résumé des actions de contrôle depuis {controlsFromDate
+      ? <>{controlsFromDate.getUTCFullYear() + 1}
+        {' '}(sur { new Date().getFullYear() - controlsFromDate.getUTCFullYear() - 1 } ans)</>
+      : <NoValue>-</NoValue>}</Title>
     <Fields>
       <ControlResumeLine>
         <ResumeText>
           <Gyro /> Nombre de contrôles
         </ResumeText>
-        <ControlResumeStrongTextElement>en mer <StrongText>{!isNaN(StrongTextOfSeaControls) ? StrongTextOfSeaControls : <NoValue>-</NoValue>}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>débarque <StrongText>{!isNaN(StrongTextOfLandControls) ? StrongTextOfLandControls : <NoValue>-</NoValue>}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>aérien <StrongText>{!isNaN(StrongTextOfAerialControls) ? StrongTextOfAerialControls : <NoValue>-</NoValue>}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>en mer <StrongText>{getText(StrongTextOfSeaControls)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>débarque <StrongText>{getText(StrongTextOfLandControls)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>aérien <StrongText>{getText(StrongTextOfAerialControls)}</StrongText></ControlResumeStrongTextElement>
       </ControlResumeLine>
       <ControlResumeLine>
         <ResumeText>
           <Warning /> Nombre d&apos;infractions
         </ResumeText>
-        <ControlResumeStrongTextElement>pêche <StrongText>{!isNaN(StrongTextOfFishingInfractions) ? StrongTextOfFishingInfractions : <NoValue>-</NoValue>}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>sécurité <StrongText>{ !isNaN(StrongTextOfSecurityInfractions) ? StrongTextOfSecurityInfractions : <NoValue>-</NoValue> }</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>pêche <StrongText>{getText(StrongTextOfFishingInfractions)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>sécurité <StrongText>{getText(StrongTextOfSecurityInfractions)}</StrongText></ControlResumeStrongTextElement>
       </ControlResumeLine>
       <ResumesBoxes>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.StrongTextOfDiversions }>{ !isNaN(StrongTextOfDiversions) ? StrongTextOfDiversions : <NoValue>-</NoValue> }</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={ resume.StrongTextOfDiversions }>{getText(StrongTextOfDiversions)}</ResumeBoxStrongText>
           <ResumeBoxText>Déroutement</ResumeBoxText>
         </ResumeBox>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.StrongTextOfEscortsToQuay }>{ !isNaN(StrongTextOfEscortsToQuay) ? StrongTextOfEscortsToQuay : <NoValue>-</NoValue> }</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={ resume.StrongTextOfEscortsToQuay }>{getText(StrongTextOfEscortsToQuay)}</ResumeBoxStrongText>
           <ResumeBoxText>Reconduite à quai</ResumeBoxText>
         </ResumeBox>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.StrongTextOfSeizures }>{ !isNaN(StrongTextOfSeizures) ? StrongTextOfSeizures : <NoValue>-</NoValue>}</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={ resume.StrongTextOfSeizures }>{getText(StrongTextOfSeizures)}</ResumeBoxStrongText>
           <ResumeBoxText>Appréhension</ResumeBoxText>
         </ResumeBox>
       </ResumesBoxes>
@@ -133,4 +135,4 @@ const Warning = styled(WarningSVG)`
     margin-right: 5px;
 `
 
-export default ControlsResume
+export default ControlsResumeZone

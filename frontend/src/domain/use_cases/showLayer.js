@@ -129,7 +129,7 @@ function showWholeVectorIfSubZone (type, subZone) {
   })
 
   vectorSource.once(IRRETRIEVABLE_FEATURES_EVENT, event => {
-    console.error(event.error)
+    console.warn(event.error)
   })
 
   return vectorSource
@@ -153,7 +153,7 @@ function showBboxIfBigZone (type, subZone) {
   })
 
   vectorSource.once(IRRETRIEVABLE_FEATURES_EVENT, event => {
-    console.error(event.error)
+    console.warn(event.error)
   })
 
   return vectorSource

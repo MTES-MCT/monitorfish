@@ -7,7 +7,7 @@ import { ReactComponent as MeasureSVG } from '../components/icons/Mesure.svg'
 import { ReactComponent as MultiLineSVG } from '../components/icons/Mesure_ligne_brisee.svg'
 import { ReactComponent as CircleRangeSVG } from '../components/icons/Mesure_rayon_action.svg'
 import { COLORS } from '../constants/constants'
-import { setCircleMeasureToAdd, setMeasure } from '../domain/reducers/Map'
+import { setCircleMeasureToAdd, setMeasureTypeToAdd } from '../domain/reducers/Map'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import { MeasureTypes } from '../domain/entities/map'
@@ -16,7 +16,7 @@ const Measure = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const measure = useSelector(state => state.map.measure)
+  const measureTypeToAdd = useSelector(state => state.map.measureTypeToAdd)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
   const firstUpdate = useRef(true)
@@ -26,6 +26,10 @@ const Measure = () => {
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
 
   const wrapperRef = useRef(null)
+
+  useEffect(() => {
+    console.log(measureTypeToAdd)
+  }, [measureTypeToAdd])
 
   useEffect(() => {
     function handleClickOutside (event) {
@@ -61,13 +65,13 @@ const Measure = () => {
   const escapeFromKeyboard = event => {
     const escapeCode = 27
     if (event.keyCode === escapeCode) {
-      dispatch(setMeasure(null))
+      dispatch(setMeasureTypeToAdd(null))
       setMeasureIsOpen(false)
     }
   }
 
   const makeMeasure = measureType => {
-    dispatch(setMeasure(measureType))
+    dispatch(setMeasureTypeToAdd(measureType))
     setMeasureIsOpen(false)
   }
 
@@ -85,10 +89,11 @@ const Measure = () => {
   }
 
   function openOrCloseMeasure () {
-    if(measure) {
-      dispatch(setMeasure(null))
+    if (measureTypeToAdd) {
+      dispatch(setMeasureTypeToAdd(null))
       setMeasureIsOpen(false)
     } else {
+      console.log("measureTypeToAdd", measureTypeToAdd)
       setMeasureIsOpen(!measureIsOpen)
     }
   }
@@ -96,14 +101,14 @@ const Measure = () => {
   return (
     <Wrapper isShowed={isShowed} ref={wrapperRef}>
       <MeasureWrapper
-        isMeasuring={measure}
+        isMeasuring={measureTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Mesurer une distance'}
         onClick={() => openOrCloseMeasure()}>
         {
-          getMeasureIcon(measure)
+          getMeasureIcon(measureTypeToAdd)
         }
       </MeasureWrapper>
       <MeasureOptions
@@ -122,7 +127,7 @@ const Measure = () => {
       </MeasureOptions>
       <CircleRangeValue
         firstUpdate={firstUpdate.current}
-        isOpen={measure === MeasureTypes.CIRCLE_RANGE}>
+        isOpen={measureTypeToAdd === MeasureTypes.CIRCLE_RANGE}>
         <Header isFirst={true}>
           Définir une valeur
         </Header>
@@ -150,7 +155,7 @@ const Measure = () => {
               }))
               setCircleCoordinatesToAdd([])
               setCircleRadiusToAdd('')
-              dispatch(setMeasure(null))
+              dispatch(setMeasureTypeToAdd(null))
               setMeasureIsOpen(false)
             }}
           >
@@ -158,7 +163,7 @@ const Measure = () => {
           </OkButton>
           <CancelButton
             onClick={() => {
-              dispatch(setMeasure(null))
+              dispatch(setMeasureTypeToAdd(null))
               setMeasureIsOpen(false)
             }}>
             Annuler

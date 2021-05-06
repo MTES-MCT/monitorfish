@@ -7,6 +7,7 @@ import { COLORS } from '../../constants/constants'
 import { vesselLabel as vesselLabelEnum } from '../../domain/entities/vesselLabel'
 import countries from 'i18n-iso-countries'
 import { vesselAndVesselFeatureAreEquals, vesselsAreEquals } from '../../domain/entities/vessel'
+import Stroke from 'ol/style/Stroke'
 
 const images = require.context('../../../public/flags', false, /\.png$/)
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
@@ -208,3 +209,21 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
     return arrowStyle
   })
 }
+
+export const measurementStyle = new Style({
+  stroke: new Stroke({
+    color: COLORS.grayDarkerThree,
+    lineDash: [4, 4],
+    width: 2
+  }),
+  image: new CircleStyle({
+    radius: 2,
+    stroke: new Stroke({
+      color: COLORS.grayDarkerThree
+    }),
+    fill: new Fill({
+      color: COLORS.grayDarkerThree
+    })
+  })
+})
+

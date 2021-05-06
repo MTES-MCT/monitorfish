@@ -59,7 +59,7 @@ export default {
     zIndex: 999
   },
   MEASURE: {
-    code: 'measure',
+    code: 'measurement',
     name: '',
     group: null,
     type: layersType.FREE_DRAW,

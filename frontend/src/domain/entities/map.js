@@ -6,7 +6,7 @@ export const InteractionTypes = {
   POLYGON: 'POLYGON'
 }
 
-export const MeasureTypes = {
-  MULTILINE: 'MULTILINE',
-  CIRCLE_RANGE: 'CIRCLE_RANGE'
+export const MeasurementTypes = {
+  MULTILINE: 'LineString',
+  CIRCLE_RANGE: 'Circle'
 }

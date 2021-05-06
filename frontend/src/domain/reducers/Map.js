@@ -10,7 +10,7 @@ const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
 const vesselLabelLocalStorageKey = 'vesselLabel'
 const savedMapViewLocalStorageKey = 'mapView'
 const baseLayerLocalStorageKey = 'baseLayer'
-const measuresLocalStorageKey = 'measures'
+const measurementsLocalStorageKey = 'measurements'
 
 const mapSlice = createSlice({
   name: 'map',
@@ -27,9 +27,9 @@ const mapSlice = createSlice({
     vesselNamesHiddenByZoom: undefined,
     isMoving: false,
     interaction: null,
-    measureTypeToAdd: null,
-    circleMeasureToAdd: null,
-    measuresDrawed: getLocalStorageState([], measuresLocalStorageKey),
+    measurementTypeToAdd: null,
+    circleMeasurementToAdd: null,
+    measurementsDrawed: getLocalStorageState([], measurementsLocalStorageKey),
     zonesSelected: [],
     selectedBaseLayer: getLocalStorageState(baseLayers.OSM.code, baseLayerLocalStorageKey),
     view: getLocalStorageState({
@@ -86,31 +86,31 @@ const mapSlice = createSlice({
     resetInteraction (state) {
       state.interaction = null
     },
-    setMeasureTypeToAdd (state, action) {
-      state.measureTypeToAdd = action.payload
+    setMeasurementTypeToAdd (state, action) {
+      state.measurementTypeToAdd = action.payload
     },
-    resetMeasureTypeToAdd (state) {
-      state.measureTypeToAdd = null
+    resetMeasurementTypeToAdd (state) {
+      state.measurementTypeToAdd = null
     },
-    addMeasureDrawed (state, action) {
-      const nextMeasuresDrawed = state.measuresDrawed.concat(action.payload)
+    addMeasurementDrawed (state, action) {
+      const nextMeasurementsDrawed = state.measurementsDrawed.concat(action.payload)
 
-      window.localStorage.setItem(measuresLocalStorageKey, JSON.stringify(nextMeasuresDrawed))
-      state.measuresDrawed = nextMeasuresDrawed
+      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
+      state.measurementsDrawed = nextMeasurementsDrawed
     },
-    removeMeasureDrawed (state, action) {
-      const nextMeasuresDrawed = state.measuresDrawed.filter(measure => {
-        return measure.feature.id !== action.payload
+    removeMeasurementDrawed (state, action) {
+      const nextMeasurementsDrawed = state.measurementsDrawed.filter(measurement => {
+        return measurement.feature.id !== action.payload
       })
 
-      window.localStorage.setItem(measuresLocalStorageKey, JSON.stringify(nextMeasuresDrawed))
-      state.measuresDrawed = nextMeasuresDrawed
+      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
+      state.measurementsDrawed = nextMeasurementsDrawed
     },
-    setCircleMeasureToAdd (state, action) {
-      state.circleMeasureToAdd = action.payload
+    setCircleMeasurementToAdd (state, action) {
+      state.circleMeasurementToAdd = action.payload
     },
-    resetCircleMeasureToAdd (state) {
-      state.circleMeasureToAdd = null
+    resetCircleMeasurementToAdd (state) {
+      state.circleMeasurementToAdd = null
     },
     addZoneSelected (state, action) {
       state.zonesSelected = state.zonesSelected.concat(action.payload)
@@ -144,12 +144,12 @@ export const {
   selectBaseLayer,
   setInteraction,
   resetInteraction,
-  setMeasureTypeToAdd,
-  resetMeasureTypeToAdd,
-  addMeasureDrawed,
-  removeMeasureDrawed,
-  setCircleMeasureToAdd,
-  resetCircleMeasureToAdd,
+  setMeasurementTypeToAdd,
+  resetMeasurementTypeToAdd,
+  addMeasurementDrawed,
+  removeMeasurementDrawed,
+  setCircleMeasurementToAdd,
+  resetCircleMeasurementToAdd,
   addZoneSelected,
   setZonesSelected,
   removeZoneSelected,

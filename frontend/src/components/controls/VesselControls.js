@@ -365,10 +365,6 @@ const ControlResumeNumberElement = styled.span`
   margin: 5px 10px 0 14px;
 `
 
-const LasControResumeElement = styled.span`
-  margin-right: 10px;
-`
-
 const Gyro = styled(GyroSVG)`
   width: 16px;
   vertical-align: top;
@@ -379,24 +375,6 @@ const Warning = styled(WarningSVG)`
   width: 16px;
   vertical-align: top;
   margin-right: 5px;
-`
-
-const Red = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-left: 5px;
-  background-color: #E1000F;
-  border-radius: 50%;
-  display: inline-block;
-`
-
-const Green = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-left: 5px;
-  background-color: #8CC63F;
-  border-radius: 50%;
-  display: inline-block;
 `
 
 export default VesselControls

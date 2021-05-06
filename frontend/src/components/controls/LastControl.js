@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { getDate } from '../../utils'
 
-const control = props => {
+const LastControl = props => {
   const {
     key,
     control
@@ -64,27 +64,6 @@ const Fields = styled.div`
   line-height: 0.2em;
 `
 
-const Zone = styled.div`
-  margin: 10px 5px 0 5px;
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
-  background: ${COLORS.background};
-`
-
-const Title = styled.div`
-  color: ${COLORS.textGray};
-  background: ${COLORS.grayDarker};
-  padding: 8.5px 10px 8px 20px;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-  flex-grow: 2;
-  display: flex;
-  width: 400px;
-  font-size: 13px;
-  font-weight: 500;
-`
-
 const ControlResumeLine = styled.div`
   margin: 0 5px 5px 0;
   border: none;
@@ -95,4 +74,4 @@ const ControlResumeLine = styled.div`
   width: 100%;
 `
 
-export default control
+export default LastControl

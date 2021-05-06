@@ -131,7 +131,7 @@ export const getTextWidth = text => {
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d')
   context.font = 'Normal 12px Arial'
-  const metrics = context.measurementText(text)
+  const metrics = context.measureText(text)
 
   return metrics.width
 }

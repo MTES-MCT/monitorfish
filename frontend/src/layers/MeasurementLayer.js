@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
@@ -29,12 +29,15 @@ const MeasurementLayer = ({ map }) => {
     measurementInProgressRef.current = value
     _setMeasurementInProgress(value)
   }
-
+  const [noDeleteAvailable, setNoDeleteAvailable] = useState(false)
   const [drawObject, setDrawObject] = useState(null)
   const [vectorSource] = useState(new VectorSource({ wrapX: false, projection: OPENLAYERS_PROJECTION }))
   const [vectorLayer] = useState(new VectorLayer({
     source: vectorSource,
-    style: measurementStyle
+    style: measurementStyle,
+    renderBuffer: 7,
+    updateWhileAnimating: true,
+    updateWhileInteracting: true
   }))
 
   useEffect(() => {
@@ -46,7 +49,7 @@ const MeasurementLayer = ({ map }) => {
   }, [measurementsDrawed, map])
 
   useEffect(() => {
-    if(map && measurementType) {
+    if (map && measurementType) {
       addEmptyNextMeasurement()
       drawNewFeatureOnMap()
     }
@@ -61,16 +64,6 @@ const MeasurementLayer = ({ map }) => {
   }, [circleMeasurementToAdd])
 
   useEffect(() => {
-    handleDrawEvents()
-  }, [drawObject])
-
-  function addLayerToMap () {
-    if (map && vectorLayer) {
-      map.getLayers().push(vectorLayer)
-    }
-  }
-
-  function handleDrawEvents () {
     if (drawObject) {
       let listener
 
@@ -86,18 +79,24 @@ const MeasurementLayer = ({ map }) => {
         endDrawing(event, listener)
       })
     }
+  }, [drawObject])
+
+  function addLayerToMap () {
+    if (map && vectorLayer) {
+      map.getLayers().push(vectorLayer)
+    }
   }
 
   function drawExistingFeaturesOnMap () {
     if (measurementsDrawed && map) {
       measurementsDrawed.forEach((measurement, index) => {
-        let measurementDrawed = measurementsDrawed[index]
+        const measurementDrawed = measurementsDrawed[index]
 
-        let feature = new GeoJSON({
-          featureProjection: 'EPSG:3857',
+        const feature = new GeoJSON({
+          featureProjection: 'EPSG:3857'
         }).readFeature(measurementDrawed.feature)
 
-        feature.setId(index + 1)
+        feature.setId(measurement.feature.id)
         vectorSource.addFeature(feature)
       })
     }
@@ -136,8 +135,7 @@ const MeasurementLayer = ({ map }) => {
         style: measurementStyle
       })
 
-      let id = getNextMeasurementId()
-      circleFeature.setId(id)
+      circleFeature.setId(circleFeature.ol_uid)
 
       const tooltipCoordinates = circleFeature.getGeometry().getLastCoordinate()
       dispatch(addMeasurementDrawed({
@@ -149,12 +147,12 @@ const MeasurementLayer = ({ map }) => {
   }
 
   function getGeoJSONFromFeature (feature) {
-    let parser = new GeoJSON()
+    const parser = new GeoJSON()
     return parser.writeFeatureObject(feature, { featureProjection: OPENLAYERS_PROJECTION })
   }
 
   function saveMeasurement (feature, measurement) {
-    let geoJSONFeature = getGeoJSONFromFeature(feature)
+    const geoJSONFeature = getGeoJSONFromFeature(feature)
 
     const tooltipCoordinates = feature.getGeometry().getLastCoordinate()
     dispatch(addMeasurementDrawed({
@@ -167,15 +165,17 @@ const MeasurementLayer = ({ map }) => {
   function deleteFeature (featureId) {
     const feature = vectorSource.getFeatureById(featureId)
     if (feature) {
+      setNoDeleteAvailable(true)
       vectorSource.removeFeature(feature)
       vectorSource.changed()
     }
 
+    vectorSource.once("change", () => setNoDeleteAvailable(false))
     dispatch(removeMeasurementDrawed(featureId))
   }
 
   function drawNewFeatureOnMap () {
-    let draw = new Draw({
+    const draw = new Draw({
       source: vectorSource,
       type: measurementType,
       style: measurementStyle
@@ -205,8 +205,7 @@ const MeasurementLayer = ({ map }) => {
   }
 
   function endDrawing (event, listener) {
-    let id = getNextMeasurementId()
-    event.feature.setId(id)
+    event.feature.setId(event.feature.ol_uid)
 
     if (event.feature.getGeometry() instanceof Circle) {
       event.feature.setGeometry(fromCircle(event.feature.getGeometry()))
@@ -240,21 +239,6 @@ const MeasurementLayer = ({ map }) => {
     }
   }
 
-  function getNextMeasurementId () {
-    let id = 1
-    if (measurementsDrawed && measurementsDrawed.length) {
-      id = measurementsDrawed[0].feature.id
-      for (let i = 1; i < measurementsDrawed.length; ++i) {
-        if (measurementsDrawed[i].feature.id > id) {
-          id = measurementsDrawed[i].feature.id
-        }
-      }
-
-      id = id + 1
-    }
-    return id
-  }
-
   function getNauticalMilesRadiusFromPolygon (polygon) {
     const length = getLength(polygon)
     const radius = length / (2 * Math.PI)
@@ -284,6 +268,7 @@ const MeasurementLayer = ({ map }) => {
             measurement={measurement.measurement}
             coordinates={measurement.coordinates}
             deleteFeature={deleteFeature}
+            noDeleteAvailable={noDeleteAvailable}
           />
         })
       }

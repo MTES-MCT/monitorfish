@@ -1,9 +1,8 @@
-
 import React from 'react'
 import styled from 'styled-components'
 import YearControls from './YearControls'
 import { COLORS } from '../../constants/constants'
-import { Zone, Title } from './Control.style'
+import { Zone, Title } from './Controls.style'
 
 const YearsToControlList = props => {
   const {
@@ -29,7 +28,7 @@ const YearsToControlList = props => {
         }
           </List>
         : <NoControls>
-            Aucun contrôle { controlsFromDate ? <>depuis {controlsFromDate.getUTCFullYear() + 1}</> : null}
+            Aucun contrôle {controlsFromDate && `depuis ${controlsFromDate.getUTCFullYear() + 1}`}
         </NoControls>
   }</Zone>
 }

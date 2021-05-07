@@ -20,8 +20,8 @@ const YearControls = props => {
     }
   }, [props.yearControls])
 
-  return props.yearControls
-    ? <Row>
+  return props.yearControls &&
+    <Row>
         <YearTitle isEmpty={props.yearControls.length === 0} isLastItem={props.isLastItem} isOpen={isOpen}>
             <Text isEmpty={props.yearControls.length === 0} isOpen={isOpen} title={props.year} onClick={() => setIsOpen(!isOpen)}>
                 {
@@ -59,7 +59,6 @@ const YearControls = props => {
             }
         </List>
     </Row>
-    : null
 }
 
 const Red = styled.span`

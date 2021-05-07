@@ -27,7 +27,6 @@ const VesselControls = props => {
     const sortedLastYearControlList = Object.values(yearsToControls).flat()
       .sort((a, b) => a.controlDatetimeUtc > b.controlDatetimeUtc)
     while (i < sortedLastYearControlList.length && lastControlList.length < 2) {
-      console.log(sortedLastYearControlList[i])
       if (sortedLastYearControlList[i].controlType === controlType.SEA) {
         lastControlList.push(sortedLastYearControlList[i])
       } else if (sortedLastYearControlList[i].controlType === controlType.LAND) {

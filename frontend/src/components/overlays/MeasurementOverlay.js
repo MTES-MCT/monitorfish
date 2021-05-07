@@ -28,7 +28,7 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
 
   return (
     <div>
-      <MeasurementTooltipElements ref={ref} >
+      <MeasurementTooltipElements ref={ref}>
         <ZoneSelected>
             <ZoneText>{measurement}</ZoneText>
             <CloseIcon onClick={() => deleteFeature(id)}/>

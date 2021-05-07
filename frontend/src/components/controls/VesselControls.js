@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -8,30 +8,27 @@ import YearsToControlList from './YearsToControlList'
 import { lastControlByType, getYearsToControl } from '../../domain/entities/controls'
 
 const VesselControls = props => {
-  const [yearsToControls, setYearsToControls] = useState()
-  const [lastControlList, setLastControlList] = useState()
-
   const {
     controlResumeAndControls,
     nextControlResumeAndControls,
     controlsFromDate
   } = props
 
-  const {
-    controls
-  } = controlResumeAndControls
-
-  useEffect(() => {
-    if (controlResumeAndControls && controlResumeAndControls.controls && controls.length) {
-      const nextYearsToControls = getYearsToControl(controlsFromDate, controls)
-      const lastControl = lastControlByType(nextYearsToControls)
-      setYearsToControls(nextYearsToControls)
-      setLastControlList(lastControl)
-    } else {
-      setYearsToControls(undefined)
-      setLastControlList(undefined)
+  const yearsToControls = useMemo(() => {
+    let nextYearsToControls
+    if (controlResumeAndControls && controlResumeAndControls.controls) {
+      nextYearsToControls = getYearsToControl(controlsFromDate, controlResumeAndControls.controls)
     }
-  }, [controlResumeAndControls, controlsFromDate, controls, setYearsToControls, setLastControlList])
+    return nextYearsToControls
+  }, [controlResumeAndControls, controlsFromDate])
+
+  const lastControlList = useMemo(() => {
+    let lastControlListByType
+    if (controlResumeAndControls && controlResumeAndControls.controls) {
+      lastControlListByType = lastControlByType(yearsToControls)
+    }
+    return lastControlListByType
+  }, [yearsToControls])
 
   return <>
         { nextControlResumeAndControls && <>

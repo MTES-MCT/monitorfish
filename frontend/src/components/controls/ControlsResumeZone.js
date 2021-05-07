@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg'
 import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
-import { Title, StrongText, NoValue, Zone } from './Control.style'
+import { Title, StrongText, NoValue, Zone } from './Controls.style'
 
 const ControlsResumeZone = props => {
   const {

@@ -2,10 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { getDate } from '../../utils'
-import { Title, Zone, StrongText, NoValue, Red, Green } from './Control.style'
+import { Title, Zone, StrongText, NoValue, Red, Green } from './Controls.style'
+import { controlType } from '../../domain/entities/controls'
 
 const LastControlZone = props => {
   const { lastControlList } = props
+
+  const getResumeText = (control) => {
+    if (control.controlType === controlType.SEA) {
+      return 'Dernier contrôle en mer'
+    } else if (control.controlType === controlType.LAND) {
+      return 'Dernier contrôle en débarque'
+    }
+  }
 
   return <Zone>
     <Title>
@@ -14,7 +23,7 @@ const LastControlZone = props => {
     {lastControlList.map((control, index) =>
       <Fields key={index}>
         <ControlResumeLine>
-          <ResumeText>Dernier contrôle en mer <StrongText>le {getDate(control.controlDatetimeUtc)}</StrongText></ResumeText>
+          <ResumeText>{getResumeText(control)}<StrongText>le {getDate(control.controlDatetimeUtc)}</StrongText></ResumeText>
         </ControlResumeLine>
         <ControlResumeLine>
           <LastControResumeElement>Unité <StrongText>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControResumeElement>

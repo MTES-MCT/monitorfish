@@ -11,18 +11,21 @@ const ControlsResumeZone = props => {
     controlsFromDate
   } = props
   const {
-    StrongTextOfSeaControls,
-    StrongTextOfLandControls,
-    StrongTextOfAerialControls,
-    StrongTextOfFishingInfractions,
-    StrongTextOfSecurityInfractions,
-    StrongTextOfDiversions,
-    StrongTextOfEscortsToQuay,
-    StrongTextOfSeizures
+    numberOfSeaControls,
+    numberOfLandControls,
+    numberOfAerialControls,
+    numberOfFishingInfractions,
+    numberOfSecurityInfractions,
+    numberOfDiversions,
+    numberOfEscortsToQuay,
+    numberOfSeizures
   } = resume
+  console.log(resume)
 
   const getText = value => {
-    return !isNaN(value) ? value : <NoValue>-</NoValue>
+    const toReturn = !isNaN(value) ? value : <NoValue>-</NoValue>
+    console.log(toReturn)
+    return toReturn
   }
 
   return <Zone>
@@ -35,28 +38,28 @@ const ControlsResumeZone = props => {
         <ResumeText>
           <Gyro /> Nombre de contrôles
         </ResumeText>
-        <ControlResumeStrongTextElement>en mer <StrongText>{getText(StrongTextOfSeaControls)}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>débarque <StrongText>{getText(StrongTextOfLandControls)}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>aérien <StrongText>{getText(StrongTextOfAerialControls)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>en mer <StrongText>{getText(numberOfSeaControls)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>débarque <StrongText>{getText(numberOfLandControls)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>aérien <StrongText>{getText(numberOfAerialControls)}</StrongText></ControlResumeStrongTextElement>
       </ControlResumeLine>
       <ControlResumeLine>
         <ResumeText>
           <Warning /> Nombre d&apos;infractions
         </ResumeText>
-        <ControlResumeStrongTextElement>pêche <StrongText>{getText(StrongTextOfFishingInfractions)}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>sécurité <StrongText>{getText(StrongTextOfSecurityInfractions)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>pêche <StrongText>{getText(numberOfFishingInfractions)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>sécurité <StrongText>{getText(numberOfSecurityInfractions)}</StrongText></ControlResumeStrongTextElement>
       </ControlResumeLine>
       <ResumesBoxes>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.StrongTextOfDiversions }>{getText(StrongTextOfDiversions)}</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={ resume.numberOfDiversions }>{getText(numberOfDiversions)}</ResumeBoxStrongText>
           <ResumeBoxText>Déroutement</ResumeBoxText>
         </ResumeBox>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.StrongTextOfEscortsToQuay }>{getText(StrongTextOfEscortsToQuay)}</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={ resume.numberOfEscortsToQuay }>{getText(numberOfEscortsToQuay)}</ResumeBoxStrongText>
           <ResumeBoxText>Reconduite à quai</ResumeBoxText>
         </ResumeBox>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.StrongTextOfSeizures }>{getText(StrongTextOfSeizures)}</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={ resume.numberOfSeizures }>{getText(numberOfSeizures)}</ResumeBoxStrongText>
           <ResumeBoxText>Appréhension</ResumeBoxText>
         </ResumeBox>
       </ResumesBoxes>

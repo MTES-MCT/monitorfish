@@ -11,12 +11,12 @@ export const lastControlByType = (yearsToControls) => {
     .sort((a, b) => a.controlDatetimeUtc > b.controlDatetimeUtc)
   while (i < sortedLastYearControlList.length && Object.keys(lastControlList).length < 2) {
     if (sortedLastYearControlList[i].controlType === controlType.SEA) {
-      lastControlList[controlType.SEA] = {
+      lastControlList.SEA = {
         control: sortedLastYearControlList[i],
         text: 'Dernier contrôle en mer'
       }
     } else if (sortedLastYearControlList[i].controlType === controlType.LAND) {
-      lastControlList[controlType.LAND] = {
+      lastControlList.LAND = {
         control: sortedLastYearControlList[i],
         text: 'Dernier contrôle à la débarque'
       }
@@ -24,4 +24,28 @@ export const lastControlByType = (yearsToControls) => {
     i++
   }
   return lastControlList
+}
+
+export const getYearsToControl = (controlsFromDate, controls) => {
+  const nextYearsToControls = {}
+  if (controlsFromDate) {
+    let fromYear = controlsFromDate.getUTCFullYear() + 1
+    while (fromYear < new Date().getUTCFullYear()) {
+      nextYearsToControls[fromYear] = []
+      fromYear += 1
+    }
+  }
+
+  controls.forEach(control => {
+    if (control && control.controlDatetimeUtc) {
+      const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
+
+      if (nextYearsToControls[year] && nextYearsToControls[year].length) {
+        nextYearsToControls[year] = nextYearsToControls[year].concat(control)
+      } else {
+        nextYearsToControls[year] = [control]
+      }
+    }
+  })
+  return nextYearsToControls
 }

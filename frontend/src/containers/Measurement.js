@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import CoordinateInput from 'react-coordinate-input'
 
 import { ReactComponent as MeasurementSVG } from '../components/icons/Mesure.svg'
 import { ReactComponent as MultiLineSVG } from '../components/icons/Mesure_ligne_brisee.svg'
@@ -11,6 +10,7 @@ import { setCircleMeasurementToAdd, setMeasurementTypeToAdd } from '../domain/re
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import { MeasurementTypes } from '../domain/entities/map'
+import CustomCircleRange from '../components/measurements/CustomCircleRange'
 
 const Measurement = () => {
   const dispatch = useDispatch()
@@ -93,6 +93,22 @@ const Measurement = () => {
     }
   }
 
+  function addCustomCircleRange () {
+    dispatch(setCircleMeasurementToAdd({
+      circleCoordinatesToAdd: circleCoordinatesToAdd,
+      circleRadiusToAdd: circleRadiusToAdd
+    }))
+    setCircleCoordinatesToAdd([])
+    setCircleRadiusToAdd('')
+    dispatch(setMeasurementTypeToAdd(null))
+    setMeasurementIsOpen(false)
+  }
+
+  function cancelAddCircleRange () {
+    dispatch(setMeasurementTypeToAdd(null))
+    setMeasurementIsOpen(false)
+  }
+
   return (
     <Wrapper isShowed={isShowed} ref={wrapperRef}>
       <MeasurementWrapper
@@ -120,138 +136,18 @@ const Measurement = () => {
           <CircleRangeIcon/>
         </MeasurementItem>
       </MeasurementOptions>
-      <CircleRangeValue
+      <CustomCircleRange
         firstUpdate={firstUpdate.current}
-        isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}>
-        <Header isFirst={true}>
-          Définir une valeur
-        </Header>
-        <Body>
-          <p>Coordonnées</p>
-          <CoordinateInput
-            onChange={(_, { unmaskedValue, dd, dms }) => setCircleCoordinatesToAdd(dd)}
-            value={circleCoordinatesToAdd && Array.isArray(circleCoordinatesToAdd) && circleCoordinatesToAdd.length
-              ? circleCoordinatesToAdd.join(',')
-              : undefined}
-          />
-          <span>(DMS)</span>
-          <p>Distance (rayon)</p>
-          <input
-            type='text'
-            onChange={e => setCircleRadiusToAdd(e.target.value)}
-            value={circleRadiusToAdd}
-          />
-          <span>(Nm)</span><br/>
-          <OkButton
-            onClick={() => {
-              dispatch(setCircleMeasurementToAdd({
-                circleCoordinatesToAdd: circleCoordinatesToAdd,
-                circleRadiusToAdd: circleRadiusToAdd
-              }))
-              setCircleCoordinatesToAdd([])
-              setCircleRadiusToAdd('')
-              dispatch(setMeasurementTypeToAdd(null))
-              setMeasurementIsOpen(false)
-            }}
-          >
-            OK
-          </OkButton>
-          <CancelButton
-            onClick={() => {
-              dispatch(setMeasurementTypeToAdd(null))
-              setMeasurementIsOpen(false)
-            }}>
-            Annuler
-          </CancelButton>
-        </Body>
-      </CircleRangeValue>
+        measurementTypeToAdd={measurementTypeToAdd}
+        circleCoordinatesToAdd={circleCoordinatesToAdd}
+        circleRadiusToAdd={circleRadiusToAdd}
+        setCircleCoordinatesToAdd={setCircleCoordinatesToAdd}
+        setCircleRadiusToAdd={setCircleRadiusToAdd}
+        cancelAddCircleRange={cancelAddCircleRange}
+        addCustomCircleRange={addCustomCircleRange}/>
     </Wrapper>
   )
 }
-
-const CancelButton = styled.button`
-  border: 1px solid ${COLORS.grayDarkerThree};
-  width: 130px;
-  padding: 5px 12px 5px 12px;
-  margin: 15px 0 0 15px;
-  font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
-  
-  :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.grayDarker};
-  }
-`
-
-const OkButton = styled.button`
-  background: ${COLORS.grayDarkerThree};
-  width: 130px;
-  padding: 5px 12px 5px 12px;
-  margin: 15px 0 0 0;
-  font-size: 13px;
-  color: ${COLORS.grayBackground};
-  
-  :hover, :focus {
-    background: ${COLORS.grayDarkerThree};
-  }
-`
-
-const Body = styled.div`
-  margin: 10px 15px;
-  text-align: left;
-  font-size: 13px;
-  color: ${COLORS.textGray};
-  
-  p {
-    margin: 0;
-    font-size: 13px;
-  }
-  
-  p:nth-of-type(2) {
-    margin-top: 15px;
-    font-size: 13px;
-  }
-  
-  span {
-    margin-left: 7px;
-  }
-  
-  input {
-    color: ${COLORS.grayDarkerThree};
-    margin-top: 7px;
-    background: ${COLORS.grayLighter};
-    border: none;
-    height: 27px;
-    padding-left: 8px;
-  }
-  
-  input:nth-of-type(2) {
-    width: 32px;
-  }
-`
-
-const Header = styled.div`
-  background: ${COLORS.textGray};
-  color: ${COLORS.grayBackground};
-  padding: 9px 0 7px 15px;
-  font-size: 16px;
-  text-align: left;
-  border-top-left-radius: ${props => props.isFirst ? '2px' : '0'};
-  border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
-`
-
-const CircleRangeValue = styled.div`
-  width: 306px;
-  background: ${COLORS.background};
-  margin-right: ${props => props.firstUpdate ? '-320px' : props.isOpen ? '45px' : '-320px'};
-  opacity:  ${props => props.firstUpdate ? '0' : props.isOpen ? '1' : '0'};
-  top: 165px;
-  right: 10px;
-  border-radius: 2px;
-  position: absolute;
-  display: inline-block;
-  transition: all 0.5s;
-`
 
 const MeasurementItem = styled.div`
   display: inline-block;

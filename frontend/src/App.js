@@ -1,7 +1,13 @@
 import React from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import Map from './containers/Map'
+import BackofficeMap from './containers/BackofficeMap'
 import VesselsSearchBox from './containers/VesselsSearchBox'
 import VesselSidebar from './containers/VesselSidebar'
 import LayersSidebar from './containers/LayersSidebar'
@@ -16,19 +22,27 @@ function App () {
   return (
     <>
       <ToastProvider placement="bottom-right">
-        <Wrapper>
-          <Map/>
-          <VesselsSearchBox/>
-          <RightMenuOnHoverZone />
-          <LayersSidebar/>
-          <VesselList/>
-          <VesselVisibility/>
-          <VesselSidebar/>
-          <UpdatingVesselLoader/>
-          <Measurement/>
-
-          <APIWorker/>
-        </Wrapper>
+        <Router>
+          <Switch>
+            <Route path='/'>
+              <Wrapper>
+                <Map/>
+                <VesselsSearchBox/>
+                <RightMenuOnHoverZone />
+                <LayersSidebar/>
+                <VesselList/>
+                <VesselVisibility/>
+                <VesselSidebar/>
+                <UpdatingVesselLoader/>
+                <Measurement/>
+                <APIWorker/>
+              </Wrapper>
+            </Route>
+            <Route path='/backoffice'>
+              <BackofficeMap/>
+            </Route>
+          </Switch>
+        </Router>
       </ToastProvider>
     </>
   )

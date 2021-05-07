@@ -1,11 +1,10 @@
 import React from 'react'
 import { Title, Zone } from './Controls.style'
 import { controlType } from '../../domain/entities/controls'
-import { ControlField } from './ControlField'
+import ControlField from './ControlField'
 
 const LastControlZone = props => {
   const { lastControlList } = props
-  console.log(lastControlList)
   return lastControlList && lastControlList.SEA && lastControlList.LAND
     ? <Zone>
       <Title>

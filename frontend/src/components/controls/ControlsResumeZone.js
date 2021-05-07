@@ -20,7 +20,6 @@ const ControlsResumeZone = props => {
     numberOfEscortsToQuay,
     numberOfSeizures
   } = resume
-  console.log(resume)
 
   const getText = value => {
     const toReturn = !isNaN(value) ? value : <NoValue>-</NoValue>

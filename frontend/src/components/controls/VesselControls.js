@@ -1,155 +1,65 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
-import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg'
-import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
-import YearControls from './YearControls'
+import LastControlZone from './LastControlZone'
+import ControlsResumeZone from './ControlsResumeZone'
+import YearsToControlList from './YearsToControlList'
+import { lastControlByType, getYearsToControl } from '../../domain/entities/controls'
 
 const VesselControls = props => {
-  const [yearsToControls, setYearsToControls] = useState({})
+  const {
+    controlResumeAndControls,
+    nextControlResumeAndControls,
+    controlsFromDate
+  } = props
 
-  useEffect(() => {
-    if (props.controlResumeAndControls && props.controlResumeAndControls.controls && props.controlResumeAndControls.controls.length) {
-      const nextYearsToControls = {}
-
-      if (props.controlsFromDate) {
-        let fromYear = props.controlsFromDate.getUTCFullYear() + 1
-        while (fromYear < new Date().getUTCFullYear()) {
-          nextYearsToControls[fromYear] = []
-          fromYear += 1
-        }
-      }
-
-      props.controlResumeAndControls.controls.forEach(control => {
-        if (control && control.controlDatetimeUtc) {
-          const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
-
-          if (nextYearsToControls[year] && nextYearsToControls[year].length) {
-            nextYearsToControls[year] = nextYearsToControls[year].concat(control)
-          } else {
-            nextYearsToControls[year] = [control]
-          }
-        }
-      })
-
-      setYearsToControls(nextYearsToControls)
-    } else {
-      setYearsToControls(null)
+  const yearsToControls = useMemo(() => {
+    let nextYearsToControls
+    if (controlResumeAndControls && controlResumeAndControls.controls) {
+      nextYearsToControls = getYearsToControl(controlsFromDate, controlResumeAndControls.controls)
     }
-  }, [props.controlResumeAndControls])
+    return nextYearsToControls
+  }, [controlResumeAndControls, controlsFromDate])
+
+  const lastControlList = useMemo(() => {
+    let lastControlListByType
+    if (controlResumeAndControls && controlResumeAndControls.controls) {
+      lastControlListByType = lastControlByType(yearsToControls)
+    }
+    return lastControlListByType
+  }, [yearsToControls])
 
   return <>
-        { props.nextControlResumeAndControls
-          ? <>
+        { nextControlResumeAndControls && <>
                 <UpdateControls/>
                 <UpdateControlsButton
-                    onClick={() => props.updateControlResumeAndControls(props.nextControlResumeAndControls)}>
+                    onClick={() => props.updateControlResumeAndControls(nextControlResumeAndControls)}>
                     Nouveaux contrôles
                 </UpdateControlsButton>
             </>
-          : null
         }
         {
-            props.controlResumeAndControls
-              ? <Body>
-                  <Zone>
-                      <Title>
-                          <Text>
-                              Résumé des actions de contrôle depuis { props.controlsFromDate
-                            ? <>{props.controlsFromDate.getUTCFullYear() + 1}
-                            {' '}(sur { new Date().getFullYear() - props.controlsFromDate.getUTCFullYear() - 1 } ans)</>
-                            : <NoValue>-</NoValue> }
-                          </Text>
-                      </Title>
-                      <Fields>
-                          <ControlResumeLine>
-                              <ResumeText>
-                                  <Gyro /> Nombre de contrôles
-                              </ResumeText>
-                              <ControlResumeNumberElement>en mer <Number>{!isNaN(props.controlResumeAndControls.numberOfSeaControls) ? props.controlResumeAndControls.numberOfSeaControls : <NoValue>-</NoValue>}</Number></ControlResumeNumberElement>
-                              <ControlResumeNumberElement>débarque <Number>{!isNaN(props.controlResumeAndControls.numberOfLandControls) ? props.controlResumeAndControls.numberOfLandControls : <NoValue>-</NoValue>}</Number></ControlResumeNumberElement>
-                              <ControlResumeNumberElement>aérien <Number>{!isNaN(props.controlResumeAndControls.numberOfAerialControls) ? props.controlResumeAndControls.numberOfAerialControls : <NoValue>-</NoValue>}</Number></ControlResumeNumberElement>
-                          </ControlResumeLine>
-                          <ControlResumeLine>
-                              <ResumeText>
-                                  <Warning /> Nombre d&apos;infractions
-                              </ResumeText>
-                              <ControlResumeNumberElement>pêche <Number>{!isNaN(props.controlResumeAndControls.numberOfFishingInfractions) ? props.controlResumeAndControls.numberOfFishingInfractions : <NoValue>-</NoValue>}</Number></ControlResumeNumberElement>
-                              <ControlResumeNumberElement>sécurité <Number>{ !isNaN(props.controlResumeAndControls.numberOfSecurityInfractions) ? props.controlResumeAndControls.numberOfSecurityInfractions : <NoValue>-</NoValue> }</Number></ControlResumeNumberElement>
-                          </ControlResumeLine>
-                          <ResumesBoxes>
-                              <ResumeBox>
-                                  <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfDiversions }>{ !isNaN(props.controlResumeAndControls.numberOfDiversions) ? props.controlResumeAndControls.numberOfDiversions : <NoValue>-</NoValue> }</ResumeBoxNumber>
-                                  <ResumeBoxText>Déroutement</ResumeBoxText>
-                              </ResumeBox>
-                              <ResumeBox>
-                                  <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfEscortsToQuay }>{ !isNaN(props.controlResumeAndControls.numberOfEscortsToQuay) ? props.controlResumeAndControls.numberOfEscortsToQuay : <NoValue>-</NoValue> }</ResumeBoxNumber>
-                                  <ResumeBoxText>Reconduite à quai</ResumeBoxText>
-                              </ResumeBox>
-                              <ResumeBox>
-                                  <ResumeBoxNumber isRed={ props.controlResumeAndControls.numberOfSeizures }>{ !isNaN(props.controlResumeAndControls.numberOfSeizures) ? props.controlResumeAndControls.numberOfSeizures : <NoValue>-</NoValue>}</ResumeBoxNumber>
-                                  <ResumeBoxText>Appréhension</ResumeBoxText>
-                              </ResumeBox>
-                          </ResumesBoxes>
-                      </Fields>
-                  </Zone>
-                  <Zone>
-                      <Title>
-                          <Text>
-                              Contrôles
-                          </Text>
-                      </Title>
-                      {
-                          yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length
-                            ? <List>
-                                {
-                                    Object.keys(yearsToControls)
-                                      .sort((a, b) => b - a)
-                                      .map((year, index) => {
-                                        return <YearControls
-                                            key={year + index}
-                                            year={year}
-                                            yearControls={yearsToControls[year]}
-                                            isLastItem={yearsToControls[year].length === index + 1}
-                                          />
-                                      })
-                                }
-                            </List>
-                            : <NoControls>
-                                Aucun contrôle { props.controlsFromDate ? <>depuis {props.controlsFromDate.getUTCFullYear() + 1}</> : null}
-                            </NoControls>
-                      }
-                  </Zone>
-                  <SeeMoreBackground>
-                      <SeeMore onClick={() => {
-                        const nextDate = new Date(props.controlsFromDate.getTime())
-                        nextDate.setMonth(nextDate.getMonth() - 12)
+          controlResumeAndControls && lastControlList && yearsToControls
+            ? <Body>
+                <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls} />
+                <LastControlZone lastControlList={lastControlList} />
+                <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate} />
+                <SeeMoreBackground>
+                    <SeeMore onClick={() => {
+                      const nextDate = new Date(controlsFromDate.getTime())
+                      nextDate.setMonth(nextDate.getMonth() - 12)
 
-                        props.setControlFromDate(nextDate)
-                      }}>
-                          Afficher plus de contrôles
-                      </SeeMore>
-                  </SeeMoreBackground>
+                      props.setControlFromDate(nextDate)
+                    }}>
+                        Afficher plus de contrôles
+                    </SeeMore>
+                </SeeMoreBackground>
               </Body>
-              : null
+            : null
         }
         </>
 }
-
-const ResumesBoxes = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-right: 15px;
-`
-
-const NoControls = styled.div`
-  text-align: center;
-  padding: 10px 0 10px 0;
-  color: ${COLORS.grayDarkerThree};
-  font-size: 13px;
-  width: 100%
-`
 
 const SeeMoreBackground = styled.div`
   background: ${COLORS.background};
@@ -168,51 +78,6 @@ const SeeMore = styled.div`
   margin-right: auto;
   user-select: none;
   background: ${COLORS.background};
-`
-
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-`
-
-const NoValue = styled.span`
-  color: ${COLORS.grayDarkerTwo};
-  font-weight: 300;
-  line-height: normal;
-`
-
-const ResumeBoxText = styled.span`
-  color: ${COLORS.grayDarkerThree};
-  margin: 0 10px 0 5px;
-  font-weight: medium;
-`
-
-const ResumeBoxNumber = styled.span`
-  background: ${props => props.isRed ? COLORS.red : COLORS.grayDarkerThree};
-  color: ${COLORS.grayBackground};
-  border-radius: 11px;
-  height: 16px;
-  display: inline-block;
-  line-height: 14px;
-  width: 16px;
-  text-align: center;
-  font-weight: bolder;
-  margin: 3px 0 0 4px;
-`
-
-const ResumeBox = styled.span`
-  background: ${COLORS.grayLighter};
-  border-radius: 11px;
-  font-size: 13px;
-  height: 22px;
-  display: inline-block;
-  margin: 8px 5px 10px 0;
-`
-
-const Number = styled.span`
-  color: ${COLORS.grayDarkerThree};
-  margin-left: 5px;
 `
 
 const UpdateControls = styled.div`
@@ -267,72 +132,9 @@ const UpdateControlsButton = styled.div`
 }
 `
 
-const Text = styled.div`
-  color: ${COLORS.textGray};
-  font-size: 13px;
-  font-weight: 500;
-  padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
-`
-
 const Body = styled.div`
   padding: 0 5px 1px 5px;
   overflow-x: hidden;
-`
-
-const Title = styled.div`
-  color: ${COLORS.textGray};
-  background: ${COLORS.grayDarker};
-  padding: 8.5px 10px 8px 20px;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-  flex-grow: 2;
-  display: flex;
-  width: 400px;
-`
-
-const Zone = styled.div`
-  margin: 10px 5px 0 5px;
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
-  background: ${COLORS.background};
-`
-
-const Fields = styled.div`
-  padding: 10px 5px 5px 20px; 
-  width: 100%;
-  margin: 0;
-  line-height: 0.2em;
-`
-
-const ControlResumeLine = styled.div`
-  margin: 0 5px 5px 0;
-  border: none;
-  background: none;
-  font-size: 13px;
-  color: ${COLORS.textGray};
-  display: flex;
-  width: 100%;
-`
-
-const ResumeText = styled.span`
-  margin: 5px 0 0 0;
-`
-
-const ControlResumeNumberElement = styled.span`
-  margin: 5px 10px 0 14px;
-`
-
-const Gyro = styled(GyroSVG)`
-  width: 16px;
-  vertical-align: top;
-  margin-right: 5px;
-`
-
-const Warning = styled(WarningSVG)`
-  width: 16px;
-  vertical-align: top;
-  margin-right: 5px;
 `
 
 export default VesselControls

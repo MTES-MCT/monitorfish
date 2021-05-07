@@ -5,11 +5,11 @@ import { COLORS } from '../../constants/constants'
 import LastControlZone from './LastControlZone'
 import ControlsResumeZone from './ControlsResumeZone'
 import YearsToControlList from './YearsToControlList'
-import { lastControlByType } from '../../domain/entities/controls'
+import { lastControlByType, getYearsToControl } from '../../domain/entities/controls'
 
 const VesselControls = props => {
-  const [yearsToControls, setYearsToControls] = useState({})
-  const [lastControls, setLastControls] = useState({})
+  const [yearsToControls, setYearsToControls] = useState()
+  const [lastControlList, setLastControlList] = useState()
 
   const {
     controlResumeAndControls,
@@ -23,33 +23,15 @@ const VesselControls = props => {
 
   useEffect(() => {
     if (controlResumeAndControls && controlResumeAndControls.controls && controls.length) {
-      const nextYearsToControls = {}
-
-      if (controlsFromDate) {
-        let fromYear = controlsFromDate.getUTCFullYear() + 1
-        while (fromYear < new Date().getUTCFullYear()) {
-          nextYearsToControls[fromYear] = []
-          fromYear += 1
-        }
-      }
-
-      controls.forEach(control => {
-        if (control && control.controlDatetimeUtc) {
-          const year = new Date(control.controlDatetimeUtc).getUTCFullYear()
-
-          if (nextYearsToControls[year] && nextYearsToControls[year].length) {
-            nextYearsToControls[year] = nextYearsToControls[year].concat(control)
-          } else {
-            nextYearsToControls[year] = [control]
-          }
-        }
-      })
+      const nextYearsToControls = getYearsToControl(controlsFromDate, controls)
+      const lastControl = lastControlByType(nextYearsToControls)
       setYearsToControls(nextYearsToControls)
-      setLastControls(lastControlByType(nextYearsToControls))
+      setLastControlList(lastControl)
     } else {
-      setYearsToControls(null)
+      setYearsToControls(undefined)
+      setLastControlList(undefined)
     }
-  }, [controlResumeAndControls, setLastControls])
+  }, [controlResumeAndControls, controlsFromDate, controls, setYearsToControls, setLastControlList])
 
   return <>
         { nextControlResumeAndControls && <>
@@ -61,10 +43,10 @@ const VesselControls = props => {
             </>
         }
         {
-          controlResumeAndControls
+          controlResumeAndControls && lastControlList && yearsToControls
             ? <Body>
                 <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls} />
-                <LastControlZone lastControlList={lastControls} />
+                <LastControlZone lastControlList={lastControlList} />
                 <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate} />
                 <SeeMoreBackground>
                     <SeeMore onClick={() => {

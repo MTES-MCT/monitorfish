@@ -5,11 +5,11 @@ import { COLORS } from '../../constants/constants'
 import LastControlZone from './LastControlZone'
 import ControlsResumeZone from './ControlsResumeZone'
 import YearsToControlList from './YearsToControlList'
-import { controlType } from '../../domain/entities/controls'
+import { lastControlByType } from '../../domain/entities/controls'
 
 const VesselControls = props => {
   const [yearsToControls, setYearsToControls] = useState({})
-  const [lastControls, setLastControls] = useState([])
+  const [lastControls, setLastControls] = useState({})
 
   const {
     controlResumeAndControls,
@@ -20,22 +20,6 @@ const VesselControls = props => {
   const {
     controls
   } = controlResumeAndControls
-
-  const lastControlType = (yearsToControls) => {
-    const lastControlList = []
-    let i = 0
-    const sortedLastYearControlList = Object.values(yearsToControls).flat()
-      .sort((a, b) => a.controlDatetimeUtc > b.controlDatetimeUtc)
-    while (i < sortedLastYearControlList.length && lastControlList.length < 2) {
-      if (sortedLastYearControlList[i].controlType === controlType.SEA) {
-        lastControlList.push(sortedLastYearControlList[i])
-      } else if (sortedLastYearControlList[i].controlType === controlType.LAND) {
-        lastControlList.push(sortedLastYearControlList[i])
-      }
-      i++
-    }
-    return lastControlList
-  }
 
   useEffect(() => {
     if (controlResumeAndControls && controlResumeAndControls.controls && controls.length) {
@@ -60,13 +44,12 @@ const VesselControls = props => {
           }
         }
       })
-      const lastControls = lastControlType(nextYearsToControls)
       setYearsToControls(nextYearsToControls)
-      setLastControls(lastControls)
+      setLastControls(lastControlByType(nextYearsToControls))
     } else {
       setYearsToControls(null)
     }
-  }, [controlResumeAndControls])
+  }, [controlResumeAndControls, setLastControls])
 
   return <>
         { nextControlResumeAndControls && <>
@@ -78,21 +61,23 @@ const VesselControls = props => {
             </>
         }
         {
-          controlResumeAndControls && <Body>
-            <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls} />
-            <LastControlZone lastControlList={lastControls} />
-            <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate} />
-            <SeeMoreBackground>
-                <SeeMore onClick={() => {
-                  const nextDate = new Date(controlsFromDate.getTime())
-                  nextDate.setMonth(nextDate.getMonth() - 12)
+          controlResumeAndControls
+            ? <Body>
+                <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls} />
+                <LastControlZone lastControlList={lastControls} />
+                <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate} />
+                <SeeMoreBackground>
+                    <SeeMore onClick={() => {
+                      const nextDate = new Date(controlsFromDate.getTime())
+                      nextDate.setMonth(nextDate.getMonth() - 12)
 
-                  props.setControlFromDate(nextDate)
-                }}>
-                    Afficher plus de contrôles
-                </SeeMore>
-            </SeeMoreBackground>
-          </Body>
+                      props.setControlFromDate(nextDate)
+                    }}>
+                        Afficher plus de contrôles
+                    </SeeMore>
+                </SeeMoreBackground>
+              </Body>
+            : null
         }
         </>
 }

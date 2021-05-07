@@ -24,7 +24,6 @@ const ControlsResumeZone = props => {
 
   const getText = value => {
     const toReturn = !isNaN(value) ? value : <NoValue>-</NoValue>
-    console.log(toReturn)
     return toReturn
   }
 

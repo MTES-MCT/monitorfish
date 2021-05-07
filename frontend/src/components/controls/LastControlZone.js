@@ -7,29 +7,33 @@ import { controlType } from '../../domain/entities/controls'
 
 const LastControlZone = props => {
   const { lastControlList } = props
+  console.log(lastControlList)
 
-  const getResumeText = (control) => {
-    if (control.controlType === controlType.SEA) {
-      return 'Dernier contrôle en mer'
-    } else if (control.controlType === controlType.LAND) {
-      return 'Dernier contrôle en débarque'
-    }
+  const ControlField = (field, type) => {
+    const {
+      control,
+      text
+    } = field
+
+    return Object.keys(lastControlList).length > 0
+      ? <Fields key={type}>
+        <ControlResumeLine>
+          <ResumeText>{text}<StrongText>le {getDate(control.controlDatetimeUtc)}</StrongText></ResumeText>
+        </ControlResumeLine>
+        <ControlResumeLine>
+          <LastControResumeElement>Unité <StrongText>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControResumeElement>
+          <LastControResumeElement>Infractions <StrongText>{control.infraction ? <> {control.infractions.length} infraction{control.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControResumeElement>
+        </ControlResumeLine>
+      </Fields>
+      : null
   }
 
   return <Zone>
     <Title>
         Derniers Contrôles
     </Title>
-    {lastControlList.map((control, index) =>
-      <Fields key={index}>
-        <ControlResumeLine>
-          <ResumeText>{getResumeText(control)}<StrongText>le {getDate(control.controlDatetimeUtc)}</StrongText></ResumeText>
-        </ControlResumeLine>
-        <ControlResumeLine>
-          <LastControResumeElement>Unité <StrongText>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControResumeElement>
-          <LastControResumeElement>Infractions <StrongText>{control.infraction ? <> {control.infractions.length} infraction{control.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControResumeElement>
-        </ControlResumeLine>
-      </Fields>)}
+    <ControlField field={lastControlList[controlType.SEA]} type={controlType.SEA} />
+    <ControlField field={lastControlList[controlType.LAND]} type={controlType.LAND} />
     </Zone>
 }
 

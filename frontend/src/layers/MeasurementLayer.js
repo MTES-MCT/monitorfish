@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
@@ -170,7 +170,7 @@ const MeasurementLayer = ({ map }) => {
       vectorSource.changed()
     }
 
-    vectorSource.once("change", () => setNoDeleteAvailable(false))
+    vectorSource.once('change', () => setNoDeleteAvailable(false))
     dispatch(removeMeasurementDrawed(featureId))
   }
 

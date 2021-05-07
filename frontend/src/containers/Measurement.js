@@ -243,23 +243,14 @@ const Header = styled.div`
 const CircleRangeValue = styled.div`
   width: 306px;
   background: ${COLORS.background};
-  margin-right: -320px;
+  margin-right: ${props => props.firstUpdate ? '-320px' : props.isOpen ? '45px' : '-320px'};
+  opacity:  ${props => props.firstUpdate ? '0' : props.isOpen ? '1' : '0'};
   top: 165px;
   right: 10px;
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.firstUpdate ? '' : props.isOpen ? 'circle-range-value-box-opening' : 'circle-range-value-box-closing'} 0.5s ease forwards;
-
-  @keyframes circle-range-value-box-opening {
-    0%   { margin-right: -320px; opacity: 0;  }
-    100% { margin-right: 45px; opacity: 1; }
-  }
-
-  @keyframes circle-range-value-box-closing {
-    0% { margin-right: 45px; opacity: 1; }
-    100%   { margin-right: -320px; opacity: 0;  }
-  }
+  transition: all 0.5s;
 `
 
 const MeasurementItem = styled.div`

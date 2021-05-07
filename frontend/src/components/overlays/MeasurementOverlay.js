@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 
-const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id, noDeleteAvailable }) => {
+const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }) => {
   const ref = createRef()
   const [overlay] = useState(new Overlay({
     element: ref.current,
@@ -31,7 +31,7 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id, 
       <MeasurementTooltipElements ref={ref} >
         <ZoneSelected>
             <ZoneText>{measurement}</ZoneText>
-            <CloseIcon onClick={noDeleteAvailable ? null : () => deleteFeature(id)}/>
+            <CloseIcon onClick={() => deleteFeature(id)}/>
           </ZoneSelected>
           <TrianglePointer>
             <TriangleShadow/>

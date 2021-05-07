@@ -190,3 +190,7 @@ const accentsMap = {
 
 export const removeAccents = text => Object.keys(accentsMap)
   .reduce((acc, cur) => acc.replace(new RegExp(accentsMap[cur], 'g'), cur), text)
+
+export function getNauticalMilesFromMeters (length) {
+  return Math.round((length / 1000) * 100 * 0.539957) / 100
+}

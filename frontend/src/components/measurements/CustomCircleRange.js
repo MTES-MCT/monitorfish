@@ -26,7 +26,7 @@ const CustomCircleRange = (
       <Body>
         <p>Coordonnées</p>
         <CoordinateInput
-          onChange={(_, { unmaskedValue, dd, dms }) => setCircleCoordinatesToAdd(dd)}
+          onChange={(_, { dd }) => setCircleCoordinatesToAdd(dd)}
           value={circleCoordinatesToAdd && Array.isArray(circleCoordinatesToAdd) && circleCoordinatesToAdd.length
             ? circleCoordinatesToAdd.join(',')
             : undefined}
@@ -56,7 +56,7 @@ const CustomCircleRange = (
 const CancelButton = styled.button`
   border: 1px solid ${COLORS.grayDarkerThree};
   width: 130px;
-  padding: 5px 12px 5px 12px;
+  padding: 5px 12px;
   margin: 15px 0 0 15px;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
@@ -70,8 +70,8 @@ const CancelButton = styled.button`
 const OkButton = styled.button`
   background: ${COLORS.grayDarkerThree};
   width: 130px;
-  padding: 5px 12px 5px 12px;
-  margin: 15px 0 0 0;
+  padding: 5px 12px;
+  margin: 15px 0 0;
   font-size: 13px;
   color: ${COLORS.grayBackground};
   
@@ -127,8 +127,8 @@ const Header = styled.div`
 const Wrapper = styled.div`
   width: 306px;
   background: ${COLORS.background};
-  margin-right: ${props => props.firstUpdate ? '-320px' : props.isOpen ? '45px' : '-320px'};
-  opacity:  ${props => props.firstUpdate ? '0' : props.isOpen ? '1' : '0'};
+  margin-right: ${props => !props.firstUpdate && props.isOpen ? '45px' : '-320px'};
+  opacity:  ${props => !props.firstUpdate && props.isOpen ? '1' : '0'};
   top: 165px;
   right: 10px;
   border-radius: 2px;

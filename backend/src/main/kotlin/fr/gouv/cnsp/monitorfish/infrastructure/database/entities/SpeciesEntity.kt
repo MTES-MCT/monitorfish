@@ -16,13 +16,7 @@ data class SpeciesEntity(
         @Column(name = "species_code")
         val code: String,
         @Column(name = "species_name")
-        val name: String,
-        @Column(name = "species_group_code")
-        val groupCode: String? = null,
-        @Column(name = "species_group_name")
-        val groupName: String? = null,
-        @Column(name = "source")
-        val source: String? = null) {
+        val name: String) {
 
         fun toSpecies() = Species(
             code = code,

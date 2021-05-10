@@ -67,13 +67,19 @@ const Map = ({ isBackOffice }) => {
 
   function initMap () {
     if (!map) {
-      const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
+      const overlayDict = {}
+      if (isBackOffice === null) {
+        const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
+        overlayDict.vesselCardOverlay = vesselCardOverlay
+        overlayDict.vesselTrackCardOverlay = vesselTrackCardOverlay
+        overlayDict.trackTypeCardOverlay = trackTypeCardOverlay
+      }
       const centeredOnFrance = [2.99049, 46.82801]
       const initialMap = new OpenLayerMap({
         target: mapElement.current,
         layers: [],
         renderer: (['webgl', 'canvas']),
-        overlays: [vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay],
+        overlays: Object.values(overlayDict),
         view: new View({
           projection: OPENLAYERS_PROJECTION,
           center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
@@ -90,11 +96,11 @@ const Map = ({ isBackOffice }) => {
       })
 
       initialMap.on('click', handleMapClick)
-      initialMap.on('pointermove', event => throttleAndHandlePointerMove(
-        event,
-        vesselCardOverlay,
-        vesselTrackCardOverlay,
-        trackTypeCardOverlay))
+      if (isBackOffice === null) {
+        initialMap.on('pointermove', event => throttleAndHandlePointerMove(
+          event,
+          overlayDict))
+      }
       initialMap.on('moveend', () => throttleAndHandleMovingAndZoom())
 
       setMap(initialMap)
@@ -116,8 +122,8 @@ const Map = ({ isBackOffice }) => {
       handleMovingAndZoom()
     }, 100)
   }
-
-  function throttleAndHandlePointerMove (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
+  // overlay list vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay
+  function throttleAndHandlePointerMove (event, overlayDict) {
     if (event.dragging || timeoutForPointerMove) {
       if (timeoutForPointerMove) {
         lastEventForPointerMove = event
@@ -127,7 +133,7 @@ const Map = ({ isBackOffice }) => {
 
     timeoutForPointerMove = setTimeout(() => {
       timeoutForPointerMove = null
-      handlePointerMove(lastEventForPointerMove, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
+      handlePointerMove(lastEventForPointerMove, overlayDict)
     }, 100)
   }
 
@@ -236,17 +242,18 @@ const Map = ({ isBackOffice }) => {
     }
   }
 
-  const handlePointerMove = (event, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) => {
+  const handlePointerMove = (event, overlayDict) => {
     if (event) {
       const pixel = mapRef.current.getEventPixel(event.originalEvent)
       const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: hitPixelTolerance })
 
-      showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay)
+      showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), overlayDict)
       showCoordinatesInDMS(event)
     }
   }
 
-  function showPointerAndCardIfVessel (feature, coordinates, vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay) {
+  function showPointerAndCardIfVessel (feature, coordinates, overlayDict) {
+    const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = overlayDict
     if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
       setVesselFeatureToShowOnCard(feature)
 
@@ -301,21 +308,23 @@ const Map = ({ isBackOffice }) => {
   return (
         <div>
             <MapContainer ref={mapElement} />
-            {isBackOffice === null && <MapHistory
+            {isBackOffice === null && <><MapHistory
               map={map}
               mapRef={mapRef}
               shouldUpdateView={shouldUpdateView}
               setShouldUpdateView={setShouldUpdateView}
               historyMoveTrigger={historyMoveTrigger}
-            />}
-            <BaseLayer map={map} />
+            />
             <VesselTrackLayer map={map} />
             <VesselsLayer map={map} mapRef={mapRef}/>
+<<<<<<< HEAD
             <DrawLayer map={map} />
             <MeasurementLayer map={map} />
             <RegulatoryLayers map={map} />
             <AdministrativeLayers map={map} />
 
+=======
+>>>>>>> code refactoring
             <VesselCardOverlay id={vesselCardID}>
                 {
                     vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null
@@ -331,6 +340,12 @@ const Map = ({ isBackOffice }) => {
                     trackTypeToShowOnCard ? <TrackTypeCard isBig={trackTypeToShowOnCard === trackTypes.SEARCHING} trackType={trackTypeToShowOnCard} /> : null
                 }
             </TrackTypeCardOverlay>
+            <DrawLayer map={map} />
+            <MeasurementLayer map={map} />
+            </>}
+            <BaseLayer map={map} />
+            <RegulatoryLayers map={map} />
+            <AdministrativeLayers map={map} />
             <MapCoordinatesBox coordinates={cursorCoordinates}/>
             {
                 regulatoryFeatureToShowOnCard ? <LayerDetailsBox gears={gears} regulatory={regulatoryFeatureToShowOnCard}/> : null

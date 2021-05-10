@@ -2,12 +2,12 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  useRouteMatch
 } from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import Map from './containers/Map'
-import BackofficeMap from './containers/BackofficeMap'
 import VesselsSearchBox from './containers/VesselsSearchBox'
 import VesselSidebar from './containers/VesselSidebar'
 import LayersSidebar from './containers/LayersSidebar'
@@ -22,6 +22,7 @@ function App () {
   return (
     <>
       <ToastProvider placement="bottom-right">
+<<<<<<< HEAD
         <Router>
           <Switch>
             <Route path='/'>
@@ -43,9 +44,37 @@ function App () {
             </Route>
           </Switch>
         </Router>
+=======
+      <Router>
+      <Switch>
+          <Route path="/">
+            <Main />
+          </Route>
+          <Route path="/backoffice">
+            <Main />
+          </Route>
+        </Switch>
+      </Router>
+>>>>>>> add router for backoffice
       </ToastProvider>
     </>
   )
+}
+
+function Main () {
+  const isBackOffice = useRouteMatch('/backoffice')
+  return <Wrapper>
+    <Map isBackOffice={isBackOffice}/>
+    {isBackOffice === null && <><VesselsSearchBox />
+    <RightMenuOnHoverZone />
+    <LayersSidebar/>
+    <VesselList/>
+    <VesselVisibility/>
+    <VesselSidebar/>
+    <UpdatingVesselLoader/>
+    <Measurement/></>}
+    <APIWorker/>
+  </Wrapper>
 }
 
 const Wrapper = styled.div`

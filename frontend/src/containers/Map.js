@@ -34,7 +34,7 @@ import MeasurementLayer from '../layers/MeasurementLayer'
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 const hitPixelTolerance = 3
 
-const Map = () => {
+const Map = ({ isBackOffice }) => {
   const gears = useSelector(state => state.gear.gears)
   const vessel = useSelector(state => state.vessel)
   const mapState = useSelector(state => state.map)
@@ -68,7 +68,6 @@ const Map = () => {
   function initMap () {
     if (!map) {
       const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
-
       const centeredOnFrance = [2.99049, 46.82801]
       const initialMap = new OpenLayerMap({
         target: mapElement.current,
@@ -302,13 +301,13 @@ const Map = () => {
   return (
         <div>
             <MapContainer ref={mapElement} />
-            <MapHistory
+            {isBackOffice === null && <MapHistory
               map={map}
               mapRef={mapRef}
               shouldUpdateView={shouldUpdateView}
               setShouldUpdateView={setShouldUpdateView}
               historyMoveTrigger={historyMoveTrigger}
-            />
+            />}
             <BaseLayer map={map} />
             <VesselTrackLayer map={map} />
             <VesselsLayer map={map} mapRef={mapRef}/>

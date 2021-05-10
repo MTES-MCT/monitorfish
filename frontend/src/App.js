@@ -65,9 +65,9 @@ function Main () {
   const isBackOffice = useRouteMatch('/backoffice')
   return <Wrapper>
     <Map isBackOffice={isBackOffice}/>
+    <LayersSidebar/>
     {isBackOffice === null && <><VesselsSearchBox />
     <RightMenuOnHoverZone />
-    <LayersSidebar/>
     <VesselList/>
     <VesselVisibility/>
     <VesselSidebar/>

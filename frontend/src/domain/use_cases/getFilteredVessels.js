@@ -5,17 +5,16 @@ import Worker from 'worker-loader!../../workers/MapperWorker'
 const worker = new Worker()
 const MapperWorker = Comlink.wrap(worker)
 
-const getFilteredVessels  = (vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected) => async () => {
+const getFilteredVessels = (vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, fleetSegmentsFiltered, gearsFiltered) => async () => {
   const worker = await new MapperWorker()
 
-  return worker.getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter).then(filteredVessels => {
+  return worker.getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter, fleetSegmentsFiltered, gearsFiltered).then(filteredVessels => {
     if (zonesSelected && zonesSelected.length) {
       filteredVessels = filterByZones(filteredVessels, zonesSelected)
     }
 
     return filteredVessels
   })
-
 }
 
 function filterByZones (filteredVessels, zonesSelected) {

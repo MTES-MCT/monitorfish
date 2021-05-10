@@ -58,6 +58,14 @@ const TimeAgoCell = ({ rowData, dataKey, ...props }) => (
     </Cell>
 )
 
+const EllipsisCell = ({ rowData, dataKey, ...props }) => (
+  <Cell title={rowData[dataKey]} {...props}>
+    <CellWithEllipsis>
+      {rowData[dataKey]}
+    </CellWithEllipsis>
+  </Cell>
+)
+
 const VesselListTable = props => {
   const [sortColumn, setSortColumn] = React.useState()
   const [sortType, setSortType] = React.useState()
@@ -67,7 +75,7 @@ const VesselListTable = props => {
     setSortType(sortType)
   }
 
-  const getVessels = () => {
+  const getVessels = useCallback(() => {
     if (sortColumn && sortType) {
       return props.filteredVessels.slice().sort((a, b) => {
         let x = a[sortColumn]
@@ -94,7 +102,7 @@ const VesselListTable = props => {
     }
 
     return props.filteredVessels
-  }
+  }, [sortColumn, sortType, props.filteredVessels])
 
   const updateAllVesselsChecked = useCallback(() => {
     const isChecked = props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
@@ -113,7 +121,7 @@ const VesselListTable = props => {
             <Table
                 virtualized
                 height={510}
-                width={1207}
+                width={1467}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -161,6 +169,16 @@ const VesselListTable = props => {
                     <Cell dataKey="internalReferenceNumber" />
                 </Column>
 
+              <Column width={130}>
+                <HeaderCell>Seg. flotte</HeaderCell>
+                <EllipsisCell dataKey="fleetSegments" />
+              </Column>
+
+              <Column width={130}>
+                <HeaderCell>Engins à bord</HeaderCell>
+                <EllipsisCell dataKey="gears" />
+              </Column>
+
                 <Column sortable width={50}>
                     <HeaderCell>
                         <FlagIcon />
@@ -197,6 +215,15 @@ const VesselListTable = props => {
   )
 }
 
+const CellWithEllipsis = styled.span`
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;    
+  max-width: 120px; 
+  line-break: auto;
+  display: inline-block;
+`
+
 const Flag = styled.img`
   font-size: 1.5em;
   margin-left: 14px;
@@ -228,4 +255,4 @@ const FlagIcon = styled(FlagSVG)`
   vertical-align: top;
 `
 
-export default VesselListTable
+export default React.memo(VesselListTable)

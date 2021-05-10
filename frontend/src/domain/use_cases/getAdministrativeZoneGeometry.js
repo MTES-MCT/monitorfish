@@ -17,8 +17,8 @@ const setIrretrievableFeaturesEvent = error => {
 
 const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zoneName) => (dispatch, getState) => {
   const geometryCache = getState().layer.administrativeZonesGeometryCache
-  let foundCache = geometryCache.find(zone => zone.key === `${administrativeZoneCode}:${subZoneCode}:${zoneName}`)
-  if(foundCache) {
+  const foundCache = geometryCache.find(zone => zone.key === `${administrativeZoneCode}:${subZoneCode}:${zoneName}`)
+  if (foundCache) {
     dispatchZoneSelected(foundCache.value)
   }
 

@@ -78,7 +78,7 @@ const DownloadVesselListModal = props => {
       })
 
     const date = new Date()
-    csvExporter.CSVOptions.filename = `export_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1}`
+    csvExporter.options.filename = `export_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1}`
     csvExporter.generateCsv(objectsToExports)
   }
 
@@ -121,6 +121,8 @@ const DownloadVesselListModal = props => {
                             <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox><br/>
                             <Checkbox value={CSVOptions.course.code}>Cap</Checkbox><br/>
                             <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
+                            <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
+                            <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
                         </div>
                     </Columns>
 

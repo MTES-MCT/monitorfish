@@ -1,19 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import countries from 'i18n-iso-countries'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'rsuite/lib/Modal'
-import TagPicker from 'rsuite/lib/TagPicker'
-import Tag from 'rsuite/lib/Tag'
-import SelectPicker from 'rsuite/lib/SelectPicker'
-import MultiCascader from 'rsuite/lib/MultiCascader'
 
 import { ReactComponent as VesselListSVG } from '../components/icons/Icone_liste_navires.svg'
-import { ReactComponent as BoxFilterSVG } from '../components/icons/Filtre_zone_rectangle.svg'
-import { ReactComponent as PolygonFilterSVG } from '../components/icons/Filtre_zone_polygone.svg'
-import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
 import { COLORS } from '../constants/constants'
-import { getZonesAndSubZonesPromises, layersType as LayersType } from '../domain/entities/layers'
+import { getZonesAndSubZonesPromises } from '../domain/entities/layers'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../domain/reducers/Map'
 import { InteractionTypes, OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import {
@@ -27,10 +19,8 @@ import getAdministrativeZoneGeometry from '../domain/use_cases/getAdministrative
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
-import { getLastPositionTimeAgoLabels } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
-
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
+import VesselListFilters from '../components/vessel_list/VesselListFilters'
 
 const VesselList = () => {
   const dispatch = useDispatch()
@@ -38,6 +28,8 @@ const VesselList = () => {
   const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
   const vesselsFromApi = useSelector(state => state.vessel.vessels)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
+  const gears = useSelector(state => state.gear.gears)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
   const firstUpdate = useRef(true)
@@ -55,18 +47,13 @@ const VesselList = () => {
   const [makeVesselListToNotUpdate, setMakeVesselListToNotUpdate] = useState(false)
   const [zonesFilter, setZonesFilter] = useState([])
 
-  const { current: countriesField } = useRef(Object.keys(countries.getAlpha2Codes()).map(country => {
-    return {
-      value: country.toLowerCase(),
-      label: countries.getName(country, 'fr')
-    }
-  }))
-
   // Filters
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
   const [countriesFiltered, setCountriesFiltered] = useState([])
   const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
   const [zoneGroups, setZoneGroups] = useState([])
+  const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])
+  const [gearsFiltered, setGearsFiltered] = useState([])
   const zonesSelected = useSelector(state => state.map.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
 
@@ -129,7 +116,10 @@ const VesselList = () => {
         latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
         longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
         olCoordinates: coordinates,
-        gears: vessel.getProperties().gears
+        gears: vessel.getProperties().gearOnboard.map(gear => gear.gear).join(', '),
+        gearsArray: vessel.getProperties().gearOnboard.map(gear => gear.gear),
+        fleetSegments: vessel.getProperties().segments.join(', '),
+        fleetSegmentsArray: vessel.getProperties().segments.map(segment => segment.replace(' ', ''))
       }
     })
 
@@ -140,12 +130,12 @@ const VesselList = () => {
 
   useEffect(() => {
     if (vessels && vessels.length) {
-      dispatch(getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected)).then(filteredVessels => {
+      dispatch(getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, fleetSegmentsFiltered, gearsFiltered)).then(filteredVessels => {
         setFilteredVessels(filteredVessels)
         setVesselsCountShowed(filteredVessels.length)
       })
     }
-  }, [countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, vessels])
+  }, [countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, vessels, fleetSegmentsFiltered, gearsFiltered])
 
   useEffect(() => {
     const nextVessels = vessels.map(vessel => {
@@ -261,17 +251,6 @@ const VesselList = () => {
     }
   }, [administrativeZonesFiltered])
 
-  const showZonesSelected  = useCallback(() => {
-    return zonesSelected && zonesSelected.length && zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
-      ? zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
-        return <ZoneSelected key={zoneSelected.code + index}>
-          <DeleteZoneText>Effacer la zone définie</DeleteZoneText>
-          <CloseIcon onClick={() => callRemoveZoneSelected(zoneSelected)}/>
-        </ZoneSelected>
-      })
-      : null
-  }, [zonesSelected])
-
   return (
         <>
             <Wrapper isShowed={isShowed} isFiltering={isFiltering}>
@@ -299,62 +278,38 @@ const VesselList = () => {
                     </Modal.Header>
                     <Modal.Body>
                         <Title>FILTRER LA LISTE</Title>
-                        <Filters>
-                            <FilterDesc>
-                                Dernières positions depuis {' '}
-                            </FilterDesc>
-                            <TimeAgoSelect>
-                                <SelectPicker
-                                    style={{ width: 70 }}
-                                    searchable={false}
-                                    placeholder="x heures..."
-                                    value={lastPositionTimeAgoFilter}
-                                    onChange={setLastPositionTimeAgoFilter}
-                                    data={getLastPositionTimeAgoLabels()}
-                                />
-                            </TimeAgoSelect>
-                            <TagPicker
-                                value={countriesFiltered}
-                                style={{ width: 180, margin: '2px 10px 0 20px', verticalAlign: 'top' }}
-                                data={countriesField}
-                                placeholder="Nationalité"
-                                renderMenuItem={(name, item) => {
-                                  return (
-                                        <Label>
-                                            {item.label}
-                                        </Label>
-                                  )
-                                }}
-                                onChange={change => setCountriesFiltered(change)}
-                                renderValue={(values, items, tags) => {
-                                  return items.map((tag, index) => (
-                                        <Tag key={index}>
-                                            {tag.label}
-                                        </Tag>
-                                  ))
-                                }}
-                            />
-                            <ZoneFilter>
-                                <MultiCascader
-                                  data={zonesFilter}
-                                  style={{ width: 230, verticalAlign: 'top', margin: '2px 10px 0 10px' }}
-                                  placeholder="Filtrer avec une zone existante"
-                                  menuWidth={250}
-                                  uncheckableItemValues={zoneGroups}
-                                  value={administrativeZonesFiltered}
-                                  onClean={() => setAdministrativeZonesFiltered([])}
-                                  onChange={change => setAdministrativeZonesFiltered(change)}
-                                />
-                                <CustomZone>
-                                ou définir une zone
-                                </CustomZone>
-                                <BoxFilter onClick={() => selectBox()}/>
-                                <PolygonFilter onClick={() => selectPolygon()}/>
-                                {
-                                    showZonesSelected()
-                                }
-                            </ZoneFilter>
-                        </Filters>
+                        <VesselListFilters
+                          lastPositionTimeAgo={{
+                            lastPositionTimeAgoFilter,
+                            setLastPositionTimeAgoFilter
+                          }}
+                          countries={{
+                            countriesFiltered,
+                            setCountriesFiltered
+                          }}
+                          fleetSegments={{
+                            fleetSegments,
+                            fleetSegmentsFiltered,
+                            setFleetSegmentsFiltered
+                          }}
+                          gears={{
+                            gears,
+                            setGearsFiltered,
+                            gearsFiltered
+                          }}
+                          zones={{
+                            zonesFilter,
+                            zoneGroups,
+                            administrativeZonesFiltered,
+                            setAdministrativeZonesFiltered,
+                            zonesSelected,
+                            callRemoveZoneSelected
+                          }}
+                          geometrySelection={{
+                            selectBox,
+                            selectPolygon
+                          }}
+                        />
                         <VesselListTable
                             vessels={vessels}
                             filteredVessels={filteredVessels}
@@ -394,28 +349,6 @@ const VesselList = () => {
         </>
   )
 }
-
-const DeleteZoneText = styled.span`
-  padding-bottom: 5px;
-  vertical-align: middle;
-  height: 30px;
-  display: inline-block;
-`
-const CustomZone = styled.span`
-  margin-left: 50px;
-`
-
-const ZoneSelected = styled.span`
-  background: ${COLORS.grayBackground};
-  border-radius: 2px;
-  color: ${COLORS.textGray};
-  margin-left: 0;
-  font-size: 13px;
-  padding: 0px 3px 0px 7px;
-  vertical-align: top;
-  height: 30px;
-  display: inline-block;
-`
 
 const Wrapper = styled.div`
   animation: ${props => props.isShowed ? 'vessel-search-box-opening' : 'vessel-search-box-closing'} 0.2s ease forwards;
@@ -483,39 +416,6 @@ const DownloadButton = styled.button`
   :hover, :focus {
     background: ${COLORS.grayDarkerThree};
   }
-`
-
-const ZoneFilter = styled.div`
-  display: inline-block;
-  margin-right: 20px;
-  margin-left: 10px;
-  font-size: 13px;
-  vertical-align: sub;
-`
-
-const TimeAgoSelect = styled.div`
-  width: 120px;
-  display: inline-block;
-  margin-right: 20px;
-  margin-left: 10px;
-`
-
-const Label = styled.span`
-  font-size: 13px;
-`
-
-const FilterDesc = styled.span`
-  font-size: 13px;
-  margin-top: 7px;
-  display: inline-block;
-  vertical-align: sub;
-`
-
-const Filters = styled.div`
-  color: #969696;
-  font-size: 13px;
-  margin-top: 15px;
-  margin-bottom: 15px;
 `
 
 const Title = styled.div`
@@ -594,33 +494,6 @@ const Vessel = styled(VesselListSVG)`
       opacity: 0;
     }
   }
-`
-
-const BoxFilter = styled(BoxFilterSVG)`
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  margin-left: 5px;
-  vertical-align: text-bottom;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  vertical-align: text-bottom;
-  cursor: pointer;
-  border-left: 1px solid white;
-  height: 30px;
-  margin: 0 6px 0 7px;
-  padding-left: 7px;
-`
-
-const PolygonFilter = styled(PolygonFilterSVG)`
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  margin-left: 5px;
-  margin-right: 5px;
-  vertical-align: text-bottom;
 `
 
 export default VesselList

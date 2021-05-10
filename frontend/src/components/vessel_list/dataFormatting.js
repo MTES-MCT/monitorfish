@@ -24,6 +24,14 @@ export const CSVOptions = {
     code: 'internalReferenceNumber',
     name: 'CFR'
   },
+  fleetSegments: {
+    code: 'fleetSegments',
+    name: 'Seg. flotte'
+  },
+  gears: {
+    code: 'gears',
+    name: 'Engins à bord'
+  },
   flagState: {
     code: 'flagState',
     name: 'Pavillon'
@@ -48,6 +56,7 @@ export const CSVOptions = {
     code: 'speed',
     name: 'Vitesse'
   }
+
 }
 
 export const getLastPositionTimeAgoLabels = () => {

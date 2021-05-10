@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../utils'
@@ -96,6 +96,15 @@ const VesselListTable = props => {
     return props.filteredVessels
   }
 
+  const updateAllVesselsChecked = useCallback(() => {
+    const isChecked = props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
+    if (isChecked === false) {
+      props.setAllVesselsChecked({ globalCheckbox: true })
+    } else {
+      props.setAllVesselsChecked({ globalCheckbox: !props.allVesselsChecked.globalCheckbox })
+    }
+  }, [props.allVesselsChecked, props.vessels])
+
   return (
         <TableContent>
             <VesselsCount>
@@ -115,14 +124,7 @@ const VesselListTable = props => {
                     <HeaderCell>
                         <Checkbox
                             checked={props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length}
-                            onChange={() => {
-                              const isChecked = props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
-                              if (isChecked === false) {
-                                props.setAllVesselsChecked({ globalCheckbox: true })
-                              } else {
-                                props.setAllVesselsChecked({ globalCheckbox: !props.allVesselsChecked.globalCheckbox })
-                              }
-                            }} />
+                            onChange={() => updateAllVesselsChecked()} />
                     </HeaderCell>
                     <CheckedCell dataKey="checked" onChange={props.handleChange} />
                 </Column>

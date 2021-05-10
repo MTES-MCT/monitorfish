@@ -1,3 +1,5 @@
+import { getAdministrativeSubZonesFromAPI } from '../../api/fetch'
+
 export const layersGroups = {
   TWELVE_FORTY_ONE: {
     code: 'twelve_forty_one',
@@ -25,7 +27,7 @@ export const layersType = {
   FREE_DRAW: 'FREE_DRAW'
 }
 
-export default {
+const Layers = {
   BASE_LAYER: {
     code: 'ol-layer',
     name: '',
@@ -323,3 +325,39 @@ export const baseLayers = {
 
 export const vesselIconIsLight = selectedBaseLayer => selectedBaseLayer === baseLayers.DARK.code ||
     selectedBaseLayer === baseLayers.SATELLITE.code
+
+export const getZonesAndSubZonesPromises = () => {
+  return Object.keys(Layers)
+    .map(layerName => Layers[layerName])
+    .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+    .filter(layer => layer.isIntersectable)
+    .map(zone => {
+      if (zone.containsMultipleZones) {
+        return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
+          return subZonesFeatures.features.map(subZone => {
+            return {
+              group: zone.name,
+              groupCode: zone.code,
+              label: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
+              name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
+              code: subZone.id,
+              value: subZone.id,
+              isSubZone: true
+            }
+          })
+        }).catch(error => {
+          console.warn(error)
+        })
+      }
+
+      const nextZone = { ...zone }
+
+      nextZone.label = zone.name
+      nextZone.value = zone.code
+      nextZone.group = zone.group ? zone.group.name : 'Administratives'
+
+      return nextZone
+    })
+}
+
+export default Layers

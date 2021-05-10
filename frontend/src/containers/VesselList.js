@@ -1,17 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import countries from 'i18n-iso-countries'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import Modal from 'rsuite/lib/Modal'
+import TagPicker from 'rsuite/lib/TagPicker'
+import Tag from 'rsuite/lib/Tag'
+import SelectPicker from 'rsuite/lib/SelectPicker'
+import MultiCascader from 'rsuite/lib/MultiCascader'
 
 import { ReactComponent as VesselListSVG } from '../components/icons/Icone_liste_navires.svg'
 import { ReactComponent as BoxFilterSVG } from '../components/icons/Filtre_zone_rectangle.svg'
 import { ReactComponent as PolygonFilterSVG } from '../components/icons/Filtre_zone_polygone.svg'
 import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
 import { COLORS } from '../constants/constants'
-import LayersEnum, { layersType as LayersType, layersType } from '../domain/entities/layers'
-import Modal from 'rsuite/lib/Modal'
-import TagPicker from 'rsuite/lib/TagPicker'
-import Tag from 'rsuite/lib/Tag'
-import SelectPicker from 'rsuite/lib/SelectPicker'
+import { getZonesAndSubZonesPromises, layersType as LayersType } from '../domain/entities/layers'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../domain/reducers/Map'
 import { InteractionTypes, OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import {
@@ -20,14 +22,13 @@ import {
 } from '../domain/reducers/Vessel'
 import VesselListTable from '../components/vessel_list/VesselListTable'
 import DownloadVesselListModal from '../components/vessel_list/DownloadVesselListModal'
-import countries from 'i18n-iso-countries'
 import { getCoordinates } from '../utils'
 import getAdministrativeZoneGeometry from '../domain/use_cases/getAdministrativeZoneGeometry'
-import { getAdministrativeSubZonesFromAPI } from '../api/fetch'
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
-import MultiCascader from 'rsuite/lib/MultiCascader'
+import { getLastPositionTimeAgoLabels } from '../components/vessel_list/dataFormatting'
+import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -54,50 +55,23 @@ const VesselList = () => {
   const [makeVesselListToNotUpdate, setMakeVesselListToNotUpdate] = useState(false)
   const [zonesFilter, setZonesFilter] = useState([])
 
+  const { current: countriesField } = useRef(Object.keys(countries.getAlpha2Codes()).map(country => {
+    return {
+      value: country.toLowerCase(),
+      label: countries.getName(country, 'fr')
+    }
+  }))
+
   // Filters
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
   const [countriesFiltered, setCountriesFiltered] = useState([])
   const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
   const [zoneGroups, setZoneGroups] = useState([])
   const zonesSelected = useSelector(state => state.map.zonesSelected)
+  const [isFiltering, setIsFiltering] = useState(false)
 
   useEffect(() => {
-    if (vesselListModalIsOpen === true) {
-      dispatch(unselectVessel())
-      firstUpdate.current = false
-    }
-
-    const nextZonesPromises = Object.keys(LayersEnum)
-      .map(layerName => LayersEnum[layerName])
-      .filter(layer => layer.type === layersType.ADMINISTRATIVE)
-      .filter(layer => layer.isIntersectable)
-      .map(zone => {
-        if (zone.containsMultipleZones) {
-          return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
-            return subZonesFeatures.features.map(subZone => {
-              return {
-                group: zone.name,
-                groupCode: zone.code,
-                label: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
-                name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
-                code: subZone.id,
-                value: subZone.id,
-                isSubZone: true
-              }
-            })
-          }).catch(error => {
-            console.error(error)
-          })
-        }
-
-        const nextZone = { ...zone }
-
-        nextZone.label = zone.name
-        nextZone.value = zone.code
-        nextZone.group = zone.group ? zone.group.name : 'Administratives'
-
-        return nextZone
-      })
+    const nextZonesPromises = getZonesAndSubZonesPromises()
 
     Promise.all(nextZonesPromises).then((nextZones) => {
       let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
@@ -115,74 +89,61 @@ const VesselList = () => {
 
       setZonesFilter(nextZonesWithoutNulls)
     })
+  }, [])
+
+  useEffect(() => {
+    if (vesselListModalIsOpen === true) {
+      dispatch(unselectVessel())
+      firstUpdate.current = false
+    }
   }, [vesselListModalIsOpen])
 
   useEffect(() => {
-    if (!makeVesselListToNotUpdate && vesselsLayerSource) {
-      if (vesselsLayerSource) {
-        vesselsLayerSource.once(VESSELS_UPDATE_EVENT, ({ features }) => {
-          if (features && features.length) {
-            const vessels = features.map(vessel => {
-              const coordinates = [...vessel.getGeometry().getCoordinates()]
-
-              return {
-                targetNumber: '',
-                id: vessel.id_,
-                checked: true,
-                vesselName: vessel.getProperties().vesselName,
-                course: vessel.getProperties().course,
-                speed: vessel.getProperties().speed,
-                flagState: vessel.getProperties().flagState.toLowerCase(),
-                mmsi: vessel.getProperties().mmsi,
-                internalReferenceNumber: vessel.getProperties().internalReferenceNumber,
-                externalReferenceNumber: vessel.getProperties().externalReferenceNumber,
-                ircs: vessel.getProperties().ircs,
-                dateTimeTimestamp: new Date(vessel.getProperties().dateTime).getTime(),
-                dateTime: vessel.getProperties().dateTime,
-                latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
-                longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
-                olCoordinates: coordinates,
-                gears: vessel.getProperties().gears
-              }
-            })
-
-            setVessels(vessels)
-            setVesselsCountTotal(vessels.length)
-            setMakeVesselListToNotUpdate(true)
-          }
-        })
-      }
+    if (!makeVesselListToNotUpdate && vesselsLayerSource && vesselsFromApi && vesselsFromApi.length) {
+      vesselsLayerSource.once(VESSELS_UPDATE_EVENT, ({ features }) => {
+        if (features && features.length) {
+          updateVesselsList(features)
+        }
+      })
     }
   }, [vesselsLayerSource, vesselsFromApi])
 
+  const updateVesselsList = useCallback(features => {
+    const vessels = features.map(vessel => {
+      const coordinates = [...vessel.getGeometry().getCoordinates()]
+
+      return {
+        targetNumber: '',
+        id: vessel.id_,
+        checked: true,
+        vesselName: vessel.getProperties().vesselName,
+        course: vessel.getProperties().course,
+        speed: vessel.getProperties().speed,
+        flagState: vessel.getProperties().flagState.toLowerCase(),
+        mmsi: vessel.getProperties().mmsi,
+        internalReferenceNumber: vessel.getProperties().internalReferenceNumber,
+        externalReferenceNumber: vessel.getProperties().externalReferenceNumber,
+        ircs: vessel.getProperties().ircs,
+        dateTimeTimestamp: new Date(vessel.getProperties().dateTime).getTime(),
+        dateTime: vessel.getProperties().dateTime,
+        latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
+        longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
+        olCoordinates: coordinates,
+        gears: vessel.getProperties().gears
+      }
+    })
+
+    setVessels(vessels)
+    setVesselsCountTotal(vessels.length)
+    setMakeVesselListToNotUpdate(true)
+  }, [])
+
   useEffect(() => {
     if (vessels && vessels.length) {
-      let filteredVessels = vessels
-
-      if (countriesFiltered && countriesFiltered.length) {
-        filteredVessels = filteredVessels.filter(vessel => countriesFiltered.some(country => vessel.flagState === country))
-      }
-
-      if (lastPositionTimeAgoFilter) {
-        filteredVessels = filteredVessels.filter(vessel => {
-          const vesselDate = new Date(vessel.dateTimeTimestamp)
-          const vesselIsHidden = new Date()
-          vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
-
-          return vesselDate > vesselIsHidden
-        })
-      }
-
-      if (zonesSelected && zonesSelected.length) {
-        filteredVessels = filteredVessels.filter(vessel => {
-          return zonesSelected.some(zoneSelected => zoneSelected.feature.getGeometry()
-            .intersectsCoordinate(vessel.olCoordinates))
-        }).filter((zone, index, acc) => acc
-          .findIndex(existingZone => (existingZone.id === zone.id)) === index)
-      }
-
-      setFilteredVessels(filteredVessels)
-      setVesselsCountShowed(filteredVessels.length)
+      dispatch(getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected)).then(filteredVessels => {
+        setFilteredVessels(filteredVessels)
+        setVesselsCountShowed(filteredVessels.length)
+      })
     }
   }, [countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, vessels])
 
@@ -210,15 +171,6 @@ const VesselList = () => {
     setAdministrativeZonesFiltered([])
     setLastPositionTimeAgoFilter(2)
     dispatch(resetZonesSelected())
-  }
-
-  const getCountries = () => {
-    return Object.keys(countries.getAlpha2Codes()).map(country => {
-      return {
-        value: country.toLowerCase(),
-        label: countries.getName(country, 'fr')
-      }
-    })
   }
 
   const selectBox = () => {
@@ -268,6 +220,8 @@ const VesselList = () => {
   useEffect(() => {
     if (administrativeZonesFiltered && zonesSelected &&
           administrativeZonesFiltered.length > zonesSelected.length) {
+      setIsFiltering(true)
+
       const zonesGeometryToFetch = administrativeZonesFiltered
         .filter(zonesFiltered => !zonesSelected.some(alreadyFetchedZone => alreadyFetchedZone.code === zonesFiltered))
         .map(zoneName =>
@@ -285,6 +239,8 @@ const VesselList = () => {
             dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name))
           }
         })
+
+      setIsFiltering(false)
     }
   }, [administrativeZonesFiltered])
 
@@ -305,46 +261,20 @@ const VesselList = () => {
     }
   }, [administrativeZonesFiltered])
 
-  const getLastPositionTimeAgo = () => {
-    return [
-      {
-        label: '1 heure',
-        value: 1
-      },
-      {
-        label: '2 heures',
-        value: 2
-      },
-      {
-        label: '3 heures',
-        value: 3
-      },
-      {
-        label: '4 heures',
-        value: 4
-      },
-      {
-        label: '5 heures',
-        value: 5
-      },
-      {
-        label: '6 heures',
-        value: 6
-      },
-      {
-        label: '12 heures',
-        value: 12
-      },
-      {
-        label: '24 heures',
-        value: 24
-      }
-    ]
-  }
+  const showZonesSelected  = useCallback(() => {
+    return zonesSelected && zonesSelected.length && zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
+      ? zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
+        return <ZoneSelected key={zoneSelected.code + index}>
+          <DeleteZoneText>Effacer la zone définie</DeleteZoneText>
+          <CloseIcon onClick={() => callRemoveZoneSelected(zoneSelected)}/>
+        </ZoneSelected>
+      })
+      : null
+  }, [zonesSelected])
 
   return (
         <>
-            <Wrapper isShowed={isShowed}>
+            <Wrapper isShowed={isShowed} isFiltering={isFiltering}>
                 <VesselListIcon
                     selectedVessel={selectedVessel}
                     onMouseEnter={() => dispatch(expandRightMenu())}
@@ -380,13 +310,13 @@ const VesselList = () => {
                                     placeholder="x heures..."
                                     value={lastPositionTimeAgoFilter}
                                     onChange={setLastPositionTimeAgoFilter}
-                                    data={getLastPositionTimeAgo()}
+                                    data={getLastPositionTimeAgoLabels()}
                                 />
                             </TimeAgoSelect>
                             <TagPicker
                                 value={countriesFiltered}
                                 style={{ width: 180, margin: '2px 10px 0 20px', verticalAlign: 'top' }}
-                                data={getCountries()}
+                                data={countriesField}
                                 placeholder="Nationalité"
                                 renderMenuItem={(name, item) => {
                                   return (
@@ -421,14 +351,7 @@ const VesselList = () => {
                                 <BoxFilter onClick={() => selectBox()}/>
                                 <PolygonFilter onClick={() => selectPolygon()}/>
                                 {
-                                    zonesSelected && zonesSelected.length && zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
-                                      ? zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
-                                        return <ZoneSelected key={zoneSelected.code + index}>
-                                                <DeleteZoneText>Effacer la zone définie</DeleteZoneText>
-                                                <CloseIcon onClick={() => callRemoveZoneSelected(zoneSelected)}/>
-                                            </ZoneSelected>
-                                      })
-                                      : null
+                                    showZonesSelected()
                                 }
                             </ZoneFilter>
                         </Filters>
@@ -496,6 +419,7 @@ const ZoneSelected = styled.span`
 
 const Wrapper = styled.div`
   animation: ${props => props.isShowed ? 'vessel-search-box-opening' : 'vessel-search-box-closing'} 0.2s ease forwards;
+  cursor: ${props => props.isFiltering ? 'progress' : 'auto'};
 
   @keyframes vessel-search-box-opening {
     0%   { opacity: 0; }
@@ -514,7 +438,7 @@ const BackToVesselListButton = styled.button`
   top: 20px;
   left: auto;
   background: ${COLORS.grayDarkerThree};
-  padding: 5px 12px 5px 12px;
+  padding: 5px 12px;
   font-size: 13px;
   color: ${COLORS.grayBackground};
   border-radius: 2px;
@@ -538,8 +462,8 @@ const BackToVesselListButton = styled.button`
 
 const ShowOnMapButton = styled.button`
   border: 1px solid ${COLORS.grayDarkerThree};
-  padding: 5px 12px 5px 12px;
-  margin: 20px 0 20px 0;
+  padding: 5px 12px;
+  margin: 20px 0;
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
   
@@ -551,7 +475,7 @@ const ShowOnMapButton = styled.button`
 
 const DownloadButton = styled.button`
   background: ${COLORS.grayDarkerThree};
-  padding: 5px 12px 5px 12px;
+  padding: 5px 12px;
   margin: 20px 20px 20px 10px;
   font-size: 13px;
   color: ${COLORS.grayBackground};

@@ -31,6 +31,24 @@ class MapperWorker {
 
     return layersNamesToZones
   }
+
+  getFilteredVessels (vessels, countriesFiltered, lastPositionTimeAgoFilter) {
+    if (countriesFiltered && countriesFiltered.length) {
+      vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel.flagState === country))
+    }
+
+    const vesselIsHidden = new Date()
+    vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
+    if (lastPositionTimeAgoFilter) {
+      vessels = vessels.filter(vessel => {
+        const vesselDate = new Date(vessel.dateTimeTimestamp)
+
+        return vesselDate > vesselIsHidden
+      })
+    }
+
+    return vessels
+  }
 }
 
 Comlink.expose(MapperWorker)

@@ -121,9 +121,9 @@ const TrackDepthSelectionContent = styled.div`
   background: ${COLORS.background};
   position: absolute;
   right: 10px;
-  margin-right: ${props => props.firstUpdate ? '217px' : props.openBox && props.trackDepthSelectionIsOpen ? '540px' : '217px'};
-  opacity: ${props => props.firstUpdate ? '0' : props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
-  visibility: ${props => props.firstUpdate ? 'hidden' : props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
+  margin-right: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '540px' : '217px'};
+  opacity: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
+  visibility: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
   padding: 15px 0 15px 0;
   font-size: 13px;

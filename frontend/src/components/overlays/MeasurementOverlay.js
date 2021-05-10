@@ -28,7 +28,7 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
 
   return (
     <div>
-      <MeasurementTooltipElements ref={ref}>
+      <MeasurementOverlayElement ref={ref}>
         <ZoneSelected>
             <ZoneText>{measurement}</ZoneText>
             <CloseIcon onClick={() => deleteFeature(id)}/>
@@ -36,7 +36,7 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
           <TrianglePointer>
             <TriangleShadow/>
           </TrianglePointer>
-      </MeasurementTooltipElements>
+      </MeasurementOverlayElement>
     </div>
   )
 }
@@ -53,13 +53,13 @@ const TriangleShadow = styled.div`
   height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.grayBackground} transparent transparent transparent;
+  border-color: ${COLORS.grayBackground} transparent;
   text-align: center;
   margin: auto;
   margin-top: -3px;
 `
 
-const MeasurementTooltipElements = styled.div``
+const MeasurementOverlayElement = styled.div``
 
 const ZoneText = styled.span`
   padding-bottom: 5px;

@@ -14,7 +14,6 @@ import {
 } from '../domain/reducers/Vessel'
 import VesselListTable from '../components/vessel_list/VesselListTable'
 import DownloadVesselListModal from '../components/vessel_list/DownloadVesselListModal'
-import { getCoordinates } from '../utils'
 import getAdministrativeZoneGeometry from '../domain/use_cases/getAdministrativeZoneGeometry'
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { expandRightMenu } from '../domain/reducers/Global'
@@ -22,6 +21,7 @@ import unselectVessel from '../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import VesselListFilters from '../components/vessel_list/VesselListFilters'
 import { getVesselTableObjects } from '../components/vessel_list/dataFormatting'
+import getUniqueSpeciesAndDistricts from '../domain/use_cases/getUniqueSpeciesAndDistricts'
 
 const VesselList = () => {
   const dispatch = useDispatch()
@@ -47,37 +47,8 @@ const VesselList = () => {
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState({ globalCheckbox: true })
   const [makeVesselListToNotUpdate, setMakeVesselListToNotUpdate] = useState(false)
-  const species = useMemo(() => {
-    return vessels
-      .map(vessel => vessel.speciesArray)
-      .flat()
-      .reduce((acc, species) => {
-        if (acc.indexOf(species) < 0) {
-          acc.push(species)
-        }
-
-        return acc
-      }, [])
-  }, [vessels])
-
-  const districts = useMemo(() => {
-    return vessels
-      .map(vessel => {
-        return {
-          district: vessel.district,
-          districtCode: vessel.districtCode,
-        }
-      })
-      .reduce((acc, district) => {
-        const found = acc.find(item => item.district === district.district)
-
-        if (!found) {
-          return acc.concat([district])
-        } else {
-          return acc
-        }
-      }, [])
-  }, [vessels])
+  const [species, setSpecies] = useState([])
+  const [districts, setDistricts] = useState([])
 
   // Filters
   const [zonesFilter, setZonesFilter] = useState([])
@@ -112,6 +83,13 @@ const VesselList = () => {
       setZonesFilter(nextZonesWithoutNulls)
     })
   }, [])
+
+  useEffect(() => {
+    dispatch(getUniqueSpeciesAndDistricts(vessels)).then(speciesAndDistricts => {
+      setSpecies(speciesAndDistricts.species)
+      setDistricts(speciesAndDistricts.districts)
+    })
+  }, [vessels])
 
   useEffect(() => {
     if (vesselListModalIsOpen === true) {
@@ -150,7 +128,7 @@ const VesselList = () => {
         .then(filteredVessels => {
           setFilteredVessels(filteredVessels)
           setVesselsCountShowed(filteredVessels.length)
-      })
+        })
     }
   }, [
     vessels,
@@ -322,7 +300,7 @@ const VesselList = () => {
                           gears={{
                             gears,
                             gearsFiltered,
-                            setGearsFiltered,
+                            setGearsFiltered
                           }}
                           species={{
                             species,

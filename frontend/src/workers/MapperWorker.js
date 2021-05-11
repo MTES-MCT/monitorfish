@@ -85,6 +85,38 @@ class MapperWorker {
 
     return vessels
   }
+
+  getUniqueSpeciesAndDistricts(vessels) {
+    const species = vessels
+      .map(vessel => vessel.speciesArray)
+      .flat()
+      .reduce((acc, species) => {
+        if (acc.indexOf(species) < 0) {
+          acc.push(species)
+        }
+
+        return acc
+      }, [])
+
+    const districts = vessels
+      .map(vessel => {
+        return {
+          district: vessel.district,
+          districtCode: vessel.districtCode
+        }
+      })
+      .reduce((acc, district) => {
+        const found = acc.find(item => item.district === district.district)
+
+        if (!found) {
+          return acc.concat([district])
+        } else {
+          return acc
+        }
+      }, [])
+
+    return { species, districts }
+  }
 }
 
 Comlink.expose(MapperWorker)

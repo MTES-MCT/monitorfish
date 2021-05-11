@@ -45,9 +45,9 @@ const VesselList = () => {
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState({ globalCheckbox: true })
   const [makeVesselListToNotUpdate, setMakeVesselListToNotUpdate] = useState(false)
-  const [zonesFilter, setZonesFilter] = useState([])
 
   // Filters
+  const [zonesFilter, setZonesFilter] = useState([])
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
   const [countriesFiltered, setCountriesFiltered] = useState([])
   const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
@@ -130,9 +130,10 @@ const VesselList = () => {
 
   useEffect(() => {
     if (vessels && vessels.length) {
-      dispatch(getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, fleetSegmentsFiltered, gearsFiltered)).then(filteredVessels => {
-        setFilteredVessels(filteredVessels)
-        setVesselsCountShowed(filteredVessels.length)
+      dispatch(getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, fleetSegmentsFiltered, gearsFiltered))
+        .then(filteredVessels => {
+          setFilteredVessels(filteredVessels)
+          setVesselsCountShowed(filteredVessels.length)
       })
     }
   }, [countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, vessels, fleetSegmentsFiltered, gearsFiltered])
@@ -174,7 +175,9 @@ const VesselList = () => {
   }
 
   const highLightOnMap = () => {
-    dispatch(setTemporaryVesselsToHighLightOnMap(filteredVessels.filter(vessel => vessel.checked)))
+    const vesselsToHighLight = filteredVessels.filter(vessel => vessel.checked)
+
+    dispatch(setTemporaryVesselsToHighLightOnMap(vesselsToHighLight))
     setVesselListModalIsOpen(false)
   }
 

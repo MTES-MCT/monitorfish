@@ -12,7 +12,7 @@ import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import Countries from 'i18n-iso-countries'
 
-const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gears, zones, geometrySelection }) => {
+const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gears, species, zones, geometrySelection }) => {
   const { current: countriesField } = useRef(Object.keys(Countries.getAlpha2Codes()).map(country => {
     return {
       value: country.toLowerCase(),
@@ -42,6 +42,17 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
     }
   }, [gears.gears])
 
+  const speciesField = useMemo(() => {
+    if (species.species && species.species.length) {
+      return species.species.map(species => {
+        return {
+          value: species,
+          label: species
+        }
+      })
+    }
+  }, [species.species])
+
   const showZonesSelected = useCallback(() => {
     return zones.zonesSelected && zones.zonesSelected.length && zones.zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
       ? zones.zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
@@ -69,6 +80,8 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
     ))
   }
 
+  const tagPickerStyle = { width: 180, margin: '2px 10px 10px 0', verticalAlign: 'top' }
+
   return (
     <Filters>
       <FilterDesc>
@@ -86,7 +99,7 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
       </TimeAgoSelect>
       <TagPicker
         value={countries.countriesFiltered}
-        style={{ width: 180, margin: '2px 10px 0 20px', verticalAlign: 'top' }}
+        style={tagPickerStyle}
         data={countriesField}
         placeholder="Nationalité"
         onChange={change => countries.setCountriesFiltered(change)}
@@ -95,7 +108,7 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
       />
       <TagPicker
         value={fleetSegments.fleetSegmentsFiltered}
-        style={{ width: 180, margin: '2px 10px 0 20px', verticalAlign: 'top' }}
+        style={tagPickerStyle}
         data={fleetSegmentsField}
         placeholder="Segments de flotte"
         onChange={change => fleetSegments.setFleetSegmentsFiltered(change)}
@@ -104,17 +117,26 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
       />
       <TagPicker
         value={gears.gearsFiltered}
-        style={{ width: 180, margin: '2px 10px 0 20px', verticalAlign: 'top' }}
+        style={tagPickerStyle}
         data={gearsField}
         placeholder="Engins à bord"
         onChange={change => gears.setGearsFiltered(change)}
         renderMenuItem={(_, item) => renderMenuItem(item)}
         renderValue={(_, items) => renderValue(items)}
       />
+      <TagPicker
+        value={species.speciesFiltered}
+        style={tagPickerStyle}
+        data={speciesField}
+        placeholder="Espèces à bord"
+        onChange={change => species.setSpeciesFiltered(change)}
+        renderMenuItem={(_, item) => renderMenuItem(item)}
+        renderValue={(_, items) => renderValue(items)}
+      />
       <ZoneFilter>
         <MultiCascader
           data={zones.zonesFilter}
-          style={{ width: 230, verticalAlign: 'top', margin: '2px 10px 0 10px' }}
+          style={{ width: 200, verticalAlign: 'top', margin: '2px 10px 10px -10px' }}
           placeholder="Filtrer avec une zone existante"
           menuWidth={250}
           uncheckableItemValues={zones.zoneGroups}
@@ -159,7 +181,6 @@ const ZoneSelected = styled.span`
 
 const ZoneFilter = styled.div`
   display: inline-block;
-  margin-right: 20px;
   margin-left: 10px;
   font-size: 13px;
   vertical-align: sub;

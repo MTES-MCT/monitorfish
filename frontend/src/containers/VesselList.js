@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'rsuite/lib/Modal'
@@ -45,6 +45,18 @@ const VesselList = () => {
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState({ globalCheckbox: true })
   const [makeVesselListToNotUpdate, setMakeVesselListToNotUpdate] = useState(false)
+  const species = useMemo(() => {
+    return vessels
+      .map(vessel => vessel.speciesArray)
+      .flat()
+      .reduce((acc, species) => {
+        if (acc.indexOf(species) < 0) {
+          acc.push(species)
+        }
+
+        return acc
+      }, [])
+  }, [vessels])
 
   // Filters
   const [zonesFilter, setZonesFilter] = useState([])
@@ -54,6 +66,7 @@ const VesselList = () => {
   const [zoneGroups, setZoneGroups] = useState([])
   const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])
   const [gearsFiltered, setGearsFiltered] = useState([])
+  const [speciesFiltered, setSpeciesFiltered] = useState([])
   const zonesSelected = useSelector(state => state.map.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
 
@@ -119,7 +132,9 @@ const VesselList = () => {
         gears: vessel.getProperties().gearOnboard.map(gear => gear.gear).join(', '),
         gearsArray: vessel.getProperties().gearOnboard.map(gear => gear.gear),
         fleetSegments: vessel.getProperties().segments.join(', '),
-        fleetSegmentsArray: vessel.getProperties().segments.map(segment => segment.replace(' ', ''))
+        fleetSegmentsArray: vessel.getProperties().segments.map(segment => segment.replace(' ', '')),
+        species: vessel.getProperties().speciesOnboard.map(species => species.species).join(', '),
+        speciesArray: vessel.getProperties().speciesOnboard.map(species => species.species),
       }
     })
 
@@ -148,7 +163,7 @@ const VesselList = () => {
     setVessels(nextVessels)
   }, [allVesselsChecked])
 
-  const handleChange = (id, key, value) => {
+  const handleChangeModifiableKey = (id, key, value) => {
     const nextVessels = Object.assign([], vessels)
 
     nextVessels.find(item => item.id === id)[key] = value
@@ -297,8 +312,13 @@ const VesselList = () => {
                           }}
                           gears={{
                             gears,
+                            gearsFiltered,
                             setGearsFiltered,
-                            gearsFiltered
+                          }}
+                          species={{
+                            species,
+                            speciesFiltered,
+                            setSpeciesFiltered
                           }}
                           zones={{
                             zonesFilter,
@@ -320,7 +340,7 @@ const VesselList = () => {
                             vesselsCountShowed={vesselsCountShowed}
                             allVesselsChecked={allVesselsChecked}
                             setAllVesselsChecked={setAllVesselsChecked}
-                            handleChange={handleChange}
+                            handleChange={handleChangeModifiableKey}
                         />
                     </Modal.Body>
                     <Modal.Footer>

@@ -43,7 +43,10 @@ const DownloadVesselListModal = props => {
   const [valuesChecked, setValuesChecked] = useState([])
 
   useEffect(() => {
-    const values = Object.keys(CSVOptions).map(value => CSVOptions[value].code)
+    const values = Object.keys(CSVOptions)
+      .map(value => CSVOptions[value].code)
+      .filter(value => value !== CSVOptions.species.code)
+
     setValuesChecked(values || [])
   }, [])
 
@@ -123,9 +126,9 @@ const DownloadVesselListModal = props => {
                             <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
                             <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
                             <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
+                            <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
                         </div>
                     </Columns>
-
                 </CheckboxGroup>
                 <SelectAll>
                     <Checkbox
@@ -179,7 +182,7 @@ const Description = styled.div`
 
 const DownloadButton = styled.button`
   background: ${COLORS.grayDarkerThree};
-  padding: 5px 12px 5px 12px;
+  padding: 5px 12px;
   margin: 20px 20px 20px 10px;
   font-size: 13px;
   color: ${COLORS.grayBackground};

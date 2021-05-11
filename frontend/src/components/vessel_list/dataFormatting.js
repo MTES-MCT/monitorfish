@@ -32,6 +32,10 @@ export const CSVOptions = {
     code: 'gears',
     name: 'Engins à bord'
   },
+  species: {
+    code: 'species',
+    name: 'Espèces à bord'
+  },
   flagState: {
     code: 'flagState',
     name: 'Pavillon'

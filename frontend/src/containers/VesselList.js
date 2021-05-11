@@ -122,7 +122,15 @@ const VesselList = () => {
 
   useEffect(() => {
     if (vessels && vessels.length) {
-      const filters = { countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, fleetSegmentsFiltered, gearsFiltered, districtsFiltered }
+      const filters = {
+        countriesFiltered,
+        lastPositionTimeAgoFilter,
+        zonesSelected,
+        fleetSegmentsFiltered,
+        gearsFiltered,
+        districtsFiltered,
+        speciesFiltered
+      }
 
       dispatch(getFilteredVessels(vessels, filters))
         .then(filteredVessels => {
@@ -137,7 +145,8 @@ const VesselList = () => {
     zonesSelected,
     fleetSegmentsFiltered,
     gearsFiltered,
-    districtsFiltered
+    districtsFiltered,
+    speciesFiltered
   ])
 
   useEffect(() => {

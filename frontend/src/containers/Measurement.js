@@ -51,16 +51,12 @@ const Measurement = () => {
   }, [measurementIsOpen])
 
   useEffect(() => {
-    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-      setIsShowed(false)
-    } else {
-      setIsShowed(true)
-    }
+    setIsShowed(!(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length))
   }, [temporaryVesselsToHighLightOnMap])
 
   const escapeFromKeyboard = event => {
-    const escapeCode = 27
-    if (event.keyCode === escapeCode) {
+    const escapeKeyCode = 27
+    if (event.keyCode === escapeKeyCode) {
       dispatch(setMeasurementTypeToAdd(null))
       setMeasurementIsOpen(false)
     }
@@ -72,16 +68,11 @@ const Measurement = () => {
   }
 
   const getMeasurementIcon = measurementType => {
-    let icon = <MeasurementIcon
-      rightMenuIsOpen={rightMenuIsOpen}
-      selectedVessel={selectedVessel}/>
-
     switch (measurementType) {
-      case MeasurementTypes.MULTILINE: icon = <MultiLineIcon/>; break
-      case MeasurementTypes.CIRCLE_RANGE: icon = <CircleRangeIcon/>; break
+      case MeasurementTypes.MULTILINE: return <MultiLineIcon/>
+      case MeasurementTypes.CIRCLE_RANGE: return <CircleRangeIcon/>
+      default: return <MeasurementIcon rightMenuIsOpen={rightMenuIsOpen} selectedVessel={selectedVessel}/>
     }
-
-    return icon
   }
 
   function openOrCloseMeasurement () {
@@ -117,7 +108,7 @@ const Measurement = () => {
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Mesurer une distance'}
-        onClick={() => openOrCloseMeasurement()}>
+        onClick={openOrCloseMeasurement}>
         {
           getMeasurementIcon(measurementTypeToAdd)
         }

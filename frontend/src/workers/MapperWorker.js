@@ -38,7 +38,8 @@ class MapperWorker {
       lastPositionTimeAgoFilter,
       fleetSegmentsFiltered,
       gearsFiltered,
-      districtsFiltered
+      districtsFiltered,
+      speciesFiltered
     } = filters
 
     if (countriesFiltered && countriesFiltered.length) {
@@ -69,10 +70,11 @@ class MapperWorker {
         }))
     }
 
-    if (gearsFiltered && gearsFiltered.length) {
+    console.log(speciesFiltered)
+    if (speciesFiltered && speciesFiltered.length) {
       vessels = vessels.filter(vessel =>
-        gearsFiltered.some(gear => {
-          return vessel.gearsArray.includes(gear)
+        speciesFiltered.some(species => {
+          return vessel.speciesArray.includes(species)
         }))
     }
 

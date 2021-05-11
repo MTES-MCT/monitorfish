@@ -2,8 +2,7 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  useRouteMatch
+  Route
 } from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
@@ -47,11 +46,11 @@ function App () {
 =======
       <Router>
       <Switch>
-          <Route path="/">
-            <Main />
-          </Route>
           <Route path="/backoffice">
-            <Main />
+            <Backoffice />
+          </Route>
+          <Route path="/">
+            <Home />
           </Route>
         </Switch>
       </Router>
@@ -61,18 +60,25 @@ function App () {
   )
 }
 
-function Main () {
-  const isBackOffice = useRouteMatch('/backoffice')
+function Home () {
   return <Wrapper>
-    <Map isBackOffice={isBackOffice}/>
+    <Map />
     <LayersSidebar/>
-    {isBackOffice === null && <><VesselsSearchBox />
+    <VesselsSearchBox />
     <RightMenuOnHoverZone />
     <VesselList/>
     <VesselVisibility/>
     <VesselSidebar/>
     <UpdatingVesselLoader/>
-    <Measurement/></>}
+    <Measurement/>
+    <APIWorker/>
+  </Wrapper>
+}
+
+function Backoffice () {
+  return <Wrapper>
+    <Map isBackOffice/>
+    <LayersSidebar/>
     <APIWorker/>
   </Wrapper>
 }

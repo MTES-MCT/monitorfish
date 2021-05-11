@@ -68,7 +68,7 @@ const Map = ({ isBackOffice }) => {
   function initMap () {
     if (!map) {
       const overlayDict = {}
-      if (isBackOffice === null) {
+      if (!isBackOffice) {
         const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
         overlayDict.vesselCardOverlay = vesselCardOverlay
         overlayDict.vesselTrackCardOverlay = vesselTrackCardOverlay
@@ -96,7 +96,7 @@ const Map = ({ isBackOffice }) => {
       })
 
       initialMap.on('click', handleMapClick)
-      if (isBackOffice === null) {
+      if (!isBackOffice) {
         initialMap.on('pointermove', event => throttleAndHandlePointerMove(
           event,
           overlayDict))
@@ -308,7 +308,7 @@ const Map = ({ isBackOffice }) => {
   return (
         <div>
             <MapContainer ref={mapElement} />
-            {isBackOffice === null && <><MapHistory
+            {!isBackOffice && <><MapHistory
               map={map}
               mapRef={mapRef}
               shouldUpdateView={shouldUpdateView}

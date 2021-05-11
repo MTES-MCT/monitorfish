@@ -1,70 +1,12 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import * as timeago from 'timeago.js'
-import { timeagoFrenchLocale } from '../../utils'
 import { ReactComponent as TargetSVG } from '../icons/target.svg'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import Table from 'rsuite/lib/Table'
 import Checkbox from 'rsuite/lib/Checkbox'
-import countries from 'i18n-iso-countries'
+import { CheckedCell, EllipsisCell, FlagCell, TargetCell, TimeAgoCell } from './tableCells'
 
 const { Column, HeaderCell, Cell } = Table
-timeago.register('fr', timeagoFrenchLocale)
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
-
-export const TargetCell = ({ rowData, dataKey, onChange, ...props }) => {
-  return (
-        <Cell key={rowData.id} {...props} className={'table-content-editing'}>
-            <input
-                type="text"
-                maxLength={3}
-                className="rs-input"
-                value={rowData[dataKey]}
-                onChange={event => {
-                  const value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : ''
-                  onChange && onChange(rowData.id, dataKey, value)
-                }}
-            />
-        </Cell>
-  )
-}
-
-export const CheckedCell = ({ rowData, dataKey, onClick, onChange, ...props }) => {
-  return (
-        <Cell {...props} className={'table-content-editing'}>
-            <Checkbox
-                value={rowData[dataKey]}
-                checked={rowData[dataKey]}
-                onChange={value => {
-                  onChange && onChange(rowData.id, dataKey, !value)
-                }}
-                onClick={() => {
-                  onClick && onClick(rowData.id)
-                }}
-            />
-        </Cell>
-  )
-}
-
-const FlagCell = ({ rowData, dataKey, ...props }) => (
-    <Cell {...props} style={{ padding: 0 }}>
-        <Flag title={countries.getName(rowData[dataKey], 'fr')} rel="preload" src={`flags/${rowData[dataKey]}.svg`} />
-    </Cell>
-)
-
-const TimeAgoCell = ({ rowData, dataKey, ...props }) => (
-    <Cell {...props}>
-        { timeago.format(rowData[dataKey], 'fr') }
-    </Cell>
-)
-
-const EllipsisCell = ({ rowData, dataKey, ...props }) => (
-  <Cell title={rowData[dataKey]} {...props}>
-    <CellWithEllipsis>
-      {rowData[dataKey]}
-    </CellWithEllipsis>
-  </Cell>
-)
 
 const VesselListTable = props => {
   const [sortColumn, setSortColumn] = React.useState()
@@ -77,32 +19,36 @@ const VesselListTable = props => {
 
   const getVessels = useCallback(() => {
     if (sortColumn && sortType) {
-      return props.filteredVessels.slice().sort((a, b) => {
-        let x = a[sortColumn]
-        let y = b[sortColumn]
-
-        if (typeof x === 'string' && typeof y === 'string') {
-          x = x.charCodeAt()
-          y = y.charCodeAt()
-        }
-
-        if (x === '') {
-          return 1
-        }
-        if (y === '') {
-          return -1
-        }
-
-        if (sortType === 'asc') {
-          return x - y
-        } else {
-          return y - x
-        }
-      })
+      return props.filteredVessels
+        .slice()
+        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
     }
 
     return props.filteredVessels
   }, [sortColumn, sortType, props.filteredVessels])
+
+  function sortArrayByColumn (a, b, sortColumn, sortType) {
+    let x = a[sortColumn]
+    let y = b[sortColumn]
+
+    if (typeof x === 'string' && typeof y === 'string') {
+      x = x.charCodeAt()
+      y = y.charCodeAt()
+    }
+
+    if (x === '') {
+      return 1
+    }
+    if (y === '') {
+      return -1
+    }
+
+    if (sortType === 'asc') {
+      return x - y
+    } else {
+      return y - x
+    }
+  }
 
   const updateAllVesselsChecked = useCallback(() => {
     const isChecked = props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
@@ -120,8 +66,8 @@ const VesselListTable = props => {
             </VesselsCount>
             <Table
                 virtualized
-                height={510}
-                width={1467}
+                height={610}
+                width={1597}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -179,6 +125,11 @@ const VesselListTable = props => {
                 <EllipsisCell dataKey="gears" />
               </Column>
 
+              <Column width={130}>
+                <HeaderCell>Espèces à bord</HeaderCell>
+                <EllipsisCell dataKey="species" />
+              </Column>
+
                 <Column sortable width={50}>
                     <HeaderCell>
                         <FlagIcon />
@@ -214,25 +165,6 @@ const VesselListTable = props => {
         </TableContent>
   )
 }
-
-const CellWithEllipsis = styled.span`
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 120px; 
-  line-break: auto;
-  display: inline-block;
-`
-
-const Flag = styled.img`
-  font-size: 1.5em;
-  margin-left: 14px;
-  margin-top: 8px;
-  display: inline-block;
-  width: 1.1em;
-  height: 1em;
-  vertical-align: middle;
-`
 
 const TableContent = styled.div``
 

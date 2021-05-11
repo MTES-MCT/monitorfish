@@ -169,6 +169,11 @@ a:hover, a:focus {
   display: inline-block;
 }
 
+.rs-modal-full .rs-modal-dialog {
+  width: 100%;
+  margin-left: 0;
+}
+
 .rs-modal-content {
   padding: 0;
   border-radius: 2px;
@@ -177,6 +182,7 @@ a:hover, a:focus {
 .rs-modal-body {
   padding: 20px 25px 20px 25px;
   margin-top: 0;
+  max-height: 800px !important;
 }
 
 .rs-modal-header {

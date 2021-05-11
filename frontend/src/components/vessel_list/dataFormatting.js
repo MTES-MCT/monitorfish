@@ -1,4 +1,7 @@
 // These properties are ordered for the CSV column order
+import { getCoordinates } from '../../utils'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+
 export const CSVOptions = {
   targetNumber: {
     code: 'targetNumber',
@@ -39,6 +42,10 @@ export const CSVOptions = {
   flagState: {
     code: 'flagState',
     name: 'Pavillon'
+  },
+  district: {
+    code: 'district',
+    name: 'Quartier'
   },
   dateTime: {
     code: 'dateTime',
@@ -98,4 +105,33 @@ export const getLastPositionTimeAgoLabels = () => {
       value: 24
     }
   ]
+}
+
+export function getVesselTableObjects (vessel, coordinates) {
+  return {
+    targetNumber: '',
+    id: vessel.id_,
+    checked: true,
+    vesselName: vessel.getProperties().vesselName,
+    course: vessel.getProperties().course,
+    speed: vessel.getProperties().speed,
+    flagState: vessel.getProperties().flagState.toLowerCase(),
+    mmsi: vessel.getProperties().mmsi,
+    internalReferenceNumber: vessel.getProperties().internalReferenceNumber,
+    externalReferenceNumber: vessel.getProperties().externalReferenceNumber,
+    ircs: vessel.getProperties().ircs,
+    dateTimeTimestamp: new Date(vessel.getProperties().dateTime).getTime(),
+    dateTime: vessel.getProperties().dateTime,
+    latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
+    longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
+    olCoordinates: coordinates,
+    gears: vessel.getProperties().gearOnboard.map(gear => gear.gear).join(', '),
+    gearsArray: vessel.getProperties().gearOnboard.map(gear => gear.gear),
+    fleetSegments: vessel.getProperties().segments.join(', '),
+    fleetSegmentsArray: vessel.getProperties().segments.map(segment => segment.replace(' ', '')),
+    species: vessel.getProperties().speciesOnboard.map(species => species.species).join(', '),
+    speciesArray: vessel.getProperties().speciesOnboard.map(species => species.species),
+    district: vessel.getProperties().district,
+    districtCode: vessel.getProperties().districtCode,
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import { getLastPositionTimeAgoLabels } from './dataFormatting'
@@ -12,7 +12,7 @@ import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import Countries from 'i18n-iso-countries'
 
-const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gears, species, zones, geometrySelection }) => {
+const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gears, species, districts, zones, geometrySelection, seeMore }) => {
   const { current: countriesField } = useRef(Object.keys(Countries.getAlpha2Codes()).map(country => {
     return {
       value: country.toLowerCase(),
@@ -52,6 +52,17 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
       })
     }
   }, [species.species])
+
+  const districtsField = useMemo(() => {
+    if (districts.districts && districts.districts.length) {
+      return districts.districts.map(district => {
+        return {
+          value: district.districtCode,
+          label: `${district.district} (${district.districtCode})`
+        }
+      })
+    }
+  }, [districts.districts])
 
   const showZonesSelected = useCallback(() => {
     return zones.zonesSelected && zones.zonesSelected.length && zones.zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
@@ -152,10 +163,37 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
         {
           showZonesSelected()
         }
-      </ZoneFilter>
+      </ZoneFilter><br/>
+      {
+        seeMore.seeMoreIsOpen
+          ? <>
+            <TagPicker
+              value={districtsField.districtsFiltered}
+              style={tagPickerStyle}
+              data={districtsField}
+              placeholder="Quartiers"
+              onChange={change => districts.setDistrictsFiltered(change)}
+              renderMenuItem={(_, item) => renderMenuItem(item)}
+              renderValue={(_, items) => renderValue(items)}
+            />
+            <br/>
+          </>
+          : null
+      }
+      <SeeMore
+        onClick={() => seeMore.setSeeMoreIsOpen(!seeMore.seeMoreIsOpen)}
+      >
+        Voir {seeMore.seeMoreIsOpen ? 'moins' : 'plus'} de critères
+      </SeeMore>
     </Filters>
   )
 }
+
+const SeeMore = styled.span`
+  text-decoration: underline;
+  color: ${COLORS.textGray};
+  cursor: pointer;
+`
 
 const DeleteZoneText = styled.span`
   padding-bottom: 5px;

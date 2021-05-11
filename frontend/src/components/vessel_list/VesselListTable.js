@@ -66,7 +66,7 @@ const VesselListTable = props => {
             </VesselsCount>
             <Table
                 virtualized
-                height={610}
+                height={props.seeMoreIsOpen ? 560 : 610}
                 width={1597}
                 rowHeight={36}
                 data={getVessels()}
@@ -161,6 +161,15 @@ const VesselListTable = props => {
                     <HeaderCell>Vitesse</HeaderCell>
                     <Cell dataKey="speed" />
                 </Column>
+
+              {
+                props.filters.districtsFiltered && props.filters.districtsFiltered.length
+                  ? <Column width={100}>
+                    <HeaderCell>Quartier</HeaderCell>
+                    <Cell dataKey="district" />
+                  </Column>
+                  : null
+              }
             </Table>
         </TableContent>
   )

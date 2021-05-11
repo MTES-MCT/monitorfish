@@ -21,6 +21,7 @@ import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import VesselListFilters from '../components/vessel_list/VesselListFilters'
+import { getVesselTableObjects } from '../components/vessel_list/dataFormatting'
 
 const VesselList = () => {
   const dispatch = useDispatch()
@@ -35,6 +36,7 @@ const VesselList = () => {
   const firstUpdate = useRef(true)
   const [vesselListModalIsOpen, setVesselListModalIsOpen] = useState(false)
   const [downloadVesselListModalIsOpen, setDownloadVesselListModalIsOpen] = useState(false)
+  const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 
   const [isShowed, setIsShowed] = useState(true)
 
@@ -58,6 +60,25 @@ const VesselList = () => {
       }, [])
   }, [vessels])
 
+  const districts = useMemo(() => {
+    return vessels
+      .map(vessel => {
+        return {
+          district: vessel.district,
+          districtCode: vessel.districtCode,
+        }
+      })
+      .reduce((acc, district) => {
+        const found = acc.find(item => item.district === district.district)
+
+        if (!found) {
+          return acc.concat([district])
+        } else {
+          return acc
+        }
+      }, [])
+  }, [vessels])
+
   // Filters
   const [zonesFilter, setZonesFilter] = useState([])
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
@@ -67,6 +88,7 @@ const VesselList = () => {
   const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])
   const [gearsFiltered, setGearsFiltered] = useState([])
   const [speciesFiltered, setSpeciesFiltered] = useState([])
+  const [districtsFiltered, setDistrictsFiltered] = useState([])
   const zonesSelected = useSelector(state => state.map.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
 
@@ -112,30 +134,7 @@ const VesselList = () => {
     const vessels = features.map(vessel => {
       const coordinates = [...vessel.getGeometry().getCoordinates()]
 
-      return {
-        targetNumber: '',
-        id: vessel.id_,
-        checked: true,
-        vesselName: vessel.getProperties().vesselName,
-        course: vessel.getProperties().course,
-        speed: vessel.getProperties().speed,
-        flagState: vessel.getProperties().flagState.toLowerCase(),
-        mmsi: vessel.getProperties().mmsi,
-        internalReferenceNumber: vessel.getProperties().internalReferenceNumber,
-        externalReferenceNumber: vessel.getProperties().externalReferenceNumber,
-        ircs: vessel.getProperties().ircs,
-        dateTimeTimestamp: new Date(vessel.getProperties().dateTime).getTime(),
-        dateTime: vessel.getProperties().dateTime,
-        latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
-        longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
-        olCoordinates: coordinates,
-        gears: vessel.getProperties().gearOnboard.map(gear => gear.gear).join(', '),
-        gearsArray: vessel.getProperties().gearOnboard.map(gear => gear.gear),
-        fleetSegments: vessel.getProperties().segments.join(', '),
-        fleetSegmentsArray: vessel.getProperties().segments.map(segment => segment.replace(' ', '')),
-        species: vessel.getProperties().speciesOnboard.map(species => species.species).join(', '),
-        speciesArray: vessel.getProperties().speciesOnboard.map(species => species.species),
-      }
+      return getVesselTableObjects(vessel, coordinates)
     })
 
     setVessels(vessels)
@@ -145,13 +144,23 @@ const VesselList = () => {
 
   useEffect(() => {
     if (vessels && vessels.length) {
-      dispatch(getFilteredVessels(vessels, countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, fleetSegmentsFiltered, gearsFiltered))
+      const filters = { countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, fleetSegmentsFiltered, gearsFiltered, districtsFiltered }
+
+      dispatch(getFilteredVessels(vessels, filters))
         .then(filteredVessels => {
           setFilteredVessels(filteredVessels)
           setVesselsCountShowed(filteredVessels.length)
       })
     }
-  }, [countriesFiltered, lastPositionTimeAgoFilter, zonesSelected, vessels, fleetSegmentsFiltered, gearsFiltered])
+  }, [
+    vessels,
+    countriesFiltered,
+    lastPositionTimeAgoFilter,
+    zonesSelected,
+    fleetSegmentsFiltered,
+    gearsFiltered,
+    districtsFiltered
+  ])
 
   useEffect(() => {
     const nextVessels = vessels.map(vessel => {
@@ -320,6 +329,11 @@ const VesselList = () => {
                             speciesFiltered,
                             setSpeciesFiltered
                           }}
+                          districts={{
+                            districts,
+                            districtsFiltered,
+                            setDistrictsFiltered
+                          }}
                           zones={{
                             zonesFilter,
                             zoneGroups,
@@ -332,6 +346,10 @@ const VesselList = () => {
                             selectBox,
                             selectPolygon
                           }}
+                          seeMore={{
+                            seeMoreIsOpen,
+                            setSeeMoreIsOpen
+                          }}
                         />
                         <VesselListTable
                             vessels={vessels}
@@ -341,6 +359,10 @@ const VesselList = () => {
                             allVesselsChecked={allVesselsChecked}
                             setAllVesselsChecked={setAllVesselsChecked}
                             handleChange={handleChangeModifiableKey}
+                            seeMoreIsOpen={seeMoreIsOpen}
+                            filters={{
+                              districtsFiltered
+                            }}
                         />
                     </Modal.Body>
                     <Modal.Footer>

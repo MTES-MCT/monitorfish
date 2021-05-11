@@ -32,7 +32,15 @@ class MapperWorker {
     return layersNamesToZones
   }
 
-  getFilteredVessels (vessels, countriesFiltered, lastPositionTimeAgoFilter, fleetSegmentsFiltered, gearsFiltered) {
+  getFilteredVessels (vessels, filters) {
+    const {
+      countriesFiltered,
+      lastPositionTimeAgoFilter,
+      fleetSegmentsFiltered,
+      gearsFiltered,
+      districtsFiltered
+    } = filters
+
     if (countriesFiltered && countriesFiltered.length) {
       vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel.flagState === country))
     }
@@ -58,6 +66,20 @@ class MapperWorker {
       vessels = vessels.filter(vessel =>
         gearsFiltered.some(gear => {
           return vessel.gearsArray.includes(gear)
+        }))
+    }
+
+    if (gearsFiltered && gearsFiltered.length) {
+      vessels = vessels.filter(vessel =>
+        gearsFiltered.some(gear => {
+          return vessel.gearsArray.includes(gear)
+        }))
+    }
+
+    if (districtsFiltered && districtsFiltered.length) {
+      vessels = vessels.filter(vessel =>
+        districtsFiltered.some(districtCode => {
+          return vessel.districtCode === districtCode
         }))
     }
 

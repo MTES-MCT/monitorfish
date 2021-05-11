@@ -132,6 +132,6 @@ export function getVesselTableObjects (vessel, coordinates) {
     species: vessel.getProperties().speciesOnboard.map(species => species.species).join(', '),
     speciesArray: vessel.getProperties().speciesOnboard.map(species => species.species),
     district: vessel.getProperties().district,
-    districtCode: vessel.getProperties().districtCode,
+    districtCode: vessel.getProperties().districtCode
   }
 }

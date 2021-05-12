@@ -6,9 +6,6 @@ import org.springframework.data.repository.CrudRepository
 import java.time.ZonedDateTime
 
 @DynamicUpdate
-interface DBLastPositionRepository : CrudRepository<LastPositionEntity, LastPositionEntity.ReferenceCompositeKey> {
+interface DBLastPositionRepository : CrudRepository<LastPositionEntity, Int> {
     fun findAllByDateTimeGreaterThanEqual(dateTime: ZonedDateTime) : List<LastPositionEntity>
-    fun findByInternalReferenceNumberEquals(internalReferenceNumber: String): LastPositionEntity
-    fun findByExternalReferenceNumberEquals(externalReferenceNumber: String): LastPositionEntity
-    fun findByIrcsEquals(ircs: String): LastPositionEntity
 }

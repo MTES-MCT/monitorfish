@@ -169,7 +169,6 @@ const Map = ({ isBackOffice }) => {
   }
 
   function animateToVessel () {
-    console.log("in animateToVessel")
     if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
       if (map.getView().getZoom() >= 8) {
         const resolution = map.getView().getResolution()
@@ -231,50 +230,48 @@ const Map = ({ isBackOffice }) => {
     }
   }
 
+  function resetPointer () {
+    setVesselFeatureToShowOnCard(null)
+    setRegulatoryFeatureToShowOnCard(null)
+    setTrackTypeToShowOnCard(null)
+    if (mapRef.current.getTarget().style) {
+      mapRef.current.getTarget().style.cursor = ''
+    }
+  }
+
   function showPointerAndCardIfVessel (feature, coordinates, overlayDict) {
+    console.log('showPointerAndCardIfVessel')
+    console.log(feature)
     const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = overlayDict
-    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
-      setVesselFeatureToShowOnCard(feature)
-
-      document.getElementById(vesselCardID).style.display = 'block'
-      document.getElementById(vesselTrackCardID).style.display = 'none'
-      document.getElementById(trackTypeCardID).style.display = 'none'
-
-      vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates())
-      mapRef.current.getTarget().style.cursor = 'pointer'
-    } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
-      setVesselFeatureToShowOnCard(feature)
-
-      document.getElementById(vesselTrackCardID).style.display = 'block'
-      document.getElementById(vesselCardID).style.display = 'none'
-      document.getElementById(trackTypeCardID).style.display = 'none'
-
-      mapRef.current.getTarget().style.cursor = 'pointer'
-      vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates())
-    } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
-      setTrackTypeToShowOnCard(feature.getProperties().trackType)
-
-      document.getElementById(trackTypeCardID).style.display = 'block'
-      document.getElementById(vesselTrackCardID).style.display = 'none'
-      document.getElementById(vesselCardID).style.display = 'none'
-
-      mapRef.current.getTarget().style.cursor = 'pointer'
-      trackTypeCardOverlay.setPosition(coordinates)
-    } else if (feature && feature.getId() && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
-      setRegulatoryFeatureToShowOnCard(feature)
-
-      mapRef.current.getTarget().style.cursor = 'pointer'
-    } else {
+    if (feature && feature.getId()) {
+      const featureId = feature.getId().toString()
+      console.log(featureId)
       document.getElementById(vesselCardID).style.display = 'none'
       document.getElementById(vesselTrackCardID).style.display = 'none'
       document.getElementById(trackTypeCardID).style.display = 'none'
+      mapRef.current.getTarget().style.cursor = 'pointer'
+      if (featureId.includes(LayersEnum.VESSELS.code)) {
+        setVesselFeatureToShowOnCard(feature)
 
-      setVesselFeatureToShowOnCard(null)
-      setRegulatoryFeatureToShowOnCard(null)
-      setTrackTypeToShowOnCard(null)
-      if (mapRef.current.getTarget().style) {
-        mapRef.current.getTarget().style.cursor = ''
+        document.getElementById(vesselCardID).style.display = 'block'
+
+        vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates())
+      } else if (featureId.includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
+        setVesselFeatureToShowOnCard(feature)
+
+        document.getElementById(vesselTrackCardID).style.display = 'block'
+
+        vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates())
+      } else if (featureId.includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
+        setTrackTypeToShowOnCard(feature.getProperties().trackType)
+        document.getElementById(trackTypeCardID).style.display = 'block'
+
+        trackTypeCardOverlay.setPosition(coordinates)
+      } else if (featureId.includes(`${LayersEnum.REGULATORY.code}`)) {
+        setRegulatoryFeatureToShowOnCard(feature)
       }
+    } else {
+      resetPointer()
     }
   }
 

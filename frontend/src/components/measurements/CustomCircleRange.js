@@ -20,7 +20,7 @@ const CustomCircleRange = (
     <Wrapper
       firstUpdate={firstUpdate}
       isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}>
-      <Header isFirst={true}>
+      <Header>
         Définir une valeur
       </Header>
       <Body>
@@ -120,8 +120,8 @@ const Header = styled.div`
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;
-  border-top-left-radius: ${props => props.isFirst ? '2px' : '0'};
-  border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 `
 
 const Wrapper = styled.div`

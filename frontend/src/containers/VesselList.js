@@ -13,7 +13,7 @@ import TagPicker from 'rsuite/lib/TagPicker'
 import Tag from 'rsuite/lib/Tag'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../domain/reducers/Map'
-import { Interactions, OPENLAYERS_PROJECTION } from '../domain/entities/map'
+import { InteractionTypes, OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import {
   resetTemporaryVesselsToHighLightOnMap,
   setTemporaryVesselsToHighLightOnMap
@@ -223,12 +223,12 @@ const VesselList = () => {
 
   const selectBox = () => {
     setVesselListModalIsOpen(false)
-    dispatch(setInteraction(Interactions.SQUARE))
+    dispatch(setInteraction(InteractionTypes.SQUARE))
   }
 
   const selectPolygon = () => {
     setVesselListModalIsOpen(false)
-    dispatch(setInteraction(Interactions.POLYGON))
+    dispatch(setInteraction(InteractionTypes.POLYGON))
   }
 
   const highLightOnMap = () => {
@@ -459,6 +459,7 @@ const VesselList = () => {
             <BackToVesselListButton
                 showBackToVesselListButton={showBackToVesselListButton}
                 onClick={() => goBackToVesselList()}
+                firstUpdate={firstUpdate.current}
             >
                 Revenir à la liste des navires
             </BackToVesselListButton>
@@ -518,7 +519,7 @@ const BackToVesselListButton = styled.button`
   color: ${COLORS.grayBackground};
   border-radius: 2px;
   margin-left: -90px;
-  animation: ${props => props.showBackToVesselListButton ? 'vessel-back-to-filter-button-opening' : 'vessel-back-to-filter-button-closing'} 0.2s ease forwards;
+  animation: ${props => props.firstUpdate ? '' : props.showBackToVesselListButton ? 'vessel-back-to-filter-button-opening' : 'vessel-back-to-filter-button-closing'} 0.2s ease forwards;
 
   @keyframes vessel-back-to-filter-button-opening {
     0%   { opacity: 0; }

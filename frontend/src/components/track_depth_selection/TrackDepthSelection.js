@@ -121,15 +121,16 @@ const TrackDepthSelectionContent = styled.div`
   background: ${COLORS.background};
   position: absolute;
   right: 10px;
-  margin-right: 217px;
-  opacity: 0;
+  margin-right: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '540px' : '217px'};
+  opacity: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
+  visibility: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
   padding: 15px 0 15px 0;
   font-size: 13px;
   color: ${COLORS.textGray};
+  transition: all 0.3s;
 
-  animation: ${props => props.firstUpdate ? '' : props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-track-depth-selection-opening' : 'vessel-track-depth-selection-closing'} 0.5s ease forwards,
-  ${props => props.rightMenuIsOpen && props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
+  animation: ${props => props.rightMenuIsOpen && props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 
   @keyframes vessel-track-depth-selection-opening {
     0%   { margin-right: 217px; opacity: 0; visibility: hidden; }

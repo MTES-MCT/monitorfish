@@ -10,6 +10,7 @@ import VesselVisibility from './containers/VesselVisibility'
 import VesselList from './containers/VesselList'
 import UpdatingVesselLoader from './containers/UpdatingVesselLoader'
 import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
+import Measurement from './containers/Measurement'
 
 function App () {
   return (
@@ -24,6 +25,7 @@ function App () {
           <VesselVisibility/>
           <VesselSidebar/>
           <UpdatingVesselLoader/>
+          <Measurement/>
 
           <APIWorker/>
         </Wrapper>

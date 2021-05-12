@@ -269,6 +269,8 @@ const Map = ({ isBackOffice }) => {
         trackTypeCardOverlay.setPosition(coordinates)
       } else if (featureId.includes(`${LayersEnum.REGULATORY.code}`)) {
         setRegulatoryFeatureToShowOnCard(feature)
+      } else {
+        resetPointer()
       }
     } else {
       resetPointer()

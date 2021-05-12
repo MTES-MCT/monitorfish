@@ -35,6 +35,8 @@ def merge(last_positions, current_segments):
         ["NaT", np.nan], [None, None]
     )
 
+    last_positions = last_positions.reset_index().rename(columns={"index": "id"})
+
     return last_positions
 
 

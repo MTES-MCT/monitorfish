@@ -18,7 +18,6 @@ import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
-@IdClass(LastPositionEntity.ReferenceCompositeKey::class)
 @TypeDefs(
         TypeDef(name = "duration",
                 typeClass = PostgreSQLIntervalType::class,
@@ -27,16 +26,17 @@ import javax.persistence.*
         TypeDef(name = "string-array",
                 typeClass = ListArrayType::class)
 )
-@Table(name = "last_positions", uniqueConstraints = [UniqueConstraint(columnNames = ["cfr", "external_immatriculation"])])
+@Table(name = "last_positions")
 data class LastPositionEntity(
         @Id
+        @Column(name = "id")
+        val id: Int,
         @Column(name = "cfr")
         val internalReferenceNumber: String? = null,
         @Column(name = "mmsi")
         val mmsi: String? = null,
         @Column(name = "ircs")
         val ircs: String? = null,
-        @Id
         @Column(name = "external_immatriculation")
         val externalReferenceNumber: String? = null,
         @Column(name = "vessel_name")
@@ -85,8 +85,6 @@ data class LastPositionEntity(
         val speciesOnboard: String? = null,
         @Column(name = "total_weight_onboard")
         val totalWeightOnboard: Double? = null) : Serializable {
-
-    data class ReferenceCompositeKey(val internalReferenceNumber: String? = null, val externalReferenceNumber: String? = null) : Serializable
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,

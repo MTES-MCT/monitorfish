@@ -129,7 +129,7 @@ function showWholeVectorIfSubZone (type, subZone) {
   })
 
   vectorSource.once(IRRETRIEVABLE_FEATURES_EVENT, event => {
-    console.error(event.error)
+    console.warn(event.error)
   })
 
   return vectorSource
@@ -153,7 +153,7 @@ function showBboxIfBigZone (type, subZone) {
   })
 
   vectorSource.once(IRRETRIEVABLE_FEATURES_EVENT, event => {
-    console.error(event.error)
+    console.warn(event.error)
   })
 
   return vectorSource
@@ -186,11 +186,7 @@ export function getGearCategory (layerGears, gears) {
       .find(gear => {
         return layerGearsArray
           .some(gearCode => {
-            if (gearCode === gear.code) {
-              return true
-            }
-
-            return false
+            return gearCode === gear.code
           })
       })
   }

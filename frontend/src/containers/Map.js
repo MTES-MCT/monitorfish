@@ -29,6 +29,7 @@ import { trackTypes } from '../domain/entities/vesselTrack'
 import { getOverlays, trackTypeCardID, vesselCardID, vesselTrackCardID } from '../components/overlays/overlays'
 import MapHistory from './MapHistory'
 import Zoom from 'ol/control/Zoom'
+import MeasurementLayer from '../layers/MeasurementLayer'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 const hitPixelTolerance = 3
@@ -80,6 +81,7 @@ const Map = () => {
           zoom: 6,
           minZoom: 3
         }),
+        units: 'm',
         controls: [
           new ScaleLine({ units: 'nautical' }),
           new Zoom({
@@ -311,6 +313,7 @@ const Map = () => {
             <VesselTrackLayer map={map} />
             <VesselsLayer map={map} mapRef={mapRef}/>
             <DrawLayer map={map} />
+            <MeasurementLayer map={map} />
             <RegulatoryLayers map={map} />
             <AdministrativeLayers map={map} />
 

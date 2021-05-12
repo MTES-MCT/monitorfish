@@ -39,7 +39,7 @@ const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zone
   })
 
   vectorSource.once(IRRETRIEVABLE_FEATURES_EVENT, event => {
-    console.error(event.error)
+    console.warn(event.error)
   })
 }
 

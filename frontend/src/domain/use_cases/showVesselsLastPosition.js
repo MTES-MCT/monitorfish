@@ -2,7 +2,7 @@ import { getVesselsLastPositionsFromAPI } from '../../api/fetch'
 import { setError } from '../reducers/Global'
 import { setVessels } from '../reducers/Vessel'
 
-const showVesselsLastPosition = () => (dispatch, getState) => {
+const showVesselsLastPosition = () => dispatch => {
   getVesselsLastPositionsFromAPI().then(vessels => {
     dispatch(setVessels(vessels))
   }).catch(error => {

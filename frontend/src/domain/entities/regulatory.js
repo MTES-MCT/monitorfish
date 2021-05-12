@@ -14,7 +14,7 @@ export const mapToRegulatoryZone = properties => {
     mandatoryDocuments: properties.documents_obligatoires,
     state: properties.etat,
     prohibitions: properties.interdictions,
-    technicalMeasures: properties.mesures_techniques,
+    technicalMeasurements: properties.mesures_techniques,
     period: properties.periodes,
     quantity: properties.quantites,
     size: properties.taille,

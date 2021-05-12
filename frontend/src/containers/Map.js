@@ -122,7 +122,7 @@ const Map = ({ isBackOffice }) => {
       handleMovingAndZoom()
     }, 100)
   }
-  // overlay list vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay
+
   function throttleAndHandlePointerMove (event, overlayDict) {
     if (event.dragging || timeoutForPointerMove) {
       if (timeoutForPointerMove) {
@@ -139,68 +139,47 @@ const Map = ({ isBackOffice }) => {
 
   function animateToRegulatoryLayer () {
     if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
-      if (map.getView().getZoom() < 8) {
-        setIsAnimating(true)
-        map.getView().animate({
-          center: [
-            mapState.animateToRegulatoryLayer.center[0],
-            mapState.animateToRegulatoryLayer.center[1]
-          ],
-          duration: 1000,
-          zoom: 8
-        }, () => {
-          setIsAnimating(false)
-          dispatch(resetAnimateToRegulatoryLayer())
-        })
-      } else {
-        setIsAnimating(true)
-        map.getView().animate({
-          center: [
-            mapState.animateToRegulatoryLayer.center[0],
-            mapState.animateToRegulatoryLayer.center[1]
-          ],
-          duration: 1000
-        }, () => {
-          setIsAnimating(false)
-          dispatch(resetAnimateToRegulatoryLayer())
-        })
+      const animateObject = {
+        center: [
+          mapState.animateToRegulatoryLayer.center[0],
+          mapState.animateToRegulatoryLayer.center[1]
+        ],
+        duration: 1000
       }
+      if (map.getView().getZoom() < 8) {
+        animateObject.zoom = 8
+      }
+      setIsAnimating(true)
+      map.getView().animate(animateObject, () => {
+        setIsAnimating(false)
+        dispatch(resetAnimateToRegulatoryLayer())
+      })
+    }
+  }
+
+  function createAnimateObject (resolution, duration, zoom) {
+    return {
+      center: [
+        mapState.animateToVessel.getGeometry().getCoordinates()[0] + resolution,
+        mapState.animateToVessel.getGeometry().getCoordinates()[1]
+      ],
+      duration,
+      zoom
     }
   }
 
   function animateToVessel () {
+    console.log("in animateToVessel")
     if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
       if (map.getView().getZoom() >= 8) {
         const resolution = map.getView().getResolution()
-        map.getView().animate({
-          center: [
-            mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
-            mapState.animateToVessel.getGeometry().getCoordinates()[1]
-          ],
-          duration: 1000,
-          zoom: undefined
-        })
+        map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
       } else {
-        map.getView().animate({
-          center: [
-            mapState.animateToVessel.getGeometry().getCoordinates()[0],
-            mapState.animateToVessel.getGeometry().getCoordinates()[1]
-          ],
-          duration: 800,
-          zoom: 8
-        }, () => {
+        map.getView().animate(createAnimateObject(0, 800, 8), () => {
           const resolution = map.getView().getResolution()
-          map.getView().animate({
-            center: [
-              mapState.animateToVessel.getGeometry().getCoordinates()[0] + (resolution * 200),
-              mapState.animateToVessel.getGeometry().getCoordinates()[1]
-            ],
-            duration: 500,
-            zoom: undefined
-          })
+          map.getView().animate(createAnimateObject(resolution * 200, 500, undefined))
         })
       }
-
       dispatch(resetAnimateToVessel())
     }
   }

@@ -7,12 +7,9 @@ import LayersEnum from '../domain/entities/layers'
 import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import MapAttributionsBox from '../components/map/MapAttributionsBox'
-import VesselCard from '../components/cards/VesselCard'
-import VesselTrackCard from '../components/cards/VesselTrackCard'
 import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideVesselNames, isMoving, resetAnimateToRegulatoryLayer, resetAnimateToVessel } from '../domain/reducers/Map'
-import { COLORS } from '../constants/constants'
 import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
 import LayerDetailsBox from '../components/map/LayerDetailsBox'
 import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../domain/entities/vessel'
@@ -24,12 +21,16 @@ import DrawLayer from '../layers/DrawLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
 import { getCoordinates } from '../utils'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
-import TrackTypeCard from '../components/cards/TrackTypeCard'
-import { trackTypes } from '../domain/entities/vesselTrack'
-import { getOverlays, trackTypeCardID, vesselCardID, vesselTrackCardID } from '../components/overlays/overlays'
+import { getOverlays } from '../components/overlays/overlays'
 import MapHistory from './MapHistory'
 import Zoom from 'ol/control/Zoom'
+<<<<<<< HEAD
 import MeasurementLayer from '../layers/MeasurementLayer'
+=======
+import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
+import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
+import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
+>>>>>>> [WIP] create overlay components and use useRef
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 const hitPixelTolerance = 3
@@ -45,10 +46,11 @@ const Map = ({ isBackOffice }) => {
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [initRenderIsDone, setInitRenderIsDone] = useState(false)
   const [cursorCoordinates, setCursorCoordinates] = useState('')
-  const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
-  const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
+  // oups ça a sauté et il fallait pas...
   const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
+  const [currentFeature, setCurrentFeature] = useState(null)
+  const [pointerMoveEvent, setPointerMoveEvent] = useState(null)
   const mapElement = useRef()
   const mapRef = useRef()
   mapRef.current = map
@@ -123,7 +125,7 @@ const Map = ({ isBackOffice }) => {
     }, 100)
   }
 
-  function throttleAndHandlePointerMove (event, overlayDict) {
+  function throttleAndHandlePointerMove (event) {
     if (event.dragging || timeoutForPointerMove) {
       if (timeoutForPointerMove) {
         lastEventForPointerMove = event
@@ -133,7 +135,7 @@ const Map = ({ isBackOffice }) => {
 
     timeoutForPointerMove = setTimeout(() => {
       timeoutForPointerMove = null
-      handlePointerMove(lastEventForPointerMove, overlayDict)
+      handlePointerMove(lastEventForPointerMove)
     }, 100)
   }
 
@@ -220,53 +222,43 @@ const Map = ({ isBackOffice }) => {
     }
   }
 
-  const handlePointerMove = (event, overlayDict) => {
+  const handlePointerMove = (event) => {
     if (event) {
+      // est-ce qu'on met cet event en state et dans ce cas quand il change on modifie nos composants?
       const pixel = mapRef.current.getEventPixel(event.originalEvent)
+      // ça ne retourne pas un tableau ?
       const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: hitPixelTolerance })
-
-      showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), overlayDict)
+      if (feature && feature.getId()) {
+        // C'est quoi exactement ?
+        // Est-ce qu'on utilise event ailleurs?
+        console.log("set feature wesh")
+        setCurrentFeature(feature)
+        setPointerMoveEvent(event)
+        if (feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
+          setRegulatoryFeatureToShowOnCard(feature)
+        }
+        mapRef.current.getTarget().style.cursor = 'pointer'
+      } else if (mapRef.current.getTarget().style) {
+        mapRef.current.getTarget().style.cursor = ''
+        setCurrentFeature(null)
+        setPointerMoveEvent(null)
+      }
+      //showPointerAndCardIfVessel(feature, mapRef.current.getCoordinateFromPixel(event.pixel), overlayDict)
       showCoordinatesInDMS(event)
     }
   }
 
-  function resetPointer () {
-    setVesselFeatureToShowOnCard(null)
-    setRegulatoryFeatureToShowOnCard(null)
-    setTrackTypeToShowOnCard(null)
-    if (mapRef.current.getTarget().style) {
-      mapRef.current.getTarget().style.cursor = ''
-    }
-  }
-
-  function showPointerAndCardIfVessel (feature, coordinates, overlayDict) {
-    console.log('showPointerAndCardIfVessel')
-    console.log(feature)
-    const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = overlayDict
+  /*function showPointerAndCardIfVessel (feature, coordinates, overlayDict) {
     if (feature && feature.getId()) {
       const featureId = feature.getId().toString()
-      console.log(featureId)
       document.getElementById(vesselCardID).style.display = 'none'
       document.getElementById(vesselTrackCardID).style.display = 'none'
       document.getElementById(trackTypeCardID).style.display = 'none'
-      mapRef.current.getTarget().style.cursor = 'pointer'
-      if (featureId.includes(LayersEnum.VESSELS.code)) {
+      
+      if (featureId.includes(LayersEnum.VESSELS.code) || featureId.includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
         setVesselFeatureToShowOnCard(feature)
-
-        document.getElementById(vesselCardID).style.display = 'block'
-
-        vesselCardOverlay.setPosition(feature.getGeometry().getCoordinates())
-      } else if (featureId.includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
-        setVesselFeatureToShowOnCard(feature)
-
-        document.getElementById(vesselTrackCardID).style.display = 'block'
-
-        vesselTrackCardOverlay.setPosition(feature.getGeometry().getCoordinates())
       } else if (featureId.includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
         setTrackTypeToShowOnCard(feature.getProperties().trackType)
-        document.getElementById(trackTypeCardID).style.display = 'block'
-
-        trackTypeCardOverlay.setPosition(coordinates)
       } else if (featureId.includes(`${LayersEnum.REGULATORY.code}`)) {
         setRegulatoryFeatureToShowOnCard(feature)
       } else {
@@ -275,13 +267,18 @@ const Map = ({ isBackOffice }) => {
     } else {
       resetPointer()
     }
-  }
+  }*/
 
   function showCoordinatesInDMS (event) {
     const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel)
     const coordinates = getCoordinates(clickedCoordinates, OPENLAYERS_PROJECTION)
     setCursorCoordinates(`${coordinates[0]} ${coordinates[1]}`)
   }
+  /*
+
+  <VesselTrackCardOverlay feature={currentFeature} />
+  <TrackTypeCardOverlay feature={currentFeature} map={map} pointerMoveEvent={pointerMoveEvent}/>
+  */
 
   return (
         <div>
@@ -295,14 +292,6 @@ const Map = ({ isBackOffice }) => {
             />
             <VesselTrackLayer map={map} />
             <VesselsLayer map={map} mapRef={mapRef}/>
-<<<<<<< HEAD
-            <DrawLayer map={map} />
-            <MeasurementLayer map={map} />
-            <RegulatoryLayers map={map} />
-            <AdministrativeLayers map={map} />
-
-=======
->>>>>>> code refactoring
             <VesselCardOverlay id={vesselCardID}>
                 {
                     vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null
@@ -333,39 +322,6 @@ const Map = ({ isBackOffice }) => {
         </div>
   )
 }
-
-const VesselCardOverlay = styled.div`
-  position: absolute;
-  top: -277px;
-  left: -185px;
-  width: 387px;
-  text-align: left;
-  background-color: ${COLORS.grayBackground};
-  border-radius: 2px;
-  z-index: 200;
-`
-
-const VesselTrackCardOverlay = styled.div`
-  position: absolute;
-  top: -170px;
-  left: -175px;
-  width: 350px;
-  text-align: left;
-  background-color: ${COLORS.grayBackground};
-  border-radius: 2px;
-  z-index: 300;
-`
-
-const TrackTypeCardOverlay = styled.div`
-  position: absolute;
-  top: -39px;
-  left: ${props => props.isBig ? '-170px' : '-100px'};
-  width: ${props => props.isBig ? '340px' : '200px'};;
-  text-align: left;
-  background-color: ${COLORS.grayBackground};
-  border-radius: 2px;
-  z-index: 100;
-`
 
 const MapContainer = styled.div`
   height: 100vh;

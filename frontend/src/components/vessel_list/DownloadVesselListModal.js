@@ -43,11 +43,15 @@ const DownloadVesselListModal = props => {
   const [valuesChecked, setValuesChecked] = useState([])
 
   useEffect(() => {
+    const columnsNotCheckedByDefault = [
+      CSVOptions.species.code,
+      CSVOptions.length.code,
+      CSVOptions.district.code
+    ]
+
     const values = Object.keys(CSVOptions)
       .map(value => CSVOptions[value].code)
-      .filter(value => value !== CSVOptions.species.code)
-      .filter(value => value !== CSVOptions.length.code)
-      .filter(value => value !== CSVOptions.district.code)
+      .filter(value => !columnsNotCheckedByDefault.includes(value))
 
     setValuesChecked(values || [])
   }, [])

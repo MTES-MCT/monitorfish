@@ -1,5 +1,6 @@
 import * as Comlink from 'comlink'
 import { mapToRegulatoryZone } from '../domain/entities/regulatory'
+import { vesselSize } from '../domain/entities/vessel'
 
 class MapperWorker {
   convertGeoJSONFeaturesToObject (features) {
@@ -39,7 +40,8 @@ class MapperWorker {
       fleetSegmentsFiltered,
       gearsFiltered,
       districtsFiltered,
-      speciesFiltered
+      speciesFiltered,
+      vesselsSizeValuesChecked
     } = filters
 
     if (countriesFiltered && countriesFiltered.length) {
@@ -70,7 +72,6 @@ class MapperWorker {
         }))
     }
 
-    console.log(speciesFiltered)
     if (speciesFiltered && speciesFiltered.length) {
       vessels = vessels.filter(vessel =>
         speciesFiltered.some(species => {
@@ -85,10 +86,49 @@ class MapperWorker {
         }))
     }
 
+    if (vesselsSizeValuesChecked && vesselsSizeValuesChecked.length) {
+      vessels = vessels.filter(vessel => {
+        return this.evaluateVesselsSize(vesselsSizeValuesChecked, vessel)
+      })
+    }
+
     return vessels
   }
 
-  getUniqueSpeciesAndDistricts(vessels) {
+  evaluateVesselsSize (vesselsSizeValuesChecked, vessel) {
+    if (vesselsSizeValuesChecked.length === 3) {
+      return true
+    }
+
+    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
+      vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
+      return vesselSize.BELOW_TEN_METERS.evaluate(vessel.length) || vesselSize.ABOVE_TWELVE_METERS.evaluate(vessel.length)
+    }
+
+    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
+      vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code)) {
+      return vesselSize.BELOW_TWELVE_METERS.evaluate(vessel.length)
+    }
+
+    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code) &&
+      vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
+      return true
+    }
+
+    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code)) {
+      return vesselSize.BELOW_TEN_METERS.evaluate(vessel.length)
+    }
+
+    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code)) {
+      return vesselSize.BELOW_TWELVE_METERS.evaluate(vessel.length)
+    }
+
+    if (vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
+      return vesselSize.ABOVE_TWELVE_METERS.evaluate(vessel.length)
+    }
+  }
+
+  getUniqueSpeciesAndDistricts (vessels) {
     const species = vessels
       .map(vessel => vessel.speciesArray)
       .flat()

@@ -8,13 +8,21 @@ const MapperWorker = Comlink.wrap(worker)
 const getFilteredVessels = (vessels, filters) => async () => {
   const worker = await new MapperWorker()
 
-  return worker.getFilteredVessels(vessels, filters).then(filteredVessels => {
+  const workerFilters = getFiltersWithoutZonesSelected(filters)
+
+  return worker.getFilteredVessels(vessels, workerFilters).then(filteredVessels => {
     if (filters.zonesSelected && filters.zonesSelected.length) {
       filteredVessels = filterByZones(filteredVessels, filters.zonesSelected)
     }
 
     return filteredVessels
   })
+}
+
+function getFiltersWithoutZonesSelected (filters) {
+  const workerFilters = { ...filters }
+  workerFilters.zonesSelected = null
+  return workerFilters
 }
 
 function filterByZones (filteredVessels, zonesSelected) {

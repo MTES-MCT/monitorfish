@@ -76,14 +76,23 @@ function Home () {
 }
 
 function Backoffice () {
-  return <Wrapper>
+  return <BackofficeWrapper>
     <Map isBackOffice/>
     <LayersSidebar/>
     <APIWorker/>
-  </Wrapper>
+  </BackofficeWrapper>
 }
 
 const Wrapper = styled.div`
+  font-size: 13px;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+`
+
+const BackofficeWrapper = styled.div`
   font-size: 13px;
   text-align: center;
   height: 100%;

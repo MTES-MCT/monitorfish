@@ -4,15 +4,15 @@ import { COLORS } from '../../constants/constants'
 import { getDate } from '../../utils'
 import { StrongText, NoValue, Red, Green } from './Controls.style'
 
-const ControlField = ({ field, type }) => {
+const ControlField = ({ field, type, isFirst }) => {
   const {
     control,
     text
   } = field
 
-  return <Fields key={type}>
+  return <Fields key={type} isFirst={isFirst}>
     <ControlResumeLine>
-      <ResumeText>{text}<StrongText>le {getDate(control.controlDatetimeUtc)}</StrongText></ResumeText>
+      <ResumeText isFirst={isFirst}>{text}<StrongText>le {getDate(control.controlDatetimeUtc)}</StrongText></ResumeText>
     </ControlResumeLine>
     <ControlResumeLine>
       <LastControResumeElement>Unité <StrongText>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControResumeElement>
@@ -26,11 +26,11 @@ const LastControResumeElement = styled.span`
 `
 
 const ResumeText = styled.span`
-  margin: 5px 0 0 0;
+  margin: ${props => props.isFirst ? '5px' : '0'} 0 0 0;
 `
 
 const Fields = styled.div`
-  padding: 10px 5px 5px 20px; 
+  padding: ${props => props.isFirst ? '10px' : '0'} 5px ${props => props.isFirst ? '5px' : '10px'} 20px; 
   width: 100%;
   margin: 0;
   line-height: 0.2em;

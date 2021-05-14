@@ -10,7 +10,7 @@ import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers
 import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 
-export const ONE_MINUTE = 60000
+export const TWO_MINUTES = 120000
 
 const APIWorker = () => {
   const error = useSelector(state => state.global.error)
@@ -28,7 +28,7 @@ const APIWorker = () => {
       dispatch(setIsUpdatingVessels())
       dispatch(showAllVessels())
       dispatch(updateVesselTrackAndSidebar())
-    }, ONE_MINUTE)
+    }, TWO_MINUTES)
 
     return () => {
       clearInterval(interval)

@@ -39,6 +39,10 @@ export const CSVOptions = {
     code: 'species',
     name: 'Espèces à bord'
   },
+  length: {
+    code: 'length',
+    name: 'Longueur'
+  },
   flagState: {
     code: 'flagState',
     name: 'Pavillon'
@@ -67,7 +71,6 @@ export const CSVOptions = {
     code: 'speed',
     name: 'Vitesse'
   }
-
 }
 
 export const getLastPositionTimeAgoLabels = () => {

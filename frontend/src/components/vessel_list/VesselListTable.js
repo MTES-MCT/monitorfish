@@ -66,7 +66,7 @@ const VesselListTable = props => {
             </VesselsCount>
             <Table
                 virtualized
-                height={props.seeMoreIsOpen ? 560 : 610}
+                height={props.seeMoreIsOpen ? 460 : 510}
                 width={1597}
                 rowHeight={36}
                 data={getVessels()}
@@ -170,6 +170,15 @@ const VesselListTable = props => {
                   </Column>
                   : null
               }
+              {
+                props.filters.vesselsSizeValuesChecked && props.filters.vesselsSizeValuesChecked.length
+                  ? <Column width={100}>
+                    <HeaderCell>Longueur</HeaderCell>
+                    <Cell dataKey="length" />
+                  </Column>
+                  : null
+              }
+
             </Table>
         </TableContent>
   )

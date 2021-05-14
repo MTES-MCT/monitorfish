@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import { getLastPositionTimeAgoLabels } from './dataFormatting'
@@ -11,8 +11,22 @@ import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.s
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import Countries from 'i18n-iso-countries'
+import Checkbox from 'rsuite/lib/Checkbox'
+import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
+import { vesselSize } from '../../domain/entities/vessel'
 
-const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gears, species, districts, zones, geometrySelection, seeMore }) => {
+const VesselListFilters = ({
+  lastPositionTimeAgo,
+  countries,
+  fleetSegments,
+  gears,
+  species,
+  districts,
+  zones,
+  geometrySelection,
+  seeMore,
+  size
+}) => {
   const { current: countriesField } = useRef(Object.keys(Countries.getAlpha2Codes()).map(country => {
     return {
       value: country.toLowerCase(),
@@ -75,7 +89,7 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
       : null
   }, [zones.zonesSelected])
 
-  function renderMenuItem (item) {
+  function renderTagPickerMenuItem (item) {
     return (
       <Label>
         {item.label}
@@ -83,7 +97,7 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
     )
   }
 
-  function renderValue (items) {
+  function renderTagPickerValue (items) {
     return items.map((tag, index) => (
       <Tag key={index}>
         {tag.label}
@@ -91,7 +105,7 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
     ))
   }
 
-  const tagPickerStyle = { width: 180, margin: '2px 10px 10px 0', verticalAlign: 'top' }
+  const tagPickerStyle = { width: 160, margin: '2px 10px 10px 0', verticalAlign: 'top' }
 
   return (
     <Filters>
@@ -114,17 +128,17 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
         data={countriesField}
         placeholder="Nationalité"
         onChange={change => countries.setCountriesFiltered(change)}
-        renderMenuItem={(_, item) => renderMenuItem(item)}
-        renderValue={(_, items) => renderValue(items)}
+        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_, items) => renderTagPickerValue(items)}
       />
       <TagPicker
         value={fleetSegments.fleetSegmentsFiltered}
         style={tagPickerStyle}
         data={fleetSegmentsField}
-        placeholder="Segments de flotte"
+        placeholder="Seg. de flotte"
         onChange={change => fleetSegments.setFleetSegmentsFiltered(change)}
-        renderMenuItem={(_, item) => renderMenuItem(item)}
-        renderValue={(_, items) => renderValue(items)}
+        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_, items) => renderTagPickerValue(items)}
       />
       <TagPicker
         value={gears.gearsFiltered}
@@ -132,8 +146,8 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
         data={gearsField}
         placeholder="Engins à bord"
         onChange={change => gears.setGearsFiltered(change)}
-        renderMenuItem={(_, item) => renderMenuItem(item)}
-        renderValue={(_, items) => renderValue(items)}
+        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_, items) => renderTagPickerValue(items)}
       />
       <TagPicker
         value={species.speciesFiltered}
@@ -141,8 +155,8 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
         data={speciesField}
         placeholder="Espèces à bord"
         onChange={change => species.setSpeciesFiltered(change)}
-        renderMenuItem={(_, item) => renderMenuItem(item)}
-        renderValue={(_, items) => renderValue(items)}
+        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_, items) => renderTagPickerValue(items)}
       />
       <ZoneFilter>
         <MultiCascader
@@ -168,14 +182,28 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
         seeMore.seeMoreIsOpen
           ? <>
             <TagPicker
-              value={districtsField.districtsFiltered}
+              value={districts.districtsFiltered}
               style={tagPickerStyle}
               data={districtsField}
               placeholder="Quartiers"
               onChange={change => districts.setDistrictsFiltered(change)}
-              renderMenuItem={(_, item) => renderMenuItem(item)}
-              renderValue={(_, items) => renderValue(items)}
+              renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
+              renderValue={(_, items) => renderTagPickerValue(items)}
             />
+            <VesselSize>
+              Taille du navire
+            </VesselSize>
+            <CheckboxGroup
+              inline
+              name="checkboxList"
+              value={size.vesselsSizeValuesChecked}
+              onChange={size.setVesselsSizeValuesChecked}
+              style={{ display: 'inline-block', color: COLORS.textGray }}
+            >
+              <Checkbox value={vesselSize.BELOW_TEN_METERS.code}><Gray>Moins de 10 m</Gray></Checkbox>
+              <Checkbox value={vesselSize.BELOW_TWELVE_METERS.code}><Gray>Moins de 12 m</Gray></Checkbox>
+              <Checkbox value={vesselSize.ABOVE_TWELVE_METERS.code}><Gray>Plus de 12 m</Gray></Checkbox>
+            </CheckboxGroup>
             <br/>
           </>
           : null
@@ -188,6 +216,20 @@ const VesselListFilters = ({ lastPositionTimeAgo, countries, fleetSegments, gear
     </Filters>
   )
 }
+
+const Gray = styled.span`
+  color: ${COLORS.textGray};
+  margin-left: 2px;
+  margin-right: 5px;
+`
+
+const VesselSize = styled.span`
+  padding-top: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 20px;
+  margin-right: 10px;
+`
 
 const SeeMore = styled.span`
   text-decoration: underline;
@@ -247,6 +289,8 @@ const Filters = styled.div`
   font-size: 13px;
   margin-top: 15px;
   margin-bottom: 15px;
+  max-height: 145px;
+  overflow: auto;
 `
 
 const BoxFilter = styled(BoxFilterSVG)`

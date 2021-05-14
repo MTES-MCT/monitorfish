@@ -115,6 +115,7 @@ export function getVesselTableObjects (vessel, coordinates) {
     vesselName: vessel.getProperties().vesselName,
     course: vessel.getProperties().course,
     speed: vessel.getProperties().speed,
+    length: vessel.getProperties().length,
     flagState: vessel.getProperties().flagState.toLowerCase(),
     mmsi: vessel.getProperties().mmsi,
     internalReferenceNumber: vessel.getProperties().internalReferenceNumber,

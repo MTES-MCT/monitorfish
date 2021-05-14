@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'rsuite/lib/Modal'
@@ -7,11 +7,8 @@ import { ReactComponent as VesselListSVG } from '../components/icons/Icone_liste
 import { COLORS } from '../constants/constants'
 import { getZonesAndSubZonesPromises } from '../domain/entities/layers'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../domain/reducers/Map'
-import { InteractionTypes, OPENLAYERS_PROJECTION } from '../domain/entities/map'
-import {
-  resetTemporaryVesselsToHighLightOnMap,
-  setTemporaryVesselsToHighLightOnMap
-} from '../domain/reducers/Vessel'
+import { InteractionTypes } from '../domain/entities/map'
+import { resetTemporaryVesselsToHighLightOnMap, setTemporaryVesselsToHighLightOnMap } from '../domain/reducers/Vessel'
 import VesselListTable from '../components/vessel_list/VesselListTable'
 import DownloadVesselListModal from '../components/vessel_list/DownloadVesselListModal'
 import getAdministrativeZoneGeometry from '../domain/use_cases/getAdministrativeZoneGeometry'
@@ -60,6 +57,7 @@ const VesselList = () => {
   const [gearsFiltered, setGearsFiltered] = useState([])
   const [speciesFiltered, setSpeciesFiltered] = useState([])
   const [districtsFiltered, setDistrictsFiltered] = useState([])
+  const [vesselsSizeValuesChecked, setVesselsSizeValuesChecked] = useState([])
   const zonesSelected = useSelector(state => state.map.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
 
@@ -129,7 +127,8 @@ const VesselList = () => {
         fleetSegmentsFiltered,
         gearsFiltered,
         districtsFiltered,
-        speciesFiltered
+        speciesFiltered,
+        vesselsSizeValuesChecked
       }
 
       dispatch(getFilteredVessels(vessels, filters))
@@ -146,7 +145,8 @@ const VesselList = () => {
     fleetSegmentsFiltered,
     gearsFiltered,
     districtsFiltered,
-    speciesFiltered
+    speciesFiltered,
+    vesselsSizeValuesChecked
   ])
 
   useEffect(() => {
@@ -337,6 +337,10 @@ const VesselList = () => {
                             seeMoreIsOpen,
                             setSeeMoreIsOpen
                           }}
+                          size={{
+                            vesselsSizeValuesChecked,
+                            setVesselsSizeValuesChecked
+                          }}
                         />
                         <VesselListTable
                             vessels={vessels}
@@ -348,7 +352,8 @@ const VesselList = () => {
                             handleChange={handleChangeModifiableKey}
                             seeMoreIsOpen={seeMoreIsOpen}
                             filters={{
-                              districtsFiltered
+                              districtsFiltered,
+                              vesselsSizeValuesChecked
                             }}
                         />
                     </Modal.Body>

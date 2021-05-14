@@ -4,9 +4,8 @@ import Overlay from 'ol/Overlay'
 import VesselCard from '../cards/VesselCard'
 import { COLORS } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
-export const vesselCardID = 'vessel-card'
 
-const VesselCardOverlay = ({ feature }) => {
+const VesselCardOverlay = ({ feature, map }) => {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
@@ -28,29 +27,26 @@ const VesselCardOverlay = ({ feature }) => {
     },
     [overlayRef, overlayObjectRef]
   )
+  useEffect(() => {
+    if (map) {
+      map.addOverlay(overlayObjectRef.current)
+    }
+  }, [map])
 
   useEffect(() => {
-    console.log('vesselCardOverlay useEffect')
-    // console.log(feature)
     if (overlayRef.current && overlayObjectRef.current) {
       if (feature && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
         setVesselFeatureToShowOnCard(feature)
-        console.log("display block ho !")
-        overlayObjectRef.current.options.element.style.display = 'block'
-        overlayObjectRef.current.element.style.display = 'block'
-        console.log(overlayRef.current)
-        console.log(feature.getGeometry().getCoordinates())
+        overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
-        console.log(overlayObjectRef.current)
       } else {
-        console.log("reset")
-        overlayObjectRef.current.options.element.display = 'none'
+        overlayRef.current.style.display = 'none'
         setVesselFeatureToShowOnCard(null)
       }
     }
   }, [feature, vesselFeatureToShowOnCard, overlayRef, overlayObjectRef])
   return (
-    <VesselCardOverlayComponent id={vesselCardID} ref={overlayCallback}>
+    <VesselCardOverlayComponent ref={overlayCallback}>
       {
         vesselFeatureToShowOnCard ? <VesselCard vessel={vesselFeatureToShowOnCard} /> : null
       }

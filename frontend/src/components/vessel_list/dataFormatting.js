@@ -73,42 +73,40 @@ export const CSVOptions = {
   }
 }
 
-export const getLastPositionTimeAgoLabels = () => {
-  return [
-    {
-      label: '1 heure',
-      value: 1
-    },
-    {
-      label: '2 heures',
-      value: 2
-    },
-    {
-      label: '3 heures',
-      value: 3
-    },
-    {
-      label: '4 heures',
-      value: 4
-    },
-    {
-      label: '5 heures',
-      value: 5
-    },
-    {
-      label: '6 heures',
-      value: 6
-    },
-    {
-      label: '12 heures',
-      value: 12
-    },
-    {
-      label: '24 heures',
-      value: 24
-    }
-  ]
-}
+export const lastPositionTimeAgoLabels = [
+  {
+    label: '1 heure',
+    value: 1
+  },
+  {
+    label: '2 heures',
+    value: 2
+  },
+  {
+    label: '3 heures',
+    value: 3
+  },
+  {
+    label: '4 heures',
+    value: 4
+  },
+  {
+    label: '5 heures',
+    value: 5
+  },
+  {
+    label: '6 heures',
+    value: 6
+  },
+  {
+    label: '12 heures',
+    value: 12
+  },
+  {
+    label: '24 heures',
+    value: 24
+  }
+]
 
 export function getVesselTableObjects (vessel, coordinates) {
   return {

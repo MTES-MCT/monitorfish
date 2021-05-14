@@ -48,9 +48,10 @@ class MapperWorker {
       vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel.flagState === country))
     }
 
-    const vesselIsHidden = new Date()
-    vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
     if (lastPositionTimeAgoFilter) {
+      const vesselIsHidden = new Date()
+      vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
+
       vessels = vessels.filter(vessel => {
         const vesselDate = new Date(vessel.dateTimeTimestamp)
 

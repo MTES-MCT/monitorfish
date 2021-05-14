@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import { getLastPositionTimeAgoLabels } from './dataFormatting'
+import { lastPositionTimeAgoLabels } from './dataFormatting'
 import TagPicker from 'rsuite/lib/TagPicker'
 import MultiCascader from 'rsuite/lib/MultiCascader'
 import { layersType as LayersType } from '../../domain/entities/layers'
@@ -119,7 +119,7 @@ const VesselListFilters = ({
           placeholder="x heures..."
           value={lastPositionTimeAgo.lastPositionTimeAgoFilter}
           onChange={lastPositionTimeAgo.setLastPositionTimeAgoFilter}
-          data={getLastPositionTimeAgoLabels()}
+          data={lastPositionTimeAgoLabels}
         />
       </TimeAgoSelect>
       <TagPicker

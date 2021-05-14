@@ -10,8 +10,8 @@ const LastControlZone = props => {
       <Title>
           Derniers Contrôles
       </Title>
-      <ControlField field={lastControlList.SEA} type={controlType.SEA} />
-      <ControlField field={lastControlList.LAND} type={controlType.LAND} />
+      <ControlField field={lastControlList.SEA} type={controlType.SEA} isFirst={true} />
+      <ControlField field={lastControlList.LAND} type={controlType.LAND} isFirst={false} />
       </Zone>
     : null
 }

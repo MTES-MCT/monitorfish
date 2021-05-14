@@ -43,3 +43,18 @@ export function vesselsAreEquals (firstVessel, secondVessel) {
         ? firstVessel.externalReferenceNumber === secondVessel.externalReferenceNumber
         : false)
 }
+
+export const vesselSize = {
+  BELOW_TEN_METERS: {
+    code: 'BELOW_TEN_METERS',
+    evaluate: value => value <= 10
+  },
+  BELOW_TWELVE_METERS: {
+    code: 'BELOW_TWELVE_METERS',
+    evaluate: value => value <= 12
+  },
+  ABOVE_TWELVE_METERS: {
+    code: 'ABOVE_TWELVE_METERS',
+    evaluate: value => value >= 12
+  }
+}

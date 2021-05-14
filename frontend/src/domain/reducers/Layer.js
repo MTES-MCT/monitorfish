@@ -10,9 +10,13 @@ const regulatorySlice = createSlice({
     layers: [],
     showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
     lastShowedFeatures: [],
-    layersAndAreas: []
+    layersAndAreas: [],
+    administrativeZonesGeometryCache: []
   },
   reducers: {
+    addAdministrativeZoneGeometryToCache (state, action) {
+      state.administrativeZonesGeometryCache = state.administrativeZonesGeometryCache.concat(action.payload)
+    },
     addLayer (state, action) {
       state.layers = state.layers.concat(action.payload)
     },
@@ -100,7 +104,8 @@ export const {
   removeShowedLayer,
   pushLayerAndArea,
   removeLayerAndArea,
-  setLastShowedFeatures
+  setLastShowedFeatures,
+  addAdministrativeZoneGeometryToCache
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

@@ -1,43 +1,59 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import VesselTrackCard from '../cards/VesselTrackCard'
 import { COLORS } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
 
-const VesselTrackCardOverlay = ({ feature }) => {
+const VesselTrackCardOverlay = ({ map, feature }) => {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
-  const vesselTrackCardID = 'vessel-track-card'
-  // memo ?
-  const documentElement = document.getElementById(vesselTrackCardID)
-  const overlay = new Overlay({
-    element: documentElement,
-    autoPan: true,
-    autoPanAnimation: {
-      duration: 400
+  const overlayRef = useRef(null)
+  const overlayObjectRef = useRef(null)
+  const overlayCallback = useCallback(
+    (e) => {
+      overlayRef.current = e
+      if (e) {
+        overlayObjectRef.current = new Overlay({
+          element: e,
+          autoPan: true,
+          autoPanAnimation: {
+            duration: 400
+          },
+          className: 'ol-overlay-container ol-selectable'
+        })
+      } else {
+        overlayObjectRef.current = null
+      }
     },
-    className: 'ol-overlay-container ol-selectable'
-  })
-  const showOverlay = (documentElement) => {
-    documentElement.style.display = 'block'
-    overlay.setPosition(feature.getGeometry().getCoordinates())
+    [overlayRef, overlayObjectRef]
+  )
+
+  useEffect(() => {
+    if (map) {
+      map.addOverlay(overlayObjectRef.current)
+    }
+  }, [map])
+
+  const showOverlay = () => {
+    overlayRef.current.style.display = 'block'
+    overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
   }
   useEffect(() => {
-    if (documentElement) {
+    if (overlayRef.current && overlayObjectRef.current) {
       if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
         showOverlay()
         setVesselFeatureToShowOnCard(feature.getProperties().trackType)
-      } else if (feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
-        showOverlay(documentElement)
+      } else if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
+        showOverlay()
         setVesselFeatureToShowOnCard(feature)
       } else {
         setVesselFeatureToShowOnCard(null)
-        documentElement.style.display = 'none'
+        overlayRef.current.style.display = 'none'
       }
     }
   }, [feature])
   return (
-    <VesselTrackCardOverlayComponent id={vesselTrackCardID}>
+    <VesselTrackCardOverlayComponent ref={overlayCallback}>
       {
         vesselFeatureToShowOnCard ? <VesselTrackCard vessel={vesselFeatureToShowOnCard} /> : null
       }

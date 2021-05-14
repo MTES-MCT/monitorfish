@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import TrackTypeCard from '../cards/VesselTrackCard'
@@ -6,36 +6,51 @@ import { COLORS } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
 import { trackTypes } from '../../domain/entities/vesselTrack'
 
-const TrackTypeCardOverlay = ({ map, pointerMoveEvent, feature }) => {
+const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
   const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
-  const trackTypeCardID = 'track-line-card'
-  // memo ?
-  const documentElement = document.getElementById(trackTypeCardID)
-  const overlay = new Overlay({
-    element: documentElement,
-    autoPan: true,
-    autoPanAnimation: {
-      duration: 400
+  const overlayRef = useRef(null)
+  const overlayObjectRef = useRef(null)
+
+  const overlayCallback = useCallback(
+    (e) => {
+      overlayRef.current = e
+      if (e) {
+        overlayObjectRef.current = new Overlay({
+          element: e,
+          autoPan: true,
+          autoPanAnimation: {
+            duration: 400
+          },
+          className: 'ol-overlay-container ol-selectable'
+        })
+      } else {
+        overlayObjectRef.current = null
+      }
     },
-    className: 'ol-overlay-container ol-selectable'
-  })
+    [overlayRef, overlayObjectRef]
+  )
 
   useEffect(() => {
-    if (documentElement) {
-      if (documentElement && feature && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
+    if (map) {
+      map.addOverlay(overlayObjectRef.current)
+    }
+  }, [map])
+
+  useEffect(() => {
+    if (overlayRef.current && overlayObjectRef.current) {
+      if (feature && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
         setTrackTypeToShowOnCard(feature.getProperties().trackType)
-        documentElement.style.display = 'block'
-        overlay.setPosition(map.getCoordinateFromPixel(pointerMoveEvent.pixel))
-        // Comment avoir la position qui est liée à un evetn du coup ?!
+        overlayRef.current.style.display = 'block'
+        overlayRef.current.setPosition(map.getCoordinateFromPixel(pointerMoveEventPixel))
       } else {
         setTrackTypeToShowOnCard(null)
-        documentElement.style.display = 'none'
+        overlayRef.current.style.display = 'none'
       }
     }
   // else est-ce qu'on reset ?
   }, [trackTypeToShowOnCard])
   return (
-    <trackTypeCardOverlayComponent id={trackTypeCardID} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>
+    <trackTypeCardOverlayComponent ref={overlayCallback} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>
     {
       trackTypeToShowOnCard ? <TrackTypeCard isBig={trackTypeToShowOnCard === trackTypes.SEARCHING} trackType={trackTypeToShowOnCard} /> : null
     }

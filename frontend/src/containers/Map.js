@@ -29,11 +29,16 @@ import MeasurementLayer from '../layers/MeasurementLayer'
 =======
 import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 >>>>>>> [WIP] create overlay components and use useRef
 =======
 >>>>>>> clean code, remove consol log
+=======
+import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
+import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
+>>>>>>> add overlay components
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 const hitPixelTolerance = 3
@@ -49,10 +54,11 @@ const Map = ({ isBackOffice }) => {
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [initRenderIsDone, setInitRenderIsDone] = useState(false)
   const [cursorCoordinates, setCursorCoordinates] = useState('')
-  // oups ça a sauté et il fallait pas...
   const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
+  // utilisé que pour TrackTypeCardOverlay
+  const [handlePointerMoveEventPixel, setHandlePointerMoveEventPixel] = useState(null)
   const mapElement = useRef()
   const mapRef = useRef()
   mapRef.current = map
@@ -225,10 +231,9 @@ const Map = ({ isBackOffice }) => {
 
   const handlePointerMove = (event) => {
     if (event) {
-      // est-ce qu'on met cet event en state et dans ce cas quand il change on modifie nos composants?
       const pixel = mapRef.current.getEventPixel(event.originalEvent)
-      // ça ne retourne pas un tableau ?
       const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: hitPixelTolerance })
+      setHandlePointerMoveEventPixel(event.pixel)
       if (feature && feature.getId()) {
         setCurrentFeature(feature)
         if (feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
@@ -262,8 +267,11 @@ const Map = ({ isBackOffice }) => {
             <VesselTrackLayer map={map} />
             <VesselsLayer map={map} mapRef={mapRef}/>
             <VesselCardOverlay map={map} feature={currentFeature} />
+            <TrackTypeCardOverlay map={map} pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature} />
+            <VesselTrackCardOverlay map={map} feature={currentFeature} />
+            <DrawLayer map={map} />
             <MeasurementLayer map={map} />
-            <DrawLayer map={map} /></>}
+            </>}
             <BaseLayer map={map} />
             <RegulatoryLayers map={map} />
             <AdministrativeLayers map={map} />

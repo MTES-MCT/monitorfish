@@ -18,6 +18,12 @@ export const calculateSplitPointCoords = (startNode, nextNode, distanceBetweenNo
   return [x, y]
 }
 
+/**
+ * Get coordinates in hours format
+ * @param {string[]} coordinates - Coordinates ([longitude, latitude]) in decimal format.
+ * @param {string} projection - The project of the entered coordinates.
+ * @returns {string[]} coordinates - The [latitude, longitude] coordinates in hours WGS format
+ */
 export const getCoordinates = (coordinates, projection) => {
   const transformedCoordinates = transform(coordinates, projection, WSG84_PROJECTION)
   const hourCoordinates = toStringHDMS(transformedCoordinates)

@@ -7,6 +7,7 @@ import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { getDate, getDateTime } from '../../utils'
+import { CSVOptions } from './dataFormatting'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -23,65 +24,13 @@ const optionsCSV = {
 
 const csvExporter = new ExportToCsv(optionsCSV)
 
-// These properties are ordered for the CSV column order
-const options = {
-  targetNumber: {
-    code: 'targetNumber',
-    name: 'Priorite'
-  },
-  vesselName: {
-    code: 'vesselName',
-    name: 'Nom'
-  },
-  externalReferenceNumber: {
-    code: 'externalReferenceNumber',
-    name: 'Marq. Ext.'
-  },
-  ircs: {
-    code: 'ircs',
-    name: 'C/S'
-  },
-  mmsi: {
-    code: 'mmsi',
-    name: 'MMSI'
-  },
-  internalReferenceNumber: {
-    code: 'internalReferenceNumber',
-    name: 'CFR'
-  },
-  flagState: {
-    code: 'flagState',
-    name: 'Pavillon'
-  },
-  dateTime: {
-    code: 'dateTime',
-    name: 'GDH (UTC)'
-  },
-  latitude: {
-    code: 'latitude',
-    name: 'Latitude'
-  },
-  longitude: {
-    code: 'longitude',
-    name: 'Longitude'
-  },
-  course: {
-    code: 'course',
-    name: 'Cap'
-  },
-  speed: {
-    code: 'speed',
-    name: 'Vitesse'
-  }
-}
-
 function orderToCSVColumnOrder (valuesChecked, filteredVesselObject) {
-  return Object.keys(options)
+  return Object.keys(CSVOptions)
     .filter(value => {
       return valuesChecked.some(valueChecked => value === valueChecked)
     }).reduce(
       (obj, key) => {
-        obj[options[key].name] = filteredVesselObject[options[key].name]
+        obj[CSVOptions[key].name] = filteredVesselObject[CSVOptions[key].name]
         return obj
       },
       {}
@@ -94,12 +43,21 @@ const DownloadVesselListModal = props => {
   const [valuesChecked, setValuesChecked] = useState([])
 
   useEffect(() => {
-    const values = Object.keys(options).map(value => options[value].code)
+    const columnsNotCheckedByDefault = [
+      CSVOptions.species.code,
+      CSVOptions.length.code,
+      CSVOptions.district.code
+    ]
+
+    const values = Object.keys(CSVOptions)
+      .map(value => CSVOptions[value].code)
+      .filter(value => !columnsNotCheckedByDefault.includes(value))
+
     setValuesChecked(values || [])
   }, [])
 
   const handleCheckAll = (value, checked) => {
-    const nextValue = checked ? Object.keys(options).map(value => options[value].code) : []
+    const nextValue = checked ? Object.keys(CSVOptions).map(value => CSVOptions[value].code) : []
 
     setValuesChecked(nextValue)
     setIndeterminate(false)
@@ -107,8 +65,8 @@ const DownloadVesselListModal = props => {
   }
   const handleChange = value => {
     setValuesChecked(value)
-    setIndeterminate(value.length > 0 && value.length < Object.keys(options).length)
-    setCheckAll(value.length === options.length)
+    setIndeterminate(value.length > 0 && value.length < Object.keys(CSVOptions).length)
+    setCheckAll(value.length === CSVOptions.length)
   }
 
   const download = () => {
@@ -119,9 +77,9 @@ const DownloadVesselListModal = props => {
 
         valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
-            case options.dateTime.code: filteredVesselObject[options[valueChecked].name] = getDateTime(vessel[valueChecked], true); break
-            case options.flagState.code: filteredVesselObject[options[valueChecked].name] = countries.getName(vessel[valueChecked], 'fr'); break
-            default: filteredVesselObject[options[valueChecked].name] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
+            case CSVOptions.dateTime.code: filteredVesselObject[CSVOptions[valueChecked].name] = getDateTime(vessel[valueChecked], true); break
+            case CSVOptions.flagState.code: filteredVesselObject[CSVOptions[valueChecked].name] = countries.getName(vessel[valueChecked], 'fr'); break
+            default: filteredVesselObject[CSVOptions[valueChecked].name] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
           }
         })
 
@@ -158,23 +116,27 @@ const DownloadVesselListModal = props => {
                 >
                     <Columns>
                         <div>
-                            <Checkbox value={options.targetNumber.code}>Priorité</Checkbox><br/>
-                            <Checkbox value={options.vesselName.code}>Nom</Checkbox><br/>
-                            <Checkbox value={options.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
-                            <Checkbox value={options.ircs.code}>Call Sign (IRCS)</Checkbox><br/>
-                            <Checkbox value={options.mmsi.code}>MMSI</Checkbox><br/>
-                            <Checkbox value={options.internalReferenceNumber.code}>CFR</Checkbox><br/>
-                            <Checkbox value={options.flagState.code}>Nationalité</Checkbox><br/>
+                            <Checkbox value={CSVOptions.targetNumber.code}>Priorité</Checkbox><br/>
+                            <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox><br/>
+                            <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
+                            <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox><br/>
+                            <Checkbox value={CSVOptions.mmsi.code}>MMSI</Checkbox><br/>
+                            <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox><br/>
+                            <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox><br/>
+                            <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox><br/>
                         </div>
                         <div>
-                            <Checkbox value={options.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>
-                            <Checkbox value={options.latitude.code}>Latitude</Checkbox><br/>
-                            <Checkbox value={options.longitude.code}>Longitude</Checkbox><br/>
-                            <Checkbox value={options.course.code}>Cap</Checkbox><br/>
-                            <Checkbox value={options.speed.code}>Vitesse</Checkbox><br/>
+                            <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>
+                            <Checkbox value={CSVOptions.latitude.code}>Latitude</Checkbox><br/>
+                            <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox><br/>
+                            <Checkbox value={CSVOptions.course.code}>Cap</Checkbox><br/>
+                            <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
+                            <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
+                            <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
+                            <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
+                            <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox><br/>
                         </div>
                     </Columns>
-
                 </CheckboxGroup>
                 <SelectAll>
                     <Checkbox
@@ -228,7 +190,7 @@ const Description = styled.div`
 
 const DownloadButton = styled.button`
   background: ${COLORS.grayDarkerThree};
-  padding: 5px 12px 5px 12px;
+  padding: 5px 12px;
   margin: 20px 20px 20px 10px;
   font-size: 13px;
   color: ${COLORS.grayBackground};

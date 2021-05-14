@@ -46,6 +46,7 @@ const DownloadVesselListModal = props => {
     const values = Object.keys(CSVOptions)
       .map(value => CSVOptions[value].code)
       .filter(value => value !== CSVOptions.species.code)
+      .filter(value => value !== CSVOptions.length.code)
       .filter(value => value !== CSVOptions.district.code)
 
     setValuesChecked(values || [])
@@ -129,6 +130,7 @@ const DownloadVesselListModal = props => {
                             <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
                             <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
                             <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
+                            <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox><br/>
                         </div>
                     </Columns>
                 </CheckboxGroup>

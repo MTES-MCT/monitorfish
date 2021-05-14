@@ -98,9 +98,21 @@ const Layers = {
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
+    zoneFieldKey: 'f_subarea',
     subZoneFieldKey: 'f_division',
     subSubZoneFieldKey: 'f_subdivis',
-    isIntersectable: true
+    isIntersectable: true,
+    getZoneName: feature => {
+      if(feature.get(Layers.FAO.subSubZoneFieldKey)){
+        return feature.get(Layers.FAO.subSubZoneFieldKey)
+      } else if(feature.get(Layers.FAO.subZoneFieldKey)){
+        return feature.get(Layers.FAO.subZoneFieldKey)
+      } else if(feature.get(Layers.FAO.zoneFieldKey)){
+        return feature.get(Layers.FAO.zoneFieldKey)
+      }
+
+      return ''
+    }
   },
   AEM: {
     code: 'aem_areas',

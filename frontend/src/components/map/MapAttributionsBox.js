@@ -35,6 +35,8 @@ const Button = styled.button`
 
 const ButtonText = styled.span`
   font-size: 0.8em;
+  vertical-align: -moz-middle-with-baseline;
+  vertical-align: -webkit-baseline-middle;
 `
 
 const List = styled.ul`

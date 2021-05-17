@@ -30,6 +30,10 @@ html {
   background-color: #515151;
 }
 
+.ol-control {
+  background: none;
+}
+
 .ol-control:hover {
   background: inherit;
 }
@@ -37,6 +41,8 @@ html {
 .ol-control button, .ol-control button:hover, .ol-control button:focus {
   background-color: #515151;
   border-radius: 2px;
+  font-size: 1em;
+  padding-bottom: 5px;
 }
 
 

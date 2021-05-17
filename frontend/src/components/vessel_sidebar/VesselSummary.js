@@ -21,7 +21,7 @@ const VesselSummary = props => {
 
   useEffect(() => {
     if (props.vessel) {
-      if (props.vessel.positions.length) {
+      if (props.vessel.positions && props.vessel.positions.length) {
         setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
       } else {
         if (!vesselsAreEquals(props.vessel, vessel)) {

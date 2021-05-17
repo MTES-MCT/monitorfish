@@ -98,9 +98,11 @@ ENV JAVA_TOOL_OPTIONS "-Dcom.sun.management.jmxremote.ssl=false \
 COPY --from=buildBack /tmp/target/monitorfish-${VERSION}-exec.jar /home/monitorfish
 COPY infra/configurations /home/monitorfish/configurations/
 
+USER root
 RUN chmod 600 /home/monitorfish/configurations/jmxremote.access
 RUN chmod 600 /home/monitorfish/configurations/jmxremote.password
 
+USER monitorfish
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
 COPY --from=buildFront /tmp/frontend/build /home/monitorfish/public/

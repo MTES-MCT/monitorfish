@@ -114,7 +114,7 @@ const VesselListFilters = ({
       </FilterDesc>
       <TimeAgoSelect>
         <SelectPicker
-          style={{ width: 70, margin: '2px 10px 10px 0'}}
+          style={{ width: 70, margin: '2px 10px 10px 0' }}
           searchable={false}
           placeholder="x heures..."
           value={lastPositionTimeAgo.lastPositionTimeAgoFilter}

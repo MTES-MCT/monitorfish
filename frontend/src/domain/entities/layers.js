@@ -103,11 +103,11 @@ const Layers = {
     subSubZoneFieldKey: 'f_subdivis',
     isIntersectable: true,
     getZoneName: feature => {
-      if(feature.get(Layers.FAO.subSubZoneFieldKey)){
+      if (feature.get(Layers.FAO.subSubZoneFieldKey)) {
         return feature.get(Layers.FAO.subSubZoneFieldKey)
-      } else if(feature.get(Layers.FAO.subZoneFieldKey)){
+      } else if (feature.get(Layers.FAO.subZoneFieldKey)) {
         return feature.get(Layers.FAO.subZoneFieldKey)
-      } else if(feature.get(Layers.FAO.zoneFieldKey)){
+      } else if (feature.get(Layers.FAO.zoneFieldKey)) {
         return feature.get(Layers.FAO.zoneFieldKey)
       }
 

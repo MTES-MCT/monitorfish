@@ -25,18 +25,18 @@ export const lastControlByType = yearsToControls => {
         text: landControlText
       }
     }
-    
+
     i++
   }
 
-  if(!lastControlList.SEA) {
+  if (!lastControlList.SEA) {
     lastControlList.SEA = {
       control: null,
       text: seaControlText
     }
   }
 
-  if(!lastControlList.LAND) {
+  if (!lastControlList.LAND) {
     lastControlList.LAND = {
       control: null,
       text: landControlText

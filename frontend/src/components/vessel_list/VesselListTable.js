@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as TargetSVG } from '../icons/target.svg'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
@@ -67,7 +67,6 @@ const VesselListTable = props => {
             <Table
                 virtualized
                 height={props.seeMoreIsOpen ? 460 : 510}
-                width={1747}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -90,74 +89,74 @@ const VesselListTable = props => {
                     <TargetCell dataKey="targetNumber" onChange={props.handleChange} />
                 </Column>
 
-                <Column sortable width={190} fixed>
+                <Column sortable width={180} fixed>
                     <HeaderCell>Nom du navire</HeaderCell>
                     <Cell dataKey="vesselName" />
                 </Column>
 
-                <Column sortable width={120}>
+                <Column sortable width={100}>
                     <HeaderCell>Marq. Ext.</HeaderCell>
                     <Cell dataKey="externalReferenceNumber" />
                 </Column>
 
-                <Column sortable width={95}>
+                <Column sortable width={80}>
                     <HeaderCell>Call Sign</HeaderCell>
                     <Cell dataKey="ircs" />
                 </Column>
 
-                <Column sortable width={100}>
+                <Column sortable width={70}>
                     <HeaderCell>MMSI</HeaderCell>
                     <Cell dataKey="mmsi" />
                 </Column>
 
-                <Column sortable width={140}>
+                <Column sortable width={120}>
                     <HeaderCell>CFR</HeaderCell>
                     <Cell dataKey="internalReferenceNumber" />
                 </Column>
 
-              <Column width={150}>
+              <Column width={120}>
                 <HeaderCell>Seg. flotte</HeaderCell>
                 <EllipsisCell dataKey="fleetSegments" />
               </Column>
 
-              <Column width={140}>
+              <Column width={120}>
                 <HeaderCell>Engins à bord</HeaderCell>
                 <EllipsisCell dataKey="gears" />
               </Column>
 
-              <Column width={150}>
+              <Column width={115}>
                 <HeaderCell>Espèces à bord</HeaderCell>
                 <EllipsisCell dataKey="species" />
               </Column>
 
-                <Column sortable width={50}>
+              <Column sortable width={50}>
                     <HeaderCell>
                         <FlagIcon />
                     </HeaderCell>
                     <FlagCell dataKey="flagState" />
                 </Column>
 
-                <Column sortable width={140}>
+                <Column sortable width={130}>
                     <HeaderCell>Dernier signal</HeaderCell>
                     <TimeAgoCell dataKey="dateTimeTimestamp" />
                 </Column>
 
-                <Column width={115}>
+                <Column width={100}>
                     <HeaderCell>Latitude</HeaderCell>
                     <Cell dataKey="latitude" />
                 </Column>
 
-                <Column width={120}>
+                <Column width={110}>
                     <HeaderCell>Longitude</HeaderCell>
                     <Cell dataKey="longitude" />
                 </Column>
 
-                <Column sortable width={70}>
+                <Column sortable width={60}>
                     <HeaderCell>Cap</HeaderCell>
                     <Cell dataKey="course" />
                 </Column>
 
-                <Column sortable width={80}>
+                <Column sortable width={70}>
                     <HeaderCell>Vitesse</HeaderCell>
                     <Cell dataKey="speed" />
                 </Column>

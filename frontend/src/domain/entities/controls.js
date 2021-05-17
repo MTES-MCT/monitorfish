@@ -14,17 +14,18 @@ export const lastControlByType = yearsToControls => {
 
   let i = 0
   while (i < sortedLastYearControlList.length && Object.keys(lastControlList).length < 2) {
-    if (sortedLastYearControlList[i].controlType === controlType.SEA) {
+    if (sortedLastYearControlList[i].controlType === controlType.SEA && !lastControlList.SEA) {
       lastControlList.SEA = {
         control: sortedLastYearControlList[i],
         text: seaControlText
       }
-    } else if (sortedLastYearControlList[i].controlType === controlType.LAND) {
+    } else if (sortedLastYearControlList[i].controlType === controlType.LAND && !lastControlList.LAND) {
       lastControlList.LAND = {
         control: sortedLastYearControlList[i],
         text: landControlText
       }
     }
+    
     i++
   }
 

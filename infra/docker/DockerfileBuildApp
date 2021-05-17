@@ -85,9 +85,7 @@ EXPOSE 5001
 WORKDIR /home/monitorfish
 
 ENV JAVA_TOOL_OPTIONS "-Dcom.sun.management.jmxremote.ssl=false \
- -Dcom.sun.management.jmxremote.authenticate=true \
- -Dcom.sun.management.jmxremote.password.file=/home/monitorfish/configurations/jmxremote.password \
- -Dcom.sun.management.jmxremote.access.file=/home/monitorfish/configurations/jmxremote.access \
+ -Dcom.sun.management.jmxremote.authenticate=false \
  -Dcom.sun.management.jmxremote.port=5000 \
  -Dcom.sun.management.jmxremote.rmi.port=5001 \
  -Dcom.sun.management.jmxremote.registry.ssl=false \
@@ -97,10 +95,6 @@ ENV JAVA_TOOL_OPTIONS "-Dcom.sun.management.jmxremote.ssl=false \
 # Copy files for the back
 COPY --from=buildBack /tmp/target/monitorfish-${VERSION}-exec.jar /home/monitorfish
 COPY infra/configurations /home/monitorfish/configurations/
-
-USER root
-RUN chmod 600 /home/monitorfish/configurations/jmxremote.access
-RUN chmod 600 /home/monitorfish/configurations/jmxremote.password
 
 USER monitorfish
 # Copy files for the front

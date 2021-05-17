@@ -164,7 +164,7 @@ const RegulatoryZoneMetadata = props => {
                             {
                                 (gears && gears.length) ||
                                   (prohibitedGears && prohibitedGears.length) ||
-                                  props.regulatoryZoneMetadata.technicalMeasures
+                                  props.regulatoryZoneMetadata.technicalMeasurements
                                   ? <ZoneWithLineBreak>
                                       {
                                           gears && gears.length
@@ -195,10 +195,10 @@ const RegulatoryZoneMetadata = props => {
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.technicalMeasures
+                                          props.regulatoryZoneMetadata.technicalMeasurements
                                             ? <>
                                                 <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
-                                                <MarkdownValue>{props.regulatoryZoneMetadata.technicalMeasures}</MarkdownValue>
+                                                <MarkdownValue>{props.regulatoryZoneMetadata.technicalMeasurements}</MarkdownValue>
                                             </>
                                             : null
                                       }

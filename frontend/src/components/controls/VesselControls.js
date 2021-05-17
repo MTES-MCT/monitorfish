@@ -43,7 +43,7 @@ const VesselControls = props => {
           controlResumeAndControls && lastControlList && yearsToControls
             ? <Body>
                 <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls} />
-                <LastControlZone lastControlList={lastControlList} />
+                <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate} />
                 <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate} />
                 <SeeMoreBackground>
                     <SeeMore onClick={() => {

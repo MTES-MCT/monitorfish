@@ -4,25 +4,44 @@ export const controlType = {
   AERIAL: 'Contrôle aérien'
 }
 
-export const lastControlByType = (yearsToControls) => {
+export const lastControlByType = yearsToControls => {
+  const seaControlText = 'Dernier contrôle en mer'
+  const landControlText = 'Dernier contrôle à la débarque'
+
   const lastControlList = {}
-  let i = 0
   const sortedLastYearControlList = Object.values(yearsToControls).flat()
-    .sort((a, b) => a.controlDatetimeUtc > b.controlDatetimeUtc)
+    .sort((a, b) => a.controlDatetimeUtc < b.controlDatetimeUtc)
+
+  let i = 0
   while (i < sortedLastYearControlList.length && Object.keys(lastControlList).length < 2) {
     if (sortedLastYearControlList[i].controlType === controlType.SEA) {
       lastControlList.SEA = {
         control: sortedLastYearControlList[i],
-        text: 'Dernier contrôle en mer'
+        text: seaControlText
       }
     } else if (sortedLastYearControlList[i].controlType === controlType.LAND) {
       lastControlList.LAND = {
         control: sortedLastYearControlList[i],
-        text: 'Dernier contrôle à la débarque'
+        text: landControlText
       }
     }
     i++
   }
+
+  if(!lastControlList.SEA) {
+    lastControlList.SEA = {
+      control: null,
+      text: seaControlText
+    }
+  }
+
+  if(!lastControlList.LAND) {
+    lastControlList.LAND = {
+      control: null,
+      text: landControlText
+    }
+  }
+
   return lastControlList
 }
 
@@ -47,5 +66,6 @@ export const getYearsToControl = (controlsFromDate, controls) => {
       }
     }
   })
+
   return nextYearsToControls
 }

@@ -12,16 +12,30 @@ const ControlField = ({ field, type, isFirst }) => {
 
   return <Fields key={type} isFirst={isFirst}>
     <ControlResumeLine>
-      <ResumeText isFirst={isFirst}>{text}<StrongText>le {getDate(control.controlDatetimeUtc)}</StrongText></ResumeText>
+      <ResumeText isFirst={isFirst}>
+        {text}
+        <StrongText>
+          {
+            control
+              ? <>le {getDate(control.controlDatetimeUtc)}</>
+              : <>Aucun</>
+          }
+        </StrongText>
+      </ResumeText>
     </ControlResumeLine>
-    <ControlResumeLine>
-      <LastControResumeElement>Unité <StrongText>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControResumeElement>
-      <LastControResumeElement>Infractions <StrongText>{control.infraction ? <> {control.infractions.length} infraction{control.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControResumeElement>
-    </ControlResumeLine>
+    {
+      control
+        ? <ControlResumeLine>
+          <LastControlResumeElement>Unité <StrongText>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
+          <LastControlResumeElement>Infractions <StrongText>{control.infraction ? <> {control.infractions.length} infraction{control.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>
+        </ControlResumeLine>
+        : null
+    }
+
   </Fields>
 }
 
-const LastControResumeElement = styled.span`
+const LastControlResumeElement = styled.span`
   margin-right: 10px;
 `
 

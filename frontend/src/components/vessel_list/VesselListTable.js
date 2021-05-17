@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as TargetSVG } from '../icons/target.svg'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
@@ -67,7 +67,7 @@ const VesselListTable = props => {
             <Table
                 virtualized
                 height={props.seeMoreIsOpen ? 460 : 510}
-                width={1597}
+                width={1747}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -90,42 +90,42 @@ const VesselListTable = props => {
                     <TargetCell dataKey="targetNumber" onChange={props.handleChange} />
                 </Column>
 
-                <Column sortable width={170} fixed>
+                <Column sortable width={190} fixed>
                     <HeaderCell>Nom du navire</HeaderCell>
                     <Cell dataKey="vesselName" />
                 </Column>
 
-                <Column sortable width={110}>
+                <Column sortable width={120}>
                     <HeaderCell>Marq. Ext.</HeaderCell>
                     <Cell dataKey="externalReferenceNumber" />
                 </Column>
 
-                <Column sortable width={90}>
+                <Column sortable width={95}>
                     <HeaderCell>Call Sign</HeaderCell>
                     <Cell dataKey="ircs" />
                 </Column>
 
-                <Column sortable width={90}>
+                <Column sortable width={100}>
                     <HeaderCell>MMSI</HeaderCell>
                     <Cell dataKey="mmsi" />
                 </Column>
 
-                <Column sortable width={130}>
+                <Column sortable width={140}>
                     <HeaderCell>CFR</HeaderCell>
                     <Cell dataKey="internalReferenceNumber" />
                 </Column>
 
-              <Column width={130}>
+              <Column width={150}>
                 <HeaderCell>Seg. flotte</HeaderCell>
                 <EllipsisCell dataKey="fleetSegments" />
               </Column>
 
-              <Column width={130}>
+              <Column width={140}>
                 <HeaderCell>Engins à bord</HeaderCell>
                 <EllipsisCell dataKey="gears" />
               </Column>
 
-              <Column width={130}>
+              <Column width={150}>
                 <HeaderCell>Espèces à bord</HeaderCell>
                 <EllipsisCell dataKey="species" />
               </Column>
@@ -137,22 +137,22 @@ const VesselListTable = props => {
                     <FlagCell dataKey="flagState" />
                 </Column>
 
-                <Column sortable width={130}>
+                <Column sortable width={140}>
                     <HeaderCell>Dernier signal</HeaderCell>
                     <TimeAgoCell dataKey="dateTimeTimestamp" />
                 </Column>
 
-                <Column width={100}>
+                <Column width={115}>
                     <HeaderCell>Latitude</HeaderCell>
                     <Cell dataKey="latitude" />
                 </Column>
 
-                <Column width={110}>
+                <Column width={120}>
                     <HeaderCell>Longitude</HeaderCell>
                     <Cell dataKey="longitude" />
                 </Column>
 
-                <Column sortable width={60}>
+                <Column sortable width={70}>
                     <HeaderCell>Cap</HeaderCell>
                     <Cell dataKey="course" />
                 </Column>
@@ -164,7 +164,7 @@ const VesselListTable = props => {
 
               {
                 props.filters.districtsFiltered && props.filters.districtsFiltered.length
-                  ? <Column width={100}>
+                  ? <Column sortable width={100}>
                     <HeaderCell>Quartier</HeaderCell>
                     <Cell dataKey="district" />
                   </Column>
@@ -172,7 +172,7 @@ const VesselListTable = props => {
               }
               {
                 props.filters.vesselsSizeValuesChecked && props.filters.vesselsSizeValuesChecked.length
-                  ? <Column width={100}>
+                  ? <Column sortable width={100}>
                     <HeaderCell>Longueur</HeaderCell>
                     <Cell dataKey="length" />
                   </Column>

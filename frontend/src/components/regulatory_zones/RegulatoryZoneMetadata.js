@@ -198,7 +198,7 @@ const RegulatoryZoneMetadata = props => {
                                           props.regulatoryZoneMetadata.technicalMeasures
                                             ? <>
                                                 <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
-                                                <MarkdownValue >{props.regulatoryZoneMetadata.technicalMeasures}</MarkdownValue>
+                                                <MarkdownValue>{props.regulatoryZoneMetadata.technicalMeasures}</MarkdownValue>
                                             </>
                                             : null
                                       }

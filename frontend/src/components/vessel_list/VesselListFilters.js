@@ -114,7 +114,7 @@ const VesselListFilters = ({
       </FilterDesc>
       <TimeAgoSelect>
         <SelectPicker
-          style={{ width: 70 }}
+          style={{ width: 70, margin: '2px 10px 10px 0'}}
           searchable={false}
           placeholder="x heures..."
           value={lastPositionTimeAgo.lastPositionTimeAgoFilter}
@@ -267,10 +267,11 @@ const ZoneFilter = styled.div`
 `
 
 const TimeAgoSelect = styled.div`
-  width: 120px;
+  width: 117px;
   display: inline-block;
   margin-right: 20px;
   margin-left: 10px;
+  vertical-align: sub;
 `
 
 const Label = styled.span`
@@ -281,7 +282,6 @@ const FilterDesc = styled.span`
   font-size: 13px;
   margin-top: 7px;
   display: inline-block;
-  vertical-align: sub;
 `
 
 const Filters = styled.div`
@@ -289,7 +289,7 @@ const Filters = styled.div`
   font-size: 13px;
   margin-top: 15px;
   margin-bottom: 15px;
-  max-height: 145px;
+  max-height: 147px;
   overflow: auto;
 `
 

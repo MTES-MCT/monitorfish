@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ERSMessageType as ERSMessageTypeEnum } from '../../../domain/entities/ERS'
@@ -8,43 +8,45 @@ import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitt
 import { getDateTime } from '../../../utils'
 
 const ERSMessage = props => {
-  const getERSMessageHeaderTitle = message => {
-    switch (message.messageType) {
-      case ERSMessageTypeEnum.DEP.code.toString(): {
-        return <>
-                    <ERSMessageName>{ERSMessageTypeEnum[message.messageType].name}</ERSMessageName>
-                    {message.message.departurePortName ? message.message.departurePortName : message.message.departurePort}
-                    {' '}le {getDateTime(message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
-      }
-      case ERSMessageTypeEnum.PNO.code.toString(): {
-        return 'Préavis (notification de retour au port)'
-      }
-      case ERSMessageTypeEnum.FAR.code.toString(): {
-        return 'Déclaration de capture'
-      }
-      case ERSMessageTypeEnum.COE.code.toString(): {
-        return 'Entrée dans une zone d\'effort'
-      }
-      case ERSMessageTypeEnum.COX.code.toString(): {
-        return 'Sortie d\'une zone d\'effort'
-      }
-      case ERSMessageTypeEnum.CRO.code.toString(): {
-        return 'Traversée d\'une zone d\'effort'
-      }
-      case ERSMessageTypeEnum.DIS.code.toString(): {
-        return 'Déclaration de rejets'
-      }
-      case ERSMessageTypeEnum.EOF.code.toString(): {
-        return 'Fin de pêche'
-      }
-      case ERSMessageTypeEnum.RTP.code.toString(): {
-        return 'Retour au port'
-      }
-      case ERSMessageTypeEnum.LAN.code.toString(): {
-        return 'Débarquement'
+  const ersMessageHeaderTitle = useMemo(() => {
+    if(props.message) {
+      switch (props.message.messageType) {
+        case ERSMessageTypeEnum.DEP.code.toString(): {
+          return <>
+            <ERSMessageName>{ERSMessageTypeEnum[props.message.messageType].name}</ERSMessageName>
+            {props.message.message.departurePortName ? props.message.message.departurePortName : props.message.message.departurePort}
+            {' '}le {getDateTime(props.message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
+        }
+        case ERSMessageTypeEnum.PNO.code.toString(): {
+          return 'Préavis (notification de retour au port)'
+        }
+        case ERSMessageTypeEnum.FAR.code.toString(): {
+          return 'Déclaration de capture'
+        }
+        case ERSMessageTypeEnum.COE.code.toString(): {
+          return 'Entrée dans une zone d\'effort'
+        }
+        case ERSMessageTypeEnum.COX.code.toString(): {
+          return 'Sortie d\'une zone d\'effort'
+        }
+        case ERSMessageTypeEnum.CRO.code.toString(): {
+          return 'Traversée d\'une zone d\'effort'
+        }
+        case ERSMessageTypeEnum.DIS.code.toString(): {
+          return 'Déclaration de rejets'
+        }
+        case ERSMessageTypeEnum.EOF.code.toString(): {
+          return 'Fin de pêche'
+        }
+        case ERSMessageTypeEnum.RTP.code.toString(): {
+          return 'Retour au port'
+        }
+        case ERSMessageTypeEnum.LAN.code.toString(): {
+          return 'Débarquement'
+        }
       }
     }
-  }
+  }, [props.message])
 
   const openXML = xml => {
     const blob = new Blob([xml], { type: 'text/xml' })
@@ -71,8 +73,11 @@ const ERSMessage = props => {
           ? <Wrapper>
                 <Header>
                     <ERSMessageType>{getErsMessageType()}</ERSMessageType>
-                    <ERSMessageHeaderText>
-                        {getERSMessageHeaderTitle(props.message)}
+                    <ERSMessageHeaderText
+                      isShortcut={props.message.isCorrected || props.message.deleted || props.message.referencedErsId}
+                      title={typeof ersMessageHeaderTitle === 'string' ? ersMessageHeaderTitle : ''}
+                    >
+                        {ersMessageHeaderTitle}
                     </ERSMessageHeaderText>
                     {
                         props.message.isCorrected
@@ -260,6 +265,10 @@ const ERSMessageHeaderText = styled.span`
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
   vertical-align: -webkit-baseline-middle;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  max-width: ${props => props.isShortcut ? '230px' : '370px'};
 `
 
 const ERSMessageName = styled.span`

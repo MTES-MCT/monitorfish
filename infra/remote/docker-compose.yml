@@ -29,7 +29,7 @@ services:
       - 5000:5000
       - 5001:5001
     volumes:
-      - /opt/monitorfish:/home/monitorfish/logs
+      - "${MONITORFISH_LOGS_FOLDER}:/home/monitorfish/logs"
     networks:
       - backend
     depends_on:

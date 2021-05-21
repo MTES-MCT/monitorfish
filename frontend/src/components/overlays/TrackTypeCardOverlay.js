@@ -50,15 +50,15 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
   // else est-ce qu'on reset ?
   }, [trackTypeToShowOnCard])
   return (
-    <trackTypeCardOverlayComponent ref={overlayCallback} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>
+    <TrackTypeCardOverlayComponent ref={overlayCallback} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>
     {
       trackTypeToShowOnCard ? <TrackTypeCard isBig={trackTypeToShowOnCard === trackTypes.SEARCHING} trackType={trackTypeToShowOnCard} /> : null
     }
-    </trackTypeCardOverlayComponent>
+    </TrackTypeCardOverlayComponent>
   )
 }
 
-const trackTypeCardOverlayComponent = styled.div`
+const TrackTypeCardOverlayComponent = styled.div`
   position: absolute;
   top: -39px;
   left: ${props => props.isBig ? '-170px' : '-100px'};

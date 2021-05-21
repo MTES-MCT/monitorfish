@@ -1,150 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import styled from 'styled-components'
-import OpenLayerMap from 'ol/Map'
-import View from 'ol/View'
-import { transform } from 'ol/proj'
-import ScaleLine from 'ol/control/ScaleLine'
-import Zoom from 'ol/control/Zoom'
 
-import { getCoordinates } from '../utils'
 import LayersEnum from '../domain/entities/layers'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import { isMoving, resetAnimateToRegulatoryLayer } from '../domain/reducers/Map'
 import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
+import { isMoving } from '../domain/reducers/Map'
 
-import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
-import MapAttributionsBox from '../components/map/MapAttributionsBox'
+import BaseMap from './BaseMap'
 import LayerDetailsBox from '../components/map/LayerDetailsBox'
 import VesselTrackLayer from '../layers/VesselTrackLayer'
 import VesselsLayer from '../layers/VesselsLayer'
-import BaseLayer from '../layers/BaseLayer'
 import DrawLayer from '../layers/DrawLayer'
-import RegulatoryLayers from '../layers/RegulatoryLayers'
-import AdministrativeLayers from '../layers/AdministrativeLayers'
 import MapHistory from './MapHistory'
 import MeasurementLayer from '../layers/MeasurementLayer'
 import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
-import { animateToVessel, hideVesselOnMapZoom, showVesselTrackAndSidebarOnMapClick } from '../components/MapVesselAnimation'
-
-let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
+import MapVesselAnimation from '../components/MapVesselAnimation'
 const hitPixelTolerance = 3
 
-const Map = ({ isBackOffice }) => {
+const Map = () => {
   const gears = useSelector(state => state.gear.gears)
-  const vessel = useSelector(state => state.vessel)
-  const mapState = useSelector(state => state.map)
   const dispatch = useDispatch()
 
-  const [map, setMap] = useState()
-  const [isAnimating, setIsAnimating] = useState(false)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
-  const [initRenderIsDone, setInitRenderIsDone] = useState(false)
-  const [cursorCoordinates, setCursorCoordinates] = useState('')
   const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
-  // utilisé que pour TrackTypeCardOverlay
+  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
+  const [mapClickEvent, setMapClickEvent] = useState(null)
   const [handlePointerMoveEventPixel, setHandlePointerMoveEventPixel] = useState(null)
-  const mapElement = useRef()
-  const mapRef = useRef()
-  mapRef.current = map
-
-  useEffect(() => {
-    initMap()
-  }, [mapState.selectedBaseLayer])
-
-  useEffect(() => {
-    animateToRegulatoryLayer()
-  }, [mapState.animateToRegulatoryLayer, map])
-
-  useEffect(() => {
-    animateToVessel(map, animateToVessel, vessel)
-  }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
-
-  function initMap () {
-    if (!map) {
-      const centeredOnFrance = [2.99049, 46.82801]
-      const initialMap = new OpenLayerMap({
-        target: mapElement.current,
-        layers: [],
-        renderer: (['webgl', 'canvas']),
-        view: new View({
-          projection: OPENLAYERS_PROJECTION,
-          center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-          zoom: 6,
-          minZoom: 3
-        }),
-        units: 'm',
-        controls: [
-          new ScaleLine({ units: 'nautical' }),
-          new Zoom({
-            className: 'zoom'
-          })
-        ]
-      })
-
-      initialMap.on('click', handleMapClick)
-      if (!isBackOffice) {
-        initialMap.on('pointermove', event => throttleAndHandlePointerMove(event))
-      }
-      initialMap.on('moveend', () => throttleAndHandleMovingAndZoom())
-
-      setMap(initialMap)
-
-      // Wait 15 seconds to not apply any animate() before this init phase
-      setTimeout(() => {
-        setInitRenderIsDone(true)
-      }, 15000)
-    }
-  }
-
-  function throttleAndHandleMovingAndZoom () {
-    if (timeoutForMove) {
-      return
-    }
-
-    timeoutForMove = setTimeout(() => {
-      timeoutForMove = null
-      handleMovingAndZoom()
-    }, 100)
-  }
-
-  function throttleAndHandlePointerMove (event) {
-    if (event.dragging || timeoutForPointerMove) {
-      if (timeoutForPointerMove) {
-        lastEventForPointerMove = event
-      }
-      return
-    }
-
-    timeoutForPointerMove = setTimeout(() => {
-      timeoutForPointerMove = null
-      handlePointerMove(lastEventForPointerMove)
-    }, 100)
-  }
-
-  function animateToRegulatoryLayer () {
-    if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
-      const animateObject = {
-        center: [
-          mapState.animateToRegulatoryLayer.center[0],
-          mapState.animateToRegulatoryLayer.center[1]
-        ],
-        duration: 1000
-      }
-      if (map.getView().getZoom() < 8) {
-        animateObject.zoom = 8
-      }
-      setIsAnimating(true)
-      map.getView().animate(animateObject, () => {
-        setIsAnimating(false)
-        dispatch(resetAnimateToRegulatoryLayer())
-      })
-    }
-  }
 
   const handleMovingAndZoom = () => {
     dispatch(isMoving())
@@ -152,82 +36,67 @@ const Map = ({ isBackOffice }) => {
       setShouldUpdateView(true)
     }
     setHistoryMoveTrigger({ dummyUpdate: true })
-    hideVesselOnMapZoom(mapRef, dispatch)
+    setMapMovingAndZoomEvent(true)
   }
 
-  const handleMapClick = event => {
-    const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: hitPixelTolerance })
-    showVesselTrackAndSidebarOnMapClick(feature, dispatch)
-    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
-      const zone = {
-        layerName: feature.getProperties().layer_name,
-        zone: feature.getProperties().zones
+  const handleMapClick = (event, map) => {
+    if (event && map) {
+      const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: hitPixelTolerance })
+      setMapClickEvent(feature)
+      if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
+        const zone = {
+          layerName: feature.getProperties().layer_name,
+          zone: feature.getProperties().zones
+        }
+        dispatch(showRegulatoryZoneMetadata(zone))
       }
-      dispatch(showRegulatoryZoneMetadata(zone))
     }
   }
 
-  const handlePointerMove = (event) => {
-    if (event) {
-      const pixel = mapRef.current.getEventPixel(event.originalEvent)
-      const feature = mapRef.current.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: hitPixelTolerance })
+  const handlePointerMove = (event, map) => {
+    if (event && map) {
+      const pixel = map.getEventPixel(event.originalEvent)
+      const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: hitPixelTolerance })
       setHandlePointerMoveEventPixel(event.pixel)
       if (feature && feature.getId()) {
         setCurrentFeature(feature)
         if (feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
           setRegulatoryFeatureToShowOnCard(feature)
         }
-        mapRef.current.getTarget().style.cursor = 'pointer'
-      } else if (mapRef.current.getTarget().style) {
-        mapRef.current.getTarget().style.cursor = ''
+        map.getTarget().style.cursor = 'pointer'
+      } else if (map.getTarget().style) {
+        map.getTarget().style.cursor = ''
         setCurrentFeature(null)
       }
-      showCoordinatesInDMS(event)
     }
   }
 
-  function showCoordinatesInDMS (event) {
-    const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel)
-    const coordinates = getCoordinates(clickedCoordinates, OPENLAYERS_PROJECTION)
-    setCursorCoordinates(`${coordinates[0]} ${coordinates[1]}`)
-  }
-
   return (
-        <div>
-            <MapContainer ref={mapElement} />
-            {!isBackOffice && <><MapHistory
-              map={map}
-              mapRef={mapRef}
+        <BaseMap
+          handleMovingAndZoom={handleMovingAndZoom}
+          handlePointerMove={handlePointerMove}
+          handleMapClick={handleMapClick}
+        >
+            <MapVesselAnimation
+              mapMovingAndZoomEvent={mapMovingAndZoomEvent}
+              mapClickEvent={mapClickEvent} />
+            <MapHistory
               shouldUpdateView={shouldUpdateView}
               setShouldUpdateView={setShouldUpdateView}
               historyMoveTrigger={historyMoveTrigger}
             />
-            <VesselTrackLayer map={map} />
-            <VesselsLayer map={map} mapRef={mapRef}/>
-            <VesselCardOverlay map={map} feature={currentFeature} />
-            <TrackTypeCardOverlay map={map} pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature} />
-            <VesselTrackCardOverlay map={map} feature={currentFeature} />
-            <DrawLayer map={map} />
-            <MeasurementLayer map={map} />
-            </>}
-            <BaseLayer map={map} />
-            <RegulatoryLayers map={map} />
-            <AdministrativeLayers map={map} />
-            <MapCoordinatesBox coordinates={cursorCoordinates}/>
+            <MeasurementLayer />
+            <VesselTrackLayer />
+            <VesselsLayer />
+            <VesselCardOverlay feature={currentFeature} />
+            <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature} />
+            <VesselTrackCardOverlay feature={currentFeature} />
+            <DrawLayer />
             {
                 regulatoryFeatureToShowOnCard ? <LayerDetailsBox gears={gears} regulatory={regulatoryFeatureToShowOnCard}/> : null
             }
-
-            <MapAttributionsBox />
-        </div>
+        </BaseMap>
   )
 }
-
-const MapContainer = styled.div`
-  height: 100vh;
-  width: 100%;
-  overflow-y: hidden;
-  overflow-x: hidden;
-`
 
 export default Map

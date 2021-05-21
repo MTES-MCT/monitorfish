@@ -21,29 +21,6 @@ function App () {
   return (
     <>
       <ToastProvider placement="bottom-right">
-<<<<<<< HEAD
-        <Router>
-          <Switch>
-            <Route path='/'>
-              <Wrapper>
-                <Map/>
-                <VesselsSearchBox/>
-                <RightMenuOnHoverZone />
-                <LayersSidebar/>
-                <VesselList/>
-                <VesselVisibility/>
-                <VesselSidebar/>
-                <UpdatingVesselLoader/>
-                <Measurement/>
-                <APIWorker/>
-              </Wrapper>
-            </Route>
-            <Route path='/backoffice'>
-              <BackofficeMap/>
-            </Route>
-          </Switch>
-        </Router>
-=======
       <Router>
       <Switch>
           <Route path="/backoffice">
@@ -54,7 +31,6 @@ function App () {
           </Route>
         </Switch>
       </Router>
->>>>>>> add router for backoffice
       </ToastProvider>
     </>
   )

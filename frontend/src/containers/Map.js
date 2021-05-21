@@ -1,44 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import OpenLayerMap from 'ol/Map'
 import View from 'ol/View'
 import { transform } from 'ol/proj'
-import LayersEnum from '../domain/entities/layers'
-import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import MapAttributionsBox from '../components/map/MapAttributionsBox'
-import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
-import { useDispatch, useSelector } from 'react-redux'
-import { hideVesselNames, isMoving, resetAnimateToRegulatoryLayer, resetAnimateToVessel } from '../domain/reducers/Map'
-import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
-import LayerDetailsBox from '../components/map/LayerDetailsBox'
-import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../domain/entities/vessel'
 import ScaleLine from 'ol/control/ScaleLine'
+import Zoom from 'ol/control/Zoom'
+
+import { getCoordinates } from '../utils'
+import LayersEnum from '../domain/entities/layers'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import { isMoving, resetAnimateToRegulatoryLayer } from '../domain/reducers/Map'
+import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
+
+import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
+import MapAttributionsBox from '../components/map/MapAttributionsBox'
+import LayerDetailsBox from '../components/map/LayerDetailsBox'
 import VesselTrackLayer from '../layers/VesselTrackLayer'
-import VesselsLayer, { MIN_ZOOM_VESSEL_NAMES } from '../layers/VesselsLayer'
+import VesselsLayer from '../layers/VesselsLayer'
 import BaseLayer from '../layers/BaseLayer'
 import DrawLayer from '../layers/DrawLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
-import { getCoordinates } from '../utils'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
-import { getOverlays } from '../components/overlays/overlays'
 import MapHistory from './MapHistory'
-import Zoom from 'ol/control/Zoom'
-<<<<<<< HEAD
 import MeasurementLayer from '../layers/MeasurementLayer'
-=======
 import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
-<<<<<<< HEAD
-<<<<<<< HEAD
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
->>>>>>> [WIP] create overlay components and use useRef
-=======
->>>>>>> clean code, remove consol log
-=======
-import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
-import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
->>>>>>> add overlay components
+import { animateToVessel, hideVesselOnMapZoom, showVesselTrackAndSidebarOnMapClick } from '../components/MapVesselAnimation'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 const hitPixelTolerance = 3
@@ -72,18 +61,11 @@ const Map = ({ isBackOffice }) => {
   }, [mapState.animateToRegulatoryLayer, map])
 
   useEffect(() => {
-    animateToVessel()
+    animateToVessel(map, animateToVessel, vessel)
   }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
 
   function initMap () {
     if (!map) {
-      const overlayDict = {}
-      if (!isBackOffice) {
-        const { vesselCardOverlay, vesselTrackCardOverlay, trackTypeCardOverlay } = getOverlays()
-        overlayDict.vesselCardOverlay = vesselCardOverlay
-        overlayDict.vesselTrackCardOverlay = vesselTrackCardOverlay
-        overlayDict.trackTypeCardOverlay = trackTypeCardOverlay
-      }
       const centeredOnFrance = [2.99049, 46.82801]
       const initialMap = new OpenLayerMap({
         target: mapElement.current,
@@ -106,9 +88,7 @@ const Map = ({ isBackOffice }) => {
 
       initialMap.on('click', handleMapClick)
       if (!isBackOffice) {
-        initialMap.on('pointermove', event => throttleAndHandlePointerMove(
-          event,
-          overlayDict))
+        initialMap.on('pointermove', event => throttleAndHandlePointerMove(event))
       }
       initialMap.on('moveend', () => throttleAndHandleMovingAndZoom())
 
@@ -166,61 +146,19 @@ const Map = ({ isBackOffice }) => {
     }
   }
 
-  function createAnimateObject (resolution, duration, zoom) {
-    return {
-      center: [
-        mapState.animateToVessel.getGeometry().getCoordinates()[0] + resolution,
-        mapState.animateToVessel.getGeometry().getCoordinates()[1]
-      ],
-      duration,
-      zoom
-    }
-  }
-
-  function animateToVessel () {
-    if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
-      if (map.getView().getZoom() >= 8) {
-        const resolution = map.getView().getResolution()
-        map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
-      } else {
-        map.getView().animate(createAnimateObject(0, 800, 8), () => {
-          const resolution = map.getView().getResolution()
-          map.getView().animate(createAnimateObject(resolution * 200, 500, undefined))
-        })
-      }
-      dispatch(resetAnimateToVessel())
-    }
-  }
-
-  function isVesselNameMinimumZoom () {
-    return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES
-  }
-
-  function isVesselNameMaximumZoom () {
-    return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES
-  }
-
   const handleMovingAndZoom = () => {
     dispatch(isMoving())
     if (!shouldUpdateView) {
       setShouldUpdateView(true)
     }
     setHistoryMoveTrigger({ dummyUpdate: true })
-
-    if (isVesselNameMinimumZoom()) {
-      dispatch(hideVesselNames(false))
-    } else if (isVesselNameMaximumZoom()) {
-      dispatch(hideVesselNames(true))
-    }
+    hideVesselOnMapZoom(mapRef, dispatch)
   }
 
   const handleMapClick = event => {
     const feature = mapRef.current.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: hitPixelTolerance })
-
-    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
-      const vessel = getVesselIdentityFromFeature(feature)
-      dispatch(showVesselTrackAndSidebar(getVesselFeatureAndIdentity(feature, vessel), false, false))
-    } else if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
+    showVesselTrackAndSidebarOnMapClick(feature, dispatch)
+    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
       const zone = {
         layerName: feature.getProperties().layer_name,
         zone: feature.getProperties().zones

@@ -32,7 +32,7 @@ import {
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_NAMES = 7.5
 
-const VesselsLayer = ({ map, mapRef }) => {
+const VesselsLayer = ({ map }) => {
   const vessels = useSelector(state => state.vessel.vessels)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const removeSelectedIconToFeature = useSelector(state => state.vessel.removeSelectedIconToFeature)
@@ -221,7 +221,7 @@ const VesselsLayer = ({ map, mapRef }) => {
 
   function addOrRemoveVesselLabelWhenZooming () {
     if (map) {
-      const extent = mapRef.current.getView().calculateExtent(map.getSize())
+      const extent = map.getView().calculateExtent(map.getSize())
 
       if (vesselNamesHiddenByZoom === undefined) {
         return
@@ -239,11 +239,11 @@ const VesselsLayer = ({ map, mapRef }) => {
   }
 
   function isVesselNameMinimumZoom () {
-    return mapRef.current && mapRef.current.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES
+    return map && map.getView().getZoom() > MIN_ZOOM_VESSEL_NAMES
   }
 
   function isVesselNameMaximumZoom () {
-    return mapRef.current && mapRef.current.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES
+    return map && map.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES
   }
 
   function addVesselLabelToAllFeatures (extent, vesselLabel) {

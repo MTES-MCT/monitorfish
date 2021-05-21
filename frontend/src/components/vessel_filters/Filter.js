@@ -24,7 +24,7 @@ const Filter = ({ filter, isLastItem, removeFilter, showFilter, hideFilters, rem
             ? <ShowIcon title="Cacher le filtre" onClick={() => hideFilters()} />
             : <HideIcon title="Afficher le filtre" onClick={() => showFilter(filter.uuid)} />
         }
-        <CloseIcon title="Supprimer le filtre de ma sélection" onClick={() => removeFilter(filter.name)}/>
+        <CloseIcon title="Supprimer le filtre de ma sélection" onClick={() => removeFilter(filter.uuid)}/>
       </FilterItem>
       <FilterTags isOpen={isOpen}>
         <TagList

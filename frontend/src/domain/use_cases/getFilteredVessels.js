@@ -48,17 +48,16 @@ function filterByZones (filteredVessels, zonesSelected) {
       .flat()
       .map(feature => feature.getGeometry())
 
-    filteredVessels = filteredVessels.filter(vessel => {
-      return flattenFeaturesGeometries.some(featureGeometry => featureGeometry.intersectsCoordinate(vessel.olCoordinates))
-    })
+    filteredVessels = filteredVessels
+      .filter(vessel => {
+        return flattenFeaturesGeometries.some(featureGeometry => featureGeometry.intersectsCoordinate(vessel.olCoordinates))
+      })
       .filter((zone, index, acc) => {
         return acc.findIndex(existingZone => (existingZone.id === zone.id)) === index
       })
-
-    return filteredVessels
-  } else {
-    return filteredVessels
   }
+
+  return filteredVessels
 }
 
 export default getFilteredVessels

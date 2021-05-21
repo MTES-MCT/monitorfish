@@ -47,14 +47,17 @@ export function vesselsAreEquals (firstVessel, secondVessel) {
 export const vesselSize = {
   BELOW_TEN_METERS: {
     code: 'BELOW_TEN_METERS',
+    text: 'Moins de 10m',
     evaluate: value => value <= 10
   },
   BELOW_TWELVE_METERS: {
     code: 'BELOW_TWELVE_METERS',
+    text: 'Moins de 12m',
     evaluate: value => value <= 12
   },
   ABOVE_TWELVE_METERS: {
     code: 'ABOVE_TWELVE_METERS',
+    text: 'Plus de 12m',
     evaluate: value => value >= 12
   }
 }

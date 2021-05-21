@@ -20,10 +20,24 @@ function degreesToRadian (vessel) {
   return vessel.course * Math.PI / 180
 }
 
-export function getVesselImage (vessel, isLight) {
+export function getVesselImage (vessel, isLight, color) {
+  let vesselFileName = 'boat_mf.png'
+  if (color) {
+    vesselFileName = `boat_mf_${color.replace('#', '')}.png`
+  } else if (isLight) {
+    vesselFileName = 'boat_mf_light.png'
+  }
+
+  let vesselColor = 'rgb(5, 5, 94)'
+  if (color) {
+    vesselColor = color
+  } else if (isLight) {
+    vesselColor = '#9B9B9B'
+  }
+
   return vessel.speed > 0.1
     ? new Icon({
-      src: isLight ? 'boat_mf_light.png' : 'boat_mf.png',
+      src: vesselFileName,
       offset: [0, 0],
       imgSize: [14, 14],
       rotation: degreesToRadian(vessel)
@@ -31,7 +45,7 @@ export function getVesselImage (vessel, isLight) {
     : new CircleStyle({
       radius: 4,
       fill: new Fill({
-        color: isLight ? '#9B9B9B' : 'rgb(5, 5, 94)'
+        color: vesselColor
       })
     })
 }

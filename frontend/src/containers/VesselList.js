@@ -17,8 +17,10 @@ import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import VesselListFilters from '../components/vessel_list/VesselListFilters'
-import { getVesselTableObjects } from '../components/vessel_list/dataFormatting'
+import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getUniqueSpeciesAndDistricts from '../domain/use_cases/getUniqueSpeciesAndDistricts'
+import SaveVesselFiltersModal from '../components/vessel_filters/SaveVesselFiltersModal'
+import { addFilter } from '../domain/reducers/Filter'
 
 const VesselList = () => {
   const dispatch = useDispatch()
@@ -33,6 +35,7 @@ const VesselList = () => {
   const firstUpdate = useRef(true)
   const [vesselListModalIsOpen, setVesselListModalIsOpen] = useState(false)
   const [downloadVesselListModalIsOpen, setDownloadVesselListModalIsOpen] = useState(false)
+  const [saveVesselFilterModalIsOpen, setSaveVesselFilterModalIsOpen] = useState(false)
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 
   const [isShowed, setIsShowed] = useState(true)
@@ -46,13 +49,13 @@ const VesselList = () => {
   const [makeVesselListToNotUpdate, setMakeVesselListToNotUpdate] = useState(false)
   const [species, setSpecies] = useState([])
   const [districts, setDistricts] = useState([])
+  const [zoneGroups, setZoneGroups] = useState([])
 
   // Filters
   const [zonesFilter, setZonesFilter] = useState([])
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
   const [countriesFiltered, setCountriesFiltered] = useState([])
   const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
-  const [zoneGroups, setZoneGroups] = useState([])
   const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])
   const [gearsFiltered, setGearsFiltered] = useState([])
   const [speciesFiltered, setSpeciesFiltered] = useState([])
@@ -110,7 +113,7 @@ const VesselList = () => {
     const vessels = features.map(vessel => {
       const coordinates = [...vessel.getGeometry().getCoordinates()]
 
-      return getVesselTableObjects(vessel, coordinates)
+      return getVesselObjectFromFeature(vessel, coordinates)
     })
 
     setVessels(vessels)
@@ -175,6 +178,10 @@ const VesselList = () => {
     dispatch(resetZonesSelected())
   }
 
+  const addFilterCallback = useCallback(filter => {
+    dispatch(addFilter(filter))
+  }, [])
+
   const selectBox = () => {
     setVesselListModalIsOpen(false)
     dispatch(setInteraction(InteractionTypes.SQUARE))
@@ -198,11 +205,15 @@ const VesselList = () => {
   }
 
   const callRemoveZoneSelected = zoneSelectedToRemove => {
-    dispatch(removeZoneSelected(zoneSelectedToRemove.name))
+    dispatch(removeZoneSelected(zoneSelectedToRemove.code))
   }
 
   const download = () => {
     setDownloadVesselListModalIsOpen(true)
+  }
+
+  const saveFilter = () => {
+    setSaveVesselFilterModalIsOpen(true)
   }
 
   useEffect(() => {
@@ -223,7 +234,7 @@ const VesselList = () => {
 
   useEffect(() => {
     if (administrativeZonesFiltered && zonesSelected &&
-          administrativeZonesFiltered.length > zonesSelected.length) {
+      administrativeZonesFiltered.length > zonesSelected.length) {
       setIsFiltering(true)
 
       const zonesGeometryToFetch = administrativeZonesFiltered
@@ -250,8 +261,8 @@ const VesselList = () => {
 
   useEffect(() => {
     if (zonesSelected && zonesSelected.length &&
-            administrativeZonesFiltered &&
-            zonesSelected.length > administrativeZonesFiltered.length) {
+      administrativeZonesFiltered &&
+      zonesSelected.length > administrativeZonesFiltered.length) {
       const nextZonesSelected = zonesSelected.filter(zoneSelected => {
         if (zoneSelected.code === 'FREE_DRAW') {
           return true
@@ -266,145 +277,157 @@ const VesselList = () => {
   }, [administrativeZonesFiltered])
 
   return (
-        <>
-            <Wrapper isShowed={isShowed} isFiltering={isFiltering}>
-                <VesselListIcon
-                    selectedVessel={selectedVessel}
-                    onMouseEnter={() => dispatch(expandRightMenu())}
-                    rightMenuIsOpen={rightMenuIsOpen}
-                    title={'Liste des navires avec VMS'}
-                    onClick={() => setVesselListModalIsOpen(true)}>
-                    <Vessel
-                      selectedVessel={selectedVessel}
-                      rightMenuIsOpen={rightMenuIsOpen}
-                    />
-                </VesselListIcon>
-                <Modal
-                    full
-                    backdrop={'static'}
-                    show={vesselListModalIsOpen}
-                    onHide={() => closeAndResetVesselList()}
-                >
-                    <Modal.Header>
-                        <Modal.Title>
-                            <Vessel isTitle={true}/> Liste des navires avec VMS
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Title>FILTRER LA LISTE</Title>
-                        <VesselListFilters
-                          lastPositionTimeAgo={{
-                            lastPositionTimeAgoFilter,
-                            setLastPositionTimeAgoFilter
-                          }}
-                          countries={{
-                            countriesFiltered,
-                            setCountriesFiltered
-                          }}
-                          fleetSegments={{
-                            fleetSegments,
-                            fleetSegmentsFiltered,
-                            setFleetSegmentsFiltered
-                          }}
-                          gears={{
-                            gears,
-                            gearsFiltered,
-                            setGearsFiltered
-                          }}
-                          species={{
-                            species,
-                            speciesFiltered,
-                            setSpeciesFiltered
-                          }}
-                          districts={{
-                            districts,
-                            districtsFiltered,
-                            setDistrictsFiltered
-                          }}
-                          zones={{
-                            zonesFilter,
-                            zoneGroups,
-                            administrativeZonesFiltered,
-                            setAdministrativeZonesFiltered,
-                            zonesSelected,
-                            callRemoveZoneSelected
-                          }}
-                          geometrySelection={{
-                            selectBox,
-                            selectPolygon
-                          }}
-                          seeMore={{
-                            seeMoreIsOpen,
-                            setSeeMoreIsOpen
-                          }}
-                          size={{
-                            vesselsSizeValuesChecked,
-                            setVesselsSizeValuesChecked
-                          }}
-                        />
-                        <VesselListTable
-                            vessels={vessels}
-                            filteredVessels={filteredVessels}
-                            vesselsCountTotal={vesselsCountTotal}
-                            vesselsCountShowed={vesselsCountShowed}
-                            allVesselsChecked={allVesselsChecked}
-                            setAllVesselsChecked={setAllVesselsChecked}
-                            handleChange={handleChangeModifiableKey}
-                            seeMoreIsOpen={seeMoreIsOpen}
-                            filters={{
-                              districtsFiltered,
-                              vesselsSizeValuesChecked
-                            }}
-                        />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <ShowOnMapButton
-                            disabled={!(filteredVessels && filteredVessels.length)}
-                            onClick={() => highLightOnMap()}>
-                            Voir sur la carte
-                        </ShowOnMapButton>
-                        <DownloadButton
-                            disabled={!(filteredVessels && filteredVessels.length)}
-                            onClick={() => download()}>
-                            Télécharger le tableau
-                        </DownloadButton>
-                    </Modal.Footer>
-                </Modal>
-            </Wrapper>
-            <BackToVesselListButton
-                showBackToVesselListButton={showBackToVesselListButton}
-                onClick={() => goBackToVesselList()}
-                firstUpdate={firstUpdate.current}
-            >
-                Revenir à la liste des navires
-            </BackToVesselListButton>
-            <DownloadVesselListModal
-                isOpen={downloadVesselListModalIsOpen}
-                setIsOpen={setDownloadVesselListModalIsOpen}
-                filteredVessels={filteredVessels}
+    <>
+      <Wrapper isShowed={isShowed} isFiltering={isFiltering}>
+        <VesselListIcon
+          selectedVessel={selectedVessel}
+          onMouseEnter={() => dispatch(expandRightMenu())}
+          rightMenuIsOpen={rightMenuIsOpen}
+          title={'Liste des navires avec VMS'}
+          onClick={() => setVesselListModalIsOpen(true)}>
+          <Vessel
+            selectedVessel={selectedVessel}
+            rightMenuIsOpen={rightMenuIsOpen}
+          />
+        </VesselListIcon>
+        <Modal
+          full
+          backdrop={'static'}
+          show={vesselListModalIsOpen}
+          onHide={() => closeAndResetVesselList()}
+        >
+          <Modal.Header>
+            <Modal.Title>
+              <Vessel isTitle={true}/> Liste des navires avec VMS
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Title>FILTRER LA LISTE</Title>
+            <VesselListFilters
+              lastPositionTimeAgo={{
+                lastPositionTimeAgoFilter,
+                setLastPositionTimeAgoFilter
+              }}
+              countries={{
+                countriesFiltered,
+                setCountriesFiltered
+              }}
+              fleetSegments={{
+                fleetSegments,
+                fleetSegmentsFiltered,
+                setFleetSegmentsFiltered
+              }}
+              gears={{
+                gears,
+                gearsFiltered,
+                setGearsFiltered
+              }}
+              species={{
+                species,
+                speciesFiltered,
+                setSpeciesFiltered
+              }}
+              districts={{
+                districts,
+                districtsFiltered,
+                setDistrictsFiltered
+              }}
+              zones={{
+                zonesFilter,
+                zoneGroups,
+                administrativeZonesFiltered,
+                setAdministrativeZonesFiltered,
+                zonesSelected,
+                callRemoveZoneSelected
+              }}
+              geometrySelection={{
+                selectBox,
+                selectPolygon
+              }}
+              seeMore={{
+                seeMoreIsOpen,
+                setSeeMoreIsOpen
+              }}
+              size={{
+                vesselsSizeValuesChecked,
+                setVesselsSizeValuesChecked
+              }}
             />
-        </>
+            <VesselListTable
+              vessels={vessels}
+              filteredVessels={filteredVessels}
+              vesselsCountTotal={vesselsCountTotal}
+              vesselsCountShowed={vesselsCountShowed}
+              allVesselsChecked={allVesselsChecked}
+              setAllVesselsChecked={setAllVesselsChecked}
+              handleChange={handleChangeModifiableKey}
+              seeMoreIsOpen={seeMoreIsOpen}
+              filters={{
+                districtsFiltered,
+                vesselsSizeValuesChecked
+              }}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <ShowOnMapButton
+              disabled={!(filteredVessels && filteredVessels.length)}
+              onClick={() => highLightOnMap()}>
+              Voir sur la carte
+            </ShowOnMapButton>
+            <BlackButton
+              disabled={!(filteredVessels && filteredVessels.length)}
+              isLast={false}
+              onClick={() => saveFilter()}>
+              Enregistrer le filtre
+            </BlackButton>
+            <BlackButton
+              disabled={!(filteredVessels && filteredVessels.length)}
+              isLast={true}
+              onClick={() => download()}>
+              Télécharger le tableau
+            </BlackButton>
+          </Modal.Footer>
+        </Modal>
+      </Wrapper>
+      <BackToVesselListButton
+        showBackToVesselListButton={showBackToVesselListButton}
+        onClick={() => goBackToVesselList()}
+        firstUpdate={firstUpdate.current}
+      >
+        Revenir à la liste des navires
+      </BackToVesselListButton>
+      <DownloadVesselListModal
+        isOpen={downloadVesselListModalIsOpen}
+        setIsOpen={setDownloadVesselListModalIsOpen}
+        filteredVessels={filteredVessels}
+      />
+      <SaveVesselFiltersModal
+        isOpen={saveVesselFilterModalIsOpen}
+        setIsOpen={setSaveVesselFilterModalIsOpen}
+        filters={{
+          countriesFiltered,
+          fleetSegmentsFiltered,
+          gearsFiltered,
+          speciesFiltered,
+          districtsFiltered,
+          zonesSelected,
+          vesselsSizeValuesChecked
+        }}
+        addFilter={addFilterCallback}
+      />
+    </>
   )
 }
 
 const Wrapper = styled.div`
-  animation: ${props => props.isShowed ? 'vessel-search-box-opening' : 'vessel-search-box-closing'} 0.2s ease forwards;
+  opacity: ${props => props.isShowed ? '1' : '0'};
+  transition: all 0.2s;
   cursor: ${props => props.isFiltering ? 'progress' : 'auto'};
-
-  @keyframes vessel-search-box-opening {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes vessel-search-box-closing {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
-  }
 `
 
 const BackToVesselListButton = styled.button`
   position: absolute;
-  opacity: 0;
+  opacity: ${props => props.showBackToVesselListButton ? '1' : '0'};;
   top: 20px;
   left: auto;
   background: ${COLORS.grayDarkerThree};
@@ -413,17 +436,7 @@ const BackToVesselListButton = styled.button`
   color: ${COLORS.grayBackground};
   border-radius: 2px;
   margin-left: -90px;
-  animation: ${props => props.firstUpdate ? '' : props.showBackToVesselListButton ? 'vessel-back-to-filter-button-opening' : 'vessel-back-to-filter-button-closing'} 0.2s ease forwards;
-
-  @keyframes vessel-back-to-filter-button-opening {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes vessel-back-to-filter-button-closing {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
-  }
+  transition: all 0.2s;
   
   :hover, :focus {
     background: ${COLORS.grayDarkerThree};
@@ -443,10 +456,10 @@ const ShowOnMapButton = styled.button`
   }
 `
 
-const DownloadButton = styled.button`
+const BlackButton = styled.button`
   background: ${COLORS.grayDarkerThree};
   padding: 5px 12px;
-  margin: 20px 20px 20px 10px;
+  margin: 20px ${props => props.isLast ? '20px' : '0'} 20px 10px;
   font-size: 13px;
   color: ${COLORS.grayBackground};
   
@@ -467,42 +480,15 @@ const VesselListIcon = styled.button`
   color: #05055E;
   background: ${COLORS.grayDarkerThree};
   padding: 8px 0px 0 1px;
+  margin-top: 8px;
   top: 60px;
   z-index: 99;
   height: 40px;
-  width: 40px;
-  border-radius: 2px;
-  right: 10px;
-  margin-top: 8px;
+  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
+  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
+  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  transition: all 0.3s;
   
-  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-list-icon-closing' : 'vessel-list-icon-opening'} 0.3s ease forwards;
-  
-  @keyframes vessel-list-icon-opening {
-    0%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-     }
-    100% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-  }
-
-  @keyframes vessel-list-icon-closing {
-    0% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-    100%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-    }
-  }
-
   :hover, :focus {
       background: ${COLORS.grayDarkerThree};
   }

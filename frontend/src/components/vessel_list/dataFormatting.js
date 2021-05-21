@@ -108,9 +108,10 @@ export const lastPositionTimeAgoLabels = [
   }
 ]
 
-export function getVesselTableObjects (vessel, coordinates) {
+export function getVesselObjectFromFeature (vessel, coordinates) {
   return {
     targetNumber: '',
+    uid: vessel.ol_uid,
     id: vessel.id_,
     checked: true,
     vesselName: vessel.getProperties().vesselName,

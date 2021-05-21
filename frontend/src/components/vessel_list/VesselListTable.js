@@ -66,7 +66,7 @@ const VesselListTable = props => {
             </VesselsCount>
             <Table
                 virtualized
-                height={props.seeMoreIsOpen ? 460 : 510}
+                height={props.seeMoreIsOpen ? 480 : 530}
                 rowHeight={36}
                 data={getVessels()}
                 sortColumn={sortColumn}
@@ -89,7 +89,7 @@ const VesselListTable = props => {
                     <TargetCell dataKey="targetNumber" onChange={props.handleChange} />
                 </Column>
 
-                <Column sortable width={180} fixed>
+                <Column sortable width={170} fixed>
                     <HeaderCell>Nom du navire</HeaderCell>
                     <Cell dataKey="vesselName" />
                 </Column>
@@ -104,7 +104,7 @@ const VesselListTable = props => {
                     <Cell dataKey="ircs" />
                 </Column>
 
-                <Column sortable width={70}>
+                <Column sortable width={80}>
                     <HeaderCell>MMSI</HeaderCell>
                     <Cell dataKey="mmsi" />
                 </Column>

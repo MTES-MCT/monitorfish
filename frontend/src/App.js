@@ -17,6 +17,7 @@ import VesselList from './containers/VesselList'
 import UpdatingVesselLoader from './containers/UpdatingVesselLoader'
 import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
 import Measurement from './containers/Measurement'
+import VesselFilter from './containers/VesselFilter'
 
 function App () {
   return (
@@ -44,6 +45,7 @@ function HomePage () {
     <VesselsSearchBox />
     <RightMenuOnHoverZone />
     <VesselList/>
+    <VesselFilter/>
     <VesselVisibility/>
     <VesselSidebar/>
     <UpdatingVesselLoader/>

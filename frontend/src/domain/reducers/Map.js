@@ -112,12 +112,30 @@ const mapSlice = createSlice({
     resetCircleMeasurementToAdd (state) {
       state.circleMeasurementToAdd = null
     },
+    /**
+     * Add a selected zone to filter vessels on vessel list
+     * @param {Object=} state
+     * @param {{
+     * payload: {
+     *  name: string,
+     *  code: string,
+     *  feature: GeoJSON
+     * }}} action - The zone to add
+     */
     addZoneSelected (state, action) {
-      state.zonesSelected = state.zonesSelected.concat(action.payload)
+      if (!state.zonesSelected.find(zone => zone.code === action.payload.code)) {
+        state.zonesSelected = state.zonesSelected.concat(action.payload)
+      }
     },
+    /**
+     * Remove a selected zone
+     * @param {Object=} state
+     * @param {{
+     * payload: string}} action - The name of the zone
+     */
     removeZoneSelected (state, action) {
       state.zonesSelected = state.zonesSelected.filter(zoneSelected => {
-        return zoneSelected.name !== action.payload
+        return zoneSelected.code !== action.payload
       })
     },
     setZonesSelected (state, action) {

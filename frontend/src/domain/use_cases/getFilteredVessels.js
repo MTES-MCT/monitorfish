@@ -1,9 +1,21 @@
 import * as Comlink from 'comlink'
 /* eslint-disable import/no-webpack-loader-syntax */
 import Worker from 'worker-loader!../../workers/MapperWorker'
+import VectorSource from 'ol/source/Vector'
+import GeoJSON from 'ol/format/GeoJSON'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
+import { all } from 'ol/loadingstrategy'
 
 const worker = new Worker()
 const MapperWorker = Comlink.wrap(worker)
+
+const vectorSource = new VectorSource({
+  format: new GeoJSON({
+    dataProjection: WSG84_PROJECTION,
+    featureProjection: OPENLAYERS_PROJECTION
+  }),
+  strategy: all
+})
 
 const getFilteredVessels = (vessels, filters) => async () => {
   const worker = await new MapperWorker()
@@ -26,12 +38,27 @@ function getFiltersWithoutZonesSelected (filters) {
 }
 
 function filterByZones (filteredVessels, zonesSelected) {
-  filteredVessels = filteredVessels.filter(vessel => {
-    return zonesSelected.some(zoneSelected => zoneSelected.feature.getGeometry()
-      .intersectsCoordinate(vessel.olCoordinates))
-  }).filter((zone, index, acc) => acc
-    .findIndex(existingZone => (existingZone.id === zone.id)) === index)
-  return filteredVessels
+  const featuresGeometries = zonesSelected
+    .map(zone => zone.feature)
+    .map(feature => feature)
+    .map(feature => vectorSource.getFormat().readFeatures(feature))
+
+  if (featuresGeometries && featuresGeometries.length) {
+    const flattenFeaturesGeometries = featuresGeometries
+      .flat()
+      .map(feature => feature.getGeometry())
+
+    filteredVessels = filteredVessels.filter(vessel => {
+      return flattenFeaturesGeometries.some(featureGeometry => featureGeometry.intersectsCoordinate(vessel.olCoordinates))
+    })
+      .filter((zone, index, acc) => {
+        return acc.findIndex(existingZone => (existingZone.id === zone.id)) === index
+      })
+
+    return filteredVessels
+  } else {
+    return filteredVessels
+  }
 }
 
 export default getFilteredVessels

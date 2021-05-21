@@ -118,19 +118,19 @@ const Text = styled.span`
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 12px;
+  width: 13px;
   padding-top: 2px;
 `
 
 const ShowIcon = styled(ShowIconSVG)`
-  width: 21px;
+  width: 23px;
   padding: 0 8px 0 0;
   margin-top: 9px;
   margin-left: 6px;
 `
 
 const HideIcon = styled(HideIconSVG)`
-  width: 21px;
+  width: 23px;
   padding: 0 8px 0 0;
   margin-top: 9px;
   margin-left: 6px;
@@ -159,14 +159,26 @@ const List = styled.div`
   }
 `
 
-const Row = styled.div`
+const Row = styled.li`
+  padding: 0px 5px 0px 0px;
+  margin: 0;
+  font-size: 0.8em;
+  text-align: left;
+  list-style-type: none;
   width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  cursor: pointer;
+  margin: 0;
+  border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
+  line-height: 1.9em;
   display: block;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
   transform: rotate(180deg);
-  width: 14px;
+  width: 16px;
   margin-right: 5px;
   margin-top: 5px;
   

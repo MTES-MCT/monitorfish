@@ -189,6 +189,7 @@ a:hover, a:focus {
   padding: 20px 25px 20px 25px;
   margin-top: 0;
   max-height: 800px !important;
+  min-height: 210px !important;
 }
 
 .rs-modal-header {

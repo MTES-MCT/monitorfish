@@ -379,12 +379,12 @@ const CFR = styled.div`
 `
 
 const Flag = styled.img`
-    font-size: 25px;
-    margin-left: 5px;
-    display: inline-block;
-    width: 1em;                      
-    height: 1em;                      
-    vertical-align: middle;
+  font-size: 25px;
+  margin-left: 5px;
+  display: inline-block;
+  width: 1em;                      
+  height: 1em;                      
+  vertical-align: middle;
 `
 
 const VesselName = styled.span`
@@ -517,7 +517,7 @@ const SelectedVessel = styled.div`
 `
 
 const SearchButton = styled.button`
-  opacity: 1;
+  opacity: ${props => props.isShowed ? '1' : '0'};
   width: 40px;
   height: 40px;
   right: 10px;
@@ -527,46 +527,10 @@ const SearchButton = styled.button`
   cursor: pointer;
   border-radius: 2px;
   position: absolute;
-  
-  animation: ${props => props.isShowed ? 'vessel-search-button-showed' : 'vessel-search-button-hidden'} 0.2s ease forwards,
-  ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-search-icon-closing' : 'vessel-search-icon-opening'} 0.3s ease forwards;
-
-  @keyframes vessel-search-button-showed {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes vessel-search-button-hidden {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
-  }
-    
-  @keyframes vessel-search-icon-opening {
-    0%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-       fill: green;
-     }
-    100% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-  }
-
-  @keyframes vessel-search-icon-closing {
-    0% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-    100%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-    }
-  }
+  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
+  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
+  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  transition: all 0.3s;
   
   :hover, :focus {
       background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
@@ -576,25 +540,8 @@ const SearchButton = styled.button`
 const SearchIcon = styled(SearchIconSVG)`
   width: 40px;
   height: 40px;
-  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-search-icon-hidden' : 'vessel-search-icon-visible'} 0.2s ease forwards;
-  
-  @keyframes vessel-search-icon-visible {
-    0%   {
-      opacity: 0;
-     }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes vessel-search-icon-hidden {
-    0% {
-      opacity: 1;
-    }
-    100%   {
-      opacity: 0;
-    }
-  }
+  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  transition: all 0.2s;
 `
 
 const List = styled.ul`

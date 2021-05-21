@@ -5,15 +5,15 @@ import { lastPositionTimeAgoLabels } from './dataFormatting'
 import TagPicker from 'rsuite/lib/TagPicker'
 import MultiCascader from 'rsuite/lib/MultiCascader'
 import { layersType as LayersType } from '../../domain/entities/layers'
-import Tag from 'rsuite/lib/Tag'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.svg'
-import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import Countries from 'i18n-iso-countries'
 import Checkbox from 'rsuite/lib/Checkbox'
 import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import { vesselSize } from '../../domain/entities/vessel'
+import Tag from 'rsuite/lib/Tag'
+import FilterTag from '../vessel_filters/FilterTag'
 
 const VesselListFilters = ({
   lastPositionTimeAgo,
@@ -81,10 +81,11 @@ const VesselListFilters = ({
   const showZonesSelected = useCallback(() => {
     return zones.zonesSelected && zones.zonesSelected.length && zones.zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
       ? zones.zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
-        return <ZoneSelected key={zoneSelected.code + index}>
-          <DeleteZoneText>Effacer la zone définie</DeleteZoneText>
-          <CloseIcon onClick={() => zones.callRemoveZoneSelected(zoneSelected)}/>
-        </ZoneSelected>
+        return <FilterTag
+          key={zoneSelected.code + index}
+          value={'Effacer la zone définie'}
+          closeCallback={() => zones.callRemoveZoneSelected(zoneSelected)}
+        />
       })
       : null
   }, [zones.zonesSelected])
@@ -237,26 +238,8 @@ const SeeMore = styled.span`
   cursor: pointer;
 `
 
-const DeleteZoneText = styled.span`
-  padding-bottom: 5px;
-  vertical-align: middle;
-  height: 30px;
-  display: inline-block;
-`
 const CustomZone = styled.span`
   margin-left: 50px;
-`
-
-const ZoneSelected = styled.span`
-  background: ${COLORS.grayBackground};
-  border-radius: 2px;
-  color: ${COLORS.textGray};
-  margin-left: 0;
-  font-size: 13px;
-  padding: 0px 3px 0px 7px;
-  vertical-align: top;
-  height: 30px;
-  display: inline-block;
 `
 
 const ZoneFilter = styled.div`
@@ -299,16 +282,6 @@ const BoxFilter = styled(BoxFilterSVG)`
   cursor: pointer;
   margin-left: 5px;
   vertical-align: text-bottom;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  vertical-align: text-bottom;
-  cursor: pointer;
-  border-left: 1px solid white;
-  height: 30px;
-  margin: 0 6px 0 7px;
-  padding-left: 7px;
 `
 
 const PolygonFilter = styled(PolygonFilterSVG)`

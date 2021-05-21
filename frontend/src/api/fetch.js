@@ -23,6 +23,24 @@ function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
   return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.layerName}/${regulatoryZone.zone} : ${e}`)
 }
 
+/**
+ * @typedef CRS
+ * @property {string} type
+ * @property {Object} properties
+ */
+
+/**
+ * @typedef GeoJSON
+ * @property {CRS} crs
+ * @property {number[]} bbox
+ * @property {Object[]} features
+ * @property {number} numberMatched
+ * @property {number} numberReturned
+ * @property {string} timeStamp
+ * @property {number} totalFeatures
+ * @property {string} type
+ */
+
 export function getVesselsLastPositionsFromAPI () {
   return fetch('/bff/v1/vessels')
     .then(response => {
@@ -125,6 +143,14 @@ export function getAllRegulatoryZonesFromAPI () {
     })
 }
 
+/**
+ * Get the administrative zone GeoJSON feature
+ * @param {string} administrativeZone
+ * @param {string[]|null} extent
+ * @param {string|null} subZone
+ * @returns {Promise<GeoJSON>} The feature GeoJSON
+ * @throws {Error}
+ */
 export function getAdministrativeZoneFromAPI (administrativeZone, extent, subZone) {
   return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone))
     .then(response => {
@@ -144,6 +170,13 @@ export function getAdministrativeZoneFromAPI (administrativeZone, extent, subZon
     })
 }
 
+/**
+ * Get the administrative zone Geoserver URL
+ * @param {string} type
+ * @param {string[]|null} extent
+ * @param {string|null} subZone
+ * @returns {string} - the zone URL WFS request
+ */
 export function getAdministrativeZoneURL (type, extent, subZone) {
   let extentFilter = ''
   if (extent) {

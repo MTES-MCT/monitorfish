@@ -6323,6 +6323,11 @@
   "resolved" "https://registry.npmjs.org/ignore/-/ignore-5.1.8.tgz"
   "version" "5.1.8"
 
+"imask@^6.0.5":
+  "integrity" "sha512-zyiKRSzuocb2adasVSz0ku9xxejDRs5wME7Dt5Uk1l83HGBFUP7A8y8Z6TytLCtCiS/A1aArlCTqLcOkoVNbNQ=="
+  "resolved" "https://registry.npmjs.org/imask/-/imask-6.0.7.tgz"
+  "version" "6.0.7"
+
 "immer@^8.0.0":
   "integrity" "sha512-jm87NNBAIG4fHwouilCHIecFXp5rMGkiFrAuhVO685UnMAlOneEAnOyzPt8OnP47TC11q/E7vpzZe0WvwepFTg=="
   "resolved" "https://registry.npmjs.org/immer/-/immer-8.0.0.tgz"
@@ -9878,7 +9883,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.4"
 
-"prop-types@^15.0.0", "prop-types@^15.5.8", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2":
+"prop-types@^15.0.0", "prop-types@^15.5.8", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@>=15.0.0":
   "integrity" "sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
   "version" "15.7.2"
@@ -10067,6 +10072,13 @@
     "raf" "^3.4.1"
     "regenerator-runtime" "^0.13.3"
     "whatwg-fetch" "^3.0.0"
+
+"react-coordinate-input@^1.0.0-rc.2":
+  "integrity" "sha512-Umfnh0jEt/bKmIM+B/fT3QscL06CrRo0WRYIMEhgcieoeU5A54hR5WGjS7dKm33sMF5fywGXs7rZ/iyCk/N5yA=="
+  "resolved" "https://registry.npmjs.org/react-coordinate-input/-/react-coordinate-input-1.0.0-rc.2.tgz"
+  "version" "1.0.0-rc.2"
+  dependencies:
+    "imask" "^6.0.5"
 
 "react-country-flag@^2.3.0":
   "integrity" "sha512-Lb2nhMoTOxNjlQoun3iPwqIgpluSyzr8jN45cN0mXYbeDi10/MhGJKZa1cvgyrnfCtOh/IHdhA0MkSuls78bBw=="
@@ -10323,7 +10335,7 @@
     "prop-types" "^15.7.2"
     "react-lifecycles-compat" "^3.0.4"
 
-"react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^16.13.1", "react@>=0.14.x", "react@>=15", "react@>=16":
+"react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^16.13.1", "react@>=0.14.x", "react@>=15", "react@>=16", "react@>=16.9.0":
   "integrity" "sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.13.1.tgz"
   "version" "16.13.1"

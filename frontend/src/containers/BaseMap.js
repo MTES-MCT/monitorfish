@@ -34,7 +34,7 @@ const BaseMap = props => {
 
   useEffect(() => {
     initMap()
-  }, [mapState.selectedBaseLayer])
+  }, [map, mapState.selectedBaseLayer])
 
   useEffect(() => {
     animateToRegulatoryLayer()
@@ -61,9 +61,9 @@ const BaseMap = props => {
         ]
       })
 
-      initialMap.on('click', event => handleMapClick(event, map))
-      initialMap.on('pointermove', event => throttleAndHandlePointerMove(event, map))
-      initialMap.on('moveend', () => throttleAndHandleMovingAndZoom(map))
+      initialMap.on('click', event => handleMapClick(event, initialMap))
+      initialMap.on('pointermove', event => throttleAndHandlePointerMove(event, initialMap))
+      initialMap.on('moveend', () => throttleAndHandleMovingAndZoom(initialMap))
 
       setMap(initialMap)
 

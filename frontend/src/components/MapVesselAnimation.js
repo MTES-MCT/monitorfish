@@ -32,7 +32,7 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
     }
   }, [mapClickEvent])
 
-  function createAnimateObject (resolution, duration, zoom, mapState) {
+  function createAnimateObject (resolution, duration, zoom) {
     return {
       center: [
         mapState.animateToVessel.getGeometry().getCoordinates()[0] + resolution,

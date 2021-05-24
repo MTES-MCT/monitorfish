@@ -10,11 +10,11 @@ const VesselCardOverlay = ({ feature, map }) => {
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
   const overlayCallback = useCallback(
-    (e) => {
-      overlayRef.current = e
-      if (e) {
+    (ref) => {
+      overlayRef.current = ref
+      if (ref) {
         overlayObjectRef.current = new Overlay({
-          element: e,
+          element: ref,
           autoPan: true,
           autoPanAnimation: {
             duration: 400
@@ -31,8 +31,7 @@ const VesselCardOverlay = ({ feature, map }) => {
     if (map) {
       map.addOverlay(overlayObjectRef.current)
     }
-  }, [map])
-
+  }, [map, overlayObjectRef])
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
       if (feature && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
@@ -44,7 +43,7 @@ const VesselCardOverlay = ({ feature, map }) => {
         setVesselFeatureToShowOnCard(null)
       }
     }
-  }, [feature, vesselFeatureToShowOnCard, overlayRef, overlayObjectRef])
+  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef])
   return (
     <VesselCardOverlayComponent ref={overlayCallback}>
       {

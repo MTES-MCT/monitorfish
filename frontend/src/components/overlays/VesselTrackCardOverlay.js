@@ -34,18 +34,12 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
     }
   }, [map, overlayObjectRef])
 
-  const showOverlay = () => {
-    overlayRef.current.style.display = 'block'
-    overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
-  }
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
-        showOverlay()
-        setVesselFeatureToShowOnCard(feature.getProperties().trackType)
-      } else if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
-        showOverlay()
+      if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
         setVesselFeatureToShowOnCard(feature)
+        overlayRef.current.style.display = 'block'
+        overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
       } else {
         setVesselFeatureToShowOnCard(null)
         overlayRef.current.style.display = 'none'

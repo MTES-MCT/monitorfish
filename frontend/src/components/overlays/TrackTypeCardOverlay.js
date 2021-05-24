@@ -12,11 +12,11 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
   const overlayObjectRef = useRef(null)
 
   const overlayCallback = useCallback(
-    (e) => {
-      overlayRef.current = e
-      if (e) {
+    (ref) => {
+      overlayRef.current = ref
+      if (ref) {
         overlayObjectRef.current = new Overlay({
-          element: e,
+          element: ref,
           autoPan: true,
           autoPanAnimation: {
             duration: 400
@@ -38,6 +38,7 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
+      // TODO Vérifier la condition ici !
       if (feature && feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
         setTrackTypeToShowOnCard(feature.getProperties().trackType)
         overlayRef.current.style.display = 'block'
@@ -48,7 +49,7 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
       }
     }
   // else est-ce qu'on reset ?
-  }, [trackTypeToShowOnCard])
+  }, [setTrackTypeToShowOnCard, pointerMoveEventPixel, feature, overlayRef, overlayObjectRef])
   return (
     <TrackTypeCardOverlayComponent ref={overlayCallback} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>
     {

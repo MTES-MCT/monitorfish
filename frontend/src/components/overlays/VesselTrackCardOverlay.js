@@ -10,11 +10,11 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
   const overlayCallback = useCallback(
-    (e) => {
-      overlayRef.current = e
-      if (e) {
+    (ref) => {
+      overlayRef.current = ref
+      if (ref) {
         overlayObjectRef.current = new Overlay({
-          element: e,
+          element: ref,
           autoPan: true,
           autoPanAnimation: {
             duration: 400
@@ -32,7 +32,7 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
     if (map) {
       map.addOverlay(overlayObjectRef.current)
     }
-  }, [map])
+  }, [map, overlayObjectRef])
 
   const showOverlay = () => {
     overlayRef.current.style.display = 'block'
@@ -51,7 +51,7 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
         overlayRef.current.style.display = 'none'
       }
     }
-  }, [feature])
+  }, [setVesselFeatureToShowOnCard, feature, overlayRef, overlayObjectRef])
   return (
     <VesselTrackCardOverlayComponent ref={overlayCallback}>
       {

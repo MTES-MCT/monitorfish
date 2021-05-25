@@ -61,7 +61,9 @@ const BaseMap = props => {
         ]
       })
 
-      initialMap.on('click', event => handleMapClick(event, initialMap))
+      if (handleMapClick) {
+        initialMap.on('click', event => handleMapClick(event, initialMap))
+      }
       initialMap.on('pointermove', event => throttleAndHandlePointerMove(event, initialMap))
       initialMap.on('moveend', () => throttleAndHandleMovingAndZoom(initialMap))
 

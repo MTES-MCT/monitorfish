@@ -7,44 +7,51 @@ import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../do
 import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../domain/entities/layers'
 
-// est-il utile d'utiliser map ref?
-// Un composant ou des fonctions ?
 const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const dispatch = useDispatch()
   const mapState = useSelector(state => state.map)
   const vessel = useSelector(state => state.vessel)
 
+  const {
+    animateToVessel
+  } = mapState
+
+  const {
+    vesselSidebarIsOpen,
+    selectedVesselFeatureAndIdentity
+  } = vessel
+
   useEffect(() => {
     if (map) {
-      animateToVessel(map)
+      addAnimateToVessel(map)
     }
-  }, [mapState.animateToVessel, map, vessel.vesselSidebarIsOpen, vessel.selectedVesselFeatureAndIdentity])
+  }, [animateToVessel, map, vesselSidebarIsOpen, selectedVesselFeatureAndIdentity])
 
   useEffect(() => {
     if (mapMovingAndZoomEvent) {
       hideVesselOnMapZoom()
     }
-  }, [mapMovingAndZoomEvent])
+  }, [map, mapMovingAndZoomEvent])
 
   useEffect(() => {
     if (mapClickEvent) {
       showVesselTrackAndSidebarOnMapClick(mapClickEvent)
     }
-  }, [mapClickEvent])
+  }, [vessel, mapClickEvent])
 
   function createAnimateObject (resolution, duration, zoom) {
     return {
       center: [
-        mapState.animateToVessel.getGeometry().getCoordinates()[0] + resolution,
-        mapState.animateToVessel.getGeometry().getCoordinates()[1]
+        animateToVessel.getGeometry().getCoordinates()[0] + resolution,
+        animateToVessel.getGeometry().getCoordinates()[1]
       ],
       duration,
       zoom
     }
   }
 
-  function animateToVessel (map) {
-    if (map && mapState.animateToVessel && vessel.selectedVesselFeatureAndIdentity && vessel.vesselSidebarIsOpen) {
+  function addAnimateToVessel (map) {
+    if (map && animateToVessel && selectedVesselFeatureAndIdentity && vesselSidebarIsOpen) {
       if (map.getView().getZoom() >= 8) {
         const resolution = map.getView().getResolution()
         map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))

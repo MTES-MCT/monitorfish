@@ -47,7 +47,6 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
         overlayRef.current.style.display = 'none'
       }
     }
-  // else est-ce qu'on reset ?
   }, [setTrackTypeToShowOnCard, pointerMoveEventPixel, feature, overlayRef, overlayObjectRef])
   return (
     <TrackTypeCardOverlayComponent ref={overlayCallback} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>

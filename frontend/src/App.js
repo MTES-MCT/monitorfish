@@ -7,6 +7,7 @@ import {
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import Map from './containers/Map'
+import Backoffice from './containers/BaseMap'
 import VesselsSearchBox from './containers/VesselsSearchBox'
 import VesselSidebar from './containers/VesselSidebar'
 import LayersSidebar from './containers/LayersSidebar'
@@ -24,10 +25,10 @@ function App () {
       <Router>
       <Switch>
           <Route path="/backoffice">
-            <Backoffice />
+            <BackofficePage />
           </Route>
           <Route path="/">
-            <Home />
+            <HomePage />
           </Route>
         </Switch>
       </Router>
@@ -36,7 +37,7 @@ function App () {
   )
 }
 
-function Home () {
+function HomePage () {
   return <Wrapper>
     <Map />
     <LayersSidebar/>
@@ -51,9 +52,9 @@ function Home () {
   </Wrapper>
 }
 
-function Backoffice () {
+function BackofficePage () {
   return <BackofficeWrapper>
-    <Map isBackOffice/>
+    <Backoffice />
     <LayersSidebar/>
     <APIWorker/>
   </BackofficeWrapper>

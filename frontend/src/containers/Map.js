@@ -23,7 +23,6 @@ const Map = () => {
   const dispatch = useDispatch()
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
-  const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
@@ -60,9 +59,6 @@ const Map = () => {
       setHandlePointerMoveEventPixel(event.pixel)
       if (feature && feature.getId()) {
         setCurrentFeature(feature)
-        if (feature.getId().toString().includes(`${LayersEnum.REGULATORY.code}`)) {
-          setRegulatoryFeatureToShowOnCard(feature)
-        }
         map.getTarget().style.cursor = 'pointer'
       } else if (map.getTarget().style) {
         map.getTarget().style.cursor = ''
@@ -92,9 +88,7 @@ const Map = () => {
             <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature} />
             <VesselTrackCardOverlay feature={currentFeature} />
             <DrawLayer />
-            {
-                regulatoryFeatureToShowOnCard ? <LayerDetailsBox gears={gears} regulatory={regulatoryFeatureToShowOnCard}/> : null
-            }
+            <LayerDetailsBox gears={gears} feature={currentFeature} />
         </BaseMap>
   )
 }

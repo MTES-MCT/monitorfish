@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
-import TrackTypeCard from '../cards/VesselTrackCard'
+import TrackTypeCard from '../cards/TrackTypeCard'
 import { COLORS } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
 import { trackTypes } from '../../domain/entities/vesselTrack'
@@ -41,13 +41,14 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
       if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
         setTrackTypeToShowOnCard(feature.getProperties().trackType)
         overlayRef.current.style.display = 'block'
-        overlayRef.current.setPosition(map.getCoordinateFromPixel(pointerMoveEventPixel))
+        overlayObjectRef.current.setPosition(map.getCoordinateFromPixel(pointerMoveEventPixel))
       } else {
         setTrackTypeToShowOnCard(null)
         overlayRef.current.style.display = 'none'
       }
     }
   }, [setTrackTypeToShowOnCard, pointerMoveEventPixel, feature, overlayRef, overlayObjectRef])
+
   return (
     <TrackTypeCardOverlayComponent ref={overlayCallback} isBig={trackTypeToShowOnCard === trackTypes.SEARCHING}>
     {

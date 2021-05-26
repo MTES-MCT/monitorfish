@@ -46,6 +46,7 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
       }
     }
   }, [setVesselFeatureToShowOnCard, feature, overlayRef, overlayObjectRef])
+
   return (
     <VesselTrackCardOverlayComponent ref={overlayCallback}>
       {

@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { MIN_ZOOM_VESSEL_NAMES } from '../layers/VesselsLayer'
-import { hideVesselNames, resetAnimateToVessel } from '../domain/reducers/Map'
-import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../domain/entities/vessel'
-import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
-import LayersEnum from '../domain/entities/layers'
+import { MIN_ZOOM_VESSEL_NAMES } from '../../layers/VesselsLayer'
+import { hideVesselNames, resetAnimateToVessel } from '../../domain/reducers/Map'
+import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../../domain/entities/vessel'
+import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
+import LayersEnum from '../../domain/entities/layers'
 
 const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const dispatch = useDispatch()

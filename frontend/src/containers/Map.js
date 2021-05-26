@@ -15,7 +15,7 @@ import MeasurementLayer from '../layers/MeasurementLayer'
 import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
-import MapVesselAnimation from '../components/Map/MapVesselAnimation'
+import MapVesselAnimation from '../components/map/MapVesselAnimation'
 const hitPixelTolerance = 3
 
 const Map = () => {

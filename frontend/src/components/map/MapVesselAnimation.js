@@ -37,7 +37,7 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
     if (mapClickEvent) {
       showVesselTrackAndSidebarOnMapClick(mapClickEvent)
     }
-  }, [vessel, mapClickEvent])
+  }, [mapClickEvent])
 
   function createAnimateObject (resolution, duration, zoom) {
     return {

@@ -330,7 +330,16 @@ const VesselsLayer = ({ map }) => {
 
       const filterShowed = filters.find(filter => filter.showed)
 
-      if (filterShowed && nonFilteredVesselsAreHidden) {
+      if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+        const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
+        vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
+          const featureIndex = temporaryVesselsToHighLightOnMapUids.indexOf(feature.ol_uid)
+
+          if (featureIndex !== NOT_FOUND_INDEX) {
+            addVesselLabelToVesselFeature(feature, vesselLabel)
+          }
+        })
+      } else if (filterShowed && nonFilteredVesselsAreHidden) {
         vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
           const featureIndex = filteredVesselsFeaturesUids.indexOf(feature.ol_uid)
 

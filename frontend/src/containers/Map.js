@@ -16,7 +16,7 @@ import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
-import MapRegulatoryAnimation from '../components/map/MapRegulatoryAnimation'
+import SHowRegulatoryMetadata from '../components/map/SHowRegulatoryMetadata'
 const hitPixelTolerance = 3
 
 const Map = () => {
@@ -70,7 +70,7 @@ const Map = () => {
             <MapVesselAnimation
               mapMovingAndZoomEvent={mapMovingAndZoomEvent}
               mapClickEvent={mapClickEvent} />
-            <MapRegulatoryAnimation mapClickEvent={mapClickEvent} />
+            <SHowRegulatoryMetadata mapClickEvent={mapClickEvent} />
             <MapHistory
               shouldUpdateView={shouldUpdateView}
               setShouldUpdateView={setShouldUpdateView}

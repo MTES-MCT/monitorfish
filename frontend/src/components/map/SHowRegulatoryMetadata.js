@@ -3,14 +3,14 @@ import { useDispatch } from 'react-redux'
 import LayersEnum from '../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZoneMetadata'
 
-const MapRegulatoryAnimation = ({ map, mapClickEvent }) => {
+const SHowRegulatoryMetadata = ({ mapClickEvent }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (mapClickEvent) {
       showRegulatoryZoneMetadataOnClick(mapClickEvent)
     }
-  }, [map, mapClickEvent])
+  }, [mapClickEvent])
 
   function showRegulatoryZoneMetadataOnClick (feature) {
     if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
@@ -24,4 +24,4 @@ const MapRegulatoryAnimation = ({ map, mapClickEvent }) => {
   return null
 }
 
-export default MapRegulatoryAnimation
+export default SHowRegulatoryMetadata

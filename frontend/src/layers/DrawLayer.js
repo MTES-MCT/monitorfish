@@ -63,7 +63,7 @@ const DrawLayer = ({ map }) => {
         const geoJsonStr = format.writeFeature(event.feature, {
           dataProjection: WSG84_PROJECTION,
           featureProjection: OPENLAYERS_PROJECTION
-        });
+        })
 
         dispatch(addZoneSelected({
           name: 'Tracé libre',

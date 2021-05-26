@@ -101,8 +101,8 @@ const BaseMap = props => {
       timeoutForPointerMove = null
       if (handlePointerMove) {
         handlePointerMove(lastEventForPointerMove, map)
-        showCoordinatesInDMS(lastEventForPointerMove)
       }
+      showCoordinatesInDMS(lastEventForPointerMove)
     }, 100)
   }
 

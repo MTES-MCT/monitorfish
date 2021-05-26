@@ -9,7 +9,7 @@ import { getDateTime } from '../../../utils'
 
 const ERSMessage = props => {
   const ersMessageHeaderTitle = useMemo(() => {
-    if(props.message) {
+    if (props.message) {
       switch (props.message.messageType) {
         case ERSMessageTypeEnum.DEP.code.toString(): {
           return <>

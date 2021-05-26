@@ -16,6 +16,7 @@ import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
+import MapRegulatoryAnimation from '../components/map/MapRegulatoryAnimation'
 const hitPixelTolerance = 3
 
 const Map = () => {
@@ -42,13 +43,6 @@ const Map = () => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: hitPixelTolerance })
       setMapClickEvent(feature)
-      if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.REGULATORY.code)) {
-        const zone = {
-          layerName: feature.getProperties().layer_name,
-          zone: feature.getProperties().zones
-        }
-        dispatch(showRegulatoryZoneMetadata(zone))
-      }
     }
   }
 
@@ -76,18 +70,18 @@ const Map = () => {
             <MapVesselAnimation
               mapMovingAndZoomEvent={mapMovingAndZoomEvent}
               mapClickEvent={mapClickEvent} />
+            <MapRegulatoryAnimation mapClickEvent={mapClickEvent} />
             <MapHistory
               shouldUpdateView={shouldUpdateView}
               setShouldUpdateView={setShouldUpdateView}
-              historyMoveTrigger={historyMoveTrigger}
-            />
+              historyMoveTrigger={historyMoveTrigger}/>
             <MeasurementLayer />
             <VesselTrackLayer />
             <VesselsLayer />
+            <DrawLayer />
             <VesselCardOverlay feature={currentFeature} />
             <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature} />
             <VesselTrackCardOverlay feature={currentFeature} />
-            <DrawLayer />
             <LayerDetailsBox gears={gears} feature={currentFeature} />
         </BaseMap>
   )

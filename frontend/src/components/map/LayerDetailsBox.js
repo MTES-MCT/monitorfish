@@ -19,6 +19,8 @@ const LayerDetailsBox = props => {
   useEffect(() => {
     if (feature && feature.getId().toString().includes(`${Layers.REGULATORY.code}`)) {
       setRegulatoryFeatureToShowOnCard(feature)
+    } else {
+      setRegulatoryFeatureToShowOnCard(null)
     }
   }, [feature, setRegulatoryFeatureToShowOnCard])
 
@@ -40,13 +42,13 @@ const LayerDetailsBox = props => {
 
   return (regulatoryFeatureToShowOnCard && <Details>
         {
-            props.regulatory && <>
+            regulatoryFeatureToShowOnCard && <>
                 <Rectangle vectorLayerStyle={vectorLayerStyle} />
                 <Text>
-                    {props.regulatory.getProperties().layer_name.replace(/[_]/g, ' ')}
+                    {regulatoryFeatureToShowOnCard.getProperties().layer_name.replace(/[_]/g, ' ')}
                     {
-                        props.regulatory.getProperties().zones
-                          ? <ZoneName>{props.regulatory.getProperties().zones.replace(/[_]/g, ' ')}</ZoneName>
+                        regulatoryFeatureToShowOnCard.getProperties().zones
+                          ? <ZoneName>{regulatoryFeatureToShowOnCard.getProperties().zones.replace(/[_]/g, ' ')}</ZoneName>
                           : null
                     }
                 </Text>

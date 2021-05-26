@@ -44,6 +44,7 @@ const VesselCardOverlay = ({ feature, map }) => {
       }
     }
   }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef])
+
   return (
     <VesselCardOverlayComponent ref={overlayCallback}>
       {

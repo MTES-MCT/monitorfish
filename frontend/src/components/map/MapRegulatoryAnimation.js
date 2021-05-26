@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import LayersEnum from '../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZoneMetadata'
 
-const MapVesselAnimation = ({ map, mapClickEvent }) => {
+const MapRegulatoryAnimation = ({ map, mapClickEvent }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -24,4 +24,4 @@ const MapVesselAnimation = ({ map, mapClickEvent }) => {
   return null
 }
 
-export default MapVesselAnimation
+export default MapRegulatoryAnimation

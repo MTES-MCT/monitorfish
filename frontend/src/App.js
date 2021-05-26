@@ -7,7 +7,7 @@ import {
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import Map from './containers/Map'
-import Backoffice from './containers/BaseMap'
+import Backoffice from './containers/Backoffice'
 import VesselsSearchBox from './containers/VesselsSearchBox'
 import VesselSidebar from './containers/VesselSidebar'
 import LayersSidebar from './containers/LayersSidebar'
@@ -55,8 +55,6 @@ function HomePage () {
 function BackofficePage () {
   return <BackofficeWrapper>
     <Backoffice />
-    <LayersSidebar/>
-    <APIWorker/>
   </BackofficeWrapper>
 }
 

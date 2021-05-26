@@ -19,18 +19,15 @@ import {
   VESSEL_SELECTOR_STYLE
 } from './styles/featuresStyles'
 import { toStringHDMS } from 'ol/coordinate'
-import {
-  setVesselsLayerSource,
-  updateVesselFeatureAndIdentity
-} from '../domain/reducers/Vessel'
+import { setVesselsLayerSource, updateVesselFeatureAndIdentity } from '../domain/reducers/Vessel'
 import {
   getVesselFeatureAndIdentity,
   getVesselIdentityFromFeature,
-  vesselAndVesselFeatureAreEquals, vesselsAreEquals
+  vesselAndVesselFeatureAreEquals,
+  vesselsAreEquals
 } from '../domain/entities/vessel'
 import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
-import { usePrevious } from '../hooks/usePrevious'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 7.5
@@ -330,7 +327,7 @@ const VesselsLayer = ({ map }) => {
       : vesselLabelsShowedOnMap && !vesselLabelsHiddenByZoom
 
     if (vesselLabelsIsShowedOnMap) {
-      extent = extent ? extent : mapRef.current.getView().calculateExtent()
+      extent = extent || mapRef.current.getView().calculateExtent()
 
       const filterShowed = filters.find(filter => filter.showed)
 

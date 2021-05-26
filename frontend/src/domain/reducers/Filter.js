@@ -112,7 +112,7 @@ const filterSlice = createSlice({
      * payload: boolean
      * }} action - The boolean
      */
-    setNonFilteredVesselsAreHidden(state, action) {
+    setNonFilteredVesselsAreHidden (state, action) {
       state.nonFilteredVesselsAreHidden = action.payload
       window.localStorage.setItem(nonFilteredVesselsAreHiddenLocalStorageKey, JSON.stringify(action.payload))
     }

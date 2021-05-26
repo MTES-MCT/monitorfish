@@ -14,10 +14,12 @@ import {
   showFilter
 } from '../domain/reducers/Filter'
 import HideNonFilteredVessels from '../components/vessel_filters/HideNonFilteredVessels'
+import { usePrevious } from '../hooks/usePrevious'
 
-const VesselFilter = () => {
+const VesselFilters = () => {
   const dispatch = useDispatch()
   const { filters, nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
+  const previousFilters = usePrevious(filters)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
@@ -66,54 +68,101 @@ const VesselFilter = () => {
     dispatch(setNonFilteredVesselsAreHidden(areHidden))
   }, [])
 
-  return (
-    <Wrapper isShowed={isShowed} ref={wrapperRef}>
-      <VesselFilterIcon
-        rightMenuIsOpen={rightMenuIsOpen}
-        selectedVessel={selectedVessel}
-        onMouseEnter={() => dispatch(expandRightMenu())}
-        title={'Mes filtres'}
-        onClick={() => setVesselFilterBoxIsOpen(!vesselFilterBoxIsOpen)}>
-        <FilterIcon
-          rightMenuIsOpen={rightMenuIsOpen}
-          selectedVessel={selectedVessel}/>
-      </VesselFilterIcon>
-      <VesselFilterBox
-        vesselFilterBoxIsOpen={vesselFilterBoxIsOpen}>
-        <Header isFirst={true}>
-          Mes filtres
-        </Header>
-        {
-          filters && filters.length
-            ? <FiltersSelectedList>
-              {
-                filters
-                  .map((filter, index) => {
-                    return <Filter
-                      key={filter.uuid}
-                      filter={filter}
-                      isLastItem={filters.length === index + 1}
-                      removeFilter={removeFilterCallback}
-                      showFilter={showFilterCallback}
-                      hideFilters={hideFiltersCallback}
-                      removeTagFromFilter={removeTagFromFilterCallback}
-                    />
-                  })
-              }
-            </FiltersSelectedList>
-            : <LastPositionInfo>
-              Aucun filtre
-            </LastPositionInfo>
-        }
-        <HideNonFilteredVessels
-          setNonFilteredVesselsAreHidden={setNonFilteredVesselsAreHiddenCallback}
-          nonFilteredVesselsAreHidden={nonFilteredVesselsAreHidden}
-        />
+  const hasOneFilterAdded = useCallback(() =>
+    !!(previousFilters && filters.length && filters.length > previousFilters.length), [previousFilters, filters])
 
-      </VesselFilterBox>
-    </Wrapper>
+  return (
+    <>
+      <Wrapper isShowed={isShowed} ref={wrapperRef}>
+        <VesselFilterIcon
+          rightMenuIsOpen={rightMenuIsOpen}
+          selectedVessel={selectedVessel}
+          onMouseEnter={() => dispatch(expandRightMenu())}
+          title={'Mes filtres'}
+          onClick={() => setVesselFilterBoxIsOpen(!vesselFilterBoxIsOpen)}>
+          <FilterIcon
+            rightMenuIsOpen={rightMenuIsOpen}
+            selectedVessel={selectedVessel}/>
+        </VesselFilterIcon>
+        <VesselFilterBox
+          vesselFilterBoxIsOpen={vesselFilterBoxIsOpen}>
+          <Header isFirst={true}>
+            Mes filtres
+          </Header>
+          {
+            filters && filters.length
+              ? <FiltersSelectedList>
+                {
+                  filters
+                    .map((filter, index) => {
+                      return <Filter
+                        key={filter.uuid}
+                        filter={filter}
+                        isLastItem={filters.length === index + 1}
+                        removeFilter={removeFilterCallback}
+                        showFilter={showFilterCallback}
+                        hideFilters={hideFiltersCallback}
+                        removeTagFromFilter={removeTagFromFilterCallback}
+                      />
+                    })
+                }
+              </FiltersSelectedList>
+              : <LastPositionInfo>
+                Aucun filtre
+              </LastPositionInfo>
+          }
+          <HideNonFilteredVessels
+            setNonFilteredVesselsAreHidden={setNonFilteredVesselsAreHiddenCallback}
+            nonFilteredVesselsAreHidden={nonFilteredVesselsAreHidden}
+          />
+
+        </VesselFilterBox>
+      </Wrapper>
+      <NewFilterAdded hasOneFilterAdded={hasOneFilterAdded()}>
+        1 filtre ajouté
+      </NewFilterAdded>
+    </>
   )
 }
+
+const NewFilterAdded = styled.div`
+  position: absolute;
+  display: inline-block;
+  background-color: ${COLORS.grayLighter};
+  top: 110px;
+  right: -150px;
+  opacity: 0;
+  border-radius: 2px;
+  width: 86px;
+  height: 18px;
+  padding: 11px 12px;
+  color: ${COLORS.grayDarkerThree};
+  font-size: 13px;
+  z-index: 9999;
+  
+  animation: ${props => props.hasOneFilterAdded ? 'new-filter-added' : ''} 4s ease;
+
+  @keyframes new-filter-added {
+    0% {
+      right: -150px;
+      opacity: 0;
+    }
+    25% {
+      opacity: 0;
+    }
+    50% {
+      right: 52px;
+      opacity: 1;
+    }
+    75% {
+      opacity: 0;
+    }
+    100% {
+      right: -150px;
+      opacity: 0;
+    }
+  }
+`
 
 const FiltersSelectedList = styled.ul`
   margin: 0;
@@ -191,4 +240,4 @@ const FilterIcon = styled(FilterSVG)`
   transition: all 0.2s;
 `
 
-export default VesselFilter
+export default VesselFilters

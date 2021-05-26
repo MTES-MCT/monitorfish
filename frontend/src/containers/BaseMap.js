@@ -76,7 +76,7 @@ const BaseMap = props => {
     }
   }
 
-  function throttleAndHandleMovingAndZoom () {
+  function throttleAndHandleMovingAndZoom (initialMap) {
     if (timeoutForMove) {
       return
     }
@@ -84,7 +84,7 @@ const BaseMap = props => {
     timeoutForMove = setTimeout(() => {
       timeoutForMove = null
       if (handleMovingAndZoom) {
-        handleMovingAndZoom(map)
+        handleMovingAndZoom(initialMap)
       }
     }, 100)
   }

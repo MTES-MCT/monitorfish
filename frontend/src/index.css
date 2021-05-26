@@ -186,7 +186,7 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 .rs-checkbox-checker {
   padding-bottom: 0;
   padding-left: 36px;
-  padding-top: 10px;
+  padding-top: 8px;
   min-height: 0;
   line-height: 1;
 }

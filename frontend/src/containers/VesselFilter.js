@@ -6,11 +6,18 @@ import { ReactComponent as FilterSVG } from '../components/icons/Icone_filtres.s
 import { COLORS } from '../constants/constants'
 import { expandRightMenu } from '../domain/reducers/Global'
 import Filter from '../components/vessel_filters/Filter'
-import { hideFilters, removeFilter, removeTagFromFilter, showFilter } from '../domain/reducers/Filter'
+import {
+  hideFilters,
+  removeFilter,
+  removeTagFromFilter,
+  setNonFilteredVesselsAreHidden,
+  showFilter
+} from '../domain/reducers/Filter'
+import HideNonFilteredVessels from '../components/vessel_filters/HideNonFilteredVessels'
 
 const VesselFilter = () => {
   const dispatch = useDispatch()
-  const filters = useSelector(state => state.filter.filters)
+  const { filters, nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
@@ -55,6 +62,10 @@ const VesselFilter = () => {
     dispatch(removeTagFromFilter(removeObject))
   }, [])
 
+  const setNonFilteredVesselsAreHiddenCallback = useCallback(areHidden => {
+    dispatch(setNonFilteredVesselsAreHidden(areHidden))
+  }, [])
+
   return (
     <Wrapper isShowed={isShowed} ref={wrapperRef}>
       <VesselFilterIcon
@@ -94,6 +105,10 @@ const VesselFilter = () => {
               Aucun filtre
             </LastPositionInfo>
         }
+        <HideNonFilteredVessels
+          setNonFilteredVesselsAreHidden={setNonFilteredVesselsAreHiddenCallback}
+          nonFilteredVesselsAreHidden={nonFilteredVesselsAreHidden}
+        />
 
       </VesselFilterBox>
     </Wrapper>

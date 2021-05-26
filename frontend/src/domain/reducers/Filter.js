@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
 
 const vesselsFiltersLocalStorageKey = 'vesselsFilters'
+const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
 
 const filterSlice = createSlice({
   name: 'filter',
   initialState: {
-    filters: getLocalStorageState([], vesselsFiltersLocalStorageKey)
+    filters: getLocalStorageState([], vesselsFiltersLocalStorageKey),
+    nonFilteredVesselsAreHidden: getLocalStorageState(false, nonFilteredVesselsAreHiddenLocalStorageKey)
   },
   reducers: {
     /**
@@ -102,6 +104,17 @@ const filterSlice = createSlice({
         return filter
       })
       window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
+    },
+    /**
+     * Hide non filtered vessels
+     * @param {Object=} state
+     * @param {{
+     * payload: boolean
+     * }} action - The boolean
+     */
+    setNonFilteredVesselsAreHidden(state, action) {
+      state.nonFilteredVesselsAreHidden = action.payload
+      window.localStorage.setItem(nonFilteredVesselsAreHiddenLocalStorageKey, JSON.stringify(action.payload))
     }
   }
 })
@@ -111,7 +124,8 @@ export const {
   removeFilter,
   showFilter,
   hideFilters,
-  removeTagFromFilter
+  removeTagFromFilter,
+  setNonFilteredVesselsAreHidden
 } = filterSlice.actions
 
 export default filterSlice.reducer

@@ -40,7 +40,6 @@ function getFiltersWithoutZonesSelected (filters) {
 function filterByZones (filteredVessels, zonesSelected) {
   const featuresGeometries = zonesSelected
     .map(zone => zone.feature)
-    .map(feature => feature)
     .map(feature => vectorSource.getFormat().readFeatures(feature))
 
   if (featuresGeometries && featuresGeometries.length) {

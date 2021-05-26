@@ -13,7 +13,7 @@ const images = require.context('../../../public/flags', false, /\.png$/)
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 export const VESSEL_ICON_STYLE = 10
-export const VESSEL_NAME_STYLE = 100
+export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
 function degreesToRadian (vessel) {
@@ -56,9 +56,7 @@ function vesselsToHighLightDoesNotContainsCurrentVessel (temporaryVesselsToHighL
   })
 }
 
-export const setVesselIconStyle = (vessel,
-  iconFeature,
-  options) => new Promise(resolve => {
+export const setVesselIconStyle = (vessel, iconFeature, options) => new Promise(resolve => {
   let selectedVesselFeatureToUpdate = null
 
   const opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, vessel.dateTime, options.temporaryVesselsToHighLightOnMap, vessel)
@@ -78,23 +76,6 @@ export const setVesselIconStyle = (vessel,
         vesselAndVesselFeatureAreEquals(vessel, options.selectedVesselFeatureAndIdentity.feature)) {
     styles.push(selectedVesselStyle)
     selectedVesselFeatureToUpdate = iconFeature
-  }
-
-  if (options.vesselLabelsShowedOnMap) {
-    const vesselDate = new Date(vessel.dateTime)
-    const vesselIsHidden = new Date()
-    vesselIsHidden.setHours(vesselIsHidden.getHours() - options.vesselsLastPositionVisibility.hidden)
-
-    if (vesselDate > vesselIsHidden) {
-      return getSVG(iconFeature, options.vesselLabel).then(svg => {
-        if (svg) {
-          styles.push(getVesselNameStyle(svg.showedText, svg.imageElement))
-        }
-
-        iconFeature.setStyle(styles)
-        resolve(selectedVesselFeatureToUpdate)
-      })
-    }
   }
 
   iconFeature.setStyle(styles)
@@ -185,14 +166,14 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
   imageElement.src = 'data:image/svg+xml,' + escape(iconSVG)
 })
 
-export const getVesselNameStyle = (showedText, image) => new Style({
+export const getVesselLabelStyle = (showedText, image) => new Style({
   image: new Icon({
     anchorOrigin: IconOrigin.TOP_RIGHT,
     img: image,
     imgSize: [getTextWidth(showedText) * 4 + 40, 36],
     offset: [-getTextWidth(showedText) * 2 - 30, 11]
   }),
-  zIndex: VESSEL_NAME_STYLE
+  zIndex: VESSEL_LABEL_STYLE
 })
 
 export const setCircleStyle = (color, arrowFeature) => {

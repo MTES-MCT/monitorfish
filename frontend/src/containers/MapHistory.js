@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setView } from '../domain/reducers/Map'
+import { setExtent, setView } from '../domain/reducers/Map'
 
 const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
   const mapState = useSelector(state => state.map)
@@ -51,9 +51,12 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
         zoom: map.getView().getZoom().toFixed(2),
         center: center
       }
-      const url = `@${center[0].toFixed(2)},${center[1].toFixed(2)},${map.getView().getZoom().toFixed(2)}`
+      const extent = map.getView().calculateExtent()
 
+      dispatch(setExtent(extent))
       dispatch(setView(view))
+
+      const url = `@${center[0].toFixed(2)},${center[1].toFixed(2)},${map.getView().getZoom().toFixed(2)}`
       window.history.pushState(view, 'map', url)
     }
   }

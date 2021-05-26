@@ -12,8 +12,8 @@ import {
   setVesselTrackDepth
 } from '../domain/reducers/Map'
 import TrackDepthRadio from '../components/vessel_visibility/TrackDepthRadio'
-import VesselLabelRadio from '../components/vessel_visibility/VesselLabelRadio'
-import VesselLabelCheckbox from '../components/vessel_visibility/VesselLabelCheckbox'
+import VesselLabelSelection from '../components/vessel_visibility/VesselLabelSelection'
+import ShowVesselLabel from '../components/vessel_visibility/ShowVesselLabel'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 
@@ -120,16 +120,14 @@ const VesselVisibility = () => {
         <VesselLabel>
           Choisir le libellé des étiquettes des navires
         </VesselLabel>
-        <VesselLabelRadio
+        <VesselLabelSelection
           updateVesselLabel={updateVesselLabel}
           vesselLabel={vesselLabel}
         />
-        <ShowVesselLabel>
-          <VesselLabelCheckbox
-            updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
-            vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
-          />
-        </ShowVesselLabel>
+        <ShowVesselLabel
+          updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
+          vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
+        />
       </VesselVisibilityBox>
     </Wrapper>
   )
@@ -139,13 +137,6 @@ const Wrapper = styled.div`
   opacity: ${props => props.isShowed ? '1' : '0'};
   transition: all 0.2s;
   z-index: 1000;
-`
-
-const ShowVesselLabel = styled.div`
-  background: ${COLORS.grayBackground};
-  padding: 0 0 9px 13px;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
 `
 
 const VesselLabel = styled.div`

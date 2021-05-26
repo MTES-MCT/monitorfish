@@ -4,6 +4,35 @@ import { getLocalStorageState } from '../../utils'
 const vesselsFiltersLocalStorageKey = 'vesselsFilters'
 const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
 
+/**
+ * @typedef Filter
+ * @property {FilterValues} filters
+ * @property {string} name
+ * @property {string} color
+ * @property {boolean} showed
+ * @property {string} uuid
+ */
+
+/**
+ * @typedef FilterValues
+ * @property {string[]} countriesFiltered
+ * @property {string[]} fleetSegmentsFiltered
+ * @property {string[]} gearsFiltered
+ * @property {string[]} speciesFiltered
+ * @property {string[]} districtsFiltered
+ * @property {string[]} vesselsSizeValuesChecked
+ * @property {{
+ *      name: string,
+ *      code: string,
+ *      feature: GeoJSONGeometry
+ *    }[]} zonesSelected
+ */
+
+/**
+ * @typedef GeoJSONGeometry
+ * @property {{type: string, coordinates: Object}} geometry
+ */
+
 const filterSlice = createSlice({
   name: 'filter',
   initialState: {
@@ -14,26 +43,7 @@ const filterSlice = createSlice({
     /**
      * Add a new filter
      * @param {Object=} state
-     * @param {{
-     * payload: {
-     *  filters: {
-     *    countriesFiltered: string[],
-     *    fleetSegmentsFiltered: string[],
-     *    gearsFiltered: string[],
-     *    speciesFiltered: string[],
-     *    districtsFiltered: string[],
-     *    zonesSelected: {
-     *      name: string,
-     *      code: string,
-     *      feature: Object
-     *    }[],
-     *    vesselsSizeValuesChecked: string[]
-     *  },
-     *  name: string,
-     *  color: string,
-     *  showed: boolean,
-     *  uuid: string
-     * }}} action - The filter to add
+     * @param {{payload: Filter}} action - The filter to add
      */
     addFilter (state, action) {
       state.filters = state.filters.map(filter => {
@@ -92,6 +102,7 @@ const filterSlice = createSlice({
      * }}} action - The tag to remove object
      */
     removeTagFromFilter (state, action) {
+      console.log(action.payload)
       const filterUUID = action.payload.uuid
       const tagType = action.payload.type
       const tagValue = action.payload.value

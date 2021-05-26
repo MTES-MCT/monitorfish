@@ -135,52 +135,51 @@ const VesselsLayer = ({ map }) => {
   }
 
   const applyFilterToVessels = (vesselsFeatures, noFilterFunction) => new Promise(resolve => {
-    if (filters && filters.length) {
-      const filter = filters.find(filter => filter.showed)
-      const color = filter ? filter.color : null
-
-      if (filter) {
-        const vesselsObjects = vesselsFeatures.map(feature => {
-          const coordinates = [...feature.getGeometry().getCoordinates()]
-
-          return getVesselObjectFromFeature(feature, coordinates)
-        })
-
-        dispatch(getFilteredVessels(vesselsObjects, filter.filters))
-          .then(filteredVessels => {
-            const uids = filteredVessels.map(vessel => vessel.uid)
-            setFilteredVesselsFeaturesUids(uids)
-
-            vesselsFeatures.forEach(feature => {
-              const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-
-              if (vesselIconStyle) {
-                const featureIndex = uids.indexOf(feature.ol_uid)
-
-                if (featureIndex !== NOT_FOUND_INDEX) {
-                  modifyVesselIcon(feature, color, false, vesselIconStyle)
-                } else if (nonFilteredVesselsAreHidden) {
-                  const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-                  if (vesselLabelStyle) {
-                    vesselLabelStyle.getImage().setOpacity(0)
-                  }
-
-                  vesselIconStyle.getImage().setOpacity(0)
-                } else {
-                  modifyVesselIcon(feature, null, false, vesselIconStyle)
-                }
-              }
-            })
-
-            return resolve(vesselsFeatures)
-          })
-      } else {
-        noFilterFunction()
-        return resolve(vesselsFeatures)
-      }
-    } else {
+    if(!filters || !filters.length) {
       return resolve(vesselsFeatures)
     }
+
+    const showedFilter = filters.find(filter => filter.showed)
+    if (!showedFilter) {
+      noFilterFunction()
+      return resolve(vesselsFeatures)
+    }
+
+    const vesselsObjects = vesselsFeatures.map(feature => {
+      const coordinates = [...feature.getGeometry().getCoordinates()]
+
+      return getVesselObjectFromFeature(feature, coordinates)
+    })
+
+    const color = showedFilter ? showedFilter.color : null
+    dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
+      .then(filteredVessels => {
+        const uids = filteredVessels.map(vessel => vessel.uid)
+        setFilteredVesselsFeaturesUids(uids)
+
+        vesselsFeatures.forEach(feature => {
+          const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+
+          if (vesselIconStyle) {
+            const featureIndex = uids.indexOf(feature.ol_uid)
+
+            if (featureIndex !== NOT_FOUND_INDEX) {
+              modifyVesselIcon(feature, color, false, vesselIconStyle)
+            } else if (nonFilteredVesselsAreHidden) {
+              const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+              if (vesselLabelStyle) {
+                vesselLabelStyle.getImage().setOpacity(0)
+              }
+
+              vesselIconStyle.getImage().setOpacity(0)
+            } else {
+              modifyVesselIcon(feature, null, false, vesselIconStyle)
+            }
+          }
+        })
+
+        return resolve(vesselsFeatures)
+      })
   })
 
   function modifyVesselIcon (feature, color, isLight, vesselIconStyle) {

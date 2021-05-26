@@ -17,6 +17,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: <Flag title={countries.getName(country, 'fr')} rel="preload" src={`flags/${country}.svg`}/>,
           text: countries.getName(country, 'fr'),
+          value: country,
           type: 'countriesFiltered'
         }
       })
@@ -29,6 +30,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.GEAR,
           text: gear,
+          value: gear,
           type: 'gearsFiltered'
         }
       })
@@ -41,6 +43,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.SPECIES,
           text: species,
+          value: species,
           type: 'speciesFiltered'
         }
       })
@@ -53,6 +56,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.ZONE,
           text: zoneSelected.name,
+          value: zoneSelected.name,
           type: 'zonesSelected'
         }
       })
@@ -65,6 +69,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.FLEET_SEGMENT,
           text: fleetSegment,
+          value: fleetSegment,
           type: 'fleetSegmentsFiltered'
         }
       })
@@ -77,6 +82,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.DISTRICTS,
           text: district,
+          value: district,
           type: 'districtsFiltered'
         }
       })
@@ -93,6 +99,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.LENGTH,
           text: sizeObject ? sizeObject.text : '',
+          value: sizeObject ? sizeObject.text : '',
           type: 'vesselsSizeValuesChecked'
         }
       })
@@ -114,7 +121,8 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
               iconType={tag.iconType}
               iconElement={tag.iconElement}
               key={tag.text}
-              value={tag.text}
+              text={tag.text}
+              value={tag.value}
               removeTagFromFilter={removeTagFromFilter}
             />
           })
@@ -126,6 +134,8 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
 
 const List = styled.div`
   display: inline-block;
+  width: 100%;
+  text-align: center;
 `
 
 const Flag = styled.img`
@@ -135,8 +145,7 @@ const Flag = styled.img`
 `
 
 const NoTag = styled.div`
-  margin-top: 20x;
-  margin-bottom: 10x;
+  margin-bottom: 10px;
   font-size: 13px;
   color: ${COLORS.textGray};
 `

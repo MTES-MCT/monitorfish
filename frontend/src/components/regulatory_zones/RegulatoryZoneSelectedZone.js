@@ -17,6 +17,16 @@ import hideLayers from '../../domain/use_cases/hideLayers'
 const RegulatoryZoneSelectedZone = props => {
   const dispatch = useDispatch()
 
+  const {
+    callRemoveRegulatoryZoneFromMySelection,
+    regulatoryZoneMetadata,
+    subZone,
+    showWholeLayer,
+    zoneIsShown,
+    isReadyToShowRegulatoryZones,
+    allowRemoveZone
+  } = props
+
   const [showSubZone, setShowSubZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
@@ -31,38 +41,38 @@ const RegulatoryZoneSelectedZone = props => {
   }
 
   useEffect(() => {
-    if (props.regulatoryZoneMetadata &&
-            props.subZone &&
-            (props.subZone.layerName !== props.regulatoryZoneMetadata.layerName ||
-                props.subZone.zone !== props.regulatoryZoneMetadata.zone)) {
+    if (regulatoryZoneMetadata &&
+            subZone &&
+            (subZone.layerName !== regulatoryZoneMetadata.layerName ||
+                subZone.zone !== regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(false)
-    } else if (props.regulatoryZoneMetadata &&
-            props.subZone &&
-            (props.subZone.layerName === props.regulatoryZoneMetadata.layerName &&
-                props.subZone.zone === props.regulatoryZoneMetadata.zone)) {
+    } else if (regulatoryZoneMetadata &&
+            subZone &&
+            (subZone.layerName === regulatoryZoneMetadata.layerName &&
+                subZone.zone === regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(true)
-    } else if (!props.regulatoryZoneMetadata && props.subZone) {
+    } else if (!regulatoryZoneMetadata && subZone) {
       setMetadataIsShown(false)
     }
-  }, [props.regulatoryZoneMetadata, props.subZone])
+  }, [regulatoryZoneMetadata, subZone])
 
   useEffect(() => {
-    if (props.showWholeLayer) {
-      if (!props.zoneIsShown && props.showWholeLayer.show) {
+    if (showWholeLayer) {
+      if (!zoneIsShown && showWholeLayer.show) {
         setShowSubZone(true)
-      } else if (props.zoneIsShown && !props.showWholeLayer.show) {
+      } else if (zoneIsShown && !showWholeLayer.show) {
         setShowSubZone(false)
       }
     }
-  }, [props.showWholeLayer])
+  }, [showWholeLayer])
 
   useEffect(() => {
-    if (props.zoneIsShown) {
+    if (zoneIsShown) {
       setShowSubZone(true)
-    } else if (!props.zoneIsShown) {
+    } else if (!zoneIsShown) {
       setShowSubZone(false)
     }
-  }, [props.zoneIsShown])
+  }, [zoneIsShown])
 
   useEffect(() => {
     if (showSubZone && props.isReadyToShowRegulatoryZones) {
@@ -76,24 +86,24 @@ const RegulatoryZoneSelectedZone = props => {
         zone: props.subZone
       }))
     }
-  }, [showSubZone, props.isReadyToShowRegulatoryZones])
+  }, [showSubZone, isReadyToShowRegulatoryZones])
 
   return (
         <SubZone>
             <Rectangle onClick={() => dispatch(zoomInSubZone(props.subZone))} vectorLayerStyle={props.vectorLayerStyle}/>
             <SubZoneText
-                title={props.subZone.zone ? props.subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+                title={subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
                 onClick={() => setShowSubZone(!showSubZone)}>
-                {props.subZone.zone ? props.subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+                {subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
             </SubZoneText>
             <Icons>
                 {
                     metadataIsShown
-                      ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/>
-                      : <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(props.subZone)}/>
+                      ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => showRegulatoryMetadata(subZone)}/>
+                      : <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(subZone)}/>
                 }
                 { showSubZone ? <ShowIcon title="Cacher la zone" onClick={() => setShowSubZone(!showSubZone)} /> : <HideIcon title="Afficher la zone" onClick={() => setShowSubZone(!showSubZone)} />}
-                <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(props.subZone, 1)}/>
+                { allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(subZone, 1)}/>}
             </Icons>
 
         </SubZone>
@@ -118,6 +128,7 @@ const Icons = styled.span`
 `
 
 const SubZone = styled.span`
+  justify-content: space-between;
   width: 94%;
   display: flex;
   line-height: 1.9em;

@@ -41,6 +41,59 @@ function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
  * @property {string} type
  */
 
+/**
+ * @typedef Gear
+ * @property {number} dimension
+ * @property {string} gear
+ * @property {number} mesh
+ */
+
+/**
+ * @typedef Species
+ * @property {string} species
+ * @property {string} faoZone
+ * @property {string} gear
+ * @property {number} weight
+ */
+
+/**
+ * @typedef VesselLastPosition
+ * {
+ * @property {number} course
+ * @property {string} dateTime
+ * @property {string} departureDateTime
+ * @property {string} destination
+ * @property {string} district
+ * @property {string} districtCode
+ * @property {number} emissionPeriod
+ * @property {string} externalReferenceNumber
+ * @property {string} flagState
+ * @property {string} from
+ * @property {Gear[]} gearOnboard
+ * @property {string} internalReferenceNumber
+ * @property {string} ircs
+ * @property {string} lastErsDateTime
+ * @property {number} latitude
+ * @property {number} length
+ * @property {number} longitude
+ * @property {string} mmsi
+ * @property {string} positionType
+ * @property {string} registryPortLocode
+ * @property {string} registryPortName
+ * @property {string[]} segments
+ * @property {Species[]} speciesOnboard
+ * @property {number} speed
+ * @property {number} totalWeightOnboard
+ * @property {number} tripNumber
+ * @property {string} vesselName
+ * @property {number} width
+ */
+
+/**
+ * Get all vessels last positions
+ * @returns {Promise<VesselLastPosition>} The vessels
+ * @throws {Error}
+ */
 export function getVesselsLastPositionsFromAPI () {
   return fetch('/bff/v1/vessels')
     .then(response => {

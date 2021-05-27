@@ -1,5 +1,5 @@
-import { VESSEL_SELECTOR_STYLE } from '../../layers/styles/featuresStyles'
 import { closeVesselSidebar } from '../reducers/Vessel'
+import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
 
 const unselectVessel = () => (dispatch, getState) => {
   removeSelectorStyleToSelectedVessel(getState)

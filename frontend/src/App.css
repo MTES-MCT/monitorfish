@@ -12,7 +12,7 @@ html {
   left: .5em;
 }
 
-.checkbox-hidden > div >label > .rs-checkbox-wrapper {
+.checkbox-hidden > div > label > .rs-checkbox-wrapper {
   opacity: 0 !important;
   margin-left: -40px;
   position: inherit;
@@ -189,6 +189,7 @@ a:hover, a:focus {
   padding: 20px 25px 20px 25px;
   margin-top: 0;
   max-height: 800px !important;
+  min-height: 210px !important;
 }
 
 .rs-modal-header {
@@ -343,6 +344,10 @@ a:hover, a:focus {
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::after, .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::after {
   margin-top: 3px !important;
   margin-left: 6px !important;
+}
+
+.rs-checkbox-wrapper {
+  top: 8px !important;
 }
 
 .rs-table-cell-header .rs-table-cell-content {

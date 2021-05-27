@@ -3,7 +3,7 @@ import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 import { vesselLabel } from '../../domain/entities/vesselLabel'
 
-const VesselLabelRadio = props => {
+const VesselLabelSelection = props => {
   const [value, setValue] = useState(null)
 
   useEffect(() => {
@@ -42,4 +42,4 @@ const RadioWrapper = styled.div`
   text-align: left;
 `
 
-export default VesselLabelRadio
+export default VesselLabelSelection

@@ -62,25 +62,24 @@ const RegulatoryZoneSelected = props => {
                 {
                     props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0
                       ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
-                        return (<ListItem key={regulatoryZoneName}>
-                            <RegulatoryZoneSelectedLayer
-                                increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-                                decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-                                isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
-                                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
-                                regulatoryZoneName={regulatoryZoneName}
-                                regulatorySubZones={props.selectedRegulatoryZones[regulatoryZoneName]}
-                                callShowRegulatoryZone={props.callShowRegulatoryZone}
-                                callHideRegulatoryZone={props.callHideRegulatoryZone}
-                                callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
-                                callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
-                                regulatoryZoneMetadata={props.regulatoryZoneMetadata}
-                                callZoomInSubZone={props.callZoomInSubZone}
-                                showedLayers={props.showedLayers}
-                                gears={props.gears}
-                                isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}
-                            />
-                        </ListItem>)
+                        return (<RegulatoryZoneSelectedLayer
+                          key={regulatoryZoneName}
+                          increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+                          decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+                          isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
+                          callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
+                          regulatoryZoneName={regulatoryZoneName}
+                          regulatorySubZones={props.selectedRegulatoryZones[regulatoryZoneName]}
+                          callShowRegulatoryZone={props.callShowRegulatoryZone}
+                          callHideRegulatoryZone={props.callHideRegulatoryZone}
+                          callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
+                          callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
+                          regulatoryZoneMetadata={props.regulatoryZoneMetadata}
+                          callZoomInSubZone={props.callZoomInSubZone}
+                          showedLayers={props.showedLayers}
+                          gears={props.gears}
+                          isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}
+                        />)
                       })
                       : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
                 }
@@ -181,22 +180,6 @@ const RegulatoryZoneSelectedList = styled.ul`
         height: 0;
     }
   }
-`
-
-const ListItem = styled.li`
-  padding: 0px 5px 0px 0px;
-  margin: 0;
-  font-size: 0.8em;
-  text-align: left;
-  list-style-type: none;
-  width: 100%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  cursor: pointer;
-  margin: 0;
-  border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
-  line-height: 1.9em;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

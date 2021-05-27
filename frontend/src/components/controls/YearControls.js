@@ -118,7 +118,7 @@ const Row = styled.div`
 
 const ChevronIcon = styled(ChevronIconSVG)`
   transform: rotate(180deg);
-  width: 14px;
+  width: 16px;
   margin-right: 10px;
   margin-top: 9px;
   float: right;

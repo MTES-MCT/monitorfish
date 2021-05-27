@@ -33,7 +33,7 @@ const Map = () => {
       setShouldUpdateView(true)
     }
     setHistoryMoveTrigger({ dummyUpdate: true })
-    setMapMovingAndZoomEvent(true)
+    setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
   const handleMapClick = (event, map) => {

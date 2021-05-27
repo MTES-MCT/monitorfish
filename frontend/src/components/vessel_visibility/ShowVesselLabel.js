@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Checkbox } from 'rsuite'
 import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
 
-const VesselLabelCheckbox = props => {
+const ShowVesselLabel = ({ vesselLabelsShowedOnMap, updateVesselLabelsShowedOnMap }) => {
   const [value, setValue] = useState(undefined)
 
   useEffect(() => {
-    if (props.vesselLabelsShowedOnMap !== undefined && value === undefined) {
-      setValue(props.vesselLabelsShowedOnMap)
+    if (vesselLabelsShowedOnMap !== undefined && value === undefined) {
+      setValue(vesselLabelsShowedOnMap)
     }
-  }, [props.vesselLabelsShowedOnMap])
+  }, [vesselLabelsShowedOnMap])
 
   return (
-        <>
+        <Wrapper>
             { value !== undefined
               ? <RadioWrapper>
                     <Checkbox
                         checked={value}
                         onChange={(value, isChecked) => {
-                          props.updateVesselLabelsShowedOnMap(isChecked)
+                          updateVesselLabelsShowedOnMap(isChecked)
                           setValue(isChecked)
                         }}
 
@@ -26,9 +27,16 @@ const VesselLabelCheckbox = props => {
                 </RadioWrapper>
               : null
             }
-        </>
+        </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  background: ${COLORS.grayBackground};
+  padding: 0 0 9px 13px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+`
 
 const ShowLabelText = styled.span`
   margin-left: 0;
@@ -36,9 +44,9 @@ const ShowLabelText = styled.span`
 `
 
 const RadioWrapper = styled.div`
-  padding: 0px 0 0 4px;
+  padding: 0 0 0 4px;
   font-size: 13px;
   text-align: left;
 `
 
-export default VesselLabelCheckbox
+export default ShowVesselLabel

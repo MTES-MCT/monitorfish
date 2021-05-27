@@ -9,6 +9,7 @@ const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibil
 const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
 const vesselLabelLocalStorageKey = 'vesselLabel'
 const savedMapViewLocalStorageKey = 'mapView'
+const savedMapExtentLocalStorageKey = 'mapExtent'
 const baseLayerLocalStorageKey = 'baseLayer'
 const measurementsLocalStorageKey = 'measurements'
 
@@ -24,7 +25,7 @@ const mapSlice = createSlice({
     vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
     animateToVessel: null,
     animateToRegulatoryLayer: null,
-    vesselNamesHiddenByZoom: undefined,
+    vesselLabelsHiddenByZoom: undefined,
     isMoving: false,
     interaction: null,
     measurementTypeToAdd: null,
@@ -35,7 +36,8 @@ const mapSlice = createSlice({
     view: getLocalStorageState({
       zoom: null,
       center: null
-    }, savedMapViewLocalStorageKey)
+    }, savedMapViewLocalStorageKey),
+    extent: getLocalStorageState(null, savedMapExtentLocalStorageKey)
   },
   reducers: {
     animateToVessel (state, action) {
@@ -58,8 +60,12 @@ const mapSlice = createSlice({
       window.localStorage.setItem(savedMapViewLocalStorageKey, JSON.stringify(action.payload))
       state.view = action.payload
     },
-    hideVesselNames (state, action) {
-      state.vesselNamesHiddenByZoom = action.payload
+    setExtent (state, action) {
+      window.localStorage.setItem(savedMapExtentLocalStorageKey, JSON.stringify(action.payload))
+      state.extent = action.payload
+    },
+    hideVesselLabels (state, action) {
+      state.vesselLabelsHiddenByZoom = action.payload
     },
     isMoving (state) {
       state.isMoving = !state.isMoving
@@ -112,12 +118,30 @@ const mapSlice = createSlice({
     resetCircleMeasurementToAdd (state) {
       state.circleMeasurementToAdd = null
     },
+    /**
+     * Add a selected zone to filter vessels on vessel list
+     * @param {Object=} state
+     * @param {{
+     * payload: {
+     *  name: string,
+     *  code: string,
+     *  feature: GeoJSON
+     * }}} action - The zone to add
+     */
     addZoneSelected (state, action) {
-      state.zonesSelected = state.zonesSelected.concat(action.payload)
+      if (!state.zonesSelected.find(zone => zone.code === action.payload.code)) {
+        state.zonesSelected = state.zonesSelected.concat(action.payload)
+      }
     },
+    /**
+     * Remove a selected zone
+     * @param {Object=} state
+     * @param {{
+     * payload: string}} action - The name of the zone
+     */
     removeZoneSelected (state, action) {
       state.zonesSelected = state.zonesSelected.filter(zoneSelected => {
-        return zoneSelected.name !== action.payload
+        return zoneSelected.code !== action.payload
       })
     },
     setZonesSelected (state, action) {
@@ -135,9 +159,10 @@ export const {
   animateToRegulatoryLayer,
   resetAnimateToRegulatoryLayer,
   setVesselLabelsShowedOnMap,
-  hideVesselNames,
+  hideVesselLabels,
   isMoving,
   setView,
+  setExtent,
   setVesselsLastPositionVisibility,
   setVesselTrackDepth,
   setVesselLabel,

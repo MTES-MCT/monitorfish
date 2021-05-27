@@ -12,8 +12,8 @@ import {
   setVesselTrackDepth
 } from '../domain/reducers/Map'
 import TrackDepthRadio from '../components/vessel_visibility/TrackDepthRadio'
-import VesselLabelRadio from '../components/vessel_visibility/VesselLabelRadio'
-import VesselLabelCheckbox from '../components/vessel_visibility/VesselLabelCheckbox'
+import VesselLabelSelection from '../components/vessel_visibility/VesselLabelSelection'
+import ShowVesselLabel from '../components/vessel_visibility/ShowVesselLabel'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 
@@ -27,7 +27,6 @@ const VesselVisibility = () => {
   const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
-  const firstUpdate = useRef(true)
   const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
   const [isShowed, setIsShowed] = useState(true)
 
@@ -51,7 +50,6 @@ const VesselVisibility = () => {
   useEffect(() => {
     if (vesselVisibilityBoxIsOpen === true) {
       dispatch(unselectVessel())
-      firstUpdate.current = false
     }
   }, [vesselVisibilityBoxIsOpen])
 
@@ -95,8 +93,7 @@ const VesselVisibility = () => {
           selectedVessel={selectedVessel}/>
       </VesselVisibilityIcon>
       <VesselVisibilityBox
-        vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}
-        firstUpdate={firstUpdate.current}>
+        vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}>
         <Header isFirst={true}>
           Gérer l&apos;affichage des dernières positions
         </Header>
@@ -123,40 +120,23 @@ const VesselVisibility = () => {
         <VesselLabel>
           Choisir le libellé des étiquettes des navires
         </VesselLabel>
-        <VesselLabelRadio
+        <VesselLabelSelection
           updateVesselLabel={updateVesselLabel}
           vesselLabel={vesselLabel}
         />
-        <ShowVesselLabel>
-          <VesselLabelCheckbox
-            updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
-            vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
-          />
-        </ShowVesselLabel>
+        <ShowVesselLabel
+          updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
+          vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
+        />
       </VesselVisibilityBox>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  animation: ${props => props.isShowed ? 'vessel-visibility-opening' : 'vessel-visibility-closing'} 0.2s ease forwards;
-  @keyframes vessel-visibility-opening {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes vessel-visibility-closing {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
-  }
+  opacity: ${props => props.isShowed ? '1' : '0'};
+  transition: all 0.2s;
   z-index: 1000;
-`
-
-const ShowVesselLabel = styled.div`
-  background: ${COLORS.grayBackground};
-  padding: 0 0 9px 13px;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
 `
 
 const VesselLabel = styled.div`
@@ -224,23 +204,15 @@ const Header = styled.div`
 const VesselVisibilityBox = styled.div`
   width: 406px;
   background: ${COLORS.background};
-  margin-right: -420px;
-  top: 110px;
+  margin-right: ${props => props.vesselVisibilityBoxIsOpen ? '45px' : '-420px'};
+  opacity: ${props => props.vesselVisibilityBoxIsOpen ? '1' : '0'};
+  top: 152px;
   right: 10px;
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.firstUpdate && !props.vesselVisibilityBoxIsOpen ? '' : props.vesselVisibilityBoxIsOpen ? 'vessel-visibility-box-opening' : 'vessel-visibility-box-closing'} 0.5s ease forwards;
+  transition: all 0.5s;
 
-  @keyframes vessel-visibility-box-opening {
-    0%   { margin-right: -420px; opacity: 0;  }
-    100% { margin-right: 45px; opacity: 1; }
-  }
-
-  @keyframes vessel-visibility-box-closing {
-    0% { margin-right: 45px; opacity: 1; }
-    100%   { margin-right: -420px; opacity: 0;  }
-  }
 `
 
 const VesselVisibilityIcon = styled.button`
@@ -249,41 +221,14 @@ const VesselVisibilityIcon = styled.button`
   color: #05055E;
   background: ${COLORS.grayDarkerThree};
   padding: 3px 0px 0 3px;
-  top: 102px;
-  z-index: 99;
-  right: 10px;
-  height: 40px;
-  width: 40px;
-  border-radius: 2px;
   margin-top: 8px;
-  
-  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-visibility-icon-closing' : 'vessel-visibility-icon-opening'} 0.3s ease forwards;
-  
-  @keyframes vessel-visibility-icon-opening {
-    0%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-     }
-    100% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-  }
-
-  @keyframes vessel-visibility-icon-closing {
-    0% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-    100%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-    }
-  }
+  top: 144px;
+  z-index: 99;
+  height: 40px;
+  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
+  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
+  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  transition: all 0.3s;
 
   :hover, :focus {
       background: ${COLORS.grayDarkerThree};
@@ -293,25 +238,8 @@ const VesselVisibilityIcon = styled.button`
 const Vessel = styled(VesselSVG)`
   width: 25px;
   height: 25px;
-  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'visibility-icon-hidden' : 'visibility-icon-visible'} 0.2s ease forwards;
-  
-  @keyframes visibility-icon-visible {
-    0%   {
-      opacity: 0;
-     }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes visibility-icon-hidden {
-    0% {
-      opacity: 1;
-    }
-    100%   {
-      opacity: 0;
-    }
-  }
+  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  transition: all 0.2s;
 `
 
 export default VesselVisibility

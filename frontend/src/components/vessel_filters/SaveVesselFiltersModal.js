@@ -79,7 +79,7 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter }) => {
             '#555b10',
             '#8b0030',
             '#ac9a00',
-            '#fc071f',
+            '#421319',
             '#ff5138']}
         />
         <SaveButton

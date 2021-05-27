@@ -146,7 +146,7 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
 
   const iconSVG = showedText
     ? `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
-            <rect x="0" y="0" width="${textWidth}px" height="16" rx="8px" fill="#FFFFFF" />
+            <rect x="0" y="0" width="${textWidth}px" height="16" rx="8px" fill="#FFFFFF" fill-opacity="0.7" />
             <image xlink:href="${flag}" width="14px" x="5px" height="16px"/>
             <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${showedText}</text>
         </svg>`
@@ -166,15 +166,17 @@ export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
   imageElement.src = 'data:image/svg+xml,' + escape(iconSVG)
 })
 
-export const getVesselLabelStyle = (showedText, image) => new Style({
-  image: new Icon({
-    anchorOrigin: IconOrigin.TOP_RIGHT,
-    img: image,
-    imgSize: [getTextWidth(showedText) * 4 + 40, 36],
-    offset: [-getTextWidth(showedText) * 2 - 30, 11]
-  }),
-  zIndex: VESSEL_LABEL_STYLE
-})
+export const getVesselLabelStyle = (showedText, image) =>
+  new Style({
+    image: new Icon({
+      anchorOrigin: IconOrigin.TOP_RIGHT,
+      img: image,
+      imgSize: [getTextWidth(showedText) * 4 + 40, 36],
+      offset: [-getTextWidth(showedText) * 2 - 30, 11],
+      padding: [5, 5]
+    }),
+    zIndex: VESSEL_LABEL_STYLE
+  })
 
 export const setCircleStyle = (color, arrowFeature) => {
   const arrowStyle = new Style({

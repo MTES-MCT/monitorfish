@@ -102,7 +102,6 @@ const filterSlice = createSlice({
      * }}} action - The tag to remove object
      */
     removeTagFromFilter (state, action) {
-      console.log(action.payload)
       const filterUUID = action.payload.uuid
       const tagType = action.payload.type
       const tagValue = action.payload.value

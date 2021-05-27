@@ -36,7 +36,7 @@ const VesselTrackCard = props => {
                 <Position>
                     <FieldName>Type de signal</FieldName>
                     <FieldValue>{props.vessel.getProperties().positionType ? props.vessel.getProperties().positionType : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Dernier signal</FieldName>
+                    <FieldName>Signal</FieldName>
                     <FieldValue>
                         {
                             props.vessel.getProperties().dateTime

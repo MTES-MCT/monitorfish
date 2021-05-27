@@ -79,6 +79,7 @@ const RegulatoryZoneSelected = props => {
                           showedLayers={props.showedLayers}
                           gears={props.gears}
                           isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}
+                          allowRemoveZone={true}
                         />)
                       })
                       : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>

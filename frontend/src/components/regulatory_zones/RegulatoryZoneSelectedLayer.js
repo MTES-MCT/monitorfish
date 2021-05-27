@@ -21,11 +21,34 @@ const RegulatoryZoneSelectedLayer = props => {
   const [showWholeLayer, setShowWholeLayer] = useState(undefined)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
 
+  const {
+    callRemoveRegulatoryZoneFromMySelection,
+    callShowRegulatoryZone,
+    callHideRegulatoryZone,
+    callShowRegulatorySubZoneMetadata,
+    callCloseRegulatoryZoneMetadata,
+    callZoomInSubZone,
+    showedLayers,
+    regulatoryZoneName,
+    allowRemoveZone,
+    increaseNumberOfZonesOpened,
+    decreaseNumberOfZonesOpened,
+    regulatorySubZones,
+    regulatoryZoneMetadata,
+    isLastItem,
+    gears,
+    isReadyToShowRegulatoryZones
+  } = props
+
   useEffect(() => {
+<<<<<<< HEAD
     if (showedLayers && props.regulatoryZoneName) {
+=======
+    if (showedLayers && regulatoryZoneName) {
+>>>>>>> add number of layer and condition for the close icon
       const showLayer = showedLayers
         .filter(layer => layer.type === Layers.REGULATORY.code)
-        .some(layer => layer.zone.layerName === props.regulatoryZoneName)
+        .some(layer => layer.zone.layerName === regulatoryZoneName)
 
       setAtLeastOneLayerIsShowed(showLayer)
     }
@@ -37,20 +60,20 @@ const RegulatoryZoneSelectedLayer = props => {
       return
     }
 
-    if (props.increaseNumberOfZonesOpened && props.decreaseNumberOfZonesOpened) {
+    if (increaseNumberOfZonesOpened && decreaseNumberOfZonesOpened) {
       if (isOpen) {
-        props.increaseNumberOfZonesOpened(props.regulatorySubZones.length)
+        increaseNumberOfZonesOpened(regulatorySubZones.length)
       } else {
-        props.decreaseNumberOfZonesOpened(props.regulatorySubZones.length)
+        decreaseNumberOfZonesOpened(regulatorySubZones.length)
       }
     }
   }, [isOpen])
 
   useEffect(() => {
-    if (props.regulatoryZoneMetadata && props.regulatoryZoneName && props.regulatoryZoneMetadata.layerName === props.regulatoryZoneName) {
+    if (regulatoryZoneMetadata && regulatoryZoneName && regulatoryZoneMetadata.layerName === regulatoryZoneName) {
       setIsOpen(true)
     }
-  }, [props.regulatoryZoneMetadata, props.regulatoryZoneName])
+  }, [regulatoryZoneMetadata, regulatoryZoneName])
 
   const getRegulatoryLayerName = regulatorySubZones => {
     return {
@@ -58,23 +81,37 @@ const RegulatoryZoneSelectedLayer = props => {
     }
   }
 
+  const displayNumberOfZones = () => {
+    const zoneNumber = regulatorySubZones.length
+    return (<ZoneNumber >
+      {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
+      </ZoneNumber>
+    )
+  }
+
   return (
         <Row>
-            <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
-                <Text title={props.regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
+            <Zone isLastItem={isLastItem} isOpen={isOpen}>
+                <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
                     <ChevronIcon isOpen={isOpen}/>
-                    {props.regulatoryZoneName.replace(/[_]/g, ' ')}
+                    {regulatoryZoneName.replace(/[_]/g, ' ')}
                 </Text>
+                {displayNumberOfZones()}
                 { atLeastOneLayerIsShowed ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })} /> : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })} />}
-                <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => props.callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(props.regulatorySubZones), props.regulatorySubZones.length)}/>
+                { allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/> }
             </Zone>
             <List
                 isOpen={isOpen}
-                name={props.regulatoryZoneName.replace(/\s/g, '-')}
-                length={props.regulatorySubZones.length}>
+                name={regulatoryZoneName.replace(/\s/g, '-')}
+                length={regulatorySubZones.length}>
                 {
+<<<<<<< HEAD
                     props.regulatorySubZones && showedLayers
                       ? props.regulatorySubZones.map(subZone => {
+=======
+                    regulatorySubZones && showedLayers
+                      ? regulatorySubZones.map(subZone => {
+>>>>>>> add number of layer and condition for the close icon
                         let vectorLayerStyle
                         if (subZone.zone && subZone.layerName && subZone.gears && gears) {
                           const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
@@ -87,10 +124,23 @@ const RegulatoryZoneSelectedLayer = props => {
                                 subZone={subZone}
                                 vectorLayerStyle={vectorLayerStyle}
                                 key={`${subZone.layerName}:${subZone.zone}`}
+<<<<<<< HEAD
                                 isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
                                 callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showWholeLayer={showWholeLayer}
+=======
+                                isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
+                                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
+                                callShowRegulatoryZone={callShowRegulatoryZone}
+                                callHideRegulatoryZone={callHideRegulatoryZone}
+                                callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
+                                callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+                                callZoomInSubZone={callZoomInSubZone}
+                                regulatoryZoneMetadata={regulatoryZoneMetadata}
+                                showWholeLayer={showWholeLayer}
+                                allowRemoveZone={true}
+>>>>>>> add number of layer and condition for the close icon
                                 zoneIsShown={showedLayers
                                   .filter(layer => layer.type === Layers.REGULATORY.code)
                                   .some(layer =>
@@ -116,6 +166,10 @@ const Text = styled.span`
   overflow: hidden;
 `
 
+const ZoneNumber = styled.span`
+  font-size: 11px;
+`
+
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
   padding-top: 2px;
@@ -138,6 +192,7 @@ const HideIcon = styled(HideIconSVG)`
 const Zone = styled.span`
   width: 100%;
   display: flex;
+  justify-content: space-between;
   user-select: none;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
 `

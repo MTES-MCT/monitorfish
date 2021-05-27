@@ -15,10 +15,18 @@ export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
 export class Vessel {
+  /**
+   * Vessel object for building OpenLayers vessel feature
+   * @param {Vessel | VesselLastPosition} vessel
+   * @param {PositionWithTransformedCoordinates} position
+   * @param {string} id
+   */
   constructor (vessel, position, id) {
     this.vessel = vessel
     this.id = id
     this.coordinates = position.coordinates
+    this.position = position
+
     this.feature = new Feature({
       geometry: new Point(position.coordinates),
       internalReferenceNumber: vessel.internalReferenceNumber,
@@ -50,6 +58,16 @@ export class Vessel {
     this.feature.setId(`${Layers.VESSELS.code}:${id}`)
   }
 
+  /**
+   * Get vessel position from either the VesselLastPosition or Vessel objects
+   * @param {Vessel | VesselLastPosition} currentVessel
+   * @param {{
+        identity: Object,
+        feature: Object
+      }} selectedVesselFeatureAndIdentity
+   * @param {Vessel} selectedVessel
+   * @returns {PositionWithTransformedCoordinates} The position
+   */
   static getPosition (currentVessel, selectedVesselFeatureAndIdentity, selectedVessel) {
     let position = {}
 
@@ -71,6 +89,19 @@ export class Vessel {
     return position
   }
 
+  /**
+   * @typedef PositionWithTransformedCoordinates
+   * @property {string[]} coordinates
+   * @property {number} course
+   * @property {string} positionType
+   * @property {number} speed
+   * @property {string} dateTime
+   */
+
+  /**
+   * Get vessel position object
+   * @returns {PositionWithTransformedCoordinates} The position
+   */
   static getPositionObject (position) {
     let transformedCoordinates = []
     if (position && position.longitude && position.latitude) {
@@ -108,7 +139,7 @@ export class Vessel {
 
   getIconStyle (options) {
     const iconStyle = new Style({
-      image: getVesselImage(this.vessel, options.isLight),
+      image: getVesselImage(this.position, options.isLight),
       zIndex: VESSEL_ICON_STYLE
     })
 
@@ -118,6 +149,7 @@ export class Vessel {
       options.temporaryVesselsToHighLightOnMap,
       this.vessel)
     iconStyle.getImage().setOpacity(opacity)
+
     return iconStyle
   }
 

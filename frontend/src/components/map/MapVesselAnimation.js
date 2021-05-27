@@ -8,12 +8,8 @@ import { MIN_ZOOM_VESSEL_LABELS } from '../../layers/VesselsLayer'
 
 const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const dispatch = useDispatch()
-  const mapState = useSelector(state => state.map)
+  const { animateToVessel } = useSelector(state => state.map)
   const vessel = useSelector(state => state.vessel)
-
-  const {
-    animateToVessel
-  } = mapState
 
   const {
     vesselSidebarIsOpen,

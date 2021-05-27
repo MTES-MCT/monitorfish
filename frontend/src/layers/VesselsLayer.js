@@ -80,7 +80,7 @@ const VesselsLayer = ({ map }) => {
   }, [vesselsLastPositionVisibility, temporaryVesselsToHighLightOnMap])
 
   useEffect(() => {
-    moveSelectedFeatureToVesselLastPosition()
+    moveExistingGeometryToVesselLastPositionOrBuildNewFeature()
   }, [selectedVessel])
 
   useEffect(() => {
@@ -244,7 +244,7 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
-  function moveSelectedFeatureToVesselLastPosition () {
+  function moveExistingGeometryToVesselLastPositionOrBuildNewFeature () {
     if (selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
       const featureToModify = vectorSource.getFeatures().find(feature => {
         return vesselAndVesselFeatureAreEquals(selectedVessel, feature)
@@ -253,11 +253,8 @@ const VesselsLayer = ({ map }) => {
       if (featureToModify) {
         moveFeatureToNewPosition(featureToModify)
       } else {
-        buildFeature(selectedVessel, uuidv4())
-          .then(feature => {
-            console.log(feature)
-            vectorSource.addFeature(feature)
-          })
+        const feature = buildFeature(selectedVessel, uuidv4())
+        vectorSource.addFeature(feature)
       }
     }
   }
@@ -381,10 +378,10 @@ const VesselsLayer = ({ map }) => {
     featureToModify.setGeometry(new Point(newCoordinates))
   }
 
-  const buildFeature = (vesselFromAPI, index) => {
+  const buildFeature = (vesselFromAPI, id) => {
     const position = Vessel.getPosition(vesselFromAPI, selectedVesselFeatureAndIdentity, selectedVessel)
 
-    const vessel = new Vessel(vesselFromAPI, position, index)
+    const vessel = new Vessel(vesselFromAPI, position, id)
 
     const options = {
       selectedVesselFeatureAndIdentity: selectedVesselFeatureAndIdentity,

@@ -332,27 +332,27 @@ const VesselsLayer = ({ map }) => {
 
       if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
         const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
-        vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
-          const featureIndex = temporaryVesselsToHighLightOnMapUids.indexOf(feature.ol_uid)
 
-          if (featureIndex !== NOT_FOUND_INDEX) {
-            addVesselLabelToVesselFeature(feature, vesselLabel)
-          }
-        })
+        addLabelForFeaturesInExtentAndIncludedInArray(extent, temporaryVesselsToHighLightOnMapUids)
       } else if (filterShowed && nonFilteredVesselsAreHidden) {
-        vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
-          const featureIndex = filteredVesselsFeaturesUids.indexOf(feature.ol_uid)
 
-          if (featureIndex !== NOT_FOUND_INDEX) {
-            addVesselLabelToVesselFeature(feature, vesselLabel)
-          }
-        })
+        addLabelForFeaturesInExtentAndIncludedInArray(extent, filteredVesselsFeaturesUids)
       } else {
         vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
           addVesselLabelToVesselFeature(feature, vesselLabel)
         })
       }
     }
+  }
+
+  function addLabelForFeaturesInExtentAndIncludedInArray (extent, arrayOfUids) {
+    vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
+      const featureIndex = arrayOfUids.indexOf(feature.ol_uid)
+
+      if (featureIndex !== NOT_FOUND_INDEX) {
+        addVesselLabelToVesselFeature(feature, vesselLabel)
+      }
+    })
   }
 
   function addVesselLabelToVesselFeature (feature, vesselLabel) {

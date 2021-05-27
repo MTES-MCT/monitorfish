@@ -167,39 +167,22 @@ const CircleRangeIcon = styled(CircleRangeSVG)`
 `
 
 const Wrapper = styled.div`
-  animation: ${props => props.isShowed ? 'measurement-opening' : 'measurement-closing'} 0.2s ease forwards;
-  @keyframes measurement-opening {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes measurement-closing {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
-  }
+  opacity: ${props => props.isShowed ? '1' : '0'};
+  transition: all 0.2s;
   z-index: 1000;
 `
 
 const MeasurementOptions = styled.div`
   width: 175px;
-  margin-right: -200px;
-  top: 165px;
+  margin-right: ${props => props.measurementBoxIsOpen ? '45px' : '-200px'};
+  opacity: ${props => props.measurementBoxIsOpen ? '1' : '0'};
+  top: 207px;
   right: 10px;
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  opacity: 0;
-  animation: ${props => props.firstUpdate && !props.measurementBoxIsOpen ? '' : props.measurementBoxIsOpen ? 'measurement-box-opening' : 'measurement-box-closing'} 0.5s ease forwards;
+  transition: all 0.5s;
 
-  @keyframes measurement-box-opening {
-    0%   { margin-right: -200px; opacity: 0;  }
-    100% { margin-right: 45px; opacity: 1; }
-  }
-
-  @keyframes measurement-box-closing {
-    0% { margin-right: 45px; opacity: 1; }
-    100%   { margin-right: -200px; opacity: 0;  }
-  }
 `
 
 const MeasurementWrapper = styled.button`
@@ -207,41 +190,14 @@ const MeasurementWrapper = styled.button`
   display: inline-block;
   color: #05055E;
   background: ${props => props.isMeasuring ? COLORS.textGray : COLORS.grayDarkerThree};
-  top: 157px;
+  top: 199px;
   z-index: 99;
-  right: 10px;
-  height: 40px;
-  width: 40px;
-  border-radius: 2px;
   margin-top: 8px;
-  
-  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'measurement-icon-closing' : 'measurement-icon-opening'} 0.3s ease forwards;
-  
-  @keyframes measurement-icon-opening {
-    0%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-     }
-    100% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-  }
-
-  @keyframes measurement-icon-closing {
-    0% {
-      width: 40px;
-      border-radius: 2px;
-      right: 10px;
-    }
-    100%   {
-      width: 5px;
-      border-radius: 1px;
-      right: 0;
-    }
-  }
+  height: 40px;
+  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
+  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
+  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  transition: all 0.3s;
 
   :hover, :focus {
       background: ${COLORS.grayDarkerThree};
@@ -250,25 +206,8 @@ const MeasurementWrapper = styled.button`
 
 const MeasurementIcon = styled(MeasurementSVG)`
   width: 40px;
-  animation: ${props => props.selectedVessel && !props.rightMenuIsOpen ? 'visibility-icon-hidden' : 'visibility-icon-visible'} 0.2s ease forwards;
-  
-  @keyframes visibility-icon-visible {
-    0%   {
-      opacity: 0;
-     }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes visibility-icon-hidden {
-    0% {
-      opacity: 1;
-    }
-    100%   {
-      opacity: 0;
-    }
-  }
+  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  transition: all 0.2s;
 `
 
 export default Measurement

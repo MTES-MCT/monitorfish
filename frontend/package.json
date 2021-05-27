@@ -18,6 +18,7 @@
     "ol": "^6.5.0",
     "ol-mapbox-style": "^6.1.4",
     "react": "^16.13.1",
+    "react-color": "^2.19.3",
     "react-coordinate-input": "^1.0.0-rc.2",
     "react-country-flag": "^2.3.0",
     "react-dom": "^16.13.1",

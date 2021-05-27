@@ -186,7 +186,7 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 .rs-checkbox-checker {
   padding-bottom: 0;
   padding-left: 36px;
-  padding-top: 10px;
+  padding-top: 8px;
   min-height: 0;
   line-height: 1;
 }
@@ -244,7 +244,6 @@ label {
 }
 
 .rs-picker-toolbar-right-btn-ok {
-  padding: 8px 12px;
   padding: 5px 10px;
   font-size: 13px;
   line-height: 1.42857143;
@@ -259,4 +258,17 @@ label {
 
 .rs-picker-toolbar-right-btn-ok:not(.rs-btn-disabled):hover {
   background-color: #515151;
+}
+
+.rs-input-group.rs-input-group-inside .rs-input-group-addon {
+  padding: 8px 13px 8px 11px;
+}
+
+.rs-input {
+  height: 36px;
+  color: #969696;
+}
+
+.rs-modal-body {
+  padding: 20px 25px 0 25px !important;
 }

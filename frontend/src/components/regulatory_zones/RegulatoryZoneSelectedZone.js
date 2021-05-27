@@ -130,7 +130,7 @@ const SubZoneText = styled.span`
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 12px;
+  width: 13px;
   margin-top: 7px;
 `
 
@@ -147,13 +147,13 @@ const REGPaperDarkIcon = styled(REGPaperDarkSVG)`
 `
 
 const ShowIcon = styled(ShowIconSVG)`
-  width: 21px;
+  width: 23px;
   padding: 0 8px 0 0;
   margin-top: 9px;
 `
 
 const HideIcon = styled(HideIconSVG)`
-  width: 21px;
+  width: 23px;
   padding: 0 8px 0 0;
   margin-top: 9px;
 `

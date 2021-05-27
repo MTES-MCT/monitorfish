@@ -9,6 +9,7 @@ export const COLORS = {
   textBueGray: '#848DAE',
   textGray: '#969696',
   textWhite: '#EDEDF5',
+  squareBorder: '#E0E0E0',
   grayVesselHidden: '#B2B2B2',
   red: '#E1000F'
 }

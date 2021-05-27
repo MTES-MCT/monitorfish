@@ -129,7 +129,7 @@ const Wrapper = styled.div`
   background: ${COLORS.background};
   margin-right: ${props => !props.firstUpdate && props.isOpen ? '45px' : '-320px'};
   opacity:  ${props => !props.firstUpdate && props.isOpen ? '1' : '0'};
-  top: 165px;
+  top: 207px;
   right: 10px;
   border-radius: 2px;
   position: absolute;

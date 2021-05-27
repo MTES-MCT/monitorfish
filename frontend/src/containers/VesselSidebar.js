@@ -342,7 +342,6 @@ const TabList = styled.div`
 const Wrapper = styled.div`
   position: absolute;
   top: 50px;
-  right: 10px;
   width: 500px;
   max-height: 93vh;
   z-index: 999;

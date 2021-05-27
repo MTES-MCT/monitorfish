@@ -153,17 +153,6 @@ const RegulatoryZoneSelectedList = styled.ul`
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   padding: 0;
-  height: ${props => {
-        if (props.layerLength) {
-            if (props.zoneLength > 0) {
-                return props.layerLength * 37 + props.zoneLength * 38.5
-            } else {
-                return props.layerLength * 37
-            }
-        } else {
-            return 40
-        }
-    }}px;
   max-height: 550px;
   overflow-x: hidden;
   color: ${COLORS.grayDarkerThree};

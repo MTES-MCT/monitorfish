@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { MIN_ZOOM_VESSEL_NAMES } from '../../layers/VesselsLayer'
-import { hideVesselNames, resetAnimateToVessel } from '../../domain/reducers/Map'
+import { hideVesselLabels, resetAnimateToVessel } from '../../domain/reducers/Map'
 import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../../domain/entities/vessel'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
+import { MIN_ZOOM_VESSEL_LABELS } from '../../layers/VesselsLayer'
 
 const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const dispatch = useDispatch()
@@ -66,7 +65,7 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   }
 
   function hideVesselOnMapZoom () {
-    dispatch(hideVesselNames(map && map.getView().getZoom() <= MIN_ZOOM_VESSEL_NAMES))
+    dispatch(hideVesselLabels(map && map.getView().getZoom() <= MIN_ZOOM_VESSEL_LABELS))
   }
 
   function showVesselTrackAndSidebarOnMapClick (feature) {

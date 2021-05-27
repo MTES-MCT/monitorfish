@@ -30,7 +30,7 @@ import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormat
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
-export const MIN_ZOOM_VESSEL_LABELS = 7.5
+export const MIN_ZOOM_VESSEL_LABELS = 8
 const NOT_FOUND_INDEX = -1
 
 const VesselsLayer = ({ map }) => {
@@ -296,15 +296,13 @@ const VesselsLayer = ({ map }) => {
 
   function addOrRemoveVesselLabelWhenZooming () {
     if (map) {
-      const extent = map.getView().calculateExtent(map.getSize())
-
       if (vesselLabelsHiddenByZoom === undefined) {
         return
       }
 
       if (vesselLabelsShowedOnMap && !vesselLabelsHiddenByZoom && isVesselLabelMinimumZoom()) {
         addVesselLabelToAllFeaturesInExtent(null)
-      } else if (vesselLabelsShowedOnMap && vesselLabelsHiddenByZoom && isVesselLabelMaximumZoom()) {
+      } else if (vesselLabelsShowedOnMap && vesselLabelsHiddenByZoom) {
         removeVesselLabelToAllFeatures()
       } else if (!vesselLabelsShowedOnMap) {
         removeVesselLabelToAllFeatures()
@@ -316,17 +314,13 @@ const VesselsLayer = ({ map }) => {
     return map && map.getView().getZoom() > MIN_ZOOM_VESSEL_LABELS
   }
 
-  function isVesselLabelMaximumZoom () {
-    return map && map.getView().getZoom() <= MIN_ZOOM_VESSEL_LABELS
-  }
-
   function addVesselLabelToAllFeaturesInExtent (extent) {
     const vesselLabelsIsShowedOnMap = vesselLabelsHiddenByZoom === undefined
       ? false
       : vesselLabelsShowedOnMap && !vesselLabelsHiddenByZoom
 
     if (vesselLabelsIsShowedOnMap) {
-      extent = extent || mapRef.current.getView().calculateExtent()
+      extent = extent || map.getView().calculateExtent()
 
       const filterShowed = filters.find(filter => filter.showed)
 

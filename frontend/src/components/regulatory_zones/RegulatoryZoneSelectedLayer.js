@@ -137,9 +137,7 @@ const RegulatoryZoneSelectedLayer = props => {
 }
 
 const Text = styled.span`
-  line-height: 2.7em;
-  font-size: 13px;
-  padding-left: 10px;
+
   width: 79%;
   display: inline-block;
   text-overflow: ellipsis;
@@ -152,27 +150,24 @@ const ZoneNumber = styled.span`
 
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
-  padding-top: 2px;
+  padding-left: 5px;
 `
 
 const ShowIcon = styled(ShowIconSVG)`
   width: 23px;
-  padding: 0 8px 0 0;
-  margin-top: 9px;
-  margin-left: 6px;
+  padding-left: 5px;
 `
 
 const HideIcon = styled(HideIconSVG)`
   width: 23px;
-  padding: 0 8px 0 0;
-  margin-top: 9px;
-  margin-left: 6px;
+  padding-left: 5px;
 `
 
 const Zone = styled.span`
-  width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 10px;
   user-select: none;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
 `
@@ -194,17 +189,12 @@ const List = styled.div`
 `
 
 const Row = styled.li`
-  padding: 0px 5px 0px 0px;
-  margin: 0;
   font-size: 0.8em;
   text-align: left;
   list-style-type: none;
   width: 100%;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
   cursor: pointer;
-  margin: 0;
   border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;

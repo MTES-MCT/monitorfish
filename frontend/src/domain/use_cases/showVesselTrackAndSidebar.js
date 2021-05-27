@@ -1,10 +1,10 @@
 import { getVesselFromAPI } from '../../api/fetch'
-import { selectedVesselStyle, VESSEL_SELECTOR_STYLE } from '../../layers/styles/featuresStyles'
 import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
 import { animateToVessel } from '../reducers/Map'
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
+import { Vessel, VESSEL_SELECTOR_STYLE } from '../entities/vessel'
 
 const showVesselTrackAndSidebar = (
   vesselFeatureAndIdentity,
@@ -61,7 +61,7 @@ const showVesselTrackAndSidebar = (
 
 function applySelectedStyleToVesselFeature (feature) {
   if (feature) {
-    feature.setStyle([...feature.getStyle(), selectedVesselStyle])
+    feature.setStyle([...feature.getStyle(), Vessel.getSelectedVesselStyle()])
   }
 }
 

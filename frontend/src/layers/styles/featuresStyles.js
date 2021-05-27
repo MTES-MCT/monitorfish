@@ -6,15 +6,10 @@ import { getTextWidth } from '../../utils'
 import { COLORS } from '../../constants/constants'
 import { vesselLabel as vesselLabelEnum } from '../../domain/entities/vesselLabel'
 import countries from 'i18n-iso-countries'
-import { vesselAndVesselFeatureAreEquals, vesselsAreEquals } from '../../domain/entities/vessel'
-import Stroke from 'ol/style/Stroke'
+import { VESSEL_LABEL_STYLE, vesselsAreEquals } from '../../domain/entities/vessel'
 
 const images = require.context('../../../public/flags', false, /\.png$/)
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
-
-export const VESSEL_ICON_STYLE = 10
-export const VESSEL_LABEL_STYLE = 100
-export const VESSEL_SELECTOR_STYLE = 200
 
 function degreesToRadian (vessel) {
   return vessel.course * Math.PI / 180
@@ -56,32 +51,6 @@ function vesselsToHighLightDoesNotContainsCurrentVessel (temporaryVesselsToHighL
   })
 }
 
-export const setVesselIconStyle = (vessel, iconFeature, options) => new Promise(resolve => {
-  let selectedVesselFeatureToUpdate = null
-
-  const opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, vessel.dateTime, options.temporaryVesselsToHighLightOnMap, vessel)
-
-  const styles = []
-  const iconStyle = new Style({
-    image: getVesselImage(vessel, options.isLight),
-    zIndex: VESSEL_ICON_STYLE
-  })
-
-  iconStyle.getImage().setOpacity(opacity)
-  styles.push(iconStyle)
-
-  if (vessel &&
-        options.selectedVesselFeatureAndIdentity &&
-        options.selectedVesselFeatureAndIdentity.feature &&
-        vesselAndVesselFeatureAreEquals(vessel, options.selectedVesselFeatureAndIdentity.feature)) {
-    styles.push(selectedVesselStyle)
-    selectedVesselFeatureToUpdate = iconFeature
-  }
-
-  iconFeature.setStyle(styles)
-  resolve(selectedVesselFeatureToUpdate)
-})
-
 export function getVesselIconOpacity (vesselsLastPositionVisibility,
   dateTime,
   temporaryVesselsToHighLightOnMap,
@@ -108,15 +77,6 @@ export function getVesselIconOpacity (vesselsLastPositionVisibility,
 
   return opacity
 }
-
-export const selectedVesselStyle = new Style({
-  image: new Icon({
-    opacity: 1,
-    src: 'select.png',
-    scale: 0.4
-  }),
-  zIndex: VESSEL_SELECTOR_STYLE
-})
 
 export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
   const imageElement = new Image()
@@ -206,20 +166,3 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
     return arrowStyle
   })
 }
-
-export const measurementStyle = new Style({
-  stroke: new Stroke({
-    color: COLORS.grayDarkerThree,
-    lineDash: [4, 4],
-    width: 2
-  }),
-  image: new CircleStyle({
-    radius: 2,
-    stroke: new Stroke({
-      color: COLORS.grayDarkerThree
-    }),
-    fill: new Fill({
-      color: COLORS.grayDarkerThree
-    })
-  })
-})

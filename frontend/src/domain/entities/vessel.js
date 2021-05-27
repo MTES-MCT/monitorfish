@@ -1,3 +1,136 @@
+import { transform } from 'ol/proj'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
+import Feature from 'ol/Feature'
+import Point from 'ol/geom/Point'
+import { toStringHDMS } from 'ol/coordinate'
+import Layers from './layers'
+import { Icon, Style } from 'ol/style'
+import {
+  getVesselIconOpacity,
+  getVesselImage
+} from '../../layers/styles/featuresStyles'
+
+export const VESSEL_ICON_STYLE = 10
+export const VESSEL_LABEL_STYLE = 100
+export const VESSEL_SELECTOR_STYLE = 200
+
+export class Vessel {
+  constructor (vessel, position, id) {
+    this.vessel = vessel
+    this.id = id
+    this.coordinates = position.coordinates
+    this.feature = new Feature({
+      geometry: new Point(position.coordinates),
+      internalReferenceNumber: vessel.internalReferenceNumber,
+      externalReferenceNumber: vessel.externalReferenceNumber,
+      mmsi: vessel.mmsi,
+      flagState: vessel.flagState,
+      vesselName: vessel.vesselName,
+      coordinates: toStringHDMS(position.coordinates),
+      course: position.course,
+      positionType: position.positionType,
+      speed: position.speed,
+      dateTime: position.dateTime,
+      ircs: vessel.ircs,
+      emissionPeriod: vessel.emissionPeriod,
+      lastErsDateTime: vessel.lastErsDateTime,
+      departureDateTime: vessel.departureDateTime,
+      width: vessel.width,
+      length: vessel.length,
+      registryPortLocode: vessel.registryPortLocode,
+      registryPortName: vessel.registryPortName,
+      district: vessel.district,
+      districtCode: vessel.districtCode,
+      gearOnboard: vessel.gearOnboard,
+      segments: vessel.segments,
+      speciesOnboard: vessel.speciesOnboard,
+      totalWeightOnboard: vessel.totalWeightOnboard
+    })
+
+    this.feature.setId(`${Layers.VESSELS.code}:${id}`)
+  }
+
+  static getPosition (currentVessel, selectedVesselFeatureAndIdentity, selectedVessel) {
+    let position = {}
+
+    if (currentVessel.longitude && currentVessel.latitude) {
+      position = Vessel.getPositionObject(currentVessel)
+    } else if (currentVessel.positions && currentVessel.positions.length) {
+      const lastPosition = currentVessel.positions[currentVessel.positions.length - 1]
+
+      position = Vessel.getPositionObject(lastPosition)
+    }
+
+    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature &&
+      vesselAndVesselFeatureAreEquals(currentVessel, selectedVesselFeatureAndIdentity.feature)) {
+      const lastPosition = selectedVessel.positions[selectedVessel.positions.length - 1]
+
+      position = Vessel.getPositionObject(lastPosition)
+    }
+
+    return position
+  }
+
+  static getPositionObject (position) {
+    let transformedCoordinates = []
+    if (position && position.longitude && position.latitude) {
+      transformedCoordinates = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    }
+
+    return {
+      coordinates: transformedCoordinates,
+      course: position.course,
+      positionType: position.positionType,
+      speed: position.speed,
+      dateTime: position.dateTime
+    }
+  }
+
+  isSelectedVessel (selectedVesselFeatureAndIdentity) {
+    return this.vessel &&
+      selectedVesselFeatureAndIdentity &&
+      selectedVesselFeatureAndIdentity.feature &&
+      vesselAndVesselFeatureAreEquals(this.vessel, selectedVesselFeatureAndIdentity.feature)
+  }
+
+  setVesselStyle (options) {
+    const styles = []
+
+    const iconStyle = this.getIconStyle(options)
+    styles.push(iconStyle)
+
+    if (this.isSelectedVessel(options.selectedVesselFeatureAndIdentity)) {
+      styles.push(Vessel.getSelectedVesselStyle())
+    }
+
+    this.feature.setStyle(styles)
+  }
+
+  getIconStyle (options) {
+    const iconStyle = new Style({
+      image: getVesselImage(this.vessel, options.isLight),
+      zIndex: VESSEL_ICON_STYLE
+    })
+
+    const opacity = getVesselIconOpacity(
+      options.vesselsLastPositionVisibility,
+      this.vessel.dateTime,
+      options.temporaryVesselsToHighLightOnMap,
+      this.vessel)
+    iconStyle.getImage().setOpacity(opacity)
+    return iconStyle
+  }
+
+  static getSelectedVesselStyle = () => new Style({
+    image: new Icon({
+      opacity: 1,
+      src: 'select.png',
+      scale: 0.4
+    }),
+    zIndex: VESSEL_SELECTOR_STYLE
+  })
+}
+
 export const getVesselIdentityFromFeature = feature => {
   return {
     internalReferenceNumber: feature.getProperties().internalReferenceNumber,

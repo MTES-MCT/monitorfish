@@ -1,7 +1,13 @@
 import React from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import Map from './containers/Map'
+import Backoffice from './containers/Backoffice'
 import VesselsSearchBox from './containers/VesselsSearchBox'
 import VesselSidebar from './containers/VesselSidebar'
 import LayersSidebar from './containers/LayersSidebar'
@@ -16,25 +22,52 @@ function App () {
   return (
     <>
       <ToastProvider placement="bottom-right">
-        <Wrapper>
-          <Map/>
-          <VesselsSearchBox/>
-          <RightMenuOnHoverZone />
-          <LayersSidebar/>
-          <VesselList/>
-          <VesselVisibility/>
-          <VesselSidebar/>
-          <UpdatingVesselLoader/>
-          <Measurement/>
-
-          <APIWorker/>
-        </Wrapper>
+      <Router>
+      <Switch>
+          <Route path="/backoffice">
+            <BackofficePage />
+          </Route>
+          <Route path="/">
+            <HomePage />
+          </Route>
+        </Switch>
+      </Router>
       </ToastProvider>
     </>
   )
 }
 
+function HomePage () {
+  return <Wrapper>
+    <Map />
+    <LayersSidebar/>
+    <VesselsSearchBox />
+    <RightMenuOnHoverZone />
+    <VesselList/>
+    <VesselVisibility/>
+    <VesselSidebar/>
+    <UpdatingVesselLoader/>
+    <Measurement/>
+    <APIWorker/>
+  </Wrapper>
+}
+
+function BackofficePage () {
+  return <BackofficeWrapper>
+    <Backoffice />
+  </BackofficeWrapper>
+}
+
 const Wrapper = styled.div`
+  font-size: 13px;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+`
+
+const BackofficeWrapper = styled.div`
   font-size: 13px;
   text-align: center;
   height: 100%;

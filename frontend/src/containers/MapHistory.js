@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setView } from '../domain/reducers/Map'
 
-const MapHistory = ({ mapRef, map, setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
+const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
   const mapState = useSelector(state => state.map)
   const dispatch = useDispatch()
 
@@ -11,9 +11,9 @@ const MapHistory = ({ mapRef, map, setShouldUpdateView, shouldUpdateView, histor
       return
     }
 
-    if (mapRef.current) {
-      mapRef.current.getView().setCenter(event.state.center)
-      mapRef.current.getView().setZoom(event.state.zoom)
+    if (map) {
+      map.getView().setCenter(event.state.center)
+      map.getView().setZoom(event.state.zoom)
       setShouldUpdateView(false)
     }
   })
@@ -45,13 +45,13 @@ const MapHistory = ({ mapRef, map, setShouldUpdateView, shouldUpdateView, histor
   }
 
   function saveMapView () {
-    if (mapRef && mapRef.current && shouldUpdateView) {
-      const center = mapRef.current.getView().getCenter()
+    if (map && shouldUpdateView) {
+      const center = map.getView().getCenter()
       const view = {
-        zoom: mapRef.current.getView().getZoom().toFixed(2),
+        zoom: map.getView().getZoom().toFixed(2),
         center: center
       }
-      const url = `@${center[0].toFixed(2)},${center[1].toFixed(2)},${mapRef.current.getView().getZoom().toFixed(2)}`
+      const url = `@${center[0].toFixed(2)},${center[1].toFixed(2)},${map.getView().getZoom().toFixed(2)}`
 
       dispatch(setView(view))
       window.history.pushState(view, 'map', url)

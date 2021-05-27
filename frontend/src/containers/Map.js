@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
-import LayersEnum from '../domain/entities/layers'
-import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
 import { isMoving } from '../domain/reducers/Map'
 
 import BaseMap from './BaseMap'
@@ -16,7 +13,7 @@ import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
-import SHowRegulatoryMetadata from '../components/map/SHowRegulatoryMetadata'
+import ShowRegulatoryMetadata from '../components/map/ShowRegulatoryMetadata'
 const hitPixelTolerance = 3
 
 const Map = () => {
@@ -70,7 +67,7 @@ const Map = () => {
             <MapVesselAnimation
               mapMovingAndZoomEvent={mapMovingAndZoomEvent}
               mapClickEvent={mapClickEvent} />
-            <SHowRegulatoryMetadata mapClickEvent={mapClickEvent} />
+            <ShowRegulatoryMetadata mapClickEvent={mapClickEvent} />
             <MapHistory
               shouldUpdateView={shouldUpdateView}
               setShouldUpdateView={setShouldUpdateView}

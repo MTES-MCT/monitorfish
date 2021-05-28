@@ -135,7 +135,7 @@ const BaseMap = props => {
   }
 
   return (
-        <div>
+        <MapWrapper>
             <MapContainer ref={mapElement} />
             <BaseLayer map={map} />
             <RegulatoryLayers map={map} />
@@ -145,9 +145,14 @@ const BaseMap = props => {
             {map && Children.map(children, (child) => (
               child && cloneElement(child, { map })
             ))}
-        </div>
+        </MapWrapper>
   )
 }
+
+const MapWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`
 
 const MapContainer = styled.div`
   height: 100vh;

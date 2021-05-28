@@ -126,7 +126,7 @@ export function searchVesselsFromAPI (searched) {
 
 export function getAllRegulatoryZonesFromAPI () {
   return fetch(`${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-        `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`)
+        `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`)
     .then(response => {
       if (response.status === OK) {
         return response.json()

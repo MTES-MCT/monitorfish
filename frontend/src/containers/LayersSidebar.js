@@ -69,7 +69,11 @@ const LayersSidebar = () => {
     setAdministrativeZones(administrativeZones)
 
     dispatch(getAllRegulatoryZones(dispatch))
-      .then(regulatoryZones => setRegulatoryZones(regulatoryZones))
+      .then(regulatoryZones => {
+        console.log("layers side bar useEffect ")
+        console.log(regulatoryZones)
+        setRegulatoryZones(regulatoryZones)
+      })
       .catch(error => {
         dispatch(setError(error))
       })

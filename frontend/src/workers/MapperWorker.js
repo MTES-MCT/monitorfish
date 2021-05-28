@@ -34,6 +34,41 @@ class MapperWorker {
     return layersNamesToZones
   }
 
+  convertGeoJSONFeaturesToObjectByLawType (features) {
+    const featuresWithoutGeometry = features.features.map(feature => {
+      return mapToRegulatoryZone(feature.properties)
+    })
+
+    const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
+      const found = acc.find(item =>
+        item.layerName === current.layerName &&
+                item.zone === current.zone)
+      if (!found) {
+        return acc.concat([current])
+      } else {
+        return acc
+      }
+    }, [])
+
+    const layerNamesArray = uniqueFeaturesWithoutGeometry
+      .map(layer => layer.layerName)
+      .map(layerName => {
+        return uniqueFeaturesWithoutGeometry.filter(layer => layer.layerName === layerName)
+      })
+    console.log(layerNamesArray)
+    const layersNamesToZones = layerNamesArray.reduce((accumulatedObject, zone) => {
+      if (!accumulatedObject[zone[0].lawType]) {
+        accumulatedObject[zone[0].lawType] = {}
+      }
+      accumulatedObject[zone[0].lawType][zone[0].layerName] = zone
+      return accumulatedObject
+    }, {})
+
+    console.log(layersNamesToZones)
+
+    return layersNamesToZones
+  }
+
   getFilteredVessels (vessels, filters) {
     const {
       countriesFiltered,

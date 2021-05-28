@@ -1,5 +1,6 @@
 export const mapToRegulatoryZone = properties => {
   return {
+    lawType: properties.law_type,
     layerName: properties.layer_name,
     prohibitedGears: properties.engins_interdits,
     gears: properties.engins,

@@ -36,7 +36,7 @@ const Backoffice = () => {
   }, [])
 
   const displayRegulatoryZoneList = (regulatoryZoneList) => {
-    return (<RegulatoryZoneList >
+    return (<>
       {
         regulatoryZoneList && Object.keys(regulatoryZoneList).length > 0
           ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName, index) => {
@@ -62,7 +62,7 @@ const Backoffice = () => {
           })
           : <div>Aucune zone disponible</div>
       }
-      </RegulatoryZoneList>
+      </>
     )
   }
 
@@ -77,7 +77,6 @@ const Backoffice = () => {
         })
         : <div>Aucune Law Type disponible</div>
       }
-
     </RegulatoryZoneList>)
   }
 
@@ -113,12 +112,12 @@ const Backoffice = () => {
         {regulatoryZoneListByRegTerritory
           ? <SearchResultList>
             <Territory>
-              <TerritoryName>{'Réglementation France'}</TerritoryName>
-              {displayRegulatoryZoneByRegTerritory('France')}
-            </Territory>
-            <Territory>
               <TerritoryName>{'Réglementation UE'}</TerritoryName>
               {displayRegulatoryZoneByRegTerritory('UE')}
+            </Territory>
+            <Territory>
+              <TerritoryName>{'Réglementation France'}</TerritoryName>
+              {displayRegulatoryZoneByRegTerritory('France')}
             </Territory>
           </SearchResultList>
           : <div>En attente de chargement</div>}
@@ -142,6 +141,7 @@ const Territory = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  margin: 20px;
 `
 
 const TerritoryName = styled.div`
@@ -149,11 +149,14 @@ const TerritoryName = styled.div`
   font-size: 13px;
   text-transform: uppercase;
   color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.textGray};
+  font-size: 16px;
 `
 
 const LawTypeName = styled.div`
-  font-size: 15px;
-  color: green;
+  font-size: 16px;
+  color: ${COLORS.grayDarkerThree};
+  border-bottom: 2px solid ${COLORS.squareBorder};
 `
 
 const RegulatoryZoneNameList = styled.div`

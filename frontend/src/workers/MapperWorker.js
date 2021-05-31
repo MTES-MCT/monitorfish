@@ -34,7 +34,13 @@ class MapperWorker {
     return layersNamesToZones
   }
 
-  convertGeoJSONFeaturesToObjectByLawType (features) {
+  convertGeoJSONFeaturesToObjectByRegTerritory (features) {
+    const lawTypeList = {
+      'Reg locale': 'France',
+      'Reg 494 - Merlu': 'UE',
+      'R(UE) 2019/1241': 'UE',
+      'R(UE) 1380/2013': 'UE'
+    }
     const featuresWithoutGeometry = features.features.map(feature => {
       return mapToRegulatoryZone(feature.properties)
     })
@@ -55,18 +61,22 @@ class MapperWorker {
       .map(layerName => {
         return uniqueFeaturesWithoutGeometry.filter(layer => layer.layerName === layerName)
       })
-    console.log(layerNamesArray)
-    const layersNamesToZones = layerNamesArray.reduce((accumulatedObject, zone) => {
-      if (!accumulatedObject[zone[0].lawType]) {
-        accumulatedObject[zone[0].lawType] = {}
+    // TODO : Review var name
+    const layersNamesByRegTerritory = layerNamesArray.reduce((accumulatedObject, zone) => {
+      const lawType = zone[0].lawType
+      const layerName = zone[0].layerName
+      const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'France'
+
+      if (!accumulatedObject[regTerritory]) {
+        accumulatedObject[regTerritory] = {}
       }
-      accumulatedObject[zone[0].lawType][zone[0].layerName] = zone
+      if (!accumulatedObject[regTerritory][lawType]) {
+        accumulatedObject[regTerritory][lawType] = {}
+      }
+      accumulatedObject[regTerritory][lawType][layerName] = zone
       return accumulatedObject
     }, {})
-
-    console.log(layersNamesToZones)
-
-    return layersNamesToZones
+    return layersNamesByRegTerritory
   }
 
   getFilteredVessels (vessels, filters) {

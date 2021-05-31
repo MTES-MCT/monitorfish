@@ -7,15 +7,15 @@ import { setError } from '../reducers/Global'
 const worker = new Worker()
 const MapperWorker = Comlink.wrap(worker)
 
-const getAllRegulatoryZonesByLawType = dispatch => async () => {
+const getAllRegulatoryZonesByRegTerritory = dispatch => async () => {
   const worker = await new MapperWorker()
 
   return getAllRegulatoryZonesFromAPI()
     .then(features => {
-      return worker.convertGeoJSONFeaturesToObjectByLawType(features)
+      return worker.convertGeoJSONFeaturesToObjectByRegTerritory(features)
     }).catch(error => {
       dispatch(setError(error))
     })
 }
 
-export default getAllRegulatoryZonesByLawType
+export default getAllRegulatoryZonesByRegTerritory

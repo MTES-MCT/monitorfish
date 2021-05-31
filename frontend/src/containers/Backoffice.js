@@ -2,36 +2,29 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BaseMap from './BaseMap'
 import styled from 'styled-components'
-import getAllRegulatoryZonesByLawType from '../domain/use_cases/getAllRegulatoryZonesByLawType'
+import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
 import { ReactComponent as SearchIconSVG } from '../components/icons/Loupe.svg'
+import RegulatoryZoneSelectedLayer from '../components/regulatory_zones/RegulatoryZoneSelectedLayer'
 import { COLORS } from '../constants/constants'
+
+import { Style } from 'ol/style'
+import Stroke from 'ol/style/Stroke'
+import Fill from 'ol/style/Fill'
 
 const Backoffice = () => {
   const [searchText, setSearchText] = useState('')
-  const [regulatoryZoneListByLawType, setRegulatoryZoneListByLawType] = useState(undefined)
+  const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState(undefined)
   const dispatch = useDispatch()
 
   const searchRegulatoryZone = () => {
     console.log(`Search text is ${searchText}`)
-    dispatch(getAllRegulatoryZonesByLawType(dispatch))
-      .then(regulatoryZones => setRegulatoryZoneListByLawType(regulatoryZones))
-      .catch(error => {
-        dispatch(setError(error))
-      })
-  }
-
-  const lawTypeList = {
-    'Reg locale': 'France',
-    'Reg 494 - Merlu': 'UE',
-    'R(UE) 2019/1241': 'UE',
-    'R(UE) 1380/2013': 'UE'
   }
 
   const getRegulatoryZones = () => {
-    dispatch(getAllRegulatoryZonesByLawType(dispatch))
+    dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
       .then(regulatoryZones => {
-        setRegulatoryZoneListByLawType(regulatoryZones)
+        setRegulatoryZoneListByRegTerritory(regulatoryZones)
       })
       .catch(error => {
         dispatch(setError(error))
@@ -42,25 +35,30 @@ const Backoffice = () => {
     getRegulatoryZones()
   }, [])
 
-  const displayRegulatoryZoneListByLayerName = (regulatoryZoneLayerName) => {
-    return (<RegulatoryZoneList color="red" isRegZone>
-      {
-        regulatoryZoneListByLawType[regulatoryZoneLayerName].map((regulatoryZone, i) => {
-          console.log(regulatoryZone)
-          return <RegulatoryZoneLayerName key={i} >{regulatoryZone.zone}</RegulatoryZoneLayerName>
-        })
-      }</RegulatoryZoneList>)
-  }
-
   const displayRegulatoryZoneList = (regulatoryZoneList) => {
     return (<RegulatoryZoneList >
       {
         regulatoryZoneList && Object.keys(regulatoryZoneList).length > 0
-          ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName) => {
-            return <RegulatoryZoneLayerName key={regulatoryZoneLayerName}>
-              <RegZoneName>{regulatoryZoneLayerName}</RegZoneName>
-              {displayRegulatoryZoneListByLayerName(regulatoryZoneList[regulatoryZoneLayerName])}
-            </RegulatoryZoneLayerName>
+          ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName, index) => {
+            return <RegulatoryZoneSelectedLayer
+              key={regulatoryZoneLayerName}
+              callRemoveRegulatoryZoneFromMySelection={() => console.log('callRemoveRegulatoryZoneFromMySelection')}
+              callShowRegulatoryZone={() => console.log('callShowRegulatoryZone')}
+              callHideRegulatoryZone={() => console.log('callHideRegulatoryZone')}
+              callShowRegulatorySubZoneMetadata={() => console.log('callShowRegulatorySubZoneMetadata')}
+              callCloseRegulatoryZoneMetadata={() => console.log('callCloseRegulatoryZoneMetadata')}
+              callZoomInSubZone={() => console.log('callZoomInSubZone')}
+              showedLayers={false}
+              regulatoryZoneName={regulatoryZoneLayerName}
+              allowRemoveZone={false}
+              increaseNumberOfZonesOpened={false}
+              decreaseNumberOfZonesOpened={() => console.log('decreaseNumberOfZonesOpened')}
+              regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
+              regulatoryZoneMetadata={undefined}
+              isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
+              gears={undefined}
+              isReadyToShowRegulatoryZones={false}
+            />
           })
           : <div>Aucune zone disponible</div>
       }
@@ -68,20 +66,28 @@ const Backoffice = () => {
     )
   }
 
-  const displayRegulatoryZoneListByLawType = () => {
+  const displayRegulatoryZoneListByLawType = (regZoneByLawType) => {
     return (<RegulatoryZoneList >{
-      regulatoryZoneListByLawType && Object.keys(regulatoryZoneListByLawType).length > 0
-        ? Object.keys(regulatoryZoneListByLawType).map(lawType => {
-          console.log(lawType)
+      regZoneByLawType && Object.keys(regZoneByLawType).length > 0
+        ? Object.keys(regZoneByLawType).map(lawType => {
           return <RegulatoryZoneLayerName key={lawType}>
             <LawTypeName>{lawType}</LawTypeName>
-            {displayRegulatoryZoneList(regulatoryZoneListByLawType[lawType])}
+            {displayRegulatoryZoneList(regZoneByLawType[lawType])}
           </RegulatoryZoneLayerName>
         })
         : <div>Aucune Law Type disponible</div>
       }
 
     </RegulatoryZoneList>)
+  }
+
+  const displayRegulatoryZoneByRegTerritory = (territory) => {
+    const franceRegList = regulatoryZoneListByRegTerritory[territory]
+    console.log(territory)
+    console.log(franceRegList)
+    return franceRegList
+      ? displayRegulatoryZoneListByLawType(franceRegList)
+      : <div>En attente</div>
   }
 
   return (
@@ -104,12 +110,18 @@ const Backoffice = () => {
           <Button>brouillon (X)</Button>
           <Button>tracé en attente (X)</Button>
         </ButtonList>
-        <SearchResultList>
-          {regulatoryZoneListByLawType !== undefined
-            ? displayRegulatoryZoneListByLawType()
-            : <div>En attente</div>
-          }
-        </SearchResultList>
+        {regulatoryZoneListByRegTerritory
+          ? <SearchResultList>
+            <Territory>
+              <TerritoryName>{'Réglementation France'}</TerritoryName>
+              {displayRegulatoryZoneByRegTerritory('France')}
+            </Territory>
+            <Territory>
+              <TerritoryName>{'Réglementation UE'}</TerritoryName>
+              {displayRegulatoryZoneByRegTerritory('UE')}
+            </Territory>
+          </SearchResultList>
+          : <div>En attente de chargement</div>}
         <ButtonList>
           <Button>Saisir une nouvelle réglementation</Button>
           <Button>Modifier une règlementation</Button>
@@ -120,9 +132,23 @@ const Backoffice = () => {
   )
 }
 
-const RegZoneName = styled.div`
+const SearchResultList = styled.div`
+  display: flex;
+  height: 400px;
+  flex-direction: row;
+`
+
+const Territory = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`
+
+const TerritoryName = styled.div`
+  display: flex;
   font-size: 13px;
-  color: blue;
+  text-transform: uppercase;
+  color: ${COLORS.grayDarkerThree};
 `
 
 const LawTypeName = styled.div`
@@ -130,9 +156,18 @@ const LawTypeName = styled.div`
   color: green;
 `
 
-const RegulatoryZoneList = styled.ul`
+const RegulatoryZoneNameList = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  overflow: hidden;
+  color: ${COLORS.grayDarkerThree};
+`
+
+const RegulatoryZoneList = styled.div`
+  display: flex;
+  flex-direction: column;
   margin: 0;
-  background-color: ${props => props.color ? props.color : COLORS.background};
   border-radius: 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
@@ -163,23 +198,16 @@ const RegulatoryZoneList = styled.ul`
     }
   }*/
 `
-const RegulatoryZoneLayerName = styled.li`
+const RegulatoryZoneLayerName = styled.div`
+  display: flex;
+  flex-direction: column;
   font-size: 0.8em;
   text-align: left;
   list-style-type: none;
-  width: 100%;
   white-space: nowrap;
   cursor: pointer;
   border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
-  display: block;
-`
-
-const SearchResultList = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 400px;
-  border: 2px solid black;
 `
 
 const SearchContainer = styled.div`
@@ -205,8 +233,9 @@ const BackofficeContainer = styled.div`
 
 const RegularotyZonePanel = styled.div`
   display: flex;
-  flex-direction: column;
   flex: 1;
+  flex-direction: column;
+  max-width: 100%
 `
 
 const SearchBoxInput = styled.input`

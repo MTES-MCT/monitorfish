@@ -5,6 +5,7 @@ CREATE TABLE public.control_anteriority (
     external_immatriculation VARCHAR(50),
     last_control_datetime_utc TIMESTAMP NOT NULL,
     last_control_infraction BOOLEAN NOT NULL,
+    post_control_comments TEXT,
     number_controls_last_5_years SMALLINT NOT NULL,
     infraction_rate REAL NOT NULL,
     diversion_rate REAL NOT NULL,

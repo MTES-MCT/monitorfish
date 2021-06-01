@@ -21,25 +21,26 @@ function degreesToRadian (vessel) {
 }
 
 export function getVesselImage (vessel, isLight, color) {
-  let vesselFileName = 'boat_mf.png'
+  let vesselFileName = 'Couleur_navires_fond_clair_05065f_png24.png'
   if (color) {
-    vesselFileName = `Couleurs_filtres_navires_${color.replace('#', '').toUpperCase()}.png`
+    vesselFileName = `Couleurs_filtres_navires_${color.replace('#', '')}_png24.png`
   } else if (isLight) {
-    vesselFileName = 'Couleur_navire_fond_sombre_CACCE0.png'
+    vesselFileName = 'Couleur_navires_fond_sombre_cacce0_png24.png'
   }
 
+  console.log(vesselFileName)
   let vesselColor = 'rgb(5, 5, 94)'
   if (color) {
     vesselColor = color
   } else if (isLight) {
-    vesselColor = '#9B9B9B'
+    vesselColor = '#cacce0'
   }
 
   return vessel.speed > 0.1
     ? new Icon({
       src: vesselFileName,
       offset: [0, 0],
-      imgSize: [14, 14],
+      imgSize: [8, 16],
       rotation: degreesToRadian(vessel)
     })
     : new CircleStyle({

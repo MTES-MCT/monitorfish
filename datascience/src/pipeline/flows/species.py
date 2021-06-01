@@ -53,7 +53,7 @@ def load_species(species: pd.DataFrame):
     )
 
 
-with Flow("Extract species codes from data.gouv") as flow:
+with Flow("Species") as flow:
     species = extract_species(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
     species = transform_species(species)
     load_species(species)

@@ -301,7 +301,7 @@ def load_vessels(all_vessels):
     )
 
 
-with Flow("Extract vessels characteristics") as flow:
+with Flow("Vessels") as flow:
     # Extract
     fr_vessels = extract_fr_vessels()
     cee_vessels = extract_cee_vessels()

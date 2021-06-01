@@ -57,10 +57,7 @@ def load_last_positions(last_positions):
     )
 
 
-with Flow(
-    "Extract last positions, enrich with current segments, "
-    "catches and gear onboard since last dep"
-) as flow:
+with Flow("Last positions") as flow:
     current_segments = extract_current_segments()
     last_positions = extract_last_positions()
     last_positions = merge(last_positions, current_segments)

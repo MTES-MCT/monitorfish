@@ -28,7 +28,7 @@ def load_infractions(infractions):
     )
 
 
-with Flow("Update infractions reference") as flow:
+with Flow("Infractions") as flow:
     infractions = extract_infractions()
     infractions = clean_infractions(infractions)
     load_infractions(infractions)

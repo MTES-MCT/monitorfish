@@ -46,10 +46,8 @@ const showVesselTrackAndSidebar = (
                   'les positions des dernières 24 heures.')))
       } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, updateShowedVessel)) {
         dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position.")))
-        applySelectedStyleToVesselFeature(getState().vessel.selectedVesselFeatureAndIdentity.feature)
       } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
         dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")))
-        applySelectedStyleToVesselFeature(getState().vessel.selectedVesselFeatureAndIdentity.feature)
       } else {
         dispatch(removeError())
       }
@@ -60,12 +58,6 @@ const showVesselTrackAndSidebar = (
       dispatch(setError(error))
       dispatch(resetLoadingVessel())
     })
-}
-
-function applySelectedStyleToVesselFeature (feature) {
-  if (feature) {
-    feature.setStyle([...feature.getStyle(), Vessel.getSelectedVesselStyle()])
-  }
 }
 
 function alreadyShownVessel (updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity) {

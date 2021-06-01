@@ -27,8 +27,6 @@ export class Vessel {
     this.coordinates = position.coordinates
     this.position = position
 
-    // TODO Rajouter ici le selector !
-
     this.feature = new Feature({
       geometry: new Point(position.coordinates),
       internalReferenceNumber: vessel.internalReferenceNumber,

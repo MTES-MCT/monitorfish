@@ -112,6 +112,15 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
+  function getSelectedFeature () {
+    let featureToKeep = null
+    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature) {
+      const selectedVesselFeatureId = selectedVesselFeatureAndIdentity.feature.getId()
+      featureToKeep = vectorSource.getFeatureById(selectedVesselFeatureId)
+    }
+    return featureToKeep
+  }
+
   function addVesselsFeaturesToMap () {
     if (map && vessels && vessels.length) {
       const vesselsFeatures = vessels
@@ -120,15 +129,11 @@ const VesselsLayer = ({ map }) => {
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => {}).then(features => {
-        let featureToKeep = null
-        if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature) {
-          const selectedVesselFeatureId = selectedVesselFeatureAndIdentity.feature.getId()
-          featureToKeep = vectorSource.getFeatureById(selectedVesselFeatureId)
-        }
+        let featureToReDraw = getSelectedFeature()
         vectorSource.clear(true)
 
-        if (featureToKeep) {
-          vectorSource.addFeature(featureToKeep)
+        if (featureToReDraw) {
+          vectorSource.addFeature(featureToReDraw)
         }
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({

@@ -46,19 +46,20 @@ const AdministrativeZoneGroup = props => {
 }
 
 const ListItem = styled.span`
-display: -webkit-box;
-display: -webkit-flex;
-display: -ms-flexbox;
-display: flex;
-line-height: 1.9em;
-padding-top: 8px;
-padding-bottom: 4px;
--webkit-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
-font-size: 13px;
-font-weight: 300;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  line-height: 1.9em;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 300;
+  margin-left: 10px;
 `
 
 const Row = styled.div`
@@ -69,8 +70,9 @@ const Row = styled.div`
 const ChevronIcon = styled(ChevronIconSVG)`
   transform: rotate(180deg);
   width: 16px;
-  margin-right: 5px;
+  margin-right: 11px;
   margin-top: 5px;
+  float: right;
   
   animation: ${props => props.isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
 

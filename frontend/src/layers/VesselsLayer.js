@@ -129,7 +129,7 @@ const VesselsLayer = ({ map }) => {
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => {}).then(features => {
-        let featureToReDraw = getSelectedFeature()
+        const featureToReDraw = getSelectedFeature()
         vectorSource.clear(true)
 
         if (featureToReDraw) {

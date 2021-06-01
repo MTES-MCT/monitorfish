@@ -3,7 +3,7 @@ import { getAdministrativeSubZonesFromAPI } from '../../api/fetch'
 export const layersGroups = {
   TWELVE_FORTY_ONE: {
     code: 'twelve_forty_one',
-    name: '1241'
+    name: 'Zones du 1241'
   },
   VMS_SITUATION: {
     code: 'vms_situation',
@@ -15,7 +15,7 @@ export const layersGroups = {
   },
   ORGP: {
     code: 'orgp',
-    name: 'ORGP'
+    name: 'Zones ORGP'
   }
 }
 
@@ -93,7 +93,7 @@ const Layers = {
   },
   FAO: {
     code: 'fao_areas',
-    name: 'Zones FAO/CIEM',
+    name: 'Zones FAO / CIEM',
     group: null,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,
@@ -113,16 +113,6 @@ const Layers = {
 
       return ''
     }
-  },
-  AEM: {
-    code: 'aem_areas',
-    name: 'Zones AEM',
-    group: null,
-    type: layersType.ADMINISTRATIVE,
-    containsMultipleZones: false,
-    showMultipleZonesInAdministrativeZones: false,
-    subZoneFieldKey: 'name',
-    isIntersectable: false
   },
   THREE_MILES: {
     code: '3_miles_areas',
@@ -226,13 +216,23 @@ const Layers = {
   },
   cormoran: {
     code: 'cormoran_areas',
-    name: 'Cormoran',
+    name: 'Zones Cormoran (NAMO-SA)',
     group: null,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'zonex',
     isIntersectable: true
+  },
+  AEM: {
+    code: 'aem_areas',
+    name: 'Zones AEM (MED)',
+    group: null,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: 'name',
+    isIntersectable: false
   },
   CCAMLR: {
     code: 'fao_ccamlr_areas',
@@ -286,7 +286,7 @@ const Layers = {
   },
   rectangles_stat: {
     code: 'rectangles_stat_areas',
-    name: 'Rectangles stat',
+    name: 'Rectangles statistiques',
     group: null,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,

@@ -33,7 +33,7 @@ const ShowVesselLabel = ({ vesselLabelsShowedOnMap, updateVesselLabelsShowedOnMa
 
 const Wrapper = styled.div`
   background: ${COLORS.grayBackground};
-  padding: 0 0 9px 13px;
+  padding: 0 0 9px 7px;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 `
@@ -44,7 +44,7 @@ const ShowLabelText = styled.span`
 `
 
 const RadioWrapper = styled.div`
-  padding: 0 0 0 4px;
+  padding: 0;
   font-size: 13px;
   text-align: left;
 `

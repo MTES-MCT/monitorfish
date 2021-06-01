@@ -17,7 +17,7 @@ const styles = {
 
 const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter }) => {
   const [filterName, setFilterName] = useState('')
-  const [filterColor, setFilterColor] = useState('#ff5138')
+  const [filterColor, setFilterColor] = useState('#2C6E49')
 
   const save = () => {
     const filter = {
@@ -73,14 +73,16 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter }) => {
           onChangeComplete={color => setFilterColor(color.hex)}
           color={filterColor}
           colors={[
-            '#002925',
-            '#053a64',
-            '#314617',
-            '#555b10',
-            '#8b0030',
-            '#ac9a00',
-            '#421319',
-            '#ff5138']}
+            '#2C6E49',
+            '#8A1C7C',
+            '#8C2C17',
+            '#38B277',
+            '#303EFF',
+            '#8389F7',
+            '#AF6F1B',
+            '#E0876C',
+            '#EABD00',
+            '#FC4C0D']}
         />
         <SaveButton
           onClick={save}>

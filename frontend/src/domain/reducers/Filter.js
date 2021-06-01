@@ -92,7 +92,7 @@ const filterSlice = createSlice({
       window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
     },
     /**
-     * Remove tag from a given filter
+     * Remove tag from a given filter and delete filter if the filter contains no tag
      * @param {Object=} state
      * @param {{
      * payload: {
@@ -109,10 +109,22 @@ const filterSlice = createSlice({
       state.filters = state.filters.map(filter => {
         if (filter.uuid === filterUUID) {
           filter.filters[tagType] = filter.filters[tagType].filter(tag => tag !== tagValue)
-        }
 
+          const filterHasNoTag = !filter.filters.countriesFiltered.length &&
+            !filter.filters.fleetSegmentsFiltered.length &&
+            !filter.filters.gearsFiltered.length &&
+            !filter.filters.speciesFiltered.length &&
+            !filter.filters.districtsFiltered.length &&
+            !filter.filters.vesselsSizeValuesChecked.length &&
+            !filter.filters.zonesSelected.length
+
+          if(filterHasNoTag) {
+            return null
+          }
+        }
         return filter
-      })
+      }).filter(vessel => vessel)
+
       window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
     },
     /**

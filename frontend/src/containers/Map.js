@@ -39,7 +39,7 @@ const Map = () => {
   const handleMapClick = (event, map) => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: hitPixelTolerance })
-      setMapClickEvent(feature)
+      setMapClickEvent({ feature })
     }
   }
 

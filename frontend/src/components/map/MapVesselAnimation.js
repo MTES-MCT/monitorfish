@@ -9,17 +9,13 @@ import { MIN_ZOOM_VESSEL_LABELS } from '../../layers/VesselsLayer'
 const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const dispatch = useDispatch()
   const { animateToVessel } = useSelector(state => state.map)
-  const vessel = useSelector(state => state.vessel)
-
   const {
     vesselSidebarIsOpen,
     selectedVesselFeatureAndIdentity
-  } = vessel
+  } = useSelector(state => state.vessel)
 
   useEffect(() => {
-    if (map) {
-      addAnimateToVessel(map)
-    }
+    addAnimateToVessel()
   }, [animateToVessel, map, vesselSidebarIsOpen, selectedVesselFeatureAndIdentity])
 
   useEffect(() => {
@@ -29,24 +25,17 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   }, [map, mapMovingAndZoomEvent])
 
   useEffect(() => {
-    if (mapClickEvent) {
-      showVesselTrackAndSidebarOnMapClick(mapClickEvent)
+    if (mapClickEvent && mapClickEvent.feature) {
+      showVesselTrackAndSidebarOnMapClick(mapClickEvent.feature)
     }
   }, [mapClickEvent])
 
-  function createAnimateObject (resolution, duration, zoom) {
-    return {
-      center: [
-        animateToVessel.getGeometry().getCoordinates()[0] + resolution,
-        animateToVessel.getGeometry().getCoordinates()[1]
-      ],
-      duration,
-      zoom
-    }
-  }
-
-  function addAnimateToVessel (map) {
-    if (map && animateToVessel && selectedVesselFeatureAndIdentity && vesselSidebarIsOpen) {
+  function addAnimateToVessel () {
+    if (map &&
+      animateToVessel &&
+      selectedVesselFeatureAndIdentity &&
+      selectedVesselFeatureAndIdentity.feature &&
+      vesselSidebarIsOpen) {
       if (map.getView().getZoom() >= 8) {
         const resolution = map.getView().getResolution()
         map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
@@ -56,7 +45,19 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
           map.getView().animate(createAnimateObject(resolution * 200, 500, undefined))
         })
       }
+
       dispatch(resetAnimateToVessel())
+    }
+  }
+
+  function createAnimateObject (resolution, duration, zoom) {
+    return {
+      center: [
+        selectedVesselFeatureAndIdentity.feature.getGeometry().getCoordinates()[0] + resolution,
+        selectedVesselFeatureAndIdentity.feature.getGeometry().getCoordinates()[1]
+      ],
+      duration,
+      zoom
     }
   }
 

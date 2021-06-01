@@ -27,6 +27,8 @@ export class Vessel {
     this.coordinates = position.coordinates
     this.position = position
 
+    // TODO Rajouter ici le selector !
+
     this.feature = new Feature({
       geometry: new Point(position.coordinates),
       internalReferenceNumber: vessel.internalReferenceNumber,
@@ -71,22 +73,29 @@ export class Vessel {
   static getPosition (currentVessel, selectedVesselFeatureAndIdentity, selectedVessel) {
     let position = {}
 
-    if (currentVessel.longitude && currentVessel.latitude) {
+    if (this.isVesselLastPosition(currentVessel)) {
       position = Vessel.getPositionObject(currentVessel)
-    } else if (currentVessel.positions && currentVessel.positions.length) {
+    } else if (this.isVesselTrack(currentVessel)) {
       const lastPosition = currentVessel.positions[currentVessel.positions.length - 1]
 
       position = Vessel.getPositionObject(lastPosition)
     }
 
-    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature &&
-      vesselAndVesselFeatureAreEquals(currentVessel, selectedVesselFeatureAndIdentity.feature)) {
+    if (this.isSelectedVessel(currentVessel, selectedVesselFeatureAndIdentity) && this.isVesselTrack(currentVessel)) {
       const lastPosition = selectedVessel.positions[selectedVessel.positions.length - 1]
 
       position = Vessel.getPositionObject(lastPosition)
     }
 
     return position
+  }
+
+  static isVesselTrack (currentVessel) {
+    return currentVessel.positions && currentVessel.positions.length
+  }
+
+  static isVesselLastPosition (currentVessel) {
+    return currentVessel.longitude && currentVessel.latitude
   }
 
   /**
@@ -117,11 +126,15 @@ export class Vessel {
     }
   }
 
-  isSelectedVessel (selectedVesselFeatureAndIdentity) {
-    return this.vessel &&
+  static isSelectedVessel (vessel, selectedVesselFeatureAndIdentity) {
+    return vessel &&
       selectedVesselFeatureAndIdentity &&
       selectedVesselFeatureAndIdentity.feature &&
-      vesselAndVesselFeatureAreEquals(this.vessel, selectedVesselFeatureAndIdentity.feature)
+      vesselAndVesselFeatureAreEquals(vessel, selectedVesselFeatureAndIdentity.feature)
+  }
+
+  isSelectedVessel (selectedVesselFeatureAndIdentity) {
+    return Vessel.isSelectedVessel(this.vessel, selectedVesselFeatureAndIdentity)
   }
 
   setVesselStyle (options) {
@@ -130,7 +143,7 @@ export class Vessel {
     const iconStyle = this.getIconStyle(options)
     styles.push(iconStyle)
 
-    if (this.isSelectedVessel(options.selectedVesselFeatureAndIdentity)) {
+    if (Vessel.isSelectedVessel(this.vessel, options.selectedVesselFeatureAndIdentity)) {
       styles.push(Vessel.getSelectedVesselStyle())
     }
 
@@ -171,6 +184,17 @@ export const getVesselIdentityFromFeature = feature => {
     flagState: feature.getProperties().flagState,
     mmsi: feature.getProperties().mmsi,
     ircs: feature.getProperties().ircs
+  }
+}
+
+export const getVesselIdentityFromVessel = vessel => {
+  return {
+    internalReferenceNumber: vessel.internalReferenceNumber,
+    externalReferenceNumber: vessel.externalReferenceNumber,
+    vesselName: vessel.vesselName,
+    flagState: vessel.flagState,
+    mmsi: vessel.mmsi,
+    ircs: vessel.ircs
   }
 }
 
@@ -226,3 +250,5 @@ export const vesselSize = {
     evaluate: value => value >= 12
   }
 }
+
+export const TEMPORARY_VESSEL_TRACK = 'temp'

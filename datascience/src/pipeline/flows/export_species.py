@@ -106,7 +106,7 @@ def export_species(species: pd.DataFrame, csv_filepath: str) -> None:
     species.to_csv(csv_filepath, index=False, encoding="utf8")
 
 
-with Flow("Extract species from fao.org as csv") as flow:
+with Flow("Species") as flow:
     csv_filepath = Parameter("csv_filepath")
     species = extract_species(url=FAO_SPECIES_URL, proxies=PROXIES)
     isscaap_groups = extract_isscaap_groups(url=ISSCAAP_GROUPS_URL, proxies=PROXIES)

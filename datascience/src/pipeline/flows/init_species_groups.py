@@ -47,7 +47,7 @@ def load_species_groups(species_groups, species_codes_groups):
     )
 
 
-with Flow("Load preliminary species groups definitions") as flow:
+with Flow("Species groups") as flow:
     species_groups = extract_species_groups()
     species_codes_groups = extract_species_codes_groups()
     load_species_groups(species_groups, species_codes_groups)

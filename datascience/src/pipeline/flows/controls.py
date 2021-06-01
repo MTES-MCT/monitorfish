@@ -161,7 +161,7 @@ def load_controls(controls):
     )
 
 
-with Flow("Extract clean and load controls data") as flow:
+with Flow("Controls") as flow:
     controls = extract_controls()
     controls = transform_controls(controls)
     load_controls(controls)

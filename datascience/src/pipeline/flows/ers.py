@@ -312,7 +312,7 @@ def load_ers(cleaned_data: List[dict]):
                 )
 
 
-with Flow("Extract parse load ERS messages") as flow:
+with Flow("ERS") as flow:
     zipfiles = extract_zipfiles(
         RECEIVED_DIRECTORY,
         TREATED_DIRECTORY,

@@ -3,7 +3,7 @@ import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
-import { Vessel, VESSEL_SELECTOR_STYLE } from '../entities/vessel'
+import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
 import { animateToVessel } from '../reducers/Map'
 
 const showVesselTrackAndSidebar = (

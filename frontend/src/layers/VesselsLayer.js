@@ -11,7 +11,7 @@ import { getSVG, getVesselIconOpacity, getVesselImage, getVesselLabelStyle } fro
 import { setVesselsLayerSource, updateVesselFeatureAndIdentity } from '../domain/reducers/Vessel'
 import {
   getVesselFeatureAndIdentity,
-  getVesselIdentityFromFeature,
+  getVesselIdentityFromFeature, TEMPORARY_VESSEL_TRACK,
   Vessel,
   VESSEL_ICON_STYLE,
   VESSEL_LABEL_STYLE,
@@ -80,7 +80,11 @@ const VesselsLayer = ({ map }) => {
   }, [vesselsLastPositionVisibility, temporaryVesselsToHighLightOnMap])
 
   useEffect(() => {
-    moveExistingGeometryToVesselLastPositionOrBuildNewFeature()
+    const feature = moveExistingGeometryToVesselLastPositionOrBuildNewFeature()
+
+    if (feature) {
+      dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(feature, getVesselIdentityFromFeature(feature))))
+    }
   }, [selectedVessel])
 
   useEffect(() => {
@@ -116,7 +120,16 @@ const VesselsLayer = ({ map }) => {
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => {}).then(features => {
+        let featureToKeep = null
+        if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature) {
+          const selectedVesselFeatureId = selectedVesselFeatureAndIdentity.feature.getId()
+          featureToKeep = vectorSource.getFeatureById(selectedVesselFeatureId)
+        }
         vectorSource.clear(true)
+
+        if (featureToKeep) {
+          vectorSource.addFeature(featureToKeep)
+        }
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
@@ -252,9 +265,13 @@ const VesselsLayer = ({ map }) => {
 
       if (featureToModify) {
         moveFeatureToNewPosition(featureToModify)
+
+        return featureToModify
       } else {
-        const feature = buildFeature(selectedVessel, uuidv4())
+        const feature = buildFeature(selectedVessel, `${TEMPORARY_VESSEL_TRACK}:${uuidv4()}`)
         vectorSource.addFeature(feature)
+
+        return feature
       }
     }
   }
@@ -265,20 +282,27 @@ const VesselsLayer = ({ map }) => {
         return vesselAndVesselFeatureAreEquals(selectedVesselLastPosition, feature)
       })
 
-      featureToModify.setGeometry(selectedVesselLastPosition.geometry)
+      if (featureToModify) {
+        featureToModify.setGeometry(selectedVesselLastPosition.geometry)
+      }
       setSelectedVesselLastPosition(null)
+    }
+  }
+
+  function addVesselSelectorStyleAndUpdateFeature (feature) {
+    const styles = feature.getStyle()
+    const vesselAlreadyWithSelectorStyle = styles.find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
+
+    if (!vesselAlreadyWithSelectorStyle) {
+      feature.setStyle([...styles, Vessel.getSelectedVesselStyle()])
+      const vesselIdentity = getVesselIdentityFromFeature(feature)
+      dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(feature, vesselIdentity)))
     }
   }
 
   function addSelectorIconToSelectedVessel () {
     if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature && !removeSelectedIconToFeature) {
-      const style = selectedVesselFeatureAndIdentity.feature.getStyle()
-      const vesselAlreadyWithSelectorStyle = selectedVesselFeatureAndIdentity.feature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
-      if (!vesselAlreadyWithSelectorStyle) {
-        selectedVesselFeatureAndIdentity.feature.setStyle([...style, Vessel.getSelectedVesselStyle()])
-        const vesselIdentity = getVesselIdentityFromFeature(selectedVesselFeatureAndIdentity.feature)
-        dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(selectedVesselFeatureAndIdentity.feature, vesselIdentity)))
-      }
+      addVesselSelectorStyleAndUpdateFeature(selectedVesselFeatureAndIdentity.feature)
     }
   }
 
@@ -374,7 +398,7 @@ const VesselsLayer = ({ map }) => {
       ircs: featureToModify.getProperties().ircs,
       geometry: featureToModify.getGeometry()
     })
-    featureToModify.getStyle().push(Vessel.getSelectedVesselStyle())
+    addVesselSelectorStyleAndUpdateFeature(featureToModify)
     featureToModify.setGeometry(new Point(newCoordinates))
   }
 

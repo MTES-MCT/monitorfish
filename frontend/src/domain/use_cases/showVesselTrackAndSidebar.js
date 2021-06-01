@@ -1,10 +1,10 @@
 import { getVesselFromAPI } from '../../api/fetch'
 import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
-import { animateToVessel } from '../reducers/Map'
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 import { Vessel, VESSEL_SELECTOR_STYLE } from '../entities/vessel'
+import { animateToVessel } from '../reducers/Map'
 
 const showVesselTrackAndSidebar = (
   vesselFeatureAndIdentity,
@@ -22,9 +22,12 @@ const showVesselTrackAndSidebar = (
 
   removePreviousSelectedFeature(getState)
 
-  setLoadingAndAnimateToFeature(vesselFeatureAndIdentity, updateShowedVessel, dispatch)
-
+  dispatch(removeError())
+  dispatch(loadingVessel(vesselFeatureAndIdentity))
   dispatch(openVesselSidebar())
+  if (!updateShowedVessel) {
+    dispatch(animateToVessel(true))
+  }
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
     updateShowedVessel,
@@ -69,17 +72,6 @@ function alreadyShownVessel (updateShowedVessel, alreadySelectedVessel, vesselFe
   return !updateShowedVessel &&
       alreadySelectedVessel &&
       alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature
-}
-
-function setLoadingAndAnimateToFeature (vesselFeatureAndIdentity, updateShowedVessel, dispatch) {
-  if (!updateShowedVessel) {
-    if (vesselFeatureAndIdentity.feature) {
-      dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
-      dispatch(removeError())
-    }
-
-    dispatch(loadingVessel(vesselFeatureAndIdentity))
-  }
 }
 
 function getVesselTrackDepth (updateShowedVessel, trackDepthParameters, temporaryTrackDepth, vesselTrackDepth) {
@@ -132,6 +124,7 @@ function trackDepthHasBeenModified (vesselAndTrackDepthModified, updateShowedVes
 
 function removePreviousSelectedFeature (getState) {
   const previousSelectedFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
+
   if (previousSelectedFeatureAndIdentity && previousSelectedFeatureAndIdentity.feature) {
     const stylesWithoutVesselSelector = previousSelectedFeatureAndIdentity.feature.getStyle()
       .filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)

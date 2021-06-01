@@ -85,3 +85,4 @@ ON (
     AND pos.external_reference_number = per.external_reference_number)
 LEFT JOIN vessels
 ON pos.internal_reference_number = vessels.cfr
+WHERE pos.flag_state != 'GBR' OR pos.latitude < 46.2294 OR pos.latitude > 46.2305 

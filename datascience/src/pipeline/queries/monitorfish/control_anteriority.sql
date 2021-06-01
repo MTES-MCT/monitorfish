@@ -39,8 +39,6 @@ SELECT
     v.cfr,
     v.ircs,
     v.external_immatriculation,
-    v.flag_state,
-    v.vessel_name,
     l.last_control_datetime_utc,
     l.last_control_infraction,
     stats.number_controls_last_5_years,

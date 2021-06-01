@@ -58,33 +58,20 @@ emission_periods AS (
         internal_reference_number,
         external_reference_number,
         ircs
-),
-
-vessels_ AS (
-    SELECT
-        cfr,
-        width,
-        length,
-        mmsi,
-        district,
-        district_code,
-        registry_port
-    FROM public.vessels
-    WHERE cfr IS NOT NULL
 )
 
 SELECT
     pos.internal_reference_number AS cfr,
     pos.external_reference_number AS external_immatriculation,
-    vessels_.mmsi,
+    vessels.mmsi,
     pos.ircs,
     pos.vessel_name,
     pos.flag_state,
-    vessels_.district_code,
-    vessels_.district,
-    vessels_.registry_port,
-    vessels_.width,
-    vessels_.length,
+    vessels.district_code,
+    vessels.district,
+    vessels.registry_port,
+    vessels.width,
+    vessels.length,
     pos.latitude,
     pos.longitude,
     pos.speed,
@@ -96,7 +83,5 @@ LEFT JOIN emission_periods per
 ON (
         pos.internal_reference_number = per.internal_reference_number
     AND pos.external_reference_number = per.external_reference_number)
-LEFT JOIN vessels_
-ON pos.internal_reference_number = vessels_.cfr
-
-
+LEFT JOIN vessels
+ON pos.internal_reference_number = vessels.cfr

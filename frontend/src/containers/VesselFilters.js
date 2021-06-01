@@ -97,6 +97,7 @@ const VesselFilters = () => {
                     .map((filter, index) => {
                       return <Filter
                         key={filter.uuid}
+                        index={index + 1}
                         filter={filter}
                         isLastItem={filters.length === index + 1}
                         removeFilter={removeFilterCallback}
@@ -140,7 +141,7 @@ const NewFilterAdded = styled.div`
   font-size: 13px;
   z-index: 9999;
   
-  animation: ${props => props.hasOneFilterAdded ? 'new-filter-added' : ''} 4s ease;
+  animation: ${props => props.hasOneFilterAdded ? 'new-filter-added' : ''} 4.5s ease;
 
   @keyframes new-filter-added {
     0% {

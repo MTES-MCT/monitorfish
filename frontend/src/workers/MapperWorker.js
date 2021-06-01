@@ -82,8 +82,8 @@ class MapperWorker {
 
     if (districtsFiltered && districtsFiltered.length) {
       vessels = vessels.filter(vessel =>
-        districtsFiltered.some(districtCode => {
-          return vessel.districtCode === districtCode
+        districtsFiltered.some(district => {
+          return vessel.district === district
         }))
     }
 

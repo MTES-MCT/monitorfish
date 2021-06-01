@@ -71,7 +71,7 @@ const VesselListFilters = ({
     if (districts.districts && districts.districts.length) {
       return districts.districts.map(district => {
         return {
-          value: district.districtCode,
+          value: district.district,
           label: `${district.district} (${district.districtCode})`
         }
       })

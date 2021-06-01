@@ -8,7 +8,7 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
 import { ReactComponent as FilterSVG } from '../icons/Icone_filtres_dark.svg'
 import TagList from './TagList'
 
-const Filter = ({ filter, isLastItem, removeFilter, showFilter, hideFilters, removeTagFromFilter }) => {
+const Filter = ({ filter, index, isLastItem, removeFilter, showFilter, hideFilters, removeTagFromFilter }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -17,7 +17,10 @@ const Filter = ({ filter, isLastItem, removeFilter, showFilter, hideFilters, rem
         <Text title={filter.name.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
           <ChevronIcon isOpen={isOpen}/>
           <FilterIcon fill={filter.color}/>
-          {filter.name.replace(/[_]/g, ' ')}
+          {filter.name
+            ? filter.name.replace(/[_]/g, ' ')
+            : `Filtre n°${index}`
+          }
         </Text>
         {
           filter.showed
@@ -26,7 +29,7 @@ const Filter = ({ filter, isLastItem, removeFilter, showFilter, hideFilters, rem
         }
         <CloseIcon title="Supprimer le filtre de ma sélection" onClick={() => removeFilter(filter.uuid)}/>
       </FilterItem>
-      <FilterTags isOpen={isOpen}>
+      <FilterTags isOpen={isOpen} isLastItem={isLastItem}>
         <TagList
           uuid={filter.uuid}
           filters={filter.filters}
@@ -41,7 +44,7 @@ const FilterTags = styled.div`
   padding: ${props => props.isOpen ? '15px 15px 5px 15px' : '0'};
   height: ${props => props.isOpen ? 'inherit' : '0'};
   opacity: ${props => props.isOpen ? '1' : '0'};
-  ${props => props.isOpen ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => props.isOpen && !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
   transition: all 0.3s;
 `
 

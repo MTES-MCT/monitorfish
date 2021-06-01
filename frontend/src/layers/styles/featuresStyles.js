@@ -23,9 +23,9 @@ function degreesToRadian (vessel) {
 export function getVesselImage (vessel, isLight, color) {
   let vesselFileName = 'boat_mf.png'
   if (color) {
-    vesselFileName = `boat_mf_${color.replace('#', '')}.png`
+    vesselFileName = `Couleurs_filtres_navires_${color.replace('#', '').toUpperCase()}.png`
   } else if (isLight) {
-    vesselFileName = 'boat_mf_light.png'
+    vesselFileName = 'Couleur_navire_fond_sombre_CACCE0.png'
   }
 
   let vesselColor = 'rgb(5, 5, 94)'

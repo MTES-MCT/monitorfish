@@ -152,6 +152,8 @@ const VesselsLayer = ({ map }) => {
     })
 
     const color = showedFilter ? showedFilter.color : null
+    const isLight = vesselIconIsLight(selectedBaseLayer)
+
     dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
       .then(filteredVessels => {
         const uids = filteredVessels.map(vessel => vessel.uid)
@@ -164,7 +166,7 @@ const VesselsLayer = ({ map }) => {
             const featureIndex = uids.indexOf(feature.ol_uid)
 
             if (featureIndex !== NOT_FOUND_INDEX) {
-              modifyVesselIcon(feature, color, false, vesselIconStyle)
+              modifyVesselIcon(feature, color, isLight, vesselIconStyle)
             } else if (nonFilteredVesselsAreHidden) {
               const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
               if (vesselLabelStyle) {
@@ -173,7 +175,7 @@ const VesselsLayer = ({ map }) => {
 
               vesselIconStyle.getImage().setOpacity(0)
             } else {
-              modifyVesselIcon(feature, null, false, vesselIconStyle)
+              modifyVesselIcon(feature, null, isLight, vesselIconStyle)
             }
           }
         })

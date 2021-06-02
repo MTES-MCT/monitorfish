@@ -31,6 +31,12 @@ export const NoValue = styled.span`
 export const StrongText = styled.span`
   color: ${COLORS.grayDarkerThree};
   margin-left: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  max-width: 200px;
+  display: inline-block;
+  vertical-align: top;
 `
 
 export const Red = styled.span`

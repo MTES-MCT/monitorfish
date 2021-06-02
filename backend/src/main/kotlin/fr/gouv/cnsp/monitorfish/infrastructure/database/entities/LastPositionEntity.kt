@@ -69,7 +69,7 @@ data class LastPositionEntity(
         @Column(name = "length")
         val length: Double? = null,
         @Column(name = "registry_port")
-        val registryPortLocode: String? = null,
+        val registryPort: String? = null,
         @Column(name = "district")
         val district: String? = null,
         @Column(name = "district_code")
@@ -105,7 +105,7 @@ data class LastPositionEntity(
             departureDateTime = departureDateTime,
             width = width,
             length = length,
-            registryPortLocode = registryPortLocode,
+            registryPortName = registryPort,
             district = district,
             districtCode = districtCode,
             gearOnboard = mapper.readValue(gearOnboard, mapper.typeFactory

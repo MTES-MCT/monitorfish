@@ -77,7 +77,6 @@ const DownloadVesselListModal = props => {
 
         valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
-            case CSVOptions.dateTime.code: filteredVesselObject[CSVOptions[valueChecked].name] = getDateTime(vessel[valueChecked], true); break
             case CSVOptions.flagState.code: filteredVesselObject[CSVOptions[valueChecked].name] = countries.getName(vessel[valueChecked], 'fr'); break
             default: filteredVesselObject[CSVOptions[valueChecked].name] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
           }

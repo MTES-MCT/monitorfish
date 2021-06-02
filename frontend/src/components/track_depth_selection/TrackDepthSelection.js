@@ -35,6 +35,9 @@ const TrackDepthSelection = props => {
   }, [trackDepthRadioSelection])
 
   const convertToUTCDay = datesSelection => {
+    datesSelection[0].setHours(0,0,0)
+    datesSelection[1].setHours(23,59,59)
+
     datesSelection[0].setMinutes(datesSelection[0].getMinutes() - datesSelection[0].getTimezoneOffset())
     datesSelection[1].setMinutes(datesSelection[1].getMinutes() - datesSelection[1].getTimezoneOffset())
   }

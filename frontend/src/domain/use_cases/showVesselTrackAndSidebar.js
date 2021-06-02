@@ -1,10 +1,10 @@
 import { getVesselFromAPI } from '../../api/fetch'
-import { selectedVesselStyle, VESSEL_SELECTOR_STYLE } from '../../layers/styles/featuresStyles'
 import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
-import { animateToVessel } from '../reducers/Map'
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
+import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
+import { animateToVessel } from '../reducers/Map'
 
 const showVesselTrackAndSidebar = (
   vesselFeatureAndIdentity,
@@ -22,9 +22,12 @@ const showVesselTrackAndSidebar = (
 
   removePreviousSelectedFeature(getState)
 
-  setLoadingAndAnimateToFeature(vesselFeatureAndIdentity, updateShowedVessel, dispatch)
-
+  dispatch(removeError())
+  dispatch(loadingVessel(vesselFeatureAndIdentity))
   dispatch(openVesselSidebar())
+  if (!updateShowedVessel) {
+    dispatch(animateToVessel(true))
+  }
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
     updateShowedVessel,
@@ -43,10 +46,8 @@ const showVesselTrackAndSidebar = (
                   'les positions des dernières 24 heures.')))
       } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, updateShowedVessel)) {
         dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position.")))
-        applySelectedStyleToVesselFeature(getState().vessel.selectedVesselFeatureAndIdentity.feature)
       } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
         dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")))
-        applySelectedStyleToVesselFeature(getState().vessel.selectedVesselFeatureAndIdentity.feature)
       } else {
         dispatch(removeError())
       }
@@ -59,27 +60,10 @@ const showVesselTrackAndSidebar = (
     })
 }
 
-function applySelectedStyleToVesselFeature (feature) {
-  if (feature) {
-    feature.setStyle([...feature.getStyle(), selectedVesselStyle])
-  }
-}
-
 function alreadyShownVessel (updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity) {
   return !updateShowedVessel &&
       alreadySelectedVessel &&
       alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature
-}
-
-function setLoadingAndAnimateToFeature (vesselFeatureAndIdentity, updateShowedVessel, dispatch) {
-  if (!updateShowedVessel) {
-    if (vesselFeatureAndIdentity.feature) {
-      dispatch(animateToVessel(vesselFeatureAndIdentity.feature))
-      dispatch(removeError())
-    }
-
-    dispatch(loadingVessel(vesselFeatureAndIdentity))
-  }
 }
 
 function getVesselTrackDepth (updateShowedVessel, trackDepthParameters, temporaryTrackDepth, vesselTrackDepth) {
@@ -132,6 +116,7 @@ function trackDepthHasBeenModified (vesselAndTrackDepthModified, updateShowedVes
 
 function removePreviousSelectedFeature (getState) {
   const previousSelectedFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
+
   if (previousSelectedFeatureAndIdentity && previousSelectedFeatureAndIdentity.feature) {
     const stylesWithoutVesselSelector = previousSelectedFeatureAndIdentity.feature.getStyle()
       .filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)

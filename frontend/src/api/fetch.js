@@ -24,23 +24,10 @@ function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
 }
 
 /**
- * @typedef CRS
- * @property {string} type
- * @property {Object} properties
+ * Get all vessels last positions
+ * @returns {Promise<VesselLastPosition>} The vessels
+ * @throws {Error}
  */
-
-/**
- * @typedef GeoJSON
- * @property {CRS} crs
- * @property {number[]} bbox
- * @property {Object[]} features
- * @property {number} numberMatched
- * @property {number} numberReturned
- * @property {string} timeStamp
- * @property {number} totalFeatures
- * @property {string} type
- */
-
 export function getVesselsLastPositionsFromAPI () {
   return fetch('/bff/v1/vessels')
     .then(response => {
@@ -62,6 +49,11 @@ export function getVesselsLastPositionsFromAPI () {
     })
 }
 
+/**
+ * Get vessel informations and last positions
+ * @returns {Promise<Vessel>} The vessels
+ * @throws {Error}
+ */
 export function getVesselFromAPI (
   internalReferenceNumber,
   externalReferenceNumber,

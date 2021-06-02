@@ -249,7 +249,9 @@ const VesselsLayer = ({ map }) => {
 
   function showBackVesselsIconsWhenClosingVesselsHighLight () {
     if (vesselsLastPositionVisibility && (!temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length) && map) {
-      vectorSource.getFeatures().forEach(feature => {
+      const features = vectorSource.getFeatures()
+
+      features.forEach(feature => {
         const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
         const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
         if (vesselIconStyle) {
@@ -260,7 +262,11 @@ const VesselsLayer = ({ map }) => {
           vesselLabelStyle.getImage().setOpacity(1)
         }
       })
-      vectorSource.changed()
+
+      applyFilterToVessels(features, () => {}).then(_ => {
+        vectorSource.changed()
+      })
+
     }
   }
 

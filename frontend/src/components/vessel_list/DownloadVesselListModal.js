@@ -6,7 +6,7 @@ import Checkbox from 'rsuite/lib/Checkbox'
 import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
-import { getDate, getDateTime } from '../../utils'
+import { getDate } from '../../utils'
 import { CSVOptions } from './dataFormatting'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
@@ -77,7 +77,6 @@ const DownloadVesselListModal = props => {
 
         valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
-            case CSVOptions.dateTime.code: filteredVesselObject[CSVOptions[valueChecked].name] = getDateTime(vessel[valueChecked], true); break
             case CSVOptions.flagState.code: filteredVesselObject[CSVOptions[valueChecked].name] = countries.getName(vessel[valueChecked], 'fr'); break
             default: filteredVesselObject[CSVOptions[valueChecked].name] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
           }

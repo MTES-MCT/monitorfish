@@ -26,7 +26,7 @@ const ControlField = ({ field, type, isFirst }) => {
     {
       control
         ? <ControlResumeLine>
-          <LastControlResumeElement>Unité <StrongText>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
+          <LastControlResumeElement>Unité <StrongText title={control.controller && control.controller.controller}>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
           <LastControlResumeElement>Infractions <StrongText>{control.infraction ? <> {control.infractions.length} infraction{control.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>
         </ControlResumeLine>
         : null

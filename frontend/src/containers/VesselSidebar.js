@@ -49,6 +49,8 @@ const VesselSidebar = () => {
   useEffect(() => {
     if (openSidebar === true) {
       firstUpdate.current = false
+    } else {
+      setTrackDepthSelectionIsOpen(false)
     }
   }, [openSidebar])
 

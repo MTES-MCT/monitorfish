@@ -35,19 +35,21 @@ const VesselSummary = props => {
         setPhotoFallback(true)
       }
 
-      if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().speciesOnboard) {
-        const faoZones = props.vesselLastPositionFeature.getProperties().speciesOnboard.map(species => {
-          return species.faoZone
-        })
-
-        setFaoZones([...new Set(faoZones)])
-      } else {
-        setFaoZones([])
-      }
-
       setVessel(props.vessel)
     }
   }, [props.vessel, props.error])
+
+  useEffect(() => {
+    if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().speciesOnboard) {
+      const faoZones = props.vesselLastPositionFeature.getProperties().speciesOnboard.map(species => {
+        return species.faoZone
+      })
+
+      setFaoZones([...new Set(faoZones)])
+    } else {
+      setFaoZones([])
+    }
+  }, [props.vesselLastPositionFeature])
 
   useEffect(() => {
     if (props.gears && props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().gearOnboard) {
@@ -63,7 +65,7 @@ const VesselSummary = props => {
     } else {
       setGears([])
     }
-  }, [props.gears, props.vessel])
+  }, [props.gears, props.vesselLastPositionFeature])
 
   useEffect(() => {
     if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments &&

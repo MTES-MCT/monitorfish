@@ -7,8 +7,8 @@ const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (mapClickEvent) {
-      showRegulatoryZoneMetadataOnClick(mapClickEvent)
+    if (mapClickEvent && mapClickEvent.feature) {
+      showRegulatoryZoneMetadataOnClick(mapClickEvent.feature)
     }
   }, [mapClickEvent])
 

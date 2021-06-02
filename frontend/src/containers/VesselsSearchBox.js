@@ -9,7 +9,11 @@ import { COLORS } from '../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import searchVessels from '../domain/use_cases/searchVessels'
-import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../domain/entities/vessel'
+import {
+  getVesselFeatureAndIdentity,
+  getVesselIdentityFromFeature,
+  getVesselIdentityFromVessel
+} from '../domain/entities/vessel'
 import countries from 'i18n-iso-countries'
 import focusOnVesselSearch, { focusState } from '../domain/use_cases/focusOnVesselSearch'
 import { expandRightMenu } from '../domain/reducers/Global'
@@ -145,6 +149,7 @@ const VesselsSearchBox = () => {
 
   useEffect(() => {
     firstUpdate.current = false
+    document.addEventListener('keydown', escapeFromKeyboard, false)
   }, [])
 
   useEffect(() => {
@@ -160,6 +165,14 @@ const VesselsSearchBox = () => {
       dispatch(unselectVessel())
     }
   }, [selectedVesselFeatureAndIdentity])
+
+  const escapeFromKeyboard = event => {
+    const escapeKeyCode = 27
+    if (event.keyCode === escapeKeyCode) {
+      dispatch(focusOnVesselSearch())
+      setSearchText('')
+    }
+  }
 
   function getListItem (id, flagState, internalReferenceNumber, externalReferenceNumber, ircs, mmsi, vesselName, vessel) {
     return (
@@ -305,6 +318,8 @@ const VesselsSearchBox = () => {
               }
               {
                 foundVesselsFromAPI.map((vessel, index) => {
+                  const vesselIdentity = getVesselIdentityFromVessel(vessel)
+
                   return getListItem(
                     index,
                     vessel.flagState,
@@ -313,7 +328,7 @@ const VesselsSearchBox = () => {
                     vessel.ircs,
                     vessel.mmsi,
                     vessel.vesselName,
-                    getVesselFeatureAndIdentity(null, vessel))
+                    getVesselFeatureAndIdentity(null, vesselIdentity))
                 })
               }
             </List>
@@ -457,7 +472,6 @@ const Results = styled.div`
   color: ${COLORS.grayDarkerThree};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
-  width: 320px;
 `
 
 const SearchBoxField = styled.div`

@@ -135,7 +135,7 @@ const VesselsLayer = ({ map }) => {
   }
 
   const applyFilterToVessels = (vesselsFeatures, noFilterFunction) => new Promise(resolve => {
-    if(!filters || !filters.length) {
+    if (!filters || !filters.length) {
       return resolve(vesselsFeatures)
     }
 
@@ -326,12 +326,11 @@ const VesselsLayer = ({ map }) => {
 
       const filterShowed = filters.find(filter => filter.showed)
 
-      if(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
+      if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
         const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
 
         addLabelForFeaturesInExtentAndIncludedInArray(extent, temporaryVesselsToHighLightOnMapUids)
       } else if (filterShowed && nonFilteredVesselsAreHidden) {
-
         addLabelForFeaturesInExtentAndIncludedInArray(extent, filteredVesselsFeaturesUids)
       } else {
         vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
@@ -442,7 +441,7 @@ const VesselsLayer = ({ map }) => {
       selectedVesselFeatureAndIdentity: selectedVesselFeatureAndIdentity,
       vesselsLastPositionVisibility: vesselsLastPositionVisibility,
       isLight: isLight,
-      temporaryVesselsToHighLightOnMap: temporaryVesselsToHighLightOnMap,
+      temporaryVesselsToHighLightOnMap: temporaryVesselsToHighLightOnMap
     }
 
     setVesselIconStyle(currentVessel, feature, options).then(newSelectedVesselFeature => {

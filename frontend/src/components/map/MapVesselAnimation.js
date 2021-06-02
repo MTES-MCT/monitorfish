@@ -11,7 +11,8 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const { animateToVessel } = useSelector(state => state.map)
   const {
     vesselSidebarIsOpen,
-    selectedVesselFeatureAndIdentity
+    selectedVesselFeatureAndIdentity,
+    temporaryVesselsToHighLightOnMap
   } = useSelector(state => state.vessel)
 
   useEffect(() => {
@@ -25,10 +26,12 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   }, [map, mapMovingAndZoomEvent])
 
   useEffect(() => {
-    if (mapClickEvent && mapClickEvent.feature) {
+    const noVesselsHighLighted = !temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length
+
+    if (mapClickEvent && mapClickEvent.feature && noVesselsHighLighted) {
       showVesselTrackAndSidebarOnMapClick(mapClickEvent.feature)
     }
-  }, [mapClickEvent])
+  }, [mapClickEvent, temporaryVesselsToHighLightOnMap])
 
   function addAnimateToVessel () {
     if (map &&

@@ -9,6 +9,7 @@ import * as timeago from 'timeago.js'
 import { ReactComponent as InfoSVG } from '../icons/Information.svg'
 
 import { vesselsAreEquals } from '../../domain/entities/vessel'
+import FleetSegments from '../fleet_segments/FleetSegments'
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselSummary = props => {
@@ -17,7 +18,6 @@ const VesselSummary = props => {
   const [lastPosition, setLastPosition] = useState(null)
   const [gears, setGears] = useState([])
   const [faoZones, setFaoZones] = useState([])
-  const [fleetSegments, setFleetSegments] = useState([])
 
   useEffect(() => {
     if (props.vessel) {
@@ -66,59 +66,6 @@ const VesselSummary = props => {
       setGears([])
     }
   }, [props.gears, props.vesselLastPositionFeature])
-
-  useEffect(() => {
-    if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().segments &&
-          props.vesselLastPositionFeature.getProperties().segments.length) {
-      if (props.fleetSegments && props.fleetSegments.length) {
-        const nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
-          const found = props.fleetSegments.find(segmentWithProperties => segmentWithProperties.segment === segment)
-
-          if (found) {
-            return found
-          } else {
-            return {
-              segment: segment
-            }
-          }
-        }).filter(segment => segment)
-        setFleetSegments(nextFleetSegments)
-      } else {
-        const nextFleetSegments = props.vesselLastPositionFeature.getProperties().segments.map(segment => {
-          return {
-            segment: segment
-          }
-        })
-        setFleetSegments(nextFleetSegments)
-      }
-    } else {
-      setFleetSegments([])
-    }
-  }, [props.fleetSegments, props.vesselLastPositionFeature])
-
-  function getSegmentInfo (segment) {
-    if (segment.gears || segment.faoAreas || segment.targetSpecies || segment.dirm || segment.bycatchSpecies) {
-      const gears = segment.gears && segment.gears.length ? segment.gears.join(', ') : 'aucun'
-      const faoAreas = segment.faoAreas && segment.faoAreas.length ? segment.faoAreas.join(', ') : 'aucune'
-      const dirm = segment.dirm && segment.dirm.length ? segment.dirm.join(', ') : 'aucune'
-
-      let targetSpeciesArray = []
-      if (segment.targetSpecies && segment.targetSpecies.length) {
-        targetSpeciesArray = targetSpeciesArray.concat(segment.targetSpecies)
-      }
-      if (segment.bycatchSpecies && segment.bycatchSpecies.length) {
-        targetSpeciesArray = targetSpeciesArray.concat(segment.bycatchSpecies)
-      }
-      const targetSpecies = targetSpeciesArray && targetSpeciesArray.length ? targetSpeciesArray.join(', ') : 'aucune'
-
-      return `Engins: ${gears}
-Zones FAO: ${faoAreas}
-Espèces: ${targetSpecies}
-Façade: ${dirm}`
-    } else {
-      return 'Segment de flotte inconnu'
-    }
-  }
 
   function getVesselOrLastPositionProperty (propertyName) {
     if (vessel && vessel[propertyName]) {
@@ -251,17 +198,10 @@ Façade: ${dirm}`
                         <Field>
                             <Key>Segments de flotte</Key>
                             <Value>
-                                {
-                                    fleetSegments && fleetSegments.length
-                                      ? fleetSegments.map((segment, index) => {
-                                        return <>
-                                              {segment.segment}
-                                              <Info isInfoSegment={true} title={getSegmentInfo(segment)}/>
-                                              {fleetSegments.length === index + 1 ? '' : ', '}
-                                              </>
-                                      })
-                                      : <NoValue>-</NoValue>
-                                }
+                                <FleetSegments
+                                  vesselLastPositionFeature={props.vesselLastPositionFeature}
+                                  fleetSegmentsReferential={props.fleetSegments}
+                                />
                             </Value>
                         </Field>
                         <Field>

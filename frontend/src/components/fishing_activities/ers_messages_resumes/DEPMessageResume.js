@@ -50,7 +50,7 @@ const DEPMessageResume = props => {
                         <Zone>
                             {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length
                               ? props.depMessage.gearOnboard.map((gear, index) => {
-                                return <Gear key={gear.gear} isFirst={index === '0'}>
+                                return <Gear key={gear.gear + index} isFirst={index === '0'}>
                                         <SubKey>Engin à bord {index + 1}</SubKey>{' '}
                                         <SubValue>
                                             {

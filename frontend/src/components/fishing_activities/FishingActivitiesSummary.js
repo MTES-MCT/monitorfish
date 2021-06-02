@@ -9,6 +9,7 @@ import FARMessageResume from './ers_messages_resumes/FARMessageResume'
 import PNOMessageResume from './ers_messages_resumes/PNOMessageResume'
 import LANMessageResume from './ers_messages_resumes/LANMessageResume'
 import { AlertTypes } from '../../domain/entities/alerts'
+import FleetSegments from '../fleet_segments/FleetSegments'
 
 const FishingActivitiesSummary = props => {
   const [depMessage, setDEPMessage] = useState(null)
@@ -261,9 +262,12 @@ const FishingActivitiesSummary = props => {
                 <Zone>
                     <Title>
                         <Text>Segment(s) de flotte(s) actuel(s)</Text>
-                        <TextValue>{props.fishingActivities.fleetSegment
-                          ? props.fishingActivities.fleetSegment
-                          : <NoValue>-</NoValue>}</TextValue>
+                        <TextValue>
+                          <FleetSegments
+                            vesselLastPositionFeature={props.vesselLastPositionFeature}
+                            fleetSegmentsReferential={props.fleetSegments}
+                          />
+                        </TextValue>
                     </Title>
                     <Fields>
                         <TableBody>
@@ -296,13 +300,16 @@ const FishingActivitiesSummary = props => {
                     </Title>
                 </Zone>
                 <Zone>
-                    <Title hasTwoLines={true}>
-                        <Text hasTwoLines={true}>Résumé de la marée</Text>
-                        <TextValue
-                            hasTwoLines={true}>{props.fishingActivities.fleetSegment
-                              ? props.fishingActivities.fleetSegment
-                              : <NoValue>-</NoValue>}</TextValue>
-                        <SeeAll onClick={() => props.showERSMessages()}>Voir tous<br/> les messages</SeeAll>
+                    <Title hasTwoLines={false}>
+                        <Text hasTwoLines={false}>Résumé de la marée</Text>
+                        <TextValue hasTwoLines={false}>
+                          {
+                            depMessage && depMessage.tripNumber
+                              ? `Marée n°${depMessage.tripNumber}`
+                              : <NoValue>-</NoValue>
+                          }
+                        </TextValue>
+                        <SeeAll onClick={() => props.showERSMessages()}>Voir tous les messages</SeeAll>
                         <Arrow onClick={() => props.showERSMessages()}/>
                     </Title>
                     {
@@ -388,21 +395,20 @@ const NoMessage = styled.div`
 const Arrow = styled(ArrowSVG)`
   margin-left: 5px;
   order: 4;
-  margin-top: 10px;
+  margin-top: 4px;
   cursor: pointer;
 `
 
 const SeeAll = styled.a`
   text-align: right;
-  text-decoration: underline;
-  font: normal 13px;
+  text-decoration: none;
+  font-size: 11px;
   line-height: 10px;
   color: ${COLORS.textGray};
   margin-left: auto;
   order: 3;
-  margin-top: -6px;
-  margin-bottom: 4px;
   cursor: pointer;
+  width: 70px;
 `
 
 const ERSMessages = styled.ul`
@@ -423,7 +429,7 @@ const TextValue = styled.div`
   font-size: 13px;
   color: ${COLORS.grayDarkerThree};
   margin: 0;
-  padding-left: 20px;
+  padding-left: 10px;
   padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
 `
 
@@ -438,7 +444,7 @@ const Title = styled.div`
   color: ${COLORS.textGray};
   background: ${COLORS.grayDarker};
   padding: ${props => props.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;'}
-  font-size: 0.8rem;
+  font-size: 13px;
   flex-shrink: 0;
   flex-grow: 2;
   display: flex;

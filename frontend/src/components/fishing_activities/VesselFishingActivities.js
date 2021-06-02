@@ -37,6 +37,8 @@ const VesselFishingActivities = props => {
           ? <FishingActivitiesSummary
                 showERSMessages={showERSMessages}
                 fishingActivities={props.fishingActivities}
+                fleetSegments={props.fleetSegments}
+                vesselLastPositionFeature={props.vesselLastPositionFeature}
             />
           : null
         }

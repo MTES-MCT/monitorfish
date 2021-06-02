@@ -28,7 +28,6 @@ export function getVesselImage (vessel, isLight, color) {
     vesselFileName = 'Couleur_navires_fond_sombre_cacce0_png24.png'
   }
 
-  console.log(vesselFileName)
   let vesselColor = 'rgb(5, 5, 94)'
   if (color) {
     vesselColor = color

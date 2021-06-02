@@ -238,6 +238,10 @@ const VesselSidebar = () => {
                                             fishingActivities={vesselState.fishingActivities}
                                             nextFishingActivities={vesselState.nextFishingActivities}
                                             updateFishingActivities={updateFishingActivities}
+                                            fleetSegments={fleetSegments}
+                                            vesselLastPositionFeature={
+                                              vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature
+                                            }
                                         />
                                     </Panel>
                                     <Panel className={index === 4 ? '' : 'hide'}>

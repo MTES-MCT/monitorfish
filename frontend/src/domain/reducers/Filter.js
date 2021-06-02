@@ -118,7 +118,7 @@ const filterSlice = createSlice({
             !filter.filters.vesselsSizeValuesChecked.length &&
             !filter.filters.zonesSelected.length
 
-          if(filterHasNoTag) {
+          if (filterHasNoTag) {
             return null
           }
         }

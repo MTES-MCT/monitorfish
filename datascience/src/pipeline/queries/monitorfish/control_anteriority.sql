@@ -7,7 +7,8 @@ SELECT
     CASE WHEN (infraction = true OR infraction_ids != '{}') THEN true ELSE false END AS infraction,
     diversion,
     seizure,
-    escort_to_quay
+    escort_to_quay,
+    post_control_comments
 FROM controls
 WHERE control_datetime_utc IS NOT NULL 
 AND control_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '5 years'
@@ -29,7 +30,8 @@ last_control AS (
     SELECT 
         vessel_id,
         control_datetime_utc AS last_control_datetime_utc,
-        infraction AS last_control_infraction
+        infraction AS last_control_infraction,
+        post_control_comments
     FROM controls_
     WHERE rk=1
 )
@@ -41,6 +43,7 @@ SELECT
     v.external_immatriculation,
     l.last_control_datetime_utc,
     l.last_control_infraction,
+    l.post_control_comments,
     stats.number_controls_last_5_years,
     stats.infraction_rate,
     stats.diversion_rate,

@@ -5,6 +5,7 @@ import pandas as pd
 
 from src.pipeline.flows.last_positions import (
     extract_current_segments,
+    extract_last_controls,
     extract_last_positions,
     flow,
     load_last_positions,
@@ -23,6 +24,12 @@ class TestLastPositionsFlow(unittest.TestCase):
     def test_extract_last_positions(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_last_positions.run()
+        self.assertTrue(isinstance(query, str))
+
+    @patch("src.pipeline.flows.last_positions.extract")
+    def test_extract_last_controls(self, mock_extract):
+        mock_extract.side_effect = mock_extract_side_effect
+        query = extract_last_controls.run()
         self.assertTrue(isinstance(query, str))
 
     @patch("src.pipeline.flows.last_positions.load", autospec=True)

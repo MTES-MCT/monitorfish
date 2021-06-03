@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import DateRangePicker, { afterToday } from 'rsuite/lib/DateRangePicker'
 import styled from 'styled-components'
 
-const TrackDepthDateRange = props => {
+const TrackDepthDateRange = ({ dates, setDate }) => {
   return (
       <Wrapper>
           <DateRangePicker
@@ -11,10 +11,9 @@ const TrackDepthDateRange = props => {
             cleanable
             size={'sm'}
             disabledDate={afterToday()}
-            value={props.dates}
-            onChange={nextValue => {
-              props.setDate(nextValue)
-            }}
+            value={dates}
+            onOk={nextValue => setDate(nextValue)}
+            onClean={() => setDate([])}
             ranges={[]}
             format="DD-MM-YYYY"
             locale={{

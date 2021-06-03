@@ -81,11 +81,14 @@ const VesselListFilters = ({
   const showZonesSelected = useCallback(() => {
     return zones.zonesSelected && zones.zonesSelected.length && zones.zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
       ? zones.zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
-        return <FilterTag
-          key={zoneSelected.code + index}
-          value={'Effacer la zone définie'}
-          closeCallback={() => zones.callRemoveZoneSelected(zoneSelected)}
-        />
+        return <InlineTagWrapper>
+          <FilterTag
+            key={zoneSelected.code + index}
+            value={'Effacer la zone définie'}
+            text={'Effacer la zone définie'}
+            removeTagFromFilter={() => zones.callRemoveZoneSelected(zoneSelected)}
+          />
+        </InlineTagWrapper>
       })
       : null
   }, [zones.zonesSelected])
@@ -162,7 +165,7 @@ const VesselListFilters = ({
       <ZoneFilter>
         <MultiCascader
           data={zones.zonesFilter}
-          style={{ width: 200, verticalAlign: 'top', margin: '2px 10px 10px -10px' }}
+          style={{ width: 200, verticalAlign: 'top', margin: '0 10px 10px -10px' }}
           placeholder="Filtrer avec une zone existante"
           menuWidth={250}
           uncheckableItemValues={zones.zoneGroups}
@@ -217,6 +220,11 @@ const VesselListFilters = ({
     </Filters>
   )
 }
+
+const InlineTagWrapper = styled.div`
+  display: inline-block;
+  vertical-align: top;
+`
 
 const Gray = styled.span`
   color: ${COLORS.textGray};

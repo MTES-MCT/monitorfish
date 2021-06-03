@@ -128,12 +128,12 @@ export function getVesselObjectFromFeature (vessel, coordinates) {
     latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
     longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
     olCoordinates: coordinates,
-    gears: vessel.getProperties().gearOnboard ? vessel.getProperties().gearOnboard.map(gear => gear.gear).join(', ') : '',
-    gearsArray: vessel.getProperties().gearOnboard ? vessel.getProperties().gearOnboard.map(gear => gear.gear) : [],
+    gears: vessel.getProperties().gearOnboard ? [...new Set(vessel.getProperties().gearOnboard.map(gear => gear.gear))].join(', ') : '',
+    gearsArray: vessel.getProperties().gearOnboard ? [...new Set(vessel.getProperties().gearOnboard.map(gear => gear.gear))] : [],
     fleetSegments: vessel.getProperties().segments ? vessel.getProperties().segments.join(', ') : '',
     fleetSegmentsArray: vessel.getProperties().segments ? vessel.getProperties().segments.map(segment => segment.replace(' ', '')) : [],
-    species: vessel.getProperties().speciesOnboard ? vessel.getProperties().speciesOnboard.map(species => species.species).join(', ') : '',
-    speciesArray: vessel.getProperties().speciesOnboard ? vessel.getProperties().speciesOnboard.map(species => species.species) : [],
+    species: vessel.getProperties().speciesOnboard ? [...new Set(vessel.getProperties().speciesOnboard.map(species => species.species))].join(', ') : '',
+    speciesArray: vessel.getProperties().speciesOnboard ? [...new Set(vessel.getProperties().speciesOnboard.map(species => species.species))] : [],
     district: vessel.getProperties().district,
     districtCode: vessel.getProperties().districtCode
   }

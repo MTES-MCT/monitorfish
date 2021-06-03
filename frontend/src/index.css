@@ -217,6 +217,14 @@ label {
   border-color: #969696 !important;
 }
 
+.rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover ~ .rs-table-column-resize-spanner, .rs-table:not(.rs-table-column-resizing) .rs-table-column-resize-spanner:hover {
+  background-color: #969696;
+}
+
+.rs-table-column-resize-spanner::before {
+  border-color: transparent #969696 transparent transparent;
+}
+
 .rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
   border: 1px solid #969696 !important;
 }

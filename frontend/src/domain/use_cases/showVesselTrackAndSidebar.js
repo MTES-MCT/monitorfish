@@ -4,15 +4,15 @@ import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
-import { animateToVessel } from '../reducers/Map'
+import { animateToVessel, setUpdatedFromCron } from '../reducers/Map'
 
 const showVesselTrackAndSidebar = (
   vesselFeatureAndIdentity,
   fromSearch,
-  updateShowedVessel,
+  calledFromCron,
   vesselTrackDepthObject) => (dispatch, getState) => {
   const alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
-  if (alreadyShownVessel(updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity)) {
+  if (alreadyShownVesselFromSearch(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch)) {
     if (getState().vessel.selectedVessel) {
       dispatch(openVesselSidebar())
     }
@@ -20,17 +20,15 @@ const showVesselTrackAndSidebar = (
     return
   }
 
+  dispatch(setUpdatedFromCron(calledFromCron))
   removePreviousSelectedFeature(getState)
 
   dispatch(removeError())
   dispatch(loadingVessel(vesselFeatureAndIdentity))
   dispatch(openVesselSidebar())
-  if (!updateShowedVessel) {
-    dispatch(animateToVessel(true))
-  }
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
-    updateShowedVessel,
+    calledFromCron,
     vesselTrackDepthObject,
     getState().vessel.temporaryTrackDepth,
     getState().map.vesselTrackDepth)
@@ -41,10 +39,10 @@ const showVesselTrackAndSidebar = (
     vesselFeatureAndIdentity.identity.ircs,
     nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {
-      if (trackDepthHasBeenModified(vesselAndTrackDepthModified, updateShowedVessel)) {
+      if (trackDepthHasBeenModified(vesselAndTrackDepthModified, calledFromCron)) {
         dispatch(setError(new NoDEPFoundError("Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
                   'les positions des dernières 24 heures.')))
-      } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, updateShowedVessel)) {
+      } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, calledFromCron)) {
         dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position.")))
       } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
         dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")))
@@ -60,8 +58,9 @@ const showVesselTrackAndSidebar = (
     })
 }
 
-function alreadyShownVessel (updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity) {
+function alreadyShownVesselFromSearch (updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) {
   return !updateShowedVessel &&
+      fromSearch &&
       alreadySelectedVessel &&
       alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature
 }

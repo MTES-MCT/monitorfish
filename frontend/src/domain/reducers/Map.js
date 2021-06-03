@@ -24,6 +24,7 @@ const mapSlice = createSlice({
     vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
     vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
     animateToVessel: null,
+    updatedFromCron: false,
     animateToRegulatoryLayer: null,
     vesselLabelsHiddenByZoom: undefined,
     isMoving: false,
@@ -40,6 +41,9 @@ const mapSlice = createSlice({
     extent: getLocalStorageState(null, savedMapExtentLocalStorageKey)
   },
   reducers: {
+    setUpdatedFromCron(state, action) {
+      state.updatedFromCron = action.payload
+    },
     animateToVessel (state, action) {
       state.animateToVessel = action.payload
     },
@@ -178,7 +182,8 @@ export const {
   addZoneSelected,
   setZonesSelected,
   removeZoneSelected,
-  resetZonesSelected
+  resetZonesSelected,
+  setUpdatedFromCron
 } = mapSlice.actions
 
 export default mapSlice.reducer

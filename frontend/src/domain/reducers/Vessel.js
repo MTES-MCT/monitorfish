@@ -4,6 +4,7 @@ const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
     temporaryVesselsToHighLightOnMap: [],
+    selectedVesselWasHiddenByFilter: false,
     selectedVesselFeatureAndIdentity: null,
     vessels: [],
     vesselsLayerSource: null,
@@ -114,6 +115,9 @@ const vesselSlice = createSlice({
         afterDateTime: null,
         beforeDateTime: null
       }
+    },
+    setSelectedVesselWasHiddenByFilter(state, action) {
+      state.selectedVesselWasHiddenByFilter = action.payload
     }
   }
 })
@@ -141,7 +145,8 @@ export const {
   setTemporaryVesselsToHighLightOnMap,
   resetTemporaryVesselsToHighLightOnMap,
   setTemporaryTrackDepth,
-  resetTemporaryTrackDepth
+  resetTemporaryTrackDepth,
+  setSelectedVesselWasHiddenByFilter
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

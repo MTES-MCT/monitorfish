@@ -153,7 +153,7 @@ const VesselSidebar = () => {
       dispatch(showVesselTrackAndSidebar(
         vesselState.selectedVesselFeatureAndIdentity,
         false,
-        true,
+        false,
         trackDepthObject))
     }
   }

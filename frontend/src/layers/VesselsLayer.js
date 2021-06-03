@@ -21,6 +21,7 @@ import {
 } from '../domain/entities/vessel'
 import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
+import { animateToVessel, setUpdatedFromCron } from '../domain/reducers/Map'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
@@ -35,6 +36,7 @@ const VesselsLayer = ({ map }) => {
 
   const vesselLabelsHiddenByZoom = useSelector(state => state.map.vesselLabelsHiddenByZoom)
   const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
+  const updatedFromCron = useSelector(state => state.map.updatedFromCron)
   const extent = useSelector(state => state.map.extent)
   const { filters, nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
   const isMoving = useSelector(state => state.map.isMoving)
@@ -84,6 +86,9 @@ const VesselsLayer = ({ map }) => {
 
     if (feature) {
       dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(feature, getVesselIdentityFromFeature(feature))))
+      if(!updatedFromCron) {
+        dispatch(animateToVessel(true))
+      }
     }
   }, [selectedVessel])
 

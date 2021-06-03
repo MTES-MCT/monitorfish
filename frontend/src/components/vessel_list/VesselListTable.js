@@ -73,7 +73,7 @@ const VesselListTable = props => {
                 sortType={sortType}
                 onSortColumn={handleSortColumn}
             >
-                <Column width={35} fixed>
+                <Column resizable width={35} fixed>
                     <HeaderCell>
                         <Checkbox
                             checked={props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length}
@@ -82,88 +82,88 @@ const VesselListTable = props => {
                     <CheckedCell dataKey="checked" onChange={props.handleChange} />
                 </Column>
 
-                <Column sortable width={50} fixed>
+                <Column resizable sortable width={50} fixed>
                     <HeaderCell>
                         <Target />
                     </HeaderCell>
                     <TargetCell dataKey="targetNumber" onChange={props.handleChange} />
                 </Column>
 
-                <Column sortable width={170} fixed>
+                <Column resizable sortable width={170} fixed>
                     <HeaderCell>Nom du navire</HeaderCell>
                     <Cell dataKey="vesselName" />
                 </Column>
 
-                <Column sortable width={100}>
+                <Column resizable sortable width={100}>
                     <HeaderCell>Marq. Ext.</HeaderCell>
                     <Cell dataKey="externalReferenceNumber" />
                 </Column>
 
-                <Column sortable width={80}>
+                <Column resizable sortable width={80}>
                     <HeaderCell>Call Sign</HeaderCell>
                     <Cell dataKey="ircs" />
                 </Column>
 
-                <Column sortable width={80}>
+                <Column resizable sortable width={80}>
                     <HeaderCell>MMSI</HeaderCell>
                     <Cell dataKey="mmsi" />
                 </Column>
 
-                <Column sortable width={120}>
+                <Column resizable sortable width={120}>
                     <HeaderCell>CFR</HeaderCell>
                     <Cell dataKey="internalReferenceNumber" />
                 </Column>
 
-              <Column width={120}>
+              <Column resizable width={120}>
                 <HeaderCell>Seg. flotte</HeaderCell>
                 <EllipsisCell dataKey="fleetSegments" />
               </Column>
 
-              <Column width={120}>
+              <Column resizable width={120}>
                 <HeaderCell>Engins à bord</HeaderCell>
                 <EllipsisCell dataKey="gears" />
               </Column>
 
-              <Column width={115}>
+              <Column resizable width={115}>
                 <HeaderCell>Espèces à bord</HeaderCell>
                 <EllipsisCell dataKey="species" />
               </Column>
 
-              <Column sortable width={50}>
+              <Column resizable sortable width={50}>
                     <HeaderCell>
                         <FlagIcon />
                     </HeaderCell>
                     <FlagCell dataKey="flagState" />
                 </Column>
 
-                <Column sortable width={130}>
+                <Column resizable sortable width={130}>
                     <HeaderCell>Dernier signal</HeaderCell>
                     <TimeAgoCell dataKey="dateTimeTimestamp" />
                 </Column>
 
-                <Column width={100}>
+                <Column resizable width={100}>
                     <HeaderCell>Latitude</HeaderCell>
                     <Cell dataKey="latitude" />
                 </Column>
 
-                <Column width={110}>
+                <Column resizable width={110}>
                     <HeaderCell>Longitude</HeaderCell>
                     <Cell dataKey="longitude" />
                 </Column>
 
-                <Column sortable width={60}>
+                <Column resizable sortable width={60}>
                     <HeaderCell>Cap</HeaderCell>
                     <Cell dataKey="course" />
                 </Column>
 
-                <Column sortable width={70}>
+                <Column resizable sortable width={70}>
                     <HeaderCell>Vitesse</HeaderCell>
                     <Cell dataKey="speed" />
                 </Column>
 
               {
                 props.filters.districtsFiltered && props.filters.districtsFiltered.length
-                  ? <Column sortable width={100}>
+                  ? <Column resizable sortable width={100}>
                     <HeaderCell>Quartier</HeaderCell>
                     <Cell dataKey="district" />
                   </Column>
@@ -171,7 +171,7 @@ const VesselListTable = props => {
               }
               {
                 props.filters.vesselsSizeValuesChecked && props.filters.vesselsSizeValuesChecked.length
-                  ? <Column sortable width={100}>
+                  ? <Column resizable sortable width={100}>
                     <HeaderCell>Longueur</HeaderCell>
                     <Cell dataKey="length" />
                   </Column>

@@ -46,7 +46,6 @@ const VesselList = () => {
   const [vesselsCountTotal, setVesselsCountTotal] = useState(0)
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState({ globalCheckbox: true })
-  const [makeVesselListToNotUpdate, setMakeVesselListToNotUpdate] = useState(false)
   const [species, setSpecies] = useState([])
   const [districts, setDistricts] = useState([])
   const [zoneGroups, setZoneGroups] = useState([])
@@ -100,14 +99,14 @@ const VesselList = () => {
   }, [vesselListModalIsOpen])
 
   useEffect(() => {
-    if (!makeVesselListToNotUpdate && vesselsLayerSource && vesselsFromApi && vesselsFromApi.length) {
+    if (vesselsLayerSource && vesselsFromApi && vesselsFromApi.length) {
       vesselsLayerSource.once(VESSELS_UPDATE_EVENT, ({ features }) => {
-        if (features && features.length) {
+        if (!vesselListModalIsOpen && features && features.length) {
           updateVesselsList(features)
         }
       })
     }
-  }, [vesselsLayerSource, vesselsFromApi])
+  }, [vesselsLayerSource, vesselsFromApi, vesselListModalIsOpen])
 
   const updateVesselsList = useCallback(features => {
     const vessels = features.map(vessel => {
@@ -118,7 +117,6 @@ const VesselList = () => {
 
     setVessels(vessels)
     setVesselsCountTotal(vessels.length)
-    setMakeVesselListToNotUpdate(true)
   }, [])
 
   useEffect(() => {
@@ -171,7 +169,6 @@ const VesselList = () => {
 
   const closeAndResetVesselList = () => {
     setVesselListModalIsOpen(false)
-    setMakeVesselListToNotUpdate(false)
     setCountriesFiltered([])
     setAdministrativeZonesFiltered([])
     setLastPositionTimeAgoFilter(2)

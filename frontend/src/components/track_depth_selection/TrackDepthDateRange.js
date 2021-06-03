@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import DateRangePicker, { afterToday } from 'rsuite/lib/DateRangePicker'
 import styled from 'styled-components'
 

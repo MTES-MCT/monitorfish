@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ReactComponent as ExportSVG } from '../icons/Bouton_exporter_piste_navire.svg'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
-import { getCoordinates, getDate, getDateTime } from '../../utils'
+import { getCoordinates, getDate } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))

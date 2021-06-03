@@ -9,7 +9,9 @@ import { lastControlByType, getYearsToControl } from '../../domain/entities/cont
 
 const VesselControls = props => {
   const {
+    /** @type {ControlResume} controlResumeAndControls */
     controlResumeAndControls,
+    /** @type {ControlResume} nextControlResumeAndControls */
     nextControlResumeAndControls,
     controlsFromDate
   } = props

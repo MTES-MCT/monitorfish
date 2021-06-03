@@ -6,6 +6,7 @@ import { StrongText, NoValue, Red, Green } from './Controls.style'
 
 const ControlField = ({ field, type, isFirst }) => {
   const {
+    /** @type {VesselControl} control */
     control,
     text
   } = field
@@ -27,7 +28,7 @@ const ControlField = ({ field, type, isFirst }) => {
       control
         ? <ControlResumeLine>
           <LastControlResumeElement>Unité <StrongText title={control.controller && control.controller.controller}>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
-          <LastControlResumeElement>Infractions <StrongText>{control.infraction ? <> {control.infractions.length} infraction{control.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>
+          <LastControlResumeElement>Infractions <StrongText>{control.infraction ? <> {control.infractions.length ? control.infractions.length : 1} infraction{control.infractions.length > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>
         </ControlResumeLine>
         : null
     }

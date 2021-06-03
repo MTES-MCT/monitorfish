@@ -13,7 +13,7 @@ const YearControls = props => {
     if (props.yearControls && props.yearControls.length) {
       const nextNumberOfInfractions = parseFloat(props.yearControls
         .reduce((accumulator, control) => {
-          return accumulator + control.infractions.length
+          return accumulator + control.infraction ? 1 : 0
         }, 0).toFixed(1))
 
       setNumberOfInfractions(nextNumberOfInfractions)

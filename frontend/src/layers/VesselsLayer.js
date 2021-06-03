@@ -8,7 +8,11 @@ import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Point from 'ol/geom/Point'
 import { getSVG, getVesselIconOpacity, getVesselImage, getVesselLabelStyle } from './styles/featuresStyles'
-import { setVesselsLayerSource, updateVesselFeatureAndIdentity } from '../domain/reducers/Vessel'
+import {
+  setSelectedVesselWasHiddenByFilter,
+  setVesselsLayerSource,
+  updateVesselFeatureAndIdentity
+} from '../domain/reducers/Vessel'
 import {
   getVesselFeatureAndIdentity,
   getVesselIdentityFromFeature, TEMPORARY_VESSEL_TRACK,
@@ -87,6 +91,7 @@ const VesselsLayer = ({ map }) => {
     if (feature) {
       dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(feature, getVesselIdentityFromFeature(feature))))
       if(!updatedFromCron) {
+        showVesselIfHiddenByFilter(feature)
         dispatch(animateToVessel(true))
       }
     }
@@ -109,6 +114,17 @@ const VesselsLayer = ({ map }) => {
       vectorSource.changed()
     })
   }, [filters, nonFilteredVesselsAreHidden])
+
+  function showVesselIfHiddenByFilter (feature) {
+    const foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+    const isLight = vesselIconIsLight(selectedBaseLayer)
+    if (foundStyle) {
+      if (!foundStyle.getImage().getOpacity()) {
+        dispatch(setSelectedVesselWasHiddenByFilter(true))
+      }
+      modifyVesselIcon(feature, null, isLight, foundStyle)
+    }
+  }
 
   function addLayerToMap () {
     if (map) {

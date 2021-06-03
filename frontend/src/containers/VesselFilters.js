@@ -15,6 +15,7 @@ import {
 } from '../domain/reducers/Filter'
 import HideNonFilteredVessels from '../components/vessel_filters/HideNonFilteredVessels'
 import { usePrevious } from '../hooks/usePrevious'
+import unselectVessel from '../domain/use_cases/unselectVessel'
 
 const VesselFilters = () => {
   const dispatch = useDispatch()
@@ -47,6 +48,12 @@ const VesselFilters = () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [wrapperRef])
+
+  useEffect(() => {
+    if (vesselFilterBoxIsOpen === true) {
+      dispatch(unselectVessel())
+    }
+  }, [vesselFilterBoxIsOpen])
 
   const removeFilterCallback = useCallback(filterUUID => {
     dispatch(removeFilter(filterUUID))

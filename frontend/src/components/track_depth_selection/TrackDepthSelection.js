@@ -35,11 +35,16 @@ const TrackDepthSelection = props => {
   }, [trackDepthRadioSelection])
 
   const convertToUTCDay = datesSelection => {
-    datesSelection[0].setHours(0, 0, 0)
-    datesSelection[1].setHours(23, 59, 59)
+    const afterDateTime = new Date(datesSelection[0].getTime())
+    const beforeDateTime = new Date(datesSelection[1].getTime())
 
-    datesSelection[0].setMinutes(datesSelection[0].getMinutes() - datesSelection[0].getTimezoneOffset())
-    datesSelection[1].setMinutes(datesSelection[1].getMinutes() - datesSelection[1].getTimezoneOffset())
+    afterDateTime.setHours(0, 0, 0)
+    beforeDateTime.setHours(23, 59, 59)
+
+    afterDateTime.setMinutes(afterDateTime.getMinutes() - afterDateTime.getTimezoneOffset())
+    beforeDateTime.setMinutes(beforeDateTime.getMinutes() - beforeDateTime.getTimezoneOffset())
+
+    return { afterDateTime, beforeDateTime }
   }
 
   useEffect(() => {
@@ -49,8 +54,8 @@ const TrackDepthSelection = props => {
         return
       }
 
-      convertToUTCDay(datesSelection)
-      props.showVesselTrackWithTrackDepth(VesselTrackDepth.CUSTOM, datesSelection[0], datesSelection[1])
+      const { afterDateTime, beforeDateTime } = convertToUTCDay(datesSelection)
+      props.showVesselTrackWithTrackDepth(VesselTrackDepth.CUSTOM, afterDateTime, beforeDateTime)
       setTrackDepthRadioSelection(null)
     } else if (!trackDepthRadioSelection) {
       setTrackDepthRadioSelection(props.vesselTrackDepth)

@@ -98,7 +98,7 @@ const TrackExport = props => {
           internalReferenceNumber: position.internalReferenceNumber ? position.internalReferenceNumber : '',
           externalReferenceNumber: position.externalReferenceNumber ? position.externalReferenceNumber : '',
           ircs: position.ircs ? position.ircs : '',
-          dateTime: position.dateTime ? getDateTime(position.dateTime, true) : '',
+          dateTime: position.dateTime ? position.dateTime : '',
           latitude: coordinates[0] ? coordinates[0] : '',
           longitude: coordinates[1] ? coordinates[1] : ''
         }

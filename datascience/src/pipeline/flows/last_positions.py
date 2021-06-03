@@ -34,7 +34,7 @@ def extract_last_controls():
 
 @task(checkpoint=False)
 def merge(last_positions, current_segments, last_controls):
-    last_positions = pd.merge(last_positions, current_segments, on="cfr", how="outer")
+    last_positions = pd.merge(last_positions, current_segments, on="cfr", how="left")
     last_positions = join_on_multiple_keys(
         last_positions,
         last_controls,

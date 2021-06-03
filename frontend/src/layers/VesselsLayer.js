@@ -266,7 +266,6 @@ const VesselsLayer = ({ map }) => {
       applyFilterToVessels(features, () => {}).then(_ => {
         vectorSource.changed()
       })
-
     }
   }
 

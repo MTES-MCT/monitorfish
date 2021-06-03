@@ -333,3 +333,81 @@ def prepare_df_for_loading(
         )
 
     return df_
+
+
+def join_on_multiple_keys(
+    left: pd.DataFrame, right: pd.DataFrame, on: list, how: str = "inner"
+):
+    """Join two pandas DataFrames, attempting to match rows on several keys by
+    decreasing order of priority.
+
+    Joins are performed successively with each of the keys listed in `on`, and results
+    are then concatenated to form the final result. This is different from joining on a
+    composite key where all keys must match simultaneously : here, rows of left and
+    right DataFrames are joined if at least one of the keys match.
+
+    Joins are performed on the keys listed in `on` by "decreasing order or priority" in
+    the sense that rows of left and right that have been matched on one key are removed
+    from ulterior joins perfomed on the next keys.
+
+    During each of the joins on the individual keys, non-joining key pairs from left and
+    right DataFrames are coalesced.
+
+    Args:
+        left (pd.DataFrame): pandas DataFrame
+        right (pd.DataFrame): pandas DataFrame
+        on (list): list of column names to use as join keys
+        how (str): 'inner', 'left', 'right' or 'outer'. Defaults to 'inner'.
+
+    Returns:
+        pd.DataFrame: result of join operation
+    """
+
+    joins = []
+
+    # Attempt to perform the join successively on each key
+    for key in on:
+
+        right_with_key = right.dropna(subset=[key])
+        left_with_key = left.dropna(subset=[key])
+
+        join = pd.merge(
+            left_with_key,
+            right_with_key,
+            on=key,
+            how="inner",
+            suffixes=("_left", "_right"),
+        )
+
+        non_joining_keys = set(on) - {key}
+
+        for non_joining_key in non_joining_keys:
+
+            cols_to_coalesce = [f"{non_joining_key}_left", f"{non_joining_key}_right"]
+
+            join[non_joining_key] = combine_overlapping_columns(
+                join[cols_to_coalesce], cols_to_coalesce
+            )
+
+            join = join.drop(columns=cols_to_coalesce)
+
+        left = left[~left[key].isin(join[key])]
+        right = right[~right[key].isin(join[key])]
+
+        joins.append(join)
+
+    # Add unmatched rows if performing left, right or outer joins
+    if how in ("left", "outer"):
+        joins.append(left)
+
+    if how in ("right", "outer"):
+        joins.append(right)
+
+    # Concatenate all join results
+    res = pd.concat(joins, axis=0)
+    res.index = np.arange(0, len(res))
+
+    columns_order = list(left) + [col for col in list(right) if col not in on]
+    res = res[columns_order]
+
+    return res

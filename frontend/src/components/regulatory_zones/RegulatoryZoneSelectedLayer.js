@@ -120,7 +120,7 @@ const RegulatoryZoneSelectedLayer = props => {
                                 callZoomInSubZone={callZoomInSubZone}
                                 regulatoryZoneMetadata={regulatoryZoneMetadata}
                                 showWholeLayer={showWholeLayer}
-                                allowRemoveZone={true}
+                                allowRemoveZone={allowRemoveZone}
                                 zoneIsShown={showedLayers
                                   .filter(layer => layer.type === Layers.REGULATORY.code)
                                   .some(layer =>

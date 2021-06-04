@@ -22,11 +22,15 @@ const Backoffice = () => {
   const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState(undefined)
   const dispatch = useDispatch()
 
-  /*const {
+  const {
+    isReadyToShowRegulatoryZones,
+    //regulatoryZoneMetadataPanelIsOpen,
+    //loadingRegulatoryZoneMetadata,
     regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)*/
+  } = useSelector(state => state.regulatory)
 
-  //const showedLayers = useSelector(state => state.layer.showedLayers)
+  const showedLayers = useSelector(state => state.layer.showedLayers)
+  console.log(showedLayers)
 
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
 
@@ -80,7 +84,6 @@ const Backoffice = () => {
               decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
               regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
               isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
-
               regulatoryZoneMetadata={undefined}
               gears={undefined}
               isReadyToShowRegulatoryZones={true}
@@ -142,6 +145,14 @@ const Backoffice = () => {
     //dispatch(zoomInSubZone(subZone))
   }
 
+  function addNewRegZone () {
+    console.log("addNewRegZone clicked")
+  }
+
+  function updateRegZone () {
+    console.log('updateRegZone clicked')
+  }
+
   return (
     <BackofficeContainer>
       <RegularotyZonePanel >
@@ -200,9 +211,8 @@ const SearchResultList = styled.div`
   margin-top: 5px;
   color: ${COLORS.textWhite};
   text-decoration: none;
-  background-color: ${COLORS.gray};
-  max-height: 400px;
   border-radius: 2px;
+  border-bottom: 1px solid ${COLORS.grayDarkerThree};
 `
 
 const Territory = styled.div`

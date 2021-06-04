@@ -10,6 +10,7 @@ import RegulatoryZoneSelectedLayer from '../components/regulatory_zones/Regulato
 //import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 //import zoomInSubZone from '../domain/use_cases/zoomInSubZone'
 import { COLORS } from '../constants/constants'
+import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
 
 // actions to regulatory zones
 import showLayer from '../domain/use_cases/showLayer'
@@ -158,8 +159,8 @@ const Backoffice = () => {
           </SearchButton>
         </SearchContainer>
         <ButtonList>
-          <Button>brouillon (X)</Button>
-          <Button>tracé en attente (X)</Button>
+          <WhiteButton>Brouillon (X)</WhiteButton>
+          <WhiteButton>Tracé en attente (X)</WhiteButton>
         </ButtonList>
         {regulatoryZoneListByRegTerritory
           ? <SearchResultList>
@@ -173,9 +174,19 @@ const Backoffice = () => {
             </Territory>
           </SearchResultList>
           : <div>En attente de chargement</div>}
-        <ButtonList>
-          <Button>Saisir une nouvelle réglementation</Button>
-          <Button>Modifier une règlementation</Button>
+          <ButtonList>
+            <BlackButton
+              disabled={false}
+              isLast={false}
+              onClick={() => addNewRegZone()}>
+              Saisir une nouvelle réglementation
+            </BlackButton>
+            <BlackButton
+              disabled={true}
+              isLast={true}
+              onClick={() => updateRegZone()}>
+              Modifier la réglementation
+            </BlackButton>
         </ButtonList>
       </RegularotyZonePanel>
       <BaseMap />
@@ -268,10 +279,9 @@ const SearchContainer = styled.div`
 const ButtonList = styled.div`
   display: flex;
   flex-direction:row;
-`
-
-const Button = styled.div`
-  border: 2px solid black;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 `
 
 const BackofficeContainer = styled.div`

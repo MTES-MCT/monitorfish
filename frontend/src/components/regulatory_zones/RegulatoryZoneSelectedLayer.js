@@ -88,7 +88,7 @@ const RegulatoryZoneSelectedLayer = props => {
                 { atLeastOneLayerIsShowed ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })} /> : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })} />}
                 { allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/> }
             </Zone>
-            <List
+            {<List
                 isOpen={isOpen}
                 name={regulatoryZoneName.replace(/\s/g, '-')}
                 length={regulatorySubZones.length}>
@@ -121,7 +121,7 @@ const RegulatoryZoneSelectedLayer = props => {
                       })
                       : null
                 }
-            </List>
+              </List>}
         </Row>
   )
 }

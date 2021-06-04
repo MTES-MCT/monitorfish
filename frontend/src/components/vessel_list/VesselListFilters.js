@@ -280,8 +280,6 @@ const Filters = styled.div`
   font-size: 13px;
   margin-top: 15px;
   margin-bottom: 15px;
-  max-height: 147px;
-  overflow: auto;
 `
 
 const BoxFilter = styled(BoxFilterSVG)`

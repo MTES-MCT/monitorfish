@@ -29,7 +29,10 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter }) => {
     }
 
     addFilter(filter)
+
     setIsOpen(false)
+    setFilterName('')
+    setFilterColor('#2c6e49')
   }
 
   const cancel = () => {

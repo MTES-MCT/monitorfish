@@ -99,7 +99,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.LENGTH,
           text: sizeObject ? sizeObject.text : '',
-          value: sizeObject ? sizeObject.text : '',
+          value: sizeObject ? sizeObject.code : '',
           type: 'vesselsSizeValuesChecked'
         }
       })

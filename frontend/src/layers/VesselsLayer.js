@@ -74,10 +74,6 @@ const VesselsLayer = ({ map }) => {
   }, [vessels, map])
 
   useEffect(() => {
-    rewriteVesselsIcons()
-  }, [selectedBaseLayer])
-
-  useEffect(() => {
     highLightVesselsOnMap()
   }, [temporaryVesselsToHighLightOnMap])
 
@@ -110,10 +106,10 @@ const VesselsLayer = ({ map }) => {
   }, [vesselLabelsShowedOnMap, map, vesselLabelsHiddenByZoom, isMoving, vesselLabel, filteredVesselsFeaturesUids])
 
   useEffect(() => {
-    applyFilterToVessels(vectorSource.getFeatures(), rewriteVesselsIcons).then(_ => {
+    applyFilterToVessels(vectorSource.getFeatures(), rewriteVesselsStylesIfNoFilter).then(_ => {
       vectorSource.changed()
     })
-  }, [filters, nonFilteredVesselsAreHidden])
+  }, [filters, nonFilteredVesselsAreHidden, selectedBaseLayer])
 
   function showVesselIfHiddenByFilter (feature) {
     const foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
@@ -127,7 +123,7 @@ const VesselsLayer = ({ map }) => {
       const filterColor = showedFilter ? showedFilter.color : null
       const colorToApply = filterColor && feature.getProperties().isShowedInFilter ? filterColor : null
 
-      modifyVesselIcon(feature, colorToApply, isLight, foundStyle, true)
+      setVesselImages(feature, colorToApply, isLight, foundStyle, true)
     }
   }
 
@@ -198,35 +194,43 @@ const VesselsLayer = ({ map }) => {
         setFilteredVesselsFeaturesUids(uids)
 
         vesselsFeatures.forEach(feature => {
-          const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-
-          const isShowedInFilterProperty = 'isShowedInFilter'
-          if (vesselIconStyle) {
-            const featureIndex = uids.indexOf(feature.ol_uid)
-
-            if (featureIndex !== NOT_FOUND_INDEX) {
-              modifyVesselIcon(feature, color, isLight, vesselIconStyle)
-              feature.set(isShowedInFilterProperty, true)
-            } else if (nonFilteredVesselsAreHidden) {
-              const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-              if (vesselLabelStyle) {
-                vesselLabelStyle.getImage().setOpacity(0)
-              }
-
-              vesselIconStyle.getImage().setOpacity(0)
-              feature.set(isShowedInFilterProperty, false)
-            } else {
-              modifyVesselIcon(feature, null, isLight, vesselIconStyle)
-              feature.set(isShowedInFilterProperty, false)
-            }
-          }
+          setVesselStyle(feature, uids, color, isLight)
         })
 
         return resolve(vesselsFeatures)
       })
   })
 
-  function modifyVesselIcon (feature, color, isLight, vesselIconStyle, withoutOpacity) {
+  function setVesselStyle (feature, uids, color, isLight) {
+    const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+
+    const isShowedInFilterProperty = 'isShowedInFilter'
+    if (vesselIconStyle) {
+      const featureIndex = uids.indexOf(feature.ol_uid)
+
+      if (featureIndex !== NOT_FOUND_INDEX) {
+        setVesselImages(feature, color, isLight, vesselIconStyle)
+        feature.set(isShowedInFilterProperty, true)
+      } else if (nonFilteredVesselsAreHidden) {
+        hideVesselImages(feature, vesselIconStyle)
+        feature.set(isShowedInFilterProperty, false)
+      } else {
+        setVesselImages(feature, null, isLight, vesselIconStyle)
+        feature.set(isShowedInFilterProperty, false)
+      }
+    }
+  }
+
+  function hideVesselImages (feature, vesselIconStyle) {
+    const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+    if (vesselLabelStyle) {
+      vesselLabelStyle.getImage().setOpacity(0)
+    }
+
+    vesselIconStyle.getImage().setOpacity(0)
+  }
+
+  function setVesselImages (feature, color, isLight, vesselIconStyle, withoutOpacity) {
     const vesselImage = getVesselImage({
       speed: feature.getProperties().speed,
       course: feature.getProperties().course
@@ -237,63 +241,54 @@ const VesselsLayer = ({ map }) => {
       const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
       vesselIconStyle.getImage().setOpacity(opacity)
     }
+
+    const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+    if (vesselLabelStyle) {
+      vesselLabelStyle.getImage().setOpacity(1)
+    }
   }
 
-  function rewriteVesselsIcons () {
+  function rewriteVesselsStylesIfNoFilter () {
     const isLight = vesselIconIsLight(selectedBaseLayer)
 
     vectorSource.getFeatures().forEach(feature => {
       const foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
       if (foundStyle) {
-        modifyVesselIcon(feature, null, isLight, foundStyle)
+        setVesselImages(feature, null, isLight, foundStyle)
       }
     })
-
-    vectorSource.changed()
   }
 
   function highLightVesselsOnMap () {
     if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {
-      vectorSource.getFeatures().filter(feature => {
-        const vesselToCompare = {
-          internalReferenceNumber: feature.getProperties().internalReferenceNumber,
-          externalReferenceNumber: feature.getProperties().externalReferenceNumber,
-          ircs: feature.getProperties().ircs
-        }
+      const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
 
-        return !temporaryVesselsToHighLightOnMap.some(vessel => {
-          return vesselsAreEquals(vessel, vesselToCompare)
-        })
+      vectorSource.getFeatures().filter(feature => {
+        const featureIndex = temporaryVesselsToHighLightOnMapUids.indexOf(feature.ol_uid)
+
+        return featureIndex === NOT_FOUND_INDEX
       }).forEach(featureToHide => {
-        const vesselIconStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-        if (vesselIconStyle) {
-          vesselIconStyle.getImage().setOpacity(0)
-        }
-        const vesselLabelStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-        if (vesselLabelStyle) {
-          vesselLabelStyle.getImage().setOpacity(0)
-        }
+        hideVessel(featureToHide)
       })
 
       vectorSource.changed()
     }
   }
 
+  function hideVessel (featureToHide) {
+    const vesselIconStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+    if (vesselIconStyle) {
+      vesselIconStyle.getImage().setOpacity(0)
+    }
+    const vesselLabelStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+    if (vesselLabelStyle) {
+      vesselLabelStyle.getImage().setOpacity(0)
+    }
+  }
+
   function showBackVesselsIconsWhenClosingVesselsHighLight () {
     if (vesselsLastPositionVisibility && (!temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length) && map) {
       const features = vectorSource.getFeatures()
-
-      features.forEach(feature => {
-        const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
-        const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-        if (vesselIconStyle) {
-          vesselIconStyle.getImage().setOpacity(opacity)
-        }
-        const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-        if (vesselLabelStyle) {
-          vesselLabelStyle.getImage().setOpacity(1)
-        }
-      })
 
       applyFilterToVessels(features, () => {}).then(_ => {
         vectorSource.changed()
@@ -308,6 +303,7 @@ const VesselsLayer = ({ map }) => {
       })
 
       if (featureToModify) {
+        // TODO Build a new image withthe course and not only the change the geometry
         moveFeatureToNewPosition(featureToModify)
 
         return featureToModify

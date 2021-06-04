@@ -26,7 +26,7 @@ const Control = props => {
     ? <Wrapper key={index} isLastItem={isLastItem}>
         <Title>
             {
-                control.infractions && control.infractions.length ? <GyroRed /> : <GyroGreen />
+              numberOfInfractions ? <GyroRed /> : <GyroGreen />
             }
             CONTRÔLE DU { getDate(control.controlDatetimeUtc) }
             {

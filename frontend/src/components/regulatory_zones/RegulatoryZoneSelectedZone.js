@@ -15,42 +15,26 @@ import zoomInSubZone from '../../domain/use_cases/zoomInSubZone'
 import hideLayers from '../../domain/use_cases/hideLayers'
 
 const RegulatoryZoneSelectedZone = props => {
-<<<<<<< HEAD
   const dispatch = useDispatch()
-=======
   const {
-    callShowRegulatorySubZoneMetadata,
-    callCloseRegulatoryZoneMetadata,
-    callZoomInSubZone,
-    callShowRegulatoryZone,
-    callHideRegulatoryZone,
     callRemoveRegulatoryZoneFromMySelection,
     regulatoryZoneMetadata,
     subZone,
     showWholeLayer,
     zoneIsShown,
     isReadyToShowRegulatoryZones,
-    allowRemoveZone,
-    vectorLayerStyle
+    allowRemoveZone
   } = props
->>>>>>> add number of layer and condition for the close icon
 
   const [showSubZone, setShowSubZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showRegulatoryMetadata = subZone => {
     if (!metadataIsShown) {
-<<<<<<< HEAD
       dispatch(showRegulatoryZoneMetadata(subZone))
       setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
-=======
-      callShowRegulatorySubZoneMetadata(subZone)
-      setMetadataIsShown(true)
-    } else {
-      callCloseRegulatoryZoneMetadata()
->>>>>>> add number of layer and condition for the close icon
       setMetadataIsShown(false)
     }
   }

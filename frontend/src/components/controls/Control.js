@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -6,7 +6,7 @@ import { ReactComponent as GyroGreenSVG } from '../icons/Gyrophare_controles_ver
 import { ReactComponent as GyroRedSVG } from '../icons/Gyrophare_controles_rouge.svg'
 import { getCoordinates, getDate } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
-import { controlType } from '../../domain/entities/controls'
+import { controlType, getNumberOfInfractions } from '../../domain/entities/controls'
 
 const Control = props => {
   const {
@@ -17,6 +17,10 @@ const Control = props => {
   } = props
 
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
+
+  const numberOfInfractions = useMemo(() => {
+    return getNumberOfInfractions(control)
+  }, [control])
 
   return control
     ? <Wrapper key={index} isLastItem={isLastItem}>
@@ -94,7 +98,7 @@ const Control = props => {
         </SubFields>
         <Key width={47}>Résultat</Key>
         <SubValue>
-            { control.infractions && control.infractions.length ? `${control.infractions.length} infraction${control.infractions.length > 1 ? 's' : ''}` : 'pas d\'infraction' }
+            { numberOfInfractions ? `${numberOfInfractions} infraction${numberOfInfractions > 1 ? 's' : ''}` : 'pas d\'infraction' }
         </SubValue><br/>
         {
             control.seizure

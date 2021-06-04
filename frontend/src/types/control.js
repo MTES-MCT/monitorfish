@@ -62,3 +62,15 @@
  * @property {number} numberOfSeizures
  * @property {number} vesselId
  */
+
+/**
+ * @typedef LastControls
+ * @property {ControlAndText} SEA - Contrôle_en_mer
+ * @property {ControlAndText} LAND - Contrôle à la débarque
+ */
+
+/**
+ * @typedef ControlAndText
+ * @property {VesselControl} control
+ * @property {string} text
+ */

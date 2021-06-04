@@ -6,9 +6,11 @@ import { Zone, Title } from './Controls.style'
 
 const YearsToControlList = props => {
   const {
+    /** @type {Object.<string, VesselControl[]>} yearsToControls */
     yearsToControls,
     controlsFromDate
   } = props
+
   return <Zone>
   <Title> Historique des contrôles </Title>
   {

@@ -23,29 +23,17 @@ const RegulatoryZoneSelectedLayer = props => {
 
   const {
     callRemoveRegulatoryZoneFromMySelection,
-    callShowRegulatoryZone,
-    callHideRegulatoryZone,
-    callShowRegulatorySubZoneMetadata,
-    callCloseRegulatoryZoneMetadata,
-    callZoomInSubZone,
-    showedLayers,
     regulatoryZoneName,
     allowRemoveZone,
     increaseNumberOfZonesOpened,
     decreaseNumberOfZonesOpened,
     regulatorySubZones,
     regulatoryZoneMetadata,
-    isLastItem,
-    gears,
-    isReadyToShowRegulatoryZones
+    isLastItem
   } = props
 
   useEffect(() => {
-<<<<<<< HEAD
-    if (showedLayers && props.regulatoryZoneName) {
-=======
     if (showedLayers && regulatoryZoneName) {
->>>>>>> add number of layer and condition for the close icon
       const showLayer = showedLayers
         .filter(layer => layer.type === Layers.REGULATORY.code)
         .some(layer => layer.zone.layerName === regulatoryZoneName)
@@ -105,13 +93,8 @@ const RegulatoryZoneSelectedLayer = props => {
                 name={regulatoryZoneName.replace(/\s/g, '-')}
                 length={regulatorySubZones.length}>
                 {
-<<<<<<< HEAD
                     props.regulatorySubZones && showedLayers
                       ? props.regulatorySubZones.map(subZone => {
-=======
-                    regulatorySubZones && showedLayers
-                      ? regulatorySubZones.map(subZone => {
->>>>>>> add number of layer and condition for the close icon
                         let vectorLayerStyle
                         if (subZone.zone && subZone.layerName && subZone.gears && gears) {
                           const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
@@ -124,23 +107,10 @@ const RegulatoryZoneSelectedLayer = props => {
                                 subZone={subZone}
                                 vectorLayerStyle={vectorLayerStyle}
                                 key={`${subZone.layerName}:${subZone.zone}`}
-<<<<<<< HEAD
                                 isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
                                 callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showWholeLayer={showWholeLayer}
-=======
-                                isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
-                                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
-                                callShowRegulatoryZone={callShowRegulatoryZone}
-                                callHideRegulatoryZone={callHideRegulatoryZone}
-                                callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
-                                callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-                                callZoomInSubZone={callZoomInSubZone}
-                                regulatoryZoneMetadata={regulatoryZoneMetadata}
-                                showWholeLayer={showWholeLayer}
-                                allowRemoveZone={true}
->>>>>>> add number of layer and condition for the close icon
                                 zoneIsShown={showedLayers
                                   .filter(layer => layer.type === Layers.REGULATORY.code)
                                   .some(layer =>
@@ -157,7 +127,9 @@ const RegulatoryZoneSelectedLayer = props => {
 }
 
 const Text = styled.span`
-
+  line-height: 2.7em;
+  font-size: 13px;
+  padding-left: 10px;
   width: 79%;
   display: inline-block;
   text-overflow: ellipsis;
@@ -170,24 +142,27 @@ const ZoneNumber = styled.span`
 
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
-  padding-left: 5px;
+  padding-top: 2px;
 `
 
 const ShowIcon = styled(ShowIconSVG)`
   width: 23px;
-  padding-left: 5px;
+  padding: 0 8px 0 0;
+  margin-top: 9px;
+  margin-left: 6px;
 `
 
 const HideIcon = styled(HideIconSVG)`
   width: 23px;
-  padding-left: 5px;
+  padding: 0 8px 0 0;
+  margin-top: 9px;
+  margin-left: 6px;
 `
 
 const Zone = styled.span`
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 10px;
   user-select: none;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
 `
@@ -209,12 +184,17 @@ const List = styled.div`
 `
 
 const Row = styled.li`
+  padding: 0px 5px 0px 0px;
+  margin: 0;
   font-size: 0.8em;
   text-align: left;
   list-style-type: none;
   width: 100%;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
   cursor: pointer;
+  margin: 0;
   border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;

@@ -16,6 +16,7 @@ const VesselControls = props => {
     controlsFromDate
   } = props
 
+  /** @type {Object.<string, VesselControl[]>} yearsToControls */
   const yearsToControls = useMemo(() => {
     let nextYearsToControls
     if (controlResumeAndControls && controlResumeAndControls.controls) {
@@ -24,6 +25,7 @@ const VesselControls = props => {
     return nextYearsToControls
   }, [controlResumeAndControls, controlsFromDate])
 
+  /** @type {LastControls} lastControlList */
   const lastControlList = useMemo(() => {
     let lastControlListByType
     if (controlResumeAndControls && controlResumeAndControls.controls) {

@@ -4,6 +4,11 @@ export const controlType = {
   AERIAL: 'Contrôle aérien'
 }
 
+/**
+ * Get last SEA and LAND controls
+ * @param {Object<string, VesselControl[]>} yearsToControls
+ * @returns {LastControls} The last controls
+ */
 export const lastControlByType = yearsToControls => {
   const seaControlText = 'Dernier contrôle en mer'
   const landControlText = 'Dernier contrôle à la débarque'
@@ -46,6 +51,12 @@ export const lastControlByType = yearsToControls => {
   return lastControlList
 }
 
+/**
+ * Get controls for each years : Years are keys and controls are values
+ * @param {string} controlsFromDate - The date
+ * @param {VesselControl[]} controls
+ * @returns {Object.<string, VesselControl[]>} The controls for all years
+ */
 export const getYearsToControl = (controlsFromDate, controls) => {
   const nextYearsToControls = {}
   if (controlsFromDate) {
@@ -69,4 +80,19 @@ export const getYearsToControl = (controlsFromDate, controls) => {
   })
 
   return nextYearsToControls
+}
+
+/**
+ * Get the number of infractions in a control - Take care of infractions without NATINF
+ * @param {VesselControl} control
+ * @returns {number} The number of infractions
+ */
+export const getNumberOfInfractions = control => {
+  if (control.infractions.length) {
+    return control.infractions.length
+  } else if (control.infraction && !control.infractions.length) {
+    return 1
+  }
+
+  return 0
 }

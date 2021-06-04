@@ -11,5 +11,6 @@ export const COLORS = {
   textWhite: '#EDEDF5',
   squareBorder: '#E0E0E0',
   grayVesselHidden: '#B2B2B2',
-  red: '#E1000F'
+  red: '#E1000F',
+  white: '#FFFFFF'
 }

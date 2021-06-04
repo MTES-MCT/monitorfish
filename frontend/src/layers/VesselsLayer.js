@@ -122,7 +122,12 @@ const VesselsLayer = ({ map }) => {
       if (!foundStyle.getImage().getOpacity()) {
         dispatch(setSelectedVesselWasHiddenByFilter(true))
       }
-      modifyVesselIcon(feature, null, isLight, foundStyle)
+
+      const showedFilter = filters.find(filter => filter.showed)
+      const filterColor = showedFilter ? showedFilter.color : null
+      const colorToApply = filterColor && feature.getProperties().isShowedInFilter ? filterColor : null
+
+      modifyVesselIcon(feature, colorToApply, isLight, foundStyle, true)
     }
   }
 
@@ -195,11 +200,13 @@ const VesselsLayer = ({ map }) => {
         vesselsFeatures.forEach(feature => {
           const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
 
+          const isShowedInFilterProperty = 'isShowedInFilter'
           if (vesselIconStyle) {
             const featureIndex = uids.indexOf(feature.ol_uid)
 
             if (featureIndex !== NOT_FOUND_INDEX) {
               modifyVesselIcon(feature, color, isLight, vesselIconStyle)
+              feature.set(isShowedInFilterProperty, true)
             } else if (nonFilteredVesselsAreHidden) {
               const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
               if (vesselLabelStyle) {
@@ -207,8 +214,10 @@ const VesselsLayer = ({ map }) => {
               }
 
               vesselIconStyle.getImage().setOpacity(0)
+              feature.set(isShowedInFilterProperty, false)
             } else {
               modifyVesselIcon(feature, null, isLight, vesselIconStyle)
+              feature.set(isShowedInFilterProperty, false)
             }
           }
         })
@@ -217,15 +226,17 @@ const VesselsLayer = ({ map }) => {
       })
   })
 
-  function modifyVesselIcon (feature, color, isLight, vesselIconStyle) {
+  function modifyVesselIcon (feature, color, isLight, vesselIconStyle, withoutOpacity) {
     const vesselImage = getVesselImage({
       speed: feature.getProperties().speed,
       course: feature.getProperties().course
     }, isLight, color)
 
     vesselIconStyle.setImage(vesselImage)
-    const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
-    vesselIconStyle.getImage().setOpacity(opacity)
+    if(!withoutOpacity) {
+      const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+      vesselIconStyle.getImage().setOpacity(opacity)
+    }
   }
 
   function rewriteVesselsIcons () {

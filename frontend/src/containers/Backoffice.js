@@ -91,7 +91,7 @@ const Backoffice = () => {
             />
           })
           : <div>Aucune zone disponible</div>
-      }
+        }
       </>
     )
   }
@@ -104,7 +104,7 @@ const Backoffice = () => {
             <LawTypeName>{lawType}</LawTypeName>
             <RegulatoryZoneLayerList key={lawType}>
               {displayRegulatoryZoneList(regZoneByLawType[lawType])}
-            </RegulatoryZoneLayerList>
+        </RegulatoryZoneLayerList>
           </>
         })
         : <div>Aucune Law Type disponible</div>)
@@ -208,19 +208,23 @@ const Backoffice = () => {
 const SearchResultList = styled.div`
   display: flex;
   flex-direction: row;
+  flex: 1;
   margin-top: 5px;
   color: ${COLORS.textWhite};
   text-decoration: none;
   border-radius: 2px;
   border-bottom: 1px solid ${COLORS.grayDarkerThree};
+  height: calc(100vh - 300px);
+  overflow: auto;
 `
+// TODO Change 300
 
 const Territory = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
-  margin: 5px;
-  max-width: 50%;
+  flex: 1 1 1%;
+  padding: 5px;
+  box-sizing: border-box;
 `
 
 const TerritoryName = styled.div`
@@ -251,8 +255,6 @@ const RegulatoryZoneLayerList = styled.ul`
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   padding: 0;
-  max-height: 550px;
-  overflow-x: hidden;
   color: ${COLORS.grayDarkerThree};
 
   animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
@@ -296,6 +298,7 @@ const ButtonList = styled.div`
 
 const BackofficeContainer = styled.div`
   display: flex;
+  position: relative;
 `
 
 const RegularotyZonePanel = styled.div`
@@ -303,6 +306,7 @@ const RegularotyZonePanel = styled.div`
   flex: 1;
   flex-direction: column;
   max-width: 50%;
+  max-height: 100vh;
 `
 
 const SearchBoxInput = styled.input`

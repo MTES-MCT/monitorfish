@@ -112,7 +112,7 @@ const RegulatoryZoneSelectedLayer = props => {
                                 callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                                 regulatoryZoneMetadata={regulatoryZoneMetadata}
                                 showWholeLayer={showWholeLayer}
-                                allowRemoveZone={true}
+                                allowRemoveZone={allowRemoveZone}
                                 zoneIsShown={showedLayers
                                   .filter(layer => layer.type === Layers.REGULATORY.code)
                                   .some(layer =>

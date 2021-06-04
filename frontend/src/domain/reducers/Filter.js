@@ -110,13 +110,13 @@ const filterSlice = createSlice({
         if (filter.uuid === filterUUID) {
           filter.filters[tagType] = filter.filters[tagType].filter(tag => tag !== tagValue)
 
-          const filterHasNoTag = !filter.filters.countriesFiltered.length &&
-            !filter.filters.fleetSegmentsFiltered.length &&
-            !filter.filters.gearsFiltered.length &&
-            !filter.filters.speciesFiltered.length &&
-            !filter.filters.districtsFiltered.length &&
-            !filter.filters.vesselsSizeValuesChecked.length &&
-            !filter.filters.zonesSelected.length
+          const filterHasNoTag = (!filter.filters.countriesFiltered || !filter.filters.countriesFiltered.length) &&
+            (!filter.filters.fleetSegmentsFiltered || !filter.filters.fleetSegmentsFiltered.length) &&
+            (!filter.filters.gearsFiltered || !filter.filters.gearsFiltered.length) &&
+            (!filter.filters.speciesFiltered || !filter.filters.speciesFiltered.length) &&
+            (!filter.filters.districtsFiltered || !filter.filters.districtsFiltered.length) &&
+            (!filter.filters.vesselsSizeValuesChecked || !filter.filters.vesselsSizeValuesChecked.length) &&
+            (!filter.filters.zonesSelected || !filter.filters.zonesSelected.length)
 
           if (filterHasNoTag) {
             return null

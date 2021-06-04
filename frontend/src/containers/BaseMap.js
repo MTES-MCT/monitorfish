@@ -86,7 +86,7 @@ const BaseMap = props => {
       if (handleMovingAndZoom) {
         handleMovingAndZoom(initialMap)
       }
-    }, 100)
+    }, 500)
   }
 
   function throttleAndHandlePointerMove (event, map) {
@@ -103,7 +103,7 @@ const BaseMap = props => {
         handlePointerMove(lastEventForPointerMove, map)
       }
       showCoordinatesInDMS(lastEventForPointerMove)
-    }, 100)
+    }, 500)
   }
 
   function animateToRegulatoryLayer () {

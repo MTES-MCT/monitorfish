@@ -6,13 +6,15 @@ import { toStringHDMS } from 'ol/coordinate'
 import Layers from './layers'
 import { Icon, Style } from 'ol/style'
 import {
+  getSVG,
   getVesselIconOpacity,
-  getVesselImage
+  getVesselImage, getVesselLabelStyle
 } from '../../layers/styles/featuresStyles'
 
 export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
+const NOT_FOUND = -1
 
 export class Vessel {
   /**
@@ -79,7 +81,7 @@ export class Vessel {
       position = Vessel.getPositionObject(lastPosition)
     }
 
-    if (this.isSelectedVessel(currentVessel, selectedVesselFeatureAndIdentity) && this.isVesselTrack(currentVessel)) {
+    if (this.isSelectedVessel(currentVessel, selectedVesselFeatureAndIdentity) && this.isVesselTrack(currentVessel) && selectedVessel) {
       const lastPosition = selectedVessel.positions[selectedVessel.positions.length - 1]
 
       position = Vessel.getPositionObject(lastPosition)
@@ -141,10 +143,6 @@ export class Vessel {
     const iconStyle = this.getIconStyle(options)
     styles.push(iconStyle)
 
-    if (Vessel.isSelectedVessel(this.vessel, options.selectedVesselFeatureAndIdentity)) {
-      styles.push(Vessel.getSelectedVesselStyle())
-    }
-
     this.feature.setStyle(styles)
   }
 
@@ -172,6 +170,90 @@ export class Vessel {
     }),
     zIndex: VESSEL_SELECTOR_STYLE
   })
+
+  static applyVesselFeatureFilterStyle (feature, filteredVesselsUids, color, isLight, nonFilteredVesselsAreHidden, vesselsLastPositionVisibility) {
+    const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+
+    const isShowedInFilterProperty = 'isShowedInFilter'
+    if (vesselIconStyle) {
+      const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
+
+      if (featureFoundInFilteredVesselsIndex !== NOT_FOUND) {
+        this.setVesselFeatureImages(feature, color, isLight, vesselIconStyle, vesselsLastPositionVisibility)
+        feature.set(isShowedInFilterProperty, true)
+      } else if (nonFilteredVesselsAreHidden) {
+        this.hideVesselFeatureImages(feature, vesselIconStyle)
+        feature.set(isShowedInFilterProperty, false)
+      } else {
+        this.setVesselFeatureImages(feature, null, isLight, vesselIconStyle, vesselsLastPositionVisibility)
+        feature.set(isShowedInFilterProperty, false)
+      }
+    }
+  }
+
+  static setVesselFeatureImages (feature, color, isLight, vesselIconStyle, withoutOpacity, vesselsLastPositionVisibility) {
+    const vesselImage = getVesselImage({
+      speed: feature.getProperties().speed,
+      course: feature.getProperties().course
+    }, isLight, color)
+
+    vesselIconStyle.setImage(vesselImage)
+    if(!withoutOpacity) {
+      const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+      vesselIconStyle.getImage().setOpacity(opacity)
+    }
+
+    const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+    if (vesselLabelStyle) {
+      vesselLabelStyle.getImage().setOpacity(1)
+    }
+  }
+
+  static hideVesselFeatureImages (feature, vesselIconStyle) {
+    const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+    if (vesselLabelStyle) {
+      vesselLabelStyle.getImage().setOpacity(0)
+    }
+
+    vesselIconStyle.getImage().setOpacity(0)
+  }
+
+  static hideVesselFeature (featureToHide) {
+    const vesselIconStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+    if (vesselIconStyle) {
+      vesselIconStyle.getImage().setOpacity(0)
+    }
+    const vesselLabelStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+    if (vesselLabelStyle) {
+      vesselLabelStyle.getImage().setOpacity(0)
+    }
+  }
+
+  static addVesselLabelToFeature (feature, vesselLabel, vesselsLastPositionVisibility) {
+    const vesselDate = new Date(feature.getProperties().dateTime)
+    const vesselIsHidden = new Date()
+    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
+
+    if (vesselDate > vesselIsHidden) {
+      getSVG(feature, vesselLabel).then(svg => {
+        if (svg) {
+          const style = getVesselLabelStyle(svg.showedText, svg.imageElement)
+
+          const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
+          if (!vesselLabelStyle || vesselLabelStyle.getImage() !== svg.imageElement) {
+            const stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_LABEL_STYLE)
+
+            feature.setStyle([...stylesWithoutVesselName, style])
+          }
+        }
+      })
+    }
+  }
+
+  static removeVesselLabelToFeature(feature) {
+    const stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_LABEL_STYLE)
+    feature.setStyle([...stylesWithoutVesselName])
+  }
 }
 
 export const getVesselIdentityFromFeature = feature => {

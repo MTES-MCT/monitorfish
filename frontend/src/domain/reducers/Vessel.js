@@ -6,6 +6,7 @@ const vesselSlice = createSlice({
     temporaryVesselsToHighLightOnMap: [],
     selectedVesselWasHiddenByFilter: false,
     selectedVesselFeatureAndIdentity: null,
+    selectedVesselLastPositionFeatureAndIdentity : null,
     vessels: [],
     vesselsLayerSource: null,
     selectedVessel: null,
@@ -32,9 +33,11 @@ const vesselSlice = createSlice({
       state.vesselsLayerSource = action.payload
     },
     loadingVessel (state, action) {
-      state.selectedVesselFeatureAndIdentity = action.payload
-      state.selectedVessel = null
-      state.loadingVessel = true
+      state.selectedVesselFeatureAndIdentity = action.payload.vesselFeatureAndIdentity
+      if(!action.payload.calledFromCron) {
+        state.selectedVessel = null
+        state.loadingVessel = true
+      }
     },
     setSelectedVessel (state, action) {
       state.loadingVessel = null
@@ -60,6 +63,9 @@ const vesselSlice = createSlice({
     },
     updateVesselFeatureAndIdentity (state, action) {
       state.selectedVesselFeatureAndIdentity = action.payload
+    },
+    updateVesselLastPositionFeatureAndIdentity (state, action) {
+      state.selectedVesselLastPositionFeatureAndIdentity = action.payload
     },
     removeSelectedIconToFeature (state) {
       state.removeSelectedIconToFeature = true
@@ -132,6 +138,7 @@ export const {
   openVesselSidebar,
   closeVesselSidebar,
   updateVesselFeatureAndIdentity,
+  updateVesselLastPositionFeatureAndIdentity,
   setFishingActivities,
   resetFishingActivities,
   setNextFishingActivities,

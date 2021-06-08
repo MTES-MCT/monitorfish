@@ -3,8 +3,9 @@ import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
-import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
-import { animateToVessel, setUpdatedFromCron } from '../reducers/Map'
+import { vesselsAreEquals } from '../entities/vessel'
+import { setUpdatedFromCron } from '../reducers/Map'
+import unselectVessel from './unselectVessel'
 
 const showVesselTrackAndSidebar = (
   vesselFeatureAndIdentity,
@@ -12,19 +13,25 @@ const showVesselTrackAndSidebar = (
   calledFromCron,
   vesselTrackDepthObject) => (dispatch, getState) => {
   const alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
-  if (alreadyShownVesselFromSearch(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch)) {
-    if (getState().vessel.selectedVessel) {
+  if (alreadyShownVesselFromSearch(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) &&
+    getState().vessel.selectedVessel) {
       dispatch(openVesselSidebar())
-    }
 
     return
   }
 
+  if(!calledFromCron &&
+    alreadySelectedVessel &&
+    !vesselsAreEquals(vesselFeatureAndIdentity.identity, alreadySelectedVessel.identity)) {
+    dispatch(unselectVessel())
+  }
   dispatch(setUpdatedFromCron(calledFromCron))
-  removePreviousSelectedFeature(getState)
 
   dispatch(removeError())
-  dispatch(loadingVessel(vesselFeatureAndIdentity))
+  dispatch(loadingVessel({
+    vesselFeatureAndIdentity: vesselFeatureAndIdentity,
+    calledFromCron: calledFromCron
+  }))
   dispatch(openVesselSidebar())
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
@@ -58,8 +65,8 @@ const showVesselTrackAndSidebar = (
     })
 }
 
-function alreadyShownVesselFromSearch (updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) {
-  return !updateShowedVessel &&
+function alreadyShownVesselFromSearch (calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) {
+  return !calledFromCron &&
       fromSearch &&
       alreadySelectedVessel &&
       alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature
@@ -111,16 +118,6 @@ function trackDepthHasBeenModified (vesselAndTrackDepthModified, updateShowedVes
       !updateShowedVessel &&
       vesselAndTrackDepthModified.vessel.positions &&
       vesselAndTrackDepthModified.vessel.positions.length
-}
-
-function removePreviousSelectedFeature (getState) {
-  const previousSelectedFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
-
-  if (previousSelectedFeatureAndIdentity && previousSelectedFeatureAndIdentity.feature) {
-    const stylesWithoutVesselSelector = previousSelectedFeatureAndIdentity.feature.getStyle()
-      .filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
-    previousSelectedFeatureAndIdentity.feature.setStyle([...stylesWithoutVesselSelector])
-  }
 }
 
 export default showVesselTrackAndSidebar

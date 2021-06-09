@@ -64,8 +64,16 @@ const vesselSlice = createSlice({
     updateVesselFeatureAndIdentity (state, action) {
       state.selectedVesselFeatureAndIdentity = action.payload
     },
+    updateVesselFeature (state, action) {
+      const nextState = { ...state.selectedVesselFeatureAndIdentity }
+      state.selectedVesselFeatureAndIdentity = { identity: nextState.identity, feature: action.payload }
+    },
     updateVesselLastPositionFeatureAndIdentity (state, action) {
       state.selectedVesselLastPositionFeatureAndIdentity = action.payload
+    },
+    updateVesselLastPositionFeature (state, action) {
+      const nextState = { ...state.selectedVesselLastPositionFeatureAndIdentity }
+      state.selectedVesselLastPositionFeatureAndIdentity = { identity: nextState.identity, feature: action.payload }
     },
     removeSelectedIconToFeature (state) {
       state.removeSelectedIconToFeature = true
@@ -138,7 +146,9 @@ export const {
   openVesselSidebar,
   closeVesselSidebar,
   updateVesselFeatureAndIdentity,
+  updateVesselFeature,
   updateVesselLastPositionFeatureAndIdentity,
+  updateVesselLastPositionFeature,
   setFishingActivities,
   resetFishingActivities,
   setNextFishingActivities,

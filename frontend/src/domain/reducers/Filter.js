@@ -4,38 +4,10 @@ import { getLocalStorageState } from '../../utils'
 const vesselsFiltersLocalStorageKey = 'vesselsFilters'
 const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
 
-/**
- * @typedef Filter
- * @property {FilterValues} filters
- * @property {string} name
- * @property {string} color
- * @property {boolean} showed
- * @property {string} uuid
- */
-
-/**
- * @typedef FilterValues
- * @property {string[]} countriesFiltered
- * @property {string[]} fleetSegmentsFiltered
- * @property {string[]} gearsFiltered
- * @property {string[]} speciesFiltered
- * @property {string[]} districtsFiltered
- * @property {string[]} vesselsSizeValuesChecked
- * @property {{
- *      name: string,
- *      code: string,
- *      feature: GeoJSONGeometry
- *    }[]} zonesSelected
- */
-
-/**
- * @typedef GeoJSONGeometry
- * @property {{type: string, coordinates: Object}} geometry
- */
-
 const filterSlice = createSlice({
   name: 'filter',
   initialState: {
+    /** @type {VesselFilter[]} filters */
     filters: getLocalStorageState([], vesselsFiltersLocalStorageKey),
     nonFilteredVesselsAreHidden: getLocalStorageState(false, nonFilteredVesselsAreHiddenLocalStorageKey)
   },
@@ -43,7 +15,7 @@ const filterSlice = createSlice({
     /**
      * Add a new filter
      * @param {Object=} state
-     * @param {{payload: Filter}} action - The filter to add
+     * @param {{payload: VesselFilter}} action - The filter to add
      */
     addFilter (state, action) {
       state.filters = state.filters.map(filter => {

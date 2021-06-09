@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { hideVesselLabels, resetAnimateToVessel } from '../../domain/reducers/Map'
+import { hideVesselLabels, resetAnimateTo } from '../../domain/reducers/Map'
 import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../../domain/entities/vessel'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
@@ -8,7 +8,7 @@ import { MIN_ZOOM_VESSEL_LABELS } from '../../layers/VesselsLayer'
 
 const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const dispatch = useDispatch()
-  const { animateToVessel } = useSelector(state => state.map)
+  const { animateTo } = useSelector(state => state.map)
   const {
     vesselSidebarIsOpen,
     selectedVesselFeatureAndIdentity,
@@ -16,8 +16,8 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   } = useSelector(state => state.vessel)
 
   useEffect(() => {
-    addAnimateToVessel()
-  }, [animateToVessel, map, vesselSidebarIsOpen, selectedVesselFeatureAndIdentity])
+    animate()
+  }, [animateTo, map, vesselSidebarIsOpen, selectedVesselFeatureAndIdentity])
 
   useEffect(() => {
     if (mapMovingAndZoomEvent) {
@@ -33,11 +33,9 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
     }
   }, [mapClickEvent])
 
-  function addAnimateToVessel () {
+  function animate () {
     if (map &&
-      animateToVessel &&
-      selectedVesselFeatureAndIdentity &&
-      selectedVesselFeatureAndIdentity.feature &&
+      animateTo &&
       vesselSidebarIsOpen) {
       if (map.getView().getZoom() >= 8) {
         const resolution = map.getView().getResolution()
@@ -49,15 +47,15 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
         })
       }
 
-      dispatch(resetAnimateToVessel())
+      dispatch(resetAnimateTo())
     }
   }
 
   function createAnimateObject (resolution, duration, zoom) {
     return {
       center: [
-        selectedVesselFeatureAndIdentity.feature.getGeometry().getCoordinates()[0] + resolution,
-        selectedVesselFeatureAndIdentity.feature.getGeometry().getCoordinates()[1]
+        animateTo[0] + resolution,
+        animateTo[1]
       ],
       duration,
       zoom

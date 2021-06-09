@@ -23,7 +23,7 @@ const mapSlice = createSlice({
     vesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
     vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
     vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
-    animateToVessel: null,
+    animateTo: null,
     updatedFromCron: false,
     animateToRegulatoryLayer: null,
     vesselLabelsHiddenByZoom: undefined,
@@ -44,17 +44,17 @@ const mapSlice = createSlice({
     setUpdatedFromCron(state, action) {
       state.updatedFromCron = action.payload
     },
-    animateToVessel (state, action) {
-      state.animateToVessel = action.payload
+    animateTo (state, action) {
+      state.animateTo = action.payload
+    },
+    resetAnimateTo (state) {
+      state.animateTo = null
     },
     animateToRegulatoryLayer (state, action) {
       state.animateToRegulatoryLayer = action.payload
     },
     resetAnimateToRegulatoryLayer (state) {
       state.animateToRegulatoryLayer = null
-    },
-    resetAnimateToVessel (state) {
-      state.animateToVessel = null
     },
     setVesselLabelsShowedOnMap (state, action) {
       window.localStorage.setItem(vesselLabelsShowedOnMapLocalStorageKey, JSON.stringify(action.payload))
@@ -158,8 +158,8 @@ const mapSlice = createSlice({
 })
 
 export const {
-  animateToVessel,
-  resetAnimateToVessel,
+  animateTo,
+  resetAnimateTo,
   animateToRegulatoryLayer,
   resetAnimateToRegulatoryLayer,
   setVesselLabelsShowedOnMap,

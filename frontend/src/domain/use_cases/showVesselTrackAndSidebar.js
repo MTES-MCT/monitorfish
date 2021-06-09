@@ -3,7 +3,7 @@ import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
-import { vesselsAreEquals } from '../entities/vessel'
+import { Vessel, vesselsAreEquals } from '../entities/vessel'
 import { setUpdatedFromCron } from '../reducers/Map'
 import unselectVessel from './unselectVessel'
 
@@ -25,8 +25,8 @@ const showVesselTrackAndSidebar = (
     !vesselsAreEquals(vesselFeatureAndIdentity.identity, alreadySelectedVessel.identity)) {
     dispatch(unselectVessel())
   }
+  Vessel.setVesselAsSelected(vesselFeatureAndIdentity.feature)
   dispatch(setUpdatedFromCron(calledFromCron))
-
   dispatch(removeError())
   dispatch(loadingVessel({
     vesselFeatureAndIdentity: vesselFeatureAndIdentity,
@@ -46,16 +46,7 @@ const showVesselTrackAndSidebar = (
     vesselFeatureAndIdentity.identity.ircs,
     nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {
-      if (trackDepthHasBeenModified(vesselAndTrackDepthModified, calledFromCron)) {
-        dispatch(setError(new NoDEPFoundError("Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
-                  'les positions des dernières 24 heures.')))
-      } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, calledFromCron)) {
-        dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position.")))
-      } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
-        dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")))
-      } else {
-        dispatch(removeError())
-      }
+      dispatchErrors(dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject)
 
       dispatch(setSelectedVessel(vesselAndTrackDepthModified.vessel))
     }).catch(error => {
@@ -63,6 +54,19 @@ const showVesselTrackAndSidebar = (
       dispatch(setError(error))
       dispatch(resetLoadingVessel())
     })
+}
+
+function dispatchErrors (dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject) {
+  if (trackDepthHasBeenModified(vesselAndTrackDepthModified, calledFromCron)) {
+    dispatch(setError(new NoDEPFoundError('Nous n\'avons pas trouvé de dernier DEP pour ce navire, nous affichons ' +
+      'les positions des dernières 24 heures.')))
+  } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, calledFromCron)) {
+    dispatch(setError(new NoPositionsFoundError('Nous n\'avons trouvé aucune position.')))
+  } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
+    dispatch(setError(new NoPositionsFoundError('Nous n\'avons trouvé aucune position pour ces dates.')))
+  } else {
+    dispatch(removeError())
+  }
 }
 
 function alreadyShownVesselFromSearch (calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) {

@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
+import { animateTo } from '../domain/reducers/Map'
 
 const VesselTrackLayer = ({ map }) => {
   const {
     selectedVessel
   } = useSelector(state => state.vessel)
+
+  const {
+    updatedFromCron
+  } = useSelector(state => state.map)
+
+  const dispatch = useDispatch()
 
   const [vectorSource] = useState(new VectorSource({
     features: []
@@ -39,9 +46,12 @@ const VesselTrackLayer = ({ map }) => {
     vectorSource.clear(true)
 
     if (map && selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
-      const vesselTrackFeatures = new VesselTrack(selectedVessel).features
+      const vesselTrack = new VesselTrack(selectedVessel)
 
-      vectorSource.addFeatures(vesselTrackFeatures)
+      vectorSource.addFeatures(vesselTrack.features)
+      if (!updatedFromCron) {
+        dispatch(animateTo(vesselTrack.lastPositionCoordinates))
+      }
     }
   }
 

@@ -29,6 +29,7 @@ export class VesselTrack {
     })
 
     this.features = vesselTrackLineFeatures
+    this.lastPositionCoordinates = circlePointFeatures[circlePointFeatures.length - 1].getGeometry().getCoordinates()
   }
 
   buildCirclePointFeatures (vesselTrackLines, positions) {
@@ -41,7 +42,7 @@ export class VesselTrack {
 
       let firstPositionOnLine
       if (positionsOnLine.length > 0 && positionsOnLine[0]) {
-        firstPositionOnLine = positionsOnLine[0]
+           firstPositionOnLine = positionsOnLine[0]
       } else {
         firstPositionOnLine = null
       }

@@ -92,7 +92,7 @@ const VesselCardOverlayComponent = styled.div`
   text-align: left;
   background-color: ${COLORS.grayBackground};
   border-radius: 2px;
-  z-index: 200;
+  z-index: 1000;
 `
 
 export default VesselCardOverlay

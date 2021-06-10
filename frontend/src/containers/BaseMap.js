@@ -103,7 +103,7 @@ const BaseMap = props => {
         handlePointerMove(lastEventForPointerMove, map)
       }
       showCoordinatesInDMS(lastEventForPointerMove)
-    }, 200)
+    }, 100)
   }
 
   function animateToRegulatoryLayer () {

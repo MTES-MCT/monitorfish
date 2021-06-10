@@ -22,9 +22,6 @@ const VesselCardOverlay = ({ feature, map }) => {
         overlayObjectRef.current = new Overlay({
           element: ref,
           autoPan: false,
-          autoPanAnimation: {
-            duration: 400
-          },
           className: 'ol-overlay-container ol-selectable'
         })
       } else {

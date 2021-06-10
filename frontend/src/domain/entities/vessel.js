@@ -113,7 +113,7 @@ export class Vessel {
    * @param {Object} feature - The OpenLayers feature object
    * @param {{
         filteredVesselsUids: string[],
-        color: string,
+        color: string | null,
         isLight: boolean,
         nonFilteredVesselsAreHidden: boolean,
         vesselsLastPositionVisibility: Object,
@@ -131,6 +131,7 @@ export class Vessel {
       this.hideVesselFeature(feature)
       feature.set(isShowedInFilterProperty, false)
     } else {
+      options.color = null
       this.setVesselFeatureImages(feature, options)
       feature.set(isShowedInFilterProperty, false)
     }

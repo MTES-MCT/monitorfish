@@ -2,11 +2,11 @@ import { closeVesselSidebar } from '../reducers/Vessel'
 import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
 
 const unselectVessel = () => (dispatch, getState) => {
-  removeSelectorStyleToSelectedVesselAndRemoveFeatureIfTemporary(dispatch, getState)
+  removeSelectorStyleToSelectedVessel(dispatch, getState)
   dispatch(closeVesselSidebar())
 }
 
-function removeSelectorStyleToSelectedVesselAndRemoveFeatureIfTemporary (dispatch, getState) {
+function removeSelectorStyleToSelectedVessel (dispatch, getState) {
   const vessel = getState().vessel.selectedVesselFeatureAndIdentity
 
   if (vessel && vessel.feature) {

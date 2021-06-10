@@ -3,12 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
-import {
-  setVesselsLayerSource,
-  updateVesselLastPositionFeature,
-  updateVesselLastPositionFeatureAndIdentity
-} from '../domain/reducers/Vessel'
-import { getVesselFeatureAndIdentity, Vessel, vesselAndVesselFeatureAreEquals } from '../domain/entities/vessel'
+import { setVesselsLayerSource, updateSelectedVesselFeature } from '../domain/reducers/Vessel'
+import { Vessel, vesselAndVesselFeatureAreEquals } from '../domain/entities/vessel'
 import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 
@@ -20,15 +16,12 @@ const VesselsLayer = ({ map }) => {
   const {
     vessels,
     selectedVessel,
-    removeSelectedIconToFeature,
     selectedVesselFeatureAndIdentity,
-    selectedVesselLastPositionFeatureAndIdentity,
     temporaryVesselsToHighLightOnMap
   } = useSelector(state => state.vessel)
   const {
     vesselLabelsHiddenByZoom,
     vesselLabelsShowedOnMap,
-    updatedFromCron,
     extent,
     isMoving,
     selectedBaseLayer,
@@ -95,15 +88,6 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
-  function getSelectedFeature () {
-    let featureToKeep = null
-    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature) {
-      const selectedVesselFeatureId = selectedVesselFeatureAndIdentity.feature.getId()
-      featureToKeep = vectorSource.getFeatureById(selectedVesselFeatureId)
-    }
-    return featureToKeep
-  }
-
   function addVesselsFeaturesToMap () {
     if (map && vessels && vessels.length) {
       const vesselsFeatures = vessels
@@ -112,12 +96,7 @@ const VesselsLayer = ({ map }) => {
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => {}).then(features => {
-        const featureToReDraw = getSelectedFeature()
         vectorSource.clear(true)
-
-        if (featureToReDraw) {
-          vectorSource.addFeature(featureToReDraw)
-        }
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
@@ -162,9 +141,9 @@ const VesselsLayer = ({ map }) => {
               vesselsLastPositionVisibility
             })
 
-          if(selectedVesselLastPositionFeatureAndIdentity &&
-            vesselAndVesselFeatureAreEquals(selectedVesselLastPositionFeatureAndIdentity.identity, feature)) {
-            dispatch(updateVesselLastPositionFeature(feature))
+          if (selectedVesselFeatureAndIdentity && vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature)) {
+            Vessel.setVesselAsSelected(feature)
+            dispatch(updateSelectedVesselFeature(feature))
           }
         })
         return resolve(vesselsFeatures)
@@ -280,11 +259,6 @@ const VesselsLayer = ({ map }) => {
       temporaryVesselsToHighLightOnMap
     }
     const vessel = new Vessel(vesselFromAPI, vesselOptions)
-
-    if (vessel.isSelectedVessel(selectedVesselFeatureAndIdentity)) {
-      Vessel.setVesselAsSelected(vessel)
-      dispatch(updateVesselLastPositionFeatureAndIdentity(getVesselFeatureAndIdentity(vessel.feature, vesselFromAPI)))
-    }
 
     return vessel.feature
   }

@@ -11,13 +11,12 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   const { animateTo } = useSelector(state => state.map)
   const {
     vesselSidebarIsOpen,
-    selectedVesselFeatureAndIdentity,
     temporaryVesselsToHighLightOnMap
   } = useSelector(state => state.vessel)
 
   useEffect(() => {
     animate()
-  }, [animateTo, map, vesselSidebarIsOpen, selectedVesselFeatureAndIdentity])
+  }, [animateTo, map, vesselSidebarIsOpen])
 
   useEffect(() => {
     if (mapMovingAndZoomEvent) {

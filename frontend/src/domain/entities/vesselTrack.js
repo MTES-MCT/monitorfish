@@ -18,7 +18,8 @@ export class VesselTrack {
   constructor (vessel) {
     const vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(vessel)
 
-    const circlePointFeatures = this.buildCirclePointFeatures(vesselTrackLineFeatures, vessel.positions)
+    const lastTrackLineFeature = vesselTrackLineFeatures[vesselTrackLineFeatures.length - 1]
+    const circlePointFeatures = this.buildCirclePointFeatures(vesselTrackLineFeatures.concat(lastTrackLineFeature), vessel.positions)
     circlePointFeatures.forEach(circlePoint => {
       vesselTrackLineFeatures.push(circlePoint)
     })
@@ -34,21 +35,22 @@ export class VesselTrack {
 
   buildCirclePointFeatures (vesselTrackLines, positions) {
     return vesselTrackLines.map((feature, index) => {
-      const firstPointCoordinatesOfLine = feature.getGeometry().getCoordinates()[0]
+      const pointCoordinatesOfLine = this.getFirstOrLastPointCoordinateOfLine(feature, vesselTrackLines, index)
+
       const positionsOnLine = positions.filter(position => {
         const point = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-        return arraysEqual(firstPointCoordinatesOfLine, point)
+        return arraysEqual(pointCoordinatesOfLine, point)
       })
 
       let firstPositionOnLine
       if (positionsOnLine.length > 0 && positionsOnLine[0]) {
-           firstPositionOnLine = positionsOnLine[0]
+        firstPositionOnLine = positionsOnLine[0]
       } else {
         firstPositionOnLine = null
       }
 
       const circleFeature = new Feature({
-        geometry: new Point(feature.getGeometry().getCoordinates()[0]),
+        geometry: new Point(pointCoordinatesOfLine),
         name: Layers.VESSEL_TRACK.code + ':position:' + index,
         course: firstPositionOnLine ? firstPositionOnLine.course : null,
         positionType: firstPositionOnLine ? firstPositionOnLine.positionType : null,
@@ -62,6 +64,16 @@ export class VesselTrack {
 
       return circleFeature
     }).filter(circlePoint => circlePoint)
+  }
+
+  getFirstOrLastPointCoordinateOfLine (feature, vesselTrackLines, index) {
+    let pointCoordinatesOfLine = feature.getGeometry().getCoordinates()[0]
+
+    if (vesselTrackLines.length === index + 1) {
+      pointCoordinatesOfLine = feature.getGeometry().getCoordinates()[1]
+    }
+
+    return pointCoordinatesOfLine
   }
 
   buildArrowPointFeatures (vesselTrackLines) {

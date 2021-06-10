@@ -263,7 +263,7 @@ const RightTriangleShadow = styled.div`
   border-top : 6px solid transparent;
   border-bottom : 6px solid transparent;
   border-left : 11px solid ${COLORS.grayBackground};
-  margin-left: 350px;
+  margin-left: 385px;
   margin-top: -134px;
   clear: top;
 `

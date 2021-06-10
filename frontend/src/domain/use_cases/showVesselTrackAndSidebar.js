@@ -1,5 +1,5 @@
 import { getVesselFromAPI } from '../../api/fetch'
-import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
@@ -13,26 +13,12 @@ const showVesselTrackAndSidebar = (
   calledFromCron,
   vesselTrackDepthObject) => (dispatch, getState) => {
   const alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
-  if (alreadyShownVesselFromSearch(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) &&
-    getState().vessel.selectedVessel) {
-      dispatch(openVesselSidebar())
+  unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, dispatch)
 
-    return
+  if (vesselFeatureAndIdentity.feature) {
+    Vessel.setVesselAsSelected(vesselFeatureAndIdentity.feature)
   }
-
-  if(!calledFromCron &&
-    alreadySelectedVessel &&
-    !vesselsAreEquals(vesselFeatureAndIdentity.identity, alreadySelectedVessel.identity)) {
-    dispatch(unselectVessel())
-  }
-  Vessel.setVesselAsSelected(vesselFeatureAndIdentity.feature)
-  dispatch(setUpdatedFromCron(calledFromCron))
-  dispatch(removeError())
-  dispatch(loadingVessel({
-    vesselFeatureAndIdentity: vesselFeatureAndIdentity,
-    calledFromCron: calledFromCron
-  }))
-  dispatch(openVesselSidebar())
+  dispatchLoadingVessel(dispatch, calledFromCron, vesselFeatureAndIdentity)
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
     calledFromCron,
@@ -40,11 +26,7 @@ const showVesselTrackAndSidebar = (
     getState().vessel.temporaryTrackDepth,
     getState().map.vesselTrackDepth)
 
-  getVesselFromAPI(
-    vesselFeatureAndIdentity.identity.internalReferenceNumber,
-    vesselFeatureAndIdentity.identity.externalReferenceNumber,
-    vesselFeatureAndIdentity.identity.ircs,
-    nextVesselTrackDepthObject)
+  getVesselFromAPI(vesselFeatureAndIdentity.identity, nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {
       dispatchErrors(dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject)
 
@@ -54,6 +36,23 @@ const showVesselTrackAndSidebar = (
       dispatch(setError(error))
       dispatch(resetLoadingVessel())
     })
+}
+
+function dispatchLoadingVessel (dispatch, calledFromCron, vesselFeatureAndIdentity) {
+  dispatch(setUpdatedFromCron(calledFromCron))
+  dispatch(removeError())
+  dispatch(loadingVessel({
+    vesselFeatureAndIdentity: vesselFeatureAndIdentity,
+    calledFromCron: calledFromCron
+  }))
+}
+
+function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, dispatch) {
+  if (!calledFromCron &&
+    alreadySelectedVessel &&
+    !vesselsAreEquals(vesselFeatureAndIdentity.identity, alreadySelectedVessel.identity)) {
+    dispatch(unselectVessel())
+  }
 }
 
 function dispatchErrors (dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject) {
@@ -67,13 +66,6 @@ function dispatchErrors (dispatch, vesselAndTrackDepthModified, calledFromCron, 
   } else {
     dispatch(removeError())
   }
-}
-
-function alreadyShownVesselFromSearch (calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) {
-  return !calledFromCron &&
-      fromSearch &&
-      alreadySelectedVessel &&
-      alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature
 }
 
 function getVesselTrackDepth (updateShowedVessel, trackDepthParameters, temporaryTrackDepth, vesselTrackDepth) {

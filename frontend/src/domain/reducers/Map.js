@@ -41,7 +41,7 @@ const mapSlice = createSlice({
     extent: getLocalStorageState(null, savedMapExtentLocalStorageKey)
   },
   reducers: {
-    setUpdatedFromCron(state, action) {
+    setUpdatedFromCron (state, action) {
       state.updatedFromCron = action.payload
     },
     animateTo (state, action) {

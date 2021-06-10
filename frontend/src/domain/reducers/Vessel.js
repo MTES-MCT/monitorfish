@@ -4,13 +4,10 @@ const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
     temporaryVesselsToHighLightOnMap: [],
-    selectedVesselWasHiddenByFilter: false,
     selectedVesselFeatureAndIdentity: null,
-    selectedVesselLastPositionFeatureAndIdentity : null,
     vessels: [],
     vesselsLayerSource: null,
     selectedVessel: null,
-    removeSelectedIconToFeature: false,
     loadingVessel: null,
     vesselSidebarIsOpen: false,
     vesselSidebarTabIndexToShow: 1,
@@ -34,7 +31,8 @@ const vesselSlice = createSlice({
     },
     loadingVessel (state, action) {
       state.selectedVesselFeatureAndIdentity = action.payload.vesselFeatureAndIdentity
-      if(!action.payload.calledFromCron) {
+      state.vesselSidebarIsOpen = true
+      if (!action.payload.calledFromCron) {
         state.selectedVessel = null
         state.loadingVessel = true
       }
@@ -47,10 +45,6 @@ const vesselSlice = createSlice({
       state.selectedVessel = null
       state.selectedVesselFeatureAndIdentity = null
     },
-    openVesselSidebar (state, action) {
-      state.vesselSidebarTabIndexToShow = action.payload ? action.payload : 1
-      state.vesselSidebarIsOpen = true
-    },
     closeVesselSidebar (state) {
       state.vesselSidebarIsOpen = false
       state.selectedVessel = null
@@ -61,22 +55,9 @@ const vesselSlice = createSlice({
         beforeDateTime: null
       }
     },
-    updateVesselFeatureAndIdentity (state, action) {
-      state.selectedVesselFeatureAndIdentity = action.payload
-    },
-    updateVesselFeature (state, action) {
+    updateSelectedVesselFeature (state, action) {
       const nextState = { ...state.selectedVesselFeatureAndIdentity }
       state.selectedVesselFeatureAndIdentity = { identity: nextState.identity, feature: action.payload }
-    },
-    updateVesselLastPositionFeatureAndIdentity (state, action) {
-      state.selectedVesselLastPositionFeatureAndIdentity = action.payload
-    },
-    updateVesselLastPositionFeature (state, action) {
-      const nextState = { ...state.selectedVesselLastPositionFeatureAndIdentity }
-      state.selectedVesselLastPositionFeatureAndIdentity = { identity: nextState.identity, feature: action.payload }
-    },
-    removeSelectedIconToFeature (state) {
-      state.removeSelectedIconToFeature = true
     },
     setFocusOnVesselSearch (state, action) {
       state.isFocusedOnVesselSearch = action.payload
@@ -129,9 +110,6 @@ const vesselSlice = createSlice({
         afterDateTime: null,
         beforeDateTime: null
       }
-    },
-    setSelectedVesselWasHiddenByFilter(state, action) {
-      state.selectedVesselWasHiddenByFilter = action.payload
     }
   }
 })
@@ -143,12 +121,8 @@ export const {
   resetLoadingVessel,
   setSelectedVessel,
   resetSelectedVessel,
-  openVesselSidebar,
   closeVesselSidebar,
-  updateVesselFeatureAndIdentity,
-  updateVesselFeature,
-  updateVesselLastPositionFeatureAndIdentity,
-  updateVesselLastPositionFeature,
+  updateSelectedVesselFeature,
   setFishingActivities,
   resetFishingActivities,
   setNextFishingActivities,
@@ -162,8 +136,7 @@ export const {
   setTemporaryVesselsToHighLightOnMap,
   resetTemporaryVesselsToHighLightOnMap,
   setTemporaryTrackDepth,
-  resetTemporaryTrackDepth,
-  setSelectedVesselWasHiddenByFilter
+  resetTemporaryTrackDepth
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

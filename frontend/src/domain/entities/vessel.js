@@ -5,12 +5,7 @@ import Point from 'ol/geom/Point'
 import { toStringHDMS } from 'ol/coordinate'
 import Layers, { baseLayers } from './layers'
 import { Icon, Style } from 'ol/style'
-import {
-  getSVG,
-  getVesselIconOpacity,
-  getVesselImage, getVesselLabelStyle
-} from '../../layers/styles/featuresStyles'
-import { updateVesselFeatureAndIdentity } from '../reducers/Vessel'
+import { getSVG, getVesselIconOpacity, getVesselImage, getVesselLabelStyle } from '../../layers/styles/featuresStyles'
 
 export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
@@ -31,23 +26,22 @@ export class Vessel {
   constructor (vessel, options) {
     this.vessel = vessel
     this.id = options.id
-
-    const position = this.getPosition()
-    this.coordinates = position.coordinates
-    this.position = position
+    this.coordinates = transform([this.vessel.longitude, this.vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
     this.feature = new Feature({
-      geometry: new Point(position.coordinates),
+      geometry: new Point(this.coordinates),
       internalReferenceNumber: vessel.internalReferenceNumber,
       externalReferenceNumber: vessel.externalReferenceNumber,
       mmsi: vessel.mmsi,
       flagState: vessel.flagState,
       vesselName: vessel.vesselName,
-      coordinates: toStringHDMS(position.coordinates),
-      course: position.course,
-      positionType: position.positionType,
-      speed: position.speed,
-      dateTime: position.dateTime,
+      coordinates: toStringHDMS(this.coordinates),
+      latitude: vessel.latitude,
+      longitude: vessel.longitude,
+      course: vessel.course,
+      positionType: vessel.positionType,
+      speed: vessel.speed,
+      dateTime: vessel.dateTime,
       ircs: vessel.ircs,
       emissionPeriod: vessel.emissionPeriod,
       lastErsDateTime: vessel.lastErsDateTime,
@@ -67,34 +61,6 @@ export class Vessel {
     this.feature.setId(`${Layers.VESSELS.code}:${options.id}`)
 
     this.setVesselStyle(options)
-  }
-
-  /**
-   * @typedef PositionWithTransformedCoordinates
-   * @property {string[]} coordinates
-   * @property {number} course
-   * @property {string} positionType
-   * @property {number} speed
-   * @property {string} dateTime
-   */
-
-  /**
-   * Get vessel position object
-   * @returns {PositionWithTransformedCoordinates} The position
-   */
-  getPosition () {
-    let transformedCoordinates = []
-    if (this.vessel.longitude && this.vessel.latitude) {
-      transformedCoordinates = transform([this.vessel.longitude, this.vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-    }
-
-    return {
-      coordinates: transformedCoordinates,
-      course: this.vessel.course,
-      positionType: this.vessel.positionType,
-      speed: this.vessel.speed,
-      dateTime: this.vessel.dateTime
-    }
   }
 
   static isSelectedVessel (vessel, selectedVesselFeatureAndIdentity) {
@@ -119,7 +85,7 @@ export class Vessel {
 
   getIconStyle (options) {
     const iconStyle = new Style({
-      image: getVesselImage(this.position, options.isLight),
+      image: getVesselImage(this.vessel, options.isLight),
       zIndex: VESSEL_ICON_STYLE
     })
 
@@ -183,14 +149,14 @@ export class Vessel {
   static setVesselFeatureImages (feature, options) {
     const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
 
-    if(vesselIconStyle) {
+    if (vesselIconStyle) {
       const vesselImage = getVesselImage({
         speed: feature.getProperties().speed,
         course: feature.getProperties().course
       }, options.isLight, options.color)
 
       vesselIconStyle.setImage(vesselImage)
-      if(!options.withoutOpacity) {
+      if (!options.withoutOpacity) {
         const opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, feature.getProperties().dateTime)
         vesselIconStyle.getImage().setOpacity(opacity)
       }
@@ -254,7 +220,7 @@ export class Vessel {
    * Remove text label to vessel feature
    * @param {Object} feature - The OpenLayers feature object
    */
-  static removeLabelToVesselFeature(feature) {
+  static removeLabelToVesselFeature (feature) {
     const stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_LABEL_STYLE)
     feature.setStyle([...stylesWithoutVesselName])
   }
@@ -266,7 +232,7 @@ export class Vessel {
   static iconIsLight = selectedBaseLayer => selectedBaseLayer === baseLayers.DARK.code ||
     selectedBaseLayer === baseLayers.SATELLITE.code
 
-  static setVesselAsSelected(feature) {
+  static setVesselAsSelected (feature) {
     const styles = feature.getStyle()
     const vesselAlreadyWithSelectorStyle = styles.find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
     if (!vesselAlreadyWithSelectorStyle) {

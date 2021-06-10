@@ -155,7 +155,7 @@ const VesselsSearchBox = () => {
   useEffect(() => {
     if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
       if (!vesselsHasBeenUpdated) {
-        if(!vesselFeatureAndIdentity ||
+        if (!vesselFeatureAndIdentity ||
           (vesselFeatureAndIdentity && !vesselsAreEquals(selectedVesselFeatureAndIdentity.identity, vesselFeatureAndIdentity.identity))) {
           dispatch(showVesselTrackAndSidebar(selectedVesselFeatureAndIdentity, true, false))
         }

@@ -1,6 +1,7 @@
 import * as Comlink from 'comlink'
 import { mapToRegulatoryZone } from '../domain/entities/regulatory'
 import { vesselSize } from '../domain/entities/vessel'
+import { getDateMonthsBefore } from '../utils'
 
 class MapperWorker {
   convertGeoJSONFeaturesToObject (features) {
@@ -41,7 +42,8 @@ class MapperWorker {
       gearsFiltered,
       districtsFiltered,
       speciesFiltered,
-      vesselsSizeValuesChecked
+      vesselsSizeValuesChecked,
+      lastControlMonthsAgo
     } = filters
 
     if (countriesFiltered && countriesFiltered.length) {
@@ -56,6 +58,16 @@ class MapperWorker {
         const vesselDate = new Date(vessel.dateTimeTimestamp)
 
         return vesselDate > vesselIsHidden
+      })
+    }
+
+    if (lastControlMonthsAgo) {
+      const controlBefore = getDateMonthsBefore(new Date(), lastControlMonthsAgo)
+
+      vessels = vessels.filter(vessel => {
+        const vesselDate = new Date(vessel.lastControlDateTimeTimestamp)
+
+        return vesselDate < controlBefore
       })
     }
 

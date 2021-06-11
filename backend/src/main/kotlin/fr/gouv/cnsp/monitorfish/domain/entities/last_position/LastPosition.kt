@@ -42,4 +42,7 @@ data class LastPosition(
         val gearOnboard: List<Gear>? = listOf(),
         val segments: List<String>? = listOf(),
         val speciesOnboard: List<Species>? = listOf(),
-        val totalWeightOnboard: Double? = null)
+        val totalWeightOnboard: Double? = null,
+        val lastControlDateTime: ZonedDateTime? = null,
+        val lastControlInfraction: Boolean? = null,
+        val postControlComment: String? = null)

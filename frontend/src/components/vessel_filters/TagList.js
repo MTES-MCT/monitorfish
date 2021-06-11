@@ -107,6 +107,17 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       nextTags = nextTags.concat(vesselsLengthTags)
     }
 
+    if (filters.lastControlMonthsAgo) {
+      const lastControlMonthAgoTag = {
+        iconElement: IconTypes.CONTROL,
+        text: `Plus de ${filters.lastControlMonthsAgo} mois`,
+        value: filters.lastControlMonthsAgo,
+        type: 'lastControlMonthsAgo'
+      }
+
+      nextTags = nextTags.concat(lastControlMonthAgoTag)
+    }
+
     setTags(nextTags)
   }, [filters])
 

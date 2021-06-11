@@ -6,6 +6,7 @@ import { ReactComponent as FilterFleetSegmentSVG } from '../icons/Label_segment_
 import { ReactComponent as FilterSpeciesSVG } from '../icons/Label_poisson.svg'
 import { ReactComponent as FilterDistrictSVG } from '../icons/Label_quartier.svg'
 import { ReactComponent as FilterLengthSVG } from '../icons/Label_taille_navire.svg'
+import { ReactComponent as FilterControlSVG } from '../icons/Label_controle.svg'
 
 const Zone = styled(FilterZoneSVG)`
   height: 13px;
@@ -55,11 +56,20 @@ const Length = styled(FilterLengthSVG)`
   margin-top: 4px;
 `
 
+const Control = styled(FilterControlSVG)`
+  height: 16px;
+  margin-right: 2px;
+  margin-left: -3px;
+  width: 22px;
+  margin-top: 2px;
+`
+
 export const IconTypes = {
   FLEET_SEGMENT: <FleetSegment />,
   ZONE: <Zone />,
   GEAR: <Gear />,
   SPECIES: <Species />,
   LENGTH: <Length />,
+  CONTROL: <Control />,
   DISTRICTS: <District />
 }

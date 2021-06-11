@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import { lastPositionTimeAgoLabels } from './dataFormatting'
+import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
 import TagPicker from 'rsuite/lib/TagPicker'
 import MultiCascader from 'rsuite/lib/MultiCascader'
 import { layersType as LayersType } from '../../domain/entities/layers'
@@ -25,7 +25,8 @@ const VesselListFilters = ({
   zones,
   geometrySelection,
   seeMore,
-  size
+  size,
+  controls
 }) => {
   const { current: countriesField } = useRef(Object.keys(Countries.getAlpha2Codes()).map(country => {
     return {
@@ -116,7 +117,7 @@ const VesselListFilters = ({
       <FilterDesc>
         Dernières positions depuis {' '}
       </FilterDesc>
-      <TimeAgoSelect>
+      <SelectWrapper>
         <SelectPicker
           style={{ width: 70, margin: '2px 10px 10px 0' }}
           searchable={false}
@@ -125,7 +126,7 @@ const VesselListFilters = ({
           onChange={lastPositionTimeAgo.setLastPositionTimeAgoFilter}
           data={lastPositionTimeAgoLabels}
         />
-      </TimeAgoSelect>
+      </SelectWrapper>
       <TagPicker
         value={countries.countriesFiltered}
         style={tagPickerStyle}
@@ -185,6 +186,19 @@ const VesselListFilters = ({
       {
         seeMore.seeMoreIsOpen
           ? <>
+            <FilterDesc>
+              Dernier contrôle il y a plus de {' '}
+            </FilterDesc>
+            <SelectWrapper>
+              <SelectPicker
+                style={{ width: 70, margin: '2px 10px 10px 0' }}
+                searchable={false}
+                placeholder="x mois..."
+                value={controls.lastControlMonthsAgo}
+                onChange={controls.setLastControlMonthsAgo}
+                data={lastControlAfterLabels}
+              />
+            </SelectWrapper>
             <TagPicker
               value={districts.districtsFiltered}
               style={tagPickerStyle}
@@ -257,7 +271,7 @@ const ZoneFilter = styled.div`
   vertical-align: sub;
 `
 
-const TimeAgoSelect = styled.div`
+const SelectWrapper = styled.div`
   width: 117px;
   display: inline-block;
   margin-right: 20px;

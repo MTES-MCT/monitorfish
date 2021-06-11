@@ -306,6 +306,11 @@ export function getVesselERSMessagesFromAPI (vesselIdentity) {
     .then(ers => ers)
 }
 
+/**
+ * Get vessel controls
+ * @returns {Promise<ControlResume>} The vessels
+ * @throws {Error}
+ */
 export function getVesselControlsFromAPI (vesselId, fromDate) {
   return fetch(`/bff/v1/vessels/${vesselId}/controls?afterDateTime=${fromDate.toISOString()}`)
     .then(response => {

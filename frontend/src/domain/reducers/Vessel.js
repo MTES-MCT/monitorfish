@@ -16,6 +16,7 @@ const vesselSlice = createSlice({
     isFocusedOnVesselSearch: false,
     fishingActivities: {},
     nextFishingActivities: null,
+    /** @type {ControlResume} controlResumeAndControl */
     controlResumeAndControls: {},
     nextControlResumeAndControls: null,
     temporaryTrackDepth: {
@@ -87,6 +88,11 @@ const vesselSlice = createSlice({
     resetNextFishingActivities (state) {
       state.nextFishingActivities = null
     },
+    /**
+     * Set selected vessel control resume and control
+     * @param {Object=} state
+     * @param {{payload: ControlResume}} action - the control resume
+     */
     setControlResumeAndControls (state, action) {
       state.controlResumeAndControls = action.payload
       state.loadingVessel = null

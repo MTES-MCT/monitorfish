@@ -92,6 +92,7 @@ const VesselsLayer = ({ map }) => {
     if (map && vessels && vessels.length) {
       const vesselsFeatures = vessels
         .filter(vessel => vessel)
+        .filter(vessel => vessel.latitude && vessel.longitude)
         .map((currentVessel, index) => buildLastPositionFeature(currentVessel, index))
         .filter(vessel => vessel)
 

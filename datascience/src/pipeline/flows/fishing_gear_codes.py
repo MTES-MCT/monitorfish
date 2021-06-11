@@ -54,7 +54,7 @@ def load_fishing_gear_codes(fishing_gear_codes):
     )
 
 
-with Flow("Update fishing gears reference") as flow:
+with Flow("Fishing gears") as flow:
     fishing_gear_codes = extract_fishing_gear_codes()
     fishing_gear_codes = clean_fishing_gear_codes(fishing_gear_codes)
     load_fishing_gear_codes(fishing_gear_codes)

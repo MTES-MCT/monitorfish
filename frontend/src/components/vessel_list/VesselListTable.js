@@ -81,86 +81,82 @@ const VesselListTable = props => {
                     </HeaderCell>
                     <CheckedCell dataKey="checked" onChange={props.handleChange} />
                 </Column>
-
                 <Column resizable sortable width={50} fixed>
                     <HeaderCell>
                         <Target />
                     </HeaderCell>
                     <TargetCell dataKey="targetNumber" onChange={props.handleChange} />
                 </Column>
-
                 <Column resizable sortable width={170} fixed>
                     <HeaderCell>Nom du navire</HeaderCell>
                     <Cell dataKey="vesselName" />
                 </Column>
-
                 <Column resizable sortable width={100}>
                     <HeaderCell>Marq. Ext.</HeaderCell>
                     <Cell dataKey="externalReferenceNumber" />
                 </Column>
-
                 <Column resizable sortable width={80}>
                     <HeaderCell>Call Sign</HeaderCell>
                     <Cell dataKey="ircs" />
                 </Column>
-
                 <Column resizable sortable width={80}>
                     <HeaderCell>MMSI</HeaderCell>
                     <Cell dataKey="mmsi" />
                 </Column>
-
                 <Column resizable sortable width={120}>
                     <HeaderCell>CFR</HeaderCell>
                     <Cell dataKey="internalReferenceNumber" />
                 </Column>
-
               <Column resizable width={120}>
                 <HeaderCell>Seg. flotte</HeaderCell>
                 <EllipsisCell dataKey="fleetSegments" />
               </Column>
-
               <Column resizable width={120}>
                 <HeaderCell>Engins à bord</HeaderCell>
                 <EllipsisCell dataKey="gears" />
               </Column>
-
               <Column resizable width={115}>
                 <HeaderCell>Espèces à bord</HeaderCell>
                 <EllipsisCell dataKey="species" />
               </Column>
-
               <Column resizable sortable width={50}>
-                    <HeaderCell>
-                        <FlagIcon />
-                    </HeaderCell>
-                    <FlagCell dataKey="flagState" />
-                </Column>
-
-                <Column resizable sortable width={130}>
-                    <HeaderCell>Dernier signal</HeaderCell>
-                    <TimeAgoCell dataKey="dateTimeTimestamp" />
-                </Column>
-
-                <Column resizable width={100}>
-                    <HeaderCell>Latitude</HeaderCell>
-                    <Cell dataKey="latitude" />
-                </Column>
-
-                <Column resizable width={110}>
-                    <HeaderCell>Longitude</HeaderCell>
-                    <Cell dataKey="longitude" />
-                </Column>
-
-                <Column resizable sortable width={60}>
-                    <HeaderCell>Cap</HeaderCell>
-                    <Cell dataKey="course" />
-                </Column>
-
-                <Column resizable sortable width={70}>
-                    <HeaderCell>Vitesse</HeaderCell>
-                    <Cell dataKey="speed" />
-                </Column>
-
+                  <HeaderCell>
+                      <FlagIcon />
+                  </HeaderCell>
+                  <FlagCell dataKey="flagState" />
+              </Column>
+              <Column resizable sortable width={130}>
+                  <HeaderCell>Dernier signal</HeaderCell>
+                  <TimeAgoCell dataKey="dateTimeTimestamp" />
+              </Column>
+              <Column resizable width={100}>
+                  <HeaderCell>Latitude</HeaderCell>
+                  <Cell dataKey="latitude" />
+              </Column>
+              <Column resizable width={110}>
+                  <HeaderCell>Longitude</HeaderCell>
+                  <Cell dataKey="longitude" />
+              </Column>
+              <Column resizable sortable width={60}>
+                  <HeaderCell>Cap</HeaderCell>
+                  <Cell dataKey="course" />
+              </Column>
+              <Column resizable sortable width={70}>
+                  <HeaderCell>Vitesse</HeaderCell>
+                  <Cell dataKey="speed" />
+              </Column>
+              <Column resizable sortable width={130}>
+                <HeaderCell>Dernier contrôle</HeaderCell>
+                <TimeAgoCell dataKey="lastControlDateTimeTimestamp"/>
+              </Column>
+              <Column sortable width={50}>
+                <HeaderCell>Infr.</HeaderCell>
+                <Cell dataKey="lastControlInfraction"/>
+              </Column>
+              <Column resizable sortable width={130}>
+                <HeaderCell>Observations</HeaderCell>
+                <Cell dataKey="postControlComment"/>
+              </Column>
               {
                 props.filters.districtsFiltered && props.filters.districtsFiltered.length
                   ? <Column resizable sortable width={100}>

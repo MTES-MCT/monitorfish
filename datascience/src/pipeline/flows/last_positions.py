@@ -4,6 +4,7 @@ import prefect
 from prefect import Flow, task
 
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.processing import join_on_multiple_keys
 
 
 @task(checkpoint=False)
@@ -23,8 +24,24 @@ def extract_last_positions():
 
 
 @task(checkpoint=False)
-def merge(last_positions, current_segments):
-    last_positions = pd.merge(last_positions, current_segments, on="cfr", how="outer")
+def extract_last_controls():
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/last_controls.sql",
+        parse_dates=["last_control_datetime_utc"],
+    )
+
+
+@task(checkpoint=False)
+def merge(last_positions, current_segments, last_controls):
+    last_positions = pd.merge(last_positions, current_segments, on="cfr", how="left")
+    last_positions = join_on_multiple_keys(
+        last_positions,
+        last_controls,
+        on=["cfr", "ircs", "external_immatriculation"],
+        how="left",
+    )
+
     last_positions = last_positions.fillna({"total_weight_onboard": 0.0})
 
     last_positions.loc[:, "trip_number"] = last_positions.trip_number.map(
@@ -35,7 +52,7 @@ def merge(last_positions, current_segments):
         ["NaT", np.nan], [None, None]
     )
 
-    last_positions = last_positions.reset_index().rename(columns={"index": "id"})
+    last_positions["id"] = np.arange(0, len(last_positions))
 
     return last_positions
 
@@ -57,11 +74,9 @@ def load_last_positions(last_positions):
     )
 
 
-with Flow(
-    "Extract last positions, enrich with current segments, "
-    "catches and gear onboard since last dep"
-) as flow:
+with Flow("Last positions") as flow:
     current_segments = extract_current_segments()
     last_positions = extract_last_positions()
-    last_positions = merge(last_positions, current_segments)
+    last_controls = extract_last_controls()
+    last_positions = merge(last_positions, current_segments, last_controls)
     load_last_positions(last_positions)

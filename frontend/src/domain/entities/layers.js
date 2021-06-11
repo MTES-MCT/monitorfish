@@ -335,9 +335,6 @@ export const baseLayers = {
   }
 }
 
-export const vesselIconIsLight = selectedBaseLayer => selectedBaseLayer === baseLayers.DARK.code ||
-    selectedBaseLayer === baseLayers.SATELLITE.code
-
 export const getZonesAndSubZonesPromises = () => {
   return Object.keys(Layers)
     .map(layerName => Layers[layerName])

@@ -4,6 +4,7 @@ import { getCoordinates, timeagoFrenchLocale } from '../../utils'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
+import { OverlayPosition } from '../overlays/position'
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselCard = props => {
@@ -114,7 +115,18 @@ const VesselCard = props => {
 
             </VesselCardBottom>
             <TrianglePointer>
-                <TriangleShadow />
+                {
+                    props.overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow /> : null
+                }
+                {
+                    props.overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow /> : null
+                }
+                {
+                    props.overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow /> : null
+                }
+                {
+                    props.overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow /> : null
+                }
             </TrianglePointer>
         </>
   )
@@ -218,7 +230,7 @@ const TrianglePointer = styled.div`
   width: auto;
 `
 
-const TriangleShadow = styled.div`
+const BottomTriangleShadow = styled.div`
   position: absolute;
   width: 0;
   height: 0;
@@ -227,6 +239,46 @@ const TriangleShadow = styled.div`
   border-color: ${COLORS.grayBackground} transparent transparent transparent;
   margin-left: 179px;
   margin-top: -1px;
+  clear: top;
+`
+
+const TopTriangleShadow = styled.div`
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: transparent;
+  border-right : 6px solid transparent;
+  border-bottom : 11px solid ${COLORS.grayBackground};
+  border-left : 6px solid transparent;
+  margin-left: 179px;
+  margin-top: -267px;
+  clear: top;
+`
+
+const RightTriangleShadow = styled.div`
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-right: transparent;
+  border-top : 6px solid transparent;
+  border-bottom : 6px solid transparent;
+  border-left : 11px solid ${COLORS.grayBackground};
+  margin-left: 385px;
+  margin-top: -134px;
+  clear: top;
+`
+
+const LeftTriangleShadow = styled.div`
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-top: 6px solid transparent;
+  border-right: 11px solid ${COLORS.grayBackground};
+  border-bottom: 6px solid transparent;
+  border-left: transparent;
+  margin-left: -11px;
+  margin-top: -134px;
   clear: top;
 `
 

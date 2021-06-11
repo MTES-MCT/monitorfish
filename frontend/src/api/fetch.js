@@ -50,23 +50,19 @@ export function getVesselsLastPositionsFromAPI () {
 }
 
 /**
- * Get vessel informations and last positions
+ * Get vessel information and last positions
  * @returns {Promise<Vessel>} The vessels
  * @throws {Error}
  */
-export function getVesselFromAPI (
-  internalReferenceNumber,
-  externalReferenceNumber,
-  IRCS,
-  vesselTrackDepthObject) {
-  internalReferenceNumber = internalReferenceNumber || ''
-  externalReferenceNumber = externalReferenceNumber || ''
-  IRCS = IRCS || ''
+export function getVesselFromAPI (identity, vesselTrackDepthObject) {
+  const internalReferenceNumber = identity.internalReferenceNumber || ''
+  const externalReferenceNumber = identity.externalReferenceNumber || ''
+  const ircs = identity.ircs || ''
   const trackDepth = vesselTrackDepthObject.trackDepth ? vesselTrackDepthObject.trackDepth : ''
   const afterDateTime = vesselTrackDepthObject.afterDateTime ? vesselTrackDepthObject.afterDateTime.toISOString() : ''
   const beforeDateTime = vesselTrackDepthObject.beforeDateTime ? vesselTrackDepthObject.beforeDateTime.toISOString() : ''
 
-  return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${IRCS}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
+  return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
     .then(response => {
       if (response.status === OK) {
         return response.json().then(vessel => {

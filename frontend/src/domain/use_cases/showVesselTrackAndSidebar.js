@@ -1,10 +1,11 @@
 import { getVesselFromAPI } from '../../api/fetch'
-import { loadingVessel, openVesselSidebar, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
-import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
-import { animateToVessel, setUpdatedFromCron } from '../reducers/Map'
+import { Vessel, vesselsAreEquals } from '../entities/vessel'
+import { setUpdatedFromCron } from '../reducers/Map'
+import unselectVessel from './unselectVessel'
 
 const showVesselTrackAndSidebar = (
   vesselFeatureAndIdentity,
@@ -12,20 +13,12 @@ const showVesselTrackAndSidebar = (
   calledFromCron,
   vesselTrackDepthObject) => (dispatch, getState) => {
   const alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
-  if (alreadyShownVesselFromSearch(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch)) {
-    if (getState().vessel.selectedVessel) {
-      dispatch(openVesselSidebar())
-    }
+  unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, dispatch)
 
-    return
+  if (vesselFeatureAndIdentity.feature) {
+    Vessel.setVesselAsSelected(vesselFeatureAndIdentity.feature)
   }
-
-  dispatch(setUpdatedFromCron(calledFromCron))
-  removePreviousSelectedFeature(getState)
-
-  dispatch(removeError())
-  dispatch(loadingVessel(vesselFeatureAndIdentity))
-  dispatch(openVesselSidebar())
+  dispatchLoadingVessel(dispatch, calledFromCron, vesselFeatureAndIdentity)
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
     calledFromCron,
@@ -33,22 +26,9 @@ const showVesselTrackAndSidebar = (
     getState().vessel.temporaryTrackDepth,
     getState().map.vesselTrackDepth)
 
-  getVesselFromAPI(
-    vesselFeatureAndIdentity.identity.internalReferenceNumber,
-    vesselFeatureAndIdentity.identity.externalReferenceNumber,
-    vesselFeatureAndIdentity.identity.ircs,
-    nextVesselTrackDepthObject)
+  getVesselFromAPI(vesselFeatureAndIdentity.identity, nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {
-      if (trackDepthHasBeenModified(vesselAndTrackDepthModified, calledFromCron)) {
-        dispatch(setError(new NoDEPFoundError("Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
-                  'les positions des dernières 24 heures.')))
-      } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, calledFromCron)) {
-        dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position.")))
-      } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
-        dispatch(setError(new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")))
-      } else {
-        dispatch(removeError())
-      }
+      dispatchErrors(dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject)
 
       dispatch(setSelectedVessel(vesselAndTrackDepthModified.vessel))
     }).catch(error => {
@@ -58,11 +38,34 @@ const showVesselTrackAndSidebar = (
     })
 }
 
-function alreadyShownVesselFromSearch (updateShowedVessel, alreadySelectedVessel, vesselFeatureAndIdentity, fromSearch) {
-  return !updateShowedVessel &&
-      fromSearch &&
-      alreadySelectedVessel &&
-      alreadySelectedVessel.feature === vesselFeatureAndIdentity.feature
+function dispatchLoadingVessel (dispatch, calledFromCron, vesselFeatureAndIdentity) {
+  dispatch(setUpdatedFromCron(calledFromCron))
+  dispatch(removeError())
+  dispatch(loadingVessel({
+    vesselFeatureAndIdentity: vesselFeatureAndIdentity,
+    calledFromCron: calledFromCron
+  }))
+}
+
+function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, dispatch) {
+  if (!calledFromCron &&
+    alreadySelectedVessel &&
+    !vesselsAreEquals(vesselFeatureAndIdentity.identity, alreadySelectedVessel.identity)) {
+    dispatch(unselectVessel())
+  }
+}
+
+function dispatchErrors (dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject) {
+  if (trackDepthHasBeenModified(vesselAndTrackDepthModified, calledFromCron)) {
+    dispatch(setError(new NoDEPFoundError('Nous n\'avons pas trouvé de dernier DEP pour ce navire, nous affichons ' +
+      'les positions des dernières 24 heures.')))
+  } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, calledFromCron)) {
+    dispatch(setError(new NoPositionsFoundError('Nous n\'avons trouvé aucune position.')))
+  } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
+    dispatch(setError(new NoPositionsFoundError('Nous n\'avons trouvé aucune position pour ces dates.')))
+  } else {
+    dispatch(removeError())
+  }
 }
 
 function getVesselTrackDepth (updateShowedVessel, trackDepthParameters, temporaryTrackDepth, vesselTrackDepth) {
@@ -111,16 +114,6 @@ function trackDepthHasBeenModified (vesselAndTrackDepthModified, updateShowedVes
       !updateShowedVessel &&
       vesselAndTrackDepthModified.vessel.positions &&
       vesselAndTrackDepthModified.vessel.positions.length
-}
-
-function removePreviousSelectedFeature (getState) {
-  const previousSelectedFeatureAndIdentity = getState().vessel.selectedVesselFeatureAndIdentity
-
-  if (previousSelectedFeatureAndIdentity && previousSelectedFeatureAndIdentity.feature) {
-    const stylesWithoutVesselSelector = previousSelectedFeatureAndIdentity.feature.getStyle()
-      .filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
-    previousSelectedFeatureAndIdentity.feature.setStyle([...stylesWithoutVesselSelector])
-  }
 }
 
 export default showVesselTrackAndSidebar

@@ -15,3 +15,8 @@
  * @property {number} totalFeatures
  * @property {string} type
  */
+
+/**
+ * @typedef GeoJSONGeometry
+ * @property {{type: string, coordinates: Object}} geometry
+ */

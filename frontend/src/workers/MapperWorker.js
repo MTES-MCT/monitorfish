@@ -1,5 +1,5 @@
 import * as Comlink from 'comlink'
-import { mapToRegulatoryZone } from '../domain/entities/regulatory'
+import { mapToRegulatoryZone, lawTypeList } from '../domain/entities/regulatory'
 import { vesselSize } from '../domain/entities/vessel'
 import { getDateMonthsBefore } from '../utils'
 
@@ -35,12 +35,6 @@ class MapperWorker {
   }
 
   convertGeoJSONFeaturesToObjectByRegTerritory (features) {
-    const lawTypeList = {
-      'Reg locale': 'France',
-      'Reg 494 - Merlu': 'UE',
-      'R(UE) 2019/1241': 'UE',
-      'R(UE) 1380/2013': 'UE'
-    }
     const featuresWithoutGeometry = features.features.map(feature => {
       return mapToRegulatoryZone(feature.properties)
     })

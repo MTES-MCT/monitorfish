@@ -32,12 +32,20 @@ const VesselSummary = props => {
 
   useEffect(() => {
     if (props.vesselLastPositionFeature) {
+      const {
+        course,
+        latitude,
+        longitude,
+        speed,
+        dateTime
+      } = props.vesselLastPositionFeature.getProperties()
+
       setLastPosition({
-        course: props.vesselLastPositionFeature.getProperties().course,
-        latitude: props.vesselLastPositionFeature.getProperties().latitude,
-        longitude: props.vesselLastPositionFeature.getProperties().longitude,
-        speed: props.vesselLastPositionFeature.getProperties().speed,
-        dateTime: props.vesselLastPositionFeature.getProperties().dateTime
+        course,
+        latitude,
+        longitude,
+        speed,
+        dateTime
       })
     } else if (props.vessel.positions && props.vessel.positions.length) {
       setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])

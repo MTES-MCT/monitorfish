@@ -4,15 +4,23 @@ import Overlay from 'ol/Overlay'
 import VesselCard from '../cards/VesselCard'
 import { COLORS } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
-import { getOverlayPosition, OverlayPosition } from './position'
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './position'
 
 const overlayBoxSize = 260
+const margins = {
+  xRight: -407,
+  xMiddle: -185,
+  xLeft: 20,
+  yTop: 20,
+  yMiddle: -127,
+  yBottom: -277,
+}
 
 const VesselCardOverlay = ({ feature, map }) => {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
-  const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([-277, -185])
+  const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([margins.yBottom, margins.xMiddle])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
 
   const overlayCallback = useCallback(
@@ -45,7 +53,7 @@ const VesselCardOverlay = ({ feature, map }) => {
 
         const nextOverlayPosition = getNextOverlayPosition()
         setOverlayPosition(nextOverlayPosition)
-        setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition))
+        setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
       } else {
         overlayRef.current.style.display = 'none'
         setVesselFeatureToShowOnCard(null)
@@ -59,20 +67,6 @@ const VesselCardOverlay = ({ feature, map }) => {
     const boxSize = map.getView().getResolution() * overlayBoxSize
 
     return getOverlayPosition(boxSize, x, y, extent)
-  }
-
-  function getTopLeftMargin(nextOverlayPosition) {
-    switch (nextOverlayPosition) {
-      case OverlayPosition.TOP_LEFT: return [20, 20]
-      case OverlayPosition.TOP_RIGHT: return [20, -407]
-      case OverlayPosition.BOTTOM_LEFT: return [-277, 20]
-      case OverlayPosition.BOTTOM_RIGHT: return [-277, -407]
-      case OverlayPosition.TOP: return [20, -185]
-      case OverlayPosition.RIGHT: return [-127, -407]
-      case OverlayPosition.BOTTOM: return [-277, -185]
-      case OverlayPosition.LEFT: return [-127, 20]
-      default: return [-277, -185]
-    }
   }
 
   return (

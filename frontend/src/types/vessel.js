@@ -43,6 +43,9 @@
  * @property {number} tripNumber
  * @property {string} vesselName
  * @property {number} width
+ * @property {string} lastControlDateTime
+ * @property {boolean} lastControlInfraction
+ * @property {number} postControlComment
  */
 
 /**

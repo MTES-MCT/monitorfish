@@ -70,7 +70,19 @@ export const CSVOptions = {
   speed: {
     code: 'speed',
     name: 'Vitesse'
-  }
+  },
+  lastControlDateTime: {
+    code: 'lastControlDateTime',
+    name: 'Dernier contrôle'
+  },
+  lastControlInfraction: {
+    code: 'lastControlInfraction',
+    name: 'Infraction'
+  },
+  postControlComment: {
+    code: 'postControlComment',
+    name: 'Observations'
+  },
 }
 
 export const lastPositionTimeAgoLabels = [
@@ -108,6 +120,41 @@ export const lastPositionTimeAgoLabels = [
   }
 ]
 
+export const lastControlAfterLabels = [
+  {
+    label: '1 mois',
+    value: 1
+  },
+  {
+    label: '2 mois',
+    value: 2
+  },
+  {
+    label: '3 mois',
+    value: 3
+  },
+  {
+    label: '4 mois',
+    value: 4
+  },
+  {
+    label: '5 mois',
+    value: 5
+  },
+  {
+    label: '6 mois',
+    value: 6
+  },
+  {
+    label: '12 mois',
+    value: 12
+  },
+  {
+    label: '24 mois',
+    value: 24
+  }
+]
+
 export function getVesselObjectFromFeature (vessel, coordinates) {
   return {
     targetNumber: '',
@@ -135,6 +182,10 @@ export function getVesselObjectFromFeature (vessel, coordinates) {
     species: vessel.getProperties().speciesOnboard ? [...new Set(vessel.getProperties().speciesOnboard.map(species => species.species))].join(', ') : '',
     speciesArray: vessel.getProperties().speciesOnboard ? [...new Set(vessel.getProperties().speciesOnboard.map(species => species.species))] : [],
     district: vessel.getProperties().district,
-    districtCode: vessel.getProperties().districtCode
+    districtCode: vessel.getProperties().districtCode,
+    lastControlDateTimeTimestamp: new Date(vessel.getProperties().lastControlDateTime).getTime(),
+    lastControlDateTime: vessel.getProperties().lastControlDateTime,
+    lastControlInfraction: vessel.getProperties().lastControlInfraction ? 'Oui' : 'Non',
+    postControlComment: vessel.getProperties().postControlComment,
   }
 }

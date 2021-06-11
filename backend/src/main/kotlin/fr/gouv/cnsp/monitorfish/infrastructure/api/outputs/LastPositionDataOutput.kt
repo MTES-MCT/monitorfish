@@ -33,7 +33,10 @@ data class LastPositionDataOutput(
         val gearOnboard: List<GearLastPositionDataOutput>? = null,
         val segments: List<String>? = listOf(),
         val speciesOnboard: List<SpeciesLastPositionDataOutput>? = null,
-        val totalWeightOnboard: Double? = null) {
+        val totalWeightOnboard: Double? = null,
+        val lastControlDateTime: ZonedDateTime? = null,
+        val lastControlInfraction: Boolean? = null,
+        val postControlComment: String? = null) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -63,8 +66,10 @@ data class LastPositionDataOutput(
                     gearOnboard = position.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
                     segments = position.segments,
                     speciesOnboard = position.speciesOnboard?.map { SpeciesLastPositionDataOutput.fromSpeciesLastPosition(it) },
-                    totalWeightOnboard = position.totalWeightOnboard
-            )
+                    totalWeightOnboard = position.totalWeightOnboard,
+                    lastControlDateTime = position.lastControlDateTime,
+                    lastControlInfraction = position.lastControlInfraction,
+                    postControlComment = position.postControlComment)
         }
     }
 }

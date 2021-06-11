@@ -84,7 +84,13 @@ data class LastPositionEntity(
         @Column(name = "species_onboard", columnDefinition = "jsonb")
         val speciesOnboard: String? = null,
         @Column(name = "total_weight_onboard")
-        val totalWeightOnboard: Double? = null) : Serializable {
+        val totalWeightOnboard: Double? = null,
+        @Column(name = "last_control_datetime_utc")
+        val lastControlDateTime: ZonedDateTime? = null,
+        @Column(name = "last_control_infraction")
+        val lastControlInfraction: Boolean? = null,
+        @Column(name = "post_control_comments")
+        val postControlComment: String? = null) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,
@@ -113,5 +119,8 @@ data class LastPositionEntity(
             segments = segments,
             speciesOnboard = mapper.readValue(speciesOnboard, mapper.typeFactory
                     .constructCollectionType(MutableList::class.java, Species::class.java)),
-            totalWeightOnboard = totalWeightOnboard)
+            totalWeightOnboard = totalWeightOnboard,
+            lastControlDateTime = lastControlDateTime,
+            lastControlInfraction = lastControlInfraction,
+            postControlComment = postControlComment)
 }

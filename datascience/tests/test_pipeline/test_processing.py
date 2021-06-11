@@ -17,6 +17,7 @@ from src.pipeline.processing import (
     df_values_to_psql_arrays,
     drop_rows_already_in_table,
     is_a_value,
+    join_on_multiple_keys,
     prepare_df_for_loading,
     to_json,
     to_pgarr,
@@ -375,3 +376,93 @@ class TestProcessingMethods(unittest.TestCase):
         self.assertTrue(isinstance(res, pd.DataFrame))
         self.assertEqual(res.shape, (2, 6))
         self.assertEqual(expected_values, res.values.tolist())
+
+    def test_join_on_multiple_keys(self):
+        left = pd.DataFrame(
+            {
+                "key_1": [1, 2, None, 4, None, 6, None, np.nan],
+                "key_2": ["a", None, "c", "d", "e", None, None, np.nan],
+                "key_3": ["A", "B", np.nan, "D", "E", None, None, np.nan],
+                "value_left_1": [9, 8, 7, 6, 5, 4, 3, 2],
+                "value_left_2": [90, 80, "70", None, 5.025, "left", 40, 30],
+            }
+        )
+
+        right = pd.DataFrame(
+            {
+                "key_1": [1, 2, 3, 4, 5, 7, np.nan],
+                "key_2": ["a", None, "c", "ddd", np.nan, None, np.nan],
+                "key_3": ["A", "B", "C", "DDD", "E", None, np.nan],
+                "value_right": ["R1", "R2", "R3", "R4", "R5", "right", np.nan],
+            }
+        )
+
+        # Test inner join
+        res_inner = join_on_multiple_keys(
+            left, right, on=["key_1", "key_2", "key_3"], how="inner"
+        ).fillna("null")
+
+        expected_values = [
+            [1.0, "a", "A", 9, 90, "R1"],
+            [2.0, "null", "B", 8, 80, "R2"],
+            [4.0, "d", "D", 6, "null", "R4"],
+            [3.0, "c", "C", 7, "70", "R3"],
+            [5.0, "e", "E", 5, 5.025, "R5"],
+        ]
+
+        self.assertEqual(res_inner.values.tolist(), expected_values)
+
+        # Test left join
+        res_left = join_on_multiple_keys(
+            left, right, on=["key_1", "key_2", "key_3"], how="left"
+        ).fillna("null")
+
+        expected_values = [
+            [1.0, "a", "A", 9, 90, "R1"],
+            [2.0, "null", "B", 8, 80, "R2"],
+            [4.0, "d", "D", 6, "null", "R4"],
+            [3.0, "c", "C", 7, "70", "R3"],
+            [5.0, "e", "E", 5, 5.025, "R5"],
+            [6.0, "null", "null", 4, "left", "null"],
+            ["null", "null", "null", 3, 40, "null"],
+            ["null", "null", "null", 2, 30, "null"],
+        ]
+
+        self.assertEqual(res_left.values.tolist(), expected_values)
+
+        # Test right join
+        res_right = join_on_multiple_keys(
+            left, right, on=["key_1", "key_2", "key_3"], how="right"
+        ).fillna("null")
+
+        expected_values = [
+            [1.0, "a", "A", 9.0, 90, "R1"],
+            [2.0, "null", "B", 8.0, 80, "R2"],
+            [4.0, "d", "D", 6.0, "null", "R4"],
+            [3.0, "c", "C", 7.0, "70", "R3"],
+            [5.0, "e", "E", 5.0, 5.025, "R5"],
+            [7.0, "null", "null", "null", "null", "right"],
+            ["null", "null", "null", "null", "null", "null"],
+        ]
+
+        self.assertEqual(res_right.values.tolist(), expected_values)
+
+        # Test outer join
+        res_outer = join_on_multiple_keys(
+            left, right, on=["key_1", "key_2", "key_3"], how="outer"
+        ).fillna("null")
+
+        expected_values = [
+            [1.0, "a", "A", 9.0, 90, "R1"],
+            [2.0, "null", "B", 8.0, 80, "R2"],
+            [4.0, "d", "D", 6.0, "null", "R4"],
+            [3.0, "c", "C", 7.0, "70", "R3"],
+            [5.0, "e", "E", 5.0, 5.025, "R5"],
+            [6.0, "null", "null", 4.0, "left", "null"],
+            ["null", "null", "null", 3.0, 40, "null"],
+            ["null", "null", "null", 2.0, 30, "null"],
+            [7.0, "null", "null", "null", "null", "right"],
+            ["null", "null", "null", "null", "null", "null"],
+        ]
+
+        self.assertEqual(res_outer.values.tolist(), expected_values)

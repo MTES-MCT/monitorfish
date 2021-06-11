@@ -53,6 +53,7 @@ const VesselList = () => {
   // Filters
   const [zonesFilter, setZonesFilter] = useState([])
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(3)
+  const [lastControlMonthsAgo, setLastControlMonthsAgo] = useState(null)
   const [countriesFiltered, setCountriesFiltered] = useState([])
   const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
   const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])
@@ -129,7 +130,8 @@ const VesselList = () => {
         gearsFiltered,
         districtsFiltered,
         speciesFiltered,
-        vesselsSizeValuesChecked
+        vesselsSizeValuesChecked,
+        lastControlMonthsAgo: lastControlMonthsAgo
       }
 
       dispatch(getFilteredVessels(vessels, filters))
@@ -147,7 +149,8 @@ const VesselList = () => {
     gearsFiltered,
     districtsFiltered,
     speciesFiltered,
-    vesselsSizeValuesChecked
+    vesselsSizeValuesChecked,
+    lastControlMonthsAgo
   ])
 
   useEffect(() => {
@@ -349,6 +352,10 @@ const VesselList = () => {
                 vesselsSizeValuesChecked,
                 setVesselsSizeValuesChecked
               }}
+              controls={{
+                lastControlMonthsAgo,
+                setLastControlMonthsAgo
+              }}
             />
             <VesselListTable
               vessels={vessels}
@@ -408,7 +415,8 @@ const VesselList = () => {
           speciesFiltered,
           districtsFiltered,
           zonesSelected,
-          vesselsSizeValuesChecked
+          vesselsSizeValuesChecked,
+          lastControlMonthsAgo: lastControlMonthsAgo
         }}
         addFilter={addFilterCallback}
       />

@@ -42,6 +42,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(position?.speciesOnboard?.first()?.gear).isEqualTo("OTB")
         assertThat(position?.speciesOnboard?.first()?.species).isEqualTo("BLI")
         assertThat(position?.speciesOnboard?.first()?.weight).isEqualTo(13.46)
+
+        assertThat(position?.lastControlDateTime).isNotNull
+        assertThat(position?.lastControlInfraction).isTrue
+        assertThat(position?.postControlComment).isEqualTo("Tout va bien")
     }
 
 }

@@ -55,7 +55,11 @@ export class Vessel {
       gearOnboard: vessel.gearOnboard,
       segments: vessel.segments,
       speciesOnboard: vessel.speciesOnboard,
-      totalWeightOnboard: vessel.totalWeightOnboard
+      totalWeightOnboard: vessel.totalWeightOnboard,
+      lastControlDateTime: vessel.lastControlDateTime,
+      lastControlInfraction: vessel.lastControlInfraction,
+      postControlComment: vessel.postControlComment
+
     })
 
     this.feature.setId(`${Layers.VESSELS.code}:${options.id}`)

@@ -80,7 +80,11 @@ const filterSlice = createSlice({
 
       state.filters = state.filters.map(filter => {
         if (filter.uuid === filterUUID) {
-          filter.filters[tagType] = filter.filters[tagType].filter(tag => tag !== tagValue)
+          if (tagType === 'lastControlMonthsAgo') {
+            filter.filters.lastControlMonthsAgo = null
+          } else {
+            filter.filters[tagType] = filter.filters[tagType].filter(tag => tag !== tagValue)
+          }
 
           const filterHasNoTag = (!filter.filters.countriesFiltered || !filter.filters.countriesFiltered.length) &&
             (!filter.filters.fleetSegmentsFiltered || !filter.filters.fleetSegmentsFiltered.length) &&
@@ -88,6 +92,7 @@ const filterSlice = createSlice({
             (!filter.filters.speciesFiltered || !filter.filters.speciesFiltered.length) &&
             (!filter.filters.districtsFiltered || !filter.filters.districtsFiltered.length) &&
             (!filter.filters.vesselsSizeValuesChecked || !filter.filters.vesselsSizeValuesChecked.length) &&
+            (!filter.filters.lastControlMonthsAgo) &&
             (!filter.filters.zonesSelected || !filter.filters.zonesSelected.length)
 
           if (filterHasNoTag) {

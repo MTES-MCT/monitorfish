@@ -463,6 +463,6 @@ def load_ports_to_monitorfish(ports):
         )
 
 
-with Flow("Extract ports from data.gouv.fr and load to Monitorfish") as flow:
+with Flow("Ports") as flow:
     ports = extract_datagouv_ports(ports_url=PORTS_URL, proxies=PROXIES)
     load_ports_to_monitorfish(ports)

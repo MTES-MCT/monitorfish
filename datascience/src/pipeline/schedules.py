@@ -3,13 +3,13 @@ from datetime import timedelta
 from prefect.schedules import CronSchedule, IntervalSchedule
 
 from src.pipeline.flows import (
+    control_anteriority,
     controllers,
     controls,
     current_segments,
     ers,
     fishing_gear_codes,
     fleet_segments,
-    heartbeat,
     infractions,
     last_positions,
     ports,
@@ -18,10 +18,10 @@ from src.pipeline.flows import (
 )
 
 ################################ Define flow schedules ################################
+control_anteriority.flow.schedule = IntervalSchedule(interval=timedelta(hours=1))
 current_segments.flow.schedule = IntervalSchedule(interval=timedelta(minutes=10))
 ers.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
 fishing_gear_codes.flow.schedule = CronSchedule("0 3 * * *")
-heartbeat.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
 last_positions.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
 species.flow.schedule = CronSchedule("0 4 * * *")
 vessels.flow.schedule = CronSchedule("0 2 * * *")
@@ -30,11 +30,11 @@ vessels.flow.schedule = CronSchedule("0 2 * * *")
 flows_to_register = [
     controllers.flow,
     controls.flow,
+    control_anteriority.flow,
     current_segments.flow,
     ers.flow,
     fishing_gear_codes.flow,
     fleet_segments.flow,
-    heartbeat.flow,
     infractions.flow,
     last_positions.flow,
     ports.flow,

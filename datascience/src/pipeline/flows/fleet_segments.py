@@ -31,6 +31,6 @@ def load_segments(segments):
     )
 
 
-with Flow("Load preliminary fleet segments definitions") as flow:
+with Flow("Fleet segments") as flow:
     segments = extract_segments()
     load_segments(segments)

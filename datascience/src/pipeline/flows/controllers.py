@@ -22,6 +22,6 @@ def load_controllers(controllers):
     )
 
 
-with Flow("Update controllers reference") as flow:
+with Flow("Controllers") as flow:
     controllers = extract_controllers()
     load_controllers(controllers)

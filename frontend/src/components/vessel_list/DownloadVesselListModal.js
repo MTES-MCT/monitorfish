@@ -8,6 +8,8 @@ import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { getDate } from '../../utils'
 import { CSVOptions } from './dataFormatting'
+import { TimeAgoCell } from './tableCells'
+import Table from 'rsuite/lib/Table'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -123,6 +125,9 @@ const DownloadVesselListModal = props => {
                             <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox><br/>
                             <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox><br/>
                             <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox><br/>
+                            <Checkbox value={CSVOptions.lastControlDateTime.code}>Dernier contrôle</Checkbox><br/>
+                            <Checkbox value={CSVOptions.lastControlInfraction.code}>Infraction</Checkbox><br/>
+                            <Checkbox value={CSVOptions.postControlComment.code}>Observations</Checkbox><br/>
                         </div>
                         <div>
                             <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>

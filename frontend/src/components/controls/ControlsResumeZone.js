@@ -7,9 +7,11 @@ import { Title, StrongText, NoValue, Zone } from './Controls.style'
 
 const ControlsResumeZone = props => {
   const {
+    /** @type {ControlResume} resume */
     resume,
     controlsFromDate
   } = props
+
   const {
     numberOfSeaControls,
     numberOfLandControls,

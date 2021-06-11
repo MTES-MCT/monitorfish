@@ -5,6 +5,7 @@ import ControlField from './ControlField'
 
 const LastControlZone = props => {
   const {
+    /** @type {LastControls} lastControlList */
     lastControlList,
     controlsFromDate
   } = props

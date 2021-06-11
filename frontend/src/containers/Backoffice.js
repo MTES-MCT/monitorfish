@@ -1,38 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import BaseMap from './BaseMap'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import BaseMap from './BaseMap'
+import LawType from '../components/backoffice/LawType'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
 import { ReactComponent as SearchIconSVG } from '../components/icons/Loupe.svg'
-import RegulatoryZoneSelectedLayer from '../components/regulatory_zones/RegulatoryZoneSelectedLayer'
 //import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
 //import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 //import zoomInSubZone from '../domain/use_cases/zoomInSubZone'
 import { COLORS } from '../constants/constants'
 import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
 
-// actions to regulatory zones
-import showLayer from '../domain/use_cases/showLayer'
-import hideLayers from '../domain/use_cases/hideLayers'
-import LayersEnum from '../domain/entities/layers'
-
 const Backoffice = () => {
   const [searchText, setSearchText] = useState('')
   const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState(undefined)
   const dispatch = useDispatch()
-
-  const {
-    isReadyToShowRegulatoryZones,
-    //regulatoryZoneMetadataPanelIsOpen,
-    //loadingRegulatoryZoneMetadata,
-    regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)
-
-  const showedLayers = useSelector(state => state.layer.showedLayers)
-  console.log(showedLayers)
-
-  const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
 
   const searchRegulatoryZone = () => {
     console.log(`Search text is ${searchText}`)
@@ -52,60 +35,14 @@ const Backoffice = () => {
     getRegulatoryZones()
   }, [])
 
-  function callShowRegulatoryZone (regulatoryZone) {
-    dispatch(showLayer({
-      type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
-    }))
-  }
-
-  function callHideRegulatoryZone (regulatoryZone) {
-    dispatch(hideLayers({
-      type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
-    }))
-  }
-
-  const displayRegulatoryZoneList = (regulatoryZoneList) => {
-    return (<>
-      {
-        regulatoryZoneList && Object.keys(regulatoryZoneList).length > 0
-          ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName, index) => {
-            return <RegulatoryZoneSelectedLayer
-              key={regulatoryZoneLayerName}
-              callShowRegulatoryZone={callShowRegulatoryZone}
-              callHideRegulatoryZone={callHideRegulatoryZone}
-              callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
-              callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-              callZoomInSubZone={callZoomInSubZone}
-              showedLayers={[]}
-              regulatoryZoneName={regulatoryZoneLayerName}
-              increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-              decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-              regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
-              isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
-              regulatoryZoneMetadata={undefined}
-              gears={undefined}
-              isReadyToShowRegulatoryZones={true}
-              allowRemoveZone={false}
-            />
-          })
-          : <div>Aucune zone disponible</div>
-        }
-      </>
-    )
-  }
-
   const displayRegulatoryZoneListByLawType = (regZoneByLawType) => {
     return (
       regZoneByLawType && Object.keys(regZoneByLawType).length > 0
         ? Object.keys(regZoneByLawType).map(lawType => {
-          return <>
-            <LawTypeName>{lawType}</LawTypeName>
-            <RegulatoryZoneLayerList key={lawType}>
-              {displayRegulatoryZoneList(regZoneByLawType[lawType])}
-        </RegulatoryZoneLayerList>
-          </>
+          return <LawType
+            key={lawType}
+            lawType={lawType}
+            regZoneByLawType={regZoneByLawType} />
         })
         : <div>Aucune Law Type disponible</div>)
   }
@@ -117,36 +54,8 @@ const Backoffice = () => {
       : <div>Aucune zone pour ce territoire</div>
   }
 
-  function increaseNumberOfZonesOpened (number) {
-    setNumberOfZonesOpened(numberOfZonesOpened + number)
-  }
-
-  function decreaseNumberOfZonesOpened (number) {
-    const value = numberOfZonesOpened - number
-    if (value < 0) {
-      setNumberOfZonesOpened(0)
-    } else {
-      setNumberOfZonesOpened(value)
-    }
-  }
-
-  function callShowRegulatorySubZoneMetadata (regulatorySubZone) {
-    console.log('callShowRegulatorySubZoneMetadata')
-    // dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
-  }
-
-  function callCloseRegulatoryZoneMetadata () {
-    console.log('callCloseRegulatoryZoneMetadata')
-    //dispatch(closeRegulatoryZoneMetadata())
-  }
-
-  function callZoomInSubZone (subZone) {
-    console.log('callZoomInSubZone')
-    //dispatch(zoomInSubZone(subZone))
-  }
-
   function addNewRegZone () {
-    console.log("addNewRegZone clicked")
+    console.log('addNewRegZone clicked')
   }
 
   function updateRegZone () {
@@ -215,7 +124,6 @@ const SearchResultList = styled.div`
   border-radius: 2px;
   border-bottom: 1px solid ${COLORS.grayDarkerThree};
   height: calc(100vh - 300px);
-  overflow: auto;
 `
 // TODO Change 300
 
@@ -225,6 +133,8 @@ const Territory = styled.div`
   flex: 1 1 1%;
   padding: 5px;
   box-sizing: border-box;
+  width: 50%;
+  overflow-y: auto;
 `
 
 const TerritoryName = styled.div`
@@ -238,46 +148,6 @@ const TerritoryName = styled.div`
 
 const RegulatoryZoneListByLawTypeList = styled.div`
   margin: 10px 5px;
-`
-
-const LawTypeName = styled.div`
-  font-size: 16px;
-  color: ${COLORS.grayDarkerThree};
-  border-bottom: 2px solid ${COLORS.squareBorder};
-  text-align: left;
-  text-transform: uppercase;
-`
-
-const RegulatoryZoneLayerList = styled.ul`
-  margin: 0;
-  background-color: ${COLORS.background};
-  border-radius: 0;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  padding: 0;
-  color: ${COLORS.grayDarkerThree};
-
-  animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
-
-  /*@keyframes regulatory-selected-opening {
-    0%   {
-        height: 0;
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-  }
-
-  @keyframes regulatory-selected-closing {
-    0%   {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        height: 0;
-    }
-  }*/
 `
 
 const SearchContainer = styled.div`

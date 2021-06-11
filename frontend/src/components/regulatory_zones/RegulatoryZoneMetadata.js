@@ -57,6 +57,7 @@ const RegulatoryZoneMetadata = props => {
             regulatoryZoneMetadataPanelIsOpen={props.regulatoryZoneMetadataPanelIsOpen}
             layersSidebarIsOpen={props.layersSidebarIsOpen}
             regulatoryZoneMetadata={props.regulatoryZoneMetadata}
+            fromBackoffice={props.fromBackoffice}
         >
             {
                 props.regulatoryZoneMetadataPanelIsOpen && props.regulatoryZoneMetadata
@@ -523,24 +524,14 @@ const Wrapper = styled.div`
     padding: 10px;
     
     animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
-    
-    @keyframes regulatory-metadata-box-opening-with-margin {
-        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 400px; opacity: 1; margin-left: 356px; }
-    }
-    
-    @keyframes regulatory-metadata-box-closing-with-margin {
-        0% { min-height: 400px; opacity: 1; margin-left: 371px; }
-        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-    }
        
     @keyframes regulatory-metadata-box-opening {
         0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 400px; opacity: 1; margin-left: 356px; }
+        100% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
     }
     
     @keyframes regulatory-metadata-box-closing {
-        0% { min-height: 400px; opacity: 1; margin-left: 361px; }
+        0% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
         100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
     }
 `

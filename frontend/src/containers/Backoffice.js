@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from './BaseMap'
 import LawType from '../components/backoffice/LawType'
+import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
+import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
 import { setError } from '../domain/reducers/Global'
 import { ReactComponent as SearchIconSVG } from '../components/icons/Loupe.svg'
-//import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
-//import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
-//import zoomInSubZone from '../domain/use_cases/zoomInSubZone'
 import { COLORS } from '../constants/constants'
 import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
+import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 
 const Backoffice = () => {
   const [searchText, setSearchText] = useState('')
   const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState(undefined)
+  const showedLayers = useSelector(state => state.layer.showedLayers)
+  const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
+
+  const {
+    isReadyToShowRegulatoryZones,
+    regulatoryZoneMetadataPanelIsOpen,
+    loadingRegulatoryZoneMetadata,
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
 
   const searchRegulatoryZone = () => {
     console.log(`Search text is ${searchText}`)
@@ -33,7 +42,12 @@ const Backoffice = () => {
   useEffect(() => {
     console.log('useEffect')
     getRegulatoryZones()
+    dispatch(getAllGearCodes())
   }, [])
+
+  useEffect(() => {
+    console.log(gears)
+  }, [gears])
 
   const displayRegulatoryZoneListByLawType = (regZoneByLawType) => {
     return (
@@ -42,7 +56,12 @@ const Backoffice = () => {
           return <LawType
             key={lawType}
             lawType={lawType}
-            regZoneByLawType={regZoneByLawType} />
+            regZoneByLawType={regZoneByLawType}
+            showedLayers={showedLayers}
+            gears={gears}
+            isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
+            callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+          />
         })
         : <div>Aucune Law Type disponible</div>)
   }
@@ -58,8 +77,8 @@ const Backoffice = () => {
     console.log('addNewRegZone clicked')
   }
 
-  function updateRegZone () {
-    console.log('updateRegZone clicked')
+  function callCloseRegulatoryZoneMetadata () {
+    dispatch(closeRegulatoryZoneMetadata())
   }
 
   return (
@@ -101,15 +120,18 @@ const Backoffice = () => {
               onClick={() => addNewRegZone()}>
               Saisir une nouvelle réglementation
             </BlackButton>
-            <BlackButton
-              disabled={true}
-              isLast={true}
-              onClick={() => updateRegZone()}>
-              Modifier la réglementation
-            </BlackButton>
         </ButtonList>
       </RegularotyZonePanel>
       <BaseMap />
+      <RegulatoryZoneMetadata
+        loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+        regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+        regulatoryZoneMetadata={regulatoryZoneMetadata}
+        callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+        gears={gears}
+        layersSidebarIsOpen={true}
+        fromBackoffice={true}
+      />
     </BackofficeContainer>
   )
 }

@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryZoneSelectedLayer from '../regulatory_zones/RegulatoryZoneSelectedLayer'
-// actions to regulatory zones
 import showLayer from '../../domain/use_cases/showLayer'
 import hideLayers from '../../domain/use_cases/hideLayers'
+import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZoneMetadata'
 import LayersEnum from '../../domain/entities/layers'
 import { COLORS } from '../../constants/constants'
+import zoomInSubZone from '../../domain/use_cases/zoomInSubZone'
 
-const LawType = ({ lawType, regZoneByLawType }) => {
+const LawType = props => {
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
-  // const showedLayers = useSelector(state => state.layer.showedLayers)
+  const [isOpen, setIsOpen] = useState(false)
   const dispatch = useDispatch()
 
   const {
+    lawType,
+    regZoneByLawType,
+    showedLayers,
+    gears,
     isReadyToShowRegulatoryZones,
-    //regulatoryZoneMetadataPanelIsOpen,
-    //loadingRegulatoryZoneMetadata,
-    regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)
+    callCloseRegulatoryZoneMetadata
+  } = props
 
   function increaseNumberOfZonesOpened (number) {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
@@ -34,18 +37,11 @@ const LawType = ({ lawType, regZoneByLawType }) => {
   }
 
   function callShowRegulatorySubZoneMetadata (regulatorySubZone) {
-    console.log('callShowRegulatorySubZoneMetadata')
-    // dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
-  }
-
-  function callCloseRegulatoryZoneMetadata () {
-    console.log('callCloseRegulatoryZoneMetadata')
-    //dispatch(closeRegulatoryZoneMetadata())
+    dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
   }
 
   function callZoomInSubZone (subZone) {
-    console.log('callZoomInSubZone')
-    //dispatch(zoomInSubZone(subZone))
+    dispatch(zoomInSubZone(subZone))
   }
 
   function callShowRegulatoryZone (regulatoryZone) {
@@ -74,15 +70,15 @@ const LawType = ({ lawType, regZoneByLawType }) => {
               callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
               callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
               callZoomInSubZone={callZoomInSubZone}
-              showedLayers={[]}
+              showedLayers={showedLayers}
               regulatoryZoneName={regulatoryZoneLayerName}
               increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
               decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
               regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
               isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
               regulatoryZoneMetadata={undefined}
-              gears={undefined}
-              isReadyToShowRegulatoryZones={true}
+              gears={gears}
+              isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
               allowRemoveZone={false}
             />
           })
@@ -92,7 +88,6 @@ const LawType = ({ lawType, regZoneByLawType }) => {
     )
   }
 
-  const [isOpen, setIsOpen] = useState(false)
   return (<>
     <LawTypeName onClick={() => setIsOpen(!isOpen)}>{lawType}</LawTypeName>
     {isOpen && <RegulatoryZoneLayerList>

@@ -81,7 +81,7 @@ const RegulatoryZoneSelectedLayer = props => {
         <Row>
             <Zone isLastItem={isLastItem} isOpen={isOpen}>
                 <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
-                    <ChevronIcon isOpen={isOpen}/>
+                    <ChevronIcon isopen={isOpen}/>
                     {regulatoryZoneName.replace(/[_]/g, ' ')}
                 </Text>
                 {displayNumberOfZones()}
@@ -206,7 +206,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 5px;
   margin-top: 5px;
   
-  animation: ${props => props.isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
+  animation: ${props => props.isopen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
 
   @keyframes chevron-layer-opening {
     0%   { transform: rotate(180deg); }

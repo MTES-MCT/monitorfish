@@ -12,7 +12,7 @@ import searchVessels from '../domain/use_cases/searchVessels'
 import {
   getVesselFeatureAndIdentity,
   getVesselIdentityFromFeature,
-  getVesselIdentityFromVessel
+  getVesselIdentityFromVessel, vesselsAreEquals
 } from '../domain/entities/vessel'
 import countries from 'i18n-iso-countries'
 import focusOnVesselSearch, { focusState } from '../domain/use_cases/focusOnVesselSearch'
@@ -155,7 +155,10 @@ const VesselsSearchBox = () => {
   useEffect(() => {
     if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
       if (!vesselsHasBeenUpdated) {
-        dispatch(showVesselTrackAndSidebar(selectedVesselFeatureAndIdentity, true, false))
+        if (!vesselFeatureAndIdentity ||
+          (vesselFeatureAndIdentity && !vesselsAreEquals(selectedVesselFeatureAndIdentity.identity, vesselFeatureAndIdentity.identity))) {
+          dispatch(showVesselTrackAndSidebar(selectedVesselFeatureAndIdentity, true, false))
+        }
 
         setSearchText('')
         setFoundVesselsFromAPI([])

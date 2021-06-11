@@ -7,9 +7,8 @@ import { WSG84_PROJECTION } from '../../domain/entities/map'
 import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
 import { ReactComponent as InfoSVG } from '../icons/Information.svg'
-
-import { vesselsAreEquals } from '../../domain/entities/vessel'
 import FleetSegments from '../fleet_segments/FleetSegments'
+
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselSummary = props => {
@@ -21,14 +20,6 @@ const VesselSummary = props => {
 
   useEffect(() => {
     if (props.vessel) {
-      if (props.vessel.positions && props.vessel.positions.length) {
-        setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
-      } else {
-        if (!vesselsAreEquals(props.vessel, vessel)) {
-          setLastPosition(null)
-        }
-      }
-
       if (props.vessel.mmsi) {
         setPhotoFallback(false)
       } else {
@@ -38,6 +29,30 @@ const VesselSummary = props => {
       setVessel(props.vessel)
     }
   }, [props.vessel, props.error])
+
+  useEffect(() => {
+    if (props.vesselLastPositionFeature) {
+      const {
+        course,
+        latitude,
+        longitude,
+        speed,
+        dateTime
+      } = props.vesselLastPositionFeature.getProperties()
+
+      setLastPosition({
+        course,
+        latitude,
+        longitude,
+        speed,
+        dateTime
+      })
+    } else if (props.vessel.positions && props.vessel.positions.length) {
+      setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+    } else {
+      setLastPosition(null)
+    }
+  }, [props.vesselLastPositionFeature, props.vessel])
 
   useEffect(() => {
     if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().speciesOnboard) {

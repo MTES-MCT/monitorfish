@@ -1,55 +1,45 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import { v4 as uuidv4 } from 'uuid'
-import Layers, { vesselIconIsLight } from '../domain/entities/layers'
-import { transform } from 'ol/proj'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import Point from 'ol/geom/Point'
-import { getSVG, getVesselIconOpacity, getVesselImage, getVesselLabelStyle } from './styles/featuresStyles'
-import {
-  setSelectedVesselWasHiddenByFilter,
-  setVesselsLayerSource,
-  updateVesselFeatureAndIdentity
-} from '../domain/reducers/Vessel'
-import {
-  getVesselFeatureAndIdentity,
-  getVesselIdentityFromFeature, TEMPORARY_VESSEL_TRACK,
-  Vessel,
-  VESSEL_ICON_STYLE,
-  VESSEL_LABEL_STYLE,
-  VESSEL_SELECTOR_STYLE,
-  vesselAndVesselFeatureAreEquals,
-  vesselsAreEquals
-} from '../domain/entities/vessel'
+import Layers from '../domain/entities/layers'
+import { setVesselsLayerSource, updateSelectedVesselFeature } from '../domain/reducers/Vessel'
+import { Vessel, vesselAndVesselFeatureAreEquals } from '../domain/entities/vessel'
 import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
-import { animateToVessel, setUpdatedFromCron } from '../domain/reducers/Map'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
-const NOT_FOUND_INDEX = -1
+const NOT_FOUND = -1
 
 const VesselsLayer = ({ map }) => {
-  const vessels = useSelector(state => state.vessel.vessels)
-  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
-  const removeSelectedIconToFeature = useSelector(state => state.vessel.removeSelectedIconToFeature)
-  const selectedVesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
-  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+  const {
+    vessels,
+    selectedVessel,
+    selectedVesselFeatureAndIdentity,
+    temporaryVesselsToHighLightOnMap
+  } = useSelector(state => state.vessel)
+  const {
+    vesselLabelsHiddenByZoom,
+    vesselLabelsShowedOnMap,
+    extent,
+    isMoving,
+    selectedBaseLayer,
+    vesselsLastPositionVisibility,
+    vesselLabel
+  } = useSelector(state => state.map)
+  const {
+    /** @type {VesselFilter[]} filters */
+    filters,
+    nonFilteredVesselsAreHidden
+  } = useSelector(state => state.filter)
 
-  const vesselLabelsHiddenByZoom = useSelector(state => state.map.vesselLabelsHiddenByZoom)
-  const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
-  const updatedFromCron = useSelector(state => state.map.updatedFromCron)
-  const extent = useSelector(state => state.map.extent)
-  const { filters, nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
-  const isMoving = useSelector(state => state.map.isMoving)
-  const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
-  const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
-  const vesselLabel = useSelector(state => state.map.vesselLabel)
-
-  const [selectedVesselLastPosition, setSelectedVesselLastPosition] = useState(null)
   const [filteredVesselsFeaturesUids, setFilteredVesselsFeaturesUids] = useState([])
+
+  const getFilterColor = useCallback(() => {
+    const showedFilter = filters.find(filter => filter.showed)
+    return showedFilter ? showedFilter.color : null
+  }, [filters])
 
   const dispatch = useDispatch()
 
@@ -74,10 +64,6 @@ const VesselsLayer = ({ map }) => {
   }, [vessels, map])
 
   useEffect(() => {
-    rewriteVesselsIcons()
-  }, [selectedBaseLayer])
-
-  useEffect(() => {
     highLightVesselsOnMap()
   }, [temporaryVesselsToHighLightOnMap])
 
@@ -86,50 +72,14 @@ const VesselsLayer = ({ map }) => {
   }, [vesselsLastPositionVisibility, temporaryVesselsToHighLightOnMap])
 
   useEffect(() => {
-    const feature = moveExistingGeometryToVesselLastPositionOrBuildNewFeature()
-
-    if (feature) {
-      dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(feature, getVesselIdentityFromFeature(feature))))
-      if(!updatedFromCron) {
-        showVesselIfHiddenByFilter(feature)
-        dispatch(animateToVessel(true))
-      }
-    }
-  }, [selectedVessel])
-
-  useEffect(() => {
-    movePreviouslySelectedVesselFeatureToLastKnownPositionWhenDeselected()
-  }, [selectedVessel])
-
-  useEffect(() => {
-    addSelectorIconToSelectedVessel()
-  }, [selectedVesselFeatureAndIdentity])
-
-  useEffect(() => {
     addOrRemoveVesselLabelWhenZooming()
   }, [vesselLabelsShowedOnMap, map, vesselLabelsHiddenByZoom, isMoving, vesselLabel, filteredVesselsFeaturesUids])
 
   useEffect(() => {
-    applyFilterToVessels(vectorSource.getFeatures(), rewriteVesselsIcons).then(_ => {
+    applyFilterToVessels(vectorSource.getFeatures(), rewriteVesselsStylesIfNoFilter).then(_ => {
       vectorSource.changed()
     })
-  }, [filters, nonFilteredVesselsAreHidden])
-
-  function showVesselIfHiddenByFilter (feature) {
-    const foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-    const isLight = vesselIconIsLight(selectedBaseLayer)
-    if (foundStyle) {
-      if (!foundStyle.getImage().getOpacity()) {
-        dispatch(setSelectedVesselWasHiddenByFilter(true))
-      }
-
-      const showedFilter = filters.find(filter => filter.showed)
-      const filterColor = showedFilter ? showedFilter.color : null
-      const colorToApply = filterColor && feature.getProperties().isShowedInFilter ? filterColor : null
-
-      modifyVesselIcon(feature, colorToApply, isLight, foundStyle, true)
-    }
-  }
+  }, [filters, nonFilteredVesselsAreHidden, selectedBaseLayer])
 
   function addLayerToMap () {
     if (map) {
@@ -138,29 +88,16 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
-  function getSelectedFeature () {
-    let featureToKeep = null
-    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature) {
-      const selectedVesselFeatureId = selectedVesselFeatureAndIdentity.feature.getId()
-      featureToKeep = vectorSource.getFeatureById(selectedVesselFeatureId)
-    }
-    return featureToKeep
-  }
-
   function addVesselsFeaturesToMap () {
     if (map && vessels && vessels.length) {
       const vesselsFeatures = vessels
         .filter(vessel => vessel)
-        .map((currentVessel, index) => buildFeature(currentVessel, index))
+        .filter(vessel => vessel.latitude && vessel.longitude)
+        .map((currentVessel, index) => buildLastPositionFeature(currentVessel, index))
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => {}).then(features => {
-        const featureToReDraw = getSelectedFeature()
         vectorSource.clear(true)
-
-        if (featureToReDraw) {
-          vectorSource.addFeature(featureToReDraw)
-        }
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
@@ -189,90 +126,54 @@ const VesselsLayer = ({ map }) => {
       return getVesselObjectFromFeature(feature, coordinates)
     })
 
-    const color = showedFilter ? showedFilter.color : null
-    const isLight = vesselIconIsLight(selectedBaseLayer)
-
     dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
       .then(filteredVessels => {
-        const uids = filteredVessels.map(vessel => vessel.uid)
-        setFilteredVesselsFeaturesUids(uids)
+        const filteredVesselsUids = filteredVessels.map(vessel => vessel.uid)
+        setFilteredVesselsFeaturesUids(filteredVesselsUids)
 
         vesselsFeatures.forEach(feature => {
-          const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+          Vessel.applyVesselFeatureFilterStyle(
+            feature,
+            {
+              filteredVesselsUids,
+              color: getFilterColor(),
+              isLight: Vessel.iconIsLight(selectedBaseLayer),
+              nonFilteredVesselsAreHidden,
+              vesselsLastPositionVisibility
+            })
 
-          const isShowedInFilterProperty = 'isShowedInFilter'
-          if (vesselIconStyle) {
-            const featureIndex = uids.indexOf(feature.ol_uid)
-
-            if (featureIndex !== NOT_FOUND_INDEX) {
-              modifyVesselIcon(feature, color, isLight, vesselIconStyle)
-              feature.set(isShowedInFilterProperty, true)
-            } else if (nonFilteredVesselsAreHidden) {
-              const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-              if (vesselLabelStyle) {
-                vesselLabelStyle.getImage().setOpacity(0)
-              }
-
-              vesselIconStyle.getImage().setOpacity(0)
-              feature.set(isShowedInFilterProperty, false)
-            } else {
-              modifyVesselIcon(feature, null, isLight, vesselIconStyle)
-              feature.set(isShowedInFilterProperty, false)
-            }
+          if (selectedVesselFeatureAndIdentity && vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature)) {
+            Vessel.setVesselAsSelected(feature)
+            dispatch(updateSelectedVesselFeature(feature))
           }
         })
-
         return resolve(vesselsFeatures)
       })
   })
 
-  function modifyVesselIcon (feature, color, isLight, vesselIconStyle, withoutOpacity) {
-    const vesselImage = getVesselImage({
-      speed: feature.getProperties().speed,
-      course: feature.getProperties().course
-    }, isLight, color)
-
-    vesselIconStyle.setImage(vesselImage)
-    if(!withoutOpacity) {
-      const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
-      vesselIconStyle.getImage().setOpacity(opacity)
-    }
-  }
-
-  function rewriteVesselsIcons () {
-    const isLight = vesselIconIsLight(selectedBaseLayer)
+  function rewriteVesselsStylesIfNoFilter () {
+    const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
     vectorSource.getFeatures().forEach(feature => {
-      const foundStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-      if (foundStyle) {
-        modifyVesselIcon(feature, null, isLight, foundStyle)
-      }
+      Vessel.setVesselFeatureImages(
+        feature,
+        {
+          isLight,
+          vesselsLastPositionVisibility
+        })
     })
-
-    vectorSource.changed()
   }
 
   function highLightVesselsOnMap () {
     if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {
-      vectorSource.getFeatures().filter(feature => {
-        const vesselToCompare = {
-          internalReferenceNumber: feature.getProperties().internalReferenceNumber,
-          externalReferenceNumber: feature.getProperties().externalReferenceNumber,
-          ircs: feature.getProperties().ircs
-        }
+      const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
 
-        return !temporaryVesselsToHighLightOnMap.some(vessel => {
-          return vesselsAreEquals(vessel, vesselToCompare)
-        })
+      vectorSource.getFeatures().filter(feature => {
+        const featureIndex = temporaryVesselsToHighLightOnMapUids.indexOf(feature.ol_uid)
+
+        return featureIndex === NOT_FOUND
       }).forEach(featureToHide => {
-        const vesselIconStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-        if (vesselIconStyle) {
-          vesselIconStyle.getImage().setOpacity(0)
-        }
-        const vesselLabelStyle = featureToHide.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-        if (vesselLabelStyle) {
-          vesselLabelStyle.getImage().setOpacity(0)
-        }
+        Vessel.hideVesselFeature(featureToHide)
       })
 
       vectorSource.changed()
@@ -283,70 +184,9 @@ const VesselsLayer = ({ map }) => {
     if (vesselsLastPositionVisibility && (!temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length) && map) {
       const features = vectorSource.getFeatures()
 
-      features.forEach(feature => {
-        const opacity = getVesselIconOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
-        const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-        if (vesselIconStyle) {
-          vesselIconStyle.getImage().setOpacity(opacity)
-        }
-        const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-        if (vesselLabelStyle) {
-          vesselLabelStyle.getImage().setOpacity(1)
-        }
-      })
-
       applyFilterToVessels(features, () => {}).then(_ => {
         vectorSource.changed()
       })
-    }
-  }
-
-  function moveExistingGeometryToVesselLastPositionOrBuildNewFeature () {
-    if (selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
-      const featureToModify = vectorSource.getFeatures().find(feature => {
-        return vesselAndVesselFeatureAreEquals(selectedVessel, feature)
-      })
-
-      if (featureToModify) {
-        moveFeatureToNewPosition(featureToModify)
-
-        return featureToModify
-      } else {
-        const feature = buildFeature(selectedVessel, `${TEMPORARY_VESSEL_TRACK}:${uuidv4()}`)
-        vectorSource.addFeature(feature)
-
-        return feature
-      }
-    }
-  }
-
-  function movePreviouslySelectedVesselFeatureToLastKnownPositionWhenDeselected () {
-    if (!selectedVessel && selectedVesselLastPosition) {
-      const featureToModify = vectorSource.getFeatures().find(feature => {
-        return vesselAndVesselFeatureAreEquals(selectedVesselLastPosition, feature)
-      })
-
-      if (featureToModify) {
-        featureToModify.setGeometry(selectedVesselLastPosition.geometry)
-      }
-      setSelectedVesselLastPosition(null)
-    }
-  }
-
-  function addVesselSelectorStyleAndUpdateFeature (feature) {
-    const styles = feature.getStyle()
-    const vesselAlreadyWithSelectorStyle = styles.find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
-
-    if (!vesselAlreadyWithSelectorStyle) {
-      feature.setStyle([...styles, Vessel.getSelectedVesselStyle()])
-      const vesselIdentity = getVesselIdentityFromFeature(feature)
-      dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(feature, vesselIdentity)))
-    }
-  }
-
-  function addSelectorIconToSelectedVessel () {
-    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature && !removeSelectedIconToFeature) {
-      addVesselSelectorStyleAndUpdateFeature(selectedVesselFeatureAndIdentity.feature)
     }
   }
 
@@ -388,7 +228,7 @@ const VesselsLayer = ({ map }) => {
         addLabelForFeaturesInExtentAndIncludedInArray(extent, filteredVesselsFeaturesUids)
       } else {
         vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
-          addVesselLabelToVesselFeature(feature, vesselLabel)
+          Vessel.addLabelToVesselFeature(feature, vesselLabel, vesselsLastPositionVisibility)
         })
       }
     }
@@ -398,70 +238,28 @@ const VesselsLayer = ({ map }) => {
     vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
       const featureIndex = arrayOfUids.indexOf(feature.ol_uid)
 
-      if (featureIndex !== NOT_FOUND_INDEX) {
-        addVesselLabelToVesselFeature(feature, vesselLabel)
+      if (featureIndex !== NOT_FOUND) {
+        Vessel.addLabelToVesselFeature(feature, vesselLabel, vesselsLastPositionVisibility)
       }
     })
   }
 
-  function addVesselLabelToVesselFeature (feature, vesselLabel) {
-    const vesselDate = new Date(feature.getProperties().dateTime)
-    const vesselIsHidden = new Date()
-    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
-
-    if (vesselDate > vesselIsHidden) {
-      getSVG(feature, vesselLabel).then(svg => {
-        if (svg) {
-          const style = getVesselLabelStyle(svg.showedText, svg.imageElement)
-
-          const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-          if (!vesselLabelStyle || vesselLabelStyle.getImage() !== svg.imageElement) {
-            const stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_LABEL_STYLE)
-
-            feature.setStyle([...stylesWithoutVesselName, style])
-          }
-        }
-      })
-    }
-  }
-
   function removeVesselLabelToAllFeatures () {
     vectorSource.getFeatures().forEach(feature => {
-      const stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_LABEL_STYLE)
-      feature.setStyle([...stylesWithoutVesselName])
+      Vessel.removeLabelToVesselFeature(feature)
     })
   }
 
-  function moveFeatureToNewPosition (featureToModify) {
-    const lastPosition = selectedVessel.positions[selectedVessel.positions.length - 1]
-    const newCoordinates = transform([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-
-    setSelectedVesselLastPosition({
-      internalReferenceNumber: featureToModify.getProperties().internalReferenceNumber,
-      externalReferenceNumber: featureToModify.getProperties().externalReferenceNumber,
-      ircs: featureToModify.getProperties().ircs,
-      geometry: featureToModify.getGeometry()
-    })
-    addVesselSelectorStyleAndUpdateFeature(featureToModify)
-    featureToModify.setGeometry(new Point(newCoordinates))
-  }
-
-  const buildFeature = (vesselFromAPI, id) => {
-    const position = Vessel.getPosition(vesselFromAPI, selectedVesselFeatureAndIdentity, selectedVessel)
-
-    const vessel = new Vessel(vesselFromAPI, position, id)
-
-    const options = {
-      selectedVesselFeatureAndIdentity: selectedVesselFeatureAndIdentity,
-      vesselsLastPositionVisibility: vesselsLastPositionVisibility,
-      isLight: vesselIconIsLight(selectedBaseLayer),
-      temporaryVesselsToHighLightOnMap: temporaryVesselsToHighLightOnMap
+  const buildLastPositionFeature = (vesselFromAPI, id) => {
+    const vesselOptions = {
+      selectedVesselFeatureAndIdentity,
+      selectedVessel,
+      id,
+      vesselsLastPositionVisibility,
+      isLight: Vessel.iconIsLight(selectedBaseLayer),
+      temporaryVesselsToHighLightOnMap
     }
-    vessel.setVesselStyle(options)
-
-    if (vessel.isSelectedVessel(selectedVesselFeatureAndIdentity)) {
-      dispatch(updateVesselFeatureAndIdentity(getVesselFeatureAndIdentity(vessel.feature, selectedVesselFeatureAndIdentity.identity)))
-    }
+    const vessel = new Vessel(vesselFromAPI, vesselOptions)
 
     return vessel.feature
   }

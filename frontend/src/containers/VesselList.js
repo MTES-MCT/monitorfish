@@ -52,7 +52,7 @@ const VesselList = () => {
 
   // Filters
   const [zonesFilter, setZonesFilter] = useState([])
-  const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(2)
+  const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(3)
   const [countriesFiltered, setCountriesFiltered] = useState([])
   const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState([])
   const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])

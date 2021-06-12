@@ -37,6 +37,9 @@ def transform_species(species: pd.DataFrame) -> pd.DataFrame:
     res["species_name"] = combine_overlapping_columns(res, name_columns)
     res = res.drop(columns=name_columns)
 
+    # Add id column
+    res["id"] = res.index.values
+
     return res
 
 

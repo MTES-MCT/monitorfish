@@ -48,7 +48,7 @@ export const FlagCell = ({ rowData, dataKey, ...props }) => (
 
 export const TimeAgoCell = ({ rowData, dataKey, ...props }) => (
   <Cell {...props}>
-    { timeago.format(rowData[dataKey], 'fr') }
+    { rowData[dataKey] ? timeago.format(rowData[dataKey], 'fr') : '' }
   </Cell>
 )
 
@@ -57,6 +57,12 @@ export const EllipsisCell = ({ rowData, dataKey, ...props }) => (
     <CellWithEllipsis>
       {rowData[dataKey]}
     </CellWithEllipsis>
+  </Cell>
+)
+
+export const CellWithTitle = ({ rowData, dataKey, ...props }) => (
+  <Cell title={rowData[dataKey]} {...props}>
+    {rowData[dataKey]}
   </Cell>
 )
 

@@ -4,7 +4,7 @@ import { ReactComponent as TargetSVG } from '../icons/target.svg'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import Table from 'rsuite/lib/Table'
 import Checkbox from 'rsuite/lib/Checkbox'
-import { CheckedCell, EllipsisCell, FlagCell, TargetCell, TimeAgoCell } from './tableCells'
+import { CellWithTitle, CheckedCell, EllipsisCell, FlagCell, TargetCell, TimeAgoCell } from './tableCells'
 import countries from 'i18n-iso-countries'
 import { CSVOptions } from './dataFormatting'
 
@@ -160,9 +160,9 @@ const VesselListTable = props => {
                 <HeaderCell>Infr.</HeaderCell>
                 <Cell dataKey="lastControlInfraction"/>
               </Column>
-              <Column resizable sortable width={130}>
+              <Column resizable sortable width={150}>
                 <HeaderCell>Observations</HeaderCell>
-                <Cell dataKey="postControlComment"/>
+                <CellWithTitle dataKey="postControlComment"/>
               </Column>
               {
                 props.filters.districtsFiltered && props.filters.districtsFiltered.length

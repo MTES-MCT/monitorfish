@@ -373,9 +373,6 @@ const Content = styled.div`
   color: ${COLORS.grayDarker};
   background: ${COLORS.background};
   margin-top: 6px;
-  min-height: 370px;
-  overflow-y: auto;
-  max-height: 85vh;
 `
 
 const Title = styled.span`

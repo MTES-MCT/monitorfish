@@ -321,6 +321,10 @@ export const baseLayers = {
     code: 'OSM',
     text: 'Open Street Map'
   },
+  SHOM: {
+    code: 'SHOM',
+    text: 'SHOM'
+  },
   SATELLITE: {
     code: 'SATELLITE',
     text: 'Satellite'

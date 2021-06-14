@@ -3,7 +3,7 @@ import { mapToRegulatoryZone, lawTypeList } from '../domain/entities/regulatory'
 import { vesselSize } from '../domain/entities/vessel'
 
 class MapperWorker {
-  convertGeoJSONFeaturesToObject (features) {
+  #getLayerNameList = (features) => {
     const featuresWithoutGeometry = features.features.map(feature => {
       return mapToRegulatoryZone(feature.properties)
     })
@@ -19,12 +19,15 @@ class MapperWorker {
       }
     }, [])
 
-    const layerNamesArray = uniqueFeaturesWithoutGeometry
+    return uniqueFeaturesWithoutGeometry
       .map(layer => layer.layerName)
       .map(layerName => {
         return uniqueFeaturesWithoutGeometry.filter(layer => layer.layerName === layerName)
       })
+  }
 
+  convertGeoJSONFeaturesToObject (features) {
+    const layerNamesArray = this.#getLayerNameList(features)
     const layersNamesToZones = layerNamesArray.reduce((accumulatedObject, zone) => {
       accumulatedObject[zone[0].layerName] = zone
       return accumulatedObject
@@ -34,27 +37,7 @@ class MapperWorker {
   }
 
   convertGeoJSONFeaturesToObjectByRegTerritory (features) {
-    const featuresWithoutGeometry = features.features.map(feature => {
-      return mapToRegulatoryZone(feature.properties)
-    })
-
-    const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
-      const found = acc.find(item =>
-        item.layerName === current.layerName &&
-                item.zone === current.zone)
-      if (!found) {
-        return acc.concat([current])
-      } else {
-        return acc
-      }
-    }, [])
-
-    const layerNamesArray = uniqueFeaturesWithoutGeometry
-      .map(layer => layer.layerName)
-      .map(layerName => {
-        return uniqueFeaturesWithoutGeometry.filter(layer => layer.layerName === layerName)
-      })
-    // TODO : Review var name
+    const layerNamesArray = this.#getLayerNameList(features)
     const layersNamesByRegTerritory = layerNamesArray.reduce((accumulatedObject, zone) => {
       const lawType = zone[0].lawType
       const layerName = zone[0].layerName

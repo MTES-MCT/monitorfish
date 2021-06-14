@@ -61,7 +61,7 @@ const RegulatoryZoneSelectedLayer = props => {
     if (regulatoryZoneMetadata && regulatoryZoneName && regulatoryZoneMetadata.layerName === regulatoryZoneName) {
       setIsOpen(true)
     }
-  }, [regulatoryZoneMetadata, regulatoryZoneName])
+  }, [regulatoryZoneMetadata, regulatoryZoneName, setIsOpen])
 
   const getRegulatoryLayerName = regulatorySubZones => {
     return {
@@ -77,6 +77,34 @@ const RegulatoryZoneSelectedLayer = props => {
     )
   }
 
+  const showRegulatoryZonesSelected = () => {
+    return regulatorySubZones.map(subZone => {
+      let vectorLayerStyle
+      if (subZone.zone && subZone.layerName && subZone.gears && gears) {
+        const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
+        const gearCategory = getGearCategory(subZone.gears, gears)
+        vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
+      }
+
+      return (
+          <RegulatoryZoneSelectedZone
+              subZone={subZone}
+              vectorLayerStyle={vectorLayerStyle}
+              key={`${subZone.layerName}:${subZone.zone}`}
+              isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
+              callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
+              regulatoryZoneMetadata={props.regulatoryZoneMetadata}
+              showWholeLayer={showWholeLayer}
+              zoneIsShown={showedLayers
+                .filter(layer => layer.type === Layers.REGULATORY.code)
+                .some(layer =>
+                  layer.zone.layerName === subZone.layerName &&
+                      layer.zone.zone === subZone.zone)}
+          />
+      )
+    })
+  }
+
   return (
         <Row>
             <Zone isLastItem={isLastItem} isOpen={isOpen}>
@@ -88,39 +116,11 @@ const RegulatoryZoneSelectedLayer = props => {
                 { atLeastOneLayerIsShowed ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })} /> : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })} />}
                 { allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/> }
             </Zone>
-            {<List
+            {isOpen && <List
                 isOpen={isOpen}
                 name={regulatoryZoneName.replace(/\s/g, '-')}
                 length={regulatorySubZones.length}>
-                {
-                    props.regulatorySubZones && showedLayers
-                      ? props.regulatorySubZones.map(subZone => {
-                        let vectorLayerStyle
-                        if (subZone.zone && subZone.layerName && subZone.gears && gears) {
-                          const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
-                          const gearCategory = getGearCategory(subZone.gears, gears)
-                          vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
-                        }
-
-                        return (
-                            <RegulatoryZoneSelectedZone
-                                subZone={subZone}
-                                vectorLayerStyle={vectorLayerStyle}
-                                key={`${subZone.layerName}:${subZone.zone}`}
-                                isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
-                                callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
-                                regulatoryZoneMetadata={props.regulatoryZoneMetadata}
-                                showWholeLayer={showWholeLayer}
-                                zoneIsShown={showedLayers
-                                  .filter(layer => layer.type === Layers.REGULATORY.code)
-                                  .some(layer =>
-                                    layer.zone.layerName === subZone.layerName &&
-                                        layer.zone.zone === subZone.zone)}
-                            />
-                        )
-                      })
-                      : null
-                }
+                {regulatorySubZones && showedLayers && showRegulatoryZonesSelected()}
               </List>}
         </Row>
   )

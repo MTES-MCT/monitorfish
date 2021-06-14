@@ -59,9 +59,7 @@ const RegulatoryZoneMetadata = props => {
                         <Header>
                             <REGPaperIcon/>
                             <RegulatoryName title={getTitle(props.regulatoryZoneMetadata)}>
-                                <Ellipsis>
-                                    <Title>{getTitle(props.regulatoryZoneMetadata)}</Title>
-                                </Ellipsis>
+                              {getTitle(props.regulatoryZoneMetadata)}
                             </RegulatoryName>
                             <CloseIcon onClick={() => props.callCloseRegulatoryZoneMetadata()}/>
                         </Header>
@@ -347,18 +345,12 @@ const Gray = styled.span`
 `
 
 const RegulatoryName = styled.span`
-  padding: unset;
-  margin: unset;
+  flex: 1;
   line-height: initial;
-`
-
-const Ellipsis = styled.span`
-  max-width: 290px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
-  display: inline-block;
 `
 
 const Header = styled.div`
@@ -366,6 +358,7 @@ const Header = styled.div`
   margin-left: 6px;
   text-align: left;
   height: 1.5em;
+  display: flex;
 `
 
 const Content = styled.div`
@@ -373,13 +366,7 @@ const Content = styled.div`
   color: ${COLORS.grayDarker};
   background: ${COLORS.background};
   margin-top: 6px;
-`
-
-const Title = styled.span`
-  margin-top: 2px;
-  margin-left: 12px;
-  font-size: 13px;
-}
+  overflow-y: auto;
 `
 
 const REGPaperIcon = styled(REGPaperSVG)`
@@ -389,8 +376,8 @@ const REGPaperIcon = styled(REGPaperSVG)`
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
   float: right;
-  margin-right: 7px;
-  margin-top: 5px;
+  /*margin-right: 7px;*/
+  /*margin-top: 5px;*/
   cursor: pointer;
 `
 

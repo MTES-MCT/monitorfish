@@ -52,13 +52,7 @@ const RegulatoryZoneMetadata = props => {
   const getTitle = regulatory => `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
 
   return (
-        <Wrapper
-            firstUpdate={firstUpdate.current}
-            regulatoryZoneMetadataPanelIsOpen={props.regulatoryZoneMetadataPanelIsOpen}
-            layersSidebarIsOpen={props.layersSidebarIsOpen}
-            regulatoryZoneMetadata={props.regulatoryZoneMetadata}
-            fromBackoffice={props.fromBackoffice}
-        >
+          <>
             {
                 props.regulatoryZoneMetadataPanelIsOpen && props.regulatoryZoneMetadata
                   ? <>
@@ -337,7 +331,7 @@ const RegulatoryZoneMetadata = props => {
                     </>
                   : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
             }
-        </Wrapper>
+          </>
   )
 }
 
@@ -503,37 +497,6 @@ const NoValue = styled.span`
   line-height: normal;
   font-size: 13px;
   display: block;
-`
-
-const Wrapper = styled.div`
-    border-radius: 2px;
-    width: 350px;
-    position: absolute;
-    display: block;
-    color: ${COLORS.grayDarkerThree};
-    text-decoration: none;
-    background-color: ${COLORS.gray};
-    padding: 0;
-    margin-left: -30px;
-    margin-top: 45px;
-    top: 0px;
-    opacity: 0;
-    z-index: -1;
-    min-height: 100px;
-    max-height: calc(100vh - 50px);
-    padding: 10px;
-    
-    animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
-       
-    @keyframes regulatory-metadata-box-opening {
-        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
-    }
-    
-    @keyframes regulatory-metadata-box-closing {
-        0% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
-        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-    }
 `
 
 export default RegulatoryZoneMetadata

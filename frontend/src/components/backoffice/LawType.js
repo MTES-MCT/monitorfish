@@ -8,6 +8,7 @@ import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZon
 import LayersEnum from '../../domain/entities/layers'
 import { COLORS } from '../../constants/constants'
 import zoomInSubZone from '../../domain/use_cases/zoomInSubZone'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 const LawType = props => {
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
@@ -89,8 +90,11 @@ const LawType = props => {
   }
 
   return (<>
-    <LawTypeName onClick={() => setIsOpen(!isOpen)}>{lawType}</LawTypeName>
-    {isOpen && <RegulatoryZoneLayerList>
+    <LawTypeName onClick={() => setIsOpen(!isOpen)}>
+      {lawType}
+      <ChevronIcon isopen={isOpen}/>
+    </LawTypeName>
+    {isOpen && <RegulatoryZoneLayerList isOpen={isOpen}>
       {displayRegulatoryZoneList(regZoneByLawType[lawType])}
     </RegulatoryZoneLayerList>}
   </>)
@@ -105,7 +109,6 @@ const LawTypeName = styled.div`
   cursor: pointer;
 `
 
-// Ce style existe sûrement ailleurs
 const RegulatoryZoneLayerList = styled.ul`
   margin: 0;
   background-color: ${COLORS.background};
@@ -115,9 +118,9 @@ const RegulatoryZoneLayerList = styled.ul`
   padding: 0;
   color: ${COLORS.grayDarkerThree};
 
-  animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
+  animation: ${props => props.isOpen ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
 
-  /*@keyframes regulatory-selected-opening {
+  @keyframes regulatory-selected-opening {
     0%   {
         height: 0;
         opacity: 0;
@@ -135,7 +138,27 @@ const RegulatoryZoneLayerList = styled.ul`
         opacity: 0;
         height: 0;
     }
-  }*/
+  }
+`
+
+const ChevronIcon = styled(ChevronIconSVG)`
+  transform: rotate(180deg);
+  width: 17px;
+  float: right;
+  margin-right: 10px;
+  margin-top: 5px;
+
+  animation: ${props => props.isopen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
+
+  @keyframes chevron-layer-opening {
+    0%   { transform: rotate(180deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  @keyframes chevron-layer-closing {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(180deg);   }
+  }
 `
 
 export default LawType

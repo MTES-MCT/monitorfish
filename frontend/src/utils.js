@@ -123,10 +123,10 @@ export const getDateTime = (dateString, withoutSeconds) => {
  * @param {Number} nofMonths no of months to get date before
  * @returns {Date} date before nofMonths months
  */
-export function getDateMonthsBefore(date, nofMonths) {
-  let thisMonth = date.getMonth();
+export function getDateMonthsBefore (date, nofMonths) {
+  const thisMonth = date.getMonth()
   // set the month index of the date by subtracting nofMonths from the current month index
-  date.setMonth(thisMonth - nofMonths);
+  date.setMonth(thisMonth - nofMonths)
   // When trying to add or subtract months from a Javascript Date() Object which is any end date of a month,
   // JS automatically advances your Date object to next month's first date if the resulting date does not exist in its month.
   // For example when you add 1 month to October 31, 2008 , it gives Dec 1, 2008 since November 31, 2008 does not exist.
@@ -134,12 +134,12 @@ export function getDateMonthsBefore(date, nofMonths) {
   // then set the date again to last day of previous month
   // Else check if the result of subtraction is non negative, subtract nofMonths to the index and check the same.
   if ((thisMonth - nofMonths < 0) && (date.getMonth() !== (thisMonth + nofMonths))) {
-    date.setDate(0);
+    date.setDate(0)
   } else if ((thisMonth - nofMonths >= 0) && (date.getMonth() !== thisMonth - nofMonths)) {
-    date.setDate(0);
+    date.setDate(0)
   }
 
-  return date;
+  return date
 }
 
 export const arraysEqual = (a, b) => {

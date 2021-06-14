@@ -8,8 +8,6 @@ import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { getDate } from '../../utils'
 import { CSVOptions } from './dataFormatting'
-import { TimeAgoCell } from './tableCells'
-import Table from 'rsuite/lib/Table'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 

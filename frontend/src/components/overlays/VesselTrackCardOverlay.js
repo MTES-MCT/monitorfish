@@ -13,7 +13,7 @@ const margins = {
   xLeft: 20,
   yTop: 20,
   yMiddle: -85,
-  yBottom: -170,
+  yBottom: -170
 }
 
 const VesselTrackCardOverlay = ({ map, feature }) => {

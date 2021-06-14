@@ -102,6 +102,7 @@ const LawTypeName = styled.div`
   border-bottom: 2px solid ${COLORS.squareBorder};
   text-align: left;
   text-transform: uppercase;
+  cursor: pointer;
 `
 
 // Ce style existe sûrement ailleurs

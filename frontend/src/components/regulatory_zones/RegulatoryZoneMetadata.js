@@ -385,8 +385,6 @@ const REGPaperIcon = styled(REGPaperSVG)`
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
   float: right;
-  /*margin-right: 7px;*/
-  /*margin-top: 5px;*/
   cursor: pointer;
 `
 

@@ -69,10 +69,7 @@ const LayersSidebar = () => {
     setAdministrativeZones(administrativeZones)
 
     dispatch(getAllRegulatoryZones(dispatch))
-      .then(regulatoryZones => {
-        console.log(regulatoryZones)
-        setRegulatoryZones(regulatoryZones)
-      })
+      .then(regulatoryZones => setRegulatoryZones(regulatoryZones))
       .catch(error => {
         dispatch(setError(error))
       })

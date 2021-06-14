@@ -125,7 +125,6 @@ const Icons = styled.span`
 const SubZone = styled.span`
   display: flex;
   justify-content: space-between;
-  /*width: 94%;*/
   line-height: 1.9em;
   padding-left: 31px;
   padding-top: 4px;

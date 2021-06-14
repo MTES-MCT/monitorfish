@@ -323,7 +323,7 @@ export const baseLayers = {
   },
   SHOM: {
     code: 'SHOM',
-    text: 'SHOM'
+    text: 'Carte marine (SHOM)'
   },
   SATELLITE: {
     code: 'SATELLITE',

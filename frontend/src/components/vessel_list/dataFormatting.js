@@ -183,7 +183,7 @@ export function getVesselObjectFromFeature (vessel, coordinates) {
     speciesArray: vessel.getProperties().speciesOnboard ? [...new Set(vessel.getProperties().speciesOnboard.map(species => species.species))] : [],
     district: vessel.getProperties().district,
     districtCode: vessel.getProperties().districtCode,
-    lastControlDateTimeTimestamp: new Date(vessel.getProperties().lastControlDateTime).getTime(),
+    lastControlDateTimeTimestamp: vessel.getProperties().lastControlDateTime ? new Date(vessel.getProperties().lastControlDateTime).getTime() : '',
     lastControlDateTime: vessel.getProperties().lastControlDateTime,
     lastControlInfraction: vessel.getProperties().lastControlInfraction ? 'Oui' : 'Non',
     postControlComment: vessel.getProperties().postControlComment

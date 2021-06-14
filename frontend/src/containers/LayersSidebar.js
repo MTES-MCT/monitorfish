@@ -16,7 +16,10 @@ import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
-  const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
+  const {
+    regulatoryZoneMetadataPanelIsOpen,
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
   const firstUpdate = useRef(true)
@@ -53,7 +56,6 @@ const LayersSidebar = () => {
 
     dispatch(getAllRegulatoryZones(dispatch))
       .then(regulatoryZones => {
-        console.log("layers side bar useEffect ")
         console.log(regulatoryZones)
         setRegulatoryZones(regulatoryZones)
       })
@@ -92,9 +94,16 @@ const LayersSidebar = () => {
                 />
                 <BaseLayerSelection />
             </Zones>
+          <MetadataWrapper
+            firstUpdate={firstUpdate.current}
+            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+            regulatoryZoneMetadata={regulatoryZoneMetadata}
+            layersSidebarIsOpen={layersSidebarIsOpen}
+          >
             <RegulatoryZoneMetadata
-                layersSidebarIsOpen={layersSidebarIsOpen}
+              layersSidebarIsOpen={layersSidebarIsOpen}
             />
+          </MetadataWrapper>
         </Sidebar>
   )
 }
@@ -162,6 +171,37 @@ const SidebarLayersIcon = styled.button`
 const Layers = styled(LayersSVG)`
   width: 35px;
   height: 35px;
+`
+
+const MetadataWrapper = styled.div`
+    border-radius: 2px;
+    width: 350px;
+    position: absolute;
+    display: block;
+    color: ${COLORS.grayDarkerThree};
+    text-decoration: none;
+    background-color: ${COLORS.gray};
+    padding: 0;
+    margin-left: -30px;
+    margin-top: 45px;
+    top: 0px;
+    opacity: 0;
+    z-index: -1;
+    min-height: 100px;
+    max-height: calc(100vh - 50px);
+    padding: 10px;
+    
+    animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
+       
+    @keyframes regulatory-metadata-box-opening {
+        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
+        100% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
+    }
+    
+    @keyframes regulatory-metadata-box-closing {
+        0% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
+        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
+    }
 `
 
 export default LayersSidebar

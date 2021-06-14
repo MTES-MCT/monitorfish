@@ -91,9 +91,9 @@ export const getYearsToControl = (controlsFromDate, controls) => {
  * @returns {number} The number of infractions
  */
 export const getNumberOfInfractions = control => {
-  if (control.infractions.length) {
+  if (control && control.infractions && control.infractions.length) {
     return control.infractions.length
-  } else if (control.infraction && !control.infractions.length) {
+  } else if (control && control.infraction && !control.infractions.length) {
     return 1
   }
 

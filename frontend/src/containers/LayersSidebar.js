@@ -187,9 +187,11 @@ const MetadataWrapper = styled.div`
     top: 0px;
     opacity: 0;
     z-index: -1;
-    min-height: 100px;
     max-height: calc(100vh - 50px);
-    padding: 10px;
+    padding: 10px 10px 0 10px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-bottom: 10px solid #EEE;
     
     animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
        

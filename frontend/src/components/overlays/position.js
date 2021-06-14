@@ -61,14 +61,14 @@ export const OverlayPosition = {
   }} margins
  * @returns {number[]} margins - The [top, left] overlay margins (and not the x, y margins)
  */
-export function getTopLeftMargin(nextOverlayPosition, margins) {
+export function getTopLeftMargin (nextOverlayPosition, margins) {
   const {
     xRight,
     xMiddle,
     xLeft,
     yTop,
     yMiddle,
-    yBottom,
+    yBottom
   } = margins
 
   switch (nextOverlayPosition) {
@@ -85,7 +85,7 @@ export function getTopLeftMargin(nextOverlayPosition, margins) {
 }
 
 export function getOverlayPosition (boxSize, x, y, extent) {
-  let position = getOuterExtentPosition(boxSize, x, y)
+  const position = getOuterExtentPosition(boxSize, x, y)
 
   if (!containsXY(extent, position.TOP.x, position.TOP.y) &&
     !containsXY(extent, position.LEFT.x, position.LEFT.y)) {

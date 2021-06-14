@@ -4,7 +4,6 @@ import * as timeago from 'timeago.js'
 import React from 'react'
 import Table from 'rsuite/lib/Table'
 import styled from 'styled-components'
-import { getDate } from '../../utils'
 const { Cell } = Table
 
 export const TargetCell = ({ rowData, dataKey, onChange, ...props }) => {

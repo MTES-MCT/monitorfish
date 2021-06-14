@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import TrackTypeCard from '../cards/TrackTypeCard'
 import { COLORS } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
-import { trackTypes } from '../../domain/entities/vesselTrack'
 
 const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
   const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)

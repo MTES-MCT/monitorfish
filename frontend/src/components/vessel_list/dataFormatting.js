@@ -82,7 +82,7 @@ export const CSVOptions = {
   postControlComment: {
     code: 'postControlComment',
     name: 'Observations'
-  },
+  }
 }
 
 export const lastPositionTimeAgoLabels = [
@@ -186,6 +186,6 @@ export function getVesselObjectFromFeature (vessel, coordinates) {
     lastControlDateTimeTimestamp: new Date(vessel.getProperties().lastControlDateTime).getTime(),
     lastControlDateTime: vessel.getProperties().lastControlDateTime,
     lastControlInfraction: vessel.getProperties().lastControlInfraction ? 'Oui' : 'Non',
-    postControlComment: vessel.getProperties().postControlComment,
+    postControlComment: vessel.getProperties().postControlComment
   }
 }

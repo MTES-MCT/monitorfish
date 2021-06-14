@@ -84,7 +84,7 @@ export const getYearsToControl = (controlsFromDate, controls) => {
 
 /**
  * Get the number of infractions in a control - Take care of infractions without NATINF
- * 
+ *
  * If infractions are specified in the infractions list, then the number of infractions of the length of the list is returned
  * If the infraction boolean is true and no infractions are specified, then the number of infractions returned is 1
  * @param {VesselControl} control

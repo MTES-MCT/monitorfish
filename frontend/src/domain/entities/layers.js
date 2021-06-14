@@ -325,10 +325,6 @@ export const baseLayers = {
     code: 'SHOM',
     text: 'SHOM'
   },
-  BATHYMETRY: {
-    code: 'BATHYMETRY',
-    text: 'Bathymétrie (SHOM)'
-  },
   SATELLITE: {
     code: 'SATELLITE',
     text: 'Satellite'

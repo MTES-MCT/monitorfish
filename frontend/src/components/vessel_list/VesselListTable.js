@@ -5,6 +5,8 @@ import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import Table from 'rsuite/lib/Table'
 import Checkbox from 'rsuite/lib/Checkbox'
 import { CheckedCell, EllipsisCell, FlagCell, TargetCell, TimeAgoCell } from './tableCells'
+import countries from 'i18n-iso-countries'
+import { CSVOptions } from './dataFormatting'
 
 const { Column, HeaderCell, Cell } = Table
 
@@ -30,6 +32,11 @@ const VesselListTable = props => {
   function sortArrayByColumn (a, b, sortColumn, sortType) {
     let x = a[sortColumn]
     let y = b[sortColumn]
+
+    if (sortColumn === CSVOptions.flagState.code) {
+      x = countries.getName(a[sortColumn], 'fr')
+      y = countries.getName(b[sortColumn], 'fr')
+    }
 
     if (typeof x === 'string' && typeof y === 'string') {
       x = x.charCodeAt()

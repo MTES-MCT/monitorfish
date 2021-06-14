@@ -6,22 +6,6 @@ import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import XYZ from 'ol/source/XYZ'
 import TileWMS from 'ol/source/TileWMS'
-import WMTS from 'ol/source/WMTS'
-import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
-import WMTSTileGrid from 'ol/tilegrid/WMTS'
-import { getTopLeft, getWidth } from 'ol/extent'
-import {get as getProjection} from 'ol/proj'
-
-const projection = getProjection(OPENLAYERS_PROJECTION);
-const projectionExtent = projection.getExtent();
-const size = getWidth(projectionExtent) / 256;
-const resolutions = new Array(14);
-const matrixIds = new Array(14);
-for (let z = 0; z < 14; ++z) {
-  // generate resolutions and matrixIds arrays for this WMTS
-  resolutions[z] = size / Math.pow(2, z);
-  matrixIds[z] = z;
-}
 
 const BaseLayer = ({ map }) => {
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
@@ -57,29 +41,10 @@ const BaseLayer = ({ map }) => {
     SHOM: new TileLayer({
       source: new TileWMS({
         url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,
-        params: {'LAYERS': 'RASTER_MARINE_3857_WMSR', 'TILED': true},
+        params: { LAYERS: 'RASTER_MARINE_3857_WMSR', TILED: true },
         serverType: 'geoserver',
         // Countries have transparency, so do not fade tiles:
-        transition: 0,
-      }),
-    className: Layers.BASE_LAYER.code,
-    zIndex: 0
-    }),
-    BATHYMETRY: new TileLayer({
-      opacity: 0.7,
-      source: new WMTS({
-        url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wmts`,
-        layer: 'FDC_GEBCO_PYR-PNG_3857_WMTS',
-        matrixSet: 'EPSG:3857',
-        format: 'image/png',
-        projection: OPENLAYERS_PROJECTION,
-        tileGrid: new WMTSTileGrid({
-          origin: getTopLeft(projectionExtent),
-          resolutions: resolutions,
-          matrixIds: matrixIds,
-        }),
-        style: 'default',
-        wrapX: true,
+        transition: 0
       }),
       className: Layers.BASE_LAYER.code,
       zIndex: 0

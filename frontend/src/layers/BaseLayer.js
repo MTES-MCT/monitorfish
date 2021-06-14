@@ -5,6 +5,7 @@ import Layers from '../domain/entities/layers'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import XYZ from 'ol/source/XYZ'
+import TileWMS from 'ol/source/TileWMS'
 
 const BaseLayer = ({ map }) => {
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
@@ -36,7 +37,18 @@ const BaseLayer = ({ map }) => {
       accessToken: process.env.REACT_APP_MAPBOX_KEY,
       className: Layers.BASE_LAYER.code,
       zIndex: 0
-    })
+    }),
+    SHOM: new TileLayer({
+      source: new TileWMS({
+        url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,
+        params: {'LAYERS': 'RASTER_MARINE_3857_WMSR', 'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+      }),
+    className: Layers.BASE_LAYER.code,
+    zIndex: 0
+    }),
   })
 
   useEffect(() => {

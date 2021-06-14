@@ -83,7 +83,9 @@ const Backoffice = () => {
 
   return (
     <BackofficeContainer>
-      <RegularotyZonePanel >
+      <RegularotyZonePanel
+        regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+      >
         <SearchContainer>
           <SearchBoxInput
             ref={input => input && input.focus()}
@@ -122,16 +124,20 @@ const Backoffice = () => {
             </BlackButton>
         </ButtonList>
       </RegularotyZonePanel>
-      <BaseMap />
-      <RegulatoryZoneMetadata
-        loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+      <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-        regulatoryZoneMetadata={regulatoryZoneMetadata}
-        callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-        gears={gears}
-        layersSidebarIsOpen={true}
-        fromBackoffice={true}
-      />
+      >
+        <RegulatoryZoneMetadata
+          loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+          regulatoryZoneMetadata={regulatoryZoneMetadata}
+          callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+          gears={gears}
+          layersSidebarIsOpen={true}
+          fromBackoffice={true}
+        />
+      </MetadataWrapper>
+      <BaseMap />
     </BackofficeContainer>
   )
 }
@@ -195,10 +201,23 @@ const BackofficeContainer = styled.div`
 
 const RegularotyZonePanel = styled.div`
   display: flex;
-  flex: 1;
+  flex: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 2 : 1};
   flex-direction: column;
-  max-width: 50%;
   max-height: 100vh;
+  max-width: 50%;
+`
+
+const MetadataWrapper = styled.div`
+  display: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none'};
+  flex: 1;
+  border-radius: 2px;
+  color: #515151;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  padding: 0;
+  padding: 10px;
+  flex-direction: column;
+  height: 100vh;
 `
 
 const SearchBoxInput = styled.input`

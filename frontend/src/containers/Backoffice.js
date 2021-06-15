@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from './BaseMap'
@@ -14,6 +14,7 @@ import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZone
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
 
 const Backoffice = () => {
+  const searchInput = useRef(null)
   const [searchText, setSearchText] = useState('')
   const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState(undefined)
   const showedLayers = useSelector(state => state.layer.showedLayers)
@@ -40,8 +41,11 @@ const Backoffice = () => {
         dispatch(setError(error))
       })
   }
+
   useEffect(() => {
-    console.log('useEffect')
+    if (searchInput) {
+      searchInput.current.focus()
+    }
     getRegulatoryZones()
     dispatch(getAllGearCodes())
   }, [])
@@ -99,7 +103,7 @@ const Backoffice = () => {
       >
         <SearchContainer>
           <SearchBoxInput
-            ref={input => input && input.focus()}
+            ref={searchInput}
             type="text"
             value={searchText}
             placeholder={''}
@@ -171,6 +175,7 @@ const TerritoryName = styled.div`
   display: flex;
   font-size: 13px;
   text-transform: uppercase;
+  text-align: left;
   color: ${COLORS.grayDarkerThree};
   color: ${COLORS.textGray};
   font-size: 16px;

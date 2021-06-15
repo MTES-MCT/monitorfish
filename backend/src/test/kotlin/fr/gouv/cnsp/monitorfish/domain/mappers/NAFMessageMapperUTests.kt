@@ -184,4 +184,15 @@ internal class NAFMessageMapperUTests {
 
         assertThat(position.course).isNull()
     }
+
+    @Test
+    internal fun `init Should not throw an exception When the message type is manual`() {
+        // Given
+        val naf = "//SR//TM/MAN//IR/ESP000022941//NA/PLAYA DE TUYA//RC/FIUW//FS/FRA//XR/BA932998//DA/20210602//TI/2330//LT/+53.267//LG/-011.733//FR/FRA//RD/20210603//RT/0551//ER//"
+
+        // When
+        val position = NAFMessageMapper(naf).toPosition()
+
+        assertThat(position.internalReferenceNumber).isEqualTo("ESP000022941")
+    }
 }

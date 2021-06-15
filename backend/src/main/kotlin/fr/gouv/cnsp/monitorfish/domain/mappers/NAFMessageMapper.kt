@@ -34,6 +34,7 @@ class NAFMessageMapper(private val naf: String) {
     private var tripNumber: Int? = null
 
     private val positionMessageType = "POS"
+    private val manualMessageType = "MAN"
     private val dateTimeFormat = "yyyyMMddHHmm"
 
     init {
@@ -48,7 +49,11 @@ class NAFMessageMapper(private val naf: String) {
 
                     try {
                         when (it) {
-                            NAFCode.TYPE_OF_MESSAGE -> if (value != positionMessageType) throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
+                            NAFCode.TYPE_OF_MESSAGE -> when (value) {
+                                positionMessageType -> logger.info("Receiving new position")
+                                manualMessageType -> logger.info("Receiving new manual position")
+                                else -> throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
+                            }
                             NAFCode.INTERNAL_REFERENCE_NUMBER -> this.internalReferenceNumber = value
                             NAFCode.RADIO_CALL_SIGN -> this.ircs = value
                             NAFCode.VESSEL_NAME -> this.vesselName = value

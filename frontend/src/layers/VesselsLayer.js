@@ -111,6 +111,7 @@ const VesselsLayer = ({ map }) => {
 
   const applyFilterToVessels = (vesselsFeatures, noFilterFunction) => new Promise(resolve => {
     if (!filters || !filters.length) {
+      noFilterFunction()
       return resolve(vesselsFeatures)
     }
 

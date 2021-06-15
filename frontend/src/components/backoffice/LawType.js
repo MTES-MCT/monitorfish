@@ -135,48 +135,18 @@ const RegulatoryZoneLayerList = styled.ul`
   border-bottom-right-radius: 2px;
   padding: 0;
   color: ${COLORS.grayDarkerThree};
-
-  animation: ${props => props.isOpen ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
-
-  @keyframes regulatory-selected-opening {
-    0%   {
-        height: 0;
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-  }
-
-  @keyframes regulatory-selected-closing {
-    0%   {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        height: 0;
-    }
-  }
+  height: ${props => props.isOpen ? 'unset' : '0'};
+  opacity: ${props => props.isOpen ? '1' : '0'};
+  transition:  all 0.5s;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
-  transform: rotate(180deg);
+  transform: ${props => props.isopen ? 'rotate(0deg)' : 'rotate(180deg)'};
   width: 17px;
   float: right;
   margin-right: 10px;
   margin-top: 5px;
-
-  animation: ${props => props.isopen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
-
-  @keyframes chevron-layer-opening {
-    0%   { transform: rotate(180deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  @keyframes chevron-layer-closing {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(180deg);   }
-  }
+  transition: all 0.5s;
 `
 
 export default LawType

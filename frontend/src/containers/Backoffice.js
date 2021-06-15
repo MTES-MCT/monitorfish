@@ -118,6 +118,7 @@ const Backoffice = () => {
         <ButtonList>
           <WhiteButton>Brouillon (X)</WhiteButton>
           <WhiteButton>Tracé en attente (X)</WhiteButton>
+          <WhiteButton disabled>Dernière publications (X)</WhiteButton>
         </ButtonList>
         {regulatoryZoneListByRegTerritory
           ? displaySearchResultList()
@@ -232,6 +233,8 @@ const MetadataWrapper = styled.div`
   padding: 10px;
   flex-direction: column;
   height: 100vh;
+  transition: all 0.5s;
+  opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
 `
 
 const SearchBoxInput = styled.input`

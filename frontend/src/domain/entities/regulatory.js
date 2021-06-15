@@ -33,3 +33,8 @@ export const lawTypeList = {
   'R(UE) 2019/1241': 'UE',
   'R(UE) 1380/2013': 'UE'
 }
+
+export const RegulatoryTerritory = {
+  FRANCE: 'Réglementation France',
+  UE: 'Réglementation UE'
+}

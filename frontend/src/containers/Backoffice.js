@@ -201,7 +201,7 @@ const ButtonList = styled.div`
   flex-direction:row;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 40px;
+  padding: 0 40px 0 30px;
 `
 
 const ButtonListFooter = styled.div`

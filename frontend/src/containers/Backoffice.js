@@ -11,6 +11,7 @@ import { ReactComponent as SearchIconSVG } from '../components/icons/Loupe.svg'
 import { COLORS } from '../constants/constants'
 import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
+import { RegulatoryTerritory } from '../domain/entities/regulatory'
 
 const Backoffice = () => {
   const [searchText, setSearchText] = useState('')
@@ -81,9 +82,23 @@ const Backoffice = () => {
     dispatch(closeRegulatoryZoneMetadata())
   }
 
+  const displaySearchResultList = () => {
+    return (
+    <SearchResultList>
+      {Object.keys(RegulatoryTerritory).map(territory => {
+        return (
+          <Territory key={territory}>
+            <TerritoryName>{RegulatoryTerritory[territory]}</TerritoryName>
+            {displayRegulatoryZoneByRegTerritory(territory)}
+          </Territory>
+        )
+      })}
+    </SearchResultList>)
+  }
+
   return (
     <BackofficeContainer>
-      <RegularotyZonePanel
+      <RegulatoryZonePanel
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       >
         <SearchContainer>
@@ -104,16 +119,7 @@ const Backoffice = () => {
           <WhiteButton>Tracé en attente (X)</WhiteButton>
         </ButtonList>
         {regulatoryZoneListByRegTerritory
-          ? <SearchResultList>
-            <Territory>
-              <TerritoryName>{'Réglementation France'}</TerritoryName>
-              {displayRegulatoryZoneByRegTerritory('France')}
-            </Territory>
-            <Territory>
-              <TerritoryName>{'Réglementation UE'}</TerritoryName>
-              {displayRegulatoryZoneByRegTerritory('UE')}
-            </Territory>
-          </SearchResultList>
+          ? displaySearchResultList()
           : <div>En attente de chargement</div>}
           <ButtonList>
             <BlackButton
@@ -123,7 +129,7 @@ const Backoffice = () => {
               Saisir une nouvelle réglementation
             </BlackButton>
         </ButtonList>
-      </RegularotyZonePanel>
+      </RegulatoryZonePanel>
       <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       >
@@ -153,7 +159,6 @@ const SearchResultList = styled.div`
   border-bottom: 1px solid ${COLORS.grayDarkerThree};
   height: calc(100vh - 300px);
 `
-// TODO Change 300
 
 const Territory = styled.div`
   display: flex;
@@ -199,7 +204,7 @@ const BackofficeContainer = styled.div`
   position: relative;
 `
 
-const RegularotyZonePanel = styled.div`
+const RegulatoryZonePanel = styled.div`
   display: flex;
   flex: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 2 : 1};
   flex-direction: column;

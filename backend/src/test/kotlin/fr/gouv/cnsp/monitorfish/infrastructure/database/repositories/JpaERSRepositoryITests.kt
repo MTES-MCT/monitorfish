@@ -77,10 +77,11 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     fun `findAllMessagesAfterDepartureDate Should retrieve all messages When the CFR is given`() {
         // Given
         val lastDepartureDate = ZonedDateTime.of(2019, 10, 11, 2, 6, 0, 0, UTC)
+        val now = ZonedDateTime.now()
 
         // When
         val messages = jpaERSRepository
-                .findAllMessagesAfterDepartureDate(lastDepartureDate, "GBR000B14430")
+                .findAllMessagesBetweenDepartureDates(lastDepartureDate, now, "GBR000B14430")
 
         // Then
         assertThat(messages).hasSize(17)

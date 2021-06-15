@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryZoneSelectedLayer from '../regulatory_zones/RegulatoryZoneSelectedLayer'
 import showLayer from '../../domain/use_cases/showLayer'
 import hideLayers from '../../domain/use_cases/hideLayers'
@@ -83,7 +84,7 @@ const LawType = props => {
               allowRemoveZone={false}
             />
           })
-          : <div>Aucune zone disponible</div>
+          : <EmptyResult>Aucun résultat</EmptyResult>
         }
       </>
     )

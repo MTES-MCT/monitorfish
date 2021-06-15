@@ -37,13 +37,13 @@ const YearControls = props => {
                 <YearResume>
                     {
                       yearControls.length
-                        ? <>{ yearControls.length } contrôle{ yearControls.length > 1 ? 's' : ''}</>
+                        ? <>{ yearControls.length } contrôle{ yearControls.length > 1 ? 's' : '' }</>
                         : 'Pas de contrôle'
                     }
                     {
                       yearControls.length
                         ? numberOfInfractions
-                          ? <>, {numberOfInfractions} infraction${numberOfInfractions > 1 ? 's' : ''} <Red/></>
+                          ? <>, {numberOfInfractions} infraction{ numberOfInfractions > 1 ? 's' : '' } <Red/></>
                           : <>, pas d&apos;infraction <Green /></>
                         : null
                     }

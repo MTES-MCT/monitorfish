@@ -8,7 +8,7 @@ import kotlin.jvm.Throws
 
 interface ERSRepository {
     @Throws(NoERSLastDepartureDateFound::class)
-    fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String): LastDepartureDateAndTripNumber
+    fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): LastDepartureDateAndTripNumber
     fun findAllMessagesBetweenDepartureDates(afterDateTime: ZonedDateTime,
                                              beforeDateTime: ZonedDateTime,
                                              internalReferenceNumber: String): List<ERSMessage>

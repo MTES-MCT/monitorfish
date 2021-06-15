@@ -13,8 +13,12 @@ class GetVesselLastVoyage(private val ersRepository: ERSRepository,
                           private val getERSMessages: GetERSMessages) {
     private val logger = LoggerFactory.getLogger(GetVesselLastVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String): ERSMessagesAndAlerts {
-        val lastDepartureDateAndTripNumber = ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber)
+    fun execute(internalReferenceNumber: String, beforeDateTime: ZonedDateTime?): ERSMessagesAndAlerts {
+
+        val lastDepartureDateAndTripNumber = when (beforeDateTime != null) {
+            true -> ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, beforeDateTime)
+            false -> ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, ZonedDateTime.now())
+        }
 
         val alerts = lastDepartureDateAndTripNumber.tripNumber?.let {
             alertRepository.findAlertsOfRules(

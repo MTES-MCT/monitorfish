@@ -26,11 +26,11 @@ class GetVesselLastVoyageUTests {
     @Test
     fun `execute Should return an empty list of alerts When the trim number is not found`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), null))
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), null))
 
         // When
         val (_, alerts) = GetVesselLastVoyage(ersRepository, alertRepository, getERSMessages)
-                .execute("FR224226850")
+                .execute("FR224226850", null)
 
         // Then
         assertThat(alerts).hasSize(0)

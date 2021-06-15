@@ -7,15 +7,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
-import org.springframework.transaction.annotation.Propagation
 import java.time.Instant
-import javax.transaction.Transactional
 
 @DynamicUpdate
 interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExecutor<ERSEntity> {
     @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
-            "from ERSEntity e where e.internalReferenceNumber = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")
-    fun findLastDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
+            "from ERSEntity e where e.internalReferenceNumber = ?1 and e.messageType = 'DEP' AND e.operationDateTime < ?2 order by e.operationDateTime desc")
+    fun findLastDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, beforeDateTime: Instant, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
 
     @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
             "from ERSEntity e where e.externalReferenceNumber = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")

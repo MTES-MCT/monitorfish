@@ -25,11 +25,11 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
 
     private val postgresChunkSize = 5000
 
-    override fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String): LastDepartureDateAndTripNumber {
+    override fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): LastDepartureDateAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByInternalReferenceNumber(
-                        internalReferenceNumber, PageRequest.of(0,1)).first()
+                        internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0,1)).first()
                 return LastDepartureDateAndTripNumber(
                         lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
                         lastDepartureDateAndTripNumber.tripNumber)

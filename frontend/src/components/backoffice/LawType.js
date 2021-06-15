@@ -89,7 +89,7 @@ const LawType = props => {
     )
   }
 
-  return (<>
+  return (<LawTypeContainer>
     <LawTypeName onClick={() => setIsOpen(!isOpen)}>
       {lawType}
       <ChevronIcon isopen={isOpen}/>
@@ -97,8 +97,15 @@ const LawType = props => {
     {isOpen && <RegulatoryZoneLayerList isOpen={isOpen}>
       {displayRegulatoryZoneList(regZoneByLawType[lawType])}
     </RegulatoryZoneLayerList>}
-  </>)
+  </LawTypeContainer>)
 }
+
+const LawTypeContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+`
 
 const LawTypeName = styled.div`
   font-size: 16px;
@@ -111,6 +118,8 @@ const LawTypeName = styled.div`
 
 const RegulatoryZoneLayerList = styled.ul`
   margin: 0;
+  overflow-y: auto;
+  flex: 1;
   background-color: ${COLORS.background};
   border-radius: 0;
   border-bottom-left-radius: 2px;

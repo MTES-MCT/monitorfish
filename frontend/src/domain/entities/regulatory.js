@@ -35,6 +35,6 @@ export const lawTypeList = {
 }
 
 export const RegulatoryTerritory = {
-  FRANCE: 'Réglementation France',
+  France: 'Réglementation France',
   UE: 'Réglementation UE'
 }

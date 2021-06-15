@@ -46,9 +46,13 @@ const Backoffice = () => {
     dispatch(getAllGearCodes())
   }, [])
 
-  useEffect(() => {
-    console.log(gears)
-  }, [gears])
+  function addNewRegZone () {
+    console.log('addNewRegZone clicked')
+  }
+
+  function callCloseRegulatoryZoneMetadata () {
+    dispatch(closeRegulatoryZoneMetadata())
+  }
 
   const displayRegulatoryZoneListByLawType = (regZoneByLawType) => {
     return (
@@ -72,14 +76,6 @@ const Backoffice = () => {
     return franceRegList
       ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(franceRegList)} </RegulatoryZoneListByLawTypeList>
       : <div>Aucune zone pour ce territoire</div>
-  }
-
-  function addNewRegZone () {
-    console.log('addNewRegZone clicked')
-  }
-
-  function callCloseRegulatoryZoneMetadata () {
-    dispatch(closeRegulatoryZoneMetadata())
   }
 
   const displaySearchResultList = () => {
@@ -151,6 +147,7 @@ const Backoffice = () => {
 const SearchResultList = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: stretch;
   flex: 1;
   margin-top: 5px;
   color: ${COLORS.textWhite};
@@ -168,7 +165,6 @@ const Territory = styled.div`
   padding: 5px;
   box-sizing: border-box;
   width: 50%;
-  overflow-y: auto;
 `
 
 const TerritoryName = styled.div`
@@ -181,6 +177,9 @@ const TerritoryName = styled.div`
 `
 
 const RegulatoryZoneListByLawTypeList = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   margin: 10px 0;
 `
 

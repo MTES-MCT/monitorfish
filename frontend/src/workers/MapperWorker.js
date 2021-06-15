@@ -40,9 +40,12 @@ class MapperWorker {
   convertGeoJSONFeaturesToObjectByRegTerritory (features) {
     const layerNamesArray = this.#getLayerNameList(features)
     const layersNamesByRegTerritory = layerNamesArray.reduce((accumulatedObject, zone) => {
-      const lawType = zone[0].lawType
+      let lawType = zone[0].lawType
       const layerName = zone[0].layerName
-      const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'France'
+      const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
+      if (regTerritory === 'France') {
+        lawType = `${lawType} / ${zone[0].seafront}`
+      }
 
       if (!accumulatedObject[regTerritory]) {
         accumulatedObject[regTerritory] = {}

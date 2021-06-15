@@ -79,6 +79,7 @@ const VesselListTable = props => {
                 sortColumn={sortColumn}
                 sortType={sortType}
                 onSortColumn={handleSortColumn}
+                affixHorizontalScrollbar
             >
                 <Column resizable width={35} fixed>
                     <HeaderCell>
@@ -160,7 +161,7 @@ const VesselListTable = props => {
                 <HeaderCell>Infr.</HeaderCell>
                 <Cell dataKey="lastControlInfraction"/>
               </Column>
-              <Column resizable sortable width={150}>
+              <Column resizable sortable width={300}>
                 <HeaderCell>Observations</HeaderCell>
                 <CellWithTitle dataKey="postControlComment"/>
               </Column>

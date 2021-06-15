@@ -10,6 +10,7 @@ import { setError } from '../domain/reducers/Global'
 import { ReactComponent as SearchIconSVG } from '../components/icons/Loupe.svg'
 import { COLORS } from '../constants/constants'
 import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
+import { EmptyResult } from '../components/commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
 
@@ -72,14 +73,14 @@ const Backoffice = () => {
             callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
           />
         })
-        : <div>Aucune Law Type disponible</div>)
+        : <EmptyResult>Aucun résultat</EmptyResult>)
   }
 
   const displayRegulatoryZoneByRegTerritory = (territory) => {
     const franceRegList = regulatoryZoneListByRegTerritory[territory]
     return franceRegList
       ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(franceRegList)} </RegulatoryZoneListByLawTypeList>
-      : <div>Aucune zone pour ce territoire</div>
+      : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
   }
 
   const displaySearchResultList = () => {
@@ -177,8 +178,6 @@ const TerritoryName = styled.div`
   text-transform: uppercase;
   text-align: left;
   color: ${COLORS.grayDarkerThree};
-  color: ${COLORS.textGray};
-  font-size: 16px;
 `
 
 const RegulatoryZoneListByLawTypeList = styled.div`

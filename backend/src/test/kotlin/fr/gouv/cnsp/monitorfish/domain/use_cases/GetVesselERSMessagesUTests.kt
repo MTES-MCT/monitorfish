@@ -44,7 +44,7 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
         given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -99,7 +99,7 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
         given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getCorrectedDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -133,7 +133,7 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
         given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getRETDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -176,7 +176,7 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should add the deleted property`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
         given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getRETDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))

@@ -8,10 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.LastDepartureDateAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.api.FrontController
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ERSEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBERSRepository
-import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
@@ -49,11 +47,15 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
             "No departure date (DEP) found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     @Cacheable(value = ["ers"])
-    override fun findAllMessagesAfterDepartureDate(dateTime: ZonedDateTime,
-                                                   internalReferenceNumber: String): List<ERSMessage> {
+    override fun findAllMessagesBetweenDepartureDates(afterDateTime: ZonedDateTime,
+                                                      beforeDateTime: ZonedDateTime,
+                                                      internalReferenceNumber: String): List<ERSMessage> {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                return dbERSRepository.findERSMessagesAfterOperationDateTime(internalReferenceNumber, dateTime.toInstant()).map {
+                return dbERSRepository.findERSMessagesAfterOperationDateTime(
+                        internalReferenceNumber,
+                        afterDateTime.toInstant(),
+                        beforeDateTime.toInstant()).map {
                     it.toERSMessage(mapper)
                 }
             }

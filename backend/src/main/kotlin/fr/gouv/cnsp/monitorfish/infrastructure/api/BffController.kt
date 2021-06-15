@@ -24,6 +24,7 @@ class BffController(
         private val getLastPositions: GetLastPositions,
         private val getVessel: GetVessel,
         private val getVesselLastVoyage: GetVesselLastVoyage,
+        private val getVesselVoyage: GetVesselVoyage,
         private val getAllGears: GetAllGears,
         private val getAllSpecies: GetAllSpecies,
         private val searchVessels: SearchVessels,
@@ -123,11 +124,23 @@ class BffController(
     @ApiOperation("Get vessel's ERS messages")
     fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
                              @RequestParam(name = "internalReferenceNumber")
-                             internalReferenceNumber: String): ERSMessagesAndAlertsDataOutput {
+                             internalReferenceNumber: String,
+                             @ApiParam("from date")
+                             @RequestParam(name = "afterDateTime", required = false)
+                             @DateTimeFormat(pattern = zoneDateTimePattern)
+                             afterDateTime: ZonedDateTime?,
+                             @ApiParam("to date")
+                             @RequestParam(name = "beforeDateTime", required = false)
+                             @DateTimeFormat(pattern = zoneDateTimePattern)
+                             beforeDateTime: ZonedDateTime?): ERSMessagesAndAlertsDataOutput {
         val start = System.currentTimeMillis()
-        val ersMessagesAndAlerts = getVesselLastVoyage.execute(internalReferenceNumber)
-        ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
+        val ersMessagesAndAlerts = when (afterDateTime != null && beforeDateTime != null) {
+            true -> getVesselVoyage.execute(internalReferenceNumber, afterDateTime, beforeDateTime)
+            false -> getVesselLastVoyage.execute(internalReferenceNumber)
+        }
+
+        ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return ERSMessagesAndAlertsDataOutput.fromERSMessagesAndAlerts(ersMessagesAndAlerts)
     }
 

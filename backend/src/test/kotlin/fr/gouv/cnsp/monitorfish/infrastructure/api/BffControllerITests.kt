@@ -56,6 +56,9 @@ class BffControllerITests {
     private lateinit var getVesselLastVoyage: GetVesselLastVoyage
 
     @MockBean
+    private lateinit var getVesselVoyage: GetVesselVoyage
+
+    @MockBean
     private lateinit var searchVessels: SearchVessels
 
     @MockBean
@@ -227,7 +230,7 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should find the ERS messages of vessels`() {
+    fun `Should find the last ERS messages of vessels`() {
         // Given
         given(this.getVesselLastVoyage.execute(any())).willReturn(ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
 
@@ -243,6 +246,27 @@ class BffControllerITests {
 
 
         Mockito.verify(getVesselLastVoyage).execute("FR224226850")
+    }
+
+    @Test
+    fun `Should find the ERS messages of vessels between two dates When after and before dates are specified`() {
+        // Given
+        given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+
+        // When
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&afterDateTime=2020-05-04T03:04:05.000Z&beforeDateTime=2021-05-04T03:04:05.000Z"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(2)))
+                .andExpect(jsonPath("$.ersMessages.length()", equalTo(3)))
+                .andExpect(jsonPath("$.ersMessages[0].messageType", equalTo("DEP")))
+                .andExpect(jsonPath("$.ersMessages[0].tripNumber", equalTo(345)))
+                .andExpect(jsonPath("$.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
+        
+        Mockito.verify(getVesselVoyage).execute(
+                "FR224226850",
+                ZonedDateTime.parse("2020-05-04T03:04:05.000Z"),
+                ZonedDateTime.parse("2021-05-04T03:04:05.000Z"))
     }
 
     @Test

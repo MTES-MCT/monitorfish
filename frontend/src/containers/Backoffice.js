@@ -121,14 +121,14 @@ const Backoffice = () => {
         {regulatoryZoneListByRegTerritory
           ? displaySearchResultList()
           : <div>En attente de chargement</div>}
-          <ButtonList>
+          <ButtonListFooter>
             <BlackButton
               disabled={false}
               isLast={false}
               onClick={() => addNewRegZone()}>
               Saisir une nouvelle réglementation
             </BlackButton>
-        </ButtonList>
+        </ButtonListFooter>
       </RegulatoryZonePanel>
       <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
@@ -156,8 +156,9 @@ const SearchResultList = styled.div`
   color: ${COLORS.textWhite};
   text-decoration: none;
   border-radius: 2px;
-  border-bottom: 1px solid ${COLORS.grayDarkerThree};
+  border-bottom: 1px solid ${COLORS.grayDarker};
   height: calc(100vh - 300px);
+  padding: 0 40px;
 `
 
 const Territory = styled.div`
@@ -180,7 +181,7 @@ const TerritoryName = styled.div`
 `
 
 const RegulatoryZoneListByLawTypeList = styled.div`
-  margin: 10px 5px;
+  margin: 10px 0;
 `
 
 const SearchContainer = styled.div`
@@ -188,15 +189,20 @@ const SearchContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   justify-content: center;
-  padding: 10px;
+  padding: 25px 40px 0;
 `
 
 const ButtonList = styled.div`
   display: flex;
   flex-direction:row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 10px;
+  padding: 0 40px;
+`
+
+const ButtonListFooter = styled.div`
+  ${ButtonList};
+  justify-content: center;
 `
 
 const BackofficeContainer = styled.div`

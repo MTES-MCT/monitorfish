@@ -227,8 +227,8 @@ const RegulatoryZonePanel = styled.div`
 const MetadataWrapper = styled.div`
   display: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none'};
   position: absolute;
-  top: 0;
-  left: 50%;
+  top: 1%;
+  left: 51%;
   z-index: 1;
   width: 300px;
   border-radius: 2px;

@@ -98,6 +98,7 @@ const Backoffice = () => {
   }
 
   return (
+    <>
     <BackofficeContainer>
       <RegulatoryZonePanel
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
@@ -132,21 +133,22 @@ const Backoffice = () => {
             </BlackButton>
         </ButtonListFooter>
       </RegulatoryZonePanel>
-      <MetadataWrapper
-        regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-      >
-        <RegulatoryZoneMetadata
-          loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
-          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-          regulatoryZoneMetadata={regulatoryZoneMetadata}
-          callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-          gears={gears}
-          layersSidebarIsOpen={true}
-          fromBackoffice={true}
-        />
-      </MetadataWrapper>
       <BaseMap />
     </BackofficeContainer>
+    <MetadataWrapper
+      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+    >
+      <RegulatoryZoneMetadata
+        loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+        regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+        regulatoryZoneMetadata={regulatoryZoneMetadata}
+        callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+        gears={gears}
+        layersSidebarIsOpen={true}
+        fromBackoffice={true}
+      />
+    </MetadataWrapper>
+    </>
   )
 }
 
@@ -216,7 +218,7 @@ const BackofficeContainer = styled.div`
 
 const RegulatoryZonePanel = styled.div`
   display: flex;
-  flex: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 2 : 1};
+  flex: 1;
   flex-direction: column;
   max-height: 100vh;
   max-width: 50%;
@@ -224,7 +226,11 @@ const RegulatoryZonePanel = styled.div`
 
 const MetadataWrapper = styled.div`
   display: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none'};
-  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: 300px;
   border-radius: 2px;
   color: #515151;
   text-decoration: none;
@@ -232,9 +238,10 @@ const MetadataWrapper = styled.div`
   padding: 0;
   padding: 10px;
   flex-direction: column;
-  height: 100vh;
+  max-height: 100vh;
   transition: all 0.5s;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
+  
 `
 
 const SearchBoxInput = styled.input`

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryZoneSelectedLayer from '../regulatory_zones/RegulatoryZoneSelectedLayer'
@@ -14,6 +14,7 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
 const LawType = props => {
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
+  const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   const dispatch = useDispatch()
 
   const {
@@ -78,7 +79,7 @@ const LawType = props => {
               decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
               regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
               isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
-              regulatoryZoneMetadata={undefined}
+              regulatoryZoneMetadata={regulatoryZoneMetadata}
               gears={gears}
               isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
               allowRemoveZone={false}

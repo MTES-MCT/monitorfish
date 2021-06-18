@@ -17,6 +17,9 @@ import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
 import Measurement from './containers/Measurement'
 import VesselFilters from './containers/VesselFilters'
 import { ReactComponent as AlertSVG } from './components/icons/Picto_alerte.svg'
+import { Provider } from 'react-redux'
+import { homeStore, backofficeStore } from './Store'
+import NamespaceContext from './domain/context/NamespaceContext'
 
 function App () {
   switch (browserName) {
@@ -47,25 +50,31 @@ function App () {
 }
 
 function HomePage () {
-  return <Wrapper>
-    <Map />
-    <LayersSidebar/>
-    <VesselsSearchBox />
-    <RightMenuOnHoverZone />
-    <VesselList/>
-    <VesselFilters/>
-    <VesselVisibility/>
-    <VesselSidebar/>
-    <UpdatingVesselLoader/>
-    <Measurement/>
-    <APIWorker/>
-  </Wrapper>
+  return <Provider store={homeStore}>
+    <Wrapper>
+      <Map />
+      <LayersSidebar/>
+      <VesselsSearchBox />
+      <RightMenuOnHoverZone />
+      <VesselList/>
+      <VesselFilters/>
+      <VesselVisibility/>
+      <VesselSidebar/>
+      <UpdatingVesselLoader/>
+      <Measurement/>
+      <APIWorker/>
+    </Wrapper>
+    </Provider>
 }
 
 function BackofficePage () {
-  return <BackofficeWrapper>
-    <Backoffice />
-  </BackofficeWrapper>
+  return <Provider store={backofficeStore}>
+    <NamespaceContext.Provider value={'backoffice'}>
+      <BackofficeWrapper>
+        <Backoffice />
+      </BackofficeWrapper>
+    </NamespaceContext.Provider>
+  </Provider>
 }
 
 function getUnsupportedBrowser () {

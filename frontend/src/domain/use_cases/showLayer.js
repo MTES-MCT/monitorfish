@@ -1,6 +1,6 @@
 import Layers from '../entities/layers'
 import VectorLayer from 'ol/layer/Vector'
-import { addLayer, addShowedLayer, pushLayerAndArea, setLastShowedFeatures } from '../reducers/Layer'
+import layer from '../reducers/Layer'
 import { getVectorLayerStyle } from '../../layers/styles/vectorLayerStyles'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -13,6 +13,8 @@ import { animateToRegulatoryLayer } from '../reducers/Map'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
+let currentNamespace = 'homepage'
+
 const setIrretrievableFeaturesEvent = error => {
   return {
     type: IRRETRIEVABLE_FEATURES_EVENT,
@@ -20,7 +22,13 @@ const setIrretrievableFeaturesEvent = error => {
   }
 }
 
-const showLayer = layerToShow => (dispatch, getState) => {
+const showLayer = (layerToShow, namespace) => (dispatch, getState) => {
+  currentNamespace = namespace
+  const {
+    addLayer,
+    addShowedLayer
+  } = layer[currentNamespace].actions
+
   if (layerToShow && layerToShow.type) {
     const getVectorLayerClosure = getVectorLayer(dispatch)
 
@@ -69,7 +77,11 @@ const getVectorLayer = dispatch => (type, subZone, hash, gearCategory) => {
   })
 }
 
-const getRegulatoryVectorSource = dispatch => (type, regulatoryZoneProperties) => {
+const getRegulatoryVectorSource = (dispatch) => (type, regulatoryZoneProperties) => {
+  const {
+    pushLayerAndArea,
+    setLastShowedFeatures
+  } = layer[currentNamespace].actions
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,

@@ -11,8 +11,6 @@ import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 
 import App from './App'
-import { Provider } from 'react-redux'
-import Store from './Store'
 import GlobalFonts from './fonts/fonts'
 
 Sentry.init({
@@ -29,10 +27,8 @@ Sentry.init({
 
 ReactDOM.render(
   <React.StrictMode>
-      <Provider store={Store}>
-          <GlobalFonts/>
-          <App />
-      </Provider>
+    <GlobalFonts/>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 )

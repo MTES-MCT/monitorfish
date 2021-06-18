@@ -1,11 +1,9 @@
 import Layers from '../entities/layers'
-import { createSlice } from '@reduxjs/toolkit'
-import { getLocalStorageState } from '../../utils'
+import { getLocalStorageState, createGenericSlice } from '../../utils'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
-const regulatorySlice = createSlice({
-  name: 'layer',
+const sliceObject = {
   initialState: {
     layers: [],
     showedLayers: getLocalStorageState([], layersShowedOnMapLocalStorageKey),
@@ -93,8 +91,11 @@ const regulatorySlice = createSlice({
       state.lastShowedFeatures = action.payload
     }
   }
-})
+}
 
+const homePageSlice = createGenericSlice(sliceObject, 'HomePageLayerSlice')
+
+// TODO: Should be removed
 export const {
   addLayer,
   removeLayer,
@@ -106,6 +107,11 @@ export const {
   removeLayerAndArea,
   setLastShowedFeatures,
   addAdministrativeZoneGeometryToCache
-} = regulatorySlice.actions
+} = homePageSlice.actions
 
-export default regulatorySlice.reducer
+// export default regulatorySlice.reducer
+
+export default {
+  homepage: homePageSlice,
+  backoffice: createGenericSlice(sliceObject, 'BackofficeLayerSlice')
+}

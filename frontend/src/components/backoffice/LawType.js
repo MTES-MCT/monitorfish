@@ -10,6 +10,7 @@ import LayersEnum from '../../domain/entities/layers'
 import { COLORS } from '../../constants/constants'
 import zoomInSubZone from '../../domain/use_cases/zoomInSubZone'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import NamespaceContext from '../../domain/context/NamespaceContext'
 
 const LawType = props => {
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
@@ -47,11 +48,11 @@ const LawType = props => {
     dispatch(zoomInSubZone(subZone))
   }
 
-  function callShowRegulatoryZone (regulatoryZone) {
+  function callShowRegulatoryZone (regulatoryZone, namespace) {
     dispatch(showLayer({
       type: LayersEnum.REGULATORY.code,
       zone: regulatoryZone
-    }))
+    }, namespace))
   }
 
   function callHideRegulatoryZone (regulatoryZone) {
@@ -62,13 +63,13 @@ const LawType = props => {
   }
 
   const displayRegulatoryZoneList = (regulatoryZoneList) => {
-    return (<>
-      {
+    return (<NamespaceContext.Consumer>
+      {namespace => (
         regulatoryZoneList && Object.keys(regulatoryZoneList).length > 0
           ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName, index) => {
             return <RegulatoryZoneSelectedLayer
               key={regulatoryZoneLayerName}
-              callShowRegulatoryZone={callShowRegulatoryZone}
+              callShowRegulatoryZone={regulatoryZone => callShowRegulatoryZone(regulatoryZone, namespace)}
               callHideRegulatoryZone={callHideRegulatoryZone}
               callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
               callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
@@ -86,8 +87,8 @@ const LawType = props => {
             />
           })
           : <EmptyResult>Aucun résultat</EmptyResult>
-        }
-      </>
+      )}
+      </NamespaceContext.Consumer>
     )
   }
 

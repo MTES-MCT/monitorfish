@@ -8,7 +8,9 @@ import kotlin.jvm.Throws
 
 interface ERSRepository {
     @Throws(NoERSLastDepartureDateFound::class)
-    fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): LastDepartureDateAndTripNumber
+    fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String,
+                                           beforeDateTime:
+                                           ZonedDateTime): LastDepartureDateAndTripNumber
     fun findAllMessagesBetweenDepartureDates(afterDateTime: ZonedDateTime,
                                              beforeDateTime: ZonedDateTime,
                                              internalReferenceNumber: String): List<ERSMessage>
@@ -17,4 +19,8 @@ interface ERSRepository {
     fun findById(id: Long): ERSMessage
     // For test purpose
     fun deleteAll()
+    @Throws(NoERSLastDepartureDateFound::class)
+    fun findSecondDepartureDateByInternalReferenceNumber(internalReferenceNumber: String,
+                                                         afterDateTime:
+                                                         ZonedDateTime): LastDepartureDateAndTripNumber
 }

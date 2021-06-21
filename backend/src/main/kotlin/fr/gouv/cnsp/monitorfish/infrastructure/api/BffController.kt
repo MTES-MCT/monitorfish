@@ -127,13 +127,13 @@ class BffController(
                              @ApiParam("before date")
                              @RequestParam(name = "beforeDateTime", required = false)
                              @DateTimeFormat(pattern = zoneDateTimePattern)
-                             beforeDateTime: ZonedDateTime?): ERSMessagesAndAlertsDataOutput {
+                             beforeDateTime: ZonedDateTime?): VoyageDataOutput {
         val start = System.currentTimeMillis()
 
-        val ersMessagesAndAlerts = getVesselLastVoyage.execute(internalReferenceNumber, beforeDateTime)
+        val voyage = getVesselLastVoyage.execute(internalReferenceNumber, beforeDateTime)
 
         ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
-        return ERSMessagesAndAlertsDataOutput.fromERSMessagesAndAlerts(ersMessagesAndAlerts)
+        return VoyageDataOutput.fromVoyage(voyage)
     }
 
     @GetMapping("/v1/gears")

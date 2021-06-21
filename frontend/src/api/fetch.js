@@ -274,12 +274,13 @@ export function getAllGearCodesFromAPI () {
     })
 }
 
-export function getVesselERSMessagesFromAPI (vesselIdentity) {
+export function getVesselVoyageFromAPI (vesselIdentity, beforeDateTime) {
   const internalReferenceNumber = vesselIdentity.internalReferenceNumber ? vesselIdentity.internalReferenceNumber : ''
   const externalReferenceNumber = vesselIdentity.externalReferenceNumber ? vesselIdentity.externalReferenceNumber : ''
   const ircs = vesselIdentity.ircs ? vesselIdentity.ircs : ''
+  beforeDateTime = beforeDateTime ? new Date(beforeDateTime).toISOString() : ''
 
-  return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}`)
+  return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&beforeDateTime=${beforeDateTime}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()

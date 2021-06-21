@@ -23,6 +23,12 @@ code {
   visibility: hidden;
 }
 
+.available-width {
+  width: -webkit-fill-available !important;
+  width: -moz-available !important;
+  width: stretch;
+}
+
 .rs-slider-mark {
   font-size: 13px;
   color: #969696;

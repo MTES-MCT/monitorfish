@@ -16,21 +16,37 @@ export class VesselTrack {
    * @param {Vessel} vessel
    */
   constructor (vessel) {
-    const vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(vessel)
+    let vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(vessel)
 
-    const lastTrackLineFeature = vesselTrackLineFeatures[vesselTrackLineFeatures.length - 1]
-    const circlePointFeatures = this.buildCirclePointFeatures(vesselTrackLineFeatures.concat(lastTrackLineFeature), vessel.positions)
-    circlePointFeatures.forEach(circlePoint => {
-      vesselTrackLineFeatures.push(circlePoint)
-    })
+    const hasMoreThanOnePoint = vesselTrackLineFeatures && vesselTrackLineFeatures.length
+    if (hasMoreThanOnePoint) {
+      const lastTrackLineFeature = vesselTrackLineFeatures[vesselTrackLineFeatures.length - 1]
+      if (lastTrackLineFeature) {
+        vesselTrackLineFeatures = vesselTrackLineFeatures.concat(lastTrackLineFeature)
+      }
 
-    const arrowPointFeatures = this.buildArrowPointFeatures(vesselTrackLineFeatures)
-    arrowPointFeatures.forEach(arrowPoint => {
-      vesselTrackLineFeatures.push(arrowPoint)
-    })
+      const circlePointFeatures = this.buildCirclePointFeatures(vesselTrackLineFeatures, vessel.positions)
+      circlePointFeatures.forEach(circlePoint => {
+        vesselTrackLineFeatures.push(circlePoint)
+      })
+
+      const arrowPointFeatures = this.buildArrowPointFeatures(vesselTrackLineFeatures)
+      arrowPointFeatures.forEach(arrowPoint => {
+        vesselTrackLineFeatures.push(arrowPoint)
+      })
+
+      this.lastPositionCoordinates = circlePointFeatures[circlePointFeatures.length - 1].getGeometry().getCoordinates()
+    } else if (vessel.positions && vessel.positions.length) {
+      const position = vessel.positions[0]
+      const point = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+
+      const circle = this.buildCircleFeature(point, 1, position, position.speed)
+
+      this.lastPositionCoordinates = point
+      this.features = [circle]
+    }
 
     this.features = vesselTrackLineFeatures
-    this.lastPositionCoordinates = circlePointFeatures[circlePointFeatures.length - 1].getGeometry().getCoordinates()
   }
 
   buildCirclePointFeatures (vesselTrackLines, positions) {
@@ -49,21 +65,24 @@ export class VesselTrack {
         firstPositionOnLine = null
       }
 
-      const circleFeature = new Feature({
-        geometry: new Point(pointCoordinatesOfLine),
-        name: Layers.VESSEL_TRACK.code + ':position:' + index,
-        course: firstPositionOnLine ? firstPositionOnLine.course : null,
-        positionType: firstPositionOnLine ? firstPositionOnLine.positionType : null,
-        speed: firstPositionOnLine ? firstPositionOnLine.speed : null,
-        dateTime: firstPositionOnLine ? firstPositionOnLine.dateTime : null
-      })
-
-      circleFeature.setId(Layers.VESSEL_TRACK.code + ':position:' + index)
-      const trackColor = getTrackTypeFromSpeed(feature.getProperties().speed).color
-      setCircleStyle(trackColor, circleFeature)
-
-      return circleFeature
+      return this.buildCircleFeature(pointCoordinatesOfLine, index, firstPositionOnLine, feature.getProperties().speed)
     }).filter(circlePoint => circlePoint)
+  }
+
+  buildCircleFeature (coordinates, index, position, speed) {
+    const circleFeature = new Feature({
+      geometry: new Point(coordinates),
+      name: Layers.VESSEL_TRACK.code + ':position:' + index,
+      course: position ? position.course : null,
+      positionType: position ? position.positionType : null,
+      speed: position ? position.speed : null,
+      dateTime: position ? position.dateTime : null
+    })
+
+    circleFeature.setId(Layers.VESSEL_TRACK.code + ':position:' + index)
+    const trackColor = getTrackTypeFromSpeed(speed).color
+    setCircleStyle(trackColor, circleFeature)
+    return circleFeature
   }
 
   getFirstOrLastPointCoordinateOfLine (feature, vesselTrackLines, index) {

@@ -76,7 +76,11 @@ const VesselsLayer = ({ map }) => {
   }, [vesselLabelsShowedOnMap, map, vesselLabelsHiddenByZoom, isMoving, vesselLabel, filteredVesselsFeaturesUids])
 
   useEffect(() => {
-    applyFilterToVessels(vectorSource.getFeatures(), rewriteVesselsStylesIfNoFilter).then(_ => {
+    const vesselsFeatures = vectorSource.getFeatures()
+    applyFilterToVessels(vesselsFeatures, () => {
+      rewriteVesselsStylesIfNoFilter(vesselsFeatures)
+      showSelectedVesselSelector(vesselsFeatures)
+    }).then(_ => {
       vectorSource.changed()
     })
   }, [filters, nonFilteredVesselsAreHidden, selectedBaseLayer])
@@ -88,6 +92,30 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
+  const showSelectedVesselSelector = vesselsFeatures => () => {
+    const feature = vesselsFeatures.find(feature =>
+      selectedVesselFeatureAndIdentity &&
+      vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature))
+
+    if(feature) {
+      Vessel.setVesselAsSelected(feature)
+      dispatch(updateSelectedVesselFeature(feature))
+    }
+  }
+
+  const rewriteVesselsStylesIfNoFilter = vesselsFeatures => () => {
+    const isLight = Vessel.iconIsLight(selectedBaseLayer)
+
+    vesselsFeatures.forEach(feature => {
+      Vessel.setVesselFeatureImages(
+        feature,
+        {
+          isLight,
+          vesselsLastPositionVisibility
+        })
+    })
+  }
+
   function addVesselsFeaturesToMap () {
     if (map && vessels && vessels.length) {
       const vesselsFeatures = vessels
@@ -96,7 +124,7 @@ const VesselsLayer = ({ map }) => {
         .map((currentVessel, index) => buildLastPositionFeature(currentVessel, index))
         .filter(vessel => vessel)
 
-      applyFilterToVessels(vesselsFeatures, () => {}).then(features => {
+      applyFilterToVessels(vesselsFeatures, showSelectedVesselSelector(vesselsFeatures)).then(features => {
         vectorSource.clear(true)
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({
@@ -151,19 +179,6 @@ const VesselsLayer = ({ map }) => {
         return resolve(vesselsFeatures)
       })
   })
-
-  function rewriteVesselsStylesIfNoFilter () {
-    const isLight = Vessel.iconIsLight(selectedBaseLayer)
-
-    vectorSource.getFeatures().forEach(feature => {
-      Vessel.setVesselFeatureImages(
-        feature,
-        {
-          isLight,
-          vesselsLastPositionVisibility
-        })
-    })
-  }
 
   function highLightVesselsOnMap () {
     if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {

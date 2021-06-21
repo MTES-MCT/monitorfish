@@ -43,6 +43,30 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
+    override fun findSecondDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, afterDateTime: ZonedDateTime): LastDepartureDateAndTripNumber {
+        try {
+            if(internalReferenceNumber.isNotEmpty()) {
+                val lastDepartureDateAndTripNumberList = dbERSRepository.findNextDepartureDateByInternalReferenceNumber(
+                        internalReferenceNumber, afterDateTime.toInstant(), PageRequest.of(0,2))
+
+                val lastDepartureDateAndTripNumber = when(lastDepartureDateAndTripNumberList.size) {
+                    2 -> lastDepartureDateAndTripNumberList.last()
+                    else -> throw IllegalArgumentException("no second departure message found.")
+                }
+
+                return LastDepartureDateAndTripNumber(
+                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
+                        lastDepartureDateAndTripNumber.tripNumber)
+            }
+
+            throw IllegalArgumentException("No CFR given to find the vessel.")
+        } catch (e: NoSuchElementException) {
+            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
+        } catch (e: IllegalArgumentException) {
+            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
+        }
+    }
+
     private fun getDepartureDateExceptionMessage(internalReferenceNumber: String) =
             "No departure date (DEP) found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 

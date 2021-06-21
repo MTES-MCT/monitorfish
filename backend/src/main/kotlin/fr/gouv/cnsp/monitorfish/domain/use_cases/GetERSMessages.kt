@@ -19,7 +19,7 @@ class GetERSMessages(private val ersRepository: ERSRepository,
 
     fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime): List<ERSMessage> {
         val messages = ersRepository
-                .findAllMessagesBetweenDepartureDates(afterDepartureDate, ZonedDateTime.now(), internalReferenceNumber)
+                .findAllMessagesBetweenDepartureDates(afterDepartureDate, beforeDepartureDate, internalReferenceNumber)
                 .sortedBy { it.operationDateTime }
                 .map {
                     try {

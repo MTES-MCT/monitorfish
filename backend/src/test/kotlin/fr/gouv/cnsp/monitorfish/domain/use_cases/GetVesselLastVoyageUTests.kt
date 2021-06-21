@@ -24,15 +24,22 @@ class GetVesselLastVoyageUTests {
     private lateinit var getERSMessages: GetERSMessages
 
     @Test
-    fun `execute Should return an empty list of alerts When the trim number is not found`() {
+    fun `execute Should return an empty list of alerts When the trip number is not found`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), null))
+        val expectedBeforeDateTime = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(expectedBeforeDateTime, null))
 
         // When
-        val (_, alerts) = GetVesselLastVoyage(ersRepository, alertRepository, getERSMessages)
+        val voyage = GetVesselLastVoyage(ersRepository, alertRepository, getERSMessages)
                 .execute("FR224226850", null)
 
+        val (_, alerts) = voyage.ersMessagesAndAlerts
+
         // Then
+        assertThat(voyage.isLastVoyage).isTrue
+        assertThat(voyage.previousBeforeDateTime).isEqualTo(expectedBeforeDateTime)
+        assertThat(voyage.nextBeforeDateTime).isNull()
+        assertThat(voyage.isLastVoyage).isTrue
         assertThat(alerts).hasSize(0)
     }
 

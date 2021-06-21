@@ -10,7 +10,7 @@ import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers
 import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 
-export const TWO_MINUTES = 12000
+export const TWO_MINUTES = 120000
 
 const APIWorker = () => {
   const error = useSelector(state => state.global.error)

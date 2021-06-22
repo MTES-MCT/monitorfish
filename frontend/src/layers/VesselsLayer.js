@@ -97,7 +97,7 @@ const VesselsLayer = ({ map }) => {
       selectedVesselFeatureAndIdentity &&
       vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature))
 
-    if(feature) {
+    if (feature) {
       Vessel.setVesselAsSelected(feature)
       dispatch(updateSelectedVesselFeature(feature))
     }

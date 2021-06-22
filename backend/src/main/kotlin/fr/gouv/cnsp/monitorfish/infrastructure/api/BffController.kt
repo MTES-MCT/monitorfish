@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.domain.entities.Health
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
@@ -30,6 +31,7 @@ class BffController(
         private val searchVessels: SearchVessels,
         private val getVesselControls: GetVesselControls,
         private val getAllFleetSegments: GetAllFleetSegments,
+        private val getHealthcheck: GetHealthcheck,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -163,5 +165,11 @@ class BffController(
         return getAllFleetSegments.execute().map { fleetSegment ->
             FleetSegmentDataOutput.fromFleetSegment(fleetSegment)
         }
+    }
+
+    @GetMapping("/v1/healthcheck")
+    @ApiOperation("Get healtcheck of positions and ers")
+    fun getHealthcheck(): HealthDataOutput {
+        return HealthDataOutput.fromHealth(getHealthcheck.execute())
     }
 }

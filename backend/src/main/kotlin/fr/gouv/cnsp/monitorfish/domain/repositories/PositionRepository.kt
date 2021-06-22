@@ -21,4 +21,5 @@ interface PositionRepository {
                                                           from: ZonedDateTime,
                                                           to: ZonedDateTime): List<Position>
     fun save(position: Position)
+    fun findLastPositionDate(): ZonedDateTime
 }

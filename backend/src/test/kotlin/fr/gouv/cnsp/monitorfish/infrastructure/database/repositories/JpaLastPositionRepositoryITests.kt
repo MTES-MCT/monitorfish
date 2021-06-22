@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZonedDateTime
 
 @RunWith(SpringRunner::class)
 class JpaLastPositionRepositoryITests : AbstractDBTests() {
@@ -26,7 +27,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `Should get and parse the last positions JSONBs`() {
+    fun `findAll Should get and parse the last positions JSONBs`() {
         // Then
         val positions = jpaLastPositionRepository.findAll()
 
@@ -50,4 +51,26 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(position?.vesselIdentifier).isEqualTo(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString())
     }
 
+    @Test
+    @Transactional
+    fun `findLastPositionDate Should find the last position date`() {
+        // Then
+        val dateTime = jpaLastPositionRepository.findLastPositionDate()
+
+        // Then
+        assertThat(dateTime).isAfter(ZonedDateTime.parse("2020-12-21T15:01:00Z"))
+    }
+
+    @Test
+    @Transactional
+    fun `findLastPositionDate Should return a dummy date When there is no row in the last_position table`() {
+        // Given
+        jpaLastPositionRepository.deleteAll()
+
+        // When
+        val dateTime = jpaLastPositionRepository.findLastPositionDate()
+
+        // Then
+        assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2012-04-17T00:00:00.000000001Z"))
+    }
 }

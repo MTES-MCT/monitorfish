@@ -325,4 +325,14 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(secondMessageUpdated.analyzedByRules).hasSize(1)
         assertThat(secondMessageUpdated.analyzedByRules.first()).isEqualTo("PNO_LAN_WEIGHT_TOLERANCE")
     }
+
+    @Test
+    @Transactional
+    fun `findLastMessageDate Should find the last message datetime`() {
+        // When
+        val dateTime = jpaERSRepository.findLastMessageDate()
+
+        // Then
+        assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2019-10-22T11:06Z"))
+    }
 }

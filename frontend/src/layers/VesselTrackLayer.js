@@ -49,7 +49,7 @@ const VesselTrackLayer = ({ map }) => {
       const vesselTrack = new VesselTrack(selectedVessel)
 
       vectorSource.addFeatures(vesselTrack.features)
-      if (!updatedFromCron) {
+      if (!updatedFromCron && vesselTrack.lastPositionCoordinates) {
         dispatch(animateTo(vesselTrack.lastPositionCoordinates))
       }
     }

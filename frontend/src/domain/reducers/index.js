@@ -23,10 +23,7 @@ const backofficeReducers = combineReducers({
   layer: layer.backoffice.reducer,
   map: map,
   global: global,
-  vessel: vessel,
   gear: gear,
-  filter: filter,
-  fleetSegment: fleetSegment,
   regulatory: regulatory
 })
 

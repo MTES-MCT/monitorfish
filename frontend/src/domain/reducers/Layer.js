@@ -52,25 +52,29 @@ const reducers = {
     }
   },
   removeShowedLayer (state, action) {
-    if (action.payload.type !== Layers.VESSELS.code) {
-      if (action.payload.type === Layers.REGULATORY.code) {
-        if (action.payload.zone.zone) {
+    const {
+      type,
+      zone,
+      namespace
+    } = action.payload
+    if (type !== Layers.VESSELS.code) {
+      if (type === Layers.REGULATORY.code) {
+        if (zone.zone) {
           state.showedLayers = state.showedLayers
             .filter(layer => !(
               layer.type === Layers.REGULATORY.code &&
-                              layer.zone.layerName === action.payload.zone.layerName &&
-                              layer.zone.zone === action.payload.zone.zone))
+                              layer.zone.layerName === zone.layerName &&
+                              layer.zone.zone === zone.zone))
         } else {
           state.showedLayers = state.showedLayers
             .filter(layer => !(
               layer.type === Layers.REGULATORY.code &&
-                              layer.zone.layerName === action.payload.zone.layerName))
+                              layer.zone.layerName === zone.layerName))
         }
       } else {
-        state.showedLayers = state.showedLayers.filter(layer => layer.type !== action.payload.type)
+        state.showedLayers = state.showedLayers.filter(layer => layer.type !== type)
       }
-
-      // window.localStorage.setItem(layersShowedOnMapLocalStorageKey, JSON.stringify(state.showedLayers))
+      window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
     }
   },
   pushLayerAndArea (state, action) {
@@ -89,41 +93,24 @@ const reducers = {
   }
 }
 
-const homepageInitialState = {
+const initialState = {
   layers: [],
-  showedLayers: getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`),
   lastShowedFeatures: [],
   layersAndAreas: [],
   administrativeZonesGeometryCache: []
 }
 
-const homePageSlice = createGenericSlice(homepageInitialState, reducers, 'HomePageLayerSlice')
-
-// TODO: Should be removed
-export const {
-  addLayer,
-  removeLayer,
-  removeLayers,
-  setLayers,
-  addShowedLayer,
-  removeShowedLayer,
-  pushLayerAndArea,
-  removeLayerAndArea,
-  setLastShowedFeatures,
-  addAdministrativeZoneGeometryToCache
-} = homePageSlice.actions
-
-// export default regulatorySlice.reducer
+const homepageInitialState = {
+  ...initialState,
+  showedLayers: getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`)
+}
 
 const backofficeInitialState = {
-  layers: [],
-  showedLayers: getLocalStorageState([], `backoffice${layersShowedOnMapLocalStorageKey}`),
-  lastShowedFeatures: [],
-  layersAndAreas: [],
-  administrativeZonesGeometryCache: []
+  ...initialState,
+  showedLayers: getLocalStorageState([], `backoffice${layersShowedOnMapLocalStorageKey}`)
 }
 
 export default {
-  homepage: homePageSlice,
+  homepage: createGenericSlice(homepageInitialState, reducers, 'HomePageLayerSlice'),
   backoffice: createGenericSlice(backofficeInitialState, reducers, 'BackofficeLayerSlice')
 }

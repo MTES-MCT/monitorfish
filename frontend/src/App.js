@@ -23,7 +23,7 @@ function App () {
     case 'Internet Explorer': return getUnsupportedBrowser()
     case 'Edge': if (browserVersion < 79) return getUnsupportedBrowser(); break
     case 'Chrome': if (browserVersion < 69) return getUnsupportedBrowser(); break
-    case 'Firefox': if (browserVersion > 62) return getUnsupportedBrowser(); break
+    case 'Firefox': if (browserVersion < 62) return getUnsupportedBrowser(); break
     case 'Safari': if (browserVersion < 12) return getUnsupportedBrowser(); break
     case 'Opera': if (browserVersion < 56) return getUnsupportedBrowser(); break
   }

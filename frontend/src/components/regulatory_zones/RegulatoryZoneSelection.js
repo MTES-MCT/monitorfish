@@ -5,6 +5,9 @@ import RegulatoryZoneSelectionSearchInput from './RegulatoryZoneSelectionSearchI
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import RegulatoryZoneSelectionList from './RegulatoryZoneSelectionList'
 import { COLORS } from '../../constants/constants'
+import { useDispatch, useSelector } from 'react-redux'
+import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
+import addRegulatoryZonesToMySelection from '../../domain/use_cases/addRegulatoryZonesToMySelection'
 
 function useOutsideAlerter (ref, showRegulatorySearchInput, setShowRegulatorySection) {
   useEffect(() => {
@@ -24,6 +27,9 @@ function useOutsideAlerter (ref, showRegulatorySearchInput, setShowRegulatorySec
 }
 
 const RegulatoryZoneSelection = props => {
+  const dispatch = useDispatch()
+  const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
+
   const [showRegulatorySection, setShowRegulatorySection] = useState(false)
   const [foundRegulatoryZones, setFoundRegulatoryZones] = useState({})
   const [regulatoryZonesSelection, setRegulatoryZonesSelection] = useState({})
@@ -33,14 +39,14 @@ const RegulatoryZoneSelection = props => {
   useOutsideAlerter(wrapperRef, showRegulatorySection, setShowRegulatorySection)
 
   useEffect(() => {
-    if (showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
+    if (showRegulatorySection && regulatoryZoneMetadataPanelIsOpen) {
       setShowRegulatorySection(false)
     }
-  }, [props.regulatoryZoneMetadataPanelIsOpen])
+  }, [regulatoryZoneMetadataPanelIsOpen])
 
   useEffect(() => {
-    if (showRegulatorySection && props.regulatoryZoneMetadataPanelIsOpen) {
-      props.callCloseRegulatoryZoneMetadata()
+    if (showRegulatorySection && regulatoryZoneMetadataPanelIsOpen) {
+      dispatch(closeRegulatoryZoneMetadata())
     }
   }, [showRegulatorySection])
 
@@ -79,13 +85,14 @@ const RegulatoryZoneSelection = props => {
     }
   }
 
-  function addRegulatoryZonesToMySelection (regulatoryZonesSelection) {
+  function callAddRegulatoryZonesToMySelection (regulatoryZonesSelection) {
     const numberOfZonesAdded = Object.keys(regulatoryZonesSelection)
       .map(regulatoryLayerKey => regulatoryZonesSelection[regulatoryLayerKey].length)
       .reduce((a, b) => a + b, 0)
+
     props.setRegulatoryZonesAddedToMySelection(numberOfZonesAdded)
     setTimeout(() => { props.setRegulatoryZonesAddedToMySelection(0) }, 2000)
-    props.callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)
+    dispatch(addRegulatoryZonesToMySelection(regulatoryZonesSelection))
     setRegulatoryZonesSelection({})
   }
 
@@ -109,7 +116,6 @@ const RegulatoryZoneSelection = props => {
             regulatoryZones={props.regulatoryZones}
             setFoundRegulatoryZones={setFoundRegulatoryZones}
             foundRegulatoryZones={foundRegulatoryZones}
-            gears={props.gears}
             initSearchFields={initSearchFields}
             setInitSearchFields={setInitSearchFields}
             layersSidebarIsOpen={props.layersSidebarIsOpen}
@@ -118,13 +124,12 @@ const RegulatoryZoneSelection = props => {
         <RegulatoryZoneSelectionList
             showRegulatorySearchInput={showRegulatorySection}
             foundRegulatoryZones={foundRegulatoryZones}
-            gears={props.gears}
             showRegulatorySection={showRegulatorySection}
             regulatoryZonesSelection={regulatoryZonesSelection}
             toggleSelectRegulatoryZone={toggleSelectRegulatoryZone}
         />
         <RegulatoryZoneAddButton
-            onClick={() => addRegulatoryZonesToMySelection(regulatoryZonesSelection)}
+            onClick={() => callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)}
             showRegulatorySearchInput={showRegulatorySection}
             foundRegulatoryZones={foundRegulatoryZones}
         >

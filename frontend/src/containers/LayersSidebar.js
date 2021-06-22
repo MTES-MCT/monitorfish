@@ -4,36 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setError } from '../domain/reducers/Global'
 
 import { ReactComponent as LayersSVG } from '../components/icons/Couches.svg'
-import LayersEnum, { baseLayers, layersType } from '../domain/entities/layers'
-
-import addRegulatoryZonesToMySelection from '../domain/use_cases/addRegulatoryZonesToMySelection'
+import LayersEnum, { layersType } from '../domain/entities/layers'
 import getAllRegulatoryZones from '../domain/use_cases/getAllRegulatoryZones'
-import removeRegulatoryZoneFromMySelection from '../domain/use_cases/removeRegulatoryZoneFromMySelection'
-import showLayer from '../domain/use_cases/showLayer'
-import hideLayers from '../domain/use_cases/hideLayers'
 import RegulatoryZoneSelection from '../components/regulatory_zones/RegulatoryZoneSelection'
 import AdministrativeZones from '../components/administratives_zones/AdministrativeZones'
 import RegulatoryZoneSelected from '../components/regulatory_zones/RegulatoryZoneSelected'
 import { COLORS } from '../constants/constants'
-import showRegulatoryZoneMetadata from '../domain/use_cases/showRegulatoryZoneMetadata'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
-import zoomInSubZone from '../domain/use_cases/zoomInSubZone'
-import { selectBaseLayer } from '../domain/reducers/Map'
 import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
-  const showedLayers = useSelector(state => state.layer.showedLayers)
-  const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
-  const {
-    isReadyToShowRegulatoryZones,
-    regulatoryZoneMetadataPanelIsOpen,
-    loadingRegulatoryZoneMetadata,
-    selectedRegulatoryZones,
-    regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)
-  const gears = useSelector(state => state.gear.gears)
+  const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
 
   const firstUpdate = useRef(true)
@@ -58,7 +41,7 @@ const LayersSidebar = () => {
     }
 
     if (!layersSidebarIsOpen) {
-      callCloseRegulatoryZoneMetadata()
+      dispatch(closeRegulatoryZoneMetadata())
     }
   }, [layersSidebarIsOpen])
 
@@ -75,59 +58,6 @@ const LayersSidebar = () => {
       })
   }, [])
 
-  function callAddRegulatoryZonesToMySelection (regulatoryZonesSelection) {
-    dispatch(addRegulatoryZonesToMySelection(regulatoryZonesSelection))
-  }
-
-  function callRemoveRegulatoryZoneFromMySelection (regulatoryZone) {
-    callHideRegulatoryZone(regulatoryZone)
-    dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
-  }
-
-  function callShowRegulatoryZone (regulatoryZone) {
-    dispatch(showLayer({
-      type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
-    }))
-  }
-
-  function callHideRegulatoryZone (regulatoryZone) {
-    dispatch(hideLayers({
-      type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
-    }))
-  }
-
-  function callShowAdministrativeZone (administrativeZone, administrativeSubZone) {
-    dispatch(showLayer({
-      type: administrativeZone,
-      zone: administrativeSubZone
-    }))
-  }
-
-  function callHideAdministrativeZone (administrativeZone, administrativeSubZone) {
-    dispatch(hideLayers({
-      type: administrativeZone,
-      zone: administrativeSubZone
-    }))
-  }
-
-  function callShowRegulatorySubZoneMetadata (regulatorySubZone) {
-    dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
-  }
-
-  function callCloseRegulatoryZoneMetadata () {
-    dispatch(closeRegulatoryZoneMetadata())
-  }
-
-  function callZoomInSubZone (subZone) {
-    dispatch(zoomInSubZone(subZone))
-  }
-
-  function callSelectBaseLayer (baseLayer) {
-    dispatch(selectBaseLayer(baseLayer))
-  }
-
   return (
         <Sidebar
             isShowed={isShowed}
@@ -141,11 +71,7 @@ const LayersSidebar = () => {
                 <Layers/>
             </SidebarLayersIcon>
             <RegulatoryZoneSelection
-                callAddRegulatoryZonesToMySelection={callAddRegulatoryZonesToMySelection}
-                callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
                 regulatoryZones={regulatoryZones}
-                gears={gears}
                 regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
                 setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
                 layersSidebarIsOpen={layersSidebarIsOpen}
@@ -153,39 +79,16 @@ const LayersSidebar = () => {
             />
             <Zones>
                 <RegulatoryZoneSelected
-                    isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
-                    callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
-                    callShowRegulatoryZone={callShowRegulatoryZone}
-                    callHideRegulatoryZone={callHideRegulatoryZone}
-                    callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
-                    showedLayers={showedLayers}
                     regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
-                    selectedRegulatoryZones={selectedRegulatoryZones}
-                    gears={gears}
-                    callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-                    callZoomInSubZone={callZoomInSubZone}
-                    regulatoryZoneMetadata={regulatoryZoneMetadata}
                     hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />
                 <AdministrativeZones
                     administrativeZones={administrativeZones}
-                    showedLayers={showedLayers}
-                    callShowAdministrativeZone={callShowAdministrativeZone}
-                    callHideAdministrativeZone={callHideAdministrativeZone}
                     hideZonesListWhenSearching={hideZonesListWhenSearching}
                 />
-                <BaseLayerSelection
-                    baseLayers={Object.keys(baseLayers)}
-                    selectedBaseLayer={selectedBaseLayer}
-                    callSelectBaseLayer={callSelectBaseLayer}
-                />
+                <BaseLayerSelection />
             </Zones>
             <RegulatoryZoneMetadata
-                loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
-                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-                regulatoryZoneMetadata={regulatoryZoneMetadata}
-                callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-                gears={gears}
                 layersSidebarIsOpen={layersSidebarIsOpen}
             />
         </Sidebar>

@@ -22,7 +22,6 @@ const RegulatoryZoneSelectionList = props => {
                             regulatoryZoneName={regulatoryZoneName}
                             toggleSelectRegulatoryZone={props.toggleSelectRegulatoryZone}
                             regulatoryZonesSelection={props.regulatoryZonesSelection}
-                            gears={props.gears}
                         />
                     </ListItem>)
                   })

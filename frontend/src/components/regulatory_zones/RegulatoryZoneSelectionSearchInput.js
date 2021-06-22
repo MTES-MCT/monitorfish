@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { removeAccents } from '../../utils'
+import { useSelector } from 'react-redux'
 
 function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false
@@ -33,6 +34,8 @@ function orderByAlphabeticalZone (foundRegulatoryZones) {
 }
 
 const RegulatoryZoneSelectionSearchInput = props => {
+  const gears = useSelector(state => state.gear.gears)
+
   const [placeSearchText, setPlaceSearchText] = useState('')
   const [gearSearchText, setGearSearchText] = useState('')
   const [speciesSearchText, setSpeciesSearchText] = useState('')
@@ -175,7 +178,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
   }
 
   function searchGears (searchText, regulatoryZones) {
-    if (regulatoryZones && props.gears) {
+    if (regulatoryZones && gears) {
       const foundRegulatoryZones = { ...regulatoryZones }
 
       const uniqueGearCodes = getUniqueGearCodesFromSearch(searchText)
@@ -207,7 +210,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
   }
 
   function getUniqueGearCodesFromSearch (searchText) {
-    const foundGearCodes = props.gears
+    const foundGearCodes = gears
       .filter(gear => gear.name.toLowerCase().includes(searchText.toLowerCase()))
       .map(gear => gear.code)
     return [...new Set(foundGearCodes)]

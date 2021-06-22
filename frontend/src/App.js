@@ -51,6 +51,7 @@ function App () {
 
 function HomePage () {
   return <Provider store={homeStore}>
+    <NamespaceContext.Provider value={'homepage'}>
     <Wrapper>
       <Map />
       <LayersSidebar/>
@@ -64,6 +65,7 @@ function HomePage () {
       <Measurement/>
       <APIWorker/>
     </Wrapper>
+    </NamespaceContext.Provider>
     </Provider>
 }
 

@@ -63,6 +63,9 @@ class BffControllerITests {
     @MockBean
     private lateinit var getAllFleetSegments: GetAllFleetSegments
 
+    @MockBean
+    private lateinit var getHealthcheck: GetHealthcheck
+
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
 
@@ -319,5 +322,22 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.length()", equalTo(1)))
                 .andExpect(jsonPath("$[0].segment", equalTo("SW1")))
                 .andExpect(jsonPath("$[0].dirm[0]", equalTo("NAMO")))
+    }
+
+    @Test
+    fun `Should get the health check`() {
+        // Given
+        given(this.getHealthcheck.execute()).willReturn(Health(
+                ZonedDateTime.parse("2020-12-21T15:01:00Z"),
+                ZonedDateTime.parse("2020-12-21T16:01:00Z"),
+                ZonedDateTime.parse("2020-12-21T17:01:00Z")))
+
+        // When
+        mockMvc.perform(get("/bff/v1/healthcheck"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.datePositionReceived", equalTo("2020-12-21T15:01:00Z")))
+                .andExpect(jsonPath("$.dateLastPosition", equalTo("2020-12-21T16:01:00Z")))
+                .andExpect(jsonPath("$.dateERSMessageReceived", equalTo("2020-12-21T17:01:00Z")))
     }
 }

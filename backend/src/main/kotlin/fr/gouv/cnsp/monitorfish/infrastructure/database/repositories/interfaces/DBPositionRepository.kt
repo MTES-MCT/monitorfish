@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
+import java.time.Instant
 import java.time.ZonedDateTime
 import javax.persistence.Tuple
 
@@ -83,4 +84,7 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "order by p.date_time DESC",
             nativeQuery = true)
     fun findLastByIrcs(ircs: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
+
+    @Query("select date_time from positions order by date_time desc limit 1", nativeQuery = true)
+    fun findLastPositionDateTime(): Instant
 }

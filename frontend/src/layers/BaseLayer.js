@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { MapboxVector } from 'ol/layer'
-import Layers from '../domain/entities/layers'
+import Layers, { baseLayers } from '../domain/entities/layers'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import XYZ from 'ol/source/XYZ'
 
 const BaseLayer = ({ map }) => {
-  const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
+  let selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
 
   const [baseLayersObjects] = useState({
     OSM: new TileLayer({
@@ -48,8 +48,13 @@ const BaseLayer = ({ map }) => {
   }, [selectedBaseLayer])
 
   function addLayerToMap () {
-    if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
-      map.getLayers().push(baseLayersObjects[selectedBaseLayer])
+    if (map) {
+      if (!selectedBaseLayer) {
+        selectedBaseLayer = baseLayers.OSM.code
+      }
+      if (baseLayersObjects[selectedBaseLayer]) {
+        map.getLayers().push(baseLayersObjects[selectedBaseLayer])
+      }
     }
   }
 

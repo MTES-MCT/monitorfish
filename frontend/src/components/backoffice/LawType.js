@@ -49,10 +49,15 @@ const LawType = props => {
   }
 
   function callShowRegulatoryZone (regulatoryZone, namespace) {
-    dispatch(showLayer({
-      type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
-    }, namespace))
+    console.log('namespace')
+    console.log(namespace)
+    if (namespace) {
+      dispatch(showLayer({
+        type: LayersEnum.REGULATORY.code,
+        zone: regulatoryZone,
+        namespace: namespace
+      }))
+    }
   }
 
   function callHideRegulatoryZone (regulatoryZone) {

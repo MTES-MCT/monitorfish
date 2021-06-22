@@ -227,7 +227,13 @@ export function getNauticalMilesFromMeters (length) {
   return Math.round((length / 1000) * 100 * 0.539957) / 100
 }
 
-export function createGenericSlice (sliceObject, layerName) {
-  sliceObject.name = layerName
+export function createGenericSlice (initialState, reducers, layerName) {
+  const initialStateCopy = Object.assign({}, initialState)
+  const reducersCopy = Object.assign({}, reducers)
+  const sliceObject = {
+    name: layerName,
+    initialState: initialStateCopy,
+    reducers: reducersCopy
+  }
   return createSlice(sliceObject)
 }

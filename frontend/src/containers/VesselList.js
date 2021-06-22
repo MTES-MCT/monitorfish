@@ -22,7 +22,7 @@ import getUniqueSpeciesAndDistricts from '../domain/use_cases/getUniqueSpeciesAn
 import SaveVesselFiltersModal from '../components/vessel_filters/SaveVesselFiltersModal'
 import { addFilter } from '../domain/reducers/Filter'
 
-const VesselList = () => {
+const VesselList = (namespace) => {
   const dispatch = useDispatch()
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
@@ -249,15 +249,15 @@ const VesselList = () => {
       zonesGeometryToFetch
         .forEach(zoneToFetch => {
           if (zoneToFetch.isSubZone) {
-            dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name))
+            dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name, namespace))
           } else {
-            dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name))
+            dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name, namespace))
           }
         })
 
       setIsFiltering(false)
     }
-  }, [administrativeZonesFiltered])
+  }, [administrativeZonesFiltered, namespace])
 
   useEffect(() => {
     if (zonesSelected && zonesSelected.length &&

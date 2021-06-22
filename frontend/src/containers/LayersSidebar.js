@@ -80,8 +80,8 @@ const LayersSidebar = () => {
     dispatch(addRegulatoryZonesToMySelection(regulatoryZonesSelection))
   }
 
-  function callRemoveRegulatoryZoneFromMySelection (regulatoryZone) {
-    callHideRegulatoryZone(regulatoryZone)
+  function callRemoveRegulatoryZoneFromMySelection (regulatoryZone, namespace) {
+    callHideRegulatoryZone(regulatoryZone, namespace)
     dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
   }
 
@@ -93,10 +93,11 @@ const LayersSidebar = () => {
     }))
   }
 
-  function callHideRegulatoryZone (regulatoryZone) {
+  function callHideRegulatoryZone (regulatoryZone, namespace) {
     dispatch(hideLayers({
       type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
+      zone: regulatoryZone,
+      namespace
     }))
   }
 
@@ -104,14 +105,15 @@ const LayersSidebar = () => {
     dispatch(showLayer({
       type: administrativeZone,
       zone: administrativeSubZone,
-      namespace: namespace
+      namespace
     }))
   }
 
-  function callHideAdministrativeZone (administrativeZone, administrativeSubZone) {
+  function callHideAdministrativeZone (administrativeZone, administrativeSubZone, namespace) {
     dispatch(hideLayers({
       type: administrativeZone,
-      zone: administrativeSubZone
+      zone: administrativeSubZone,
+      namespace
     }))
   }
 
@@ -160,9 +162,9 @@ const LayersSidebar = () => {
               <Zones>
                   <RegulatoryZoneSelected
                       isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
-                      callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
+                      callRemoveRegulatoryZoneFromMySelection={regZone => callRemoveRegulatoryZoneFromMySelection(regZone, namespace)}
                       callShowRegulatoryZone={regZone => callShowRegulatoryZone(regZone, namespace)}
-                      callHideRegulatoryZone={callHideRegulatoryZone}
+                      callHideRegulatoryZone={regZone => callHideRegulatoryZone(regZone, namespace)}
                       callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
                       showedLayers={showedLayers}
                       regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
@@ -180,7 +182,10 @@ const LayersSidebar = () => {
                         (administrativeZone, administrativeSubZone) =>
                           callShowAdministrativeZone(administrativeZone, administrativeSubZone, namespace)
                       }
-                      callHideAdministrativeZone={callHideAdministrativeZone}
+                      callHideAdministrativeZone={
+                        (administrativeZone, administrativeSubZone) =>
+                          callHideAdministrativeZone(administrativeZone, administrativeSubZone, namespace)
+                      }
                       hideZonesListWhenSearching={hideZonesListWhenSearching}
                   />
                   <BaseLayerSelection

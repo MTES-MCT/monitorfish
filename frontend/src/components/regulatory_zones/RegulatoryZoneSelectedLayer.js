@@ -104,6 +104,7 @@ const RegulatoryZoneSelectedLayer = props => {
           showWholeLayer={showWholeLayer}
           allowRemoveZone={allowRemoveZone}
           zoneIsShown={zoneIsShown}
+          namespace={props.namespace}
         />
       )
     })

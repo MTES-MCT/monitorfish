@@ -78,7 +78,8 @@ const RegulatoryZoneSelectedZone = props => {
     if (showSubZone && props.isReadyToShowRegulatoryZones) {
       dispatch(showLayer({
         type: LayersEnum.REGULATORY.code,
-        zone: props.subZone
+        zone: props.subZone,
+        namespace: props.namespace
       }))
     } else {
       dispatch(hideLayers({

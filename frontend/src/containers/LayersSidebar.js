@@ -13,6 +13,7 @@ import { COLORS } from '../constants/constants'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
+import NamespaceContext from '../domain/context/NamespaceContext'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
@@ -61,47 +62,54 @@ const LayersSidebar = () => {
       })
   }, [])
 
-  return (
-        <Sidebar
+  return (<NamespaceContext.Consumer>
+      {
+        namespace => (
+          <Sidebar
             isShowed={isShowed}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon
-                title={'Couches réglementaires'}
-                layersSidebarIsOpen={layersSidebarIsOpen}
-                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-                onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
-                <Layers/>
+              title={'Couches réglementaires'}
+              layersSidebarIsOpen={layersSidebarIsOpen}
+              regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+              onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
+              <Layers/>
             </SidebarLayersIcon>
             <RegulatoryZoneSelection
-                regulatoryZones={regulatoryZones}
-                regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
-                setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
-                layersSidebarIsOpen={layersSidebarIsOpen}
-                setHideZonesListWhenSearching={setHideZonesListWhenSearching}
+              regulatoryZones={regulatoryZones}
+              regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
+              setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
+              layersSidebarIsOpen={layersSidebarIsOpen}
+              setHideZonesListWhenSearching={setHideZonesListWhenSearching}
             />
             <Zones>
-                <RegulatoryZoneSelected
-                    regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
-                    hideZonesListWhenSearching={hideZonesListWhenSearching}
-                />
-                <AdministrativeZones
-                    administrativeZones={administrativeZones}
-                    hideZonesListWhenSearching={hideZonesListWhenSearching}
-                />
-                <BaseLayerSelection />
+              <RegulatoryZoneSelected
+                namespace={namespace}
+                regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
+                hideZonesListWhenSearching={hideZonesListWhenSearching}
+              />
+              <AdministrativeZones
+                namespace={namespace}
+                administrativeZones={administrativeZones}
+                hideZonesListWhenSearching={hideZonesListWhenSearching}
+              />
+              <BaseLayerSelection/>
             </Zones>
-          <MetadataWrapper
-            firstUpdate={firstUpdate.current}
-            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-            regulatoryZoneMetadata={regulatoryZoneMetadata}
-            layersSidebarIsOpen={layersSidebarIsOpen}
-          >
-            <RegulatoryZoneMetadata
+            <MetadataWrapper
+              firstUpdate={firstUpdate.current}
+              regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+              regulatoryZoneMetadata={regulatoryZoneMetadata}
               layersSidebarIsOpen={layersSidebarIsOpen}
-            />
-          </MetadataWrapper>
-        </Sidebar>
+            >
+              <RegulatoryZoneMetadata
+                layersSidebarIsOpen={layersSidebarIsOpen}
+              />
+            </MetadataWrapper>
+          </Sidebar>
+        )
+      }
+    </NamespaceContext.Consumer>
   )
 }
 

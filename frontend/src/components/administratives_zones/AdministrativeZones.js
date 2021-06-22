@@ -10,7 +10,7 @@ import getAdministrativeZonesAndSubZones from '../../domain/use_cases/getAdminis
 import showLayer from '../../domain/use_cases/showLayer'
 import hideLayers from '../../domain/use_cases/hideLayers'
 
-const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }) => {
+const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, namespace }) => {
   const dispatch = useDispatch()
   const showedLayers = useSelector(state => state.layer.showedLayers)
 
@@ -43,7 +43,8 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }
   function callShowAdministrativeZone (administrativeZone, administrativeSubZone) {
     dispatch(showLayer({
       type: administrativeZone,
-      zone: administrativeSubZone
+      zone: administrativeSubZone,
+      namespace: namespace
     }))
   }
 

@@ -1,6 +1,7 @@
 import layer from './Layer'
 import global from './Global'
 import map from './Map'
+import backofficeMap from './BackofficeMap'
 import vessel from './Vessel'
 import gear from './Gear'
 import filter from './Filter'
@@ -21,8 +22,7 @@ const homeReducers = combineReducers({
 
 const backofficeReducers = combineReducers({
   layer: layer.backoffice.reducer,
-  map: map,
-  global: global,
+  map: backofficeMap,
   gear: gear,
   regulatory: regulatory
 })

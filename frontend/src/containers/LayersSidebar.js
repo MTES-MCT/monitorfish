@@ -13,6 +13,7 @@ import { COLORS } from '../constants/constants'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
+import NamespaceContext from '../domain/context/NamespaceContext'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
@@ -59,6 +60,9 @@ const LayersSidebar = () => {
   }, [])
 
   return (
+    <NamespaceContext.Consumer>
+      {
+        namespace => (
         <Sidebar
             isShowed={isShowed}
             layersSidebarIsOpen={layersSidebarIsOpen}
@@ -90,14 +94,16 @@ const LayersSidebar = () => {
             </Zones>
             <MetadataWrapper
               firstUpdate={firstUpdate.current}
-              layersSidebarIsOpen={layersSidebarIsOpen}
+              regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
             >
               <RegulatoryZoneMetadata
                   layersSidebarIsOpen={layersSidebarIsOpen}
               />
             </MetadataWrapper>
-        </Sidebar>
-  )
+          </Sidebar>
+        )
+      }
+    </NamespaceContext.Consumer>)
 }
 
 const Sidebar = styled.div`

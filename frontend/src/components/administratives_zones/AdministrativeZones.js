@@ -51,7 +51,8 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
   function callHideAdministrativeZone (administrativeZone, administrativeSubZone) {
     dispatch(hideLayers({
       type: administrativeZone,
-      zone: administrativeSubZone
+      zone: administrativeSubZone,
+      namespace: namespace
     }))
   }
 

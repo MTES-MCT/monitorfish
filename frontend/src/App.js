@@ -49,7 +49,7 @@ function HomePage () {
       <LayersSidebar/>
       <VesselsSearchBox />
       <RightMenuOnHoverZone />
-      <VesselList/>
+      <VesselList namespace={'homepage'}/>
       <VesselFilters/>
       <VesselVisibility/>
       <VesselSidebar/>

@@ -1,25 +1,35 @@
-import { removeLayer, removeLayerAndArea, removeLayers, removeShowedLayer } from '../reducers/Layer'
+import layer from '../reducers/Layer'
 
 const hideLayers = layerToHide => (dispatch, getState) => {
+  const {
+    type,
+    zone,
+    namespace
+  } = layerToHide
+
+  const {
+    removeLayer, removeLayerAndArea, removeLayers, removeShowedLayer
+  } = layer[namespace].actions
+
   if (layerToHide && layerToHide.type) {
     let layerToRemove, layersToRemove
 
     switch (layerToHide.zone) {
       case undefined: layerToRemove = getState().layer.layers.find(layer => layer.className_ === layerToHide.type); break
       default: {
-        dispatch(removeLayerAndArea(`${layerToHide.type}:${layerToHide.zone.layerName}:${layerToHide.zone.zone}`))
+        dispatch(removeLayerAndArea(`${type}:${zone.layerName}:${zone.zone}`))
 
         if (layerToHide.zone.zone) {
           layerToRemove = getState().layer.layers.find(layer => {
-            return layer.className_ === `${layerToHide.type}:${layerToHide.zone.layerName}:${layerToHide.zone.zone}`
+            return layer.className_ === `${type}:${zone.layerName}:${zone.zone}`
           })
-        } else if (layerToHide.zone.layerName) {
+        } else if (zone.layerName) {
           layersToRemove = getState().layer.layers.filter(layer => {
-            return layer.className_.includes(`${layerToHide.type}:${layerToHide.zone.layerName}`)
+            return layer.className_.includes(`${type}:${zone.layerName}`)
           })
         } else {
           layersToRemove = getState().layer.layers.filter(layer => {
-            return layer.className_.includes(`${layerToHide.type}:${layerToHide.zone}`)
+            return layer.className_.includes(`${type}:${zone}`)
           })
         }
         break

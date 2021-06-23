@@ -5,14 +5,13 @@ import Modal from 'rsuite/lib/Modal'
 
 import { ReactComponent as VesselListSVG } from '../components/icons/Icone_liste_navires.svg'
 import { COLORS } from '../constants/constants'
-import { getZonesAndSubZonesPromises } from '../domain/entities/layers'
+import { getZonesAndSubZonesPromises, layersType } from '../domain/entities/layers'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../domain/reducers/Map'
 import { InteractionTypes } from '../domain/entities/map'
 import { resetTemporaryVesselsToHighLightOnMap, setTemporaryVesselsToHighLightOnMap } from '../domain/reducers/Vessel'
 import VesselListTable from '../components/vessel_list/VesselListTable'
 import DownloadVesselListModal from '../components/vessel_list/DownloadVesselListModal'
 import getAdministrativeZoneGeometry from '../domain/use_cases/getAdministrativeZoneGeometry'
-import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
@@ -26,7 +25,6 @@ const VesselList = () => {
   const dispatch = useDispatch()
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
-  const vesselsFromApi = useSelector(state => state.vessel.vessels)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
@@ -96,18 +94,10 @@ const VesselList = () => {
     if (vesselListModalIsOpen === true) {
       dispatch(unselectVessel())
       firstUpdate.current = false
+
+      updateVesselsList(vesselsLayerSource.getFeatures())
     }
   }, [vesselListModalIsOpen])
-
-  useEffect(() => {
-    if (vesselsLayerSource && vesselsFromApi && vesselsFromApi.length) {
-      vesselsLayerSource.once(VESSELS_UPDATE_EVENT, ({ features }) => {
-        if (!vesselListModalIsOpen && features && features.length) {
-          updateVesselsList(features)
-        }
-      })
-    }
-  }, [vesselsLayerSource, vesselsFromApi, vesselListModalIsOpen])
 
   const updateVesselsList = useCallback(features => {
     const vessels = features.map(vessel => {
@@ -131,7 +121,7 @@ const VesselList = () => {
         districtsFiltered,
         speciesFiltered,
         vesselsSizeValuesChecked,
-        lastControlMonthsAgo: lastControlMonthsAgo
+        lastControlMonthsAgo
       }
 
       dispatch(getFilteredVessels(vessels, filters))
@@ -264,7 +254,7 @@ const VesselList = () => {
       administrativeZonesFiltered &&
       zonesSelected.length > administrativeZonesFiltered.length) {
       const nextZonesSelected = zonesSelected.filter(zoneSelected => {
-        if (zoneSelected.code === 'FREE_DRAW') {
+        if (zoneSelected.code === layersType.FREE_DRAW) {
           return true
         }
 

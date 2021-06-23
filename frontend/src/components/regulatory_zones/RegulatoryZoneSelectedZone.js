@@ -6,17 +6,26 @@ import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { ReactComponent as REGPaperSVG } from '../icons/reg_paper.svg'
 import { ReactComponent as REGPaperDarkSVG } from '../icons/reg_paper_dark.svg'
 import { COLORS } from '../../constants/constants'
+import showLayer from '../../domain/use_cases/showLayer'
+import LayersEnum from '../../domain/entities/layers'
+import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZoneMetadata'
+import { useDispatch } from 'react-redux'
+import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
+import zoomInSubZone from '../../domain/use_cases/zoomInSubZone'
+import hideLayers from '../../domain/use_cases/hideLayers'
 
 const RegulatoryZoneSelectedZone = props => {
+  const dispatch = useDispatch()
+
   const [showSubZone, setShowSubZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showRegulatoryMetadata = subZone => {
     if (!metadataIsShown) {
-      props.callShowRegulatorySubZoneMetadata(subZone)
+      dispatch(showRegulatoryZoneMetadata(subZone))
       setMetadataIsShown(true)
     } else {
-      props.callCloseRegulatoryZoneMetadata()
+      dispatch(closeRegulatoryZoneMetadata())
       setMetadataIsShown(false)
     }
   }
@@ -55,21 +64,23 @@ const RegulatoryZoneSelectedZone = props => {
     }
   }, [props.zoneIsShown])
 
-  const zoomInSubZone = subZone => {
-    props.callZoomInSubZone(subZone)
-  }
-
   useEffect(() => {
     if (showSubZone && props.isReadyToShowRegulatoryZones) {
-      props.callShowRegulatoryZone(props.subZone)
+      dispatch(showLayer({
+        type: LayersEnum.REGULATORY.code,
+        zone: props.subZone
+      }))
     } else {
-      props.callHideRegulatoryZone(props.subZone)
+      dispatch(hideLayers({
+        type: LayersEnum.REGULATORY.code,
+        zone: props.subZone
+      }))
     }
   }, [showSubZone, props.isReadyToShowRegulatoryZones])
 
   return (
         <SubZone>
-            <Rectangle onClick={() => zoomInSubZone(props.subZone)} vectorLayerStyle={props.vectorLayerStyle}/>
+            <Rectangle onClick={() => dispatch(zoomInSubZone(props.subZone))} vectorLayerStyle={props.vectorLayerStyle}/>
             <SubZoneText
                 title={props.subZone.zone ? props.subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
                 onClick={() => setShowSubZone(!showSubZone)}>

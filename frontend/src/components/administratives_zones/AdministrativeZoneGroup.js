@@ -3,8 +3,11 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import AdministrativeZone from './AdministrativeZone'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import { useSelector } from 'react-redux'
 
 const AdministrativeZoneGroup = props => {
+  const showedLayers = useSelector(state => state.layer.showedLayers)
+
   const [isOpen, setIsOpen] = useState(false)
 
   return <>
@@ -24,7 +27,7 @@ const AdministrativeZoneGroup = props => {
                         { props.layers.map((layer, index) => {
                           return <ListItem isLastItem={props.layers === index + 1} key={layer.code}>
                                     <AdministrativeZone
-                                      isShownOnInit={props.showedLayers.some(layer_ => {
+                                      isShownOnInit={showedLayers.some(layer_ => {
                                         if (layer_.zone) {
                                           return layer_.type === layer.groupCode && layer_.zone === layer.code
                                         } else {

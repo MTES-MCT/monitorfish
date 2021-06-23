@@ -10,22 +10,26 @@ import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ShowIconSVG } from '../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../icons/oeil_masque.svg'
+import { useSelector } from 'react-redux'
 
 const RegulatoryZoneSelectedLayer = props => {
+  const gears = useSelector(state => state.gear.gears)
+  const showedLayers = useSelector(state => state.layer.showedLayers)
+
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
   const [showWholeLayer, setShowWholeLayer] = useState(undefined)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
 
   useEffect(() => {
-    if (props.showedLayers && props.regulatoryZoneName) {
-      const showLayer = props.showedLayers
+    if (showedLayers && props.regulatoryZoneName) {
+      const showLayer = showedLayers
         .filter(layer => layer.type === Layers.REGULATORY.code)
         .some(layer => layer.zone.layerName === props.regulatoryZoneName)
 
       setAtLeastOneLayerIsShowed(showLayer)
     }
-  }, [props.showedLayers])
+  }, [showedLayers])
 
   useEffect(() => {
     if (firstUpdate.current) {
@@ -69,12 +73,12 @@ const RegulatoryZoneSelectedLayer = props => {
                 name={props.regulatoryZoneName.replace(/\s/g, '-')}
                 length={props.regulatorySubZones.length}>
                 {
-                    props.regulatorySubZones && props.showedLayers
+                    props.regulatorySubZones && showedLayers
                       ? props.regulatorySubZones.map(subZone => {
                         let vectorLayerStyle
-                        if (subZone.zone && subZone.layerName && subZone.gears && props.gears) {
+                        if (subZone.zone && subZone.layerName && subZone.gears && gears) {
                           const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
-                          const gearCategory = getGearCategory(subZone.gears, props.gears)
+                          const gearCategory = getGearCategory(subZone.gears, gears)
                           vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
                         }
 
@@ -85,14 +89,9 @@ const RegulatoryZoneSelectedLayer = props => {
                                 key={`${subZone.layerName}:${subZone.zone}`}
                                 isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
                                 callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
-                                callShowRegulatoryZone={props.callShowRegulatoryZone}
-                                callHideRegulatoryZone={props.callHideRegulatoryZone}
-                                callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
-                                callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
-                                callZoomInSubZone={props.callZoomInSubZone}
                                 regulatoryZoneMetadata={props.regulatoryZoneMetadata}
                                 showWholeLayer={showWholeLayer}
-                                zoneIsShown={props.showedLayers
+                                zoneIsShown={showedLayers
                                   .filter(layer => layer.type === Layers.REGULATORY.code)
                                   .some(layer =>
                                     layer.zone.layerName === subZone.layerName &&

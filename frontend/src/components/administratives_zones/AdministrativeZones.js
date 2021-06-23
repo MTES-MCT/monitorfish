@@ -9,6 +9,7 @@ import AdministrativeZoneGroup from './AdministrativeZoneGroup'
 import getAdministrativeZonesAndSubZones from '../../domain/use_cases/getAdministrativeZonesAndSubZones'
 import showLayer from '../../domain/use_cases/showLayer'
 import hideLayers from '../../domain/use_cases/hideLayers'
+import NamespaceContext from '../../domain/context/NamespaceContext'
 
 const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }) => {
   const dispatch = useDispatch()
@@ -39,56 +40,61 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }
     }
   }, [administrativeZones])
 
-  function callShowAdministrativeZone (administrativeZone, administrativeSubZone) {
+  function callShowAdministrativeZone (administrativeZone, administrativeSubZone, namespace) {
     dispatch(showLayer({
       type: administrativeZone,
-      zone: administrativeSubZone
+      zone: administrativeSubZone,
+      namespace
     }))
   }
 
-  function callHideAdministrativeZone (administrativeZone, administrativeSubZone) {
+  function callHideAdministrativeZone (administrativeZone, administrativeSubZone, namespace) {
     dispatch(hideLayers({
       type: administrativeZone,
-      zone: administrativeSubZone
+      zone: administrativeSubZone,
+      namespace
     }))
   }
 
   return (
-        <>
-            <SectionTitle onClick={() => setShowZones(!showZones)} showZones={showZones}>
-                Zones administratives <ChevronIcon isOpen={showZones}/>
-            </SectionTitle>
+    <>
+      <SectionTitle onClick={() => setShowZones(!showZones)} showZones={showZones}>
+          Zones administratives <ChevronIcon isOpen={showZones}/>
+      </SectionTitle>
+      <NamespaceContext.Consumer>
+      {namespace => (
+        zones && zones.length
+          ? <ZonesList showZones={showZones} zonesLength={zones.length}>
             {
-                zones && zones.length
-                  ? <ZonesList showZones={showZones} zonesLength={zones.length}>
-                    {
-                        zones.map((layers, index) => {
-                          if (layers.length === 1 && layers[0]) {
-                            return <ListItem key={layers[0].code}>
-                                    <AdministrativeZone
-                                        isShownOnInit={showedLayers.some(layer_ => layer_.type === layers[0].code)}
-                                        layer={layers[0]}
-                                        callShowAdministrativeZone={callShowAdministrativeZone}
-                                        callHideAdministrativeZone={callHideAdministrativeZone}
-                                    />
-                                </ListItem>
-                          } else {
-                            return <ListItem key={layers[0].group.code}>
-                                    <AdministrativeZoneGroup
-                                        isLastItem={zones.length === index + 1}
-                                        layers={layers}
-                                        showedLayers={showedLayers}
-                                        callShowAdministrativeZone={callShowAdministrativeZone}
-                                        callHideAdministrativeZone={callHideAdministrativeZone}
-                                    />
-                                </ListItem>
-                          }
-                        })
-                    }
-                </ZonesList>
-                  : null
+              zones.map((layers, index) => {
+                if (layers.length === 1 && layers[0]) {
+                  return <ListItem key={layers[0].code}>
+                          <AdministrativeZone
+                              isShownOnInit={showedLayers.some(layer_ => layer_.type === layers[0].code)}
+                              layer={layers[0]}
+                              callShowAdministrativeZone={(administrativeZone, administrativeSubZone) => callShowAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
+                              callHideAdministrativeZone={(administrativeZone, administrativeSubZone) => callHideAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
+                          />
+                      </ListItem>
+                } else {
+                  return <ListItem key={layers[0].group.code}>
+                          <AdministrativeZoneGroup
+                              isLastItem={zones.length === index + 1}
+                              layers={layers}
+                              showedLayers={showedLayers}
+                              callShowAdministrativeZone={(administrativeZone, administrativeSubZone) => callShowAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
+                              callHideAdministrativeZone={(administrativeZone, administrativeSubZone) => callHideAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
+                          />
+                      </ListItem>
+                }
+              })
             }
-        </>
+          </ZonesList>
+          : null
+      )
+      }
+      </NamespaceContext.Consumer>
+    </>
   )
 }
 

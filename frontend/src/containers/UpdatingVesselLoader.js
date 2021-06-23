@@ -4,10 +4,12 @@ import { COLORS } from '../constants/constants'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 import { ReactComponent as VesselSVG } from '../components/icons/Icone_navire.svg'
+import { MapComponent } from '../components/map/MapComponent'
 
 const UpdatingVesselLoader = () => {
   const isUpdatingVessels = useSelector(state => state.global.isUpdatingVessels)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const [loadingApp, setLoadingApp] = useState(false)
   const [appIsLoaded, setAppIsLoaded] = useState(false)
 
@@ -23,7 +25,7 @@ const UpdatingVesselLoader = () => {
   return (
     <>
       {loadingApp
-        ? <FirstLoadWrapper>
+        ? <FirstLoadWrapper healthcheckTextWarning={healthcheckTextWarning}>
           <FulfillingBouncingCircleSpinner
             color={COLORS.background}
             className={'update-vessels'}
@@ -33,7 +35,9 @@ const UpdatingVesselLoader = () => {
         </FirstLoadWrapper>
         : null
       }
-      <UpdateWrapper selectedVessel={selectedVessel}>
+      <UpdateWrapper
+        healthcheckTextWarning={healthcheckTextWarning}
+        selectedVessel={selectedVessel}>
         {
           isUpdatingVessels && !loadingApp
             ? <>
@@ -73,7 +77,7 @@ const BigVessel = styled(VesselSVG)`
   transform: scale(2);
 `
 
-const UpdateWrapper = styled.div`
+const UpdateWrapper = styled(MapComponent)`
   position: absolute;
   top: 30px;
   right: ${props => props.selectedVessel ? '510px' : '370px'};
@@ -81,7 +85,7 @@ const UpdateWrapper = styled.div`
   transform: translate(-50%, -50%);
 `
 
-const FirstLoadWrapper = styled.div`
+const FirstLoadWrapper = styled(MapComponent)`
   position: fixed;
   top: 15%;
   left: 50%;

@@ -13,12 +13,14 @@ import { COLORS } from '../constants/constants'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
+import { MapComponent } from '../components/map/MapComponent'
 import NamespaceContext from '../domain/context/NamespaceContext'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
   const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
   const [regulatoryZones, setRegulatoryZones] = useState()
@@ -64,6 +66,7 @@ const LayersSidebar = () => {
       {
         namespace => (
           <Sidebar
+            healthcheckTextWarning={healthcheckTextWarning}
             isShowed={isShowed}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
@@ -107,7 +110,7 @@ const LayersSidebar = () => {
     </NamespaceContext.Consumer>)
 }
 
-const Sidebar = styled.div`
+const Sidebar = styled(MapComponent)`
   margin-left: -373px;
   top: 10px;
   left: 12px;

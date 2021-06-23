@@ -18,6 +18,8 @@ import {
 import countries from 'i18n-iso-countries'
 import focusOnVesselSearch, { focusState } from '../domain/use_cases/focusOnVesselSearch'
 import { expandRightMenu } from '../domain/reducers/Global'
+import { MapComponent } from '../components/map/MapComponent'
+import { MapButton } from '../components/map/MapButton'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -29,6 +31,7 @@ const VesselsSearchBox = () => {
   const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const dispatch = useDispatch()
 
   const [searchText, setSearchText] = useState('')
@@ -254,6 +257,7 @@ const VesselsSearchBox = () => {
   return (
     <>
       <Wrapper
+        healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}
         vesselSidebarIsOpen={vesselSidebarIsOpen}
         isShowed={isShowed}
@@ -341,6 +345,7 @@ const VesselsSearchBox = () => {
         }
       </Wrapper>
       <SearchButton
+        healthcheckTextWarning={healthcheckTextWarning}
         title={'Rechercher un navire'}
         onMouseEnter={() => dispatch(expandRightMenu())}
         onClick={() => dispatch(focusOnVesselSearch(focusState.CLICK_SEARCH_ICON, !selectedVessel))}
@@ -423,7 +428,7 @@ const CloseIcon = styled(CloseIconSVG)`
   cursor: pointer;
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled(MapComponent)`
   position: absolute;
   display: inline-block;
   top: 10px;
@@ -534,7 +539,7 @@ const SelectedVessel = styled.div`
   }
 `
 
-const SearchButton = styled.button`
+const SearchButton = styled(MapButton)`
   opacity: ${props => props.isShowed ? '1' : '0'};
   width: 40px;
   height: 40px;

@@ -5,7 +5,9 @@ const globalSlice = createSlice({
   initialState: {
     error: null,
     isUpdatingVessels: false,
-    rightMenuIsOpen: false
+    rightMenuIsOpen: false,
+    /** @type {string | null} healthcheckTextWarning */
+    healthcheckTextWarning: null
   },
   reducers: {
     expandRightMenu (state) {
@@ -25,6 +27,14 @@ const globalSlice = createSlice({
     },
     removeError (state) {
       state.error = null
+    },
+    /**
+     * Set warning to show on application header
+     * @param {Object=} state
+     * @param {{payload: string | null}} action - the warning(s) or null if no warning are found
+     */
+    setHealthcheckTextWarning (state, action) {
+      state.healthcheckTextWarning = action.payload
     }
   }
 })
@@ -35,7 +45,8 @@ export const {
   setIsUpdatingVessels,
   resetIsUpdatingVessels,
   expandRightMenu,
-  contractRightMenu
+  contractRightMenu,
+  setHealthcheckTextWarning
 } = globalSlice.actions
 
 export default globalSlice.reducer

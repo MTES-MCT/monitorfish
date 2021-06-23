@@ -15,11 +15,11 @@ export const getLANMessageFromMessages = (ersMessages, depMessage) => {
       const depTripNumber = depMessage.tripNumber
       if (depTripNumber) {
         return depTripNumber === message.tripNumber
-      } else {
-        const landingDatetimeUtc = new Date(message.message.landingDatetimeUtc)
-        const departureDatetimeUtc = new Date(depMessage.message.departureDatetimeUtc)
-        return landingDatetimeUtc > departureDatetimeUtc
       }
+
+      const landingDatetimeUtc = new Date(message.message.landingDatetimeUtc)
+      const departureDatetimeUtc = new Date(depMessage.message.departureDatetimeUtc)
+      return landingDatetimeUtc > departureDatetimeUtc
     })
 }
 

@@ -6,7 +6,7 @@ const SpeciesAndWeightChart = props => {
   const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
 
   useEffect(() => {
-    if (props.speciesAndWeightArray && props.increaseChartHeight) {
+    if (props.speciesAndWeightArray && props.setChartHeight) {
       const speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
         const heightInLog = speciesAndWeight.weight ? Math.log10(getPercentOfTotalFARWeight(speciesAndWeight)) : 22
 
@@ -20,7 +20,8 @@ const SpeciesAndWeightChart = props => {
       const totalHeight = speciesAndWeightArray.reduce((subAccumulator, speciesCatch) => {
         return subAccumulator + speciesCatch.height + 2
       }, 0)
-      props.increaseChartHeight(totalHeight)
+
+      props.setChartHeight(totalHeight)
     }
   }, [props.speciesAndWeightArray])
 

@@ -37,8 +37,8 @@ const FARMessageResume = props => {
       : <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - aucune capture</>
   }
 
-  const increaseChartHeight = height => {
-    setChartHeight(chartHeight + height)
+  const resetChartHeight = () => {
+    setChartHeight(0)
   }
 
   return <Wrapper>
@@ -62,7 +62,8 @@ const FARMessageResume = props => {
                     name={ERSMessageTypeEnum.FAR.code.toString()}>
                     <Zone>
                         <SpeciesAndWeightChart
-                            increaseChartHeight={increaseChartHeight}
+                            setChartHeight={setChartHeight}
+                            resetChartHeight={resetChartHeight}
                             compareWithTotalWeight={true}
                             speciesAndWeightArray={speciesAndWeightArray}
                         />

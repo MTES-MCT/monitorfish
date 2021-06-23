@@ -120,9 +120,9 @@ class GetERSMessages(private val ersRepository: ERSRepository,
     }
 
     private fun setNamesFromCodes(message: COX) {
-        message.targetSpeciesOnExit?.let { targetSpeciesOnEntry ->
+        message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
             try {
-                message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnEntry).name
+                message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnExit).name
             } catch (e: CodeNotFoundException) {
                 logger.warn(e.message)
             }

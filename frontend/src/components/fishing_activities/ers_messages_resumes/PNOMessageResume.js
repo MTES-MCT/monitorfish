@@ -10,6 +10,7 @@ const PNOMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
   const [chartHeight, setChartHeight] = useState(0)
+  const [boxHeight, setBoxHeight] = useState(0)
 
   const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
   const [speciesNotLandedArray, setSpeciesNotLandedArray] = useState([])
@@ -30,7 +31,7 @@ const PNOMessageResume = props => {
         })
         .sort((a, b) => a.weight < b.weight)
       setSpeciesNotLandedArray(speciesNotLandedArray)
-      increaseHeight(speciesNotLandedArray.length ? speciesNotLandedArray.length * 18 : 0)
+      setBoxHeight(speciesNotLandedArray.length ? speciesNotLandedArray.length * 18 : 0)
 
       setTotalWeightNotLanded(getTotalFARNotLandedWeight(speciesNotLandedArray))
     }
@@ -61,10 +62,6 @@ const PNOMessageResume = props => {
             ,{' '} prévu le {getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)}  <Gray>(UTC)</Gray></>
   }
 
-  const increaseHeight = height => {
-    setChartHeight(chartHeight + height)
-  }
-
   return <Wrapper>
         <ERSMessageResumeHeader
             isNotAcknowledged={props.isNotAcknowledged}
@@ -82,7 +79,7 @@ const PNOMessageResume = props => {
               ? null
               : <ERSMessageContent
                     id={props.id}
-                    chartHeight={chartHeight}
+                    chartHeight={chartHeight + boxHeight}
                     speciesNotLandedSize={speciesNotLandedArray && speciesNotLandedArray.length ? 55 : 0}
                     firstUpdate={firstUpdate}
                     isOpen={isOpen}
@@ -105,7 +102,7 @@ const PNOMessageResume = props => {
                             </TableBody>
                         </Fields>
                         <SpeciesAndWeightChart
-                            increaseChartHeight={increaseHeight}
+                            setChartHeight={setChartHeight}
                             compareWithTotalWeight={true}
                             speciesAndWeightArray={speciesAndWeightArray}
                         />

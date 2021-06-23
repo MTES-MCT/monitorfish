@@ -16,9 +16,8 @@ import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
 import { removeError } from '../domain/reducers/Global'
 import {
   resetNextControlResumeAndControls,
-  resetNextFishingActivities,
   setControlResumeAndControls,
-  setVoyage, setTemporaryTrackDepth
+  setTemporaryTrackDepth
 } from '../domain/reducers/Vessel'
 import getControls from '../domain/use_cases/getControls'
 import VesselControls from '../components/controls/VesselControls'

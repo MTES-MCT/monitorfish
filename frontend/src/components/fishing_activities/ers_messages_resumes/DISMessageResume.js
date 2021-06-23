@@ -26,10 +26,6 @@ const DISMessageResume = props => {
     }
   }, [isOpen])
 
-  const increaseChartHeight = height => {
-    setChartHeight(chartHeight + height)
-  }
-
   const getDISMessageResumeTitleText = () => {
     return `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalDISWeight} kg rejetés au total`
   }
@@ -59,7 +55,7 @@ const DISMessageResume = props => {
                     name={ERSMessageTypeEnum.DIS.code.toString()}>
                     <Zone>
                         <SpeciesAndWeightChart
-                            increaseChartHeight={increaseChartHeight}
+                            setChartHeight={setChartHeight}
                             compareWithTotalWeight={true}
                             speciesAndWeightArray={speciesAndWeightArray}
                         />

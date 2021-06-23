@@ -17,32 +17,8 @@ const ERSMessage = ({ message, isFirst }) => {
             {message.message.departurePortName ? message.message.departurePortName : message.message.departurePort}
             {' '}le {getDateTime(message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
         }
-        case ERSMessageTypeEnum.PNO.code.toString(): {
-          return 'Préavis (notification de retour au port)'
-        }
-        case ERSMessageTypeEnum.FAR.code.toString(): {
-          return 'Déclaration de capture'
-        }
-        case ERSMessageTypeEnum.COE.code.toString(): {
-          return 'Entrée dans une zone d\'effort'
-        }
-        case ERSMessageTypeEnum.COX.code.toString(): {
-          return 'Sortie d\'une zone d\'effort'
-        }
-        case ERSMessageTypeEnum.CRO.code.toString(): {
-          return 'Traversée d\'une zone d\'effort'
-        }
-        case ERSMessageTypeEnum.DIS.code.toString(): {
-          return 'Déclaration de rejets'
-        }
-        case ERSMessageTypeEnum.EOF.code.toString(): {
-          return 'Fin de pêche'
-        }
-        case ERSMessageTypeEnum.RTP.code.toString(): {
-          return 'Retour au port'
-        }
-        case ERSMessageTypeEnum.LAN.code.toString(): {
-          return 'Débarquement'
+        default: {
+          return ERSMessageTypeEnum[message.messageType].fullName
         }
       }
     }

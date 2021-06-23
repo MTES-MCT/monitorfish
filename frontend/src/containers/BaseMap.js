@@ -34,6 +34,7 @@ const BaseMap = props => {
     animateToRegulatoryLayer
   } = useSelector(state => state.map)
 
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const dispatch = useDispatch()
 
   const [map, setMap] = useState()
@@ -184,7 +185,10 @@ const BaseMap = props => {
 
   return (
     <MapWrapper>
-      <MapContainer ref={mapElement}/>
+      <MapContainer
+        ref={mapElement}
+        healthcheckTextWarning={healthcheckTextWarning}
+      />
       <BaseLayer map={map}/>
       <RegulatoryLayers map={map}/>
       <AdministrativeLayers map={map}/>
@@ -204,7 +208,7 @@ const MapWrapper = styled.div`
 `
 
 const MapContainer = styled.div`
-  height: 100vh;
+  height: ${props => props.healthcheckTextWarning ? 'calc(100vh - 50px)' : '100vh'};
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

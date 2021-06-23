@@ -34,9 +34,10 @@ const Warning = styled.div`
 const HealthcheckWarnings = styled.div`
   background: #F6D012 0% 0% no-repeat padding-box;
   width 100%;
-  height: 20px;
+  height: 22px;
   text-align: center;
-  padding: 15px;
+  padding: 13px;
+  border-bottom: 2px solid #E3BE05;
 `
 
 export default Healthcheck

@@ -23,7 +23,8 @@ const RegulatoryZoneSelectedZone = props => {
     showWholeLayer,
     zoneIsShown,
     isReadyToShowRegulatoryZones,
-    allowRemoveZone
+    allowRemoveZone,
+    namespace
   } = props
 
   const [showSubZone, setShowSubZone] = useState(undefined)
@@ -77,15 +78,17 @@ const RegulatoryZoneSelectedZone = props => {
     if (showSubZone && props.isReadyToShowRegulatoryZones) {
       dispatch(showLayer({
         type: LayersEnum.REGULATORY.code,
-        zone: props.subZone
+        zone: props.subZone,
+        namespace
       }))
     } else {
       dispatch(hideLayers({
         type: LayersEnum.REGULATORY.code,
-        zone: props.subZone
+        zone: props.subZone,
+        namespace
       }))
     }
-  }, [showSubZone, isReadyToShowRegulatoryZones])
+  }, [showSubZone, isReadyToShowRegulatoryZones, namespace])
 
   return (
         <SubZone>

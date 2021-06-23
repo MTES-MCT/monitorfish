@@ -11,6 +11,7 @@ import { COLORS } from '../../constants/constants'
 import { ReactComponent as ShowIconSVG } from '../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../icons/oeil_masque.svg'
 import { useSelector } from 'react-redux'
+import NamespaceContext from '../../domain/context/NamespaceContext'
 
 const RegulatoryZoneSelectedLayer = props => {
   const gears = useSelector(state => state.gear.gears)
@@ -77,7 +78,7 @@ const RegulatoryZoneSelectedLayer = props => {
     )
   }
 
-  const showRegulatoryZonesSelected = () => {
+  const showRegulatoryZonesSelected = (namespace) => {
     return regulatorySubZones.map(subZone => {
       let vectorLayerStyle
       if (subZone.zone && subZone.layerName && subZone.gears && gears) {
@@ -95,6 +96,7 @@ const RegulatoryZoneSelectedLayer = props => {
               callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
               regulatoryZoneMetadata={props.regulatoryZoneMetadata}
               showWholeLayer={showWholeLayer}
+              namespace={namespace}
               zoneIsShown={showedLayers
                 .filter(layer => layer.type === Layers.REGULATORY.code)
                 .some(layer =>
@@ -106,6 +108,8 @@ const RegulatoryZoneSelectedLayer = props => {
   }
 
   return (
+      <NamespaceContext.Consumer>
+      { namespace => (
         <Row>
             <Zone isLastItem={isLastItem} isOpen={isOpen}>
                 <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
@@ -120,9 +124,11 @@ const RegulatoryZoneSelectedLayer = props => {
                 isOpen={isOpen}
                 name={regulatoryZoneName.replace(/\s/g, '-')}
                 length={regulatorySubZones.length}>
-                {regulatorySubZones && showedLayers && showRegulatoryZonesSelected()}
+                {regulatorySubZones && showedLayers && showRegulatoryZonesSelected(namespace)}
               </List>}
         </Row>
+      )}
+      </NamespaceContext.Consumer>
   )
 }
 

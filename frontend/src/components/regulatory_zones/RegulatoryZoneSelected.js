@@ -16,6 +16,8 @@ const RegulatoryZoneSelected = props => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
+  const { namespace } = props
+
   const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false)
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const firstUpdate = useRef(true)
@@ -37,7 +39,8 @@ const RegulatoryZoneSelected = props => {
     decreaseNumberOfZonesOpened(numberOfZones)
     dispatch(hideLayers({
       type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
+      zone: regulatoryZone,
+      namespace
     }))
     dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
   }

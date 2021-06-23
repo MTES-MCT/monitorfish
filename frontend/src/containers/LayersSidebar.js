@@ -85,6 +85,7 @@ const LayersSidebar = () => {
                 <RegulatoryZoneSelected
                     regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
                     hideZonesListWhenSearching={hideZonesListWhenSearching}
+                    namespace={namespace}
                 />
                 <AdministrativeZones
                     administrativeZones={administrativeZones}

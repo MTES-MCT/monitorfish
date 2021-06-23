@@ -1,14 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 import AdministrativeZone from './AdministrativeZone'
 import { COLORS } from '../../constants/constants'
 import AdministrativeZoneGroup from './AdministrativeZoneGroup'
-import LayersEnum, { layersType } from '../../domain/entities/layers'
-import { getAdministrativeSubZonesFromAPI } from '../../api/fetch'
+import getAdministrativeZonesAndSubZones from '../../domain/use_cases/getAdministrativeZonesAndSubZones'
+import showLayer from '../../domain/use_cases/showLayer'
+import hideLayers from '../../domain/use_cases/hideLayers'
 
-const AdministrativeZones = props => {
+const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }) => {
+  const dispatch = useDispatch()
+  const showedLayers = useSelector(state => state.layer.showedLayers)
+
   const [showZones, setShowZones] = useState(false)
   const [zones, setZones] = useState([])
   const firstUpdate = useRef(true)
@@ -17,75 +22,37 @@ const AdministrativeZones = props => {
     if (firstUpdate) {
       firstUpdate.current = false
     } else {
-      if (props.hideZonesListWhenSearching) {
+      if (hideZonesListWhenSearching) {
         setShowZones(false)
       } else {
         setShowZones(true)
       }
     }
-  }, [props.hideZonesListWhenSearching])
+  }, [hideZonesListWhenSearching])
 
   useEffect(() => {
-    let nextZones = []
-    if (props.administrativeZones && props.administrativeZones.length) {
-      nextZones = props.administrativeZones
-        .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
-        .filter(zone => !zone.group)
-        .map(zone => [zone])
-
-      const groups = [...new Set(props.administrativeZones
-        .filter(zone => zone.group)
-        .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
-        .map(zone => zone.group))]
-
-      groups.forEach(group => {
-        nextZones.push(props.administrativeZones
-          .filter(zone => zone.group && zone.group === group))
-      })
-
-      const nextSubZonesPromises = Object.keys(LayersEnum)
-        .map(layerName => LayersEnum[layerName])
-        .filter(layer => layer.type === layersType.ADMINISTRATIVE)
-        .filter(layer => layer.showMultipleZonesInAdministrativeZones)
-        .map(zone => {
-          if (zone.containsMultipleZones) {
-            return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
-              return subZonesFeatures.features.map(subZone => {
-                return {
-                  group: zone.group,
-                  groupCode: zone.code,
-                  name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
-                  code: subZone.id,
-                  showMultipleZonesInAdministrativeZones: zone.showMultipleZonesInAdministrativeZones,
-                  isSubZone: true
-                }
-              })
-            }).catch(error => {
-              console.error(error)
-            })
-          }
-
-          const nextSubZone = { ...zone }
-
-          nextSubZone.group = zone.group ? zone.group.name : 'Administratives'
-
-          return nextSubZone
+    if (administrativeZones && administrativeZones.length) {
+      dispatch(getAdministrativeZonesAndSubZones(administrativeZones))
+        .then(nextZones => {
+          console.log(nextZones)
+          setZones(nextZones)
         })
-
-      Promise.all(nextSubZonesPromises).then((nextSubZones) => {
-        const nextSubZonesWithoutNulls = nextSubZones.flat().filter(zone => zone)
-
-        const groups = [...new Set(nextSubZonesWithoutNulls.map(zone => zone.group))]
-
-        groups.forEach(group => {
-          nextZones.push(nextSubZonesWithoutNulls.filter(zone => zone.group === group))
-        })
-
-        setZones(nextZones)
-      })
-      setZones(nextZones)
     }
-  }, [props.administrativeZones])
+  }, [administrativeZones])
+
+  function callShowAdministrativeZone (administrativeZone, administrativeSubZone) {
+    dispatch(showLayer({
+      type: administrativeZone,
+      zone: administrativeSubZone
+    }))
+  }
+
+  function callHideAdministrativeZone (administrativeZone, administrativeSubZone) {
+    dispatch(hideLayers({
+      type: administrativeZone,
+      zone: administrativeSubZone
+    }))
+  }
 
   return (
         <>
@@ -100,10 +67,10 @@ const AdministrativeZones = props => {
                           if (layers.length === 1 && layers[0]) {
                             return <ListItem key={layers[0].code}>
                                     <AdministrativeZone
-                                        isShownOnInit={props.showedLayers.some(layer_ => layer_.type === layers[0].code)}
+                                        isShownOnInit={showedLayers.some(layer_ => layer_.type === layers[0].code)}
                                         layer={layers[0]}
-                                        callShowAdministrativeZone={props.callShowAdministrativeZone}
-                                        callHideAdministrativeZone={props.callHideAdministrativeZone}
+                                        callShowAdministrativeZone={callShowAdministrativeZone}
+                                        callHideAdministrativeZone={callHideAdministrativeZone}
                                     />
                                 </ListItem>
                           } else {
@@ -111,9 +78,9 @@ const AdministrativeZones = props => {
                                     <AdministrativeZoneGroup
                                         isLastItem={zones.length === index + 1}
                                         layers={layers}
-                                        showedLayers={props.showedLayers}
-                                        callShowAdministrativeZone={props.callShowAdministrativeZone}
-                                        callHideAdministrativeZone={props.callHideAdministrativeZone}
+                                        showedLayers={showedLayers}
+                                        callShowAdministrativeZone={callShowAdministrativeZone}
+                                        callHideAdministrativeZone={callHideAdministrativeZone}
                                     />
                                 </ListItem>
                           }

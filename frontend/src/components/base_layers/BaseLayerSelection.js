@@ -4,8 +4,13 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
 
 import BaseLayerItem from './BaseLayerItem'
 import { COLORS } from '../../constants/constants'
+import { useSelector } from 'react-redux'
+import { baseLayers } from '../../domain/entities/layers'
 
-const BaseLayerSelection = props => {
+const BaseLayerSelection = () => {
+  const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
+
+  const baseLayersKeys = Object.keys(baseLayers)
   const [showBaseLayers, setShowBaseLayers] = useState(false)
 
   return (
@@ -13,14 +18,13 @@ const BaseLayerSelection = props => {
             <SectionTitle onClick={() => setShowBaseLayers(!showBaseLayers)} showBaseLayers={showBaseLayers}>
                 Fonds de carte <ChevronIcon isOpen={showBaseLayers}/>
             </SectionTitle>
-            <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={props.baseLayers.length}>
+            <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={baseLayersKeys.length}>
                 {
-                    props.baseLayers.map(layer => {
+                    baseLayersKeys.map(layer => {
                       return (<ListItem key={layer}>
                             <BaseLayerItem
-                                isShownOnInit={props.selectedBaseLayer === layer}
+                                isShownOnInit={selectedBaseLayer === layer}
                                 layer={layer}
-                                callSelectBaseLayer={props.callSelectBaseLayer}
                             />
                         </ListItem>)
                     })

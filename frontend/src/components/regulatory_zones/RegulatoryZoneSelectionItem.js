@@ -5,8 +5,11 @@ import { getHash } from '../../utils'
 import { getVectorLayerStyle } from '../../layers/styles/vectorLayerStyles'
 import { getGearCategory } from '../../domain/use_cases/showLayer'
 import Layers from '../../domain/entities/layers'
+import { useSelector } from 'react-redux'
 
 const RegulatoryZoneSelectionItem = props => {
+  const gears = useSelector(state => state.gear.gears)
+
   const [globalIsSelected, setGlobalIsSelected] = useState(undefined)
 
   const select = subZone => {
@@ -40,9 +43,9 @@ const RegulatoryZoneSelectionItem = props => {
             props.regulatorySubZones
               ? props.regulatorySubZones.map((subZone) => {
                 let vectorLayerStyle
-                if (subZone.zone && subZone.layerName && subZone.gears && props.gears) {
+                if (subZone.zone && subZone.layerName && subZone.gears && gears) {
                   const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
-                  const gearCategory = getGearCategory(subZone.gears, props.gears)
+                  const gearCategory = getGearCategory(subZone.gears, gears)
                   vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
                 }
 

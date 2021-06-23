@@ -6,39 +6,48 @@ import { ReactComponent as REGPaperSVG } from '../icons/reg_paper.svg'
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { getDateTime } from '../../utils'
+import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
+import { useDispatch, useSelector } from 'react-redux'
 
 const RegulatoryZoneMetadata = props => {
-  const [gears, setGears] = useState([])
+  const dispatch = useDispatch()
+  const gears = useSelector(state => state.gear.gears)
+  const {
+    regulatoryZoneMetadata,
+    regulatoryZoneMetadataPanelIsOpen
+  } = useSelector(state => state.regulatory)
+
+  const [formattedGears, setFormattedGears] = useState([])
   const [prohibitedGears, setProhibitedGears] = useState([])
   const firstUpdate = useRef(true)
   const [regulatoryReferences, setRegulatoryReferences] = useState([])
 
   useEffect(() => {
-    if (props.regulatoryZoneMetadata && props.gears) {
+    if (regulatoryZoneMetadata && gears) {
       firstUpdate.current = false
 
-      setRegulatoryReferences(JSON.parse(props.regulatoryZoneMetadata.regulatoryReferences))
+      setRegulatoryReferences(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
 
-      if (!props.regulatoryZoneMetadata.gears) {
-        setGears(null)
+      if (!regulatoryZoneMetadata.gears) {
+        setFormattedGears(null)
       } else {
-        const gearCodesArray = props.regulatoryZoneMetadata.gears.replace(/ /g, '').split(',')
-        const gears = gearCodesArray.map(gearCode => {
-          const foundGear = props.gears.find(gear => gear.code === gearCode)
+        const gearCodesArray = regulatoryZoneMetadata.gears.replace(/ /g, '').split(',')
+        const nextGears = gearCodesArray.map(gearCode => {
+          const foundGear = gears.find(gear => gear.code === gearCode)
           return {
             name: foundGear ? foundGear.name : null,
             code: gearCode
           }
         })
-        setGears(gears)
+        setFormattedGears(nextGears)
       }
 
-      if (!props.regulatoryZoneMetadata.prohibitedGears) {
+      if (!regulatoryZoneMetadata.prohibitedGears) {
         setProhibitedGears(null)
       } else {
-        const prohibitedGearCodesArray = props.regulatoryZoneMetadata.prohibitedGears.replace(/ /g, '').split(',')
+        const prohibitedGearCodesArray = regulatoryZoneMetadata.prohibitedGears.replace(/ /g, '').split(',')
         const prohibitedGears = prohibitedGearCodesArray.map(gearCode => {
-          const foundGear = props.gears.find(gear => gear.code === gearCode)
+          const foundGear = gears.find(gear => gear.code === gearCode)
           return {
             name: foundGear ? foundGear.name : null,
             code: gearCode
@@ -47,55 +56,55 @@ const RegulatoryZoneMetadata = props => {
         setProhibitedGears(prohibitedGears)
       }
     }
-  }, [props.gears, props.regulatoryZoneMetadata])
+  }, [gears, regulatoryZoneMetadata])
 
   const getTitle = regulatory => `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
 
   return (
         <Wrapper
             firstUpdate={firstUpdate.current}
-            regulatoryZoneMetadataPanelIsOpen={props.regulatoryZoneMetadataPanelIsOpen}
+            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
             layersSidebarIsOpen={props.layersSidebarIsOpen}
-            regulatoryZoneMetadata={props.regulatoryZoneMetadata}
+            regulatoryZoneMetadata={regulatoryZoneMetadata}
         >
             {
-                props.regulatoryZoneMetadataPanelIsOpen && props.regulatoryZoneMetadata
+                regulatoryZoneMetadataPanelIsOpen && regulatoryZoneMetadata
                   ? <>
                         <Header>
                             <REGPaperIcon/>
-                            <RegulatoryName title={getTitle(props.regulatoryZoneMetadata)}>
+                            <RegulatoryName title={getTitle(regulatoryZoneMetadata)}>
                                 <Ellipsis>
-                                    <Title>{getTitle(props.regulatoryZoneMetadata)}</Title>
+                                    <Title>{getTitle(regulatoryZoneMetadata)}</Title>
                                 </Ellipsis>
                             </RegulatoryName>
-                            <CloseIcon onClick={() => props.callCloseRegulatoryZoneMetadata()}/>
+                            <CloseIcon onClick={() => dispatch(closeRegulatoryZoneMetadata())}/>
                         </Header>
                         <Content>
                             {
-                                props.regulatoryZoneMetadata.seafront ||
-                                props.regulatoryZoneMetadata.region ||
-                                props.regulatoryZoneMetadata.zone ||
-                                props.regulatoryZoneMetadata.deposit
+                                regulatoryZoneMetadata.seafront ||
+                                regulatoryZoneMetadata.region ||
+                                regulatoryZoneMetadata.zone ||
+                                regulatoryZoneMetadata.deposit
                                   ? <Zone>
                                       <Fields>
                                           <Body>
                                               <Field>
                                                   <Key>Façade</Key>
-                                                  <Value>{props.regulatoryZoneMetadata.seafront ? props.regulatoryZoneMetadata.seafront : <NoValue>-</NoValue>}</Value>
+                                                  <Value>{regulatoryZoneMetadata.seafront ? regulatoryZoneMetadata.seafront : <NoValue>-</NoValue>}</Value>
                                               </Field>
                                               <Field>
                                                   <Key>Région</Key>
-                                                  <Value>{props.regulatoryZoneMetadata.region ? props.regulatoryZoneMetadata.region : <NoValue>-</NoValue>}</Value>
+                                                  <Value>{regulatoryZoneMetadata.region ? regulatoryZoneMetadata.region : <NoValue>-</NoValue>}</Value>
                                               </Field>
                                               <Field>
                                                   <Key>Zone</Key>
-                                                  <Value>{props.regulatoryZoneMetadata.zone ? props.regulatoryZoneMetadata.zone.replace(/[_]/g, ' ') : <NoValue>-</NoValue>}</Value>
+                                                  <Value>{regulatoryZoneMetadata.zone ? regulatoryZoneMetadata.zone.replace(/[_]/g, ' ') : <NoValue>-</NoValue>}</Value>
                                               </Field>
                                               {
-                                                  props.regulatoryZoneMetadata.deposit
+                                                  regulatoryZoneMetadata.deposit
                                                     ? <Field>
                                                         <Key>Gisement</Key>
-                                                        <Value>{props.regulatoryZoneMetadata.deposit}</Value>
+                                                        <Value>{regulatoryZoneMetadata.deposit}</Value>
                                                     </Field>
                                                     : null
 
@@ -106,28 +115,28 @@ const RegulatoryZoneMetadata = props => {
                                   : null
                             }
                             {
-                                props.regulatoryZoneMetadata.period ||
-                                props.regulatoryZoneMetadata.openingDate ||
-                                props.regulatoryZoneMetadata.closingDate ||
-                                props.regulatoryZoneMetadata.state
+                                regulatoryZoneMetadata.period ||
+                                regulatoryZoneMetadata.openingDate ||
+                                regulatoryZoneMetadata.closingDate ||
+                                regulatoryZoneMetadata.state
                                   ? <Zone>
                                       <Fields>
                                           <Body>
                                               {
-                                                  props.regulatoryZoneMetadata.period
+                                                  regulatoryZoneMetadata.period
                                                     ? <Field>
                                                         <Key>Période(s)</Key>
-                                                        <Value>{props.regulatoryZoneMetadata.period}</Value>
+                                                        <Value>{regulatoryZoneMetadata.period}</Value>
                                                     </Field>
                                                     : null
                                               }
                                               {
-                                                  props.regulatoryZoneMetadata.openingDate
+                                                  regulatoryZoneMetadata.openingDate
                                                     ? <Field>
                                                         <Key>Dates d&apos;ouvertures</Key>
                                                         <Value>
                                                             <>
-                                                                {getDateTime(props.regulatoryZoneMetadata.openingDate, true)}{' '}
+                                                                {getDateTime(regulatoryZoneMetadata.openingDate, true)}{' '}
                                                                 <Gray>(UTC)</Gray>
                                                             </>
                                                         </Value>
@@ -135,12 +144,12 @@ const RegulatoryZoneMetadata = props => {
                                                     : null
                                               }
                                               {
-                                                  props.regulatoryZoneMetadata.closingDate
+                                                  regulatoryZoneMetadata.closingDate
                                                     ? <Field>
                                                         <Key>Dates de fermetures</Key>
                                                         <Value>
                                                             <>
-                                                                {getDateTime(props.regulatoryZoneMetadata.closingDate, true)}{' '}
+                                                                {getDateTime(regulatoryZoneMetadata.closingDate, true)}{' '}
                                                                 <Gray>(UTC)</Gray>
                                                             </>
                                                         </Value>
@@ -150,10 +159,10 @@ const RegulatoryZoneMetadata = props => {
                                               {/*
                                               // TODO Re-add the regulatory state when the field is fixed for all data
                                               {
-                                                  props.regulatoryZoneMetadata.state ?
+                                                  regulatoryZoneMetadata.state ?
                                                     <Field>
                                                         <Key>État</Key>
-                                                        <Value>{props.regulatoryZoneMetadata.state}</Value>
+                                                        <Value>{regulatoryZoneMetadata.state}</Value>
                                                     </Field> : null
                                               } */}
                                           </Body>
@@ -162,16 +171,16 @@ const RegulatoryZoneMetadata = props => {
                                   : null
                             }
                             {
-                                (gears && gears.length) ||
+                                (formattedGears && formattedGears.length) ||
                                   (prohibitedGears && prohibitedGears.length) ||
-                                  props.regulatoryZoneMetadata.technicalMeasurements
+                                  regulatoryZoneMetadata.technicalMeasurements
                                   ? <ZoneWithLineBreak>
                                       {
-                                          gears && gears.length
+                                          formattedGears && formattedGears.length
                                             ? <>
                                                 <KeyWithLineBreak>Engin(s)</KeyWithLineBreak>
                                                 {
-                                                    gears.map(gear => {
+                                                    formattedGears.map(gear => {
                                                       return gear.name
                                                         ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
                                                         : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
@@ -195,10 +204,10 @@ const RegulatoryZoneMetadata = props => {
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.technicalMeasurements
+                                          regulatoryZoneMetadata.technicalMeasurements
                                             ? <>
                                                 <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
-                                                <MarkdownValue>{props.regulatoryZoneMetadata.technicalMeasurements}</MarkdownValue>
+                                                <MarkdownValue>{regulatoryZoneMetadata.technicalMeasurements}</MarkdownValue>
                                             </>
                                             : null
                                       }
@@ -206,19 +215,19 @@ const RegulatoryZoneMetadata = props => {
                                   : null
                             }
                             {
-                                props.regulatoryZoneMetadata.species ||
-                                props.regulatoryZoneMetadata.prohibitedSpecies ||
-                                props.regulatoryZoneMetadata.size ||
-                                props.regulatoryZoneMetadata.quantity ||
-                                props.regulatoryZoneMetadata.bycatch ||
-                                props.regulatoryZoneMetadata.rejections
+                                regulatoryZoneMetadata.species ||
+                                regulatoryZoneMetadata.prohibitedSpecies ||
+                                regulatoryZoneMetadata.size ||
+                                regulatoryZoneMetadata.quantity ||
+                                regulatoryZoneMetadata.bycatch ||
+                                regulatoryZoneMetadata.rejections
                                   ? <ZoneWithLineBreak>
                                       {
-                                          props.regulatoryZoneMetadata.species
+                                          regulatoryZoneMetadata.species
                                             ? <>
                                                 <KeyWithLineBreak>Espèce(s)</KeyWithLineBreak>
                                                 {
-                                                    props.regulatoryZoneMetadata.species.replace(/ /g, '').split(',').map(species => {
+                                                    regulatoryZoneMetadata.species.replace(/ /g, '').split(',').map(species => {
                                                       return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
                                                     })
                                                 }
@@ -226,11 +235,11 @@ const RegulatoryZoneMetadata = props => {
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.prohibitedSpecies
+                                          regulatoryZoneMetadata.prohibitedSpecies
                                             ? <>
                                                 <KeyWithLineBreak>Espèce(s) interdite(s)</KeyWithLineBreak>
                                                 {
-                                                    props.regulatoryZoneMetadata.prohibitedSpecies.replace(/ /g, '').split(',').map(species => {
+                                                    regulatoryZoneMetadata.prohibitedSpecies.replace(/ /g, '').split(',').map(species => {
                                                       return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
                                                     })
                                                 }
@@ -238,34 +247,34 @@ const RegulatoryZoneMetadata = props => {
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.size
+                                          regulatoryZoneMetadata.size
                                             ? <>
                                                 <KeyWithLineBreak>Tailles</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.size}</ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.size}</ValueWithLineBreak>
                                             </>
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.quantity
+                                          regulatoryZoneMetadata.quantity
                                             ? <>
                                                 <KeyWithLineBreak>Quantités</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.quantity}</ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.quantity}</ValueWithLineBreak>
                                             </>
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.bycatch
+                                          regulatoryZoneMetadata.bycatch
                                             ? <>
                                                 <KeyWithLineBreak>Captures accessoires</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.bycatch} </ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.bycatch} </ValueWithLineBreak>
                                             </>
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.rejections
+                                          regulatoryZoneMetadata.rejections
                                             ? <>
                                                 <KeyWithLineBreak>Rejets</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.rejections} </ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.rejections} </ValueWithLineBreak>
                                             </>
                                             : null
                                       }
@@ -273,41 +282,41 @@ const RegulatoryZoneMetadata = props => {
                                   : null
                             }
                             {
-                                props.regulatoryZoneMetadata.mandatoryDocuments ||
-                                props.regulatoryZoneMetadata.obligations ||
-                                props.regulatoryZoneMetadata.prohibitions ||
-                                props.regulatoryZoneMetadata.permissions ||
+                                regulatoryZoneMetadata.mandatoryDocuments ||
+                                regulatoryZoneMetadata.obligations ||
+                                regulatoryZoneMetadata.prohibitions ||
+                                regulatoryZoneMetadata.permissions ||
                                 (regulatoryReferences && regulatoryReferences.length)
                                   ? <ZoneWithLineBreak>
                                       {
-                                          props.regulatoryZoneMetadata.mandatoryDocuments
+                                          regulatoryZoneMetadata.mandatoryDocuments
                                             ? <>
                                                 <KeyWithLineBreak>Documents obligatoires</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.mandatoryDocuments}</ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.mandatoryDocuments}</ValueWithLineBreak>
                                             </>
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.obligations
+                                          regulatoryZoneMetadata.obligations
                                             ? <>
                                                 <KeyWithLineBreak>Autres obligations</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.obligations}</ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.obligations}</ValueWithLineBreak>
                                             </>
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.prohibitions
+                                          regulatoryZoneMetadata.prohibitions
                                             ? <>
                                                 <KeyWithLineBreak>Interdictions</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.prohibitions}</ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.prohibitions}</ValueWithLineBreak>
                                             </>
                                             : null
                                       }
                                       {
-                                          props.regulatoryZoneMetadata.permissions
+                                          regulatoryZoneMetadata.permissions
                                             ? <>
                                                 <KeyWithLineBreak>Autorisations</KeyWithLineBreak>
-                                                <ValueWithLineBreak>{props.regulatoryZoneMetadata.permissions} </ValueWithLineBreak>
+                                                <ValueWithLineBreak>{regulatoryZoneMetadata.permissions} </ValueWithLineBreak>
                                             </>
                                             : null
                                       }

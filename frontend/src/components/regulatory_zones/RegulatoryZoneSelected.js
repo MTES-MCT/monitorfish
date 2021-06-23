@@ -3,8 +3,19 @@ import styled from 'styled-components'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import RegulatoryZoneSelectedLayer from './RegulatoryZoneSelectedLayer'
 import { COLORS } from '../../constants/constants'
+import removeRegulatoryZoneFromMySelection from '../../domain/use_cases/removeRegulatoryZoneFromMySelection'
+import LayersEnum from '../../domain/entities/layers'
+import hideLayers from '../../domain/use_cases/hideLayers'
+import { useDispatch, useSelector } from 'react-redux'
 
 const RegulatoryZoneSelected = props => {
+  const dispatch = useDispatch()
+  const {
+    isReadyToShowRegulatoryZones,
+    selectedRegulatoryZones,
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
+
   const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false)
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const firstUpdate = useRef(true)
@@ -24,7 +35,11 @@ const RegulatoryZoneSelected = props => {
 
   const callRemoveRegulatoryZoneFromMySelection = (regulatoryZone, numberOfZones) => {
     decreaseNumberOfZonesOpened(numberOfZones)
-    props.callRemoveRegulatoryZoneFromMySelection(regulatoryZone)
+    dispatch(hideLayers({
+      type: LayersEnum.REGULATORY.code,
+      zone: regulatoryZone
+    }))
+    dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
   }
 
   useEffect(() => {
@@ -55,30 +70,23 @@ const RegulatoryZoneSelected = props => {
                 Mes zones réglementaires <ChevronIcon isOpen={showRegulatoryZonesSelected}/>
             </RegulatoryZoneSelectedTitle>
             <RegulatoryZoneSelectedList
-                layerLength={Object.keys(props.selectedRegulatoryZones).length}
+                layerLength={Object.keys(selectedRegulatoryZones).length}
                 zoneLength={numberOfZonesOpened}
                 showRegulatoryZonesSelected={showRegulatoryZonesSelected}
             >
                 {
-                    props.selectedRegulatoryZones && Object.keys(props.selectedRegulatoryZones).length > 0
-                      ? Object.keys(props.selectedRegulatoryZones).map((regulatoryZoneName, index) => {
+                    selectedRegulatoryZones && Object.keys(selectedRegulatoryZones).length > 0
+                      ? Object.keys(selectedRegulatoryZones).map((regulatoryZoneName, index) => {
                         return (<RegulatoryZoneSelectedLayer
                           key={regulatoryZoneName}
                           increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
                           decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-                          isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
+                          isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
                           callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                           regulatoryZoneName={regulatoryZoneName}
-                          regulatorySubZones={props.selectedRegulatoryZones[regulatoryZoneName]}
-                          callShowRegulatoryZone={props.callShowRegulatoryZone}
-                          callHideRegulatoryZone={props.callHideRegulatoryZone}
-                          callShowRegulatorySubZoneMetadata={props.callShowRegulatorySubZoneMetadata}
-                          callCloseRegulatoryZoneMetadata={props.callCloseRegulatoryZoneMetadata}
-                          regulatoryZoneMetadata={props.regulatoryZoneMetadata}
-                          callZoomInSubZone={props.callZoomInSubZone}
-                          showedLayers={props.showedLayers}
-                          gears={props.gears}
-                          isLastItem={Object.keys(props.selectedRegulatoryZones).length === index + 1}
+                          regulatorySubZones={selectedRegulatoryZones[regulatoryZoneName]}
+                          regulatoryZoneMetadata={regulatoryZoneMetadata}
+                          isLastItem={Object.keys(selectedRegulatoryZones).length === index + 1}
                         />)
                       })
                       : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>

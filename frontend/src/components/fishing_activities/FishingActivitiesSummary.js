@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import { ERSMessageType as ERSMessageTypeEnum } from '../../domain/entities/ERS'
 import { ReactComponent as ArrowSVG } from '../icons/Picto_fleche-pleine-droite.svg'
+import { ReactComponent as ArrowTripSVG } from '../icons/Fleche_navigation_marees.svg'
+import { ReactComponent as ArrowLastTripSVG } from '../icons/Double_fleche_navigation_marees.svg'
 import DEPMessageResume from './ers_messages_resumes/DEPMessageResume'
 import DISMessageResume from './ers_messages_resumes/DISMessageResume'
 import FARMessageResume from './ers_messages_resumes/FARMessageResume'
@@ -10,8 +11,31 @@ import PNOMessageResume from './ers_messages_resumes/PNOMessageResume'
 import LANMessageResume from './ers_messages_resumes/LANMessageResume'
 import { AlertTypes } from '../../domain/entities/alerts'
 import FleetSegments from '../fleet_segments/FleetSegments'
+import { useSelector } from 'react-redux'
+import {
+  getDEPMessageFromMessages,
+  getDISMessagesFromMessages,
+  getFAOZonesFromFARMessages,
+  getFARMessagesFromMessages,
+  getLANMessageFromMessages,
+  getPNOMessageFromMessages,
+  getSpeciesToWeightDISObject,
+  getSpeciesToWeightFARObject,
+  getSpeciesToWeightLANObject,
+  getSpeciesToWeightPNOObject,
+  getTotalDEPWeightFromMessages,
+  getTotalDISWeightFromMessages,
+  getTotalFARWeightFromMessages,
+  getTotalLANWeightFromMessages,
+  getTotalPNOWeightFromMessages
+} from '../../domain/entities/fishingActivities'
 
-const FishingActivitiesSummary = props => {
+const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSegments, vesselLastPositionFeature, navigation }) => {
+  const {
+    isLastVoyage,
+    previousBeforeDateTime
+  } = useSelector(state => state.vessel)
+
   const [depMessage, setDEPMessage] = useState(null)
   const [lanMessage, setLANMessage] = useState(null)
   const [pnoMessage, setPNOMessage] = useState(null)
@@ -32,36 +56,21 @@ const FishingActivitiesSummary = props => {
   const [faoZones, setFAOZones] = useState([])
 
   useEffect(() => {
-    if (props.fishingActivities && props.fishingActivities.ersMessages && props.fishingActivities.ersMessages.length) {
-      const ersMessages = props.fishingActivities.ersMessages
-      const depMessage = ersMessages
-        .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
+    if (fishingActivities && fishingActivities.ersMessages && fishingActivities.ersMessages.length) {
+      const ersMessages = fishingActivities.ersMessages
+      const depMessage = getDEPMessageFromMessages(ersMessages)
       setDEPMessage(depMessage)
 
-      const lanMessage = ersMessages
-        .filter(message => message.messageType === ERSMessageTypeEnum.LAN.code)
-        .find(message => {
-          const depTripNumber = depMessage.tripNumber
-          if (depTripNumber) {
-            return depTripNumber === message.tripNumber
-          } else {
-            const landingDatetimeUtc = new Date(message.message.landingDatetimeUtc)
-            const departureDatetimeUtc = new Date(depMessage.message.departureDatetimeUtc)
-            return landingDatetimeUtc > departureDatetimeUtc
-          }
-        })
+      const lanMessage = getLANMessageFromMessages(ersMessages, depMessage)
       setLANMessage(lanMessage)
 
-      const disMessages = ersMessages
-        .filter(message => message.messageType === ERSMessageTypeEnum.DIS.code)
+      const disMessages = getDISMessagesFromMessages(ersMessages)
       setDISMessages(disMessages)
 
-      const pnoMessage = ersMessages
-        .find(message => message.messageType === ERSMessageTypeEnum.PNO.code)
+      const pnoMessage = getPNOMessageFromMessages(ersMessages)
       setPNOMessage(pnoMessage)
 
-      const farMessages = ersMessages
-        .filter(message => message.messageType === ERSMessageTypeEnum.FAR.code)
+      const farMessages = getFARMessagesFromMessages(ersMessages)
       setFARMessages(farMessages)
 
       let totalFARAndDEPWeight = 0
@@ -70,23 +79,7 @@ const FishingActivitiesSummary = props => {
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
 
-        const speciesToWeightFARObject = {}
-        farMessages.forEach(message => {
-          message.message.catches.forEach(speciesCatch => {
-            if (speciesToWeightFARObject[speciesCatch.species]) {
-              speciesToWeightFARObject[speciesCatch.species].weight = parseFloat((
-                speciesToWeightFARObject[speciesCatch.species].weight +
-                                (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
-            } else {
-              speciesToWeightFARObject[speciesCatch.species] = {
-                species: speciesCatch.species,
-                weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
-                speciesName: speciesCatch.speciesName,
-                totalWeight: totalFARWeight
-              }
-            }
-          })
-        })
+        const speciesToWeightFARObject = getSpeciesToWeightFARObject(farMessages, totalFARWeight)
         setSpeciesToWeightOfFAR(speciesToWeightFARObject)
       }
 
@@ -99,23 +92,7 @@ const FishingActivitiesSummary = props => {
         const totalDISWeight = getTotalDISWeightFromMessages(disMessages)
         setTotalDISWeight(totalDISWeight)
 
-        const speciesToWeightDISObject = {}
-        disMessages.forEach(message => {
-          message.message.catches.forEach(speciesCatch => {
-            if (speciesToWeightDISObject[speciesCatch.species]) {
-              speciesToWeightDISObject[speciesCatch.species].weight = parseFloat((
-                speciesToWeightDISObject[speciesCatch.species].weight +
-                              (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
-            } else {
-              speciesToWeightDISObject[speciesCatch.species] = {
-                species: speciesCatch.species,
-                weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
-                speciesName: speciesCatch.speciesName,
-                totalWeight: totalDISWeight
-              }
-            }
-          })
-        })
+        const speciesToWeightDISObject = getSpeciesToWeightDISObject(disMessages, totalDISWeight)
         setSpeciesToWeightOfDIS(speciesToWeightDISObject)
       }
 
@@ -123,21 +100,7 @@ const FishingActivitiesSummary = props => {
         const totalLANWeight = getTotalLANWeightFromMessages(lanMessage)
         setTotalLANWeight(totalLANWeight)
 
-        const speciesToWeightLANObject = {}
-        lanMessage.message.catchLanded.forEach(speciesCatch => {
-          // TODO Regarder le calcul de la somme du LAN pour chaue espèce, ça semble trop élevé en env de DEV
-          if (speciesToWeightLANObject[speciesCatch.species]) {
-            speciesToWeightLANObject[speciesCatch.species].weight = parseFloat((
-              speciesToWeightLANObject[speciesCatch.species].weight +
-                            (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
-          } else {
-            speciesToWeightLANObject[speciesCatch.species] = {
-              species: speciesCatch.species,
-              weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
-              speciesName: speciesCatch.speciesName
-            }
-          }
-        })
+        const speciesToWeightLANObject = getSpeciesToWeightLANObject(lanMessage)
         setSpeciesToWeightOfLAN(speciesToWeightLANObject)
       }
 
@@ -145,86 +108,37 @@ const FishingActivitiesSummary = props => {
         const totalPNOWeight = getTotalPNOWeightFromMessages(pnoMessage)
         setTotalPNOWeight(totalPNOWeight)
 
-        const speciesToWeightPNOObject = {}
-        pnoMessage.message.catchOnboard.forEach(speciesCatch => {
-          if (speciesToWeightPNOObject[speciesCatch.species]) {
-            speciesToWeightPNOObject[speciesCatch.species].weight = parseFloat((
-              speciesToWeightPNOObject[speciesCatch.species].weight +
-                           (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
-          } else {
-            speciesToWeightPNOObject[speciesCatch.species] = {
-              species: speciesCatch.species,
-              weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
-              speciesName: speciesCatch.speciesName,
-              totalWeight: totalFARAndDEPWeight
-            }
-          }
-        })
+        const speciesToWeightPNOObject = getSpeciesToWeightPNOObject(pnoMessage, totalFARAndDEPWeight)
         setSpeciesToWeightOfPNO(speciesToWeightPNOObject)
       }
 
       setTotalFARAndDEPWeight(totalFARAndDEPWeight)
 
-      const faoZones = farMessages
-        .map(farMessage => {
-          return farMessage.message.catches.map(speciesCatch => speciesCatch.faoZone)
-        })
-        .flat()
-        .reduce((acc, faoZone) => {
-          if (acc.indexOf(faoZone) < 0) {
-            acc.push(faoZone)
-          }
-
-          return acc
-        }, [])
+      const faoZones = getFAOZonesFromFARMessages(farMessages)
       setFAOZones(faoZones)
+    } else {
+      setDEPMessage(null)
+      setLANMessage(null)
+      setPNOMessage(null)
+      setFARMessages(null)
+      setDISMessages(null)
+
+      setTotalFARWeight(null)
+      setTotalDISWeight(null)
+      setTotalLANWeight(null)
+      setTotalPNOWeight(null)
+      setTotalFARAndDEPWeight(null)
+
+      setSpeciesToWeightOfFAR({})
+      setSpeciesToWeightOfPNO({})
+      setSpeciesToWeightOfDIS({})
+      setSpeciesToWeightOfLAN({})
     }
-  }, [props.fishingActivities])
-
-  function getTotalFARWeightFromMessages (ersMessages) {
-    return parseFloat(ersMessages
-      .reduce((accumulator, ersMessage) => {
-        const sumOfCatches = ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
-          ? ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
-            return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-          }, 0)
-          : 0
-        return accumulator + sumOfCatches
-      }, 0).toFixed(1))
-  }
-
-  function getTotalDEPWeightFromMessages (ersMessage) {
-    return parseFloat(ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
-      return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-    }, 0).toFixed(1))
-  }
-
-  function getTotalLANWeightFromMessages (ersMessage) {
-    return parseFloat(ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
-      return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-    }, 0).toFixed(1))
-  }
-
-  function getTotalPNOWeightFromMessages (ersMessage) {
-    return parseFloat(ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
-      return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-    }, 0).toFixed(1))
-  }
-
-  function getTotalDISWeightFromMessages (ersMessages) {
-    return parseFloat(ersMessages
-      .reduce((accumulator, ersMessage) => {
-        const sumOfCatches = ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
-          return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-        }, 0)
-
-        return accumulator + sumOfCatches
-      }, 0).toFixed(1))
-  }
+  }, [fishingActivities])
 
   const getCatchesOverToleranceAlert = () => {
-    if (props.fishingActivities.alerts && props.fishingActivities.alerts.length) {
-      return props.fishingActivities.alerts.find(alert => alert.name === AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
+    if (fishingActivities.alerts && fishingActivities.alerts.length) {
+      return fishingActivities.alerts.find(alert => alert.name === AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
     }
 
     return null
@@ -257,15 +171,15 @@ const FishingActivitiesSummary = props => {
   }
 
   return <>
-        {props.fishingActivities
+        {fishingActivities
           ? <Body>
                 <Zone>
                     <Title>
                         <Text>Segment(s) de flotte(s) actuel(s)</Text>
                         <TextValue>
                           <FleetSegments
-                            vesselLastPositionFeature={props.vesselLastPositionFeature}
-                            fleetSegmentsReferential={props.fleetSegments}
+                            vesselLastPositionFeature={vesselLastPositionFeature}
+                            fleetSegmentsReferential={fleetSegments}
                           />
                         </TextValue>
                     </Title>
@@ -294,8 +208,8 @@ const FishingActivitiesSummary = props => {
                 <Zone>
                     <Title>
                         <Text>Licences</Text>
-                        <TextValue>{props.fishingActivities.isExpired
-                          ? props.fishingActivities.isExpired
+                        <TextValue>{fishingActivities.isExpired
+                          ? fishingActivities.isExpired
                           : <NoValue>à venir</NoValue>}</TextValue>
                     </Title>
                 </Zone>
@@ -303,22 +217,37 @@ const FishingActivitiesSummary = props => {
                     <Title hasTwoLines={false}>
                         <Text hasTwoLines={false}>Résumé de la marée</Text>
                         <TextValue hasTwoLines={false}>
+                          <PreviousTrip
+                            disabled={!previousBeforeDateTime}
+                            onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
+                            title={'Marée précédente'}
+                          />
                           {
                             depMessage && depMessage.tripNumber
                               ? `Marée n°${depMessage.tripNumber}`
                               : <NoValue>-</NoValue>
                           }
+                          <NextTrip
+                            disabled={isLastVoyage}
+                            onClick={!isLastVoyage && navigation.goToNextTrip}
+                            title={'Marée suivante'}
+                          />
+                          <LastTrip
+                            disabled={isLastVoyage}
+                            onClick={!isLastVoyage && navigation.goToLastTrip}
+                            title={'Dernière marée'}
+                          />
                         </TextValue>
-                        <SeeAll onClick={() => props.showERSMessages()}>Voir tous les messages</SeeAll>
-                        <Arrow onClick={() => props.showERSMessages()}/>
+                        <SeeAll onClick={() => showERSMessages()}>Voir tous les messages</SeeAll>
+                        <Arrow onClick={() => showERSMessages()}/>
                     </Title>
                     {
-                        props.fishingActivities && props.fishingActivities.ersMessages && props.fishingActivities.ersMessages.length
+                        fishingActivities && fishingActivities.ersMessages && fishingActivities.ersMessages.length
                           ? <ERSMessages>
                                 {depMessage
                                   ? <DEPMessageResume
                                         id={depMessage.ersId}
-                                        showERSMessages={props.showERSMessages}
+                                        showERSMessages={showERSMessages}
                                         depMessage={depMessage.message}
                                         isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
                                         isDeleted={depMessage.deleted}
@@ -329,7 +258,7 @@ const FishingActivitiesSummary = props => {
                                 {farMessages && farMessages.length && farMessages[0]
                                   ? <FARMessageResume
                                         id={farMessages[0].ersId}
-                                        showERSMessages={props.showERSMessages}
+                                        showERSMessages={showERSMessages}
                                         totalFARWeight={totalFARWeight}
                                         numberOfMessages={farMessages ? farMessages.length : 0}
                                         speciesToWeightOfFAR={speciesToWeightOfFAR}/>
@@ -342,7 +271,7 @@ const FishingActivitiesSummary = props => {
                                         totalDISWeight={totalDISWeight}
                                         numberOfMessages={disMessages ? disMessages.length : 0}
                                         speciesToWeightOfDIS={speciesToWeightOfDIS}
-                                        showERSMessages={props.showERSMessages}/>
+                                        showERSMessages={showERSMessages}/>
                                   : <DISMessageResume hasNoMessage={true}/>
                                 }
 
@@ -352,7 +281,7 @@ const FishingActivitiesSummary = props => {
                                         totalFARAndDEPWeight={totalFARAndDEPWeight}
                                         speciesToWeightOfPNO={speciesToWeightOfPNO}
                                         speciesToWeightOfFAR={speciesToWeightOfFAR}
-                                        showERSMessages={props.showERSMessages}
+                                        showERSMessages={showERSMessages}
                                         isNotAcknowledged={pnoMessage.acknowledge && pnoMessage.acknowledge.isSuccess === false}
                                         isDeleted={pnoMessage.deleted}
                                         pnoMessage={pnoMessage}/>
@@ -368,7 +297,7 @@ const FishingActivitiesSummary = props => {
                                         speciesToWeightOfFAR={speciesToWeightOfFAR}
                                         speciesToWeightOfPNO={speciesToWeightOfPNO}
                                         speciesToWeightOfLAN={speciesToWeightOfLAN}
-                                        showERSMessages={props.showERSMessages}
+                                        showERSMessages={showERSMessages}
                                         isNotAcknowledged={lanMessage.acknowledge && lanMessage.acknowledge.isSuccess === false}
                                         isDeleted={lanMessage.deleted}
                                         lanMessage={lanMessage.message}/>
@@ -382,6 +311,28 @@ const FishingActivitiesSummary = props => {
           : null}
     </>
 }
+
+const PreviousTrip = styled(ArrowTripSVG)`
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  vertical-align: sub;
+  width: 14px;
+  margin-right: 10px;
+  transform: rotate(180deg);
+`
+
+const NextTrip = styled(ArrowTripSVG)`
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  vertical-align: sub;
+  width: 14px;
+  margin-left: 10px;
+`
+
+const LastTrip = styled(ArrowLastTripSVG)`
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  vertical-align: sub;
+  width: 14px;
+  margin-left: 5px;
+`
 
 const NoMessage = styled.div`
   text-align: center;

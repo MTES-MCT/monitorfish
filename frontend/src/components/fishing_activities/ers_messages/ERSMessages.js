@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import ERSMessage from './ERSMessage'
-import { ReactComponent as ArrowSVG } from '../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as SortSVG } from '../../icons/ascendant-descendant.svg'
+import { ReactComponent as ArrowSVG } from '../../icons/Picto_fleche-pleine-droite.svg'
+import { ReactComponent as ArrowTripSVG } from '../../icons/Fleche_navigation_marees.svg'
+import { ReactComponent as ArrowLastTripSVG } from '../../icons/Double_fleche_navigation_marees.svg'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
+import { getDEPMessageFromMessages } from '../../../domain/entities/fishingActivities'
+import { useSelector } from 'react-redux'
 
 const animatedComponents = makeAnimated()
 
@@ -21,24 +25,33 @@ const options = [
   { value: 'LAN', label: 'LAN' }
 ]
 
-const ERSMessages = props => {
-  const [fishingActivities, setFishingActivities] = useState([])
+const ERSMessages = ({ showFishingActivitiesSummary, fishingActivities, messageTypeFilter, navigation, tripNumber }) => {
+  const {
+    isLastVoyage,
+    previousBeforeDateTime
+  } = useSelector(state => state.vessel)
+
+  const [ersMessages, setERSMessages] = useState([])
   const [ascendingSort, setAscendingSort] = useState(true)
   const [selectedOptions, setSelectedOptions] = useState(null)
+  const [depMessage, setDEPMessage] = useState(null)
 
   useEffect(() => {
-    setFishingActivities(props.fishingActivities.ersMessages)
-  }, [props.fishingActivities])
+    setERSMessages(fishingActivities.ersMessages)
+
+    const depMessage = getDEPMessageFromMessages(fishingActivities.ersMessages)
+    setDEPMessage(depMessage)
+  }, [fishingActivities])
 
   useEffect(() => {
-    const messageTypes = options.filter(options => options.value === props.messageTypeFilter)
+    const messageTypes = options.filter(options => options.value === messageTypeFilter)
     setSelectedOptions(messageTypes)
-  }, [props.messageTypeFilter])
+  }, [messageTypeFilter])
 
   function inverseSort () {
     const inversedSort = !ascendingSort
 
-    const sortedFishingActivities = [...fishingActivities].sort((a, b) => {
+    const sortedFishingActivities = [...ersMessages].sort((a, b) => {
       if (inversedSort) {
         return new Date(a.operationDateTime) - new Date(b.operationDateTime)
       } else {
@@ -47,7 +60,7 @@ const ERSMessages = props => {
     })
 
     setAscendingSort(inversedSort)
-    setFishingActivities(sortedFishingActivities)
+    setERSMessages(sortedFishingActivities)
   }
 
   const selectStyles = {
@@ -55,7 +68,8 @@ const ERSMessages = props => {
       ...provided,
       padding: 0,
       height: 'fit-content',
-      zIndex: 4
+      zIndex: 4,
+      width: '-moz-available'
     }),
     control: base => ({ ...base, minHeight: 26, fontSize: 13, borderRadius: 'unset', borderColor: COLORS.grayDarker }),
     option: base => ({ ...base, fontSize: 13 }),
@@ -83,7 +97,7 @@ const ERSMessages = props => {
   }
 
   return <Wrapper>
-        <Arrow onClick={() => props.showFishingActivitiesSummary()}/><Previous onClick={() => props.showFishingActivitiesSummary()}>Revenir au résumé</Previous>
+        <Arrow onClick={() => showFishingActivitiesSummary()}/><Previous onClick={() => showFishingActivitiesSummary()}>Revenir au résumé</Previous>
         <Filters>
             <Select
               menuPortalTarget={document.body}
@@ -97,11 +111,34 @@ const ERSMessages = props => {
               options={options}
               styles={selectStyles}
               isSearchable={false}
+              className={'available-width'}
             />
+            <Navigation selectedOptionsSize={selectedOptions ? selectedOptions.length : 0}>
+              <PreviousTrip
+                disabled={!previousBeforeDateTime}
+                onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
+                title={'Marée précédente'}
+              />
+              {
+                depMessage && depMessage.tripNumber
+                  ? `Marée n°${depMessage.tripNumber}`
+                  : '-'
+              }
+              <LastTrip
+                disabled={isLastVoyage}
+                onClick={!isLastVoyage && navigation.goToLastTrip}
+                title={'Dernière marée'}
+              />
+              <NextTrip
+                disabled={isLastVoyage}
+                onClick={!isLastVoyage && navigation.goToNextTrip}
+                title={'Marée suivante'}
+              />
+            </Navigation>
             <InverseDate ascendingSort={ascendingSort} onClick={() => inverseSort()}/>
         </Filters>
-        { fishingActivities && fishingActivities.length
-          ? fishingActivities
+        { ersMessages && ersMessages.length
+          ? ersMessages
             .filter(ersMessage => {
               if (selectedOptions && selectedOptions.length) {
                 return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
@@ -109,16 +146,63 @@ const ERSMessages = props => {
                 return true
               }
             })
-            .map(message => {
-              return <ERSMessage key={message.ersId} message={message}/>
+            .map((message, index) => {
+              return <ERSMessage
+                key={message.ersId}
+                message={message}
+                isFirst={index === 0}
+              />
             })
           : <NoMessage>Aucun message reçu</NoMessage> }
     </Wrapper>
 }
 
+const PreviousTrip = styled(ArrowTripSVG)`
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  vertical-align: sub;
+  width: 14px;
+  margin-right: 10px;
+  transform: rotate(180deg);
+  float: left;
+  margin: 2px 0 0 5px;
+`
+
+const NextTrip = styled(ArrowTripSVG)`
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  vertical-align: sub;
+  width: 14px;
+  margin-left: 10px;
+  float: right;
+  margin: 2px 5px 0 0;
+`
+
+const LastTrip = styled(ArrowLastTripSVG)`
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  vertical-align: sub;
+  width: 14px;
+  margin-left: 5px;
+  float: right;
+  margin: 2px 5px 0 0;
+`
+
+const Navigation = styled.div`
+  width: -moz-available;          /* For Mozilla */
+  width: -webkit-fill-available;  /* For Chrome */
+  width: stretch;  
+  padding: 0 0 0 10px;
+  text-align: center;
+  font-size: 13px;
+  color: #969696;
+  padding: 2px;
+  max-width: 250px;
+  margin: 0 10px 0 10px;
+  border: 1px solid ${COLORS.grayDarker};
+}
+`
+
 const InverseDate = styled(SortSVG)`
   border: 1px solid ${COLORS.grayDarker};
-  width: 15px;
+  width: 30px;
   height: 12px;
   padding: 6px;
   margin-left: auto;

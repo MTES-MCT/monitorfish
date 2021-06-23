@@ -43,7 +43,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastDepartureDateAndTripNumber Should return the last departure date When the CFR is given`() {
         // When
-        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("GBR000B14430")
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("GBR000B14430", ZonedDateTime.now())
 
         // Then
         assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
@@ -54,7 +54,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastDepartureDateAndTripNumber Should throw an exception When no parameter is given`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("") }
+        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("", ZonedDateTime.now()) }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
@@ -65,7 +65,45 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastDepartureDateAndTripNumber Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("ARGH") }
+        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("ARGH", ZonedDateTime.now()) }
+
+        // Then
+        assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
+        assertThat(throwable.message).contains("No departure date (DEP) found for the vessel.")
+    }
+
+    @Test
+    @Transactional
+    fun `findSecondDepartureDateByInternalReferenceNumber Should return the second departure date When the second DEP is not the last one`() {
+        // When
+        val secondDepartureDateAndTripNumber = jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber(
+                "GBR000B14430",
+                ZonedDateTime.parse("2019-02-15T01:05:00Z"))
+
+        // Then
+        assertThat(secondDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-02-27T01:05Z")
+        assertThat(secondDepartureDateAndTripNumber.tripNumber).isEqualTo(9463714)
+    }
+
+    @Test
+    @Transactional
+    fun `findSecondDepartureDateByInternalReferenceNumber Should return the second departure date When the second DEP is the last DEP`() {
+        // When
+        val secondDepartureDateAndTripNumber = jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber(
+                "GBR000B14430",
+                ZonedDateTime.parse("2019-02-18T01:05:00Z"))
+
+        // Then
+        assertThat(secondDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(secondDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
+    }
+
+    @Test
+    @Transactional
+    fun `findSecondDepartureDateByInternalReferenceNumber Should throw an exception When no second DEP is found`() {
+        // When
+        // When
+        val throwable = catchThrowable { jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber("GBR000B14430", ZonedDateTime.parse("2019-02-28T01:05:00Z")) }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
@@ -77,10 +115,11 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     fun `findAllMessagesAfterDepartureDate Should retrieve all messages When the CFR is given`() {
         // Given
         val lastDepartureDate = ZonedDateTime.of(2019, 10, 11, 2, 6, 0, 0, UTC)
+        val now = ZonedDateTime.now()
 
         // When
         val messages = jpaERSRepository
-                .findAllMessagesAfterDepartureDate(lastDepartureDate, "GBR000B14430")
+                .findAllMessagesBetweenDepartureDates(lastDepartureDate, now, "GBR000B14430")
 
         // Then
         assertThat(messages).hasSize(17)

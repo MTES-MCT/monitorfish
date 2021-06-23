@@ -1,11 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import FishingActivitiesSummary from './FishingActivitiesSummary'
 import ERSMessages from './ers_messages/ERSMessages'
 import { COLORS } from '../../constants/constants'
+import { resetNextFishingActivities, setVoyage } from '../../domain/reducers/Vessel'
+import { useDispatch, useSelector } from 'react-redux'
+import getVesselVoyage, { NAVIGATE_TO } from '../../domain/use_cases/getVesselVoyage'
 
-const VesselFishingActivities = props => {
+const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fleetSegments, vesselLastPositionFeature }) => {
+  const dispatch = useDispatch()
+  const {
+    selectedVesselFeatureAndIdentity
+  } = useSelector(state => state.vessel)
+
   const [fishingViewIndex, setFishingViewIndex] = useState(1)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
 
@@ -22,12 +30,37 @@ const VesselFishingActivities = props => {
     setFishingViewIndex(1)
   }
 
+  useEffect(() => {
+    if (fishingActivities) {
+      dispatch(resetNextFishingActivities())
+    }
+  }, [fishingActivities])
+
+  const updateFishingActivities = nextFishingActivities => {
+    if (nextFishingActivities) {
+      dispatch(setVoyage(nextFishingActivities))
+      dispatch(resetNextFishingActivities())
+    }
+  }
+
+  function goToPreviousTrip () {
+    dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.PREVIOUS, false))
+  }
+
+  function goToNextTrip () {
+    dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.NEXT, false))
+  }
+
+  function goToLastTrip () {
+    dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.LAST, false))
+  }
+
   return <>
-        { props.nextFishingActivities
+        { nextFishingActivities
           ? <>
                 <UpdateFishingActivities/>
                 <UpdateFishingActivitiesButton
-                    onClick={() => props.updateFishingActivities(props.nextFishingActivities)}>
+                    onClick={() => updateFishingActivities(nextFishingActivities)}>
                     Nouveaux messages JPE
                 </UpdateFishingActivitiesButton>
             </>
@@ -36,17 +69,27 @@ const VesselFishingActivities = props => {
         { fishingViewIndex === 1
           ? <FishingActivitiesSummary
                 showERSMessages={showERSMessages}
-                fishingActivities={props.fishingActivities}
-                fleetSegments={props.fleetSegments}
-                vesselLastPositionFeature={props.vesselLastPositionFeature}
+                fishingActivities={fishingActivities}
+                fleetSegments={fleetSegments}
+                vesselLastPositionFeature={vesselLastPositionFeature}
+                navigation={{
+                  goToPreviousTrip,
+                  goToNextTrip,
+                  goToLastTrip
+                }}
             />
           : null
         }
         { fishingViewIndex === 2
           ? <ERSMessages
                 showFishingActivitiesSummary={showFishingActivitiesSummary}
-                fishingActivities={props.fishingActivities}
+                fishingActivities={fishingActivities}
                 messageTypeFilter={messageTypeFilter}
+                navigation={{
+                  goToPreviousTrip,
+                  goToNextTrip,
+                  goToLastTrip
+                }}
             />
           : null }
         </>

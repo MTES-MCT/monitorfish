@@ -123,12 +123,17 @@ class BffController(
     @ApiOperation("Get vessel's ERS messages")
     fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
                              @RequestParam(name = "internalReferenceNumber")
-                             internalReferenceNumber: String): ERSMessagesAndAlertsDataOutput {
+                             internalReferenceNumber: String,
+                             @ApiParam("before date")
+                             @RequestParam(name = "beforeDateTime", required = false)
+                             @DateTimeFormat(pattern = zoneDateTimePattern)
+                             beforeDateTime: ZonedDateTime?): VoyageDataOutput {
         val start = System.currentTimeMillis()
-        val ersMessagesAndAlerts = getVesselLastVoyage.execute(internalReferenceNumber)
-        ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
 
-        return ERSMessagesAndAlertsDataOutput.fromERSMessagesAndAlerts(ersMessagesAndAlerts)
+        val voyage = getVesselLastVoyage.execute(internalReferenceNumber, beforeDateTime)
+
+        ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+        return VoyageDataOutput.fromVoyage(voyage)
     }
 
     @GetMapping("/v1/gears")

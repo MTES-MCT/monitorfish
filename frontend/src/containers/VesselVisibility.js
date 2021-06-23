@@ -16,6 +16,8 @@ import VesselLabelSelection from '../components/vessel_visibility/VesselLabelSel
 import ShowVesselLabel from '../components/vessel_visibility/ShowVesselLabel'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
+import { MapComponent } from '../components/map/MapComponent'
+import { MapButton } from '../components/map/MapButton'
 
 const VesselVisibility = () => {
   const dispatch = useDispatch()
@@ -26,6 +28,7 @@ const VesselVisibility = () => {
   const vesselLabel = useSelector(state => state.map.vesselLabel)
   const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
   const [isShowed, setIsShowed] = useState(true)
@@ -81,8 +84,11 @@ const VesselVisibility = () => {
   }
 
   return (
-    <Wrapper isShowed={isShowed} ref={wrapperRef}>
+    <Wrapper
+      isShowed={isShowed}
+      ref={wrapperRef}>
       <VesselVisibilityIcon
+        healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
@@ -93,6 +99,7 @@ const VesselVisibility = () => {
           selectedVessel={selectedVessel}/>
       </VesselVisibilityIcon>
       <VesselVisibilityBox
+        healthcheckTextWarning={healthcheckTextWarning}
         vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}>
         <Header isFirst={true}>
           Gérer l&apos;affichage des dernières positions
@@ -202,7 +209,7 @@ const Header = styled.div`
   border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
 `
 
-const VesselVisibilityBox = styled.div`
+const VesselVisibilityBox = styled(MapComponent)`
   width: 406px;
   background: ${COLORS.background};
   margin-right: ${props => props.vesselVisibilityBoxIsOpen ? '45px' : '-420px'};
@@ -213,17 +220,15 @@ const VesselVisibilityBox = styled.div`
   position: absolute;
   display: inline-block;
   transition: all 0.5s;
-
 `
 
-const VesselVisibilityIcon = styled.button`
+const VesselVisibilityIcon = styled(MapButton)`
   position: absolute;
   display: inline-block;
   color: #05055E;
   background: ${COLORS.grayDarkerThree};
   padding: 3px 0px 0 3px;
-  margin-top: 8px;
-  top: 144px;
+  top: 152px;
   z-index: 99;
   height: 40px;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};

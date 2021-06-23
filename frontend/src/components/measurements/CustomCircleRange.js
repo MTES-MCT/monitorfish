@@ -4,6 +4,7 @@ import CoordinateInput from 'react-coordinate-input'
 
 import { COLORS } from '../../constants/constants'
 import { MeasurementTypes } from '../../domain/entities/map'
+import { MapComponent } from '../map/MapComponent'
 
 const CustomCircleRange = (
   {
@@ -14,10 +15,12 @@ const CustomCircleRange = (
     circleRadiusToAdd,
     setCircleRadiusToAdd,
     cancelAddCircleRange,
-    addCustomCircleRange
+    addCustomCircleRange,
+    healthcheckTextWarning
   }) => {
   return (
     <Wrapper
+      healthcheckTextWarning={healthcheckTextWarning}
       firstUpdate={firstUpdate}
       isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}>
       <Header>
@@ -124,7 +127,7 @@ const Header = styled.div`
   border-top-right-radius: 2px;
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled(MapComponent)`
   width: 306px;
   background: ${COLORS.background};
   margin-right: ${props => !props.firstUpdate && props.isOpen ? '45px' : '-320px'};

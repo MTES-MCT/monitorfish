@@ -5,13 +5,13 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async () => {
   let nextZones = []
 
   nextZones = administrativeZones
-    .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
+    .filter(zone => !zone.showMultipleZonesInAdministrativeZones)
     .filter(zone => !zone.group)
     .map(zone => [zone])
 
   const groups = [...new Set(administrativeZones
     .filter(zone => zone.group)
-    .filter(layer => !layer.showMultipleZonesInAdministrativeZones)
+    .filter(zone => !zone.showMultipleZonesInAdministrativeZones)
     .map(zone => zone.group))]
 
   groups.forEach(group => {
@@ -21,8 +21,8 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async () => {
 
   const nextSubZonesPromises = Object.keys(LayersEnum)
     .map(layerName => LayersEnum[layerName])
-    .filter(layer => layer.type === layersType.ADMINISTRATIVE)
-    .filter(layer => layer.showMultipleZonesInAdministrativeZones)
+    .filter(zone => zone.type === layersType.ADMINISTRATIVE)
+    .filter(zone => zone.showMultipleZonesInAdministrativeZones)
     .map(zone => {
       if (zone.containsMultipleZones) {
         return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {

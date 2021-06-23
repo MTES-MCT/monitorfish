@@ -7,7 +7,6 @@ import { COLORS } from '../../constants/constants'
 import { resetNextFishingActivities, setVoyage } from '../../domain/reducers/Vessel'
 import { useDispatch, useSelector } from 'react-redux'
 import getVesselVoyage, { NAVIGATE_TO } from '../../domain/use_cases/getVesselVoyage'
-import { getDEPMessageFromMessages } from '../../domain/entities/fishingActivities'
 
 const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fleetSegments, vesselLastPositionFeature }) => {
   const dispatch = useDispatch()
@@ -32,7 +31,7 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
   }
 
   useEffect(() => {
-    if(fishingActivities) {
+    if (fishingActivities) {
       dispatch(resetNextFishingActivities())
     }
   }, [fishingActivities])
@@ -44,15 +43,15 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
     }
   }
 
-  function goToPreviousTrip() {
+  function goToPreviousTrip () {
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.PREVIOUS, false))
   }
 
-  function goToNextTrip() {
+  function goToNextTrip () {
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.NEXT, false))
   }
 
-  function goToLastTrip() {
+  function goToLastTrip () {
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.LAST, false))
   }
 
@@ -74,9 +73,9 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
                 fleetSegments={fleetSegments}
                 vesselLastPositionFeature={vesselLastPositionFeature}
                 navigation={{
-                    goToPreviousTrip,
-                    goToNextTrip,
-                    goToLastTrip
+                  goToPreviousTrip,
+                  goToNextTrip,
+                  goToLastTrip
                 }}
             />
           : null

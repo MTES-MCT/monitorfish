@@ -51,7 +51,6 @@ function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselFe
   if (!calledFromCron &&
     alreadySelectedVessel &&
     !vesselsAreEquals(vesselFeatureAndIdentity.identity, alreadySelectedVessel.identity)) {
-    console.log("unselect")
     dispatch(unselectVessel())
   }
 }

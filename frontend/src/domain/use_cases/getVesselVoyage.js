@@ -27,16 +27,16 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     } = getState().vessel
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
 
-    if(navigateTo === NAVIGATE_TO.NEXT && isLastVoyage) {
-      console.error("This voyage is the last one.")
+    if (navigateTo === NAVIGATE_TO.NEXT && isLastVoyage) {
+      console.error('This voyage is the last one.')
       return
     }
 
     let beforeDateTime = null
     switch (navigateTo) {
-      case NAVIGATE_TO.PREVIOUS: beforeDateTime = previousBeforeDateTime; break;
-      case NAVIGATE_TO.NEXT: beforeDateTime = nextBeforeDateTime; break;
-      case NAVIGATE_TO.LAST: beforeDateTime = null; break;
+      case NAVIGATE_TO.PREVIOUS: beforeDateTime = previousBeforeDateTime; break
+      case NAVIGATE_TO.NEXT: beforeDateTime = nextBeforeDateTime; break
+      case NAVIGATE_TO.LAST: beforeDateTime = null; break
     }
 
     if (!isSameVesselAsCurrentlyShowed) {
@@ -44,7 +44,6 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     }
 
     getVesselVoyageFromAPI(vesselIdentity, beforeDateTime).then(voyage => {
-      console.log("voyage", voyage)
       if (!voyage) {
         dispatch(setVoyage({
           ersMessagesAndAlerts: {
@@ -57,15 +56,11 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       }
 
       if (isSameVesselAsCurrentlyShowed && fromCron) {
-        if ((lastFishingActivities.ersMessages && !lastFishingActivities.ersMessages.length) ||
-          (lastFishingActivities.alerts && voyage.ersMessagesAndAlerts.alerts &&
-                    voyage.ersMessagesAndAlerts.alerts.length > lastFishingActivities.alerts.length) ||
-                    (lastFishingActivities.ersMessages && voyage.ersMessagesAndAlerts.ersMessages &&
-                        voyage.ersMessagesAndAlerts.ersMessages.length > lastFishingActivities.ersMessages.length)) {
+        if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
           dispatch(setNextFishingActivities(voyage.ersMessagesAndAlerts))
         }
       } else {
-        if(!beforeDateTime) {
+        if (!beforeDateTime) {
           dispatch(setLastVoyage(voyage))
         } else {
           dispatch(setVoyage(voyage))
@@ -78,6 +73,14 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(resetLoadingVessel())
     })
   }
+}
+
+function gotNewFishingActivitiesWithMoreMessagesOrAlerts (lastFishingActivities, voyage) {
+  return (lastFishingActivities.ersMessages && !lastFishingActivities.ersMessages.length) ||
+    (lastFishingActivities.alerts && voyage.ersMessagesAndAlerts.alerts &&
+      voyage.ersMessagesAndAlerts.alerts.length > lastFishingActivities.alerts.length) ||
+    (lastFishingActivities.ersMessages && voyage.ersMessagesAndAlerts.ersMessages &&
+      voyage.ersMessagesAndAlerts.ersMessages.length > lastFishingActivities.ersMessages.length)
 }
 
 export default getVesselVoyage

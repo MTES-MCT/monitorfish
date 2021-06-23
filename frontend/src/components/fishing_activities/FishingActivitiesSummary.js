@@ -170,8 +170,6 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
     return <NoValue>-</NoValue>
   }
 
-
-
   return <>
         {fishingActivities
           ? <Body>

@@ -7,15 +7,17 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
-import org.springframework.transaction.annotation.Propagation
 import java.time.Instant
-import javax.transaction.Transactional
 
 @DynamicUpdate
 interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExecutor<ERSEntity> {
     @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
-            "from ERSEntity e where e.internalReferenceNumber = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")
-    fun findLastDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
+            "from ERSEntity e where e.internalReferenceNumber = ?1 and e.messageType = 'DEP' AND e.operationDateTime < ?2 order by e.operationDateTime desc")
+    fun findLastDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, beforeDateTime: Instant, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
+
+    @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
+            "from ERSEntity e where e.internalReferenceNumber = ?1 and e.messageType = 'DEP' AND e.operationDateTime > ?2 order by e.operationDateTime asc")
+    fun findNextDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, afterDateTime: Instant, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
 
     @Query("select new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.LastDepartureInstantAndTripNumber(e.operationDateTime, e.tripNumber) " +
             "from ERSEntity e where e.externalReferenceNumber = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")
@@ -25,14 +27,14 @@ interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExe
             "from ERSEntity e where e.ircs = ?1 and e.messageType = 'DEP' order by e.operationDateTime desc")
     fun findLastDepartureDateByIRCS(ircs: String, pageable: Pageable): List<LastDepartureInstantAndTripNumber>
 
-    @Query("WITH dat_cor AS (select * from ers e where e.cfr = ?1 and e.operation_datetime_utc >= ?2 AND operation_type IN ('DAT', 'COR') order by e.operation_datetime_utc desc), " +
-            "ret AS (select * from ers e where e.referenced_ers_id IN (select ers_id FROM dat_cor) and e.operation_datetime_utc >= ?2 AND operation_type = 'RET' order by e.operation_datetime_utc desc), " +
-            "del AS (select * from ers e where e.referenced_ers_id IN (select ers_id FROM dat_cor) and e.operation_datetime_utc >= ?2 AND operation_type = 'DEL' order by e.operation_datetime_utc desc) " +
+    @Query("WITH dat_cor AS (select * from ers e where e.cfr = ?1 AND e.operation_datetime_utc >= ?2 AND e.operation_datetime_utc < ?3 AND operation_type IN ('DAT', 'COR') order by e.operation_datetime_utc desc), " +
+            "ret AS (select * from ers e where e.referenced_ers_id IN (select ers_id FROM dat_cor) AND e.operation_datetime_utc >= ?2 AND e.operation_datetime_utc < ?3 AND operation_type = 'RET' order by e.operation_datetime_utc desc), " +
+            "del AS (select * from ers e where e.referenced_ers_id IN (select ers_id FROM dat_cor) AND e.operation_datetime_utc >= ?2 AND e.operation_datetime_utc < ?3 AND operation_type = 'DEL' order by e.operation_datetime_utc desc) " +
             "SELECT * " +
             "FROM dat_cor " +
             "UNION ALL SELECT * from ret " +
             "UNION ALL SELECT * from del", nativeQuery = true)
-    fun findERSMessagesAfterOperationDateTime(internalReferenceNumber: String, dateTime: Instant): List<ERSEntity>
+    fun findERSMessagesAfterOperationDateTime(internalReferenceNumber: String, afterDateTime: Instant, beforeDateTime: Instant): List<ERSEntity>
 
     @Query("select * from ers where ers_id in " +
             "(select distinct referenced_ers_id from ers where operation_type = 'RET' and value->>'returnStatus' = '000') " +

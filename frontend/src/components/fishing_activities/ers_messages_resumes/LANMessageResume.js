@@ -14,7 +14,7 @@ const LANMessageResume = props => {
   useEffect(() => {
     if (props.lanMessage) {
       const height = props.lanMessage.catchLanded.length > 0 ? props.lanMessage.catchLanded.length * 58 : 0
-      increaseHeight(height)
+      setChartHeight(height)
     }
   }, [props.lanMessage])
 
@@ -33,10 +33,6 @@ const LANMessageResume = props => {
       firstUpdate.current = false
     }
   }, [isOpen])
-
-  const increaseHeight = height => {
-    setChartHeight(chartHeight + height)
-  }
 
   const getWeightOverToleranceInfo = () => {
     if (props.catchesOverToleranceAlert) {

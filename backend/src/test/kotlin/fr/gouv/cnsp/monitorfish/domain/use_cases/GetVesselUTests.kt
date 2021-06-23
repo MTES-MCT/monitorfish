@@ -66,7 +66,7 @@ class GetVesselUTests {
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
         given(positionRepository.findVesselLastPositions(any(), any(), any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
         given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
-        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willThrow(NoERSLastDepartureDateFound("ERROR"))
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willThrow(NoERSLastDepartureDateFound("ERROR"))
 
         // When
         val pair = runBlocking {
@@ -98,7 +98,7 @@ class GetVesselUTests {
     @Test
     fun `execute Should not throw an exception When a vessel's last DEP is not found`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any())).willThrow(NoERSLastDepartureDateFound("ERROR"))
+        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willThrow(NoERSLastDepartureDateFound("ERROR"))
 
         // When
         val throwable = catchThrowable {

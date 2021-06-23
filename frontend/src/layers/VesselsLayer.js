@@ -171,8 +171,8 @@ const VesselsLayer = ({ map }) => {
               vesselsLastPositionVisibility
             })
 
-          if (selectedVesselFeatureAndIdentity && vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature)) {
-            Vessel.setVesselAsSelected(feature)
+          if (selectedVesselFeatureAndIdentity &&
+            vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature)) {
             dispatch(updateSelectedVesselFeature(feature))
           }
         })
@@ -276,6 +276,12 @@ const VesselsLayer = ({ map }) => {
       temporaryVesselsToHighLightOnMap
     }
     const vessel = new Vessel(vesselFromAPI, vesselOptions)
+
+    if (selectedVesselFeatureAndIdentity &&
+      vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, vessel.feature)) {
+      Vessel.setVesselAsSelected(vessel.feature)
+      dispatch(updateSelectedVesselFeature(vessel.feature))
+    }
 
     return vessel.feature
   }

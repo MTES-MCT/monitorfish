@@ -7,46 +7,22 @@ import { ReactComponent as AckOkSVG } from '../../icons/Message_JPE_acquitté.sv
 import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitté.svg'
 import { getDateTime } from '../../../utils'
 
-const ERSMessage = props => {
+const ERSMessage = ({ message, isFirst }) => {
   const ersMessageHeaderTitle = useMemo(() => {
-    if (props.message) {
-      switch (props.message.messageType) {
+    if (message) {
+      switch (message.messageType) {
         case ERSMessageTypeEnum.DEP.code.toString(): {
           return <>
-            <ERSMessageName>{ERSMessageTypeEnum[props.message.messageType].name}</ERSMessageName>
-            {props.message.message.departurePortName ? props.message.message.departurePortName : props.message.message.departurePort}
-            {' '}le {getDateTime(props.message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
+            <ERSMessageName>{ERSMessageTypeEnum[message.messageType].name}</ERSMessageName>
+            {message.message.departurePortName ? message.message.departurePortName : message.message.departurePort}
+            {' '}le {getDateTime(message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
         }
-        case ERSMessageTypeEnum.PNO.code.toString(): {
-          return 'Préavis (notification de retour au port)'
-        }
-        case ERSMessageTypeEnum.FAR.code.toString(): {
-          return 'Déclaration de capture'
-        }
-        case ERSMessageTypeEnum.COE.code.toString(): {
-          return 'Entrée dans une zone d\'effort'
-        }
-        case ERSMessageTypeEnum.COX.code.toString(): {
-          return 'Sortie d\'une zone d\'effort'
-        }
-        case ERSMessageTypeEnum.CRO.code.toString(): {
-          return 'Traversée d\'une zone d\'effort'
-        }
-        case ERSMessageTypeEnum.DIS.code.toString(): {
-          return 'Déclaration de rejets'
-        }
-        case ERSMessageTypeEnum.EOF.code.toString(): {
-          return 'Fin de pêche'
-        }
-        case ERSMessageTypeEnum.RTP.code.toString(): {
-          return 'Retour au port'
-        }
-        case ERSMessageTypeEnum.LAN.code.toString(): {
-          return 'Débarquement'
+        default: {
+          return ERSMessageTypeEnum[message.messageType].fullName
         }
       }
     }
-  }, [props.message])
+  }, [message])
 
   const openXML = xml => {
     const blob = new Blob([xml], { type: 'text/xml' })
@@ -61,26 +37,26 @@ const ERSMessage = props => {
   }
 
   function getErsMessageType () {
-    if (props.message.messageType === ERSMessageTypeEnum.DIS.code &&
-            props.message.message.catches.some(aCatch => aCatch.presentation === ERSMessageTypeEnum.DIM.code)) {
+    if (message.messageType === ERSMessageTypeEnum.DIS.code &&
+            message.message.catches.some(aCatch => aCatch.presentation === ERSMessageTypeEnum.DIM.code)) {
       return ERSMessageTypeEnum.DIM.code
     }
-    return props.message.messageType
+    return message.messageType
   }
 
   return <>
-        { props.message
-          ? <Wrapper>
+        { message
+          ? <Wrapper isFirst={isFirst}>
                 <Header>
                     <ERSMessageType>{getErsMessageType()}</ERSMessageType>
                     <ERSMessageHeaderText
-                      isShortcut={props.message.isCorrected || props.message.deleted || props.message.referencedErsId}
+                      isShortcut={message.isCorrected || message.deleted || message.referencedErsId}
                       title={typeof ersMessageHeaderTitle === 'string' ? ersMessageHeaderTitle : ''}
                     >
                         {ersMessageHeaderTitle}
                     </ERSMessageHeaderText>
                     {
-                        props.message.isCorrected
+                        message.isCorrected
                           ? <CorrectedMessage>
                             <MessageCorrected/>
                             <CorrectedMessageText>ANCIEN MESSAGE</CorrectedMessageText>
@@ -88,7 +64,7 @@ const ERSMessage = props => {
                           : null
                     }
                     {
-                        props.message.deleted
+                        message.deleted
                           ? <CorrectedMessage>
                             <MessageCorrected/>
                             <CorrectedMessageText>MESSAGE SUPPRIMÉ</CorrectedMessageText>
@@ -96,7 +72,7 @@ const ERSMessage = props => {
                           : null
                     }
                     {
-                        props.message.referencedErsId
+                        message.referencedErsId
                           ? <CorrectedMessage>
                             <MessageOK/>
                             <OKMessageText>MESSAGE CORRIGÉ</OKMessageText>
@@ -104,11 +80,11 @@ const ERSMessage = props => {
                           : null
                     }
                     {
-                        props.message.rawMessage
+                        message.rawMessage
                           ? <XML
                             title="Ouvrir le message XML brut"
                             style={{ cursor: 'pointer' }}
-                            onClick={() => openXML(props.message.rawMessage)}/>
+                            onClick={() => openXML(message.rawMessage)}/>
                           : <XML/>
                     }
                 </Header>
@@ -116,30 +92,30 @@ const ERSMessage = props => {
                     <ERSMessageMetadata>
                         <EmissionDateTime>
                             <Key>Date d&apos;émission</Key><br/>
-                            {getDateTime(props.message.operationDateTime, true)}
+                            {getDateTime(message.operationDateTime, true)}
                         </EmissionDateTime>
                         <ReceptionDateTime>
                             <Key>Date de réception</Key><br/>
-                            {getDateTime(props.message.operationDateTime, true)}
+                            {getDateTime(message.operationDateTime, true)}
                         </ReceptionDateTime>
                         <VoyageNumber>
                             <Key>N° de marée</Key><br/>
-                            {props.message.tripNumber ? props.message.tripNumber : <Gray>-</Gray>}
+                            {message.tripNumber ? message.tripNumber : <Gray>-</Gray>}
                         </VoyageNumber>
                         <Acknowledge>
                             <Key>Acq.</Key><br/>
-                            {!props.message.acknowledge || props.message.acknowledge.isSuccess === null
+                            {!message.acknowledge || message.acknowledge.isSuccess === null
                               ? <Gray>-</Gray>
                               : null}
-                            {props.message.acknowledge && props.message.acknowledge.isSuccess === true
+                            {message.acknowledge && message.acknowledge.isSuccess === true
                               ? <AckOk/>
                               : null}
-                            {props.message.acknowledge && props.message.acknowledge.isSuccess === false
-                              ? <AckNOk title={props.message.acknowledge.rejectionCause}/>
+                            {message.acknowledge && message.acknowledge.isSuccess === false
+                              ? <AckNOk title={message.acknowledge.rejectionCause}/>
                               : null}
                         </Acknowledge>
                     </ERSMessageMetadata>
-                    {getERSMessage(props.message)}
+                    {getERSMessage(message)}
                 </Body>
             </Wrapper>
           : null }
@@ -244,7 +220,7 @@ const Body = styled.div`
 `
 
 const Wrapper = styled.div`
-  margin-top: 10px;
+  margin-top: ${props => props.isFirst ? '5' : '10'}px;
   font-size: 13px;
   background: ${COLORS.background};
   text-align: left;

@@ -20,36 +20,43 @@ export const ERSMessageType = {
   FAR: {
     code: 'FAR',
     name: 'Captures',
+    fullName: 'Déclaration de capture',
     component: FARMessage
   },
   PNO: {
     code: 'PNO',
     name: 'Préavis',
+    fullName: 'Préavis (notification de retour au port)',
     component: PNOMessage
   },
   LAN: {
     code: 'LAN',
     name: 'Débarquement',
+    fullName: 'Débarquement',
     component: LANMessage
   },
   RTP: {
     code: 'RTP',
     name: 'Retour au port',
+    fullName: 'Retour au port',
     component: RTPMessage
   },
   EOF: {
     code: 'EOF',
     name: 'Fin de la marée',
+    fullName: 'Fin de pêche',
     component: EOFMessage
   },
   COE: {
     code: 'COE',
+    fullName: 'Entrée dans une zone d\'effort',
     name: 'Entrée dans une zone d\'effort',
     component: COEMessage
   },
   COX: {
     code: 'COX',
     name: 'Sortie d\'une zone d\'effort',
+    fullName: 'Sortie d\'une zone d\'effort',
     component: COXMessage
   },
   CRO: {
@@ -60,6 +67,7 @@ export const ERSMessageType = {
   DIS: {
     code: 'DIS',
     name: 'Rejets',
+    fullName: 'Déclaration de rejets',
     component: DISMessage
   },
   DIM: {

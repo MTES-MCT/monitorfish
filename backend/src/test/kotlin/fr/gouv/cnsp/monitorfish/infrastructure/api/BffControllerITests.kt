@@ -2,12 +2,12 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
-import fr.gouv.cnsp.monitorfish.domain.entities.ERSMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
@@ -227,22 +227,39 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should find the ERS messages of vessels`() {
+    fun `Should find the last ERS messages of vessels`() {
         // Given
-        given(this.getVesselLastVoyage.execute(any())).willReturn(ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        val voyage = Voyage(true, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        given(this.getVesselLastVoyage.execute(any(), anyOrNull())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850"))
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&beforeDateTime="))
                 // Then
                 .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(2)))
-                .andExpect(jsonPath("$.ersMessages.length()", equalTo(3)))
-                .andExpect(jsonPath("$.ersMessages[0].messageType", equalTo("DEP")))
-                .andExpect(jsonPath("$.ersMessages[0].tripNumber", equalTo(345)))
-                .andExpect(jsonPath("$.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
+                .andExpect(jsonPath("$.length()", equalTo(4)))
+                .andExpect(jsonPath("$.isLastVoyage", equalTo(true)))
+                .andExpect(jsonPath("$.previousBeforeDateTime", equalTo("2021-01-21T10:21:26.617301+01:00")))
+                .andExpect(jsonPath("$.nextBeforeDateTime", equalTo(null)))
+                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages.length()", equalTo(3)))
+                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].messageType", equalTo("DEP")))
+                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].tripNumber", equalTo(345)))
+                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
+        Mockito.verify(getVesselLastVoyage).execute("FR224226850", null)
+    }
 
-        Mockito.verify(getVesselLastVoyage).execute("FR224226850")
+    @Test
+    fun `Should find the ERS messages of vessels before a specified date`() {
+        // Given
+        val voyage = Voyage(true, ZonedDateTime.now().minusMonths(5), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        given(this.getVesselLastVoyage.execute(any(), any())).willReturn(voyage)
+
+        // When
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&beforeDateTime=2021-05-04T03:04:05.000Z"))
+
+        Mockito.verify(getVesselLastVoyage).execute(
+                "FR224226850",
+                ZonedDateTime.parse("2021-05-04T03:04:05.000Z"))
     }
 
     @Test

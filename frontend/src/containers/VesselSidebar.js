@@ -12,13 +12,12 @@ import { COLORS } from '../constants/constants'
 import VesselSummary from '../components/vessel_sidebar/VesselSummary'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import VesselFishingActivities from '../components/fishing_activities/VesselFishingActivities'
-import getFishingActivities from '../domain/use_cases/getFishingActivities'
+import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
 import { removeError } from '../domain/reducers/Global'
 import {
   resetNextControlResumeAndControls,
-  resetNextFishingActivities,
   setControlResumeAndControls,
-  setFishingActivities, setTemporaryTrackDepth
+  setTemporaryTrackDepth
 } from '../domain/reducers/Vessel'
 import getControls from '../domain/use_cases/getControls'
 import VesselControls from '../components/controls/VesselControls'
@@ -92,7 +91,7 @@ const VesselSidebar = () => {
 
       if (index === 3) {
         if (vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-          dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+          dispatch(getVesselVoyage(vesselState.selectedVesselFeatureAndIdentity.identity, null, true))
         }
       } else if (index === 4) {
         dispatch(getControls(vesselState.selectedVessel.id, controlsFromDate))
@@ -102,7 +101,7 @@ const VesselSidebar = () => {
 
   const showFishingActivities = () => {
     if (vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.identity) {
-      dispatch(getFishingActivities(vesselState.selectedVesselFeatureAndIdentity.identity))
+      dispatch(getVesselVoyage(vesselState.selectedVesselFeatureAndIdentity.identity, null, false))
       setIndex(3)
     }
   }
@@ -126,13 +125,6 @@ const VesselSidebar = () => {
       dispatch(getControls(vessel.id, controlsFromDate, true))
     }
   }, [controlsFromDate])
-
-  const updateFishingActivities = nextFishingActivities => {
-    if (nextFishingActivities) {
-      dispatch(setFishingActivities(nextFishingActivities))
-      dispatch(resetNextFishingActivities())
-    }
-  }
 
   const updateControlResumeAndControls = nextControlResumeAndControls => {
     if (nextControlResumeAndControls) {
@@ -239,7 +231,6 @@ const VesselSidebar = () => {
                                         <VesselFishingActivities
                                             fishingActivities={vesselState.fishingActivities}
                                             nextFishingActivities={vesselState.nextFishingActivities}
-                                            updateFishingActivities={updateFishingActivities}
                                             fleetSegments={fleetSegments}
                                             vesselLastPositionFeature={
                                               vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature

@@ -12,7 +12,14 @@ const vesselSlice = createSlice({
     vesselSidebarIsOpen: false,
     vesselSidebarTabIndexToShow: 1,
     isFocusedOnVesselSearch: false,
+    /** @type {FishingActivities} fishingActivities */
     fishingActivities: {},
+    /** @type {FishingActivities} lastFishingActivities */
+    lastFishingActivities: {},
+    isLastVoyage: null,
+    previousBeforeDateTime: null,
+    nextBeforeDateTime: null,
+    /** @type {FishingActivities | null} nextFishingActivities */
     nextFishingActivities: null,
     /** @type {ControlResume} controlResumeAndControl */
     controlResumeAndControls: {},
@@ -55,6 +62,7 @@ const vesselSlice = createSlice({
         afterDateTime: null,
         beforeDateTime: null
       }
+      state.tripMessagesLastToFormerDEPDateTimes = []
     },
     updateSelectedVesselFeature (state, action) {
       const nextState = { ...state.selectedVesselFeatureAndIdentity }
@@ -69,14 +77,44 @@ const vesselSlice = createSlice({
     resetLoadingVessel (state) {
       state.loadingVessel = false
     },
-    setFishingActivities (state, action) {
-      state.fishingActivities = action.payload
+    /**
+     * Set selected vessel voyage
+     * @param {Object=} state
+     * @param {{payload: VesselVoyage}} action - the vessel voyage
+     */
+    setVoyage (state, action) {
+      state.fishingActivities = action.payload.ersMessagesAndAlerts
+      state.isLastVoyage = action.payload.isLastVoyage
+      state.previousBeforeDateTime = action.payload.previousBeforeDateTime
+      state.nextBeforeDateTime = action.payload.nextBeforeDateTime
       state.loadingVessel = null
     },
-    resetFishingActivities (state) {
+    /**
+     * Set selected vessel last voyage - This voyage is saved to be able to compare it
+     * with new last voyages we will receive from the CRON
+     * @param {Object=} state
+     * @param {{payload: VesselVoyage}} action - the vessel last voyage
+     */
+    setLastVoyage (state, action) {
+      state.lastFishingActivities = action.payload.ersMessagesAndAlerts
+      state.fishingActivities = action.payload.ersMessagesAndAlerts
+      state.isLastVoyage = action.payload.isLastVoyage
+      state.previousBeforeDateTime = action.payload.previousBeforeDateTime
+      state.nextBeforeDateTime = action.payload.nextBeforeDateTime
+      state.loadingVessel = null
+    },
+    resetVoyage (state) {
       state.fishingActivities = null
+      state.isLastVoyage = null
+      state.previousBeforeDateTime = null
+      state.nextBeforeDateTime = null
       state.loadingVessel = null
     },
+    /**
+     * Set selected next vessel fishing activities to propose an update of the current displayed fishing activities
+     * @param {Object=} state
+     * @param {{payload: FishingActivities}} action - the fishing activities with new messages
+     */
     setNextFishingActivities (state, action) {
       state.nextFishingActivities = action.payload
     },
@@ -129,10 +167,14 @@ export const {
   resetSelectedVessel,
   closeVesselSidebar,
   updateSelectedVesselFeature,
-  setFishingActivities,
-  resetFishingActivities,
+  setVoyage,
+  setLastVoyage,
+  resetVoyage,
+  setLastFishingActivities,
   setNextFishingActivities,
   resetNextFishingActivities,
+  addNextDEPDateTime,
+  removeLastFormerDEPDateTime,
   setControlResumeAndControls,
   setNextControlResumeAndControls,
   resetNextControlResumeAndControls,

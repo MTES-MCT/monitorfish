@@ -77,10 +77,7 @@ const VesselsLayer = ({ map }) => {
 
   useEffect(() => {
     const vesselsFeatures = vectorSource.getFeatures()
-    applyFilterToVessels(vesselsFeatures, () => {
-      rewriteVesselsStylesIfNoFilter(vesselsFeatures)
-      showSelectedVesselSelector(vesselsFeatures)
-    }).then(_ => {
+    applyFilterToVessels(vesselsFeatures, redrawVesselsIfNoFilter(vesselsFeatures)).then(_ => {
       vectorSource.changed()
     })
   }, [filters, nonFilteredVesselsAreHidden, selectedBaseLayer])
@@ -92,7 +89,14 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
-  const showSelectedVesselSelector = vesselsFeatures => () => {
+  function redrawVesselsIfNoFilter (vesselsFeatures) {
+    return () => {
+      rewriteVesselsStylesIfNoFilter(vesselsFeatures)
+      showSelectedVesselSelector(vesselsFeatures)
+    }
+  }
+
+  const showSelectedVesselSelector = vesselsFeatures => {
     const feature = vesselsFeatures.find(feature =>
       selectedVesselFeatureAndIdentity &&
       vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature))
@@ -103,7 +107,7 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
-  const rewriteVesselsStylesIfNoFilter = vesselsFeatures => () => {
+  const rewriteVesselsStylesIfNoFilter = vesselsFeatures => {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
     vesselsFeatures.forEach(feature => {
@@ -124,7 +128,7 @@ const VesselsLayer = ({ map }) => {
         .map((currentVessel, index) => buildLastPositionFeature(currentVessel, index))
         .filter(vessel => vessel)
 
-      applyFilterToVessels(vesselsFeatures, showSelectedVesselSelector(vesselsFeatures)).then(features => {
+      applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(features => {
         vectorSource.clear(true)
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({
@@ -200,7 +204,7 @@ const VesselsLayer = ({ map }) => {
     if (vesselsLastPositionVisibility && (!temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length) && map) {
       const features = vectorSource.getFeatures()
 
-      applyFilterToVessels(features, () => {}).then(_ => {
+      applyFilterToVessels(features, redrawVesselsIfNoFilter(features)).then(_ => {
         vectorSource.changed()
       })
     }

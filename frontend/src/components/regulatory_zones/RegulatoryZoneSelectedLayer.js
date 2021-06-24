@@ -24,6 +24,7 @@ const RegulatoryZoneSelectedLayer = props => {
 
   const {
     callRemoveRegulatoryZoneFromMySelection,
+    isReadyToShowRegulatoryZones,
     regulatoryZoneName,
     allowRemoveZone,
     increaseNumberOfZonesOpened,
@@ -44,6 +45,7 @@ const RegulatoryZoneSelectedLayer = props => {
   }, [showedLayers])
 
   useEffect(() => {
+    console.log(`isOpen ${isOpen}`)
     if (firstUpdate.current) {
       firstUpdate.current = false
       return
@@ -92,7 +94,7 @@ const RegulatoryZoneSelectedLayer = props => {
               subZone={subZone}
               vectorLayerStyle={vectorLayerStyle}
               key={`${subZone.layerName}:${subZone.zone}`}
-              isReadyToShowRegulatoryZones={props.isReadyToShowRegulatoryZones}
+              isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
               callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
               regulatoryZoneMetadata={props.regulatoryZoneMetadata}
               showWholeLayer={showWholeLayer}
@@ -113,19 +115,19 @@ const RegulatoryZoneSelectedLayer = props => {
         <Row>
             <Zone isLastItem={isLastItem} isOpen={isOpen}>
                 <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
-                    <ChevronIcon isopen={isOpen}/>
+                    <ChevronIcon isOpen={isOpen}/>
                     {regulatoryZoneName.replace(/[_]/g, ' ')}
                 </Text>
                 {displayNumberOfZones()}
                 { atLeastOneLayerIsShowed ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })} /> : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })} />}
                 { allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/> }
             </Zone>
-            {isOpen && <List
+            <List
                 isOpen={isOpen}
                 name={regulatoryZoneName.replace(/\s/g, '-')}
                 length={regulatorySubZones.length}>
                 {regulatorySubZones && showedLayers && showRegulatoryZonesSelected(namespace)}
-              </List>}
+              </List>
         </Row>
       )}
       </NamespaceContext.Consumer>

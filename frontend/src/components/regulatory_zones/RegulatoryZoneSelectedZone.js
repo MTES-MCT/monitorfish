@@ -75,7 +75,7 @@ const RegulatoryZoneSelectedZone = props => {
   }, [zoneIsShown])
 
   useEffect(() => {
-    if (showSubZone && props.isReadyToShowRegulatoryZones) {
+    if (showSubZone && isReadyToShowRegulatoryZones) {
       dispatch(showLayer({
         type: LayersEnum.REGULATORY.code,
         zone: props.subZone,

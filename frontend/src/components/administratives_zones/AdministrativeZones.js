@@ -34,7 +34,6 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }
     if (administrativeZones && administrativeZones.length) {
       dispatch(getAdministrativeZonesAndSubZones(administrativeZones))
         .then(nextZones => {
-          console.log(nextZones)
           setZones(nextZones)
         })
     }

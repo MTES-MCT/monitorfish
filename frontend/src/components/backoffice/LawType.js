@@ -1,30 +1,20 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryZoneSelectedLayer from '../regulatory_zones/RegulatoryZoneSelectedLayer'
-import showLayer from '../../domain/use_cases/showLayer'
-import hideLayers from '../../domain/use_cases/hideLayers'
-import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZoneMetadata'
-import LayersEnum from '../../domain/entities/layers'
 import { COLORS } from '../../constants/constants'
-import zoomInSubZone from '../../domain/use_cases/zoomInSubZone'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import NamespaceContext from '../../domain/context/NamespaceContext'
 
 const LawType = props => {
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
   const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
-  const dispatch = useDispatch()
 
   const {
     lawType,
     regZoneByLawType,
-    showedLayers,
-    gears,
-    isReadyToShowRegulatoryZones,
-    callCloseRegulatoryZoneMetadata
+    isReadyToShowRegulatoryZones
   } = props
 
   function increaseNumberOfZonesOpened (number) {
@@ -40,59 +30,23 @@ const LawType = props => {
     }
   }
 
-  function callShowRegulatorySubZoneMetadata (regulatorySubZone) {
-    dispatch(showRegulatoryZoneMetadata(regulatorySubZone))
-  }
-
-  function callZoomInSubZone (subZone) {
-    dispatch(zoomInSubZone(subZone))
-  }
-
-  function callShowRegulatoryZone (regulatoryZone, namespace) {
-    if (namespace) {
-      dispatch(showLayer({
-        type: LayersEnum.REGULATORY.code,
-        zone: regulatoryZone,
-        namespace: namespace
-      }))
-    }
-  }
-
-  function callHideRegulatoryZone (regulatoryZone, namespace) {
-    dispatch(hideLayers({
-      type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone,
-      namespace
-    }))
-  }
-
   const displayRegulatoryZoneList = (regulatoryZoneList) => {
-    return (<NamespaceContext.Consumer>
-      {namespace => (
-        regulatoryZoneList && Object.keys(regulatoryZoneList).length > 0
-          ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName, index) => {
-            return <RegulatoryZoneSelectedLayer
-              key={regulatoryZoneLayerName}
-              callShowRegulatoryZone={regulatoryZone => callShowRegulatoryZone(regulatoryZone, namespace)}
-              callHideRegulatoryZone={regulatoryZone => callHideRegulatoryZone(regulatoryZone, namespace)}
-              callShowRegulatorySubZoneMetadata={callShowRegulatorySubZoneMetadata}
-              callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-              callZoomInSubZone={callZoomInSubZone}
-              showedLayers={showedLayers}
-              regulatoryZoneName={regulatoryZoneLayerName}
-              increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-              decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-              regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
-              isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
-              regulatoryZoneMetadata={regulatoryZoneMetadata}
-              gears={gears}
-              isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
-              allowRemoveZone={false}
-            />
-          })
-          : <EmptyResult>Aucun résultat</EmptyResult>
-      )}
-      </NamespaceContext.Consumer>
+    return (
+      regulatoryZoneList && Object.keys(regulatoryZoneList).length > 0
+        ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName, index) => {
+          return <RegulatoryZoneSelectedLayer
+            key={regulatoryZoneLayerName}
+            increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+            decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+            isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
+            regulatoryZoneName={regulatoryZoneLayerName}
+            regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
+            regulatoryZoneMetadata={regulatoryZoneMetadata}
+            isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
+            allowRemoveZone={false}
+          />
+        })
+        : <EmptyResult>Aucun résultat</EmptyResult>
     )
   }
 

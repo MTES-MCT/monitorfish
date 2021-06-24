@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import RegulatoryZoneSelectedZone from './RegulatoryZoneSelectedZone'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
@@ -99,15 +99,18 @@ const RegulatoryZoneSelectedLayer = props => {
               regulatoryZoneMetadata={props.regulatoryZoneMetadata}
               showWholeLayer={showWholeLayer}
               namespace={namespace}
-              zoneIsShown={showedLayers
-                .filter(layer => layer.type === Layers.REGULATORY.code)
-                .some(layer =>
-                  layer.zone.layerName === subZone.layerName &&
-                      layer.zone.zone === subZone.zone)}
+              zoneIsShown={getZoneIsShown(subZone)}
           />
       )
     })
   }
+  const getZoneIsShown = useCallback(subZone => {
+    return showedLayers
+      .filter(layer => layer.type === Layers.REGULATORY.code)
+      .some(layer =>
+        layer.zone.layerName === subZone.layerName &&
+        layer.zone.zone === subZone.zone)
+  }, [showedLayers])
 
   return (
       <NamespaceContext.Consumer>
@@ -119,7 +122,9 @@ const RegulatoryZoneSelectedLayer = props => {
                     {regulatoryZoneName.replace(/[_]/g, ' ')}
                 </Text>
                 {displayNumberOfZones()}
-                { atLeastOneLayerIsShowed ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })} /> : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })} />}
+                { atLeastOneLayerIsShowed
+                  ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })} />
+                  : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })} />}
                 { allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/> }
             </Zone>
             <List

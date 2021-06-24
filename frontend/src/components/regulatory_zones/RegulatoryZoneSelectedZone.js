@@ -69,8 +69,6 @@ const RegulatoryZoneSelectedZone = props => {
   useEffect(() => {
     if (zoneIsShown) {
       setShowSubZone(true)
-    } else if (!zoneIsShown) {
-      setShowSubZone(false)
     }
   }, [zoneIsShown])
 

@@ -35,7 +35,7 @@ const TrackDepthDateRange = ({ dates, setDate }) => {
 }
 
 const Wrapper = styled.div`
-  margin: 12px 0 0 20px;
+  margin: 12px 0 20px 20px;
   width: 197px;
 `
 

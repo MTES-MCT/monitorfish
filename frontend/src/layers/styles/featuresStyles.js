@@ -142,16 +142,17 @@ export const getVesselLabelStyle = (showedText, image) =>
     zIndex: VESSEL_LABEL_STYLE
   })
 
-export const setCircleStyle = (color, arrowFeature) => {
-  const arrowStyle = new Style({
+export const setCircleStyle = (color, circleFeature, radius) => {
+  const circleStyle = new Style({
     image: new CircleStyle({
-      radius: 3,
+      radius: radius || 3,
       fill: new Fill({
         color: color
       })
     })
   })
-  arrowFeature.setStyle(arrowStyle)
+
+  circleFeature.setStyle(circleStyle)
 }
 
 export const setArrowStyle = (trackArrow, arrowFeature) => {

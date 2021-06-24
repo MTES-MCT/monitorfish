@@ -169,6 +169,7 @@ const Zone = styled.span`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   user-select: none;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
 `

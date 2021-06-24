@@ -90,6 +90,7 @@ const RegulatoryZoneSelected = props => {
                           regulatorySubZones={selectedRegulatoryZones[regulatoryZoneName]}
                           regulatoryZoneMetadata={regulatoryZoneMetadata}
                           isLastItem={Object.keys(selectedRegulatoryZones).length === index + 1}
+                          allowRemoveZone={false}
                         />)
                       })
                       : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>

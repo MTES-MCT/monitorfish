@@ -3,8 +3,9 @@ import TrackDepthRadio from './TrackDepthRadio'
 import TrackDepthDateRange from './TrackDepthDateRange'
 import { COLORS } from '../../constants/constants'
 import styled from 'styled-components'
-import { ReactComponent as ClockSVG } from '../icons/Bouton_regler_piste_navire.svg'
+import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
 import { VesselTrackDepth } from '../../domain/entities/vesselTrackDepth'
+import TrackPositionsTable from './TrackPositionsTable'
 
 const TrackDepthSelection = props => {
   const [datesSelection, setDateSelection] = useState([])
@@ -79,7 +80,7 @@ const TrackDepthSelection = props => {
         rightMenuIsOpen={props.rightMenuIsOpen}
         trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
       >
-        Afficher la piste VMS du navire depuis :
+        <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <TrackDepthRadio
           vesselTrackDepth={props.vesselTrackDepth}
           showVesselTrackWithTrackDepth={props.showVesselTrackWithTrackDepth}
@@ -90,16 +91,26 @@ const TrackDepthSelection = props => {
           dates={datesSelection}
           setDate={setDateSelection}
         />
+        <Header>Liste des positions VMS affichées</Header>
+        <TrackPositionsTable />
       </TrackDepthSelectionContent>
     </>
   )
 }
 
+const Header = styled.div`
+  background: ${COLORS.textGray};
+  color: ${COLORS.grayBackground};
+  padding: 5px 0 5px 15px;
+  font-size: 13px;
+  text-align: left;
+`
+
 const TrackDepthSelectionButton = styled.div`
   top: 118px;
   height: 30px;
   width: 30px;
-  background: ${props => props.trackDepthSelectionIsOpen ? COLORS.textGray : COLORS.grayBackground};
+  background: ${props => props.trackDepthSelectionIsOpen ? COLORS.textGray : COLORS.grayDarkerThree};
   position: absolute;
   right: 10px;
   margin-right: -45px;
@@ -124,7 +135,6 @@ const TrackDepthSelectionButton = styled.div`
 
 const TrackDepthSelectionContent = styled.div`
   top: 118px;
-  height: 155px;
   width: 282px;
   background: ${COLORS.background};
   position: absolute;
@@ -133,7 +143,7 @@ const TrackDepthSelectionContent = styled.div`
   opacity: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
   visibility: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
-  padding: 15px 0 15px 0;
+  padding: 0
   font-size: 13px;
   color: ${COLORS.textGray};
   transition: all 0.3s;
@@ -151,9 +161,11 @@ const TrackDepthSelectionContent = styled.div`
   }
 `
 
-const ClockIcon = styled(ClockSVG)`
-  width: 30px;
+const ClockIcon = styled(VesselSVG)`
+  width: 20px;
   background: none;
+  margin-top: 2px;
+  margin-left: 2px;
 `
 
 export default TrackDepthSelection

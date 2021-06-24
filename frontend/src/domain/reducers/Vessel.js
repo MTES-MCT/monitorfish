@@ -7,7 +7,10 @@ const vesselSlice = createSlice({
     selectedVesselFeatureAndIdentity: null,
     vessels: [],
     vesselsLayerSource: null,
+    /** @type {Vessel | null} selectedVessel */
     selectedVessel: null,
+    /** @type {VesselPosition | null} highlightedVesselTrackPosition */
+    highlightedVesselTrackPosition: null,
     loadingVessel: null,
     vesselSidebarIsOpen: false,
     vesselSidebarTabIndexToShow: 1,
@@ -154,6 +157,21 @@ const vesselSlice = createSlice({
         afterDateTime: null,
         beforeDateTime: null
       }
+    },
+    /**
+     * Highlight a vessel position on map from the vessel track positions table
+     * @param {Object=} state
+     * @param {{payload: ControlResume}} action - The position
+     */
+    highlightVesselTrackPosition (state, action) {
+      state.highlightedVesselTrackPosition = action.payload
+    },
+    /**
+     * Reset the highlighted vessel position
+     * @param {Object=} state
+     */
+    resetHighlightedVesselTrackPosition (state) {
+      state.highlightedVesselTrackPosition = null
     }
   }
 })
@@ -184,7 +202,9 @@ export const {
   setTemporaryVesselsToHighLightOnMap,
   resetTemporaryVesselsToHighLightOnMap,
   setTemporaryTrackDepth,
-  resetTemporaryTrackDepth
+  resetTemporaryTrackDepth,
+  highlightVesselTrackPosition,
+  resetHighlightedVesselTrackPosition
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

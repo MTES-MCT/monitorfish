@@ -139,7 +139,7 @@ const TrackExportButton = styled.div`
   top: 153px;
   height: 30px;
   width: 30px;
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.grayDarkerThree};
   position: absolute;
   right: 10px;
   margin-right: -45px;

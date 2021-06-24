@@ -9,7 +9,7 @@ import { getDateTime } from '../../utils'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { useDispatch, useSelector } from 'react-redux'
 
-const RegulatoryZoneMetadata = props => {
+const RegulatoryZoneMetadata = () => {
   const dispatch = useDispatch()
   const gears = useSelector(state => state.gear.gears)
   const {
@@ -58,7 +58,9 @@ const RegulatoryZoneMetadata = props => {
     }
   }, [gears, regulatoryZoneMetadata])
 
-  const getTitle = regulatory => `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+  const getTitle = regulatory => regulatory
+    ? `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+    : ''
 
   return (
           <>
@@ -67,8 +69,8 @@ const RegulatoryZoneMetadata = props => {
                   ? <>
                         <Header>
                             <REGPaperIcon/>
-                            <RegulatoryName title={getTitle(props.regulatoryZoneMetadata)}>
-                              {getTitle(props.regulatoryZoneMetadata)}
+                            <RegulatoryName title={getTitle(regulatoryZoneMetadata)}>
+                              {getTitle(regulatoryZoneMetadata)}
                             </RegulatoryName>
                             <CloseIcon onClick={() => dispatch(closeRegulatoryZoneMetadata())}/>
                         </Header>

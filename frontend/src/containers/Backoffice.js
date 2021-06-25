@@ -214,6 +214,7 @@ const ButtonListFooter = styled.div`
 const BackofficeContainer = styled.div`
   display: flex;
   position: relative;
+  background-color: ${COLORS.white}:
 `
 
 const RegulatoryZonePanel = styled.div`
@@ -222,6 +223,7 @@ const RegulatoryZonePanel = styled.div`
   flex-direction: column;
   max-height: 100vh;
   max-width: 50%;
+  background-color: ${COLORS.white};
 `
 
 const MetadataWrapper = styled.div`

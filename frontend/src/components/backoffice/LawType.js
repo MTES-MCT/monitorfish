@@ -53,7 +53,7 @@ const LawType = props => {
   return (<LawTypeContainer>
     <LawTypeName onClick={() => setIsOpen(!isOpen)}>
       <LawTypeText>{lawType}</LawTypeText>
-      <ChevronIcon isopen={isOpen}/>
+      <ChevronIcon isOpen={isOpen}/>
     </LawTypeName>
     {isOpen && <RegulatoryZoneLayerList isOpen={isOpen}>
       {displayRegulatoryZoneList(regZoneByLawType[lawType])}
@@ -101,7 +101,7 @@ const RegulatoryZoneLayerList = styled.ul`
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
-  transform: ${props => props.isopen ? 'rotate(0deg)' : 'rotate(180deg)'};
+  transform: ${props => props.isOpen ? 'rotate(0deg)' : 'rotate(180deg)'};
   width: 17px;
   float: right;
   margin-right: 10px;

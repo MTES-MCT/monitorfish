@@ -39,13 +39,11 @@ const RegulatoryZoneSelectedLayer = props => {
       const showLayer = showedLayers
         .filter(layer => layer.type === Layers.REGULATORY.code)
         .some(layer => layer.zone.layerName === regulatoryZoneName)
-
       setAtLeastOneLayerIsShowed(showLayer)
     }
   }, [showedLayers])
 
   useEffect(() => {
-    console.log(`isOpen ${isOpen}`)
     if (firstUpdate.current) {
       firstUpdate.current = false
       return
@@ -182,6 +180,7 @@ const Zone = styled.span`
 `
 
 const List = styled.div`
+  display: ${props => props.isOpen ? 'block' : 'none'}
   height: inherit;
   overflow: hidden;
   animation: ${props => props.isOpen ? `list-zones-${props.name}-${props.length}-opening` : `list-zones-${props.name}-${props.length}-closing`} 0.2s ease forwards;

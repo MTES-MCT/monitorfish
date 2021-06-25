@@ -27,7 +27,7 @@ const RegulatoryZoneSelectedZone = props => {
     namespace
   } = props
 
-  const [showSubZone, setShowSubZone] = useState(undefined)
+  const [showSubZone, setShowSubZone] = useState(zoneIsShown)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showRegulatoryMetadata = subZone => {
@@ -67,12 +67,6 @@ const RegulatoryZoneSelectedZone = props => {
   }, [showWholeLayer])
 
   useEffect(() => {
-    if (zoneIsShown) {
-      setShowSubZone(true)
-    }
-  }, [zoneIsShown])
-
-  useEffect(() => {
     if (showSubZone && isReadyToShowRegulatoryZones) {
       dispatch(showLayer({
         type: LayersEnum.REGULATORY.code,
@@ -86,7 +80,7 @@ const RegulatoryZoneSelectedZone = props => {
         namespace
       }))
     }
-  }, [showSubZone, isReadyToShowRegulatoryZones, namespace])
+  }, [zoneIsShown, showSubZone, isReadyToShowRegulatoryZones, namespace])
 
   return (
         <SubZone>
@@ -105,7 +99,6 @@ const RegulatoryZoneSelectedZone = props => {
                 { showSubZone ? <ShowIcon title="Cacher la zone" onClick={() => setShowSubZone(!showSubZone)} /> : <HideIcon title="Afficher la zone" onClick={() => setShowSubZone(!showSubZone)} />}
                 { allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(subZone, 1)}/>}
             </Icons>
-
         </SubZone>
   )
 }

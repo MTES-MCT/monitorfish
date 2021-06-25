@@ -44,6 +44,7 @@ const RegulatoryZoneSelectedLayer = props => {
   }, [showedLayers])
 
   useEffect(() => {
+    console.log(firstUpdate.current)
     if (firstUpdate.current) {
       firstUpdate.current = false
       return
@@ -116,7 +117,7 @@ const RegulatoryZoneSelectedLayer = props => {
         <Row>
             <Zone isLastItem={isLastItem} isOpen={isOpen}>
                 <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
-                    <ChevronIcon isOpen={isOpen}/>
+                    <ChevronIcon firstUpdate={firstUpdate} isOpen={isOpen}/>
                     {regulatoryZoneName.replace(/[_]/g, ' ')}
                 </Text>
                 {displayNumberOfZones()}
@@ -215,22 +216,11 @@ const Row = styled.li`
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
-  transform: rotate(180deg);
+  transform: ${props => props.isOpen ? 'rotate(0deg)' : 'rotate(180deg)'};
   width: 16px;
   margin-right: 5px;
   margin-top: 5px;
-  
-  animation: ${props => props.firstUpdate ? null : props.isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
-
-  @keyframes chevron-layer-opening {
-    0%   { transform: rotate(180deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  @keyframes chevron-layer-closing {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(180deg);   }
-  }
+  transition: ${props => props.firstUpdate ? 'none' : 'all 0.5s'};
 `
 
 export default RegulatoryZoneSelectedLayer

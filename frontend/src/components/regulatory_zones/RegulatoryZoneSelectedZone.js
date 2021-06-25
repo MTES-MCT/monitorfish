@@ -27,7 +27,7 @@ const RegulatoryZoneSelectedZone = props => {
     namespace
   } = props
 
-  const [showSubZone, setShowSubZone] = useState(zoneIsShown)
+  const [showSubZone, setShowSubZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showRegulatoryMetadata = subZone => {
@@ -67,6 +67,12 @@ const RegulatoryZoneSelectedZone = props => {
   }, [showWholeLayer])
 
   useEffect(() => {
+    if (zoneIsShown) {
+      setShowSubZone(zoneIsShown)
+    }
+  }, [zoneIsShown])
+
+  useEffect(() => {
     if (showSubZone && isReadyToShowRegulatoryZones) {
       dispatch(showLayer({
         type: LayersEnum.REGULATORY.code,
@@ -80,7 +86,7 @@ const RegulatoryZoneSelectedZone = props => {
         namespace
       }))
     }
-  }, [zoneIsShown, showSubZone, isReadyToShowRegulatoryZones, namespace])
+  }, [showSubZone, isReadyToShowRegulatoryZones, namespace])
 
   return (
         <SubZone>

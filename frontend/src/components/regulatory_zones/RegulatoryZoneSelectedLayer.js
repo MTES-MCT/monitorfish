@@ -128,7 +128,8 @@ const RegulatoryZoneSelectedLayer = props => {
             <List
                 isOpen={isOpen}
                 name={regulatoryZoneName.replace(/\s/g, '-')}
-                length={regulatorySubZones.length}>
+                length={regulatorySubZones.length}
+                firstUpdate={firstUpdate}>
                 {regulatorySubZones && showedLayers && showRegulatoryZonesSelected(namespace)}
               </List>
         </Row>
@@ -180,10 +181,10 @@ const Zone = styled.span`
 `
 
 const List = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'}
+  display: ${props => props.isOpen ? 'block' : 'none'};
   height: inherit;
   overflow: hidden;
-  animation: ${props => props.isOpen ? `list-zones-${props.name}-${props.length}-opening` : `list-zones-${props.name}-${props.length}-closing`} 0.2s ease forwards;
+  animation: ${props => props.firstUpdate ? null : props.isOpen ? `list-zones-${props.name}-${props.length}-opening` : `list-zones-${props.name}-${props.length}-closing`} 0.2s ease forwards;
 
   @keyframes ${props => props.name ? `list-zones-${props.name}-${props.length}-opening` : null} {
     0%   { height: 0px; }
@@ -219,7 +220,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 5px;
   margin-top: 5px;
   
-  animation: ${props => props.isopen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
+  animation: ${props => props.firstUpdate ? null : props.isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
 
   @keyframes chevron-layer-opening {
     0%   { transform: rotate(180deg); }

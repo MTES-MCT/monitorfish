@@ -185,17 +185,8 @@ const List = styled.div`
   display: ${props => props.isOpen ? 'block' : 'none'};
   height: inherit;
   overflow: hidden;
-  animation: ${props => props.firstUpdate ? null : props.isOpen ? `list-zones-${props.name}-${props.length}-opening` : `list-zones-${props.name}-${props.length}-closing`} 0.2s ease forwards;
-
-  @keyframes ${props => props.name ? `list-zones-${props.name}-${props.length}-opening` : null} {
-    0%   { height: 0px; }
-    100% { height: ${props => props.length * 38.5}px; }
-  }
-
-  @keyframes ${props => props.name ? `list-zones-${props.name}-${props.length}-closing` : null} {
-    0%   { height: ${props => props.length * 38.5}px; }
-    100% { height: 0px;   }
-  }
+  transition: all 0.5s;
+  height: ${props => props.isOpen ? props.length * 38.5 : '0px'};
 `
 
 const Row = styled.li`

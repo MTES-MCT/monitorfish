@@ -378,7 +378,7 @@ const Content = styled.div`
   background: ${COLORS.background};
   margin-top: 6px;
   overflow-y: auto;
-  max-height: 500px;
+  max-height: calc(100vh - 90px);
 `
 
 const REGPaperIcon = styled(REGPaperSVG)`

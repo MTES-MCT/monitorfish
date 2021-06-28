@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import VesselTrackCard from '../cards/VesselTrackCard'
@@ -73,7 +73,10 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
   return (
     <VesselTrackCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
       {
-        vesselFeatureToShowOnCard ? <VesselTrackCard vessel={vesselFeatureToShowOnCard} overlayPosition={overlayPosition} /> : null
+        vesselFeatureToShowOnCard
+          ? <VesselTrackCard vessel={vesselFeatureToShowOnCard}
+                             overlayPosition={overlayPosition}/>
+          : null
       }
     </VesselTrackCardOverlayComponent>
   )

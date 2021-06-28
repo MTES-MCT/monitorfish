@@ -4,6 +4,7 @@ import * as timeago from 'timeago.js'
 import React from 'react'
 import Table from 'rsuite/lib/Table'
 import styled from 'styled-components'
+
 const { Cell } = Table
 
 export const TargetCell = ({ rowData, dataKey, onChange, ...props }) => {
@@ -42,13 +43,13 @@ export const CheckedCell = ({ rowData, dataKey, onClick, onChange, ...props }) =
 
 export const FlagCell = ({ rowData, dataKey, ...props }) => (
   <Cell {...props} style={{ padding: 0 }}>
-    <Flag title={countries.getName(rowData[dataKey], 'fr')} rel="preload" src={`flags/${rowData[dataKey]}.svg`} />
+    <Flag title={countries.getName(rowData[dataKey], 'fr')} rel="preload" src={`flags/${rowData[dataKey]}.svg`}/>
   </Cell>
 )
 
 export const TimeAgoCell = ({ rowData, dataKey, ...props }) => (
   <Cell {...props}>
-    { rowData[dataKey] ? timeago.format(rowData[dataKey], 'fr') : '' }
+    {rowData[dataKey] ? timeago.format(rowData[dataKey], 'fr') : ''}
   </Cell>
 )
 

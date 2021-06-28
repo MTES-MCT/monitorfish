@@ -68,8 +68,8 @@ const VesselSidebar = () => {
 
   function isSameShowedError (error, showedError) {
     return error &&
-          showedError &&
-          error.name === showedError.name
+      showedError &&
+      error.name === showedError.name
   }
 
   function isShowedError () {
@@ -151,122 +151,122 @@ const VesselSidebar = () => {
   }
 
   return (
-      <>
-          {
-              vessel
-                ? <TrackDepthSelection
-                  openBox={openSidebar}
-                  init={!vesselState.vesselSidebarIsOpen ? {} : null}
-                  firstUpdate={firstUpdate.current}
-                  rightMenuIsOpen={rightMenuIsOpen}
-                  vesselTrackDepth={vesselTrackDepth}
-                  trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
-                  showVesselTrackWithTrackDepth={showVesselTrackWithTrackDepth}
-                  setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
-                />
-                : null
-          }
-          {
-              vessel && vessel.positions
-                ? <TrackExport
-                  positions={vessel.positions}
-                  openBox={openSidebar}
-                  firstUpdate={firstUpdate.current}
-                  rightMenuIsOpen={rightMenuIsOpen}
-                />
-                : null
-          }
-            <Wrapper
-              openBox={openSidebar}
-              firstUpdate={firstUpdate.current}
-              rightMenuIsOpen={rightMenuIsOpen}
-            >
+    <>
+      {
+        vessel
+          ? <TrackDepthSelection
+            openBox={openSidebar}
+            init={!vesselState.vesselSidebarIsOpen ? {} : null}
+            firstUpdate={firstUpdate.current}
+            rightMenuIsOpen={rightMenuIsOpen}
+            vesselTrackDepth={vesselTrackDepth}
+            trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
+            showVesselTrackWithTrackDepth={showVesselTrackWithTrackDepth}
+            setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
+          />
+          : null
+      }
+      {
+        vessel && vessel.positions
+          ? <TrackExport
+            positions={vessel.positions}
+            openBox={openSidebar}
+            firstUpdate={firstUpdate.current}
+            rightMenuIsOpen={rightMenuIsOpen}
+          />
+          : null
+      }
+      <Wrapper
+        openBox={openSidebar}
+        firstUpdate={firstUpdate.current}
+        rightMenuIsOpen={rightMenuIsOpen}
+      >
+        {
+          <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
+        }
+        {
+          vessel
+            ? <div>
+              <div>
+                <TabList>
+                  <Tab isActive={index === 1} onClick={() => showTab(1)}>
+                    <SummaryIcon/> <br/> Résumé
+                  </Tab>
+                  <Tab isActive={index === 2} onClick={() => showTab(2)}>
+                    <VesselIDIcon/> <br/> Identité
+                  </Tab>
+                  <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
+                    <FisheriesIcon/> <br/> Pêche
+                  </Tab>
+                  <Tab type="button" isActive={index === 4} onClick={() => showControls()}>
+                    <ControlsIcon/> <br/> Contrôles
+                  </Tab>
+                  <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
+                    <ObservationsIcon/> <br/> Ciblage
+                  </Tab>
+                  <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(6)}>
+                    <VMSIcon/> <br/> VMS/ERS
+                  </Tab>
+                </TabList>
                 {
-                    <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
-                }
-                {
-                    vessel
-                      ? <div>
-                        <div>
-                            <TabList>
-                                <Tab isActive={index === 1} onClick={() => showTab(1)}>
-                                    <SummaryIcon /> <br/> Résumé
-                                </Tab>
-                                <Tab isActive={index === 2} onClick={() => showTab(2)}>
-                                    <VesselIDIcon /> <br/> Identité
-                                </Tab>
-                                <Tab type="button" isActive={index === 3} onClick={() => showFishingActivities()}>
-                                    <FisheriesIcon /> <br/> Pêche
-                                </Tab>
-                                <Tab type="button" isActive={index === 4} onClick={() => showControls()}>
-                                    <ControlsIcon /> <br/>  Contrôles
-                                </Tab>
-                                <Tab type="button" disabled isActive={index === 5} onClick={() => setIndex(5)}>
-                                    <ObservationsIcon /> <br/> Ciblage
-                                </Tab>
-                                <Tab type="button" disabled isActive={index === 6} onClick={() => setIndex(6)}>
-                                    <VMSIcon /> <br/> VMS/ERS
-                                </Tab>
-                            </TabList>
-                            {
-                                !vesselState.loadingVessel
-                                  ? <>
-                                    <Panel className={index === 1 ? '' : 'hide'}>
-                                        <VesselSummary
-                                          vessel={vessel}
-                                          gears={gears}
-                                          fleetSegments={fleetSegments}
-                                          vesselLastPositionFeature={
-                                              vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature
-                                          }
-                                        />
-                                    </Panel>
-                                    <Panel className={index === 2 ? '' : 'hide'}>
-                                        <VesselIdentity
-                                          vessel={vessel}
-                                          gears={gears}
-                                        />
-                                    </Panel>
-                                    <Panel className={index === 3 ? '' : 'hide'}>
-                                        <VesselFishingActivities
-                                            fishingActivities={vesselState.fishingActivities}
-                                            nextFishingActivities={vesselState.nextFishingActivities}
-                                            fleetSegments={fleetSegments}
-                                            vesselLastPositionFeature={
-                                              vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature
-                                            }
-                                        />
-                                    </Panel>
-                                    <Panel className={index === 4 ? '' : 'hide'}>
-                                        <VesselControls
-                                          setControlFromDate={setControlFromDate}
-                                          controlsFromDate={controlsFromDate}
-                                          controlResumeAndControls={vesselState.controlResumeAndControls}
-                                          nextControlResumeAndControls={vesselState.nextControlResumeAndControls}
-                                          updateControlResumeAndControls={updateControlResumeAndControls}
-                                        />
-                                    </Panel>
-                                    <Panel className={index === 5 ? '' : 'hide'}>
+                  !vesselState.loadingVessel
+                    ? <>
+                      <Panel className={index === 1 ? '' : 'hide'}>
+                        <VesselSummary
+                          vessel={vessel}
+                          gears={gears}
+                          fleetSegments={fleetSegments}
+                          vesselLastPositionFeature={
+                            vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature
+                          }
+                        />
+                      </Panel>
+                      <Panel className={index === 2 ? '' : 'hide'}>
+                        <VesselIdentity
+                          vessel={vessel}
+                          gears={gears}
+                        />
+                      </Panel>
+                      <Panel className={index === 3 ? '' : 'hide'}>
+                        <VesselFishingActivities
+                          fishingActivities={vesselState.fishingActivities}
+                          nextFishingActivities={vesselState.nextFishingActivities}
+                          fleetSegments={fleetSegments}
+                          vesselLastPositionFeature={
+                            vesselState.selectedVesselFeatureAndIdentity && vesselState.selectedVesselFeatureAndIdentity.feature
+                          }
+                        />
+                      </Panel>
+                      <Panel className={index === 4 ? '' : 'hide'}>
+                        <VesselControls
+                          setControlFromDate={setControlFromDate}
+                          controlsFromDate={controlsFromDate}
+                          controlResumeAndControls={vesselState.controlResumeAndControls}
+                          nextControlResumeAndControls={vesselState.nextControlResumeAndControls}
+                          updateControlResumeAndControls={updateControlResumeAndControls}
+                        />
+                      </Panel>
+                      <Panel className={index === 5 ? '' : 'hide'}>
 
-                                    </Panel>
-                                    <Panel className={index === 6 ? '' : 'hide'}>
+                      </Panel>
+                      <Panel className={index === 6 ? '' : 'hide'}>
 
-                                    </Panel>
-                                </>
-                                  : showedError
-                                    ? <Error>
-                                    <ErrorText>
-                                        { showedError.message }
-                                    </ErrorText>
-                                </Error>
-                                    : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
-                            }
-                        </div>
-                    </div>
+                      </Panel>
+                    </>
+                    : showedError
+                      ? <Error>
+                      <ErrorText>
+                        {showedError.message}
+                      </ErrorText>
+                    </Error>
                       : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
                 }
-            </Wrapper>
-          </>
+              </div>
+            </div>
+            : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+        }
+      </Wrapper>
+    </>
   )
 }
 

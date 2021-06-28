@@ -1,5 +1,5 @@
 import * as Comlink from 'comlink'
-import { mapToRegulatoryZone, lawTypeList } from '../domain/entities/regulatory'
+import { lawTypeList, mapToRegulatoryZone } from '../domain/entities/regulatory'
 import { vesselSize } from '../domain/entities/vessel'
 import { getDateMonthsBefore } from '../utils'
 
@@ -12,7 +12,7 @@ class MapperWorker {
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
       const found = acc.find(item =>
         item.layerName === current.layerName &&
-                item.zone === current.zone)
+        item.zone === current.zone)
       if (!found) {
         return acc.concat([current])
       } else {

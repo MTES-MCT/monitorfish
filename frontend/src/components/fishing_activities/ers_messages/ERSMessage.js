@@ -38,88 +38,88 @@ const ERSMessage = ({ message, isFirst }) => {
 
   function getErsMessageType () {
     if (message.messageType === ERSMessageTypeEnum.DIS.code &&
-            message.message.catches.some(aCatch => aCatch.presentation === ERSMessageTypeEnum.DIM.code)) {
+      message.message.catches.some(aCatch => aCatch.presentation === ERSMessageTypeEnum.DIM.code)) {
       return ERSMessageTypeEnum.DIM.code
     }
     return message.messageType
   }
 
   return <>
-        { message
-          ? <Wrapper isFirst={isFirst}>
-                <Header>
-                    <ERSMessageType>{getErsMessageType()}</ERSMessageType>
-                    <ERSMessageHeaderText
-                      isShortcut={message.isCorrected || message.deleted || message.referencedErsId}
-                      title={typeof ersMessageHeaderTitle === 'string' ? ersMessageHeaderTitle : ''}
-                    >
-                        {ersMessageHeaderTitle}
-                    </ERSMessageHeaderText>
-                    {
-                        message.isCorrected
-                          ? <CorrectedMessage>
-                            <MessageCorrected/>
-                            <CorrectedMessageText>ANCIEN MESSAGE</CorrectedMessageText>
-                        </CorrectedMessage>
-                          : null
-                    }
-                    {
-                        message.deleted
-                          ? <CorrectedMessage>
-                            <MessageCorrected/>
-                            <CorrectedMessageText>MESSAGE SUPPRIMÉ</CorrectedMessageText>
-                        </CorrectedMessage>
-                          : null
-                    }
-                    {
-                        message.referencedErsId
-                          ? <CorrectedMessage>
-                            <MessageOK/>
-                            <OKMessageText>MESSAGE CORRIGÉ</OKMessageText>
-                        </CorrectedMessage>
-                          : null
-                    }
-                    {
-                        message.rawMessage
-                          ? <XML
-                            title="Ouvrir le message XML brut"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => openXML(message.rawMessage)}/>
-                          : <XML/>
-                    }
-                </Header>
-                <Body>
-                    <ERSMessageMetadata>
-                        <EmissionDateTime>
-                            <Key>Date d&apos;émission</Key><br/>
-                            {getDateTime(message.operationDateTime, true)}
-                        </EmissionDateTime>
-                        <ReceptionDateTime>
-                            <Key>Date de réception</Key><br/>
-                            {getDateTime(message.operationDateTime, true)}
-                        </ReceptionDateTime>
-                        <VoyageNumber>
-                            <Key>N° de marée</Key><br/>
-                            {message.tripNumber ? message.tripNumber : <Gray>-</Gray>}
-                        </VoyageNumber>
-                        <Acknowledge>
-                            <Key>Acq.</Key><br/>
-                            {!message.acknowledge || message.acknowledge.isSuccess === null
-                              ? <Gray>-</Gray>
-                              : null}
-                            {message.acknowledge && message.acknowledge.isSuccess === true
-                              ? <AckOk/>
-                              : null}
-                            {message.acknowledge && message.acknowledge.isSuccess === false
-                              ? <AckNOk title={message.acknowledge.rejectionCause}/>
-                              : null}
-                        </Acknowledge>
-                    </ERSMessageMetadata>
-                    {getERSMessage(message)}
-                </Body>
-            </Wrapper>
-          : null }
-    </>
+    {message
+      ? <Wrapper isFirst={isFirst}>
+        <Header>
+          <ERSMessageType>{getErsMessageType()}</ERSMessageType>
+          <ERSMessageHeaderText
+            isShortcut={message.isCorrected || message.deleted || message.referencedErsId}
+            title={typeof ersMessageHeaderTitle === 'string' ? ersMessageHeaderTitle : ''}
+          >
+            {ersMessageHeaderTitle}
+          </ERSMessageHeaderText>
+          {
+            message.isCorrected
+              ? <CorrectedMessage>
+                <MessageCorrected/>
+                <CorrectedMessageText>ANCIEN MESSAGE</CorrectedMessageText>
+              </CorrectedMessage>
+              : null
+          }
+          {
+            message.deleted
+              ? <CorrectedMessage>
+                <MessageCorrected/>
+                <CorrectedMessageText>MESSAGE SUPPRIMÉ</CorrectedMessageText>
+              </CorrectedMessage>
+              : null
+          }
+          {
+            message.referencedErsId
+              ? <CorrectedMessage>
+                <MessageOK/>
+                <OKMessageText>MESSAGE CORRIGÉ</OKMessageText>
+              </CorrectedMessage>
+              : null
+          }
+          {
+            message.rawMessage
+              ? <XML
+                title="Ouvrir le message XML brut"
+                style={{ cursor: 'pointer' }}
+                onClick={() => openXML(message.rawMessage)}/>
+              : <XML/>
+          }
+        </Header>
+        <Body>
+          <ERSMessageMetadata>
+            <EmissionDateTime>
+              <Key>Date d&apos;émission</Key><br/>
+              {getDateTime(message.operationDateTime, true)}
+            </EmissionDateTime>
+            <ReceptionDateTime>
+              <Key>Date de réception</Key><br/>
+              {getDateTime(message.operationDateTime, true)}
+            </ReceptionDateTime>
+            <VoyageNumber>
+              <Key>N° de marée</Key><br/>
+              {message.tripNumber ? message.tripNumber : <Gray>-</Gray>}
+            </VoyageNumber>
+            <Acknowledge>
+              <Key>Acq.</Key><br/>
+              {!message.acknowledge || message.acknowledge.isSuccess === null
+                ? <Gray>-</Gray>
+                : null}
+              {message.acknowledge && message.acknowledge.isSuccess === true
+                ? <AckOk/>
+                : null}
+              {message.acknowledge && message.acknowledge.isSuccess === false
+                ? <AckNOk title={message.acknowledge.rejectionCause}/>
+                : null}
+            </Acknowledge>
+          </ERSMessageMetadata>
+          {getERSMessage(message)}
+        </Body>
+      </Wrapper>
+      : null}
+  </>
 }
 
 const OKMessageText = styled.span`

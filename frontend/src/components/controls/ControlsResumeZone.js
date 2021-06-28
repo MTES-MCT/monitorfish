@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg'
 import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
-import { Title, StrongText, NoValue, Zone } from './Controls.style'
+import { NoValue, StrongText, Title, Zone } from './Controls.style'
 
 const ControlsResumeZone = props => {
   const {
@@ -31,35 +31,37 @@ const ControlsResumeZone = props => {
   return <Zone>
     <Title>Résumé des actions de contrôle depuis {controlsFromDate
       ? <>{controlsFromDate.getUTCFullYear() + 1}
-        {' '}(sur { new Date().getFullYear() - controlsFromDate.getUTCFullYear() - 1 } ans)</>
+        {' '}(sur {new Date().getFullYear() - controlsFromDate.getUTCFullYear() - 1} ans)</>
       : <NoValue>-</NoValue>}</Title>
     <Fields>
       <ControlResumeLine>
         <ResumeText>
-          <Gyro /> Nombre de contrôles
+          <Gyro/> Nombre de contrôles
         </ResumeText>
-        <ControlResumeStrongTextElement>en mer <StrongText>{getText(numberOfSeaControls)}</StrongText></ControlResumeStrongTextElement>
+        <ControlResumeStrongTextElement>en
+          mer <StrongText>{getText(numberOfSeaControls)}</StrongText></ControlResumeStrongTextElement>
         <ControlResumeStrongTextElement>débarque <StrongText>{getText(numberOfLandControls)}</StrongText></ControlResumeStrongTextElement>
         <ControlResumeStrongTextElement>aérien <StrongText>{getText(numberOfAerialControls)}</StrongText></ControlResumeStrongTextElement>
       </ControlResumeLine>
       <ControlResumeLine>
         <ResumeText>
-          <Warning /> Nombre d&apos;infractions
+          <Warning/> Nombre d&apos;infractions
         </ResumeText>
         <ControlResumeStrongTextElement>pêche <StrongText>{getText(numberOfFishingInfractions)}</StrongText></ControlResumeStrongTextElement>
         <ControlResumeStrongTextElement>sécurité <StrongText>{getText(numberOfSecurityInfractions)}</StrongText></ControlResumeStrongTextElement>
       </ControlResumeLine>
       <ResumesBoxes>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.numberOfDiversions }>{getText(numberOfDiversions)}</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={resume.numberOfDiversions}>{getText(numberOfDiversions)}</ResumeBoxStrongText>
           <ResumeBoxText>Déroutement</ResumeBoxText>
         </ResumeBox>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.numberOfEscortsToQuay }>{getText(numberOfEscortsToQuay)}</ResumeBoxStrongText>
+          <ResumeBoxStrongText
+            isRed={resume.numberOfEscortsToQuay}>{getText(numberOfEscortsToQuay)}</ResumeBoxStrongText>
           <ResumeBoxText>Reconduite à quai</ResumeBoxText>
         </ResumeBox>
         <ResumeBox>
-          <ResumeBoxStrongText isRed={ resume.numberOfSeizures }>{getText(numberOfSeizures)}</ResumeBoxStrongText>
+          <ResumeBoxStrongText isRed={resume.numberOfSeizures}>{getText(numberOfSeizures)}</ResumeBoxStrongText>
           <ResumeBoxText>Appréhension</ResumeBoxText>
         </ResumeBox>
       </ResumesBoxes>

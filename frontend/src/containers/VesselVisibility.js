@@ -105,7 +105,8 @@ const VesselVisibility = () => {
           vesselsLastPositionVisibility={vesselsLastPositionVisibility}
         />
         <LastPositionLegend>
-          Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des navires.
+          Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des
+          navires.
         </LastPositionLegend>
         <Header isFirst={false}>
           Paramétrer la longueur par défaut des pistes

@@ -6,16 +6,16 @@ const MapAttributionsBox = () => {
   const [isVisible, setIsVisible] = useState(false)
 
   return (<Wrapper className={'ol-unselectable ol-control'}>
-        <List className={isVisible ? '' : 'collapsed'}>
-            <ListItem><Link href="https://www.openstreetmap.org/copyright" target="_blank" data-bcup-haslogintext="no">©
-                OpenStreetMap contributors</Link></ListItem>
-        </List>
-        <Button onClick={() => setIsVisible(!isVisible)} type="button" title="Attributions" data-bcup-haslogintext="no">
-            <ButtonText>
-                {isVisible ? '^' : 'i'}
-            </ButtonText>
-        </Button>
-    </Wrapper>)
+    <List className={isVisible ? '' : 'collapsed'}>
+      <ListItem><Link href="https://www.openstreetmap.org/copyright" target="_blank" data-bcup-haslogintext="no">©
+        OpenStreetMap contributors</Link></ListItem>
+    </List>
+    <Button onClick={() => setIsVisible(!isVisible)} type="button" title="Attributions" data-bcup-haslogintext="no">
+      <ButtonText>
+        {isVisible ? '^' : 'i'}
+      </ButtonText>
+    </Button>
+  </Wrapper>)
 }
 
 const Wrapper = styled.div`

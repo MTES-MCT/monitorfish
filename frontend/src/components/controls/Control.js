@@ -24,169 +24,177 @@ const Control = props => {
 
   return control
     ? <Wrapper key={index} isLastItem={isLastItem}>
-        <Title>
-            {
-              numberOfInfractions ? <GyroRed /> : <GyroGreen />
-            }
-            CONTRÔLE DU { getDate(control.controlDatetimeUtc) }
-            {
-                control.seizure
-                  ? <ResumeBox>
-                      <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
-                      <ResumeBoxText>Appréhension</ResumeBoxText>
-                  </ResumeBox>
-                  : null
-            }
-            {
-                control.diversion
-                  ? <ResumeBox>
-                      <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
-                      <ResumeBoxText>Déroutement</ResumeBoxText>
-                  </ResumeBox>
-                  : null
-            }
-            {
-                control.escortToQuay
-                  ? <ResumeBox>
-                      <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
-                      <ResumeBoxText>Reconduite à quai</ResumeBoxText>
-                  </ResumeBox>
-                  : null
-            }
-        </Title>
-        <Key width={47}>Type</Key>
-        <SubValue>
-            { control.controlType }
-        </SubValue><br/>
-        <Key width={47}>Façade</Key>
-        <SubValue>
-            {control.facade ? <>{control.facade}</> : <NoValue>-</NoValue>}
-        </SubValue><br/>
+      <Title>
         {
-            (control.controlType === controlType.AERIAL) || (control.controlType === controlType.SEA)
-              ? <SubFields>
-                  <SubField>
-                      <Key width={47}>Lat.</Key>
-                      <SubValue>{(control.latitude || control.latitude === 0) && (control.longitude || control.longitude === 0) ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION)[0]}</> : <NoValue>-</NoValue>}</SubValue>
-                  </SubField><br/>
-                  <SubField>
-                      <Key width={25}>Lon.</Key>
-                      <SubValue>{(control.latitude || control.latitude === 0) && (control.longitude || control.longitude === 0) ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION)[1]}</> : <NoValue>-</NoValue>}</SubValue>
-                  </SubField>
-              </SubFields>
-              : null
+          numberOfInfractions ? <GyroRed/> : <GyroGreen/>
+        }
+        CONTRÔLE DU {getDate(control.controlDatetimeUtc)}
+        {
+          control.seizure
+            ? <ResumeBox>
+              <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
+              <ResumeBoxText>Appréhension</ResumeBoxText>
+            </ResumeBox>
+            : null
         }
         {
-            control.controlType === controlType.LAND
-              ? <>
-                  <Key width={47}>Port</Key>
-                  <SubValue>
-                      {control.portName ? <>{control.portName} ({control.portLocode})</> : control.portLocode}
-                  </SubValue>
-              </>
-              : null
+          control.diversion
+            ? <ResumeBox>
+              <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
+              <ResumeBoxText>Déroutement</ResumeBoxText>
+            </ResumeBox>
+            : null
         }
-        <SubFields>
+        {
+          control.escortToQuay
+            ? <ResumeBox>
+              <ResumeBoxNumber isRed={true}>{1}</ResumeBoxNumber>
+              <ResumeBoxText>Reconduite à quai</ResumeBoxText>
+            </ResumeBox>
+            : null
+        }
+      </Title>
+      <Key width={47}>Type</Key>
+      <SubValue>
+        {control.controlType}
+      </SubValue><br/>
+      <Key width={47}>Façade</Key>
+      <SubValue>
+        {control.facade ? <>{control.facade}</> : <NoValue>-</NoValue>}
+      </SubValue><br/>
+      {
+        (control.controlType === controlType.AERIAL) || (control.controlType === controlType.SEA)
+          ? <SubFields>
             <SubField>
-                <Key width={47}>Admin.</Key>
-                <SubValue>{control.controller && control.controller.administration ? <>{control.controller.administration}</> : <NoValue>-</NoValue>}</SubValue>
-            </SubField>
+              <Key width={47}>Lat.</Key>
+              <SubValue>{(control.latitude || control.latitude === 0) && (control.longitude || control.longitude === 0)
+                ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION)[0]}</>
+                : <NoValue>-</NoValue>}</SubValue>
+            </SubField><br/>
             <SubField>
-                <SubKey>Unité</SubKey>
-                <SubValue>{control.controller && control.controller.controller ? <>{control.controller.controller}</> : <NoValue>-</NoValue>}</SubValue>
+              <Key width={25}>Lon.</Key>
+              <SubValue>{(control.latitude || control.latitude === 0) && (control.longitude || control.longitude === 0)
+                ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION)[1]}</>
+                : <NoValue>-</NoValue>}</SubValue>
             </SubField>
-        </SubFields>
-        <Key width={47}>Résultat</Key>
-        <SubValue>
-            { numberOfInfractions ? `${numberOfInfractions} infraction${numberOfInfractions > 1 ? 's' : ''}` : 'pas d\'infraction' }
-        </SubValue><br/>
-        {
-            control.seizure
-              ? <>
-                  <Key width={80}>Appréhension</Key>
-                  <SubValue>
-                      { control.seizureComment }
-                  </SubValue><br/>
-              </>
-              : null
-        }
-        <Key width={80}>Observations</Key>
-        <SubValue>
-            <Comment>
-                { control.postControlComments ? control.postControlComments : <NoValue>-</NoValue> }
-            </Comment>
-        </SubValue>
-        {
-            control.infractions && control.infractions.length
-              ? <Infractions>
-                  {
-                      control.infractions.map((infraction, index) => {
-                        return <Infraction key={infraction.infractionCategory + index}>
-                              <Line>
-                                  <InfractionKey>infraction {index + 1}</InfractionKey>
-                                  <InfractionValue>
-                                      { infraction.infractionCategory }
-                                  </InfractionValue>
-                              </Line>
-                              <Line>
-                                  <InfractionKey>Description</InfractionKey>
-                                  <InfractionValue>
-                                      NATINF { infraction.natinfCode } - { infraction.infraction } - { infraction.regulation }
-                                  </InfractionValue>
-                              </Line>
-                          </Infraction>
-                      })
-                  }
-              </Infractions>
-              : null
-        }
-        {
-            seeMoreIsOpen
-              ? <More>
-                  <Key width={135}>Contrôle sur OM</Key>
-                  <SubValue>
-                      { control.missionOrder ? 'Oui' : 'Non' }
-                  </SubValue><br/>
-                  <Key width={135}>Navire ciblé</Key>
-                  <SubValue>
-                      { control.vesselTargeted ? 'Oui' : 'Non' }
-                  </SubValue><br/>
-                  <Key width={135}>Contrôle des engins</Key>
-                  <SubValue>
-                      { control.gearControls && control.gearControls.length ? 'Oui' : 'Non' }
-                  </SubValue><br/>
-                  {
-                      control.gearControls && control.gearControls.length
-                        ? control.gearControls.map((gear, index) => {
-                          return <Gear key={gear.gearCode + index}>
-                                <Key width={100}>Engin {index + 1}</Key>
-                                <SubValue>
-                                    {gear.gearName ? <>{gear.gearName} ({gear.gearCode})</> : gear.gearCode}
-                                </SubValue><br/>
-                                <SubFields>
-                                    <SubField>
-                                        <Key width={100}>Maillage déclaré</Key>
-                                        <SubValue>{gear.declaredMesh ? <>{gear.declaredMesh}</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                    <SubField>
-                                        <SubKey>Maillage mesuré</SubKey>
-                                        <SubValue>{gear.controlledMesh ? <>{gear.controlledMesh}</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                </SubFields>
-                            </Gear>
-                        })
-                        : null
-                  }
-                  <Key width={135}>Contexte du contrôle</Key>
-                  <SubValue>
-                      { control.cooperative === false ? 'Coopératif' : 'Non coopératif' }
-                  </SubValue>
-              </More>
-              : null
-        }
-        <SeeMore onClick={() => setSeeMoreIsOpen(!seeMoreIsOpen)}>
-            Voir {seeMoreIsOpen ? 'moins' : 'plus'} de détails
-        </SeeMore>
+          </SubFields>
+          : null
+      }
+      {
+        control.controlType === controlType.LAND
+          ? <>
+            <Key width={47}>Port</Key>
+            <SubValue>
+              {control.portName ? <>{control.portName} ({control.portLocode})</> : control.portLocode}
+            </SubValue>
+          </>
+          : null
+      }
+      <SubFields>
+        <SubField>
+          <Key width={47}>Admin.</Key>
+          <SubValue>{control.controller && control.controller.administration
+            ? <>{control.controller.administration}</>
+            : <NoValue>-</NoValue>}</SubValue>
+        </SubField>
+        <SubField>
+          <SubKey>Unité</SubKey>
+          <SubValue>{control.controller && control.controller.controller
+            ? <>{control.controller.controller}</>
+            : <NoValue>-</NoValue>}</SubValue>
+        </SubField>
+      </SubFields>
+      <Key width={47}>Résultat</Key>
+      <SubValue>
+        {numberOfInfractions ? `${numberOfInfractions} infraction${numberOfInfractions > 1 ? 's' : ''}` : 'pas d\'infraction'}
+      </SubValue><br/>
+      {
+        control.seizure
+          ? <>
+            <Key width={80}>Appréhension</Key>
+            <SubValue>
+              {control.seizureComment}
+            </SubValue><br/>
+          </>
+          : null
+      }
+      <Key width={80}>Observations</Key>
+      <SubValue>
+        <Comment>
+          {control.postControlComments ? control.postControlComments : <NoValue>-</NoValue>}
+        </Comment>
+      </SubValue>
+      {
+        control.infractions && control.infractions.length
+          ? <Infractions>
+            {
+              control.infractions.map((infraction, index) => {
+                return <Infraction key={infraction.infractionCategory + index}>
+                  <Line>
+                    <InfractionKey>infraction {index + 1}</InfractionKey>
+                    <InfractionValue>
+                      {infraction.infractionCategory}
+                    </InfractionValue>
+                  </Line>
+                  <Line>
+                    <InfractionKey>Description</InfractionKey>
+                    <InfractionValue>
+                      NATINF {infraction.natinfCode} - {infraction.infraction} - {infraction.regulation}
+                    </InfractionValue>
+                  </Line>
+                </Infraction>
+              })
+            }
+          </Infractions>
+          : null
+      }
+      {
+        seeMoreIsOpen
+          ? <More>
+            <Key width={135}>Contrôle sur OM</Key>
+            <SubValue>
+              {control.missionOrder ? 'Oui' : 'Non'}
+            </SubValue><br/>
+            <Key width={135}>Navire ciblé</Key>
+            <SubValue>
+              {control.vesselTargeted ? 'Oui' : 'Non'}
+            </SubValue><br/>
+            <Key width={135}>Contrôle des engins</Key>
+            <SubValue>
+              {control.gearControls && control.gearControls.length ? 'Oui' : 'Non'}
+            </SubValue><br/>
+            {
+              control.gearControls && control.gearControls.length
+                ? control.gearControls.map((gear, index) => {
+                  return <Gear key={gear.gearCode + index}>
+                    <Key width={100}>Engin {index + 1}</Key>
+                    <SubValue>
+                      {gear.gearName ? <>{gear.gearName} ({gear.gearCode})</> : gear.gearCode}
+                    </SubValue><br/>
+                    <SubFields>
+                      <SubField>
+                        <Key width={100}>Maillage déclaré</Key>
+                        <SubValue>{gear.declaredMesh ? <>{gear.declaredMesh}</> : <NoValue>-</NoValue>}</SubValue>
+                      </SubField>
+                      <SubField>
+                        <SubKey>Maillage mesuré</SubKey>
+                        <SubValue>{gear.controlledMesh ? <>{gear.controlledMesh}</> : <NoValue>-</NoValue>}</SubValue>
+                      </SubField>
+                    </SubFields>
+                  </Gear>
+                })
+                : null
+            }
+            <Key width={135}>Contexte du contrôle</Key>
+            <SubValue>
+              {control.cooperative === false ? 'Coopératif' : 'Non coopératif'}
+            </SubValue>
+          </More>
+          : null
+      }
+      <SeeMore onClick={() => setSeeMoreIsOpen(!seeMoreIsOpen)}>
+        Voir {seeMoreIsOpen ? 'moins' : 'plus'} de détails
+      </SeeMore>
     </Wrapper>
     : null
 }

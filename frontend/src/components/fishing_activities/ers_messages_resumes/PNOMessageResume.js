@@ -59,76 +59,84 @@ const PNOMessageResume = props => {
 
   const getPNOMessageResumeTitle = () => {
     return <>{props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}
-            ,{' '} prévu le {getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)}  <Gray>(UTC)</Gray></>
+      ,{' '} prévu le {getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)} <Gray>(UTC)</Gray></>
   }
 
   return <Wrapper>
-        <ERSMessageResumeHeader
-            isNotAcknowledged={props.isNotAcknowledged}
-            isDeleted={props.isDeleted}
-            id={props.id}
-            onHoverText={props.hasNoMessage ? null : getPNOMessageResumeTitleText()}
-            title={props.hasNoMessage ? null : getPNOMessageResumeTitle()}
-            hasNoMessage={props.hasNoMessage}
-            showERSMessages={props.showERSMessages}
-            messageType={ERSMessageTypeEnum.PNO.code.toString()}
-            setIsOpen={setIsOpen}
-            isOpen={isOpen}/>
-        {
-            props.hasNoMessage
-              ? null
-              : <ERSMessageContent
-                    id={props.id}
-                    chartHeight={chartHeight + boxHeight}
-                    speciesNotLandedSize={speciesNotLandedArray && speciesNotLandedArray.length ? 55 : 0}
-                    firstUpdate={firstUpdate}
-                    isOpen={isOpen}
-                    name={ERSMessageTypeEnum.PNO.code.toString()}>
-                    <Zone>
-                        <Fields>
-                            <TableBody>
-                                <Field>
-                                    <Key>Date d&apos;envoi</Key>
-                                    <Value>{props.pnoMessage.operationDateTime ? <>Le {getDateTime(props.pnoMessage.operationDateTime, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                                </Field>
-                                <Field>
-                                    <Key>Port d&apos;arrivée</Key>
-                                    <Value>{props.pnoMessage.message.port && props.pnoMessage.message.portName ? <>{props.pnoMessage.message.portName} ({props.pnoMessage.message.port})</> : <NoValue>-</NoValue>}</Value>
-                                </Field>
-                                <Field>
-                                    <Key>Raison du préavis</Key>
-                                    <Value>{props.pnoMessage.message.purpose ? <>{ERSMessagePNOPurposeType[props.pnoMessage.message.purpose]} ({props.pnoMessage.message.purpose})</> : <NoValue>-</NoValue>}</Value>
-                                </Field>
-                            </TableBody>
-                        </Fields>
-                        <SpeciesAndWeightChart
-                            setChartHeight={setChartHeight}
-                            compareWithTotalWeight={true}
-                            speciesAndWeightArray={speciesAndWeightArray}
-                        />
+    <ERSMessageResumeHeader
+      isNotAcknowledged={props.isNotAcknowledged}
+      isDeleted={props.isDeleted}
+      id={props.id}
+      onHoverText={props.hasNoMessage ? null : getPNOMessageResumeTitleText()}
+      title={props.hasNoMessage ? null : getPNOMessageResumeTitle()}
+      hasNoMessage={props.hasNoMessage}
+      showERSMessages={props.showERSMessages}
+      messageType={ERSMessageTypeEnum.PNO.code.toString()}
+      setIsOpen={setIsOpen}
+      isOpen={isOpen}/>
+    {
+      props.hasNoMessage
+        ? null
+        : <ERSMessageContent
+          id={props.id}
+          chartHeight={chartHeight + boxHeight}
+          speciesNotLandedSize={speciesNotLandedArray && speciesNotLandedArray.length ? 55 : 0}
+          firstUpdate={firstUpdate}
+          isOpen={isOpen}
+          name={ERSMessageTypeEnum.PNO.code.toString()}>
+          <Zone>
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Date d&apos;envoi</Key>
+                  <Value>{props.pnoMessage.operationDateTime
+                    ? <>Le {getDateTime(props.pnoMessage.operationDateTime, true)}
+                      <Gray>(UTC)</Gray></>
+                    : <NoValue>-</NoValue>}</Value>
+                </Field>
+                <Field>
+                  <Key>Port d&apos;arrivée</Key>
+                  <Value>{props.pnoMessage.message.port && props.pnoMessage.message.portName
+                    ? <>{props.pnoMessage.message.portName} ({props.pnoMessage.message.port})</>
+                    : <NoValue>-</NoValue>}</Value>
+                </Field>
+                <Field>
+                  <Key>Raison du préavis</Key>
+                  <Value>{props.pnoMessage.message.purpose
+                    ? <>{ERSMessagePNOPurposeType[props.pnoMessage.message.purpose]} ({props.pnoMessage.message.purpose})</>
+                    : <NoValue>-</NoValue>}</Value>
+                </Field>
+              </TableBody>
+            </Fields>
+            <SpeciesAndWeightChart
+              setChartHeight={setChartHeight}
+              compareWithTotalWeight={true}
+              speciesAndWeightArray={speciesAndWeightArray}
+            />
+            {
+              speciesNotLandedArray && speciesNotLandedArray.length
+                ? <SpeciesNotLanded>
+                  Poids des captures non débarquées
+                  ({getPercentOfTotalWeight(totalWeightNotLanded, props.totalFARAndDEPWeight)}%)
+                  {speciesNotLandedArray && speciesNotLandedArray.length
+                    ? speciesNotLandedArray.map(speciesCatch => {
+                      return <IndividualSpeciesNotLanded key={speciesCatch.species}>
                         {
-                            speciesNotLandedArray && speciesNotLandedArray.length
-                              ? <SpeciesNotLanded>
-                                    Poids des captures non débarquées ({getPercentOfTotalWeight(totalWeightNotLanded, props.totalFARAndDEPWeight)}%)
-                                    {speciesNotLandedArray && speciesNotLandedArray.length
-                                      ? speciesNotLandedArray.map(speciesCatch => {
-                                        return <IndividualSpeciesNotLanded key={speciesCatch.species}>
-                                                {
-                                                    speciesCatch.speciesName
-                                                      ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
-                                                      : speciesCatch.species
-                                                }
-                                                {''} - {speciesCatch.weight} kg<br/>
-                                            </IndividualSpeciesNotLanded>
-                                      })
-                                      : <NoValue>-</NoValue>}
-                                </SpeciesNotLanded>
-                              : null
+                          speciesCatch.speciesName
+                            ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                            : speciesCatch.species
                         }
-                    </Zone>
-                </ERSMessageContent>
-        }
-    </Wrapper>
+                        {''} - {speciesCatch.weight} kg<br/>
+                      </IndividualSpeciesNotLanded>
+                    })
+                    : <NoValue>-</NoValue>}
+                </SpeciesNotLanded>
+                : null
+            }
+          </Zone>
+        </ERSMessageContent>
+    }
+  </Wrapper>
 }
 
 const IndividualSpeciesNotLanded = styled.div`

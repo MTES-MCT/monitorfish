@@ -16,76 +16,81 @@ const DEPMessage = props => {
   }
 
   return <>
-        { props.message
-          ? <>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Date de départ</Key>
-                                <Value>{props.message.departureDatetimeUtc ? <>{getDateTime(props.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Port de départ</Key>
-                                <Value>{getPortName(props.message)}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Activité prévue</Key>
-                                <Value>{props.message.anticipatedActivity ? <>{ERSMessageActivityType[props.message.anticipatedActivity]} ({props.message.anticipatedActivity})</> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
-                <Zone>
-                    {props.message.gearOnboard && props.message.gearOnboard.length
-                      ? props.message.gearOnboard.map((gear, index) => {
-                        return <Gear key={index}>
-                                <SubKey>Engin à bord {index + 1}</SubKey>{' '}
-                                <SubValue>
-                                    {
-                                        gear.gearName
-                                          ? <>{gear.gearName} ({gear.gear})</>
-                                          : gear.gear
-                                    }
-                                </SubValue><br/>
-                                <SubFields>
-                                    <SubField>
-                                        <SubKey>Maillage</SubKey>
-                                        <SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                    <SubField>
-                                        <SubKey>Dimensions</SubKey>
-                                        <SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                </SubFields>
-                            </Gear>
-                      })
-                      : <NoValue>-</NoValue>}
-                </Zone>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Captures à bord</Key>
-                                <Value>{props.message.speciesOnboard && props.message.speciesOnboard.length
-                                  ? props.message.speciesOnboard.map(speciesCatch => {
-                                    return <span key={speciesCatch.species}>
+    {props.message
+      ? <>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Date de départ</Key>
+                <Value>{props.message.departureDatetimeUtc
+                  ? <>{getDateTime(props.message.departureDatetimeUtc, true)}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Port de départ</Key>
+                <Value>{getPortName(props.message)}</Value>
+              </Field>
+              <Field>
+                <Key>Activité prévue</Key>
+                <Value>{props.message.anticipatedActivity
+                  ? <>{ERSMessageActivityType[props.message.anticipatedActivity]} ({props.message.anticipatedActivity})</>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          {props.message.gearOnboard && props.message.gearOnboard.length
+            ? props.message.gearOnboard.map((gear, index) => {
+              return <Gear key={index}>
+                <SubKey>Engin à bord {index + 1}</SubKey>{' '}
+                <SubValue>
+                  {
+                    gear.gearName
+                      ? <>{gear.gearName} ({gear.gear})</>
+                      : gear.gear
+                  }
+                </SubValue><br/>
+                <SubFields>
+                  <SubField>
+                    <SubKey>Maillage</SubKey>
+                    <SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
+                  </SubField>
+                  <SubField>
+                    <SubKey>Dimensions</SubKey>
+                    <SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
+                  </SubField>
+                </SubFields>
+              </Gear>
+            })
+            : <NoValue>-</NoValue>}
+        </Zone>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Captures à bord</Key>
+                <Value>{props.message.speciesOnboard && props.message.speciesOnboard.length
+                  ? props.message.speciesOnboard.map(speciesCatch => {
+                    return <span key={speciesCatch.species}>
                                         {
-                                            speciesCatch.speciesName
-                                              ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
-                                              : speciesCatch.species
+                                          speciesCatch.speciesName
+                                            ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                                            : speciesCatch.species
                                         }
-                                            {''} - {speciesCatch.weight} kg<br/>
+                      {''} - {speciesCatch.weight} kg<br/>
                                     </span>
-                                  })
-                                  : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
-            </>
-          : null }
-    </>
+                  })
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+      </>
+      : null}
+  </>
 }
 
 const SubFields = styled.div`

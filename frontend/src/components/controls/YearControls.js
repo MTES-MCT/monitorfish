@@ -8,7 +8,7 @@ import { getNumberOfInfractions } from '../../domain/entities/controls'
 
 const YearControls = props => {
   const {
-  /** @type {VesselControl[]} yearControls */
+    /** @type {VesselControl[]} yearControls */
     yearControls
   } = props
 
@@ -28,42 +28,42 @@ const YearControls = props => {
 
   return yearControls &&
     <Row>
-        <YearTitle isEmpty={yearControls.length === 0} isLastItem={props.isLastItem} isOpen={isOpen}>
-            <Text isEmpty={yearControls.length === 0} isOpen={isOpen} title={props.year} onClick={() => setIsOpen(!isOpen)}>
-                {
-                    yearControls.length ? <ChevronIcon isOpen={isOpen}/> : null
-                }
-                <Year>{props.year}</Year>
-                <YearResume>
-                    {
-                      yearControls.length
-                        ? <>{ yearControls.length } contrôle{ yearControls.length > 1 ? 's' : '' }</>
-                        : 'Pas de contrôle'
-                    }
-                    {
-                      yearControls.length
-                        ? numberOfInfractions
-                          ? <>, {numberOfInfractions} infraction{ numberOfInfractions > 1 ? 's' : '' } <Red/></>
-                          : <>, pas d&apos;infraction <Green /></>
-                        : null
-                    }
-                </YearResume>
-            </Text>
-        </YearTitle>
-        <List
-          isOpen={isOpen}
-          name={yearControls.length && yearControls[0] ? yearControls[0].controlDatetimeUtc : props.year}>
+      <YearTitle isEmpty={yearControls.length === 0} isLastItem={props.isLastItem} isOpen={isOpen}>
+        <Text isEmpty={yearControls.length === 0} isOpen={isOpen} title={props.year} onClick={() => setIsOpen(!isOpen)}>
+          {
+            yearControls.length ? <ChevronIcon isOpen={isOpen}/> : null
+          }
+          <Year>{props.year}</Year>
+          <YearResume>
             {
-                yearControls.length
-                  ? yearControls.map((control, index) => {
-                    return <Control
-                        key={index}
-                        isLastItem={yearControls.length === index + 1}
-                        control={control}/>
-                  })
-                  : null
+              yearControls.length
+                ? <>{yearControls.length} contrôle{yearControls.length > 1 ? 's' : ''}</>
+                : 'Pas de contrôle'
             }
-        </List>
+            {
+              yearControls.length
+                ? numberOfInfractions
+                  ? <>, {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} <Red/></>
+                  : <>, pas d&apos;infraction <Green/></>
+                : null
+            }
+          </YearResume>
+        </Text>
+      </YearTitle>
+      <List
+        isOpen={isOpen}
+        name={yearControls.length && yearControls[0] ? yearControls[0].controlDatetimeUtc : props.year}>
+        {
+          yearControls.length
+            ? yearControls.map((control, index) => {
+              return <Control
+                key={index}
+                isLastItem={yearControls.length === index + 1}
+                control={control}/>
+            })
+            : null
+        }
+      </List>
     </Row>
 }
 

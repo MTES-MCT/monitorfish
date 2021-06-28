@@ -13,19 +13,19 @@ const LastControlZone = props => {
   return lastControlList
     ? <Zone>
       <Title>
-          Derniers contrôles depuis{' '}
+        Derniers contrôles depuis{' '}
         {
           controlsFromDate
             ? <>
               {controlsFromDate.getUTCFullYear() + 1}
-              {' '}(sur { new Date().getFullYear() - controlsFromDate.getUTCFullYear() - 1 } ans)
+              {' '}(sur {new Date().getFullYear() - controlsFromDate.getUTCFullYear() - 1} ans)
             </>
             : <NoValue>-</NoValue>
         }
       </Title>
-      <ControlField field={lastControlList.SEA} type={controlType.SEA} isFirst={true} />
-      <ControlField field={lastControlList.LAND} type={controlType.LAND} isFirst={false} />
-      </Zone>
+      <ControlField field={lastControlList.SEA} type={controlType.SEA} isFirst={true}/>
+      <ControlField field={lastControlList.LAND} type={controlType.LAND} isFirst={false}/>
+    </Zone>
     : null
 }
 

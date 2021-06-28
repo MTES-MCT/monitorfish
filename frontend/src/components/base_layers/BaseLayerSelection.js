@@ -14,23 +14,23 @@ const BaseLayerSelection = () => {
   const [showBaseLayers, setShowBaseLayers] = useState(false)
 
   return (
-        <>
-            <SectionTitle onClick={() => setShowBaseLayers(!showBaseLayers)} showBaseLayers={showBaseLayers}>
-                Fonds de carte <ChevronIcon isOpen={showBaseLayers}/>
-            </SectionTitle>
-            <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={baseLayersKeys.length}>
-                {
-                    baseLayersKeys.map(layer => {
-                      return (<ListItem key={layer}>
-                            <BaseLayerItem
-                                isShownOnInit={selectedBaseLayer === layer}
-                                layer={layer}
-                            />
-                        </ListItem>)
-                    })
-                }
-            </BaseLayersList>
-        </>
+    <>
+      <SectionTitle onClick={() => setShowBaseLayers(!showBaseLayers)} showBaseLayers={showBaseLayers}>
+        Fonds de carte <ChevronIcon isOpen={showBaseLayers}/>
+      </SectionTitle>
+      <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={baseLayersKeys.length}>
+        {
+          baseLayersKeys.map(layer => {
+            return (<ListItem key={layer}>
+              <BaseLayerItem
+                isShownOnInit={selectedBaseLayer === layer}
+                layer={layer}
+              />
+            </ListItem>)
+          })
+        }
+      </BaseLayersList>
+    </>
   )
 }
 

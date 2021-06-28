@@ -45,107 +45,114 @@ const LANMessageResume = props => {
   }
 
   return <Wrapper>
-        <ERSMessageResumeHeader
-            isNotAcknowledged={props.isNotAcknowledged}
-            isDeleted={props.isDeleted}
-            isAlert={!!props.catchesOverToleranceAlert}
-            title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
-            onHoverText={getWeightOverToleranceInfo()}
-            hasNoMessage={props.hasNoMessage}
-            showERSMessages={props.showERSMessages}
-            messageType={ERSMessageTypeEnum.LAN.code.toString()}
-            setIsOpen={setIsOpen}
-            isOpen={isOpen}
-            isLastItem={true}
-        />
-        {
-            props.hasNoMessage
-              ? null
-              : <ERSMessageContent
-                    id={props.id}
-                    chartHeight={chartHeight}
-                    firstUpdate={firstUpdate}
-                    isOpen={isOpen}
-                    name={ERSMessageTypeEnum.LAN.code.toString()}>
-                    <Zone>
-                        <Fields withoutMarginBottom={true}>
-                            <TableBody>
-                                <Field>
-                                    <Key>Date de fin de débarquement</Key>
-                                    <Value>{ props.lanMessage.landingDatetimeUtc ? getDateTime(props.lanMessage.landingDatetimeUtc, true) : <NoValue>-</NoValue>}</Value>
-                                </Field>
-                                <Field>
-                                    <Key>Port de débarquement</Key>
-                                    <Value>{ getPortName(props.lanMessage) }</Value>
-                                </Field>
-                            </TableBody>
-                        </Fields>
-                        <Fields withoutMarginTop={true} withoutMarginBottom={true}>
-                            <TableBody>
-                                <Field>
-                                    <Key>Poids débarqué</Key>
-                                    <Value>
-                                        {props.totalLANWeight ? props.totalLANWeight : <NoValue>-</NoValue>} kg
-                                        {
-                                            props.totalPNOWeight ? <> sur les {props.totalPNOWeight} kg annoncés dans le PNO</> : null
-                                        }
-                                    </Value>
-                                </Field>
-                            </TableBody>
-                        </Fields>
-                        {props.lanMessage.catchLanded && props.lanMessage.catchLanded.length
-                          ? props.lanMessage.catchLanded.map((speciesCatch, index) => {
-                            return <Species key={index}>
-                                    <SubKey>Espèce {index + 1}</SubKey>{' '}
-                                    <SubValue>
-                                        {
-                                            speciesCatch.speciesName
-                                              ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
-                                              : speciesCatch.species
-                                        }
-                                        {
-                                            props.catchesOverToleranceAlert && props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length
-                                              ? props.catchesOverToleranceAlert.catchesOverTolerance.some(catchWithAlert => catchWithAlert.lan.species === speciesCatch.species)
-                                                ? <OverWeightTolerance title={getWeightOverToleranceInfo()}>
-                                                    <OverWeightToleranceText>10 %</OverWeightToleranceText>
-                                                </OverWeightTolerance>
-                                                : null
-                                              : null
-                                        }
-                                    </SubValue><br/>
-                                    <Weights>
-                                        <Weight>
-                                            <SubKey>Poids FAR</SubKey>
-                                            <SubValueWeight withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>{props.speciesToWeightOfFAR && props.speciesToWeightOfFAR[speciesCatch.species]
-                                              ? <span title={`${props.speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfFAR[speciesCatch.species].weight} kg</span>
-                                              : <NoValue>-</NoValue>}
-                                            </SubValueWeight>
-                                        </Weight>
-                                        {
-                                            props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]
-                                              ? <Weight>
-                                                  <SubKey>Poids PNO</SubKey>
-                                                  <SubValueWeight>
-                                                      <span title={`${props.speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfPNO[speciesCatch.species].weight} kg</span>
-                                                  </SubValueWeight>
-                                              </Weight>
-                                              : null
-                                        }
-                                        <Weight>
-                                            <SubKey>Poids LAN</SubKey>
-                                            <SubValueWeight withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>{props.speciesToWeightOfLAN && props.speciesToWeightOfLAN[speciesCatch.species]
-                                              ? <span title={`${props.speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfLAN[speciesCatch.species].weight} kg</span>
-                                              : <NoValue>-</NoValue>}
-                                            </SubValueWeight>
-                                        </Weight>
-                                    </Weights>
-                                </Species>
-                          })
-                          : <Gray>Aucune capture à bord</Gray>}
-                    </Zone>
-                </ERSMessageContent>
-        }
-    </Wrapper>
+    <ERSMessageResumeHeader
+      isNotAcknowledged={props.isNotAcknowledged}
+      isDeleted={props.isDeleted}
+      isAlert={!!props.catchesOverToleranceAlert}
+      title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
+      onHoverText={getWeightOverToleranceInfo()}
+      hasNoMessage={props.hasNoMessage}
+      showERSMessages={props.showERSMessages}
+      messageType={ERSMessageTypeEnum.LAN.code.toString()}
+      setIsOpen={setIsOpen}
+      isOpen={isOpen}
+      isLastItem={true}
+    />
+    {
+      props.hasNoMessage
+        ? null
+        : <ERSMessageContent
+          id={props.id}
+          chartHeight={chartHeight}
+          firstUpdate={firstUpdate}
+          isOpen={isOpen}
+          name={ERSMessageTypeEnum.LAN.code.toString()}>
+          <Zone>
+            <Fields withoutMarginBottom={true}>
+              <TableBody>
+                <Field>
+                  <Key>Date de fin de débarquement</Key>
+                  <Value>{props.lanMessage.landingDatetimeUtc
+                    ? getDateTime(props.lanMessage.landingDatetimeUtc, true)
+                    : <NoValue>-</NoValue>}</Value>
+                </Field>
+                <Field>
+                  <Key>Port de débarquement</Key>
+                  <Value>{getPortName(props.lanMessage)}</Value>
+                </Field>
+              </TableBody>
+            </Fields>
+            <Fields withoutMarginTop={true} withoutMarginBottom={true}>
+              <TableBody>
+                <Field>
+                  <Key>Poids débarqué</Key>
+                  <Value>
+                    {props.totalLANWeight ? props.totalLANWeight : <NoValue>-</NoValue>} kg
+                    {
+                      props.totalPNOWeight ? <> sur les {props.totalPNOWeight} kg annoncés dans le PNO</> : null
+                    }
+                  </Value>
+                </Field>
+              </TableBody>
+            </Fields>
+            {props.lanMessage.catchLanded && props.lanMessage.catchLanded.length
+              ? props.lanMessage.catchLanded.map((speciesCatch, index) => {
+                return <Species key={index}>
+                  <SubKey>Espèce {index + 1}</SubKey>{' '}
+                  <SubValue>
+                    {
+                      speciesCatch.speciesName
+                        ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                        : speciesCatch.species
+                    }
+                    {
+                      props.catchesOverToleranceAlert && props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length
+                        ? props.catchesOverToleranceAlert.catchesOverTolerance.some(catchWithAlert => catchWithAlert.lan.species === speciesCatch.species)
+                          ? <OverWeightTolerance title={getWeightOverToleranceInfo()}>
+                          <OverWeightToleranceText>10 %</OverWeightToleranceText>
+                        </OverWeightTolerance>
+                          : null
+                        : null
+                    }
+                  </SubValue><br/>
+                  <Weights>
+                    <Weight>
+                      <SubKey>Poids FAR</SubKey>
+                      <SubValueWeight
+                        withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>{props.speciesToWeightOfFAR && props.speciesToWeightOfFAR[speciesCatch.species]
+                          ? <span
+                          title={`${props.speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfFAR[speciesCatch.species].weight} kg</span>
+                          : <NoValue>-</NoValue>}
+                      </SubValueWeight>
+                    </Weight>
+                    {
+                      props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]
+                        ? <Weight>
+                          <SubKey>Poids PNO</SubKey>
+                          <SubValueWeight>
+                            <span
+                              title={`${props.speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfPNO[speciesCatch.species].weight} kg</span>
+                          </SubValueWeight>
+                        </Weight>
+                        : null
+                    }
+                    <Weight>
+                      <SubKey>Poids LAN</SubKey>
+                      <SubValueWeight
+                        withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>{props.speciesToWeightOfLAN && props.speciesToWeightOfLAN[speciesCatch.species]
+                          ? <span
+                          title={`${props.speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>{props.speciesToWeightOfLAN[speciesCatch.species].weight} kg</span>
+                          : <NoValue>-</NoValue>}
+                      </SubValueWeight>
+                    </Weight>
+                  </Weights>
+                </Species>
+              })
+              : <Gray>Aucune capture à bord</Gray>}
+          </Zone>
+        </ERSMessageContent>
+    }
+  </Wrapper>
 }
 
 const OverWeightToleranceText = styled.span`

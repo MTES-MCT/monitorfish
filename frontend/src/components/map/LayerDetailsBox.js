@@ -41,20 +41,20 @@ const LayerDetailsBox = props => {
   }, [regulatoryFeatureToShowOnCard, gears, setVectorLayerStyle])
 
   return (regulatoryFeatureToShowOnCard && <Details>
-        {
-            regulatoryFeatureToShowOnCard && <>
-                <Rectangle vectorLayerStyle={vectorLayerStyle} />
-                <Text>
-                    {regulatoryFeatureToShowOnCard.getProperties().layer_name.replace(/[_]/g, ' ')}
-                    {
-                        regulatoryFeatureToShowOnCard.getProperties().zones
-                          ? <ZoneName>{regulatoryFeatureToShowOnCard.getProperties().zones.replace(/[_]/g, ' ')}</ZoneName>
-                          : null
-                    }
-                </Text>
-            </>
-        }
-    </Details>)
+    {
+      regulatoryFeatureToShowOnCard && <>
+        <Rectangle vectorLayerStyle={vectorLayerStyle}/>
+        <Text>
+          {regulatoryFeatureToShowOnCard.getProperties().layer_name.replace(/[_]/g, ' ')}
+          {
+            regulatoryFeatureToShowOnCard.getProperties().zones
+              ? <ZoneName>{regulatoryFeatureToShowOnCard.getProperties().zones.replace(/[_]/g, ' ')}</ZoneName>
+              : null
+          }
+        </Text>
+      </>
+    }
+  </Details>)
 }
 
 const Rectangle = styled.div`

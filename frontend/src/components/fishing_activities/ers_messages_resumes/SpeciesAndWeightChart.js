@@ -30,31 +30,33 @@ const SpeciesAndWeightChart = props => {
   }
 
   return <>
-        {
-            speciesAndWeightArray && speciesAndWeightArray.length
-              ? props.speciesAndWeightArray.map((speciesAndWeight, index) => {
-                return <SpeciesAndWeight key={speciesAndWeight.species}>
-                    <Weight
-                        height={speciesAndWeight.height}
-                        isLast={index === props.speciesAndWeightArray.length - 1}
-                    >
-                        <WeightText>{parseFloat(speciesAndWeight.weight.toFixed(1))} kg {props.compareWithTotalWeight ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray> : null}</WeightText>
-                    </Weight>
-                    <Species
-                        height={speciesAndWeight.height}
-                        isLast={index === speciesAndWeightArray.length - 1}
-                    >
-                        {
-                            speciesAndWeight.speciesName
-                              ? <>{speciesAndWeight.speciesName} ({speciesAndWeight.species})</>
-                              : speciesAndWeight.species
-                        }
-                    </Species>
-                </SpeciesAndWeight>
-              })
-              : null
-        }
-    </>
+    {
+      speciesAndWeightArray && speciesAndWeightArray.length
+        ? props.speciesAndWeightArray.map((speciesAndWeight, index) => {
+          return <SpeciesAndWeight key={speciesAndWeight.species}>
+            <Weight
+              height={speciesAndWeight.height}
+              isLast={index === props.speciesAndWeightArray.length - 1}
+            >
+              <WeightText>{parseFloat(speciesAndWeight.weight.toFixed(1))} kg {props.compareWithTotalWeight
+                ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray>
+                : null}</WeightText>
+            </Weight>
+            <Species
+              height={speciesAndWeight.height}
+              isLast={index === speciesAndWeightArray.length - 1}
+            >
+              {
+                speciesAndWeight.speciesName
+                  ? <>{speciesAndWeight.speciesName} ({speciesAndWeight.species})</>
+                  : speciesAndWeight.species
+              }
+            </Species>
+          </SpeciesAndWeight>
+        })
+        : null
+    }
+  </>
 }
 
 const Gray = styled.span`

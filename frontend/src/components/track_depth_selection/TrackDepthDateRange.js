@@ -4,33 +4,33 @@ import styled from 'styled-components'
 
 const TrackDepthDateRange = ({ dates, setDate }) => {
   return (
-      <Wrapper>
-          <DateRangePicker
-            showOneCalendar
-            placeholder="Choisir une période précise"
-            cleanable
-            size={'sm'}
-            disabledDate={afterToday()}
-            value={dates}
-            onOk={nextValue => setDate(nextValue)}
-            onClean={() => setDate([])}
-            ranges={[]}
-            format="DD-MM-YYYY"
-            locale={{
-              sunday: 'Di',
-              monday: 'Lu',
-              tuesday: 'Ma',
-              wednesday: 'Me',
-              thursday: 'Je',
-              friday: 'Ve',
-              saturday: 'Sa',
-              ok: 'OK',
-              today: 'Aujourd\'hui',
-              yesterday: 'Hier',
-              last7Days: '7 derniers jours'
-            }}
-          />
-      </Wrapper>
+    <Wrapper>
+      <DateRangePicker
+        showOneCalendar
+        placeholder="Choisir une période précise"
+        cleanable
+        size={'sm'}
+        disabledDate={afterToday()}
+        value={dates}
+        onOk={nextValue => setDate(nextValue)}
+        onClean={() => setDate([])}
+        ranges={[]}
+        format="DD-MM-YYYY"
+        locale={{
+          sunday: 'Di',
+          monday: 'Lu',
+          tuesday: 'Ma',
+          wednesday: 'Me',
+          thursday: 'Je',
+          friday: 'Ve',
+          saturday: 'Sa',
+          ok: 'OK',
+          today: 'Aujourd\'hui',
+          yesterday: 'Hier',
+          last7Days: '7 derniers jours'
+        }}
+      />
+    </Wrapper>
   )
 }
 

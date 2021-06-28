@@ -70,10 +70,10 @@ const RegulatoryZoneSelection = props => {
       regulatorySubZones.forEach(regulatorySubZone => {
         if (existingSelectedZones[regulatoryZoneName].some(item =>
           item.layerName === regulatorySubZone.layerName &&
-                    item.zone === regulatorySubZone.zone)) {
+          item.zone === regulatorySubZone.zone)) {
           existingSelectedZones[regulatoryZoneName] = existingSelectedZones[regulatoryZoneName].filter(item =>
             !(item.layerName === regulatorySubZone.layerName &&
-                        item.zone === regulatorySubZone.zone))
+              item.zone === regulatorySubZone.zone))
           if (!existingSelectedZones[regulatoryZoneName].length) {
             delete existingSelectedZones[regulatoryZoneName]
           }
@@ -97,46 +97,46 @@ const RegulatoryZoneSelection = props => {
   }
 
   return (<Search ref={wrapperRef}>
-            {
-                showRegulatorySection
-                  ? null
-                  : <RegulatoryZoneTitle
-                        onClick={() => setShowRegulatorySection(!showRegulatorySection)}
-                        showRegulatorySection={showRegulatorySection}
-                    >
-                        <TitleText>
-                            Rechercher des zones réglementaires
-                        </TitleText>
-                        <SearchIcon />
-                    </RegulatoryZoneTitle>
-            }
-        <RegulatoryZoneSelectionSearchInput
-            showRegulatorySearchInput={showRegulatorySection}
-            setShowRegulatorySection={setShowRegulatorySection}
-            regulatoryZones={props.regulatoryZones}
-            setFoundRegulatoryZones={setFoundRegulatoryZones}
-            foundRegulatoryZones={foundRegulatoryZones}
-            initSearchFields={initSearchFields}
-            setInitSearchFields={setInitSearchFields}
-            layersSidebarIsOpen={props.layersSidebarIsOpen}
-            resetSelectRegulatoryZone={resetSelectRegulatoryZone}
-        />
-        <RegulatoryZoneSelectionList
-            showRegulatorySearchInput={showRegulatorySection}
-            foundRegulatoryZones={foundRegulatoryZones}
+      {
+        showRegulatorySection
+          ? null
+          : <RegulatoryZoneTitle
+            onClick={() => setShowRegulatorySection(!showRegulatorySection)}
             showRegulatorySection={showRegulatorySection}
-            regulatoryZonesSelection={regulatoryZonesSelection}
-            toggleSelectRegulatoryZone={toggleSelectRegulatoryZone}
-        />
-        <RegulatoryZoneAddButton
-            onClick={() => callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)}
-            showRegulatorySearchInput={showRegulatorySection}
-            foundRegulatoryZones={foundRegulatoryZones}
-        >
-            {
-                props.regulatoryZonesAddedToMySelection ? `${props.regulatoryZonesAddedToMySelection} zones ajoutées` : 'Ajouter à mes zones'
-            }
-        </RegulatoryZoneAddButton>
+          >
+            <TitleText>
+              Rechercher des zones réglementaires
+            </TitleText>
+            <SearchIcon/>
+          </RegulatoryZoneTitle>
+      }
+      <RegulatoryZoneSelectionSearchInput
+        showRegulatorySearchInput={showRegulatorySection}
+        setShowRegulatorySection={setShowRegulatorySection}
+        regulatoryZones={props.regulatoryZones}
+        setFoundRegulatoryZones={setFoundRegulatoryZones}
+        foundRegulatoryZones={foundRegulatoryZones}
+        initSearchFields={initSearchFields}
+        setInitSearchFields={setInitSearchFields}
+        layersSidebarIsOpen={props.layersSidebarIsOpen}
+        resetSelectRegulatoryZone={resetSelectRegulatoryZone}
+      />
+      <RegulatoryZoneSelectionList
+        showRegulatorySearchInput={showRegulatorySection}
+        foundRegulatoryZones={foundRegulatoryZones}
+        showRegulatorySection={showRegulatorySection}
+        regulatoryZonesSelection={regulatoryZonesSelection}
+        toggleSelectRegulatoryZone={toggleSelectRegulatoryZone}
+      />
+      <RegulatoryZoneAddButton
+        onClick={() => callAddRegulatoryZonesToMySelection(regulatoryZonesSelection)}
+        showRegulatorySearchInput={showRegulatorySection}
+        foundRegulatoryZones={foundRegulatoryZones}
+      >
+        {
+          props.regulatoryZonesAddedToMySelection ? `${props.regulatoryZonesAddedToMySelection} zones ajoutées` : 'Ajouter à mes zones'
+        }
+      </RegulatoryZoneAddButton>
     </Search>
   )
 }

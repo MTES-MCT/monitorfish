@@ -46,7 +46,6 @@ function App () {
   return (
     <>
       <ToastProvider placement="bottom-right">
-        <Healthcheck/>
         <Router>
           <Switch>
             <Route path="/backoffice">
@@ -65,6 +64,7 @@ function App () {
 function HomePage () {
   return <Provider store={homeStore}>
     <NamespaceContext.Provider value={'homepage'}>
+      <Healthcheck/>
       <Wrapper>
         <Map/>
         <LayersSidebar/>

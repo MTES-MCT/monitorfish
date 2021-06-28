@@ -1,5 +1,5 @@
 import { getHealthcheckFromAPI } from '../../api/fetch'
-import { setHealthcheckTextWarning } from '../reducers/Global'
+import { setError, setHealthcheckTextWarning } from '../reducers/Global'
 
 const FIVE_MINUTES = 5
 
@@ -12,6 +12,9 @@ const getHealthcheck = () => dispatch => {
 
     const warning = getWarningText(ersMessagesReceivedMinutesAgo, positionsReceivedMinutesAgo, lastPositionsMinutesAgo)
     dispatch(setHealthcheckTextWarning(warning))
+  }).catch(error => {
+    console.error(error)
+    dispatch(setError(error))
   })
 }
 

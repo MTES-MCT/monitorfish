@@ -28,7 +28,6 @@ const BaseLayerItem = ({ layer, isShownOnInit }) => {
     }
   }, [showLayer_])
 
-
   function callSelectBaseLayer (baseLayer) {
     dispatch(selectBaseLayer(baseLayer))
   }

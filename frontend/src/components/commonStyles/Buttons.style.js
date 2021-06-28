@@ -28,4 +28,3 @@ export const WhiteButton = styled(button)`
     color: ${COLORS.grayDarker};
   }
 `
-

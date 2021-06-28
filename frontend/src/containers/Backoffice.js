@@ -77,9 +77,9 @@ const Backoffice = () => {
   }
 
   const displayRegulatoryZoneByRegTerritory = (territory) => {
-    const franceRegList = regulatoryZoneListByRegTerritory[territory]
-    return franceRegList
-      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(franceRegList)} </RegulatoryZoneListByLawTypeList>
+    const territoryRegList = regulatoryZoneListByRegTerritory[territory]
+    return territoryRegList
+      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territoryRegList)} </RegulatoryZoneListByLawTypeList>
       : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
   }
 

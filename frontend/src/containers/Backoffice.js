@@ -229,16 +229,16 @@ const RegulatoryZonePanel = styled.div`
 const MetadataWrapper = styled.div`
   display: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none'};
   position: absolute;
-  top: 1%;
-  left: 51%;
+  top: 0;
+  left: 50%;
   z-index: 1;
-  width: 300px;
+  width: 350px;
   border-radius: 2px;
   color: #515151;
   text-decoration: none;
   background-color: #EEEEEE;
-  padding: 0;
   padding: 10px;
+  margin: 6px 0 0 6px;
   flex-direction: column;
   max-height: 100vh;
   transition: all 0.5s;

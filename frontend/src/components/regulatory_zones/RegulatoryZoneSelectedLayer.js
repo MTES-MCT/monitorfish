@@ -44,7 +44,6 @@ const RegulatoryZoneSelectedLayer = props => {
   }, [showedLayers])
 
   useEffect(() => {
-    console.log(firstUpdate.current)
     if (firstUpdate.current) {
       firstUpdate.current = false
       return
@@ -99,6 +98,7 @@ const RegulatoryZoneSelectedLayer = props => {
               showWholeLayer={showWholeLayer}
               namespace={namespace}
               zoneIsShown={getZoneIsShown(subZone)}
+              allowRemoveZone={allowRemoveZone}
           />
       )
     })
@@ -155,20 +155,18 @@ const ZoneNumber = styled.span`
 
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
-  padding-top: 2px;
+  padding: 2px 6px 0 0;
 `
 
 const ShowIcon = styled(ShowIconSVG)`
   width: 23px;
   padding: 0 8px 0 0;
-  margin-top: 9px;
   margin-left: 6px;
 `
 
 const HideIcon = styled(HideIconSVG)`
   width: 23px;
   padding: 0 8px 0 0;
-  margin-top: 9px;
   margin-left: 6px;
 `
 

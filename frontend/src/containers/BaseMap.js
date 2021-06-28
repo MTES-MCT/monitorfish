@@ -15,11 +15,13 @@ import MapAttributionsBox from '../components/map/MapAttributionsBox'
 import BaseLayer from '../layers/BaseLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
+import ShowRegulatoryMetadata from '../components/map/ShowRegulatoryMetadata'
+import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
 const BaseMap = props => {
-  const { handleMovingAndZoom, handlePointerMove, handleMapClick, children } = props
+  const { handleMovingAndZoom, handlePointerMove, children, showCoordinates, setCurrentFeature, showAttributions } = props
   const mapState = useSelector(state => state.map)
   const dispatch = useDispatch()
 
@@ -27,10 +29,47 @@ const BaseMap = props => {
   const [isAnimating, setIsAnimating] = useState(false)
   const [initRenderIsDone, setInitRenderIsDone] = useState(false)
   const [cursorCoordinates, setCursorCoordinates] = useState('')
+  const [mapClickEvent, setMapClickEvent] = useState(null)
 
   const mapElement = useRef()
   const mapRef = useRef()
   mapRef.current = map
+
+  const handleMapClick = (event, map) => {
+    if (event && map) {
+      const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
+      setMapClickEvent({ feature })
+
+      if (feature && feature.getId()) {
+        map.getTarget().style.cursor = 'pointer'
+      } else if (map.getTarget().style) {
+        map.getTarget().style.cursor = ''
+      }
+    }
+  }
+
+  const handleBasePointerMove = (event, map) => {
+    if (event && map) {
+      const pixel = map.getEventPixel(event.originalEvent)
+      const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
+
+      if (feature && feature.getId()) {
+        if (setCurrentFeature) {
+          setCurrentFeature(feature)
+        }
+        map.getTarget().style.cursor = 'pointer'
+      } else if (map.getTarget().style) {
+        map.getTarget().style.cursor = ''
+        if (setCurrentFeature) {
+          setCurrentFeature(null)
+        }
+      }
+
+      if (handlePointerMove) {
+        handlePointerMove(event, map)
+      }
+    }
+  }
 
   useEffect(() => {
     initMap()
@@ -61,9 +100,7 @@ const BaseMap = props => {
         ]
       })
 
-      if (handleMapClick) {
-        initialMap.on('click', event => handleMapClick(event, initialMap))
-      }
+      initialMap.on('click', event => handleMapClick(event, initialMap))
       initialMap.on('pointermove', event => throttleAndHandlePointerMove(event, initialMap))
       initialMap.on('moveend', () => throttleAndHandleMovingAndZoom(initialMap))
 
@@ -99,10 +136,11 @@ const BaseMap = props => {
 
     timeoutForPointerMove = setTimeout(() => {
       timeoutForPointerMove = null
-      if (handlePointerMove) {
-        handlePointerMove(lastEventForPointerMove, map)
+      handleBasePointerMove(lastEventForPointerMove, map)
+
+      if (showCoordinates) {
+        showCoordinatesInDMS(lastEventForPointerMove)
       }
-      showCoordinatesInDMS(lastEventForPointerMove)
     }, 100)
   }
 
@@ -135,19 +173,25 @@ const BaseMap = props => {
   }
 
   return (
-        <div>
+        <MapWrapper>
             <MapContainer ref={mapElement} />
             <BaseLayer map={map} />
             <RegulatoryLayers map={map} />
             <AdministrativeLayers map={map} />
-            <MapCoordinatesBox coordinates={cursorCoordinates}/>
-            <MapAttributionsBox />
+            <ShowRegulatoryMetadata mapClickEvent={mapClickEvent} />
+            {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
+            {showAttributions && <MapAttributionsBox />}
             {map && Children.map(children, (child) => (
-              child && cloneElement(child, { map })
+              child && cloneElement(child, { map, mapClickEvent })
             ))}
-        </div>
+        </MapWrapper>
   )
 }
+
+const MapWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`
 
 const MapContainer = styled.div`
   height: 100vh;

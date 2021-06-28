@@ -2,6 +2,7 @@ import { transform } from 'ol/proj'
 import { WSG84_PROJECTION } from './domain/entities/map'
 import { toStringHDMS } from 'ol/coordinate'
 import { asArray, asString } from 'ol/color'
+import { createSlice } from '@reduxjs/toolkit'
 
 export const calculatePointsDistance = (coord1, coord2) => {
   const dx = coord1[0] - coord2[0]
@@ -224,4 +225,15 @@ export const removeAccents = text => Object.keys(accentsMap)
 
 export function getNauticalMilesFromMeters (length) {
   return Math.round((length / 1000) * 100 * 0.539957) / 100
+}
+
+export function createGenericSlice (initialState, reducers, layerName) {
+  const initialStateCopy = Object.assign({}, initialState)
+  const reducersCopy = Object.assign({}, reducers)
+  const sliceObject = {
+    name: layerName,
+    initialState: initialStateCopy,
+    reducers: reducersCopy
+  }
+  return createSlice(sliceObject)
 }

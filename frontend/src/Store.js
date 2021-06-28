@@ -1,10 +1,15 @@
-import reducer from './domain/reducers'
+import { homeReducers, backofficeReducers } from './domain/reducers'
 import { configureStore } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
 
-const store = configureStore({
-  reducer: reducer,
+const homeStore = configureStore({
+  reducer: homeReducers,
   middleware: [thunk]
 })
 
-export default store
+const backofficeStore = configureStore({
+  reducer: backofficeReducers,
+  middleware: [thunk]
+})
+
+export { homeStore, backofficeStore }

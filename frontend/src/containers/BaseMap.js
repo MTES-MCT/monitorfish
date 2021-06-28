@@ -21,7 +21,7 @@ import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
 const BaseMap = props => {
-  const { handleMovingAndZoom, handlePointerMove, children, showCoordinates } = props
+  const { handleMovingAndZoom, handlePointerMove, children, showCoordinates, setCurrentFeature, showAttributions } = props
   const mapState = useSelector(state => state.map)
   const dispatch = useDispatch()
 
@@ -39,8 +39,38 @@ const BaseMap = props => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
       setMapClickEvent({ feature })
+
+      if (feature && feature.getId()) {
+        map.getTarget().style.cursor = 'pointer'
+      } else if (map.getTarget().style) {
+        map.getTarget().style.cursor = ''
+      }
     }
   }
+
+  const handleBasePointerMove = (event, map) => {
+    if (event && map) {
+      const pixel = map.getEventPixel(event.originalEvent)
+      const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
+
+      if (feature && feature.getId()) {
+        if (setCurrentFeature) {
+          setCurrentFeature(feature)
+        }
+        map.getTarget().style.cursor = 'pointer'
+      } else if (map.getTarget().style) {
+        map.getTarget().style.cursor = ''
+        if (setCurrentFeature) {
+          setCurrentFeature(null)
+        }
+      }
+
+      if (handlePointerMove) {
+        handlePointerMove(event, map)
+      }
+    }
+  }
+
 
   useEffect(() => {
     initMap()
@@ -107,9 +137,8 @@ const BaseMap = props => {
 
     timeoutForPointerMove = setTimeout(() => {
       timeoutForPointerMove = null
-      if (handlePointerMove) {
-        handlePointerMove(lastEventForPointerMove, map)
-      }
+      handleBasePointerMove(lastEventForPointerMove, map)
+
       if (showCoordinates) {
         showCoordinatesInDMS(lastEventForPointerMove)
       }
@@ -152,7 +181,7 @@ const BaseMap = props => {
             <AdministrativeLayers map={map} />
             <ShowRegulatoryMetadata mapClickEvent={mapClickEvent} />
             {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
-            <MapAttributionsBox />
+            {showAttributions && <MapAttributionsBox />}
             {map && Children.map(children, (child) => (
               child && cloneElement(child, { map, mapClickEvent })
             ))}

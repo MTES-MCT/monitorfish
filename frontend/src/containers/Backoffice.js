@@ -133,7 +133,7 @@ const Backoffice = () => {
             </BlackButton>
         </ButtonListFooter>
       </RegulatoryZonePanel>
-      <BaseMap />
+      <BaseMap/>
     </BackofficeContainer>
     <MetadataWrapper
       regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
@@ -232,7 +232,7 @@ const MetadataWrapper = styled.div`
   top: 0;
   left: 50%;
   z-index: 1;
-  width: 350px;
+  width: 380px;
   border-radius: 2px;
   color: #515151;
   text-decoration: none;
@@ -240,10 +240,9 @@ const MetadataWrapper = styled.div`
   padding: 10px;
   margin: 6px 0 0 6px;
   flex-direction: column;
-  max-height: 100vh;
+  max-height: 95vh;
   transition: all 0.5s;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
-  
 `
 
 const SearchBoxInput = styled.input`

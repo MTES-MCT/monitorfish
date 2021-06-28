@@ -362,6 +362,7 @@ const RegulatoryName = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
+  margin-left: 5px;
 `
 
 const Header = styled.div`
@@ -378,7 +379,7 @@ const Content = styled.div`
   background: ${COLORS.background};
   margin-top: 6px;
   overflow-y: auto;
-  max-height: calc(100vh - 90px);
+  max-height: calc(100vh - 145px);
 `
 
 const REGPaperIcon = styled(REGPaperSVG)`

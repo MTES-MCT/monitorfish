@@ -88,6 +88,7 @@ const LawTypeText = styled.div`
 const RegulatoryZoneLayerList = styled.ul`
   margin: 0;
   overflow-y: auto;
+  overflow-x: unset;
   flex: 1;
   background-color: ${COLORS.background};
   border-radius: 0;
@@ -98,6 +99,8 @@ const RegulatoryZoneLayerList = styled.ul`
   height: ${props => props.isOpen ? 'unset' : '0'};
   opacity: ${props => props.isOpen ? '1' : '0'};
   transition:  all 0.5s;
+  overflow-x: hidden;
+  max-width: 100%;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

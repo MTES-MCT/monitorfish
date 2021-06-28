@@ -62,6 +62,7 @@ const LawType = props => {
 }
 
 const LawTypeContainer = styled.div`
+  margin-top: 10px;
   display: flex;
   min-height: 40px;
   flex-direction: column;
@@ -76,6 +77,7 @@ const LawTypeName = styled.div`
   text-align: left;
   text-transform: uppercase;
   cursor: pointer;
+  padding-bottom: 5px;
 `
 
 const LawTypeText = styled.div`

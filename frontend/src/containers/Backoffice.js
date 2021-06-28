@@ -79,7 +79,7 @@ const Backoffice = () => {
   const displayRegulatoryZoneByRegTerritory = (territory) => {
     const territoryRegList = regulatoryZoneListByRegTerritory[territory]
     return territoryRegList
-      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territoryRegList)} </RegulatoryZoneListByLawTypeList>
+      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territoryRegList)}</RegulatoryZoneListByLawTypeList>
       : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
   }
 
@@ -177,10 +177,11 @@ const Territory = styled.div`
 
 const TerritoryName = styled.div`
   display: flex;
-  font-size: 13px;
+  font-size: 16px;
   text-transform: uppercase;
   text-align: left;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.grayDarkerTwo};
+  font-weight: 600;
 `
 
 const RegulatoryZoneListByLawTypeList = styled.div`

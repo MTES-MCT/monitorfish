@@ -1,7 +1,6 @@
 import layer from './Layer'
 import global from './Global'
 import map from './Map'
-import backofficeMap from './BackofficeMap'
 import vessel from './Vessel'
 import gear from './Gear'
 import filter from './Filter'
@@ -11,7 +10,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 
 const homeReducers = combineReducers({
   layer: layer.homepage.reducer,
-  map: map,
+  map,
   global: global,
   vessel: vessel,
   gear: gear,
@@ -22,7 +21,7 @@ const homeReducers = combineReducers({
 
 const backofficeReducers = combineReducers({
   layer: layer.backoffice.reducer,
-  map: backofficeMap,
+  map,
   gear: gear,
   regulatory: regulatory
 })

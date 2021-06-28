@@ -14,3 +14,5 @@ export const COLORS = {
   red: '#E1000F',
   white: '#FFFFFF'
 }
+
+export const HIT_PIXEL_TO_TOLERANCE = 3

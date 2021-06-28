@@ -15,11 +15,13 @@ import MapAttributionsBox from '../components/map/MapAttributionsBox'
 import BaseLayer from '../layers/BaseLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
+import ShowRegulatoryMetadata from '../components/map/ShowRegulatoryMetadata'
+import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
 const BaseMap = props => {
-  const { handleMovingAndZoom, handlePointerMove, handleMapClick, children } = props
+  const { handleMovingAndZoom, handlePointerMove, children, showCoordinates } = props
   const mapState = useSelector(state => state.map)
   const dispatch = useDispatch()
 
@@ -27,10 +29,18 @@ const BaseMap = props => {
   const [isAnimating, setIsAnimating] = useState(false)
   const [initRenderIsDone, setInitRenderIsDone] = useState(false)
   const [cursorCoordinates, setCursorCoordinates] = useState('')
+  const [mapClickEvent, setMapClickEvent] = useState(null)
 
   const mapElement = useRef()
   const mapRef = useRef()
   mapRef.current = map
+
+  const handleMapClick = (event, map) => {
+    if (event && map) {
+      const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
+      setMapClickEvent({ feature })
+    }
+  }
 
   useEffect(() => {
     initMap()
@@ -61,9 +71,7 @@ const BaseMap = props => {
         ]
       })
 
-      if (handleMapClick) {
-        initialMap.on('click', event => handleMapClick(event, initialMap))
-      }
+      initialMap.on('click', event => handleMapClick(event, initialMap))
       initialMap.on('pointermove', event => throttleAndHandlePointerMove(event, initialMap))
       initialMap.on('moveend', () => throttleAndHandleMovingAndZoom(initialMap))
 
@@ -102,7 +110,9 @@ const BaseMap = props => {
       if (handlePointerMove) {
         handlePointerMove(lastEventForPointerMove, map)
       }
-      showCoordinatesInDMS(lastEventForPointerMove)
+      if (showCoordinates) {
+        showCoordinatesInDMS(lastEventForPointerMove)
+      }
     }, 100)
   }
 
@@ -140,10 +150,11 @@ const BaseMap = props => {
             <BaseLayer map={map} />
             <RegulatoryLayers map={map} />
             <AdministrativeLayers map={map} />
-            <MapCoordinatesBox coordinates={cursorCoordinates}/>
+            <ShowRegulatoryMetadata mapClickEvent={mapClickEvent} />
+            {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
             <MapAttributionsBox />
             {map && Children.map(children, (child) => (
-              child && cloneElement(child, { map })
+              child && cloneElement(child, { map, mapClickEvent })
             ))}
         </MapWrapper>
   )

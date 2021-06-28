@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as REGPaperSVG } from '../icons/reg_paper.svg'
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
+import { ReactComponent as AlertSVG } from '../icons/Picto_alerte.svg'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { getDateTime } from '../../utils'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
@@ -74,6 +75,10 @@ const RegulatoryZoneMetadata = () => {
                             </RegulatoryName>
                             <CloseIcon onClick={() => dispatch(closeRegulatoryZoneMetadata())}/>
                         </Header>
+                        <Warning>
+                          <WarningIcon/>
+                          Travail en cours, bien vérifier dans Légipêche la validité de la référence et des infos réglementaires
+                        </Warning>
                         <Content>
                             {
                                 regulatoryZoneMetadata.seafront ||
@@ -368,6 +373,7 @@ const RegulatoryName = styled.span`
 const Header = styled.div`
   color: ${COLORS.grayDarkerThree};
   margin-left: 6px;
+  margin-bottom: 6px;
   text-align: left;
   height: 1.5em;
   display: flex;
@@ -380,6 +386,23 @@ const Content = styled.div`
   margin-top: 6px;
   overflow-y: auto;
   max-height: calc(100vh - 145px);
+`
+
+const Warning = styled.div`
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
+  background: ${COLORS.orange};
+  display: flex;
+  text-align: left;
+  font: normal normal bold 13px/18px Marianne;
+  padding: 10px;
+`
+
+const WarningIcon = styled(AlertSVG)`
+  width: 30px;
+  flex: 57px;
+  height: 30px;
+  margin: 4px 10px 0px 0;
 `
 
 const REGPaperIcon = styled(REGPaperSVG)`

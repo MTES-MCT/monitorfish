@@ -24,8 +24,8 @@ const Filter = ({ filter, index, isLastItem, removeFilter, showFilter, hideFilte
         </Text>
         {
           filter.showed
-            ? <ShowIcon title="Cacher le filtre" onClick={() => hideFilters()} />
-            : <HideIcon title="Afficher le filtre" onClick={() => showFilter(filter.uuid)} />
+            ? <ShowIcon title="Cacher le filtre" onClick={() => hideFilters()}/>
+            : <HideIcon title="Afficher le filtre" onClick={() => showFilter(filter.uuid)}/>
         }
         <CloseIcon title="Supprimer le filtre de ma sélection" onClick={() => removeFilter(filter.uuid)}/>
       </FilterItem>

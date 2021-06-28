@@ -20,7 +20,7 @@ const getControls = (vesselId, fromDate, userRequest) => (dispatch, getState) =>
     getVesselControlsFromAPI(vesselId, fromDate).then(controlResumeAndControls => {
       if (isSameVesselAsCurrentlyShowed && !userRequest) {
         if (currentControlResumeAndControls.controls && controlResumeAndControls.controls &&
-                    controlResumeAndControls.controls.length > currentControlResumeAndControls.controls.length) {
+          controlResumeAndControls.controls.length > currentControlResumeAndControls.controls.length) {
           dispatch(setNextControlResumeAndControls(controlResumeAndControls))
         }
       } else {
@@ -33,7 +33,7 @@ const getControls = (vesselId, fromDate, userRequest) => (dispatch, getState) =>
       dispatch(resetLoadingVessel())
     })
   } else {
-    dispatch(setError(new NoControlsFoundError("Ce navire n'a aucun contrôle")))
+    dispatch(setError(new NoControlsFoundError('Ce navire n\'a aucun contrôle')))
     dispatch(setControlResumeAndControls({
       controls: []
     }))

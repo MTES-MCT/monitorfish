@@ -14,6 +14,7 @@ import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverla
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
 import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
+
 console.log('HIT_PIXEL_TO_TOLERANCE ' + HIT_PIXEL_TO_TOLERANCE)
 
 const Map = () => {
@@ -42,29 +43,29 @@ const Map = () => {
   }
 
   return (
-        <BaseMap
-          handleMovingAndZoom={handleMovingAndZoom}
-          handlePointerMove={handlePointerMove}
-          setCurrentFeature={setCurrentFeature}
-          showCoordinates={true}
-          showAttributions={true}
-        >
-            <MapVesselAnimation
-              mapMovingAndZoomEvent={mapMovingAndZoomEvent}
-            />
-            <MapHistory
-              shouldUpdateView={shouldUpdateView}
-              setShouldUpdateView={setShouldUpdateView}
-              historyMoveTrigger={historyMoveTrigger}/>
-            <MeasurementLayer />
-            <VesselTrackLayer />
-            <VesselsLayer />
-            <DrawLayer />
-            <VesselCardOverlay feature={currentFeature} />
-            <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature} />
-            <VesselTrackCardOverlay feature={currentFeature} />
-            <LayerDetailsBox gears={gears} feature={currentFeature} />
-        </BaseMap>
+    <BaseMap
+      handleMovingAndZoom={handleMovingAndZoom}
+      handlePointerMove={handlePointerMove}
+      setCurrentFeature={setCurrentFeature}
+      showCoordinates={true}
+      showAttributions={true}
+    >
+      <MapVesselAnimation
+        mapMovingAndZoomEvent={mapMovingAndZoomEvent}
+      />
+      <MapHistory
+        shouldUpdateView={shouldUpdateView}
+        setShouldUpdateView={setShouldUpdateView}
+        historyMoveTrigger={historyMoveTrigger}/>
+      <MeasurementLayer/>
+      <VesselTrackLayer/>
+      <VesselsLayer/>
+      <DrawLayer/>
+      <VesselCardOverlay feature={currentFeature}/>
+      <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
+      <VesselTrackCardOverlay feature={currentFeature}/>
+      <LayerDetailsBox gears={gears} feature={currentFeature}/>
+    </BaseMap>
   )
 }
 

@@ -72,8 +72,8 @@ const RegulatoryZoneSelectedLayer = props => {
 
   const displayNumberOfZones = () => {
     const zoneNumber = regulatorySubZones.length
-    return (<ZoneNumber >
-      {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
+    return (<ZoneNumber>
+        {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
       </ZoneNumber>
     )
   }
@@ -88,18 +88,18 @@ const RegulatoryZoneSelectedLayer = props => {
       }
 
       return (
-          <RegulatoryZoneSelectedZone
-              subZone={subZone}
-              vectorLayerStyle={vectorLayerStyle}
-              key={`${subZone.layerName}:${subZone.zone}`}
-              isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
-              callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
-              regulatoryZoneMetadata={props.regulatoryZoneMetadata}
-              showWholeLayer={showWholeLayer}
-              namespace={namespace}
-              zoneIsShown={getZoneIsShown(subZone)}
-              allowRemoveZone={allowRemoveZone}
-          />
+        <RegulatoryZoneSelectedZone
+          subZone={subZone}
+          vectorLayerStyle={vectorLayerStyle}
+          key={`${subZone.layerName}:${subZone.zone}`}
+          isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
+          callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
+          regulatoryZoneMetadata={props.regulatoryZoneMetadata}
+          showWholeLayer={showWholeLayer}
+          namespace={namespace}
+          zoneIsShown={getZoneIsShown(subZone)}
+          allowRemoveZone={allowRemoveZone}
+        />
       )
     })
   }
@@ -112,30 +112,31 @@ const RegulatoryZoneSelectedLayer = props => {
   }, [showedLayers])
 
   return (
-      <NamespaceContext.Consumer>
-      { namespace => (
+    <NamespaceContext.Consumer>
+      {namespace => (
         <Row>
-            <Zone isLastItem={isLastItem} isOpen={isOpen}>
-                <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
-                    <ChevronIcon firstUpdate={firstUpdate} isOpen={isOpen}/>
-                    {regulatoryZoneName.replace(/[_]/g, ' ')}
-                </Text>
-                {displayNumberOfZones()}
-                { atLeastOneLayerIsShowed
-                  ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })} />
-                  : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })} />}
-                { allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/> }
-            </Zone>
-            <List
-                isOpen={isOpen}
-                name={regulatoryZoneName.replace(/\s/g, '-')}
-                length={regulatorySubZones.length}
-                firstUpdate={firstUpdate}>
-                {regulatorySubZones && showedLayers && showRegulatoryZonesSelected(namespace)}
-              </List>
+          <Zone isLastItem={isLastItem} isOpen={isOpen}>
+            <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
+              <ChevronIcon firstUpdate={firstUpdate} isOpen={isOpen}/>
+              {regulatoryZoneName.replace(/[_]/g, ' ')}
+            </Text>
+            {displayNumberOfZones()}
+            {atLeastOneLayerIsShowed
+              ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })}/>
+              : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })}/>}
+            {allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection"
+                                           onClick={() => callRemoveRegulatoryZoneFromMySelection(getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/>}
+          </Zone>
+          <List
+            isOpen={isOpen}
+            name={regulatoryZoneName.replace(/\s/g, '-')}
+            length={regulatorySubZones.length}
+            firstUpdate={firstUpdate}>
+            {regulatorySubZones && showedLayers && showRegulatoryZonesSelected(namespace)}
+          </List>
         </Row>
       )}
-      </NamespaceContext.Consumer>
+    </NamespaceContext.Consumer>
   )
 }
 

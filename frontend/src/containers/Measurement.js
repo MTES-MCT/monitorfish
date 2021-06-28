@@ -69,9 +69,12 @@ const Measurement = () => {
 
   const getMeasurementIcon = measurementType => {
     switch (measurementType) {
-      case MeasurementTypes.MULTILINE: return <MultiLineIcon/>
-      case MeasurementTypes.CIRCLE_RANGE: return <CircleRangeIcon/>
-      default: return <MeasurementIcon rightMenuIsOpen={rightMenuIsOpen} selectedVessel={selectedVessel}/>
+      case MeasurementTypes.MULTILINE:
+        return <MultiLineIcon/>
+      case MeasurementTypes.CIRCLE_RANGE:
+        return <CircleRangeIcon/>
+      default:
+        return <MeasurementIcon rightMenuIsOpen={rightMenuIsOpen} selectedVessel={selectedVessel}/>
     }
   }
 

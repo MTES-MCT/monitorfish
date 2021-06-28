@@ -28,44 +28,52 @@ const LastPositionsSlider = props => {
   }
 
   return (
-        <>
-            { value
-              ? <SliderWrapper>
-                    <Nouislider
-                        range={{
-                          min: [0, 1],
-                          max: [6]
-                        }}
-                        start={value}
-                        connect={[true, true, true]}
-                        onSlide={(render, handle, nextValue) => updateValue(nextValue)}
-                        behaviour="tap"
-                    />
-                    <RangeSlider
-                        min={0}
-                        max={labels.length - 1}
-                        value={value}
-                        defaultValue={value}
-                        graduated
-                        tooltip={false}
-                        onChange={nextValue => updateValue(nextValue)}
-                        renderMark={mark => {
-                          switch (mark) {
-                            case 0: return '48h'
-                            case 1: return '24h'
-                            case 2: return '12h'
-                            case 3: return '6h'
-                            case 4: return '3h'
-                            case 5: return '2h'
-                            case 6: return '1h'
-                            default: return null
-                          }
-                        }}
-                    />
-                </SliderWrapper>
-              : null
-            }
-        </>
+    <>
+      {value
+        ? <SliderWrapper>
+          <Nouislider
+            range={{
+              min: [0, 1],
+              max: [6]
+            }}
+            start={value}
+            connect={[true, true, true]}
+            onSlide={(render, handle, nextValue) => updateValue(nextValue)}
+            behaviour="tap"
+          />
+          <RangeSlider
+            min={0}
+            max={labels.length - 1}
+            value={value}
+            defaultValue={value}
+            graduated
+            tooltip={false}
+            onChange={nextValue => updateValue(nextValue)}
+            renderMark={mark => {
+              switch (mark) {
+                case 0:
+                  return '48h'
+                case 1:
+                  return '24h'
+                case 2:
+                  return '12h'
+                case 3:
+                  return '6h'
+                case 4:
+                  return '3h'
+                case 5:
+                  return '2h'
+                case 6:
+                  return '1h'
+                default:
+                  return null
+              }
+            }}
+          />
+        </SliderWrapper>
+        : null
+      }
+    </>
   )
 }
 

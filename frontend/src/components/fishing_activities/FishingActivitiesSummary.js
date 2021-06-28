@@ -146,13 +146,13 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
 
   function getGears () {
     if (depMessage &&
-          depMessage.message &&
-          depMessage.message.gearOnboard &&
-          depMessage.message.gearOnboard.length) {
+      depMessage.message &&
+      depMessage.message.gearOnboard &&
+      depMessage.message.gearOnboard.length) {
       const uniqueGears = depMessage.message.gearOnboard.reduce((acc, current) => {
         const found = acc.find(item =>
           item.gear === current.gear &&
-                  item.gearName === current.gearName)
+          item.gearName === current.gearName)
         if (!found) {
           return acc.concat([current])
         } else {
@@ -171,145 +171,145 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
   }
 
   return <>
-        {fishingActivities
-          ? <Body>
-                <Zone>
-                    <Title>
-                        <Text>Segment(s) de flotte(s) actuel(s)</Text>
-                        <TextValue>
-                          <FleetSegments
-                            vesselLastPositionFeature={vesselLastPositionFeature}
-                            fleetSegmentsReferential={fleetSegments}
-                          />
-                        </TextValue>
-                    </Title>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Engins à bord (JPE)</Key>
-                                <Value>
-                                    {
-                                        getGears()
-                                    }
-                                </Value>
-                            </Field>
-                            <Field>
-                                <Key>Zones de la marée (JPE)</Key>
-                                <Value>{faoZones && faoZones.length
-                                  ? faoZones.map((faoZone, index) => {
-                                    return <span
-                                            key={index}>{faoZone}{index === faoZones.length - 1 ? '' : ', '}</span>
-                                  })
-                                  : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
-                <Zone>
-                    <Title>
-                        <Text>Licences</Text>
-                        <TextValue>{fishingActivities.isExpired
-                          ? fishingActivities.isExpired
-                          : <NoValue>à venir</NoValue>}</TextValue>
-                    </Title>
-                </Zone>
-                <Zone>
-                    <Title hasTwoLines={false}>
-                        <Text hasTwoLines={false}>Résumé de la marée</Text>
-                        <TextValue hasTwoLines={false}>
-                          <PreviousTrip
-                            disabled={!previousBeforeDateTime}
-                            onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
-                            title={'Marée précédente'}
-                          />
-                          {
-                            depMessage && depMessage.tripNumber
-                              ? `Marée n°${depMessage.tripNumber}`
-                              : <NoValue>-</NoValue>
-                          }
-                          <NextTrip
-                            disabled={isLastVoyage}
-                            onClick={!isLastVoyage && navigation.goToNextTrip}
-                            title={'Marée suivante'}
-                          />
-                          <LastTrip
-                            disabled={isLastVoyage}
-                            onClick={!isLastVoyage && navigation.goToLastTrip}
-                            title={'Dernière marée'}
-                          />
-                        </TextValue>
-                        <SeeAll onClick={() => showERSMessages()}>Voir tous les messages</SeeAll>
-                        <Arrow onClick={() => showERSMessages()}/>
-                    </Title>
-                    {
-                        fishingActivities && fishingActivities.ersMessages && fishingActivities.ersMessages.length
-                          ? <ERSMessages>
-                                {depMessage
-                                  ? <DEPMessageResume
-                                        id={depMessage.ersId}
-                                        showERSMessages={showERSMessages}
-                                        depMessage={depMessage.message}
-                                        isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
-                                        isDeleted={depMessage.deleted}
-                                        rejectionCause={depMessage.acknowledge && depMessage.acknowledge.rejectionCause ? depMessage.acknowledge.rejectionCause : null}/>
-                                  : <DEPMessageResume hasNoMessage={true}/>
-                                }
+    {fishingActivities
+      ? <Body>
+        <Zone>
+          <Title>
+            <Text>Segment(s) de flotte(s) actuel(s)</Text>
+            <TextValue>
+              <FleetSegments
+                vesselLastPositionFeature={vesselLastPositionFeature}
+                fleetSegmentsReferential={fleetSegments}
+              />
+            </TextValue>
+          </Title>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Engins à bord (JPE)</Key>
+                <Value>
+                  {
+                    getGears()
+                  }
+                </Value>
+              </Field>
+              <Field>
+                <Key>Zones de la marée (JPE)</Key>
+                <Value>{faoZones && faoZones.length
+                  ? faoZones.map((faoZone, index) => {
+                    return <span
+                      key={index}>{faoZone}{index === faoZones.length - 1 ? '' : ', '}</span>
+                  })
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          <Title>
+            <Text>Licences</Text>
+            <TextValue>{fishingActivities.isExpired
+              ? fishingActivities.isExpired
+              : <NoValue>à venir</NoValue>}</TextValue>
+          </Title>
+        </Zone>
+        <Zone>
+          <Title hasTwoLines={false}>
+            <Text hasTwoLines={false}>Résumé de la marée</Text>
+            <TextValue hasTwoLines={false}>
+              <PreviousTrip
+                disabled={!previousBeforeDateTime}
+                onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
+                title={'Marée précédente'}
+              />
+              {
+                depMessage && depMessage.tripNumber
+                  ? `Marée n°${depMessage.tripNumber}`
+                  : <NoValue>-</NoValue>
+              }
+              <NextTrip
+                disabled={isLastVoyage}
+                onClick={!isLastVoyage && navigation.goToNextTrip}
+                title={'Marée suivante'}
+              />
+              <LastTrip
+                disabled={isLastVoyage}
+                onClick={!isLastVoyage && navigation.goToLastTrip}
+                title={'Dernière marée'}
+              />
+            </TextValue>
+            <SeeAll onClick={() => showERSMessages()}>Voir tous les messages</SeeAll>
+            <Arrow onClick={() => showERSMessages()}/>
+          </Title>
+          {
+            fishingActivities && fishingActivities.ersMessages && fishingActivities.ersMessages.length
+              ? <ERSMessages>
+                {depMessage
+                  ? <DEPMessageResume
+                    id={depMessage.ersId}
+                    showERSMessages={showERSMessages}
+                    depMessage={depMessage.message}
+                    isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
+                    isDeleted={depMessage.deleted}
+                    rejectionCause={depMessage.acknowledge && depMessage.acknowledge.rejectionCause ? depMessage.acknowledge.rejectionCause : null}/>
+                  : <DEPMessageResume hasNoMessage={true}/>
+                }
 
-                                {farMessages && farMessages.length && farMessages[0]
-                                  ? <FARMessageResume
-                                        id={farMessages[0].ersId}
-                                        showERSMessages={showERSMessages}
-                                        totalFARWeight={totalFARWeight}
-                                        numberOfMessages={farMessages ? farMessages.length : 0}
-                                        speciesToWeightOfFAR={speciesToWeightOfFAR}/>
-                                  : <FARMessageResume hasNoMessage={true}/>
-                                }
+                {farMessages && farMessages.length && farMessages[0]
+                  ? <FARMessageResume
+                    id={farMessages[0].ersId}
+                    showERSMessages={showERSMessages}
+                    totalFARWeight={totalFARWeight}
+                    numberOfMessages={farMessages ? farMessages.length : 0}
+                    speciesToWeightOfFAR={speciesToWeightOfFAR}/>
+                  : <FARMessageResume hasNoMessage={true}/>
+                }
 
-                                {disMessages && disMessages.length && disMessages[0]
-                                  ? <DISMessageResume
-                                        id={disMessages[0].ersId}
-                                        totalDISWeight={totalDISWeight}
-                                        numberOfMessages={disMessages ? disMessages.length : 0}
-                                        speciesToWeightOfDIS={speciesToWeightOfDIS}
-                                        showERSMessages={showERSMessages}/>
-                                  : <DISMessageResume hasNoMessage={true}/>
-                                }
+                {disMessages && disMessages.length && disMessages[0]
+                  ? <DISMessageResume
+                    id={disMessages[0].ersId}
+                    totalDISWeight={totalDISWeight}
+                    numberOfMessages={disMessages ? disMessages.length : 0}
+                    speciesToWeightOfDIS={speciesToWeightOfDIS}
+                    showERSMessages={showERSMessages}/>
+                  : <DISMessageResume hasNoMessage={true}/>
+                }
 
-                                {pnoMessage
-                                  ? <PNOMessageResume
-                                        id={pnoMessage.ersId}
-                                        totalFARAndDEPWeight={totalFARAndDEPWeight}
-                                        speciesToWeightOfPNO={speciesToWeightOfPNO}
-                                        speciesToWeightOfFAR={speciesToWeightOfFAR}
-                                        showERSMessages={showERSMessages}
-                                        isNotAcknowledged={pnoMessage.acknowledge && pnoMessage.acknowledge.isSuccess === false}
-                                        isDeleted={pnoMessage.deleted}
-                                        pnoMessage={pnoMessage}/>
-                                  : <PNOMessageResume hasNoMessage={true}/>
-                                }
+                {pnoMessage
+                  ? <PNOMessageResume
+                    id={pnoMessage.ersId}
+                    totalFARAndDEPWeight={totalFARAndDEPWeight}
+                    speciesToWeightOfPNO={speciesToWeightOfPNO}
+                    speciesToWeightOfFAR={speciesToWeightOfFAR}
+                    showERSMessages={showERSMessages}
+                    isNotAcknowledged={pnoMessage.acknowledge && pnoMessage.acknowledge.isSuccess === false}
+                    isDeleted={pnoMessage.deleted}
+                    pnoMessage={pnoMessage}/>
+                  : <PNOMessageResume hasNoMessage={true}/>
+                }
 
-                                {lanMessage
-                                  ? <LANMessageResume
-                                        id={lanMessage.ersId}
-                                        catchesOverToleranceAlert={getCatchesOverToleranceAlert()}
-                                        totalLANWeight={totalLANWeight}
-                                        totalPNOWeight={totalPNOWeight}
-                                        speciesToWeightOfFAR={speciesToWeightOfFAR}
-                                        speciesToWeightOfPNO={speciesToWeightOfPNO}
-                                        speciesToWeightOfLAN={speciesToWeightOfLAN}
-                                        showERSMessages={showERSMessages}
-                                        isNotAcknowledged={lanMessage.acknowledge && lanMessage.acknowledge.isSuccess === false}
-                                        isDeleted={lanMessage.deleted}
-                                        lanMessage={lanMessage.message}/>
-                                  : <LANMessageResume hasNoMessage={true}/>
-                                }
-                            </ERSMessages>
-                          : <NoMessage>Aucun message reçu</NoMessage>
-                    }
-                </Zone>
-            </Body>
-          : null}
-    </>
+                {lanMessage
+                  ? <LANMessageResume
+                    id={lanMessage.ersId}
+                    catchesOverToleranceAlert={getCatchesOverToleranceAlert()}
+                    totalLANWeight={totalLANWeight}
+                    totalPNOWeight={totalPNOWeight}
+                    speciesToWeightOfFAR={speciesToWeightOfFAR}
+                    speciesToWeightOfPNO={speciesToWeightOfPNO}
+                    speciesToWeightOfLAN={speciesToWeightOfLAN}
+                    showERSMessages={showERSMessages}
+                    isNotAcknowledged={lanMessage.acknowledge && lanMessage.acknowledge.isSuccess === false}
+                    isDeleted={lanMessage.deleted}
+                    lanMessage={lanMessage.message}/>
+                  : <LANMessageResume hasNoMessage={true}/>
+                }
+              </ERSMessages>
+              : <NoMessage>Aucun message reçu</NoMessage>
+          }
+        </Zone>
+      </Body>
+      : null}
+  </>
 }
 
 const PreviousTrip = styled(ArrowTripSVG)`

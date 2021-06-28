@@ -5,65 +5,72 @@ import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
 import { OverlayPosition } from '../overlays/position'
+
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselTrackCard = props => {
   return (
-        <>
-            <VesselCardHeader>
-                <VesselCardTitle>POSITION</VesselCardTitle>
-                <TimeAgo>
-                    {
-                        props.vessel.getProperties().dateTime
-                          ? <>
-                                {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
-                          : <NoValue>-</NoValue>
-                    }
-                </TimeAgo>
-            </VesselCardHeader>
-            <VesselCardBody>
-                <LatLon>
-                    <FieldName>Latitude</FieldName>
-                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[0]}</FieldValue>
-                    <FieldName>Longitude</FieldName>
-                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[1]}</FieldValue>
-                </LatLon>
-                <Course>
-                    <FieldName>Route</FieldName>
-                    <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course ? <>{props.vessel.getProperties().course}°</> : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Vitesse</FieldName>
-                    <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
-                </Course>
-                <Position>
-                    <FieldName>Type de signal</FieldName>
-                    <FieldValue>{props.vessel.getProperties().positionType ? props.vessel.getProperties().positionType : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Signal</FieldName>
-                    <FieldValue>
-                        {
-                            props.vessel.getProperties().dateTime
-                              ? <>
-                                    {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
-                                    <Gray>(UTC)</Gray></>
-                              : <NoValue>-</NoValue>
-                        }
-                    </FieldValue>
-                </Position>
-            </VesselCardBody>
-            <TrianglePointer>
-              {
-                props.overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow /> : null
-              }
-              {
-                props.overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow /> : null
-              }
-              {
-                props.overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow /> : null
-              }
-              {
-                props.overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow /> : null
-              }
-            </TrianglePointer>
-        </>
+    <>
+      <VesselCardHeader>
+        <VesselCardTitle>POSITION</VesselCardTitle>
+        <TimeAgo>
+          {
+            props.vessel.getProperties().dateTime
+              ? <>
+                {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+              : <NoValue>-</NoValue>
+          }
+        </TimeAgo>
+      </VesselCardHeader>
+      <VesselCardBody>
+        <LatLon>
+          <FieldName>Latitude</FieldName>
+          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[0]}</FieldValue>
+          <FieldName>Longitude</FieldName>
+          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[1]}</FieldValue>
+        </LatLon>
+        <Course>
+          <FieldName>Route</FieldName>
+          <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course
+            ? <>{props.vessel.getProperties().course}°</>
+            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldName>Vitesse</FieldName>
+          <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed
+            ? <>{props.vessel.getProperties().speed} Nds</>
+            : <NoValue>-</NoValue>}</FieldValue>
+        </Course>
+        <Position>
+          <FieldName>Type de signal</FieldName>
+          <FieldValue>{props.vessel.getProperties().positionType
+            ? props.vessel.getProperties().positionType
+            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldName>Signal</FieldName>
+          <FieldValue>
+            {
+              props.vessel.getProperties().dateTime
+                ? <>
+                  {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
+                  <Gray>(UTC)</Gray></>
+                : <NoValue>-</NoValue>
+            }
+          </FieldValue>
+        </Position>
+      </VesselCardBody>
+      <TrianglePointer>
+        {
+          props.overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
+        }
+        {
+          props.overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
+        }
+        {
+          props.overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
+        }
+        {
+          props.overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
+        }
+      </TrianglePointer>
+    </>
   )
 }
 

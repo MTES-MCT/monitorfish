@@ -97,7 +97,7 @@ const VesselSummary = props => {
       const uniqueGears = gears.reduce((acc, current) => {
         const found = acc.find(item =>
           item.code === current.code &&
-                  item.name === current.name)
+          item.name === current.name)
         if (!found) {
           return acc.concat([current])
         } else {
@@ -117,141 +117,152 @@ const VesselSummary = props => {
 
   return vessel
     ? (
-        <Body>
-            <PhotoZone>
+      <Body>
+        <PhotoZone>
+          {
+            photoFallback
+              ? <NoVessel/>
+              : <>
                 {
-                    photoFallback
-                      ? <NoVessel />
-                      : <>
-                            {
-                                vessel.mmsi
-                                  ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)} src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
-                                  : null
-                            }
-                        </>
+                  vessel.mmsi
+                    ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)}
+                             src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                    : null
                 }
-            </PhotoZone>
-            <ZoneWithoutBackground>
-                <LatLon>
-                    <FieldName>Latitude</FieldName>
-                    <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude) ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0] : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Longitude</FieldName>
-                    <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude) ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1] : <NoValue>-</NoValue>}</FieldValue>
-                </LatLon>
-                <Course>
-                    <FieldName>Route</FieldName>
-                    <FieldValue>{lastPosition && !isNaN(lastPosition.course) ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Vitesse</FieldName>
-                    <FieldValue>{lastPosition && !isNaN(lastPosition.speed) ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
-                </Course>
-                <Position>
-                    <FieldName>Dernier signal VMS</FieldName>
-                    <FieldValue>
-                        {
-                            lastPosition && lastPosition.dateTime
-                              ? <>
-                                    {getDateTime(lastPosition.dateTime, true)}{' '}
-                                    <Gray>(UTC)</Gray></>
-                              : <NoValue>-</NoValue>
-                        }
-                    </FieldValue>
-                    <FieldName>Dernier cadencement <Info title={'Cette valeur est calculée à partir des 2 dernières positions VMS reçues'}/></FieldName>
-                    <FieldValue>
-                        {
-                            props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().emissionPeriod
-                              ? <>1 signal toutes les {props.vesselLastPositionFeature.getProperties().emissionPeriod / 60} minutes</>
-                              : <NoValue>-</NoValue>
-                        }
-                    </FieldValue>
-                </Position>
-            </ZoneWithoutBackground>
-            <Zone>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>CFR</Key>
-                            <Value>
-                                {
-                                    getVesselOrLastPositionProperty('internalReferenceNumber')
-                                }
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>MMSI</Key>
-                            <Value>
-                                {
-                                    getVesselOrLastPositionProperty('mmsi')
-                                }
-                            </Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Marquage ext.</Key>
-                            <Value>
-                                {
-                                    getVesselOrLastPositionProperty('externalReferenceNumber')
-                                }
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Call Sign (IRCS)</Key>
-                            <Value>
-                                {
-                                    getVesselOrLastPositionProperty('ircs')
-                                }
-                            </Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-            </Zone>
-            <Zone>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Segments de flotte</Key>
-                            <Value>
-                                <FleetSegments
-                                  vesselLastPositionFeature={props.vesselLastPositionFeature}
-                                  fleetSegmentsReferential={props.fleetSegments}
-                                />
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Engins à bord (JPE)</Key>
-                            <Value>
-                                {
-                                    getGears()
-                                }
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Zones de la marée (FAR)</Key>
-                            <Value>
-                                {
-                                    faoZones && faoZones.length
-                                      ? faoZones.join(', ')
-                                      : <NoValue>Aucune zone de pêche reçue</NoValue>
-                                }
-                            </Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-            </Zone>
-            <Zone>
-                <Fields>
-                    <BodyWithTopPadding>
-                        <Field>
-                            <Key>Dernier contrôle</Key>
-                            <Value>{vessel.lastControl ? vessel.lastControl : <NoValue>à venir</NoValue>}</Value>
-                        </Field>
+              </>
+          }
+        </PhotoZone>
+        <ZoneWithoutBackground>
+          <LatLon>
+            <FieldName>Latitude</FieldName>
+            <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude)
+              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0]
+              : <NoValue>-</NoValue>}</FieldValue>
+            <FieldName>Longitude</FieldName>
+            <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude)
+              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1]
+              : <NoValue>-</NoValue>}</FieldValue>
+          </LatLon>
+          <Course>
+            <FieldName>Route</FieldName>
+            <FieldValue>{lastPosition && !isNaN(lastPosition.course)
+              ? <>{lastPosition.course}°</>
+              : <NoValue>-</NoValue>}</FieldValue>
+            <FieldName>Vitesse</FieldName>
+            <FieldValue>{lastPosition && !isNaN(lastPosition.speed)
+              ? <>{lastPosition.speed} Nds</>
+              : <NoValue>-</NoValue>}</FieldValue>
+          </Course>
+          <Position>
+            <FieldName>Dernier signal VMS</FieldName>
+            <FieldValue>
+              {
+                lastPosition && lastPosition.dateTime
+                  ? <>
+                    {getDateTime(lastPosition.dateTime, true)}{' '}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>
+              }
+            </FieldValue>
+            <FieldName>Dernier cadencement <Info
+              title={'Cette valeur est calculée à partir des 2 dernières positions VMS reçues'}/></FieldName>
+            <FieldValue>
+              {
+                props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().emissionPeriod
+                  ? <>1 signal toutes
+                    les {props.vesselLastPositionFeature.getProperties().emissionPeriod / 60} minutes</>
+                  : <NoValue>-</NoValue>
+              }
+            </FieldValue>
+          </Position>
+        </ZoneWithoutBackground>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>CFR</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('internalReferenceNumber')
+                  }
+                </Value>
+              </Field>
+              <Field>
+                <Key>MMSI</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('mmsi')
+                  }
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Marquage ext.</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('externalReferenceNumber')
+                  }
+                </Value>
+              </Field>
+              <Field>
+                <Key>Call Sign (IRCS)</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('ircs')
+                  }
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Segments de flotte</Key>
+                <Value>
+                  <FleetSegments
+                    vesselLastPositionFeature={props.vesselLastPositionFeature}
+                    fleetSegmentsReferential={props.fleetSegments}
+                  />
+                </Value>
+              </Field>
+              <Field>
+                <Key>Engins à bord (JPE)</Key>
+                <Value>
+                  {
+                    getGears()
+                  }
+                </Value>
+              </Field>
+              <Field>
+                <Key>Zones de la marée (FAR)</Key>
+                <Value>
+                  {
+                    faoZones && faoZones.length
+                      ? faoZones.join(', ')
+                      : <NoValue>Aucune zone de pêche reçue</NoValue>
+                  }
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          <Fields>
+            <BodyWithTopPadding>
+              <Field>
+                <Key>Dernier contrôle</Key>
+                <Value>{vessel.lastControl ? vessel.lastControl : <NoValue>à venir</NoValue>}</Value>
+              </Field>
 
-                    </BodyWithTopPadding>
-                </Fields>
-            </Zone>
-        </Body>
+            </BodyWithTopPadding>
+          </Fields>
+        </Zone>
+      </Body>
       )
     : null
 }

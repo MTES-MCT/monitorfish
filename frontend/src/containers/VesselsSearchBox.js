@@ -12,7 +12,8 @@ import searchVessels from '../domain/use_cases/searchVessels'
 import {
   getVesselFeatureAndIdentity,
   getVesselIdentityFromFeature,
-  getVesselIdentityFromVessel, vesselsAreEquals
+  getVesselIdentityFromVessel,
+  vesselsAreEquals
 } from '../domain/entities/vessel'
 import countries from 'i18n-iso-countries'
 import focusOnVesselSearch, { focusState } from '../domain/use_cases/focusOnVesselSearch'
@@ -190,8 +191,8 @@ const VesselsSearchBox = () => {
         <div>
           {flagState
             ? <Flag rel="preload"
-                  title={countries.getName(flagState, 'fr')}
-                  src={`flags/${flagState.toLowerCase()}.svg`}/>
+                    title={countries.getName(flagState, 'fr')}
+                    src={`flags/${flagState.toLowerCase()}.svg`}/>
             : null}
           <Name>
             <Highlighter
@@ -273,8 +274,8 @@ const VesselsSearchBox = () => {
               >
                 {selectedVesselFeatureAndIdentity.identity.flagState
                   ? <Flag
-                  title={countries.getName(selectedVesselFeatureAndIdentity.identity.flagState, 'fr')}
-                  src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`}/>
+                    title={countries.getName(selectedVesselFeatureAndIdentity.identity.flagState, 'fr')}
+                    src={`flags/${selectedVesselFeatureAndIdentity.identity.flagState.toLowerCase()}.svg`}/>
                   : null}
                 <VesselName>
                   {selectedVesselFeatureAndIdentity.identity.vesselName}
@@ -303,39 +304,39 @@ const VesselsSearchBox = () => {
           (foundVesselsOnMap && foundVesselsOnMap.length) ||
           (foundVesselsFromAPI && foundVesselsFromAPI.length)
             ? <Results>
-            <List>
-              {
-                foundVesselsOnMap.map((feature, index) => {
-                  const vessel = getVesselIdentityFromFeature(feature)
+              <List>
+                {
+                  foundVesselsOnMap.map((feature, index) => {
+                    const vessel = getVesselIdentityFromFeature(feature)
 
-                  return getListItem(
-                    feature.id_,
-                    feature.getProperties().flagState,
-                    feature.getProperties().internalReferenceNumber,
-                    feature.getProperties().externalReferenceNumber,
-                    feature.getProperties().ircs,
-                    feature.getProperties().mmsi,
-                    feature.getProperties().vesselName,
-                    getVesselFeatureAndIdentity(feature, vessel))
-                })
-              }
-              {
-                foundVesselsFromAPI.map((vessel, index) => {
-                  const vesselIdentity = getVesselIdentityFromVessel(vessel)
+                    return getListItem(
+                      feature.id_,
+                      feature.getProperties().flagState,
+                      feature.getProperties().internalReferenceNumber,
+                      feature.getProperties().externalReferenceNumber,
+                      feature.getProperties().ircs,
+                      feature.getProperties().mmsi,
+                      feature.getProperties().vesselName,
+                      getVesselFeatureAndIdentity(feature, vessel))
+                  })
+                }
+                {
+                  foundVesselsFromAPI.map((vessel, index) => {
+                    const vesselIdentity = getVesselIdentityFromVessel(vessel)
 
-                  return getListItem(
-                    index,
-                    vessel.flagState,
-                    vessel.internalReferenceNumber,
-                    vessel.externalReferenceNumber,
-                    vessel.ircs,
-                    vessel.mmsi,
-                    vessel.vesselName,
-                    getVesselFeatureAndIdentity(null, vesselIdentity))
-                })
-              }
-            </List>
-          </Results>
+                    return getListItem(
+                      index,
+                      vessel.flagState,
+                      vessel.internalReferenceNumber,
+                      vessel.externalReferenceNumber,
+                      vessel.ircs,
+                      vessel.mmsi,
+                      vessel.vesselName,
+                      getVesselFeatureAndIdentity(null, vesselIdentity))
+                  })
+                }
+              </List>
+            </Results>
             : ''
         }
       </Wrapper>
@@ -440,10 +441,10 @@ const Wrapper = styled.div`
   
   animation: ${props => props.isShowed ? 'vessel-search-box-opening' : 'vessel-search-box-closing'} 0.2s ease forwards,
     ${props => props.selectedVesselFeatureAndIdentity
-      ? props.rightMenuIsOpen && props.vesselSidebarIsOpen
-        ? 'vessel-search-box-opening-with-right-menu-hover'
-        : 'vessel-search-box-closing-with-right-menu-hover'
-      : null} 0.3s ease forwards;
+  ? props.rightMenuIsOpen && props.vesselSidebarIsOpen
+    ? 'vessel-search-box-opening-with-right-menu-hover'
+    : 'vessel-search-box-closing-with-right-menu-hover'
+  : null} 0.3s ease forwards;
 
   @keyframes vessel-search-box-opening {
     0%   { opacity: 0; }

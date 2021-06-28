@@ -121,15 +121,15 @@ const TrackExport = props => {
   }
 
   return (
-      <TrackExportButton
-        isClickable={props.positions && props.positions.length}
-        openBox={props.openBox}
-        firstUpdate={props.firstUpdate.current}
-        rightMenuIsOpen={props.rightMenuIsOpen}
-        onClick={() => props.positions && props.positions.length && download()}
-      >
-        <ExportIcon />
-      </TrackExportButton>
+    <TrackExportButton
+      isClickable={props.positions && props.positions.length}
+      openBox={props.openBox}
+      firstUpdate={props.firstUpdate.current}
+      rightMenuIsOpen={props.rightMenuIsOpen}
+      onClick={() => props.positions && props.positions.length && download()}
+    >
+      <ExportIcon/>
+    </TrackExportButton>
   )
 }
 

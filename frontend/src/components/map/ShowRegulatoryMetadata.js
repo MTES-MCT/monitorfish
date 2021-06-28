@@ -21,6 +21,7 @@ const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
       dispatch(showRegulatoryZoneMetadata(zone))
     }
   }
+
   return null
 }
 

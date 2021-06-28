@@ -30,7 +30,7 @@ const RightMenuOnHoverZone = () => {
         ? <Zone ref={wrapperRef} onMouseLeave={() => dispatch(contractRightMenu())}/>
         : null
     }
-    </>
+  </>
 }
 
 const Zone = styled.div`

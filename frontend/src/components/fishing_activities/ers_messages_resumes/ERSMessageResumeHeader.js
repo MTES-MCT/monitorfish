@@ -16,42 +16,42 @@ const ERSMessageResumeHeader = props => {
   }, [props.messageType])
 
   return <>
-        { props.messageType
-          ? <Wrapper>
-                <ERSMessageTitle
-                    onClick={() => props.setIsOpen(!props.isOpen)}
-                    hasNoMessage={props.hasNoMessage}
-                    isLastItem={props.isLastItem}>
-                    {
-                        props.hasNoMessage ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
-                    }
-                    <ERSMessageName
-                      isNotAcknowledged={props.isNotAcknowledged}
-                      hasNoMessage={props.hasNoMessage}
-                      title={
-                        props.rejectionCause
-                          ? props.rejectionCause
-                          : props.isDeleted
-                            ? 'Message supprimé'
-                            : ''
-                      }>
-                      {
-                        props.isNotAcknowledged || props.isDeleted
-                          ? <NotAcknowledgedOrDeleted />
-                          : null
-                      }
-                        { ERSMessageTypeEnum[props.messageType].name }
-                    </ERSMessageName>
-                    <ERSMessageResumeText title={props.onHoverText ? props.onHoverText : ''}>
-                        { props.hasNoMessage ? <Gray>Aucun message</Gray> : <>{props.title}{props.isAlert ? <Red /> : null}</> }
-                    </ERSMessageResumeText>
-                    {
-                        props.hasNoMessage ? null : <ShowThisMessage onClick={() => props.showERSMessages(props.messageType)}/>
-                    }
-                </ERSMessageTitle>
-            </Wrapper>
-          : null }
-    </>
+    {props.messageType
+      ? <Wrapper>
+        <ERSMessageTitle
+          onClick={() => props.setIsOpen(!props.isOpen)}
+          hasNoMessage={props.hasNoMessage}
+          isLastItem={props.isLastItem}>
+          {
+            props.hasNoMessage ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
+          }
+          <ERSMessageName
+            isNotAcknowledged={props.isNotAcknowledged}
+            hasNoMessage={props.hasNoMessage}
+            title={
+              props.rejectionCause
+                ? props.rejectionCause
+                : props.isDeleted
+                  ? 'Message supprimé'
+                  : ''
+            }>
+            {
+              props.isNotAcknowledged || props.isDeleted
+                ? <NotAcknowledgedOrDeleted/>
+                : null
+            }
+            {ERSMessageTypeEnum[props.messageType].name}
+          </ERSMessageName>
+          <ERSMessageResumeText title={props.onHoverText ? props.onHoverText : ''}>
+            {props.hasNoMessage ? <Gray>Aucun message</Gray> : <>{props.title}{props.isAlert ? <Red/> : null}</>}
+          </ERSMessageResumeText>
+          {
+            props.hasNoMessage ? null : <ShowThisMessage onClick={() => props.showERSMessages(props.messageType)}/>
+          }
+        </ERSMessageTitle>
+      </Wrapper>
+      : null}
+  </>
 }
 
 const Red = styled.span`
@@ -146,7 +146,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
         100% { transform: rotate(180deg);   }
       }
       `
-    }
+}
 `
 
 export default ERSMessageResumeHeader

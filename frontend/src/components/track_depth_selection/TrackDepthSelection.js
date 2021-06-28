@@ -63,35 +63,35 @@ const TrackDepthSelection = props => {
   }, [datesSelection])
 
   return (
-      <>
-          <TrackDepthSelectionButton
-            openBox={props.openBox}
-            firstUpdate={firstUpdate.current}
-            rightMenuIsOpen={props.rightMenuIsOpen}
-            trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
-            onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
-          >
-              <ClockIcon />
-          </TrackDepthSelectionButton>
-          <TrackDepthSelectionContent
-            openBox={props.openBox}
-            firstUpdate={firstUpdate.current}
-            rightMenuIsOpen={props.rightMenuIsOpen}
-            trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
-          >
-              Afficher la piste VMS du navire depuis :
-              <TrackDepthRadio
-                vesselTrackDepth={props.vesselTrackDepth}
-                showVesselTrackWithTrackDepth={props.showVesselTrackWithTrackDepth}
-                trackDepthRadioSelection={trackDepthRadioSelection}
-                setTrackDepthRadioSelection={setTrackDepthRadioSelection}
-              />
-              <TrackDepthDateRange
-                dates={datesSelection}
-                setDate={setDateSelection}
-              />
-          </TrackDepthSelectionContent>
-      </>
+    <>
+      <TrackDepthSelectionButton
+        openBox={props.openBox}
+        firstUpdate={firstUpdate.current}
+        rightMenuIsOpen={props.rightMenuIsOpen}
+        trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
+        onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
+      >
+        <ClockIcon/>
+      </TrackDepthSelectionButton>
+      <TrackDepthSelectionContent
+        openBox={props.openBox}
+        firstUpdate={firstUpdate.current}
+        rightMenuIsOpen={props.rightMenuIsOpen}
+        trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
+      >
+        Afficher la piste VMS du navire depuis :
+        <TrackDepthRadio
+          vesselTrackDepth={props.vesselTrackDepth}
+          showVesselTrackWithTrackDepth={props.showVesselTrackWithTrackDepth}
+          trackDepthRadioSelection={trackDepthRadioSelection}
+          setTrackDepthRadioSelection={setTrackDepthRadioSelection}
+        />
+        <TrackDepthDateRange
+          dates={datesSelection}
+          setDate={setDateSelection}
+        />
+      </TrackDepthSelectionContent>
+    </>
   )
 }
 

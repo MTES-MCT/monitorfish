@@ -65,11 +65,11 @@ const Control = styled(FilterControlSVG)`
 `
 
 export const IconTypes = {
-  FLEET_SEGMENT: <FleetSegment />,
-  ZONE: <Zone />,
-  GEAR: <Gear />,
-  SPECIES: <Species />,
-  LENGTH: <Length />,
-  CONTROL: <Control />,
-  DISTRICTS: <District />
+  FLEET_SEGMENT: <FleetSegment/>,
+  ZONE: <Zone/>,
+  GEAR: <Gear/>,
+  SPECIES: <Species/>,
+  LENGTH: <Length/>,
+  CONTROL: <Control/>,
+  DISTRICTS: <District/>
 }

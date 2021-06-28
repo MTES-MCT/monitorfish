@@ -72,15 +72,24 @@ export function getTopLeftMargin (nextOverlayPosition, margins) {
   } = margins
 
   switch (nextOverlayPosition) {
-    case OverlayPosition.TOP_LEFT: return [yTop, xLeft]
-    case OverlayPosition.TOP_RIGHT: return [yTop, xRight]
-    case OverlayPosition.BOTTOM_LEFT: return [yBottom, xLeft]
-    case OverlayPosition.BOTTOM_RIGHT: return [yBottom, xRight]
-    case OverlayPosition.TOP: return [yTop, xMiddle]
-    case OverlayPosition.RIGHT: return [yMiddle, xRight]
-    case OverlayPosition.BOTTOM: return [yBottom, xMiddle]
-    case OverlayPosition.LEFT: return [yMiddle, xLeft]
-    default: return [yBottom, yMiddle]
+    case OverlayPosition.TOP_LEFT:
+      return [yTop, xLeft]
+    case OverlayPosition.TOP_RIGHT:
+      return [yTop, xRight]
+    case OverlayPosition.BOTTOM_LEFT:
+      return [yBottom, xLeft]
+    case OverlayPosition.BOTTOM_RIGHT:
+      return [yBottom, xRight]
+    case OverlayPosition.TOP:
+      return [yTop, xMiddle]
+    case OverlayPosition.RIGHT:
+      return [yMiddle, xRight]
+    case OverlayPosition.BOTTOM:
+      return [yBottom, xMiddle]
+    case OverlayPosition.LEFT:
+      return [yMiddle, xLeft]
+    default:
+      return [yBottom, yMiddle]
   }
 }
 

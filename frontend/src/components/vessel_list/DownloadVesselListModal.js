@@ -77,8 +77,11 @@ const DownloadVesselListModal = props => {
 
         valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
-            case CSVOptions.flagState.code: filteredVesselObject[CSVOptions[valueChecked].name] = countries.getName(vessel[valueChecked], 'fr'); break
-            default: filteredVesselObject[CSVOptions[valueChecked].name] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
+            case CSVOptions.flagState.code:
+              filteredVesselObject[CSVOptions[valueChecked].name] = countries.getName(vessel[valueChecked], 'fr')
+              break
+            default:
+              filteredVesselObject[CSVOptions[valueChecked].name] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
           }
         })
 
@@ -91,75 +94,75 @@ const DownloadVesselListModal = props => {
   }
 
   return (
-        <Modal
-            size={'sm'}
-            backdrop
-            show={props.isOpen}
-            style={{ marginTop: 100 }}
-            onHide={() => props.setIsOpen(false)}
+    <Modal
+      size={'sm'}
+      backdrop
+      show={props.isOpen}
+      style={{ marginTop: 100 }}
+      onHide={() => props.setIsOpen(false)}
+    >
+      <Modal.Header>
+        <Modal.Title>
+          <Title>
+            Télécharger la liste des navires
+          </Title>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Description>Sélectionnez les colonnes à télécharger</Description>
+        <CheckboxGroup
+          inline
+          name="checkboxList"
+          value={valuesChecked}
+          onChange={handleChange}
         >
-            <Modal.Header>
-                <Modal.Title>
-                    <Title>
-                        Télécharger la liste des navires
-                    </Title>
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Description>Sélectionnez les colonnes à télécharger</Description>
-                <CheckboxGroup
-                    inline
-                    name="checkboxList"
-                    value={valuesChecked}
-                    onChange={handleChange}
-                >
-                    <Columns>
-                        <div>
-                            <Checkbox value={CSVOptions.targetNumber.code}>Priorité</Checkbox><br/>
-                            <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox><br/>
-                            <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
-                            <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox><br/>
-                            <Checkbox value={CSVOptions.mmsi.code}>MMSI</Checkbox><br/>
-                            <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox><br/>
-                            <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox><br/>
-                            <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox><br/>
-                            <Checkbox value={CSVOptions.lastControlDateTime.code}>Dernier contrôle</Checkbox><br/>
-                            <Checkbox value={CSVOptions.lastControlInfraction.code}>Infraction</Checkbox><br/>
-                            <Checkbox value={CSVOptions.postControlComment.code}>Observations</Checkbox><br/>
-                        </div>
-                        <div>
-                            <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>
-                            <Checkbox value={CSVOptions.latitude.code}>Latitude</Checkbox><br/>
-                            <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox><br/>
-                            <Checkbox value={CSVOptions.course.code}>Cap</Checkbox><br/>
-                            <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
-                            <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
-                            <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
-                            <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
-                            <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox><br/>
-                        </div>
-                    </Columns>
-                </CheckboxGroup>
-                <SelectAll>
-                    <Checkbox
-                        className={'checkbox-hidden'}
-                        indeterminate={indeterminate}
-                        checked={checkAll}
-                        onChange={handleCheckAll}
-                    >
-                        <SelectAllText>
-                            Tout {checkAll ? 'dé' : ''}sélectionner
-                        </SelectAllText>
-                    </Checkbox>
-                </SelectAll>
-            </Modal.Body>
-            <Modal.Footer>
-                <DownloadButton
-                    onClick={() => download()}>
-                    Télécharger le tableau
-                </DownloadButton>
-            </Modal.Footer>
-        </Modal>
+          <Columns>
+            <div>
+              <Checkbox value={CSVOptions.targetNumber.code}>Priorité</Checkbox><br/>
+              <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox><br/>
+              <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
+              <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox><br/>
+              <Checkbox value={CSVOptions.mmsi.code}>MMSI</Checkbox><br/>
+              <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox><br/>
+              <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox><br/>
+              <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox><br/>
+              <Checkbox value={CSVOptions.lastControlDateTime.code}>Dernier contrôle</Checkbox><br/>
+              <Checkbox value={CSVOptions.lastControlInfraction.code}>Infraction</Checkbox><br/>
+              <Checkbox value={CSVOptions.postControlComment.code}>Observations</Checkbox><br/>
+            </div>
+            <div>
+              <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>
+              <Checkbox value={CSVOptions.latitude.code}>Latitude</Checkbox><br/>
+              <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox><br/>
+              <Checkbox value={CSVOptions.course.code}>Cap</Checkbox><br/>
+              <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
+              <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
+              <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
+              <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
+              <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox><br/>
+            </div>
+          </Columns>
+        </CheckboxGroup>
+        <SelectAll>
+          <Checkbox
+            className={'checkbox-hidden'}
+            indeterminate={indeterminate}
+            checked={checkAll}
+            onChange={handleCheckAll}
+          >
+            <SelectAllText>
+              Tout {checkAll ? 'dé' : ''}sélectionner
+            </SelectAllText>
+          </Checkbox>
+        </SelectAll>
+      </Modal.Body>
+      <Modal.Footer>
+        <DownloadButton
+          onClick={() => download()}>
+          Télécharger le tableau
+        </DownloadButton>
+      </Modal.Footer>
+    </Modal>
   )
 }
 

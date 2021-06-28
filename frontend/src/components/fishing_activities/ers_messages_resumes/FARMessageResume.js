@@ -33,7 +33,8 @@ const FARMessageResume = props => {
 
   const getFARMessageResumeTitle = () => {
     return props.totalFARWeight > 0
-      ? <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalFARWeight} kg pêchés au total</>
+      ? <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalFARWeight} kg pêchés au
+        total</>
       : <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - aucune capture</>
   }
 
@@ -42,35 +43,35 @@ const FARMessageResume = props => {
   }
 
   return <Wrapper>
-        <ERSMessageResumeHeader
-            onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
-            title={props.hasNoMessage ? null : getFARMessageResumeTitle()}
-            hasNoMessage={props.hasNoMessage || !props.totalFARWeight}
-            showERSMessages={props.showERSMessages}
-            messageType={ERSMessageTypeEnum.FAR.code.toString()}
-            setIsOpen={setIsOpen}
-            isOpen={isOpen}/>
-        {
-            props.hasNoMessage
-              ? null
-              : <ERSMessageContent
-                    id={props.id}
-                    chartHeight={chartHeight}
-                    species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
-                    firstUpdate={firstUpdate}
-                    isOpen={isOpen}
-                    name={ERSMessageTypeEnum.FAR.code.toString()}>
-                    <Zone>
-                        <SpeciesAndWeightChart
-                            setChartHeight={setChartHeight}
-                            resetChartHeight={resetChartHeight}
-                            compareWithTotalWeight={true}
-                            speciesAndWeightArray={speciesAndWeightArray}
-                        />
-                    </Zone>
-                </ERSMessageContent>
-        }
-    </Wrapper>
+    <ERSMessageResumeHeader
+      onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
+      title={props.hasNoMessage ? null : getFARMessageResumeTitle()}
+      hasNoMessage={props.hasNoMessage || !props.totalFARWeight}
+      showERSMessages={props.showERSMessages}
+      messageType={ERSMessageTypeEnum.FAR.code.toString()}
+      setIsOpen={setIsOpen}
+      isOpen={isOpen}/>
+    {
+      props.hasNoMessage
+        ? null
+        : <ERSMessageContent
+          id={props.id}
+          chartHeight={chartHeight}
+          species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
+          firstUpdate={firstUpdate}
+          isOpen={isOpen}
+          name={ERSMessageTypeEnum.FAR.code.toString()}>
+          <Zone>
+            <SpeciesAndWeightChart
+              setChartHeight={setChartHeight}
+              resetChartHeight={resetChartHeight}
+              compareWithTotalWeight={true}
+              speciesAndWeightArray={speciesAndWeightArray}
+            />
+          </Zone>
+        </ERSMessageContent>
+    }
+  </Wrapper>
 }
 
 const Zone = styled.div`

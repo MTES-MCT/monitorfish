@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { getDate } from '../../utils'
-import { StrongText, NoValue, Red, Green } from './Controls.style'
+import { Green, NoValue, Red, StrongText } from './Controls.style'
 import { getNumberOfInfractions } from '../../domain/entities/controls'
 
 const ControlField = ({ field, type, isFirst }) => {
@@ -32,8 +32,14 @@ const ControlField = ({ field, type, isFirst }) => {
     {
       control
         ? <ControlResumeLine>
-          <LastControlResumeElement>Unité <StrongText title={control.controller && control.controller.controller}>{control.controller && control.controller.controller ? control.controller.controller : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
-          <LastControlResumeElement>Infractions <StrongText>{numberOfInfractions ? <> {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} <Red/></> : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>
+          <LastControlResumeElement>Unité <StrongText
+            title={control.controller && control.controller.controller}>{control.controller && control.controller.controller
+              ? control.controller.controller
+              : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
+          <LastControlResumeElement>Infractions <StrongText>{numberOfInfractions
+            ? <> {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''}
+              <Red/></>
+            : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>
         </ControlResumeLine>
         : null
     }

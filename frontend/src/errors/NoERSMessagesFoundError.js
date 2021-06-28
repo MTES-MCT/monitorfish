@@ -1,7 +1,7 @@
 import { errorType } from '../domain/entities/errors'
 
 export default class NoERSMessagesFoundError extends Error {
-  name = 'NoERSMessagesFoundError';
+  name = 'NoERSMessagesFoundError'
   type = errorType.INFO_AND_HIDDEN
   showEmptyComponentFields = true
 

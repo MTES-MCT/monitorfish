@@ -63,42 +63,42 @@ const LayersSidebar = () => {
     <NamespaceContext.Consumer>
       {
         namespace => (
-        <Sidebar
+          <Sidebar
             isShowed={isShowed}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon
-                title={'Couches réglementaires'}
-                layersSidebarIsOpen={layersSidebarIsOpen}
-                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-                onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
-                <Layers/>
+              title={'Couches réglementaires'}
+              layersSidebarIsOpen={layersSidebarIsOpen}
+              regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+              onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
+              <Layers/>
             </SidebarLayersIcon>
             <RegulatoryZoneSelection
-                regulatoryZones={regulatoryZones}
-                regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
-                setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
-                layersSidebarIsOpen={layersSidebarIsOpen}
-                setHideZonesListWhenSearching={setHideZonesListWhenSearching}
+              regulatoryZones={regulatoryZones}
+              regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
+              setRegulatoryZonesAddedToMySelection={setRegulatoryZonesAddedToMySelection}
+              layersSidebarIsOpen={layersSidebarIsOpen}
+              setHideZonesListWhenSearching={setHideZonesListWhenSearching}
             />
             <Zones>
-                <RegulatoryZoneSelected
-                    regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
-                    hideZonesListWhenSearching={hideZonesListWhenSearching}
-                    namespace={namespace}
-                />
-                <AdministrativeZones
-                    administrativeZones={administrativeZones}
-                    hideZonesListWhenSearching={hideZonesListWhenSearching}
-                />
-                <BaseLayerSelection />
+              <RegulatoryZoneSelected
+                regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
+                hideZonesListWhenSearching={hideZonesListWhenSearching}
+                namespace={namespace}
+              />
+              <AdministrativeZones
+                administrativeZones={administrativeZones}
+                hideZonesListWhenSearching={hideZonesListWhenSearching}
+              />
+              <BaseLayerSelection/>
             </Zones>
             <MetadataWrapper
               firstUpdate={firstUpdate.current}
               regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
             >
               <RegulatoryZoneMetadata
-                  layersSidebarIsOpen={layersSidebarIsOpen}
+                layersSidebarIsOpen={layersSidebarIsOpen}
               />
             </MetadataWrapper>
           </Sidebar>
@@ -188,8 +188,7 @@ const MetadataWrapper = styled.div`
     z-index: -1;
     max-height: calc(100vh - 50px);
     padding: 10px 10px 0 10px;
-    max-height: 90vh;
-    overflow-y: auto;
+    overflow-y: no-scroll;
     border-bottom: 10px solid #EEE;
     min-height: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 400 : 100}px;
     transition: all 0.5s;

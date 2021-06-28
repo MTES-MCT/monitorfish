@@ -71,7 +71,6 @@ const BaseMap = props => {
     }
   }
 
-
   useEffect(() => {
     initMap()
   }, [map, mapState.selectedBaseLayer])

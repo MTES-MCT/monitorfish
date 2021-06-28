@@ -37,7 +37,7 @@ export function getVesselImage (vessel, isLight, color) {
       imgSize: [8, 16],
       rotation: degreesToRadian(vessel),
       // See https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210
-      color: "white"
+      color: 'white'
     })
     : new CircleStyle({
       radius: 4,
@@ -137,7 +137,7 @@ export const getVesselLabelStyle = (showedText, image) =>
       offset: [-getTextWidth(showedText) * 2 - 30, 11],
       padding: [5, 5],
       // See https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210
-      color: "white"
+      color: 'white'
     }),
     zIndex: VESSEL_LABEL_STYLE
   })

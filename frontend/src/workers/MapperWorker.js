@@ -1,10 +1,10 @@
 import * as Comlink from 'comlink'
-import { mapToRegulatoryZone } from '../domain/entities/regulatory'
+import { mapToRegulatoryZone, lawTypeList } from '../domain/entities/regulatory'
 import { vesselSize } from '../domain/entities/vessel'
 import { getDateMonthsBefore } from '../utils'
 
 class MapperWorker {
-  convertGeoJSONFeaturesToObject (features) {
+  #getLayerNameList = (features) => {
     const featuresWithoutGeometry = features.features.map(feature => {
       return mapToRegulatoryZone(feature.properties)
     })
@@ -20,18 +20,43 @@ class MapperWorker {
       }
     }, [])
 
-    const layerNamesArray = uniqueFeaturesWithoutGeometry
+    return uniqueFeaturesWithoutGeometry
       .map(layer => layer.layerName)
       .map(layerName => {
         return uniqueFeaturesWithoutGeometry.filter(layer => layer.layerName === layerName)
       })
+  }
 
+  convertGeoJSONFeaturesToObject (features) {
+    const layerNamesArray = this.#getLayerNameList(features)
     const layersNamesToZones = layerNamesArray.reduce((accumulatedObject, zone) => {
       accumulatedObject[zone[0].layerName] = zone
       return accumulatedObject
     }, {})
 
     return layersNamesToZones
+  }
+
+  convertGeoJSONFeaturesToObjectByRegTerritory (features) {
+    const layerNamesArray = this.#getLayerNameList(features)
+    const layersNamesByRegTerritory = layerNamesArray.reduce((accumulatedObject, zone) => {
+      let lawType = zone[0].lawType
+      const layerName = zone[0].layerName
+      const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
+      if (regTerritory === 'France') {
+        lawType = `${lawType} / ${zone[0].seafront}`
+      }
+
+      if (!accumulatedObject[regTerritory]) {
+        accumulatedObject[regTerritory] = {}
+      }
+      if (!accumulatedObject[regTerritory][lawType]) {
+        accumulatedObject[regTerritory][lawType] = {}
+      }
+      accumulatedObject[regTerritory][lawType][layerName] = zone
+      return accumulatedObject
+    }, {})
+    return layersNamesByRegTerritory
   }
 
   getFilteredVessels (vessels, filters) {

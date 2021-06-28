@@ -8,9 +8,9 @@ import fleetSegment from './FleetSegment'
 import regulatory from './Regulatory'
 import { combineReducers } from '@reduxjs/toolkit'
 
-export default combineReducers({
-  layer: layer,
-  map: map,
+const homeReducers = combineReducers({
+  layer: layer.homepage.reducer,
+  map,
   global: global,
   vessel: vessel,
   gear: gear,
@@ -18,3 +18,12 @@ export default combineReducers({
   fleetSegment: fleetSegment,
   regulatory: regulatory
 })
+
+const backofficeReducers = combineReducers({
+  layer: layer.backoffice.reducer,
+  map,
+  gear: gear,
+  regulatory: regulatory
+})
+
+export { homeReducers, backofficeReducers }

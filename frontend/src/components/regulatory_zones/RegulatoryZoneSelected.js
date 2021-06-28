@@ -16,6 +16,8 @@ const RegulatoryZoneSelected = props => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
+  const { namespace } = props
+
   const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false)
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const firstUpdate = useRef(true)
@@ -37,7 +39,8 @@ const RegulatoryZoneSelected = props => {
     decreaseNumberOfZonesOpened(numberOfZones)
     dispatch(hideLayers({
       type: LayersEnum.REGULATORY.code,
-      zone: regulatoryZone
+      zone: regulatoryZone,
+      namespace
     }))
     dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
   }
@@ -87,6 +90,7 @@ const RegulatoryZoneSelected = props => {
                           regulatorySubZones={selectedRegulatoryZones[regulatoryZoneName]}
                           regulatoryZoneMetadata={regulatoryZoneMetadata}
                           isLastItem={Object.keys(selectedRegulatoryZones).length === index + 1}
+                          allowRemoveZone={true}
                         />)
                       })
                       : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
@@ -152,17 +156,6 @@ const RegulatoryZoneSelectedList = styled.ul`
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   padding: 0;
-  height: ${props => {
-        if (props.layerLength) {
-            if (props.zoneLength > 0) {
-                return props.layerLength * 37 + props.zoneLength * 38.5
-            } else {
-                return props.layerLength * 37
-            }
-        } else {
-            return 40
-        }
-    }}px;
   max-height: 550px;
   overflow-x: hidden;
   color: ${COLORS.grayDarkerThree};

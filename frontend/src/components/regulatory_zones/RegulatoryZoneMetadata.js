@@ -9,7 +9,7 @@ import { getDateTime } from '../../utils'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { useDispatch, useSelector } from 'react-redux'
 
-const RegulatoryZoneMetadata = props => {
+const RegulatoryZoneMetadata = () => {
   const dispatch = useDispatch()
   const gears = useSelector(state => state.gear.gears)
   const {
@@ -58,24 +58,19 @@ const RegulatoryZoneMetadata = props => {
     }
   }, [gears, regulatoryZoneMetadata])
 
-  const getTitle = regulatory => `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+  const getTitle = regulatory => regulatory
+    ? `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+    : ''
 
   return (
-        <Wrapper
-            firstUpdate={firstUpdate.current}
-            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-            layersSidebarIsOpen={props.layersSidebarIsOpen}
-            regulatoryZoneMetadata={regulatoryZoneMetadata}
-        >
+          <>
             {
                 regulatoryZoneMetadataPanelIsOpen && regulatoryZoneMetadata
                   ? <>
                         <Header>
                             <REGPaperIcon/>
                             <RegulatoryName title={getTitle(regulatoryZoneMetadata)}>
-                                <Ellipsis>
-                                    <Title>{getTitle(regulatoryZoneMetadata)}</Title>
-                                </Ellipsis>
+                              {getTitle(regulatoryZoneMetadata)}
                             </RegulatoryName>
                             <CloseIcon onClick={() => dispatch(closeRegulatoryZoneMetadata())}/>
                         </Header>
@@ -345,7 +340,7 @@ const RegulatoryZoneMetadata = props => {
                     </>
                   : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
             }
-        </Wrapper>
+          </>
   )
 }
 
@@ -361,18 +356,13 @@ const Gray = styled.span`
 `
 
 const RegulatoryName = styled.span`
-  padding: unset;
-  margin: unset;
+  flex: 1;
   line-height: initial;
-`
-
-const Ellipsis = styled.span`
-  max-width: 290px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
-  display: inline-block;
+  margin-left: 5px;
 `
 
 const Header = styled.div`
@@ -380,6 +370,7 @@ const Header = styled.div`
   margin-left: 6px;
   text-align: left;
   height: 1.5em;
+  display: flex;
 `
 
 const Content = styled.div`
@@ -387,16 +378,8 @@ const Content = styled.div`
   color: ${COLORS.grayDarker};
   background: ${COLORS.background};
   margin-top: 6px;
-  min-height: 370px;
   overflow-y: auto;
-  max-height: 85vh;
-`
-
-const Title = styled.span`
-  margin-top: 2px;
-  margin-left: 12px;
-  font-size: 13px;
-}
+  max-height: calc(100vh - 145px);
 `
 
 const REGPaperIcon = styled(REGPaperSVG)`
@@ -406,8 +389,6 @@ const REGPaperIcon = styled(REGPaperSVG)`
 const CloseIcon = styled(CloseIconSVG)`
   width: 13px;
   float: right;
-  margin-right: 7px;
-  margin-top: 5px;
   cursor: pointer;
 `
 
@@ -511,47 +492,6 @@ const NoValue = styled.span`
   line-height: normal;
   font-size: 13px;
   display: block;
-`
-
-const Wrapper = styled.div`
-    border-radius: 2px;
-    width: 350px;
-    position: absolute;
-    display: block;
-    color: ${COLORS.grayDarkerThree};
-    text-decoration: none;
-    background-color: ${COLORS.gray};
-    padding: 0;
-    margin-left: -30px;
-    margin-top: 45px;
-    top: 0px;
-    opacity: 0;
-    z-index: -1;
-    min-height: 100px;
-    max-height: calc(100vh - 50px);
-    padding: 10px;
-    
-    animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
-    
-    @keyframes regulatory-metadata-box-opening-with-margin {
-        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 400px; opacity: 1; margin-left: 356px; }
-    }
-    
-    @keyframes regulatory-metadata-box-closing-with-margin {
-        0% { min-height: 400px; opacity: 1; margin-left: 371px; }
-        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-    }
-       
-    @keyframes regulatory-metadata-box-opening {
-        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 400px; opacity: 1; margin-left: 356px; }
-    }
-    
-    @keyframes regulatory-metadata-box-closing {
-        0% { min-height: 400px; opacity: 1; margin-left: 361px; }
-        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-    }
 `
 
 export default RegulatoryZoneMetadata

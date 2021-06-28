@@ -4,7 +4,7 @@ import { getLocalStorageState } from '../../utils'
 
 const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
 
-const layerSlice = createSlice({
+const regulatorySlice = createSlice({
   name: 'regulatory',
   initialState: {
     isReadyToShowRegulatoryZones: false,
@@ -58,23 +58,13 @@ const layerSlice = createSlice({
 })
 
 export const {
-  replaceVesselLayer,
-  addLayer,
-  removeLayer,
-  setLayers,
-  addShowedLayer,
-  removeShowedLayer,
   addRegulatoryZonesToSelection,
   removeRegulatoryZonesFromSelection,
   setIsReadyToShowRegulatoryZones,
   setLoadingRegulatoryZoneMetadata,
   resetLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata,
-  closeRegulatoryZoneMetadataPanel,
-  removeLayers,
-  pushLayerAndArea,
-  removeLayerAndArea,
-  setLastShowedFeatures
-} = layerSlice.actions
+  closeRegulatoryZoneMetadataPanel
+} = regulatorySlice.actions
 
-export default layerSlice.reducer
+export default regulatorySlice.reducer

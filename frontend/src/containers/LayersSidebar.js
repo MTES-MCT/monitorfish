@@ -174,35 +174,27 @@ const Layers = styled(LayersSVG)`
 
 const MetadataWrapper = styled.div`
     border-radius: 2px;
-    width: 350px;
+    width: 380px;
     position: absolute;
     display: block;
     color: ${COLORS.grayDarkerThree};
     text-decoration: none;
     background-color: ${COLORS.gray};
     padding: 0;
-    margin-left: -30px;
+    margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 361 : -30}px;
     margin-top: 45px;
     top: 0px;
-    opacity: 0;
+    opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
     z-index: -1;
     max-height: calc(100vh - 50px);
     padding: 10px 10px 0 10px;
-    max-height: 85vh;
+    max-height: 90vh;
     overflow-y: auto;
     border-bottom: 10px solid #EEE;
+    min-height: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 400 : 100}px;
+    transition: all 0.5s;
     
-    animation: ${props => (props.firstUpdate && !props.regulatoryZoneMetadataPanelIsOpen) ? '' : props.regulatoryZoneMetadataPanelIsOpen ? 'regulatory-metadata-box-opening' : 'regulatory-metadata-box-closing'} 0.5s ease forwards;
-       
-    @keyframes regulatory-metadata-box-opening {
-        0%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-        100% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
-    }
-    
-    @keyframes regulatory-metadata-box-closing {
-        0% { min-height: 400px; opacity: 1; margin-left: ${props => props.fromBackoffice ? '600px' : '361px'}; }
-        100%   { min-height: 100px; opacity: 0; margin-left: -30px;   }
-    }
+   
 `
 
 export default LayersSidebar

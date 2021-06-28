@@ -37,16 +37,7 @@ const Map = () => {
 
   const handlePointerMove = (event, map) => {
     if (event && map) {
-      const pixel = map.getEventPixel(event.originalEvent)
-      const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
       setHandlePointerMoveEventPixel(event.pixel)
-      if (feature && feature.getId()) {
-        setCurrentFeature(feature)
-        map.getTarget().style.cursor = 'pointer'
-      } else if (map.getTarget().style) {
-        map.getTarget().style.cursor = ''
-        setCurrentFeature(null)
-      }
     }
   }
 
@@ -54,7 +45,9 @@ const Map = () => {
         <BaseMap
           handleMovingAndZoom={handleMovingAndZoom}
           handlePointerMove={handlePointerMove}
+          setCurrentFeature={setCurrentFeature}
           showCoordinates={true}
+          showAttributions={true}
         >
             <MapVesselAnimation
               mapMovingAndZoomEvent={mapMovingAndZoomEvent}

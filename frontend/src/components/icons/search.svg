@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="1200"
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200"
      viewBox="0 0 1200 1200">
     <g transform="translate(600 600) scale(0.69 0.69) rotate(0) translate(-600 -600)" style="fill:#05055e">
-        <svg fill="#e2e2e9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><path d="M100,90l-10,10L60,70V60h10L100,90z"></path><path
-                d="M35,70C15.5,70,0,54.5,0,35S15.5,0,35,0s35,15.5,35,35S54.5,70,35,70z M35,10c-14,0-25,11-25,25s11,25,25,25s25-11,25-25  S49,10,35,10z"></path><path
-                d="M53.1,57l3.6-3.6L69,65.8l-3.6,3.6L53.1,57z"></path></svg>
+        <svg fill="#e2e2e9" xmlns="http://www.w3.org/2000/svg" version="1.1"
+             x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><path d="M100,90l-10,10L60,70V60h10L100,90z"></path>
+            <path
+                    d="M35,70C15.5,70,0,54.5,0,35S15.5,0,35,0s35,15.5,35,35S54.5,70,35,70z M35,10c-14,0-25,11-25,25s11,25,25,25s25-11,25-25  S49,10,35,10z"></path>
+            <path
+                    d="M53.1,57l3.6-3.6L69,65.8l-3.6,3.6L53.1,57z"></path></svg>
     </g>
 </svg>

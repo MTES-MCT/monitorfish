@@ -62,19 +62,19 @@ Façade: ${dirm}`
   }
 
   return (
-        <>
-          {
-            fleetSegments && fleetSegments.length
-              ? fleetSegments.map((segment, index) => {
-                return <span key={index}>
+    <>
+      {
+        fleetSegments && fleetSegments.length
+          ? fleetSegments.map((segment, index) => {
+            return <span key={index}>
                   {segment.segment}
-                  <Info isInfoSegment={true} title={getSegmentInfo(segment)}/>
-                  {fleetSegments.length === index + 1 ? '' : ', '}
+              <Info isInfoSegment={true} title={getSegmentInfo(segment)}/>
+              {fleetSegments.length === index + 1 ? '' : ', '}
                 </span>
-              })
-              : <NoValue>-</NoValue>
-          }
-        </>
+          })
+          : <NoValue>-</NoValue>
+      }
+    </>
   )
 }
 

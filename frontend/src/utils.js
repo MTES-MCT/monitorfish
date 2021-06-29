@@ -35,9 +35,14 @@ export const getCoordinates = (coordinates, projection) => {
     if (degreeSplit.length) {
       let degree = degreeSplit[0].trim()
       switch (degree.length) {
-        case 1: degree = `00${degree}`; break
-        case 2: degree = `0${degree}`; break
-        default: break
+        case 1:
+          degree = `00${degree}`
+          break
+        case 2:
+          degree = `0${degree}`
+          break
+        default:
+          break
       }
 
       return [`${nSplit[0]} N`, `${degree}° ${degreeSplit[1]}`]
@@ -50,9 +55,14 @@ export const getCoordinates = (coordinates, projection) => {
     if (degreeSplit.length) {
       let degree = degreeSplit[0].trim()
       switch (degree.length) {
-        case 1: degree = `00${degree}`; break
-        case 2: degree = `0${degree}`; break
-        default: break
+        case 1:
+          degree = `00${degree}`
+          break
+        case 2:
+          degree = `0${degree}`
+          break
+        default:
+          break
       }
 
       return [`${sSplit[0]} S`, `${degree}° ${degreeSplit[1]}`]
@@ -65,9 +75,14 @@ export const getCoordinates = (coordinates, projection) => {
     if (degreeSplit.length) {
       let degree = degreeSplit[0].trim()
       switch (degree.length) {
-        case 1: degree = `00${degree}`; break
-        case 2: degree = `0${degree}`; break
-        default: break
+        case 1:
+          degree = `00${degree}`
+          break
+        case 2:
+          degree = `0${degree}`
+          break
+        default:
+          break
       }
 
       return ['0° 00′ 00″', `${degree}° ${degreeSplit[1]}″${split[2]}`]
@@ -193,7 +208,7 @@ export const getColorWithAlpha = (color, alpha) => {
 
 export const timeagoFrenchLocale = function (number, index) {
   return [
-    ["à l'instant", 'dans un instant'],
+    ['à l\'instant', 'dans un instant'],
     ['il y a %s secondes', 'dans %s secondes'],
     ['il y a 1 minute', 'dans 1 minute'],
     ['il y a %s minutes', 'dans %s minutes'],

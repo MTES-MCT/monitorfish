@@ -1,17 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="22" viewBox="0 0 24 22">
-  <defs>
-    <clipPath id="clip-Plan_de_travail_5">
-      <rect width="24" height="22"/>
-    </clipPath>
-  </defs>
-  <g id="Plan_de_travail_5" data-name="Plan de travail – 5" clip-path="url(#clip-Plan_de_travail_5)">
-    <g id="Composant_19_22" data-name="Composant 19 – 22" transform="translate(3 3)">
-      <path id="Tracé_2" data-name="Tracé 2" d="M252.789,77.794h18v16h-18v-16Z" transform="translate(-252.789 -77.794)" fill="none" stroke="#515151" stroke-width="1.4"/>
-      <g id="Groupe_3" data-name="Groupe 3" transform="translate(4.38 4.411)">
-        <line id="Ligne_25" data-name="Ligne 25" x2="9.107" fill="none" stroke="#515151" stroke-linejoin="round" stroke-width="1.4"/>
-        <line id="Ligne_26" data-name="Ligne 26" x2="9.107" transform="translate(0 3.627)" fill="none" stroke="#515151" stroke-linejoin="round" stroke-width="1.4"/>
-        <line id="Ligne_27" data-name="Ligne 27" x2="9.107" transform="translate(0 7.255)" fill="none" stroke="#515151" stroke-linejoin="round" stroke-width="1.4"/>
-      </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="22"
+     viewBox="0 0 24 22">
+    <defs>
+        <clipPath id="clip-Plan_de_travail_5">
+            <rect width="24" height="22"/>
+        </clipPath>
+    </defs>
+    <g id="Plan_de_travail_5" data-name="Plan de travail – 5" clip-path="url(#clip-Plan_de_travail_5)">
+        <g id="Composant_19_22" data-name="Composant 19 – 22" transform="translate(3 3)">
+            <path id="Tracé_2" data-name="Tracé 2" d="M252.789,77.794h18v16h-18v-16Z"
+                  transform="translate(-252.789 -77.794)" fill="none" stroke="#515151" stroke-width="1.4"/>
+            <g id="Groupe_3" data-name="Groupe 3" transform="translate(4.38 4.411)">
+                <line id="Ligne_25" data-name="Ligne 25" x2="9.107" fill="none" stroke="#515151" stroke-linejoin="round"
+                      stroke-width="1.4"/>
+                <line id="Ligne_26" data-name="Ligne 26" x2="9.107" transform="translate(0 3.627)" fill="none"
+                      stroke="#515151" stroke-linejoin="round" stroke-width="1.4"/>
+                <line id="Ligne_27" data-name="Ligne 27" x2="9.107" transform="translate(0 7.255)" fill="none"
+                      stroke="#515151" stroke-linejoin="round" stroke-width="1.4"/>
+            </g>
+        </g>
     </g>
-  </g>
 </svg>

@@ -1,4 +1,3 @@
-
 export const errorType = {
   WARNING: 'warning',
   INFO: 'info',

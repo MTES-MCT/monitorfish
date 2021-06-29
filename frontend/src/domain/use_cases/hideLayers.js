@@ -15,7 +15,9 @@ const hideLayers = layerToHide => (dispatch, getState) => {
     let layerToRemove, layersToRemove
 
     switch (layerToHide.zone) {
-      case undefined: layerToRemove = getState().layer.layers.find(layer => layer.className_ === layerToHide.type); break
+      case undefined:
+        layerToRemove = getState().layer.layers.find(layer => layer.className_ === layerToHide.type)
+        break
       default: {
         dispatch(removeLayerAndArea(`${type}:${zone.layerName}:${zone.zone}`))
 

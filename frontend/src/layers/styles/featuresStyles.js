@@ -66,8 +66,8 @@ export function getVesselIconOpacity (vesselsLastPositionVisibility,
 
   let opacity = 1
   if (temporaryVesselsToHighLightOnMap &&
-        temporaryVesselsToHighLightOnMap.length &&
-        vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel)) {
+    temporaryVesselsToHighLightOnMap.length &&
+    vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel)) {
     opacity = 0
   } else {
     if (vesselDate < vesselIsHidden) {

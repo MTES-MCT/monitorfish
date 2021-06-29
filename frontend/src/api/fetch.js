@@ -5,15 +5,15 @@ const OK = 200
 const NOT_FOUND = 404
 const ACCEPTED = 202
 
-const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
-const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
-const ERS_ERROR_MESSAGE = "Nous n'avons pas pu chercher les messages JPE de ce navire"
-const CONTROLS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles pour ce navire"
-const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
-const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
-const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
-const GEAR_CODES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les codes des engins de pêches"
-const FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les segments de flotte"
+const LAST_POSITIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les dernières positions'
+const VESSEL_POSITIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les informations du navire'
+const ERS_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les messages JPE de ce navire'
+const CONTROLS_ERROR_MESSAGE = 'Nous n\'avons pas pu récuperer les contrôles pour ce navire'
+const VESSEL_SEARCH_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les navires dans notre base'
+const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
+const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
+const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
+const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -114,7 +114,7 @@ export function searchVesselsFromAPI (searched) {
 
 export function getAllRegulatoryZonesFromAPI () {
   return fetch(`${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-        `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`)
+    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -181,9 +181,9 @@ export function getAdministrativeZoneURL (type, extent, subZone) {
   }
 
   return (
-        `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
-        `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-        `outputFormat=application/json&srsname=${WSG84_PROJECTION}` + extentFilter + subZoneFilter
+    `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
+    `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
+    `outputFormat=application/json&srsname=${WSG84_PROJECTION}` + extentFilter + subZoneFilter
   )
 }
 
@@ -220,10 +220,10 @@ export function getRegulatoryZoneURL (type, regulatoryZone) {
 
   const filter = `layer_name='${regulatoryZone.layerName.replace(/'/g, '\'\'')}' AND zones='${regulatoryZone.zone.replace(/'/g, '\'\'')}'`
   return (
-        `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS` +
-        `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
-        '&outputFormat=application/json&CQL_FILTER=' +
-        filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS` +
+    `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
+    '&outputFormat=application/json&CQL_FILTER=' +
+    filter.replace(/'/g, '%27').replace(/ /g, '%20')
   )
 }
 
@@ -333,13 +333,13 @@ export function getAdministrativeSubZonesFromAPI (type) {
     const filter = 'f_level=\'DIVISION\''
 
     query = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
-            `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-            `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
-            filter.replace(/'/g, '%27').replace(/ /g, '%20')
+      `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
+      `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
+      filter.replace(/'/g, '%27').replace(/ /g, '%20')
   } else {
     query = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
-            `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-            `outputFormat=application/json&srsname=${WSG84_PROJECTION}`
+      `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
+      `outputFormat=application/json&srsname=${WSG84_PROJECTION}`
   }
 
   return fetch(query)

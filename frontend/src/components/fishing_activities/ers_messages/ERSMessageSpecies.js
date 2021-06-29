@@ -22,99 +22,99 @@ const ERSMessageSpecies = props => {
   }
 
   return <>
-        {props.species
-          ? <Species>
-                <Title isLast={props.isLast} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
-                    <TitleText title={getSpeciesName(props.species)}>
-                        {getSpeciesName(props.species)}
-                    </TitleText>
-                    <Weight>
-                        <InlineKey>Poids total (estimé) </InlineKey>
-                        <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
-                    </Weight>
-                    <ChevronIcon isOpen={isOpen} name={props.species.species}/>
-                </Title>
-                <Content isOpen={isOpen} name={props.species.species}
-                         length={props.species.properties ? props.species.properties.length : 1}>
-                    {
-                        props.species.properties && props.species.properties.length > 1
-                          ? <MultipleProperties>
-                            <Warning/> Plusieurs zones de pêche et/ou présentations pour cette espèce
-                        </MultipleProperties>
-                          : null
-                    }
-                    {
-                        props.species.properties && props.species.properties.length
-                          ? props.species.properties.map((species, index) => {
-                            return <Property key={props.species.species + index}>
-                                    <Fields>
-                                        <TableBody>
-                                            <Field>
-                                                <Key>Présentation</Key>
-                                                <TrimmedValue
-                                                    title={`${ERSSpeciesPresentation[species.presentation]} (${species.presentation})`}>
-                                                    {
-                                                        species.presentation && ERSSpeciesPresentation[species.presentation]
-                                                          ? <>{ERSSpeciesPresentation[species.presentation]} ({species.presentation})</>
-                                                          : species.presentation
-                                                            ? species.presentation
-                                                            : <NoValue>-</NoValue>
-                                                    }
-                                                </TrimmedValue>
-                                            </Field>
-                                            <Field>
-                                                <Key>Préservation</Key>
-                                                <TrimmedValue
-                                                    title={`${ERSSpeciesPreservationState[species.preservationState]} (${species.preservationState})`}>
-                                                    {
-                                                        species.preservationState && ERSSpeciesPreservationState[species.preservationState]
-                                                          ? <>{ERSSpeciesPreservationState[species.preservationState]} ({species.preservationState})</>
-                                                          : species.preservationState
-                                                            ? species.preservationState
-                                                            : <NoValue>-</NoValue>
-                                                    }
-                                                </TrimmedValue>
-                                            </Field>
-                                            <Field>
-                                                <Key>Fact. conversion</Key>
-                                                <TrimmedValue>{species.conversionFactor
-                                                  ? species.conversionFactor
-                                                  : <NoValue>-</NoValue>}</TrimmedValue>
-                                            </Field>
-                                        </TableBody>
-                                    </Fields>
-                                    <Fields>
-                                        <TableBody>
-                                            <Field>
-                                                <Key>ZEE</Key>
-                                                <Value>
-                                                    {species.economicZone
-                                                      ? <>{countries.getName(species.economicZone, 'fr')} ({species.economicZone})</>
-                                                      : <NoValue>-</NoValue>}
-                                                </Value>
-                                            </Field>
-                                            <Field>
-                                                <Key>Zone FAO</Key>
-                                                <Value>{species.faoZone
-                                                  ? <>{species.faoZone}</>
-                                                  : <NoValue>-</NoValue>}</Value>
-                                            </Field>
-                                            <Field>
-                                                <Key>Rect. stat.</Key>
-                                                <Value>{species.statisticalRectangle
-                                                  ? <>{species.statisticalRectangle}</>
-                                                  : <NoValue>-</NoValue>}</Value>
-                                            </Field>
-                                        </TableBody>
-                                    </Fields>
-                                </Property>
-                          })
-                          : null
-                    }
-                </Content>
-            </Species>
-          : null}
-    </>
+    {props.species
+      ? <Species>
+        <Title isLast={props.isLast} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+          <TitleText title={getSpeciesName(props.species)}>
+            {getSpeciesName(props.species)}
+          </TitleText>
+          <Weight>
+            <InlineKey>Poids total (estimé) </InlineKey>
+            <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
+          </Weight>
+          <ChevronIcon isOpen={isOpen} name={props.species.species}/>
+        </Title>
+        <Content isOpen={isOpen} name={props.species.species}
+                 length={props.species.properties ? props.species.properties.length : 1}>
+          {
+            props.species.properties && props.species.properties.length > 1
+              ? <MultipleProperties>
+                <Warning/> Plusieurs zones de pêche et/ou présentations pour cette espèce
+              </MultipleProperties>
+              : null
+          }
+          {
+            props.species.properties && props.species.properties.length
+              ? props.species.properties.map((species, index) => {
+                return <Property key={props.species.species + index}>
+                  <Fields>
+                    <TableBody>
+                      <Field>
+                        <Key>Présentation</Key>
+                        <TrimmedValue
+                          title={`${ERSSpeciesPresentation[species.presentation]} (${species.presentation})`}>
+                          {
+                            species.presentation && ERSSpeciesPresentation[species.presentation]
+                              ? <>{ERSSpeciesPresentation[species.presentation]} ({species.presentation})</>
+                              : species.presentation
+                                ? species.presentation
+                                : <NoValue>-</NoValue>
+                          }
+                        </TrimmedValue>
+                      </Field>
+                      <Field>
+                        <Key>Préservation</Key>
+                        <TrimmedValue
+                          title={`${ERSSpeciesPreservationState[species.preservationState]} (${species.preservationState})`}>
+                          {
+                            species.preservationState && ERSSpeciesPreservationState[species.preservationState]
+                              ? <>{ERSSpeciesPreservationState[species.preservationState]} ({species.preservationState})</>
+                              : species.preservationState
+                                ? species.preservationState
+                                : <NoValue>-</NoValue>
+                          }
+                        </TrimmedValue>
+                      </Field>
+                      <Field>
+                        <Key>Fact. conversion</Key>
+                        <TrimmedValue>{species.conversionFactor
+                          ? species.conversionFactor
+                          : <NoValue>-</NoValue>}</TrimmedValue>
+                      </Field>
+                    </TableBody>
+                  </Fields>
+                  <Fields>
+                    <TableBody>
+                      <Field>
+                        <Key>ZEE</Key>
+                        <Value>
+                          {species.economicZone
+                            ? <>{countries.getName(species.economicZone, 'fr')} ({species.economicZone})</>
+                            : <NoValue>-</NoValue>}
+                        </Value>
+                      </Field>
+                      <Field>
+                        <Key>Zone FAO</Key>
+                        <Value>{species.faoZone
+                          ? <>{species.faoZone}</>
+                          : <NoValue>-</NoValue>}</Value>
+                      </Field>
+                      <Field>
+                        <Key>Rect. stat.</Key>
+                        <Value>{species.statisticalRectangle
+                          ? <>{species.statisticalRectangle}</>
+                          : <NoValue>-</NoValue>}</Value>
+                      </Field>
+                    </TableBody>
+                  </Fields>
+                </Property>
+              })
+              : null
+          }
+        </Content>
+      </Species>
+      : null}
+  </>
 }
 
 const Warning = styled(WarningSVG)`

@@ -12,7 +12,8 @@ export const COLORS = {
   squareBorder: '#E0E0E0',
   grayVesselHidden: '#B2B2B2',
   red: '#E1000F',
-  white: '#FFFFFF'
+  white: '#FFFFFF',
+  orange: '#F6D012'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

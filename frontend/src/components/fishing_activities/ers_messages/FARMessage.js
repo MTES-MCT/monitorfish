@@ -19,70 +19,73 @@ const FARMessage = props => {
   }, [props.message])
 
   return <>
-        { props.message
-          ? <>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Date opération</Key>
-                                <Value>{props.message.farDatetimeUtc ? <>{getDateTime(props.message.farDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Position opération</Key>
-                                <Value>
-                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitude && props.message.longitude
-                                      ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[0]
-                                      : <NoValue>-</NoValue> }
-                                    <InlineKey>Lon.</InlineKey> { props.message.latitude && props.message.longitude
-                                      ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[1]
-                                      : <NoValue>-</NoValue>}
-                                </Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                    {
-                        props.message.gear
-                          ? <Gear>
-                                <SubKey>Engin à bord</SubKey>{' '}
-                                <SubValue>
-                                    {
-                                        props.message.gearName
-                                          ? <>{props.message.gearName} ({props.message.gear})</>
-                                          : props.message.gear
-                                    }
-                                </SubValue><br/>
-                                <SubFields>
-                                    <SubField>
-                                        <SubKey>Maillage</SubKey>
-                                        <SubValue>{props.message.mesh ? <>{props.message.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                    <SubField>
-                                        <SubKey>Dimensions</SubKey>
-                                        <SubValue>{props.message.size ? <>{props.message.size}</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                </SubFields>
-                            </Gear>
-                          : null
-                    }
-                </Zone>
-                <SpeciesList>
-                    {
-                        catches
-                          .map((speciesCatch, index) => {
-                            return <ERSMessageSpecies
-                                  index={index + 1}
-                                  hasManyProperties={speciesCatch.properties.length > 1}
-                                  isLast={catches.length === index + 1}
-                                  species={speciesCatch}
-                                  key={'FAR' + speciesCatch.species}
-                              />
-                          })
-                    }
-                </SpeciesList>
-            </>
-          : null }
-    </>
+    {props.message
+      ? <>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Date opération</Key>
+                <Value>{props.message.farDatetimeUtc
+                  ? <>{getDateTime(props.message.farDatetimeUtc, true)}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Position opération</Key>
+                <Value>
+                  <FirstInlineKey>Lat.</FirstInlineKey> {props.message.latitude && props.message.longitude
+                    ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[0]
+                    : <NoValue>-</NoValue>}
+                  <InlineKey>Lon.</InlineKey> {props.message.latitude && props.message.longitude
+                    ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[1]
+                    : <NoValue>-</NoValue>}
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+          {
+            props.message.gear
+              ? <Gear>
+                <SubKey>Engin à bord</SubKey>{' '}
+                <SubValue>
+                  {
+                    props.message.gearName
+                      ? <>{props.message.gearName} ({props.message.gear})</>
+                      : props.message.gear
+                  }
+                </SubValue><br/>
+                <SubFields>
+                  <SubField>
+                    <SubKey>Maillage</SubKey>
+                    <SubValue>{props.message.mesh ? <>{props.message.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
+                  </SubField>
+                  <SubField>
+                    <SubKey>Dimensions</SubKey>
+                    <SubValue>{props.message.size ? <>{props.message.size}</> : <NoValue>-</NoValue>}</SubValue>
+                  </SubField>
+                </SubFields>
+              </Gear>
+              : null
+          }
+        </Zone>
+        <SpeciesList>
+          {
+            catches
+              .map((speciesCatch, index) => {
+                return <ERSMessageSpecies
+                  index={index + 1}
+                  hasManyProperties={speciesCatch.properties.length > 1}
+                  isLast={catches.length === index + 1}
+                  species={speciesCatch}
+                  key={'FAR' + speciesCatch.species}
+                />
+              })
+          }
+        </SpeciesList>
+      </>
+      : null}
+  </>
 }
 
 const FirstInlineKey = styled.div`

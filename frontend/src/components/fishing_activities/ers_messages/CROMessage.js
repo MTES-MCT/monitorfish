@@ -9,53 +9,59 @@ countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const CROMessage = props => {
   return <>
-        { props.message
-          ? <>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Date d&apos;entrée</Key>
-                                <Value>{props.message.effortZoneEntryDatetimeUtc ? <>{getDateTime(props.message.effortZoneEntryDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Position d&apos;entrée</Key>
-                                <Value>
-                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitudeEntered && props.message.longitudeEntered
-                                      ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[0]
-                                      : <NoValue>-</NoValue> }
-                                    <InlineKey>Lon.</InlineKey> { props.message.latitudeEntered && props.message.longitudeEntered
-                                      ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[1]
-                                      : <NoValue>-</NoValue>}<br/>
-                                </Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Date de sortie</Key>
-                                <Value>{props.message.effortZoneExitDatetimeUtc ? <>{getDateTime(props.message.effortZoneExitDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Position de sortie</Key>
-                                <Value>
-                                    <FirstInlineKey>Lat.</FirstInlineKey> { props.message.latitudeExited && props.message.longitudeExited
-                                      ? getCoordinates([props.message.longitudeExited, props.message.latitudeExited], WSG84_PROJECTION)[0]
-                                      : <NoValue>-</NoValue> }
-                                    <InlineKey>Lon.</InlineKey> { props.message.latitudeExited && props.message.longitudeExited
-                                      ? getCoordinates([props.message.longitudeExited, props.message.latitudeExited], WSG84_PROJECTION)[1]
-                                      : <NoValue>-</NoValue>}<br/>
-                                </Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
-            </>
-          : null }
-    </>
+    {props.message
+      ? <>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Date d&apos;entrée</Key>
+                <Value>{props.message.effortZoneEntryDatetimeUtc
+                  ? <>{getDateTime(props.message.effortZoneEntryDatetimeUtc, true)}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Position d&apos;entrée</Key>
+                <Value>
+                  <FirstInlineKey>Lat.</FirstInlineKey> {props.message.latitudeEntered && props.message.longitudeEntered
+                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[0]
+                    : <NoValue>-</NoValue>}
+                  <InlineKey>Lon.</InlineKey> {props.message.latitudeEntered && props.message.longitudeEntered
+                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[1]
+                    : <NoValue>-</NoValue>}<br/>
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Date de sortie</Key>
+                <Value>{props.message.effortZoneExitDatetimeUtc
+                  ? <>{getDateTime(props.message.effortZoneExitDatetimeUtc, true)}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Position de sortie</Key>
+                <Value>
+                  <FirstInlineKey>Lat.</FirstInlineKey> {props.message.latitudeExited && props.message.longitudeExited
+                    ? getCoordinates([props.message.longitudeExited, props.message.latitudeExited], WSG84_PROJECTION)[0]
+                    : <NoValue>-</NoValue>}
+                  <InlineKey>Lon.</InlineKey> {props.message.latitudeExited && props.message.longitudeExited
+                    ? getCoordinates([props.message.longitudeExited, props.message.latitudeExited], WSG84_PROJECTION)[1]
+                    : <NoValue>-</NoValue>}<br/>
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+      </>
+      : null}
+  </>
 }
 
 const FirstInlineKey = styled.div`

@@ -13,21 +13,21 @@ const ShowVesselLabel = ({ vesselLabelsShowedOnMap, updateVesselLabelsShowedOnMa
   }, [vesselLabelsShowedOnMap])
 
   return (
-        <Wrapper>
-            { value !== undefined
-              ? <RadioWrapper>
-                    <Checkbox
-                        checked={value}
-                        onChange={(value, isChecked) => {
-                          updateVesselLabelsShowedOnMap(isChecked)
-                          setValue(isChecked)
-                        }}
+    <Wrapper>
+      {value !== undefined
+        ? <RadioWrapper>
+          <Checkbox
+            checked={value}
+            onChange={(value, isChecked) => {
+              updateVesselLabelsShowedOnMap(isChecked)
+              setValue(isChecked)
+            }}
 
-                    >{' '} <ShowLabelText>Afficher les étiquettes des navires</ShowLabelText></Checkbox>
-                </RadioWrapper>
-              : null
-            }
-        </Wrapper>
+          >{' '} <ShowLabelText>Afficher les étiquettes des navires</ShowLabelText></Checkbox>
+        </RadioWrapper>
+        : null
+      }
+    </Wrapper>
   )
 }
 

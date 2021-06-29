@@ -4,15 +4,15 @@ import { COLORS } from '../../constants/constants'
 
 const TrackTypeCard = props => {
   return (
-        <>
-            <Body>
-                <Square color={props.trackType.color} />
-                <Text>{props.trackType.description}</Text>
-            </Body>
-            <TrianglePointer>
-                <TriangleShadow isBig={props.isBig}/>
-            </TrianglePointer>
-        </>
+    <>
+      <Body>
+        <Square color={props.trackType.color}/>
+        <Text>{props.trackType.description}</Text>
+      </Body>
+      <TrianglePointer>
+        <TriangleShadow isBig={props.isBig}/>
+      </TrianglePointer>
+    </>
   )
 }
 

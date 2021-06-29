@@ -19,45 +19,54 @@ const PNOMessage = props => {
   }, [props.message])
 
   return <>
-        { props.message
-          ? <>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Date prévue d&apos;arrivée</Key>
-                                <Value>{props.message.predictedArrivalDatetimeUtc ? <>{getDateTime(props.message.predictedArrivalDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Date de début de la marée</Key>
-                                <Value>{props.message.tripStartDate ? <>{getDate(props.message.tripStartDate)}</> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Port d&apos;arrivée</Key>
-                                <Value>{props.message.port && props.message.portName ? <>{props.message.portName} ({props.message.port})</> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Raison du préavis</Key>
-                                <Value>{props.message.purpose ? <>{ERSMessagePNOPurposeType[props.message.purpose]} ({props.message.purpose})</> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
-                <SpeciesList>
-                    {
-                        catches.map((speciesCatch, index) => {
-                          return <ERSMessageSpecies
-                                index={index + 1}
-                                isLast={catches.length === index + 1}
-                                species={speciesCatch}
-                                key={'PNO' + speciesCatch.species}
-                            />
-                        })
-                    }
-                </SpeciesList>
-            </>
-          : null }
-    </>
+    {props.message
+      ? <>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Date prévue d&apos;arrivée</Key>
+                <Value>{props.message.predictedArrivalDatetimeUtc
+                  ? <>{getDateTime(props.message.predictedArrivalDatetimeUtc, true)}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Date de début de la marée</Key>
+                <Value>{props.message.tripStartDate
+                  ? <>{getDate(props.message.tripStartDate)}</>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Port d&apos;arrivée</Key>
+                <Value>{props.message.port && props.message.portName
+                  ? <>{props.message.portName} ({props.message.port})</>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Raison du préavis</Key>
+                <Value>{props.message.purpose
+                  ? <>{ERSMessagePNOPurposeType[props.message.purpose]} ({props.message.purpose})</>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <SpeciesList>
+          {
+            catches.map((speciesCatch, index) => {
+              return <ERSMessageSpecies
+                index={index + 1}
+                isLast={catches.length === index + 1}
+                species={speciesCatch}
+                key={'PNO' + speciesCatch.species}
+              />
+            })
+          }
+        </SpeciesList>
+      </>
+      : null}
+  </>
 }
 
 const Gray = styled.span`

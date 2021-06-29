@@ -80,7 +80,14 @@ const ERSMessages = ({ showFishingActivitiesSummary, fishingActivities, messageT
     dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),
     valueContainer: base => ({ ...base, minWidth: 130, fontSize: 13, padding: '0px 2px' }),
     multiValue: base => ({ ...base, fontSize: 13, borderRadius: 12, background: COLORS.grayBackground }),
-    multiValueLabel: base => ({ ...base, paddingTop: 2, paddingBottom: 1, background: COLORS.grayBackground, color: COLORS.textGray, borderRadius: 12 }),
+    multiValueLabel: base => ({
+      ...base,
+      paddingTop: 2,
+      paddingBottom: 1,
+      background: COLORS.grayBackground,
+      color: COLORS.textGray,
+      borderRadius: 12
+    }),
     multiValueRemove: base => ({
       ...base,
       background: COLORS.grayBackground,
@@ -97,64 +104,65 @@ const ERSMessages = ({ showFishingActivitiesSummary, fishingActivities, messageT
   }
 
   return <Wrapper>
-        <Arrow onClick={() => showFishingActivitiesSummary()}/><Previous onClick={() => showFishingActivitiesSummary()}>Revenir au résumé</Previous>
-        <Filters>
-            <Select
-              menuPortalTarget={document.body}
-              placeholder="Filtrer les messages"
-              closeMenuOnSelect={true}
-              components={animatedComponents}
-              defaultValue={selectedOptions}
-              value={selectedOptions}
-              onChange={setSelectedOptions}
-              isMulti
-              options={options}
-              styles={selectStyles}
-              isSearchable={false}
-              className={'available-width'}
-            />
-            <Navigation selectedOptionsSize={selectedOptions ? selectedOptions.length : 0}>
-              <PreviousTrip
-                disabled={!previousBeforeDateTime}
-                onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
-                title={'Marée précédente'}
-              />
-              {
-                depMessage && depMessage.tripNumber
-                  ? `Marée n°${depMessage.tripNumber}`
-                  : '-'
-              }
-              <LastTrip
-                disabled={isLastVoyage}
-                onClick={!isLastVoyage && navigation.goToLastTrip}
-                title={'Dernière marée'}
-              />
-              <NextTrip
-                disabled={isLastVoyage}
-                onClick={!isLastVoyage && navigation.goToNextTrip}
-                title={'Marée suivante'}
-              />
-            </Navigation>
-            <InverseDate ascendingSort={ascendingSort} onClick={() => inverseSort()}/>
-        </Filters>
-        { ersMessages && ersMessages.length
-          ? ersMessages
-            .filter(ersMessage => {
-              if (selectedOptions && selectedOptions.length) {
-                return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
-              } else {
-                return true
-              }
-            })
-            .map((message, index) => {
-              return <ERSMessage
-                key={message.ersId}
-                message={message}
-                isFirst={index === 0}
-              />
-            })
-          : <NoMessage>Aucun message reçu</NoMessage> }
-    </Wrapper>
+    <Arrow onClick={() => showFishingActivitiesSummary()}/><Previous onClick={() => showFishingActivitiesSummary()}>Revenir
+    au résumé</Previous>
+    <Filters>
+      <Select
+        menuPortalTarget={document.body}
+        placeholder="Filtrer les messages"
+        closeMenuOnSelect={true}
+        components={animatedComponents}
+        defaultValue={selectedOptions}
+        value={selectedOptions}
+        onChange={setSelectedOptions}
+        isMulti
+        options={options}
+        styles={selectStyles}
+        isSearchable={false}
+        className={'available-width'}
+      />
+      <Navigation selectedOptionsSize={selectedOptions ? selectedOptions.length : 0}>
+        <PreviousTrip
+          disabled={!previousBeforeDateTime}
+          onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
+          title={'Marée précédente'}
+        />
+        {
+          depMessage && depMessage.tripNumber
+            ? `Marée n°${depMessage.tripNumber}`
+            : '-'
+        }
+        <LastTrip
+          disabled={isLastVoyage}
+          onClick={!isLastVoyage && navigation.goToLastTrip}
+          title={'Dernière marée'}
+        />
+        <NextTrip
+          disabled={isLastVoyage}
+          onClick={!isLastVoyage && navigation.goToNextTrip}
+          title={'Marée suivante'}
+        />
+      </Navigation>
+      <InverseDate ascendingSort={ascendingSort} onClick={() => inverseSort()}/>
+    </Filters>
+    {ersMessages && ersMessages.length
+      ? ersMessages
+        .filter(ersMessage => {
+          if (selectedOptions && selectedOptions.length) {
+            return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
+          } else {
+            return true
+          }
+        })
+        .map((message, index) => {
+          return <ERSMessage
+            key={message.ersId}
+            message={message}
+            isFirst={index === 0}
+          />
+        })
+      : <NoMessage>Aucun message reçu</NoMessage>}
+  </Wrapper>
 }
 
 const PreviousTrip = styled(ArrowTripSVG)`

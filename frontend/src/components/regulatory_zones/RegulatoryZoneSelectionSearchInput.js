@@ -79,9 +79,9 @@ const RegulatoryZoneSelectionSearchInput = props => {
 
   useEffect(() => {
     if (placeSearchText.length < 1 &&
-            gearSearchText.length < 1 &&
-            regulatoryReferencesSearchText.length < 1 &&
-            speciesSearchText.length < 1) {
+      gearSearchText.length < 1 &&
+      regulatoryReferencesSearchText.length < 1 &&
+      speciesSearchText.length < 1) {
       props.setFoundRegulatoryZones({})
       return
     }
@@ -149,18 +149,18 @@ const RegulatoryZoneSelectionSearchInput = props => {
                 }
                 case 2: {
                   return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
-                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText)
+                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText)
                 }
                 case 3: {
                   return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
-                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
-                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText)
+                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
+                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText)
                 }
                 case 4: {
                   return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
-                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
-                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText) ||
-                                        findIfSearchStringIncludedInProperty(zone, propertiesToSearch[3], searchText)
+                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
+                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText) ||
+                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[3], searchText)
                 }
                 default: {
                   return false
@@ -223,51 +223,51 @@ const RegulatoryZoneSelectionSearchInput = props => {
   }
 
   return (
-        <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
-            <SearchBoxField>
-                <Label>Zone</Label>
-                <SearchBoxInput
-                    ref={input => props.showRegulatorySearchInput &&
-                        focusPlaceSearchText &&
-                        !gearSearchText &&
-                        !speciesSearchText &&
-                        !regulatoryReferencesSearchText
-                      ? input && input.focus()
-                      : null}
-                    type="text"
-                    value={placeSearchText}
-                    placeholder={'Bretagne, Charente...'}
-                    onChange={e => setPlaceSearchText(e.target.value)}/>
-                <SearchIcon showRegulatorySearchInput={props.showRegulatorySearchInput}/>
-            </SearchBoxField>
-            <SearchBoxField>
-                <Label>Engin</Label>
-                <SearchBoxInput
-                    type="text"
-                    value={gearSearchText}
-                    onClick={() => setFocusPlaceSearchText(false)}
-                    placeholder={'chalut, OTB...'}
-                    onChange={e => setGearSearchText(e.target.value)}/>
-            </SearchBoxField>
-            <SearchBoxField>
-                <Label>Espèce</Label>
-                <SearchBoxInput
-                    type="text"
-                    value={speciesSearchText}
-                    onClick={() => setFocusPlaceSearchText(false)}
-                    placeholder={'Bivalve, HKE...'}
-                    onChange={e => setSpeciesSearchText(e.target.value)}/>
-            </SearchBoxField>
-            <SearchBoxField>
-                <Label>Ref. reg.</Label>
-                <SearchBoxInput
-                    type="text"
-                    value={regulatoryReferencesSearchText}
-                    onClick={() => setFocusPlaceSearchText(false)}
-                    placeholder={'2018-171...'}
-                    onChange={e => setRegulatoryReferenceSearchText(e.target.value)}/>
-            </SearchBoxField>
-        </SearchBox>)
+    <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
+      <SearchBoxField>
+        <Label>Zone</Label>
+        <SearchBoxInput
+          ref={input => props.showRegulatorySearchInput &&
+          focusPlaceSearchText &&
+          !gearSearchText &&
+          !speciesSearchText &&
+          !regulatoryReferencesSearchText
+            ? input && input.focus()
+            : null}
+          type="text"
+          value={placeSearchText}
+          placeholder={'Bretagne, Charente...'}
+          onChange={e => setPlaceSearchText(e.target.value)}/>
+        <SearchIcon showRegulatorySearchInput={props.showRegulatorySearchInput}/>
+      </SearchBoxField>
+      <SearchBoxField>
+        <Label>Engin</Label>
+        <SearchBoxInput
+          type="text"
+          value={gearSearchText}
+          onClick={() => setFocusPlaceSearchText(false)}
+          placeholder={'chalut, OTB...'}
+          onChange={e => setGearSearchText(e.target.value)}/>
+      </SearchBoxField>
+      <SearchBoxField>
+        <Label>Espèce</Label>
+        <SearchBoxInput
+          type="text"
+          value={speciesSearchText}
+          onClick={() => setFocusPlaceSearchText(false)}
+          placeholder={'Bivalve, HKE...'}
+          onChange={e => setSpeciesSearchText(e.target.value)}/>
+      </SearchBoxField>
+      <SearchBoxField>
+        <Label>Ref. reg.</Label>
+        <SearchBoxInput
+          type="text"
+          value={regulatoryReferencesSearchText}
+          onClick={() => setFocusPlaceSearchText(false)}
+          placeholder={'2018-171...'}
+          onChange={e => setRegulatoryReferenceSearchText(e.target.value)}/>
+      </SearchBoxField>
+    </SearchBox>)
 }
 
 const SearchBox = styled.div`

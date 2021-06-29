@@ -28,7 +28,7 @@ Sentry.init({
 ReactDOM.render(
   <React.StrictMode>
     <GlobalFonts/>
-    <App />
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 )

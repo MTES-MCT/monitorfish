@@ -42,14 +42,14 @@ const RegulatoryZoneSelectedZone = props => {
 
   useEffect(() => {
     if (regulatoryZoneMetadata &&
-            subZone &&
-            (subZone.layerName !== regulatoryZoneMetadata.layerName ||
-                subZone.zone !== regulatoryZoneMetadata.zone)) {
+      subZone &&
+      (subZone.layerName !== regulatoryZoneMetadata.layerName ||
+        subZone.zone !== regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(false)
     } else if (regulatoryZoneMetadata &&
-            subZone &&
-            (subZone.layerName === regulatoryZoneMetadata.layerName &&
-                subZone.zone === regulatoryZoneMetadata.zone)) {
+      subZone &&
+      (subZone.layerName === regulatoryZoneMetadata.layerName &&
+        subZone.zone === regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(true)
     } else if (!regulatoryZoneMetadata && subZone) {
       setMetadataIsShown(false)
@@ -89,23 +89,27 @@ const RegulatoryZoneSelectedZone = props => {
   }, [showSubZone, isReadyToShowRegulatoryZones, namespace])
 
   return (
-        <SubZone>
-            <Rectangle onClick={() => dispatch(zoomInSubZone(props.subZone))} vectorLayerStyle={props.vectorLayerStyle}/>
-            <SubZoneText
-                title={subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
-                onClick={() => setShowSubZone(!showSubZone)}>
-                {subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
-            </SubZoneText>
-            <Icons>
-                {
-                    metadataIsShown
-                      ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => showRegulatoryMetadata(subZone)}/>
-                      : <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(subZone)}/>
-                }
-                { showSubZone ? <ShowIcon title="Cacher la zone" onClick={() => setShowSubZone(!showSubZone)} /> : <HideIcon title="Afficher la zone" onClick={() => setShowSubZone(!showSubZone)} />}
-                { allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection" onClick={() => callRemoveRegulatoryZoneFromMySelection(subZone, 1)}/>}
-            </Icons>
-        </SubZone>
+    <SubZone>
+      <Rectangle onClick={() => dispatch(zoomInSubZone(props.subZone))} vectorLayerStyle={props.vectorLayerStyle}/>
+      <SubZoneText
+        title={subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+        onClick={() => setShowSubZone(!showSubZone)}>
+        {subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+      </SubZoneText>
+      <Icons>
+        {
+          metadataIsShown
+            ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => showRegulatoryMetadata(subZone)}/>
+            : <REGPaperIcon title="Afficher la réglementation" onClick={() => showRegulatoryMetadata(subZone)}/>
+        }
+        {showSubZone
+          ? <ShowIcon title="Cacher la zone" onClick={() => setShowSubZone(!showSubZone)}/>
+          : <HideIcon
+            title="Afficher la zone" onClick={() => setShowSubZone(!showSubZone)}/>}
+        {allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection"
+                                       onClick={() => callRemoveRegulatoryZoneFromMySelection(subZone, 1)}/>}
+      </Icons>
+    </SubZone>
   )
 }
 

@@ -18,32 +18,43 @@ import Measurement from './containers/Measurement'
 import VesselFilters from './containers/VesselFilters'
 import { ReactComponent as AlertSVG } from './components/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
-import { homeStore, backofficeStore } from './Store'
+import { backofficeStore, homeStore } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
 
 function App () {
   switch (browserName) {
-    case 'Internet Explorer': return getUnsupportedBrowser()
-    case 'Edge': if (browserVersion < 79) return getUnsupportedBrowser(); break
-    case 'Chrome': if (browserVersion < 69) return getUnsupportedBrowser(); break
-    case 'Firefox': if (browserVersion < 62) return getUnsupportedBrowser(); break
-    case 'Safari': if (browserVersion < 12) return getUnsupportedBrowser(); break
-    case 'Opera': if (browserVersion < 56) return getUnsupportedBrowser(); break
+    case 'Internet Explorer':
+      return getUnsupportedBrowser()
+    case 'Edge':
+      if (browserVersion < 79) return getUnsupportedBrowser()
+      break
+    case 'Chrome':
+      if (browserVersion < 69) return getUnsupportedBrowser()
+      break
+    case 'Firefox':
+      if (browserVersion < 62) return getUnsupportedBrowser()
+      break
+    case 'Safari':
+      if (browserVersion < 12) return getUnsupportedBrowser()
+      break
+    case 'Opera':
+      if (browserVersion < 56) return getUnsupportedBrowser()
+      break
   }
 
   return (
     <>
       <ToastProvider placement="bottom-right">
-      <Router>
-      <Switch>
-          <Route path="/backoffice">
-            <BackofficePage />
-          </Route>
-          <Route path="/">
-            <HomePage />
-          </Route>
-        </Switch>
-      </Router>
+        <Router>
+          <Switch>
+            <Route path="/backoffice">
+              <BackofficePage/>
+            </Route>
+            <Route path="/">
+              <HomePage/>
+            </Route>
+          </Switch>
+        </Router>
       </ToastProvider>
     </>
   )
@@ -52,28 +63,28 @@ function App () {
 function HomePage () {
   return <Provider store={homeStore}>
     <NamespaceContext.Provider value={'homepage'}>
-    <Wrapper>
-      <Map />
-      <LayersSidebar/>
-      <VesselsSearchBox />
-      <RightMenuOnHoverZone />
-      <VesselList namespace={'homepage'}/>
-      <VesselFilters/>
-      <VesselVisibility/>
-      <VesselSidebar/>
-      <UpdatingVesselLoader/>
-      <Measurement/>
-      <APIWorker/>
-    </Wrapper>
+      <Wrapper>
+        <Map/>
+        <LayersSidebar/>
+        <VesselsSearchBox/>
+        <RightMenuOnHoverZone/>
+        <VesselList namespace={'homepage'}/>
+        <VesselFilters/>
+        <VesselVisibility/>
+        <VesselSidebar/>
+        <UpdatingVesselLoader/>
+        <Measurement/>
+        <APIWorker/>
+      </Wrapper>
     </NamespaceContext.Provider>
-    </Provider>
+  </Provider>
 }
 
 function BackofficePage () {
   return <Provider store={backofficeStore}>
     <NamespaceContext.Provider value={'backoffice'}>
       <BackofficeWrapper>
-        <Backoffice />
+        <Backoffice/>
       </BackofficeWrapper>
     </NamespaceContext.Provider>
   </Provider>
@@ -82,10 +93,12 @@ function BackofficePage () {
 function getUnsupportedBrowser () {
   return <Wrapper>
     <Alert>
-      <AlertSVG /><br/>
+      <AlertSVG/><br/>
       <Text>
-        <Title>Cette version de votre navigateur est trop ancienne, MonitorFish ne peut pas fonctionner correctement.</Title><br/>
-        Merci d&apos;utiliser une version de Firefox supérieure à la version 62, ou une version de Chrome supérieure à la version 69.
+        <Title>Cette version de votre navigateur est trop ancienne, MonitorFish ne peut pas fonctionner
+          correctement.</Title><br/>
+        Merci d&apos;utiliser une version de Firefox supérieure à la version 62, ou une version de Chrome supérieure à
+        la version 69.
       </Text>
     </Alert>
   </Wrapper>

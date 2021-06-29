@@ -1,5 +1,5 @@
 import Layers from '../entities/layers'
-import { getLocalStorageState, createGenericSlice } from '../../utils'
+import { createGenericSlice, getLocalStorageState } from '../../utils'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
@@ -33,13 +33,13 @@ const reducers = {
           .filter(layer => layer.type === Layers.REGULATORY.code)
           .some(layer => (
             layer.zone.layerName === zone.layerName &&
-                          layer.zone.zone === zone.zone
+            layer.zone.zone === zone.zone
           ))
       } else if (zone) {
         found = state.showedLayers
           .some(layer => (
             layer.type === type &&
-                      layer.zone === zone
+            layer.zone === zone
           ))
       } else {
         found = state.showedLayers.some(layer => layer.type === type)
@@ -63,13 +63,13 @@ const reducers = {
           state.showedLayers = state.showedLayers
             .filter(layer => !(
               layer.type === Layers.REGULATORY.code &&
-                              layer.zone.layerName === zone.layerName &&
-                              layer.zone.zone === zone.zone))
+              layer.zone.layerName === zone.layerName &&
+              layer.zone.zone === zone.zone))
         } else {
           state.showedLayers = state.showedLayers
             .filter(layer => !(
               layer.type === Layers.REGULATORY.code &&
-                              layer.zone.layerName === zone.layerName))
+              layer.zone.layerName === zone.layerName))
         }
       } else {
         state.showedLayers = state.showedLayers.filter(layer => layer.type !== type)

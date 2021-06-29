@@ -16,55 +16,60 @@ const RTPMessage = props => {
   }
 
   return <>
-        { props.message
-          ? <>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Date de retour</Key>
-                                <Value>{props.message.returnDatetimeUtc ? <>{getDateTime(props.message.returnDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Port d&apos;arrivée</Key>
-                                <Value>{getPortName(props.message)}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Raison du retour</Key>
-                                <Value>{props.message.reasonOfReturn ? <>{ERSMessagePNOPurposeType[props.message.reasonOfReturn]} ({props.message.reasonOfReturn})</> : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </TableBody>
-                    </Fields>
-                </Zone>
-                <Zone>
-                    {props.message.gearOnboard && props.message.gearOnboard.length
-                      ? props.message.gearOnboard.map((gear, index) => {
-                        return <Gear key={index}>
-                                <SubKey>Engin à bord {index + 1}</SubKey>{' '}
-                                <SubValue>
-                                    {
-                                        gear.gearName
-                                          ? <>{gear.gearName} ({gear.gear})</>
-                                          : gear.gear
-                                    }
-                                </SubValue><br/>
-                                <SubFields>
-                                    <SubField>
-                                        <SubKey>Maillage</SubKey>
-                                        <SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                    <SubField>
-                                        <SubKey>Dimensions</SubKey>
-                                        <SubValue>{gear.size ? <>{gear.size}</> : <NoValue>-</NoValue>}</SubValue>
-                                    </SubField>
-                                </SubFields>
-                            </Gear>
-                      })
-                      : <NoValue>-</NoValue>}
-                </Zone>
-            </>
-          : null }
-    </>
+    {props.message
+      ? <>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Date de retour</Key>
+                <Value>{props.message.returnDatetimeUtc
+                  ? <>{getDateTime(props.message.returnDatetimeUtc, true)}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Port d&apos;arrivée</Key>
+                <Value>{getPortName(props.message)}</Value>
+              </Field>
+              <Field>
+                <Key>Raison du retour</Key>
+                <Value>{props.message.reasonOfReturn
+                  ? <>{ERSMessagePNOPurposeType[props.message.reasonOfReturn]} ({props.message.reasonOfReturn})</>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          {props.message.gearOnboard && props.message.gearOnboard.length
+            ? props.message.gearOnboard.map((gear, index) => {
+              return <Gear key={index}>
+                <SubKey>Engin à bord {index + 1}</SubKey>{' '}
+                <SubValue>
+                  {
+                    gear.gearName
+                      ? <>{gear.gearName} ({gear.gear})</>
+                      : gear.gear
+                  }
+                </SubValue><br/>
+                <SubFields>
+                  <SubField>
+                    <SubKey>Maillage</SubKey>
+                    <SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
+                  </SubField>
+                  <SubField>
+                    <SubKey>Dimensions</SubKey>
+                    <SubValue>{gear.size ? <>{gear.size}</> : <NoValue>-</NoValue>}</SubValue>
+                  </SubField>
+                </SubFields>
+              </Gear>
+            })
+            : <NoValue>-</NoValue>}
+        </Zone>
+      </>
+      : null}
+  </>
 }
 
 const Gray = styled.span`

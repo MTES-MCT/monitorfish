@@ -56,43 +56,43 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
   }
 
   return <>
-        { nextFishingActivities
-          ? <>
-                <UpdateFishingActivities/>
-                <UpdateFishingActivitiesButton
-                    onClick={() => updateFishingActivities(nextFishingActivities)}>
-                    Nouveaux messages JPE
-                </UpdateFishingActivitiesButton>
-            </>
-          : null
-        }
-        { fishingViewIndex === 1
-          ? <FishingActivitiesSummary
-                showERSMessages={showERSMessages}
-                fishingActivities={fishingActivities}
-                fleetSegments={fleetSegments}
-                vesselLastPositionFeature={vesselLastPositionFeature}
-                navigation={{
-                  goToPreviousTrip,
-                  goToNextTrip,
-                  goToLastTrip
-                }}
-            />
-          : null
-        }
-        { fishingViewIndex === 2
-          ? <ERSMessages
-                showFishingActivitiesSummary={showFishingActivitiesSummary}
-                fishingActivities={fishingActivities}
-                messageTypeFilter={messageTypeFilter}
-                navigation={{
-                  goToPreviousTrip,
-                  goToNextTrip,
-                  goToLastTrip
-                }}
-            />
-          : null }
-        </>
+    {nextFishingActivities
+      ? <>
+        <UpdateFishingActivities/>
+        <UpdateFishingActivitiesButton
+          onClick={() => updateFishingActivities(nextFishingActivities)}>
+          Nouveaux messages JPE
+        </UpdateFishingActivitiesButton>
+      </>
+      : null
+    }
+    {fishingViewIndex === 1
+      ? <FishingActivitiesSummary
+        showERSMessages={showERSMessages}
+        fishingActivities={fishingActivities}
+        fleetSegments={fleetSegments}
+        vesselLastPositionFeature={vesselLastPositionFeature}
+        navigation={{
+          goToPreviousTrip,
+          goToNextTrip,
+          goToLastTrip
+        }}
+      />
+      : null
+    }
+    {fishingViewIndex === 2
+      ? <ERSMessages
+        showFishingActivitiesSummary={showFishingActivitiesSummary}
+        fishingActivities={fishingActivities}
+        messageTypeFilter={messageTypeFilter}
+        navigation={{
+          goToPreviousTrip,
+          goToNextTrip,
+          goToLastTrip
+        }}
+      />
+      : null}
+  </>
 }
 
 const UpdateFishingActivities = styled.div`

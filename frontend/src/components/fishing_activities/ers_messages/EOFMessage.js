@@ -5,22 +5,25 @@ import { getDateTime } from '../../../utils'
 
 const EOFMessage = props => {
   return <>
-        { props.message
-          ? <>
-                <Zone>
-                    <Fields>
-                        <TableBody>
-                            <Field>
-                                <Key>Date de fin de pêche</Key>
-                                <Value>{props.message.endOfFishingDatetimeUtc ? <>{getDateTime(props.message.endOfFishingDatetimeUtc, true)} <Gray>(UTC)</Gray></> : <NoValue>-</NoValue>}</Value>
-                            </Field>
+    {props.message
+      ? <>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Date de fin de pêche</Key>
+                <Value>{props.message.endOfFishingDatetimeUtc
+                  ? <>{getDateTime(props.message.endOfFishingDatetimeUtc, true)}
+                    <Gray>(UTC)</Gray></>
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
 
-                        </TableBody>
-                    </Fields>
-                </Zone>
-            </>
-          : null }
-    </>
+            </TableBody>
+          </Fields>
+        </Zone>
+      </>
+      : null}
+  </>
 }
 
 const Gray = styled.span`

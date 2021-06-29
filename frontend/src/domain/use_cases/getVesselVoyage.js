@@ -34,9 +34,15 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
 
     let beforeDateTime = null
     switch (navigateTo) {
-      case NAVIGATE_TO.PREVIOUS: beforeDateTime = previousBeforeDateTime; break
-      case NAVIGATE_TO.NEXT: beforeDateTime = nextBeforeDateTime; break
-      case NAVIGATE_TO.LAST: beforeDateTime = null; break
+      case NAVIGATE_TO.PREVIOUS:
+        beforeDateTime = previousBeforeDateTime
+        break
+      case NAVIGATE_TO.NEXT:
+        beforeDateTime = nextBeforeDateTime
+        break
+      case NAVIGATE_TO.LAST:
+        beforeDateTime = null
+        break
     }
 
     if (!isSameVesselAsCurrentlyShowed) {
@@ -51,7 +57,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
             alerts: []
           }
         }))
-        dispatch(setError(new NoERSMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
+        dispatch(setError(new NoERSMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
         return
       }
 

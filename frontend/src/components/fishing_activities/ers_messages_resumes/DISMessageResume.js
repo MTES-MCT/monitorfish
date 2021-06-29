@@ -31,38 +31,39 @@ const DISMessageResume = props => {
   }
 
   const getDISMessageResumeTitle = () => {
-    return <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalDISWeight} kg rejetés au total</>
+    return <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalDISWeight} kg rejetés
+      au total</>
   }
 
   return <Wrapper>
-        <ERSMessageResumeHeader
-            onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
-            title={props.hasNoMessage ? null : getDISMessageResumeTitle()}
-            hasNoMessage={props.hasNoMessage}
-            showERSMessages={props.showERSMessages}
-            messageType={ERSMessageTypeEnum.DIS.code.toString()}
-            setIsOpen={setIsOpen}
-            isOpen={isOpen}/>
-        {
-            props.hasNoMessage
-              ? null
-              : <ERSMessageContent
-                    id={props.id}
-                    chartHeight={chartHeight}
-                    species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
-                    firstUpdate={firstUpdate}
-                    isOpen={isOpen}
-                    name={ERSMessageTypeEnum.DIS.code.toString()}>
-                    <Zone>
-                        <SpeciesAndWeightChart
-                            setChartHeight={setChartHeight}
-                            compareWithTotalWeight={true}
-                            speciesAndWeightArray={speciesAndWeightArray}
-                        />
-                    </Zone>
-                </ERSMessageContent>
-        }
-    </Wrapper>
+    <ERSMessageResumeHeader
+      onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
+      title={props.hasNoMessage ? null : getDISMessageResumeTitle()}
+      hasNoMessage={props.hasNoMessage}
+      showERSMessages={props.showERSMessages}
+      messageType={ERSMessageTypeEnum.DIS.code.toString()}
+      setIsOpen={setIsOpen}
+      isOpen={isOpen}/>
+    {
+      props.hasNoMessage
+        ? null
+        : <ERSMessageContent
+          id={props.id}
+          chartHeight={chartHeight}
+          species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
+          firstUpdate={firstUpdate}
+          isOpen={isOpen}
+          name={ERSMessageTypeEnum.DIS.code.toString()}>
+          <Zone>
+            <SpeciesAndWeightChart
+              setChartHeight={setChartHeight}
+              compareWithTotalWeight={true}
+              speciesAndWeightArray={speciesAndWeightArray}
+            />
+          </Zone>
+        </ERSMessageContent>
+    }
+  </Wrapper>
 }
 
 const Zone = styled.div`

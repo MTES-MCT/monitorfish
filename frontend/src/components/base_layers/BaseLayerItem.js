@@ -33,23 +33,23 @@ const BaseLayerItem = ({ layer, isShownOnInit }) => {
   }
 
   return <>
-        {layer
-          ? <Row
-                className={'base-layers-selection'}
-            >
-                    <Radio
-                        onChange={() => {
-                          callSelectBaseLayer(baseLayers[layer].code)
-                        }}
-                        checked={isShownOnInit}
-                        value={layer}>
-                        {baseLayers[layer].text}
-                    </Radio>
+    {layer
+      ? <Row
+        className={'base-layers-selection'}
+      >
+        <Radio
+          onChange={() => {
+            callSelectBaseLayer(baseLayers[layer].code)
+          }}
+          checked={isShownOnInit}
+          value={layer}>
+          {baseLayers[layer].text}
+        </Radio>
 
-            </Row>
-          : null
-        }
-        </>
+      </Row>
+      : null
+    }
+  </>
 }
 
 const Row = styled.span`

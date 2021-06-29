@@ -13,21 +13,21 @@ const HideNonFilteredVessels = ({ nonFilteredVesselsAreHidden, setNonFilteredVes
   }, [nonFilteredVesselsAreHidden])
 
   return (
-        <Wrapper>
-            { value !== undefined
-              ? <RadioWrapper>
-                    <Checkbox
-                        checked={value}
-                        onChange={(value, isChecked) => {
-                          setNonFilteredVesselsAreHidden(isChecked)
-                          setValue(isChecked)
-                        }}
+    <Wrapper>
+      {value !== undefined
+        ? <RadioWrapper>
+          <Checkbox
+            checked={value}
+            onChange={(value, isChecked) => {
+              setNonFilteredVesselsAreHidden(isChecked)
+              setValue(isChecked)
+            }}
 
-                    >{' '} <ShowLabelText>Masquer les autres navires</ShowLabelText></Checkbox>
-                </RadioWrapper>
-              : null
-            }
-        </Wrapper>
+          >{' '} <ShowLabelText>Masquer les autres navires</ShowLabelText></Checkbox>
+        </RadioWrapper>
+        : null
+      }
+    </Wrapper>
   )
 }
 

@@ -21,74 +21,76 @@ const DEPMessageResume = props => {
 
   const getDEPMessageResumeTitle = () => {
     return <>{props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort}
-            {' '}le {getDateTime(props.depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
+      {' '}le {getDateTime(props.depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
   }
 
   return <>
-        <Wrapper>
-            <ERSMessageResumeHeader
-                isNotAcknowledged={props.isNotAcknowledged}
-                isDeleted={props.isDeleted}
-                rejectionCause={props.rejectionCause}
-                onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
-                title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}
-                hasNoMessage={props.hasNoMessage}
-                showERSMessages={props.showERSMessages}
-                messageType={ERSMessageTypeEnum.DEP.code.toString()}
-                setIsOpen={setIsOpen}
-                isOpen={isOpen}/>
-            {
-                props.hasNoMessage
-                  ? null
-                  : <ERSMessageContent
-                        id={props.id}
-                        speciesOnboard={(props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length > 0) ? props.depMessage.speciesOnboard.length : 1}
-                        gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
-                        firstUpdate={firstUpdate}
-                        isOpen={isOpen}
-                        name={ERSMessageTypeEnum.DEP.code.toString()}>
-                        <Zone>
-                            {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length
-                              ? props.depMessage.gearOnboard.map((gear, index) => {
-                                return <Gear key={gear.gear + index} isFirst={index === '0'}>
-                                        <SubKey>Engin à bord {index + 1}</SubKey>{' '}
-                                        <SubValue>
-                                            {
-                                                gear.gearName
-                                                  ? <>{gear.gearName} ({gear.gear})</>
-                                                  : gear.species
-                                            }
-                                        </SubValue><br/>
-                                        <SubKey>Maillage</SubKey><SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
-                                        <SubKey>Dimensions</SubKey><SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
-                                        <br/>
-                                    </Gear>
-                              })
-                              : <NoValue>Pas d&apos;engins à bord</NoValue>}
-                            <Fields>
-                                <TableBody>
-                                    <Field>
-                                        <Key>Captures à bord</Key>
-                                        <Value>{props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length
-                                          ? props.depMessage.speciesOnboard.map(speciesCatch => {
-                                            return <span key={speciesCatch.species}>
+    <Wrapper>
+      <ERSMessageResumeHeader
+        isNotAcknowledged={props.isNotAcknowledged}
+        isDeleted={props.isDeleted}
+        rejectionCause={props.rejectionCause}
+        onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
+        title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}
+        hasNoMessage={props.hasNoMessage}
+        showERSMessages={props.showERSMessages}
+        messageType={ERSMessageTypeEnum.DEP.code.toString()}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}/>
+      {
+        props.hasNoMessage
+          ? null
+          : <ERSMessageContent
+            id={props.id}
+            speciesOnboard={(props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length > 0) ? props.depMessage.speciesOnboard.length : 1}
+            gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
+            firstUpdate={firstUpdate}
+            isOpen={isOpen}
+            name={ERSMessageTypeEnum.DEP.code.toString()}>
+            <Zone>
+              {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length
+                ? props.depMessage.gearOnboard.map((gear, index) => {
+                  return <Gear key={gear.gear + index} isFirst={index === '0'}>
+                    <SubKey>Engin à bord {index + 1}</SubKey>{' '}
+                    <SubValue>
+                      {
+                        gear.gearName
+                          ? <>{gear.gearName} ({gear.gear})</>
+                          : gear.species
+                      }
+                    </SubValue><br/>
+                    <SubKey>Maillage</SubKey><SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
+                    <SubKey>Dimensions</SubKey><SubValue>{gear.dimensions
+                      ? <>{gear.dimensions} m</>
+                      : <NoValue>-</NoValue>}</SubValue>
+                    <br/>
+                  </Gear>
+                })
+                : <NoValue>Pas d&apos;engins à bord</NoValue>}
+              <Fields>
+                <TableBody>
+                  <Field>
+                    <Key>Captures à bord</Key>
+                    <Value>{props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length
+                      ? props.depMessage.speciesOnboard.map(speciesCatch => {
+                        return <span key={speciesCatch.species}>
                                         {
-                                            speciesCatch.speciesName
-                                              ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
-                                              : speciesCatch.species
+                                          speciesCatch.speciesName
+                                            ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
+                                            : speciesCatch.species
                                         }
-                                                    {''} - {speciesCatch.weight} kg<br/>
+                          {''} - {speciesCatch.weight} kg<br/>
                                     </span>
-                                          })
-                                          : <NoValue>aucune</NoValue>}</Value>
-                                    </Field>
-                                </TableBody>
-                            </Fields>
-                        </Zone>
-                    </ERSMessageContent>
-            }
-        </Wrapper>
-    </>
+                      })
+                      : <NoValue>aucune</NoValue>}</Value>
+                  </Field>
+                </TableBody>
+              </Fields>
+            </Zone>
+          </ERSMessageContent>
+      }
+    </Wrapper>
+  </>
 }
 
 const Gear = styled.div`

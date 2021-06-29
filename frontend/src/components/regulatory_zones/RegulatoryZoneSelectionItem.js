@@ -36,30 +36,30 @@ const RegulatoryZoneSelectionItem = props => {
   }
 
   return (<Row>
-        <Zone selected={globalIsSelected} onClick={() => select()}>
-            {props.regulatoryZoneName.replace(/[_]/g, ' ')}
-        </Zone>
-        {
-            props.regulatorySubZones
-              ? props.regulatorySubZones.map((subZone) => {
-                let vectorLayerStyle
-                if (subZone.zone && subZone.layerName && subZone.gears && gears) {
-                  const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
-                  const gearCategory = getGearCategory(subZone.gears, gears)
-                  vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
-                }
+    <Zone selected={globalIsSelected} onClick={() => select()}>
+      {props.regulatoryZoneName.replace(/[_]/g, ' ')}
+    </Zone>
+    {
+      props.regulatorySubZones
+        ? props.regulatorySubZones.map((subZone) => {
+          let vectorLayerStyle
+          if (subZone.zone && subZone.layerName && subZone.gears && gears) {
+            const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
+            const gearCategory = getGearCategory(subZone.gears, gears)
+            vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
+          }
 
-                return (<SubZone
-                    onClick={() => select(subZone)}
-                    selected={globalIsSelected || (!globalIsSelected && isSelected(props.regulatoryZonesSelection[props.regulatoryZoneName], subZone))}
-                    key={subZone.zone}>
-                    <Rectangle vectorLayerStyle={vectorLayerStyle} />
-                    <Name>{subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}</Name>
-                </SubZone>)
-              })
-              : null
-        }
-            </Row>)
+          return (<SubZone
+            onClick={() => select(subZone)}
+            selected={globalIsSelected || (!globalIsSelected && isSelected(props.regulatoryZonesSelection[props.regulatoryZoneName], subZone))}
+            key={subZone.zone}>
+            <Rectangle vectorLayerStyle={vectorLayerStyle}/>
+            <Name>{subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}</Name>
+          </SubZone>)
+        })
+        : null
+    }
+  </Row>)
 }
 
 const Name = styled.span`

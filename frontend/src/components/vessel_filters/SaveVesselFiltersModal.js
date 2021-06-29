@@ -64,7 +64,7 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter }) => {
             onChange={setFilterName}
           />
         </InputGroup>
-        <TagList filters={filters} />
+        <TagList filters={filters}/>
         <SelectedFilterColor>
           <Square color={filterColor}/>
           Couleur des navires du filtre

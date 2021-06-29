@@ -5,130 +5,143 @@ import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
 import { OverlayPosition } from '../overlays/position'
+
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselCard = props => {
   return (
-        <>
-            <VesselCardHeader>
-                {
-                    props.vessel.getProperties().flagState
-                      ? <>
-                        <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`} />{' '}</>
-                      : null
-                }
-                <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
-                {
-                    props.vessel.getProperties().lastErsDateTime
-                      ? <ERS>
-                          <ERSOK/>
-                          <MessageText>JPE</MessageText>
-                      </ERS>
-                      : <ERS>
-                          <NoERS/>
-                          <MessageText>JPE</MessageText>
-                      </ERS>
-                }
-            </VesselCardHeader>
-            <VesselCardBody>
-                <LatLon>
-                    <FieldName>Latitude</FieldName>
-                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[0]}</FieldValue>
-                    <FieldName>Longitude</FieldName>
-                    <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[1]}</FieldValue>
-                </LatLon>
-                <Course>
-                    <FieldName>Route</FieldName>
-                    <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course ? <>{props.vessel.getProperties().course}°</> : <NoValue>-</NoValue>}</FieldValue>
-                    <FieldName>Vitesse</FieldName>
-                    <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed ? <>{props.vessel.getProperties().speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
-                </Course>
-                <Position>
-                    <FieldName>Dernier signal VMS</FieldName>
-                    <FieldValue>
-                        {
-                            props.vessel.getProperties().dateTime
-                              ? <>{timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
-                              : <NoValue>-</NoValue>
-                        }
-                    </FieldValue>
-                    <FieldName>Cadencement</FieldName>
-                    <FieldValue>
-                        {
-                            props.vessel.getProperties().emissionPeriod
-                              ? <>1 signal toutes les {props.vessel.getProperties().emissionPeriod / 60} min</>
-                              : <NoValue>-</NoValue>
-                        }
-                    </FieldValue>
-                </Position>
-            </VesselCardBody>
-            <VesselCardBottom>
-                <ColumnOne>
-                    <Fields>
-                        <Body>
-                            <Field>
-                                <Key>CFR</Key>
-                                <Value>{props.vessel.getProperties().internalReferenceNumber ? props.vessel.getProperties().internalReferenceNumber : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>MMSI</Key>
-                                <Value>{props.vessel.getProperties().mmsi ? props.vessel.getProperties().mmsi : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </Body>
-                    </Fields>
-                </ColumnOne>
-                <ColumnTwo>
-                    <Fields>
-                        <Body>
-                            <Field>
-                                <Key>Marquage ext.</Key>
-                                <Value>{props.vessel.getProperties().externalReferenceNumber ? props.vessel.getProperties().externalReferenceNumber : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                            <Field>
-                                <Key>Call Sign (IRCS)</Key>
-                                <Value>{props.vessel.getProperties().ircs ? props.vessel.getProperties().ircs : <NoValue>-</NoValue>}</Value>
-                            </Field>
-                        </Body>
-                    </Fields>
-                </ColumnTwo>
-            </VesselCardBottom>
-            <VesselCardBottom>
-                <ColumnOne>
-                    <Fields>
-                        <Body>
-                            <Field>
-                                <Key>Taille du navire</Key>
-                                <Value>
-                                    {
-                                        props.vessel.getProperties().length ? props.vessel.getProperties().length : <NoValue>-</NoValue>
-                                    }
-                                    {' '}x{' '}
-                                    {
-                                        props.vessel.getProperties().width ? props.vessel.getProperties().width : <NoValue>-</NoValue>
-                                    }
-                                    {' '}m
-                                </Value>
-                            </Field>
-                        </Body>
-                    </Fields>
-                </ColumnOne>
+    <>
+      <VesselCardHeader>
+        {
+          props.vessel.getProperties().flagState
+            ? <>
+              <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`}/>{' '}</>
+            : null
+        }
+        <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
+        {
+          props.vessel.getProperties().lastErsDateTime
+            ? <ERS>
+              <ERSOK/>
+              <MessageText>JPE</MessageText>
+            </ERS>
+            : <ERS>
+              <NoERS/>
+              <MessageText>JPE</MessageText>
+            </ERS>
+        }
+      </VesselCardHeader>
+      <VesselCardBody>
+        <LatLon>
+          <FieldName>Latitude</FieldName>
+          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[0]}</FieldValue>
+          <FieldName>Longitude</FieldName>
+          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[1]}</FieldValue>
+        </LatLon>
+        <Course>
+          <FieldName>Route</FieldName>
+          <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course
+            ? <>{props.vessel.getProperties().course}°</>
+            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldName>Vitesse</FieldName>
+          <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed
+            ? <>{props.vessel.getProperties().speed} Nds</>
+            : <NoValue>-</NoValue>}</FieldValue>
+        </Course>
+        <Position>
+          <FieldName>Dernier signal VMS</FieldName>
+          <FieldValue>
+            {
+              props.vessel.getProperties().dateTime
+                ? <>{timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+                : <NoValue>-</NoValue>
+            }
+          </FieldValue>
+          <FieldName>Cadencement</FieldName>
+          <FieldValue>
+            {
+              props.vessel.getProperties().emissionPeriod
+                ? <>1 signal toutes les {props.vessel.getProperties().emissionPeriod / 60} min</>
+                : <NoValue>-</NoValue>
+            }
+          </FieldValue>
+        </Position>
+      </VesselCardBody>
+      <VesselCardBottom>
+        <ColumnOne>
+          <Fields>
+            <Body>
+              <Field>
+                <Key>CFR</Key>
+                <Value>{props.vessel.getProperties().internalReferenceNumber
+                  ? props.vessel.getProperties().internalReferenceNumber
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>MMSI</Key>
+                <Value>{props.vessel.getProperties().mmsi
+                  ? props.vessel.getProperties().mmsi
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </Body>
+          </Fields>
+        </ColumnOne>
+        <ColumnTwo>
+          <Fields>
+            <Body>
+              <Field>
+                <Key>Marquage ext.</Key>
+                <Value>{props.vessel.getProperties().externalReferenceNumber
+                  ? props.vessel.getProperties().externalReferenceNumber
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Call Sign (IRCS)</Key>
+                <Value>{props.vessel.getProperties().ircs
+                  ? props.vessel.getProperties().ircs
+                  : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </Body>
+          </Fields>
+        </ColumnTwo>
+      </VesselCardBottom>
+      <VesselCardBottom>
+        <ColumnOne>
+          <Fields>
+            <Body>
+              <Field>
+                <Key>Taille du navire</Key>
+                <Value>
+                  {
+                    props.vessel.getProperties().length ? props.vessel.getProperties().length : <NoValue>-</NoValue>
+                  }
+                  {' '}x{' '}
+                  {
+                    props.vessel.getProperties().width ? props.vessel.getProperties().width : <NoValue>-</NoValue>
+                  }
+                  {' '}m
+                </Value>
+              </Field>
+            </Body>
+          </Fields>
+        </ColumnOne>
 
-            </VesselCardBottom>
-            <TrianglePointer>
-                {
-                    props.overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow /> : null
-                }
-                {
-                    props.overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow /> : null
-                }
-                {
-                    props.overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow /> : null
-                }
-                {
-                    props.overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow /> : null
-                }
-            </TrianglePointer>
-        </>
+      </VesselCardBottom>
+      <TrianglePointer>
+        {
+          props.overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
+        }
+        {
+          props.overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
+        }
+        {
+          props.overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
+        }
+        {
+          props.overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
+        }
+      </TrianglePointer>
+    </>
   )
 }
 

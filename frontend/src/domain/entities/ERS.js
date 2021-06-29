@@ -1,14 +1,14 @@
 import {
-  DEPMessage,
-  FARMessage,
-  EOFMessage,
-  PNOMessage,
-  RTPMessage,
-  LANMessage,
   COEMessage,
   COXMessage,
   CROMessage,
-  DISMessage
+  DEPMessage,
+  DISMessage,
+  EOFMessage,
+  FARMessage,
+  LANMessage,
+  PNOMessage,
+  RTPMessage
 } from '../../components/fishing_activities/ers_messages/index.js'
 
 export const ERSMessageType = {
@@ -165,12 +165,12 @@ export const buildCatchArray = catches => {
     } else {
       const foundPropertyIndex = accumulator[sameSpeciesIndex].properties.findIndex(property => {
         return property.faoZone === ersCatch.faoZone &&
-                    property.conversionFactor === ersCatch.conversionFactor &&
-                    property.effortZone === ersCatch.effortZone &&
-                    property.economicZone === ersCatch.economicZone &&
-                    property.preservationState === ersCatch.preservationState &&
-                    property.statisticalRectangle === ersCatch.statisticalRectangle &&
-                    property.presentation === ersCatch.presentation
+          property.conversionFactor === ersCatch.conversionFactor &&
+          property.effortZone === ersCatch.effortZone &&
+          property.economicZone === ersCatch.economicZone &&
+          property.preservationState === ersCatch.preservationState &&
+          property.statisticalRectangle === ersCatch.statisticalRectangle &&
+          property.presentation === ersCatch.presentation
       })
 
       if (foundPropertyIndex === notFound) {

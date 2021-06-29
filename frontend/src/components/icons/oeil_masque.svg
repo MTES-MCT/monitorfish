@@ -1,12 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="18" viewBox="0 0 24 18">
-  <defs>
-    <clipPath id="clip-Plan_de_travail_4">
-      <rect width="24" height="18"/>
-    </clipPath>
-  </defs>
-  <g id="Plan_de_travail_4" data-name="Plan de travail – 4" clip-path="url(#clip-Plan_de_travail_4)">
-    <g id="Composant_16_17" data-name="Composant 16 – 17" transform="translate(3 3)">
-      <path id="Tracé_7" data-name="Tracé 7" d="M219.724,333.829a9.676,9.676,0,0,0-9,6,9.75,9.75,0,0,0,18,0A9.675,9.675,0,0,0,219.724,333.829Zm0,10a4,4,0,1,1,4.091-4A4.048,4.048,0,0,1,219.724,343.829Zm0-6.4a2.4,2.4,0,1,0,2.454,2.4A2.425,2.425,0,0,0,219.724,337.429Z" transform="translate(-210.724 -333.829)" fill="#e1e1e1"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="18"
+     viewBox="0 0 24 18">
+    <defs>
+        <clipPath id="clip-Plan_de_travail_4">
+            <rect width="24" height="18"/>
+        </clipPath>
+    </defs>
+    <g id="Plan_de_travail_4" data-name="Plan de travail – 4" clip-path="url(#clip-Plan_de_travail_4)">
+        <g id="Composant_16_17" data-name="Composant 16 – 17" transform="translate(3 3)">
+            <path id="Tracé_7" data-name="Tracé 7"
+                  d="M219.724,333.829a9.676,9.676,0,0,0-9,6,9.75,9.75,0,0,0,18,0A9.675,9.675,0,0,0,219.724,333.829Zm0,10a4,4,0,1,1,4.091-4A4.048,4.048,0,0,1,219.724,343.829Zm0-6.4a2.4,2.4,0,1,0,2.454,2.4A2.425,2.425,0,0,0,219.724,337.429Z"
+                  transform="translate(-210.724 -333.829)" fill="#e1e1e1"/>
+        </g>
     </g>
-  </g>
 </svg>

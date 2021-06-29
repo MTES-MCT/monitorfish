@@ -81,9 +81,9 @@ function getVesselTrackDepth (updateShowedVessel, trackDepthParameters, temporar
     nextBeforeDateTime = temporaryTrackDepth.beforeDateTime
   } else {
     if (!trackDepthParameters ||
-          (!trackDepthParameters.trackDepth &&
-            !trackDepthParameters.afterDateTime &&
-            !trackDepthParameters.beforeDateTime)) {
+      (!trackDepthParameters.trackDepth &&
+        !trackDepthParameters.afterDateTime &&
+        !trackDepthParameters.beforeDateTime)) {
       nextTrackDepth = vesselTrackDepth
     } else {
       return trackDepthParameters
@@ -99,21 +99,21 @@ function getVesselTrackDepth (updateShowedVessel, trackDepthParameters, temporar
 
 function noPositionsFoundForVessel (vesselAndTrackDepthModified, updateShowedVessel) {
   return vesselAndTrackDepthModified.vessel.positions &&
-      !vesselAndTrackDepthModified.vessel.positions.length &&
-      !updateShowedVessel
+    !vesselAndTrackDepthModified.vessel.positions.length &&
+    !updateShowedVessel
 }
 
 function noPositionsFoundForEnteredDateTime (vesselAndTrackDepthModified, vesselTrackDepthObject) {
   return vesselAndTrackDepthModified.vessel.positions &&
-      !vesselAndTrackDepthModified.vessel.positions.length &&
-      vesselTrackDepthObject
+    !vesselAndTrackDepthModified.vessel.positions.length &&
+    vesselTrackDepthObject
 }
 
 function trackDepthHasBeenModified (vesselAndTrackDepthModified, updateShowedVessel) {
   return vesselAndTrackDepthModified.trackDepthHasBeenModified &&
-      !updateShowedVessel &&
-      vesselAndTrackDepthModified.vessel.positions &&
-      vesselAndTrackDepthModified.vessel.positions.length
+    !updateShowedVessel &&
+    vesselAndTrackDepthModified.vessel.positions &&
+    vesselAndTrackDepthModified.vessel.positions.length
 }
 
 export default showVesselTrackAndSidebar

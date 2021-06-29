@@ -11,23 +11,23 @@ const RegulatoryZoneSelectionList = props => {
   }, [props.foundRegulatoryZones])
 
   return (
-        <List showRegulatorySearchInput={props.showRegulatorySection} foundRegulatoryZones={foundRegulatoryZones}>
-            {
-                foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0
-                  ? Object.keys(foundRegulatoryZones).map((regulatoryZoneName) => {
-                    return (<ListItem key={regulatoryZoneName}>
-                        <RegulatoryZoneSelectionItem
-                            key={regulatoryZoneName}
-                            regulatorySubZones={foundRegulatoryZones[regulatoryZoneName]}
-                            regulatoryZoneName={regulatoryZoneName}
-                            toggleSelectRegulatoryZone={props.toggleSelectRegulatoryZone}
-                            regulatoryZonesSelection={props.regulatoryZonesSelection}
-                        />
-                    </ListItem>)
-                  })
-                  : null
-            }
-        </List>
+    <List showRegulatorySearchInput={props.showRegulatorySection} foundRegulatoryZones={foundRegulatoryZones}>
+      {
+        foundRegulatoryZones && Object.keys(foundRegulatoryZones).length > 0
+          ? Object.keys(foundRegulatoryZones).map((regulatoryZoneName) => {
+            return (<ListItem key={regulatoryZoneName}>
+              <RegulatoryZoneSelectionItem
+                key={regulatoryZoneName}
+                regulatorySubZones={foundRegulatoryZones[regulatoryZoneName]}
+                regulatoryZoneName={regulatoryZoneName}
+                toggleSelectRegulatoryZone={props.toggleSelectRegulatoryZone}
+                regulatoryZonesSelection={props.regulatoryZonesSelection}
+              />
+            </ListItem>)
+          })
+          : null
+      }
+    </List>
   )
 }
 

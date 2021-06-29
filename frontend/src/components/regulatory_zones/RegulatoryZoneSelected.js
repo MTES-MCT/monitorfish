@@ -64,39 +64,39 @@ const RegulatoryZoneSelected = props => {
   }, [props.hideZonesListWhenSearching])
 
   return (
-        <>
-            <RegulatoryZoneSelectedTitle
-                onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}
-                regulatoryZonesAddedToMySelection={props.regulatoryZonesAddedToMySelection}
-                showRegulatoryZonesSelected={showRegulatoryZonesSelected}
-            >
-                Mes zones réglementaires <ChevronIcon isOpen={showRegulatoryZonesSelected}/>
-            </RegulatoryZoneSelectedTitle>
-            <RegulatoryZoneSelectedList
-                layerLength={Object.keys(selectedRegulatoryZones).length}
-                zoneLength={numberOfZonesOpened}
-                showRegulatoryZonesSelected={showRegulatoryZonesSelected}
-            >
-                {
-                    selectedRegulatoryZones && Object.keys(selectedRegulatoryZones).length > 0
-                      ? Object.keys(selectedRegulatoryZones).map((regulatoryZoneName, index) => {
-                        return (<RegulatoryZoneSelectedLayer
-                          key={regulatoryZoneName}
-                          increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-                          decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-                          isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
-                          callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
-                          regulatoryZoneName={regulatoryZoneName}
-                          regulatorySubZones={selectedRegulatoryZones[regulatoryZoneName]}
-                          regulatoryZoneMetadata={regulatoryZoneMetadata}
-                          isLastItem={Object.keys(selectedRegulatoryZones).length === index + 1}
-                          allowRemoveZone={true}
-                        />)
-                      })
-                      : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
-                }
-            </RegulatoryZoneSelectedList>
-        </>
+    <>
+      <RegulatoryZoneSelectedTitle
+        onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}
+        regulatoryZonesAddedToMySelection={props.regulatoryZonesAddedToMySelection}
+        showRegulatoryZonesSelected={showRegulatoryZonesSelected}
+      >
+        Mes zones réglementaires <ChevronIcon isOpen={showRegulatoryZonesSelected}/>
+      </RegulatoryZoneSelectedTitle>
+      <RegulatoryZoneSelectedList
+        layerLength={Object.keys(selectedRegulatoryZones).length}
+        zoneLength={numberOfZonesOpened}
+        showRegulatoryZonesSelected={showRegulatoryZonesSelected}
+      >
+        {
+          selectedRegulatoryZones && Object.keys(selectedRegulatoryZones).length > 0
+            ? Object.keys(selectedRegulatoryZones).map((regulatoryZoneName, index) => {
+              return (<RegulatoryZoneSelectedLayer
+                key={regulatoryZoneName}
+                increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+                decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+                isReadyToShowRegulatoryZones={isReadyToShowRegulatoryZones}
+                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
+                regulatoryZoneName={regulatoryZoneName}
+                regulatorySubZones={selectedRegulatoryZones[regulatoryZoneName]}
+                regulatoryZoneMetadata={regulatoryZoneMetadata}
+                isLastItem={Object.keys(selectedRegulatoryZones).length === index + 1}
+                allowRemoveZone={true}
+              />)
+            })
+            : <NoZoneSelected>Aucune zone sélectionnée</NoZoneSelected>
+        }
+      </RegulatoryZoneSelectedList>
+    </>
   )
 }
 

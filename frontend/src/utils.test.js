@@ -1,4 +1,4 @@
-import { getDateTime, getCoordinates } from './utils'
+import { getCoordinates, getDateTime } from './utils'
 import { WSG84_PROJECTION } from './domain/entities/map'
 
 describe('utils', () => {

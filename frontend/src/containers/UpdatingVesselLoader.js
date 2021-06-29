@@ -22,7 +22,7 @@ const UpdatingVesselLoader = () => {
 
   return (
     <>
-      { loadingApp
+      {loadingApp
         ? <FirstLoadWrapper>
           <FulfillingBouncingCircleSpinner
             color={COLORS.background}

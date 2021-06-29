@@ -35,13 +35,13 @@ const AdministrativeZone = props => {
   }, [showLayer_])
 
   return <>{
-        props.layer
-          ? <Row isGrouped={props.isGrouped} onClick={() => setShowLayer(!showLayer_)}>
-                    <LayerName title={props.layer.name}>{props.layer.name}</LayerName>
-                    { showLayer_ ? <ShowIcon /> : <HideIcon />}
-                </Row>
-          : null
-    }</>
+    props.layer
+      ? <Row isGrouped={props.isGrouped} onClick={() => setShowLayer(!showLayer_)}>
+        <LayerName title={props.layer.name}>{props.layer.name}</LayerName>
+        {showLayer_ ? <ShowIcon/> : <HideIcon/>}
+      </Row>
+      : null
+  }</>
 }
 
 const LayerName = styled.span`

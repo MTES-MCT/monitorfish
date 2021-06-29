@@ -45,7 +45,9 @@ const showLayer = (layerToShow) => (dispatch, getState) => {
         dispatch(addLayer(vectorLayer))
         break
       }
-      default: dispatch(addLayer(getVectorLayerClosure(layerToShow.type, layerToShow.zone))); break
+      default:
+        dispatch(addLayer(getVectorLayerClosure(layerToShow.type, layerToShow.zone)))
+        break
     }
 
     dispatch(addShowedLayer(layerToShow))

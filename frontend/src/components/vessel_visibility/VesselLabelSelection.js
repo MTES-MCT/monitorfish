@@ -13,26 +13,26 @@ const VesselLabelSelection = props => {
   }, [props.vesselLabel])
 
   return (
-        <>
-            { value
-              ? <RadioWrapper>
-                    <RadioGroup
-                        name="vesselLabelRadio"
-                        value={value}
-                        onChange={value => {
-                          setValue(value)
-                          props.updateVesselLabel(value)
-                        }}
-                    >
-                        <Radio value={vesselLabel.VESSEL_NATIONALITY}>Nationalité (nom)</Radio>
-                        <Radio value={vesselLabel.VESSEL_NAME}>Nom du navire</Radio>
-                        <Radio value={vesselLabel.VESSEL_INTERNAL_REFERENCE_NUMBER}>CFR</Radio>
-                        <Radio value={vesselLabel.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>
-                    </RadioGroup>
-                </RadioWrapper>
-              : null
-            }
-        </>
+    <>
+      {value
+        ? <RadioWrapper>
+          <RadioGroup
+            name="vesselLabelRadio"
+            value={value}
+            onChange={value => {
+              setValue(value)
+              props.updateVesselLabel(value)
+            }}
+          >
+            <Radio value={vesselLabel.VESSEL_NATIONALITY}>Nationalité (nom)</Radio>
+            <Radio value={vesselLabel.VESSEL_NAME}>Nom du navire</Radio>
+            <Radio value={vesselLabel.VESSEL_INTERNAL_REFERENCE_NUMBER}>CFR</Radio>
+            <Radio value={vesselLabel.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>
+          </RadioGroup>
+        </RadioWrapper>
+        : null
+      }
+    </>
   )
 }
 

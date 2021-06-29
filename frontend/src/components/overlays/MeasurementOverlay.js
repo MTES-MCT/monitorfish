@@ -30,12 +30,12 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
     <div>
       <MeasurementOverlayElement ref={ref}>
         <ZoneSelected>
-            <ZoneText>{measurement}</ZoneText>
-            <CloseIcon onClick={() => deleteFeature(id)}/>
-          </ZoneSelected>
-          <TrianglePointer>
-            <TriangleShadow/>
-          </TrianglePointer>
+          <ZoneText>{measurement}</ZoneText>
+          <CloseIcon onClick={() => deleteFeature(id)}/>
+        </ZoneSelected>
+        <TrianglePointer>
+          <TriangleShadow/>
+        </TrianglePointer>
       </MeasurementOverlayElement>
     </div>
   )

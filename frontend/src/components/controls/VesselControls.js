@@ -5,7 +5,7 @@ import { COLORS } from '../../constants/constants'
 import LastControlZone from './LastControlZone'
 import ControlsResumeZone from './ControlsResumeZone'
 import YearsToControlList from './YearsToControlList'
-import { lastControlByType, getYearsToControl } from '../../domain/entities/controls'
+import { getYearsToControl, lastControlByType } from '../../domain/entities/controls'
 
 const VesselControls = props => {
   const {
@@ -35,34 +35,34 @@ const VesselControls = props => {
   }, [yearsToControls])
 
   return <>
-        { nextControlResumeAndControls && <>
-                <UpdateControls/>
-                <UpdateControlsButton
-                    onClick={() => props.updateControlResumeAndControls(nextControlResumeAndControls)}>
-                    Nouveaux contrôles
-                </UpdateControlsButton>
-            </>
-        }
-        {
-          controlResumeAndControls && lastControlList && yearsToControls
-            ? <Body>
-                <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls} />
-                <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate} />
-                <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate} />
-                <SeeMoreBackground>
-                    <SeeMore onClick={() => {
-                      const nextDate = new Date(controlsFromDate.getTime())
-                      nextDate.setMonth(nextDate.getMonth() - 12)
+    {nextControlResumeAndControls && <>
+      <UpdateControls/>
+      <UpdateControlsButton
+        onClick={() => props.updateControlResumeAndControls(nextControlResumeAndControls)}>
+        Nouveaux contrôles
+      </UpdateControlsButton>
+    </>
+    }
+    {
+      controlResumeAndControls && lastControlList && yearsToControls
+        ? <Body>
+          <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls}/>
+          <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate}/>
+          <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate}/>
+          <SeeMoreBackground>
+            <SeeMore onClick={() => {
+              const nextDate = new Date(controlsFromDate.getTime())
+              nextDate.setMonth(nextDate.getMonth() - 12)
 
-                      props.setControlFromDate(nextDate)
-                    }}>
-                        Afficher plus de contrôles
-                    </SeeMore>
-                </SeeMoreBackground>
-              </Body>
-            : null
-        }
-        </>
+              props.setControlFromDate(nextDate)
+            }}>
+              Afficher plus de contrôles
+            </SeeMore>
+          </SeeMoreBackground>
+        </Body>
+        : null
+    }
+  </>
 }
 
 const SeeMoreBackground = styled.div`

@@ -4,6 +4,7 @@ import { COLORS } from '../../constants/constants'
 import countries from 'i18n-iso-countries'
 import { getDate } from '../../utils'
 import { vesselsAreEquals } from '../../domain/entities/vessel'
+
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const VesselIdentity = props => {
@@ -57,194 +58,202 @@ const VesselIdentity = props => {
 
   return (vessel
     ? <Body>
-            <Zone>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>CFR</Key>
-                            <Value>
-                                {
-                                    getVesselOrLastPositionProperty('internalReferenceNumber')
-                                }
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>MMSI</Key>
-                            <Value>{
-                                getVesselOrLastPositionProperty('mmsi')
-                            }</Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Marquage ext.</Key>
-                            <Value>
-                                {
-                                    getVesselOrLastPositionProperty('externalReferenceNumber')
-                                }
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Call Sign (IRCS)</Key>
-                            <Value>
-                                {
-                                    getVesselOrLastPositionProperty('ircs')
-                                }
-                            </Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-            </Zone>
-            <Zone>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Nationalité</Key>
-                            <TrimmedValue>{vessel.flagState && countries.getName(vessel.flagState, 'fr') ? countries.getName(vessel.flagState, 'fr') : <NoValue>-</NoValue>}</TrimmedValue>
-                        </Field>
-                        <Field>
-                            <Key>Quartier</Key>
-                            <TrimmedValue>{vessel.district ? <>{vessel.district} {vessel.districtCode ? <>({vessel.districtCode})</> : ''}</> : <NoValue>-</NoValue>}</TrimmedValue>
-                        </Field>
-                        <Field>
-                            <Key>Port d&apos;attache</Key>
-                            <TrimmedValue>{vessel.registryPort ? vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
-                        </Field>
-                    </TableBody>
-                </Fields>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Taille</Key>
-                            <Value>
-                                {vessel.length ? vessel.length : <NoValue>-</NoValue>} x {vessel.width ? vessel.width : <NoValue>-</NoValue>}
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Jauge</Key>
-                            <Value>{vessel.gauge ? <>{vessel.gauge} GT</> : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        <Field>
-                            <Key>Moteur</Key>
-                            <Value>{vessel.power ? <>{vessel.power} kW</> : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-            </Zone>
-            <Zone>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Type de navire</Key>
-                            <Value>{vessel.vesselType ? vessel.vesselType : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        <Field>
-                            <Key>Catégorie de navigation</Key>
-                            <Value>{vessel.sailingCategory ? vessel.sailingCategory : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        <Field>
-                            <Key>Genre de navigation</Key>
-                            <Value>{vessel.sailingType ? vessel.sailingType : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        <Field>
-                            <Key/>
-                        </Field>
-                        <Field>
-                            <Key>Engins de pêche utilisés (JPE)</Key>
-                            <Value><NoValue>-</NoValue></Value>
-                        </Field>
-                        <Field>
-                            <Key>Engins de pêche déclarés (PME)</Key>
-                            <Value>
-                                {
-                                    gears
-                                      ? gears.map(gear => {
-                                        return gear.name
-                                          ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                                          : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-                                      })
-                                      : <NoValue>-</NoValue>
-                                }
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key/>
-                        </Field>
-                        <Field>
-                            <Key>Appartenance à une liste</Key>
-                            <Value><NoValue>-</NoValue></Value>
-                        </Field>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>CFR</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('internalReferenceNumber')
+                  }
+                </Value>
+              </Field>
+              <Field>
+                <Key>MMSI</Key>
+                <Value>{
+                  getVesselOrLastPositionProperty('mmsi')
+                }</Value>
+              </Field>
+            </TableBody>
+          </Fields>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Marquage ext.</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('externalReferenceNumber')
+                  }
+                </Value>
+              </Field>
+              <Field>
+                <Key>Call Sign (IRCS)</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('ircs')
+                  }
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Nationalité</Key>
+                <TrimmedValue>{vessel.flagState && countries.getName(vessel.flagState, 'fr')
+                  ? countries.getName(vessel.flagState, 'fr')
+                  : <NoValue>-</NoValue>}</TrimmedValue>
+              </Field>
+              <Field>
+                <Key>Quartier</Key>
+                <TrimmedValue>{vessel.district
+                  ? <>{vessel.district} {vessel.districtCode ? <>({vessel.districtCode})</> : ''}</>
+                  : <NoValue>-</NoValue>}</TrimmedValue>
+              </Field>
+              <Field>
+                <Key>Port d&apos;attache</Key>
+                <TrimmedValue>{vessel.registryPort ? vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
+              </Field>
+            </TableBody>
+          </Fields>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Taille</Key>
+                <Value>
+                  {vessel.length ? vessel.length : <NoValue>-</NoValue>} x {vessel.width
+                    ? vessel.width
+                    : <NoValue>-</NoValue>}
+                </Value>
+              </Field>
+              <Field>
+                <Key>Jauge</Key>
+                <Value>{vessel.gauge ? <>{vessel.gauge} GT</> : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Moteur</Key>
+                <Value>{vessel.power ? <>{vessel.power} kW</> : <NoValue>-</NoValue>}</Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Type de navire</Key>
+                <Value>{vessel.vesselType ? vessel.vesselType : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Catégorie de navigation</Key>
+                <Value>{vessel.sailingCategory ? vessel.sailingCategory : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Genre de navigation</Key>
+                <Value>{vessel.sailingType ? vessel.sailingType : <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key/>
+              </Field>
+              <Field>
+                <Key>Engins de pêche utilisés (JPE)</Key>
+                <Value><NoValue>-</NoValue></Value>
+              </Field>
+              <Field>
+                <Key>Engins de pêche déclarés (PME)</Key>
+                <Value>
+                  {
+                    gears
+                      ? gears.map(gear => {
+                        return gear.name
+                          ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                          : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
+                      })
+                      : <NoValue>-</NoValue>
+                  }
+                </Value>
+              </Field>
+              <Field>
+                <Key/>
+              </Field>
+              <Field>
+                <Key>Appartenance à une liste</Key>
+                <Value><NoValue>-</NoValue></Value>
+              </Field>
 
-                    </TableBody>
-                </Fields>
-            </Zone>
-            <Zone>
-                <Fields>
-                    <TableBody>
-                        <Field>
-                            <Key>Permis de navigation</Key>
-                            <Value>
-                                {
-                                    vessel.navigationLicenceExpirationDate
-                                      ? <>
-                                            Exp le {showLicenceExpirationDate(vessel.navigationLicenceExpirationDate)}
-                                            { new Date(vessel.navigationLicenceExpirationDate) >= Date.now() ? <LicenceActive /> : <LicenceExpired />}
-                                        </>
-                                      : <NoValue>-</NoValue>
-                                }
+            </TableBody>
+          </Fields>
+        </Zone>
+        <Zone>
+          <Fields>
+            <TableBody>
+              <Field>
+                <Key>Permis de navigation</Key>
+                <Value>
+                  {
+                    vessel.navigationLicenceExpirationDate
+                      ? <>
+                        Exp le {showLicenceExpirationDate(vessel.navigationLicenceExpirationDate)}
+                        {new Date(vessel.navigationLicenceExpirationDate) >= Date.now()
+                          ? <LicenceActive/>
+                          : <LicenceExpired/>}
+                      </>
+                      : <NoValue>-</NoValue>
+                  }
 
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Coordonnées propriétaire</Key>
-                            <Value>
-                                <PersonalData>
-                                    { vessel.proprietorName
-                                      ? <>
-                                        {vessel.proprietorName}
-                                        <span>{ vessel.proprietorPhones ? <><br/>{vessel.proprietorPhones.join(', ')}</> : '' }</span>
-                                        { vessel.proprietorEmails ? <><br/>{vessel.proprietorEmails.join(', ')}</> : '' }
-                                    </>
-                                      : <NoPersonalData>-</NoPersonalData>
-                                    }
-                                </PersonalData>
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Coordonnées armateur</Key>
-                            <Value>
-                                <PersonalData>
-                                    { vessel.operatorName
-                                      ? <>
-                                        {vessel.operatorName}
-                                        <span>{ vessel.operatorPhones ? <><br/>{vessel.operatorPhones.join(', ')}</> : '' }</span>
-                                        { vessel.operatorEmails ? <><br/>{vessel.operatorEmails.join(', ')}</> : '' }
-                                    </>
-                                      : <NoPersonalData>-</NoPersonalData>
-                                    }
-                                </PersonalData>
-                            </Value>
-                        </Field>
-                        <Field>
-                            <Key>Contact navire</Key>
-                            <Value>
-                                <PersonalData>
-                                    { vessel.vesselPhones || vessel.vesselEmails
-                                      ? <>
-                                        { vessel.vesselPhones ? <>{vessel.vesselPhones.join(', ')}<br/></> : '' }
-                                        { vessel.vesselEmails ? <>{vessel.vesselEmails.join(', ')}</> : '' }
-                                    </>
-                                      : <NoPersonalData>-</NoPersonalData>
-                                    }
-                                </PersonalData>
-                            </Value>
-                        </Field>
-                    </TableBody>
-                </Fields>
-            </Zone>
-        </Body>
+                </Value>
+              </Field>
+              <Field>
+                <Key>Coordonnées propriétaire</Key>
+                <Value>
+                  <PersonalData>
+                    {vessel.proprietorName
+                      ? <>
+                        {vessel.proprietorName}
+                        <span>{vessel.proprietorPhones ? <><br/>{vessel.proprietorPhones.join(', ')}</> : ''}</span>
+                        {vessel.proprietorEmails ? <><br/>{vessel.proprietorEmails.join(', ')}</> : ''}
+                      </>
+                      : <NoPersonalData>-</NoPersonalData>
+                    }
+                  </PersonalData>
+                </Value>
+              </Field>
+              <Field>
+                <Key>Coordonnées armateur</Key>
+                <Value>
+                  <PersonalData>
+                    {vessel.operatorName
+                      ? <>
+                        {vessel.operatorName}
+                        <span>{vessel.operatorPhones ? <><br/>{vessel.operatorPhones.join(', ')}</> : ''}</span>
+                        {vessel.operatorEmails ? <><br/>{vessel.operatorEmails.join(', ')}</> : ''}
+                      </>
+                      : <NoPersonalData>-</NoPersonalData>
+                    }
+                  </PersonalData>
+                </Value>
+              </Field>
+              <Field>
+                <Key>Contact navire</Key>
+                <Value>
+                  <PersonalData>
+                    {vessel.vesselPhones || vessel.vesselEmails
+                      ? <>
+                        {vessel.vesselPhones ? <>{vessel.vesselPhones.join(', ')}<br/></> : ''}
+                        {vessel.vesselEmails ? <>{vessel.vesselEmails.join(', ')}</> : ''}
+                      </>
+                      : <NoPersonalData>-</NoPersonalData>
+                    }
+                  </PersonalData>
+                </Value>
+              </Field>
+            </TableBody>
+          </Fields>
+        </Zone>
+      </Body>
     : null
   )
 }

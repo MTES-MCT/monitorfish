@@ -173,18 +173,18 @@ const BaseMap = props => {
   }
 
   return (
-        <MapWrapper>
-            <MapContainer ref={mapElement} />
-            <BaseLayer map={map} />
-            <RegulatoryLayers map={map} />
-            <AdministrativeLayers map={map} />
-            <ShowRegulatoryMetadata mapClickEvent={mapClickEvent} />
-            {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
-            {showAttributions && <MapAttributionsBox />}
-            {map && Children.map(children, (child) => (
-              child && cloneElement(child, { map, mapClickEvent })
-            ))}
-        </MapWrapper>
+    <MapWrapper>
+      <MapContainer ref={mapElement}/>
+      <BaseLayer map={map}/>
+      <RegulatoryLayers map={map}/>
+      <AdministrativeLayers map={map}/>
+      <ShowRegulatoryMetadata mapClickEvent={mapClickEvent}/>
+      {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
+      {showAttributions && <MapAttributionsBox/>}
+      {map && Children.map(children, (child) => (
+        child && cloneElement(child, { map, mapClickEvent })
+      ))}
+    </MapWrapper>
   )
 }
 

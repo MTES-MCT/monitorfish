@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import YearControls from './YearControls'
 import { COLORS } from '../../constants/constants'
-import { Zone, Title } from './Controls.style'
+import { Title, Zone } from './Controls.style'
 
 const YearsToControlList = props => {
   const {
@@ -12,27 +12,27 @@ const YearsToControlList = props => {
   } = props
 
   return <Zone>
-  <Title> Historique des contrôles </Title>
-  {
+    <Title> Historique des contrôles </Title>
+    {
       yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length
         ? <List>
-        {
-          Object.keys(yearsToControls)
-            .sort((a, b) => b - a)
-            .map((year, index) => {
-              return <YearControls
+          {
+            Object.keys(yearsToControls)
+              .sort((a, b) => b - a)
+              .map((year, index) => {
+                return <YearControls
                   key={year + index}
                   year={year}
                   yearControls={yearsToControls[year]}
                   isLastItem={yearsToControls[year].length === index + 1}
                 />
-            })
-        }
-          </List>
+              })
+          }
+        </List>
         : <NoControls>
-            Aucun contrôle {controlsFromDate && `depuis ${controlsFromDate.getUTCFullYear() + 1}`}
+          Aucun contrôle {controlsFromDate && `depuis ${controlsFromDate.getUTCFullYear() + 1}`}
         </NoControls>
-  }</Zone>
+    }</Zone>
 }
 
 const List = styled.ul`

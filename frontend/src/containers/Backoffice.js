@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from './BaseMap'
@@ -85,45 +85,45 @@ const Backoffice = () => {
 
   const displaySearchResultList = () => {
     return (
-    <SearchResultList>
-      {Object.keys(RegulatoryTerritory).map(territory => {
-        return (
-          <Territory key={territory}>
-            <TerritoryName>{RegulatoryTerritory[territory]}</TerritoryName>
-            {displayRegulatoryZoneByRegTerritory(territory)}
-          </Territory>
-        )
-      })}
-    </SearchResultList>)
+      <SearchResultList>
+        {Object.keys(RegulatoryTerritory).map(territory => {
+          return (
+            <Territory key={territory}>
+              <TerritoryName>{RegulatoryTerritory[territory]}</TerritoryName>
+              {displayRegulatoryZoneByRegTerritory(territory)}
+            </Territory>
+          )
+        })}
+      </SearchResultList>)
   }
 
   return (
     <>
-    <BackofficeContainer>
-      <RegulatoryZonePanel
-        regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-      >
-        <SearchContainer>
-          <SearchBoxInput
-            ref={searchInput}
-            type="text"
-            value={searchText}
-            placeholder={''}
-            onChange={e => setSearchText(e.target.value)}/>
-          <SearchButton
-            onClick={() => searchRegulatoryZone()}
-          >
-            <SearchIcon />
-          </SearchButton>
-        </SearchContainer>
-        <ButtonList>
-          <WhiteButton>Brouillon (X)</WhiteButton>
-          <WhiteButton>Tracé en attente (X)</WhiteButton>
-          <WhiteButton disabled>Dernière publications (X)</WhiteButton>
-        </ButtonList>
-        {regulatoryZoneListByRegTerritory
-          ? displaySearchResultList()
-          : <div>En attente de chargement</div>}
+      <BackofficeContainer>
+        <RegulatoryZonePanel
+          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+        >
+          <SearchContainer>
+            <SearchBoxInput
+              ref={searchInput}
+              type="text"
+              value={searchText}
+              placeholder={''}
+              onChange={e => setSearchText(e.target.value)}/>
+            <SearchButton
+              onClick={() => searchRegulatoryZone()}
+            >
+              <SearchIcon/>
+            </SearchButton>
+          </SearchContainer>
+          <ButtonList>
+            <WhiteButton>Brouillon (X)</WhiteButton>
+            <WhiteButton>Tracé en attente (X)</WhiteButton>
+            <WhiteButton disabled>Dernière publications (X)</WhiteButton>
+          </ButtonList>
+          {regulatoryZoneListByRegTerritory
+            ? displaySearchResultList()
+            : <div>En attente de chargement</div>}
           <ButtonListFooter>
             <BlackButton
               disabled={false}
@@ -131,23 +131,23 @@ const Backoffice = () => {
               onClick={() => addNewRegZone()}>
               Saisir une nouvelle réglementation
             </BlackButton>
-        </ButtonListFooter>
-      </RegulatoryZonePanel>
-      <BaseMap/>
-    </BackofficeContainer>
-    <MetadataWrapper
-      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-    >
-      <RegulatoryZoneMetadata
-        loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+          </ButtonListFooter>
+        </RegulatoryZonePanel>
+        <BaseMap/>
+      </BackofficeContainer>
+      <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-        regulatoryZoneMetadata={regulatoryZoneMetadata}
-        callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-        gears={gears}
-        layersSidebarIsOpen={true}
-        fromBackoffice={true}
-      />
-    </MetadataWrapper>
+      >
+        <RegulatoryZoneMetadata
+          loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+          regulatoryZoneMetadata={regulatoryZoneMetadata}
+          callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+          gears={gears}
+          layersSidebarIsOpen={true}
+          fromBackoffice={true}
+        />
+      </MetadataWrapper>
     </>
   )
 }

@@ -11,41 +11,42 @@ const AdministrativeZoneGroup = props => {
   const [isOpen, setIsOpen] = useState(false)
 
   return <>
-        {
-            props.layers && props.layers.length && props.layers[0]
-              ? <Row>
-                    <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
-                        <Text isOpen={isOpen} title={props.layers[0].group.name.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
-                            <ChevronIcon isOpen={isOpen}/>
-                            {props.layers[0].group.name.replace(/[_]/g, ' ')}
-                        </Text>
-                    </Zone>
-                    <List
-                        isOpen={isOpen}
-                        name={props.layers[0].group.name.replace(/\s/g, '-')}
-                        length={props.layers.length}>
-                        { props.layers.map((layer, index) => {
-                          return <ListItem isLastItem={props.layers === index + 1} key={layer.code}>
-                                    <AdministrativeZone
-                                      isShownOnInit={showedLayers.some(layer_ => {
-                                        if (layer_.zone) {
-                                          return layer_.type === layer.groupCode && layer_.zone === layer.code
-                                        } else {
-                                          return layer_.type === layer.code
-                                        }
-                                      })}
-                                    layer={layer}
-                                    callShowAdministrativeZone={props.callShowAdministrativeZone}
-                                    callHideAdministrativeZone={props.callHideAdministrativeZone}
-                                    isGrouped={true}
-                                />
-                                </ListItem>
-                        })
-                        }
-                    </List>
-                </Row>
-              : null
-        }</>
+    {
+      props.layers && props.layers.length && props.layers[0]
+        ? <Row>
+          <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
+            <Text isOpen={isOpen} title={props.layers[0].group.name.replace(/[_]/g, ' ')}
+                  onClick={() => setIsOpen(!isOpen)}>
+              <ChevronIcon isOpen={isOpen}/>
+              {props.layers[0].group.name.replace(/[_]/g, ' ')}
+            </Text>
+          </Zone>
+          <List
+            isOpen={isOpen}
+            name={props.layers[0].group.name.replace(/\s/g, '-')}
+            length={props.layers.length}>
+            {props.layers.map((layer, index) => {
+              return <ListItem isLastItem={props.layers === index + 1} key={layer.code}>
+                <AdministrativeZone
+                  isShownOnInit={showedLayers.some(layer_ => {
+                    if (layer_.zone) {
+                      return layer_.type === layer.groupCode && layer_.zone === layer.code
+                    } else {
+                      return layer_.type === layer.code
+                    }
+                  })}
+                  layer={layer}
+                  callShowAdministrativeZone={props.callShowAdministrativeZone}
+                  callHideAdministrativeZone={props.callHideAdministrativeZone}
+                  isGrouped={true}
+                />
+              </ListItem>
+            })
+            }
+          </List>
+        </Row>
+        : null
+    }</>
 }
 
 const ListItem = styled.span`

@@ -15,7 +15,7 @@ const styles = {
   marginBottom: 20
 }
 
-const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter }) => {
+const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAndResetVesselList }) => {
   const [filterName, setFilterName] = useState('')
   const [filterColor, setFilterColor] = useState('#2c6e49')
 
@@ -33,6 +33,8 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter }) => {
     setIsOpen(false)
     setFilterName('')
     setFilterColor('#2c6e49')
+
+    closeAndResetVesselList()
   }
 
   const cancel = () => {

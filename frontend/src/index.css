@@ -169,6 +169,7 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 
 .rs-radio-inline > .rs-radio-checker {
     padding-top: 2px;
+    margin-right: 6px;
 }
 
 .rs-radio-group {

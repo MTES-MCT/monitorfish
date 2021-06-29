@@ -1,5 +1,5 @@
 import { transform } from 'ol/proj'
-import { WSG84_PROJECTION } from './domain/entities/map'
+import { CoordinatesFormat, WSG84_PROJECTION } from './domain/entities/map'
 import { toStringHDMS } from 'ol/coordinate'
 import { asArray, asString } from 'ol/color'
 import { createSlice } from '@reduxjs/toolkit'
@@ -20,13 +20,72 @@ export const calculateSplitPointCoords = (startNode, nextNode, distanceBetweenNo
 }
 
 /**
- * Get coordinates in hours format
- * @param {string[]} coordinates - Coordinates ([longitude, latitude]) in decimal format.
+ * Get coordinates in the specified format
+ * @param {number[]} coordinates - Coordinates ([longitude, latitude]) in decimal format.
  * @param {string} projection - The project of the entered coordinates.
- * @returns {string[]} coordinates - The [latitude, longitude] coordinates in hours WGS format
+ * @param {string} coordinatesFormat - The wanted format of the returned coordinates (DMS, DMD or DD)
+ * @returns {string[]} coordinates - The [latitude, longitude] coordinates
  */
-export const getCoordinates = (coordinates, projection) => {
+export const getCoordinates = (coordinates, projection, coordinatesFormat) => {
   const transformedCoordinates = transform(coordinates, projection, WSG84_PROJECTION)
+
+  switch (coordinatesFormat) {
+    case CoordinatesFormat.DEGREES_MINUTES_SECONDS: return getDMSCoordinates(transformedCoordinates)
+    case CoordinatesFormat.DEGREES_MINUTES_DECIMALS: return getDMDCoordinates(transformedCoordinates)
+    case CoordinatesFormat.DECIMAL_DEGREES: return getDDCoordinates(transformedCoordinates)
+  }
+}
+
+/**
+ * Get coordinates in DD format
+ * @param {number[]} transformedCoordinates - Coordinates ([longitude, latitude]) in decimal format.
+ * @returns {string[]} coordinates - The [latitude, longitude] coordinates in DD format
+ */
+function getDDCoordinates (transformedCoordinates) {
+  return Array.isArray(transformedCoordinates) && transformedCoordinates.length === 2
+    ? [
+      `${transformedCoordinates[1].toFixed(4)}°`,
+      `${transformedCoordinates[0].toFixed(4)}°`
+      ]
+    : []
+}
+
+/**
+ * Get coordinates in DMD format
+ * @param {number[]} transformedCoordinates - Coordinates ([longitude, latitude]) in decimal format.
+ * @returns {string[]} coordinates - The [latitude, longitude] coordinates in DMD format
+ */
+function getDMDCoordinates (transformedCoordinates) {
+  const dms = getDMSCoordinates(transformedCoordinates)
+
+  let latitude = dms[0]
+  latitude = getDMDOf(latitude)
+
+  let longitude = dms[1]
+  longitude = getDMDOf(longitude)
+
+  return [latitude, longitude]
+}
+
+function getDMDOf (latitudeOrLongitude) {
+  const secondsSplit = latitudeOrLongitude.substring(
+    latitudeOrLongitude.lastIndexOf('′') + 1,
+    latitudeOrLongitude.lastIndexOf('″')
+  )
+
+  const firstPart = latitudeOrLongitude.split('′')[0]
+  const lastPart = latitudeOrLongitude.split('″')[1]
+
+  const decimal = (parseInt(secondsSplit) / 60).toFixed(3)
+  return `${firstPart}.${decimal.replace('0.', '')}′${lastPart}`
+}
+
+/**
+ * Get coordinates in DMS format
+ * @param {number[]} transformedCoordinates - Coordinates ([longitude, latitude]) in decimal format.
+ * @returns {string[]} coordinates - The [latitude, longitude] coordinates in DMS format
+ */
+function getDMSCoordinates (transformedCoordinates) {
   const hourCoordinates = toStringHDMS(transformedCoordinates)
 
   const nSplit = hourCoordinates.split('N')

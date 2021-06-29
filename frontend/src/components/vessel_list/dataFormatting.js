@@ -1,6 +1,6 @@
 // These properties are ordered for the CSV column order
 import { getCoordinates } from '../../utils'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 
 export const CSVOptions = {
   targetNumber: {
@@ -172,8 +172,8 @@ export function getVesselObjectFromFeature (vessel, coordinates) {
     ircs: vessel.getProperties().ircs,
     dateTimeTimestamp: new Date(vessel.getProperties().dateTime).getTime(),
     dateTime: vessel.getProperties().dateTime,
-    latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[0],
-    longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION)[1],
+    latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)[0],
+    longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)[1],
     olCoordinates: coordinates,
     gears: vessel.getProperties().gearOnboard ? [...new Set(vessel.getProperties().gearOnboard.map(gear => gear.gear))].join(', ') : '',
     gearsArray: vessel.getProperties().gearOnboard ? [...new Set(vessel.getProperties().gearOnboard.map(gear => gear.gear))] : [],

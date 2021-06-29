@@ -363,11 +363,13 @@ const VesselList = (namespace) => {
             />
           </Modal.Body>
           <Modal.Footer>
+            {/*
+            TODO To check : is this feature still needed ?
             <ShowOnMapButton
               disabled={!(filteredVessels && filteredVessels.length)}
               onClick={() => highLightOnMap()}>
               Voir sur la carte
-            </ShowOnMapButton>
+            </ShowOnMapButton>*/}
             <BlackButton
               disabled={!(filteredVessels && filteredVessels.length)}
               isLast={false}

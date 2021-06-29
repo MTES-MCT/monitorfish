@@ -45,4 +45,5 @@ data class LastPosition(
         val totalWeightOnboard: Double? = null,
         val lastControlDateTime: ZonedDateTime? = null,
         val lastControlInfraction: Boolean? = null,
-        val postControlComment: String? = null)
+        val postControlComment: String? = null,
+        val vesselIdentifier: String? = null)

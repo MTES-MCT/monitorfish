@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
@@ -63,6 +64,9 @@ class BffController(
                   @ApiParam("Vessel track depth")
                   @RequestParam(name = "trackDepth")
                   trackDepth: VesselTrackDepth,
+                  @ApiParam("Vessel positions identifier")
+                  @RequestParam(name = "vesselIdentifier")
+                  vesselIdentifier: VesselIdentifier,
                   @ApiParam("from date")
                   @RequestParam(name = "afterDateTime", required = false)
                   @DateTimeFormat(pattern = zoneDateTimePattern)
@@ -79,6 +83,7 @@ class BffController(
                     externalReferenceNumber,
                     IRCS,
                     trackDepth,
+                    vesselIdentifier,
                     afterDateTime,
                     beforeDateTime)
 

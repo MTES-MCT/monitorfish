@@ -36,7 +36,8 @@ data class LastPositionDataOutput(
         val totalWeightOnboard: Double? = null,
         val lastControlDateTime: ZonedDateTime? = null,
         val lastControlInfraction: Boolean? = null,
-        val postControlComment: String? = null) {
+        val postControlComment: String? = null,
+        val vesselIdentifier: String? = null) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -69,7 +70,8 @@ data class LastPositionDataOutput(
                     totalWeightOnboard = position.totalWeightOnboard,
                     lastControlDateTime = position.lastControlDateTime,
                     lastControlInfraction = position.lastControlInfraction,
-                    postControlComment = position.postControlComment)
+                    postControlComment = position.postControlComment,
+                    vesselIdentifier = position.vesselIdentifier)
         }
     }
 }

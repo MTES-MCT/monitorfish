@@ -165,6 +165,12 @@ const VesselList = (namespace) => {
     setCountriesFiltered([])
     setAdministrativeZonesFiltered([])
     setLastPositionTimeAgoFilter(2)
+    setFleetSegmentsFiltered([])
+    setGearsFiltered([])
+    setSpeciesFiltered([])
+    setDistrictsFiltered([])
+    setVesselsSizeValuesChecked([])
+
     dispatch(resetZonesSelected())
   }
 
@@ -400,6 +406,7 @@ const VesselList = (namespace) => {
       <SaveVesselFiltersModal
         isOpen={saveVesselFilterModalIsOpen}
         setIsOpen={setSaveVesselFilterModalIsOpen}
+        closeAndResetVesselList={closeAndResetVesselList}
         filters={{
           countriesFiltered,
           fleetSegmentsFiltered,

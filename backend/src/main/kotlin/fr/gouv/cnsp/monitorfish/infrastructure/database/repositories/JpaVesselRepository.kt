@@ -23,19 +23,19 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
             }
         }
 
-        if (externalReferenceNumber.isNotEmpty()) {
-            try {
-                return dbVesselRepository.findByExternalReferenceNumberIgnoreCaseContaining(externalReferenceNumber).toVessel()
-            } catch (e: EmptyResultDataAccessException) {
-                logger.warn("No vessel found for external marking $externalReferenceNumber", e)
-            }
-        }
-
         if (ircs.isNotEmpty()) {
             try {
                 return dbVesselRepository.findByIrcs(ircs).toVessel()
             } catch (e: EmptyResultDataAccessException) {
                 logger.warn("No vessel found for IRCS $externalReferenceNumber", e)
+            }
+        }
+
+        if (externalReferenceNumber.isNotEmpty()) {
+            try {
+                return dbVesselRepository.findByExternalReferenceNumberIgnoreCaseContaining(externalReferenceNumber).toVessel()
+            } catch (e: EmptyResultDataAccessException) {
+                logger.warn("No vessel found for external marking $externalReferenceNumber", e)
             }
         }
 

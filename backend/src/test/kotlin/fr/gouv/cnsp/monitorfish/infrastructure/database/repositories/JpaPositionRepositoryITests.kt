@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -66,7 +65,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(secondPosition)
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
-        val lastPositions = jpaPositionRepository.findVesselLastPositions(
+        val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
                 "FR224226850",
                 "",
                 "",
@@ -93,7 +92,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(secondPosition)
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
-        val lastPositions = jpaPositionRepository.findVesselLastPositions(
+        val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
                 "FR224226850",
                 "",
                 "",
@@ -120,7 +119,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(secondPosition)
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
-        val lastPositions = jpaPositionRepository.findVesselLastPositions(
+        val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
                 "",
                 "NOT_NULL",
                 "",
@@ -146,7 +145,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(secondPosition)
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
-        val lastPositions = jpaPositionRepository.findVesselLastPositions(
+        val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
                 "",
                 "",
                 "NOT_NULL",

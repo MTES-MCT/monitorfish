@@ -1,13 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPositionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
@@ -22,31 +20,50 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
                 .map(PositionEntity::toPosition)
     }
 
-    @Cacheable(value = ["vessel_track"])
-    override fun findVesselLastPositions(internalReferenceNumber: String,
-                                         externalReferenceNumber: String,
-                                         ircs: String,
-                                         from: ZonedDateTime,
-                                         to: ZonedDateTime): List<Position> {
+    override fun findVesselLastPositionsWithoutSpecifiedIdentifier(internalReferenceNumber: String,
+                                                                   externalReferenceNumber: String,
+                                                                   ircs: String,
+                                                                   from: ZonedDateTime,
+                                                                   to: ZonedDateTime): List<Position> {
 
         if(internalReferenceNumber.isNotEmpty()) {
-            return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
-                    .map(PositionEntity::toPosition)
-        }
-
-        if(externalReferenceNumber.isNotEmpty()) {
-            return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
-                    .map(PositionEntity::toPosition)
+            return findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from, to)
         }
 
         if(ircs.isNotEmpty()) {
-            return dbPositionRepository.findLastByIrcs(ircs, from, to)
-                    .map(PositionEntity::toPosition)
+            return findVesselLastPositionsByIrcs(ircs, from, to)
+        }
+
+        if(externalReferenceNumber.isNotEmpty()) {
+            return findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from, to)
         }
 
         return listOf()
     }
 
+    @Cacheable(value = ["vessel_track"])
+    override fun findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber: String,
+                                                                  from: ZonedDateTime,
+                                                                  to: ZonedDateTime): List<Position> {
+        return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
+                .map(PositionEntity::toPosition)
+    }
+
+    @Cacheable(value = ["vessel_track"])
+    override fun findVesselLastPositionsByIrcs(ircs: String,
+                                               from: ZonedDateTime,
+                                               to: ZonedDateTime): List<Position> {
+        return dbPositionRepository.findLastByIrcs(ircs, from, to)
+                .map(PositionEntity::toPosition)
+    }
+
+    @Cacheable(value = ["vessel_track"])
+    override fun findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber: String,
+                                                                  from: ZonedDateTime,
+                                                                  to: ZonedDateTime): List<Position> {
+        return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
+                .map(PositionEntity::toPosition)
+    }
 
     override fun save(position: Position) {
         val positionEntity = PositionEntity.fromPosition(position)

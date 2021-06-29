@@ -58,11 +58,12 @@ export function getVesselFromAPI (identity, vesselTrackDepthObject) {
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
+  const vesselIdentifier = identity.vesselIdentifier || 'UNDEFINED'
   const trackDepth = vesselTrackDepthObject.trackDepth ? vesselTrackDepthObject.trackDepth : ''
   const afterDateTime = vesselTrackDepthObject.afterDateTime ? vesselTrackDepthObject.afterDateTime.toISOString() : ''
   const beforeDateTime = vesselTrackDepthObject.beforeDateTime ? vesselTrackDepthObject.beforeDateTime.toISOString() : ''
 
-  return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
+  return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
     .then(response => {
       if (response.status === OK) {
         return response.json().then(vessel => {

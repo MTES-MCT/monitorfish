@@ -3,11 +3,14 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.Logger
@@ -24,6 +27,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
                         externalReferenceNumber: String,
                         ircs: String,
                         trackDepth: VesselTrackDepth,
+                        vesselIdentifier: VesselIdentifier,
                         fromDateTime: ZonedDateTime? = null,
                         toDateTime: ZonedDateTime? = null): Pair<Boolean, Pair<Vessel, List<Position>>> {
         var vesselTrackDepthHasBeenModified = false
@@ -64,13 +68,31 @@ class GetVessel(private val vesselRepository: VesselRepository,
         }
 
         return coroutineScope {
-            val positionsFuture = async {
-                positionRepository.findVesselLastPositions(internalReferenceNumber, externalReferenceNumber, ircs, from!!, to!!)
-                        .sortedBy { it.dateTime }
-            }
+            val positionsFuture = findPositionsAsync(vesselIdentifier, internalReferenceNumber, from, to, ircs, externalReferenceNumber)
+
             val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }
 
             Pair(vesselTrackDepthHasBeenModified, Pair(vesselFuture.await(), positionsFuture.await()))
+        }
+    }
+
+    private fun CoroutineScope.findPositionsAsync(vesselIdentifier: VesselIdentifier,
+                                                  internalReferenceNumber: String,
+                                                  from: ZonedDateTime?,
+                                                  to: ZonedDateTime?,
+                                                  ircs: String,
+                                                  externalReferenceNumber: String): Deferred<List<Position>> {
+        return when (vesselIdentifier) {
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> async { positionRepository.findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from!!, to!!)
+                    .sortedBy { it.dateTime }}
+            VesselIdentifier.IRCS -> async { positionRepository.findVesselLastPositionsByIrcs(ircs, from!!, to!!)
+                    .sortedBy { it.dateTime }}
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> async { positionRepository.findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from!!, to!!)
+                    .sortedBy { it.dateTime }}
+            VesselIdentifier.UNDEFINED -> async {
+                positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(internalReferenceNumber, externalReferenceNumber, ircs, from!!, to!!)
+                        .sortedBy { it.dateTime }
+            }
         }
     }
 }

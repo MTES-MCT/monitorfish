@@ -94,6 +94,39 @@ def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd
     return res
 
 
+def get_first_non_null_column_name(
+    df: pd.DataFrame, result_labels: Union[None, dict] = None
+) -> pd.Series:
+    """Returns a Series with the same index as the input DataFrame, whose values are
+    the name of the first column (or the corresponding label, if provided) with a
+    non-null value in each row, from left to right.
+
+    Rows with all null values return None.
+
+    Args:
+        df (pd.DataFrame): input pandas DataFrame
+        result_labels (dict): if provided, must be a mapping of column names to the
+        corresponding labels in the result.
+
+    Returns:
+        pd.Series: Series containing the name of the first column with a non-null value
+        in each row of the DataFrame, from left to right
+    """
+
+    non_null_rows = df.dropna(how="all")
+    first_non_null_values_idx = np.argmax(non_null_rows.notnull().values, axis=1)
+
+    res_values = np.choose(first_non_null_values_idx, list(df))
+
+    res = pd.Series(index=df.index, data=[None] * len(df))
+    res[non_null_rows.index] = res_values
+
+    if result_labels is not None:
+        res = res.map(lambda s: result_labels.get(s))
+
+    return res
+
+
 def df_to_dict_series(df: pd.DataFrame, result_colname: str = "json_col"):
     """Converts a pandas DataFrame into a Series with the same index as the input
     DataFrame and whose values are dictionnaries like :

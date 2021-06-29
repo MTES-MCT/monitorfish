@@ -58,8 +58,8 @@ export class Vessel {
       totalWeightOnboard: vessel.totalWeightOnboard,
       lastControlDateTime: vessel.lastControlDateTime,
       lastControlInfraction: vessel.lastControlInfraction,
-      postControlComment: vessel.postControlComment
-
+      postControlComment: vessel.postControlComment,
+      vesselIdentifier: vessel.vesselIdentifier
     })
 
     this.feature.setId(`${Layers.VESSELS.code}:${options.id}`)
@@ -255,7 +255,8 @@ export const getVesselIdentityFromFeature = feature => {
     vesselName: feature.getProperties().vesselName,
     flagState: feature.getProperties().flagState,
     mmsi: feature.getProperties().mmsi,
-    ircs: feature.getProperties().ircs
+    ircs: feature.getProperties().ircs,
+    vesselIdentifier: feature.getProperties().vesselIdentifier
   }
 }
 
@@ -266,7 +267,8 @@ export const getVesselIdentityFromVessel = vessel => {
     vesselName: vessel.vesselName,
     flagState: vessel.flagState,
     mmsi: vessel.mmsi,
-    ircs: vessel.ircs
+    ircs: vessel.ircs,
+    vesselIdentifier: vessel.vesselIdentifier
   }
 }
 

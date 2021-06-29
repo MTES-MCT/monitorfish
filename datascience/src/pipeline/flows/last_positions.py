@@ -40,9 +40,9 @@ def merge(last_positions, current_segments, last_controls):
     last_positions = pd.merge(last_positions, current_segments, on="cfr", how="left")
 
     vessel_identifier_labels = {
-        "cfr": "internalReferenceNumber",
-        "ircs": "ircs",
-        "external_immatriculation": "externalReferenceNumber",
+        "cfr": "INTERNAL_REFERENCE_NUMBER",
+        "ircs": "IRCS",
+        "external_immatriculation": "EXTERNAL_REFERENCE_NUMBER",
     }
 
     last_positions["vessel_identifier"] = get_first_non_null_column_name(

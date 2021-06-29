@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -46,6 +47,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(position?.lastControlDateTime).isNotNull
         assertThat(position?.lastControlInfraction).isTrue
         assertThat(position?.postControlComment).isEqualTo("Tout va bien")
+        assertThat(position?.vesselIdentifier).isEqualTo(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString())
     }
 
 }

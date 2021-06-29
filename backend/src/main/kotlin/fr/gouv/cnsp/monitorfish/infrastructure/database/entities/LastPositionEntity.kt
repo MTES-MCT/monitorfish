@@ -90,7 +90,9 @@ data class LastPositionEntity(
         @Column(name = "last_control_infraction")
         val lastControlInfraction: Boolean? = null,
         @Column(name = "post_control_comments")
-        val postControlComment: String? = null) : Serializable {
+        val postControlComment: String? = null,
+        @Column(name = "vessel_identifier")
+        val vesselIdentifier: String? = null) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,
@@ -122,5 +124,6 @@ data class LastPositionEntity(
             totalWeightOnboard = totalWeightOnboard,
             lastControlDateTime = lastControlDateTime,
             lastControlInfraction = lastControlInfraction,
-            postControlComment = postControlComment)
+            postControlComment = postControlComment,
+            vesselIdentifier = vesselIdentifier)
 }

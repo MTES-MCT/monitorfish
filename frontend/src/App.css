@@ -133,7 +133,7 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
 .ol-scale-line {
     position: absolute;
     bottom: 10px;
-    left: 242px;
+    left: 272px;
     display: inline-block;
     margin: 1px;
     padding: 2px 0 5px 2px;

@@ -5,10 +5,13 @@ import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
 import { OverlayPosition } from '../overlays/position'
+import { useSelector } from 'react-redux'
 
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselCard = props => {
+  const { coordinatesFormat } = useSelector(state => state.map)
+
   return (
     <>
       <VesselCardHeader>
@@ -34,9 +37,9 @@ const VesselCard = props => {
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[0]}</FieldValue>
+          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION)[1]}</FieldValue>
+          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>

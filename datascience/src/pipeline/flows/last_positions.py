@@ -1,9 +1,12 @@
+from datetime import datetime
+
 import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, task
 
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.helpers.spatial import estimate_current_position
 from src.pipeline.processing import (
     get_first_non_null_column_name,
     join_on_multiple_keys,
@@ -33,6 +36,36 @@ def extract_last_controls():
         query_filepath="monitorfish/last_controls.sql",
         parse_dates=["last_control_datetime_utc"],
     )
+
+
+@task(checkpoint=False)
+def estimate_current_positions(last_positions):
+
+    last_positions = last_positions.copy(deep=True)
+    now = datetime.utcnow()
+
+    estimated_position_cols = [
+        "estimated_current_latitude",
+        "estimated_current_longitude",
+    ]
+
+    last_positions[estimated_position_cols] = last_positions.apply(
+        lambda row: estimate_current_position(
+            last_latitude=row["latitude"],
+            last_longitude=row["longitude"],
+            course=row["course"],
+            speed=row["speed"],
+            time_since_last_position=(
+                (now - row["last_position_datetime_utc"]).total_seconds() / 3600
+            ),
+            max_time_since_last_position=2,
+            on_error="ignore",
+        ),
+        axis=1,
+        result_type="expand",
+    )
+
+    return last_positions
 
 
 @task(checkpoint=False)
@@ -92,6 +125,7 @@ def load_last_positions(last_positions):
 with Flow("Last positions") as flow:
     current_segments = extract_current_segments()
     last_positions = extract_last_positions()
+    last_positions = estimate_current_positions(last_positions)
     last_controls = extract_last_controls()
     last_positions = merge(last_positions, current_segments, last_controls)
     load_last_positions(last_positions)

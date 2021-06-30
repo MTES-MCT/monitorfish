@@ -143,7 +143,6 @@ const TrackDepthSelectionContent = styled.div`
   opacity: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
   visibility: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
-  padding: 0
   font-size: 13px;
   color: ${COLORS.textGray};
   transition: all 0.3s;

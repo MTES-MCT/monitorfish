@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Table from 'rsuite/lib/Table'
 import { useDispatch, useSelector } from 'react-redux'
 import { sortArrayByColumn, SortType } from '../vessel_list/tableSort'
@@ -11,11 +11,12 @@ const { Column, HeaderCell, Cell } = Table
 
 const TrackPositionsTable = () => {
   const dispatch = useDispatch()
+  const { coordinatesFormat } = useSelector(state => state.map)
   const { selectedVessel } = useSelector(state => state.vessel)
 
-  const [sortColumn, setSortColumn] = React.useState(CSVOptions.dateTime.code)
-  const [sortType, setSortType] = React.useState(SortType.DESC)
-  const [positions, setPositions] = React.useState()
+  const [sortColumn, setSortColumn] = useState(CSVOptions.dateTime.code)
+  const [sortType, setSortType] = useState(SortType.DESC)
+  const [positions, setPositions] = useState()
 
   useEffect(() => {
     if (selectedVessel) {
@@ -51,22 +52,22 @@ const TrackPositionsTable = () => {
     >
       <Column width={150} fixed sortable>
         <HeaderCell>GDH</HeaderCell>
-        <DateTimeCell dispatch={dispatch} dataKey="dateTime" />
+        <DateTimeCell dispatch={dispatch} dataKey="dateTime" coordinatesFormat={coordinatesFormat}/>
       </Column>
       <Column width={70} fixed sortable>
         <HeaderCell>Vitesse</HeaderCell>
-        <SpeedCell dispatch={dispatch} dataKey="speed" />
+        <SpeedCell dispatch={dispatch} dataKey="speed" coordinatesFormat={coordinatesFormat}/>
       </Column>
       <Column width={60} fixed sortable>
         <HeaderCell>Cap</HeaderCell>
-        <CourseCell dispatch={dispatch} dataKey="course" />
+        <CourseCell dispatch={dispatch} dataKey="course" coordinatesFormat={coordinatesFormat}/>
       </Column>
     </Table>
   )
 }
 
-export const SpeedCell = ({ rowData, dataKey, dispatch, ...props }) => {
-  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION) : ''
+export const SpeedCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...props }) => {
+  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat) : ''
 
   return (
     <Cell
@@ -78,8 +79,8 @@ export const SpeedCell = ({ rowData, dataKey, dispatch, ...props }) => {
   )
 }
 
-export const CourseCell = ({ rowData, dataKey, dispatch, ...props }) => {
-  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION) : ''
+export const CourseCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...props }) => {
+  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat) : ''
 
   return (
     <Cell
@@ -91,8 +92,8 @@ export const CourseCell = ({ rowData, dataKey, dispatch, ...props }) => {
   )
 }
 
-export const DateTimeCell = ({ rowData, dataKey, dispatch, ...props }) => {
-  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION) : ''
+export const DateTimeCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...props }) => {
+  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat) : ''
 
   return (
     <Cell

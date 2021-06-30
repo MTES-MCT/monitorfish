@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { setVesselsLayerSource, updateSelectedVesselFeature } from '../domain/reducers/Vessel'

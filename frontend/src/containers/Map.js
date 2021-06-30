@@ -15,7 +15,6 @@ import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
 import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
 import VesselEstimatedPositionLayer from '../layers/VesselEstimatedPositionLayer'
-import VesselEstimatedPositionCard from '../components/cards/VesselEstimatedPositionCard'
 import VesselEstimatedPositionCardOverlay from '../components/overlays/VesselEstimatedPositionCardOverlay'
 
 console.log('HIT_PIXEL_TO_TOLERANCE ' + HIT_PIXEL_TO_TOLERANCE)

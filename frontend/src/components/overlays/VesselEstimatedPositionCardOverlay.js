@@ -6,8 +6,10 @@ import LayersEnum from '../../domain/entities/layers'
 import VesselEstimatedPositionCard from '../cards/VesselEstimatedPositionCard'
 import { getCoordinates } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
+import { useSelector } from 'react-redux'
 
 const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
+  const { coordinatesFormat } = useSelector(state => state.map)
   const [coordinates, setCoordinates] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
@@ -44,7 +46,7 @@ const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, featur
 
         const latitude = feature.getProperties().latitude
         const longitude = feature.getProperties().longitude
-        let coordinates = getCoordinates([longitude, latitude], WSG84_PROJECTION)
+        const coordinates = getCoordinates([longitude, latitude], WSG84_PROJECTION, coordinatesFormat)
         setCoordinates(coordinates)
         if (pointerMoveEventPixel) {
           overlayObjectRef.current.setPosition(map.getCoordinateFromPixel(pointerMoveEventPixel))

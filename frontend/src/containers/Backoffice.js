@@ -13,11 +13,13 @@ import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.sty
 import { EmptyResult } from '../components/commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
+import { search } from '../utils'
 
 const Backoffice = () => {
   const searchInput = useRef(null)
   const [searchText, setSearchText] = useState('')
-  const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState(undefined)
+  const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
+  const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState({})
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
@@ -29,8 +31,21 @@ const Backoffice = () => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
-  const searchRegulatoryZone = () => {
-    console.log(`Search text is ${searchText}`)
+  const properties = ['layerName', 'zone', 'region', 'seafront', 'regulatoryReferences']
+
+  const searchRegulatoryZone = (searchText) => {
+    const searchResult = {}
+    if (searchText === '') {
+      setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
+    } else {
+      regulatoryZoneListByRegTerritory.foreach(key => {
+        const foundRegulatoryZones = search(searchText, properties, regulatoryZoneListByRegTerritory[key])
+        if (foundRegulatoryZones && foundRegulatoryZones !== {}) {
+          foundRegulatoryZonesByRegTerritory[key] = foundRegulatoryZones
+        }
+      })
+      setFoundRegulatoryZonesByRegTerritory(searchResult)
+    }
   }
 
   const getRegulatoryZones = () => {
@@ -50,6 +65,14 @@ const Backoffice = () => {
     getRegulatoryZones()
     dispatch(getAllGearCodes())
   }, [])
+
+  useEffect(() => {
+    console.log(foundRegulatoryZonesByRegTerritory)
+  }, [foundRegulatoryZonesByRegTerritory])
+
+  useEffect(() => {
+    searchRegulatoryZone(searchText)
+  }, [searchText, setFoundRegulatoryZonesByRegTerritory, regulatoryZoneListByRegTerritory])
 
   function addNewRegZone () {
     console.log('addNewRegZone clicked')
@@ -108,7 +131,7 @@ const Backoffice = () => {
               ref={searchInput}
               type="text"
               value={searchText}
-              placeholder={''}
+              placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
               onChange={e => setSearchText(e.target.value)}/>
             <SearchButton
               onClick={() => searchRegulatoryZone()}

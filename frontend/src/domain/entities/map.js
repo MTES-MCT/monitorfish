@@ -10,3 +10,9 @@ export const MeasurementTypes = {
   MULTILINE: 'LineString',
   CIRCLE_RANGE: 'Circle'
 }
+
+export const CoordinatesFormat = {
+  DEGREES_MINUTES_SECONDS: 'DMS',
+  DEGREES_MINUTES_DECIMALS: 'DMD',
+  DECIMAL_DEGREES: 'DD'
+}

@@ -1,10 +1,78 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
+import { Radio, RadioGroup } from 'rsuite'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCoordinatesFormat } from '../../domain/reducers/Map'
+import { getCoordinates } from '../../utils'
 
-const MapCoordinatesBox = props => {
-  return (<Coordinates>{props.coordinates}</Coordinates>)
+const MapCoordinatesBox = ({ coordinates }) => {
+  const dispatch = useDispatch()
+  const { coordinatesFormat } = useSelector(state => state.map)
+  const [formatSelectionIsOpen, setFormatSelectionIsOpen] = useState(false)
+
+  const getShowedCoordinates = coordinates => {
+    const transformedCoordinates = getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)
+
+    if (Array.isArray(transformedCoordinates) && transformedCoordinates.length === 2) {
+      return `${transformedCoordinates[0]} ${transformedCoordinates[1]}`
+    }
+
+    return ''
+  }
+
+  return (<>
+    <CoordinatesTypeSelection isOpen={formatSelectionIsOpen}>
+      <Header onClick={() => setFormatSelectionIsOpen(false)}>Unités des coordonnées</Header>
+      <RadioWrapper
+        inline
+        name="coordinatesRadio"
+        value={coordinatesFormat}
+        onChange={value => dispatch(setCoordinatesFormat(value))}
+      >
+        <Radio inline value={CoordinatesFormat.DEGREES_MINUTES_SECONDS} title={'Degrés Minutes Secondes'}>DMS</Radio>
+        <Radio inline value={CoordinatesFormat.DEGREES_MINUTES_DECIMALS} title={'Degrés Minutes Décimales'}>DMD</Radio>
+        <Radio inline value={CoordinatesFormat.DECIMAL_DEGREES} title={'Degrés Décimales'}>DD</Radio>
+      </RadioWrapper>
+    </CoordinatesTypeSelection>
+    <Coordinates onClick={() => setFormatSelectionIsOpen(!formatSelectionIsOpen)}>
+      {getShowedCoordinates(coordinates)} ({coordinatesFormat})
+    </Coordinates>
+    </>)
 }
+
+const RadioWrapper = styled(RadioGroup)`
+  padding: 6px 12px 12px 12px !important;
+`
+
+const Header = styled.span`
+  background-color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.grayLighter};
+  padding: 5px 0;
+  width: 100%;
+  display: inline-block;
+  cursor: pointer;
+`
+
+const CoordinatesTypeSelection = styled.span`
+  position: absolute;
+  bottom: ${props => props.isOpen ? 40 : -40}px;
+  left: 40px;
+  display: inline-block;
+  margin: 1px;
+  color: ${COLORS.textGray};
+  font-size: 13px;
+  font-weight: 300;
+  text-decoration: none;
+  text-align: center;
+  background-color: ${COLORS.background};
+  border: none;
+  border-radius: 2px;
+  width: 227px;
+  opacity: ${props => props.isOpen ? 1 : 0};
+  transition: all 0.5s;
+`
 
 const Coordinates = styled.span`
   position: absolute;
@@ -22,7 +90,8 @@ const Coordinates = styled.span`
   background-color: ${COLORS.grayDarkerThree};
   border: none;
   border-radius: 2px;
-  width: 195px;
+  width: 225px;
+  cursor: pointer;
 `
 
 export default MapCoordinatesBox

@@ -3,6 +3,7 @@ import { getLocalStorageState } from '../../utils'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 import { vesselLabel } from '../entities/vesselLabel'
 import { baseLayers } from '../entities/layers'
+import { CoordinatesFormat } from '../entities/map'
 
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
 const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
@@ -12,6 +13,7 @@ const savedMapViewLocalStorageKey = 'mapView'
 const savedMapExtentLocalStorageKey = 'mapExtent'
 const baseLayerLocalStorageKey = 'baseLayer'
 const measurementsLocalStorageKey = 'measurements'
+const coordinatesFormatLocalStorageKey = 'coordinatesFormat'
 
 const mapSlice = createSlice({
   name: 'map',
@@ -38,7 +40,8 @@ const mapSlice = createSlice({
       zoom: null,
       center: null
     }, savedMapViewLocalStorageKey),
-    extent: getLocalStorageState(null, savedMapExtentLocalStorageKey)
+    extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
+    coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey)
   },
   reducers: {
     setUpdatedFromCron (state, action) {
@@ -153,6 +156,16 @@ const mapSlice = createSlice({
     },
     resetZonesSelected (state) {
       state.zonesSelected = []
+    },
+    /**
+     * Set the coordinate format in the whole application (as DMS, DMD or DD)
+     * @param {Object=} state
+     * @param {{
+     * payload: CoordinatesFormat}} action - The coordinate format
+     */
+    setCoordinatesFormat (state, action) {
+      window.localStorage.setItem(coordinatesFormatLocalStorageKey, JSON.stringify(action.payload))
+      state.coordinatesFormat = action.payload
     }
   }
 })
@@ -183,7 +196,8 @@ export const {
   setZonesSelected,
   removeZoneSelected,
   resetZonesSelected,
-  setUpdatedFromCron
+  setUpdatedFromCron,
+  setCoordinatesFormat
 } = mapSlice.actions
 
 export default mapSlice.reducer

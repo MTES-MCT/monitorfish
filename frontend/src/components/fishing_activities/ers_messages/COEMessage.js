@@ -4,10 +4,13 @@ import { COLORS } from '../../../constants/constants'
 import { getCoordinates, getDateTime } from '../../../utils'
 import { WSG84_PROJECTION } from '../../../domain/entities/map'
 import countries from 'i18n-iso-countries'
+import { useSelector } from 'react-redux'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const COEMessage = props => {
+  const { coordinatesFormat } = useSelector(state => state.map)
+
   return <>
     {props.message
       ? <>
@@ -25,10 +28,10 @@ const COEMessage = props => {
                 <Key>Position d&apos;entrée</Key>
                 <Value>
                   <FirstInlineKey>Lat.</FirstInlineKey> {props.message.latitudeEntered && props.message.longitudeEntered
-                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[0]
+                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION, coordinatesFormat)[0]
                     : <NoValue>-</NoValue>}
                   <InlineKey>Lon.</InlineKey> {props.message.latitudeEntered && props.message.longitudeEntered
-                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION)[1]
+                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION, coordinatesFormat)[1]
                     : <NoValue>-</NoValue>}<br/>
                   <FirstInlineKey>ZEE</FirstInlineKey> {props.message.economicZoneEntered
                     ? <>{countries.getName(props.message.economicZoneEntered, 'fr')} ({props.message.economicZoneEntered})</>

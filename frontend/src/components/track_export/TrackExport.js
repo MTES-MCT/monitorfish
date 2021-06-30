@@ -6,6 +6,7 @@ import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { getCoordinates, getDate } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
+import { useSelector } from 'react-redux'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -82,12 +83,13 @@ function orderToCSVColumnOrder (positionsObject) {
 }
 
 const TrackExport = props => {
+  const { coordinatesFormat } = useSelector(state => state.map)
   const [positions, setPositions] = useState([])
 
   useEffect(() => {
     if (props.positions && props.positions.length) {
       const nextPositions = props.positions.map(position => {
-        const coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION)
+        const coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION, coordinatesFormat)
 
         return {
           vesselName: position.vesselName ? position.vesselName : '',

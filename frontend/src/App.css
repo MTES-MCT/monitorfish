@@ -227,6 +227,7 @@ a:hover, a:focus {
     font-weight: normal;
     color: #515151;
     padding: 9px 7px;
+    text-align: left;
 }
 
 .rs-table-cell-content > input {
@@ -368,4 +369,8 @@ a:hover, a:focus {
 
 .rs-table-cell-header-icon-sort-desc::after {
     color: #9A9A9A;
+}
+
+.rs-table-hover .rs-table-row:not(.rs-table-row-header):hover, .rs-table-hover .rs-table-row:hover .rs-table-cell-group, .rs-table-hover .rs-table-row:hover .rs-table-cell {
+  background: #D6D6D6 !important;
 }

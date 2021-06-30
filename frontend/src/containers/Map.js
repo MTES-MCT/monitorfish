@@ -13,6 +13,11 @@ import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
+import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
+import VesselEstimatedPositionLayer from '../layers/VesselEstimatedPositionLayer'
+import VesselEstimatedPositionCardOverlay from '../components/overlays/VesselEstimatedPositionCardOverlay'
+
+console.log('HIT_PIXEL_TO_TOLERANCE ' + HIT_PIXEL_TO_TOLERANCE)
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
@@ -58,8 +63,10 @@ const Map = () => {
       <VesselTrackLayer/>
       <VesselsLayer/>
       <DrawLayer/>
+      <VesselEstimatedPositionLayer/>
       <VesselCardOverlay feature={currentFeature}/>
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
+      <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselTrackCardOverlay feature={currentFeature}/>
       <LayerDetailsBox gears={gears} feature={currentFeature}/>
     </BaseMap>

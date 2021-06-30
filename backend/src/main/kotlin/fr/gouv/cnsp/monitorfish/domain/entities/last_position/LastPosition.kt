@@ -24,6 +24,8 @@ data class LastPosition(
 
         val latitude: Double? = null,
         val longitude: Double? = null,
+        val estimatedCurrentLatitude: Double? = null,
+        val estimatedCurrentLongitude: Double? = null,
         val speed: Double? = null,
         val course: Double? = null,
         val dateTime: ZonedDateTime,

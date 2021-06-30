@@ -60,6 +60,17 @@ const Layers = {
     isIntersectable: false,
     zIndex: 999
   },
+  VESSEL_ESTIMATED_POSITION: {
+    code: 'vessel_estimated_position',
+    name: '',
+    group: null,
+    type: layersType.VESSEL,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 99
+  },
   MEASURE: {
     code: 'measurement',
     name: '',

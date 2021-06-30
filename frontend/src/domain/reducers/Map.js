@@ -13,6 +13,7 @@ const savedMapViewLocalStorageKey = 'mapView'
 const savedMapExtentLocalStorageKey = 'mapExtent'
 const baseLayerLocalStorageKey = 'baseLayer'
 const measurementsLocalStorageKey = 'measurements'
+const estimatedPositionsLocalStorageKey = 'estimatedPositions'
 const coordinatesFormatLocalStorageKey = 'coordinatesFormat'
 
 const mapSlice = createSlice({
@@ -41,6 +42,7 @@ const mapSlice = createSlice({
       center: null
     }, savedMapViewLocalStorageKey),
     extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
+    showingVesselsEstimatedPositions: getLocalStorageState(false, estimatedPositionsLocalStorageKey),
     coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey)
   },
   reducers: {
@@ -166,7 +168,17 @@ const mapSlice = createSlice({
     setCoordinatesFormat (state, action) {
       window.localStorage.setItem(coordinatesFormatLocalStorageKey, JSON.stringify(action.payload))
       state.coordinatesFormat = action.payload
-    }
+    },
+    /**
+     * Show or hide the vessels current estimated positions
+     * @param {Object=} state
+     * @param {{
+     * payload: boolean}} action
+     */
+    showVesselsEstimatedPositions (state, action) {
+      window.localStorage.setItem(estimatedPositionsLocalStorageKey, JSON.stringify(action.payload))
+      state.showingVesselsEstimatedPositions = action.payload
+    },
   }
 })
 
@@ -196,6 +208,7 @@ export const {
   setZonesSelected,
   removeZoneSelected,
   resetZonesSelected,
+  showVesselsEstimatedPositions,
   setUpdatedFromCron,
   setCoordinatesFormat
 } = mapSlice.actions

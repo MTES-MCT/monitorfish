@@ -73,7 +73,7 @@ class BffControllerITests {
     fun `Should get all positions`() {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"));
-        val position = LastPosition(0, "MMSI", null, null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
+        val position = LastPosition(0, "MMSI", null, null, null, null, null, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When
@@ -88,6 +88,8 @@ class BffControllerITests {
                 .andExpect(jsonPath("$[0].flagState", equalTo(position.flagState)))
                 .andExpect(jsonPath("$[0].latitude", equalTo(position.latitude)))
                 .andExpect(jsonPath("$[0].longitude", equalTo(position.longitude)))
+                .andExpect(jsonPath("$[0].estimatedCurrentLatitude", equalTo(position.estimatedCurrentLatitude)))
+                .andExpect(jsonPath("$[0].estimatedCurrentLongitude", equalTo(position.estimatedCurrentLongitude)))
                 .andExpect(jsonPath("$[0].speed", equalTo(position.speed)))
                 .andExpect(jsonPath("$[0].course", equalTo(position.course)))
                 .andExpect(jsonPath("$[0].from", equalTo(position.from)))

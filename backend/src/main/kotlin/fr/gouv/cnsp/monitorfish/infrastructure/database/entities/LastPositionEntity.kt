@@ -51,6 +51,10 @@ data class LastPositionEntity(
         val latitude: Double? = null,
         @Column(name = "longitude")
         val longitude: Double? = null,
+        @Column(name = "estimated_current_latitude")
+        val estimatedCurrentLatitude: Double? = null,
+        @Column(name = "estimated_current_longitude")
+        val estimatedCurrentLongitude: Double? = null,
         @Column(name = "speed")
         val speed: Double? = null,
         @Column(name = "course")
@@ -102,6 +106,8 @@ data class LastPositionEntity(
             dateTime = dateTime,
             latitude = latitude,
             longitude = longitude,
+            estimatedCurrentLatitude = estimatedCurrentLatitude,
+            estimatedCurrentLongitude = estimatedCurrentLongitude,
             vesselName = vesselName,
             speed = speed,
             course = course,

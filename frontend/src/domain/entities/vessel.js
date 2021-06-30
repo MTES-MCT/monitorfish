@@ -38,6 +38,8 @@ export class Vessel {
       coordinates: toStringHDMS(this.coordinates),
       latitude: vessel.latitude,
       longitude: vessel.longitude,
+      estimatedCurrentLatitude: vessel.estimatedCurrentLatitude,
+      estimatedCurrentLongitude: vessel.estimatedCurrentLongitude,
       course: vessel.course,
       positionType: vessel.positionType,
       speed: vessel.speed,

@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Repository
@@ -73,5 +74,9 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
     override fun findAllByMmsi(mmsi: String): List<Position> {
         return dbPositionRepository.findAllByMmsi(mmsi)
                 .map(PositionEntity::toPosition)
+    }
+
+    override fun findLastPositionDate(): ZonedDateTime {
+        return dbPositionRepository.findLastPositionDateTime().atZone(ZoneOffset.UTC)
     }
 }

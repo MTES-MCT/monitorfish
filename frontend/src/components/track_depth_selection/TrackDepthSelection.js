@@ -5,9 +5,12 @@ import { COLORS } from '../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
 import { VesselTrackDepth } from '../../domain/entities/vesselTrackDepth'
+import { useSelector } from 'react-redux'
+import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
 
 const TrackDepthSelection = props => {
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const [datesSelection, setDateSelection] = useState([])
   const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(null)
   const firstUpdate = useRef(true)
@@ -66,6 +69,7 @@ const TrackDepthSelection = props => {
   return (
     <>
       <TrackDepthSelectionButton
+        healthcheckTextWarning={healthcheckTextWarning}
         openBox={props.openBox}
         firstUpdate={firstUpdate.current}
         rightMenuIsOpen={props.rightMenuIsOpen}
@@ -75,6 +79,7 @@ const TrackDepthSelection = props => {
         <ClockIcon/>
       </TrackDepthSelectionButton>
       <TrackDepthSelectionContent
+        healthcheckTextWarning={healthcheckTextWarning}
         openBox={props.openBox}
         firstUpdate={firstUpdate.current}
         rightMenuIsOpen={props.rightMenuIsOpen}
@@ -106,7 +111,7 @@ const Header = styled.div`
   text-align: left;
 `
 
-const TrackDepthSelectionButton = styled.div`
+const TrackDepthSelectionButton = styled(MapComponentStyle)`
   top: 118px;
   height: 30px;
   width: 30px;
@@ -133,7 +138,7 @@ const TrackDepthSelectionButton = styled.div`
   }
 `
 
-const TrackDepthSelectionContent = styled.div`
+const TrackDepthSelectionContent = styled(MapComponentStyle)`
   top: 118px;
   width: 282px;
   background: ${COLORS.background};

@@ -16,10 +16,13 @@ import {
 import HideNonFilteredVessels from '../components/vessel_filters/HideNonFilteredVessels'
 import { usePrevious } from '../hooks/usePrevious'
 import unselectVessel from '../domain/use_cases/unselectVessel'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 const VesselFilters = () => {
   const dispatch = useDispatch()
   const { filters, nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const previousFilters = usePrevious(filters)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
@@ -80,8 +83,11 @@ const VesselFilters = () => {
 
   return (
     <>
-      <Wrapper isShowed={isShowed} ref={wrapperRef}>
+      <Wrapper
+        isShowed={isShowed}
+        ref={wrapperRef}>
         <VesselFilterIcon
+          healthcheckTextWarning={healthcheckTextWarning}
           rightMenuIsOpen={rightMenuIsOpen}
           selectedVessel={selectedVessel}
           onMouseEnter={() => dispatch(expandRightMenu())}
@@ -92,6 +98,7 @@ const VesselFilters = () => {
             selectedVessel={selectedVessel}/>
         </VesselFilterIcon>
         <VesselFilterBox
+          healthcheckTextWarning={healthcheckTextWarning}
           vesselFilterBoxIsOpen={vesselFilterBoxIsOpen}>
           <Header isFirst={true}>
             Mes filtres
@@ -206,7 +213,7 @@ const Header = styled.div`
   border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
 `
 
-const VesselFilterBox = styled.div`
+const VesselFilterBox = styled(MapComponentStyle)`
   width: 305px;
   background: ${COLORS.background};
   margin-right: ${props => props.vesselFilterBoxIsOpen ? '45px' : '-420px'};
@@ -219,15 +226,14 @@ const VesselFilterBox = styled.div`
   transition: all 0.5s;
 `
 
-const VesselFilterIcon = styled.button`
+const VesselFilterIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: #05055E;
   background: ${COLORS.grayDarkerThree};
   z-index: 99;
-  top: 102px;
+  top: 110px;
   padding: 3px 0px 0 3px;
-  margin-top: 8px;
   height: 40px;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
   border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};

@@ -36,6 +36,9 @@ interface DBERSRepository : CrudRepository<ERSEntity, Long>, JpaSpecificationExe
             "UNION ALL SELECT * from del", nativeQuery = true)
     fun findERSMessagesAfterOperationDateTime(internalReferenceNumber: String, afterDateTime: Instant, beforeDateTime: Instant): List<ERSEntity>
 
+    @Query("select operation_datetime_utc from ers order by operation_datetime_utc desc limit 1", nativeQuery = true)
+    fun findLastOperationDateTime(): Instant
+
     @Query("select * from ers where ers_id in " +
             "(select distinct referenced_ers_id from ers where operation_type = 'RET' and value->>'returnStatus' = '000') " +
             "and (log_type = 'LAN' or log_type = 'PNO') " +

@@ -14,6 +14,7 @@ const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zon
 const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
+const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -375,5 +376,27 @@ export function getAllFleetSegmentFromAPI () {
     }).catch(error => {
       console.error(error)
       throw Error(FLEET_SEGMENT_ERROR_MESSAGE)
+    })
+}
+
+/**
+ * Get application healthcheck
+ * @returns {Promise<Healthcheck>} The healthcheck dates of positions and ers messages
+ * @throws {Error}
+ */
+export function getHealthcheckFromAPI () {
+  return fetch('/bff/v1/healthcheck')
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(HEALTH_CHECK_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(HEALTH_CHECK_ERROR_MESSAGE)
     })
 }

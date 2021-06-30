@@ -131,6 +131,10 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         dbERSRepository.deleteAll()
     }
 
+    override fun findLastMessageDate(): ZonedDateTime {
+        return dbERSRepository.findLastOperationDateTime().atZone(UTC)
+    }
+
     private fun getCorrectedMessageIfAvailable(pnoMessage: ERSEntity, messages: List<ERSEntity>): Boolean {
         return if (pnoMessage.operationType == ERSOperationType.DAT) {
             !messages.any { it.operationType == ERSOperationType.COR && it.referencedErsId == pnoMessage.ersId }

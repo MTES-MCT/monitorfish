@@ -9,6 +9,7 @@ import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers/Global'
 import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
+import getHealthcheck from '../domain/use_cases/getHealthcheck'
 
 export const TWO_MINUTES = 120000
 
@@ -20,12 +21,14 @@ const APIWorker = () => {
 
   useEffect(() => {
     dispatch(setIsUpdatingVessels())
+    dispatch(getHealthcheck())
     dispatch(getAllGearCodes())
     dispatch(getAllFleetSegments())
     dispatch(showAllVessels())
 
     const interval = setInterval(() => {
       dispatch(setIsUpdatingVessels())
+      dispatch(getHealthcheck())
       dispatch(showAllVessels())
       dispatch(updateVesselTrackAndSidebar())
     }, TWO_MINUTES)

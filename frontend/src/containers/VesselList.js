@@ -20,6 +20,8 @@ import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormat
 import getUniqueSpeciesAndDistricts from '../domain/use_cases/getUniqueSpeciesAndDistricts'
 import SaveVesselFiltersModal from '../components/vessel_filters/SaveVesselFiltersModal'
 import { addFilter } from '../domain/reducers/Filter'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 const VesselList = (namespace) => {
   const dispatch = useDispatch()
@@ -29,6 +31,7 @@ const VesselList = (namespace) => {
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
   const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
   const [vesselListModalIsOpen, setVesselListModalIsOpen] = useState(false)
@@ -274,8 +277,11 @@ const VesselList = (namespace) => {
 
   return (
     <>
-      <Wrapper isShowed={isShowed} isFiltering={isFiltering}>
+      <Wrapper
+        isShowed={isShowed}
+        isFiltering={isFiltering}>
         <VesselListIcon
+          healthcheckTextWarning={healthcheckTextWarning}
           selectedVessel={selectedVessel}
           onMouseEnter={() => dispatch(expandRightMenu())}
           rightMenuIsOpen={rightMenuIsOpen}
@@ -423,7 +429,7 @@ const VesselList = (namespace) => {
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled(MapComponentStyle)`
   opacity: ${props => props.isShowed ? '1' : '0'};
   transition: all 0.2s;
   cursor: ${props => props.isFiltering ? 'progress' : 'auto'};
@@ -478,14 +484,13 @@ const Title = styled.div`
   font-weight: 500;
 `
 
-const VesselListIcon = styled.button`
+const VesselListIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: #05055E;
   background: ${COLORS.grayDarkerThree};
   padding: 8px 0px 0 1px;
-  margin-top: 8px;
-  top: 60px;
+  top: 68px;
   z-index: 99;
   height: 40px;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};

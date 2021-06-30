@@ -6,6 +6,7 @@ import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { getCoordinates, getDate } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
+import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useSelector } from 'react-redux'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
@@ -85,6 +86,7 @@ function orderToCSVColumnOrder (positionsObject) {
 const TrackExport = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [positions, setPositions] = useState([])
+  const { healthcheckTextWarning } = useSelector(state => state.global)
 
   useEffect(() => {
     if (props.positions && props.positions.length) {
@@ -124,6 +126,7 @@ const TrackExport = props => {
 
   return (
     <TrackExportButton
+      healthcheckTextWarning={healthcheckTextWarning}
       isClickable={props.positions && props.positions.length}
       openBox={props.openBox}
       firstUpdate={props.firstUpdate.current}
@@ -135,7 +138,7 @@ const TrackExport = props => {
   )
 }
 
-const TrackExportButton = styled.div`
+const TrackExportButton = styled(MapButtonStyle)`
   top: 153px;
   height: 30px;
   width: 30px;

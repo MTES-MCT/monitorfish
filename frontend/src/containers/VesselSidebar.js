@@ -24,10 +24,11 @@ import VesselControls from '../components/controls/VesselControls'
 import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
 import TrackDepthSelection from '../components/track_depth_selection/TrackDepthSelection'
 import TrackExport from '../components/track_export/TrackExport'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
-
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const error = useSelector(state => state.global.error)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const vesselState = useSelector(state => state.vessel)
@@ -177,6 +178,7 @@ const VesselSidebar = () => {
           : null
       }
       <Wrapper
+        healthcheckTextWarning={healthcheckTextWarning}
         openBox={openSidebar}
         firstUpdate={firstUpdate.current}
         rightMenuIsOpen={rightMenuIsOpen}
@@ -336,7 +338,7 @@ const TabList = styled.div`
   border-top: 1px solid ${COLORS.grayDarkerTwo};
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled(MapComponentStyle)`
   position: absolute;
   top: 50px;
   width: 500px;
@@ -345,7 +347,6 @@ const Wrapper = styled.div`
   padding: 0;
   background: white;
   overflow: hidden;
-  margin: 0;
   margin-right: -510px;
   border-top: 1px solid ${COLORS.grayDarkerTwo};
  

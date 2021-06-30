@@ -20,6 +20,7 @@ import { ReactComponent as AlertSVG } from './components/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
 import { backofficeStore, homeStore } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
+import Healthcheck from './components/healthcheck/Healthcheck'
 
 function App () {
   switch (browserName) {
@@ -63,6 +64,7 @@ function App () {
 function HomePage () {
   return <Provider store={homeStore}>
     <NamespaceContext.Provider value={'homepage'}>
+      <Healthcheck/>
       <Wrapper>
         <Map/>
         <LayersSidebar/>
@@ -130,7 +132,7 @@ const Alert = styled.div`
 const Wrapper = styled.div`
   font-size: 13px;
   text-align: center;
-  height: 100%;
+  height: 100% - 50px;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

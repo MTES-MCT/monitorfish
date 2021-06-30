@@ -2,22 +2,8 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
-import { removeAccents } from '../../utils'
+import { search } from '../../utils'
 import { useSelector } from 'react-redux'
-
-function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
-  return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false
-}
-
-function getTextForSearch (text) {
-  return removeAccents(text)
-    .toLowerCase()
-    .replace(/[ ]/g, '')
-    .replace(/[_]/g, '')
-    .replace(/[-]/g, '')
-    .replace(/[']/g, '')
-    .replace(/["]/g, '')
-}
 
 function orderByAlphabeticalZone (foundRegulatoryZones) {
   if (foundRegulatoryZones) {
@@ -34,6 +20,16 @@ function orderByAlphabeticalZone (foundRegulatoryZones) {
 }
 
 const RegulatoryZoneSelectionSearchInput = props => {
+  const {
+    layersSidebarIsOpen,
+    initSearchFields,
+    setInitSearchFields,
+    setFoundRegulatoryZones,
+    resetSelectRegulatoryZone,
+    regulatoryZones,
+    showRegulatorySearchInput
+  } = props
+
   const gears = useSelector(state => state.gear.gears)
 
   const [placeSearchText, setPlaceSearchText] = useState('')
@@ -43,20 +39,20 @@ const RegulatoryZoneSelectionSearchInput = props => {
   const [focusPlaceSearchText, setFocusPlaceSearchText] = useState(true)
 
   useEffect(() => {
-    if (props.layersSidebarIsOpen) {
+    if (layersSidebarIsOpen) {
       setFocusPlaceSearchText(true)
     }
-  }, [props.layersSidebarIsOpen])
+  }, [layersSidebarIsOpen])
 
   useEffect(() => {
-    if (props.initSearchFields) {
+    if (initSearchFields) {
       setPlaceSearchText('')
       setGearSearchText('')
       setSpeciesSearchText('')
       setRegulatoryReferenceSearchText('')
-      props.setInitSearchFields(false)
+      setInitSearchFields(false)
     }
-  }, [props.initSearchFields])
+  }, [initSearchFields])
 
   const searchFields = {
     placeSearchText: {
@@ -82,11 +78,11 @@ const RegulatoryZoneSelectionSearchInput = props => {
       gearSearchText.length < 1 &&
       regulatoryReferencesSearchText.length < 1 &&
       speciesSearchText.length < 1) {
-      props.setFoundRegulatoryZones({})
+      setFoundRegulatoryZones({})
       return
     }
 
-    props.resetSelectRegulatoryZone()
+    resetSelectRegulatoryZone()
 
     let foundRegulatoryZones = {}
     Object.keys(searchFields).forEach(searchProperty => {
@@ -95,12 +91,13 @@ const RegulatoryZoneSelectionSearchInput = props => {
         if (searchFields[searchProperty].properties === searchFields.gearSearchText.properties) {
           searchFieldFoundRegulatoryZones = searchGears(
             searchFields[searchProperty].searchText,
-            props.regulatoryZones)
+            regulatoryZones)
         } else {
+          console.log('search reg zone')
           searchFieldFoundRegulatoryZones = search(
             searchFields[searchProperty].searchText,
             searchFields[searchProperty].properties,
-            props.regulatoryZones)
+            regulatoryZones)
         }
 
         if (foundRegulatoryZones && Object.keys(foundRegulatoryZones).length === 0) {
@@ -113,7 +110,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
 
     orderByAlphabeticalZone(foundRegulatoryZones)
 
-    props.setFoundRegulatoryZones(foundRegulatoryZones)
+    setFoundRegulatoryZones(foundRegulatoryZones)
   }, [speciesSearchText, gearSearchText, placeSearchText, regulatoryReferencesSearchText])
 
   function getMergedRegulatoryZones (foundRegulatoryZones, searchFieldFoundRegulatoryZones) {
@@ -133,48 +130,6 @@ const RegulatoryZoneSelectionSearchInput = props => {
     })
 
     return mergedRegulatoryZones
-  }
-
-  function search (searchText, propertiesToSearch, regulatoryZones) {
-    if (regulatoryZones) {
-      const foundRegulatoryZones = { ...regulatoryZones }
-
-      Object.keys(foundRegulatoryZones)
-        .forEach(key => {
-          foundRegulatoryZones[key] = foundRegulatoryZones[key]
-            .filter(zone => {
-              switch (propertiesToSearch.length) {
-                case 1: {
-                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText)
-                }
-                case 2: {
-                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
-                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText)
-                }
-                case 3: {
-                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
-                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
-                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText)
-                }
-                case 4: {
-                  return findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText) ||
-                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[1], searchText) ||
-                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[2], searchText) ||
-                    findIfSearchStringIncludedInProperty(zone, propertiesToSearch[3], searchText)
-                }
-                default: {
-                  return false
-                }
-              }
-            })
-
-          if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
-            delete foundRegulatoryZones[key]
-          }
-        })
-
-      return foundRegulatoryZones
-    }
   }
 
   function searchGears (searchText, regulatoryZones) {
@@ -223,11 +178,11 @@ const RegulatoryZoneSelectionSearchInput = props => {
   }
 
   return (
-    <SearchBox showRegulatorySearchInput={props.showRegulatorySearchInput}>
+    <SearchBox showRegulatorySearchInput={showRegulatorySearchInput}>
       <SearchBoxField>
         <Label>Zone</Label>
         <SearchBoxInput
-          ref={input => props.showRegulatorySearchInput &&
+          ref={input => showRegulatorySearchInput &&
           focusPlaceSearchText &&
           !gearSearchText &&
           !speciesSearchText &&
@@ -238,7 +193,7 @@ const RegulatoryZoneSelectionSearchInput = props => {
           value={placeSearchText}
           placeholder={'Bretagne, Charente...'}
           onChange={e => setPlaceSearchText(e.target.value)}/>
-        <SearchIcon showRegulatorySearchInput={props.showRegulatorySearchInput}/>
+        <SearchIcon showRegulatorySearchInput={showRegulatorySearchInput}/>
       </SearchBoxField>
       <SearchBoxField>
         <Label>Engin</Label>

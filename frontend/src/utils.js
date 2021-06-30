@@ -314,3 +314,45 @@ export function createGenericSlice (initialState, reducers, layerName) {
   }
   return createSlice(sliceObject)
 }
+
+export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
+  return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false
+}
+
+function getTextForSearch (text) {
+  return removeAccents(text)
+    .toLowerCase()
+    .replace(/[ ]/g, '')
+    .replace(/[_]/g, '')
+    .replace(/[-]/g, '')
+    .replace(/[']/g, '')
+    .replace(/["]/g, '')
+}
+
+export function search (searchText, propertiesToSearch, regulatoryZones) {
+  if (regulatoryZones) {
+    console.log('regulatoryZones in search function')
+    console.log(regulatoryZones)
+    const foundRegulatoryZones = { ...regulatoryZones }
+    console.log('foundRegulatoryZones in search function')
+    console.log(foundRegulatoryZones)
+    Object.keys(foundRegulatoryZones)
+      .forEach(key => {
+        foundRegulatoryZones[key] = foundRegulatoryZones[key]
+          .filter(zone => {
+            let searchStringIncludedInProperty = false
+            propertiesToSearch.forEach(property => {
+              searchStringIncludedInProperty =
+                searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText)
+            })
+            return searchStringIncludedInProperty
+          })
+
+        if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
+          delete foundRegulatoryZones[key]
+        }
+      })
+
+    return foundRegulatoryZones
+  }
+}

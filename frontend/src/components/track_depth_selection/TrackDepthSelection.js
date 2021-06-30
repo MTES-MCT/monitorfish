@@ -79,6 +79,7 @@ const TrackDepthSelection = props => {
         <ClockIcon/>
       </TrackDepthSelectionButton>
       <TrackDepthSelectionContent
+        healthcheckTextWarning={healthcheckTextWarning}
         openBox={props.openBox}
         firstUpdate={firstUpdate.current}
         rightMenuIsOpen={props.rightMenuIsOpen}
@@ -137,7 +138,7 @@ const TrackDepthSelectionButton = styled(MapComponentStyle)`
   }
 `
 
-const TrackDepthSelectionContent = styled.div`
+const TrackDepthSelectionContent = styled(MapComponentStyle)`
   top: 118px;
   width: 282px;
   background: ${COLORS.background};

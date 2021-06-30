@@ -38,10 +38,21 @@ const Backoffice = () => {
     if (searchText === '') {
       setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
     } else {
-      regulatoryZoneListByRegTerritory.foreach(key => {
-        const foundRegulatoryZones = search(searchText, properties, regulatoryZoneListByRegTerritory[key])
-        if (foundRegulatoryZones && foundRegulatoryZones !== {}) {
-          foundRegulatoryZonesByRegTerritory[key] = foundRegulatoryZones
+      // by Territory
+      Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
+        // by lawType
+        const searchResultByLawType = {}
+        Object.keys(regulatoryZoneListByRegTerritory[territory]).forEach(lawType => {
+          // make a copy
+          const regulatoryZone = Object.assign({}, regulatoryZoneListByRegTerritory[territory][lawType])
+          const foundRegulatoryZones = search(searchText, properties, regulatoryZone)
+          // Si c'est vide c'est quand même ajouté ?
+          if (foundRegulatoryZones && foundRegulatoryZones !== {}) {
+            searchResultByLawType[lawType] = foundRegulatoryZones
+          }
+        })
+        if (searchResultByLawType !== {}) {
+          searchResult[territory] = searchResultByLawType
         }
       })
       setFoundRegulatoryZonesByRegTerritory(searchResult)
@@ -67,6 +78,7 @@ const Backoffice = () => {
   }, [])
 
   useEffect(() => {
+    console.log('and the result is')
     console.log(foundRegulatoryZonesByRegTerritory)
   }, [foundRegulatoryZonesByRegTerritory])
 

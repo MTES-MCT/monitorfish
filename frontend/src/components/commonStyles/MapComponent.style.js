@@ -1,5 +1,5 @@
 import styled from 'styled-components'
 
-export const MapButton = styled.button`
+export const MapComponentStyle = styled.div`
   margin-top: ${props => props.healthcheckTextWarning ? 50 : 0}px;
 `

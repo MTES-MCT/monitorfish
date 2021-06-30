@@ -6,7 +6,7 @@ import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { getCoordinates, getDate } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
-import { MapButton } from '../map/MapButton'
+import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useSelector } from 'react-redux'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
@@ -138,7 +138,7 @@ const TrackExport = props => {
   )
 }
 
-const TrackExportButton = styled(MapButton)`
+const TrackExportButton = styled(MapButtonStyle)`
   top: 153px;
   height: 30px;
   width: 30px;

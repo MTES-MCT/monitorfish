@@ -24,7 +24,7 @@ import VesselControls from '../components/controls/VesselControls'
 import showVesselTrackAndSidebar from '../domain/use_cases/showVesselTrackAndSidebar'
 import TrackDepthSelection from '../components/track_depth_selection/TrackDepthSelection'
 import TrackExport from '../components/track_export/TrackExport'
-import { MapComponent } from '../components/map/MapComponent'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -338,7 +338,7 @@ const TabList = styled.div`
   border-top: 1px solid ${COLORS.grayDarkerTwo};
 `
 
-const Wrapper = styled(MapComponent)`
+const Wrapper = styled(MapComponentStyle)`
   position: absolute;
   top: 50px;
   width: 500px;

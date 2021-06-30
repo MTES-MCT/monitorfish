@@ -16,8 +16,8 @@ import VesselLabelSelection from '../components/vessel_visibility/VesselLabelSel
 import ShowVesselLabel from '../components/vessel_visibility/ShowVesselLabel'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
-import { MapComponent } from '../components/map/MapComponent'
-import { MapButton } from '../components/map/MapButton'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 const VesselVisibility = () => {
   const dispatch = useDispatch()
@@ -209,7 +209,7 @@ const Header = styled.div`
   border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
 `
 
-const VesselVisibilityBox = styled(MapComponent)`
+const VesselVisibilityBox = styled(MapComponentStyle)`
   width: 406px;
   background: ${COLORS.background};
   margin-right: ${props => props.vesselVisibilityBoxIsOpen ? '45px' : '-420px'};
@@ -222,7 +222,7 @@ const VesselVisibilityBox = styled(MapComponent)`
   transition: all 0.5s;
 `
 
-const VesselVisibilityIcon = styled(MapButton)`
+const VesselVisibilityIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: #05055E;

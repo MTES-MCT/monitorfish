@@ -16,8 +16,8 @@ import {
 import HideNonFilteredVessels from '../components/vessel_filters/HideNonFilteredVessels'
 import { usePrevious } from '../hooks/usePrevious'
 import unselectVessel from '../domain/use_cases/unselectVessel'
-import { MapComponent } from '../components/map/MapComponent'
-import { MapButton } from '../components/map/MapButton'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 const VesselFilters = () => {
   const dispatch = useDispatch()
@@ -213,7 +213,7 @@ const Header = styled.div`
   border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
 `
 
-const VesselFilterBox = styled(MapComponent)`
+const VesselFilterBox = styled(MapComponentStyle)`
   width: 305px;
   background: ${COLORS.background};
   margin-right: ${props => props.vesselFilterBoxIsOpen ? '45px' : '-420px'};
@@ -226,7 +226,7 @@ const VesselFilterBox = styled(MapComponent)`
   transition: all 0.5s;
 `
 
-const VesselFilterIcon = styled(MapButton)`
+const VesselFilterIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: #05055E;

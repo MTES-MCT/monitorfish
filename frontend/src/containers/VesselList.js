@@ -20,8 +20,8 @@ import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormat
 import getUniqueSpeciesAndDistricts from '../domain/use_cases/getUniqueSpeciesAndDistricts'
 import SaveVesselFiltersModal from '../components/vessel_filters/SaveVesselFiltersModal'
 import { addFilter } from '../domain/reducers/Filter'
-import { MapComponent } from '../components/map/MapComponent'
-import { MapButton } from '../components/map/MapButton'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 const VesselList = (namespace) => {
   const dispatch = useDispatch()
@@ -429,7 +429,7 @@ const VesselList = (namespace) => {
   )
 }
 
-const Wrapper = styled(MapComponent)`
+const Wrapper = styled(MapComponentStyle)`
   opacity: ${props => props.isShowed ? '1' : '0'};
   transition: all 0.2s;
   cursor: ${props => props.isFiltering ? 'progress' : 'auto'};
@@ -484,7 +484,7 @@ const Title = styled.div`
   font-weight: 500;
 `
 
-const VesselListIcon = styled(MapButton)`
+const VesselListIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: #05055E;

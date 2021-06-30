@@ -18,8 +18,8 @@ import {
 import countries from 'i18n-iso-countries'
 import focusOnVesselSearch, { focusState } from '../domain/use_cases/focusOnVesselSearch'
 import { expandRightMenu } from '../domain/reducers/Global'
-import { MapComponent } from '../components/map/MapComponent'
-import { MapButton } from '../components/map/MapButton'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -428,7 +428,7 @@ const CloseIcon = styled(CloseIconSVG)`
   cursor: pointer;
 `
 
-const Wrapper = styled(MapComponent)`
+const Wrapper = styled(MapComponentStyle)`
   position: absolute;
   display: inline-block;
   top: 10px;
@@ -539,7 +539,7 @@ const SelectedVessel = styled.div`
   }
 `
 
-const SearchButton = styled(MapButton)`
+const SearchButton = styled(MapButtonStyle)`
   opacity: ${props => props.isShowed ? '1' : '0'};
   width: 40px;
   height: 40px;

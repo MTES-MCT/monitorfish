@@ -178,7 +178,7 @@ const mapSlice = createSlice({
     showVesselsEstimatedPositions (state, action) {
       window.localStorage.setItem(estimatedPositionsLocalStorageKey, JSON.stringify(action.payload))
       state.showingVesselsEstimatedPositions = action.payload
-    },
+    }
   }
 })
 

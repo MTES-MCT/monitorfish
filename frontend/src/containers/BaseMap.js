@@ -7,7 +7,6 @@ import { transform } from 'ol/proj'
 import ScaleLine from 'ol/control/ScaleLine'
 import Zoom from 'ol/control/Zoom'
 
-import { getCoordinates } from '../utils'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import { resetAnimateToRegulatoryLayer } from '../domain/reducers/Map'
 import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
@@ -21,8 +20,20 @@ import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
 const BaseMap = props => {
-  const { handleMovingAndZoom, handlePointerMove, children, showCoordinates, setCurrentFeature, showAttributions } = props
-  const mapState = useSelector(state => state.map)
+  const {
+    handleMovingAndZoom,
+    handlePointerMove,
+    children,
+    showCoordinates,
+    setCurrentFeature,
+    showAttributions
+  } = props
+
+  const {
+    selectedBaseLayer,
+    animateToRegulatoryLayer
+  } = useSelector(state => state.map)
+
   const dispatch = useDispatch()
 
   const [map, setMap] = useState()
@@ -73,11 +84,11 @@ const BaseMap = props => {
 
   useEffect(() => {
     initMap()
-  }, [map, mapState.selectedBaseLayer])
+  }, [map, selectedBaseLayer])
 
   useEffect(() => {
-    animateToRegulatoryLayer()
-  }, [mapState.animateToRegulatoryLayer, map])
+    animateToLayer()
+  }, [animateToRegulatoryLayer, map])
 
   function initMap () {
     if (!map) {
@@ -139,17 +150,17 @@ const BaseMap = props => {
       handleBasePointerMove(lastEventForPointerMove, map)
 
       if (showCoordinates) {
-        showCoordinatesInDMS(lastEventForPointerMove)
+        saveCoordinates(lastEventForPointerMove)
       }
     }, 100)
   }
 
-  function animateToRegulatoryLayer () {
-    if (map && mapState.animateToRegulatoryLayer && mapState.animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
+  function animateToLayer () {
+    if (map && animateToRegulatoryLayer && animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
       const animateObject = {
         center: [
-          mapState.animateToRegulatoryLayer.center[0],
-          mapState.animateToRegulatoryLayer.center[1]
+          animateToRegulatoryLayer.center[0],
+          animateToRegulatoryLayer.center[1]
         ],
         duration: 1000
       }
@@ -164,11 +175,10 @@ const BaseMap = props => {
     }
   }
 
-  function showCoordinatesInDMS (event) {
+  function saveCoordinates (event) {
     if (event) {
       const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel)
-      const coordinates = getCoordinates(clickedCoordinates, OPENLAYERS_PROJECTION)
-      setCursorCoordinates(`${coordinates[0]} ${coordinates[1]}`)
+      setCursorCoordinates(clickedCoordinates)
     }
   }
 

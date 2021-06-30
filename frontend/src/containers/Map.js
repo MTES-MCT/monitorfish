@@ -13,9 +13,6 @@ import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
-import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
-
-console.log('HIT_PIXEL_TO_TOLERANCE ' + HIT_PIXEL_TO_TOLERANCE)
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)

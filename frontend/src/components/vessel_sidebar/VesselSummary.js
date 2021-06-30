@@ -8,10 +8,12 @@ import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
 import { ReactComponent as InfoSVG } from '../icons/Information.svg'
 import FleetSegments from '../fleet_segments/FleetSegments'
+import { useSelector } from 'react-redux'
 
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselSummary = props => {
+  const { coordinatesFormat } = useSelector(state => state.map)
   const [photoFallback, setPhotoFallback] = useState(false)
   const [vessel, setVessel] = useState(null)
   const [lastPosition, setLastPosition] = useState(null)
@@ -136,11 +138,11 @@ const VesselSummary = props => {
           <LatLon>
             <FieldName>Latitude</FieldName>
             <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude)
-              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[0]
+              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
               : <NoValue>-</NoValue>}</FieldValue>
             <FieldName>Longitude</FieldName>
             <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude)
-              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION)[1]
+              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
               : <NoValue>-</NoValue>}</FieldValue>
           </LatLon>
           <Course>

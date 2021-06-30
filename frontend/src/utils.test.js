@@ -1,5 +1,5 @@
 import { getCoordinates, getDateTime } from './utils'
-import { WSG84_PROJECTION } from './domain/entities/map'
+import { CoordinatesFormat, WSG84_PROJECTION } from './domain/entities/map'
 
 describe('utils', () => {
   it('getDateTime Should respect the timezone given fur UTC', async () => {
@@ -37,7 +37,7 @@ describe('utils', () => {
 
   it('getCoordinates Should get coordinates for a dummy lon/lat', async () => {
     // When
-    const coordinates = getCoordinates([-4.276, 46.947], WSG84_PROJECTION)
+    const coordinates = getCoordinates([-4.276, 46.947], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_SECONDS)
 
     // Then
     expect(coordinates).not.toBeUndefined()
@@ -47,7 +47,7 @@ describe('utils', () => {
 
   it('getCoordinates Should get S coordinates for a dummy lon/lat', async () => {
     // When
-    const coordinates = getCoordinates([4.591, -33.56], WSG84_PROJECTION)
+    const coordinates = getCoordinates([4.591, -33.56], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_SECONDS)
 
     // Then
     expect(coordinates).not.toBeUndefined()
@@ -57,7 +57,7 @@ describe('utils', () => {
 
   it('getCoordinates Should get coordinates for a 0 longitude', async () => {
     // When
-    const coordinates = getCoordinates([0, 49.6167], WSG84_PROJECTION)
+    const coordinates = getCoordinates([0, 49.6167], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_SECONDS)
 
     // Then
     expect(coordinates).not.toBeUndefined()

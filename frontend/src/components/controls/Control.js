@@ -7,8 +7,11 @@ import { ReactComponent as GyroRedSVG } from '../icons/Gyrophare_controles_rouge
 import { getCoordinates, getDate } from '../../utils'
 import { WSG84_PROJECTION } from '../../domain/entities/map'
 import { controlType, getNumberOfInfractions } from '../../domain/entities/controls'
+import { useSelector } from 'react-redux'
 
 const Control = props => {
+  const { coordinatesFormat } = useSelector(state => state.map)
+
   const {
     /** @type {VesselControl} control */
     control,
@@ -68,13 +71,13 @@ const Control = props => {
             <SubField>
               <Key width={47}>Lat.</Key>
               <SubValue>{(control.latitude || control.latitude === 0) && (control.longitude || control.longitude === 0)
-                ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION)[0]}</>
+                ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION, coordinatesFormat)[0]}</>
                 : <NoValue>-</NoValue>}</SubValue>
             </SubField><br/>
             <SubField>
               <Key width={25}>Lon.</Key>
               <SubValue>{(control.latitude || control.latitude === 0) && (control.longitude || control.longitude === 0)
-                ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION)[1]}</>
+                ? <>{getCoordinates([control.longitude, control.latitude], WSG84_PROJECTION, coordinatesFormat)[1]}</>
                 : <NoValue>-</NoValue>}</SubValue>
             </SubField>
           </SubFields>

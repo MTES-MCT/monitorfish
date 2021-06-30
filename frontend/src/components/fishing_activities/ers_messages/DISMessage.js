@@ -5,8 +5,10 @@ import { getCoordinates, getDateTime } from '../../../utils'
 import { WSG84_PROJECTION } from '../../../domain/entities/map'
 import ERSMessageSpecies from './ERSMessageSpecies'
 import { buildCatchArray } from '../../../domain/entities/ERS'
+import { useSelector } from 'react-redux'
 
 const DISMessage = props => {
+  const { coordinatesFormat } = useSelector(state => state.map)
   const [catches, setCatches] = useState([])
 
   useEffect(() => {
@@ -36,10 +38,10 @@ const DISMessage = props => {
                 <Key>Position opération</Key>
                 <Value>
                   <FirstInlineKey>Lat.</FirstInlineKey> {props.message.latitude && props.message.longitude
-                    ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[0]
+                    ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
                     : <NoValue>-</NoValue>}
                   <InlineKey>Lon.</InlineKey> {props.message.latitude && props.message.longitude
-                    ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION)[1]
+                    ? getCoordinates([props.message.longitude, props.message.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
                     : <NoValue>-</NoValue>}
                 </Value>
               </Field>

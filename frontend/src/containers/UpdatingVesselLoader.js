@@ -4,7 +4,7 @@ import { COLORS } from '../constants/constants'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 import { ReactComponent as VesselSVG } from '../components/icons/Icone_navire.svg'
-import { MapComponent } from '../components/map/MapComponent'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 
 const UpdatingVesselLoader = () => {
   const isUpdatingVessels = useSelector(state => state.global.isUpdatingVessels)
@@ -77,7 +77,7 @@ const BigVessel = styled(VesselSVG)`
   transform: scale(2);
 `
 
-const UpdateWrapper = styled(MapComponent)`
+const UpdateWrapper = styled(MapComponentStyle)`
   position: absolute;
   top: 30px;
   right: ${props => props.selectedVessel ? '510px' : '370px'};
@@ -85,7 +85,7 @@ const UpdateWrapper = styled(MapComponent)`
   transform: translate(-50%, -50%);
 `
 
-const FirstLoadWrapper = styled(MapComponent)`
+const FirstLoadWrapper = styled(MapComponentStyle)`
   position: fixed;
   top: 15%;
   left: 50%;

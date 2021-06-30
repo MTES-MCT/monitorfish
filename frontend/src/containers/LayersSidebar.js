@@ -13,7 +13,7 @@ import { COLORS } from '../constants/constants'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
-import { MapComponent } from '../components/map/MapComponent'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 import NamespaceContext from '../domain/context/NamespaceContext'
 
 const LayersSidebar = () => {
@@ -110,7 +110,7 @@ const LayersSidebar = () => {
     </NamespaceContext.Consumer>)
 }
 
-const Sidebar = styled(MapComponent)`
+const Sidebar = styled(MapComponentStyle)`
   margin-left: -373px;
   top: 10px;
   left: 12px;

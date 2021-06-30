@@ -11,8 +11,8 @@ import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import { MeasurementTypes } from '../domain/entities/map'
 import CustomCircleRange from '../components/measurements/CustomCircleRange'
-import { MapComponent } from '../components/map/MapComponent'
-import { MapButton } from '../components/map/MapButton'
+import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 const Measurement = () => {
   const dispatch = useDispatch()
@@ -183,7 +183,7 @@ const Wrapper = styled.div`
   z-index: 1000;
 `
 
-const MeasurementOptions = styled(MapComponent)`
+const MeasurementOptions = styled(MapComponentStyle)`
   width: 175px;
   margin-right: ${props => props.measurementBoxIsOpen ? '45px' : '-200px'};
   opacity: ${props => props.measurementBoxIsOpen ? '1' : '0'};
@@ -195,7 +195,7 @@ const MeasurementOptions = styled(MapComponent)`
   transition: all 0.5s;
 `
 
-const MeasurementWrapper = styled(MapButton)`
+const MeasurementWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: #05055E;

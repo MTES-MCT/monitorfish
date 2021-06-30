@@ -4,7 +4,7 @@ import CoordinateInput from 'react-coordinate-input'
 
 import { COLORS } from '../../constants/constants'
 import { MeasurementTypes } from '../../domain/entities/map'
-import { MapComponent } from '../map/MapComponent'
+import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 
 const CustomCircleRange = (
   {
@@ -127,7 +127,7 @@ const Header = styled.div`
   border-top-right-radius: 2px;
 `
 
-const Wrapper = styled(MapComponent)`
+const Wrapper = styled(MapComponentStyle)`
   width: 306px;
   background: ${COLORS.background};
   margin-right: ${props => !props.firstUpdate && props.isOpen ? '45px' : '-320px'};

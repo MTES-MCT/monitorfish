@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
 import { VesselTrackDepth } from '../../domain/entities/vesselTrackDepth'
 import { useSelector } from 'react-redux'
-import { MapComponent } from '../map/MapComponent'
+import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
 
 const TrackDepthSelection = props => {
@@ -110,7 +110,7 @@ const Header = styled.div`
   text-align: left;
 `
 
-const TrackDepthSelectionButton = styled(MapComponent)`
+const TrackDepthSelectionButton = styled(MapComponentStyle)`
   top: 118px;
   height: 30px;
   width: 30px;

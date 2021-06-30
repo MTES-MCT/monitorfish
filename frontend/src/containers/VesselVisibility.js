@@ -16,6 +16,7 @@ import VesselLabelSelection from '../components/vessel_visibility/VesselLabelSel
 import ShowVesselLabel from '../components/vessel_visibility/ShowVesselLabel'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
+import ShowVesselEstimatedPositions from '../components/vessel_visibility/ShowVesselEstimatedPositions'
 import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
@@ -136,6 +137,7 @@ const VesselVisibility = () => {
           updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
           vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
         />
+        <ShowVesselEstimatedPositions/>
       </VesselVisibilityBox>
     </Wrapper>
   )

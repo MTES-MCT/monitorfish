@@ -60,8 +60,8 @@ const Layers = {
     isIntersectable: false,
     zIndex: 999
   },
-  VESSEL_ESTIMATION: {
-    code: 'vessel_estimation',
+  VESSEL_ESTIMATED_POSITION: {
+    code: 'vessel_estimated_position',
     name: '',
     group: null,
     type: layersType.VESSEL,

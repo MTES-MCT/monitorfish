@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { EstimatedPosition } from '../domain/entities/estimatedPosition'
 import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
+import { Vessel } from '../domain/entities/vessel'
+import VectorImageLayer from 'ol/layer/VectorImage'
 
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
     vesselsLayerSource
   } = useSelector(state => state.vessel)
 
+  const {
+    selectedBaseLayer,
+    showingVesselsEstimatedPositions
+  } = useSelector(state => state.map)
+
   const [vectorSource] = useState(new VectorSource({
     features: []
   }))
-  const [layer] = useState(new Vector({
-    className: Layers.VESSEL_ESTIMATION.code,
+  const [layer] = useState(new VectorImageLayer({
+    renderBuffer: 7,
+    className: Layers.VESSEL_ESTIMATED_POSITION.code,
     source: vectorSource,
-    zIndex: Layers.VESSEL_ESTIMATION.zIndex,
+    zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,
     updateWhileAnimating: true,
     updateWhileInteracting: true
   }))
@@ -27,13 +34,16 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    if (vesselsLayerSource) {
+    if (vesselsLayerSource && showingVesselsEstimatedPositions) {
+      showVesselTrack()
+
       vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
-        console.log("got vesselS")
         showVesselTrack()
       })
+    } else {
+      vectorSource.clear(true)
     }
-  }, [vesselsLayerSource])
+  }, [vesselsLayerSource, selectedBaseLayer, showingVesselsEstimatedPositions])
 
   function addLayerToMap () {
     if (map) {
@@ -43,21 +53,27 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
   function showVesselTrack () {
     vectorSource.clear(true)
+    const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
-    console.log(vesselsLayerSource.getFeatures())
     const estimatedCurrentPositionsFeatures = vesselsLayerSource.getFeatures().map((feature, index) => {
-      const latitude = feature.getProperties().estimatedCurrentLatitude
-      const longitude = feature.getProperties().estimatedCurrentLongitude
+      const estimatedCurrentLatitude = feature.getProperties().estimatedCurrentLatitude
+      const estimatedCurrentLongitude = feature.getProperties().estimatedCurrentLongitude
+      const latitude = feature.getProperties().latitude
+      const longitude = feature.getProperties().longitude
 
-      const estimatedCurrentPosition = new EstimatedPosition(latitude, longitude, index)
+      const estimatedCurrentPosition = new EstimatedPosition(
+        [longitude, latitude],
+        [estimatedCurrentLongitude, estimatedCurrentLatitude],
+        {
+          id: index,
+          isLight
+        })
 
       return estimatedCurrentPosition.feature
     }).filter(vessel => vessel)
 
-    console.log(estimatedCurrentPositionsFeatures)
     vectorSource.addFeatures(estimatedCurrentPositionsFeatures)
   }
-
 
   return null
 }

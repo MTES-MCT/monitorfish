@@ -7,6 +7,7 @@ import { setVesselsLayerSource, updateSelectedVesselFeature } from '../domain/re
 import { Vessel, vesselAndVesselFeatureAreEquals } from '../domain/entities/vessel'
 import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
+import VectorImageLayer from 'ol/layer/VectorImage'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
@@ -46,7 +47,7 @@ const VesselsLayer = ({ map }) => {
   const [vectorSource] = useState(new VectorSource({
     features: []
   }))
-  const [layer] = useState(new Vector({
+  const [layer] = useState(new VectorImageLayer({
     renderBuffer: 7,
     className: Layers.VESSELS.code,
     source: vectorSource,

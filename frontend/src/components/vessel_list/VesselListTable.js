@@ -5,8 +5,7 @@ import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import Table from 'rsuite/lib/Table'
 import Checkbox from 'rsuite/lib/Checkbox'
 import { CellWithTitle, CheckedCell, EllipsisCell, FlagCell, TargetCell, TimeAgoCell } from './tableCells'
-import countries from 'i18n-iso-countries'
-import { CSVOptions } from './dataFormatting'
+import { sortArrayByColumn } from './tableSort'
 
 const { Column, HeaderCell, Cell } = Table
 
@@ -29,36 +28,9 @@ const VesselListTable = props => {
     return props.filteredVessels
   }, [sortColumn, sortType, props.filteredVessels])
 
-  function sortArrayByColumn (a, b, sortColumn, sortType) {
-    let x = a[sortColumn]
-    let y = b[sortColumn]
-
-    if (sortColumn === CSVOptions.flagState.code) {
-      x = countries.getName(a[sortColumn], 'fr')
-      y = countries.getName(b[sortColumn], 'fr')
-    }
-
-    if (typeof x === 'string' && typeof y === 'string') {
-      x = x.charCodeAt()
-      y = y.charCodeAt()
-    }
-
-    if (x === '') {
-      return 1
-    }
-    if (y === '') {
-      return -1
-    }
-
-    if (sortType === 'asc') {
-      return x - y
-    } else {
-      return y - x
-    }
-  }
-
   const updateAllVesselsChecked = useCallback(() => {
-    const isChecked = props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
+    const isChecked = props.allVesselsChecked.globalCheckbox &&
+      props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
     if (isChecked === false) {
       props.setAllVesselsChecked({ globalCheckbox: true })
     } else {

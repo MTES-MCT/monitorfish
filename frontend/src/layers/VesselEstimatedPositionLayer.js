@@ -7,10 +7,17 @@ import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
 import { Vessel } from '../domain/entities/vessel'
 import VectorImageLayer from 'ol/layer/VectorImage'
 
+const NOT_FOUND = -1
+
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
-    vesselsLayerSource
+    vesselsLayerSource,
+    filteredVesselsFeaturesUids
   } = useSelector(state => state.vessel)
+
+  const {
+    nonFilteredVesselsAreHidden
+  } = useSelector(state => state.filter)
 
   const {
     selectedBaseLayer,
@@ -49,7 +56,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         }
       })
     }
-  }, [vesselsLayerSource, selectedBaseLayer, showingVesselsEstimatedPositions])
+  }, [vesselsLayerSource, selectedBaseLayer, showingVesselsEstimatedPositions, filteredVesselsFeaturesUids, nonFilteredVesselsAreHidden])
 
   function addLayerToMap () {
     if (map) {
@@ -61,11 +68,19 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     vectorSource.clear(true)
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
-    const estimatedCurrentPositionsFeatures = vesselsLayerSource.getFeatures().map((feature, index) => {
-      const estimatedCurrentLatitude = feature.getProperties().estimatedCurrentLatitude
-      const estimatedCurrentLongitude = feature.getProperties().estimatedCurrentLongitude
-      const latitude = feature.getProperties().latitude
-      const longitude = feature.getProperties().longitude
+    const estimatedCurrentPositionsFeatures = vesselsLayerSource.getFeatures().map((vesselFeature, index) => {
+      const estimatedCurrentLatitude = vesselFeature.getProperties().estimatedCurrentLatitude
+      const estimatedCurrentLongitude = vesselFeature.getProperties().estimatedCurrentLongitude
+      const latitude = vesselFeature.getProperties().latitude
+      const longitude = vesselFeature.getProperties().longitude
+
+      if (nonFilteredVesselsAreHidden && Array.isArray(filteredVesselsFeaturesUids) && filteredVesselsFeaturesUids.length > 0) {
+        const featureIndex = filteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
+
+        if (featureIndex === NOT_FOUND) {
+          return null
+        }
+      }
 
       if(estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
         const estimatedCurrentPosition = new EstimatedPosition(

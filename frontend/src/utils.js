@@ -44,8 +44,8 @@ export const getCoordinates = (coordinates, projection, coordinatesFormat) => {
 function getDDCoordinates (transformedCoordinates) {
   return Array.isArray(transformedCoordinates) && transformedCoordinates.length === 2
     ? [
-      `${transformedCoordinates[1].toFixed(4)}°`,
-      `${transformedCoordinates[0].toFixed(4)}°`
+      `${transformedCoordinates[1] ? transformedCoordinates[1].toFixed(4) : null}°`,
+      `${transformedCoordinates[0] ? transformedCoordinates[0].toFixed(4) : null}°`
       ]
     : []
 }
@@ -73,10 +73,13 @@ function getDMDOf (latitudeOrLongitude) {
     latitudeOrLongitude.lastIndexOf('″')
   )
 
+  let decimal = ''
+  if (secondsSplit) {
+    decimal = (parseInt(secondsSplit) / 60).toFixed(3)
+  }
   const firstPart = latitudeOrLongitude.split('′')[0]
   const lastPart = latitudeOrLongitude.split('″')[1]
 
-  const decimal = (parseInt(secondsSplit) / 60).toFixed(3)
   return `${firstPart}.${decimal.replace('0.', '')}′${lastPart}`
 }
 

@@ -6,6 +6,7 @@ const vesselSlice = createSlice({
     temporaryVesselsToHighLightOnMap: [],
     selectedVesselFeatureAndIdentity: null,
     vessels: [],
+    filteredVesselsFeaturesUids: [],
     vesselsLayerSource: null,
     /** @type {Vessel | null} selectedVessel */
     selectedVessel: null,
@@ -36,6 +37,14 @@ const vesselSlice = createSlice({
   reducers: {
     setVessels (state, action) {
       state.vessels = action.payload
+    },
+    /**
+     * Set the list of vessel features Uids for filtering features (using JS indexOf is good for performance)
+     * @param {Object=} state
+     * @param {{payload: string[]}} action - the vessel features uids
+     */
+    setFilteredVesselsFeaturesUids (state, action) {
+      state.filteredVesselsFeaturesUids = action.payload
     },
     setVesselsLayerSource (state, action) {
       state.vesselsLayerSource = action.payload
@@ -178,6 +187,7 @@ const vesselSlice = createSlice({
 
 export const {
   setVessels,
+  setFilteredVesselsFeaturesUids,
   setVesselsLayerSource,
   loadingVessel,
   resetLoadingVessel,

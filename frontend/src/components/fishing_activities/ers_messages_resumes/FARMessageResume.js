@@ -15,7 +15,13 @@ const FARMessageResume = props => {
     if (props.speciesToWeightOfFAR) {
       const array = Object.keys(props.speciesToWeightOfFAR)
         .map(species => props.speciesToWeightOfFAR[species])
-        .sort((a, b) => a.weight < b.weight)
+        .sort((a, b) => {
+          if (a.weight < b.weight) {
+            return 1
+          } else {
+            return -1
+          }
+        })
       setSpeciesAndWeightArray(array)
     }
   }, [props.speciesToWeightOfFAR])

@@ -15,7 +15,13 @@ const DISMessageResume = props => {
     if (props.speciesToWeightOfDIS) {
       const array = Object.keys(props.speciesToWeightOfDIS)
         .map(species => props.speciesToWeightOfDIS[species])
-        .sort((a, b) => a.weight < b.weight)
+        .sort((a, b) => {
+          if (a.weight < b.weight) {
+            return 1
+          } else {
+            return -1
+          }
+        })
       setSpeciesAndWeightArray(array)
     }
   }, [props.speciesToWeightOfDIS])

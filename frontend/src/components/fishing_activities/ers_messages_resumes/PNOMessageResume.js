@@ -20,7 +20,13 @@ const PNOMessageResume = props => {
     if (props.pnoMessage && props.speciesToWeightOfPNO && props.speciesToWeightOfFAR) {
       const pnoSpeciesAndWeight = Object.keys(props.speciesToWeightOfPNO)
         .map(speciesToWeightKey => props.speciesToWeightOfPNO[speciesToWeightKey])
-        .sort((a, b) => a.weight < b.weight)
+        .sort((a, b) => {
+          if (a.weight < b.weight) {
+            return 1
+          } else {
+            return -1
+          }
+        })
       setSpeciesAndWeightArray(pnoSpeciesAndWeight)
 
       const speciesNotLandedArray = Object.keys(props.speciesToWeightOfFAR)
@@ -29,7 +35,13 @@ const PNOMessageResume = props => {
           return !props.pnoMessage.message.catchOnboard
             .some(landedSpecies => landedSpecies.species === speciesToWeight.species)
         })
-        .sort((a, b) => a.weight < b.weight)
+        .sort((a, b) => {
+          if (a.weight < b.weight) {
+            return 1
+          } else {
+            return -1
+          }
+        })
       setSpeciesNotLandedArray(speciesNotLandedArray)
       setBoxHeight(speciesNotLandedArray.length ? speciesNotLandedArray.length * 18 : 0)
 

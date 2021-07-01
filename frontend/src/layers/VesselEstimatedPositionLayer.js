@@ -61,15 +61,19 @@ const VesselEstimatedPositionLayer = ({ map }) => {
       const latitude = feature.getProperties().latitude
       const longitude = feature.getProperties().longitude
 
-      const estimatedCurrentPosition = new EstimatedPosition(
-        [longitude, latitude],
-        [estimatedCurrentLongitude, estimatedCurrentLatitude],
-        {
-          id: index,
-          isLight
-        })
+      if(estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
+        const estimatedCurrentPosition = new EstimatedPosition(
+          [longitude, latitude],
+          [estimatedCurrentLongitude, estimatedCurrentLatitude],
+          {
+            id: index,
+            isLight
+          })
 
-      return estimatedCurrentPosition.feature
+        return estimatedCurrentPosition.feature
+      }
+
+      return null
     }).filter(vessel => vessel)
 
     vectorSource.addFeatures(estimatedCurrentPositionsFeatures)

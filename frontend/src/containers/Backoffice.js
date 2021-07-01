@@ -145,8 +145,9 @@ const SearchResultList = styled.div`
   text-decoration: none;
   border-radius: 2px;
   border-bottom: 1px solid ${COLORS.grayDarker};
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - 235px);
   padding: 0 40px;
+  margin-bottom: 60px;
 `
 
 const Territory = styled.div`
@@ -187,6 +188,8 @@ const ButtonListFooter = styled.div`
   justify-content: center;
   position: fixed;
   bottom: 0;
+  left: 25%;
+  margin-left: -120px;
 `
 
 const BackofficeContainer = styled.div`

@@ -17,6 +17,7 @@ WITH last_54_hours_positions AS (
             ORDER BY date_time DESC) AS rk
     FROM positions
     WHERE date_time > CURRENT_TIMESTAMP - INTERVAL '2 days 6 hours'
+    AND date_time < CURRENT_TIMESTAMP + INTERVAL '1 day'
     AND (internal_reference_number IS NOT NULL OR 
          external_reference_number IS NOT NULL OR
          ircs IS NOT NULL)

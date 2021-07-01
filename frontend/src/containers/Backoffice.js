@@ -145,7 +145,7 @@ const SearchResultList = styled.div`
   text-decoration: none;
   border-radius: 2px;
   border-bottom: 1px solid ${COLORS.grayDarker};
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 60px);
   padding: 0 40px;
 `
 

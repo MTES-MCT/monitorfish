@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from './BaseMap'
 import LawType from '../components/backoffice/LawType'
-import SearchComponent from '../components/backoffice/SearchComponent'
+import SearchRegulations from '../components/backoffice/SearchRegulations'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
@@ -95,7 +95,7 @@ const Backoffice = () => {
         <RegulatoryZonePanel
           regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
         >
-          <SearchComponent
+          <SearchRegulations
             setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
             regulatoryZoneListByRegTerritory={regulatoryZoneListByRegTerritory}
           />

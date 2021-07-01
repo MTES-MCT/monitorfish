@@ -101,7 +101,7 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
 }
 
 const Wrapper = styled.div`
-  cursor: ${props => props.isWaitingForData ? 'wait' : 'auto'};
+  cursor: ${props => props.isWaitingForData ? 'progress' : 'inherit'} !important;
 `
 
 const UpdateFishingActivities = styled.div`

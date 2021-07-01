@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { search } from '../../utils'
-import { COLORS } from '../../constants/constants'
+import { COLORS, BACKOFFICE_SEARCH_PROPERTIES } from '../../constants/constants'
 
 const SearchComponent = props => {
   const {
@@ -23,8 +23,6 @@ const SearchComponent = props => {
     }
   }, [])
 
-  const properties = ['layerName', 'zone', 'region', 'seafront', 'regulatoryReferences']
-
   const searchRegulatoryZone = () => {
     const searchResult = {}
     if (searchText === '') {
@@ -34,7 +32,7 @@ const SearchComponent = props => {
         const searchResultByLawType = {}
         Object.keys(regulatoryZoneListByRegTerritory[territory]).forEach(lawType => {
           const regulatoryZone = Object.assign({}, regulatoryZoneListByRegTerritory[territory][lawType])
-          const foundRegulatoryZones = search(searchText, properties, regulatoryZone)
+          const foundRegulatoryZones = search(searchText, BACKOFFICE_SEARCH_PROPERTIES, regulatoryZone)
           if (foundRegulatoryZones && Object.keys(foundRegulatoryZones).length !== 0) {
             searchResultByLawType[lawType] = foundRegulatoryZones
           }

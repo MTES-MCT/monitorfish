@@ -4,7 +4,7 @@ import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { search } from '../../utils'
 import { COLORS, BACKOFFICE_SEARCH_PROPERTIES } from '../../constants/constants'
 
-const SearchComponent = props => {
+const SearchRegulations = props => {
   const {
     setFoundRegulatoryZonesByRegTerritory,
     regulatoryZoneListByRegTerritory
@@ -95,4 +95,4 @@ const SearchButton = styled.a`
   height: 40px;
 `
 
-export default SearchComponent
+export default SearchRegulations

@@ -26,7 +26,8 @@ const VesselsLayer = ({ map }) => {
     isMoving,
     selectedBaseLayer,
     vesselsLastPositionVisibility,
-    vesselLabel
+    vesselLabel,
+    showingVesselsEstimatedPositions
   } = useSelector(state => state.map)
   const {
     /** @type {VesselFilter[]} filters */
@@ -133,7 +134,8 @@ const VesselsLayer = ({ map }) => {
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
-          features: features
+          features: features,
+          showingVesselsEstimatedPositions: showingVesselsEstimatedPositions
         })
 
         addVesselLabelToAllFeaturesInExtent(extent)

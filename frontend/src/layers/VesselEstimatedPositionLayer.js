@@ -34,14 +34,20 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
+    if(vesselsLayerSource && !showingVesselsEstimatedPositions) {
+      vectorSource.clear(true)
+    }
+
     if (vesselsLayerSource && showingVesselsEstimatedPositions) {
       showVesselTrack()
+    }
 
-      vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
-        showVesselTrack()
+    if (vesselsLayerSource) {
+      vesselsLayerSource.on(VESSELS_UPDATE_EVENT, event => {
+        if (event.showingVesselsEstimatedPositions) {
+          showVesselTrack()
+        }
       })
-    } else {
-      vectorSource.clear(true)
     }
   }, [vesselsLayerSource, selectedBaseLayer, showingVesselsEstimatedPositions])
 

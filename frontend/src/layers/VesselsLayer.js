@@ -2,7 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
-import { setVesselsLayerSource, updateSelectedVesselFeature } from '../domain/reducers/Vessel'
+import {
+  setFilteredVesselsFeaturesUids,
+  setVesselsLayerSource,
+  updateSelectedVesselFeature
+} from '../domain/reducers/Vessel'
 import { Vessel, vesselAndVesselFeatureAreEquals } from '../domain/entities/vessel'
 import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
@@ -17,7 +21,8 @@ const VesselsLayer = ({ map }) => {
     vessels,
     selectedVessel,
     selectedVesselFeatureAndIdentity,
-    temporaryVesselsToHighLightOnMap
+    temporaryVesselsToHighLightOnMap,
+    filteredVesselsFeaturesUids
   } = useSelector(state => state.vessel)
   const {
     vesselLabelsHiddenByZoom,
@@ -34,8 +39,6 @@ const VesselsLayer = ({ map }) => {
     filters,
     nonFilteredVesselsAreHidden
   } = useSelector(state => state.filter)
-
-  const [filteredVesselsFeaturesUids, setFilteredVesselsFeaturesUids] = useState([])
 
   const getFilterColor = useCallback(() => {
     const showedFilter = filters.find(filter => filter.showed)
@@ -146,12 +149,14 @@ const VesselsLayer = ({ map }) => {
   const applyFilterToVessels = (vesselsFeatures, noFilterFunction) => new Promise(resolve => {
     if (!filters || !filters.length) {
       noFilterFunction()
+      dispatch(setFilteredVesselsFeaturesUids([]))
       return resolve(vesselsFeatures)
     }
 
     const showedFilter = filters.find(filter => filter.showed)
     if (!showedFilter) {
       noFilterFunction()
+      dispatch(setFilteredVesselsFeaturesUids([]))
       return resolve(vesselsFeatures)
     }
 
@@ -164,7 +169,7 @@ const VesselsLayer = ({ map }) => {
     dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
       .then(filteredVessels => {
         const filteredVesselsUids = filteredVessels.map(vessel => vessel.uid)
-        setFilteredVesselsFeaturesUids(filteredVesselsUids)
+        dispatch(setFilteredVesselsFeaturesUids(filteredVesselsUids))
 
         vesselsFeatures.forEach(feature => {
           Vessel.applyVesselFeatureFilterStyle(

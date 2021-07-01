@@ -331,11 +331,7 @@ function getTextForSearch (text) {
 
 export function search (searchText, propertiesToSearch, regulatoryZones) {
   if (regulatoryZones) {
-    console.log('regulatoryZones in search function')
-    console.log(regulatoryZones)
     const foundRegulatoryZones = { ...regulatoryZones }
-    console.log('foundRegulatoryZones in search function')
-    console.log(foundRegulatoryZones)
     Object.keys(foundRegulatoryZones)
       .forEach(key => {
         foundRegulatoryZones[key] = foundRegulatoryZones[key]
@@ -343,11 +339,10 @@ export function search (searchText, propertiesToSearch, regulatoryZones) {
             let searchStringIncludedInProperty = false
             propertiesToSearch.forEach(property => {
               searchStringIncludedInProperty =
-                searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, propertiesToSearch[0], searchText)
+                searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)
             })
             return searchStringIncludedInProperty
           })
-
         if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
           delete foundRegulatoryZones[key]
         }

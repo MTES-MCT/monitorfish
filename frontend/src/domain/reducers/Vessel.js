@@ -161,7 +161,7 @@ const vesselSlice = createSlice({
     /**
      * Highlight a vessel position on map from the vessel track positions table
      * @param {Object=} state
-     * @param {{payload: ControlResume}} action - The position
+     * @param {{payload: Position | null}} action - The position
      */
     highlightVesselTrackPosition (state, action) {
       state.highlightedVesselTrackPosition = action.payload

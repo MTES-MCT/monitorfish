@@ -133,7 +133,7 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
 .ol-scale-line {
     position: absolute;
     bottom: 10px;
-    left: 272px;
+    left: 282px;
     display: inline-block;
     margin: 1px;
     padding: 2px 0 5px 2px;
@@ -373,4 +373,9 @@ a:hover, a:focus {
 
 .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover, .rs-table-hover .rs-table-row:hover .rs-table-cell-group, .rs-table-hover .rs-table-row:hover .rs-table-cell {
   background: #D6D6D6 !important;
+}
+
+.rs-table-cell, .rs-table-cell-group, .rs-table-row {
+    -webkit-transition: background-color .1s linear !important;
+    transition: background-color .1s linear  !important;;
 }

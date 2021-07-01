@@ -49,6 +49,13 @@ const mapSlice = createSlice({
     setUpdatedFromCron (state, action) {
       state.updatedFromCron = action.payload
     },
+    /**
+     * Animate map to the specified OpenLayers coordinates
+     * @param {Object=} state
+     * @param {{
+     * payload: String[]
+     * }} action - The OpenLayers internal [longitude, latitude] coordinates
+     */
     animateTo (state, action) {
       state.animateTo = action.payload
     },

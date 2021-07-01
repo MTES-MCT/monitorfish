@@ -41,17 +41,17 @@ const VesselTrackLayer = ({ map }) => {
   }, [selectedVessel])
 
   useEffect(() => {
-    updateTrackCircleStyle(highlightedVesselTrackPosition, 7)
-  }, [highlightedVesselTrackPosition])
-
-  useEffect(() => {
-    updateTrackCircleStyle(previousHighlightedVesselTrackPosition, null)
-  }, [previousHighlightedVesselTrackPosition])
+    if (highlightedVesselTrackPosition) {
+      updateTrackCircleStyle(previousHighlightedVesselTrackPosition, null)
+      updateTrackCircleStyle(highlightedVesselTrackPosition, 7)
+    } else {
+      updateTrackCircleStyle(previousHighlightedVesselTrackPosition, null)
+    }
+  }, [highlightedVesselTrackPosition, previousHighlightedVesselTrackPosition])
 
   function updateTrackCircleStyle (vesselTrackCircle, radius) {
     if (vesselTrackCircle) {
       const feature = vectorSource.getFeatures()
-        .filter(feature => feature && feature.getId().toString().includes(Layers.VESSEL_TRACK.code))
         .find(feature => feature.getProperties().dateTime === vesselTrackCircle.dateTime)
 
       if (feature) {

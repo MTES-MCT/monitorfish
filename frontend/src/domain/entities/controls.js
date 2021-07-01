@@ -15,7 +15,13 @@ export const lastControlByType = yearsToControls => {
 
   const lastControlList = {}
   const sortedLastYearControlList = Object.values(yearsToControls).flat()
-    .sort((a, b) => a.controlDatetimeUtc < b.controlDatetimeUtc)
+    .sort((a, b) => {
+      if (a.controlDatetimeUtc < b.controlDatetimeUtc) {
+        return 1
+      } else {
+        return - 1
+      }
+    })
 
   let i = 0
   while (i < sortedLastYearControlList.length && Object.keys(lastControlList).length < 2) {

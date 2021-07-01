@@ -17,8 +17,6 @@ import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
 import VesselEstimatedPositionLayer from '../layers/VesselEstimatedPositionLayer'
 import VesselEstimatedPositionCardOverlay from '../components/overlays/VesselEstimatedPositionCardOverlay'
 
-console.log('HIT_PIXEL_TO_TOLERANCE ' + HIT_PIXEL_TO_TOLERANCE)
-
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()

@@ -328,6 +328,7 @@ const Tab = styled.button`
   
   :hover, :focus, :active {
     background: ${COLORS.textGray};
+    border-right: 1px solid ${COLORS.grayDarkerTwo};
   }
 `
 

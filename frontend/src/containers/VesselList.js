@@ -23,7 +23,7 @@ import { addFilter } from '../domain/reducers/Filter'
 import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
-const VesselList = (namespace) => {
+const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)

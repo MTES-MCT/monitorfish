@@ -1,5 +1,6 @@
 import { COLORS } from '../../constants/constants'
 import styled, { css } from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const baseBlackButton = css`
   background: ${COLORS.grayDarkerThree};
@@ -75,7 +76,7 @@ const baseAddButton = css`
   }
 `
 
-export const AddRegulationButton = styled.button`
+export const AddRegulationButton = styled(Link)`
   ${baseAddButton}
   min-width: 40px;
   min-height: 40px;

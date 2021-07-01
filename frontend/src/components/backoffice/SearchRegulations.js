@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useRouteMatch } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { search } from '../../utils'
 import { COLORS, BACKOFFICE_SEARCH_PROPERTIES } from '../../constants/constants'
@@ -50,6 +51,8 @@ const SearchRegulations = props => {
     console.log('addNewRegZone clicked')
   }
 
+  const match = useRouteMatch()
+
   return (
     <SearchContainer>
       <SearchBox>
@@ -60,13 +63,14 @@ const SearchRegulations = props => {
           placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
           onChange={e => setSearchText(e.target.value)} />
         <SearchIcon />
-      </SearchBox>
-      <AddRegulationButton
-        disabled={false}
-        isLast={false}
-        onClick={() => addNewRegZone()}
-        title={'Saisir une nouvelle réglementation'}
-      />
+        </SearchBox>
+        <AddRegulationButton
+          to={match.url + '/createRegulatoryZone'}
+          disabled={false}
+          isLast={false}
+          onClick={() => addNewRegZone()}
+          title={'Saisir une nouvelle réglementation'}
+        />
     </SearchContainer>
   )
 }

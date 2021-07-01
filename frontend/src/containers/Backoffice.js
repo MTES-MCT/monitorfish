@@ -185,6 +185,8 @@ const ButtonList = styled.div`
 const ButtonListFooter = styled.div`
   ${ButtonList};
   justify-content: center;
+  position: fixed;
+  bottom: 0;
 `
 
 const BackofficeContainer = styled.div`

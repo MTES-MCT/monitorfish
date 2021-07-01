@@ -145,7 +145,7 @@ const SearchResultList = styled.div`
   text-decoration: none;
   border-radius: 2px;
   border-bottom: 1px solid ${COLORS.grayDarker};
-  height: calc(100vh - 300px);
+  max-height: calc(100vh - 300px);
   padding: 0 40px;
 `
 
@@ -155,7 +155,7 @@ const Territory = styled.div`
   flex: 1 1 1%;
   padding: 5px;
   box-sizing: border-box;
-  width: 50%;
+  max-width: 50%;
 `
 
 const TerritoryName = styled.div`

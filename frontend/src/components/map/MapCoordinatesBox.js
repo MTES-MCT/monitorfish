@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { Radio, RadioGroup } from 'rsuite'
@@ -6,11 +6,21 @@ import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../domain/entities/
 import { useDispatch, useSelector } from 'react-redux'
 import { setCoordinatesFormat } from '../../domain/reducers/Map'
 import { getCoordinates } from '../../utils'
+import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 
 const MapCoordinatesBox = ({ coordinates }) => {
+  const wrapperRef = useRef(null)
+
   const dispatch = useDispatch()
   const { coordinatesFormat } = useSelector(state => state.map)
-  const [formatSelectionIsOpen, setFormatSelectionIsOpen] = useState(false)
+  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const [coordinatesSelectionIsOpen, setCoordinatesSelectionIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (clickedOutsideComponent) {
+      setCoordinatesSelectionIsOpen(false)
+    }
+  }, [clickedOutsideComponent])
 
   const getShowedCoordinates = coordinates => {
     const transformedCoordinates = getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)
@@ -22,9 +32,9 @@ const MapCoordinatesBox = ({ coordinates }) => {
     return ''
   }
 
-  return (<>
-    <CoordinatesTypeSelection isOpen={formatSelectionIsOpen}>
-      <Header onClick={() => setFormatSelectionIsOpen(false)}>Unités des coordonnées</Header>
+  return (<div ref={wrapperRef}>
+    <CoordinatesTypeSelection isOpen={coordinatesSelectionIsOpen}>
+      <Header onClick={() => setCoordinatesSelectionIsOpen(false)}>Unités des coordonnées</Header>
       <RadioWrapper
         inline
         name="coordinatesRadio"
@@ -36,10 +46,10 @@ const MapCoordinatesBox = ({ coordinates }) => {
         <Radio inline value={CoordinatesFormat.DECIMAL_DEGREES} title={'Degrés Décimales'}>DD</Radio>
       </RadioWrapper>
     </CoordinatesTypeSelection>
-    <Coordinates onClick={() => setFormatSelectionIsOpen(!formatSelectionIsOpen)}>
+    <Coordinates onClick={() => setCoordinatesSelectionIsOpen(!coordinatesSelectionIsOpen)}>
       {getShowedCoordinates(coordinates)} ({coordinatesFormat})
     </Coordinates>
-    </>)
+    </div>)
 }
 
 const RadioWrapper = styled(RadioGroup)`

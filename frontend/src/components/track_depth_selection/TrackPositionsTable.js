@@ -96,6 +96,7 @@ export const SpeedCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...pr
   return (
     <Cell
       {...props}
+      style={{cursor: 'pointer'}}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateTo(olCoordinates))}
@@ -112,6 +113,7 @@ export const CourseCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...p
   return (
     <Cell
       {...props}
+      style={{cursor: 'pointer'}}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateTo(olCoordinates))}
@@ -133,6 +135,7 @@ export const DateTimeCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ..
   return (
     <Cell
       {...props}
+      style={{cursor: 'pointer'}}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateTo(olCoordinates))}

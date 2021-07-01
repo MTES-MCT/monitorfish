@@ -16,6 +16,7 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
 
   const [fishingViewIndex, setFishingViewIndex] = useState(1)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
+  const [isWaitingForData, setIsWaitingForData] = useState(true)
 
   const showERSMessages = messageType => {
     if (messageType) {
@@ -32,6 +33,7 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
 
   useEffect(() => {
     if (fishingActivities) {
+      setIsWaitingForData(false)
       dispatch(resetNextFishingActivities())
     }
   }, [fishingActivities])
@@ -44,18 +46,21 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
   }
 
   function goToPreviousTrip () {
+    setIsWaitingForData(true)
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.PREVIOUS, false))
   }
 
   function goToNextTrip () {
+    setIsWaitingForData(true)
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.NEXT, false))
   }
 
   function goToLastTrip () {
+    setIsWaitingForData(true)
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.LAST, false))
   }
 
-  return <>
+  return <Wrapper isWaitingForData={isWaitingForData}>
     {nextFishingActivities
       ? <>
         <UpdateFishingActivities/>
@@ -92,8 +97,12 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
         }}
       />
       : null}
-  </>
+  </Wrapper>
 }
+
+const Wrapper = styled.div`
+  cursor: ${props => props.isWaitingForData ? 'wait' : 'auto'};
+`
 
 const UpdateFishingActivities = styled.div`
   background: ${COLORS.background};

@@ -69,7 +69,7 @@ const CoordinatesTypeSelection = styled.span`
   background-color: ${COLORS.background};
   border: none;
   border-radius: 2px;
-  width: 227px;
+  width: 237px;
   opacity: ${props => props.isOpen ? 1 : 0};
   transition: all 0.5s;
 `
@@ -90,7 +90,7 @@ const Coordinates = styled.span`
   background-color: ${COLORS.grayDarkerThree};
   border: none;
   border-radius: 2px;
-  width: 225px;
+  width: 235px;
   cursor: pointer;
 `
 

@@ -162,7 +162,7 @@ const CloseIcon = styled(CloseIconSVG)`
 
 const baseIcon = css`
   width: 27px;
-  margin: 0 6px 0 6px;
+  margin: 0 5px 0 6px;
 `
 
 const ShowIcon = styled(ShowIconSVG)`

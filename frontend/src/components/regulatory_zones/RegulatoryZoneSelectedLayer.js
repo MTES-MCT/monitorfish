@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import RegulatoryZoneSelectedZone from './RegulatoryZoneSelectedZone'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { getHash } from '../../utils'
@@ -152,6 +152,7 @@ const Text = styled.span`
 
 const ZoneNumber = styled.span`
   font-size: 11px;
+  color: ${COLORS.textGray}
 `
 
 const CloseIcon = styled(CloseIconSVG)`
@@ -159,14 +160,17 @@ const CloseIcon = styled(CloseIconSVG)`
   margin: 2px 6px 0 0;
 `
 
-const ShowIcon = styled(ShowIconSVG)`
+const baseIcon = css`
   width: 27px;
-  margin: 0 8px 0 6px;
+  margin: 0 6px 0 6px;
+`
+
+const ShowIcon = styled(ShowIconSVG)`
+  ${baseIcon}
 `
 
 const HideIcon = styled(HideIconSVG)`
-  width: 27px;
-  margin: 0 8px 0 6px;
+  ${baseIcon}
 `
 
 const Zone = styled.span`

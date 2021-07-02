@@ -158,11 +158,11 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastPositionDate Should find the last position date`() {
+    fun `findLastPositionDate Should find the last position date before now and not a date in the future`() {
         // Then
         val dateTime = jpaPositionRepository.findLastPositionDate()
 
         // Then
-        assertThat(dateTime).isAfter(ZonedDateTime.parse("2020-12-21T15:01:00Z"))
+        assertThat(dateTime).isNotEqualTo(ZonedDateTime.parse("2100-12-21T15:01Z"))
     }
 }

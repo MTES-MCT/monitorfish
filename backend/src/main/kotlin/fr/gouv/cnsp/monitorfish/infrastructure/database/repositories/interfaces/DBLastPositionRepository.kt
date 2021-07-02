@@ -13,6 +13,6 @@ import java.time.ZonedDateTime
 interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
     fun findAllByDateTimeGreaterThanEqual(dateTime: ZonedDateTime) : List<LastPositionEntity>
 
-    @Query("select last_position_datetime_utc from last_positions order by last_position_datetime_utc desc limit 1", nativeQuery = true)
+    @Query("select last_position_datetime_utc from last_positions where last_position_datetime_utc < now() order by last_position_datetime_utc desc limit 1", nativeQuery = true)
     fun findLastPositionDateTime(): Instant
 }

@@ -57,12 +57,12 @@ const LawType = props => {
   }
 
   const openLawTypeList = () => {
-    setIsOpen(!isOpen)
     if (isOpen) {
       dispatch(setLawTypeOpenned(null))
     } else {
       dispatch(setLawTypeOpenned(lawType))
     }
+    setIsOpen(!isOpen)
   }
 
   return (<LawTypeContainer>

@@ -203,6 +203,7 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
        ('OOF99190430056936', ''),
        ('OOF91190430056936', ''),
        ('OOF20190227059999', ''),
+       ('OOF22103048321398', ''),
        ('OOF20191205059902', '');
 
 
@@ -369,9 +370,14 @@ VALUES ('OOF20190126059903', 9463713, 'OOF', '2019-01-26T11:45:00Z', 'DAT', 'OOF
         'GBR000B14430', 'MVGM5', 'AR865', 'CABO ORTEGAL', 'FRA', null, 'LAN',
         '{"port": "AEAJM", "sender": "MAS", "catchLanded": [{"weight": 20.0, "conversionFactor": 1.0, "nbFish": null, "species": "SLS", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 180.0, "nbFish": null, "species": "HKC", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 1500.0, "nbFish": null, "species": "BON", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 200.0, "nbFish": null, "species": "SCR", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "24E6"}, {"weight": 6.0, "nbFish": null, "species": "LBE", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "24E6"}], "landingDatetimeUtc": "2019-10-22T11:06:00Z"}',
         '2021-01-18T07:17:28.2717Z'),
-       ('OOF22103048321399', null, 'OOF', '2106-10-17T11:36:00Z', 'RET', null, 'OOF20190627059908',
-        '2106-10-30T11:32:00Z',
+       ('OOF22103048321399', null, 'OOF', '2019-10-17T11:36:00Z', 'RET', null, 'OOF20190627059908',
+        '2019-10-30T11:32:00Z',
         null, null, null, null, null, null, '',
         '{"returnStatus": "000"}', '2021-01-18T07:19:28.384921Z'),
        ('OOF22103048321399', null, 'OOF', '2019-10-17T11:36:00Z', 'DEL', null, 'OOF20190627059908',
-        '2019-10-30T11:32:00Z', null, null, null, null, null, null, '', null, '2021-01-18T07:19:28.384921Z');
+        '2019-10-30T11:32:00Z', null, null, null, null, null, null, '', null, '2021-01-18T07:19:28.384921Z'),
+	 ('OOF22103048321398', null, 'OOF', '2106-10-17T11:36:00Z', 'RET', null, 'OOF20190627059903',
+        '2106-10-30T11:32:00Z',
+        null, null, null, null, null, null, '',
+        '{"returnStatus": "000"}', '2100-01-18T07:19:28.384921Z');
+

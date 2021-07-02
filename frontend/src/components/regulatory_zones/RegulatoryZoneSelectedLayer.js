@@ -78,7 +78,7 @@ const RegulatoryZoneSelectedLayer = props => {
     )
   }
 
-  const showRegulatoryZonesSelected = (namespace) => {
+  const showRegulatoryZonesSelected = namespace => {
     return regulatorySubZones.map(subZone => {
       let vectorLayerStyle
       if (subZone.zone && subZone.layerName && subZone.gears && gears) {

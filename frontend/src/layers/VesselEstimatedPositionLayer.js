@@ -9,8 +9,6 @@ import { Vector } from 'ol/layer'
 
 const NOT_FOUND = -1
 
-const NOT_FOUND = -1
-
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
     vesselsLayerSource,

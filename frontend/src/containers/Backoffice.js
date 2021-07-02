@@ -9,7 +9,7 @@ import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegul
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
 import { setError } from '../domain/reducers/Global'
 import { COLORS } from '../constants/constants'
-import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
+import { BackofficeBottomButton, WhiteButton } from '../components/commonStyles/Buttons.style'
 import { EmptyResult } from '../components/commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
@@ -78,10 +78,11 @@ const Backoffice = () => {
   const displaySearchResultList = () => {
     return (
       <SearchResultList>
-        {Object.keys(RegulatoryTerritory).map(territory => {
+        {Object.keys(RegulatoryTerritory).map((territory, id) => {
+          const territoryNumber = Object.keys(RegulatoryTerritory).length
           return (
-            <Territory key={territory}>
-              <TerritoryName>{RegulatoryTerritory[territory]}</TerritoryName>
+            <Territory key={territory} isLast={territoryNumber - 1 === id }>
+              <TerritoryName >{RegulatoryTerritory[territory]}</TerritoryName>
               {displayRegulatoryZoneByRegTerritory(territory)}
             </Territory>
           )
@@ -108,12 +109,12 @@ const Backoffice = () => {
             ? displaySearchResultList()
             : <div>En attente de chargement</div>}
           <ButtonListFooter>
-            <BlackButton
+            <BackofficeBottomButton
               disabled={false}
               isLast={false}
               onClick={() => addNewRegZone()}>
               Saisir une nouvelle réglementation
-            </BlackButton>
+            </BackofficeBottomButton>
           </ButtonListFooter>
         </RegulatoryZonePanel>
         <BaseMap/>
@@ -144,7 +145,6 @@ const SearchResultList = styled.div`
   color: ${COLORS.textWhite};
   text-decoration: none;
   border-radius: 2px;
-  border-bottom: 1px solid ${COLORS.grayDarker};
   max-height: calc(100vh - 235px);
   padding: 0 40px;
   margin-bottom: 60px;
@@ -157,6 +157,7 @@ const Territory = styled.div`
   padding: 5px;
   box-sizing: border-box;
   max-width: 50%;
+  margin-right: ${props => props.isLast ? '0px' : '20px'}
 `
 
 const TerritoryName = styled.div`
@@ -184,11 +185,11 @@ const ButtonList = styled.div`
 
 const ButtonListFooter = styled.div`
   ${ButtonList};
-  justify-content: center;
+  border-top: 1px solid ${COLORS.grayDarker};
+  width: 100%;
   position: fixed;
   bottom: 0;
-  left: 25%;
-  margin-left: -120px;
+  height: 60px;
 `
 
 const BackofficeContainer = styled.div`

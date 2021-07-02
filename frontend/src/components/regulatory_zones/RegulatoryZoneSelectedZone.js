@@ -129,6 +129,7 @@ const Icons = styled.span`
   display: flex;
   margin-right: 5px;
   justify-content: flex-end;
+  flex: 1;
 `
 
 const SubZone = styled.span`

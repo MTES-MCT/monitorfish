@@ -85,6 +85,6 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             nativeQuery = true)
     fun findLastByIrcs(ircs: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
 
-    @Query("select date_time from positions order by date_time desc limit 1", nativeQuery = true)
+    @Query("select date_time from positions where date_time < now() order by date_time desc limit 1", nativeQuery = true)
     fun findLastPositionDateTime(): Instant
 }

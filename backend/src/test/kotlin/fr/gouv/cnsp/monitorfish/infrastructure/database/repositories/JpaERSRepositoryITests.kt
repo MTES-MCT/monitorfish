@@ -328,7 +328,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastMessageDate Should find the last message datetime`() {
+    fun `findLastMessageDate Should find the last message datetime before now and not a datetime in the future`() {
         // When
         val dateTime = jpaERSRepository.findLastMessageDate()
 

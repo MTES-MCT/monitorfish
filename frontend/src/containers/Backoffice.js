@@ -14,6 +14,7 @@ import { EmptyResult } from '../components/commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
 
+
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
   const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState({})

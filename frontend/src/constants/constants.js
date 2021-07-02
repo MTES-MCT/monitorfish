@@ -17,3 +17,5 @@ export const COLORS = {
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3
+
+export const BACKOFFICE_SEARCH_PROPERTIES = ['layerName', 'zone', 'region', 'seafront', 'regulatoryReferences']

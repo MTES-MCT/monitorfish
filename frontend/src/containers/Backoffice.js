@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from './BaseMap'
 import LawType from '../components/backoffice/LawType'
+import SearchRegulations from '../components/backoffice/SearchRegulations'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
 import { setError } from '../domain/reducers/Global'
-import { ReactComponent as SearchIconSVG } from '../components/icons/Loupe.svg'
 import { COLORS } from '../constants/constants'
 import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
 import { EmptyResult } from '../components/commonStyles/Text.style'
@@ -15,9 +15,8 @@ import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZone
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
 
 const Backoffice = () => {
-  const searchInput = useRef(null)
-  const [searchText, setSearchText] = useState('')
-  const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState(undefined)
+  const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
+  const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState({})
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
@@ -28,10 +27,6 @@ const Backoffice = () => {
     loadingRegulatoryZoneMetadata,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
-
-  const searchRegulatoryZone = () => {
-    console.log(`Search text is ${searchText}`)
-  }
 
   const getRegulatoryZones = () => {
     dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
@@ -44,9 +39,6 @@ const Backoffice = () => {
   }
 
   useEffect(() => {
-    if (searchInput) {
-      searchInput.current.focus()
-    }
     getRegulatoryZones()
     dispatch(getAllGearCodes())
   }, [])
@@ -77,7 +69,7 @@ const Backoffice = () => {
   }
 
   const displayRegulatoryZoneByRegTerritory = (territory) => {
-    const territoryRegList = regulatoryZoneListByRegTerritory[territory]
+    const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
     return territoryRegList
       ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territoryRegList)}</RegulatoryZoneListByLawTypeList>
       : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
@@ -103,19 +95,10 @@ const Backoffice = () => {
         <RegulatoryZonePanel
           regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
         >
-          <SearchContainer>
-            <SearchBoxInput
-              ref={searchInput}
-              type="text"
-              value={searchText}
-              placeholder={''}
-              onChange={e => setSearchText(e.target.value)}/>
-            <SearchButton
-              onClick={() => searchRegulatoryZone()}
-            >
-              <SearchIcon/>
-            </SearchButton>
-          </SearchContainer>
+          <SearchRegulations
+            setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
+            regulatoryZoneListByRegTerritory={regulatoryZoneListByRegTerritory}
+          />
           <ButtonList>
             <WhiteButton>Brouillon (X)</WhiteButton>
             <WhiteButton>Tracé en attente (X)</WhiteButton>
@@ -191,14 +174,6 @@ const RegulatoryZoneListByLawTypeList = styled.div`
   margin: 10px 0;
 `
 
-const SearchContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  justify-content: center;
-  padding: 25px 40px 0;
-`
-
 const ButtonList = styled.div`
   display: flex;
   flex-direction:row;
@@ -244,31 +219,6 @@ const MetadataWrapper = styled.div`
   max-height: 95vh;
   transition: all 0.5s;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
-`
-
-const SearchBoxInput = styled.input`
-  margin: 0;
-  background-color: white;
-  border: 1px ${COLORS.gray} solid;
-  border-radius: 0;
-  color: ${COLORS.grayDarkerThree};
-  font-size: 0.8em;
-  height: 40px;
-  width: 100%;
-  padding: 0 5px 0 10px;
-`
-
-const SearchIcon = styled(SearchIconSVG)`
-  width: 40px;
-  height: 40px;
-  float: right;
-  background: ${COLORS.grayDarkerThree};
-  cursor: pointer;
-`
-
-const SearchButton = styled.a`
-  width: 40px;
-  height: 40px;
 `
 
 export default Backoffice

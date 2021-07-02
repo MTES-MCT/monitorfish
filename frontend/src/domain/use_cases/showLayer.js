@@ -22,7 +22,7 @@ const setIrretrievableFeaturesEvent = error => {
   }
 }
 
-const showLayer = (layerToShow) => (dispatch, getState) => {
+const showLayer = layerToShow => (dispatch, getState) => {
   currentNamespace = layerToShow.namespace
   const {
     addLayer,

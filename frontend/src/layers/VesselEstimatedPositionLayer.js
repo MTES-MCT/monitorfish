@@ -5,7 +5,7 @@ import Layers from '../domain/entities/layers'
 import { EstimatedPosition } from '../domain/entities/estimatedPosition'
 import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
 import { Vessel } from '../domain/entities/vessel'
-import VectorImageLayer from 'ol/layer/VectorImage'
+import { Vector } from 'ol/layer'
 
 const NOT_FOUND = -1
 
@@ -27,7 +27,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   const [vectorSource] = useState(new VectorSource({
     features: []
   }))
-  const [layer] = useState(new VectorImageLayer({
+  const [layer] = useState(new Vector({
     renderBuffer: 7,
     className: Layers.VESSEL_ESTIMATED_POSITION.code,
     source: vectorSource,

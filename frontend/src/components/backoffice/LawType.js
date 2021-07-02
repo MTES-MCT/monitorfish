@@ -5,13 +5,13 @@ import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryZoneSelectedLayer from '../regulatory_zones/RegulatoryZoneSelectedLayer'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import { setLawTypeOpenned } from '../../domain/reducers/Regulatory'
+import { setLawTypeOpened } from '../../domain/reducers/Regulatory'
 
 const LawType = props => {
   const dispatch = useDispatch()
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
-  const lawTypeOpenned = useSelector(state => state.regulatory.lawTypeOpenned)
+  const lawTypeOpened = useSelector(state => state.regulatory.lawTypeOpened)
   const {
     lawType,
     regZoneByLawType,
@@ -20,8 +20,8 @@ const LawType = props => {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    setIsOpen(lawTypeOpenned === lawType)
-  }, [lawType, lawTypeOpenned, setIsOpen])
+    setIsOpen(lawTypeOpened === lawType)
+  }, [lawType, lawTypeOpened, setIsOpen])
 
   function increaseNumberOfZonesOpened (number) {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
@@ -58,9 +58,9 @@ const LawType = props => {
 
   const openLawTypeList = () => {
     if (isOpen) {
-      dispatch(setLawTypeOpenned(null))
+      dispatch(setLawTypeOpened(null))
     } else {
-      dispatch(setLawTypeOpenned(lawType))
+      dispatch(setLawTypeOpened(lawType))
     }
     setIsOpen(!isOpen)
   }

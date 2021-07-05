@@ -15,6 +15,7 @@ import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
 import VesselEstimatedPositionLayer from '../layers/VesselEstimatedPositionLayer'
 import VesselEstimatedPositionCardOverlay from '../components/overlays/VesselEstimatedPositionCardOverlay'
+import VesselsLabelsLayer from '../layers/VesselsLabelsLayer'
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
@@ -59,6 +60,7 @@ const Map = () => {
       <MeasurementLayer/>
       <VesselTrackLayer/>
       <VesselsLayer/>
+      <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>
       <VesselEstimatedPositionLayer/>
       <VesselCardOverlay feature={currentFeature}/>

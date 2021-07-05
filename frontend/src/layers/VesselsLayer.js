@@ -14,24 +14,17 @@ import { Vector } from 'ol/layer'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
-const NOT_FOUND = -1
 
 const VesselsLayer = ({ map }) => {
   const {
     vessels,
     selectedVessel,
     selectedVesselFeatureAndIdentity,
-    temporaryVesselsToHighLightOnMap,
-    filteredVesselsFeaturesUids
+    temporaryVesselsToHighLightOnMap
   } = useSelector(state => state.vessel)
   const {
-    vesselLabelsHiddenByZoom,
-    vesselLabelsShowedOnMap,
-    extent,
-    isMoving,
     selectedBaseLayer,
     vesselsLastPositionVisibility,
-    vesselLabel,
     showingVesselsEstimatedPositions
   } = useSelector(state => state.map)
   const {
@@ -67,6 +60,7 @@ const VesselsLayer = ({ map }) => {
     addVesselsFeaturesToMap()
   }, [vessels, map])
 
+  /*
   useEffect(() => {
     highLightVesselsOnMap()
   }, [temporaryVesselsToHighLightOnMap])
@@ -74,10 +68,7 @@ const VesselsLayer = ({ map }) => {
   useEffect(() => {
     showBackVesselsIconsWhenClosingVesselsHighLight()
   }, [vesselsLastPositionVisibility, temporaryVesselsToHighLightOnMap])
-
-  useEffect(() => {
-    addOrRemoveVesselLabelWhenZooming()
-  }, [vesselLabelsShowedOnMap, map, vesselLabelsHiddenByZoom, isMoving, vesselLabel, filteredVesselsFeaturesUids])
+  */
 
   useEffect(() => {
     const vesselsFeatures = vectorSource.getFeatures()
@@ -140,8 +131,6 @@ const VesselsLayer = ({ map }) => {
           features: features,
           showingVesselsEstimatedPositions: showingVesselsEstimatedPositions
         })
-
-        addVesselLabelToAllFeaturesInExtent(extent)
       })
     }
   }
@@ -191,6 +180,27 @@ const VesselsLayer = ({ map }) => {
       })
   })
 
+  const buildLastPositionFeature = (vesselFromAPI, id) => {
+    const vesselOptions = {
+      selectedVesselFeatureAndIdentity,
+      selectedVessel,
+      id,
+      vesselsLastPositionVisibility,
+      isLight: Vessel.iconIsLight(selectedBaseLayer),
+      temporaryVesselsToHighLightOnMap
+    }
+    const vessel = new Vessel(vesselFromAPI, vesselOptions)
+
+    if (selectedVesselFeatureAndIdentity &&
+      vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, vessel.feature)) {
+      Vessel.setVesselAsSelected(vessel.feature)
+      dispatch(updateSelectedVesselFeature(vessel.feature))
+    }
+
+    return vessel.feature
+  }
+
+  /*
   function highLightVesselsOnMap () {
     if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {
       const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
@@ -217,85 +227,7 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
-  function addOrRemoveVesselLabelWhenZooming () {
-    if (map) {
-      if (vesselLabelsHiddenByZoom === undefined) {
-        return
-      }
-
-      if (vesselLabelsShowedOnMap && !vesselLabelsHiddenByZoom && isVesselLabelMinimumZoom()) {
-        addVesselLabelToAllFeaturesInExtent(null)
-      } else if (vesselLabelsShowedOnMap && vesselLabelsHiddenByZoom) {
-        removeVesselLabelToAllFeatures()
-      } else if (!vesselLabelsShowedOnMap) {
-        removeVesselLabelToAllFeatures()
-      }
-    }
-  }
-
-  function isVesselLabelMinimumZoom () {
-    return map && map.getView().getZoom() > MIN_ZOOM_VESSEL_LABELS
-  }
-
-  function addVesselLabelToAllFeaturesInExtent (extent) {
-    const vesselLabelsIsShowedOnMap = vesselLabelsHiddenByZoom === undefined
-      ? false
-      : vesselLabelsShowedOnMap && !vesselLabelsHiddenByZoom
-
-    if (vesselLabelsIsShowedOnMap) {
-      extent = extent || map.getView().calculateExtent()
-
-      const filterShowed = filters.find(filter => filter.showed)
-
-      if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-        const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
-
-        addLabelForFeaturesInExtentAndIncludedInArray(extent, temporaryVesselsToHighLightOnMapUids)
-      } else if (filterShowed && nonFilteredVesselsAreHidden) {
-        addLabelForFeaturesInExtentAndIncludedInArray(extent, filteredVesselsFeaturesUids)
-      } else {
-        vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
-          Vessel.addLabelToVesselFeature(feature, vesselLabel, vesselsLastPositionVisibility)
-        })
-      }
-    }
-  }
-
-  function addLabelForFeaturesInExtentAndIncludedInArray (extent, arrayOfUids) {
-    vectorSource.forEachFeatureIntersectingExtent(extent, feature => {
-      const featureIndex = arrayOfUids.indexOf(feature.ol_uid)
-
-      if (featureIndex !== NOT_FOUND) {
-        Vessel.addLabelToVesselFeature(feature, vesselLabel, vesselsLastPositionVisibility)
-      }
-    })
-  }
-
-  function removeVesselLabelToAllFeatures () {
-    vectorSource.getFeatures().forEach(feature => {
-      Vessel.removeLabelToVesselFeature(feature)
-    })
-  }
-
-  const buildLastPositionFeature = (vesselFromAPI, id) => {
-    const vesselOptions = {
-      selectedVesselFeatureAndIdentity,
-      selectedVessel,
-      id,
-      vesselsLastPositionVisibility,
-      isLight: Vessel.iconIsLight(selectedBaseLayer),
-      temporaryVesselsToHighLightOnMap
-    }
-    const vessel = new Vessel(vesselFromAPI, vesselOptions)
-
-    if (selectedVesselFeatureAndIdentity &&
-      vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, vessel.feature)) {
-      Vessel.setVesselAsSelected(vessel.feature)
-      dispatch(updateSelectedVesselFeature(vessel.feature))
-    }
-
-    return vessel.feature
-  }
+   */
 
   return null
 }

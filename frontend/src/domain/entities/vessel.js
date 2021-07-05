@@ -6,6 +6,8 @@ import { toStringHDMS } from 'ol/coordinate'
 import Layers, { baseLayers } from './layers'
 import { Icon, Style } from 'ol/style'
 import { getSVG, getVesselIconOpacity, getVesselImage, getVesselLabelStyle } from '../../layers/styles/featuresStyles'
+import { vesselLabel as vesselLabelEnum } from './vesselLabel'
+import countries from 'i18n-iso-countries'
 
 export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
@@ -202,25 +204,30 @@ export class Vessel {
    * @param {string} vesselLabelTypeEnum
    * @param {Object} vesselsLastPositionVisibility
    */
-  static addLabelToVesselFeature (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility) {
+  static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility) {
     const vesselDate = new Date(feature.getProperties().dateTime)
     const vesselIsHidden = new Date()
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
     if (vesselDate > vesselIsHidden) {
-      getSVG(feature, vesselLabelTypeEnum).then(svg => {
-        if (svg) {
-          const style = getVesselLabelStyle(svg.showedText, svg.imageElement)
-
-          const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-          if (!vesselLabelStyle || vesselLabelStyle.getImage() !== svg.imageElement) {
-            const stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_LABEL_STYLE)
-
-            feature.setStyle([...stylesWithoutVesselName, style])
-          }
+      switch (vesselLabelTypeEnum) {
+        case vesselLabelEnum.VESSEL_NAME: {
+          return feature.getProperties().vesselName
         }
-      })
+        case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
+          return feature.getProperties().internalReferenceNumber
+        }
+        case vesselLabelEnum.VESSEL_NATIONALITY: {
+          return countries.getName(feature.getProperties().flagState, 'fr')
+        }
+        case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
+          return feature.getProperties().segments.join(', ')
+        }
+        default: return null
+      }
     }
+
+    return null
   }
 
   /**

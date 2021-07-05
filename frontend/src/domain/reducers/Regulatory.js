@@ -10,7 +10,8 @@ const regulatorySlice = createSlice({
     selectedRegulatoryZones: getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey),
     regulatoryZoneMetadata: null,
     loadingRegulatoryZoneMetadata: false,
-    regulatoryZoneMetadataPanelIsOpen: false
+    regulatoryZoneMetadataPanelIsOpen: false,
+    lawTypeOpened: null
   },
   reducers: {
     addRegulatoryZonesToSelection (state, action) {
@@ -52,6 +53,9 @@ const regulatorySlice = createSlice({
     closeRegulatoryZoneMetadataPanel (state) {
       state.regulatoryZoneMetadataPanelIsOpen = false
       state.regulatoryZoneMetadata = null
+    },
+    setLawTypeOpened (state, action) {
+      state.lawTypeOpened = action.payload
     }
   }
 })
@@ -63,7 +67,8 @@ export const {
   setLoadingRegulatoryZoneMetadata,
   resetLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata,
-  closeRegulatoryZoneMetadataPanel
+  closeRegulatoryZoneMetadataPanel,
+  setLawTypeOpened
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

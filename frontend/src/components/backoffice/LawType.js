@@ -1,21 +1,27 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryZoneSelectedLayer from '../regulatory_zones/RegulatoryZoneSelectedLayer'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import { setLawTypeOpened } from '../../domain/reducers/Regulatory'
 
 const LawType = props => {
+  const dispatch = useDispatch()
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
-  const [isOpen, setIsOpen] = useState(false)
   const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
-
+  const lawTypeOpened = useSelector(state => state.regulatory.lawTypeOpened)
   const {
     lawType,
     regZoneByLawType,
     isReadyToShowRegulatoryZones
   } = props
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    setIsOpen(lawTypeOpened === lawType)
+  }, [lawType, lawTypeOpened, setIsOpen])
 
   function increaseNumberOfZonesOpened (number) {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
@@ -50,8 +56,17 @@ const LawType = props => {
     )
   }
 
+  const openLawTypeList = () => {
+    if (isOpen) {
+      dispatch(setLawTypeOpened(null))
+    } else {
+      dispatch(setLawTypeOpened(lawType))
+    }
+    setIsOpen(!isOpen)
+  }
+
   return (<LawTypeContainer>
-    <LawTypeName onClick={() => setIsOpen(!isOpen)}>
+    <LawTypeName onClick={openLawTypeList}>
       <LawTypeText>{lawType}</LawTypeText>
       <ChevronIcon isOpen={isOpen}/>
     </LawTypeName>

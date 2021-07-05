@@ -127,12 +127,14 @@ const Rectangle = styled.div`
 const Icons = styled.span`
   float: right;
   display: flex;
-  margin-right: 6px;
+  margin-right: 5px;
+  justify-content: flex-end;
+  flex: 1;
 `
 
 const SubZone = styled.span`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   line-height: 1.9em;
   padding-left: 31px;
   padding-top: 4px;

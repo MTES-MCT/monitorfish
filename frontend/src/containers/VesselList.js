@@ -234,7 +234,6 @@ const VesselList = ({ namespace }) => {
   }, [temporaryVesselsToHighLightOnMap])
 
   useEffect(() => {
-    console.log("namespace", namespace)
 
     if (administrativeZonesFiltered && zonesSelected &&
       administrativeZonesFiltered.length > zonesSelected.length) {

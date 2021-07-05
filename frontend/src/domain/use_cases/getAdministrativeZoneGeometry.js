@@ -3,7 +3,6 @@ import { addZoneSelected } from '../reducers/Map'
 import layer from '../reducers/Layer'
 
 const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zoneName, namespace) => (dispatch, getState) => {
-  console.log(namespace, layer, layer[namespace])
   const { addAdministrativeZoneGeometryToCache } = layer[namespace].actions
   const geometryCache = getState().layer.administrativeZonesGeometryCache
   const foundCache = geometryCache.find(zone => zone.key === `${administrativeZoneCode}:${subZoneCode}:${zoneName}`)

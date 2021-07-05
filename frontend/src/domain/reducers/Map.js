@@ -29,7 +29,6 @@ const mapSlice = createSlice({
     animateTo: null,
     updatedFromCron: false,
     animateToRegulatoryLayer: null,
-    vesselLabelsHiddenByZoom: undefined,
     isMoving: false,
     interaction: null,
     measurementTypeToAdd: null,
@@ -79,9 +78,6 @@ const mapSlice = createSlice({
     setExtent (state, action) {
       window.localStorage.setItem(savedMapExtentLocalStorageKey, JSON.stringify(action.payload))
       state.extent = action.payload
-    },
-    hideVesselLabels (state, action) {
-      state.vesselLabelsHiddenByZoom = action.payload
     },
     isMoving (state) {
       state.isMoving = !state.isMoving
@@ -195,7 +191,6 @@ export const {
   animateToRegulatoryLayer,
   resetAnimateToRegulatoryLayer,
   setVesselLabelsShowedOnMap,
-  hideVesselLabels,
   isMoving,
   setView,
   setExtent,

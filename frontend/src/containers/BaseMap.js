@@ -114,6 +114,7 @@ const BaseMap = props => {
 
       initialMap.on('click', event => handleMapClick(event, initialMap))
       initialMap.on('pointermove', event => throttleAndHandlePointerMove(event, initialMap))
+      initialMap.on('movestart', () => throttleAndHandleMovingAndZoom(initialMap))
       initialMap.on('moveend', () => throttleAndHandleMovingAndZoom(initialMap))
 
       setMap(initialMap)
@@ -135,7 +136,7 @@ const BaseMap = props => {
       if (handleMovingAndZoom) {
         handleMovingAndZoom(initialMap)
       }
-    }, 200)
+    }, 100)
   }
 
   function throttleAndHandlePointerMove (event, map) {

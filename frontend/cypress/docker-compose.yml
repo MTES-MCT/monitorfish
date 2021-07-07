@@ -16,7 +16,7 @@ services:
     container_name: monitorfish_backend
     user: "monitorfish:${MONITORFISH_LOGS_GID}"
     environment:
-      - ENV_DB_URL=jdbc:postgresql://db:5432/$POSTGRES_DB?user=$POSTGRES_USER&password=$POSTGRES_PASSWORD
+      - ENV_DB_URL=jdbc:postgresql://db:5432/$POSTGRES_DB?user=postgres&password=postgres
       - SPRING_PROFILES_ACTIVE=prod
       - HOST_IP=127.0.0.1
     ports:

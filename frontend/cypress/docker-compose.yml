@@ -25,7 +25,7 @@ services:
       - 5000:5000
       - 5001:5001
     volumes:
-      - "${MONITORFISH_LOGS_FOLDER}:/home/monitorfish/logs"
+      - "${logs_folder}:/home/monitorfish/logs"
     depends_on:
       - db
     restart: always

@@ -108,6 +108,8 @@ jobs:
       with:
         # just perform install
         runTests: false
+        working-directory: frontend
+        install-command: npm i
 
     - name: Cypress run
       uses: cypress-io/github-action@v2

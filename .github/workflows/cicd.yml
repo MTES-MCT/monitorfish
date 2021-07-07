@@ -12,6 +12,7 @@ on:
     - 'infra/docker/DockerfileBuildApp'
     - '**.sql'
     - 'backend/pom.xml'
+    - 'Makefile'
   schedule:
     - cron: "38 11 */3 * *"
 

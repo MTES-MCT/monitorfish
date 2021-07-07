@@ -14,7 +14,6 @@ services:
   app:
     image: monitorfish-app:$MONITORFISH_VERSION
     container_name: monitorfish_backend
-    user: "monitorfish:${MONITORFISH_LOGS_GID}"
     environment:
       - ENV_DB_URL=jdbc:postgresql://db:5432/$POSTGRES_DB?user=postgres&password=postgres
       - SPRING_PROFILES_ACTIVE=prod
@@ -24,8 +23,6 @@ services:
       - 8000:8000
       - 5000:5000
       - 5001:5001
-    volumes:
-      - "logs_folder:/home/monitorfish/logs"
     depends_on:
       - db
     restart: always

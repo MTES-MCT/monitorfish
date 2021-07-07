@@ -96,7 +96,7 @@ export const SpeedCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...pr
   return (
     <Cell
       {...props}
-      style={{cursor: 'pointer'}}
+      style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateTo(olCoordinates))}
@@ -113,7 +113,7 @@ export const CourseCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...p
   return (
     <Cell
       {...props}
-      style={{cursor: 'pointer'}}
+      style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateTo(olCoordinates))}
@@ -128,14 +128,14 @@ export const DateTimeCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ..
   const olCoordinates = rowData ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION) : []
 
   let dateTimeStringWithoutMilliSeconds = rowData[dataKey].split('.')[0]
-  if(!dateTimeStringWithoutMilliSeconds.includes('Z')) {
+  if (!dateTimeStringWithoutMilliSeconds.includes('Z')) {
     dateTimeStringWithoutMilliSeconds += 'Z'
   }
 
   return (
     <Cell
       {...props}
-      style={{cursor: 'pointer'}}
+      style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateTo(olCoordinates))}

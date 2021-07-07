@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-export const useClickOutsideComponent  = ref => {
-  const [clicked, setClicked] = useState(false);
+export const useClickOutsideComponent = ref => {
+  const [clicked, setClicked] = useState(false)
 
   useEffect(() => {
     function handleClickOutside (event) {

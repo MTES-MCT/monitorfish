@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-18.04
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
+      REACT_APP_CYPRESS_PORT: 8880
     steps:
 
     - name: Get last release version

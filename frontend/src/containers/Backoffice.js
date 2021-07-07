@@ -30,8 +30,9 @@ const Backoffice = () => {
 
   const getRegulatoryZones = () => {
     dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
-      .then(regulatoryZones => {
-        setRegulatoryZoneListByRegTerritory(regulatoryZones)
+      .then(response => {
+        const { layersNamesByRegTerritory } = response
+        setRegulatoryZoneListByRegTerritory(layersNamesByRegTerritory)
       })
       .catch(error => {
         dispatch(setError(error))

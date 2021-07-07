@@ -62,7 +62,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const featureIdsList = featuresAndLabels.map(({ feature }) => VesselLabelLine.getFeatureId(getVesselIdentityFromFeature(feature)))
 
       previousFeatureIdsList.forEach(id => {
-        if (featureIdsList.indexOf(id) === -1) {
+        if (featureIdsList.indexOf(id) === NOT_FOUND) {
           const feature = vectorSource.getFeatureById(id)
           if (feature) {
             vectorSource.removeFeature(feature)

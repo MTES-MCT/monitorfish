@@ -63,7 +63,7 @@ const VesselIdentity = props => {
             <TableBody>
               <Field>
                 <Key>CFR</Key>
-                <Value>
+                <Value data-cy={"cfr"}>
                   {
                     getVesselOrLastPositionProperty('internalReferenceNumber')
                   }
@@ -164,7 +164,7 @@ const VesselIdentity = props => {
               </Field>
               <Field>
                 <Key>Engins de pêche déclarés (PME)</Key>
-                <Value>
+                <Value data-cy={"vessel-identity-gears"}>
                   {
                     gears
                       ? gears.map(gear => {

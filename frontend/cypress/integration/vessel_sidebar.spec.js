@@ -5,7 +5,7 @@ import { getDate } from '../../src/utils'
 context('VesselSidebar', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
-    cy.visit('http://localhost:3000/#@-824534.42,6082993.21,8.70')
+    cy.visit(`http://0.0.0.0:${process.env.REACT_APP_CYPRESS_PORT}/#@-824534.42,6082993.21,8.70`)
     cy.wait(2000)
   })
 

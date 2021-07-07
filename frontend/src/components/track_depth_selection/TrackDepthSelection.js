@@ -99,6 +99,7 @@ const TrackDepthSelection = props => {
         rightMenuIsOpen={props.rightMenuIsOpen}
         trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
         onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
+        data-cy={'vessel-track-depth-selection'}
       >
         <ClockIcon/>
       </TrackDepthSelectionButton>

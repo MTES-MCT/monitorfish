@@ -41,7 +41,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    if(vesselsLayerSource && !showingVesselsEstimatedPositions) {
+    if (vesselsLayerSource && !showingVesselsEstimatedPositions) {
       vectorSource.clear(true)
     }
 
@@ -82,7 +82,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         }
       }
 
-      if(estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
+      if (estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
         const estimatedCurrentPosition = new EstimatedPosition(
           [longitude, latitude],
           [estimatedCurrentLongitude, estimatedCurrentLatitude],

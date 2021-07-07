@@ -19,7 +19,7 @@ export const lastControlByType = yearsToControls => {
       if (a.controlDatetimeUtc < b.controlDatetimeUtc) {
         return 1
       } else {
-        return - 1
+        return -1
       }
     })
 

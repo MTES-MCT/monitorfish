@@ -13,7 +13,6 @@ import VesselCardOverlay from '../components/overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from '../components/overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
-import { HIT_PIXEL_TO_TOLERANCE } from '../constants/constants'
 import VesselEstimatedPositionLayer from '../layers/VesselEstimatedPositionLayer'
 import VesselEstimatedPositionCardOverlay from '../components/overlays/VesselEstimatedPositionCardOverlay'
 

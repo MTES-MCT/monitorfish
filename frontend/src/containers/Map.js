@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { isMoving } from '../domain/reducers/Map'
+import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
 import LayerDetailsBox from '../components/map/LayerDetailsBox'
@@ -19,7 +18,6 @@ import VesselsLabelsLayer from '../layers/VesselsLabelsLayer'
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
-  const dispatch = useDispatch()
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
@@ -28,7 +26,6 @@ const Map = () => {
   const [handlePointerMoveEventPixel, setHandlePointerMoveEventPixel] = useState(null)
 
   const handleMovingAndZoom = () => {
-    dispatch(isMoving())
     if (!shouldUpdateView) {
       setShouldUpdateView(true)
     }

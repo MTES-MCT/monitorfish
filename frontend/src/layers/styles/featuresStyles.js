@@ -1,15 +1,6 @@
 import { Icon, Style } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
-import IconOrigin from 'ol/style/IconOrigin'
-import { getTextWidth } from '../../utils'
-import { COLORS } from '../../constants/constants'
-import { vesselLabel as vesselLabelEnum } from '../../domain/entities/vesselLabel'
-import countries from 'i18n-iso-countries'
-import { VESSEL_LABEL_STYLE, vesselsAreEquals } from '../../domain/entities/vessel'
-
-const images = require.context('../../../public/flags', false, /\.png$/)
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 function degreesToRadian (vessel) {
   return vessel.course * Math.PI / 180
@@ -47,16 +38,7 @@ export function getVesselImage (vessel, isLight, color) {
     })
 }
 
-function vesselsToHighLightDoesNotContainsCurrentVessel (temporaryVesselsToHighLightOnMap, vessel) {
-  return !temporaryVesselsToHighLightOnMap.some((vesselToHighLight) => {
-    return vesselsAreEquals(vessel, vesselToHighLight)
-  })
-}
-
-export function getVesselIconOpacity (vesselsLastPositionVisibility,
-  dateTime,
-  temporaryVesselsToHighLightOnMap,
-  vessel) {
+export function getVesselIconOpacity (vesselsLastPositionVisibility, dateTime) {
   const vesselDate = new Date(dateTime)
 
   const vesselIsHidden = new Date()
@@ -65,82 +47,14 @@ export function getVesselIconOpacity (vesselsLastPositionVisibility,
   vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
 
   let opacity = 1
-  if (temporaryVesselsToHighLightOnMap &&
-    temporaryVesselsToHighLightOnMap.length &&
-    vesselsToHighLightDoesNotContainsCurrentVessel(temporaryVesselsToHighLightOnMap, vessel)) {
+  if (vesselDate < vesselIsHidden) {
     opacity = 0
-  } else {
-    if (vesselDate < vesselIsHidden) {
-      opacity = 0
-    } else if (vesselDate < vesselIsOpacityReduced) {
-      opacity = 0.2
-    }
+  } else if (vesselDate < vesselIsOpacityReduced) {
+    opacity = 0.2
   }
 
   return opacity
 }
-
-export const getSVG = (feature, vesselLabel) => new Promise(function (resolve) {
-  const imageElement = new Image()
-  const flag = images(`./${feature.getProperties().flagState.toLowerCase()}.png`)
-
-  let showedText = ''
-  switch (vesselLabel) {
-    case vesselLabelEnum.VESSEL_NAME: {
-      showedText = feature.getProperties().vesselName
-      break
-    }
-    case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
-      showedText = feature.getProperties().internalReferenceNumber
-      break
-    }
-    case vesselLabelEnum.VESSEL_NATIONALITY: {
-      showedText = countries.getName(feature.getProperties().flagState, 'fr')
-      break
-    }
-    case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
-      showedText = feature.getProperties().segments.join(', ')
-      break
-    }
-  }
-
-  const textWidth = getTextWidth(showedText) + 10 + (flag ? 18 : 0)
-
-  const iconSVG = showedText
-    ? `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="${textWidth}px" height="36px" viewBox="0 0 ${textWidth} 16"  xml:space="preserve">
-            <rect x="0" y="0" width="${textWidth}px" height="16" rx="8px" fill="#FFFFFF" fill-opacity="0.7" />
-            <image xlink:href="${flag}" width="14px" x="5px" height="16px"/>
-            <text x="${flag ? 23 : 5}" y="13" fill="${COLORS.grayDarkerThree}" font-family="Arial" font-size="12" font-weight="normal">${showedText}</text>
-        </svg>`
-    : '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"/>'
-
-  imageElement.addEventListener('load', function animationendListener () {
-    imageElement.removeEventListener('load', animationendListener)
-    resolve({
-      imageElement: imageElement,
-      showedText: showedText
-    })
-  }, { once: true })
-  imageElement.addEventListener('error', function animationendListener () {
-    imageElement.removeEventListener('error', animationendListener)
-    resolve(null)
-  }, { once: true })
-  imageElement.src = 'data:image/svg+xml,' + escape(iconSVG)
-})
-
-export const getVesselLabelStyle = (showedText, image) =>
-  new Style({
-    image: new Icon({
-      anchorOrigin: IconOrigin.TOP_RIGHT,
-      img: image,
-      imgSize: [getTextWidth(showedText) * 4 + 40, 36],
-      offset: [-getTextWidth(showedText) * 2 - 30, 11],
-      padding: [5, 5],
-      // See https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210
-      color: 'white'
-    }),
-    zIndex: VESSEL_LABEL_STYLE
-  })
 
 export const setCircleStyle = (color, circleFeature, radius) => {
   const circleStyle = new Style({

@@ -154,7 +154,7 @@ const BaseMap = props => {
       if (showCoordinates) {
         saveCoordinates(lastEventForPointerMove)
       }
-    }, 100)
+    }, 50)
   }
 
   function animateToLayer () {

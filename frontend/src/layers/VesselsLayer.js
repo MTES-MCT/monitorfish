@@ -19,8 +19,7 @@ const VesselsLayer = ({ map }) => {
   const {
     vessels,
     selectedVessel,
-    selectedVesselFeatureAndIdentity,
-    temporaryVesselsToHighLightOnMap
+    selectedVesselFeatureAndIdentity
   } = useSelector(state => state.vessel)
   const {
     selectedBaseLayer,
@@ -59,16 +58,6 @@ const VesselsLayer = ({ map }) => {
   useEffect(() => {
     addVesselsFeaturesToMap()
   }, [vessels, map])
-
-  /*
-  useEffect(() => {
-    highLightVesselsOnMap()
-  }, [temporaryVesselsToHighLightOnMap])
-
-  useEffect(() => {
-    showBackVesselsIconsWhenClosingVesselsHighLight()
-  }, [vesselsLastPositionVisibility, temporaryVesselsToHighLightOnMap])
-  */
 
   useEffect(() => {
     const vesselsFeatures = vectorSource.getFeatures()
@@ -186,8 +175,7 @@ const VesselsLayer = ({ map }) => {
       selectedVessel,
       id,
       vesselsLastPositionVisibility,
-      isLight: Vessel.iconIsLight(selectedBaseLayer),
-      temporaryVesselsToHighLightOnMap
+      isLight: Vessel.iconIsLight(selectedBaseLayer)
     }
     const vessel = new Vessel(vesselFromAPI, vesselOptions)
 
@@ -199,35 +187,6 @@ const VesselsLayer = ({ map }) => {
 
     return vessel.feature
   }
-
-  /*
-  function highLightVesselsOnMap () {
-    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length && map) {
-      const temporaryVesselsToHighLightOnMapUids = temporaryVesselsToHighLightOnMap.map(vessel => vessel.uid)
-
-      vectorSource.getFeatures().filter(feature => {
-        const featureIndex = temporaryVesselsToHighLightOnMapUids.indexOf(feature.ol_uid)
-
-        return featureIndex === NOT_FOUND
-      }).forEach(featureToHide => {
-        Vessel.hideVesselFeature(featureToHide)
-      })
-
-      vectorSource.changed()
-    }
-  }
-
-  function showBackVesselsIconsWhenClosingVesselsHighLight () {
-    if (vesselsLastPositionVisibility && (!temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length) && map) {
-      const features = vectorSource.getFeatures()
-
-      applyFilterToVessels(features, redrawVesselsIfNoFilter(features)).then(_ => {
-        vectorSource.changed()
-      })
-    }
-  }
-
-   */
 
   return null
 }

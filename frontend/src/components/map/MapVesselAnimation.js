@@ -5,12 +5,11 @@ import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../..
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
 
-const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
+const MapVesselAnimation = ({ map, mapClickEvent }) => {
   const dispatch = useDispatch()
   const { animateTo } = useSelector(state => state.map)
   const {
-    vesselSidebarIsOpen,
-    temporaryVesselsToHighLightOnMap
+    vesselSidebarIsOpen
   } = useSelector(state => state.vessel)
 
   useEffect(() => {
@@ -18,9 +17,7 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   }, [animateTo, map, vesselSidebarIsOpen])
 
   useEffect(() => {
-    const noVesselsHighLighted = !temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length
-
-    if (mapClickEvent && mapClickEvent.feature && noVesselsHighLighted) {
+    if (mapClickEvent && mapClickEvent.feature) {
       showVesselTrackAndSidebarOnMapClick(mapClickEvent.feature)
     }
   }, [mapClickEvent])

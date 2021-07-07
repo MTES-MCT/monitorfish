@@ -25,17 +25,10 @@ const VesselFilters = () => {
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const previousFilters = usePrevious(filters)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
-  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
 
   const [vesselFilterBoxIsOpen, setVesselFilterBoxIsOpen] = useState(false)
-  const [isShowed, setIsShowed] = useState(true)
-
   const wrapperRef = useRef(null)
-
-  useEffect(() => {
-    setIsShowed(!(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length))
-  }, [temporaryVesselsToHighLightOnMap])
 
   useEffect(() => {
     function handleClickOutside (event) {
@@ -83,9 +76,7 @@ const VesselFilters = () => {
 
   return (
     <>
-      <Wrapper
-        isShowed={isShowed}
-        ref={wrapperRef}>
+      <Wrapper ref={wrapperRef}>
         <VesselFilterIcon
           healthcheckTextWarning={healthcheckTextWarning}
           rightMenuIsOpen={rightMenuIsOpen}
@@ -192,7 +183,6 @@ const FiltersSelectedList = styled.ul`
 `
 
 const Wrapper = styled.div`
-  opacity: ${props => props.isShowed ? '1' : '0'};
   transition: all 0.2s;
   z-index: 1000;
 `

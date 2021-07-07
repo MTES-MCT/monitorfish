@@ -19,7 +19,6 @@ import NamespaceContext from '../domain/context/NamespaceContext'
 const LayersSidebar = () => {
   const dispatch = useDispatch()
   const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
-  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
@@ -28,15 +27,6 @@ const LayersSidebar = () => {
   const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false)
   const [regulatoryZonesAddedToMySelection, setRegulatoryZonesAddedToMySelection] = useState(0)
   const [hideZonesListWhenSearching, setHideZonesListWhenSearching] = useState(false)
-  const [isShowed, setIsShowed] = useState(true)
-
-  useEffect(() => {
-    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-      setIsShowed(false)
-    } else {
-      setIsShowed(true)
-    }
-  }, [temporaryVesselsToHighLightOnMap])
 
   useEffect(() => {
     if (layersSidebarIsOpen === true) {
@@ -67,7 +57,6 @@ const LayersSidebar = () => {
         namespace => (
           <Sidebar
             healthcheckTextWarning={healthcheckTextWarning}
-            isShowed={isShowed}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon
@@ -118,13 +107,7 @@ const Sidebar = styled(MapComponentStyle)`
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '' : props.layersSidebarIsOpen ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards,
-  ${props => props.isShowed ? 'left-sidebar-visible' : 'left-sidebar-hiding'} 0.5s ease forwards;
-
-  @keyframes left-sidebar-visible {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
+  animation: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '' : props.layersSidebarIsOpen ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards;
 
   @keyframes left-sidebar-hiding {
     0%   { opacity: 1; }

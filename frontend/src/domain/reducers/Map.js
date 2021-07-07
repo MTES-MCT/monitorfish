@@ -29,7 +29,6 @@ const mapSlice = createSlice({
     animateTo: null,
     updatedFromCron: false,
     animateToRegulatoryLayer: null,
-    isMoving: false,
     interaction: null,
     measurementTypeToAdd: null,
     circleMeasurementToAdd: null,
@@ -78,9 +77,6 @@ const mapSlice = createSlice({
     setExtent (state, action) {
       window.localStorage.setItem(savedMapExtentLocalStorageKey, JSON.stringify(action.payload))
       state.extent = action.payload
-    },
-    isMoving (state) {
-      state.isMoving = !state.isMoving
     },
     setVesselsLastPositionVisibility (state, action) {
       window.localStorage.setItem(vesselsLastPositionVisibilityLocalStorageKey, JSON.stringify(action.payload))
@@ -191,7 +187,6 @@ export const {
   animateToRegulatoryLayer,
   resetAnimateToRegulatoryLayer,
   setVesselLabelsShowedOnMap,
-  isMoving,
   setView,
   setExtent,
   setVesselsLastPositionVisibility,

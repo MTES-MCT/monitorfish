@@ -5,7 +5,7 @@ import Point from 'ol/geom/Point'
 import { toStringHDMS } from 'ol/coordinate'
 import Layers, { baseLayers } from './layers'
 import { Icon, Style } from 'ol/style'
-import { getSVG, getVesselIconOpacity, getVesselImage, getVesselLabelStyle } from '../../layers/styles/featuresStyles'
+import { getVesselIconOpacity, getVesselImage } from '../../layers/styles/featuresStyles'
 import { vesselLabel as vesselLabelEnum } from './vesselLabel'
 import countries from 'i18n-iso-countries'
 
@@ -22,7 +22,6 @@ export class Vessel {
       id: string,
       vesselsLastPositionVisibility: Object,
       isLight: boolean,
-      temporaryVesselsToHighLightOnMap: Object[]
    * }} options
    */
   constructor (vessel, options) {
@@ -99,9 +98,7 @@ export class Vessel {
 
     const opacity = getVesselIconOpacity(
       options.vesselsLastPositionVisibility,
-      this.vessel.dateTime,
-      options.temporaryVesselsToHighLightOnMap,
-      this.vessel)
+      this.vessel.dateTime)
     iconStyle.getImage().setOpacity(opacity)
 
     return iconStyle

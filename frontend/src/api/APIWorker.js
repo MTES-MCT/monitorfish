@@ -11,7 +11,7 @@ import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 import getHealthcheck from '../domain/use_cases/getHealthcheck'
 
-export const TWO_MINUTES = 120000
+export const TWO_MINUTES = 12000
 
 const APIWorker = () => {
   const error = useSelector(state => state.global.error)

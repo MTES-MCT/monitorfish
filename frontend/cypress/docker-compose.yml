@@ -1,0 +1,55 @@
+version: '3'
+services:
+  db:
+    image: timescale/timescaledb-postgis:1.7.4-pg11
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=monitorfishdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  app:
+    image: docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$MONITORFISH_VERSION
+    container_name: monitorfish_backend
+    user: "monitorfish:${MONITORFISH_LOGS_GID}"
+    environment:
+      - ENV_DB_URL=jdbc:postgresql://db:5432/$POSTGRES_DB?user=$POSTGRES_USER&password=$POSTGRES_PASSWORD
+      - SPRING_PROFILES_ACTIVE=prod
+      - HOST_IP=127.0.0.1
+    ports:
+      - 8880:8880
+      - 8000:8000
+      - 5000:5000
+      - 5001:5001
+    volumes:
+      - "${MONITORFISH_LOGS_FOLDER}:/home/monitorfish/logs"
+    networks:
+      - backend
+    depends_on:
+      - db
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+
+  geoserver:
+    image: kartoza/geoserver:2.18.0
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    links:
+      - "db:db"
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    depends_on:
+      - db
+
+volumes:
+  geoserver-data:
+    driver: local
+  db-data:
+    driver: local

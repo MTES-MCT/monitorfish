@@ -12,7 +12,7 @@ services:
       - 5432:5432
 
   app:
-    image: docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$MONITORFISH_VERSION
+    image: monitorfish-app:$MONITORFISH_VERSION
     container_name: monitorfish_backend
     user: "monitorfish:${MONITORFISH_LOGS_GID}"
     environment:

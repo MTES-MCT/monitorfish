@@ -26,8 +26,6 @@ services:
       - 5001:5001
     volumes:
       - "${MONITORFISH_LOGS_FOLDER}:/home/monitorfish/logs"
-    networks:
-      - backend
     depends_on:
       - db
     restart: always

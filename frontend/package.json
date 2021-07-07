@@ -47,6 +47,7 @@
     "build:local": "REACT_APP_ENV=local npm run build",
     "lint": "eslint src/ --fix",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
+    "cypress:open": "cypress open",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -71,6 +72,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-react": "^7.23.2"
+    "eslint-plugin-react": "^7.23.2",
+    "cypress": "^7.1.0"
   }
 }

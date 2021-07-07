@@ -1,4 +1,5 @@
 import * as Comlink from 'comlink'
+// import { set } from 'ol/transform'
 import { lawTypeList, mapToRegulatoryZone } from '../domain/entities/regulatory'
 import { vesselSize } from '../domain/entities/vessel'
 import { getDateMonthsBefore } from '../utils'
@@ -38,15 +39,20 @@ class MapperWorker {
   }
 
   convertGeoJSONFeaturesToObjectByRegTerritory (features) {
+    const reglementationBlocList = new Set()
+    const zoneThemelist = new Set()
+    const seaFrontList = new Set()
     const layerNamesArray = this.#getLayerNameList(features)
     const layersNamesByRegTerritory = layerNamesArray.reduce((accumulatedObject, zone) => {
       let lawType = zone[0].lawType
       const layerName = zone[0].layerName
+      zoneThemelist.add(layerName)
       const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
       if (regTerritory === 'France') {
         lawType = `${lawType} / ${zone[0].seafront}`
+        seaFrontList.add(zone[0].seafront)
       }
-
+      reglementationBlocList.add(lawType)
       if (!accumulatedObject[regTerritory]) {
         accumulatedObject[regTerritory] = {}
       }
@@ -56,7 +62,12 @@ class MapperWorker {
       accumulatedObject[regTerritory][lawType][layerName] = zone
       return accumulatedObject
     }, {})
-    return layersNamesByRegTerritory
+    return {
+      layersNamesByRegTerritory,
+      zoneThemeArray: [...zoneThemelist],
+      reglementationArray: [...reglementationBlocList],
+      seaFrontArray: [...seaFrontList]
+    }
   }
 
   getFilteredVessels (vessels, filters) {

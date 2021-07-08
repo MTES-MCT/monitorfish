@@ -6,6 +6,7 @@ import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_si
 import { SelectPicker, Input } from 'rsuite'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
+import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -18,6 +19,25 @@ const CreateRegulation = () => {
   const [selectedZoneTheme, setSelectedZoneTheme] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   const [nameZone, setNameZone] = useState()
+  const [selectedRegion, setSelectedRegion] = useState()
+  const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
+  const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
+
+  const FRENCH_REGION_LIST = [
+    'Auvergne-Rhône-Alpes',
+    'Bourgogne-Franche-Comté',
+    'Bretagne',
+    'Centre-Val de Loire',
+    'Corse',
+    'Grand Est',
+    'Hauts-de-France',
+    'Ile-de-France',
+    'Normandie',
+    'Nouvelle-Aquitaine',
+    'Occitanie',
+    'Pays de la Loire',
+    'Provence-Alpes-Côte d’Azur'
+  ]
 
   // à passer dans le state ?
   // Pourquoi un dispatch ici ?
@@ -53,6 +73,21 @@ const CreateRegulation = () => {
     return array
   }
 
+  const addNewReglementationBloc = () => {
+    console.log('addNewReglementationBloc')
+  }
+
+  const addNewTheme = () => {
+    console.log('addNewTheme')
+  }
+
+  const selectPickerStyle = {
+    width: 180,
+    margin: '0',
+    'border-color': COLORS.grayDarker,
+    'box-sizing': 'border-box'
+  }
+
   return (
     <CreateRegulationWrapper>
       <Header>
@@ -66,29 +101,100 @@ const CreateRegulation = () => {
           </SectionTitle>
           <ContentLine>
             <Label>Ensemble règlementaire</Label>
-            <SelectPicker
-              style={{ width: 180, margin: '2px 10px 10px 0' }}
-              searchable={false}
-              placeholder=" Choisir un ensemble "
-              value={selectedReglementationBloc}
-              onChange={setSelectedReglementationBloc}
-              data={reglementationBlocList}
-            />
+            <SelectWrapper>
+              <CustomSelectPicker
+                style={selectPickerStyle}
+                searchable={false}
+                placeholder=" Choisir un ensemble "
+                value={selectedReglementationBloc}
+                onChange={setSelectedReglementationBloc}
+                data={reglementationBlocList}
+              />
+            </SelectWrapper>
+            {
+              isAddReglementationBlocClicked
+                ? <CreateReglementationBloc>
+                  <CustomInput
+                    placeholder='Nommez le nouvel ensemble règlementaire'
+                    value={nameZone}
+                    onChange={setNameZone}
+                  />
+                  <ValidateButton
+                    disabled={false}
+                    isLast={false}
+                    onClick={addNewReglementationBloc}>
+                    Enregistrer
+                  </ValidateButton>
+                  <CancelButton
+                    disabled={false}
+                    isLast={false}
+                    onClick={() => setIsAddReglementationBlocClicked(false)}>
+                    Annuler
+                  </CancelButton>
+                </CreateReglementationBloc>
+                : <><RectangularButton
+                    onClick={() => setIsAddReglementationBlocClicked(true)}
+                  />
+                  <Label>Ajouter un nouvel ensemble</Label></>
+          }
           </ContentLine>
           <ContentLine>
             <Label>Thématique de la zone</Label>
-            <SelectPicker
-              style={{ width: 180, margin: '2px 10px 10px 0' }}
-              searchable={true}
-              placeholder=" Choisir une thématique "
-              value={selectedZoneTheme}
-              onChange={setSelectedZoneTheme}
-              data={zoneThemeList}
-            />
+            <SelectWrapper>
+              <CustomSelectPicker
+                searchable={true}
+                style={selectPickerStyle}
+                placeholder=" Choisir une thématique "
+                value={selectedZoneTheme}
+                onChange={setSelectedZoneTheme}
+                data={zoneThemeList}
+              />
+            </SelectWrapper>
+            {
+              isAddThemeClicked
+                ? <CreateReglementationBloc>
+                  <CustomInput
+                    placeholder='Lieu (obligatoire)'
+                    value={nameZone}
+                    onChange={setNameZone}
+                  />
+                  <CustomInput
+                    placeholder='Espèce (optionnel)'
+                    value={nameZone}
+                    onChange={setNameZone}
+                  />
+                  <CustomInput
+                    placeholder='Engins (optionnel)'
+                    value={nameZone}
+                    onChange={setNameZone}
+                  />
+                  <CustomInput
+                    placeholder='Autres indications (optionnel)'
+                    value={nameZone}
+                    onChange={setNameZone}
+                  />
+                  <ValidateButton
+                    disabled={false}
+                    isLast={false}
+                    onClick={addNewTheme}>
+                    Enregistrer
+                  </ValidateButton>
+                  <CancelButton
+                    disabled={false}
+                    isLast={false}
+                    onClick={() => setIsAddThemeClicked(false)}>
+                    Annuler
+                  </CancelButton>
+                </CreateReglementationBloc>
+                : <><RectangularButton
+                    onClick={() => setIsAddThemeClicked(true)}
+                  />
+                  <Label>Créer une nouvelle thématique</Label></>
+            }
           </ContentLine>
           <ContentLine>
             <Label>Nom de la zone</Label>
-            <Input
+            <CustomInput
               placeholder=''
               value={nameZone}
               onChange={setNameZone}
@@ -96,20 +202,76 @@ const CreateRegulation = () => {
           </ContentLine>
           <ContentLine>
             <Label>Secteur</Label>
-            <SelectPicker
-              style={{ width: 180, margin: '2px 10px 10px 0' }}
-              searchable={true}
-              placeholder=" Choisir une thématique "
-              value={selectedSeaFront}
-              onChange={setSelectedSeaFront}
-              data={seaFrontList}
-            />
+            <SelectWrapper>
+              <CustomSelectPicker
+                style={selectPickerStyle}
+                searchable={true}
+                placeholder=" Choisir une thématique "
+                value={selectedSeaFront}
+                onChange={setSelectedSeaFront}
+                data={seaFrontList}
+              />
+            </SelectWrapper>
+          </ContentLine>
+          <ContentLine>
+            <Label>Région</Label>
+            <SelectWrapper>
+              <CustomSelectPicker
+                style={selectPickerStyle}
+                searchable={false}
+                placeholder=" Choisir une région "
+                value={selectedRegion}
+                onChange={setSelectedRegion}
+                data={formatData(FRENCH_REGION_LIST)}
+              />
+            </SelectWrapper>
           </ContentLine>
         </Section>
       </Content>
     </CreateRegulationWrapper>
   )
 }
+
+const Header = styled.div`
+  margin-bottom: 40px;
+  margin-top: 20px;
+`
+
+const ValidateButton = styled(BlackButton)`
+  margin: 0px 10px 0px 0px;
+`
+
+const CancelButton = styled(WhiteButton)`
+  margin: 0px 10px 0px 0px;
+`
+
+const CreateReglementationBloc = styled.div`
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+const CustomSelectPicker = styled(SelectPicker)`
+  width: 180;
+  margin: '0';
+  border-color: ${COLORS.grayDarker};
+  box-sizing: border-box;
+  a {
+    box-sizing: border-box;
+  }
+`
+const CustomInput = styled(Input)`
+  font-size: 13px;
+  width: 180px; 
+  height: 35px;
+  margin: 0px 10px 0px 0px;
+`
+const SelectWrapper = styled.div`
+  width: 180px;
+  display: inline-block;
+  margin: 0px 10px 0px 0px;
+  vertical-align: sub;
+`
 
 const CreateRegulationWrapper = styled.div`
   display: flex;
@@ -118,15 +280,10 @@ const CreateRegulationWrapper = styled.div`
   margin: 15px 45px 0px 45px;
 `
 
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 40px;
-`
-
 const LinkSpan = styled.span`
   display: flex;
   flex-direction: row;
+  position: absolute;
 `
 
 const Link = styled.a`
@@ -141,9 +298,8 @@ const Title = styled.span`
   font-size: 16px;
   color: ${COLORS.textGray};
   text-transform: uppercase;
-
   left: 50%;
-  position: fixed;
+  position: relative;
   margin-left: -168px;
 `
 
@@ -170,14 +326,55 @@ const SectionTitle = styled.span`
   text-transform: uppercase;
   width: 100%;
   border-bottom: 1px solid ${COLORS.grayDarker};
+  margin-bottom: 20px;
 `
 const ContentLine = styled.div`
   display: flex;
+  align-items: center;
+  margin-bottom: 8px;
 `
 const Label = styled.span`
   text-align: left;
-  font: normal normal normal 13px;
   color: ${COLORS.textGray};
+  min-width: 154px;
+  font-size: 13px;
+`
+const RectangularButton = styled.a`
+  position: relative;
+  width: 35px;
+  height: 35px;
+  border: 1px solid ${COLORS.grayDarker};
+  border-radius: 2px;
+  color: ${COLORS.grayDarker};
+  margin-right: 8px;
+
+  &:after {
+    content: "";  
+    display: block;
+    background-color: ${COLORS.grayDarker};
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &:before {
+    content: "";  
+    display: block;
+    background-color: ${COLORS.grayDarker};
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &:before {
+    height: 15px;
+    width: 1.5px;
+  }
+  &:after {
+    height: 1.5px;
+    width: 15px;
+  }
 `
 
 export default CreateRegulation

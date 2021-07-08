@@ -113,6 +113,9 @@ jobs:
         working-directory: frontend
         install-command: npm i
 
+    - name: Get docker urls
+      run: docker ps
+
     - name: Cypress run
       uses: cypress-io/github-action@v2
       with:

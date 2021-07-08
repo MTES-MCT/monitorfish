@@ -6,7 +6,7 @@ function degreesToRadian (vessel) {
   return vessel.course * Math.PI / 180
 }
 
-export function getVesselImage (vessel, isLight, color) {
+export function getVesselImage (vessel, isLight, color, opacity) {
   let vesselFileName = 'Couleur_navires_fond_clair_05065f_png24.png'
   if (color) {
     vesselFileName = `Couleurs_filtres_navires_${color.replace('#', '')}_png24.png`
@@ -28,13 +28,15 @@ export function getVesselImage (vessel, isLight, color) {
       imgSize: [8, 16],
       rotation: degreesToRadian(vessel),
       // See https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210
-      color: 'white'
+      color: 'white',
+      opacity: opacity
     })
     : new CircleStyle({
       radius: 4,
       fill: new Fill({
         color: vesselColor
-      })
+      }),
+      opacity: opacity
     })
 }
 

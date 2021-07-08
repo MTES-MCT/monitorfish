@@ -3,6 +3,7 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
 import Feature from 'ol/Feature'
 import Layers from './layers'
 import LineString from 'ol/geom/LineString'
+import { Vessel } from './vessel'
 
 export class EstimatedPosition {
   /**
@@ -27,7 +28,9 @@ export class EstimatedPosition {
       geometry: new LineString([this.currentCoordinates, this.estimatedCoordinates]),
       latitude: estimatedPosition[1],
       longitude: estimatedPosition[0],
-      color: vesselColor
+      color: vesselColor,
+      isShowed: options.vesselsLastPositionVisibility ? !!Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime) : true,
+      dateTime: options.dateTime
     })
 
     this.feature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)

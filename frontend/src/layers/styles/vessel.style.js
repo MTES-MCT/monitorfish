@@ -3,8 +3,9 @@ import { asArray } from 'ol/color'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import { VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
+import { Vessel } from '../../domain/entities/vessel'
+import { COLORS } from '../../constants/constants'
 
-// A javascript object literal can be used to cache previously created styles.
 const iconStyleCache = new WeakMap()
 const circleStyleCache = new WeakMap()
 
@@ -71,31 +72,42 @@ export const getVesselStyle = feature => {
     return []
   }
 
-  let vesselFileName = 'Couleur_navires_fond_clair_05065f_png24.png'
-  if (filterColor && isShowedInFilter) {
-    vesselFileName = `Couleurs_filtres_navires_${filterColor.replace('#', '')}_png24.png`
-  } else if (isLight) {
-    vesselFileName = 'Couleur_navires_fond_sombre_cacce0_png24.png'
-  }
+  let vesselFileName = getVesselFilename(filterColor, isShowedInFilter, isLight)
+  let vesselColor = getVesselColor(filterColor, isShowedInFilter, isLight)
 
-  let vesselColor = 'rgb(5, 5, 94)'
-  if (filterColor && isShowedInFilter) {
-    vesselColor = filterColor
-  } else if (isLight) {
-    vesselColor = '#cacce0'
-  }
-
-  const style = speed > 0.1
-    ? getIconStyle({ vesselFileName, course, opacity })
-    : getCircleStyle({ vesselColor, opacity })
-
-  const styles = [style]
+  const styles = speed > Vessel.vesselIsMovingSpeed
+    ? [getIconStyle({ vesselFileName, course, opacity })]
+    : [getCircleStyle({ vesselColor, opacity })]
 
   if (feature.getProperties().isSelected) {
     styles.push(selectedVesselStyle)
   }
 
   return styles
+}
+
+function getVesselFilename (filterColor, isShowedInFilter, isLight) {
+  let vesselFileName = 'Couleur_navires_fond_clair_05065f_png24.png'
+
+  if (filterColor && isShowedInFilter) {
+    vesselFileName = `Couleurs_filtres_navires_${filterColor.replace('#', '')}_png24.png`
+  } else if (isLight) {
+    vesselFileName = 'Couleur_navires_fond_sombre_cacce0_png24.png'
+  }
+
+  return vesselFileName
+}
+
+function getVesselColor (filterColor, isShowedInFilter, isLight) {
+  let vesselColor = COLORS.vesselColor
+
+  if (filterColor && isShowedInFilter) {
+    vesselColor = filterColor
+  } else if (isLight) {
+    vesselColor = COLORS.vesselLightColor
+  }
+
+  return vesselColor
 }
 
 export function degreesToRadian (course) {

@@ -3,43 +3,41 @@ import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { setFilteredVesselsFeaturesUids, setVesselsLayerSource } from '../domain/reducers/Vessel'
-import { Vessel, vesselAndVesselFeatureAreEquals } from '../domain/entities/vessel'
+import {
+  FILTER_COLOR_PROPERTY,
+  IS_LIGHT_PROPERTY, IS_SELECTED_PROPERTY,
+  NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY,
+  OPACITY_PROPERTY,
+  Vessel,
+  vesselAndVesselFeatureAreEquals
+} from '../domain/entities/vessel'
 import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import { Vector } from 'ol/layer'
 import { getVesselStyle } from './styles/vessel.style'
 
-export const IS_LIGHT_PROPERTY = 'isLight'
-export const NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY = 'nonFilteredVesselsAreHidden'
-export const OPACITY_PROPERTY = 'opacity'
-export const FILTER_COLOR_PROPERTY = 'filterColor'
-export const IS_SELECTED_PROPERTY = 'isSelected'
-
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
 
 const VesselsLayer = ({ map }) => {
+  const dispatch = useDispatch()
+
   const {
     vessels,
     selectedVesselFeatureAndIdentity
   } = useSelector(state => state.vessel)
+
   const {
     selectedBaseLayer,
     vesselsLastPositionVisibility,
     showingVesselsEstimatedPositions
   } = useSelector(state => state.map)
+
   const {
     /** @type {VesselFilter[]} filters */
     filters,
     nonFilteredVesselsAreHidden
   } = useSelector(state => state.filter)
-
-  const getFilterColor = useCallback(() => {
-    const showedFilter = filters.find(filter => filter.showed)
-    return showedFilter ? showedFilter.color : null
-  }, [filters])
-
-  const dispatch = useDispatch()
 
   const [vectorSource] = useState(new VectorSource({
     features: []
@@ -65,16 +63,28 @@ const VesselsLayer = ({ map }) => {
   }, [vessels, map])
 
   useEffect(() => {
-    vectorSource.on(VESSELS_UPDATE_EVENT, ({ features }) => {
+    const vesselsFeatures = vectorSource.getFeatures()
+    applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(_ => {
+      vectorSource.changed()
+    })
+  }, [filters])
+
+  useEffect(() => {
+    vectorSource.on(VESSELS_UPDATE_EVENT, ({
+      features,
+      selectedBaseLayer,
+      filterColor,
+      vesselsLastPositionVisibility,
+      nonFilteredVesselsAreHidden
+    }) => {
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
-      const vesselsColor = getFilterColor()
 
       features.forEach(feature => {
         const opacity = Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
         feature.set(IS_LIGHT_PROPERTY, isLight)
         feature.set(OPACITY_PROPERTY, opacity)
         feature.set(NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY, nonFilteredVesselsAreHidden)
-        feature.set(FILTER_COLOR_PROPERTY, vesselsColor)
+        feature.set(FILTER_COLOR_PROPERTY, filterColor)
       })
     })
   }, [vectorSource])
@@ -104,6 +114,11 @@ const VesselsLayer = ({ map }) => {
     vectorSource.getFeatures().forEach(feature => {
       feature.set(FILTER_COLOR_PROPERTY, vesselsColor)
     })
+  }, [filters])
+
+  const getFilterColor = useCallback(() => {
+    const showedFilter = filters.find(filter => filter.showed)
+    return showedFilter ? showedFilter.color : null
   }, [filters])
 
   function addLayerToMap () {
@@ -137,7 +152,10 @@ const VesselsLayer = ({ map }) => {
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
           features: features,
-          showingVesselsEstimatedPositions: showingVesselsEstimatedPositions
+          showingVesselsEstimatedPositions: showingVesselsEstimatedPositions,
+          filterColor: getFilterColor(),
+          vesselsLastPositionVisibility: vesselsLastPositionVisibility,
+          selectedBaseLayer: selectedBaseLayer
         })
       })
     }

@@ -10,6 +10,14 @@ import countries from 'i18n-iso-countries'
 export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
+
+export const IS_LIGHT_PROPERTY = 'isLight'
+export const NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY = 'nonFilteredVesselsAreHidden'
+export const OPACITY_PROPERTY = 'opacity'
+export const FILTER_COLOR_PROPERTY = 'filterColor'
+export const IS_SELECTED_PROPERTY = 'isSelected'
+export const IS_SHOWED_IN_FILTER_PROPERTY = 'isShowedInFilter'
+
 const NOT_FOUND = -1
 
 export class Vessel {
@@ -64,19 +72,20 @@ export class Vessel {
     this.feature.setId(`${Layers.VESSELS.code}:${options.id}`)
   }
 
+  static vesselIsMovingSpeed = 0.1
+
   /**
-   * Apply vessels filter style to feature or apply standard style
+   * Apply filter property to vessel feature
    * @param {Object} feature - The OpenLayers feature object
    * @param filteredVesselsUids: string[] - the filtered vessels list
    */
   static applyIsShowedPropertyToVessels (feature, filteredVesselsUids) {
-    const isShowedInFilterProperty = 'isShowedInFilter'
     const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
 
     if (featureFoundInFilteredVesselsIndex !== NOT_FOUND) {
-      feature.set(isShowedInFilterProperty, true)
+      feature.set(IS_SHOWED_IN_FILTER_PROPERTY, true)
     } else {
-      feature.set(isShowedInFilterProperty, false)
+      feature.set(IS_SHOWED_IN_FILTER_PROPERTY, false)
     }
   }
 

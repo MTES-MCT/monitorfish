@@ -1,5 +1,5 @@
 import { closeVesselSidebar } from '../reducers/Vessel'
-import { IS_SELECTED_PROPERTY } from '../../layers/VesselsLayer'
+import { IS_SELECTED_PROPERTY } from '../entities/vessel'
 
 const unselectVessel = () => (dispatch, getState) => {
   const vessel = getState().vessel.selectedVesselFeatureAndIdentity

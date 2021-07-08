@@ -2,8 +2,8 @@ import { Icon, Style } from 'ol/style'
 import { asArray } from 'ol/color'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
-import { VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
-import { Vessel } from '../../domain/entities/vessel'
+import { VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE, Vessel } from '../../domain/entities/vessel'
+
 import { COLORS } from '../../constants/constants'
 
 const iconStyleCache = new WeakMap()
@@ -72,8 +72,8 @@ export const getVesselStyle = feature => {
     return []
   }
 
-  let vesselFileName = getVesselFilename(filterColor, isShowedInFilter, isLight)
-  let vesselColor = getVesselColor(filterColor, isShowedInFilter, isLight)
+  const vesselFileName = getVesselFilename(filterColor, isShowedInFilter, isLight)
+  const vesselColor = getVesselColor(filterColor, isShowedInFilter, isLight)
 
   const styles = speed > Vessel.vesselIsMovingSpeed
     ? [getIconStyle({ vesselFileName, course, opacity })]

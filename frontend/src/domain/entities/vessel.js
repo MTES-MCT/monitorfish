@@ -14,6 +14,11 @@ export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 const NOT_FOUND = -1
 
+const vesselStyle = (vessel, options) => new Style({
+    image: getVesselImage(vessel, options.isLight, null, options.opacity),
+    zIndex: VESSEL_ICON_STYLE
+})
+
 export class Vessel {
   /**
    * Vessel object for building OpenLayers vessel feature
@@ -67,6 +72,11 @@ export class Vessel {
 
     this.feature.setId(`${Layers.VESSELS.code}:${options.id}`)
 
+    options.opacity = getVesselIconOpacity(
+      options.vesselsLastPositionVisibility,
+      this.vessel.dateTime,
+      options.temporaryVesselsToHighLightOnMap,
+      this.vessel)
     this.setVesselStyle(options)
   }
 
@@ -84,24 +94,10 @@ export class Vessel {
   setVesselStyle (options) {
     const styles = []
 
-    const iconStyle = this.getIconStyle(options)
+    const iconStyle = vesselStyle(this.vessel, options)
     styles.push(iconStyle)
 
     this.feature.setStyle(styles)
-  }
-
-  getIconStyle (options) {
-    const iconStyle = new Style({
-      image: getVesselImage(this.vessel, options.isLight),
-      zIndex: VESSEL_ICON_STYLE
-    })
-
-    const opacity = getVesselIconOpacity(
-      options.vesselsLastPositionVisibility,
-      this.vessel.dateTime)
-    iconStyle.getImage().setOpacity(opacity)
-
-    return iconStyle
   }
 
   static getSelectedVesselStyle = () => new Style({
@@ -148,24 +144,21 @@ export class Vessel {
    * @param {{
         color: string?,
         isLight: boolean,
-        vesselsLastPositionVisibility: Object,
-        withoutOpacity: boolean?
+        vesselsLastPositionVisibility: Object
       }} options
    */
   static setVesselFeatureImages (feature, options) {
     const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
 
     if (vesselIconStyle) {
+      const opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, feature.getProperties().dateTime)
+
       const vesselImage = getVesselImage({
         speed: feature.getProperties().speed,
         course: feature.getProperties().course
-      }, options.isLight, options.color)
+      }, options.isLight, options.color, opacity)
 
       vesselIconStyle.setImage(vesselImage)
-      if (!options.withoutOpacity) {
-        const opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, feature.getProperties().dateTime)
-        vesselIconStyle.getImage().setOpacity(opacity)
-      }
     }
 
     const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)

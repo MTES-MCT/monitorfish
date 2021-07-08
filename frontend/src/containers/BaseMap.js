@@ -51,12 +51,6 @@ const BaseMap = props => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
       setMapClickEvent({ feature })
-
-      if (feature && feature.getId()) {
-        map.getTarget().style.cursor = 'pointer'
-      } else if (map.getTarget().style) {
-        map.getTarget().style.cursor = ''
-      }
     }
   }
 
@@ -71,10 +65,10 @@ const BaseMap = props => {
         }
         map.getTarget().style.cursor = 'pointer'
       } else if (map.getTarget().style) {
-        map.getTarget().style.cursor = ''
         if (setCurrentFeature) {
           setCurrentFeature(null)
         }
+        map.getTarget().style.cursor = ''
       }
 
       if (handlePointerMove) {

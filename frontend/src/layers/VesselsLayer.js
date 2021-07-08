@@ -43,12 +43,13 @@ const VesselsLayer = ({ map }) => {
     features: []
   }))
   const [layer] = useState(new Vector({
-    renderBuffer: 7,
+    renderBuffer: 4,
     className: Layers.VESSELS.code,
     source: vectorSource,
     zIndex: Layers.VESSELS.zIndex,
     updateWhileAnimating: true,
-    updateWhileInteracting: true
+    updateWhileInteracting: true,
+    useSpatialIndex: false
   }))
 
   useEffect(() => {

@@ -28,7 +28,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     features: []
   }))
   const [layer] = useState(new Vector({
-    renderBuffer: 7,
+    renderBuffer: 4,
     className: Layers.VESSEL_ESTIMATED_POSITION.code,
     source: vectorSource,
     zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,

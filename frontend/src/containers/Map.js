@@ -33,8 +33,8 @@ const Map = () => {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  const handlePointerMove = (event, map) => {
-    if (event && map) {
+  const handlePointerMove = (event) => {
+    if (event) {
       setHandlePointerMoveEventPixel(event.pixel)
     }
   }

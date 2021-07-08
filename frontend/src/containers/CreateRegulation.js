@@ -8,6 +8,22 @@ import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegul
 import { setError } from '../domain/reducers/Global'
 import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
 
+const INFO_TEXT = {
+  zoneName: `De mme que pour les thmatiques, le nom des zones doit être aussi explicite que possible. 
+  Le couple thmatique / zone fonctionne comme un tout, qui permet à l'utilisateur de comprendre rapidement
+   quelle rglementation il consulte. Le nom de la zone peut tre - un nom gographique 
+   ("Ile-Rousse", ou "Bande des 3 miles"), - ou numérique ("Zone 1"), - ou encore spcifiant une autre caractristique 
+   ("Zone d'autorisation ponctuelle", ou "Zone pour navire > 10m")`,
+  zoneTheme: `Avant de créer une nouvelle thématique, vérifiez bien qu'il n'en existe pas déjà une qui pourrait correspondre. 
+  Le nom de la thématique doit permettre de connaître en un coup d'œil le lieu et le sujet de la réglementation : 
+  des espèces, et/ou des engins, et/ou d'autres points réglementaires spécifiques. 
+  Il peut être intéressant notamment de mentionner si la zone est totalement 
+  interdite à la pêche avec le mot "interdiction". 
+  NB : le lieu indiqué peut être une façade maritime (NAMO), une région (Bretagne), un département (Vendée), 
+  une commune (Saint-Malo), une zone géographique (Cotentin), une mer (Mer Baltique), 
+  un secteur européen (Ouest-Écosse-Rockhall)...`
+}
+
 const CreateRegulation = () => {
   const dispatch = useDispatch()
   // useRef ?
@@ -23,6 +39,7 @@ const CreateRegulation = () => {
   const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
   const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+  const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
 
   const FRENCH_REGION_LIST = [
     'Auvergne-Rhône-Alpes',
@@ -89,6 +106,9 @@ const CreateRegulation = () => {
     'box-sizing': 'border-box'
   }
 
+  const getInfoText = (messageType) => {
+    return INFO_TEXT[messageType]
+  }
   return (
     <CreateRegulationWrapper>
       <Header>
@@ -138,7 +158,6 @@ const CreateRegulation = () => {
                   />
                   <Label>Ajouter un nouvel ensemble</Label></>
           }
-          <InfoPoint />
           </ContentLine>
           <ContentLine>
             <Label>Thématique de la zone</Label>
@@ -193,11 +212,22 @@ const CreateRegulation = () => {
                   />
                   <Label>Créer une nouvelle thématique</Label></>
             }
-          <InfoPoint onClick={() => setIsInfoTextShown(true)} >!</InfoPoint>
-          <InfoTextWrapper isInfoTextShown={isInfoTextShown}>
-            <InfoPoint >!</InfoPoint>
-            <InfoText>Blablablabla</InfoText>
-          </InfoTextWrapper>
+          <InfoTextParent>
+              {isInfoTextShown
+                ? <InfoTextWrapper >
+                    <InfoPoint>!</InfoPoint>
+                    <InfoText
+                      onMouseLeave={() => setIsInfoTextShown(false)}
+                    >
+                      {getInfoText('zoneTheme')}
+                    </InfoText>
+                  </InfoTextWrapper>
+                : <InfoPoint
+                  onMouseEnter={() => setIsInfoTextShown(true)}
+                  onMouseOut={() => setIsInfoTextShown(true)}
+                >!</InfoPoint>
+              }
+            </InfoTextParent>
           </ContentLine>
           <ContentLine>
             <Label>Nom de la zone</Label>
@@ -206,6 +236,21 @@ const CreateRegulation = () => {
               value={nameZone}
               onChange={setNameZone}
             />
+            <InfoTextParent>
+              {isZoneNameInfoTextShown
+                ? <InfoTextWrapper >
+                    <InfoPoint>!</InfoPoint>
+                    <InfoText
+                      onMouseLeave={() => setIsZoneNameInfoTextShown(false)}
+                    >
+                      {getInfoText('zoneName')}
+                    </InfoText>
+                  </InfoTextWrapper>
+                : <InfoPoint
+                  onMouseEnter={() => setIsZoneNameInfoTextShown(true)}
+                >!</InfoPoint>
+              }
+            </InfoTextParent>
           </ContentLine>
           <ContentLine>
             <Label>Secteur</Label>
@@ -238,6 +283,57 @@ const CreateRegulation = () => {
     </CreateRegulationWrapper>
   )
 }
+
+const InfoTextParent = styled.div`
+  min-height: 20px;
+  min-width: 20px;
+  position: relative;
+`
+
+const InfoPoint = styled.a`
+  display: inline-block;
+  align-self: start;
+  min-height: 20px;
+  min-width: 20px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: ${COLORS.grayDarkerThree} 0% 0% no-repeat padding-box;
+  color: ${COLORS.grayBackground};
+  text-align: center;
+  font: normal normal bold 13px Arial;
+  text-align: center;
+  line-height: 20px;
+  &:hover {
+    text-decoration: none;
+    color: ${COLORS.grayBackground};
+  }
+  &:focus {
+    text-decoration: none;
+    color: ${COLORS.grayBackground};
+  }
+`
+
+const InfoTextWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  border: 1px solid ${COLORS.grayDarker};
+  background: ${COLORS.grayBackground} 0% 0% no-repeat padding-box;
+  border-radius: 2px;
+  min-width: 560px;
+  max-width: 600px;
+  padding: 8px;
+  box-sizing: border-box;
+  z-index: 30;
+  top: -6px;
+  left: 0;
+`
+
+const InfoText = styled.span`
+  font-size: 13px;
+  color: ${COLORS.textGray};
+  padding-left: 8px;
+`
 
 const Header = styled.div`
   margin-bottom: 40px;
@@ -337,6 +433,7 @@ const SectionTitle = styled.span`
 `
 const ContentLine = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   margin-bottom: 8px;
 `
@@ -345,6 +442,7 @@ const Label = styled.span`
   color: ${COLORS.textGray};
   min-width: 154px;
   font-size: 13px;
+  margin-right: 8px;
 `
 const RectangularButton = styled.a`
   position: relative;
@@ -382,18 +480,6 @@ const RectangularButton = styled.a`
     height: 1.5px;
     width: 15px;
   }
-`
-
-const InfoPoint = styled.a`
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: ${COLORS.grayDarkerThree} 0% 0% no-repeat padding-box;
-  color: ${COLORS.grayBackground};
-  text-align: center;
-  font: normal normal bold 13px Arial;
-  text-align: center;
-  line-height: 20px;
 `
 
 export default CreateRegulation

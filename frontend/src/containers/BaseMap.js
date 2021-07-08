@@ -78,7 +78,7 @@ const BaseMap = props => {
       }
 
       if (handlePointerMove) {
-        handlePointerMove(event, map)
+        handlePointerMove(event)
       }
     }
   }

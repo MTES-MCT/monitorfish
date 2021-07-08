@@ -25,6 +25,7 @@ const VesselTrackLayer = ({ map }) => {
     features: []
   }))
   const [layer] = useState(new Vector({
+    renderBuffer: 4,
     className: Layers.VESSEL_TRACK.code,
     source: vectorSource,
     zIndex: Layers.VESSEL_TRACK.zIndex,

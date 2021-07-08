@@ -2,7 +2,7 @@
 
 import { getDate } from '../../src/utils'
 
-const port = process.env.PORT ? process.env.PORT : 3000
+const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('VesselSidebar', () => {
   beforeEach(() => {

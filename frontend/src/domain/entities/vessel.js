@@ -4,8 +4,6 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { toStringHDMS } from 'ol/coordinate'
 import Layers, { baseLayers } from './layers'
-import { Icon, Style } from 'ol/style'
-import { getVesselIconOpacity, getVesselImage } from '../../layers/styles/featuresStyles'
 import { vesselLabel as vesselLabelEnum } from './vesselLabel'
 import countries from 'i18n-iso-countries'
 
@@ -14,19 +12,12 @@ export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 const NOT_FOUND = -1
 
-const vesselStyle = (vessel, options) => new Style({
-    image: getVesselImage(vessel, options.isLight, null, options.opacity),
-    zIndex: VESSEL_ICON_STYLE
-})
-
 export class Vessel {
   /**
    * Vessel object for building OpenLayers vessel feature
    * @param {VesselLastPosition} vessel
    * @param {{
       id: string,
-      vesselsLastPositionVisibility: Object,
-      isLight: boolean,
    * }} options
    */
   constructor (vessel, options) {
@@ -71,100 +62,40 @@ export class Vessel {
     })
 
     this.feature.setId(`${Layers.VESSELS.code}:${options.id}`)
-
-    options.opacity = getVesselIconOpacity(
-      options.vesselsLastPositionVisibility,
-      this.vessel.dateTime,
-      options.temporaryVesselsToHighLightOnMap,
-      this.vessel)
-    this.setVesselStyle(options)
   }
-
-  static isSelectedVessel (vessel, selectedVesselFeatureAndIdentity) {
-    return vessel &&
-      selectedVesselFeatureAndIdentity &&
-      selectedVesselFeatureAndIdentity.feature &&
-      vesselAndVesselFeatureAreEquals(vessel, selectedVesselFeatureAndIdentity.feature)
-  }
-
-  isSelectedVessel (selectedVesselFeatureAndIdentity) {
-    return Vessel.isSelectedVessel(this.vessel, selectedVesselFeatureAndIdentity)
-  }
-
-  setVesselStyle (options) {
-    const styles = []
-
-    const iconStyle = vesselStyle(this.vessel, options)
-    styles.push(iconStyle)
-
-    this.feature.setStyle(styles)
-  }
-
-  static getSelectedVesselStyle = () => new Style({
-    image: new Icon({
-      opacity: 1,
-      src: 'select.png',
-      scale: 0.4
-    }),
-    zIndex: VESSEL_SELECTOR_STYLE
-  })
 
   /**
    * Apply vessels filter style to feature or apply standard style
    * @param {Object} feature - The OpenLayers feature object
-   * @param {{
-        filteredVesselsUids: string[],
-        color: string | null,
-        isLight: boolean,
-        nonFilteredVesselsAreHidden: boolean,
-        vesselsLastPositionVisibility: Object,
-        withoutOpacity: boolean?
-      }} options
+   * @param filteredVesselsUids: string[] - the filtered vessels list
    */
-  static applyVesselFeatureFilterStyle (feature, options) {
+  static applyIsShowedPropertyToVessels (feature, filteredVesselsUids) {
     const isShowedInFilterProperty = 'isShowedInFilter'
-    const featureFoundInFilteredVesselsIndex = options.filteredVesselsUids.indexOf(feature.ol_uid)
+    const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
 
     if (featureFoundInFilteredVesselsIndex !== NOT_FOUND) {
-      this.setVesselFeatureImages(feature, options)
       feature.set(isShowedInFilterProperty, true)
-    } else if (options.nonFilteredVesselsAreHidden) {
-      this.hideVesselFeature(feature)
-      feature.set(isShowedInFilterProperty, false)
     } else {
-      options.color = null
-      this.setVesselFeatureImages(feature, options)
       feature.set(isShowedInFilterProperty, false)
     }
   }
 
-  /**
-   * Set vessel feature icon and label images
-   * @param {Object} feature - The OpenLayers feature object
-   * @param {{
-        color: string?,
-        isLight: boolean,
-        vesselsLastPositionVisibility: Object
-      }} options
-   */
-  static setVesselFeatureImages (feature, options) {
-    const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
+  static getVesselOpacity (vesselsLastPositionVisibility, dateTime) {
+    const vesselDate = new Date(dateTime)
 
-    if (vesselIconStyle) {
-      const opacity = getVesselIconOpacity(options.vesselsLastPositionVisibility, feature.getProperties().dateTime)
+    const vesselIsHidden = new Date()
+    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
+    const vesselIsOpacityReduced = new Date()
+    vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
 
-      const vesselImage = getVesselImage({
-        speed: feature.getProperties().speed,
-        course: feature.getProperties().course
-      }, options.isLight, options.color, opacity)
-
-      vesselIconStyle.setImage(vesselImage)
+    let opacity = 1
+    if (vesselDate < vesselIsHidden) {
+      opacity = 0
+    } else if (vesselDate < vesselIsOpacityReduced) {
+      opacity = 0.2
     }
 
-    const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-    if (vesselLabelStyle) {
-      vesselLabelStyle.getImage().setOpacity(1)
-    }
+    return opacity
   }
 
   /**
@@ -221,30 +152,11 @@ export class Vessel {
   }
 
   /**
-   * Remove text label to vessel feature
-   * @param {Object} feature - The OpenLayers feature object
-   */
-  static removeLabelToVesselFeature (feature) {
-    const stylesWithoutVesselName = feature.getStyle().filter(style => style.zIndex_ !== VESSEL_LABEL_STYLE)
-    feature.setStyle([...stylesWithoutVesselName])
-  }
-
-  /**
    * Check if vessel icon is in light or dark mode, based on the base layer
    * @return {boolean} isLight - returns true if vessel icon is light
    */
   static iconIsLight = selectedBaseLayer => selectedBaseLayer === baseLayers.DARK.code ||
     selectedBaseLayer === baseLayers.SATELLITE.code
-
-  static setVesselAsSelected (feature) {
-    const styles = feature.getStyle()
-    const vesselAlreadyWithSelectorStyle = styles.find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
-    if (!vesselAlreadyWithSelectorStyle) {
-      feature.setStyle([...styles, Vessel.getSelectedVesselStyle()])
-    }
-
-    return feature
-  }
 }
 
 export const getVesselIdentityFromFeature = feature => {

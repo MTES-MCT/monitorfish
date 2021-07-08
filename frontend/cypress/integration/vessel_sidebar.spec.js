@@ -7,7 +7,7 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 context('VesselSidebar', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
-    cy.visit(`http://0.0.0.0:${port}/#@-824534.42,6082993.21,8.70`)
+    cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     cy.wait(2000)
   })
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { isMoving } from '../domain/reducers/Map'
+import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
 import LayerDetailsBox from '../components/map/LayerDetailsBox'
@@ -15,10 +14,10 @@ import TrackTypeCardOverlay from '../components/overlays/TrackTypeCardOverlay'
 import MapVesselAnimation from '../components/map/MapVesselAnimation'
 import VesselEstimatedPositionLayer from '../layers/VesselEstimatedPositionLayer'
 import VesselEstimatedPositionCardOverlay from '../components/overlays/VesselEstimatedPositionCardOverlay'
+import VesselsLabelsLayer from '../layers/VesselsLabelsLayer'
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
-  const dispatch = useDispatch()
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
@@ -27,7 +26,6 @@ const Map = () => {
   const [handlePointerMoveEventPixel, setHandlePointerMoveEventPixel] = useState(null)
 
   const handleMovingAndZoom = () => {
-    dispatch(isMoving())
     if (!shouldUpdateView) {
       setShouldUpdateView(true)
     }
@@ -59,6 +57,7 @@ const Map = () => {
       <MeasurementLayer/>
       <VesselTrackLayer/>
       <VesselsLayer/>
+      <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>
       <VesselEstimatedPositionLayer/>
       <VesselCardOverlay feature={currentFeature}/>

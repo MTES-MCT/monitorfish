@@ -8,7 +8,6 @@ import { COLORS } from '../constants/constants'
 import { getZonesAndSubZonesPromises, layersType } from '../domain/entities/layers'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../domain/reducers/Map'
 import { InteractionTypes } from '../domain/entities/map'
-import { resetTemporaryVesselsToHighLightOnMap } from '../domain/reducers/Vessel'
 import VesselListTable from '../components/vessel_list/VesselListTable'
 import DownloadVesselListModal from '../components/vessel_list/DownloadVesselListModal'
 import getAdministrativeZoneGeometry from '../domain/use_cases/getAdministrativeZoneGeometry'
@@ -30,7 +29,6 @@ const VesselList = ({ namespace }) => {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
-  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
@@ -39,9 +37,6 @@ const VesselList = ({ namespace }) => {
   const [saveVesselFilterModalIsOpen, setSaveVesselFilterModalIsOpen] = useState(false)
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 
-  const [isShowed, setIsShowed] = useState(true)
-
-  const [showBackToVesselListButton, setShowBackToVesselListButton] = useState(false)
   const [vessels, setVessels] = useState([])
   const [filteredVessels, setFilteredVessels] = useState([])
   const [vesselsCountTotal, setVesselsCountTotal] = useState(0)
@@ -191,20 +186,6 @@ const VesselList = ({ namespace }) => {
     dispatch(setInteraction(InteractionTypes.POLYGON))
   }
 
-  /*
-  const highLightOnMap = () => {
-    const vesselsToHighLight = filteredVessels.filter(vessel => vessel.checked)
-
-    dispatch(setTemporaryVesselsToHighLightOnMap(vesselsToHighLight))
-    setVesselListModalIsOpen(false)
-  }
-*/
-
-  const goBackToVesselList = () => {
-    dispatch(resetTemporaryVesselsToHighLightOnMap())
-    setVesselListModalIsOpen(true)
-  }
-
   const callRemoveZoneSelected = zoneSelectedToRemove => {
     dispatch(removeZoneSelected(zoneSelectedToRemove.code))
   }
@@ -222,16 +203,6 @@ const VesselList = ({ namespace }) => {
       setVesselListModalIsOpen(true)
     }
   }, [zonesSelected])
-
-  useEffect(() => {
-    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-      setShowBackToVesselListButton(true)
-      setIsShowed(false)
-    } else {
-      setShowBackToVesselListButton(false)
-      setIsShowed(true)
-    }
-  }, [temporaryVesselsToHighLightOnMap])
 
   useEffect(() => {
     if (administrativeZonesFiltered && zonesSelected &&
@@ -279,9 +250,7 @@ const VesselList = ({ namespace }) => {
 
   return (
     <>
-      <Wrapper
-        isShowed={isShowed}
-        isFiltering={isFiltering}>
+      <Wrapper isFiltering={isFiltering}>
         <VesselListIcon
           healthcheckTextWarning={healthcheckTextWarning}
           selectedVessel={selectedVessel}
@@ -399,13 +368,6 @@ const VesselList = ({ namespace }) => {
           </Modal.Footer>
         </Modal>
       </Wrapper>
-      <BackToVesselListButton
-        showBackToVesselListButton={showBackToVesselListButton}
-        onClick={() => goBackToVesselList()}
-        firstUpdate={firstUpdate.current}
-      >
-        Revenir à la liste des navires
-      </BackToVesselListButton>
       <DownloadVesselListModal
         isOpen={downloadVesselListModalIsOpen}
         setIsOpen={setDownloadVesselListModalIsOpen}
@@ -432,41 +394,9 @@ const VesselList = ({ namespace }) => {
 }
 
 const Wrapper = styled(MapComponentStyle)`
-  opacity: ${props => props.isShowed ? '1' : '0'};
   transition: all 0.2s;
   cursor: ${props => props.isFiltering ? 'progress' : 'auto'};
 `
-
-const BackToVesselListButton = styled.button`
-  position: absolute;
-  opacity: ${props => props.showBackToVesselListButton ? '1' : '0'};;
-  top: 20px;
-  left: auto;
-  background: ${COLORS.grayDarkerThree};
-  padding: 5px 12px;
-  font-size: 13px;
-  color: ${COLORS.grayBackground};
-  border-radius: 2px;
-  margin-left: -90px;
-  transition: all 0.2s;
-  
-  :hover, :focus {
-    background: ${COLORS.grayDarkerThree};
-  }
-`
-
-/* const ShowOnMapButton = styled.button`
-  border: 1px solid ${COLORS.grayDarkerThree};
-  padding: 5px 12px;
-  margin: 20px 0;
-  font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
-
-  :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.grayDarker};
-  }
-` */
 
 const BlackButton = styled.button`
   background: ${COLORS.grayDarkerThree};

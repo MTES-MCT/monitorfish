@@ -1,17 +1,15 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { hideVesselLabels, resetAnimateTo } from '../../domain/reducers/Map'
+import { resetAnimateTo } from '../../domain/reducers/Map'
 import { getVesselFeatureAndIdentity, getVesselIdentityFromFeature } from '../../domain/entities/vessel'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
-import { MIN_ZOOM_VESSEL_LABELS } from '../../layers/VesselsLayer'
 
-const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
+const MapVesselAnimation = ({ map, mapClickEvent }) => {
   const dispatch = useDispatch()
   const { animateTo } = useSelector(state => state.map)
   const {
-    vesselSidebarIsOpen,
-    temporaryVesselsToHighLightOnMap
+    vesselSidebarIsOpen
   } = useSelector(state => state.vessel)
 
   useEffect(() => {
@@ -19,15 +17,7 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
   }, [animateTo, map, vesselSidebarIsOpen])
 
   useEffect(() => {
-    if (mapMovingAndZoomEvent) {
-      hideVesselOnMapZoom()
-    }
-  }, [map, mapMovingAndZoomEvent])
-
-  useEffect(() => {
-    const noVesselsHighLighted = !temporaryVesselsToHighLightOnMap || !temporaryVesselsToHighLightOnMap.length
-
-    if (mapClickEvent && mapClickEvent.feature && noVesselsHighLighted) {
+    if (mapClickEvent && mapClickEvent.feature) {
       showVesselTrackAndSidebarOnMapClick(mapClickEvent.feature)
     }
   }, [mapClickEvent])
@@ -59,10 +49,6 @@ const MapVesselAnimation = ({ map, mapMovingAndZoomEvent, mapClickEvent }) => {
       duration,
       zoom
     }
-  }
-
-  function hideVesselOnMapZoom () {
-    dispatch(hideVesselLabels(map && map.getView().getZoom() <= MIN_ZOOM_VESSEL_LABELS))
   }
 
   function showVesselTrackAndSidebarOnMapClick (feature) {

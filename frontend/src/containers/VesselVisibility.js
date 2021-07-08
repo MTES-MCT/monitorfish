@@ -28,11 +28,9 @@ const VesselVisibility = () => {
   const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
   const vesselLabel = useSelector(state => state.map.vesselLabel)
   const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
-  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
-  const [isShowed, setIsShowed] = useState(true)
 
   const wrapperRef = useRef(null)
 
@@ -57,14 +55,6 @@ const VesselVisibility = () => {
     }
   }, [vesselVisibilityBoxIsOpen])
 
-  useEffect(() => {
-    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-      setIsShowed(false)
-    } else {
-      setIsShowed(true)
-    }
-  }, [temporaryVesselsToHighLightOnMap])
-
   const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
     dispatch(setVesselsLastPositionVisibility({
       opacityReduced: opacityReduced,
@@ -85,9 +75,7 @@ const VesselVisibility = () => {
   }
 
   return (
-    <Wrapper
-      isShowed={isShowed}
-      ref={wrapperRef}>
+    <Wrapper ref={wrapperRef}>
       <VesselVisibilityIcon
         healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}
@@ -144,7 +132,6 @@ const VesselVisibility = () => {
 }
 
 const Wrapper = styled.div`
-  opacity: ${props => props.isShowed ? '1' : '0'};
   transition: all 0.2s;
   z-index: 1000;
 `

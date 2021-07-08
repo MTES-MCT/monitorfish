@@ -29,7 +29,6 @@ const VesselsSearchBox = () => {
   const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
   const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
   const vesselFeatureAndIdentity = useSelector(state => state.vessel.selectedVesselFeatureAndIdentity)
-  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const dispatch = useDispatch()
@@ -40,7 +39,6 @@ const VesselsSearchBox = () => {
   const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([])
   const [selectedVesselFeatureAndIdentity, setSelectedVesselFeatureAndIdentity] = useState(null)
   const firstUpdate = useRef(true)
-  const [isShowed, setIsShowed] = useState(true)
 
   const wrapperRef = useRef(null)
 
@@ -77,14 +75,6 @@ const VesselsSearchBox = () => {
     dispatch(focusOnVesselSearch(null, doNotFocus))
     setSelectedVesselFeatureAndIdentity(vesselFeatureAndIdentity)
   }, [vesselFeatureAndIdentity])
-
-  useEffect(() => {
-    if (temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length) {
-      setIsShowed(false)
-    } else {
-      setIsShowed(true)
-    }
-  }, [temporaryVesselsToHighLightOnMap])
 
   function getTextForSearch (text) {
     return text
@@ -260,7 +250,6 @@ const VesselsSearchBox = () => {
         healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}
         vesselSidebarIsOpen={vesselSidebarIsOpen}
-        isShowed={isShowed}
         selectedVesselFeatureAndIdentity={selectedVesselFeatureAndIdentity}
         ref={wrapperRef}>
         <SearchBoxField>
@@ -350,7 +339,6 @@ const VesselsSearchBox = () => {
         onMouseEnter={() => dispatch(expandRightMenu())}
         onClick={() => dispatch(focusOnVesselSearch(focusState.CLICK_SEARCH_ICON, !selectedVessel))}
         rightMenuIsOpen={rightMenuIsOpen}
-        isShowed={isShowed}
         selectedVessel={selectedVessel}>
         <SearchIcon
           rightMenuIsOpen={rightMenuIsOpen}
@@ -444,22 +432,11 @@ const Wrapper = styled(MapComponentStyle)`
   margin-left: auto;
   margin-right: auto;
   
-  animation: ${props => props.isShowed ? 'vessel-search-box-opening' : 'vessel-search-box-closing'} 0.2s ease forwards,
-    ${props => props.selectedVesselFeatureAndIdentity
+  animation: ${props => props.selectedVesselFeatureAndIdentity
   ? props.rightMenuIsOpen && props.vesselSidebarIsOpen
     ? 'vessel-search-box-opening-with-right-menu-hover'
     : 'vessel-search-box-closing-with-right-menu-hover'
   : null} 0.3s ease forwards;
-
-  @keyframes vessel-search-box-opening {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes vessel-search-box-closing {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
-  }
   
   @keyframes vessel-search-box-opening-with-right-menu-hover {
     0%   { right: 10px;   }
@@ -540,7 +517,6 @@ const SelectedVessel = styled.div`
 `
 
 const SearchButton = styled(MapButtonStyle)`
-  opacity: ${props => props.isShowed ? '1' : '0'};
   width: 40px;
   height: 40px;
   right: 10px;

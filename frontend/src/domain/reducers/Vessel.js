@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
-    temporaryVesselsToHighLightOnMap: [],
     selectedVesselFeatureAndIdentity: null,
     vessels: [],
     filteredVesselsFeaturesUids: [],
@@ -150,12 +149,6 @@ const vesselSlice = createSlice({
     },
     resetNextControlResumeAndControls (state) {
       state.nextControlResumeAndControls = null
-    },
-    setTemporaryVesselsToHighLightOnMap (state, action) {
-      state.temporaryVesselsToHighLightOnMap = action.payload
-    },
-    resetTemporaryVesselsToHighLightOnMap (state) {
-      state.temporaryVesselsToHighLightOnMap = []
     },
     setTemporaryTrackDepth (state, action) {
       state.temporaryTrackDepth = action.payload

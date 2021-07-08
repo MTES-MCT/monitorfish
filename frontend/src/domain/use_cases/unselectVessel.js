@@ -1,18 +1,13 @@
 import { closeVesselSidebar } from '../reducers/Vessel'
-import { VESSEL_SELECTOR_STYLE } from '../entities/vessel'
+import { IS_SELECTED_PROPERTY } from '../../layers/VesselsLayer'
 
 const unselectVessel = () => (dispatch, getState) => {
-  removeSelectorStyleToSelectedVessel(dispatch, getState)
-  dispatch(closeVesselSidebar())
-}
-
-function removeSelectorStyleToSelectedVessel (dispatch, getState) {
   const vessel = getState().vessel.selectedVesselFeatureAndIdentity
 
   if (vessel && vessel.feature) {
-    const stylesWithoutVesselSelector = vessel.feature.getStyle().filter(style => style.zIndex_ !== VESSEL_SELECTOR_STYLE)
-    vessel.feature.setStyle([...stylesWithoutVesselSelector])
+    vessel.feature.set(IS_SELECTED_PROPERTY, false)
   }
+  dispatch(closeVesselSidebar())
 }
 
 export default unselectVessel

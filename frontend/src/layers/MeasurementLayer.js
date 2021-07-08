@@ -17,32 +17,11 @@ import GeoJSON from 'ol/format/GeoJSON'
 import MeasurementOverlay from '../components/overlays/MeasurementOverlay'
 import { getNauticalMilesFromMeters } from '../utils'
 import saveMeasurement from '../domain/use_cases/saveMeasurement'
-import { Style } from 'ol/style'
-import Stroke from 'ol/style/Stroke'
-import { COLORS } from '../constants/constants'
-import CircleStyle from 'ol/style/Circle'
-import Fill from 'ol/style/Fill'
+import { measurementStyle } from './styles/measurement.style'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
 const DRAW_END_EVENT = 'drawend'
-
-export const measurementStyle = new Style({
-  stroke: new Stroke({
-    color: COLORS.grayDarkerThree,
-    lineDash: [4, 4],
-    width: 2
-  }),
-  image: new CircleStyle({
-    radius: 2,
-    stroke: new Stroke({
-      color: COLORS.grayDarkerThree
-    }),
-    fill: new Fill({
-      color: COLORS.grayDarkerThree
-    })
-  })
-})
 
 const MeasurementLayer = ({ map }) => {
   const measurementType = useSelector(state => state.map.measurementTypeToAdd)
@@ -60,10 +39,10 @@ const MeasurementLayer = ({ map }) => {
   const [vectorSource] = useState(new VectorSource({ wrapX: false, projection: OPENLAYERS_PROJECTION }))
   const [vectorLayer] = useState(new VectorLayer({
     source: vectorSource,
-    style: measurementStyle,
     renderBuffer: 7,
     updateWhileAnimating: true,
-    updateWhileInteracting: true
+    updateWhileInteracting: true,
+    style: measurementStyle
   }))
 
   useEffect(() => {

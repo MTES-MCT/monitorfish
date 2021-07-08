@@ -6,6 +6,7 @@ import { EstimatedPosition } from '../domain/entities/estimatedPosition'
 import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
 import { Vessel } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'
+import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
 
 const NOT_FOUND = -1
 
@@ -27,13 +28,15 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   const [vectorSource] = useState(new VectorSource({
     features: []
   }))
+
   const [layer] = useState(new Vector({
     renderBuffer: 4,
     className: Layers.VESSEL_ESTIMATED_POSITION.code,
     source: vectorSource,
     zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,
     updateWhileAnimating: true,
-    updateWhileInteracting: true
+    updateWhileInteracting: true,
+    style: feature => getEstimatedPositionStyle(feature)
   }))
 
   useEffect(() => {

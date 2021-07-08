@@ -49,6 +49,17 @@ const Layers = {
     isIntersectable: false,
     zIndex: 1000
   },
+  VESSELS_LABEL: {
+    code: 'label',
+    name: '',
+    group: null,
+    type: layersType.VESSEL,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 998
+  },
   VESSEL_TRACK: {
     code: 'vessel_track',
     name: '',

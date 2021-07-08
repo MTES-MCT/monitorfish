@@ -19,12 +19,10 @@ const Measurement = () => {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const measurementTypeToAdd = useSelector(state => state.map.measurementTypeToAdd)
-  const temporaryVesselsToHighLightOnMap = useSelector(state => state.vessel.temporaryVesselsToHighLightOnMap)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
   const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
-  const [isShowed, setIsShowed] = useState(true)
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
 
@@ -52,10 +50,6 @@ const Measurement = () => {
       document.addEventListener('keydown', escapeFromKeyboard, false)
     }
   }, [measurementIsOpen])
-
-  useEffect(() => {
-    setIsShowed(!(temporaryVesselsToHighLightOnMap && temporaryVesselsToHighLightOnMap.length))
-  }, [temporaryVesselsToHighLightOnMap])
 
   const escapeFromKeyboard = event => {
     const escapeKeyCode = 27
@@ -107,9 +101,7 @@ const Measurement = () => {
   }
 
   return (
-    <Wrapper
-      isShowed={isShowed}
-      ref={wrapperRef}>
+    <Wrapper ref={wrapperRef}>
       <MeasurementWrapper
         healthcheckTextWarning={healthcheckTextWarning}
         isMeasuring={measurementTypeToAdd}
@@ -178,7 +170,6 @@ const CircleRangeIcon = styled(CircleRangeSVG)`
 `
 
 const Wrapper = styled.div`
-  opacity: ${props => props.isShowed ? '1' : '0'};
   transition: all 0.2s;
   z-index: 1000;
 `

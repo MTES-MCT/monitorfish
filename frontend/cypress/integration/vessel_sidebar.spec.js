@@ -9,6 +9,7 @@ context('VesselSidebar', () => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     cy.wait(2000)
+    cy.url().should('include', '@-82')
   })
 
   it('Resume Should be opened When clicking on a vessel', () => {

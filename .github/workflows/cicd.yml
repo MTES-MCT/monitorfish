@@ -126,6 +126,12 @@ jobs:
         # quote the url to be safe against YML parsing surprises
         wait-on: 'http://localhost:8880'
 
+    - name: Upload to slack step
+      uses: adrey/slack-file-upload-action@master
+      with:
+        token: ${{ secrets.SLACK_TOKEN }}
+        path: /home/runner/work/monitorfish/monitorfish/frontend/cypress/videos/vessel_sidebar.spec.js.mp4
+        channel: cicd-feedbacks
 
     - name: Push docker image to registry
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')

@@ -108,27 +108,6 @@ export class Vessel {
   }
 
   /**
-   * Hide vessel feature icon, selector and label images
-   * @param {Object} feature - The OpenLayers feature object
-   */
-  static hideVesselFeature (feature) {
-    const vesselIconStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_ICON_STYLE)
-    if (vesselIconStyle) {
-      vesselIconStyle.getImage().setOpacity(0)
-    }
-
-    const vesselLabelStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_LABEL_STYLE)
-    if (vesselLabelStyle) {
-      vesselLabelStyle.getImage().setOpacity(0)
-    }
-
-    const vesselSelectorStyle = feature.getStyle().find(style => style.zIndex_ === VESSEL_SELECTOR_STYLE)
-    if (vesselSelectorStyle) {
-      vesselSelectorStyle.getImage().setOpacity(0)
-    }
-  }
-
-  /**
    * Add text label to vessel feature
    * @param {Object} feature - The OpenLayers feature object
    * @param {string} vesselLabelTypeEnum

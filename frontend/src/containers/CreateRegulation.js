@@ -22,6 +22,7 @@ const CreateRegulation = () => {
   const [selectedRegion, setSelectedRegion] = useState()
   const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
   const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
+  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
   const FRENCH_REGION_LIST = [
     'Auvergne-Rhône-Alpes',
@@ -137,6 +138,7 @@ const CreateRegulation = () => {
                   />
                   <Label>Ajouter un nouvel ensemble</Label></>
           }
+          <InfoPoint />
           </ContentLine>
           <ContentLine>
             <Label>Thématique de la zone</Label>
@@ -191,6 +193,11 @@ const CreateRegulation = () => {
                   />
                   <Label>Créer une nouvelle thématique</Label></>
             }
+          <InfoPoint onClick={() => setIsInfoTextShown(true)} >!</InfoPoint>
+          <InfoTextWrapper isInfoTextShown={isInfoTextShown}>
+            <InfoPoint >!</InfoPoint>
+            <InfoText>Blablablabla</InfoText>
+          </InfoTextWrapper>
           </ContentLine>
           <ContentLine>
             <Label>Nom de la zone</Label>
@@ -375,6 +382,18 @@ const RectangularButton = styled.a`
     height: 1.5px;
     width: 15px;
   }
+`
+
+const InfoPoint = styled.a`
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: ${COLORS.grayDarkerThree} 0% 0% no-repeat padding-box;
+  color: ${COLORS.grayBackground};
+  text-align: center;
+  font: normal normal bold 13px Arial;
+  text-align: center;
+  line-height: 20px;
 `
 
 export default CreateRegulation

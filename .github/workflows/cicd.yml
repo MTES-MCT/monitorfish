@@ -108,22 +108,12 @@ jobs:
     - name: Run docker images
       run: make docker-compose-up
 
-    - name: Install cypress dependencies
-      uses: cypress-io/github-action@v2
-      with:
-        # just perform install
-        runTests: false
-        working-directory: frontend
-        install-command: npm i
-
-    - name: Get docker urls
-      run: docker ps
-
     - name: Cypress run
       uses: cypress-io/github-action@v2
       with:
         # we have already installed all dependencies above
-        install: false
+        install: true
+        install-command: npm i
         working-directory: frontend
         record: true
         wait-on: 'http://localhost:8880'

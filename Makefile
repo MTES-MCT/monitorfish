@@ -29,7 +29,7 @@ docker-tag:
 docker-push:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-compose-up:
-	export MONITORFISH_VERSION=$(VERSION) && export REACT_APP_CYPRESS_PORT=8880 && cd frontend/cypress && docker-compose up -d
+	export MONITORFISH_VERSION=$(VERSION) && cd frontend/cypress && docker-compose up -d
 
 # CI commands - data pipeline
 docker-build-pipeline:

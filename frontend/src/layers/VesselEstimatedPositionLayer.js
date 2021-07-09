@@ -6,8 +6,10 @@ import { EstimatedPosition } from '../domain/entities/estimatedPosition'
 import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
 import { Vessel } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'
+import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
 
 const NOT_FOUND = -1
+export const IS_SHOWED_PROPERTY = 'isShowed'
 
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
@@ -21,19 +23,22 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
   const {
     selectedBaseLayer,
-    showingVesselsEstimatedPositions
+    showingVesselsEstimatedPositions,
+    vesselsLastPositionVisibility
   } = useSelector(state => state.map)
 
   const [vectorSource] = useState(new VectorSource({
     features: []
   }))
+
   const [layer] = useState(new Vector({
-    renderBuffer: 7,
+    renderBuffer: 4,
     className: Layers.VESSEL_ESTIMATED_POSITION.code,
     source: vectorSource,
     zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,
     updateWhileAnimating: true,
-    updateWhileInteracting: true
+    updateWhileInteracting: true,
+    style: feature => getEstimatedPositionStyle(feature)
   }))
 
   useEffect(() => {
@@ -46,17 +51,24 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     }
 
     if (vesselsLayerSource && showingVesselsEstimatedPositions) {
-      showVesselTrack()
+      showVesselEstimatedTrack()
     }
 
     if (vesselsLayerSource) {
-      vesselsLayerSource.on(VESSELS_UPDATE_EVENT, event => {
-        if (event.showingVesselsEstimatedPositions) {
-          showVesselTrack()
+      vesselsLayerSource.on(VESSELS_UPDATE_EVENT, ({ showingVesselsEstimatedPositions }) => {
+        if (showingVesselsEstimatedPositions) {
+          showVesselEstimatedTrack()
         }
       })
     }
   }, [vesselsLayerSource, selectedBaseLayer, showingVesselsEstimatedPositions, filteredVesselsFeaturesUids, nonFilteredVesselsAreHidden])
+
+  useEffect(() => {
+    vectorSource.getFeatures().forEach(feature => {
+      const isShowed = !!Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+      feature.set(IS_SHOWED_PROPERTY, isShowed)
+    })
+  }, [vesselsLastPositionVisibility])
 
   function addLayerToMap () {
     if (map) {
@@ -64,15 +76,18 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     }
   }
 
-  function showVesselTrack () {
+  function showVesselEstimatedTrack () {
     vectorSource.clear(true)
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
     const estimatedCurrentPositionsFeatures = vesselsLayerSource.getFeatures().map((vesselFeature, index) => {
-      const estimatedCurrentLatitude = vesselFeature.getProperties().estimatedCurrentLatitude
-      const estimatedCurrentLongitude = vesselFeature.getProperties().estimatedCurrentLongitude
-      const latitude = vesselFeature.getProperties().latitude
-      const longitude = vesselFeature.getProperties().longitude
+      const {
+        estimatedCurrentLatitude,
+        estimatedCurrentLongitude,
+        latitude,
+        longitude,
+        dateTime
+      } = vesselFeature.getProperties()
 
       if (nonFilteredVesselsAreHidden && Array.isArray(filteredVesselsFeaturesUids) && filteredVesselsFeaturesUids.length > 0) {
         const featureIndex = filteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
@@ -88,7 +103,9 @@ const VesselEstimatedPositionLayer = ({ map }) => {
           [estimatedCurrentLongitude, estimatedCurrentLatitude],
           {
             id: index,
-            isLight
+            isLight,
+            dateTime,
+            vesselsLastPositionVisibility
           })
 
         return estimatedCurrentPosition.feature

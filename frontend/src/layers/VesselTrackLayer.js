@@ -5,7 +5,7 @@ import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
 import { animateTo } from '../domain/reducers/Map'
-import { setCircleStyle } from './styles/featuresStyles'
+import { setCircleStyle } from './styles/vesselTrack.style'
 import { usePrevious } from '../hooks/usePrevious'
 
 const VesselTrackLayer = ({ map }) => {
@@ -25,6 +25,7 @@ const VesselTrackLayer = ({ map }) => {
     features: []
   }))
   const [layer] = useState(new Vector({
+    renderBuffer: 4,
     className: Layers.VESSEL_TRACK.code,
     source: vectorSource,
     zIndex: Layers.VESSEL_TRACK.zIndex,

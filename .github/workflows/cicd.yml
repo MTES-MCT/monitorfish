@@ -123,7 +123,6 @@ jobs:
         install: false
         working-directory: frontend
         record: true
-        # quote the url to be safe against YML parsing surprises
         wait-on: 'http://localhost:8880'
         env: PORT=8880,CYPRESS_RECORD_KEY=${{ secrets.CYPRESS_RECORD_KEY }},CYPRESS_PROJECT_ID=${{ secrets.PROJECT_ID }}
 

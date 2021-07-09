@@ -3,7 +3,7 @@ import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../reducer
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
-import { Vessel, vesselsAreEquals } from '../entities/vessel'
+import { IS_SELECTED_PROPERTY, vesselsAreEquals } from '../entities/vessel'
 import { setUpdatedFromCron } from '../reducers/Map'
 import unselectVessel from './unselectVessel'
 
@@ -16,7 +16,7 @@ const showVesselTrackAndSidebar = (
   unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, dispatch)
 
   if (vesselFeatureAndIdentity.feature) {
-    Vessel.setVesselAsSelected(vesselFeatureAndIdentity.feature)
+    vesselFeatureAndIdentity.feature.set(IS_SELECTED_PROPERTY, true)
   }
   dispatchLoadingVessel(dispatch, calledFromCron, vesselFeatureAndIdentity)
 

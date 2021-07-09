@@ -5,11 +5,9 @@ import VectorSource from 'ol/source/Vector'
 import { layersType as LayersType } from '../domain/entities/layers'
 import { InteractionTypes, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Draw, { createBox } from 'ol/interaction/Draw'
-import { Icon, Style } from 'ol/style'
-import Fill from 'ol/style/Fill'
-import Stroke from 'ol/style/Stroke'
 import { addZoneSelected, resetInteraction } from '../domain/reducers/Map'
 import GeoJSON from 'ol/format/GeoJSON'
+import { drawStyle } from './styles/draw.style'
 
 const DrawLayer = ({ map }) => {
   const interaction = useSelector(state => state.map.interaction)
@@ -39,21 +37,7 @@ const DrawLayer = ({ map }) => {
       const draw = new Draw({
         source: source,
         type: type,
-        style: new Style({
-          image: new Icon({
-            opacity: 1,
-            src: 'Pointeur_selection_zone.svg',
-            scale: 1.5
-          }),
-          stroke: new Stroke({
-            color: '#515151',
-            lineDash: [5, 5]
-          }),
-          fill: new Fill({
-            color: 'rgb(255, 255, 255, 0.3)'
-          })
-
-        }),
+        style: drawStyle,
         geometryFunction: interaction === InteractionTypes.SQUARE ? createBox() : null
       })
       map.addInteraction(draw)

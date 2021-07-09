@@ -1,9 +1,6 @@
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
 import Layers from './layers'
-import Style from 'ol/style/Style'
-import Stroke from 'ol/style/Stroke'
-import { COLORS } from '../../constants/constants'
 
 export const vesselLabel = {
   VESSEL_NATIONALITY: 'VESSEL_NATIONALITY',
@@ -31,12 +28,4 @@ export class VesselLabelLine {
   static getFeatureId (identity) {
     return `${Layers.VESSELS_LABEL.code}:${identity.internalReferenceNumber}/${identity.ircs}/${identity.externalReferenceNumber}`
   }
-
-  static labelLineStyle = new Style({
-    stroke: new Stroke({
-      color: COLORS.grayDarkerThree,
-      lineDash: [4, 4],
-      width: 2
-    })
-  })
 }

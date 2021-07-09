@@ -9,6 +9,7 @@ import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
 import { VesselLabelLine } from '../domain/entities/vesselLabel'
 import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
+import { labelLineStyle } from './styles/vesselLabelLine.style'
 
 const MAX_LABELS_DISPLAYED = 150
 const NOT_FOUND = -1
@@ -49,7 +50,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     zIndex: Layers.VESSELS_LABEL.zIndex,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
-    style: VesselLabelLine.labelLineStyle
+    style: labelLineStyle
   }))
 
   useEffect(() => {

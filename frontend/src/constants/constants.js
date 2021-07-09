@@ -13,7 +13,9 @@ export const COLORS = {
   grayVesselHidden: '#B2B2B2',
   red: '#E1000F',
   white: '#FFFFFF',
-  orange: '#F6D012'
+  orange: '#F6D012',
+  vesselLightColor: '#cacce0',
+  vesselColor: 'rgb(5, 5, 94)'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

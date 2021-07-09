@@ -23,6 +23,8 @@ jobs:
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
       REACT_APP_CYPRESS_PORT: 8880
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
     steps:
 
     - name: Get last release version
@@ -124,7 +126,7 @@ jobs:
         working-directory: frontend
         record: true
         wait-on: 'http://localhost:8880'
-        env: PORT=8880,CYPRESS_RECORD_KEY=${{ secrets.CYPRESS_RECORD_KEY }},CYPRESS_PROJECT_ID=${{ secrets.PROJECT_ID }}
+        env: PORT=8880
 
     - name: slack upload file
       # You may pin to the exact commit or the version.

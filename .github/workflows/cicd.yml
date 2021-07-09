@@ -126,12 +126,21 @@ jobs:
         # quote the url to be safe against YML parsing surprises
         wait-on: 'http://localhost:8880'
 
-    - name: Upload to slack step
-      uses: adrey/slack-file-upload-action@master
+    - name: slack upload file
+      # You may pin to the exact commit or the version.
+      # uses: MeilCli/slack-upload-file@ca243ebae91d5a9209a6bc891e2abfc444e32faf
+      uses: MeilCli/slack-upload-file@v1.0.0
       with:
-        token: ${{ secrets.SLACK_TOKEN }}
-        path: /home/runner/work/monitorfish/monitorfish/frontend/cypress/videos/vessel_sidebar.spec.js.mp4
-        channel: cicd-feedbacks
+        # Slack token, must has files:write permission
+        slack_token: ${{ secrets.SLACK_TOKEN }}
+        # Custom slack api url
+        slack_api_url: https://hooks.slack.com/services/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
+        # Comma-separated list of channel names or IDs where the file will be shared.
+        channels: cicd-feedbacks
+        # File contents via multipart/form-data. If omitting this parameter, you must submit content.
+        file_path: /home/runner/work/monitorfish/monitorfish/frontend/cypress/videos
+        # Filename of file.
+        file_name: vessel_sidebar.spec.js.mp4
 
     - name: Push docker image to registry
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')

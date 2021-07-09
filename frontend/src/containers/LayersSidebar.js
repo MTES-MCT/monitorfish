@@ -56,6 +56,7 @@ const LayersSidebar = () => {
       {
         namespace => (
           <Sidebar
+            healthcheckTextWarning={healthcheckTextWarning}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
             <SidebarLayersIcon

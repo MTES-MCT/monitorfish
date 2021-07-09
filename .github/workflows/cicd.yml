@@ -134,7 +134,7 @@ jobs:
         # Slack token, must has files:write permission
         slack_token: ${{ secrets.SLACK_TOKEN }}
         # Custom slack api url
-        slack_api_url: https://hooks.slack.com/services/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
+        slack_api_url: ${{ secrets.SLACK_URL }}
         # Comma-separated list of channel names or IDs where the file will be shared.
         channels: cicd-feedbacks
         # File contents via multipart/form-data. If omitting this parameter, you must submit content.

@@ -3,10 +3,11 @@ import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
-import { SelectPicker, Input } from 'rsuite'
+import { SelectPicker, Input, Radio, Checkbox } from 'rsuite'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
 import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
+import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
 
 const INFO_TEXT = {
   zoneName: `De mme que pour les thmatiques, le nom des zones doit être aussi explicite que possible. 
@@ -103,12 +104,26 @@ const CreateRegulation = () => {
     width: 180,
     margin: '0',
     'border-color': COLORS.grayDarker,
-    'box-sizing': 'border-box'
+    'box-sizing': 'border-box',
+    'text-overflow': 'ellipsis'
   }
 
   const getInfoText = (messageType) => {
     return INFO_TEXT[messageType]
   }
+  // TODO : Add a spinner
+  const renderMenuItem = (checked, item, tag) => {
+    let component
+    if (tag === 'Radio') {
+      component = <Radio checked={checked}>{item.label}</Radio>
+    } else if (tag === 'Checkbox') {
+      console.log(`${item.label}`)
+      component = <Checkbox checked={checked}>{item.label}</Checkbox>
+    }
+
+    return component
+  }
+
   return (
     <CreateRegulationWrapper>
       <Header>
@@ -126,12 +141,19 @@ const CreateRegulation = () => {
               <CustomSelectPicker
                 style={selectPickerStyle}
                 searchable={false}
-                placeholder=" Choisir un ensemble "
-                value={selectedReglementationBloc}
+                placeholder='Choisir un ensemble'
+                value={'Choisir un ensemble'}
                 onChange={setSelectedReglementationBloc}
                 data={reglementationBlocList}
+                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedReglementationBloc, item, 'Radio')}
               />
             </SelectWrapper>
+            {selectedReglementationBloc
+              ? <CustomTag>
+                  <SelectedValue>{selectedReglementationBloc}</SelectedValue>
+                  <CloseIcon onClick={() => setSelectedReglementationBloc()}/>
+                </CustomTag>
+              : null }
             {
               isAddReglementationBlocClicked
                 ? <CreateReglementationBloc>
@@ -165,12 +187,19 @@ const CreateRegulation = () => {
               <CustomSelectPicker
                 searchable={true}
                 style={selectPickerStyle}
-                placeholder=" Choisir une thématique "
-                value={selectedZoneTheme}
+                placeholder='Choisir une thématique'
+                value={'Choisir une thématique'}
                 onChange={setSelectedZoneTheme}
                 data={zoneThemeList}
+                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedZoneTheme, item, 'Radio')}
               />
             </SelectWrapper>
+            {selectedZoneTheme
+              ? <CustomTag>
+                  <SelectedValue>{selectedZoneTheme}</SelectedValue>
+                  <CloseIcon onClick={() => setSelectedZoneTheme()}/>
+                </CustomTag>
+              : null }
             {
               isAddThemeClicked
                 ? <CreateReglementationBloc>
@@ -258,25 +287,41 @@ const CreateRegulation = () => {
               <CustomSelectPicker
                 style={selectPickerStyle}
                 searchable={true}
-                placeholder=" Choisir une thématique "
-                value={selectedSeaFront}
+                placeholder='Choisir une thématique'
+                value={'Choisir une thématique'}
                 onChange={setSelectedSeaFront}
                 data={seaFrontList}
+                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedSeaFront, item, 'Radio')}
               />
             </SelectWrapper>
+            {selectedSeaFront
+              ? <CustomTag>
+                  <SelectedValue>{selectedSeaFront}</SelectedValue>
+                  <CloseIcon onClick={() => setSelectedSeaFront()}/>
+                </CustomTag>
+              : null }
           </ContentLine>
           <ContentLine>
             <Label>Région</Label>
             <SelectWrapper>
               <CustomSelectPicker
+                menuStyle={{ width: 250, 'overflow-y': 'hidden', 'text-overflow': 'ellipsis' }}
                 style={selectPickerStyle}
                 searchable={false}
-                placeholder=" Choisir une région "
-                value={selectedRegion}
+                placeholder='Choisir une région'
                 onChange={setSelectedRegion}
+                value={'Choisir une région'}
                 data={formatData(FRENCH_REGION_LIST)}
+                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedRegion, item, 'Checkbox')}
+                block
               />
             </SelectWrapper>
+            {selectedRegion
+              ? <CustomTag>
+                  <SelectedValue>{selectedRegion}</SelectedValue>
+                  <CloseIcon onClick={() => setSelectedRegion()}/>
+                </CustomTag>
+              : null }
           </ContentLine>
         </Section>
       </Content>
@@ -312,6 +357,31 @@ const InfoPoint = styled.a`
     text-decoration: none;
     color: ${COLORS.grayBackground};
   }
+`
+
+const CustomTag = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #EDEDED;
+  border-radius: 2px;
+  margin-right: 8px;
+`
+
+const SelectedValue = styled.span`
+  font-size: 13px;
+  padding: 2.5px;
+`
+
+// Pourrait être dans common car on l'utilise souvent
+const CloseIcon = styled(CloseIconSVG)`
+  width: 13px;
+  vertical-align: text-bottom;
+  cursor: pointer;
+  border-left: 1px solid white;
+  height: 30px;
+  margin: 0 6px 0 7px;
+  padding: 2.5px 2.5px 2.5px 7px;
 `
 
 const InfoTextWrapper = styled.div`
@@ -355,14 +425,11 @@ const CreateReglementationBloc = styled.div`
 `
 
 const CustomSelectPicker = styled(SelectPicker)`
-  width: 180;
-  margin: '0';
-  border-color: ${COLORS.grayDarker};
-  box-sizing: border-box;
   a {
     box-sizing: border-box;
   }
 `
+
 const CustomInput = styled(Input)`
   font-size: 13px;
   width: 180px; 
@@ -370,7 +437,6 @@ const CustomInput = styled(Input)`
   margin: 0px 10px 0px 0px;
 `
 const SelectWrapper = styled.div`
-  width: 180px;
   display: inline-block;
   margin: 0px 10px 0px 0px;
   vertical-align: sub;

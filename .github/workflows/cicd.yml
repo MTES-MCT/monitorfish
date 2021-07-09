@@ -13,6 +13,7 @@ on:
     - '**.sql'
     - 'backend/pom.xml'
     - 'Makefile'
+    - 'frontend'
   schedule:
     - cron: "38 11 */3 * *"
 

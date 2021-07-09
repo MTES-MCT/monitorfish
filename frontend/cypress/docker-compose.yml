@@ -11,6 +11,14 @@ services:
     ports:
       - 5432:5432
 
+  flyway:
+    image: flyway/flyway
+    command: -url=postgresql://db:5432/monitorfishdb?user=postgres&password=postgres -schemas=public -user=postgres -password=postgres -connectRetries=60 migrate
+    volumes:
+      - ../../backend/src/main/resources/db/testdata:/flyway/sql
+    depends_on:
+      - db
+
   app:
     image: monitorfish-app:$MONITORFISH_VERSION
     container_name: monitorfish_backend

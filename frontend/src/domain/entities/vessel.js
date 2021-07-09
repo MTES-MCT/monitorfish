@@ -82,11 +82,7 @@ export class Vessel {
   static applyIsShowedPropertyToVessels (feature, filteredVesselsUids) {
     const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
 
-    if (featureFoundInFilteredVesselsIndex !== NOT_FOUND) {
-      feature.set(IS_SHOWED_IN_FILTER_PROPERTY, true)
-    } else {
-      feature.set(IS_SHOWED_IN_FILTER_PROPERTY, false)
-    }
+    feature.set(IS_SHOWED_IN_FILTER_PROPERTY, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
   }
 
   static getVesselOpacity (vesselsLastPositionVisibility, dateTime) {

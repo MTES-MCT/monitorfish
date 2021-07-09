@@ -128,7 +128,6 @@ const Sidebar = styled(MapComponentStyle)`
   }
 `
 
-// Dépend aussi de si on a le message en haut ou pas
 const Zones = styled.div`
   margin-top: 5px;
   width: 335px;

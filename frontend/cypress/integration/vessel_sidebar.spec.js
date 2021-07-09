@@ -10,7 +10,7 @@ context('VesselSidebar', () => {
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     // Add in this get method which will wait until load
     cy.get('.ol-viewport')
-    cy.wait(1000)
+    cy.wait(4000)
     cy.url().should('include', '@-82')
   })
 

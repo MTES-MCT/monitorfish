@@ -125,6 +125,10 @@ jobs:
         env: PORT=8880
         # quote the url to be safe against YML parsing surprises
         wait-on: 'http://localhost:8880'
+        # pass the Dashboard record key as an environment variable
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        # pass the project ID from the secrets through environment variable
+        CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
 
     - name: slack upload file
       # You may pin to the exact commit or the version.

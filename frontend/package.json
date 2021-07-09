@@ -48,6 +48,7 @@
     "lint": "eslint src/ --fix",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
     "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

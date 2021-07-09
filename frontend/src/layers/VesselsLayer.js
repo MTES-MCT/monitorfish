@@ -151,11 +151,11 @@ const VesselsLayer = ({ map }) => {
         vectorSource.addFeatures(features)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
-          features: features,
-          showingVesselsEstimatedPositions: showingVesselsEstimatedPositions,
+          features,
+          showingVesselsEstimatedPositions,
           filterColor: getFilterColor(),
-          vesselsLastPositionVisibility: vesselsLastPositionVisibility,
-          selectedBaseLayer: selectedBaseLayer
+          vesselsLastPositionVisibility,
+          selectedBaseLayer
         })
       })
     }

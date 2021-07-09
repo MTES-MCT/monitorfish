@@ -106,14 +106,6 @@ jobs:
 
     - name: Run docker images
       run: make docker-compose-up
-      
-    - name: Flyway Migration
-      uses: joshuaavalon/flyway-action@v1
-      with:
-        # The jdbc url to use to connect to the database
-        url: jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
-        # Comma-separated list of locations to scan recursively for migrations
-        locations: /home/runner/work/monitorfish/monitorfish/backend/src/main/resources/db/testdata
 
     - name: Install cypress dependencies
       uses: cypress-io/github-action@v2

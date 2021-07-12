@@ -84,8 +84,9 @@ const LayersSidebar = () => {
               <AdministrativeZones
                 administrativeZones={administrativeZones}
                 hideZonesListWhenSearching={hideZonesListWhenSearching}
+                namespace={namespace}
               />
-              <BaseLayerSelection/>
+              <BaseLayerSelection namespace={namespace}/>
             </Zones>
             <MetadataWrapper
               healthcheckTextWarning={healthcheckTextWarning}
@@ -137,7 +138,7 @@ const Zones = styled.div`
   padding: 1px 10px 10px 10px;
   max-height: calc(100vh - ${props => props.healthcheckTextWarning ? '210px' : '160px'});
   border-radius: 2px;
-  overflow-x: hidden;
+  overflow: hidden;
 `
 
 const SidebarLayersIcon = styled.button`

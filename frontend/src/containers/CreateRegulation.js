@@ -205,23 +205,23 @@ const CreateRegulation = () => {
                 ? <CreateReglementationBloc>
                   <CustomInput
                     placeholder='Lieu (obligatoire)'
-                    value={nameZone}
-                    onChange={setNameZone}
+                    value={themeZone}
+                    onChange={setThemeZone}
                   />
                   <CustomInput
                     placeholder='Espèce (optionnel)'
-                    value={nameZone}
-                    onChange={setNameZone}
+                    value={themeSpecies}
+                    onChange={setThemeSpecies}
                   />
                   <CustomInput
                     placeholder='Engins (optionnel)'
-                    value={nameZone}
-                    onChange={setNameZone}
+                    value={themeGears}
+                    onChange={setThemeGears}
                   />
                   <CustomInput
                     placeholder='Autres indications (optionnel)'
-                    value={nameZone}
-                    onChange={setNameZone}
+                    value={themeOtherIndications}
+                    onChange={setThemeOtherIndications}
                   />
                   <ValidateButton
                     disabled={false}

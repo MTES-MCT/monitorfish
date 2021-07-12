@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import BaseMap from './BaseMap'
 import LawType from '../components/backoffice/LawType'
@@ -9,7 +10,7 @@ import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegul
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
 import { setError } from '../domain/reducers/Global'
 import { COLORS } from '../constants/constants'
-import { BackofficeBottomButton, WhiteButton } from '../components/commonStyles/Buttons.style'
+import { WhiteButton } from '../components/commonStyles/Buttons.style'
 import { EmptyResult } from '../components/commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
@@ -30,8 +31,9 @@ const Backoffice = () => {
 
   const getRegulatoryZones = () => {
     dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
-      .then(regulatoryZones => {
-        setRegulatoryZoneListByRegTerritory(regulatoryZones)
+      .then(response => {
+        const { layersNamesByRegTerritory } = response
+        setRegulatoryZoneListByRegTerritory(layersNamesByRegTerritory)
       })
       .catch(error => {
         dispatch(setError(error))
@@ -90,6 +92,8 @@ const Backoffice = () => {
       </SearchResultList>)
   }
 
+  const match = useRouteMatch()
+
   return (
     <>
       <BackofficeContainer>
@@ -109,12 +113,13 @@ const Backoffice = () => {
             ? displaySearchResultList()
             : <div>En attente de chargement</div>}
           <ButtonListFooter>
-            <BackofficeBottomButton
+            <CreateRegulatoryButton
+              to={match.url + '/createRegulatoryZone'}
               disabled={false}
               isLast={false}
               onClick={() => addNewRegZone()}>
               Saisir une nouvelle réglementation
-            </BackofficeBottomButton>
+            </CreateRegulatoryButton>
           </ButtonListFooter>
         </RegulatoryZonePanel>
         <BaseMap/>
@@ -135,6 +140,22 @@ const Backoffice = () => {
     </>
   )
 }
+
+export const CreateRegulatoryButton = styled(Link)`
+  display: inline-block;
+  font-size: 13px;
+  padding: 5px 12px;
+  margin: 20px ${props => props.isLast ? '20px' : '0'} 20px 10px;
+  background: ${COLORS.grayDarkerThree};
+  color: ${COLORS.grayBackground}!important;
+  :hover, :focus {
+    background: ${COLORS.grayDarkerThree};
+  }
+  :disabled {
+    border: 1px solid ${COLORS.grayDarker};
+    background: ${COLORS.grayDarker};
+  }
+`
 
 const SearchResultList = styled.div`
   display: flex;

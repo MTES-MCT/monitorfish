@@ -13,7 +13,9 @@ class EstimatedPosition {
    * @param {string[]} estimatedPosition - The [longitude, latitude] of the estimated position
    * @param {{
       id: string,
-      isLight: boolean
+      isLight: boolean,
+      vesselsLastPositionVisibility: Object,
+      dateTime: Date
    * }} options
    */
   constructor (currentPosition, estimatedPosition, options) {
@@ -26,7 +28,7 @@ class EstimatedPosition {
       lineColor = 'rgb(202, 204, 224, 0.2)'
     }
 
-    let vesselColor = 'rgb(5, 5, 94, 0.2)'
+    let vesselColor = 'rgb(5, 5, 94)'
     if (options.isLight) {
       vesselColor = 'rgb(202, 204, 224)'
     }
@@ -43,14 +45,13 @@ class EstimatedPosition {
 
     const circleFeature = new Feature({
       geometry: new Point(this.estimatedCoordinates),
+      isCircle: true,
       latitude: estimatedPosition[1],
       longitude: estimatedPosition[0],
       color: vesselColor,
       isShowed: options.vesselsLastPositionVisibility ? !!Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime) : true,
       dateTime: options.dateTime
     })
-
-    circleFeature.setStyle(circleStyle(vesselColor))
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)
 
     this.features.push(lineFeature, circleFeature)

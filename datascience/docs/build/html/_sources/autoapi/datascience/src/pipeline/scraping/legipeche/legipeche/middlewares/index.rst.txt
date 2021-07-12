@@ -1,0 +1,61 @@
+:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.middlewares`
+========================================================================
+
+.. py:module:: datascience.src.pipeline.scraping.legipeche.legipeche.middlewares
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.pipeline.scraping.legipeche.legipeche.middlewares.LegipecheSpiderMiddleware
+   datascience.src.pipeline.scraping.legipeche.legipeche.middlewares.LegipecheDownloaderMiddleware
+
+
+
+
+.. class:: LegipecheSpiderMiddleware
+
+   .. method:: from_crawler(cls, crawler)
+      :classmethod:
+
+
+   .. method:: process_spider_input(self, response, spider)
+
+
+   .. method:: process_spider_output(self, response, result, spider)
+
+
+   .. method:: process_spider_exception(self, response, exception, spider)
+
+
+   .. method:: process_start_requests(self, start_requests, spider)
+
+
+   .. method:: spider_opened(self, spider)
+
+
+
+.. class:: LegipecheDownloaderMiddleware
+
+   .. method:: from_crawler(cls, crawler)
+      :classmethod:
+
+
+   .. method:: process_request(self, request, spider)
+
+
+   .. method:: process_response(self, request, response, spider)
+
+
+   .. method:: process_exception(self, request, exception, spider)
+
+
+   .. method:: spider_opened(self, spider)
+
+
+

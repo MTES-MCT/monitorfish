@@ -1,0 +1,55 @@
+:mod:`datascience.src.pipeline.flows.last_positions`
+====================================================
+
+.. py:module:: datascience.src.pipeline.flows.last_positions
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.pipeline.flows.last_positions.extract_current_segments
+   datascience.src.pipeline.flows.last_positions.extract_last_positions
+   datascience.src.pipeline.flows.last_positions.extract_last_controls
+   datascience.src.pipeline.flows.last_positions.estimate_current_positions
+   datascience.src.pipeline.flows.last_positions.merge
+   datascience.src.pipeline.flows.last_positions.load_last_positions
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.pipeline.flows.last_positions.current_segments
+
+
+.. function:: extract_current_segments()
+
+
+.. function:: extract_last_positions()
+
+
+.. function:: extract_last_controls()
+
+
+.. function:: estimate_current_positions(last_positions)
+
+
+.. function:: merge(last_positions, current_segments, last_controls)
+
+
+.. function:: load_last_positions(last_positions)
+
+
+.. data:: current_segments
+   
+
+   
+

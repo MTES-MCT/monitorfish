@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.pipeline.flows.vessels &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>datascience.src.pipeline.flows.vessels</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for datascience.src.pipeline.flows.vessels</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">prefect</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">ARRAY</span><span class="p">,</span> <span class="n">Date</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">MetaData</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Table</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.exc</span> <span class="kn">import</span> <span class="n">InvalidRequestError</span>
+
+<span class="kn">from</span> <span class="nn">src.db_config</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">src.pipeline.generic_tasks</span> <span class="kn">import</span> <span class="n">extract</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span> <span class="nn">src.pipeline.processing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">combine_overlapping_columns</span><span class="p">,</span>
+    <span class="n">concatenate_columns</span><span class="p">,</span>
+    <span class="n">df_values_to_psql_arrays</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">src.pipeline.utils</span> <span class="kn">import</span> <span class="n">delete</span><span class="p">,</span> <span class="n">psql_insert_copy</span>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="extract_fr_vessels"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.extract_fr_vessels">[docs]</a><span class="k">def</span> <span class="nf">extract_fr_vessels</span><span class="p">():</span>
+
+    <span class="c1"># Sparse data type takes up less memory - especially for float data type</span>
+    <span class="c1"># For string data, pd.SparseDtype does not reduce memory usage much. Using</span>
+    <span class="c1"># pd.Categorical reduces memory usage much more.</span>
+
+    <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;length_nf&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDtype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;width_nf&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDtype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;gauge_nf&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDtype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;power_nf&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDtype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;vessel_phone_1_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_phone_2_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_phone_3_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_phone_4_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_email_1_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_email_2_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_name_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_email_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_phone_1_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_phone_2_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_name_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_email_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_phone_1_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_phone_2_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_type_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;registry_port_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sailing_types_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fishing_gear_main_nfp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fishing_gear_secondary_nfp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fishing_gear_third_nfp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">extract</span><span class="p">(</span><span class="s2">&quot;ocan&quot;</span><span class="p">,</span> <span class="s2">&quot;ocan/navires_fr.sql&quot;</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="n">dtypes</span><span class="p">)</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="extract_cee_vessels"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.extract_cee_vessels">[docs]</a><span class="k">def</span> <span class="nf">extract_cee_vessels</span><span class="p">():</span>
+
+    <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;fishing_gear_main_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fishing_gear_secondary_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fishing_gear_third_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_type_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;district_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_name_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_email_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_email_ncp&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;length_ncp&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDtype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;gauge_ncp&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDtype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;power_ncp&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">SparseDtype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">extract</span><span class="p">(</span><span class="s2">&quot;ocan&quot;</span><span class="p">,</span> <span class="s2">&quot;ocan/navires_cee_peche.sql&quot;</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="n">dtypes</span><span class="p">)</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="extract_non_cee_vessels"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.extract_non_cee_vessels">[docs]</a><span class="k">def</span> <span class="nf">extract_non_cee_vessels</span><span class="p">():</span>
+    <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fishing_gear_main_nep&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">extract</span><span class="p">(</span><span class="s2">&quot;ocan&quot;</span><span class="p">,</span> <span class="s2">&quot;ocan/navires_hors_cee_peche.sql&quot;</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="n">dtypes</span><span class="p">)</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="extract_floats"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.extract_floats">[docs]</a><span class="k">def</span> <span class="nf">extract_floats</span><span class="p">():</span>
+
+    <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;imo_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cfr_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;external_immatriculation_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_name_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ircs_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mmsi_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;flag_state_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;district_code_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;district_f&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">extract</span><span class="p">(</span><span class="s2">&quot;ocan&quot;</span><span class="p">,</span> <span class="s2">&quot;ocan/flotteurs.sql&quot;</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="n">dtypes</span><span class="p">)</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="extract_nav_licences"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.extract_nav_licences">[docs]</a><span class="k">def</span> <span class="nf">extract_nav_licences</span><span class="p">():</span>
+    <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sailing_category&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="s2">&quot;nav_licence_expiration_date&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">extract</span><span class="p">(</span><span class="s2">&quot;ocan&quot;</span><span class="p">,</span> <span class="s2">&quot;ocan/permis_navigation.sql&quot;</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="n">dtypes</span><span class="p">)</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="merge_vessels"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.merge_vessels">[docs]</a><span class="k">def</span> <span class="nf">merge_vessels</span><span class="p">(</span><span class="n">floats</span><span class="p">,</span> <span class="n">fr_vessels</span><span class="p">,</span> <span class="n">cee_vessels</span><span class="p">,</span> <span class="n">non_cee_vessels</span><span class="p">,</span> <span class="n">licences</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">floats</span><span class="p">,</span>
+        <span class="n">fr_vessels</span><span class="p">,</span>
+        <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_f&quot;</span><span class="p">,</span>
+        <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_nf&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">res</span><span class="p">,</span>
+        <span class="n">cee_vessels</span><span class="p">,</span>
+        <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_f&quot;</span><span class="p">,</span>
+        <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_ncp&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">res</span><span class="p">,</span>
+        <span class="n">non_cee_vessels</span><span class="p">,</span>
+        <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_f&quot;</span><span class="p">,</span>
+        <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_nep&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">res</span><span class="p">,</span>
+        <span class="n">licences</span><span class="p">,</span>
+        <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_f&quot;</span><span class="p">,</span>
+        <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;id_nav_flotteur_gin&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="clean_vessels"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.clean_vessels">[docs]</a><span class="k">def</span> <span class="nf">clean_vessels</span><span class="p">(</span><span class="n">all_vessels</span><span class="p">):</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">prefect</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;logger&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Concatenate several columns into lists when several values can be kept.</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Combining columns into lists: emails, phone numbers...&quot;</span><span class="p">)</span>
+    <span class="n">concat_cols</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;proprietor_phones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;proprietor_phone_1_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;proprietor_phone_2_nf&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;proprietor_emails&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;proprietor_email_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;proprietor_email_ncp&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;operator_phones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;operator_phone_1_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;operator_phone_2_nf&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;operator_emails&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;operator_email_ncp&quot;</span><span class="p">,</span> <span class="s2">&quot;operator_email_nf&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;vessel_phones&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;vessel_phone_1_nf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vessel_phone_2_nf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vessel_phone_3_nf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vessel_phone_4_nf&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;vessel_emails&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;vessel_email_1_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;vessel_email_2_nf&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;declared_fishing_gears&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;fishing_gear_main_ncp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fishing_gear_main_nep&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fishing_gear_main_nfp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fishing_gear_secondary_ncp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fishing_gear_secondary_nfp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fishing_gear_third_ncp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fishing_gear_third_nfp&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+    <span class="n">cols_to_drop</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">all_vessels</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">cols_list</span> <span class="ow">in</span> <span class="n">concat_cols</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">concatenate_columns</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">cols_list</span><span class="p">)</span>
+        <span class="n">cols_to_drop</span> <span class="o">+=</span> <span class="n">cols_list</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">cols_to_drop</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Columns combined into lists.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Combine several columns into one value when only one value must be kept.</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Combining columns into single values: names, characteristics...&quot;</span><span class="p">)</span>
+    <span class="n">combine_cols</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;gauge&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;gauge_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;gauge_ncp&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;operator_name&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;operator_name_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;operator_name_ncp&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;length_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;length_ncp&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;power&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;power_nf&quot;</span><span class="p">,</span> <span class="s2">&quot;power_ncp&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;district&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;district_f&quot;</span><span class="p">,</span> <span class="s2">&quot;district_ncp&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;vessel_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;vessel_type_ncp&quot;</span><span class="p">,</span> <span class="s2">&quot;vessel_type_nf&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="n">cols_to_drop</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">cols_list</span> <span class="ow">in</span> <span class="n">combine_cols</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">combine_overlapping_columns</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">cols_list</span><span class="p">)</span>
+        <span class="n">cols_to_drop</span> <span class="o">+=</span> <span class="n">cols_list</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">cols_to_drop</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Columns combined into single values.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Rename columns as required in the final data format</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Renaming columns...&quot;</span><span class="p">)</span>
+    <span class="n">renamed_columns</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cfr_f&quot;</span><span class="p">:</span> <span class="s2">&quot;cfr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;flag_state_f&quot;</span><span class="p">:</span> <span class="s2">&quot;flag_state&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;id_nav_flotteur_f&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;imo_f&quot;</span><span class="p">:</span> <span class="s2">&quot;imo&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ircs_f&quot;</span><span class="p">:</span> <span class="s2">&quot;ircs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mmsi_f&quot;</span><span class="p">:</span> <span class="s2">&quot;mmsi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;external_immatriculation_f&quot;</span><span class="p">:</span> <span class="s2">&quot;external_immatriculation&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;registry_port_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;registry_port&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sailing_types_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;sailing_type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_name_f&quot;</span><span class="p">:</span> <span class="s2">&quot;vessel_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;width_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;width&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;district_code_f&quot;</span><span class="p">:</span> <span class="s2">&quot;district_code&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_name_nf&quot;</span><span class="p">:</span> <span class="s2">&quot;proprietor_name&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">renamed_columns</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Columns renamed.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Sort columns</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sorting columns...&quot;</span><span class="p">)</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;imo&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cfr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;external_immatriculation&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mmsi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ircs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;flag_state&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;width&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;district&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;district_code&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gauge&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;registry_port&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;power&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sailing_category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sailing_type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;declared_fishing_gears&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nav_licence_expiration_date&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_phones&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;proprietor_emails&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_phones&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operator_emails&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_phones&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_emails&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Columns sorted.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="load_vessels"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.load_vessels">[docs]</a><span class="k">def</span> <span class="nf">load_vessels</span><span class="p">(</span><span class="n">all_vessels</span><span class="p">):</span>
+    <span class="n">all_vessels</span> <span class="o">=</span> <span class="n">all_vessels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;imo&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;cfr&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;external_immatriculation&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;mmsi&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;ircs&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;vessel_name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;flag_state&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="s2">&quot;district&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;district_code&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;gauge&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="s2">&quot;registry_port&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;power&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="s2">&quot;vessel_type&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;sailing_category&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;sailing_type&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;proprietor_name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;operator_name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="s2">&quot;nav_licence_expiration_date&quot;</span><span class="p">:</span> <span class="s2">&quot;datetime64[ns]&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">all_vessels</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">all_vessels</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">])</span>
+
+    <span class="n">load</span><span class="p">(</span>
+        <span class="n">all_vessels</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;vessels&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;public&quot;</span><span class="p">,</span>
+        <span class="n">db_name</span><span class="o">=</span><span class="s2">&quot;monitorfish_remote&quot;</span><span class="p">,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="n">prefect</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;logger&quot;</span><span class="p">),</span>
+        <span class="n">delete_before_insert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">pg_array_columns</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;declared_fishing_gears&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;operator_phones&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;operator_emails&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;proprietor_phones&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;proprietor_emails&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vessel_phones&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vessel_emails&quot;</span><span class="p">,</span></div>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+
+<span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;Vessels&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
+    <span class="c1"># Extract</span>
+<div class="viewcode-block" id="fr_vessels"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/vessels/index.html#datascience.src.pipeline.flows.vessels.fr_vessels">[docs]</a>    <span class="n">fr_vessels</span> <span class="o">=</span> <span class="n">extract_fr_vessels</span><span class="p">()</span></div>
+    <span class="n">cee_vessels</span> <span class="o">=</span> <span class="n">extract_cee_vessels</span><span class="p">()</span>
+    <span class="n">non_cee_vessels</span> <span class="o">=</span> <span class="n">extract_non_cee_vessels</span><span class="p">()</span>
+    <span class="n">floats</span> <span class="o">=</span> <span class="n">extract_floats</span><span class="p">()</span>
+    <span class="n">licences</span> <span class="o">=</span> <span class="n">extract_nav_licences</span><span class="p">()</span>
+
+    <span class="c1"># Transform</span>
+    <span class="n">all_vessels</span> <span class="o">=</span> <span class="n">merge_vessels</span><span class="p">(</span>
+        <span class="n">floats</span><span class="p">,</span> <span class="n">fr_vessels</span><span class="p">,</span> <span class="n">cee_vessels</span><span class="p">,</span> <span class="n">non_cee_vessels</span><span class="p">,</span> <span class="n">licences</span>
+    <span class="p">)</span>
+    <span class="n">all_vessels</span> <span class="o">=</span> <span class="n">clean_vessels</span><span class="p">(</span><span class="n">all_vessels</span><span class="p">)</span>
+
+    <span class="c1"># Load</span>
+    <span class="n">load_vessels</span><span class="p">(</span><span class="n">all_vessels</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

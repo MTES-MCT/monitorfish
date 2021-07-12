@@ -192,7 +192,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
             <TableBody>
               <Field>
                 <Key>Engins à bord (JPE)</Key>
-                <Value data-cy={"vessel-fishing-gears"}>
+                <Value data-cy={'vessel-fishing-gears'}>
                   {
                     getGears()
                   }
@@ -245,7 +245,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
                 data-cy={'vessel-fishing-next-trip'}
               />
             </TextValue>
-            <SeeAll onClick={() => showERSMessages()} data-cy={"vessel-fishing-see-all"}>Voir tous les messages</SeeAll>
+            <SeeAll onClick={() => showERSMessages()} data-cy={'vessel-fishing-see-all'}>Voir tous les messages</SeeAll>
             <Arrow onClick={() => showERSMessages()}/>
           </Title>
           {

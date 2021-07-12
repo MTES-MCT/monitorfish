@@ -33,12 +33,16 @@ class EstimatedPosition {
       vesselColor = 'rgb(202, 204, 224)'
     }
 
+    const isShowed = options.vesselsLastPositionVisibility
+      ? !!Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime)
+      : true
+
     const lineFeature = new Feature({
       geometry: new LineString([this.currentCoordinates, this.estimatedCoordinates]),
       latitude: estimatedPosition[1],
       longitude: estimatedPosition[0],
       color: lineColor,
-      isShowed: options.vesselsLastPositionVisibility ? !!Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime) : true,
+      isShowed,
       dateTime: options.dateTime
     })
     lineFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
@@ -49,7 +53,7 @@ class EstimatedPosition {
       latitude: estimatedPosition[1],
       longitude: estimatedPosition[0],
       color: vesselColor,
-      isShowed: options.vesselsLastPositionVisibility ? !!Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime) : true,
+      isShowed,
       dateTime: options.dateTime
     })
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)

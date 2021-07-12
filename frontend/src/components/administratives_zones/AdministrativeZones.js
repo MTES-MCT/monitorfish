@@ -161,23 +161,12 @@ const ListItem = styled.li`
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
-  transform: rotate(180deg);
   width: 17px;
   float: right;
   margin-right: 10px;
   margin-top: 5px;
-  
-  animation: ${props => props.isOpen ? 'chevron-zones-opening' : 'chevron-zones-closing'} 0.5s ease forwards;
-
-  @keyframes chevron-zones-opening {
-    0%   { transform: rotate(180deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  @keyframes chevron-zones-closing {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(180deg);   }
-  }
+  transform: ${props => !props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transition: all 0.5s
 `
 
 export default AdministrativeZones

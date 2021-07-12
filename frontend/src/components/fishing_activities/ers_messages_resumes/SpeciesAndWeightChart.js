@@ -1,29 +1,58 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
+import { ERSSpeciesPresentation } from '../../../domain/entities/ERS'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 
-const SpeciesAndWeightChart = props => {
-  const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
+function getHeight (weight, percentOfTotalFARWeight) {
+  let height = weight ? Math.log10(percentOfTotalFARWeight) : 22
+
+  height = height * 50
+  height = height <= 22 ? 22 : height
+  height = height > 90 ? 90 : height
+
+  return height
+}
+
+const SpeciesAndWeightChart = ({
+  speciesAndWeightArray,
+  speciesPresentationAndWeightArray,
+  setChartHeight,
+  increaseChartTotalHeight,
+  resetInitialChartHeight,
+  compareWithTotalWeight
+}) => {
+  const [speciesAndWeightArrayWithHeight, setSpeciesAndWeightArrayWithHeight] = useState([])
+  const [speciesPresentationOpened, setSpeciesPresentationOpened] = useState(null)
 
   useEffect(() => {
-    if (props.speciesAndWeightArray && props.setChartHeight) {
-      const speciesAndWeightArray = props.speciesAndWeightArray.map((speciesAndWeight) => {
-        const heightInLog = speciesAndWeight.weight ? Math.log10(getPercentOfTotalFARWeight(speciesAndWeight)) : 22
+    if (speciesAndWeightArrayWithHeight && setChartHeight) {
+      const nextSpeciesAndWeightArrayWithHeight = speciesAndWeightArray.map(speciesAndWeight => {
+        speciesAndWeight.height = getHeight(speciesAndWeight.weight, getPercentOfTotalFARWeight(speciesAndWeight))
 
-        speciesAndWeight.height = heightInLog * 50
-        speciesAndWeight.height = speciesAndWeight.height <= 22 ? 22 : speciesAndWeight.height
-        speciesAndWeight.height = speciesAndWeight.height > 90 ? 90 : speciesAndWeight.height
         return speciesAndWeight
       })
 
-      setSpeciesAndWeightArray(speciesAndWeightArray)
-      const totalHeight = speciesAndWeightArray.reduce((subAccumulator, speciesCatch) => {
+      setSpeciesAndWeightArrayWithHeight(nextSpeciesAndWeightArrayWithHeight)
+      const totalHeight = nextSpeciesAndWeightArrayWithHeight.reduce((subAccumulator, speciesCatch) => {
         return subAccumulator + speciesCatch.height + 2
       }, 0)
 
-      props.setChartHeight(totalHeight)
+      setChartHeight(totalHeight)
     }
-  }, [props.speciesAndWeightArray])
+  }, [speciesAndWeightArray])
+
+  const openPresentation = (species, speciesPresentationAndWeight) => {
+    const height = speciesPresentationAndWeight ? speciesPresentationAndWeight.length * 22 : 0
+
+    if (speciesPresentationOpened === species) {
+      setSpeciesPresentationOpened(null)
+      resetInitialChartHeight()
+    } else {
+      setSpeciesPresentationOpened(species)
+      increaseChartTotalHeight(height)
+    }
+  }
 
   const getPercentOfTotalFARWeight = speciesAndWeight => {
     return parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
@@ -31,37 +60,80 @@ const SpeciesAndWeightChart = props => {
 
   return <>
     {
-      speciesAndWeightArray && speciesAndWeightArray.length
-        ? props.speciesAndWeightArray.map((speciesAndWeight, index) => {
-          return <SpeciesAndWeight key={speciesAndWeight.species}>
-            <Weight
-              height={speciesAndWeight.height}
-              isLast={index === props.speciesAndWeightArray.length - 1}
-            >
-              <WeightText>{parseFloat(speciesAndWeight.weight.toFixed(1))} kg {props.compareWithTotalWeight
-                ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray>
-                : null}</WeightText>
-            </Weight>
-            <Species
-              height={speciesAndWeight.height}
-              isLast={index === speciesAndWeightArray.length - 1}
-            >
-              {
-                speciesAndWeight.speciesName
-                  ? <>{speciesAndWeight.speciesName} ({speciesAndWeight.species})</>
-                  : speciesAndWeight.species
-              }
-            </Species>
-          </SpeciesAndWeight>
+      speciesAndWeightArrayWithHeight && speciesAndWeightArrayWithHeight.length
+        ? speciesAndWeightArrayWithHeight.map((speciesAndWeight, index) => {
+          return <Wrapper key={speciesAndWeight.species}>
+            <SpeciesAndWeight>
+              <Weight
+                hasPresentation={speciesPresentationAndWeightArray}
+                height={speciesAndWeight.height}
+                isLast={index === speciesAndWeightArrayWithHeight.length - 1}
+                onClick={() => speciesPresentationAndWeightArray
+                  ? openPresentation(speciesAndWeight.species, speciesPresentationAndWeightArray[index])
+                  : undefined
+                }
+              >
+                <WeightText>
+                  {parseFloat(speciesAndWeight.weight.toFixed(1))} kg {compareWithTotalWeight
+                    ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray>
+                    : null}
+                </WeightText>
+                {
+                  speciesPresentationAndWeightArray
+                    ? <ChevronIcon isOpen={speciesAndWeight.species === speciesPresentationOpened}/>
+                    : null
+                }
+              </Weight>
+              <Species
+                height={speciesAndWeight.height}
+                isLast={index === speciesAndWeightArrayWithHeight.length - 1}
+              >
+                {
+                  speciesAndWeight.speciesName
+                    ? <>{speciesAndWeight.speciesName} ({speciesAndWeight.species})</>
+                    : speciesAndWeight.species
+                }
+              </Species>
+            </SpeciesAndWeight>
+            <PresentationWrapper isOpen={speciesAndWeight.species === speciesPresentationOpened}>
+                { speciesPresentationAndWeightArray && speciesPresentationAndWeightArray[index]
+                  ? speciesPresentationAndWeightArray[index]
+                    .map((speciesAndPresentation, index) => {
+                      return <SpeciesAndPresentation key={speciesPresentationAndWeightArray[index].presentation}>
+                        <PresentationWeight isLast={speciesPresentationAndWeightArray[index] === speciesPresentationAndWeightArray[index].length - 1}>
+                          {speciesAndPresentation.weight} kg
+                        </PresentationWeight>
+                        <Presentation>
+                          {speciesAndPresentation.presentation
+                            ? <>{ERSSpeciesPresentation[speciesAndPresentation.presentation]} ({speciesAndPresentation.presentation})</>
+                            : 'Inconnu'
+                          }
+                        </Presentation>
+                      </SpeciesAndPresentation>
+                    })
+                  : null
+                }
+            </PresentationWrapper>
+          </Wrapper>
         })
         : null
     }
   </>
 }
 
+const Presentation = styled.div`
+  display: flex;
+  height: 20px;
+  color: ${COLORS.textGray};
+  font-size: 11px;
+  margin: 2px 0 0 10px;
+  ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
+`
+
+const Wrapper = styled.div``
+
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
-  font-weight: 300;
+  color: ${COLORS.textGray};
 `
 
 const SpeciesAndWeight = styled.div`
@@ -70,25 +142,37 @@ const SpeciesAndWeight = styled.div`
   margin-left: 5px;
 `
 
+const SpeciesAndPresentation = styled.div`
+  display: flex;
+  width: 100%;
+  margin-left: 5px;
+`
+
+const PresentationWrapper = styled.div`
+  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
+  height: ${props => props.isOpen ? 'inherit' : '0px'};
+
+`
+
 const Species = styled.div`
   display: flex;
   height: ${props => props.height}px;
   min-height: 20px;
   max-height: 90px;
   align-items: center;
-  justify-content: center;
   color: ${COLORS.grayDarkerThree};
-  font-size: 13px;
+  font-size: 11px;
   margin: 2px 0 0 10px;
   ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
+  font-weight: 500;
 `
 
 const WeightText = styled.span``
 
 const Weight = styled.div`
-  width: 110px;
+  width: 130px;
   background: ${COLORS.grayBackground} 0% 0% no-repeat padding-box;
-  font-weight: normal;
+  font-weight: 500;
   border-left: 2px solid ${COLORS.textGray};
   border-right: 2px solid ${COLORS.textGray};
   border-top: 2px solid ${COLORS.textGray};
@@ -97,11 +181,38 @@ const Weight = styled.div`
   min-height: 20px;
   max-height: 90px;
   color: ${COLORS.grayDarkerThree};
-  font-size: 13px;
-  text-align: center;
+  font-size: 11px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  text-align: left;
+  padding-left: 10px;
+  ${props => props.hasPresentation ? 'cursor: pointer;' : null}
+`
+
+const PresentationWeight = styled.div`
+  width: 130px;
+  font-weight: normal;
+  border-left: 2px solid ${COLORS.grayDarker};
+  border-right: 2px solid ${COLORS.grayDarker};
+  border-top: 2px solid ${COLORS.grayDarker};
+  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.textGray};` : ''}
+  height: 20px;
+  color: ${COLORS.textGray};
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+`
+
+const ChevronIcon = styled(ChevronIconSVG)`
+  width: 13px;
+  float: right;
+  margin-right: 10px;
+  margin-top: 0;
+  transform: ${props => !props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transition: all 0.5;
+  text-align: right;
+  margin-left: auto;
 `
 
 export default SpeciesAndWeightChart

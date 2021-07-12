@@ -43,7 +43,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API reference" href="reference.html" />
-    <link rel="prev" title="ERS" href="ers.html" /> 
+    <link rel="prev" title="Containerization" href="containerization.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containerization.html">Containerization</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Deployment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a></li>
@@ -202,7 +203,7 @@
 <span id="id1"></span><h4>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
 <li><p>A <code class="docutils literal notranslate"><span class="pre">.env</span></code> file must be created in the <code class="docutils literal notranslate"><span class="pre">datascience</span></code> folder, with all the variables listed in <code class="docutils literal notranslate"><span class="pre">.env.template</span></code> filled in.</p></li>
-<li><p>Set the <code class="docutils literal notranslate"><span class="pre">MONITORFISH_VERSION</span></code> environment variable. This will determine which docker imaged to pull when running <code class="docutils literal notranslate"><span class="pre">`make</span></code> commands.</p></li>
+<li><p>Set the <code class="docutils literal notranslate"><span class="pre">MONITORFISH_VERSION</span></code> environment variable. This will determine which docker images to pull when running <code class="docutils literal notranslate"><span class="pre">`make</span></code> commands.</p></li>
 </ul>
 </div>
 <div class="section" id="ers-files">
@@ -218,13 +219,17 @@ In order to make ERS data available to Monitorfish, ERS files should therefore b
 </div>
 <div class="section" id="running-the-orchestration-service">
 <h2>Running the orchestration service<a class="headerlink" href="#running-the-orchestration-service" title="Permalink to this headline">¶</a></h2>
-<p>The orchestration service can be start with :</p>
+<p>The orchestration service can be started with :</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make run-pipeline-server-prod
 </pre></div>
 </div>
 </div>
 <div class="section" id="running-the-execution-service">
 <h2>Running the execution service<a class="headerlink" href="#running-the-execution-service" title="Permalink to this headline">¶</a></h2>
+<p>The execution service can be started with :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make run-pipeline-flows-prod
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -235,7 +240,7 @@ In order to make ERS data available to Monitorfish, ERS files should therefore b
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="reference.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="ers.html" class="btn btn-neutral float-left" title="ERS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="containerization.html" class="btn btn-neutral float-left" title="Containerization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

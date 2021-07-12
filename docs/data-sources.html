@@ -171,11 +171,12 @@
 <h1>External data sources<a class="headerlink" href="#external-data-sources" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="poseidon-positions">
 <h2>Poséidon positions<a class="headerlink" href="#poseidon-positions" title="Permalink to this headline">¶</a></h2>
-<p>VMS positions are received from the Poséidon application on an API endpoint. This is done by the Kotlin Springboot backend service.</p>
+<p>VMS positions are received from the <code class="docutils literal notranslate"><span class="pre">Poséidon</span></code> application on an API endpoint provided by the Kotlin Springboot backend service.</p>
 </div>
 <div class="section" id="ers-xml-files">
 <h2>ERS xml files<a class="headerlink" href="#ers-xml-files" title="Permalink to this headline">¶</a></h2>
-<p>ERS raw xml files are ingested by the ERS flow from the configured location.</p>
+<p>ERS raw xml files are ingested by the <span class="xref std std-ref">ERS</span> from the
+<a class="reference external" href="https://github.com/MTES-MCT/monitorfish/blob/master/datascience/config.py">configured location</a>.</p>
 </div>
 <div class="section" id="databases">
 <h2>Databases<a class="headerlink" href="#databases" title="Permalink to this headline">¶</a></h2>
@@ -183,6 +184,7 @@
 <li><p>OCAN</p></li>
 <li><p>FMC2</p></li>
 </ul>
+<p>Credentials for these data sources must be configured for Monitorfish to connect to them. See <a class="reference internal" href="deployment.html#environment-variables"><span class="std std-ref">Environment variables</span></a>.</p>
 </div>
 </div>
 

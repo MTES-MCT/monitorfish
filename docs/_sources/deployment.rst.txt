@@ -32,7 +32,7 @@ Environment variables
 """""""""""""""""""""
 
 * A ``.env`` file must be created in the ``datascience`` folder, with all the variables listed in ``.env.template`` filled in.
-* Set the ``MONITORFISH_VERSION`` environment variable. This will determine which docker imaged to pull when running ```make`` commands.
+* Set the ``MONITORFISH_VERSION`` environment variable. This will determine which docker images to pull when running ```make`` commands.
 
 ERS files
 """""""""
@@ -48,7 +48,7 @@ The Monitorfish database must be running for data processing operations to be ca
 Running the orchestration service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The orchestration service can be start with :
+The orchestration service can be started with :
 
 .. code-block:: bash
 
@@ -57,3 +57,9 @@ The orchestration service can be start with :
 
 Running the execution service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The execution service can be started with :
+
+.. code-block:: bash
+
+    make run-pipeline-flows-prod

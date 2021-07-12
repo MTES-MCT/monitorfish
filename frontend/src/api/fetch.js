@@ -1,8 +1,11 @@
+/* eslint-disable */
 /** @namespace API */
-const API = null
+const API = null // eslint-disable-line
+/* eslint-disable */
 
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+
 
 const OK = 200
 const NOT_FOUND = 404

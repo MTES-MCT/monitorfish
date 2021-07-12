@@ -1,5 +1,7 @@
+/* eslint-disable */
 /** @namespace VesselReducer */
 const VesselReducer = null
+/* eslint-disable */
 
 import { createSlice } from '@reduxjs/toolkit'
 

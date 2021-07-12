@@ -1,5 +1,7 @@
+/* eslint-disable */
 /** @namespace Control */
 const Control = null
+/* eslint-disable */
 
 const controlType = {
   SEA: 'Contrôle à la mer',

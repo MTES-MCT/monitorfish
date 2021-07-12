@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.utils.graphs &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="datascience.main" href="../../../main/index.html" />
+    <link rel="prev" title="datascience.src.utils.geocode" href="../geocode/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../../reference.html">API reference</a> &raquo;</li>
+        
+          <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.utils</span></code></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.utils.graphs</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../../_sources/autoapi/datascience/src/utils/graphs/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-datascience.src.utils.graphs">
+<span id="datascience-src-utils-graphs"></span><h1><a class="reference internal" href="#module-datascience.src.utils.graphs" title="datascience.src.utils.graphs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.utils.graphs</span></code></a><a class="headerlink" href="#module-datascience.src.utils.graphs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.graphs.pcolor" title="datascience.src.utils.graphs.pcolor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pcolor</span></code></a></p></td>
+<td><p>Helper class for formatted printing.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.graphs.dataframe_inventory" title="datascience.src.utils.graphs.dataframe_inventory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_inventory</span></code></a>(df: pandas.DataFrame, title=None, fig_height=None)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.utils.graphs.compare_2_columns_values" title="datascience.src.utils.graphs.compare_2_columns_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_2_columns_values</span></code></a>(df: pandas.DataFrame, col_name_1: str, col_name_2: str)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.graphs.compare_2_columns_availability" title="datascience.src.utils.graphs.compare_2_columns_availability"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_2_columns_availability</span></code></a>(df: pandas.DataFrame, col_name_1: str, col_name_2: str)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.dataframe_inventory">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.graphs.</span></span><span class="sig-name descname"><span class="pre">dataframe_inventory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#dataframe_inventory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.dataframe_inventory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.compare_2_columns_values">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.graphs.</span></span><span class="sig-name descname"><span class="pre">compare_2_columns_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_name_1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_name_2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#compare_2_columns_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.compare_2_columns_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.compare_2_columns_availability">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.graphs.</span></span><span class="sig-name descname"><span class="pre">compare_2_columns_availability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_name_1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_name_2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#compare_2_columns_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.compare_2_columns_availability" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datascience.src.utils.graphs.</span></span><span class="sig-name descname"><span class="pre">pcolor</span></span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper class for formatted printing.</p>
+<p>Example : print(pcolor.BOLD + ‘Hello World !’ + pcolor.END)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.PURPLE">
+<span class="sig-name descname"><span class="pre">PURPLE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[95m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.PURPLE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.PURPLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.CYAN">
+<span class="sig-name descname"><span class="pre">CYAN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[96m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.CYAN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.CYAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.DARKCYAN">
+<span class="sig-name descname"><span class="pre">DARKCYAN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[36m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.DARKCYAN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.DARKCYAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.BLUE">
+<span class="sig-name descname"><span class="pre">BLUE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[94m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.BLUE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.BLUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.GREEN">
+<span class="sig-name descname"><span class="pre">GREEN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[92m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.GREEN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.GREEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.YELLOW">
+<span class="sig-name descname"><span class="pre">YELLOW</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[93m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.YELLOW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.YELLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.RED">
+<span class="sig-name descname"><span class="pre">RED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[91m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.RED"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.RED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.BOLD">
+<span class="sig-name descname"><span class="pre">BOLD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[1m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.BOLD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.BOLD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.UNDERLINE">
+<span class="sig-name descname"><span class="pre">UNDERLINE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[4m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.UNDERLINE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.UNDERLINE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datascience.src.utils.graphs.pcolor.END">
+<span class="sig-name descname"><span class="pre">END</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[0m</span></em><a class="reference internal" href="../../../../../_modules/datascience/src/utils/graphs.html#pcolor.END"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.graphs.pcolor.END" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../../../main/index.html" class="btn btn-neutral float-right" title="datascience.main" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../geocode/index.html" class="btn btn-neutral float-left" title="datascience.src.utils.geocode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

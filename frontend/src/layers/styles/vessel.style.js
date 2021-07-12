@@ -6,8 +6,8 @@ import { VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE, Vessel } from '../../domain/e
 
 import { COLORS } from '../../constants/constants'
 
-const iconStyleCache = new WeakMap()
-const circleStyleCache = new WeakMap()
+const iconStyleCache = new Map()
+const circleStyleCache = new Map()
 
 export const selectedVesselStyle = new Style({
   image: new Icon({
@@ -19,8 +19,10 @@ export const selectedVesselStyle = new Style({
 })
 
 export const getIconStyle = object => {
-  if (!iconStyleCache.has(object)) {
-    iconStyleCache.set(object, new Style({
+  const key = JSON.stringify(object)
+
+  if (!iconStyleCache.has(key)) {
+    iconStyleCache.set(key, new Style({
       image: new Icon({
         src: object.vesselFileName,
         offset: [0, 0],
@@ -34,16 +36,18 @@ export const getIconStyle = object => {
     }))
   }
 
-  return iconStyleCache.get(object)
+  return iconStyleCache.get(key)
 }
 
 export const getCircleStyle = object => {
-  if (!circleStyleCache.has(object)) {
+  const key = JSON.stringify(object)
+
+  if (!circleStyleCache.has(key)) {
     let color = asArray(object.vesselColor)
     color = color.slice()
     color[3] = object.opacity
 
-    circleStyleCache.set(object, new Style({
+    circleStyleCache.set(key, new Style({
       image: new CircleStyle({
         radius: 4,
         fill: new Fill({
@@ -54,7 +58,7 @@ export const getCircleStyle = object => {
     }))
   }
 
-  return circleStyleCache.get(object)
+  return circleStyleCache.get(key)
 }
 
 export const getVesselStyle = feature => {

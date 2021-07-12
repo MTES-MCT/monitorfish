@@ -4,6 +4,14 @@ import { ReactComponent as HideIconSVG } from '../icons/oeil_masque.svg'
 import styled from 'styled-components'
 
 const AdministrativeZone = props => {
+  const {
+    isShownOnInit,
+    layer,
+    callShowAdministrativeZone,
+    callHideAdministrativeZone,
+    isGrouped
+  } = props
+
   const firstUpdate = useRef(true)
   const [showLayer_, setShowLayer] = useState(undefined)
 
@@ -11,7 +19,7 @@ const AdministrativeZone = props => {
     if (showLayer_ === undefined) {
       setShowLayer(props.isShownOnInit)
     }
-  }, [props.isShownOnInit, showLayer_])
+  }, [isShownOnInit, showLayer_])
 
   useEffect(() => {
     if (firstUpdate.current) {
@@ -20,24 +28,24 @@ const AdministrativeZone = props => {
     }
 
     if (showLayer_) {
-      if (props.layer.showMultipleZonesInAdministrativeZones) {
-        props.callShowAdministrativeZone(props.layer.groupCode, props.layer.code)
+      if (layer.showMultipleZonesInAdministrativeZones) {
+        callShowAdministrativeZone(layer.groupCode, props.layer.code)
       } else {
-        props.callShowAdministrativeZone(props.layer.code)
+        callShowAdministrativeZone(layer.code)
       }
     } else {
-      if (props.layer.showMultipleZonesInAdministrativeZones) {
-        props.callHideAdministrativeZone(props.layer.groupCode, props.layer.code)
+      if (layer.showMultipleZonesInAdministrativeZones) {
+        callHideAdministrativeZone(layer.groupCode, props.layer.code)
       } else {
-        props.callHideAdministrativeZone(props.layer.code)
+        callHideAdministrativeZone(layer.code)
       }
     }
   }, [showLayer_])
 
   return <>{
     props.layer
-      ? <Row isGrouped={props.isGrouped} onClick={() => setShowLayer(!showLayer_)}>
-        <LayerName title={props.layer.name}>{props.layer.name}</LayerName>
+      ? <Row isGrouped={isGrouped} onClick={() => setShowLayer(!showLayer_)}>
+        <LayerName title={layer.name}>{layer.name}</LayerName>
         {showLayer_ ? <ShowIcon/> : <HideIcon/>}
       </Row>
       : null

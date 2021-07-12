@@ -108,11 +108,12 @@ const VesselEstimatedPositionLayer = ({ map }) => {
             vesselsLastPositionVisibility
           })
 
-        return estimatedCurrentPosition.feature
+        return estimatedCurrentPosition.features
       }
 
       return null
     }).filter(vessel => vessel)
+      .flat()
 
     vectorSource.addFeatures(estimatedCurrentPositionsFeatures)
   }

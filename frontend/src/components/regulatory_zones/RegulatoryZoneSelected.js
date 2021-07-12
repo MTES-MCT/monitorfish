@@ -7,6 +7,9 @@ import removeRegulatoryZoneFromMySelection from '../../domain/use_cases/removeRe
 import LayersEnum from '../../domain/entities/layers'
 import hideLayers from '../../domain/use_cases/hideLayers'
 import { useDispatch, useSelector } from 'react-redux'
+import layer from '../../domain/reducers/Layer'
+
+const ZONE_NAME = 'regulatory_zone_selected'
 
 const RegulatoryZoneSelected = props => {
   const dispatch = useDispatch()
@@ -21,6 +24,12 @@ const RegulatoryZoneSelected = props => {
   const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false)
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const firstUpdate = useRef(true)
+  const { layersSideBarOpenedZone } = useSelector(state => state.layer)
+  const { setLayersSideBarOpenedZone } = layer[namespace].actions
+
+  useEffect(() => {
+    setShowRegulatoryZonesSelected(layersSideBarOpenedZone === ZONE_NAME)
+  }, [layersSideBarOpenedZone, setShowRegulatoryZonesSelected])
 
   function increaseNumberOfZonesOpened (number) {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
@@ -63,10 +72,20 @@ const RegulatoryZoneSelected = props => {
     }
   }, [props.hideZonesListWhenSearching])
 
+  const onTitleClicked = () => {
+    if (showRegulatoryZonesSelected) {
+      setShowRegulatoryZonesSelected(false)
+      dispatch(setLayersSideBarOpenedZone(''))
+    } else {
+      setShowRegulatoryZonesSelected(true)
+      dispatch(setLayersSideBarOpenedZone(ZONE_NAME))
+    }
+  }
+
   return (
     <>
       <RegulatoryZoneSelectedTitle
-        onClick={() => setShowRegulatoryZonesSelected(!showRegulatoryZonesSelected)}
+        onClick={() => onTitleClicked()}
         regulatoryZonesAddedToMySelection={props.regulatoryZonesAddedToMySelection}
         showRegulatoryZonesSelected={showRegulatoryZonesSelected}
       >

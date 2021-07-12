@@ -1,21 +1,43 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 import BaseLayerItem from './BaseLayerItem'
 import { COLORS } from '../../constants/constants'
-import { useSelector } from 'react-redux'
 import { baseLayers } from '../../domain/entities/layers'
+import layer from '../../domain/reducers/Layer'
 
-const BaseLayerSelection = () => {
+const ZONE_NAME = 'base_layer_zone'
+const BaseLayerSelection = ({ namespace }) => {
+  const dispatch = useDispatch()
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
+  const { layersSideBarOpenedZone } = useSelector(state => state.layer)
 
   const baseLayersKeys = Object.keys(baseLayers)
   const [showBaseLayers, setShowBaseLayers] = useState(false)
 
+  const {
+    setLayersSideBarOpenedZone
+  } = layer[namespace].actions
+
+  useEffect(() => {
+    setShowBaseLayers(layersSideBarOpenedZone === ZONE_NAME)
+  }, [layersSideBarOpenedZone, setShowBaseLayers])
+
+  const onSectionTitleClicked = () => {
+    if (showBaseLayers) {
+      setShowBaseLayers(false)
+      dispatch(setLayersSideBarOpenedZone(''))
+    } else {
+      setShowBaseLayers(true)
+      dispatch(setLayersSideBarOpenedZone(ZONE_NAME))
+    }
+  }
+
   return (
     <>
-      <SectionTitle onClick={() => setShowBaseLayers(!showBaseLayers)} showBaseLayers={showBaseLayers}>
+      <SectionTitle onClick={() => onSectionTitleClicked()} showBaseLayers={showBaseLayers}>
         Fonds de carte <ChevronIcon isOpen={showBaseLayers}/>
       </SectionTitle>
       <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={baseLayersKeys.length}>

@@ -90,6 +90,9 @@ const reducers = {
   },
   setLastShowedFeatures (state, action) {
     state.lastShowedFeatures = action.payload
+  },
+  setLayersSideBarOpenedZone (state, action) {
+    state.layersSideBarOpenedZone = action.payload
   }
 }
 
@@ -97,7 +100,8 @@ const initialState = {
   layers: [],
   lastShowedFeatures: [],
   layersAndAreas: [],
-  administrativeZonesGeometryCache: []
+  administrativeZonesGeometryCache: [],
+  layersSideBarOpenedZone: ''
 }
 
 const homepageInitialState = {

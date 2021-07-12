@@ -251,7 +251,8 @@ const VesselsSearchBox = () => {
         rightMenuIsOpen={rightMenuIsOpen}
         vesselSidebarIsOpen={vesselSidebarIsOpen}
         selectedVesselFeatureAndIdentity={selectedVesselFeatureAndIdentity}
-        ref={wrapperRef}>
+        ref={wrapperRef}
+        data-cy={'vessel-name'}>
         <SearchBoxField>
           {
             !isFocusedOnVesselSearch && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity

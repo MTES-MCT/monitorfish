@@ -52,6 +52,7 @@ const ERSMessage = ({ message, isFirst }) => {
           <ERSMessageHeaderText
             isShortcut={message.isCorrected || message.deleted || message.referencedErsId}
             title={typeof ersMessageHeaderTitle === 'string' ? ersMessageHeaderTitle : ''}
+            data-cy={'vessel-fishing-dep-message'}
           >
             {ersMessageHeaderTitle}
           </ERSMessageHeaderText>

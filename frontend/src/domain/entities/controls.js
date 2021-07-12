@@ -1,4 +1,9 @@
-export const controlType = {
+/* eslint-disable */
+/** @namespace Control */
+const Control = null
+/* eslint-disable */
+
+const controlType = {
   SEA: 'Contrôle à la mer',
   LAND: 'Contrôle à la débarque',
   AERIAL: 'Contrôle aérien'
@@ -6,10 +11,11 @@ export const controlType = {
 
 /**
  * Get last SEA and LAND controls
+ * @memberOf Control
  * @param {Object<string, VesselControl[]>} yearsToControls
  * @returns {LastControls} The last controls
  */
-export const lastControlByType = yearsToControls => {
+const lastControlByType = yearsToControls => {
   const seaControlText = 'Dernier contrôle en mer'
   const landControlText = 'Dernier contrôle à la débarque'
 
@@ -59,11 +65,12 @@ export const lastControlByType = yearsToControls => {
 
 /**
  * Get controls for each years : Years are keys and controls are values
+ * @memberOf Control
  * @param {string} controlsFromDate - The date
  * @param {VesselControl[]} controls
  * @returns {Object.<string, VesselControl[]>} The controls for all years
  */
-export const getYearsToControl = (controlsFromDate, controls) => {
+const getYearsToControl = (controlsFromDate, controls) => {
   const nextYearsToControls = {}
   if (controlsFromDate) {
     let fromYear = controlsFromDate.getUTCFullYear() + 1
@@ -93,10 +100,11 @@ export const getYearsToControl = (controlsFromDate, controls) => {
  *
  * If infractions are specified in the infractions list, then the number of infractions of the length of the list is returned
  * If the infraction boolean is true and no infractions are specified, then the number of infractions returned is 1
+ * @memberOf Control
  * @param {VesselControl} control
  * @returns {number} The number of infractions
  */
-export const getNumberOfInfractions = control => {
+const getNumberOfInfractions = control => {
   if (control && control.infractions && control.infractions.length) {
     return control.infractions.length
   } else if (control && control.infraction && !control.infractions.length) {
@@ -104,4 +112,11 @@ export const getNumberOfInfractions = control => {
   }
 
   return 0
+}
+
+export {
+  controlType,
+  lastControlByType,
+  getYearsToControl,
+  getNumberOfInfractions
 }

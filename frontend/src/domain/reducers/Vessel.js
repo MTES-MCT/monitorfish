@@ -1,3 +1,8 @@
+/* eslint-disable */
+/** @namespace VesselReducer */
+const VesselReducer = null
+/* eslint-disable */
+
 import { createSlice } from '@reduxjs/toolkit'
 
 const vesselSlice = createSlice({
@@ -39,6 +44,8 @@ const vesselSlice = createSlice({
     },
     /**
      * Set the list of vessel features Uids for filtering features (using JS indexOf is good for performance)
+     * @function setFilteredVesselsFeaturesUids
+     * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: string[]}} action - the vessel features uids
      */
@@ -90,6 +97,8 @@ const vesselSlice = createSlice({
     },
     /**
      * Set selected vessel voyage
+     * @function setVoyage
+     * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: VesselVoyage}} action - the vessel voyage
      */
@@ -103,6 +112,8 @@ const vesselSlice = createSlice({
     /**
      * Set selected vessel last voyage - This voyage is saved to be able to compare it
      * with new last voyages we will receive from the CRON
+     * @function setLastVoyage
+     * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: VesselVoyage}} action - the vessel last voyage
      */
@@ -123,6 +134,8 @@ const vesselSlice = createSlice({
     },
     /**
      * Set selected next vessel fishing activities to propose an update of the current displayed fishing activities
+     * @function setNextFishingActivities
+     * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: FishingActivities}} action - the fishing activities with new messages
      */
@@ -134,6 +147,8 @@ const vesselSlice = createSlice({
     },
     /**
      * Set selected vessel control resume and control
+     * @function setControlResumeAndControls
+     * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: ControlResume}} action - the control resume
      */
@@ -162,6 +177,8 @@ const vesselSlice = createSlice({
     },
     /**
      * Highlight a vessel position on map from the vessel track positions table
+     * @function highlightVesselTrackPosition
+     * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: Position | null}} action - The position
      */
@@ -170,6 +187,8 @@ const vesselSlice = createSlice({
     },
     /**
      * Reset the highlighted vessel position
+     * @function resetHighlightedVesselTrackPosition
+     * @memberOf VesselReducer
      * @param {Object=} state
      */
     resetHighlightedVesselTrackPosition (state) {

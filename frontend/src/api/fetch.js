@@ -1,5 +1,11 @@
+/* eslint-disable */
+/** @namespace API */
+const API = null // eslint-disable-line
+/* eslint-disable */
+
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+
 
 const OK = 200
 const NOT_FOUND = 404
@@ -26,10 +32,11 @@ function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
 
 /**
  * Get all vessels last positions
+ * @memberOf API
  * @returns {Promise<VesselLastPosition>} The vessels
  * @throws {Error}
  */
-export function getVesselsLastPositionsFromAPI () {
+function getVesselsLastPositionsFromAPI () {
   return fetch('/bff/v1/vessels')
     .then(response => {
       if (response.status === OK) {
@@ -52,10 +59,11 @@ export function getVesselsLastPositionsFromAPI () {
 
 /**
  * Get vessel information and last positions
+ * @memberOf API
  * @returns {Promise<Vessel>} The vessels
  * @throws {Error}
  */
-export function getVesselFromAPI (identity, vesselTrackDepthObject) {
+function getVesselFromAPI (identity, vesselTrackDepthObject) {
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
@@ -94,7 +102,7 @@ export function getVesselFromAPI (identity, vesselTrackDepthObject) {
     .then(vessel => vessel)
 }
 
-export function searchVesselsFromAPI (searched) {
+function searchVesselsFromAPI (searched) {
   searched = searched || ''
 
   return fetch(`/bff/v1/vessels/search?searched=${searched}`)
@@ -114,7 +122,7 @@ export function searchVesselsFromAPI (searched) {
     })
 }
 
-export function getAllRegulatoryZonesFromAPI () {
+function getAllRegulatoryZonesFromAPI () {
   return fetch(`${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
     `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`)
     .then(response => {
@@ -135,13 +143,14 @@ export function getAllRegulatoryZonesFromAPI () {
 
 /**
  * Get the administrative zone GeoJSON feature
+ * @memberOf API
  * @param {string} administrativeZone
  * @param {string[]|null} extent
  * @param {string|null} subZone
  * @returns {Promise<GeoJSON>} The feature GeoJSON
  * @throws {Error}
  */
-export function getAdministrativeZoneFromAPI (administrativeZone, extent, subZone) {
+function getAdministrativeZoneFromAPI (administrativeZone, extent, subZone) {
   return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone))
     .then(response => {
       if (response.status === OK) {
@@ -162,12 +171,13 @@ export function getAdministrativeZoneFromAPI (administrativeZone, extent, subZon
 
 /**
  * Get the administrative zone Geoserver URL
+ * @memberOf API
  * @param {string} type
  * @param {string[]|null} extent
  * @param {string|null} subZone
  * @returns {string} - the zone URL WFS request
  */
-export function getAdministrativeZoneURL (type, extent, subZone) {
+function getAdministrativeZoneURL (type, extent, subZone) {
   let extentFilter = ''
   if (extent) {
     extentFilter = `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
@@ -189,7 +199,7 @@ export function getAdministrativeZoneURL (type, extent, subZone) {
   )
 }
 
-export function getRegulatoryZoneFromAPI (type, regulatoryZone) {
+function getRegulatoryZoneFromAPI (type, regulatoryZone) {
   try {
     return fetch(getRegulatoryZoneURL(type, regulatoryZone))
       .then(response => {
@@ -212,7 +222,7 @@ export function getRegulatoryZoneFromAPI (type, regulatoryZone) {
   }
 }
 
-export function getRegulatoryZoneURL (type, regulatoryZone) {
+function getRegulatoryZoneURL (type, regulatoryZone) {
   if (!regulatoryZone.layerName) {
     throw new Error('Le nom de la couche n\'est pas renseigné')
   }
@@ -229,7 +239,7 @@ export function getRegulatoryZoneURL (type, regulatoryZone) {
   )
 }
 
-export function getRegulatoryZoneMetadataFromAPI (regulatorySubZone) {
+function getRegulatoryZoneMetadataFromAPI (regulatorySubZone) {
   let url
   try {
     url = getRegulatoryZoneURL(Layers.REGULATORY.code, regulatorySubZone)
@@ -259,7 +269,7 @@ export function getRegulatoryZoneMetadataFromAPI (regulatorySubZone) {
     })
 }
 
-export function getAllGearCodesFromAPI () {
+function getAllGearCodesFromAPI () {
   return fetch('/bff/v1/gears')
     .then(response => {
       if (response.status === OK) {
@@ -276,7 +286,7 @@ export function getAllGearCodesFromAPI () {
     })
 }
 
-export function getVesselVoyageFromAPI (vesselIdentity, beforeDateTime) {
+function getVesselVoyageFromAPI (vesselIdentity, beforeDateTime) {
   const internalReferenceNumber = vesselIdentity.internalReferenceNumber ? vesselIdentity.internalReferenceNumber : ''
   const externalReferenceNumber = vesselIdentity.externalReferenceNumber ? vesselIdentity.externalReferenceNumber : ''
   const ircs = vesselIdentity.ircs ? vesselIdentity.ircs : ''
@@ -307,10 +317,11 @@ export function getVesselVoyageFromAPI (vesselIdentity, beforeDateTime) {
 
 /**
  * Get vessel controls
+ * @memberOf API
  * @returns {Promise<ControlResume>} The vessels
  * @throws {Error}
  */
-export function getVesselControlsFromAPI (vesselId, fromDate) {
+function getVesselControlsFromAPI (vesselId, fromDate) {
   return fetch(`/bff/v1/vessels/${vesselId}/controls?afterDateTime=${fromDate.toISOString()}`)
     .then(response => {
       if (response.status === OK) {
@@ -329,7 +340,7 @@ export function getVesselControlsFromAPI (vesselId, fromDate) {
     .then(controls => controls)
 }
 
-export function getAdministrativeSubZonesFromAPI (type) {
+function getAdministrativeSubZonesFromAPI (type) {
   let query
   if (type === Layers.FAO.code) {
     const filter = 'f_level=\'DIVISION\''
@@ -362,7 +373,7 @@ export function getAdministrativeSubZonesFromAPI (type) {
     })
 }
 
-export function getAllFleetSegmentFromAPI () {
+function getAllFleetSegmentFromAPI () {
   return fetch('/bff/v1/fleet_segments')
     .then(response => {
       if (response.status === OK) {
@@ -381,10 +392,11 @@ export function getAllFleetSegmentFromAPI () {
 
 /**
  * Get application healthcheck
+ * @memberOf API
  * @returns {Promise<Healthcheck>} The healthcheck dates of positions and ers messages
  * @throws {Error}
  */
-export function getHealthcheckFromAPI () {
+function getHealthcheckFromAPI () {
   return fetch('/bff/v1/healthcheck')
     .then(response => {
       if (response.status === OK) {
@@ -399,4 +411,22 @@ export function getHealthcheckFromAPI () {
       console.error(error)
       throw Error(HEALTH_CHECK_ERROR_MESSAGE)
     })
+}
+
+export {
+  getVesselsLastPositionsFromAPI,
+  getVesselFromAPI,
+  searchVesselsFromAPI,
+  getAllRegulatoryZonesFromAPI,
+  getAdministrativeZoneFromAPI,
+  getAdministrativeZoneURL,
+  getRegulatoryZoneFromAPI,
+  getRegulatoryZoneURL,
+  getRegulatoryZoneMetadataFromAPI,
+  getAllGearCodesFromAPI,
+  getVesselVoyageFromAPI,
+  getVesselControlsFromAPI,
+  getAdministrativeSubZonesFromAPI,
+  getAllFleetSegmentFromAPI,
+  getHealthcheckFromAPI
 }

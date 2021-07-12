@@ -5,14 +5,14 @@ import Layers from './layers'
 import LineString from 'ol/geom/LineString'
 import { Vessel } from './vessel'
 
-export class EstimatedPosition {
+class EstimatedPosition {
   /**
    * EstimatedPosition object for building OpenLayers estimated position feature
    * @param {string[]} currentPosition - The [longitude, latitude] of the current position
    * @param {string[]} estimatedPosition - The [longitude, latitude] of the estimated position
    * @param {{
       id: string,
-      isLight: boolean,
+      isLight: boolean
    * }} options
    */
   constructor (currentPosition, estimatedPosition, options) {
@@ -35,4 +35,8 @@ export class EstimatedPosition {
 
     this.feature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
   }
+}
+
+export {
+  EstimatedPosition
 }

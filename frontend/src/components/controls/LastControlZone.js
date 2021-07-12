@@ -24,7 +24,7 @@ const LastControlZone = props => {
         }
       </Title>
       <ControlField field={lastControlList.SEA} type={controlType.SEA} isFirst={true}/>
-      <ControlField data-cy={"vessel-controls-last-land-control"} field={lastControlList.LAND} type={controlType.LAND} isFirst={false}/>
+      <ControlField data-cy={'vessel-controls-last-land-control'} field={lastControlList.LAND} type={controlType.LAND} isFirst={false}/>
     </Zone>
     : null
 }

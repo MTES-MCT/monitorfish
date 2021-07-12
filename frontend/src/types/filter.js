@@ -15,9 +15,12 @@
  * @property {string[]} speciesFiltered
  * @property {string[]} districtsFiltered
  * @property {string[]} vesselsSizeValuesChecked
- * @property {{
- *      name: string,
- *      code: string,
- *      feature: GeoJSONGeometry
- *    }[]} zonesSelected
+ * @property {ZoneSelected[]} zonesSelected
+ */
+
+/**
+ * @typedef ZoneSelected
+ * @property {string} name
+ * @property {string} code
+ * @property {GeoJSONGeometry} feature
  */

@@ -79,9 +79,11 @@ To manually add a VMS position (in NAF format) for the vessel `CABO ARTA`:
 curl --data '//SR//AD/FRA//FR/NLD//RD/20210431//NA/CABO ARTA//RT/2133//FS/NLD//RC/PCVC//XR/FG78//IR/XXX2545115//DA/20210431//TI/2130//LT/55.099//LG/3.869//SP/0//CO/173//TM/POS//ER//'  -X POST http://localhost:8880/api/v1/positions -H "Content-Type:application/text"
 ```
 
-### API Documentation
+### Documentation
 
-API documentation can be found at http://localhost:8880/swagger-ui.html
+- API documentation can be found at http://localhost:8880/swagger-ui.html
+- Frontend documentation can be generated with `jsdoc frontend/src/domain/ frontend/src/types/ frontend/src/api/ -r -P frontend/ -d docs`
+
 
 ## Data pipeline and data science environment
 

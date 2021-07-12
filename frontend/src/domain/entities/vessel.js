@@ -24,9 +24,7 @@ export class Vessel {
   /**
    * Vessel object for building OpenLayers vessel feature
    * @param {VesselLastPosition} vessel
-   * @param {{
-      id: string,
-   * }} options
+   * @param {{id: string}} options
    */
   constructor (vessel, options) {
     this.vessel = vessel

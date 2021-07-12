@@ -1,5 +1,11 @@
+/* eslint-disable */
+/** @namespace FilterReducer */
+const FilterReducer = null
+/* eslint-disable */
+
 import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
+
 
 const vesselsFiltersLocalStorageKey = 'vesselsFilters'
 const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
@@ -14,6 +20,8 @@ const filterSlice = createSlice({
   reducers: {
     /**
      * Add a new filter
+     * @function addFilter
+     * @memberOf FilterReducer
      * @param {Object=} state
      * @param {{payload: VesselFilter}} action - The filter to add
      */
@@ -28,6 +36,8 @@ const filterSlice = createSlice({
     },
     /**
      * Delete a given filter
+     * @function removeFilter
+     * @memberOf FilterReducer
      * @param {Object=} state
      * @param {{payload: string}} action - The filter UUID
      */
@@ -38,6 +48,8 @@ const filterSlice = createSlice({
     },
     /**
      * Show a given filter
+     * @function showFilter
+     * @memberOf FilterReducer
      * @param {Object=} state
      * @param {{payload: string}} action - The filter UUID
      */
@@ -53,6 +65,8 @@ const filterSlice = createSlice({
     },
     /**
      * Hide all filters
+     * @function hideFilters
+     * @memberOf FilterReducer
      * @param {Object=} state
      */
     hideFilters (state) {
@@ -65,6 +79,8 @@ const filterSlice = createSlice({
     },
     /**
      * Remove tag from a given filter and delete filter if the filter contains no tag
+     * @function removeTagFromFilter
+     * @memberOf FilterReducer
      * @param {Object=} state
      * @param {{
      * payload: {
@@ -106,6 +122,8 @@ const filterSlice = createSlice({
     },
     /**
      * Hide non filtered vessels
+     * @function setNonFilteredVesselsAreHidden
+     * @memberOf FilterReducer
      * @param {Object=} state
      * @param {{
      * payload: boolean

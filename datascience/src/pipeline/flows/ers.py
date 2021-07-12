@@ -22,8 +22,9 @@ ERROR_DIRECTORY = ERS_FILES_LOCATION / "error"
 
 
 def get_message_type(zipfile_name: str) -> str:
-    """For zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
+    """For a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
     extract the message type, which may be one of :
+
     - ERS3 (a set of messages in ERS3 format)
     - ERS3_ACK (a set of acknowledgement statuses from BIA for ERS3 messages)
     - UN (a set of FLUX messages)"""
@@ -42,15 +43,17 @@ def extract_zipfiles(
     non_treated_dir: pathlib.Path,
     error_dir: pathlib.Path,
 ) -> List[dict]:
-    """Scans input_dir, in which ers zipfiles are expected to be arranged in a
-     hierarchy folders like : year / month / zipfiles.
-    Yields founds zipfiles along with the corresponding paths of :
-    - input_directory where the zipfile is located
-    - treated_directory where the zipfile will be transfered after integration into the
-    monitorfish database
-    - non_treated_directory where the zipfile will be transfered if it is a FLUX type
-    of message (currently not handled)
-    - error_directory if an error occurs during the treatment of messages.
+    """
+    Scans ``input_dir``, in which ers zipfiles are expected to be arranged in a
+    hierarchy folders like : year / month / zipfiles. Yields found zipfiles
+    along with the corresponding paths of :
+
+    - ``input_directory`` where the zipfile is located
+    - ``treated_directory`` where the zipfile will be transfered after integration into
+      the monitorfish database
+    - ``non_treated_directory`` where the zipfile will be transfered if it is a FLUX type
+      of message (currently not handled)
+    - ``error_directory`` if an error occurs during the treatment of messages.
     """
 
     logger = prefect.context.get("logger")

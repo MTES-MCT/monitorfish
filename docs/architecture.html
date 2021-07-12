@@ -93,6 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#database-schema">Database schema</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#orchestration">Orchestration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#execution">Execution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#stack">Stack</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flows-one-for-each-job">Flows : one for each job</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#execution-in-a-dockerized-service">Execution in a dockerized service</a></li>
 </ul>
@@ -180,7 +181,7 @@
 </ul>
 <div class="section" id="database-schema">
 <h2>Database schema<a class="headerlink" href="#database-schema" title="Permalink to this headline">¶</a></h2>
-<p>Database tables are created by Flyway migrations in the Kotlin Springboot backend app. Since data processing
+<p>Database tables are created by <a class="reference external" href="https://flywaydb.org/">Flyway</a> migrations in the Kotlin Springboot backend app. Since data processing
 jobs executed by the python data ingestion and processing application require tables to already exist and to have the right
 columns and data types, it is necessary to keep the Springboot backend and  the python data processing applications “in sync”.
 For this reason, both applications should alway be deployed with the <strong>same version number</strong> (see <a class="reference internal" href="deployment.html#environment-variables"><span class="std std-ref">Environment variables</span></a>).</p>
@@ -190,10 +191,24 @@ For this reason, both applications should alway be deployed with the <strong>sam
 <p>Batch jobs are orchestrated by <a class="reference external" href="https://prefect.io">Prefect</a>. For more information see
 <a class="reference external" href="https://docs.prefect.io/orchestration/">Prefect documentation</a>.</p>
 <p>A <cite>prefect server</cite> instance has been deployed in the DAM server center and is used to orchestrate data processing
-jobs in Monitorfish. The UI can be accessed at <a class="reference external" href="http://prefect.csam.e2.rie.gouv.fr/">http://prefect.csam.e2.rie.gouv.fr/</a>.</p>
+jobs in Monitorfish. The UI can be accessed at <a class="reference external" href="http://prefect.csam.e2.rie.gouv.fr/">http://prefect.csam.e2.rie.gouv.fr/</a> and enables
+administrators to view each flow as a diagram of its constituent tasks, to monitor their execution, see
+the logs and debug in case any flow run fails…</p>
 </div>
 <div class="section" id="execution">
 <h2>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="stack">
+<h3>Stack<a class="headerlink" href="#stack" title="Permalink to this headline">¶</a></h3>
+<p>The main tools used to extract data, process it in python and load it to the PostgreSQL database of Monitorfish are :</p>
+<ul class="simple">
+<li><p>python 3.8.7</p></li>
+<li><p><a class="reference external" href="https://www.sqlalchemy.org/">SQLAlchemy</a> as a python SQL toolkit to interact with SQL databases</p></li>
+<li><p>Database adapters <a class="reference external" href="https://oracle.github.io/python-cx_Oracle/">cx_Oracle</a> and  <a class="reference external" href="https://github.com/psycopg/psycopg2/">psycopg2</a> for
+connectivity to Oracle and PostgreSQL databases respectively</p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/">pandas</a> for data manipulation in python</p></li>
+<li><p>the <a class="reference external" href="https://github.com/prefecthq/prefect">prefect python library</a> to write batch jobs as flows of tasks</p></li>
+</ul>
+</div>
 <div class="section" id="flows-one-for-each-job">
 <h3>Flows : one for each job<a class="headerlink" href="#flows-one-for-each-job" title="Permalink to this headline">¶</a></h3>
 <p>Batch jobs are written in python as prefect <a class="reference internal" href="flows.html#flows"><span class="std std-ref">flows</span></a> : each flow is responsible
@@ -202,7 +217,7 @@ for one particular task, such as updating the <code class="docutils literal notr
 <div class="section" id="execution-in-a-dockerized-service">
 <h3>Execution in a dockerized service<a class="headerlink" href="#execution-in-a-dockerized-service" title="Permalink to this headline">¶</a></h3>
 <p>A dockerized python service runs a <a class="reference external" href="https://docs.prefect.io/orchestration/agents/overview.html">prefect agent</a>,
-a small process which queries the prefect server API every second in order to know if any flow must be executed.
+a small process which queries the API of the  prefect server orchestrator every second in order to know if any flow must be executed.
 When a flow must be executed, perfect server tells the agent, which spawns a local python process that runs the flow.</p>
 </div>
 </div>

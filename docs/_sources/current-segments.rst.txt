@@ -7,4 +7,4 @@ DEP message and crosses its catch (species, area and fishing gear) with the defi
 fleet_segments in order to determine the fleet segment(s) to which each vessel belongs in
 real time.
 
-It is sceduled to run every 10 minutes.
+It is scheduled to run every 10 minutes.

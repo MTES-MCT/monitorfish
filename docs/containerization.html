@@ -43,7 +43,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Deployment" href="deployment.html" />
-    <link rel="prev" title="ERS" href="ers.html" /> 
+    <link rel="prev" title="Vessels" href="vessels.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -164,8 +164,12 @@
             
   <div class="section" id="containerization">
 <h1>Containerization<a class="headerlink" href="#containerization" title="Permalink to this headline">¶</a></h1>
-<p>For each <a class="reference external" href="https://github.com/MTES-MCT/monitorfish/releases">release</a>, docker images for the Kotlin Springboot backend and
-the python data processing services are pushed to the <a class="reference external" href="https://github.com/orgs/MTES-MCT/packages?repo_name=monitorfish">Github package regitry</a>.</p>
+<p>For each <a class="reference external" href="https://github.com/MTES-MCT/monitorfish/releases">release</a>, 2 docker images are created :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">monitorfish_app</span></code> : service with back end (Kotlin Springboot) and front end (React) apps</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">monitorfish_pipeline</span></code> : service with python data ingestion and processing app</p></li>
+</ul>
+<p>These two images are pushed to the <a class="reference external" href="https://github.com/orgs/MTES-MCT/packages?repo_name=monitorfish">Github package regitry</a>.</p>
 <p>To choose which version to pull from this registry when deploying, set the right <a class="reference internal" href="deployment.html#environment-variables"><span class="std std-ref">Environment variables</span></a>.</p>
 </div>
 
@@ -176,7 +180,7 @@ the python data processing services are pushed to the <a class="reference extern
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="deployment.html" class="btn btn-neutral float-right" title="Deployment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="ers.html" class="btn btn-neutral float-left" title="ERS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vessels.html" class="btn btn-neutral float-left" title="Vessels" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

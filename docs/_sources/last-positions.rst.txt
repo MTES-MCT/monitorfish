@@ -11,4 +11,4 @@ The ``last_positions`` flow extracts
 then joins the results and dumps them in the ``last_positions`` table, which is used 
 by the backend to to display vessels on the map.
 
-It is sceduled to run every minute.
+It is scheduled to run every minute.

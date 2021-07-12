@@ -36,11 +36,17 @@ const CreateRegulation = () => {
   const [selectedZoneTheme, setSelectedZoneTheme] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   const [nameZone, setNameZone] = useState()
-  const [selectedRegion, setSelectedRegion] = useState()
+  const [selectedRegionList, setSelectedRegionList] = useState(['blabla', 'yoyo'])
   const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
   const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
   const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
+
+  const [reglementationBlocName, setReglementationBlocName] = useState('')
+  const [themeZone, setThemeZone] = useState('')
+  const [themeGears, setThemeGears] = useState('')
+  const [themeSpecies, setThemeSpecies] = useState('')
+  const [themeOtherIndications, setThemeOtherIndications] = useState('')
 
   const FRENCH_REGION_LIST = [
     'Auvergne-Rhône-Alpes',
@@ -94,34 +100,67 @@ const CreateRegulation = () => {
 
   const addNewReglementationBloc = () => {
     console.log('addNewReglementationBloc')
+    setSelectedReglementationBloc(reglementationBlocName)
+    setReglementationBlocName('')
+    setIsAddReglementationBlocClicked(false)
   }
 
   const addNewTheme = () => {
     console.log('addNewTheme')
+    setSelectedZoneTheme(`${themeZone} - ${themeSpecies} - ${themeGears} `)
+    resetThemeForm()
+    setIsAddThemeClicked(false)
+  }
+
+  const resetThemeForm = () => {
+    setThemeGears('')
+    setThemeSpecies('')
+    setThemeGears('')
+    setThemeOtherIndications('')
   }
 
   const selectPickerStyle = {
     width: 180,
     margin: '0',
-    'border-color': COLORS.grayDarker,
-    'box-sizing': 'border-box',
-    'text-overflow': 'ellipsis'
+    borderColor: COLORS.grayDarker,
+    boxSizing: 'border-box',
+    textOverflow: 'ellipsis'
   }
 
   const getInfoText = (messageType) => {
     return INFO_TEXT[messageType]
   }
-  // TODO : Add a spinner
+
   const renderMenuItem = (checked, item, tag) => {
     let component
     if (tag === 'Radio') {
       component = <Radio checked={checked}>{item.label}</Radio>
     } else if (tag === 'Checkbox') {
-      console.log(`${item.label}`)
       component = <Checkbox checked={checked}>{item.label}</Checkbox>
     }
-
     return component
+  }
+
+  const addRegionToSelectedRegionList = (elem) => {
+    const newArray = [...selectedRegionList]
+    newArray.push(elem)
+    setSelectedRegionList(newArray)
+  }
+
+  const removeRegionToSelectedRegionList = (elem) => {
+    const idx = selectedRegionList.find(e => elem === e)
+    const newArray = [...selectedRegionList]
+    newArray.splice(idx, 1)
+    setSelectedRegionList(newArray)
+  }
+
+  function SelectedRegionList () {
+    return selectedRegionList.map(selectedRegion => {
+      return (<CustomTag key={selectedRegion}>
+        <SelectedValue>{selectedRegion}</SelectedValue>
+        <CloseIcon onClick={removeRegionToSelectedRegionList}/>
+      </CustomTag>)
+    })
   }
 
   return (
@@ -159,8 +198,8 @@ const CreateRegulation = () => {
                 ? <CreateReglementationBloc>
                   <CustomInput
                     placeholder='Nommez le nouvel ensemble règlementaire'
-                    value={nameZone}
-                    onChange={setNameZone}
+                    value={reglementationBlocName}
+                    onChange={setReglementationBlocName}
                   />
                   <ValidateButton
                     disabled={false}
@@ -305,23 +344,23 @@ const CreateRegulation = () => {
             <Label>Région</Label>
             <SelectWrapper>
               <CustomSelectPicker
-                menuStyle={{ width: 250, 'overflow-y': 'hidden', 'text-overflow': 'ellipsis' }}
+                menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
                 style={selectPickerStyle}
                 searchable={false}
                 placeholder='Choisir une région'
-                onChange={setSelectedRegion}
+                onChange={addRegionToSelectedRegionList}
                 value={'Choisir une région'}
                 data={formatData(FRENCH_REGION_LIST)}
-                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedRegion, item, 'Checkbox')}
+                renderMenuItem={(_, item) => renderMenuItem(selectedRegionList.includes(item.value), item, 'Checkbox')}
                 block
               />
             </SelectWrapper>
-            {selectedRegion
-              ? <CustomTag>
-                  <SelectedValue>{selectedRegion}</SelectedValue>
-                  <CloseIcon onClick={() => setSelectedRegion()}/>
-                </CustomTag>
-              : null }
+            <>
+            {
+            selectedRegionList && selectedRegionList.length > 0 &&
+              <SelectedRegionList />
+            }
+            </>
           </ContentLine>
         </Section>
       </Content>

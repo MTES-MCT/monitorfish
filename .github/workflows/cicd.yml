@@ -108,7 +108,7 @@ jobs:
     - name: Run docker images
       run: make docker-compose-up
 
-    - name: Cypress run
+    - name: Run Cypress tests
       uses: cypress-io/github-action@v2
       with:
         # we have already installed all dependencies above

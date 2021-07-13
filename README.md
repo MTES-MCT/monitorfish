@@ -7,7 +7,8 @@
 
 > Improve monitoring and controlling of the activities of fishing vessels
 
-**Notice**: To clone the repo without downloading large layers files, execute: `GIT_LFS_SKIP_SMUDGE=1 git clone <REPO>` as we use [Git LFS](https://git-lfs.github.com/) to manage large layers files.
+See documentation [here](https://mtes-mct.github.io/monitorfish/).
+
 ## Stack
 
 Frontend:

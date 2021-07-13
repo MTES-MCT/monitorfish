@@ -36,7 +36,7 @@ const CreateRegulation = () => {
   const [selectedZoneTheme, setSelectedZoneTheme] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   const [nameZone, setNameZone] = useState()
-  const [selectedRegionList, setSelectedRegionList] = useState(['blabla', 'yoyo'])
+  const [selectedRegionList, setSelectedRegionList] = useState([])
   const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
   const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)

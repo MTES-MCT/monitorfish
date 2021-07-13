@@ -10,14 +10,27 @@ import getAdministrativeZonesAndSubZones from '../../domain/use_cases/getAdminis
 import showLayer from '../../domain/use_cases/showLayer'
 import hideLayers from '../../domain/use_cases/hideLayers'
 import NamespaceContext from '../../domain/context/NamespaceContext'
+import layer from '../../domain/reducers/Layer'
 
-const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }) => {
+const ZONE_NAME = 'administrative_zones'
+
+const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, namespace }) => {
+  const {
+    setLayersSideBarOpenedZone
+  } = layer[namespace].actions
+
   const dispatch = useDispatch()
   const showedLayers = useSelector(state => state.layer.showedLayers)
 
   const [showZones, setShowZones] = useState(false)
   const [zones, setZones] = useState([])
   const firstUpdate = useRef(true)
+
+  const { layersSideBarOpenedZone } = useSelector(state => state.layer)
+
+  useEffect(() => {
+    setShowZones(layersSideBarOpenedZone === ZONE_NAME)
+  }, [layersSideBarOpenedZone, setShowZones])
 
   useEffect(() => {
     if (firstUpdate) {
@@ -56,9 +69,19 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching }
     }))
   }
 
+  const onSectionTitleClicked = () => {
+    if (showZones) {
+      setShowZones(false)
+      dispatch(setLayersSideBarOpenedZone(''))
+    } else {
+      setShowZones(true)
+      dispatch(setLayersSideBarOpenedZone(ZONE_NAME))
+    }
+  }
+
   return (
     <>
-      <SectionTitle onClick={() => setShowZones(!showZones)} showZones={showZones}>
+      <SectionTitle onClick={() => onSectionTitleClicked()} showZones={showZones}>
         Zones administratives <ChevronIcon isOpen={showZones}/>
       </SectionTitle>
       <NamespaceContext.Consumer>

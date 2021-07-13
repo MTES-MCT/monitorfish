@@ -18,14 +18,13 @@ import {
   getFAOZonesFromFARMessages,
   getFARMessagesFromMessages,
   getLANMessageFromMessages,
-  getPNOMessageFromMessages,
+  getPNOMessageFromMessages, getSpeciesAndPresentationToWeightFARObject,
   getSpeciesToWeightDISObject,
   getSpeciesToWeightFARObject,
   getSpeciesToWeightLANObject,
   getSpeciesToWeightPNOObject,
   getTotalDEPWeightFromMessages,
-  getTotalDISWeightFromMessages,
-  getTotalFARWeightFromMessages,
+  getTotalFAROrDISWeightFromMessages,
   getTotalLANWeightFromMessages,
   getTotalPNOWeightFromMessages
 } from '../../domain/entities/fishingActivities'
@@ -49,6 +48,7 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
   const [totalFARAndDEPWeight, setTotalFARAndDEPWeight] = useState(null)
 
   const [speciesToWeightOfFAR, setSpeciesToWeightOfFAR] = useState({})
+  const [speciesAndPresentationToWeightOfFAR, setSpeciesAndPresentationToWeightOfFAR] = useState({})
   const [speciesToWeightOfPNO, setSpeciesToWeightOfPNO] = useState({})
   const [speciesToWeightOfDIS, setSpeciesToWeightOfDIS] = useState({})
   const [speciesToWeightOfLAN, setSpeciesToWeightOfLAN] = useState({})
@@ -75,12 +75,14 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
 
       let totalFARAndDEPWeight = 0
       if (farMessages && farMessages.length) {
-        const totalFARWeight = getTotalFARWeightFromMessages(farMessages)
+        const totalFARWeight = getTotalFAROrDISWeightFromMessages(farMessages)
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
 
         const speciesToWeightFARObject = getSpeciesToWeightFARObject(farMessages, totalFARWeight)
+        const speciesAndPresentationToWeightFARObject = getSpeciesAndPresentationToWeightFARObject(farMessages)
         setSpeciesToWeightOfFAR(speciesToWeightFARObject)
+        setSpeciesAndPresentationToWeightOfFAR(speciesAndPresentationToWeightFARObject)
       }
 
       if (depMessage) {
@@ -89,7 +91,7 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
       }
 
       if (disMessages && disMessages.length) {
-        const totalDISWeight = getTotalDISWeightFromMessages(disMessages)
+        const totalDISWeight = getTotalFAROrDISWeightFromMessages(disMessages)
         setTotalDISWeight(totalDISWeight)
 
         const speciesToWeightDISObject = getSpeciesToWeightDISObject(disMessages, totalDISWeight)
@@ -129,7 +131,7 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
       setTotalPNOWeight(null)
       setTotalFARAndDEPWeight(null)
 
-      setSpeciesToWeightOfFAR({})
+      setSpeciesAndPresentationToWeightOfFAR({})
       setSpeciesToWeightOfPNO({})
       setSpeciesToWeightOfDIS({})
       setSpeciesToWeightOfLAN({})
@@ -261,7 +263,8 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
                     showERSMessages={showERSMessages}
                     totalFARWeight={totalFARWeight}
                     numberOfMessages={farMessages ? farMessages.length : 0}
-                    speciesToWeightOfFAR={speciesToWeightOfFAR}/>
+                    speciesToWeightOfFAR={speciesToWeightOfFAR}
+                    speciesAndPresentationToWeightOfFAR={speciesAndPresentationToWeightOfFAR}/>
                   : <FARMessageResume hasNoMessage={true}/>
                 }
 
@@ -387,6 +390,7 @@ const TextValue = styled.div`
 const Body = styled.div`
   padding: 5px 5px 1px 5px;
   overflow-x: hidden;
+  max-height: 730px;
 `
 
 const TableBody = styled.tbody``

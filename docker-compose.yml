@@ -23,33 +23,33 @@ services:
     depends_on:
       - db
 
-  prometheus:
-    ports:
-      - 9090:9090
-    image: prom/prometheus
-    container_name: prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
-
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - 9000:3000
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    depends_on:
-      - prometheus
-
-  dockerhost:
-    image: qoomon/docker-host
-    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
-    restart: on-failure
+#  prometheus:
+#    ports:
+#      - 9090:9090
+#    image: prom/prometheus
+#    container_name: prometheus
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#      - prometheus-data:/prometheus
+#
+#  grafana:
+#    image: grafana/grafana
+#    container_name: grafana
+#    ports:
+#      - 9000:3000
+#    volumes:
+#      - grafana-data:/var/lib/grafana
+#      - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+#    environment:
+#      - GF_SECURITY_ADMIN_PASSWORD=admin
+#      - GF_USERS_ALLOW_SIGN_UP=false
+#    depends_on:
+#      - prometheus
+#
+#  dockerhost:
+#    image: qoomon/docker-host
+#    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+#    restart: on-failure
 
 volumes:
   geoserver-data:

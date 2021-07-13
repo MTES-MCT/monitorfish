@@ -58,6 +58,10 @@ const SpeciesAndWeightChart = ({
     return parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
   }
 
+  const getPercentOfPresentationToSpeciesWeight = (presentationWeight, speciesWeight) => {
+    return parseFloat(((presentationWeight * 100) / speciesWeight).toFixed(1))
+  }
+
   return <>
     {
       speciesAndWeightArrayWithHeight && speciesAndWeightArrayWithHeight.length
@@ -74,9 +78,12 @@ const SpeciesAndWeightChart = ({
                 }
               >
                 <WeightText>
-                  {parseFloat(speciesAndWeight.weight.toFixed(1))} kg {compareWithTotalWeight
-                    ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray>
-                    : null}
+                  {parseFloat(speciesAndWeight.weight.toFixed(1))} kg{' '}
+                  {
+                    compareWithTotalWeight
+                      ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray>
+                      : null
+                  }
                 </WeightText>
                 {
                   speciesPresentationAndWeightArray
@@ -101,7 +108,7 @@ const SpeciesAndWeightChart = ({
                     .map((speciesAndPresentation, index) => {
                       return <SpeciesAndPresentation key={speciesPresentationAndWeightArray[index].presentation}>
                         <PresentationWeight isLast={speciesPresentationAndWeightArray[index] === speciesPresentationAndWeightArray[index].length - 1}>
-                          {speciesAndPresentation.weight} kg
+                          {speciesAndPresentation.weight} kg ({getPercentOfPresentationToSpeciesWeight(speciesAndPresentation.weight, speciesAndWeight.weight)} %)
                         </PresentationWeight>
                         <Presentation>
                           {speciesAndPresentation.presentation
@@ -151,7 +158,6 @@ const SpeciesAndPresentation = styled.div`
 const PresentationWrapper = styled.div`
   visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
   height: ${props => props.isOpen ? 'inherit' : '0px'};
-
 `
 
 const Species = styled.div`

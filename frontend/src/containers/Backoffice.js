@@ -133,8 +133,8 @@ const SearchResultList = styled.div`
   color: ${COLORS.textWhite};
   text-decoration: none;
   border-radius: 2px;
-  max-height: calc(100vh - 200px);
-  padding: 0 40px;
+  max-height: calc(100vh - 138.5px - 25px);
+  padding: 0 40px 25px;
   margin-bottom: 60px;
 `
 

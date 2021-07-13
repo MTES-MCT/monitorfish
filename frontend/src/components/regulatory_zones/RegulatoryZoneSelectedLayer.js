@@ -152,7 +152,8 @@ const Text = styled.span`
 
 const ZoneNumber = styled.span`
   font-size: 11px;
-  color: ${COLORS.textGray}
+  color: ${COLORS.textGray};
+  margin-right: 12px;
 `
 
 const CloseIcon = styled(CloseIconSVG)`
@@ -161,8 +162,8 @@ const CloseIcon = styled(CloseIconSVG)`
 `
 
 const baseIcon = css`
-  width: 27px;
-  margin: 0 5px 0 6px;
+  flex: 0 0 24px;
+  align-self: center;
 `
 
 const ShowIcon = styled(ShowIconSVG)`
@@ -205,6 +206,7 @@ const Row = styled.li`
   border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;
+  border-bottom: 1px solid ${COLORS.squareBorder};
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

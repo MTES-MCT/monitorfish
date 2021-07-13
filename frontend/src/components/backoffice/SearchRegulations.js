@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { search } from '../../utils'
 import { COLORS, BACKOFFICE_SEARCH_PROPERTIES } from '../../constants/constants'
+import { AddRegulationButton } from '../commonStyles/Buttons.style'
 
 const SearchRegulations = props => {
   const {
@@ -45,19 +46,27 @@ const SearchRegulations = props => {
     }
   }
 
+  function addNewRegZone () {
+    console.log('addNewRegZone clicked')
+  }
+
   return (
     <SearchContainer>
-      <SearchBoxInput
-        ref={searchInput}
-        type="text"
-        value={searchText}
-        placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
-        onChange={e => setSearchText(e.target.value)}/>
-      <SearchButton
-        onClick={searchRegulatoryZone}
-      >
-        <SearchIcon/>
-      </SearchButton>
+      <SearchBox>
+        <SearchBoxInput
+          ref={searchInput}
+          type="text"
+          value={searchText}
+          placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
+          onChange={e => setSearchText(e.target.value)} />
+        <SearchIcon />
+        </SearchBox>
+        <AddRegulationButton
+          disabled={false}
+          isLast={false}
+          onClick={() => addNewRegZone()}
+          title={'Saisir une nouvelle réglementation'}
+        />
     </SearchContainer>
   )
 }
@@ -66,33 +75,36 @@ const SearchContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  justify-content: center;
   padding: 25px 40px 0;
+  background-color: white;
+`
+
+const SearchBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px ${COLORS.gray} solid;
+  border-radius: 0;
+  background-color: white;
+  margin-right: 10px;
+  width: 100%;
 `
 
 const SearchBoxInput = styled.input`
   margin: 0;
-  background-color: white;
-  border: 1px ${COLORS.gray} solid;
-  border-radius: 0;
   color: ${COLORS.grayDarkerThree};
   font-size: 0.8em;
   height: 40px;
   width: 100%;
   padding: 0 5px 0 10px;
+  background-color: white;
+  border: none;
 `
 
 const SearchIcon = styled(SearchIconSVG)`
   width: 40px;
   height: 40px;
   float: right;
-  background: ${COLORS.grayDarkerThree};
-  cursor: pointer;
-`
-
-const SearchButton = styled.a`
-  width: 40px;
-  height: 40px;
 `
 
 export default SearchRegulations

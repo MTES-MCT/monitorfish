@@ -15,11 +15,12 @@ const baseBlackButton = css`
 `
 
 const baseWhiteButton = css`
+// 1 px en #D6D6D6
   border: 1px solid ${COLORS.grayDarkerThree};
   color: ${COLORS.grayDarkerThree};
   :disabled {
     border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.grayDarker};
+    color: ${COLORS.textGray};
   }
 `
 
@@ -35,14 +36,6 @@ const BackofficeButton = styled.button`
   margin: 15px ${props => props.isLast ? '20px' : '0'} 15px 10px;
 `
 
-export const BackofficeBottomButton = styled(BackofficeButton)`
-  ${baseBlackButton}
-  position: fixed;
-  bottom: 0;
-  left: 25%;
-  margin-left: -120px;
-`
-
 export const BlackButton = styled(Button)`
   ${baseBlackButton}
 `
@@ -53,4 +46,47 @@ export const WhiteButton = styled(Button)`
 
 export const BackofficeWhiteButton = styled(BackofficeButton)`
   ${baseWhiteButton}
+`
+
+const baseAddButton = css`
+  position: relative;
+  border: 1px solid ${COLORS.grayDarker};
+  border-radius: 2px;
+  color: ${COLORS.grayDarker};
+  &:after {
+    content: "";  
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 1.6px;
+    width: 15px;
+  }
+  &:before {
+    content: "";  
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 16px;
+    width: 1.5px;
+  }
+`
+
+export const AddRegulationButton = styled.button`
+  ${baseAddButton}
+  min-width: 40px;
+  min-height: 40px;
+  background-color: ${COLORS.grayDarkerThree};
+  &:after {
+    background-color: ${COLORS.white};
+  }
+  &:before {
+    background-color: ${COLORS.white};
+  }
+  &:hover {
+    background-color: ${COLORS.grayDarkerThree};
+  }
 `

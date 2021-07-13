@@ -114,7 +114,7 @@ const RegulatoryZoneSelectedLayer = props => {
   return (
     <NamespaceContext.Consumer>
       {namespace => (
-        <Row>
+        <Row isOpen={isOpen}>
           <Zone isLastItem={isLastItem} isOpen={isOpen}>
             <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
               <ChevronIcon firstUpdate={firstUpdate} isOpen={isOpen}/>
@@ -206,7 +206,7 @@ const Row = styled.li`
   border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;
-  border-bottom: 1px solid ${COLORS.squareBorder};
+  border-bottom: ${props => props.isOpen ? `1px solid ${COLORS.squareBorder}` : 'none'};
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

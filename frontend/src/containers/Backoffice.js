@@ -9,7 +9,7 @@ import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegul
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
 import { setError } from '../domain/reducers/Global'
 import { COLORS } from '../constants/constants'
-import { BackofficeBottomButton, WhiteButton } from '../components/commonStyles/Buttons.style'
+import { WhiteButton } from '../components/commonStyles/Buttons.style'
 import { EmptyResult } from '../components/commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../domain/entities/regulatory'
@@ -42,10 +42,6 @@ const Backoffice = () => {
     getRegulatoryZones()
     dispatch(getAllGearCodes())
   }, [])
-
-  function addNewRegZone () {
-    console.log('addNewRegZone clicked')
-  }
 
   function callCloseRegulatoryZoneMetadata () {
     dispatch(closeRegulatoryZoneMetadata())
@@ -108,14 +104,6 @@ const Backoffice = () => {
           {regulatoryZoneListByRegTerritory
             ? displaySearchResultList()
             : <div>En attente de chargement</div>}
-          <ButtonListFooter>
-            <BackofficeBottomButton
-              disabled={false}
-              isLast={false}
-              onClick={() => addNewRegZone()}>
-              Saisir une nouvelle réglementation
-            </BackofficeBottomButton>
-          </ButtonListFooter>
         </RegulatoryZonePanel>
         <BaseMap/>
       </BackofficeContainer>
@@ -145,8 +133,8 @@ const SearchResultList = styled.div`
   color: ${COLORS.textWhite};
   text-decoration: none;
   border-radius: 2px;
-  max-height: calc(100vh - 235px);
-  padding: 0 40px;
+  max-height: calc(100vh - 138.5px - 25px);
+  padding: 0 40px 25px;
   margin-bottom: 60px;
 `
 
@@ -162,7 +150,8 @@ const Territory = styled.div`
 
 const TerritoryName = styled.div`
   display: flex;
-  font: normal normal bold 16px Marianne;
+  font-size: 16px;
+  font-weight: bold;
   text-transform: uppercase;
   text-align: left;
   color: ${COLORS.grayDarkerTwo};
@@ -181,15 +170,6 @@ const ButtonList = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0 40px 0 30px;
-`
-
-const ButtonListFooter = styled.div`
-  ${ButtonList};
-  border-top: 1px solid ${COLORS.grayDarker};
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  height: 60px;
 `
 
 const BackofficeContainer = styled.div`

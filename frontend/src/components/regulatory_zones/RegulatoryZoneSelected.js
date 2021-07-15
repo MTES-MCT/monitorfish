@@ -76,7 +76,7 @@ const RegulatoryZoneSelected = props => {
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
       setShowRegulatoryZonesSelected(true)
-      dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
+      dispatch(setLayersSideBarOpenedZone(layersType.REGULATORY))
     }
   }
 

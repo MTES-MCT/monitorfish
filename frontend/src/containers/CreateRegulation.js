@@ -33,7 +33,7 @@ const CreateRegulation = () => {
   const [seaFrontList, setSeaFrontList] = useState([])
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
-  const [selectedZoneTheme, setSelectedZoneTheme] = useState()
+  const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   const [nameZone, setNameZone] = useState()
   const [selectedRegionList, setSelectedRegionList] = useState([])
@@ -43,7 +43,9 @@ const CreateRegulation = () => {
   const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
 
   const [reglementationBlocName, setReglementationBlocName] = useState('')
-  const [themeZone, setThemeZone] = useState('')
+  const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
+  const [themePlace, setThemePlace] = useState('')
+  const [themePlaceIsRed, setThemePlaceIsRed] = useState(false)
   const [themeGears, setThemeGears] = useState('')
   const [themeSpecies, setThemeSpecies] = useState('')
   const [themeOtherIndications, setThemeOtherIndications] = useState('')
@@ -99,17 +101,28 @@ const CreateRegulation = () => {
   }
 
   const addNewReglementationBloc = () => {
-    console.log('addNewReglementationBloc')
-    setSelectedReglementationBloc(reglementationBlocName)
-    setReglementationBlocName('')
-    setIsAddReglementationBlocClicked(false)
+    if (reglementationBlocName === '') {
+      setReglementationBlocNameIsRed(true)
+    } else {
+      setSelectedReglementationBloc(reglementationBlocName)
+      setReglementationBlocName('')
+      setIsAddReglementationBlocClicked(false)
+      setReglementationBlocNameIsRed(false)
+    }
   }
 
-  const addNewTheme = () => {
-    console.log('addNewTheme')
-    setSelectedZoneTheme(`${themeZone} - ${themeSpecies} - ${themeGears} `)
-    resetThemeForm()
-    setIsAddThemeClicked(false)
+  const addNewTheme = (elem) => {
+    if (themePlace === '') {
+      setThemePlaceIsRed(true)
+    } else {
+      const reglementationPlace = `${themePlace}
+      ${themeSpecies ? ' - ' + themeSpecies : ''}
+      ${themeGears ? ' - ' + themeGears : ''}`
+      setSelectedReglementationTheme(reglementationPlace)
+      resetThemeForm()
+      setIsAddThemeClicked(false)
+      setThemePlaceIsRed(false)
+    }
   }
 
   const resetThemeForm = () => {
@@ -163,6 +176,27 @@ const CreateRegulation = () => {
     })
   }
 
+  const displayInfoBox = (isInfoTextShown, setIsInfoTextShown, isFormOpened, text) => {
+    return (<InfoTextParent
+              isInfoTextShown={isInfoTextShown}
+              isFormOpened={isFormOpened}
+        >
+        {isInfoTextShown
+          ? <InfoTextWrapper
+            isFormOpened={isFormOpened}
+          >
+            <InfoPoint>!</InfoPoint>
+            <InfoText>
+              {getInfoText(text)}
+            </InfoText>
+          </InfoTextWrapper>
+          : <InfoPoint
+            onMouseEnter={() => setIsInfoTextShown(true)}
+            onMouseOut={() => setIsInfoTextShown(true)}
+          >!</InfoPoint>}
+      </InfoTextParent>)
+  }
+
   return (
     <CreateRegulationWrapper>
       <Header>
@@ -196,31 +230,37 @@ const CreateRegulation = () => {
             {
               isAddReglementationBlocClicked
                 ? <CreateReglementationBloc>
-                  <CustomInput
-                    placeholder='Nommez le nouvel ensemble règlementaire'
-                    value={reglementationBlocName}
-                    onChange={setReglementationBlocName}
-                  />
-                  <ValidateButton
-                    disabled={false}
-                    isLast={false}
-                    onClick={addNewReglementationBloc}>
-                    Enregistrer
-                  </ValidateButton>
-                  <CancelButton
-                    disabled={false}
-                    isLast={false}
-                    onClick={() => setIsAddReglementationBlocClicked(false)}>
-                    Annuler
-                  </CancelButton>
-                </CreateReglementationBloc>
-                : <><RectangularButton
+                    <CustomInput
+                      placeholder='Nommez le nouvel ensemble règlementaire'
+                      value={reglementationBlocName}
+                      onChange={setReglementationBlocName}
+                      width={'250px'}
+                      isRed={reglementationBlocNameIsRed}
+                    />
+                    <ValidateButton
+                      disabled={false}
+                      isLast={false}
+                      onClick={addNewReglementationBloc}>
+                      Enregistrer
+                    </ValidateButton>
+                    <CancelButton
+                      disabled={false}
+                      isLast={false}
+                      onClick={() => setIsAddReglementationBlocClicked(false)}>
+                      Annuler
+                    </CancelButton>
+                  </CreateReglementationBloc>
+                : !selectedReglementationBloc && <><RectangularButton
                     onClick={() => setIsAddReglementationBlocClicked(true)}
                   />
                   <Label>Ajouter un nouvel ensemble</Label></>
           }
           </ContentLine>
-          <ContentLine>
+          <ContentLine
+            isFormOpened={isAddThemeClicked}
+            isInfoTextShown={isInfoTextShown}
+          >
+            <Wrapper>
             <Label>Thématique de la zone</Label>
             <SelectWrapper>
               <CustomSelectPicker
@@ -229,39 +269,41 @@ const CreateRegulation = () => {
                 menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
                 placeholder='Choisir une thématique'
                 value={'Choisir une thématique'}
-                onChange={setSelectedZoneTheme}
+                onChange={setSelectedReglementationTheme}
                 data={zoneThemeList}
-                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedZoneTheme, item, 'Radio')}
+                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedReglementationTheme, item, 'Radio')}
               />
             </SelectWrapper>
-            {selectedZoneTheme
+            {selectedReglementationTheme
               ? <CustomTag>
-                  <SelectedValue>{selectedZoneTheme}</SelectedValue>
-                  <CloseIcon onClick={() => setSelectedZoneTheme()}/>
+                  <SelectedValue>{selectedReglementationTheme}</SelectedValue>
+                  <CloseIcon onClick={() => setSelectedReglementationTheme()}/>
                 </CustomTag>
               : null }
             {
               isAddThemeClicked
                 ? <CreateReglementationBloc>
                   <CustomInput
-                    placeholder='Lieu (obligatoire)'
-                    value={themeZone}
-                    onChange={setThemeZone}
+                    placeholder='Lieu*'
+                    value={themePlace}
+                    onChange={setThemePlace}
+                    isRed={themePlaceIsRed}
                   />
                   <CustomInput
-                    placeholder='Espèce (optionnel)'
+                    placeholder='Espèce'
                     value={themeSpecies}
                     onChange={setThemeSpecies}
                   />
                   <CustomInput
-                    placeholder='Engins (optionnel)'
+                    placeholder='Engins'
                     value={themeGears}
                     onChange={setThemeGears}
                   />
                   <CustomInput
-                    placeholder='Autres indications (optionnel)'
+                    placeholder='Autres indications'
                     value={themeOtherIndications}
                     onChange={setThemeOtherIndications}
+                    width={'115px'}
                   />
                   <ValidateButton
                     disabled={false}
@@ -272,31 +314,24 @@ const CreateRegulation = () => {
                   <CancelButton
                     disabled={false}
                     isLast={false}
-                    onClick={() => setIsAddThemeClicked(false)}>
+                    onClick={() => {
+                      setIsAddThemeClicked(false)
+                      setIsInfoTextShown(false)
+                    }}
+                  >
                     Annuler
                   </CancelButton>
                 </CreateReglementationBloc>
-                : <><RectangularButton
-                    onClick={() => setIsAddThemeClicked(true)}
+                : !selectedReglementationTheme && <><RectangularButton
+                    onClick={() => {
+                      setIsAddThemeClicked(true)
+                      setIsInfoTextShown(true)
+                    }}
                   />
                   <Label>Créer une nouvelle thématique</Label></>
             }
-          <InfoTextParent>
-              {isInfoTextShown
-                ? <InfoTextWrapper >
-                    <InfoPoint>!</InfoPoint>
-                    <InfoText
-                      onMouseLeave={() => setIsInfoTextShown(false)}
-                    >
-                      {getInfoText('zoneTheme')}
-                    </InfoText>
-                  </InfoTextWrapper>
-                : <InfoPoint
-                  onMouseEnter={() => setIsInfoTextShown(true)}
-                  onMouseOut={() => setIsInfoTextShown(true)}
-                >!</InfoPoint>
-              }
-            </InfoTextParent>
+            </Wrapper>
+            {displayInfoBox(isInfoTextShown, setIsInfoTextShown, isAddThemeClicked, 'zoneTheme')}
           </ContentLine>
           <ContentLine>
             <Label>Nom de la zone</Label>
@@ -304,22 +339,9 @@ const CreateRegulation = () => {
               placeholder=''
               value={nameZone}
               onChange={setNameZone}
+              width={'180px'}
             />
-            <InfoTextParent>
-              {isZoneNameInfoTextShown
-                ? <InfoTextWrapper >
-                    <InfoPoint>!</InfoPoint>
-                    <InfoText
-                      onMouseLeave={() => setIsZoneNameInfoTextShown(false)}
-                    >
-                      {getInfoText('zoneName')}
-                    </InfoText>
-                  </InfoTextWrapper>
-                : <InfoPoint
-                  onMouseEnter={() => setIsZoneNameInfoTextShown(true)}
-                >!</InfoPoint>
-              }
-            </InfoTextParent>
+            {displayInfoBox(isZoneNameInfoTextShown, setIsZoneNameInfoTextShown, false, 'zoneName')}
           </ContentLine>
           <ContentLine>
             <Label>Secteur</Label>
@@ -369,10 +391,41 @@ const CreateRegulation = () => {
   )
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  margin-bottom: 8px;
+  align-items: center;
+`
+
 const InfoTextParent = styled.div`
+  display: flex;
   min-height: 20px;
   min-width: 20px;
   position: relative;
+  ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
+`
+
+const InfoTextWrapper = styled.div`
+  display: flex;
+  ${props => props.isFormOpened ? '' : 'position: absolute;'};
+  border: 1px solid ${COLORS.grayDarker};
+  background: ${COLORS.grayBackground} 0% 0% no-repeat padding-box;
+  border-radius: 2px;
+  min-width: 560px;
+  max-width: 600px;
+  padding: 8px;
+  box-sizing: border-box;
+  z-index: 30;
+  top: '-6px';
+  left: '0';
+`
+
+const InfoText = styled.span`
+  align-self: center;
+  display: 'flex';
+  font-size: 13px;
+  color: ${COLORS.textGray};
+  padding-left: 8px;
 `
 
 const InfoPoint = styled.a`
@@ -424,27 +477,6 @@ const CloseIcon = styled(CloseIconSVG)`
   padding: 2.5px 2.5px 2.5px 7px;
 `
 
-const InfoTextWrapper = styled.div`
-  display: flex;
-  position: absolute;
-  border: 1px solid ${COLORS.grayDarker};
-  background: ${COLORS.grayBackground} 0% 0% no-repeat padding-box;
-  border-radius: 2px;
-  min-width: 560px;
-  max-width: 600px;
-  padding: 8px;
-  box-sizing: border-box;
-  z-index: 30;
-  top: -6px;
-  left: 0;
-`
-
-const InfoText = styled.span`
-  font-size: 13px;
-  color: ${COLORS.textGray};
-  padding-left: 8px;
-`
-
 const Header = styled.div`
   margin-bottom: 40px;
   margin-top: 20px;
@@ -459,9 +491,7 @@ const CancelButton = styled(WhiteButton)`
 `
 
 const CreateReglementationBloc = styled.div`
-  display:flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex;
 `
 
 const CustomSelectPicker = styled(SelectPicker)`
@@ -471,9 +501,11 @@ const CustomSelectPicker = styled(SelectPicker)`
 `
 
 const CustomInput = styled(Input)`
-  font-size: 13px;
-  width: 180px; 
+  font-size: 11px;
   height: 35px;
+  ${props => props.width ? '' : 'min-width: 100px;'}
+  ${props => props.width ? `width: ${props.width};` : ''}
+  ${props => props.isRed ? `border-color: ${COLORS.red};` : ''}
   margin: 0px 10px 0px 0px;
   padding: 8px;
 `
@@ -540,8 +572,8 @@ const SectionTitle = styled.span`
 `
 const ContentLine = styled.div`
   display: flex;
-  position: relative;
-  align-items: center;
+  flex-direction : ${props => props.isFormOpened && props.isInfoTextShown ? 'column' : 'row'};
+  align-items: ${props => props.isFormOpened && props.isInfoTextShown ? 'flex-start' : 'center'};
   margin-bottom: 8px;
 `
 const Label = styled.span`

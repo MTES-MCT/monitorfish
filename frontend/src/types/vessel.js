@@ -155,4 +155,3 @@
  * @property {boolean | null} lastControlInfraction
  * @property {number | null} postControlComment
  */
-

@@ -29,11 +29,14 @@ import {
   getTotalPNOWeightFromMessages
 } from '../../domain/entities/fishingActivities'
 
-const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSegments, vesselLastPositionFeature, navigation }) => {
+const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   const {
     isLastVoyage,
-    previousBeforeDateTime
+    previousBeforeDateTime,
+    fishingActivities,
+    selectedVesselFeatureAndIdentity
   } = useSelector(state => state.vessel)
+  const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
 
   const [depMessage, setDEPMessage] = useState(null)
   const [lanMessage, setLANMessage] = useState(null)
@@ -180,7 +183,7 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
             <Text>Segment(s) de flotte(s) actuel(s)</Text>
             <TextValue>
               <FleetSegments
-                vesselLastPositionFeature={vesselLastPositionFeature}
+                vesselLastPositionFeature={selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature}
                 fleetSegmentsReferential={fleetSegments}
               />
             </TextValue>
@@ -221,7 +224,7 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
             <TextValue hasTwoLines={false}>
               <PreviousTrip
                 disabled={!previousBeforeDateTime}
-                onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
+                onClick={previousBeforeDateTime ? navigation.goToPreviousTrip : undefined}
                 title={'Marée précédente'}
               />
               {
@@ -231,12 +234,12 @@ const FishingActivitiesSummary = ({ showERSMessages, fishingActivities, fleetSeg
               }
               <NextTrip
                 disabled={isLastVoyage}
-                onClick={!isLastVoyage && navigation.goToNextTrip}
+                onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
                 title={'Marée suivante'}
               />
               <LastTrip
                 disabled={isLastVoyage}
-                onClick={!isLastVoyage && navigation.goToLastTrip}
+                onClick={!isLastVoyage ? navigation.goToLastTrip : undefined}
                 title={'Dernière marée'}
               />
             </TextValue>

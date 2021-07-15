@@ -25,10 +25,11 @@ const options = [
   { value: 'LAN', label: 'LAN' }
 ]
 
-const ERSMessages = ({ showFishingActivitiesSummary, fishingActivities, messageTypeFilter, navigation, tripNumber }) => {
+const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigation }) => {
   const {
     isLastVoyage,
-    previousBeforeDateTime
+    previousBeforeDateTime,
+    fishingActivities
   } = useSelector(state => state.vessel)
 
   const [ersMessages, setERSMessages] = useState([])

@@ -3,6 +3,7 @@
 const VesselReducer = null
 /* eslint-disable */
 
+import { VesselSidebarTab } from '../../containers/VesselSidebar'
 import { createSlice } from '@reduxjs/toolkit'
 
 const vesselSlice = createSlice({
@@ -18,7 +19,7 @@ const vesselSlice = createSlice({
     highlightedVesselTrackPosition: null,
     loadingVessel: null,
     vesselSidebarIsOpen: false,
-    vesselSidebarTabIndexToShow: 1,
+    vesselSidebarTab: VesselSidebarTab.SUMMARY,
     isFocusedOnVesselSearch: false,
     /** @type {FishingActivities} fishingActivities */
     fishingActivities: {},
@@ -32,6 +33,7 @@ const vesselSlice = createSlice({
     /** @type {ControlResume} controlResumeAndControl */
     controlResumeAndControls: {},
     nextControlResumeAndControls: null,
+    controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     temporaryTrackDepth: {
       trackDepth: null,
       afterDateTimeRange: null,
@@ -193,6 +195,26 @@ const vesselSlice = createSlice({
      */
     resetHighlightedVesselTrackPosition (state) {
       state.highlightedVesselTrackPosition = null
+    },
+    /**
+     * Show the specified vessel tab
+     * @function showVesselSidebarTab
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: VesselSidebarTab}} action - The tab
+     */
+    showVesselSidebarTab (state, action) {
+      state.vesselSidebarTab = action.payload
+    },
+    /**
+     * Set the date since controls are fetched
+     * @function setControlFromDate
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: Date}} action - The "from" date
+     */
+    setControlFromDate (state, action) {
+      state.controlsFromDate = action.payload
     }
   }
 })
@@ -226,7 +248,9 @@ export const {
   setTemporaryTrackDepth,
   resetTemporaryTrackDepth,
   highlightVesselTrackPosition,
-  resetHighlightedVesselTrackPosition
+  resetHighlightedVesselTrackPosition,
+  showVesselSidebarTab,
+  setControlFromDate
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

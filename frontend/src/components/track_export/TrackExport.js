@@ -87,10 +87,11 @@ const TrackExport = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [positions, setPositions] = useState([])
   const { healthcheckTextWarning } = useSelector(state => state.global)
+  const { selectedVessel } = useSelector(state => state.vessel)
 
   useEffect(() => {
-    if (props.positions && props.positions.length) {
-      const nextPositions = props.positions.map(position => {
+    if (selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
+      const nextPositions = selectedVessel.positions.map(position => {
         const coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION, coordinatesFormat)
 
         return {
@@ -110,7 +111,7 @@ const TrackExport = props => {
 
       setPositions(nextPositions)
     }
-  }, [props.positions])
+  }, [selectedVessel])
 
   const download = () => {
     const objectsToExports = positions
@@ -127,11 +128,11 @@ const TrackExport = props => {
   return (
     <TrackExportButton
       healthcheckTextWarning={healthcheckTextWarning}
-      isClickable={props.positions && props.positions.length}
+      isClickable={selectedVessel && selectedVessel.positions && selectedVessel.positions.length}
       openBox={props.openBox}
       firstUpdate={props.firstUpdate.current}
       rightMenuIsOpen={props.rightMenuIsOpen}
-      onClick={() => props.positions && props.positions.length && download()}
+      onClick={() => selectedVessel && selectedVessel.positions && selectedVessel.positions.length ? download() : undefined}
     >
       <ExportIcon/>
     </TrackExportButton>

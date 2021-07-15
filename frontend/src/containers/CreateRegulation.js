@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
-import { SelectPicker, Input, Radio, Checkbox } from 'rsuite'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
-import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
-import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
+import ReglementationBlocLine from '../components/backoffice/create_reglementation/ReglementationBlocLine'
+import RegulationZoneThemeLine from '../component/backoffice/create_reglementation/RegulationZoneThemeLine'
+import RegulationRegionLine from '../components/backoffice/create_reglementation/RegulationRegionLine'
+import RegulationZoneNameLine from '../components/backoffice/create_reglementation/RegulationZoneNameLine'
+import RegulationThemeLine from '../components/backoffice/create_reglementation/RegulationThemeLine'
 
 const INFO_TEXT = {
   zoneName: `De mme que pour les thmatiques, le nom des zones doit être aussi explicite que possible. 
@@ -100,17 +102,6 @@ const CreateRegulation = () => {
     return array
   }
 
-  const addNewReglementationBloc = () => {
-    if (reglementationBlocName === '') {
-      setReglementationBlocNameIsRed(true)
-    } else {
-      setSelectedReglementationBloc(reglementationBlocName)
-      setReglementationBlocName('')
-      setIsAddReglementationBlocClicked(false)
-      setReglementationBlocNameIsRed(false)
-    }
-  }
-
   const addNewTheme = (elem) => {
     if (themePlace === '') {
       setThemePlaceIsRed(true)
@@ -132,26 +123,8 @@ const CreateRegulation = () => {
     setThemeOtherIndications('')
   }
 
-  const selectPickerStyle = {
-    width: 180,
-    margin: '0',
-    borderColor: COLORS.grayDarker,
-    boxSizing: 'border-box',
-    textOverflow: 'ellipsis'
-  }
-
   const getInfoText = (messageType) => {
     return INFO_TEXT[messageType]
-  }
-
-  const renderMenuItem = (checked, item, tag) => {
-    let component
-    if (tag === 'Radio') {
-      component = <Radio checked={checked}>{item.label}</Radio>
-    } else if (tag === 'Checkbox') {
-      component = <Checkbox checked={checked}>{item.label}</Checkbox>
-    }
-    return component
   }
 
   const addRegionToSelectedRegionList = (elem) => {
@@ -208,183 +181,17 @@ const CreateRegulation = () => {
           <SectionTitle>
             identification de la zone réglementaire
           </SectionTitle>
-          <ContentLine>
-            <Label>Ensemble règlementaire</Label>
-            <SelectWrapper>
-              <CustomSelectPicker
-                style={selectPickerStyle}
-                searchable={false}
-                placeholder='Choisir un ensemble'
-                value={'Choisir un ensemble'}
-                onChange={setSelectedReglementationBloc}
-                data={reglementationBlocList}
-                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedReglementationBloc, item, 'Radio')}
-              />
-            </SelectWrapper>
-            {selectedReglementationBloc
-              ? <CustomTag>
-                  <SelectedValue>{selectedReglementationBloc}</SelectedValue>
-                  <CloseIcon onClick={() => setSelectedReglementationBloc()}/>
-                </CustomTag>
-              : null }
-            {
-              isAddReglementationBlocClicked
-                ? <CreateReglementationBloc>
-                    <CustomInput
-                      placeholder='Nommez le nouvel ensemble règlementaire'
-                      value={reglementationBlocName}
-                      onChange={setReglementationBlocName}
-                      width={'250px'}
-                      isRed={reglementationBlocNameIsRed}
-                    />
-                    <ValidateButton
-                      disabled={false}
-                      isLast={false}
-                      onClick={addNewReglementationBloc}>
-                      Enregistrer
-                    </ValidateButton>
-                    <CancelButton
-                      disabled={false}
-                      isLast={false}
-                      onClick={() => setIsAddReglementationBlocClicked(false)}>
-                      Annuler
-                    </CancelButton>
-                  </CreateReglementationBloc>
-                : !selectedReglementationBloc && <><RectangularButton
-                    onClick={() => setIsAddReglementationBlocClicked(true)}
-                  />
-                  <Label>Ajouter un nouvel ensemble</Label></>
-          }
-          </ContentLine>
-          <ContentLine
-            isFormOpened={isAddThemeClicked}
-            isInfoTextShown={isInfoTextShown}
-          >
-            <Wrapper>
-            <Label>Thématique de la zone</Label>
-            <SelectWrapper>
-              <CustomSelectPicker
-                searchable={false}
-                style={selectPickerStyle}
-                menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
-                placeholder='Choisir une thématique'
-                value={'Choisir une thématique'}
-                onChange={setSelectedReglementationTheme}
-                data={zoneThemeList}
-                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedReglementationTheme, item, 'Radio')}
-              />
-            </SelectWrapper>
-            {selectedReglementationTheme
-              ? <CustomTag>
-                  <SelectedValue>{selectedReglementationTheme}</SelectedValue>
-                  <CloseIcon onClick={() => setSelectedReglementationTheme()}/>
-                </CustomTag>
-              : null }
-            {
-              isAddThemeClicked
-                ? <CreateReglementationBloc>
-                  <CustomInput
-                    placeholder='Lieu*'
-                    value={themePlace}
-                    onChange={setThemePlace}
-                    isRed={themePlaceIsRed}
-                  />
-                  <CustomInput
-                    placeholder='Espèce'
-                    value={themeSpecies}
-                    onChange={setThemeSpecies}
-                  />
-                  <CustomInput
-                    placeholder='Engins'
-                    value={themeGears}
-                    onChange={setThemeGears}
-                  />
-                  <CustomInput
-                    placeholder='Autres indications'
-                    value={themeOtherIndications}
-                    onChange={setThemeOtherIndications}
-                    width={'115px'}
-                  />
-                  <ValidateButton
-                    disabled={false}
-                    isLast={false}
-                    onClick={addNewTheme}>
-                    Enregistrer
-                  </ValidateButton>
-                  <CancelButton
-                    disabled={false}
-                    isLast={false}
-                    onClick={() => {
-                      setIsAddThemeClicked(false)
-                      setIsInfoTextShown(false)
-                    }}
-                  >
-                    Annuler
-                  </CancelButton>
-                </CreateReglementationBloc>
-                : !selectedReglementationTheme && <><RectangularButton
-                    onClick={() => {
-                      setIsAddThemeClicked(true)
-                      setIsInfoTextShown(true)
-                    }}
-                  />
-                  <Label>Créer une nouvelle thématique</Label></>
-            }
-            </Wrapper>
-            {displayInfoBox(isInfoTextShown, setIsInfoTextShown, isAddThemeClicked, 'zoneTheme')}
-          </ContentLine>
-          <ContentLine>
-            <Label>Nom de la zone</Label>
-            <CustomInput
-              placeholder=''
-              value={nameZone}
-              onChange={setNameZone}
-              width={'180px'}
-            />
-            {displayInfoBox(isZoneNameInfoTextShown, setIsZoneNameInfoTextShown, false, 'zoneName')}
-          </ContentLine>
-          <ContentLine>
-            <Label>Secteur</Label>
-            <SelectWrapper>
-              <CustomSelectPicker
-                style={selectPickerStyle}
-                searchable={false}
-                placeholder='Choisir une thématique'
-                value={'Choisir une thématique'}
-                onChange={setSelectedSeaFront}
-                data={seaFrontList}
-                renderMenuItem={(_, item) => renderMenuItem(item.value === selectedSeaFront, item, 'Radio')}
-              />
-            </SelectWrapper>
-            {selectedSeaFront
-              ? <CustomTag>
-                  <SelectedValue>{selectedSeaFront}</SelectedValue>
-                  <CloseIcon onClick={() => setSelectedSeaFront()}/>
-                </CustomTag>
-              : null }
-          </ContentLine>
-          <ContentLine>
-            <Label>Région</Label>
-            <SelectWrapper>
-              <CustomSelectPicker
-                menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
-                style={selectPickerStyle}
-                searchable={false}
-                placeholder='Choisir une région'
-                onChange={addRegionToSelectedRegionList}
-                value={'Choisir une région'}
-                data={formatData(FRENCH_REGION_LIST)}
-                renderMenuItem={(_, item) => renderMenuItem(selectedRegionList.includes(item.value), item, 'Checkbox')}
-                block
-              />
-            </SelectWrapper>
-            <>
-            {
-            selectedRegionList && selectedRegionList.length > 0 &&
-              <SelectedRegionList />
-            }
-            </>
-          </ContentLine>
+          <ReglementationBlocLine
+            setSelectedValue={selectedReglementationBloc}
+            selectedValue={setSelectedReglementationBloc}
+            selectData={reglementationBlocList}
+            reglementationBlocName={reglementationBlocName}
+            setReglementationBlocName={setReglementationBlocName}
+          />
+          <RegulationZoneThemeLine />
+          <RegulationZoneNameLine />
+          <RegulationThemeLine />
+          <RegulationRegionLine />
         </Section>
       </Content>
     </CreateRegulationWrapper>
@@ -452,67 +259,9 @@ const InfoPoint = styled.a`
   }
 `
 
-const CustomTag = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #EDEDED;
-  border-radius: 2px;
-  margin-right: 8px;
-`
-
-const SelectedValue = styled.span`
-  font-size: 13px;
-  padding: 2.5px;
-`
-
-// Pourrait être dans common car on l'utilise souvent
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  vertical-align: text-bottom;
-  cursor: pointer;
-  border-left: 1px solid white;
-  height: 30px;
-  margin: 0 6px 0 7px;
-  padding: 2.5px 2.5px 2.5px 7px;
-`
-
 const Header = styled.div`
   margin-bottom: 40px;
   margin-top: 20px;
-`
-
-const ValidateButton = styled(BlackButton)`
-  margin: 0px 10px 0px 0px;
-`
-
-const CancelButton = styled(WhiteButton)`
-  margin: 0px 10px 0px 0px;
-`
-
-const CreateReglementationBloc = styled.div`
-  display: flex;
-`
-
-const CustomSelectPicker = styled(SelectPicker)`
-  a {
-    box-sizing: border-box;
-  }
-`
-
-const CustomInput = styled(Input)`
-  font-size: 11px;
-  height: 35px;
-  ${props => props.width ? '' : 'min-width: 100px;'}
-  ${props => props.width ? `width: ${props.width};` : ''}
-  ${props => props.isRed ? `border-color: ${COLORS.red};` : ''}
-  margin: 0px 10px 0px 0px;
-  padding: 8px;
-`
-const SelectWrapper = styled.div`
-  display: inline-block;
-  margin: 0px 10px 0px 0px;
-  vertical-align: sub;
 `
 
 const CreateRegulationWrapper = styled.div`
@@ -569,56 +318,6 @@ const SectionTitle = styled.span`
   width: 100%;
   border-bottom: 1px solid ${COLORS.grayDarker};
   margin-bottom: 20px;
-`
-const ContentLine = styled.div`
-  display: flex;
-  flex-direction : ${props => props.isFormOpened && props.isInfoTextShown ? 'column' : 'row'};
-  align-items: ${props => props.isFormOpened && props.isInfoTextShown ? 'flex-start' : 'center'};
-  margin-bottom: 8px;
-`
-const Label = styled.span`
-  text-align: left;
-  color: ${COLORS.textGray};
-  min-width: 154px;
-  font-size: 13px;
-  margin-right: 8px;
-`
-const RectangularButton = styled.a`
-  position: relative;
-  width: 35px;
-  height: 35px;
-  border: 1px solid ${COLORS.grayDarker};
-  border-radius: 2px;
-  color: ${COLORS.grayDarker};
-  margin-right: 8px;
-
-  &:after {
-    content: "";  
-    display: block;
-    background-color: ${COLORS.grayDarker};
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  &:before {
-    content: "";  
-    display: block;
-    background-color: ${COLORS.grayDarker};
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  &:before {
-    height: 15px;
-    width: 1.5px;
-  }
-  &:after {
-    height: 1.5px;
-    width: 15px;
-  }
 `
 
 export default CreateRegulation

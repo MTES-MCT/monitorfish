@@ -5,10 +5,8 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
 
 import BaseLayerItem from './BaseLayerItem'
 import { COLORS } from '../../constants/constants'
-import { baseLayers } from '../../domain/entities/layers'
+import { baseLayers, layersType } from '../../domain/entities/layers'
 import layer from '../../domain/reducers/Layer'
-
-const ZONE_NAME = 'base_layer_zone'
 const BaseLayerSelection = ({ namespace }) => {
   const dispatch = useDispatch()
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
@@ -22,7 +20,7 @@ const BaseLayerSelection = ({ namespace }) => {
   } = layer[namespace].actions
 
   useEffect(() => {
-    setShowBaseLayers(layersSideBarOpenedZone === ZONE_NAME)
+    setShowBaseLayers(layersSideBarOpenedZone === layersType.BASE_LAYER)
   }, [layersSideBarOpenedZone, setShowBaseLayers])
 
   const onSectionTitleClicked = () => {
@@ -31,7 +29,7 @@ const BaseLayerSelection = ({ namespace }) => {
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
       setShowBaseLayers(true)
-      dispatch(setLayersSideBarOpenedZone(ZONE_NAME))
+      dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
     }
   }
 

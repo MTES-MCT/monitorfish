@@ -224,8 +224,9 @@ const CreateRegulation = () => {
             <Label>Thématique de la zone</Label>
             <SelectWrapper>
               <CustomSelectPicker
-                searchable={true}
+                searchable={false}
                 style={selectPickerStyle}
+                menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
                 placeholder='Choisir une thématique'
                 value={'Choisir une thématique'}
                 onChange={setSelectedZoneTheme}
@@ -325,7 +326,7 @@ const CreateRegulation = () => {
             <SelectWrapper>
               <CustomSelectPicker
                 style={selectPickerStyle}
-                searchable={true}
+                searchable={false}
                 placeholder='Choisir une thématique'
                 value={'Choisir une thématique'}
                 onChange={setSelectedSeaFront}
@@ -474,6 +475,7 @@ const CustomInput = styled(Input)`
   width: 180px; 
   height: 35px;
   margin: 0px 10px 0px 0px;
+  padding: 8px;
 `
 const SelectWrapper = styled.div`
   display: inline-block;

@@ -4,12 +4,10 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
 import RegulatoryZoneSelectedLayer from './RegulatoryZoneSelectedLayer'
 import { COLORS } from '../../constants/constants'
 import removeRegulatoryZoneFromMySelection from '../../domain/use_cases/removeRegulatoryZoneFromMySelection'
-import LayersEnum from '../../domain/entities/layers'
+import LayersEnum, { layersType } from '../../domain/entities/layers'
 import hideLayers from '../../domain/use_cases/hideLayers'
 import { useDispatch, useSelector } from 'react-redux'
 import layer from '../../domain/reducers/Layer'
-
-const ZONE_NAME = 'regulatory_zone_selected'
 
 const RegulatoryZoneSelected = props => {
   const dispatch = useDispatch()
@@ -28,7 +26,7 @@ const RegulatoryZoneSelected = props => {
   const { setLayersSideBarOpenedZone } = layer[namespace].actions
 
   useEffect(() => {
-    setShowRegulatoryZonesSelected(layersSideBarOpenedZone === ZONE_NAME)
+    setShowRegulatoryZonesSelected(layersSideBarOpenedZone === layersType.REGULATORY)
   }, [layersSideBarOpenedZone, setShowRegulatoryZonesSelected])
 
   function increaseNumberOfZonesOpened (number) {
@@ -78,7 +76,7 @@ const RegulatoryZoneSelected = props => {
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
       setShowRegulatoryZonesSelected(true)
-      dispatch(setLayersSideBarOpenedZone(ZONE_NAME))
+      dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
     }
   }
 

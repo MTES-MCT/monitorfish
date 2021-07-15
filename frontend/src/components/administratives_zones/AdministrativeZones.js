@@ -11,8 +11,7 @@ import showLayer from '../../domain/use_cases/showLayer'
 import hideLayers from '../../domain/use_cases/hideLayers'
 import NamespaceContext from '../../domain/context/NamespaceContext'
 import layer from '../../domain/reducers/Layer'
-
-const ZONE_NAME = 'administrative_zones'
+import { layersType } from '../../domain/entities/layers'
 
 const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, namespace }) => {
   const {
@@ -29,7 +28,7 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
   const { layersSideBarOpenedZone } = useSelector(state => state.layer)
 
   useEffect(() => {
-    setShowZones(layersSideBarOpenedZone === ZONE_NAME)
+    setShowZones(layersSideBarOpenedZone === layersType.ADMINISTRATIVE)
   }, [layersSideBarOpenedZone, setShowZones])
 
   useEffect(() => {
@@ -75,7 +74,7 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
       setShowZones(true)
-      dispatch(setLayersSideBarOpenedZone(ZONE_NAME))
+      dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
     }
   }
 

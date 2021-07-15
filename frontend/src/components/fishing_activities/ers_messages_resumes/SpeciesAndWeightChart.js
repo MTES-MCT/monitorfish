@@ -71,7 +71,7 @@ const SpeciesAndWeightChart = ({
               <Weight
                 hasPresentation={speciesPresentationAndWeightArray}
                 height={speciesAndWeight.height}
-                isLast={index === speciesAndWeightArrayWithHeight.length - 1}
+                isLast={index === speciesAndWeightArrayWithHeight.length - 1 && speciesAndWeight.species !== speciesPresentationOpened}
                 onClick={() => speciesPresentationAndWeightArray
                   ? openPresentation(speciesAndWeight.species, speciesPresentationAndWeightArray[index])
                   : undefined
@@ -93,7 +93,7 @@ const SpeciesAndWeightChart = ({
               </Weight>
               <Species
                 height={speciesAndWeight.height}
-                isLast={index === speciesAndWeightArrayWithHeight.length - 1}
+                isLast={index === speciesAndWeightArrayWithHeight.length - 1 && speciesAndWeight.species !== speciesPresentationOpened}
               >
                 {
                   speciesAndWeight.speciesName
@@ -105,9 +105,11 @@ const SpeciesAndWeightChart = ({
             <PresentationWrapper isOpen={speciesAndWeight.species === speciesPresentationOpened}>
                 { speciesPresentationAndWeightArray && speciesPresentationAndWeightArray[index]
                   ? speciesPresentationAndWeightArray[index]
-                    .map((speciesAndPresentation, index) => {
-                      return <SpeciesAndPresentation key={speciesPresentationAndWeightArray[index].presentation}>
-                        <PresentationWeight isLast={speciesPresentationAndWeightArray[index] === speciesPresentationAndWeightArray[index].length - 1}>
+                    .map((speciesAndPresentation, presentationIndex) => {
+                      return <SpeciesAndPresentation key={speciesAndPresentation.presentation}>
+                        <PresentationWeight isLast={
+                          index === speciesPresentationAndWeightArray.length - 1 &&
+                          presentationIndex === speciesPresentationAndWeightArray[index].length - 1}>
                           {speciesAndPresentation.weight} kg ({getPercentOfPresentationToSpeciesWeight(speciesAndPresentation.weight, speciesAndWeight.weight)} %)
                         </PresentationWeight>
                         <Presentation>
@@ -134,7 +136,6 @@ const Presentation = styled.div`
   color: ${COLORS.textGray};
   font-size: 11px;
   margin: 2px 0 0 10px;
-  ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
 `
 
 const Wrapper = styled.div``
@@ -201,7 +202,7 @@ const PresentationWeight = styled.div`
   border-left: 2px solid ${COLORS.grayDarker};
   border-right: 2px solid ${COLORS.grayDarker};
   border-top: 2px solid ${COLORS.grayDarker};
-  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.textGray};` : ''}
+  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.grayDarker};` : ''}
   height: 20px;
   color: ${COLORS.textGray};
   font-size: 11px;

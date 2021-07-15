@@ -45,7 +45,6 @@ const FARMessageResume = props => {
       })
 
       setSpeciesPresentationAndWeightArray(array)
-      console.log(array, props.speciesAndPresentationToWeightOfFAR)
     }
   }, [props.speciesAndPresentationToWeightOfFAR, speciesAndWeightArray])
 

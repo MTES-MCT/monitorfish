@@ -79,14 +79,13 @@ export const AddRegulationButton = styled.button`
   ${baseAddButton}
   min-width: 40px;
   min-height: 40px;
-  background-color: ${COLORS.grayDarkerThree};
+  && {
+    background-color: ${COLORS.grayDarkerThree};
+  }
   &:after {
     background-color: ${COLORS.white};
   }
   &:before {
     background-color: ${COLORS.white};
-  }
-  &:hover {
-    background-color: ${COLORS.grayDarkerThree};
   }
 `

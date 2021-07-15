@@ -25,11 +25,11 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
   const [zones, setZones] = useState([])
   const firstUpdate = useRef(true)
 
-  const { layersSideBarOpenedZone } = useSelector(state => state.layer)
+  const { layersSidebarOpenedZone } = useSelector(state => state.layer)
 
   useEffect(() => {
-    setShowZones(layersSideBarOpenedZone === layersType.ADMINISTRATIVE)
-  }, [layersSideBarOpenedZone, setShowZones])
+    setShowZones(layersSidebarOpenedZone === layersType.ADMINISTRATIVE)
+  }, [layersSidebarOpenedZone, setShowZones])
 
   useEffect(() => {
     if (firstUpdate) {

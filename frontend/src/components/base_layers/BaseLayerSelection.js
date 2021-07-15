@@ -10,7 +10,7 @@ import layer from '../../domain/reducers/Layer'
 const BaseLayerSelection = ({ namespace }) => {
   const dispatch = useDispatch()
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
-  const { layersSideBarOpenedZone } = useSelector(state => state.layer)
+  const { layersSidebarOpenedZone } = useSelector(state => state.layer)
 
   const baseLayersKeys = Object.keys(baseLayers)
   const [showBaseLayers, setShowBaseLayers] = useState(false)
@@ -20,8 +20,8 @@ const BaseLayerSelection = ({ namespace }) => {
   } = layer[namespace].actions
 
   useEffect(() => {
-    setShowBaseLayers(layersSideBarOpenedZone === layersType.BASE_LAYER)
-  }, [layersSideBarOpenedZone, setShowBaseLayers])
+    setShowBaseLayers(layersSidebarOpenedZone === layersType.BASE_LAYER)
+  }, [layersSidebarOpenedZone, setShowBaseLayers])
 
   const onSectionTitleClicked = () => {
     if (showBaseLayers) {

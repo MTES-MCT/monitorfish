@@ -22,12 +22,12 @@ const RegulatoryZoneSelected = props => {
   const [showRegulatoryZonesSelected, setShowRegulatoryZonesSelected] = useState(false)
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const firstUpdate = useRef(true)
-  const { layersSideBarOpenedZone } = useSelector(state => state.layer)
+  const { layersSidebarOpenedZone } = useSelector(state => state.layer)
   const { setLayersSideBarOpenedZone } = layer[namespace].actions
 
   useEffect(() => {
-    setShowRegulatoryZonesSelected(layersSideBarOpenedZone === layersType.REGULATORY)
-  }, [layersSideBarOpenedZone, setShowRegulatoryZonesSelected])
+    setShowRegulatoryZonesSelected(layersSidebarOpenedZone === layersType.REGULATORY)
+  }, [layersSidebarOpenedZone, setShowRegulatoryZonesSelected])
 
   function increaseNumberOfZonesOpened (number) {
     setNumberOfZonesOpened(numberOfZonesOpened + number)

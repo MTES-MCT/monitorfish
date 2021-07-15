@@ -1,13 +1,20 @@
 import { closeVesselSidebar } from '../reducers/Vessel'
-import { IS_SELECTED_PROPERTY } from '../entities/vessel'
+import { IS_SELECTED_PROPERTY, Vessel } from '../entities/vessel'
 
 const unselectVessel = () => (dispatch, getState) => {
-  const vessel = getState().vessel.selectedVesselFeatureAndIdentity
+  const {
+    vesselsLayerSource,
+    selectedVessel
+  } = getState().vessel
 
-  if (vessel && vessel.feature) {
-    vessel.feature.set(IS_SELECTED_PROPERTY, false)
+  if (vesselsLayerSource && selectedVessel) {
+    const feature = vesselsLayerSource.getFeatureById(Vessel.getVesselId(selectedVessel))
+    if (feature) {
+      feature.set(IS_SELECTED_PROPERTY, false)
+    }
+
+    dispatch(closeVesselSidebar())
   }
-  dispatch(closeVesselSidebar())
 }
 
 export default unselectVessel

@@ -100,3 +100,59 @@
  * @property {string} vesselType
  * @property {number} width
  */
+
+/**
+ * @typedef SelectedVessel
+ * @property {string[]} declaredFishingGears
+ * @property {string} district
+ * @property {string} districtCode
+ * @property {string} externalReferenceNumber
+ * @property {string} flagState
+ * @property {number} gauge
+ * @property {number} id
+ * @property {string} imo
+ * @property {string} internalReferenceNumber
+ * @property {string} ircs
+ * @property {number} length
+ * @property {string} mmsi
+ * @property {string} navigationLicenceExpirationDate
+ * @property {string[]} operatorEmails
+ * @property {string} operatorName
+ * @property {string[]} operatorPhones
+ * @property {boolean} pinger
+ * @property {VesselPosition[]} positions
+ * @property {number} power
+ * @property {string[]} proprietorEmails
+ * @property {string} proprietorName
+ * @property {string[]} proprietorPhones
+ * @property {string} registryPort
+ * @property {string} sailingCategory
+ * @property {string} sailingType
+ * @property {string[]} vesselEmails
+ * @property {string} vesselName
+ * @property {string[]} vesselPhones
+ * @property {string} vesselType
+ * @property {number} width
+ * @property {number} course
+ * @property {string | null} dateTime
+ * @property {string | null} departureDateTime
+ * @property {string | null} destination
+ * @property {number | null} emissionPeriod
+ * @property {string | null} from
+ * @property {Gear[] | null} gearOnboard
+ * @property {string | null} lastErsDateTime
+ * @property {number | null} latitude
+ * @property {number | null} longitude
+ * @property {string | null} positionType
+ * @property {string | null} registryPortLocode
+ * @property {string | null} registryPortName
+ * @property {string[] | null} segments
+ * @property {Species[] | null} speciesOnboard
+ * @property {number | null} speed
+ * @property {number | null} totalWeightOnboard
+ * @property {number | null} tripNumber
+ * @property {string | null} lastControlDateTime
+ * @property {boolean | null} lastControlInfraction
+ * @property {number | null} postControlComment
+ */
+

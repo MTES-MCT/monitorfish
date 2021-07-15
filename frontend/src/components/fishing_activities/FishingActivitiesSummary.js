@@ -34,7 +34,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
     isLastVoyage,
     previousBeforeDateTime,
     fishingActivities,
-    selectedVesselFeatureAndIdentity
+    selectedVessel
   } = useSelector(state => state.vessel)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
 
@@ -183,7 +183,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
             <Text>Segment(s) de flotte(s) actuel(s)</Text>
             <TextValue>
               <FleetSegments
-                vesselLastPositionFeature={selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature}
+                selectedVessel={selectedVessel}
                 fleetSegmentsReferential={fleetSegments}
               />
             </TextValue>

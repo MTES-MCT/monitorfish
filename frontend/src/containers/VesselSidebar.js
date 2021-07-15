@@ -144,36 +144,28 @@ const VesselSidebar = () => {
             </TabList>
             {
               !showedError
-                ? <>
+                ? <Panel>
                   {
                     vesselSidebarTab === VesselSidebarTab.SUMMARY
-                      ? <Panel>
-                        <VesselSummary/>
-                      </Panel>
+                      ? <VesselSummary/>
                       : null
                   }
                   {
                     vesselSidebarTab === VesselSidebarTab.IDENTITY
-                      ? <Panel>
-                        <VesselIdentity/>
-                      </Panel>
+                      ? <VesselIdentity/>
                       : null
                   }
                   {
                     vesselSidebarTab === VesselSidebarTab.VOYAGES
-                      ? <Panel>
-                        <VesselFishingActivities/>
-                      </Panel>
+                      ? <VesselFishingActivities/>
                       : null
                   }
                   {
                     vesselSidebarTab === VesselSidebarTab.CONTROLS
-                      ? <Panel>
-                        <VesselControls/>
-                      </Panel>
+                      ? <VesselControls/>
                       : null
                   }
-                </>
+                </Panel>
                 : <Error>
                   <ErrorText>
                     {showedError.message}

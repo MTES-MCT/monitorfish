@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useToasts } from 'react-toast-notifications'
 
 import showAllVessels from '../domain/use_cases/showVesselsLastPosition'
@@ -22,10 +22,10 @@ const APIWorker = () => {
   const {
     vesselsLayerSource,
     vesselSidebarTab,
-    selectedVessel,
-    selectedVesselFeatureAndIdentity
+    selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const { addToast } = useToasts()
+  const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
     dispatch(setIsUpdatingVessels())
@@ -39,6 +39,8 @@ const APIWorker = () => {
       dispatch(getHealthcheck())
       dispatch(showAllVessels())
       dispatch(updateVesselTrackAndSidebar())
+
+      setUpdateVesselSidebarTab(true)
     }, TWO_MINUTES)
 
     return () => {
@@ -47,24 +49,26 @@ const APIWorker = () => {
   }, [])
 
   useEffect(() => {
+    if (updateVesselSidebarTab) {
+      if (vesselSidebarTab === VesselSidebarTab.VOYAGES) {
+        if (selectedVesselIdentity) {
+          dispatch(getVesselVoyage(selectedVesselIdentity, null, true))
+        }
+      } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
+        dispatch(getControls())
+      }
+
+      setUpdateVesselSidebarTab(false)
+    }
+  }, [selectedVesselIdentity, updateVesselSidebarTab])
+
+  useEffect(() => {
     if (vesselsLayerSource) {
       vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
         dispatch(resetIsUpdatingVessels())
       })
     }
   }, [vesselsLayerSource])
-
-  useEffect(() => {
-    if (selectedVessel) {
-      if (vesselSidebarTab === VesselSidebarTab.VOYAGES) {
-        if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
-          dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, null, true))
-        }
-      } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
-        dispatch(getControls())
-      }
-    }
-  }, [selectedVessel])
 
   useEffect(() => {
     if (error) {

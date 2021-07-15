@@ -24,11 +24,10 @@ export class Vessel {
   /**
    * Vessel object for building OpenLayers vessel feature
    * @param {VesselLastPosition} vessel
-   * @param {{id: string}} options
    */
-  constructor (vessel, options) {
+  constructor (vessel) {
     this.vessel = vessel
-    this.id = options.id
+    this.id = Vessel.getVesselId(vessel)
     this.coordinates = transform([this.vessel.longitude, this.vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
     this.feature = new Feature({
@@ -67,7 +66,7 @@ export class Vessel {
       vesselIdentifier: vessel.vesselIdentifier
     })
 
-    this.feature.setId(`${Layers.VESSELS.code}:${options.id}`)
+    this.feature.setId(this.id)
   }
 
   static vesselIsMovingSpeed = 0.1
@@ -81,6 +80,10 @@ export class Vessel {
     const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
 
     feature.set(IS_SHOWED_IN_FILTER_PROPERTY, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
+  }
+
+  static getVesselId (vessel) {
+    return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
   }
 
   static getVesselOpacity (vesselsLastPositionVisibility, dateTime) {
@@ -145,11 +148,30 @@ export const getVesselIdentityFromFeature = feature => {
   return {
     internalReferenceNumber: feature.getProperties().internalReferenceNumber,
     externalReferenceNumber: feature.getProperties().externalReferenceNumber,
+    latitude: feature.getProperties().latitude,
+    longitude: feature.getProperties().longitude,
     vesselName: feature.getProperties().vesselName,
     flagState: feature.getProperties().flagState,
     mmsi: feature.getProperties().mmsi,
     ircs: feature.getProperties().ircs,
-    vesselIdentifier: feature.getProperties().vesselIdentifier
+    course: feature.getProperties().course,
+    speed: feature.getProperties().speed,
+    width: feature.getProperties().width,
+    length: feature.getProperties().length,
+    dateTime: feature.getProperties().dateTime,
+    gearOnboard: feature.getProperties().gearOnboard,
+    segments: feature.getProperties().segments,
+    speciesOnboard: feature.getProperties().speciesOnboard,
+    district: feature.getProperties().district,
+    districtCode: feature.getProperties().districtCode,
+    lastControlDateTime: feature.getProperties().lastControlDateTime,
+    lastControlInfraction: feature.getProperties().lastControlInfraction,
+    totalWeightOnboard: feature.getProperties().totalWeightOnboard,
+    registryPortLocode: feature.getProperties().registryPortLocode,
+    registryPortName: feature.getProperties().registryPortName,
+    lastErsDateTime: feature.getProperties().lastErsDateTime,
+    emissionPeriod: feature.getProperties().emissionPeriod,
+    departureDateTime: feature.getProperties().departureDateTime
   }
 }
 
@@ -165,11 +187,8 @@ export const getVesselIdentityFromVessel = vessel => {
   }
 }
 
-export const getVesselFeatureAndIdentity = (feature, identity) => {
-  return {
-    identity: identity,
-    feature: feature
-  }
+export const getVesselFeatureIdFromVessel = vessel => {
+  return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.mmsi}/${vessel.ircs}`
 }
 
 export function vesselAndVesselFeatureAreEquals (vessel, feature) {

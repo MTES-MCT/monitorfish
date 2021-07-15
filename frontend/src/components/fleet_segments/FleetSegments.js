@@ -3,15 +3,15 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as InfoSVG } from '../icons/Information.svg'
 
-const FleetSegments = ({ vesselLastPositionFeature, fleetSegmentsReferential }) => {
+const FleetSegments = ({ selectedVessel, fleetSegmentsReferential }) => {
   const [fleetSegments, setFleetSegments] = useState([])
 
   useEffect(() => {
-    if (vesselLastPositionFeature &&
-      vesselLastPositionFeature.getProperties().segments &&
-      vesselLastPositionFeature.getProperties().segments.length) {
+    if (selectedVessel &&
+      selectedVessel.segments &&
+      selectedVessel.segments.length) {
       if (fleetSegmentsReferential && fleetSegmentsReferential.length) {
-        const nextFleetSegments = vesselLastPositionFeature.getProperties().segments.map(segment => {
+        const nextFleetSegments = selectedVessel.segments.map(segment => {
           const found = fleetSegmentsReferential.find(segmentWithProperties => segmentWithProperties.segment === segment)
 
           if (found) {
@@ -25,7 +25,7 @@ const FleetSegments = ({ vesselLastPositionFeature, fleetSegmentsReferential }) 
 
         setFleetSegments(nextFleetSegments)
       } else {
-        const nextFleetSegments = vesselLastPositionFeature.getProperties().segments.map(segment => {
+        const nextFleetSegments = selectedVessel.segments.map(segment => {
           return {
             segment: segment
           }
@@ -35,7 +35,7 @@ const FleetSegments = ({ vesselLastPositionFeature, fleetSegmentsReferential }) 
     } else {
       setFleetSegments([])
     }
-  }, [fleetSegmentsReferential, vesselLastPositionFeature])
+  }, [fleetSegmentsReferential, selectedVessel])
 
   function getSegmentInfo (segment) {
     if (segment.gears || segment.faoAreas || segment.targetSpecies || segment.dirm || segment.bycatchSpecies) {

@@ -73,7 +73,9 @@ const LayersSidebar = () => {
               layersSidebarIsOpen={layersSidebarIsOpen}
               setHideZonesListWhenSearching={setHideZonesListWhenSearching}
             />
-            <Zones>
+            <Zones
+              healthcheckTextWarning={healthcheckTextWarning}
+            >
               <RegulatoryZoneSelected
                 regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
                 hideZonesListWhenSearching={hideZonesListWhenSearching}
@@ -82,10 +84,12 @@ const LayersSidebar = () => {
               <AdministrativeZones
                 administrativeZones={administrativeZones}
                 hideZonesListWhenSearching={hideZonesListWhenSearching}
+                namespace={namespace}
               />
-              <BaseLayerSelection/>
+              <BaseLayerSelection namespace={namespace}/>
             </Zones>
             <MetadataWrapper
+              healthcheckTextWarning={healthcheckTextWarning}
               firstUpdate={firstUpdate.current}
               regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
             >
@@ -132,8 +136,9 @@ const Zones = styled.div`
   text-decoration: none;
   background-color: ${COLORS.gray};
   padding: 1px 10px 10px 10px;
-  max-height: calc(100vh - 50px);
+  max-height: calc(100vh - ${props => props.healthcheckTextWarning ? '210px' : '160px'});
   border-radius: 2px;
+  overflow: hidden;
 `
 
 const SidebarLayersIcon = styled.button`
@@ -172,8 +177,9 @@ const MetadataWrapper = styled.div`
     top: 0px;
     opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
     z-index: -1;
-    max-height: calc(100vh - 50px);
+    max-height: calc(100vh - ${props => props.healthcheckTextWarning ? '210px' : '160px'});
     padding: 10px 10px 0 10px;
+    overflow-x: hidden;
     overflow-y: no-scroll;
     border-bottom: 10px solid #EEE;
     min-height: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 400 : 100}px;

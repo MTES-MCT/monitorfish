@@ -50,7 +50,7 @@ const VesselControls = () => {
     if (selectedVessel && controlsFromDate) {
       dispatch(getControls(true))
     }
-  }, [controlsFromDate])
+  }, [selectedVessel, controlsFromDate])
 
   const updateControlResumeAndControls = nextControlResumeAndControls => {
     if (nextControlResumeAndControls) {

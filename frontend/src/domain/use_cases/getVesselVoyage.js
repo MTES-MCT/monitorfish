@@ -18,7 +18,7 @@ export const NAVIGATE_TO = {
 
 const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, getState) => {
   if (vesselIdentity) {
-    const currentSelectedVesselIdentity = getState().vessel.selectedVesselFeatureAndIdentity.identity
+    const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
     const {
       lastFishingActivities,
       isLastVoyage,
@@ -45,8 +45,11 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         break
     }
 
-    dispatch(loadingFisheriesActivities())
+    if (!fromCron) {
+      dispatch(loadingFisheriesActivities())
+    }
 
+    console.log('getVesselVoyageFromAPI')
     getVesselVoyageFromAPI(vesselIdentity, beforeDateTime).then(voyage => {
       if (!voyage) {
         dispatch(setVoyage({

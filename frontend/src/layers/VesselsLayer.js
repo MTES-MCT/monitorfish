@@ -5,7 +5,8 @@ import Layers from '../domain/entities/layers'
 import { setFilteredVesselsFeaturesUids, setVesselsLayerSource } from '../domain/reducers/Vessel'
 import {
   FILTER_COLOR_PROPERTY,
-  IS_LIGHT_PROPERTY, IS_SELECTED_PROPERTY,
+  IS_LIGHT_PROPERTY,
+  IS_SELECTED_PROPERTY,
   NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY,
   OPACITY_PROPERTY,
   Vessel,
@@ -24,7 +25,7 @@ const VesselsLayer = ({ map }) => {
 
   const {
     vessels,
-    selectedVesselFeatureAndIdentity
+    selectedVesselIdentity
   } = useSelector(state => state.vessel)
 
   const {
@@ -130,8 +131,7 @@ const VesselsLayer = ({ map }) => {
 
   const showSelectedVesselSelector = vesselsFeatures => {
     const feature = vesselsFeatures.find(feature =>
-      selectedVesselFeatureAndIdentity &&
-      vesselAndVesselFeatureAreEquals(selectedVesselFeatureAndIdentity.identity, feature))
+      selectedVesselIdentity && vesselAndVesselFeatureAreEquals(selectedVesselIdentity, feature))
 
     if (feature) {
       feature.set(IS_SELECTED_PROPERTY, true)
@@ -143,7 +143,7 @@ const VesselsLayer = ({ map }) => {
       const vesselsFeatures = vessels
         .filter(vessel => vessel)
         .filter(vessel => vessel.latitude && vessel.longitude)
-        .map((currentVessel, index) => buildLastPositionFeature(currentVessel, index))
+        .map(currentVessel => buildLastPositionFeature(currentVessel))
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(features => {
@@ -194,9 +194,8 @@ const VesselsLayer = ({ map }) => {
       })
   })
 
-  const buildLastPositionFeature = (vesselFromAPI, id) => {
-    const vesselOptions = { id }
-    const vessel = new Vessel(vesselFromAPI, vesselOptions)
+  const buildLastPositionFeature = (vesselFromAPI) => {
+    const vessel = new Vessel(vesselFromAPI)
 
     return vessel.feature
   }

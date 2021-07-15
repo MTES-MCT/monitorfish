@@ -15,7 +15,7 @@ const getControls = userRequest => (dispatch, getState) => {
     selectedVessel
   } = getState().vessel
 
-  if (selectedVessel.id) {
+  if (selectedVessel && selectedVessel.id) {
     const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.id, currentControlResumeAndControls)
 
     if (!isSameVesselAsCurrentlyShowed) {

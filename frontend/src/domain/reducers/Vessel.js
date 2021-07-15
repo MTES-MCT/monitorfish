@@ -9,11 +9,11 @@ import { createSlice } from '@reduxjs/toolkit'
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
-    selectedVesselFeatureAndIdentity: null,
+    selectedVesselIdentity: null,
     vessels: [],
     filteredVesselsFeaturesUids: [],
     vesselsLayerSource: null,
-    /** @type {Vessel | null} selectedVessel */
+    /** @type {SelectedVessel | null} selectedVessel */
     selectedVessel: null,
     /** @type {VesselPosition | null} highlightedVesselTrackPosition */
     highlightedVesselTrackPosition: null,
@@ -58,7 +58,7 @@ const vesselSlice = createSlice({
       state.vesselsLayerSource = action.payload
     },
     loadingVessel (state, action) {
-      state.selectedVesselFeatureAndIdentity = action.payload.vesselFeatureAndIdentity
+      state.selectedVesselIdentity = action.payload.vesselIdentity
       state.vesselSidebarIsOpen = true
       if (!action.payload.calledFromCron) {
         state.selectedVessel = null
@@ -71,22 +71,18 @@ const vesselSlice = createSlice({
     },
     resetSelectedVessel (state) {
       state.selectedVessel = null
-      state.selectedVesselFeatureAndIdentity = null
+      state.selectedVesselIdentity = null
     },
     closeVesselSidebar (state) {
       state.vesselSidebarIsOpen = false
       state.selectedVessel = null
-      state.selectedVesselFeatureAndIdentity = null
+      state.selectedVesselIdentity = null
       state.temporaryTrackDepth = {
         trackDepth: null,
         afterDateTime: null,
         beforeDateTime: null
       }
       state.tripMessagesLastToFormerDEPDateTimes = []
-    },
-    updateSelectedVesselFeature (state, action) {
-      const nextState = { ...state.selectedVesselFeatureAndIdentity }
-      state.selectedVesselFeatureAndIdentity = { identity: nextState.identity, feature: action.payload }
     },
     setFocusOnVesselSearch (state, action) {
       state.isFocusedOnVesselSearch = action.payload
@@ -228,7 +224,6 @@ export const {
   setSelectedVessel,
   resetSelectedVessel,
   closeVesselSidebar,
-  updateSelectedVesselFeature,
   setVoyage,
   setLastVoyage,
   resetVoyage,

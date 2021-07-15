@@ -19,8 +19,7 @@ const VesselSummary = props => {
   const { fleetSegments } = useSelector(state => state.fleetSegment)
   const {
     loadingVessel,
-    selectedVessel,
-    selectedVesselFeatureAndIdentity
+    selectedVessel
   } = useSelector(state => state.vessel)
   const [photoFallback, setPhotoFallback] = useState(false)
   const [lastPosition, setLastPosition] = useState(null)
@@ -38,14 +37,14 @@ const VesselSummary = props => {
   }, [selectedVessel, props.error])
 
   useEffect(() => {
-    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature) {
+    if (selectedVessel) {
       const {
         course,
         latitude,
         longitude,
         speed,
         dateTime
-      } = selectedVesselFeatureAndIdentity.feature.getProperties()
+      } = selectedVessel
 
       setLastPosition({
         course,
@@ -59,11 +58,11 @@ const VesselSummary = props => {
     } else {
       setLastPosition(null)
     }
-  }, [selectedVesselFeatureAndIdentity, selectedVessel])
+  }, [selectedVessel])
 
   useEffect(() => {
-    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature && selectedVesselFeatureAndIdentity.feature.getProperties().speciesOnboard) {
-      const faoZones = selectedVesselFeatureAndIdentity.feature.getProperties().speciesOnboard.map(species => {
+    if (selectedVessel && selectedVessel.speciesOnboard) {
+      const faoZones = selectedVessel.speciesOnboard.map(species => {
         return species.faoZone
       })
 
@@ -71,11 +70,11 @@ const VesselSummary = props => {
     } else {
       setFaoZones([])
     }
-  }, [selectedVesselFeatureAndIdentity])
+  }, [selectedVessel])
 
   useEffect(() => {
-    if (gears && selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature && selectedVesselFeatureAndIdentity.feature.getProperties().gearOnboard) {
-      const nextVesselGears = selectedVesselFeatureAndIdentity.feature.getProperties().gearOnboard.map(gearERS => {
+    if (gears && selectedVessel && selectedVessel.gearOnboard) {
+      const nextVesselGears = selectedVessel.gearOnboard.map(gearERS => {
         const foundGear = gears.find(gear => gear.code === gearERS.gear)
         return {
           name: foundGear ? foundGear.name : null,
@@ -87,7 +86,7 @@ const VesselSummary = props => {
     } else {
       setVesselGears([])
     }
-  }, [gears, selectedVesselFeatureAndIdentity])
+  }, [gears, selectedVessel])
 
   function getVesselOrLastPositionProperty (propertyName) {
     if (selectedVessel && selectedVessel[propertyName]) {
@@ -175,9 +174,9 @@ const VesselSummary = props => {
               title={'Cette valeur est calculée à partir des 2 dernières positions VMS reçues'}/></FieldName>
             <FieldValue>
               {
-                selectedVesselFeatureAndIdentity.feature && selectedVesselFeatureAndIdentity.feature.getProperties().emissionPeriod
+                selectedVessel && selectedVessel.emissionPeriod
                   ? <>1 signal toutes
-                    les {selectedVesselFeatureAndIdentity.feature.getProperties().emissionPeriod / 60} minutes</>
+                    les {selectedVessel.emissionPeriod / 60} minutes</>
                   : <NoValue>-</NoValue>
               }
             </FieldValue>
@@ -232,7 +231,7 @@ const VesselSummary = props => {
                 <Key>Segments de flotte</Key>
                 <Value>
                   <FleetSegments
-                    vesselLastPositionFeature={selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.feature}
+                    selectedVessel={selectedVessel}
                     fleetSegmentsReferential={fleetSegments}
                   />
                 </Value>
@@ -263,7 +262,7 @@ const VesselSummary = props => {
             <BodyWithTopPadding>
               <Field>
                 <Key>Dernier contrôle</Key>
-                <Value>{selectedVessel.lastControl ? selectedVessel.lastControl : <NoValue>à venir</NoValue>}</Value>
+                <Value>{selectedVessel.lastControlDateTime ? timeago.format(selectedVessel.lastControlDateTime, 'fr') : <NoValue>à venir</NoValue>}</Value>
               </Field>
 
             </BodyWithTopPadding>

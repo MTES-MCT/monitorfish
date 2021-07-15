@@ -15,7 +15,7 @@ const TrackDepthSelection = props => {
   const dispatch = useDispatch()
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
-  const { selectedVesselFeatureAndIdentity } = useSelector(state => state.vessel)
+  const { selectedVesselIdentity } = useSelector(state => state.vessel)
   const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
 
   const [datesSelection, setDateSelection] = useState([])
@@ -81,9 +81,9 @@ const TrackDepthSelection = props => {
     }
 
     dispatch(setTemporaryTrackDepth(trackDepthObject))
-    if (selectedVesselFeatureAndIdentity && trackDepth) {
+    if (selectedVesselIdentity && trackDepth) {
       dispatch(showVesselTrackAndSidebar(
-        selectedVesselFeatureAndIdentity,
+        selectedVesselIdentity,
         false,
         false,
         trackDepthObject))

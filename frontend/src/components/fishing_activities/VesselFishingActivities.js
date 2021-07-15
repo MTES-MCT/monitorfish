@@ -8,6 +8,8 @@ import { resetNextFishingActivities, setVoyage } from '../../domain/reducers/Ves
 import { useDispatch, useSelector } from 'react-redux'
 import getVesselVoyage, { NAVIGATE_TO } from '../../domain/use_cases/getVesselVoyage'
 import { FingerprintSpinner } from 'react-epic-spinners'
+import { usePrevious } from '../../hooks/usePrevious'
+import { vesselsAreEquals } from '../../domain/entities/vessel'
 
 const FishingActivitiesTab = {
   SUMMARY: 1,
@@ -17,12 +19,14 @@ const FishingActivitiesTab = {
 const VesselFishingActivities = () => {
   const dispatch = useDispatch()
   const {
-    selectedVesselFeatureAndIdentity,
+    selectedVesselIdentity,
+    selectedVessel,
     loadingVessel,
     fishingActivities,
     nextFishingActivities
   } = useSelector(state => state.vessel)
 
+  const previousSelectedVessel = usePrevious(selectedVessel)
   const [fishingActivitiesTab, setFishingActivitiesTab] = useState(FishingActivitiesTab.SUMMARY)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
 
@@ -40,10 +44,16 @@ const VesselFishingActivities = () => {
   }
 
   useEffect(() => {
-    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
-      dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, null, false))
+    if (selectedVesselIdentity) {
+      if (!fishingActivities) {
+        dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
+      }
+
+      if (!vesselsAreEquals(previousSelectedVessel, selectedVessel)) {
+        dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
+      }
     }
-  }, [selectedVesselFeatureAndIdentity])
+  }, [selectedVessel])
 
   useEffect(() => {
     if (fishingActivities) {
@@ -59,15 +69,15 @@ const VesselFishingActivities = () => {
   }
 
   function goToPreviousTrip () {
-    dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.PREVIOUS, false))
+    dispatch(getVesselVoyage(selectedVesselIdentity, NAVIGATE_TO.PREVIOUS, false))
   }
 
   function goToNextTrip () {
-    dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.NEXT, false))
+    dispatch(getVesselVoyage(selectedVesselIdentity, NAVIGATE_TO.NEXT, false))
   }
 
   function goToLastTrip () {
-    dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.LAST, false))
+    dispatch(getVesselVoyage(selectedVesselIdentity, NAVIGATE_TO.LAST, false))
   }
 
   return <>

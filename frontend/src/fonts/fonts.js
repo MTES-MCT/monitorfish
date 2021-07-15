@@ -1,13 +1,13 @@
 import { createGlobalStyle } from 'styled-components'
 
-import MarianneRegular from './Marianne/Marianne-Regular.woff'
-import MarianneMedium from './Marianne/Marianne-Medium.woff'
-import MarianneMediumItalic from './Marianne/Marianne-Medium_Italic.woff'
-import MarianneLight from './Marianne/Marianne-Light.woff'
-import MarianneLightItalic from './Marianne/Marianne-Light_Italic.woff'
-import MarianneBold from './Marianne/Marianne-Bold.woff'
-import MarianneBoldItalic from './Marianne/Marianne-Bold_Italic.woff'
-import MarianneItalic from './Marianne/Marianne-Regular_Italic.woff'
+import MarianneRegular from './Marianne/Marianne-Regular.woff2'
+import MarianneMedium from './Marianne/Marianne-Medium.woff2'
+import MarianneMediumItalic from './Marianne/Marianne-Medium_Italic.woff2'
+import MarianneLight from './Marianne/Marianne-Light.woff2'
+import MarianneLightItalic from './Marianne/Marianne-Light_Italic.woff2'
+import MarianneBold from './Marianne/Marianne-Bold.woff2'
+import MarianneBoldItalic from './Marianne/Marianne-Bold_Italic.woff2'
+import MarianneItalic from './Marianne/Marianne-Regular_Italic.woff2'
 
 export default createGlobalStyle`
     @font-face {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as ShowIconSVG } from '../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../icons/oeil_masque.svg'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 import { ReactComponent as REGPaperSVG } from '../icons/reg_paper.svg'
 import { ReactComponent as REGPaperDarkSVG } from '../icons/reg_paper_dark.svg'
@@ -127,7 +127,6 @@ const Rectangle = styled.div`
 const Icons = styled.span`
   float: right;
   display: flex;
-  margin-right: 5px;
   justify-content: flex-end;
   flex: 1;
 `
@@ -160,27 +159,28 @@ const CloseIcon = styled(CloseIconSVG)`
   margin-top: 7px;
   margin-left: 8px;
 `
-
-const REGPaperIcon = styled(REGPaperSVG)`
+const baseREGPaperIcon = css`
   width: 17px;
-  margin-right: 7px;
-  margin-top: 7px;
+  align-self: center;
+  margin-right: 12px;
+`
+const REGPaperIcon = styled(REGPaperSVG)`
+  ${baseREGPaperIcon}
 `
 
 const REGPaperDarkIcon = styled(REGPaperDarkSVG)`
-  width: 17px;
-  margin-right: 7px;
-  margin-top: 7px;
+  ${baseREGPaperIcon}
 `
-
+const baseIcon = css`
+  flex: 0 0 24px;
+  align-self: center;
+`
 const ShowIcon = styled(ShowIconSVG)`
-  width: 23px;
-  margin-top: 9px;
+  ${baseIcon}
 `
 
 const HideIcon = styled(HideIconSVG)`
-  width: 23px;
-  margin-top: 9px;
+  ${baseIcon}
 `
 
 export default RegulatoryZoneSelectedZone

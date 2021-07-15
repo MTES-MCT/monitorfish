@@ -31,7 +31,7 @@ const UpdatingVesselLoader = () => {
             className={'update-vessels'}
             size={100}/>
           <BigVessel/>
-          <Text>Chargement...</Text>
+          <Text data-cy={'first-loader'}>Chargement...</Text>
         </FirstLoadWrapper>
         : null
       }

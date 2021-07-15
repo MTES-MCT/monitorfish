@@ -45,9 +45,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         break
     }
 
-    if (!isSameVesselAsCurrentlyShowed) {
-      dispatch(loadingFisheriesActivities())
-    }
+    dispatch(loadingFisheriesActivities())
 
     getVesselVoyageFromAPI(vesselIdentity, beforeDateTime).then(voyage => {
       if (!voyage) {

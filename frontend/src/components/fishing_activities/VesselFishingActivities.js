@@ -7,33 +7,46 @@ import { COLORS } from '../../constants/constants'
 import { resetNextFishingActivities, setVoyage } from '../../domain/reducers/Vessel'
 import { useDispatch, useSelector } from 'react-redux'
 import getVesselVoyage, { NAVIGATE_TO } from '../../domain/use_cases/getVesselVoyage'
+import { FingerprintSpinner } from 'react-epic-spinners'
 
-const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fleetSegments, vesselLastPositionFeature }) => {
+const FishingActivitiesTab = {
+  SUMMARY: 1,
+  MESSAGES: 2
+}
+
+const VesselFishingActivities = () => {
   const dispatch = useDispatch()
   const {
-    selectedVesselFeatureAndIdentity
+    selectedVesselFeatureAndIdentity,
+    loadingVessel,
+    fishingActivities,
+    nextFishingActivities
   } = useSelector(state => state.vessel)
 
-  const [fishingViewIndex, setFishingViewIndex] = useState(1)
+  const [fishingActivitiesTab, setFishingActivitiesTab] = useState(FishingActivitiesTab.SUMMARY)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
-  const [isWaitingForData, setIsWaitingForData] = useState(true)
 
-  const showERSMessages = messageType => {
+  const showMessages = messageType => {
     if (messageType) {
       setMessageTypeFilter(messageType)
     } else {
       setMessageTypeFilter(null)
     }
-    setFishingViewIndex(2)
+    setFishingActivitiesTab(FishingActivitiesTab.MESSAGES)
   }
 
-  const showFishingActivitiesSummary = () => {
-    setFishingViewIndex(1)
+  const showSummary = () => {
+    setFishingActivitiesTab(FishingActivitiesTab.SUMMARY)
   }
 
   useEffect(() => {
+    if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
+      dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, null, false))
+    }
+  }, [selectedVesselFeatureAndIdentity])
+
+  useEffect(() => {
     if (fishingActivities) {
-      setIsWaitingForData(false)
       dispatch(resetNextFishingActivities())
     }
   }, [fishingActivities])
@@ -46,63 +59,63 @@ const VesselFishingActivities = ({ fishingActivities, nextFishingActivities, fle
   }
 
   function goToPreviousTrip () {
-    setIsWaitingForData(true)
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.PREVIOUS, false))
   }
 
   function goToNextTrip () {
-    setIsWaitingForData(true)
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.NEXT, false))
   }
 
   function goToLastTrip () {
-    setIsWaitingForData(true)
     dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, NAVIGATE_TO.LAST, false))
   }
 
-  return <Wrapper isWaitingForData={isWaitingForData}>
-    {nextFishingActivities
-      ? <>
-        <UpdateFishingActivities/>
-        <UpdateFishingActivitiesButton
-          onClick={() => updateFishingActivities(nextFishingActivities)}>
-          Nouveaux messages JPE
-        </UpdateFishingActivitiesButton>
-      </>
-      : null
+  return <>
+    { !loadingVessel
+      ? <Wrapper>
+        {
+          nextFishingActivities
+            ? <>
+              <UpdateFishingActivities/>
+              <UpdateFishingActivitiesButton
+                onClick={() => updateFishingActivities(nextFishingActivities)}>
+                Nouveaux messages JPE
+              </UpdateFishingActivitiesButton>
+            </>
+            : null
+        }
+        {
+          fishingActivitiesTab === FishingActivitiesTab.SUMMARY
+            ? <FishingActivitiesSummary
+              showERSMessages={showMessages}
+              navigation={{
+                goToPreviousTrip,
+                goToNextTrip,
+                goToLastTrip
+              }}
+            />
+            : null
+        }
+        {
+          fishingActivitiesTab === FishingActivitiesTab.MESSAGES
+            ? <ERSMessages
+              showFishingActivitiesSummary={showSummary}
+              messageTypeFilter={messageTypeFilter}
+              navigation={{
+                goToPreviousTrip,
+                goToNextTrip,
+                goToLastTrip
+              }}
+            />
+            : null
+        }
+      </Wrapper>
+      : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
     }
-    {fishingViewIndex === 1
-      ? <FishingActivitiesSummary
-        showERSMessages={showERSMessages}
-        fishingActivities={fishingActivities}
-        fleetSegments={fleetSegments}
-        vesselLastPositionFeature={vesselLastPositionFeature}
-        navigation={{
-          goToPreviousTrip,
-          goToNextTrip,
-          goToLastTrip
-        }}
-      />
-      : null
-    }
-    {fishingViewIndex === 2
-      ? <ERSMessages
-        showFishingActivitiesSummary={showFishingActivitiesSummary}
-        fishingActivities={fishingActivities}
-        messageTypeFilter={messageTypeFilter}
-        navigation={{
-          goToPreviousTrip,
-          goToNextTrip,
-          goToLastTrip
-        }}
-      />
-      : null}
-  </Wrapper>
+  </>
 }
 
-const Wrapper = styled.div`
-  cursor: ${props => props.isWaitingForData ? 'progress' : 'inherit'} !important;
-`
+const Wrapper = styled.div``
 
 const UpdateFishingActivities = styled.div`
   background: ${COLORS.background};

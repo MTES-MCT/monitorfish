@@ -10,13 +10,21 @@ import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers
 import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 import getHealthcheck from '../domain/use_cases/getHealthcheck'
+import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
+import { VesselSidebarTab } from '../containers/VesselSidebar'
+import getControls from '../domain/use_cases/getControls'
 
 export const TWO_MINUTES = 120000
 
 const APIWorker = () => {
-  const error = useSelector(state => state.global.error)
-  const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
   const dispatch = useDispatch()
+  const error = useSelector(state => state.global.error)
+  const {
+    vesselsLayerSource,
+    vesselSidebarTab,
+    selectedVessel,
+    selectedVesselFeatureAndIdentity
+  } = useSelector(state => state.vessel)
   const { addToast } = useToasts()
 
   useEffect(() => {
@@ -41,12 +49,22 @@ const APIWorker = () => {
   useEffect(() => {
     if (vesselsLayerSource) {
       vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
-        setTimeout(() => {
-          dispatch(resetIsUpdatingVessels())
-        }, 1000)
+        dispatch(resetIsUpdatingVessels())
       })
     }
   }, [vesselsLayerSource])
+
+  useEffect(() => {
+    if (selectedVessel) {
+      if (vesselSidebarTab === VesselSidebarTab.VOYAGES) {
+        if (selectedVesselFeatureAndIdentity && selectedVesselFeatureAndIdentity.identity) {
+          dispatch(getVesselVoyage(selectedVesselFeatureAndIdentity.identity, null, true))
+        }
+      } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
+        dispatch(getControls())
+      }
+    }
+  }, [selectedVessel])
 
   useEffect(() => {
     if (error) {

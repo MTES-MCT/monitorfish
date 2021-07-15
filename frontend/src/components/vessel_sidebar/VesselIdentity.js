@@ -4,47 +4,55 @@ import { COLORS } from '../../constants/constants'
 import countries from 'i18n-iso-countries'
 import { getDate } from '../../utils'
 import { vesselsAreEquals } from '../../domain/entities/vessel'
+import { useSelector } from 'react-redux'
+import { FingerprintSpinner } from 'react-epic-spinners'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
-const VesselIdentity = props => {
-  const [gears, setGears] = useState([])
+const VesselIdentity = () => {
+  const {
+    loadingVessel,
+    selectedVessel
+  } = useSelector(state => state.vessel)
+  const gears = useSelector(state => state.gear.gears)
+
+  const [vesselGears, setVesselGears] = useState([])
   const [vessel, setVessel] = useState(null)
   const [lastPosition, setLastPosition] = useState(null)
 
   useEffect(() => {
-    if (props.vessel) {
-      if (props.vessel.positions && props.vessel.positions.length) {
-        setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+    if (selectedVessel) {
+      if (selectedVessel.positions && selectedVessel.positions.length) {
+        setLastPosition(selectedVessel.positions[selectedVessel.positions.length - 1])
       } else {
-        if (!vesselsAreEquals(props.vessel, vessel)) {
+        if (!vesselsAreEquals(selectedVessel, vessel)) {
           setLastPosition(null)
         }
       }
 
-      setVessel(props.vessel)
+      setVessel(selectedVessel)
     }
-  }, [props.vessel])
+  }, [selectedVessel])
 
   const showLicenceExpirationDate = licenceExpirationDate => {
     return getDate(licenceExpirationDate)
   }
 
   useEffect(() => {
-    if (props.gears && props.vessel && props.vessel.declaredFishingGears) {
-      const gears = props.vessel.declaredFishingGears.map(declaredGearCode => {
-        const foundGear = props.gears.find(gear => gear.code === declaredGearCode)
+    if (gears && selectedVessel && selectedVessel.declaredFishingGears) {
+      const nextVesselGears = selectedVessel.declaredFishingGears.map(declaredGearCode => {
+        const foundGear = gears.find(gear => gear.code === declaredGearCode)
         return {
           name: foundGear ? foundGear.name : null,
           code: declaredGearCode
         }
       })
 
-      setGears(gears)
+      setVesselGears(nextVesselGears)
     } else {
-      setGears([])
+      setVesselGears([])
     }
-  }, [props.gears, props.vessel])
+  }, [gears, selectedVessel])
 
   function getVesselOrLastPositionProperty (propertyName) {
     if (vessel && vessel[propertyName]) {
@@ -56,7 +64,7 @@ const VesselIdentity = props => {
     }
   }
 
-  return (vessel
+  return (vessel && !loadingVessel
     ? <Body>
         <Zone>
           <Fields>
@@ -166,8 +174,8 @@ const VesselIdentity = props => {
                 <Key>Engins de pêche déclarés (PME)</Key>
                 <Value>
                   {
-                    gears
-                      ? gears.map(gear => {
+                    vesselGears
+                      ? vesselGears.map(gear => {
                         return gear.name
                           ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
                           : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
@@ -254,7 +262,7 @@ const VesselIdentity = props => {
           </Fields>
         </Zone>
       </Body>
-    : null
+    : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
   )
 }
 

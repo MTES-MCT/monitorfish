@@ -8,9 +8,7 @@ context('VesselSidebar', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
-    // Add in this get method which will wait until load
-    cy.get('.ol-viewport')
-    cy.wait(4000)
+    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist');
     cy.url().should('include', '@-82')
   })
 

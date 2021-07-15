@@ -2,27 +2,20 @@ import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { contractRightMenu } from '../domain/reducers/Global'
+import { useClickOutsideComponent } from '../hooks/useClickOutside'
 
 const RightMenuOnHoverZone = () => {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const dispatch = useDispatch()
 
   const wrapperRef = useRef(null)
+  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
 
   useEffect(() => {
-    function handleClickOutside (event) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        dispatch(contractRightMenu())
-      }
+    if (clickedOutsideComponent) {
+      dispatch(contractRightMenu())
     }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [wrapperRef])
+  }, [clickedOutsideComponent])
 
   return <>
     {

@@ -8,23 +8,7 @@ import { COLORS } from '../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import addRegulatoryZonesToMySelection from '../../domain/use_cases/addRegulatoryZonesToMySelection'
-
-function useOutsideAlerter (ref, showRegulatorySearchInput, setShowRegulatorySection) {
-  useEffect(() => {
-    function handleClickOutside (event) {
-      if (ref.current && !ref.current.contains(event.target) && showRegulatorySearchInput) {
-        setShowRegulatorySection(false)
-      }
-    }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [ref, showRegulatorySearchInput])
-}
+import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 
 const RegulatoryZoneSelection = props => {
   const dispatch = useDispatch()
@@ -36,7 +20,13 @@ const RegulatoryZoneSelection = props => {
   const [initSearchFields, setInitSearchFields] = useState(false)
 
   const wrapperRef = useRef(null)
-  useOutsideAlerter(wrapperRef, showRegulatorySection, setShowRegulatorySection)
+  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+
+  useEffect(() => {
+    if (clickedOutsideComponent && showRegulatorySection) {
+      setShowRegulatorySection(false)
+    }
+  }, [clickedOutsideComponent, showRegulatorySection])
 
   useEffect(() => {
     if (showRegulatorySection && regulatoryZoneMetadataPanelIsOpen) {

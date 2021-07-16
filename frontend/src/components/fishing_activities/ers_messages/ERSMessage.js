@@ -244,7 +244,7 @@ const ERSMessageHeaderText = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  max-width: ${props => props.isShortcut ? '230px' : '370px'};
+  max-width: ${props => props.isShortcut ? '205px' : '370px'};
 `
 
 const ERSMessageName = styled.span`

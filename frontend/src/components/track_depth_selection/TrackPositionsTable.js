@@ -52,7 +52,7 @@ const TrackPositionsTable = () => {
 
   const getPositions = useCallback(() => {
     if (sortColumn && sortType && Array.isArray(positions)) {
-      return positions.concat(positions)
+      return positions
         .slice()
         .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
     }

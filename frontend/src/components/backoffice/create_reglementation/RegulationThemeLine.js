@@ -4,8 +4,8 @@ import {
   Label
 } from '../common_styles'
 import CustomSelectComponent from './CustomSelectComponent'
-import MenuItem from '../MenuItem'
-import Tag from '../Tag'
+import MenuItem from './MenuItem'
+import Tag from './Tag'
 
 const RegulationThemeLine = props => {
   const {

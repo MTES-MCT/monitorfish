@@ -36,7 +36,7 @@ export const CancelButton = styled(WhiteButton)`
   margin: 0px 10px 0px 0px;
 `
 
-export const RectangularButton = styled.a`
+export const SquareButton = styled.a`
 position: relative;
 width: 35px;
 height: 35px;

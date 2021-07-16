@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ContentLine, Label, CustomInput } from '../common_styles'
 import InfoBox from '../InfoBox'
 const RegulationZoneNameLine = props => {
-  // const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
+  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
   const {
     nameZone,
     setNameZone
@@ -16,6 +16,8 @@ const RegulationZoneNameLine = props => {
       width={'180px'}
     />
     <InfoBox
+      isInfoTextShown={isInfoTextShown}
+      setIsInfoTextShown={setIsInfoTextShown}
       isFormOpened={false}
       message={'zoneName'}
     />

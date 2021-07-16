@@ -5,8 +5,8 @@ import {
 } from '../common_styles'
 import CustomSelectComponent from './CustomSelectComponent'
 import { formatData, FRENCH_REGION_LIST } from '../utils'
-import Tag from '../Tag'
-import MenuItem from '../MenuItem'
+import Tag from './Tag'
+import MenuItem from './MenuItem'
 
 const RegulationRegionLine = props => {
   const {

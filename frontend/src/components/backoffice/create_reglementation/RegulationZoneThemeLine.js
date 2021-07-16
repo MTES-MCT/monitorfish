@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { ContentLine, Label, SquareButton } from '../common_styles'
 import CustomSelectComponent from './CustomSelectComponent'
-import Tag from '../Tag'
-import MenuItem from '../MenuItem'
+import Tag from './Tag'
+import MenuItem from './MenuItem'
 import CreateReglementationBlocForm from './CreateReglementationBlocForm'
-import InfoBox from '../InfoBox'
+import InfoBox from './InfoBox'
 
 const RegulationZoneThemeLine = props => {
   const {

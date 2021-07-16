@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Tag from '../Tag'
+import Tag from './Tag'
 import {
   ContentLine,
   Label,
@@ -10,7 +10,7 @@ import {
   SquareButton
 } from '../common_styles'
 import CustomSelectComponent from './CustomSelectComponent'
-import MenuItem from '../MenuItem'
+import MenuItem from './MenuItem'
 
 const ReglementationBlocLine = props => {
   const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)

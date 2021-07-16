@@ -40,8 +40,10 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
   useEffect(() => {
     setERSMessages(fishingActivities.ersMessages)
 
-    const depMessage = getDEPMessageFromMessages(fishingActivities.ersMessages)
-    setDEPMessage(depMessage)
+    if (fishingActivities.ersMessages) {
+      const depMessage = getDEPMessageFromMessages(fishingActivities.ersMessages)
+      setDEPMessage(depMessage)
+    }
   }, [fishingActivities])
 
   useEffect(() => {

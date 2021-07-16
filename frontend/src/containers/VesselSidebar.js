@@ -90,6 +90,7 @@ const VesselSidebar = () => {
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <Wrapper
+        data-cy={'vessel-sidebar'}
         healthcheckTextWarning={healthcheckTextWarning}
         openBox={openSidebar}
         firstUpdate={firstUpdate.current}

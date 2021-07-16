@@ -8,14 +8,14 @@ context('VesselSidebar', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist');
+    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-82')
   })
 
   it('Resume Should be opened When clicking on a vessel', () => {
     // When
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then
     cy.get('*[data-cy^="cfr"]').contains("GBR000B14430")
@@ -25,7 +25,7 @@ context('VesselSidebar', () => {
   it('Identity Should contain the vessel identity', () => {
     // Given
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="vessel-menu-identity"]').click()
@@ -37,11 +37,11 @@ context('VesselSidebar', () => {
   it('Fishing Should contain the vessel fishing resume', () => {
     // Given
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 10000 }).should('be.visible')
 
     // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]').contains("Trémails et filets maillants combinés (GTN)")
@@ -51,9 +51,10 @@ context('VesselSidebar', () => {
   it('Fishing trips Should be walkable', () => {
     // Given
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 10000 }).should('be.visible')
 
     // Then
     cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains("Marée n°9463715")
@@ -68,11 +69,11 @@ context('VesselSidebar', () => {
   it('Fishing Should contain the vessel DEP message', () => {
     // Given
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click()
 
     // Then
@@ -84,11 +85,11 @@ context('VesselSidebar', () => {
   it('Controls Should contain the controls resume', () => {
     // Given
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="vessel-menu-controls"]').click()
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-controls"]', { timeout: 10000 }).should('be.visible')
 
     // Then
     cy.get('*[data-cy^="vessel-controls-year"]').first().contains("2 contrôles, 2 infractions")
@@ -104,11 +105,11 @@ context('VesselSidebar', () => {
   it('Last SEA and LAND controls Should be presents', () => {
     // Given
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="vessel-menu-controls"]').click()
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-controls"]', { timeout: 10000 }).should('be.visible')
 
     // Then
     const date = getDate(new Date().toISOString())
@@ -120,7 +121,7 @@ context('VesselSidebar', () => {
   it('Vessel track depth Should be changed', () => {
     // Given
     cy.get('.vessels').click(460, 480)
-    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click()
@@ -130,4 +131,3 @@ context('VesselSidebar', () => {
     cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("7.5 nds")
   })
 })
-

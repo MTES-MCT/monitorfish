@@ -1,7 +1,13 @@
-// import React from 'react'
-
-/*
-  <ContentLine>
+import React from 'react'
+import { ContentLine, Label, CustomInput } from '../common_styles'
+import InfoBox from '../InfoBox'
+const RegulationZoneNameLine = props => {
+  // const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
+  const {
+    nameZone,
+    setNameZone
+  } = props
+  return <ContentLine>
     <Label>Nom de la zone</Label>
     <CustomInput
       placeholder=''
@@ -9,12 +15,11 @@
       onChange={setNameZone}
       width={'180px'}
     />
-    {displayInfoBox(isZoneNameInfoTextShown, setIsZoneNameInfoTextShown, false, 'zoneName')}
+    <InfoBox
+      isFormOpened={false}
+      message={'zoneName'}
+    />
   </ContentLine>
-*/
-
-const RegulationZoneNameLine = props => {
-  return null
 }
 
 export default RegulationZoneNameLine

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   ContentLine,
   Label
@@ -9,9 +9,11 @@ import Tag from '../Tag'
 
 const RegulationThemeLine = props => {
   const {
+    selectedSeaFront,
+    setSelectedSeaFront,
     seaFrontList
   } = props
-  const [selectedSeaFront, setSelectedSeaFront] = useState()
+
   return <ContentLine>
     <Label>Secteur</Label>
     <CustomSelectComponent

@@ -8,7 +8,7 @@ const MenuItem = ({ checked, item, tag }) => {
       : tag === 'Checkbox'
         ? <Checkbox checked={checked}>{item.label}</Checkbox>
         : null
-  }</>
+    }</>
 }
 
 export default MenuItem

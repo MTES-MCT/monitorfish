@@ -16,27 +16,34 @@ const CreateRegulation = () => {
   const dispatch = useDispatch()
   // useRef ?
   const [reglementationBlocList, setReglementationBlocList] = useState([])
-  const [zoneThemeList, setZoneThemeList] = useState([])
+  // const [zoneThemeList, setZoneThemeList] = useState([])
   const [seaFrontList, setSeaFrontList] = useState([])
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
   const [nameZone, setNameZone] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
-  const [selectedRegionList, setSelectedRegionList] = useState([])
+  // const [selectedRegionList, setSelectedRegionList] = useState([])
+  // const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
+  // const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
+  // const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+  // const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
 
   const [reglementationBlocName, setReglementationBlocName] = useState('')
+  // const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
 
+  // à passer dans le state ?
+  // Pourquoi un dispatch ici ?
   const getRegulatoryZones = () => {
     dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
       .then(response => {
         const {
-          zoneThemeArray,
+          // zoneThemeArray,
           reglementationArray,
           seaFrontArray
         } = response
         setSeaFrontList(formatData(seaFrontArray))
-        setZoneThemeList(formatData(zoneThemeArray))
+        // setZoneThemeList(formatData(zoneThemeArray))
         setReglementationBlocList(formatData(reglementationArray))
       })
       .catch(error => {
@@ -48,6 +55,9 @@ const CreateRegulation = () => {
     getRegulatoryZones()
   }, [])
 
+  /* const getInfoText = (messageType) => {
+    return INFO_TEXT[messageType]
+  } */
   return (
     <CreateRegulationWrapper>
       <Header>
@@ -69,7 +79,7 @@ const CreateRegulation = () => {
           <RegulationZoneThemeLine
             selectedReglementationTheme={selectedReglementationTheme}
             setSelectedReglementationTheme={setSelectedReglementationTheme}
-            zoneThemeList={zoneThemeList}
+            zoneThemeList
           />
           <RegulationZoneNameLine
             nameZone={nameZone}
@@ -80,10 +90,7 @@ const CreateRegulation = () => {
             setSelectedSeaFront={setSelectedSeaFront}
             seaFrontList={seaFrontList}
           />
-          <RegulationRegionLine
-            selectedRegionList={selectedRegionList}
-            setSelectedRegionList={setSelectedRegionList}
-          />
+          <RegulationRegionLine />
         </Section>
       </Content>
     </CreateRegulationWrapper>

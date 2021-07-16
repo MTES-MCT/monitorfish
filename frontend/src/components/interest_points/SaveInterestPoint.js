@@ -1,0 +1,216 @@
+import React, { useState } from 'react'
+import styled, { css } from 'styled-components'
+import CoordinateInput from 'react-coordinate-input'
+
+import { COLORS } from '../../constants/constants'
+import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import RadioGroup from 'rsuite/lib/RadioGroup'
+import Radio from 'rsuite/lib/Radio'
+import { interestPointTypes } from '../../domain/entities/interestPoints'
+
+import { ReactComponent as GearSVG } from '../icons/Label_engin_de_peche.svg'
+import { ReactComponent as ControlSVG } from '../icons/Label_controle.svg'
+import { ReactComponent as VesselSVG } from '../icons/Label_segment_de_flotte.svg'
+
+const SaveInterestPoint = (
+  {
+    healthcheckTextWarning,
+    isOpen
+  }) => {
+  const [coordinates, setCoordinates] = useState([])
+  const [name, setName] = useState('')
+  const [observations, setObservations] = useState('')
+  const [type, setType] = useState('')
+
+  return (
+    <Wrapper
+      healthcheckTextWarning={healthcheckTextWarning}
+      isOpen={isOpen}>
+      <Header>
+        Créer un point d&apos;intérêt
+      </Header>
+      <Body>
+        <p>Coordonnées</p>
+        <CoordinateInput
+          onChange={(_, { dd }) => setCoordinates(dd)}
+          value={coordinates && Array.isArray(coordinates) && coordinates.length
+            ? coordinates.join(',')
+            : undefined}
+        />
+        <CoordinatesType>(DMS)</CoordinatesType>
+        <p>Type de point</p>
+        <RadioWrapper>
+          <RadioGroup
+            name="interestTypeRadio"
+            value={type}
+            onChange={value => {
+              setType(value)
+            }}
+          >
+            <Radio value={interestPointTypes.CONTROL_ENTITY}>
+              <Control/>
+              Moyen de contrôle
+            </Radio>
+            <Radio value={interestPointTypes.FISHING_VESSEL}>
+              <Vessel/>
+              Navire de pêche
+            </Radio>
+            <Radio value={interestPointTypes.FISHING_GEAR}>
+              <Gear />
+              Engin de pêche
+            </Radio>
+          </RadioGroup>
+        </RadioWrapper>
+        <p>Libellé du point</p>
+        <input
+          type='text'
+          onChange={e => setName(e.target.value)}
+          value={name}
+        />
+        <p>Observations</p>
+        <textarea
+          onChange={e => setObservations(e.target.value)}
+          value={observations}
+        />
+        <OkButton>
+          OK
+        </OkButton>
+        <CancelButton>
+          Annuler
+        </CancelButton>
+      </Body>
+    </Wrapper>
+  )
+}
+
+const CoordinatesType = styled.span`
+  margin-left: 7px;
+`
+
+const RadioWrapper = styled.div`
+  margin-top: 10px;
+`
+
+const CancelButton = styled.button`
+  border: 1px solid ${COLORS.grayDarkerThree};
+  width: 130px;
+  padding: 5px 12px;
+  margin: 15px 0 0 15px;
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
+  
+  :disabled {
+    border: 1px solid ${COLORS.grayDarker};
+    color: ${COLORS.grayDarker};
+  }
+`
+
+const OkButton = styled.button`
+  background: ${COLORS.grayDarkerThree};
+  width: 130px;
+  padding: 5px 12px;
+  margin: 15px 0 0;
+  font-size: 13px;
+  color: ${COLORS.grayBackground};
+  
+  :hover, :focus {
+    background: ${COLORS.grayDarkerThree};
+  }
+`
+
+const Body = styled.div`
+  text-align: left;
+  font-size: 13px;
+  color: ${COLORS.textGray};
+  margin: 10px 15px;
+  
+  p {
+    margin: 0;
+    font-size: 13px;
+  }
+  
+  p:nth-of-type(2) {
+   
+    margin-top: 15px;
+    font-size: 13px;
+  }
+  
+  p:nth-of-type(3) {
+    margin-top: 15px;
+    font-size: 13px;
+  }
+  
+  p:nth-of-type(4) {
+    margin-top: 15px;
+    font-size: 13px;
+  }
+  
+  input {
+    margin-top: 7px;
+    color: ${COLORS.grayDarkerThree};
+    background: ${COLORS.grayLighter};
+    border: none;
+    height: 27px;
+    padding-left: 8px;
+  }
+  
+  input:nth-of-type(2) {
+    width: 100%;
+  }
+  
+  textarea {
+    color: ${COLORS.grayDarkerThree};
+    margin-top: 7px;
+    background: ${COLORS.grayLighter};
+    border: none;
+    min-height: 50px;
+    padding-left: 8px;
+    padding-top: 3px;
+    width: 100% !important;
+    resize: vertical;
+  }
+`
+
+const Header = styled.div`
+  background: ${COLORS.textGray};
+  color: ${COLORS.grayBackground};
+  padding: 9px 0 7px 15px;
+  font-size: 16px;
+  text-align: left;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+`
+
+const Wrapper = styled(MapComponentStyle)`
+  width: 306px;
+  background: ${COLORS.background};
+  margin-right: ${props => props.isOpen ? '45px' : '-320px'};
+  opacity:  ${props => props.isOpen ? '1' : '0'};
+  top: 249px;
+  right: 10px;
+  border-radius: 2px;
+  position: absolute;
+  display: inline-block;
+  transition: all 0.5s;
+`
+
+const iconStyle = css`
+  vertical-align: sub;
+  width: 14px;
+  margin-left: 3px;
+  margin-right: 7px;
+`
+
+const Gear = styled(GearSVG)`
+  ${iconStyle}
+`
+
+const Control = styled(ControlSVG)`
+  ${iconStyle}
+`
+
+const Vessel = styled(VesselSVG)`
+  ${iconStyle}
+`
+
+export default SaveInterestPoint

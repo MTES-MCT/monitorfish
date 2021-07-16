@@ -1,0 +1,5 @@
+export const interestPointTypes = {
+  CONTROL_ENTITY: 'CONTROL_ENTITY',
+  FISHING_VESSEL: 'FISHING_VESSEL',
+  FISHING_GEAR: 'FISHING_GEAR'
+}

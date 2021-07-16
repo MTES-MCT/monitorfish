@@ -20,7 +20,7 @@ const CreateRegulation = () => {
   const [seaFrontList, setSeaFrontList] = useState([])
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
-  // const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
+  const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
   const [nameZone, setNameZone] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   // const [selectedRegionList, setSelectedRegionList] = useState([])
@@ -31,11 +31,6 @@ const CreateRegulation = () => {
 
   const [reglementationBlocName, setReglementationBlocName] = useState('')
   // const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
-  // const [themePlace] = useState('')
-  // const [themePlaceIsRed, setThemePlaceIsRed] = useState(false)
-  // const [themeGears, setThemeGears] = useState('')
-  // const [themeSpecies, setThemeSpecies] = useState('')
-  // const [themeOtherIndications, setThemeOtherIndications] = useState('')
 
   // à passer dans le state ?
   // Pourquoi un dispatch ici ?
@@ -60,27 +55,6 @@ const CreateRegulation = () => {
     getRegulatoryZones()
   }, [])
 
-  /* const addNewTheme = (elem) => {
-    if (themePlace === '') {
-      setThemePlaceIsRed(true)
-    } else {
-      const reglementationPlace = `${themePlace}
-      ${themeSpecies ? ' - ' + themeSpecies : ''}
-      ${themeGears ? ' - ' + themeGears : ''}`
-      setSelectedReglementationTheme(reglementationPlace)
-      resetThemeForm()
-      setIsAddThemeClicked(false)
-      setThemePlaceIsRed(false)
-    }
-  } */
-
-  /* const resetThemeForm = () => {
-    setThemeGears('')
-    setThemeSpecies('')
-    setThemeGears('')
-    setThemeOtherIndications('')
-  } */
-
   /* const getInfoText = (messageType) => {
     return INFO_TEXT[messageType]
   } */
@@ -102,7 +76,11 @@ const CreateRegulation = () => {
             reglementationBlocName={reglementationBlocName}
             setReglementationBlocName={setReglementationBlocName}
           />
-          <RegulationZoneThemeLine />
+          <RegulationZoneThemeLine
+            selectedReglementationTheme={selectedReglementationTheme}
+            setSelectedReglementationTheme={setSelectedReglementationTheme}
+            zoneThemeList
+          />
           <RegulationZoneNameLine
             nameZone={nameZone}
             setNameZone={setNameZone}
@@ -118,13 +96,6 @@ const CreateRegulation = () => {
     </CreateRegulationWrapper>
   )
 }
-
-/* const Wrapper = styled.div`
-  display: flex;
-  margin-bottom: 8px;
-  align-items: center;
-`
- */
 
 const Header = styled.div`
   margin-bottom: 40px;

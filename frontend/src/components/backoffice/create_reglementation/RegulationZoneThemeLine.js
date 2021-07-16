@@ -1,86 +1,71 @@
-// import React from 'react'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { ContentLine, Label, SquareButton } from '../common_styles'
+import CustomSelectComponent from './CustomSelectComponent'
+import Tag from '../Tag'
+import MenuItem from '../MenuItem'
+import CreateReglementationBlocForm from './CreateReglementationBlocForm'
+import InfoBox from '../InfoBox'
 
 const RegulationZoneThemeLine = props => {
-/*
-<ContentLine
-isFormOpened={isAddThemeClicked}
-isInfoTextShown={isInfoTextShown}
->
-<Wrapper>
-<Label>Thématique de la zone</Label>
-<SelectWrapper>
-<CustomSelectPicker
-searchable={false}
-style={selectPickerStyle}
-menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
-placeholder='Choisir une thématique'
-value={'Choisir une thématique'}
-onChange={setSelectedReglementationTheme}
-data={zoneThemeList}
-renderMenuItem={(_, item) => renderMenuItem(item.value === selectedReglementationTheme, item, 'Radio')}
-/>
-</SelectWrapper>
-{selectedReglementationTheme
-? <CustomTag>
-<SelectedValue>{selectedReglementationTheme}</SelectedValue>
-<CloseIcon onClick={() => setSelectedReglementationTheme()}/>
-</CustomTag>
-: null }
-{
-isAddThemeClicked
-? <CreateReglementationBloc>
-<CustomInput
-placeholder='Lieu*'
-value={themePlace}
-onChange={setThemePlace}
-isRed={themePlaceIsRed}
-/>
-<CustomInput
-placeholder='Espèce'
-value={themeSpecies}
-onChange={setThemeSpecies}
-/>
-<CustomInput
-placeholder='Engins'
-value={themeGears}
-onChange={setThemeGears}
-/>
-<CustomInput
-placeholder='Autres indications'
-value={themeOtherIndications}
-onChange={setThemeOtherIndications}
-width={'115px'}
-/>
-<ValidateButton
-disabled={false}
-isLast={false}
-onClick={addNewTheme}>
-Enregistrer
-</ValidateButton>
-<CancelButton
-disabled={false}
-isLast={false}
-onClick={() => {
-setIsAddThemeClicked(false)
-setIsInfoTextShown(false)
-}}
->
-Annuler
-</CancelButton>
-</CreateReglementationBloc>
-: !selectedReglementationTheme && <><RectangularButton
-onClick={() => {
-setIsAddThemeClicked(true)
-setIsInfoTextShown(true)
-}}
-/>
-<Label>Créer une nouvelle thématique</Label></>
+  const {
+    selectedReglementationTheme,
+    setSelectedReglementationTheme,
+    zoneThemeList
+  } = props
+
+  const [isAddThemeClicked, setIsAddThemeClicked] = useState()
+  const [isInfoTextShown, setIsInfoTextShown] = useState()
+
+  return <ContentLine
+    isFormOpened={isAddThemeClicked}
+    isInfoTextShown={isInfoTextShown}
+    >
+      <Wrapper>
+        <Label>Thématique de la zone</Label>
+        <CustomSelectComponent
+          searchable={false}
+          menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
+          placeholder='Choisir une thématique'
+          value={'Choisir une thématique'}
+          onChange={setSelectedReglementationTheme}
+          data={zoneThemeList}
+          renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedReglementationTheme} item={item} tag={'Radio'} />}
+        />
+        {selectedReglementationTheme &&
+          <Tag
+            selectedValue={selectedReglementationTheme}
+            setSelectedValue={setSelectedReglementationTheme}
+          />}
+        {
+        isAddThemeClicked
+          ? <CreateReglementationBlocForm
+              setSelectedReglementationTheme={setSelectedReglementationTheme}
+              setIsAddThemeClicked={setIsAddThemeClicked}
+              setIsInfoTextShown={setIsInfoTextShown}
+            />
+          : !selectedReglementationTheme && <><SquareButton
+          onClick={() => {
+            setIsAddThemeClicked(true)
+            setIsInfoTextShown(true)
+          }}
+        />
+        <Label>Créer une nouvelle thématique</Label></>
+        }
+      </Wrapper>
+      <InfoBox
+        isInfoTextShown={isInfoTextShown}
+        setIsInfoTextShown={setIsInfoTextShown}
+        isFormOpened={isAddThemeClicked}
+        message={'zoneTheme'}
+      />
+      </ContentLine>
 }
-</Wrapper>
-{displayInfoBox(isInfoTextShown, setIsInfoTextShown, isAddThemeClicked, 'zoneTheme')}
-</ContentLine>
-*/
-  return null
-}
+
+const Wrapper = styled.div`
+  display: flex;
+  margin-bottom: 8px;
+  align-items: center;
+`
 
 export default RegulationZoneThemeLine

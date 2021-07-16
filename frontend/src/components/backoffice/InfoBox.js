@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { INFO_TEXT } from './utils'
 
 const InfoBox = props => {
-  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
   const {
+    isInfoTextShown,
+    setIsInfoTextShown,
     isFormOpened,
     message
   } = props
@@ -13,19 +14,21 @@ const InfoBox = props => {
     <InfoTextParent
       isInfoTextShown={isInfoTextShown}
       isFormOpened={isFormOpened}
+      onMouseLeave={() => !isFormOpened && setIsInfoTextShown(false)}
     >
       {isInfoTextShown
         ? <InfoTextWrapper
           isFormOpened={isFormOpened}
-        >
+          onMouseLeave={() => !isFormOpened && setIsInfoTextShown(false)}
+          >
           <InfoPoint>!</InfoPoint>
           <InfoText>
-            {INFO_TEXT[message]()}
+            {INFO_TEXT[message]}
           </InfoText>
         </InfoTextWrapper>
         : <InfoPoint
           onMouseEnter={() => setIsInfoTextShown(true)}
-          onMouseOut={() => setIsInfoTextShown(true)}
+          onMouseOut={() => setIsInfoTextShown(false)}
         >!</InfoPoint>}
     </InfoTextParent>)
 }

@@ -7,7 +7,7 @@ import {
   CustomInput,
   ValidateButton,
   CancelButton,
-  RectangularButton
+  SquareButton
 } from '../common_styles'
 import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from '../MenuItem'
@@ -76,7 +76,7 @@ const ReglementationBlocLine = props => {
                 Annuler
               </CancelButton>
             </CreateReglementationBloc>
-          : !selectedValue && <><RectangularButton
+          : !selectedValue && <><SquareButton
               onClick={() => setIsAddReglementationBlocClicked(true)}
             />
             <Label>Ajouter un nouvel ensemble</Label></>

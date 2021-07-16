@@ -1,7 +1,7 @@
 import React from 'react'
 import { Radio, Checkbox } from 'rsuite'
 
-export const MenuItem = (checked, item, tag) => {
+const MenuItem = (checked, item, tag) => {
   return <>{tag === 'Radio'
     ? <Radio checked={checked}>{item.label}</Radio>
     : tag === 'Checkbox'
@@ -9,3 +9,5 @@ export const MenuItem = (checked, item, tag) => {
       : null
     }</>
 }
+
+export default MenuItem

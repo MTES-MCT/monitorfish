@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { Input } from 'rsuite'
-import { BlackButton, WhiteButton } from '../components/commonStyles/Buttons.style'
+import { BlackButton, WhiteButton } from '../commonStyles/Buttons.style'
 
 export const ContentLine = styled.div`
   display: flex;

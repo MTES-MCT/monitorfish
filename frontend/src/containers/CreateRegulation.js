@@ -6,67 +6,35 @@ import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_si
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
 import ReglementationBlocLine from '../components/backoffice/create_reglementation/ReglementationBlocLine'
-import RegulationZoneThemeLine from '../component/backoffice/create_reglementation/RegulationZoneThemeLine'
+import RegulationZoneThemeLine from '../components/backoffice/create_reglementation/RegulationZoneThemeLine'
 import RegulationRegionLine from '../components/backoffice/create_reglementation/RegulationRegionLine'
 import RegulationZoneNameLine from '../components/backoffice/create_reglementation/RegulationZoneNameLine'
 import RegulationThemeLine from '../components/backoffice/create_reglementation/RegulationThemeLine'
-
-const INFO_TEXT = {
-  zoneName: `De mme que pour les thmatiques, le nom des zones doit être aussi explicite que possible. 
-  Le couple thmatique / zone fonctionne comme un tout, qui permet à l'utilisateur de comprendre rapidement
-   quelle rglementation il consulte. Le nom de la zone peut tre - un nom gographique 
-   ("Ile-Rousse", ou "Bande des 3 miles"), - ou numérique ("Zone 1"), - ou encore spcifiant une autre caractristique 
-   ("Zone d'autorisation ponctuelle", ou "Zone pour navire > 10m")`,
-  zoneTheme: `Avant de créer une nouvelle thématique, vérifiez bien qu'il n'en existe pas déjà une qui pourrait correspondre. 
-  Le nom de la thématique doit permettre de connaître en un coup d'œil le lieu et le sujet de la réglementation : 
-  des espèces, et/ou des engins, et/ou d'autres points réglementaires spécifiques. 
-  Il peut être intéressant notamment de mentionner si la zone est totalement 
-  interdite à la pêche avec le mot "interdiction". 
-  NB : le lieu indiqué peut être une façade maritime (NAMO), une région (Bretagne), un département (Vendée), 
-  une commune (Saint-Malo), une zone géographique (Cotentin), une mer (Mer Baltique), 
-  un secteur européen (Ouest-Écosse-Rockhall)...`
-}
+import { formatData } from '../components/backoffice/utils'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
   // useRef ?
   const [reglementationBlocList, setReglementationBlocList] = useState([])
-  const [zoneThemeList, setZoneThemeList] = useState([])
+  // const [zoneThemeList, setZoneThemeList] = useState([])
   const [seaFrontList, setSeaFrontList] = useState([])
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
-  const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
-  const [selectedSeaFront, setSelectedSeaFront] = useState()
-  const [nameZone, setNameZone] = useState()
-  const [selectedRegionList, setSelectedRegionList] = useState([])
-  const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
-  const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
-  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
-  const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
+  // const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
+  // const [nameZone, setNameZone] = useState()
+  // const [selectedRegionList, setSelectedRegionList] = useState([])
+  // const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
+  // const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
+  // const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+  // const [isZoneNameInfoTextShown, setIsZoneNameInfoTextShown] = useState(false)
 
   const [reglementationBlocName, setReglementationBlocName] = useState('')
-  const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
-  const [themePlace, setThemePlace] = useState('')
-  const [themePlaceIsRed, setThemePlaceIsRed] = useState(false)
-  const [themeGears, setThemeGears] = useState('')
-  const [themeSpecies, setThemeSpecies] = useState('')
-  const [themeOtherIndications, setThemeOtherIndications] = useState('')
-
-  const FRENCH_REGION_LIST = [
-    'Auvergne-Rhône-Alpes',
-    'Bourgogne-Franche-Comté',
-    'Bretagne',
-    'Centre-Val de Loire',
-    'Corse',
-    'Grand Est',
-    'Hauts-de-France',
-    'Ile-de-France',
-    'Normandie',
-    'Nouvelle-Aquitaine',
-    'Occitanie',
-    'Pays de la Loire',
-    'Provence-Alpes-Côte d’Azur'
-  ]
+  // const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
+  // const [themePlace] = useState('')
+  // const [themePlaceIsRed, setThemePlaceIsRed] = useState(false)
+  // const [themeGears, setThemeGears] = useState('')
+  // const [themeSpecies, setThemeSpecies] = useState('')
+  // const [themeOtherIndications, setThemeOtherIndications] = useState('')
 
   // à passer dans le state ?
   // Pourquoi un dispatch ici ?
@@ -74,12 +42,12 @@ const CreateRegulation = () => {
     dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
       .then(response => {
         const {
-          zoneThemeArray,
+          // zoneThemeArray,
           reglementationArray,
           seaFrontArray
         } = response
         setSeaFrontList(formatData(seaFrontArray))
-        setZoneThemeList(formatData(zoneThemeArray))
+        // setZoneThemeList(formatData(zoneThemeArray))
         setReglementationBlocList(formatData(reglementationArray))
       })
       .catch(error => {
@@ -91,18 +59,7 @@ const CreateRegulation = () => {
     getRegulatoryZones()
   }, [])
 
-  const formatData = list => {
-    const array = list.map(e => {
-      const obj = {
-        label: e,
-        value: e
-      }
-      return obj
-    })
-    return array
-  }
-
-  const addNewTheme = (elem) => {
+  /* const addNewTheme = (elem) => {
     if (themePlace === '') {
       setThemePlaceIsRed(true)
     } else {
@@ -114,42 +71,20 @@ const CreateRegulation = () => {
       setIsAddThemeClicked(false)
       setThemePlaceIsRed(false)
     }
-  }
+  } */
 
-  const resetThemeForm = () => {
+  /* const resetThemeForm = () => {
     setThemeGears('')
     setThemeSpecies('')
     setThemeGears('')
     setThemeOtherIndications('')
-  }
+  } */
 
-  const getInfoText = (messageType) => {
+  /* const getInfoText = (messageType) => {
     return INFO_TEXT[messageType]
-  }
+  } */
 
-  const addRegionToSelectedRegionList = (elem) => {
-    const newArray = [...selectedRegionList]
-    newArray.push(elem)
-    setSelectedRegionList(newArray)
-  }
-
-  const removeRegionToSelectedRegionList = (elem) => {
-    const idx = selectedRegionList.find(e => elem === e)
-    const newArray = [...selectedRegionList]
-    newArray.splice(idx, 1)
-    setSelectedRegionList(newArray)
-  }
-
-  function SelectedRegionList () {
-    return selectedRegionList.map(selectedRegion => {
-      return (<CustomTag key={selectedRegion}>
-        <SelectedValue>{selectedRegion}</SelectedValue>
-        <CloseIcon onClick={removeRegionToSelectedRegionList}/>
-      </CustomTag>)
-    })
-  }
-
-  const displayInfoBox = (isInfoTextShown, setIsInfoTextShown, isFormOpened, text) => {
+  /* const displayInfoBox = (isInfoTextShown, setIsInfoTextShown, isFormOpened, text) => {
     return (<InfoTextParent
               isInfoTextShown={isInfoTextShown}
               isFormOpened={isFormOpened}
@@ -168,7 +103,7 @@ const CreateRegulation = () => {
             onMouseOut={() => setIsInfoTextShown(true)}
           >!</InfoPoint>}
       </InfoTextParent>)
-  }
+  } */
 
   return (
     <CreateRegulationWrapper>
@@ -182,15 +117,15 @@ const CreateRegulation = () => {
             identification de la zone réglementaire
           </SectionTitle>
           <ReglementationBlocLine
-            setSelectedValue={selectedReglementationBloc}
-            selectedValue={setSelectedReglementationBloc}
+            setSelectedValue={setSelectedReglementationBloc}
+            selectedValue={selectedReglementationBloc}
             selectData={reglementationBlocList}
             reglementationBlocName={reglementationBlocName}
             setReglementationBlocName={setReglementationBlocName}
           />
           <RegulationZoneThemeLine />
           <RegulationZoneNameLine />
-          <RegulationThemeLine />
+          <RegulationThemeLine seaFrontList={seaFrontList} />
           <RegulationRegionLine />
         </Section>
       </Content>
@@ -198,7 +133,7 @@ const CreateRegulation = () => {
   )
 }
 
-const Wrapper = styled.div`
+/* const Wrapper = styled.div`
   display: flex;
   margin-bottom: 8px;
   align-items: center;
@@ -257,7 +192,7 @@ const InfoPoint = styled.a`
     text-decoration: none;
     color: ${COLORS.grayBackground};
   }
-`
+` */
 
 const Header = styled.div`
   margin-bottom: 40px;

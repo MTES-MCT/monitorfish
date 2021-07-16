@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Tag } from './Tag'
+import Tag from '../Tag'
 import {
   ContentLine,
   Label,
@@ -10,7 +10,7 @@ import {
   RectangularButton
 } from '../common_styles'
 import CustomSelectComponent from './CustomSelectComponent'
-import MenuItem from './MenuItem'
+import MenuItem from '../MenuItem'
 
 const ReglementationBlocLine = props => {
   const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
@@ -22,6 +22,8 @@ const ReglementationBlocLine = props => {
     reglementationBlocName,
     setReglementationBlocName
   } = props
+
+  console.log(selectData)
 
   const addNewReglementationBloc = () => {
     if (reglementationBlocName === '') {
@@ -43,7 +45,7 @@ const ReglementationBlocLine = props => {
         value={'Choisir un ensemble'}
         onChange={setSelectedValue}
         data={selectData}
-        renderMenuItem={(_, item) => <MenuItem checked= {item.value === selectedValue} item={item} tag={'Radio'} />}
+        renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedValue} item={item} tag={'Radio'} />}
       />
       {selectedValue &&
         <Tag

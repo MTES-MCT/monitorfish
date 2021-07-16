@@ -1,6 +1,6 @@
 // import React from 'react'
 
-export const RegulationZoneThemeLine = props => {
+const RegulationZoneThemeLine = props => {
 /*
 <ContentLine
 isFormOpened={isAddThemeClicked}
@@ -82,3 +82,5 @@ setIsInfoTextShown(true)
 */
   return null
 }
+
+export default RegulationZoneThemeLine

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as CloseIconSVG } from '../components/icons/Croix_grise.svg'
+import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 
 const Tag = props => {
   const {

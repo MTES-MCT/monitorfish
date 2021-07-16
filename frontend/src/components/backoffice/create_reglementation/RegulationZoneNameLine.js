@@ -13,6 +13,8 @@
   </ContentLine>
 */
 
-export const RegulationZoneNameLine = props => {
+const RegulationZoneNameLine = props => {
   return null
 }
+
+export default RegulationZoneNameLine

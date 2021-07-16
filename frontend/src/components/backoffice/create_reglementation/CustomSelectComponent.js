@@ -10,7 +10,8 @@ const CustomSelectComponent = props => {
     value,
     onChange,
     data,
-    renderMenuItem
+    renderMenuItem,
+    menuStyle
   } = props
 
   const selectPickerStyle = {
@@ -30,6 +31,7 @@ const CustomSelectComponent = props => {
         onChange={onChange}
         data={data}
         renderMenuItem={renderMenuItem}
+        menuStyle={menuStyle}
       />
     </SelectWrapper>
   )

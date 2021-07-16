@@ -79,7 +79,6 @@ context('VesselSidebar', () => {
     // Then
     cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains("Départ")
     cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains("Al Jazeera Port le 11/10/2019 à 01h40 (UTC)")
-
   })
 
   it('Controls Should contain the controls resume', () => {

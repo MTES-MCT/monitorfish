@@ -14,7 +14,6 @@ import { formatDataForSelectPicker } from '../utils'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
-  // useRef ?
   const [reglementationBlocList, setReglementationBlocList] = useState([])
   const [zoneThemeList, setZoneThemeList] = useState([])
   const [seaFrontList, setSeaFrontList] = useState([])
@@ -24,10 +23,8 @@ const CreateRegulation = () => {
   const [nameZone, setNameZone] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   const [selectedRegionList, setSelectedRegionList] = useState([])
-
   const [reglementationBlocName, setReglementationBlocName] = useState('')
 
-  // à passer dans le state ?
   const getRegulatoryZones = () => {
     dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
       .then(response => {

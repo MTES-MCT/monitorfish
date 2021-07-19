@@ -1,5 +1,4 @@
 import * as Comlink from 'comlink'
-// import { set } from 'ol/transform'
 import { lawTypeList, mapToRegulatoryZone } from '../domain/entities/regulatory'
 import { vesselSize } from '../domain/entities/vessel'
 import { getDateMonthsBefore } from '../utils'

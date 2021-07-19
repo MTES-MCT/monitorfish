@@ -30,10 +30,10 @@ def extract_last_positions():
 
 
 @task(checkpoint=False)
-def extract_last_controls():
+def extract_control_anteriority():
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/last_controls.sql",
+        query_filepath="monitorfish/control_anteriority.sql",
         parse_dates=["last_control_datetime_utc"],
     )
 
@@ -69,7 +69,7 @@ def estimate_current_positions(last_positions):
 
 
 @task(checkpoint=False)
-def merge(last_positions, current_segments, last_controls):
+def merge(last_positions, current_segments, control_anteriority):
     last_positions = pd.merge(last_positions, current_segments, on="cfr", how="left")
 
     vessel_identifier_labels = {
@@ -85,7 +85,7 @@ def merge(last_positions, current_segments, last_controls):
 
     last_positions = join_on_multiple_keys(
         last_positions,
-        last_controls,
+        control_anteriority,
         on=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
@@ -126,6 +126,6 @@ with Flow("Last positions") as flow:
     current_segments = extract_current_segments()
     last_positions = extract_last_positions()
     last_positions = estimate_current_positions(last_positions)
-    last_controls = extract_last_controls()
-    last_positions = merge(last_positions, current_segments, last_controls)
+    control_anteriority = extract_control_anteriority()
+    last_positions = merge(last_positions, current_segments, control_anteriority)
     load_last_positions(last_positions)

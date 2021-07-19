@@ -1,10 +1,9 @@
 import React from 'react'
-import {
-  ContentLine,
-  Label
-} from '../common_styles'
+import { ContentLine } from '../../commonStyles/Backoffice.style'
+import { Label } from '../../commonStyles/Input.style'
 import CustomSelectComponent from './CustomSelectComponent'
-import { formatData, FRENCH_REGION_LIST } from '../utils'
+import { formatDataForSelectPicker } from '../../../utils'
+import { FRENCH_REGION_LIST } from '../../../constants/constants'
 import Tag from './Tag'
 import MenuItem from './MenuItem'
 
@@ -45,7 +44,7 @@ const RegulationRegionLine = props => {
       placeholder={'Choisir une région'}
       onChange={addRegionToSelectedRegionList}
       value={'Choisir une région'}
-      data={formatData(FRENCH_REGION_LIST)}
+      data={formatDataForSelectPicker(FRENCH_REGION_LIST)}
       renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList.includes(item.value)} item={item} tag={'Checkbox'} />}
     />
     <>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { CustomInput, ValidateButton, CancelButton } from '../common_styles'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import { CustomInput } from '../../commonStyles/Input.style'
 
 const CreateReglementatonBlocForm = props => {
   const {

@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import Tag from './Tag'
-import {
-  ContentLine,
-  Label,
-  CustomInput,
-  ValidateButton,
-  CancelButton,
-  SquareButton
-} from '../common_styles'
+import { ContentLine } from '../../commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../../commonStyles/Input.style'
+import { ValidateButton, CancelButton, SquareButton } from '../../commonStyles/Buttons.style'
 import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from './MenuItem'
 
@@ -22,8 +17,6 @@ const ReglementationBlocLine = props => {
     reglementationBlocName,
     setReglementationBlocName
   } = props
-
-  console.log(selectData)
 
   const addNewReglementationBloc = () => {
     if (reglementationBlocName === '') {

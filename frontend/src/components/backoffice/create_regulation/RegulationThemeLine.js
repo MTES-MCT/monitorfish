@@ -1,8 +1,6 @@
 import React from 'react'
-import {
-  ContentLine,
-  Label
-} from '../common_styles'
+import { ContentLine } from '../../commonStyles/Backoffice.style'
+import { Label } from '../../commonStyles/Input.style'
 import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from './MenuItem'
 import Tag from './Tag'

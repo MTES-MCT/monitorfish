@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { INFO_TEXT } from '../utils'
+import { COLORS, INFO_TEXT } from '../../../constants/constants'
 
 const InfoBox = props => {
   const {

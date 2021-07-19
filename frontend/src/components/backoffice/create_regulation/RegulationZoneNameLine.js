@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ContentLine, Label, CustomInput } from '../common_styles'
+import { ContentLine } from '../../commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../../commonStyles/Input.style'
 import InfoBox from './InfoBox'
 const RegulationZoneNameLine = props => {
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)

@@ -351,3 +351,14 @@ export function search (searchText, propertiesToSearch, regulatoryZones) {
     return foundRegulatoryZones
   }
 }
+
+export const formatDataForSelectPicker = list => {
+  const array = list.map(e => {
+    const obj = {
+      label: e,
+      value: e
+    }
+    return obj
+  })
+  return array
+}

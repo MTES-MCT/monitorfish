@@ -90,3 +90,49 @@ export const AddRegulationButton = styled(Link)`
     background-color: ${COLORS.white};
   }
 `
+
+export const ValidateButton = styled(BlackButton)`
+  margin: 0px 10px 0px 0px;
+`
+
+export const CancelButton = styled(WhiteButton)`
+  margin: 0px 10px 0px 0px;
+`
+
+export const SquareButton = styled.a`
+position: relative;
+width: 35px;
+height: 35px;
+border: 1px solid ${COLORS.grayDarker};
+border-radius: 2px;
+color: ${COLORS.grayDarker};
+margin-right: 8px;
+
+&:after {
+  content: "";  
+  display: block;
+  background-color: ${COLORS.grayDarker};
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+&:before {
+  content: "";  
+  display: block;
+  background-color: ${COLORS.grayDarker};
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+&:before {
+  height: 15px;
+  width: 1.5px;
+}
+&:after {
+  height: 1.5px;
+  width: 15px;
+}
+`

@@ -65,7 +65,7 @@ const SearchRegulations = props => {
         <SearchIcon />
         </SearchBox>
         <AddRegulationButton
-          to={match.url + '/createRegulatoryZone'}
+          to={match.url + '/newRegulation'}
           disabled={false}
           isLast={false}
           onClick={() => addNewRegZone()}

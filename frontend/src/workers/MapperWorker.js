@@ -11,7 +11,6 @@ class MapperWorker {
     })
 
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
-      console.log(`item.layerName ${current.layerName}`)
       const found = acc.find(item =>
         item.layerName === current.layerName &&
         item.zone === current.zone)

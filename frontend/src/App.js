@@ -15,7 +15,7 @@ import VesselList from './containers/VesselList'
 import UpdatingVesselLoader from './containers/UpdatingVesselLoader'
 import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
 import Measurement from './containers/Measurement'
-import CreateRegulation from './containers/CreateRegulation'
+import CreateRegulation from './containers/NewRegulation'
 import VesselFilters from './containers/VesselFilters'
 import { ReactComponent as AlertSVG } from './components/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
@@ -93,7 +93,7 @@ function BackofficePage () {
           <Backoffice/>
         </BackofficeWrapper>
         </Route>
-        <Route path={`${match.path}/createRegulatoryZone`}>
+        <Route path={`${match.path}/newRegulation`}>
           <CreateRegulation />
         </Route>
       </Switch>

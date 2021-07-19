@@ -5,12 +5,12 @@ import { COLORS } from '../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
-import ReglementationBlocLine from '../components/backoffice/create_reglementation/ReglementationBlocLine'
-import RegulationZoneThemeLine from '../components/backoffice/create_reglementation/RegulationZoneThemeLine'
-import RegulationRegionLine from '../components/backoffice/create_reglementation/RegulationRegionLine'
-import RegulationZoneNameLine from '../components/backoffice/create_reglementation/RegulationZoneNameLine'
-import RegulationThemeLine from '../components/backoffice/create_reglementation/RegulationThemeLine'
-import { formatData } from '../components/backoffice/utils'
+import ReglementationBlocLine from '../components/backoffice/create_regulation/ReglementationBlocLine'
+import RegulationZoneThemeLine from '../components/backoffice/create_regulation/RegulationZoneThemeLine'
+import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
+import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
+import RegulationThemeLine from '../components/backoffice/create_regulation/RegulationThemeLine'
+import { formatDataForSelectPicker } from '../utils'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -36,9 +36,9 @@ const CreateRegulation = () => {
           reglementationArray,
           seaFrontArray
         } = response
-        setSeaFrontList(formatData(seaFrontArray))
-        setZoneThemeList(formatData(zoneThemeArray))
-        setReglementationBlocList(formatData(reglementationArray))
+        setSeaFrontList(formatDataForSelectPicker(seaFrontArray))
+        setZoneThemeList(formatDataForSelectPicker(zoneThemeArray))
+        setReglementationBlocList(formatDataForSelectPicker(reglementationArray))
       })
       .catch(error => {
         dispatch(setError(error))

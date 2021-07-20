@@ -1,4 +1,5 @@
 from datetime import datetime
+from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -34,11 +35,11 @@ control_rate_bins_risk_factors = pd.DataFrame(
     pd.DataFrame(
         index=pd.Index(
             control_rate_bins["number_recent_controls_labels"],
-            name="number_recent_controls",
+            name="number_recent_controls_bin",
         ),
         columns=pd.Index(
             control_rate_bins["time_since_last_control_labels"],
-            name="time_since_last_control",
+            name="time_since_last_control_bin",
         ),
         data=[
             [4.00, 4.00, 4.00, 4.00, 4.00, 4.00],
@@ -49,9 +50,14 @@ control_rate_bins_risk_factors = pd.DataFrame(
         ],
     )
     .stack()
-    .rename("risk_factor")
+    .rename("control_rate_risk_factor")
     .reset_index()
 )
+
+infraction_rate_bins = {
+    "infraction_score_bins": [-10, 0, 11, 21, 10000],
+    "infraction_score_risk_factors": [1, 2, 3, 4],
+}
 
 ################################### Helper functions ###################################
 
@@ -62,19 +68,23 @@ def compute_control_dates_coefficients(
 
     control_interval = (to_date - from_date).total_seconds()
 
-    control_dates_coefficients = (control_dates - from_date).map(
+    coefficients = (control_dates - from_date).map(
         lambda timedelta: timedelta.total_seconds()
     ) / control_interval
 
-    control_dates_coefficients.update(
+    coefficients.update(
         np.where(
-            ((control_dates_coefficients >= 0) & (control_dates_coefficients <= 1)),
-            control_dates_coefficients,
+            ((coefficients >= 0) & (coefficients <= 1)),
+            coefficients,
             0,
         )
     )
 
-    return control_dates_coefficients
+    return coefficients
+
+
+def compute_control_ranks_coefficients(control_ranks: np.array) -> np.array:
+    return np.where(control_ranks <= 10, (11 - control_ranks) / 10, 0)
 
 
 #################################### Tasks and flows ###################################
@@ -170,27 +180,32 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
         / 365
     )
 
-    control_rate_risk_factors["time_since_last_control"] = pd.cut(
+    control_rate_risk_factors["time_since_last_control_bin"] = pd.cut(
         control_rate_risk_factors["time_since_last_control"],
         bins=control_rate_bins["time_since_last_control_bins"],
         labels=control_rate_bins["time_since_last_control_labels"],
     )
 
-    control_rate_risk_factors["number_recent_controls"] = pd.cut(
+    control_rate_risk_factors["number_recent_controls_bin"] = pd.cut(
         control_rate_risk_factors["number_recent_controls"],
         bins=control_rate_bins["number_recent_controls_bins"],
         labels=control_rate_bins["number_recent_controls_labels"],
-    )
-
-    control_rate_risk_factors = control_rate_risk_factors.drop(
-        columns=["last_control_datetime_utc"]
     )
 
     # Compute the risk factor
     control_rate_risk_factors = pd.merge(
         control_rate_risk_factors,
         control_rate_bins_risk_factors,
-        on=["number_recent_controls", "time_since_last_control"],
+        on=["number_recent_controls_bin", "time_since_last_control_bin"],
+    )
+
+    control_rate_risk_factors = control_rate_risk_factors.drop(
+        columns=[
+            "last_control_datetime_utc",
+            "time_since_last_control",
+            "number_recent_controls_bin",
+            "time_since_last_control_bin",
+        ]
     )
 
     return control_rate_risk_factors
@@ -200,7 +215,42 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 def compute_infraction_rate_risk_factors(
     controls: pd.DataFrame, fishing_infraction_ids: set
 ) -> pd.DataFrame:
-    pass
+    columns = ["vessel_id", "control_datetime_utc", "infraction_ids"]
+
+    controls_ = controls[columns].copy(deep=True)
+
+    controls_["n_fishing_infractions"] = controls_["infraction_ids"].map(
+        lambda l: sum(map(lambda x: x in fishing_infraction_ids, l))
+    )
+
+    controls_["points"] = controls_["n_fishing_infractions"] * 10 - (
+        controls_["n_fishing_infractions"] == 0
+    ).astype(int)
+
+    controls_["control_rank"] = controls_.groupby("vessel_id")[
+        "control_datetime_utc"
+    ].rank(ascending=False, method="average")
+
+    controls_["coefficient"] = compute_control_ranks_coefficients(
+        controls_.control_rank.values
+    )
+
+    controls_["weighted_points"] = controls_["coefficient"] * controls_["points"]
+
+    infraction_rate_risk_factors = (
+        controls_.groupby("vessel_id")["weighted_points"]
+        .sum()
+        .rename("infraction_score")
+        .reset_index()
+    )
+
+    infraction_rate_risk_factors["infraction_rate_risk_factor"] = pd.cut(
+        infraction_rate_risk_factors.infraction_score,
+        infraction_rate_bins["infraction_score_bins"],
+        labels=infraction_rate_bins["infraction_score_risk_factors"],
+    )
+
+    return infraction_rate_risk_factors
 
 
 @task(checkpoint=False)
@@ -209,7 +259,16 @@ def merge(
     infraction_rate_risk_factor: pd.DataFrame,
     last_controls: pd.DataFrame,
 ) -> pd.DataFrame:
-    pass
+
+    res = pd.merge(
+        last_controls,
+        pd.merge(
+            control_rate_risk_factors, infraction_rate_risk_factor, on="vessel_id"
+        ),
+        on="vessel_id",
+    )
+
+    return res
 
 
 @task(checkpoint=False)

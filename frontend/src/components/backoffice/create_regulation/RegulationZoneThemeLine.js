@@ -66,7 +66,6 @@ const RegulationZoneThemeLine = props => {
 
 const Wrapper = styled.div`
   display: flex;
-  margin-bottom: 8px;
   align-items: center;
 `
 

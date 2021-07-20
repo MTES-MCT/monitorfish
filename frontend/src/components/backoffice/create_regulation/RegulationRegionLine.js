@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label } from '../../commonStyles/Input.style'
 import CustomSelectComponent from './CustomSelectComponent'
@@ -36,7 +37,7 @@ const RegulationRegionLine = props => {
     })
   }
 
-  return (<ContentLine>
+  return (<CustomContentLine>
     <Label>Région</Label>
     <CustomSelectComponent
       menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
@@ -53,7 +54,11 @@ const RegulationRegionLine = props => {
       <SelectedRegionList />
     }
     </>
-  </ContentLine>)
+  </CustomContentLine>)
 }
+
+const CustomContentLine = styled(ContentLine)`
+  margin-bottom: 15px;
+`
 
 export default RegulationRegionLine

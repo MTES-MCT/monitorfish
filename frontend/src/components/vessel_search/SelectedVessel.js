@@ -14,6 +14,15 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
     isFocusedOnVesselSearch
   } = useSelector(state => state.vessel)
 
+  function getVesselName () {
+    let flagState = 'INCONNU'
+    if (selectedVesselIdentity.flagState !== 'UNDEFINED') {
+      flagState = `${selectedVesselIdentity.flagState}`
+    }
+
+    return `${selectedVesselIdentity.vesselName} (${flagState})`
+  }
+
   return (
     <Wrapper
       onClick={() => {
@@ -31,17 +40,9 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
           src={`flags/${selectedVesselIdentity.flagState.toLowerCase()}.svg`}/>
         : null}
       <VesselName>
-        {selectedVesselIdentity.vesselName}
-        {' '}
-        {
-          selectedVesselIdentity.flagState !== 'UNDEFINED'
-            ? <>({selectedVesselIdentity.flagState})</>
-            : <>(INCONNU)</>
-        }
+        {getVesselName()}
       </VesselName>
-      <CloseIcon onClick={() => {
-        setSelectedVesselIdentity(null)
-      }}/>
+      <CloseIcon onClick={() => setSelectedVesselIdentity(null)}/>
     </Wrapper>
   )
 }

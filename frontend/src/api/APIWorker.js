@@ -11,8 +11,8 @@ import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 import getHealthcheck from '../domain/use_cases/getHealthcheck'
 import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
-import { VesselSidebarTab } from '../containers/VesselSidebar'
 import getControls from '../domain/use_cases/getControls'
+import { VesselSidebarTab } from '../domain/entities/vessel'
 
 export const TWO_MINUTES = 120000
 
@@ -60,7 +60,7 @@ const APIWorker = () => {
 
       setUpdateVesselSidebarTab(false)
     }
-  }, [selectedVesselIdentity, updateVesselSidebarTab])
+  }, [selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
 
   useEffect(() => {
     if (vesselsLayerSource) {

@@ -12,7 +12,7 @@ import focusOnVesselSearch, { focusState } from '../domain/use_cases/focusOnVess
 import { expandRightMenu } from '../domain/reducers/Global'
 import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
-import FoundVesselsList from '../components/vessel_search/FoundVesselsList'
+import VesselSearchList from '../components/vessel_search/VesselSearchList'
 import SelectedVessel from '../components/vessel_search/SelectedVessel'
 import { useClickOutsideComponent } from '../hooks/useClickOutside'
 
@@ -187,7 +187,7 @@ const VesselsSearchBox = () => {
               />
           }
         </SearchBoxField>
-        <FoundVesselsList
+        <VesselSearchList
           foundVesselsOnMap={foundVesselsOnMap}
           foundVesselsFromAPI={foundVesselsFromAPI}
           setVesselsHasBeenUpdated={setVesselsHasBeenUpdated}

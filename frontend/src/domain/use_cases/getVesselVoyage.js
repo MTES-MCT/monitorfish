@@ -49,7 +49,6 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(loadingFisheriesActivities())
     }
 
-    console.log('getVesselVoyageFromAPI')
     getVesselVoyageFromAPI(vesselIdentity, beforeDateTime).then(voyage => {
       if (!voyage) {
         dispatch(setVoyage({

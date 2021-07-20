@@ -26,8 +26,8 @@ const RegulationZoneThemeLine = props => {
       <Wrapper>
         <Label>Thématique de la zone</Label>
         <CustomSelectComponent
-          searchable={false}
-          menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
+          searchable={true}
+          menuStyle={{ width: 300, overflowY: 'hidden', textOverflow: 'ellipsis' }}
           placeholder='Choisir une thématique'
           value={'Choisir une thématique'}
           onChange={setSelectedReglementationTheme}

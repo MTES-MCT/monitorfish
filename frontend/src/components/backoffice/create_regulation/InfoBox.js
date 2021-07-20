@@ -37,6 +37,7 @@ const InfoTextParent = styled.div`
   min-height: 20px;
   min-width: 20px;
   position: relative;
+  cursor: pointer;
   ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
 `
 

@@ -101,6 +101,7 @@ export const CancelButton = styled(WhiteButton)`
 
 export const SquareButton = styled.a`
 position: relative;
+cursor: pointer;
 width: 35px;
 height: 35px;
 border: 1px solid ${COLORS.grayDarker};

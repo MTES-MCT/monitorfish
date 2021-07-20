@@ -5,7 +5,7 @@ import { COLORS } from '../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import { setError } from '../domain/reducers/Global'
-import ReglementationBlocLine from '../components/backoffice/create_regulation/ReglementationBlocLine'
+import RegulationBlocLine from '../components/backoffice/create_regulation/RegulationBlocLine'
 import RegulationZoneThemeLine from '../components/backoffice/create_regulation/RegulationZoneThemeLine'
 import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
 import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
@@ -56,7 +56,7 @@ const CreateRegulation = () => {
           <SectionTitle>
             identification de la zone réglementaire
           </SectionTitle>
-          <ReglementationBlocLine
+          <RegulationBlocLine
             setSelectedValue={setSelectedReglementationBloc}
             selectedValue={selectedReglementationBloc}
             selectData={reglementationBlocList}

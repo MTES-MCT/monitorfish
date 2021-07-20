@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton, SquareButton } from '../../commonStyles/B
 import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from './MenuItem'
 
-const ReglementationBlocLine = props => {
+const RegulationBlocLine = props => {
   const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
   const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
   const {
@@ -82,4 +82,4 @@ const CreateReglementationBloc = styled.div`
   display: flex;
 `
 
-export default ReglementationBlocLine
+export default RegulationBlocLine

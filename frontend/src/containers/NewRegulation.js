@@ -96,13 +96,14 @@ const CreateRegulationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  margin: 15px 45px 0px 45px;
+  margin: 11px 27px 0px 27px;
 `
 
 const LinkSpan = styled.span`
   display: flex;
   flex-direction: row;
   position: absolute;
+  cursor: pointer;
 `
 
 const Link = styled.a`

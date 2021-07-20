@@ -125,7 +125,7 @@ const SectionTitle = styled.div`
   margin-top: 10px;
   padding-top: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  background: ${COLORS.grayDarker};
+  background: ${COLORS.lightGray};
   color: ${COLORS.grayDarkerTwo};
   font-size: 0.8em;
   padding-top: 10px;
@@ -177,7 +177,7 @@ const ListItem = styled.li`
   cursor: pointer;
   margin: 0;
   background: ${COLORS.background};
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   border-bottom: 1px solid ${COLORS.gray};
   line-height: 1.9em;
 `

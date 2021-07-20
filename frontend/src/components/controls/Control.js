@@ -227,7 +227,7 @@ const SeeMore = styled.a`
   display: block;
   text-decoration: underline;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   cursor: pointer;
 `
 
@@ -247,14 +247,14 @@ const Infraction = styled.div`
 `
 
 const ResumeBoxText = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0 10px 0 5px;
   font-weight: medium;
 `
 
 const ResumeBoxNumber = styled.span`
-  background: ${props => props.isRed ? COLORS.red : COLORS.grayDarkerThree};
-  color: ${COLORS.grayBackground};
+  background: ${props => props.isRed ? COLORS.red : COLORS.charcoal};
+  color: ${COLORS.gainsboro};
   border-radius: 11px;
   height: 16px;
   display: inline-block;
@@ -303,13 +303,13 @@ const Wrapper = styled.div`
 
 const SubKey = styled.span`
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-right: 10px;
 `
 
 const Key = styled.span`
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-right: 10px;
   width: ${props => props.width ? props.width : '47'}px;
   display: inline-block;
@@ -317,7 +317,7 @@ const Key = styled.span`
 
 const InfractionKey = styled.th`
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-right: 10px;
   width: 80px;
   display: inline-block;
@@ -328,7 +328,7 @@ const InfractionKey = styled.th`
 
 const InfractionValue = styled.th`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin-right: 10px;
   flex: initial;
   display: inline-block;
@@ -343,7 +343,7 @@ const InfractionValue = styled.th`
 
 const SubValue = styled.span`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin-right: 10px;
 `
 

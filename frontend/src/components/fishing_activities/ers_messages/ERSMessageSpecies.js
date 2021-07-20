@@ -124,7 +124,7 @@ const Warning = styled(WarningSVG)`
 `
 
 const MultipleProperties = styled.div`
-  background: ${COLORS.grayDarker};
+  background: ${COLORS.lightGray};
   padding: 5px 5px 5px 10px;
   height: 20px;
   width: inherit;
@@ -146,14 +146,14 @@ const Kg = styled.span`
 `
 
 const InlineKey = styled.div`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   display: inline-block;
   padding: 0px 5px 0px 10px;
   font-size: 13px;
 `
 
 const TitleText = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
@@ -164,7 +164,7 @@ const TitleText = styled.span`
 `
 
 const Weight = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
@@ -178,7 +178,7 @@ const Species = styled.li`
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const Title = styled.div`
@@ -255,7 +255,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -271,7 +271,7 @@ const Key = styled.th`
 
 const TrimmedValue = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -286,7 +286,7 @@ const TrimmedValue = styled.td`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

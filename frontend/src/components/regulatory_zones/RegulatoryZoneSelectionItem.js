@@ -90,8 +90,8 @@ const Zone = styled.span`
   font-size: 13px;
   padding-left: 18px;
   font-weight: 500;
-  color: ${COLORS.grayDarkerThree};
-  border-bottom: 1px solid ${props => props.selected ? COLORS.grayDarker : COLORS.gray};
+  color: ${COLORS.charcoal};
+  border-bottom: 1px solid ${props => props.selected ? COLORS.lightGray : COLORS.gray};
   background: ${props => props.selected ? COLORS.gray : COLORS.background};
 `
 
@@ -102,8 +102,8 @@ const SubZone = styled.span`
   padding-left: 20px;
   padding-right: 10px;
   background: ${props => props.selected ? COLORS.gray : COLORS.background};
-  border-bottom: 1px solid ${props => props.selected ? COLORS.grayDarker : COLORS.gray};
-  color: ${COLORS.grayDarkerThree};
+  border-bottom: 1px solid ${props => props.selected ? COLORS.lightGray : COLORS.gray};
+  color: ${COLORS.charcoal};
   padding-top: 1px;
   padding-bottom: 8px;
 `

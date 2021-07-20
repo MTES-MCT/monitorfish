@@ -216,7 +216,7 @@ const VesselListFilters = ({
               name="checkboxList"
               value={size.vesselsSizeValuesChecked}
               onChange={size.setVesselsSizeValuesChecked}
-              style={{ display: 'inline-block', color: COLORS.textGray }}
+              style={{ display: 'inline-block', color: COLORS.slateGray }}
             >
               <Checkbox value={vesselSize.BELOW_TEN_METERS.code}><Gray>Moins de 10 m</Gray></Checkbox>
               <Checkbox value={vesselSize.BELOW_TWELVE_METERS.code}><Gray>Moins de 12 m</Gray></Checkbox>
@@ -241,7 +241,7 @@ const InlineTagWrapper = styled.div`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-left: 2px;
   margin-right: 5px;
 `
@@ -256,7 +256,7 @@ const VesselSize = styled.span`
 
 const SeeMore = styled.span`
   text-decoration: underline;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   cursor: pointer;
 `
 
@@ -290,7 +290,7 @@ const FilterDesc = styled.span`
 `
 
 const Filters = styled.div`
-  color: #969696;
+  color: ${COLORS.slateGray};
   font-size: 13px;
   margin-top: 15px;
   margin-bottom: 15px;

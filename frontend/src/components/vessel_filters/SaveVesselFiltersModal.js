@@ -105,7 +105,7 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAn
 const SelectedFilterColor = styled.div`
   margin: 10px 0 10px 0;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const Square = styled.div`
@@ -125,30 +125,30 @@ const Title = styled.div`
 `
 
 const SaveButton = styled.button`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   padding: 5px 12px;
   margin: -28px 0px 20px 10px;
   font-size: 13px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   float: right;
   
   :hover {
-    background: ${COLORS.grayDarkerThree};
+    background: ${COLORS.charcoal};
   }
 `
 
 const CancelButton = styled.button`
-  border: 1px solid ${COLORS.grayDarkerThree};
+  border: 1px solid ${COLORS.charcoal};
   padding: 4px 12px;
   margin: 20px 0;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: -28px 0px 20px 10px;
   float: right;
   
   :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.grayDarker};
+    border: 1px solid ${COLORS.lightGray};
+    color: ${COLORS.lightGray};
   }
 `
 

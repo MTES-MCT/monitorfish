@@ -183,7 +183,7 @@ const GrayOverlay = styled.div`
   height: 100%;
   width: 100%;
   opacity: 0;
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   animation: ${props => props.isOverlayed ? 'opacity-up' : 'opacity-down'} 0.5s ease forwards;
   z-index: 11;
 
@@ -209,13 +209,13 @@ const ErrorText = styled.div`
   font-size: 15px;
   vertical-align: middle;
   height: inherit;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const Panel = styled.div`
   padding: 0;
   overflow-y: auto;
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   max-height: 86vh;
 `
 
@@ -228,19 +228,19 @@ const Tab = styled.button`
   border-radius: 0;
   height: 65px;
   font-size: 13px;
-  color: ${COLORS.grayDarker};
+  color: ${COLORS.lightGray};
   border-right: 1px solid ${COLORS.grayDarkerTwo};
-  background: ${props => props.isActive ? COLORS.textGray : COLORS.grayDarkerThree};
+  background: ${props => props.isActive ? COLORS.slateGray : COLORS.charcoal};
   
   :hover, :focus, :active {
-    background: ${COLORS.textGray};
+    background: ${COLORS.slateGray};
     border-right: 1px solid ${COLORS.grayDarkerTwo};
   }
 `
 
 const TabList = styled.div`
   display: flex;
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   border-bottom: 1px solid ${COLORS.grayDarkerTwo};
   border-top: 1px solid ${COLORS.grayDarkerTwo};
 `

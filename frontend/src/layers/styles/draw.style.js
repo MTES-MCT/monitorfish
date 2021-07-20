@@ -1,6 +1,7 @@
 import { Icon, Style } from 'ol/style'
 import Stroke from 'ol/style/Stroke'
 import Fill from 'ol/style/Fill'
+import { COLORS } from '../../constants/constants'
 
 export const drawStyle = new Style({
   image: new Icon({
@@ -9,7 +10,7 @@ export const drawStyle = new Style({
     scale: 1.5
   }),
   stroke: new Stroke({
-    color: '#515151',
+    color: COLORS.charcoal,
     lineDash: [5, 5]
   }),
   fill: new Fill({

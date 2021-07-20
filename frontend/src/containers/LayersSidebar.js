@@ -145,7 +145,7 @@ const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
+  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.charcoal};
   padding: 2px 2px 2px 2px;
   margin-top: 0;
   margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px'};
@@ -154,7 +154,7 @@ const SidebarLayersIcon = styled.button`
   width: 40px;
 
   :hover, :focus {
-      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
+      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.charcoal};
   }
 `
 
@@ -168,7 +168,7 @@ const MetadataWrapper = styled.div`
     width: 380px;
     position: absolute;
     display: block;
-    color: ${COLORS.grayDarkerThree};
+    color: ${COLORS.charcoal};
     text-decoration: none;
     background-color: ${COLORS.gray};
     padding: 0;

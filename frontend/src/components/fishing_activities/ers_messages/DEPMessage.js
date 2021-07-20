@@ -109,13 +109,13 @@ const Gear = styled.div`
 
 const SubKey = styled.span`
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-right: 10px;
 `
 
 const SubValue = styled.span`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin-right: 10px;
 `
 
@@ -149,7 +149,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -165,7 +165,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -183,7 +183,7 @@ const NoValue = styled.span`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-weight: 300;
 `
 

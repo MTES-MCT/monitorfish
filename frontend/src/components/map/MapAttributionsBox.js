@@ -39,7 +39,7 @@ const ButtonText = styled.span``
 
 const List = styled.ul`
   font-size: 0.9em;
-  background-color: ${COLORS.grayBackground};
+  background-color: ${COLORS.gainsboro};
   height: 1.5em;
   border: none;
   border-radius: 0;
@@ -54,7 +54,7 @@ const ListItem = styled.li`
 `
 
 const Link = styled.a`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 export default MapAttributionsBox

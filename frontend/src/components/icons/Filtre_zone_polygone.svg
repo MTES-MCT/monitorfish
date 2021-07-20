@@ -1,27 +1,27 @@
 <svg id="Filtre_zone_polygone_30_px" data-name="Filtre zone_polygone_30 px" xmlns="http://www.w3.org/2000/svg"
      width="30" height="30" viewBox="0 0 30 30">
-    <rect id="Rectangle_1390" data-name="Rectangle 1390" width="30" height="30" fill="#ededed"/>
+    <rect id="Rectangle_1390" data-name="Rectangle 1390" width="30" height="30" fill="#E5E5EB"/>
     <g id="Calque_2" data-name="Calque 2" transform="translate(6 6)">
         <path id="Tracé_316" data-name="Tracé 316" d="M9.234,1.459,7.517,3.051,6.2,1.28"
-              transform="translate(-1.771 15.949)" fill="none" stroke="#515151" stroke-width="1.5"/>
+              transform="translate(-1.771 15.949)" fill="none" stroke="#3B4559" stroke-width="1.5"/>
         <line id="Ligne_1153" data-name="Ligne 1153" x1="1.985" y1="2.842" transform="translate(1.51 13.041)"
-              fill="none" stroke="#515151" stroke-width="1.5" stroke-dasharray="2.975 2.231"/>
+              fill="none" stroke="#3B4559" stroke-width="1.5" stroke-dasharray="2.975 2.231"/>
         <path id="Tracé_317" data-name="Tracé 317" d="M2.117,12.352,1.15,10.961,1.829,9.4"
-              transform="translate(-1.15 -0.307)" fill="none" stroke="#515151" stroke-width="1.5"/>
+              transform="translate(-1.15 -0.307)" fill="none" stroke="#3B4559" stroke-width="1.5"/>
         <line id="Ligne_1154" data-name="Ligne 1154" y1="3.868" x2="1.68" transform="translate(1.663 2.856)" fill="none"
-              stroke="#515151" stroke-width="1.5" stroke-dasharray="3.615 2.711"/>
+              stroke="#3B4559" stroke-width="1.5" stroke-dasharray="3.615 2.711"/>
         <path id="Tracé_318" data-name="Tracé 318" d="M5.55,22.721l.679-1.561h1.7" transform="translate(-1.655 -21.16)"
-              fill="none" stroke="#515151" stroke-width="1.5"/>
+              fill="none" stroke="#3B4559" stroke-width="1.5"/>
         <line id="Ligne_1155" data-name="Ligne 1155" x2="4.157" transform="translate(8.783 0)" fill="none"
-              stroke="#515151" stroke-width="1.5" stroke-dasharray="3.567 2.675"/>
+              stroke="#3B4559" stroke-width="1.5" stroke-dasharray="3.567 2.675"/>
         <path id="Tracé_319" data-name="Tracé 319" d="M17.26,21.1h1.7l.526,1.612" transform="translate(-2.9 -21.1)"
-              fill="none" stroke="#515151" stroke-width="1.5"/>
+              fill="none" stroke="#3B4559" stroke-width="1.5"/>
         <line id="Ligne_1156" data-name="Ligne 1156" x2="1.035" y2="3.164" transform="translate(17.151 3.543)"
-              fill="none" stroke="#515151" stroke-width="1.5" stroke-dasharray="2.857 2.143"/>
+              fill="none" stroke="#3B4559" stroke-width="1.5" stroke-dasharray="2.857 2.143"/>
         <path id="Tracé_320" data-name="Tracé 320" d="M21.906,11.79,22.44,13.4l-1.62.526"
-              transform="translate(-3.44 -4.004)" fill="none" stroke="#515151" stroke-width="1.5"/>
+              transform="translate(-3.44 -4.004)" fill="none" stroke="#3B4559" stroke-width="1.5"/>
         <path id="Tracé_321" data-name="Tracé 321" d="M17.289,3.7l-2.427.5s-2.627,2.74-4.6,5.146"
-              transform="translate(-2.026 6.902)" fill="none" stroke="#515151" stroke-width="1.5"
+              transform="translate(-2.026 6.902)" fill="none" stroke="#3B4559" stroke-width="1.5"
               stroke-dasharray="3.578 2.684"/>
     </g>
 </svg>

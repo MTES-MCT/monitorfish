@@ -38,9 +38,9 @@ const TagName = styled.span`
 `
 
 const TagWrapper = styled.span`
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   border-radius: 2px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-left: 0;
   margin-right: 10px;
   margin-bottom: 8px;

@@ -133,7 +133,7 @@ const SpeciesAndWeightChart = ({
 const Presentation = styled.div`
   display: flex;
   height: 20px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 11px;
   margin: 2px 0 0 10px;
 `
@@ -141,7 +141,7 @@ const Presentation = styled.div`
 const Wrapper = styled.div``
 
 const Gray = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const SpeciesAndWeight = styled.div`
@@ -167,7 +167,7 @@ const Species = styled.div`
   min-height: 20px;
   max-height: 90px;
   align-items: center;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 11px;
   margin: 2px 0 0 10px;
   ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
@@ -178,16 +178,16 @@ const WeightText = styled.span``
 
 const Weight = styled.div`
   width: 130px;
-  background: ${COLORS.grayBackground} 0% 0% no-repeat padding-box;
+  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
   font-weight: 500;
-  border-left: 2px solid ${COLORS.textGray};
-  border-right: 2px solid ${COLORS.textGray};
-  border-top: 2px solid ${COLORS.textGray};
-  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.textGray};` : ''}
+  border-left: 2px solid ${COLORS.slateGray};
+  border-right: 2px solid ${COLORS.slateGray};
+  border-top: 2px solid ${COLORS.slateGray};
+  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.slateGray};` : ''}
   height: ${props => props.height}px;
   min-height: 20px;
   max-height: 90px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 11px;
   display: flex;
   align-items: center;
@@ -199,12 +199,12 @@ const Weight = styled.div`
 const PresentationWeight = styled.div`
   width: 130px;
   font-weight: normal;
-  border-left: 2px solid ${COLORS.grayDarker};
-  border-right: 2px solid ${COLORS.grayDarker};
-  border-top: 2px solid ${COLORS.grayDarker};
-  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.grayDarker};` : ''}
+  border-left: 2px solid ${COLORS.lightGray};
+  border-right: 2px solid ${COLORS.lightGray};
+  border-top: 2px solid ${COLORS.lightGray};
+  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.lightGray};` : ''}
   height: 20px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 11px;
   display: flex;
   align-items: center;

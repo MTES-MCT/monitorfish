@@ -3,25 +3,24 @@ import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const baseBlackButton = css`
-  background: ${COLORS.grayDarkerThree};
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.charcoal};
+  color: ${COLORS.gainsboro};
   :hover, :focus {
-    background: ${COLORS.grayDarkerThree};
+    background: ${COLORS.charcoal};
   }
   :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    background: ${COLORS.grayDarker};
+    border: 1px solid ${COLORS.lightGray};
+    background: ${COLORS.lightGray};
     color: ${COLORS.white};
   }
 `
 
 const baseWhiteButton = css`
-// 1 px en #D6D6D6
-  border: 1px solid ${COLORS.grayDarkerThree};
-  color: ${COLORS.grayDarkerThree};
+  border: 1px solid ${COLORS.charcoal};
+  color: ${COLORS.charcoal};
   :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.textGray};
+    border: 1px solid ${COLORS.lightGray};
+    color: ${COLORS.slateGray};
   }
 `
 
@@ -51,9 +50,9 @@ export const BackofficeWhiteButton = styled(BackofficeButton)`
 
 const baseAddButton = css`
   position: relative;
-  border: 1px solid ${COLORS.grayDarker};
+  border: 1px solid ${COLORS.lightGray};
   border-radius: 2px;
-  color: ${COLORS.grayDarker};
+  color: ${COLORS.lightGray};
   &:after {
     content: "";  
     display: block;
@@ -81,7 +80,7 @@ export const AddRegulationButton = styled(Link)`
   min-width: 40px;
   min-height: 40px;
   && {
-    background-color: ${COLORS.grayDarkerThree};
+    background-color: ${COLORS.charcoal};
   }
   &:after {
     background-color: ${COLORS.white};

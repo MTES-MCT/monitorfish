@@ -174,9 +174,9 @@ const ERSOK = styled.span`
 
 const ERS = styled.span`
   border-radius: 11px;
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   font-size: 11px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 3px 7px 7px 3px;
   height: 17px;
   padding: 3px 5px 0px 2px;
@@ -209,7 +209,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -225,7 +225,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-weight: medium;
   margin: 0;
   text-align: left;
@@ -252,7 +252,7 @@ const BottomTriangleShadow = styled.div`
   height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.grayBackground} transparent transparent transparent;
+  border-color: ${COLORS.gainsboro} transparent transparent transparent;
   margin-left: 179px;
   margin-top: -1px;
   clear: top;
@@ -264,7 +264,7 @@ const TopTriangleShadow = styled.div`
   height: 0;
   border-top: transparent;
   border-right : 6px solid transparent;
-  border-bottom : 11px solid ${COLORS.grayBackground};
+  border-bottom : 11px solid ${COLORS.gainsboro};
   border-left : 6px solid transparent;
   margin-left: 179px;
   margin-top: -267px;
@@ -278,7 +278,7 @@ const RightTriangleShadow = styled.div`
   border-right: transparent;
   border-top : 6px solid transparent;
   border-bottom : 6px solid transparent;
-  border-left : 11px solid ${COLORS.grayBackground};
+  border-left : 11px solid ${COLORS.gainsboro};
   margin-left: 385px;
   margin-top: -134px;
   clear: top;
@@ -290,7 +290,7 @@ const LeftTriangleShadow = styled.div`
   height: 0;
   border-style: solid;
   border-top: 6px solid transparent;
-  border-right: 11px solid ${COLORS.grayBackground};
+  border-right: 11px solid ${COLORS.gainsboro};
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
@@ -299,7 +299,7 @@ const LeftTriangleShadow = styled.div`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-weight: 300;
   margin: 0;
   line-height: normal;
@@ -326,13 +326,13 @@ const VesselCardBottom = styled.div`
 
 const FieldName = styled.div`
   margin-top: 9px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: normal;
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 13px;
   font-weight: medium;
   margin-top: 2px;
@@ -365,8 +365,8 @@ const Position = styled.div`
 `
 
 const VesselCardHeader = styled.div`
-  background: ${COLORS.grayDarkerThree};
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.charcoal};
+  color: ${COLORS.gainsboro};
   padding: 4px 5px 5px 5px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;

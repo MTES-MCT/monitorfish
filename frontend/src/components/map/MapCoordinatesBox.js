@@ -82,7 +82,7 @@ const RadioWrapper = styled(RadioGroup)`
 `
 
 const Header = styled.span`
-  background-color: ${COLORS.grayDarkerThree};
+  background-color: ${COLORS.charcoal};
   color: ${COLORS.grayLighter};
   padding: 5px 0;
   width: 100%;
@@ -99,7 +99,7 @@ const CoordinatesTypeSelection = styled.span`
   left: 40px;
   display: inline-block;
   margin: 1px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: 300;
   text-decoration: none;
@@ -125,7 +125,7 @@ const Coordinates = styled.span`
   text-decoration: none;
   text-align: center;
   height: 1.275em;
-  background-color: ${COLORS.grayDarkerThree};
+  background-color: ${COLORS.charcoal};
   border: none;
   border-radius: 2px;
   width: 235px;

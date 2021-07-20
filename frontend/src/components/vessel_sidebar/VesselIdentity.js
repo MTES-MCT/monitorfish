@@ -262,12 +262,12 @@ const VesselIdentity = () => {
           </Fields>
         </Zone>
       </Body>
-    : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+    : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
   )
 }
 
 const ValueWithLineBreak = styled.div`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
@@ -322,7 +322,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -338,7 +338,7 @@ const Key = styled.th`
 
 const TrimmedValue = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -353,7 +353,7 @@ const TrimmedValue = styled.td`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

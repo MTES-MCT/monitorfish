@@ -6,6 +6,7 @@ import Table from 'rsuite/lib/Table'
 import Checkbox from 'rsuite/lib/Checkbox'
 import { CellWithTitle, CheckedCell, EllipsisCell, FlagCell, TargetCell, TimeAgoCell } from './tableCells'
 import { sortArrayByColumn } from './tableSort'
+import { COLORS } from '../../constants/constants'
 
 const { Column, HeaderCell, Cell } = Table
 
@@ -162,7 +163,7 @@ const VesselListTable = props => {
 const TableContent = styled.div``
 
 const VesselsCount = styled.span`
-  color: #969696;
+  color: ${COLORS.slateGray};
   font-size: 13px;
   margin-bottom: 5px;
   display: inline-block;

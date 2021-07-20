@@ -88,7 +88,7 @@ const VesselTrackCardOverlayComponent = styled.div`
   left: ${props => props.overlayTopLeftMargin[1]}px;
   width: 350px;
   text-align: left;
-  background-color: ${COLORS.grayBackground};
+  background-color: ${COLORS.gainsboro};
   border-radius: 2px;
   z-index: 300;
 `

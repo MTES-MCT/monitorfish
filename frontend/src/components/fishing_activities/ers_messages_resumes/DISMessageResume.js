@@ -86,7 +86,7 @@ const Wrapper = styled.li`
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const ERSMessageContent = styled.div`

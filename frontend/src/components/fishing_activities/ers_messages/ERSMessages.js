@@ -74,7 +74,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
       zIndex: 4,
       width: '-moz-available'
     }),
-    control: base => ({ ...base, minHeight: 26, fontSize: 13, borderRadius: 'unset', borderColor: COLORS.grayDarker }),
+    control: base => ({ ...base, minHeight: 26, fontSize: 13, borderRadius: 'unset', borderColor: COLORS.lightGray }),
     option: base => ({ ...base, fontSize: 13 }),
     menu: base => ({ ...base, margin: 0, padding: 0, maxHeight: 360 }),
     menuList: base => ({ ...base, maxHeight: 360 }),
@@ -82,22 +82,22 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     clearIndicator: base => ({ ...base, padding: 1, width: 18 }),
     dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),
     valueContainer: base => ({ ...base, minWidth: 130, fontSize: 13, padding: '0px 2px' }),
-    multiValue: base => ({ ...base, fontSize: 13, borderRadius: 12, background: COLORS.grayBackground }),
+    multiValue: base => ({ ...base, fontSize: 13, borderRadius: 12, background: COLORS.gainsboro }),
     multiValueLabel: base => ({
       ...base,
       paddingTop: 2,
       paddingBottom: 1,
-      background: COLORS.grayBackground,
-      color: COLORS.textGray,
+      background: COLORS.gainsboro,
+      color: COLORS.slateGray,
       borderRadius: 12
     }),
     multiValueRemove: base => ({
       ...base,
-      background: COLORS.grayBackground,
-      color: COLORS.grayDarker,
+      background: COLORS.gainsboro,
+      color: COLORS.lightGray,
       borderRadius: 12,
       '&:hover': {
-        backgroundColor: COLORS.grayDarker,
+        backgroundColor: COLORS.lightGray,
         color: COLORS.grayDarkerTwo
       }
     }),
@@ -203,16 +203,16 @@ const Navigation = styled.div`
   padding: 0 0 0 10px;
   text-align: center;
   font-size: 13px;
-  color: #969696;
+  color: ${COLORS.slateGray};
   padding: 2px;
   max-width: 250px;
   margin: 0 10px 0 10px;
-  border: 1px solid ${COLORS.grayDarker};
+  border: 1px solid ${COLORS.lightGray};
 }
 `
 
 const InverseDate = styled(SortSVG)`
-  border: 1px solid ${COLORS.grayDarker};
+  border: 1px solid ${COLORS.lightGray};
   width: 30px;
   height: 12px;
   padding: 6px;
@@ -237,7 +237,7 @@ const NoMessage = styled.div`
   margin-top: 40px;
   padding-bottom: 30px;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const Wrapper = styled.div`
@@ -250,7 +250,7 @@ const Previous = styled.a`
   text-align: left;
   text-decoration: underline;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   cursor: pointer;
   display: inline-block;
 `

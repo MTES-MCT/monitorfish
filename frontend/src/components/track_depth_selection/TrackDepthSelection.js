@@ -129,8 +129,8 @@ const TrackDepthSelection = props => {
 }
 
 const Header = styled.div`
-  background: ${COLORS.textGray};
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.slateGray};
+  color: ${COLORS.gainsboro};
   padding: 5px 0 5px 15px;
   font-size: 13px;
   text-align: left;
@@ -140,7 +140,7 @@ const TrackDepthSelectionButton = styled(MapComponentStyle)`
   top: 118px;
   height: 30px;
   width: 30px;
-  background: ${props => props.trackDepthSelectionIsOpen ? COLORS.textGray : COLORS.grayDarkerThree};
+  background: ${props => props.trackDepthSelectionIsOpen ? COLORS.slateGray : COLORS.charcoal};
   position: absolute;
   right: 10px;
   margin-right: -45px;
@@ -174,7 +174,7 @@ const TrackDepthSelectionContent = styled(MapComponentStyle)`
   visibility: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   transition: all 0.3s;
 
   animation: ${props => props.rightMenuIsOpen && props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;

@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
     <g id="Groupe_240" data-name="Groupe 240" transform="translate(-178.705 -131.072)">
         <line id="Ligne_196" data-name="Ligne 196" y2="4" transform="translate(186.705 131.072)" fill="none"
-              stroke="#969696" stroke-miterlimit="10" stroke-width="1.5"/>
+              stroke="#707785" stroke-miterlimit="10" stroke-width="1.5"/>
         <line id="Ligne_197" data-name="Ligne 197" y2="4" transform="translate(186.705 143.072)" fill="none"
-              stroke="#969696" stroke-miterlimit="10" stroke-width="1.5"/>
+              stroke="#707785" stroke-miterlimit="10" stroke-width="1.5"/>
         <line id="Ligne_198" data-name="Ligne 198" x2="4" transform="translate(190.705 139.072)" fill="none"
-              stroke="#969696" stroke-miterlimit="10" stroke-width="1.5"/>
+              stroke="#707785" stroke-miterlimit="10" stroke-width="1.5"/>
         <line id="Ligne_199" data-name="Ligne 199" x2="4" transform="translate(178.705 139.072)" fill="none"
-              stroke="#969696" stroke-miterlimit="10" stroke-width="1.5"/>
+              stroke="#707785" stroke-miterlimit="10" stroke-width="1.5"/>
         <path id="Tracé_39" data-name="Tracé 39" d="M6,0A6,6,0,1,1,0,6,6,6,0,0,1,6,0Z"
-              transform="translate(180.705 133.072)" fill="none" stroke="#969696" stroke-width="1.5"/>
+              transform="translate(180.705 133.072)" fill="none" stroke="#707785" stroke-width="1.5"/>
         <circle id="Ellipse_28" data-name="Ellipse 28" cx="2.5" cy="2.5" r="2.5" transform="translate(184.205 136.572)"
-                fill="#969696"/>
+                fill="#707785"/>
     </g>
 </svg>

@@ -132,28 +132,28 @@ const RegulatoryZoneSelectedTitle = styled.div`
   border-top-right-radius: 2px;
   border-bottom-left-radius: ${props => props.showRegulatoryZonesSelected ? '0' : '2px'};
   border-bottom-right-radius: ${props => props.showRegulatoryZonesSelected ? '0' : '2px'};
-  background: ${COLORS.grayDarker};
+  background: ${COLORS.lightGray};
   
   animation: ${props => props.regulatoryZonesAddedToMySelection ? 'blink' : ''} 0.3s ease forwards;
 
   @keyframes blink {
     0%   {
-        background: ${COLORS.grayDarker};
+        background: ${COLORS.lightGray};
     }
     20%   {
         background: ${COLORS.grayDarkerTwo};
     }
     40% {
-        background: ${COLORS.grayDarker};
+        background: ${COLORS.lightGray};
     }
     60%   {
-        background: ${COLORS.grayDarker};
+        background: ${COLORS.lightGray};
     }
     80%   {
         background: ${COLORS.grayDarkerTwo};
     }
     100% {
-        background: ${COLORS.grayDarker};
+        background: ${COLORS.lightGray};
     }
   }
   
@@ -175,7 +175,7 @@ const RegulatoryZoneSelectedList = styled.ul`
   padding: 0;
   max-height: 550px;
   overflow-x: hidden;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   
   animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
 

@@ -131,14 +131,14 @@ const Wrapper = styled.div`
 const VesselLabel = styled.div`
   margin: 15px 5px 0 20px;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   text-align: left;
 `
 
 const LastPositionLegend = styled.div`
   margin: 5px 5px 15px 25px;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   text-align: left;
 `
 
@@ -164,7 +164,7 @@ const VesselAlmostHidden = styled.span`
 `
 
 const VesselShowed = styled.span`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   border: unset;
   margin-right: 5px;
   margin-left: 25px;
@@ -177,12 +177,12 @@ const VesselShowed = styled.span`
 const LastPositionInfo = styled.div`
   font-size: 10px;
   margin: 15px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
 `
 
 const Header = styled.div`
-  background: ${COLORS.textGray};
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.slateGray};
+  color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;
@@ -207,7 +207,7 @@ const VesselVisibilityIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   padding: 3px 0px 0 3px;
   top: 152px;
   z-index: 99;
@@ -218,7 +218,7 @@ const VesselVisibilityIcon = styled(MapButtonStyle)`
   transition: all 0.3s;
 
   :hover, :focus {
-      background: ${COLORS.grayDarkerThree};
+      background: ${COLORS.charcoal};
   }
 `
 

@@ -10,8 +10,8 @@ export const Zone = styled.div`
 `
 
 export const Title = styled.div`
-  color: ${COLORS.textGray};
-  background: ${COLORS.grayDarker};
+  color: ${COLORS.slateGray};
+  background: ${COLORS.lightGray};
   padding: 8.5px 10px 8px 20px;
   font-size: 0.8rem;
   flex-shrink: 0;
@@ -29,7 +29,7 @@ export const NoValue = styled.span`
 `
 
 export const StrongText = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin-left: 5px;
   white-space: nowrap;
   text-overflow: ellipsis;

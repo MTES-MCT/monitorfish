@@ -138,7 +138,7 @@ const Measurement = () => {
 const MeasurementItem = styled.div`
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.textGray};
+  background: ${COLORS.slateGray};
   padding: 0;
   z-index: 99;
   right: 0;
@@ -182,7 +182,7 @@ const MeasurementWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${props => props.isMeasuring ? COLORS.textGray : COLORS.grayDarkerThree};
+  background: ${props => props.isMeasuring ? COLORS.slateGray : COLORS.charcoal};
   top: 207px;
   z-index: 99;
   height: 40px;
@@ -192,7 +192,7 @@ const MeasurementWrapper = styled(MapButtonStyle)`
   transition: all 0.3s;
 
   :hover, :focus {
-      background: ${COLORS.grayDarkerThree};
+      background: ${COLORS.charcoal};
   }
 `
 

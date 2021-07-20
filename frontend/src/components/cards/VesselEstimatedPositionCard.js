@@ -35,7 +35,7 @@ const TriangleShadow = styled.div`
   height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.grayBackground} transparent transparent transparent;
+  border-color: ${COLORS.gainsboro} transparent transparent transparent;
   margin-left: 150px;
   margin-top: -1px;
   clear: top;
@@ -43,7 +43,7 @@ const TriangleShadow = styled.div`
 
 const Body = styled.div`
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   padding-top: 2px;
   padding-bottom: 2px;
 `

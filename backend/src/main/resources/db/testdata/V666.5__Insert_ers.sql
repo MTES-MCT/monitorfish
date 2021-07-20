@@ -205,6 +205,7 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
        ('OOF20190227059999', ''),
        ('OOF22103048321398', ''),
        ('OOF20191205059902', ''),
+       ('OOF20190227050000', ''),
        ('OOF22103048326325', '');
 
 
@@ -244,6 +245,11 @@ VALUES ('OOF20190126059903', 9463713, 'OOF', '2019-01-26T11:45:00Z', 'DAT', 'OOF
         'GBR000B14430', 'MVGM5', 'AR865', 'CABO ORTEGAL', 'FRA', null, 'DEP',
         '{"gearOnboard": [{"gear": "GTR", "mesh": 100.0}], "departurePort": "AEJAZ", "anticipatedActivity": "FSH", "tripStartDate": "2019-02-17T00:00Z", "departureDatetimeUtc": "2019-02-27T01:05Z"}',
         '2021-01-18T07:17:28.317559Z'),
+       ('OOF20190227050000', 9463711, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF20180227059999', null,
+        '2018-02-17T01:05:00Z',
+        'FRA000461560', 'QGDF', 'GV461590', 'BREIZH LORD', 'FRA', null, 'DEP',
+        '{"gearOnboard": [{"gear": "GTR", "mesh": 100.0}], "departurePort": "AEJAZ", "anticipatedActivity": "FSH", "tripStartDate": "2018-02-17T00:00Z", "departureDatetimeUtc": "2018-02-27T01:05Z"}',
+        '2019-01-18T07:17:28.317559Z'),
        ('OOF20190223059904', 9463713, 'OOF', '2019-02-23T13:08:00Z', 'DAT', 'OOF20190223059904', null,
         '2019-02-23T13:08:00Z',
         'GBR000B14430', 'MVGM5', 'AR865', 'CABO ORTEGAL', 'FRA', null, 'EOF',

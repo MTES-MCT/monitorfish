@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -6,15 +6,27 @@ import LastControlZone from './LastControlZone'
 import ControlsResumeZone from './ControlsResumeZone'
 import YearsToControlList from './YearsToControlList'
 import { getYearsToControl, lastControlByType } from '../../domain/entities/controls'
+import getControls from '../../domain/use_cases/getControls'
+import {
+  resetNextControlResumeAndControls,
+  setControlFromDate,
+  setControlResumeAndControls
+} from '../../domain/reducers/Vessel'
+import { useDispatch, useSelector } from 'react-redux'
+import { FingerprintSpinner } from 'react-epic-spinners'
 
-const VesselControls = props => {
+const VesselControls = () => {
+  const dispatch = useDispatch()
+
   const {
     /** @type {ControlResume} controlResumeAndControls */
     controlResumeAndControls,
     /** @type {ControlResume} nextControlResumeAndControls */
     nextControlResumeAndControls,
-    controlsFromDate
-  } = props
+    selectedVessel,
+    controlsFromDate,
+    loadingVessel
+  } = useSelector(state => state.vessel)
 
   /** @type {Object.<string, VesselControl[]>} yearsToControls */
   const yearsToControls = useMemo(() => {
@@ -34,33 +46,48 @@ const VesselControls = props => {
     return lastControlListByType
   }, [yearsToControls])
 
+  useEffect(() => {
+    if (selectedVessel && controlsFromDate) {
+      dispatch(getControls(true))
+    }
+  }, [selectedVessel, controlsFromDate])
+
+  const updateControlResumeAndControls = nextControlResumeAndControls => {
+    if (nextControlResumeAndControls) {
+      dispatch(setControlResumeAndControls(nextControlResumeAndControls))
+      dispatch(resetNextControlResumeAndControls())
+    }
+  }
+
+  function seeMore () {
+    const nextDate = new Date(controlsFromDate.getTime())
+    nextDate.setMonth(nextDate.getMonth() - 12)
+
+    dispatch(setControlFromDate(nextDate))
+  }
+
   return <>
     {nextControlResumeAndControls && <>
       <UpdateControls/>
       <UpdateControlsButton
-        onClick={() => props.updateControlResumeAndControls(nextControlResumeAndControls)}>
+        onClick={() => updateControlResumeAndControls(nextControlResumeAndControls)}>
         Nouveaux contrôles
       </UpdateControlsButton>
     </>
     }
     {
-      controlResumeAndControls && lastControlList && yearsToControls
+      controlResumeAndControls && lastControlList && yearsToControls && !loadingVessel
         ? <Body>
           <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls}/>
           <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate}/>
           <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate}/>
           <SeeMoreBackground>
-            <SeeMore onClick={() => {
-              const nextDate = new Date(controlsFromDate.getTime())
-              nextDate.setMonth(nextDate.getMonth() - 12)
-
-              props.setControlFromDate(nextDate)
-            }}>
+            <SeeMore onClick={seeMore}>
               Afficher plus de contrôles
             </SeeMore>
           </SeeMoreBackground>
         </Body>
-        : null
+        : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
     }
   </>
 }

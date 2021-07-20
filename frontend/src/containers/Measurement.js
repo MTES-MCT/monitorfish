@@ -13,6 +13,7 @@ import { MeasurementTypes } from '../domain/entities/map'
 import CustomCircleRange from '../components/measurements/CustomCircleRange'
 import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
+import { useClickOutsideComponent } from '../hooks/useClickOutside'
 
 const Measurement = () => {
   const dispatch = useDispatch()
@@ -25,23 +26,14 @@ const Measurement = () => {
   const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
-
   const wrapperRef = useRef(null)
+  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
 
   useEffect(() => {
-    function handleClickOutside (event) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        setMeasurementIsOpen(false)
-      }
+    if (clickedOutsideComponent) {
+      setMeasurementIsOpen(false)
     }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [wrapperRef])
+  }, [clickedOutsideComponent])
 
   useEffect(() => {
     if (measurementIsOpen === true) {

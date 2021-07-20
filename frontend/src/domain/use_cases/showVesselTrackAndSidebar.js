@@ -3,22 +3,26 @@ import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../reducer
 import { removeError, setError } from '../reducers/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
-import { IS_SELECTED_PROPERTY, vesselsAreEquals } from '../entities/vessel'
+import { IS_SELECTED_PROPERTY, Vessel, vesselsAreEquals } from '../entities/vessel'
 import { setUpdatedFromCron } from '../reducers/Map'
 import unselectVessel from './unselectVessel'
 
 const showVesselTrackAndSidebar = (
-  vesselFeatureAndIdentity,
+  vesselIdentity,
   fromSearch,
   calledFromCron,
   vesselTrackDepthObject) => (dispatch, getState) => {
-  const alreadySelectedVessel = getState().vessel.selectedVesselFeatureAndIdentity
-  unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, dispatch)
+  const {
+    vesselIdentity: alreadySelectedVessel,
+    vesselsLayerSource
+  } = getState().vessel
+  unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)
 
-  if (vesselFeatureAndIdentity.feature) {
-    vesselFeatureAndIdentity.feature.set(IS_SELECTED_PROPERTY, true)
+  const feature = vesselsLayerSource.getFeatureById(Vessel.getVesselId(vesselIdentity))
+  if (feature) {
+    feature.set(IS_SELECTED_PROPERTY, true)
   }
-  dispatchLoadingVessel(dispatch, calledFromCron, vesselFeatureAndIdentity)
+  dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
     calledFromCron,
@@ -26,11 +30,12 @@ const showVesselTrackAndSidebar = (
     getState().vessel.temporaryTrackDepth,
     getState().map.vesselTrackDepth)
 
-  getVesselFromAPI(vesselFeatureAndIdentity.identity, nextVesselTrackDepthObject)
+  getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {
       dispatchErrors(dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject)
 
-      dispatch(setSelectedVessel(vesselAndTrackDepthModified.vessel))
+      const vessel = { ...vesselAndTrackDepthModified.vessel, ...vesselIdentity }
+      dispatch(setSelectedVessel(vessel))
     }).catch(error => {
       console.error(error)
       dispatch(setError(error))
@@ -38,19 +43,19 @@ const showVesselTrackAndSidebar = (
     })
 }
 
-function dispatchLoadingVessel (dispatch, calledFromCron, vesselFeatureAndIdentity) {
+function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
   dispatch(setUpdatedFromCron(calledFromCron))
   dispatch(removeError())
   dispatch(loadingVessel({
-    vesselFeatureAndIdentity: vesselFeatureAndIdentity,
-    calledFromCron: calledFromCron
+    vesselIdentity,
+    calledFromCron
   }))
 }
 
-function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselFeatureAndIdentity, dispatch) {
+function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch) {
   if (!calledFromCron &&
     alreadySelectedVessel &&
-    !vesselsAreEquals(vesselFeatureAndIdentity.identity, alreadySelectedVessel.identity)) {
+    !vesselsAreEquals(vesselIdentity, alreadySelectedVessel.identity)) {
     dispatch(unselectVessel())
   }
 }

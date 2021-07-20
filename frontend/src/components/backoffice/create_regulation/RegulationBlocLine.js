@@ -8,8 +8,6 @@ import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from './MenuItem'
 
 const RegulationBlocLine = props => {
-  const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
-  const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
   const {
     setSelectedValue,
     selectedValue,
@@ -17,6 +15,8 @@ const RegulationBlocLine = props => {
     reglementationBlocName,
     setReglementationBlocName
   } = props
+  const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
+  const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
 
   const addNewReglementationBloc = () => {
     if (reglementationBlocName === '') {
@@ -33,7 +33,7 @@ const RegulationBlocLine = props => {
     <ContentLine>
       <Label>Ensemble règlementaire</Label>
       <CustomSelectComponent
-        searchable={false}
+        searchable={true}
         placeholder='Choisir un ensemble'
         value={'Choisir un ensemble'}
         onChange={setSelectedValue}
@@ -43,7 +43,7 @@ const RegulationBlocLine = props => {
       {selectedValue &&
         <Tag
           selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
+          onCloseIconClicked={_ => setSelectedValue()}
         />
       }
       {

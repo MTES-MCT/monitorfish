@@ -37,7 +37,7 @@ const RegulationZoneThemeLine = props => {
         {selectedReglementationTheme &&
           <Tag
             selectedValue={selectedReglementationTheme}
-            setSelectedValue={setSelectedReglementationTheme}
+            onCloseIconClicked={_ => setSelectedReglementationTheme()}
           />}
         {
         isAddThemeClicked

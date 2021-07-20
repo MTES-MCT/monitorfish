@@ -6,7 +6,6 @@ const FilterReducer = null
 import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
 
-
 const vesselsFiltersLocalStorageKey = 'vesselsFilters'
 const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
 

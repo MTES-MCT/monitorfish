@@ -15,6 +15,7 @@ import MapVesselAnimation from '../components/map/MapVesselAnimation'
 import VesselEstimatedPositionLayer from '../layers/VesselEstimatedPositionLayer'
 import VesselEstimatedPositionCardOverlay from '../components/overlays/VesselEstimatedPositionCardOverlay'
 import VesselsLabelsLayer from '../layers/VesselsLabelsLayer'
+import InterestPointLayer from '../layers/InterestPointLayer'
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
@@ -66,6 +67,7 @@ const Map = () => {
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselTrackCardOverlay feature={currentFeature}/>
       <LayerDetailsBox gears={gears} feature={currentFeature}/>
+      <InterestPointLayer />
     </BaseMap>
   )
 }

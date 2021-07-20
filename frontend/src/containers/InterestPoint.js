@@ -5,9 +5,9 @@ import { COLORS } from '../constants/constants'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
-import { useClickOutsideComponent } from '../hooks/useClickOutside'
 import { ReactComponent as MeasurementSVG } from '../components/icons/Mesure.svg'
 import SaveInterestPoint from '../components/interest_points/SaveInterestPoint'
+import { drawInterestPoint } from '../domain/reducers/InterestPoint'
 
 const InterestPoint = () => {
   const dispatch = useDispatch()
@@ -18,19 +18,13 @@ const InterestPoint = () => {
   const firstUpdate = useRef(true)
   const [interestPointIsOpen, setInterestPointIsOpen] = useState(false)
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
-
-  useEffect(() => {
-    if (clickedOutsideComponent) {
-      setInterestPointIsOpen(false)
-    }
-  }, [clickedOutsideComponent])
 
   useEffect(() => {
     if (interestPointIsOpen === true) {
       dispatch(unselectVessel())
       firstUpdate.current = false
       document.addEventListener('keydown', escapeFromKeyboard, false)
+      dispatch(drawInterestPoint())
     }
   }, [interestPointIsOpen])
 

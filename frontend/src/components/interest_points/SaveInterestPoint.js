@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
-import CoordinateInput from 'react-coordinate-input'
 
 import { COLORS } from '../../constants/constants'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
@@ -11,16 +10,84 @@ import { interestPointTypes } from '../../domain/entities/interestPoints'
 import { ReactComponent as GearSVG } from '../icons/Label_engin_de_peche.svg'
 import { ReactComponent as ControlSVG } from '../icons/Label_controle.svg'
 import { ReactComponent as VesselSVG } from '../icons/Label_segment_de_flotte.svg'
+import SetCoordinates from '../coordinates/SetCoordinates'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  addInterestPoint,
+  endInterestPointDraw,
+  updateInterestPointBeingDrawed
+} from '../../domain/reducers/InterestPoint'
+import { getCoordinates } from '../../utils'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 
 const SaveInterestPoint = (
   {
     healthcheckTextWarning,
     isOpen
   }) => {
+  const dispatch = useDispatch()
+
+  const {
+    /** @type {InterestPoint | null} interestPointBeingDrawed */
+    interestPointBeingDrawed
+  } = useSelector(state => state.interestPoint)
+
   const [coordinates, setCoordinates] = useState([])
   const [name, setName] = useState('')
   const [observations, setObservations] = useState('')
   const [type, setType] = useState('')
+
+  useEffect(() => {
+    if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates && interestPointBeingDrawed.coordinates.length) {
+      const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
+        .map(coordinate => {
+          return parseFloat(coordinate.replace(/°/g, ''))
+        })
+      setCoordinates(ddCoordinates)
+    }
+  }, [interestPointBeingDrawed])
+
+  console.log('coordinates', coordinates)
+
+  useEffect(() => {
+    if (interestPointBeingDrawed && name && interestPointBeingDrawed.name !== name) {
+      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
+      nextInterestPointBeingDrawed.name = name
+      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
+    }
+  }, [name, interestPointBeingDrawed])
+
+  useEffect(() => {
+    if (interestPointBeingDrawed && observations && interestPointBeingDrawed.observations !== observations) {
+      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
+      nextInterestPointBeingDrawed.observations = observations
+      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
+    }
+  }, [observations, interestPointBeingDrawed])
+
+  useEffect(() => {
+    if (interestPointBeingDrawed && type && interestPointBeingDrawed.type !== type) {
+      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
+      nextInterestPointBeingDrawed.type = type
+      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
+    }
+  }, [type, interestPointBeingDrawed])
+
+  useEffect(() => {
+    // TODO Convert to OL coordinates
+    /* if (interestPointBeingDrawed && coordinates && coordinates.length && interestPointBeingDrawed.coordinates !== coordinates) {
+      console.log('COORDS', coordinates, interestPointBeingDrawed.coordinates)
+      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
+      nextInterestPointBeingDrawed.coordinates = coordinates
+      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
+    } */
+  }, [coordinates, interestPointBeingDrawed])
+
+  const saveInterestPoint = () => {
+    if (name && type && coordinates && coordinates.length) {
+      dispatch(addInterestPoint(interestPointBeingDrawed))
+    }
+  }
 
   return (
     <Wrapper
@@ -31,13 +98,10 @@ const SaveInterestPoint = (
       </Header>
       <Body>
         <p>Coordonnées</p>
-        <CoordinateInput
-          onChange={(_, { dd }) => setCoordinates(dd)}
-          value={coordinates && Array.isArray(coordinates) && coordinates.length
-            ? coordinates.join(',')
-            : undefined}
+        <SetCoordinates
+          coordinates={coordinates}
+          setCoordinates={setCoordinates}
         />
-        <CoordinatesType>(DMS)</CoordinatesType>
         <p>Type de point</p>
         <RadioWrapper>
           <RadioGroup
@@ -62,7 +126,7 @@ const SaveInterestPoint = (
           </RadioGroup>
         </RadioWrapper>
         <p>Libellé du point</p>
-        <input
+        <Name
           type='text'
           onChange={e => setName(e.target.value)}
           value={name}
@@ -72,10 +136,10 @@ const SaveInterestPoint = (
           onChange={e => setObservations(e.target.value)}
           value={observations}
         />
-        <OkButton>
+        <OkButton onClick={saveInterestPoint}>
           OK
         </OkButton>
-        <CancelButton>
+        <CancelButton onClick={() => dispatch(endInterestPointDraw())}>
           Annuler
         </CancelButton>
       </Body>
@@ -83,8 +147,8 @@ const SaveInterestPoint = (
   )
 }
 
-const CoordinatesType = styled.span`
-  margin-left: 7px;
+const Name = styled.input`
+  width: 100%;
 `
 
 const RadioWrapper = styled.div`
@@ -130,7 +194,6 @@ const Body = styled.div`
   }
   
   p:nth-of-type(2) {
-   
     margin-top: 15px;
     font-size: 13px;
   }
@@ -152,10 +215,6 @@ const Body = styled.div`
     border: none;
     height: 27px;
     padding-left: 8px;
-  }
-  
-  input:nth-of-type(2) {
-    width: 100%;
   }
   
   textarea {

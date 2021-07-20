@@ -56,15 +56,17 @@ function getDDCoordinates (transformedCoordinates) {
   const degreeSplit = transformedCoordinates[0].toString().split('.')
   if (degreeSplit.length) {
     let degree = degreeSplit[0].trim().replace(/-/g, '')
+    const decimals = degreeSplit[1] ? degreeSplit[1].substring(0, 4) : '0000'
+
     switch (degree.length) {
       case 1:
-        degree = `${negative ? '-' : ''}00${degree}.${degreeSplit[1].substring(0, 4)}`
+        degree = `${negative ? '-' : ''}00${degree}.${decimals}`
         break
       case 2:
-        degree = `${negative ? '-' : ''}0${degree}.${degreeSplit[1].substring(0, 4)}`
+        degree = `${negative ? '-' : ''}0${degree}.${decimals}`
         break
       default:
-        degree = `${negative ? '-' : ''}${degree}.${degreeSplit[1].substring(0, 4)}`
+        degree = `${negative ? '-' : ''}${degree}.${decimals}`
         break
     }
 

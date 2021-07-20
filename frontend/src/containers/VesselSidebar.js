@@ -105,28 +105,28 @@ const VesselSidebar = () => {
               <Tab
                 isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
                 onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.SUMMARY))}
-                data-cy={"vessel-menu-resume"}
+                data-cy={'vessel-menu-resume'}
               >
                 <SummaryIcon/> <br/> Résumé
               </Tab>
               <Tab
                 isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
                 onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))}
-                data-cy={"vessel-menu-identity"}
+                data-cy={'vessel-menu-identity'}
               >
                 <VesselIDIcon/> <br/> Identité
               </Tab>
               <Tab
                 isActive={vesselSidebarTab === VesselSidebarTab.VOYAGES}
                 onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))}
-                data-cy={"vessel-menu-fishing"}
+                data-cy={'vessel-menu-fishing'}
               >
                 <FisheriesIcon/> <br/> Pêche
               </Tab>
               <Tab
                 isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
                 onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.CONTROLS))}
-                data-cy={"vessel-menu-controls"}
+                data-cy={'vessel-menu-controls'}
               >
                 <ControlsIcon/> <br/> Contrôles
               </Tab>

@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.pipeline.flows.ers &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../_static/underscore.js"></script>
+        <script src="../../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" />
+    <link rel="next" title="datascience.src.pipeline.flows.export_species" href="../export_species/index.html" />
+    <link rel="prev" title="datascience.src.pipeline.flows.current_segments" href="../current_segments/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../../../reference.html">API reference</a> &raquo;</li>
+        
+          <li><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.pipeline</span></code></a> &raquo;</li>
+        
+          <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.pipeline.flows</span></code></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.pipeline.flows.ers</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../../../_sources/autoapi/datascience/src/pipeline/flows/ers/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-datascience.src.pipeline.flows.ers">
+<span id="datascience-src-pipeline-flows-ers"></span><h1><a class="reference internal" href="#module-datascience.src.pipeline.flows.ers" title="datascience.src.pipeline.flows.ers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.pipeline.flows.ers</span></code></a><a class="headerlink" href="#module-datascience.src.pipeline.flows.ers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.get_message_type" title="datascience.src.pipeline.flows.ers.get_message_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_message_type</span></code></a>(zipfile_name: str) → str</p></td>
+<td><p>For a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.extract_zipfiles" title="datascience.src.pipeline.flows.ers.extract_zipfiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_zipfiles</span></code></a>(input_dir: pathlib.Path, treated_dir: pathlib.Path, non_treated_dir: pathlib.Path, error_dir: pathlib.Path) → List[dict]</p></td>
+<td><p>Scans <code class="docutils literal notranslate"><span class="pre">input_dir</span></code>, in which ers zipfiles are expected to be arranged in a</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.extract_xmls_from_zipfile" title="datascience.src.pipeline.flows.ers.extract_xmls_from_zipfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_xmls_from_zipfile</span></code></a>(zipfile: Union[None, dict]) → Union[None, dict]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.parse_xmls" title="datascience.src.pipeline.flows.ers.parse_xmls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_xmls</span></code></a>(zipfile: Union[None, dict]) → Union[None, dict]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.clean" title="datascience.src.pipeline.flows.ers.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean</span></code></a>(zipfile: Union[None, dict]) → Union[None, dict]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.load_ers" title="datascience.src.pipeline.flows.ers.load_ers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_ers</span></code></a>(cleaned_data: List[dict])</p></td>
+<td><p>Loads ERS data into public.ers and public.ers_messages tables.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.RECEIVED_DIRECTORY" title="datascience.src.pipeline.flows.ers.RECEIVED_DIRECTORY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RECEIVED_DIRECTORY</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.TREATED_DIRECTORY" title="datascience.src.pipeline.flows.ers.TREATED_DIRECTORY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TREATED_DIRECTORY</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.NON_TREATED_DIRECTORY" title="datascience.src.pipeline.flows.ers.NON_TREATED_DIRECTORY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NON_TREATED_DIRECTORY</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.ERROR_DIRECTORY" title="datascience.src.pipeline.flows.ers.ERROR_DIRECTORY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ERROR_DIRECTORY</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.ers.zipfiles" title="datascience.src.pipeline.flows.ers.zipfiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zipfiles</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.RECEIVED_DIRECTORY">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">RECEIVED_DIRECTORY</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#RECEIVED_DIRECTORY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.RECEIVED_DIRECTORY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.TREATED_DIRECTORY">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">TREATED_DIRECTORY</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#TREATED_DIRECTORY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.TREATED_DIRECTORY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.NON_TREATED_DIRECTORY">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">NON_TREATED_DIRECTORY</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#NON_TREATED_DIRECTORY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.NON_TREATED_DIRECTORY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.ERROR_DIRECTORY">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">ERROR_DIRECTORY</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#ERROR_DIRECTORY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.ERROR_DIRECTORY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.get_message_type">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">get_message_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zipfile_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#get_message_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.get_message_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
+extract the message type, which may be one of :</p>
+<ul class="simple">
+<li><p>ERS3 (a set of messages in ERS3 format)</p></li>
+<li><p>ERS3_ACK (a set of acknowledgement statuses from BIA for ERS3 messages)</p></li>
+<li><p>UN (a set of FLUX messages)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.extract_zipfiles">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">extract_zipfiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treated_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_treated_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#extract_zipfiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.extract_zipfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scans <code class="docutils literal notranslate"><span class="pre">input_dir</span></code>, in which ers zipfiles are expected to be arranged in a
+hierarchy folders like : year / month / zipfiles. Yields found zipfiles
+along with the corresponding paths of :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_directory</span></code> where the zipfile is located</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">treated_directory</span></code> where the zipfile will be transfered after integration into
+the monitorfish database</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">non_treated_directory</span></code> where the zipfile will be transfered if it is a FLUX type
+of message (currently not handled)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error_directory</span></code> if an error occurs during the treatment of messages.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.extract_xmls_from_zipfile">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">extract_xmls_from_zipfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zipfile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#extract_xmls_from_zipfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.extract_xmls_from_zipfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.parse_xmls">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">parse_xmls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zipfile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#parse_xmls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.parse_xmls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.clean">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zipfile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.load_ers">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">load_ers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cleaned_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#load_ers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.load_ers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads ERS data into public.ers and public.ers_messages tables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cleaned_data</strong> (<em>list</em>) – list of dictionaries (output of <cite>clean</cite> task)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.ers.zipfiles">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.ers.</span></span><span class="sig-name descname"><span class="pre">zipfiles</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/ers.html#zipfiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.ers.zipfiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../export_species/index.html" class="btn btn-neutral float-right" title="datascience.src.pipeline.flows.export_species" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../current_segments/index.html" class="btn btn-neutral float-left" title="datascience.src.pipeline.flows.current_segments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

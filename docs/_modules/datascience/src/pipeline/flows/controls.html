@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.pipeline.flows.controls &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>datascience.src.pipeline.flows.controls</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for datascience.src.pipeline.flows.controls</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">prefect</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.exc</span> <span class="kn">import</span> <span class="n">InvalidRequestError</span>
+
+<span class="kn">from</span> <span class="nn">src.db_config</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">src.pipeline.generic_tasks</span> <span class="kn">import</span> <span class="n">extract</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span> <span class="nn">src.pipeline.processing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">df_to_dict_series</span><span class="p">,</span>
+    <span class="n">df_values_to_psql_arrays</span><span class="p">,</span>
+    <span class="n">to_json</span><span class="p">,</span>
+    <span class="n">zeros_ones_to_bools</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">src.pipeline.utils</span> <span class="kn">import</span> <span class="n">delete</span><span class="p">,</span> <span class="n">get_table</span><span class="p">,</span> <span class="n">psql_insert_copy</span>
+
+<span class="c1"># ********************************** Tasks and flow ***********************************</span>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="extract_controls"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/controls/index.html#datascience.src.pipeline.flows.controls.extract_controls">[docs]</a><span class="k">def</span> <span class="nf">extract_controls</span><span class="p">():</span>
+
+    <span class="n">parse_dates</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;control_datetime_utc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_start_datetime_utc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_end_datetime_utc&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;controller_id&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;control_type&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;facade&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;port_locode&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mission_order&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_targeted&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cnsp_called_unit&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;infraction&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cooperative&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;diversion&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;escort_to_quay&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;seizure&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_1_code&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_2_code&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_3_code&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_1_was_controlled&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_2_was_controlled&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_3_was_controlled&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">extract</span><span class="p">(</span>
+        <span class="n">db_name</span><span class="o">=</span><span class="s2">&quot;fmc&quot;</span><span class="p">,</span>
+        <span class="n">query_filepath</span><span class="o">=</span><span class="s2">&quot;fmc/controles.sql&quot;</span><span class="p">,</span>
+        <span class="n">parse_dates</span><span class="o">=</span><span class="n">parse_dates</span><span class="p">,</span>
+        <span class="n">dtypes</span><span class="o">=</span><span class="n">dtypes</span><span class="p">,</span></div>
+    <span class="p">)</span>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="transform_controls"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/controls/index.html#datascience.src.pipeline.flows.controls.transform_controls">[docs]</a><span class="k">def</span> <span class="nf">transform_controls</span><span class="p">(</span><span class="n">controls</span><span class="p">):</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">prefect</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;logger&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ---------------------------------------------------------------------------------</span>
+    <span class="c1"># Transform boolean values stored as &quot;0&quot;s and &quot;1&quot;s in Oracle to booleans</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Converting &#39;0&#39;s and &#39;1&#39; to booleans&quot;</span><span class="p">)</span>
+    <span class="n">bool_cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;mission_order&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_targeted&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cnsp_called_unit&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;infraction&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cooperative&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;diversion&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;escort_to_quay&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;seizure&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_1_was_controlled&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_2_was_controlled&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gear_3_was_controlled&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">controls</span><span class="p">[</span><span class="n">bool_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">zeros_ones_to_bools</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="n">bool_cols</span><span class="p">])</span>
+
+    <span class="c1"># ---------------------------------------------------------------------------------</span>
+    <span class="c1"># Transform gear control data</span>
+    <span class="c1"># 1. First build a dictionnary of control data for each of the 3 gears controlled</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Transforming gears control data columns to dictionnary&quot;</span><span class="p">)</span>
+    <span class="n">col_maps</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;column_names_to_json_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;gear_1_code&quot;</span><span class="p">:</span> <span class="s2">&quot;gearCode&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;gear_1_was_controlled&quot;</span><span class="p">:</span> <span class="s2">&quot;gearWasControlled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;declared_mesh_1&quot;</span><span class="p">:</span> <span class="s2">&quot;declaredMesh&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;controlled_mesh_1&quot;</span><span class="p">:</span> <span class="s2">&quot;controlledMesh&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;result_col&quot;</span><span class="p">:</span> <span class="s2">&quot;gear_1&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;column_names_to_json_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;gear_2_code&quot;</span><span class="p">:</span> <span class="s2">&quot;gearCode&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;gear_2_was_controlled&quot;</span><span class="p">:</span> <span class="s2">&quot;gearWasControlled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;declared_mesh_2&quot;</span><span class="p">:</span> <span class="s2">&quot;declaredMesh&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;controlled_mesh_2&quot;</span><span class="p">:</span> <span class="s2">&quot;controlledMesh&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;result_col&quot;</span><span class="p">:</span> <span class="s2">&quot;gear_2&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;column_names_to_json_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;gear_3_code&quot;</span><span class="p">:</span> <span class="s2">&quot;gearCode&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;gear_3_was_controlled&quot;</span><span class="p">:</span> <span class="s2">&quot;gearWasControlled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;declared_mesh_3&quot;</span><span class="p">:</span> <span class="s2">&quot;declaredMesh&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;controlled_mesh_3&quot;</span><span class="p">:</span> <span class="s2">&quot;controlledMesh&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;result_col&quot;</span><span class="p">:</span> <span class="s2">&quot;gear_3&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">col_map</span> <span class="ow">in</span> <span class="n">col_maps</span><span class="p">:</span>
+
+        <span class="n">gear_data_df</span> <span class="o">=</span> <span class="n">controls</span><span class="p">[</span><span class="n">col_map</span><span class="p">[</span><span class="s2">&quot;column_names_to_json_keys&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">gear_data_df</span> <span class="o">=</span> <span class="n">gear_data_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">col_map</span><span class="p">[</span><span class="s2">&quot;column_names_to_json_keys&quot;</span><span class="p">])</span>
+
+        <span class="n">gear_data_series</span> <span class="o">=</span> <span class="n">df_to_dict_series</span><span class="p">(</span>
+            <span class="n">df</span><span class="o">=</span><span class="n">gear_data_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gearCode&quot;</span><span class="p">]),</span>
+            <span class="n">result_colname</span><span class="o">=</span><span class="n">col_map</span><span class="p">[</span><span class="s2">&quot;result_col&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">gear_data_series</span><span class="p">)</span>
+        <span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">col_map</span><span class="p">[</span><span class="s2">&quot;column_names_to_json_keys&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="c1"># 2. Then group the 3 dictionnaries containing the data of the 3 gear controls into</span>
+    <span class="c1"># a numpy array of dictionnaries</span>
+    <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;gear_controls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">controls</span><span class="p">[[</span><span class="s2">&quot;gear_1&quot;</span><span class="p">,</span> <span class="s2">&quot;gear_2&quot;</span><span class="p">,</span> <span class="s2">&quot;gear_3&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">dropna</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 3. Finally drop the unneeded temporary columns with the 3 dictionnaries</span>
+    <span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gear_1&quot;</span><span class="p">,</span> <span class="s2">&quot;gear_2&quot;</span><span class="p">,</span> <span class="s2">&quot;gear_3&quot;</span><span class="p">])</span>
+
+    <span class="c1"># ---------------------------------------------------------------------------------</span>
+    <span class="c1"># Transform the list of infraction ids from string to list</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Transforming infraction ids from string to list&quot;</span><span class="p">)</span>
+    <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;infraction_ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">controls</span><span class="o">.</span><span class="n">infraction_ids</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">controls</span></div>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="load_controls"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/controls/index.html#datascience.src.pipeline.flows.controls.load_controls">[docs]</a><span class="k">def</span> <span class="nf">load_controls</span><span class="p">(</span><span class="n">controls</span><span class="p">):</span>
+    <span class="n">load</span><span class="p">(</span>
+        <span class="n">controls</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;controls&quot;</span><span class="p">,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;public&quot;</span><span class="p">,</span>
+        <span class="n">db_name</span><span class="o">=</span><span class="s2">&quot;monitorfish_remote&quot;</span><span class="p">,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="n">prefect</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;logger&quot;</span><span class="p">),</span>
+        <span class="n">pg_array_columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;infraction_ids&quot;</span><span class="p">],</span>
+        <span class="n">jsonb_columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gear_controls&quot;</span><span class="p">],</span>
+        <span class="n">delete_before_insert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span></div>
+    <span class="p">)</span>
+
+
+<span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;Controls&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
+<div class="viewcode-block" id="controls"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/controls/index.html#datascience.src.pipeline.flows.controls.controls">[docs]</a>    <span class="n">controls</span> <span class="o">=</span> <span class="n">extract_controls</span><span class="p">()</span></div>
+    <span class="n">controls</span> <span class="o">=</span> <span class="n">transform_controls</span><span class="p">(</span><span class="n">controls</span><span class="p">)</span>
+    <span class="n">load_controls</span><span class="p">(</span><span class="n">controls</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

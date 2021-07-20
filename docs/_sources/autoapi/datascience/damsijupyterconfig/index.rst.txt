@@ -1,0 +1,34 @@
+:mod:`datascience.dam-si-jupyter-config`
+========================================
+
+.. py:module:: datascience.dam-si-jupyter-config
+
+
+Module Contents
+---------------
+
+.. data:: allow_origin
+   :annotation: = *
+
+   
+
+.. data:: allow_remote_access
+   :annotation: = True
+
+   
+
+.. data:: base_url
+   :annotation: = /jupyter
+
+   
+
+.. data:: custom_display_url
+   :annotation: = jupyternotebook-test.csam.e2.rie.gouv.fr/jupyter
+
+   
+
+.. data:: open_browser
+   :annotation: = False
+
+   
+

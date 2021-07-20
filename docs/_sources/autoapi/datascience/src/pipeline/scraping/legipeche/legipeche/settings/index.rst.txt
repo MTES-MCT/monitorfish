@@ -1,0 +1,29 @@
+:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.settings`
+=====================================================================
+
+.. py:module:: datascience.src.pipeline.scraping.legipeche.legipeche.settings
+
+
+Module Contents
+---------------
+
+.. data:: BOT_NAME
+   :annotation: = legipeche
+
+   
+
+.. data:: SPIDER_MODULES
+   :annotation: = ['legipeche.spiders']
+
+   
+
+.. data:: NEWSPIDER_MODULE
+   :annotation: = legipeche.spiders
+
+   
+
+.. data:: ROBOTSTXT_OBEY
+   :annotation: = True
+
+   
+

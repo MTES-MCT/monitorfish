@@ -172,35 +172,33 @@ def to_pgarr(
     stripped of leading and trailing blank spaces, and finally filtered to keep only
     non empty strings.
 
-    If the input is not a `list`, a `set` or a `numpy.ndarray`:
-        - if `handle_errors` is False (default), raises a `ValueError`
-        - if `handle_errors` is True, then `value_on_error` is returned
-
     This transformation is required on the elements of a DataFrame's columns that
     contain collections before bulk inserting the DataFrame into Postgresql with
     the psql_insert_copy method.
 
-    Examples:
-    >> to_pgarr([1, 2, "a ", "b", "", " "])
-    "{1,2,'a','b'}"
-
-    >> to_pgarr(None)
-    ValueError
-
-    >> to_pgarr(None, handle_errors=True, value_on_error="{}")
-    "{}"
-
-    >> to_pgarr(np.nan, handle_errors=True, value_on_error=None)
-
     Args:
         x (list, set or numpy.ndarray) : iterable to serialize as Postgres array
-        handle_errors (bool): if True, returns value_on_error instead of raising
-            ValueError when the input is of an unexpected type
-        value_on_error (str or None): value to return on errors, if `handle_errors`
-            is True
+        handle_errors (bool): if ``True``, returns ``value_on_error`` instead of raising
+            ``ValueError`` when the input is of an unexpected type
+        value_on_error (str or None): value to return on errors, if ``handle_errors``
+            is ``True``
 
     Returns:
         str: string with Postgresql Array compatible syntax
+
+    Raises:
+        ValueError : when ``handle_errors`` is False and ``x`` is not list-like.
+
+    Examples:
+        >>> to_pgarr([1, 2, "a ", "b", "", " "])
+        "{1,2,'a','b'}"
+        >>> to_pgarr(None)
+        ValueError
+
+        >>> to_pgarr(None, handle_errors=True, value_on_error="{}")
+        "{}"
+
+        >>> to_pgarr(np.nan, handle_errors=True, value_on_error=None)
     """
     try:
         assert isinstance(x, (list, set, np.ndarray))
@@ -230,13 +228,6 @@ def df_values_to_psql_arrays(
     This is required before bulk loading a pandas.DataFrame into a Postgresql table
     with the psql_insert_copy method.
 
-    Example :
-
-    >> df_to_psql_arrays(pd.DataFrame({'a': [[1, 2], ['a', 'b']]}))
-    | a       |
-    |---------|
-    | {1,2,3} |
-    | {a,b}   |
 
     Args:
         df (pd.DataFrame): pandas DataFrame
@@ -244,6 +235,13 @@ def df_values_to_psql_arrays(
     Returns:
         pd.DataFrame: pandas DataFrame with the same shape and index, all values
             serialized as strings with Postgresql array syntax.
+
+    Examples :
+
+        >>> df_to_psql_arrays(pd.DataFrame({'a': [[1, 2], ['a', 'b']]}))
+            a
+        0   {1,2,3}
+        1   {a,b}
     """
 
     serialize = partial(

@@ -1,0 +1,60 @@
+:mod:`datascience.src.utils.database`
+=====================================
+
+.. py:module:: datascience.src.utils.database
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.utils.database.get_tables_sizes
+   datascience.src.utils.database.print_view_query_string
+   datascience.src.utils.database.find_table_schema
+   datascience.src.utils.database.print_schemas_tables
+
+
+
+.. function:: get_tables_sizes(db: str, table_names: List[str]) -> pandas.DataFrame
+
+   Returns a pandas DataFrame with the size of each table in tables_names, in Mb.
+
+   db : 'ocan', 'fmc'
+   view_name : the name of the view to inspect.
+
+
+.. function:: print_view_query_string(db: str, view_name: str)
+
+   View the SQL query string that was used to create an existing view in an Oracle
+   database.
+
+       db : 'ocan', 'fmc'
+       view_name : the name of the view to inspect.
+
+
+.. function:: find_table_schema(db: str, table_name: str)
+
+   Looks for a table named table_name in all schemas of
+   the designated database and return the name of the schema
+   in which the table is found.
+
+   If the table is not found, returns None.
+
+   Possible values for db : 'ocan', 'monitorfish_remote',
+                            'fmc', 'monitorfish_local'
+
+
+.. function:: print_schemas_tables(db: str, schemas=None)
+
+   Prints all schemas and associated tables in a database.
+   Optionnal argument 'schemas' takes a list of schemas to restrict the scan.
+
+   Possible values for db :
+       'ocan', 'monitorfish_remote', 'fmc', 'monitorfish_local'
+
+

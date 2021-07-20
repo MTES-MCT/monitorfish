@@ -1,0 +1,651 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.pipeline.processing &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>datascience.src.pipeline.processing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for datascience.src.pipeline.processing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pytz</span>
+<span class="kn">import</span> <span class="nn">simplejson</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">select</span>
+
+
+<div class="viewcode-block" id="is_a_value"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.is_a_value">[docs]</a><span class="k">def</span> <span class="nf">is_a_value</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns False if pd.isna(x), True otherwise.</span>
+
+<span class="sd">    NB : The same result could be obtained simply by checking pd.isna(x),</span>
+<span class="sd">    but checking if x is None before checking pd.isna(x)</span>
+<span class="sd">    improves performance on DataFrames containing many None values,</span>
+<span class="sd">    since checking pd.isna(x) is slower than checking if x is None.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x : Anything</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: False if pd.isna(x), True otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="concatenate_values"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.concatenate_values">[docs]</a><span class="k">def</span> <span class="nf">concatenate_values</span><span class="p">(</span><span class="n">row</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Filters the input pandas Series to keep only distinct non null values</span>
+<span class="sd">    and returns the result as a python list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        row (pd.Series): pandas Series</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List: list of distinct non null values in row</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_a_value</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result_set</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">result_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="concatenate_columns"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.concatenate_columns">[docs]</a><span class="k">def</span> <span class="nf">concatenate_columns</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">input_col_names</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;For each row in the input DataFrame, the distinct and non null values contained in</span>
+<span class="sd">    the columns input_col_names are stored in a list. A pandas Series of the same length</span>
+<span class="sd">    as the input DataFrame is then constructed with these lists as values.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): input DataFrame</span>
+<span class="sd">        input_col_names (List): the names of the columns to use</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.Series: resulting Series</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">non_null_rows</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">input_col_names</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    <span class="n">res_non_null_rows</span> <span class="o">=</span> <span class="n">non_null_rows</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">concatenate_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[[]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+    <span class="n">res</span><span class="p">[</span><span class="n">res_non_null_rows</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_non_null_rows</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="combine_overlapping_columns"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.combine_overlapping_columns">[docs]</a><span class="k">def</span> <span class="nf">combine_overlapping_columns</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ordered_cols_list</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Combines several columns into one by taking the first_valid_value in each row,</span>
+<span class="sd">    in the order of the ordered_cols_list.</span>
+
+<span class="sd">    Returns a pandas Series with the combined results.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): input pandas DataFrame</span>
+<span class="sd">        ordered_cols_list (List): list of column names</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.Series: Series containing the first valid value in each row of the DataFrame,</span>
+<span class="sd">            taken in the ordered_cols_list columns.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">non_null_rows</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">ordered_cols_list</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    <span class="n">first_non_null_values_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">non_null_rows</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">res_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="n">first_non_null_values_idx</span><span class="p">,</span> <span class="n">non_null_rows</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+    <span class="n">res</span><span class="p">[</span><span class="n">non_null_rows</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_values</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="get_first_non_null_column_name"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.get_first_non_null_column_name">[docs]</a><span class="k">def</span> <span class="nf">get_first_non_null_column_name</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">result_labels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns a Series with the same index as the input DataFrame, whose values are</span>
+<span class="sd">    the name of the first column (or the corresponding label, if provided) with a</span>
+<span class="sd">    non-null value in each row, from left to right.</span>
+
+<span class="sd">    Rows with all null values return None.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): input pandas DataFrame</span>
+<span class="sd">        result_labels (dict): if provided, must be a mapping of column names to the</span>
+<span class="sd">        corresponding labels in the result.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.Series: Series containing the name of the first column with a non-null value</span>
+<span class="sd">        in each row of the DataFrame, from left to right</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">non_null_rows</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    <span class="n">first_non_null_values_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">non_null_rows</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">res_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="n">first_non_null_values_idx</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+    <span class="n">res</span><span class="p">[</span><span class="n">non_null_rows</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_values</span>
+
+    <span class="k">if</span> <span class="n">result_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">result_labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="df_to_dict_series"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.df_to_dict_series">[docs]</a><span class="k">def</span> <span class="nf">df_to_dict_series</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">result_colname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json_col&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts a pandas DataFrame into a Series with the same index as the input</span>
+<span class="sd">    DataFrame and whose values are dictionnaries like :</span>
+
+<span class="sd">        {&#39;column_1&#39; : value, &#39;column_2&#39;: value}</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): input DataFrame</span>
+<span class="sd">        result_colname (Union[str, None]): optionnal, name of result Series</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.Series: pandas Series</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">),</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s2">&quot;Series&quot;</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">result_colname</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="zeros_ones_to_bools"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.zeros_ones_to_bools">[docs]</a><span class="k">def</span> <span class="nf">zeros_ones_to_bools</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Converts a pandas DataFrame containing &quot;0&quot;, &quot;1&quot; and None values</span>
+<span class="sd">    to a DataFrame with False, True and None values respectively.</span>
+
+<span class="sd">    Useful to convert boolean data extracted from Oracle databases, since Oracle does</span>
+<span class="sd">    not have a boolean data type and boolean data is often stored as &quot;0&quot;s and &quot;1&quot;s.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># /!\ Simply converting to float and then to bool results in None values being</span>
+    <span class="c1"># converted into True</span>
+    <span class="c1"># The conversion to &#39;category&#39; makes it possible to preserve None values.</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="to_pgarr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.to_pgarr">[docs]</a><span class="k">def</span> <span class="nf">to_pgarr</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">handle_errors</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">value_on_error</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Converts a python `list`, `set` or `numpy.ndarray` to a string with Postgresql</span>
+<span class="sd">    array syntax.</span>
+
+<span class="sd">    Elements of the list-like input argument are converted to `string` type, then</span>
+<span class="sd">    stripped of leading and trailing blank spaces, and finally filtered to keep only</span>
+<span class="sd">    non empty strings.</span>
+
+<span class="sd">    This transformation is required on the elements of a DataFrame&#39;s columns that</span>
+<span class="sd">    contain collections before bulk inserting the DataFrame into Postgresql with</span>
+<span class="sd">    the psql_insert_copy method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (list, set or numpy.ndarray) : iterable to serialize as Postgres array</span>
+<span class="sd">        handle_errors (bool): if ``True``, returns ``value_on_error`` instead of raising</span>
+<span class="sd">            ``ValueError`` when the input is of an unexpected type</span>
+<span class="sd">        value_on_error (str or None): value to return on errors, if ``handle_errors``</span>
+<span class="sd">            is ``True``</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: string with Postgresql Array compatible syntax</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError : when ``handle_errors`` is False and ``x`` is not list-like.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; to_pgarr([1, 2, &quot;a &quot;, &quot;b&quot;, &quot;&quot;, &quot; &quot;])</span>
+<span class="sd">        &quot;{1,2,&#39;a&#39;,&#39;b&#39;}&quot;</span>
+<span class="sd">        &gt;&gt;&gt; to_pgarr(None)</span>
+<span class="sd">        ValueError</span>
+
+<span class="sd">        &gt;&gt;&gt; to_pgarr(None, handle_errors=True, value_on_error=&quot;{}&quot;)</span>
+<span class="sd">        &quot;{}&quot;</span>
+
+<span class="sd">        &gt;&gt;&gt; to_pgarr(np.nan, handle_errors=True, value_on_error=None)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">handle_errors</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value_on_error</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected type for x: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">strip</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">x</span><span class="p">))))</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span></div>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="df_values_to_psql_arrays"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.df_values_to_psql_arrays">[docs]</a><span class="k">def</span> <span class="nf">df_values_to_psql_arrays</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">handle_errors</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">value_on_error</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns a `pandas.DataFrame` with all values serialized as strings</span>
+<span class="sd">    with Postgresql array syntax. All values must be of type list, set or numpy array.</span>
+<span class="sd">    Other values raise errors, which may be handled if handle_errors is set to True.</span>
+
+<span class="sd">    See `to_pgarr` for details on error handling.</span>
+
+<span class="sd">    This is required before bulk loading a pandas.DataFrame into a Postgresql table</span>
+<span class="sd">    with the psql_insert_copy method.</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): pandas DataFrame</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: pandas DataFrame with the same shape and index, all values</span>
+<span class="sd">            serialized as strings with Postgresql array syntax.</span>
+
+<span class="sd">    Examples :</span>
+
+<span class="sd">        &gt;&gt;&gt; df_to_psql_arrays(pd.DataFrame({&#39;a&#39;: [[1, 2], [&#39;a&#39;, &#39;b&#39;]]}))</span>
+<span class="sd">            a</span>
+<span class="sd">        0   {1,2,3}</span>
+<span class="sd">        1   {a,b}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">serialize</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+        <span class="n">to_pgarr</span><span class="p">,</span> <span class="n">handle_errors</span><span class="o">=</span><span class="n">handle_errors</span><span class="p">,</span> <span class="n">value_on_error</span><span class="o">=</span><span class="n">value_on_error</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">serialize</span><span class="p">,</span> <span class="n">na_action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="json_converter"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.json_converter">[docs]</a><span class="k">def</span> <span class="nf">json_converter</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converter for types not natively handled by json.dumps&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">_libs</span><span class="o">.</span><span class="n">tslibs</span><span class="o">.</span><span class="n">nattype</span><span class="o">.</span><span class="n">NaTType</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tzinfo</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">))</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">utcoffset</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;+00:00&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">)</span>  <span class="c1"># UTC, ISO format</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="to_json"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.to_json">[docs]</a><span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Converts python object to json string.&quot;&quot;&quot;</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">json_converter</span><span class="p">,</span> <span class="n">ignore_nan</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="df_values_to_json"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.df_values_to_json">[docs]</a><span class="k">def</span> <span class="nf">df_values_to_json</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns a `pandas.DataFrame` with all values serialized to json string.</span>
+
+<span class="sd">    This is required before bulk loading into a Postgresql table with</span>
+<span class="sd">    the psql_insert_copy method.</span>
+
+<span class="sd">    See `to_json` function for details.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): pandas DataFrame</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: pandas DataFrame with the same shape and index, all values</span>
+<span class="sd">            serialized as json strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">to_json</span><span class="p">,</span> <span class="n">na_action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;null&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="drop_rows_already_in_table"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.drop_rows_already_in_table">[docs]</a><span class="k">def</span> <span class="nf">drop_rows_already_in_table</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">df_column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">table</span><span class="p">:</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Table</span><span class="p">,</span>
+    <span class="n">table_column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">connection</span><span class="p">:</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span>
+    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Removes rows from the input DataFrame `df` in which the column `df_column_name`</span>
+<span class="sd">    contains values that are already present in the column `table_column_name` of the</span>
+<span class="sd">    table `table`, and returns the filtered DataFrame.&quot;&quot;&quot;</span>
+
+    <span class="n">df_n_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df_ids</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">df_n_ids</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_ids</span><span class="p">)</span>
+
+    <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="nb">getattr</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">table_column_name</span><span class="p">)])</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">table_column_name</span><span class="p">)</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">df_ids</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">df_ids_already_in_table</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">connection</span><span class="p">)[</span><span class="n">table_column_name</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Remove keys already present in the database table from df</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="n">df_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">df_ids_already_in_table</span><span class="p">)]</span>
+
+    <span class="c1"># Remove possible duplicate ids in df</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="o">~</span><span class="n">res</span><span class="p">[</span><span class="n">df_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()]</span>
+
+    <span class="n">res_n_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="n">res_n_ids</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">df_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+
+    <span class="n">log</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;From </span><span class="si">{</span><span class="n">df_n_rows</span><span class="si">}</span><span class="s2"> rows with </span><span class="si">{</span><span class="n">df_n_ids</span><span class="si">}</span><span class="s2"> distinct </span><span class="si">{</span><span class="n">df_column_name</span><span class="si">}</span><span class="s2"> values, &quot;</span>
+        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">res_n_rows</span><span class="si">}</span><span class="s2"> rows with </span><span class="si">{</span><span class="n">res_n_ids</span><span class="si">}</span><span class="s2"> distinct </span><span class="si">{</span><span class="n">df_column_name</span><span class="si">}</span><span class="s2"> values &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot;are new and will be inserted in the database.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="prepare_df_for_loading"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.prepare_df_for_loading">[docs]</a><span class="k">def</span> <span class="nf">prepare_df_for_loading</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">,</span>
+    <span class="n">pg_array_columns</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">handle_array_conversion_errors</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">value_on_array_conversion_error</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">jsonb_columns</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="n">df_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Serialize columns to be loaded into JSONB columns</span>
+    <span class="k">if</span> <span class="n">jsonb_columns</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Serializing json columns&quot;</span><span class="p">)</span>
+        <span class="n">df_</span><span class="p">[</span><span class="n">jsonb_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_values_to_json</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="n">jsonb_columns</span><span class="p">])</span>
+
+    <span class="c1"># Serialize columns to be loaded into Postgres ARRAY columns</span>
+    <span class="k">if</span> <span class="n">pg_array_columns</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Serializing postgresql array columns&quot;</span><span class="p">)</span>
+        <span class="n">df_</span><span class="p">[</span><span class="n">pg_array_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_values_to_psql_arrays</span><span class="p">(</span>
+            <span class="n">df_</span><span class="p">[</span><span class="n">pg_array_columns</span><span class="p">],</span>
+            <span class="n">handle_errors</span><span class="o">=</span><span class="n">handle_array_conversion_errors</span><span class="p">,</span>
+            <span class="n">value_on_error</span><span class="o">=</span><span class="n">value_on_array_conversion_error</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df_</span></div>
+
+
+<div class="viewcode-block" id="join_on_multiple_keys"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/processing/index.html#datascience.src.pipeline.processing.join_on_multiple_keys">[docs]</a><span class="k">def</span> <span class="nf">join_on_multiple_keys</span><span class="p">(</span>
+    <span class="n">left</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">on</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">how</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;inner&quot;</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Join two pandas DataFrames, attempting to match rows on several keys by</span>
+<span class="sd">    decreasing order of priority.</span>
+
+<span class="sd">    Joins are performed successively with each of the keys listed in `on`, and results</span>
+<span class="sd">    are then concatenated to form the final result. This is different from joining on a</span>
+<span class="sd">    composite key where all keys must match simultaneously : here, rows of left and</span>
+<span class="sd">    right DataFrames are joined if at least one of the keys match.</span>
+
+<span class="sd">    Joins are performed on the keys listed in `on` by &quot;decreasing order or priority&quot; in</span>
+<span class="sd">    the sense that rows of left and right that have been matched on one key are removed</span>
+<span class="sd">    from ulterior joins perfomed on the next keys.</span>
+
+<span class="sd">    During each of the joins on the individual keys, non-joining key pairs from left and</span>
+<span class="sd">    right DataFrames are coalesced.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        left (pd.DataFrame): pandas DataFrame</span>
+<span class="sd">        right (pd.DataFrame): pandas DataFrame</span>
+<span class="sd">        on (list): list of column names to use as join keys</span>
+<span class="sd">        how (str): &#39;inner&#39;, &#39;left&#39;, &#39;right&#39; or &#39;outer&#39;. Defaults to &#39;inner&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: result of join operation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">joins</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Attempt to perform the join successively on each key</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">on</span><span class="p">:</span>
+
+        <span class="n">right_with_key</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="n">left_with_key</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+        <span class="n">join</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">left_with_key</span><span class="p">,</span>
+            <span class="n">right_with_key</span><span class="p">,</span>
+            <span class="n">on</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span>
+            <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_left&quot;</span><span class="p">,</span> <span class="s2">&quot;_right&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">non_joining_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">on</span><span class="p">)</span> <span class="o">-</span> <span class="p">{</span><span class="n">key</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">non_joining_key</span> <span class="ow">in</span> <span class="n">non_joining_keys</span><span class="p">:</span>
+
+            <span class="n">cols_to_coalesce</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">non_joining_key</span><span class="si">}</span><span class="s2">_left&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">non_joining_key</span><span class="si">}</span><span class="s2">_right&quot;</span><span class="p">]</span>
+
+            <span class="n">join</span><span class="p">[</span><span class="n">non_joining_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">combine_overlapping_columns</span><span class="p">(</span>
+                <span class="n">join</span><span class="p">[</span><span class="n">cols_to_coalesce</span><span class="p">],</span> <span class="n">cols_to_coalesce</span>
+            <span class="p">)</span>
+
+            <span class="n">join</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">cols_to_coalesce</span><span class="p">)</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="p">[</span><span class="o">~</span><span class="n">left</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">join</span><span class="p">[</span><span class="n">key</span><span class="p">])]</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="p">[</span><span class="o">~</span><span class="n">right</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">join</span><span class="p">[</span><span class="n">key</span><span class="p">])]</span>
+
+        <span class="n">joins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">join</span><span class="p">)</span>
+
+    <span class="c1"># Add unmatched rows if performing left, right or outer joins</span>
+    <span class="k">if</span> <span class="n">how</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;outer&quot;</span><span class="p">):</span>
+        <span class="n">joins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">how</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;outer&quot;</span><span class="p">):</span>
+        <span class="n">joins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+
+    <span class="c1"># Concatenate all join results</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">joins</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+
+    <span class="n">columns_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">right</span><span class="p">)</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">on</span><span class="p">]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">columns_order</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

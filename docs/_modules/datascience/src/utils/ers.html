@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.utils.ers &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>datascience.src.utils.ers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for datascience.src.utils.ers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">import</span> <span class="n">ParseError</span>
+
+<div class="viewcode-block" id="NS"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.NS">[docs]</a><span class="n">NS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ers&quot;</span><span class="p">:</span> <span class="s2">&quot;http://ec.europa.eu/fisheries/schema/ers/v3&quot;</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="remove_namespace"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.remove_namespace">[docs]</a><span class="k">def</span> <span class="nf">remove_namespace</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Removes xmlns from tag string.</span>
+
+<span class="sd">    --------</span>
+<span class="sd">    Examples</span>
+
+<span class="sd">    &gt;&gt;&gt; remove_namespace(&quot;{http://ec.europa.eu/fisheries/schema/ers/v3}OPS&quot;)</span>
+<span class="sd">    &quot;OPS&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="xml_tag_structure_func_factory"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.xml_tag_structure_func_factory">[docs]</a><span class="k">def</span> <span class="nf">xml_tag_structure_func_factory</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">max_nb_children</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_xml_tag_structure</span><span class="p">(</span>
+        <span class="n">xml_element</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">max_nb_children</span><span class="o">=</span><span class="n">max_nb_children</span>
+    <span class="p">):</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="n">xml_element</span><span class="o">.</span><span class="n">getchildren</span><span class="p">()</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="n">remove_namespace</span><span class="p">(</span><span class="n">xml_element</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">children</span> <span class="o">==</span> <span class="p">[]</span> <span class="ow">or</span> <span class="n">max_depth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tag</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">max_nb_children</span><span class="p">:</span>
+                <span class="n">children</span> <span class="o">=</span> <span class="n">children</span><span class="p">[:</span><span class="n">max_nb_children</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">max_depth</span><span class="p">:</span>
+                <span class="n">max_depth</span> <span class="o">-=</span> <span class="mi">1</span>
+
+            <span class="n">children_tag_structures</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">get_xml_tag_structure</span><span class="p">(</span>
+                    <span class="n">child</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">max_nb_children</span><span class="o">=</span><span class="n">max_nb_children</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span>
+            <span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">children_tag_structures</span> <span class="o">=</span> <span class="n">children_tag_structures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="p">{</span><span class="n">tag</span><span class="p">:</span> <span class="n">children_tag_structures</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_xml_string_tag_structure</span><span class="p">(</span><span class="n">xml_string</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xml_element</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">xml_string</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ParseError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">get_xml_tag_structure</span><span class="p">(</span><span class="n">xml_element</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">max_nb_children</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">get_xml_string_tag_structure</span></div>
+
+
+<div class="viewcode-block" id="has_tag"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.has_tag">[docs]</a><span class="k">def</span> <span class="nf">has_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">has_tag_</span><span class="p">(</span><span class="n">xml_element</span><span class="p">):</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="n">xml_element</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//ers:</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">NS</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">elements</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">has_tag_</span></div>
+
+
+<div class="viewcode-block" id="get_elements_by_ers_tag"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.get_elements_by_ers_tag">[docs]</a><span class="k">def</span> <span class="nf">get_elements_by_ers_tag</span><span class="p">(</span><span class="n">xml_element</span><span class="p">,</span> <span class="n">ers_tag</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">xml_element</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//ers:</span><span class="si">{</span><span class="n">ers_tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">NS</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_root_tag"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.get_root_tag">[docs]</a><span class="k">def</span> <span class="nf">get_root_tag</span><span class="p">(</span><span class="n">xml_element</span><span class="p">):</span>
+    <span class="n">root_tag</span> <span class="o">=</span> <span class="n">remove_namespace</span><span class="p">(</span><span class="n">xml_element</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">root_tag</span></div>
+
+
+<div class="viewcode-block" id="get_first_child"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.get_first_child">[docs]</a><span class="k">def</span> <span class="nf">get_first_child</span><span class="p">(</span><span class="n">xml_element</span><span class="p">,</span> <span class="n">assert_child_single</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">xml_element</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">assert_child_single</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="make_datetime"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.make_datetime">[docs]</a><span class="k">def</span> <span class="nf">make_datetime</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes date a &quot;2020-12-24&quot; string and, optionnally, a time &quot;16:49&quot; string,</span>
+<span class="sd">    Returns a datetime object&quot;&quot;&quot;</span>
+    <span class="n">datetime_string</span> <span class="o">=</span> <span class="n">date</span>
+    <span class="n">datetime_format</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+
+    <span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">datetime_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">time</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">datetime_format</span> <span class="o">+=</span> <span class="s2">&quot; %H:%M&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetime_string</span><span class="p">,</span> <span class="n">datetime_format</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;ERS datetime could not be parsed&quot;</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="make_datetime_json_serializable"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.make_datetime_json_serializable">[docs]</a><span class="k">def</span> <span class="nf">make_datetime_json_serializable</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">make_datetime</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dt</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="try_float"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.try_float">[docs]</a><span class="k">def</span> <span class="nf">try_float</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="tagged_children"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/ers/index.html#datascience.src.utils.ers.tagged_children">[docs]</a><span class="k">def</span> <span class="nf">tagged_children</span><span class="p">(</span><span class="n">el</span><span class="p">):</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="n">remove_namespace</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

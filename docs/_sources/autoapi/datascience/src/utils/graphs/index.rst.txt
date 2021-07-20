@@ -1,0 +1,95 @@
+:mod:`datascience.src.utils.graphs`
+===================================
+
+.. py:module:: datascience.src.utils.graphs
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.utils.graphs.pcolor
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.utils.graphs.dataframe_inventory
+   datascience.src.utils.graphs.compare_2_columns_values
+   datascience.src.utils.graphs.compare_2_columns_availability
+
+
+
+.. function:: dataframe_inventory(df: pandas.DataFrame, title=None, fig_height=None)
+
+
+.. function:: compare_2_columns_values(df: pandas.DataFrame, col_name_1: str, col_name_2: str)
+
+
+.. function:: compare_2_columns_availability(df: pandas.DataFrame, col_name_1: str, col_name_2: str)
+
+
+.. class:: pcolor
+
+   Helper class for formatted printing.
+
+   Example : print(pcolor.BOLD + 'Hello World !' + pcolor.END)
+
+   .. attribute:: PURPLE
+      :annotation: = [95m
+
+      
+
+   .. attribute:: CYAN
+      :annotation: = [96m
+
+      
+
+   .. attribute:: DARKCYAN
+      :annotation: = [36m
+
+      
+
+   .. attribute:: BLUE
+      :annotation: = [94m
+
+      
+
+   .. attribute:: GREEN
+      :annotation: = [92m
+
+      
+
+   .. attribute:: YELLOW
+      :annotation: = [93m
+
+      
+
+   .. attribute:: RED
+      :annotation: = [91m
+
+      
+
+   .. attribute:: BOLD
+      :annotation: = [1m
+
+      
+
+   .. attribute:: UNDERLINE
+      :annotation: = [4m
+
+      
+
+   .. attribute:: END
+      :annotation: = [0m
+
+      
+
+

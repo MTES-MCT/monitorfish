@@ -1,5 +1,4 @@
 from datetime import datetime
-from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -65,9 +64,44 @@ infraction_rate_bins = {
 def compute_control_dates_coefficients(
     control_dates: pd.Series, from_date: datetime, to_date: datetime
 ) -> pd.Series:
+    """
+    For each date in ``control_dates``, computes a coefficient determined by its
+    distance from ``from_date`` relative to the distance between ``from_date`` and
+    ``to_date``.
 
+    Args:
+            control_dates (pd.Series): Series of ``datetime.datetime``
+            from_date (datetime): Start of time interval considered
+            to_date (datetime): Start of time interval considered
+
+    Returns:
+            pd.Series: [description]
+
+    Examples:
+            >>> import pandas as pd
+            >>> from datetime import datetime
+            >>> from_date = datetime(2021, 1, 1)
+            >>> to_date = datetime(2023, 1, 1)
+            >>> dates = pd.Series([
+                            datetime(2019, 6, 5),
+                            datetime(2021, 1, 1),
+                            datetime(2022, 1, 1),
+                            datetime(2025, 5, 2)
+                    ])
+
+            >>> compute_control_dates_coefficients(
+                            dates,
+                            from_date=from_date,
+                            to_date=to_date
+                    )
+
+            0    0.0
+            1    0.0
+            2    0.5
+            3    0.0
+            dtype: float64
+    """
     control_interval = (to_date - from_date).total_seconds()
-
     coefficients = (control_dates - from_date).map(
         lambda timedelta: timedelta.total_seconds()
     ) / control_interval

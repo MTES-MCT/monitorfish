@@ -83,18 +83,16 @@ def compute_control_dates_coefficients(
             >>> from_date = datetime(2021, 1, 1)
             >>> to_date = datetime(2023, 1, 1)
             >>> dates = pd.Series([
-                            datetime(2019, 6, 5),
-                            datetime(2021, 1, 1),
-                            datetime(2022, 1, 1),
-                            datetime(2025, 5, 2)
-                    ])
-
+                        datetime(2019, 6, 5),
+                        datetime(2021, 1, 1),
+                        datetime(2022, 1, 1),
+                        datetime(2025, 5, 2)
+                ])
             >>> compute_control_dates_coefficients(
-                            dates,
-                            from_date=from_date,
-                            to_date=to_date
-                    )
-
+                        dates,
+                        from_date=from_date,
+                        to_date=to_date
+                )
             0    0.0
             1    0.0
             2    0.5
@@ -118,6 +116,33 @@ def compute_control_dates_coefficients(
 
 
 def compute_control_ranks_coefficients(control_ranks: np.array) -> np.array:
+    """Given a ``numpy.array`` of integers representing the rank of vessels controls
+    over time, returns the corresponding coefficients with which they must be taken
+    into account in the risk factor.
+
+    The input array represents the controls of several vessels. For each vessel,
+    controls are sorted from most to least recent and ranked (1, 2, 3...).
+
+    The output is an array with the same shape which contains coefficients defined as:
+
+      * 1.0 for controls of rank 1
+      * 0.9 for controls of rank 2
+      * ...
+      * 0.1 for controls of rank 10
+      * 0.0 for controls of rank 11+
+
+    Args:
+        control_ranks (np.array): 1D-array of integers >= 1
+
+    Returns:
+        np.array: array with the same shape and with coefficients between 1 (for
+        controls of rank 1) and 0 (for controls of rank >= 10).
+
+    Examples:
+        >>> ranks = np.array([1, 4, 2, 2, 12, 2, 4])
+        >>> compute_control_ranks_coefficients(ranks)
+        np.array([1.0, 0.7, 0.9, 0.9, 0.0, 0.9, 0.7])
+    """
     return np.where(control_ranks <= 10, (11 - control_ranks) / 10, 0)
 
 
@@ -125,7 +150,16 @@ def compute_control_ranks_coefficients(control_ranks: np.array) -> np.array:
 
 
 @task(checkpoint=False)
-def extract_last_years_controls(years: float = 5):
+def extract_last_years_controls(years: float = 5) -> pd.DataFrame:
+    """Extracts controls data of the last ``years`` years for all vessels.
+
+    Args:
+        years (float, optional): Number of years to extract. Defaults to 5.
+
+    Returns:
+        pd.DataFrame: all vessels' controls data for the last years
+    """
+
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/last_years_controls.sql",
@@ -135,6 +169,13 @@ def extract_last_years_controls(years: float = 5):
 
 @task(checkpoint=False)
 def extract_fishing_infraction_ids() -> set:
+    """Extracts all ``ids`` of ``infractions`` related to fishing non-compliance
+    (safety non compliance events are excluded).
+
+    Returns:
+        set: Set of infractions ids related to fishing
+    """
+
     df = extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/fishing_infractions.sql",
@@ -147,7 +188,26 @@ def extract_fishing_infraction_ids() -> set:
 
 @task(checkpoint=False)
 def get_last_controls(controls: pd.DataFrame) -> pd.DataFrame:
+    """Filters the input ``pd.DataFrame`` of controls data to keep only
 
+    * the most recent control of each vessel
+    * the following columns:
+
+      * ``vessel_id``
+      * ``cfr``
+      * ``ircs``
+      * ``external_immatriculation``
+      * ``control_datetime_utc``
+      * ``infraction``
+      * ``post_control_comments``
+
+    Args:
+        controls (pd.DataFrame): ``pd.DataFrame`` with controls data
+
+    Returns:
+        pd.DataFrame: filtered input with only the most recent control of each vessel
+        and a subset of columns
+    """
     columns = {
         "vessel_id": "vessel_id",
         "cfr": "cfr",
@@ -172,6 +232,21 @@ def get_last_controls(controls: pd.DataFrame) -> pd.DataFrame:
 
 @task(checkpoint=False)
 def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
+    """Given controls data on 3+ years, computes the control rate risk factor of each
+    vessel.
+
+    The idea is that vessels that have been controlled less over the past 3 years and
+    that have not been controlled for a certain time have a higher priority of control
+    than vessels that were controlled many times over the past 3 years and that were
+    controlled recently.
+
+    Args:
+        controls (pd.DataFrame): ``pd.DataFrame`` of controls data on the last 3+ years
+
+    Returns:
+        pd.DataFrame: for each vessel, the component of the risk factor related to the
+        control rate of each vessel.
+    """
 
     columns = [
         "vessel_id",
@@ -249,8 +324,25 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 def compute_infraction_rate_risk_factors(
     controls: pd.DataFrame, fishing_infraction_ids: set
 ) -> pd.DataFrame:
-    columns = ["vessel_id", "control_datetime_utc", "infraction_ids"]
+    """Given control results data of vessels over the past 3+ years, computes the
+    infraction rate risk factor of each vessel.
 
+    The idea is that vessels which committed infractions in the past have a higher
+    priority of control than vessels that were in order.
+
+    Only violations related to fishing non-compliance are taken into account. Safety
+    non-compliance evens are not taken into account.
+
+    Args:
+        controls (pd.DataFrame): control results data
+        fishing_infraction_ids (set): set of infractions ids related to fishing
+         non-compliance.
+
+    Returns:
+        pd.DataFrame: for each vessel, the component of the risk factor related to the
+        infraction rate of each vessel.
+    """
+    columns = ["vessel_id", "control_datetime_utc", "infraction_ids"]
     controls_ = controls[columns].copy(deep=True)
 
     controls_["n_fishing_infractions"] = controls_["infraction_ids"].map(
@@ -293,6 +385,19 @@ def merge(
     infraction_rate_risk_factor: pd.DataFrame,
     last_controls: pd.DataFrame,
 ) -> pd.DataFrame:
+    """Merge of ``pd.DataFrame``s to produce output of the flow. The join is performed
+    on ``vessel_id``.
+
+    Args:
+        control_rate_risk_factors (pd.DataFrame): output of
+        ``compute_control_rate_risk_factors`` task
+        infraction_rate_risk_factor (pd.DataFrame): output of
+        ``compute_infraction_rate_risk_factors`` task
+        last_controls (pd.DataFrame): output of ``get_last_controls`` task
+
+    Returns:
+        pd.DataFrame: join of the 3 input ``pd.DataFrame``s
+    """
 
     res = pd.merge(
         last_controls,
@@ -307,6 +412,11 @@ def merge(
 
 @task(checkpoint=False)
 def load_control_anteriority(control_anteriority: pd.DataFrame):
+    """Load the output of ``merge`` task into ``control_anteriority`` table.
+
+    Args:
+        control_anteriority (pd.DataFrame): output of ``merge`` task.
+    """
 
     load(
         control_anteriority,

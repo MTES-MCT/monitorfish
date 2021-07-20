@@ -13,16 +13,16 @@ const RegulationRegionLine = props => {
     setSelectedRegionList
   } = props
 
-  const addRegionToSelectedRegionList = (elem) => {
+  const addRegionToSelectedRegionList = (region) => {
     const newArray = [...selectedRegionList]
-    newArray.push(elem)
+    newArray.push(region)
     setSelectedRegionList(newArray)
   }
 
-  const removeRegionToSelectedRegionList = (elem) => {
-    const idx = selectedRegionList.find(e => elem === e)
+  const removeRegionToSelectedRegionList = (regionToRemove) => {
+    const regionToRemoveIndex = selectedRegionList.indexOf(regionToRemove)
     const newArray = [...selectedRegionList]
-    newArray.splice(idx, 1)
+    newArray.splice(regionToRemoveIndex, 1)
     setSelectedRegionList(newArray)
   }
 
@@ -31,7 +31,7 @@ const RegulationRegionLine = props => {
       return <Tag
         key={selectedRegion}
         selectedValue={selectedRegion}
-        setSelectedValue={removeRegionToSelectedRegionList}
+        onCloseIconClicked={removeRegionToSelectedRegionList}
       />
     })
   }

@@ -5,12 +5,12 @@ import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 const Tag = props => {
   const {
     selectedValue,
-    setSelectedValue
+    onCloseIconClicked
   } = props
 
   return <TagWrapper>
     <SelectedValue>{selectedValue}</SelectedValue>
-    <CloseIcon onClick={() => setSelectedValue()}/>
+    <CloseIcon onClick={_ => onCloseIconClicked(selectedValue)}/>
   </TagWrapper>
 }
 

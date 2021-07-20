@@ -18,7 +18,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="cfr"]').contains("GBR000B14430")
+    cy.get('*[data-cy^="vessel-cfr"]').contains("GBR000B14430")
     cy.get('*[data-cy^="vessel-name"]').contains("CABO ORTEGAL (GB)")
   })
 
@@ -28,9 +28,11 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
+    cy.get('*[data-cy^="vessel-menu-identity"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-menu-identity"]').click()
 
     // Then
+    cy.get('*[data-cy^="vessel-identity-gears"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-identity-gears"]').contains("Sennes danoises (SDN)")
   })
 
@@ -41,11 +43,12 @@ context('VesselSidebar', () => {
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
-    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 10000 }).should('be.visible')
 
     // Then
+    cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-fishing-gears"]').contains("Trémails et filets maillants combinés (GTN)")
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("3 messages - 2000 kg pêchés au total")
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("1 message - 2256 kg pêchés au total")
   })
 
   it('Fishing trips Should be walkable', () => {
@@ -114,7 +117,7 @@ context('VesselSidebar', () => {
     const date = getDate(new Date().toISOString())
     cy.get('*[data-cy^="vessel-controls-last-control-date"]').first().contains(`le ${date}`)
     cy.get('*[data-cy^="vessel-controls-last-control-unit"]').first().contains("ULAM 56")
-    cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains("2 infractions")
+    cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains("Pas d'infraction")
   })
 
   it('Vessel track depth Should be changed', () => {
@@ -127,6 +130,6 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-twelve-hours"]').click()
 
     // Then
-    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("7.5 nds")
+    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("14 nds")
   })
 })

@@ -63,7 +63,7 @@ const TrackTypeCardOverlayComponent = styled.div`
   left: -102px;
   width: 215px;
   text-align: left;
-  background-color: ${COLORS.grayBackground};
+  background-color: ${COLORS.gainsboro};
   border-radius: 2px;
   z-index: 100;
 `

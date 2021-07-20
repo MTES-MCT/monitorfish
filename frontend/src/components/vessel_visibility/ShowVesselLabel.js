@@ -32,7 +32,7 @@ const ShowVesselLabel = ({ vesselLabelsShowedOnMap, updateVesselLabelsShowedOnMa
 }
 
 const Wrapper = styled.div`
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   padding: 0 0 9px 7px;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
@@ -41,7 +41,7 @@ const Wrapper = styled.div`
 
 const ShowLabelText = styled.span`
   margin-left: 0;
-  color: #969696;
+  color: ${COLORS.slateGray};
 `
 
 const RadioWrapper = styled.div`

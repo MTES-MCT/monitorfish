@@ -53,7 +53,7 @@ const TriangleShadow = styled.div`
   height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.grayBackground} transparent;
+  border-color: ${COLORS.gainsboro} transparent;
   text-align: center;
   margin: auto;
   margin-top: -3px;
@@ -70,9 +70,9 @@ const ZoneText = styled.span`
 `
 
 const ZoneSelected = styled.span`
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   border-radius: 2px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-left: 0;
   font-size: 13px;
   padding: 0px 3px 0px 7px;

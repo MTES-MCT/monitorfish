@@ -86,12 +86,12 @@ const Green = styled.span`
 `
 
 const Year = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 16px;
 `
 
 const YearResume = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 13px;
   margin-left: 15px;
   vertical-align: text-bottom;
@@ -117,7 +117,7 @@ const Row = styled.div`
   overflow: hidden !important;
   margin: 0;
   background: ${COLORS.background};
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   border-bottom: 1px solid ${COLORS.gray};
   line-height: 1.9em;
 `
@@ -160,7 +160,7 @@ const List = styled.div`
 `
 
 const Text = styled.div`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: 500;
   width: 95%;

@@ -87,7 +87,7 @@ const VesselControls = () => {
             </SeeMore>
           </SeeMoreBackground>
         </Body>
-        : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+        : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
     }
   </>
 }
@@ -99,8 +99,8 @@ const SeeMoreBackground = styled.div`
 `
 
 const SeeMore = styled.div`
-  border: 1px solid ${COLORS.grayDarkerThree};
-  color: ${COLORS.grayDarkerThree};
+  border: 1px solid ${COLORS.charcoal};
+  color: ${COLORS.charcoal};
   padding: 5px 10px 5px 10px;
   width: max-content;
   font-size: 13px;
@@ -124,10 +124,10 @@ const UpdateControls = styled.div`
 `
 
 const UpdateControlsButton = styled.div`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   border-radius: 15px;
   font-size: 13px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   position: absolute;
   padding: 5px 10px 5px 10px;
   margin-top: 13px;

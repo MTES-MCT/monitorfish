@@ -228,7 +228,7 @@ const SearchBox = styled.div`
   background: ${COLORS.background};
   top: 0.5em;
   z-index: 999;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   text-decoration: none;
   border: none;
   border-radius: 0;
@@ -257,8 +257,8 @@ const Label = styled.div`
   width: 53px;
   height: 39px;
   background: ${COLORS.gray};
-  color: ${COLORS.grayDarkerThree};
-  border-bottom: 1px ${COLORS.grayDarker} solid;
+  color: ${COLORS.charcoal};
+  border-bottom: 1px ${COLORS.lightGray} solid;
   flex: 0 0 64px;
   font-size: 13px;
   line-height: 2.9em;
@@ -270,7 +270,7 @@ const SearchBoxInput = styled.input`
   border: none;
   border-bottom: 1px ${COLORS.gray} solid;
   border-radius: 0;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 0.8em;
   height: 40px;
   width: 100%;
@@ -287,7 +287,7 @@ const SearchIcon = styled(SearchIconSVG)`
   width: 40px;
   height: 40px;
   float: right;
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   cursor: pointer;
 `
 

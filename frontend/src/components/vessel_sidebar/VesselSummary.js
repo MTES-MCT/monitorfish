@@ -270,37 +270,37 @@ const VesselSummary = props => {
         </Zone>
       </Body>
       )
-    : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+    : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
 }
 
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-weight: 300;
 `
 
 const NoVessel = styled(NoVesselSVG)`
   width: 60px;
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   padding: 92px 136px 92px 136px;
   margin: 10px 0 5px 0;
 `
 
 const FieldName = styled.div`
   margin-top: 9px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: normal;
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 13px;
   font-weight: medium;
   margin-top: 2px;
 `
 
 const ValueWithLineBreak = styled.div`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
@@ -353,7 +353,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -369,7 +369,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

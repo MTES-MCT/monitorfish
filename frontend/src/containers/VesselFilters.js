@@ -135,7 +135,7 @@ const NewFilterAdded = styled.div`
   width: 86px;
   height: 18px;
   padding: 11px 12px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 13px;
   z-index: 9999;
   
@@ -172,7 +172,7 @@ const FiltersSelectedList = styled.ul`
   padding: 0;
   max-height: 550px;
   overflow-x: hidden;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
 `
 
 const Wrapper = styled.div`
@@ -183,12 +183,12 @@ const Wrapper = styled.div`
 const LastPositionInfo = styled.div`
   font-size: 13px;
   margin: 15px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
 `
 
 const Header = styled.div`
-  background: ${COLORS.textGray};
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.slateGray};
+  color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;
@@ -213,7 +213,7 @@ const VesselFilterIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   z-index: 99;
   top: 110px;
   padding: 3px 0px 0 3px;
@@ -224,7 +224,7 @@ const VesselFilterIcon = styled(MapButtonStyle)`
   transition: all 0.3s;
   
   :hover, :focus {
-      background: ${COLORS.grayDarkerThree};
+      background: ${COLORS.charcoal};
   }
 `
 

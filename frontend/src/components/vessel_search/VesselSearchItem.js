@@ -78,10 +78,10 @@ const ListItem = styled.li`
   text-align: left;
   list-style-type: none;
   cursor: pointer;
-  border-bottom: ${COLORS.grayDarker} 1px solid;
+  border-bottom: ${COLORS.lightGray} 1px solid;
   
   :hover {
-    background: ${COLORS.grayBackground};
+    background: ${COLORS.gainsboro};
   }
 `
 
@@ -101,7 +101,7 @@ const Information = styled.div`
   display: flex;
   font-size: 13px;
   margin-left: 5px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const CallSign = styled.div`

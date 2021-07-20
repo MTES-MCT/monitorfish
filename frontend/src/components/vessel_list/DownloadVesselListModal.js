@@ -172,9 +172,9 @@ const Columns = styled.div`
 `
 
 const SelectAllText = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   text-decoration: underline;
-  text-decoration-color: ${COLORS.textGray};
+  text-decoration-color: ${COLORS.slateGray};
 `
 
 const SelectAll = styled.div`
@@ -190,18 +190,18 @@ const Title = styled.div`
 
 const Description = styled.div`
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const DownloadButton = styled.button`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   padding: 5px 12px;
   margin: 20px 20px 20px 10px;
   font-size: 13px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   
   :hover {
-    background: ${COLORS.grayDarkerThree};
+    background: ${COLORS.charcoal};
   }
 `
 

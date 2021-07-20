@@ -399,20 +399,20 @@ const Wrapper = styled(MapComponentStyle)`
 `
 
 const BlackButton = styled.button`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   padding: 5px 12px;
   margin: 20px ${props => props.isLast ? '20px' : '0'} 20px 10px;
   font-size: 13px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   
   :hover, :focus {
-    background: ${COLORS.grayDarkerThree};
+    background: ${COLORS.charcoal};
   }
 `
 
 const Title = styled.div`
   font-size: 16px;
-  color: #969696;
+  color: ${COLORS.slateGray};
   font-weight: 500;
 `
 
@@ -420,7 +420,7 @@ const VesselListIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   padding: 8px 0px 0 1px;
   top: 68px;
   z-index: 99;
@@ -431,7 +431,7 @@ const VesselListIcon = styled(MapButtonStyle)`
   transition: all 0.3s;
   
   :hover, :focus {
-      background: ${COLORS.grayDarkerThree};
+      background: ${COLORS.charcoal};
   }
 `
 

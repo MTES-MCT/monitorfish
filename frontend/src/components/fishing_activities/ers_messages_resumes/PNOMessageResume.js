@@ -153,12 +153,12 @@ const PNOMessageResume = props => {
 
 const IndividualSpeciesNotLanded = styled.div`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   height: 18px;
 `
 
 const SpeciesNotLanded = styled.div`
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   padding: 10px 15px 10px 15px;
   width: max-content;
   margin: 10px 5px 5px 5px;
@@ -166,7 +166,7 @@ const SpeciesNotLanded = styled.div`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-weight: 300;
 `
 
@@ -190,7 +190,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -206,7 +206,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -235,7 +235,7 @@ const Wrapper = styled.li`
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const ERSMessageContent = styled.div`

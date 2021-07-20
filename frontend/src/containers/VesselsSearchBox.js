@@ -258,7 +258,7 @@ const SearchBoxInput = styled.input`
   border: none;
   border-radius: 0;
   border-radius: 2px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 0.8em;
   height: 40px;
   width: ${props => props.isFocusedOnVesselSearch || props.vesselSidebarIsOpen ? '500px' : '320px'};
@@ -283,7 +283,7 @@ const SearchButton = styled(MapButtonStyle)`
   right: 10px;
   top: 10px;
   z-index: 99;
-  background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
+  background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.charcoal};
   cursor: pointer;
   border-radius: 2px;
   position: absolute;
@@ -293,7 +293,7 @@ const SearchButton = styled(MapButtonStyle)`
   transition: all 0.3s;
   
   :hover, :focus {
-      background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
+      background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.charcoal};
   }
 `
 

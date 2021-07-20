@@ -143,7 +143,7 @@ const TrackExportButton = styled(MapButtonStyle)`
   top: 153px;
   height: 30px;
   width: 30px;
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   position: absolute;
   right: 10px;
   margin-right: -45px;

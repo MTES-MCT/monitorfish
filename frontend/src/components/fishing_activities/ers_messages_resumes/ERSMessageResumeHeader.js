@@ -80,12 +80,12 @@ const NotAcknowledgedOrDeleted = styled(NotAcknowledgedSVG)`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-weight: 300;
 `
 
 const ERSMessageResumeText = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
@@ -100,7 +100,7 @@ const ERSMessageResumeText = styled.span`
 `
 
 const ERSMessageName = styled.span`
-  color: ${props => props.isNotAcknowledged ? COLORS.red : COLORS.textGray};
+  color: ${props => props.isNotAcknowledged ? COLORS.red : COLORS.slateGray};
   margin: 5px 0 5px ${props => props.hasNoMessage ? '27px' : '0px'};
   padding: 2px 4px 2px 4px;
   font-size: 13px;
@@ -116,7 +116,7 @@ const Wrapper = styled.div`
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const ERSMessageTitle = styled.div`

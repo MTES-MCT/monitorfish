@@ -155,21 +155,21 @@ const MessageOK = styled.span`
 
 const CorrectedMessage = styled.span`
   border-radius: 11px;
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   font-size: 11px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 7px 7px 7px 3px;
   height: 17px;
   padding: 3px 5px 0px 2px;
 `
 
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-weight: 300;
 `
 
 const Key = styled.span`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 const Acknowledge = styled.div`
@@ -178,7 +178,7 @@ const Acknowledge = styled.div`
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   flex-grow: 4;
 `
 
@@ -188,7 +188,7 @@ const VoyageNumber = styled.div`
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   flex-grow: 3;
 `
 
@@ -198,7 +198,7 @@ const ReceptionDateTime = styled.div`
   padding: 5px 8px 9px 8px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   flex-grow: 3;
 `
 
@@ -207,7 +207,7 @@ const EmissionDateTime = styled.div`
   background: ${COLORS.background};
   padding: 5px 8px 9px 8px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   flex-grow: 3;
 `
 
@@ -217,7 +217,7 @@ const ERSMessageMetadata = styled.div`
 
 const Body = styled.div`
   padding: 10px;
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
 `
 
 const Wrapper = styled.div`
@@ -231,12 +231,12 @@ const Header = styled.div`
   height: 35px;
   width: inherit;
   padding: 0 0 0 10px;
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   display: flex;
 `
 
 const ERSMessageHeaderText = styled.span`
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   margin: 5px 5px 5px 5px;
   padding: 3px 4px 2px 0;
   font-size: 13px;
@@ -249,15 +249,15 @@ const ERSMessageHeaderText = styled.span`
 `
 
 const ERSMessageName = styled.span`
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
 `
 
 const ERSMessageType = styled.span`
-  border: 1px solid ${COLORS.textGray};
-  color: ${COLORS.grayBackground};
+  border: 1px solid ${COLORS.slateGray};
+  color: ${COLORS.gainsboro};
   margin: 5px 5px 5px 0;
   padding: 1px 2px 1px 2px;
   font-size: 13px;

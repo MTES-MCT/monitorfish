@@ -50,12 +50,12 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
 const Wrapper = styled.div`
   font-weight: bolder;
   margin: 0;
-  background-color: ${COLORS.grayDarkerThree};
+  background-color: ${COLORS.charcoal};
   border: none;
   border-radius: 0;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   height: 40px;
   width: 485px;
   padding: 0 5px 0 10px;
@@ -89,7 +89,7 @@ const Flag = styled.img`
 
 const VesselName = styled.span`
   display: inline-block;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   margin: 0 0 0 10px;
   line-height: 1.9em;
   vertical-align: middle;

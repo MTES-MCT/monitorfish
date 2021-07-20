@@ -39,7 +39,7 @@ const List = styled.ul`
   max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   
   animation: ${props => props.showRegulatorySearchInput && props.foundRegulatoryZones ? Object.keys(props.foundRegulatoryZones).length > 0 ? 'regulatory-result-opening' : 'regulatory-result-closing' : 'regulatory-result-closing'} 0.5s ease forwards;
 

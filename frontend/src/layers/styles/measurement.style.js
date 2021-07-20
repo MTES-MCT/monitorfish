@@ -6,17 +6,17 @@ import CircleStyle from 'ol/style/Circle'
 
 export const measurementStyle = new Style({
   stroke: new Stroke({
-    color: COLORS.grayDarkerThree,
+    color: COLORS.charcoal,
     lineDash: [4, 4],
     width: 2
   }),
   image: new CircleStyle({
     radius: 2,
     stroke: new Stroke({
-      color: COLORS.grayDarkerThree
+      color: COLORS.charcoal
     }),
     fill: new Fill({
-      color: COLORS.grayDarkerThree
+      color: COLORS.charcoal
     })
   })
 })

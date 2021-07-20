@@ -363,7 +363,7 @@ const Reference = styled.li`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-weight: 300;
 `
 
@@ -378,7 +378,7 @@ const RegulatoryName = styled.span`
 `
 
 const Header = styled.div`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin-left: 6px;
   margin-bottom: 6px;
   text-align: left;
@@ -388,7 +388,7 @@ const Header = styled.div`
 
 const Content = styled.div`
   border-radius: 2px;
-  color: ${COLORS.grayDarker};
+  color: ${COLORS.lightGray};
   background: ${COLORS.background};
   overflow-y: auto;
   max-height: calc(100vh - 145px);
@@ -396,7 +396,7 @@ const Content = styled.div`
 
 const Warning = styled.div`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   background: ${COLORS.orange};
   display: flex;
   text-align: left;
@@ -429,7 +429,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 1px solid ${COLORS.grayDarker};
+  border-bottom: 1px solid ${COLORS.lightGray};
 `
 
 const ZoneWithLineBreak = styled.div`
@@ -437,7 +437,7 @@ const ZoneWithLineBreak = styled.div`
   padding: 10px 5px 9px 16px;
   text-align: left;
   display: block;
-  border-bottom: 1px solid ${COLORS.grayDarker};
+  border-bottom: 1px solid ${COLORS.lightGray};
 `
 
 const Fields = styled.table`
@@ -472,14 +472,14 @@ const KeyWithLineBreak = styled.div`
 `
 
 const ValueWithLineBreak = styled.div`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
 `
 
 const MarkdownValue = styled(ReactMarkdown)`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
@@ -505,7 +505,7 @@ const Key = styled.th`
 `
 
 const Value = styled.td`
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

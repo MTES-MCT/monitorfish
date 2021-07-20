@@ -152,7 +152,7 @@ const Text = styled.span`
 
 const ZoneNumber = styled.span`
   font-size: 11px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-right: 12px;
 `
 

@@ -347,7 +347,7 @@ const NoMessage = styled.div`
   margin-top: 20px;
   padding-bottom: 20px;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   width: 100%;
 `
 
@@ -363,7 +363,7 @@ const SeeAll = styled.a`
   text-decoration: none;
   font-size: 11px;
   line-height: 10px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin-left: auto;
   order: 3;
   cursor: pointer;
@@ -378,7 +378,7 @@ const ERSMessages = styled.ul`
 `
 
 const Text = styled.div`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: 500;
   padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
@@ -386,7 +386,7 @@ const Text = styled.div`
 
 const TextValue = styled.div`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   padding-left: 10px;
   padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
@@ -401,8 +401,8 @@ const Body = styled.div`
 const TableBody = styled.tbody``
 
 const Title = styled.div`
-  color: ${COLORS.textGray};
-  background: ${COLORS.grayDarker};
+  color: ${COLORS.slateGray};
+  background: ${COLORS.lightGray};
   padding: ${props => props.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;'}
   font-size: 13px;
   flex-shrink: 0;
@@ -438,7 +438,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -454,7 +454,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

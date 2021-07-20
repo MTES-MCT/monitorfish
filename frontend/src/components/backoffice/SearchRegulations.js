@@ -90,7 +90,7 @@ const SearchBox = styled.div`
 
 const SearchBoxInput = styled.input`
   margin: 0;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 0.8em;
   height: 40px;
   width: 100%;

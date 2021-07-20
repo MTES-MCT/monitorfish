@@ -158,7 +158,7 @@ const Flag = styled.img`
 const NoTag = styled.div`
   margin-bottom: 10px;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
 `
 
 export default TagList

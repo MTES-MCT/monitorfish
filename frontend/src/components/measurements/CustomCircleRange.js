@@ -57,29 +57,29 @@ const CustomCircleRange = (
 }
 
 const CancelButton = styled.button`
-  border: 1px solid ${COLORS.grayDarkerThree};
+  border: 1px solid ${COLORS.charcoal};
   width: 130px;
   padding: 5px 12px;
   margin: 15px 0 0 15px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   
   :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.grayDarker};
+    border: 1px solid ${COLORS.lightGray};
+    color: ${COLORS.lightGray};
   }
 `
 
 const OkButton = styled.button`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   width: 130px;
   padding: 5px 12px;
   margin: 15px 0 0;
   font-size: 13px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   
   :hover, :focus {
-    background: ${COLORS.grayDarkerThree};
+    background: ${COLORS.charcoal};
   }
 `
 
@@ -87,7 +87,7 @@ const Body = styled.div`
   margin: 10px 15px;
   text-align: left;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   
   p {
     margin: 0;
@@ -104,7 +104,7 @@ const Body = styled.div`
   }
   
   input {
-    color: ${COLORS.grayDarkerThree};
+    color: ${COLORS.charcoal};
     margin-top: 7px;
     background: ${COLORS.grayLighter};
     border: none;
@@ -118,8 +118,8 @@ const Body = styled.div`
 `
 
 const Header = styled.div`
-  background: ${COLORS.textGray};
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.slateGray};
+  color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;

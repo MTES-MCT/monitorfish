@@ -87,7 +87,7 @@ const VesselCardOverlayComponent = styled.div`
   left: ${props => props.overlayTopLeftMargin[1]}px;
   width: 387px;
   text-align: left;
-  background-color: ${COLORS.grayBackground};
+  background-color: ${COLORS.gainsboro};
   border-radius: 2px;
   z-index: 1000;
 `

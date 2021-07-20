@@ -62,7 +62,7 @@ const Text = styled.span`
   display: inline-block;
   text-overflow: ellipsis;
   overflow: hidden;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-weight: 500;
 `
 

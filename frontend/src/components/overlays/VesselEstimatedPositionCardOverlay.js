@@ -72,7 +72,7 @@ const VesselEstimatedPositionCardOverlayComponent = styled.div`
   left: -155px;
   width: 310px;
   text-align: center;
-  background-color: ${COLORS.grayBackground};
+  background-color: ${COLORS.gainsboro};
   border-radius: 2px;
   z-index: 100;
 `

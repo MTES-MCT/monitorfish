@@ -76,14 +76,14 @@ const ResumesBoxes = styled.div`
 `
 
 const ResumeBoxText = styled.span`
-    color: ${COLORS.grayDarkerThree};
+    color: ${COLORS.charcoal};
     margin: 0 10px 0 5px;
     font-weight: medium;
 `
 
 const ResumeBoxStrongText = styled.span`
-    background: ${props => props.isRed ? COLORS.red : COLORS.grayDarkerThree};
-    color: ${COLORS.grayBackground};
+    background: ${props => props.isRed ? COLORS.red : COLORS.charcoal};
+    color: ${COLORS.gainsboro};
     border-radius: 11px;
     height: 16px;
     display: inline-block;
@@ -115,7 +115,7 @@ const ControlResumeLine = styled.div`
     border: none;
     background: none;
     font-size: 13px;
-    color: ${COLORS.textGray};
+    color: ${COLORS.slateGray};
     display: flex;
     width: 100%;
 `

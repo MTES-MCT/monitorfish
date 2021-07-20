@@ -83,10 +83,10 @@ const Details = styled.span`
   height: 21px;
   border: none;
   border-radius: 2px;
-  background: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro};
   font-size: 13px;
   font-weight: 500;
-  color: ${COLORS.grayDarkerThree}
+  color: ${COLORS.charcoal}
 `
 
 const ZoneName = styled.span`

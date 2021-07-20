@@ -184,7 +184,7 @@ const MetadataWrapper = styled.div`
   z-index: 1;
   width: 380px;
   border-radius: 2px;
-  color: #515151;
+  color: ${COLORS.charcoal};
   text-decoration: none;
   background-color: #EEEEEE;
   padding: 10px;

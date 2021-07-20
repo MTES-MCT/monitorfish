@@ -146,7 +146,7 @@ const RegulatoryZoneAddButton = styled.div`
   cursor: pointer;
   border-radius: 0;
   font-size: 0.8em;
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   color: ${COLORS.gray};
   padding: 0;
   line-height: 2.5em;
@@ -187,7 +187,7 @@ const SearchIcon = styled(SearchIconSVG)`
   width: 40px;
   height: 40px;
   float: right;
-  background: ${COLORS.grayDarkerThree};  
+  background: ${COLORS.charcoal};  
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 `

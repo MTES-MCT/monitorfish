@@ -87,9 +87,9 @@ const LawTypeContainer = styled.div`
 const LawTypeName = styled.div`
   display: flex;
   font-size: 16px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
+  border-bottom: 2px solid ${COLORS.squareBorder};
   font-weight: 700;
-  border-bottom: 2px solid ${COLORS.grayDarker};
   text-align: left;
   text-transform: uppercase;
   cursor: pointer;
@@ -113,7 +113,7 @@ const RegulatoryZoneLayerList = styled.ul`
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   padding: 0;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   height: ${props => props.isOpen ? 'unset' : '0'};
   opacity: ${props => props.isOpen ? '1' : '0'};
   transition:  all 0.5s;

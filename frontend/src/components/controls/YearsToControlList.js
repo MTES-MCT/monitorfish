@@ -44,7 +44,7 @@ const List = styled.ul`
 const NoControls = styled.div`
   text-align: center;
   padding: 10px 0 10px 0;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.charcoal};
   font-size: 13px;
   width: 100%
 `

@@ -67,7 +67,7 @@ const ControlResumeLine = styled.div`
   border: none;
   background: none;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   display: flex;
   width: 100%;
 `

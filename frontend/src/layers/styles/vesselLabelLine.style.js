@@ -4,7 +4,7 @@ import { COLORS } from '../../constants/constants'
 
 export const labelLineStyle = new Style({
   stroke: new Stroke({
-    color: COLORS.grayDarkerThree,
+    color: COLORS.charcoal,
     lineDash: [4, 4],
     width: 2
   })

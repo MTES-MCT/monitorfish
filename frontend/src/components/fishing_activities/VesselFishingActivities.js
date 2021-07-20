@@ -120,7 +120,7 @@ const VesselFishingActivities = () => {
             : null
         }
       </Wrapper>
-      : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
+      : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
     }
   </>
 }
@@ -140,10 +140,10 @@ const UpdateFishingActivities = styled.div`
 `
 
 const UpdateFishingActivitiesButton = styled.div`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   border-radius: 15px;
   font-size: 13px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   position: absolute;
   padding: 5px 10px 5px 10px;
   margin-top: 13px;

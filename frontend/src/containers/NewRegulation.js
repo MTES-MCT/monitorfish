@@ -9,7 +9,7 @@ import RegulationBlocLine from '../components/backoffice/create_regulation/Regul
 import RegulationZoneThemeLine from '../components/backoffice/create_regulation/RegulationZoneThemeLine'
 import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
 import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
-import RegulationThemeLine from '../components/backoffice/create_regulation/RegulationThemeLine'
+import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
 import { formatDataForSelectPicker } from '../utils'
 
 const CreateRegulation = () => {
@@ -72,7 +72,7 @@ const CreateRegulation = () => {
             nameZone={nameZone}
             setNameZone={setNameZone}
           />
-          <RegulationThemeLine
+          <RegulationSeaFrontLine
             selectedSeaFront={selectedSeaFront}
             setSelectedSeaFront={setSelectedSeaFront}
             seaFrontList={seaFrontList}

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useToasts } from 'react-toast-notifications'
 
 import showAllVessels from '../domain/use_cases/showVesselsLastPosition'
@@ -10,14 +10,22 @@ import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers
 import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 import getHealthcheck from '../domain/use_cases/getHealthcheck'
+import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
+import getControls from '../domain/use_cases/getControls'
+import { VesselSidebarTab } from '../domain/entities/vessel'
 
 export const TWO_MINUTES = 120000
 
 const APIWorker = () => {
-  const error = useSelector(state => state.global.error)
-  const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
   const dispatch = useDispatch()
+  const error = useSelector(state => state.global.error)
+  const {
+    vesselsLayerSource,
+    vesselSidebarTab,
+    selectedVesselIdentity
+  } = useSelector(state => state.vessel)
   const { addToast } = useToasts()
+  const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
     dispatch(setIsUpdatingVessels())
@@ -31,6 +39,8 @@ const APIWorker = () => {
       dispatch(getHealthcheck())
       dispatch(showAllVessels())
       dispatch(updateVesselTrackAndSidebar())
+
+      setUpdateVesselSidebarTab(true)
     }, TWO_MINUTES)
 
     return () => {
@@ -39,11 +49,23 @@ const APIWorker = () => {
   }, [])
 
   useEffect(() => {
+    if (updateVesselSidebarTab) {
+      if (vesselSidebarTab === VesselSidebarTab.VOYAGES) {
+        if (selectedVesselIdentity) {
+          dispatch(getVesselVoyage(selectedVesselIdentity, null, true))
+        }
+      } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
+        dispatch(getControls())
+      }
+
+      setUpdateVesselSidebarTab(false)
+    }
+  }, [selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
+
+  useEffect(() => {
     if (vesselsLayerSource) {
       vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
-        setTimeout(() => {
-          dispatch(resetIsUpdatingVessels())
-        }, 1000)
+        dispatch(resetIsUpdatingVessels())
       })
     }
   }, [vesselsLayerSource])

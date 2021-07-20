@@ -8,16 +8,21 @@ import {
 } from '../reducers/Vessel'
 import NoControlsFoundError from '../../errors/NoControlsFoundError'
 
-const getControls = (vesselId, fromDate, userRequest) => (dispatch, getState) => {
-  if (vesselId) {
-    const currentControlResumeAndControls = getState().vessel.controlResumeAndControls
-    const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(vesselId, currentControlResumeAndControls)
+const getControls = userRequest => (dispatch, getState) => {
+  const {
+    currentControlResumeAndControls,
+    controlsFromDate,
+    selectedVessel
+  } = getState().vessel
+
+  if (selectedVessel && selectedVessel.id) {
+    const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.id, currentControlResumeAndControls)
 
     if (!isSameVesselAsCurrentlyShowed) {
       dispatch(loadingControls())
     }
 
-    getVesselControlsFromAPI(vesselId, fromDate).then(controlResumeAndControls => {
+    getVesselControlsFromAPI(selectedVessel.id, controlsFromDate).then(controlResumeAndControls => {
       if (isSameVesselAsCurrentlyShowed && !userRequest) {
         if (currentControlResumeAndControls.controls && controlResumeAndControls.controls &&
           controlResumeAndControls.controls.length > currentControlResumeAndControls.controls.length) {

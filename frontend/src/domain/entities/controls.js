@@ -66,7 +66,7 @@ const lastControlByType = yearsToControls => {
 /**
  * Get controls for each years : Years are keys and controls are values
  * @memberOf Control
- * @param {string} controlsFromDate - The date
+ * @param {Date} controlsFromDate - The date
  * @param {VesselControl[]} controls
  * @returns {Object.<string, VesselControl[]>} The controls for all years
  */

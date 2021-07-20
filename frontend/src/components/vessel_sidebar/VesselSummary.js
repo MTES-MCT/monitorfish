@@ -9,38 +9,42 @@ import * as timeago from 'timeago.js'
 import { ReactComponent as InfoSVG } from '../icons/Information.svg'
 import FleetSegments from '../fleet_segments/FleetSegments'
 import { useSelector } from 'react-redux'
+import { FingerprintSpinner } from 'react-epic-spinners'
 
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselSummary = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
+  const { gears } = useSelector(state => state.gear)
+  const { fleetSegments } = useSelector(state => state.fleetSegment)
+  const {
+    loadingVessel,
+    selectedVessel
+  } = useSelector(state => state.vessel)
   const [photoFallback, setPhotoFallback] = useState(false)
-  const [vessel, setVessel] = useState(null)
   const [lastPosition, setLastPosition] = useState(null)
-  const [gears, setGears] = useState([])
+  const [vesselGears, setVesselGears] = useState([])
   const [faoZones, setFaoZones] = useState([])
 
   useEffect(() => {
-    if (props.vessel) {
-      if (props.vessel.mmsi) {
+    if (selectedVessel) {
+      if (selectedVessel.mmsi) {
         setPhotoFallback(false)
       } else {
         setPhotoFallback(true)
       }
-
-      setVessel(props.vessel)
     }
-  }, [props.vessel, props.error])
+  }, [selectedVessel, props.error])
 
   useEffect(() => {
-    if (props.vesselLastPositionFeature) {
+    if (selectedVessel) {
       const {
         course,
         latitude,
         longitude,
         speed,
         dateTime
-      } = props.vesselLastPositionFeature.getProperties()
+      } = selectedVessel
 
       setLastPosition({
         course,
@@ -49,16 +53,16 @@ const VesselSummary = props => {
         speed,
         dateTime
       })
-    } else if (props.vessel.positions && props.vessel.positions.length) {
-      setLastPosition(props.vessel.positions[props.vessel.positions.length - 1])
+    } else if (selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
+      setLastPosition(selectedVessel.positions[selectedVessel.positions.length - 1])
     } else {
       setLastPosition(null)
     }
-  }, [props.vesselLastPositionFeature, props.vessel])
+  }, [selectedVessel])
 
   useEffect(() => {
-    if (props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().speciesOnboard) {
-      const faoZones = props.vesselLastPositionFeature.getProperties().speciesOnboard.map(species => {
+    if (selectedVessel && selectedVessel.speciesOnboard) {
+      const faoZones = selectedVessel.speciesOnboard.map(species => {
         return species.faoZone
       })
 
@@ -66,27 +70,27 @@ const VesselSummary = props => {
     } else {
       setFaoZones([])
     }
-  }, [props.vesselLastPositionFeature])
+  }, [selectedVessel])
 
   useEffect(() => {
-    if (props.gears && props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().gearOnboard) {
-      const gears = props.vesselLastPositionFeature.getProperties().gearOnboard.map(gearERS => {
-        const foundGear = props.gears.find(gear => gear.code === gearERS.gear)
+    if (gears && selectedVessel && selectedVessel.gearOnboard) {
+      const nextVesselGears = selectedVessel.gearOnboard.map(gearERS => {
+        const foundGear = gears.find(gear => gear.code === gearERS.gear)
         return {
           name: foundGear ? foundGear.name : null,
           code: gearERS.gear
         }
       })
 
-      setGears(gears)
+      setVesselGears(nextVesselGears)
     } else {
-      setGears([])
+      setVesselGears([])
     }
-  }, [props.gears, props.vesselLastPositionFeature])
+  }, [gears, selectedVessel])
 
   function getVesselOrLastPositionProperty (propertyName) {
-    if (vessel && vessel[propertyName]) {
-      return vessel[propertyName]
+    if (selectedVessel && selectedVessel[propertyName]) {
+      return selectedVessel[propertyName]
     } else if (lastPosition && lastPosition[propertyName]) {
       return lastPosition[propertyName]
     } else {
@@ -95,8 +99,8 @@ const VesselSummary = props => {
   }
 
   function getGears () {
-    if (gears && gears.length) {
-      const uniqueGears = gears.reduce((acc, current) => {
+    if (vesselGears && vesselGears.length) {
+      const uniqueGears = vesselGears.reduce((acc, current) => {
         const found = acc.find(item =>
           item.code === current.code &&
           item.name === current.name)
@@ -117,7 +121,7 @@ const VesselSummary = props => {
     return <NoValue>-</NoValue>
   }
 
-  return vessel
+  return selectedVessel && !loadingVessel
     ? (
       <Body>
         <PhotoZone>
@@ -126,9 +130,9 @@ const VesselSummary = props => {
               ? <NoVessel/>
               : <>
                 {
-                  vessel.mmsi
+                  selectedVessel.mmsi
                     ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)}
-                             src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${props.vessel.mmsi}&size=thumb300`}/>
+                             src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel.mmsi}&size=thumb300`}/>
                     : null
                 }
               </>
@@ -170,9 +174,9 @@ const VesselSummary = props => {
               title={'Cette valeur est calculée à partir des 2 dernières positions VMS reçues'}/></FieldName>
             <FieldValue>
               {
-                props.vesselLastPositionFeature && props.vesselLastPositionFeature.getProperties().emissionPeriod
+                selectedVessel && selectedVessel.emissionPeriod
                   ? <>1 signal toutes
-                    les {props.vesselLastPositionFeature.getProperties().emissionPeriod / 60} minutes</>
+                    les {selectedVessel.emissionPeriod / 60} minutes</>
                   : <NoValue>-</NoValue>
               }
             </FieldValue>
@@ -227,8 +231,8 @@ const VesselSummary = props => {
                 <Key>Segments de flotte</Key>
                 <Value>
                   <FleetSegments
-                    vesselLastPositionFeature={props.vesselLastPositionFeature}
-                    fleetSegmentsReferential={props.fleetSegments}
+                    selectedVessel={selectedVessel}
+                    fleetSegmentsReferential={fleetSegments}
                   />
                 </Value>
               </Field>
@@ -258,7 +262,7 @@ const VesselSummary = props => {
             <BodyWithTopPadding>
               <Field>
                 <Key>Dernier contrôle</Key>
-                <Value>{vessel.lastControl ? vessel.lastControl : <NoValue>à venir</NoValue>}</Value>
+                <Value>{selectedVessel.lastControlDateTime ? timeago.format(selectedVessel.lastControlDateTime, 'fr') : <NoValue>à venir</NoValue>}</Value>
               </Field>
 
             </BodyWithTopPadding>
@@ -266,7 +270,7 @@ const VesselSummary = props => {
         </Zone>
       </Body>
       )
-    : null
+    : <FingerprintSpinner color={COLORS.grayDarkerThree} className={'radar'} size={100}/>
 }
 
 const Gray = styled.span`

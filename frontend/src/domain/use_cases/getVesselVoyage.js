@@ -18,7 +18,7 @@ export const NAVIGATE_TO = {
 
 const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, getState) => {
   if (vesselIdentity) {
-    const currentSelectedVesselIdentity = getState().vessel.selectedVesselFeatureAndIdentity.identity
+    const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
     const {
       lastFishingActivities,
       isLastVoyage,
@@ -45,7 +45,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         break
     }
 
-    if (!isSameVesselAsCurrentlyShowed) {
+    if (!fromCron) {
       dispatch(loadingFisheriesActivities())
     }
 

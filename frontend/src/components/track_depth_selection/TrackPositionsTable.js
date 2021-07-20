@@ -8,6 +8,7 @@ import { highlightVesselTrackPosition } from '../../domain/reducers/Vessel'
 import { CSVOptions } from '../vessel_list/dataFormatting'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import { animateTo } from '../../domain/reducers/Map'
+import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 
 const { Column, HeaderCell, Cell } = Table
 
@@ -19,23 +20,14 @@ const TrackPositionsTable = () => {
   const [sortColumn, setSortColumn] = useState(CSVOptions.dateTime.code)
   const [sortType, setSortType] = useState(SortType.DESC)
   const [positions, setPositions] = useState()
-
   const wrapperRef = useRef(null)
+  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
 
   useEffect(() => {
-    function handleClickOutside (event) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        dispatch(highlightVesselTrackPosition(null))
-      }
+    if (clickedOutsideComponent) {
+      dispatch(highlightVesselTrackPosition(null))
     }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [wrapperRef])
+  }, [clickedOutsideComponent])
 
   useEffect(() => {
     if (selectedVessel) {

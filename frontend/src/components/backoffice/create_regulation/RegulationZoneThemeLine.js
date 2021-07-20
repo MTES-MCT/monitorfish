@@ -6,7 +6,7 @@ import { SquareButton } from '../../commonStyles/Buttons.style'
 import CustomSelectComponent from './CustomSelectComponent'
 import Tag from './Tag'
 import MenuItem from './MenuItem'
-import CreateReglementationBlocForm from './CreateReglementationBlocForm'
+import CreateRegulationBlocForm from './CreateRegulationBlocForm'
 import InfoBox from './InfoBox'
 
 const RegulationZoneThemeLine = props => {
@@ -41,7 +41,7 @@ const RegulationZoneThemeLine = props => {
           />}
         {
         isAddThemeClicked
-          ? <CreateReglementationBlocForm
+          ? <CreateRegulationBlocForm
               setSelectedReglementationTheme={setSelectedReglementationTheme}
               setIsAddThemeClicked={setIsAddThemeClicked}
               setIsInfoTextShown={setIsInfoTextShown}

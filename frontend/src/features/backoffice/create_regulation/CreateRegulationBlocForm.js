@@ -22,7 +22,7 @@ const CreateRegulationBlocForm = props => {
     setThemeOtherIndications('')
   }
 
-  const addNewTheme = (elem) => {
+  const addNewTheme = () => {
     if (themePlace === '') {
       setThemePlaceIsRed(true)
     } else {

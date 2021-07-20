@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label } from '../../commonStyles/Input.style'
 import CustomSelectComponent from './CustomSelectComponent'
@@ -12,7 +13,7 @@ const RegulationSeaFrontLine = props => {
     seaFrontList
   } = props
 
-  return <ContentLine>
+  return <CustomContentLine>
     <Label>Secteur</Label>
     <CustomSelectComponent
         searchable={false}
@@ -29,7 +30,11 @@ const RegulationSeaFrontLine = props => {
         selectedValue={selectedSeaFront}
         onCloseIconClicked={_ => setSelectedSeaFront()}
       />}
-  </ContentLine>
+  </CustomContentLine>
 }
+
+const CustomContentLine = styled(ContentLine)`
+  margin-top: 15px;
+`
 
 export default RegulationSeaFrontLine

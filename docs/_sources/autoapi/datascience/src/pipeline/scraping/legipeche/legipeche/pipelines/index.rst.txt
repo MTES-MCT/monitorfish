@@ -1,0 +1,25 @@
+:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.pipelines`
+======================================================================
+
+.. py:module:: datascience.src.pipeline.scraping.legipeche.legipeche.pipelines
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.pipeline.scraping.legipeche.legipeche.pipelines.LegipechePipeline
+
+
+
+
+.. class:: LegipechePipeline
+
+   .. method:: process_item(self, item, spider)
+
+
+

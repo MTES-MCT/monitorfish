@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.utils.ers &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="datascience.src.utils.geocode" href="../geocode/index.html" />
+    <link rel="prev" title="datascience.src.utils.database" href="../database/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../../reference.html">API reference</a> &raquo;</li>
+        
+          <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.utils</span></code></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.utils.ers</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../../_sources/autoapi/datascience/src/utils/ers/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-datascience.src.utils.ers">
+<span id="datascience-src-utils-ers"></span><h1><a class="reference internal" href="#module-datascience.src.utils.ers" title="datascience.src.utils.ers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datascience.src.utils.ers</span></code></a><a class="headerlink" href="#module-datascience.src.utils.ers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.ers.remove_namespace" title="datascience.src.utils.ers.remove_namespace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_namespace</span></code></a>(tag: str)</p></td>
+<td><p>Removes xmlns from tag string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.utils.ers.xml_tag_structure_func_factory" title="datascience.src.utils.ers.xml_tag_structure_func_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xml_tag_structure_func_factory</span></code></a>(max_depth, max_nb_children)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.ers.has_tag" title="datascience.src.utils.ers.has_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_tag</span></code></a>(tag)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.utils.ers.get_elements_by_ers_tag" title="datascience.src.utils.ers.get_elements_by_ers_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_elements_by_ers_tag</span></code></a>(xml_element, ers_tag)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.ers.get_root_tag" title="datascience.src.utils.ers.get_root_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_root_tag</span></code></a>(xml_element)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.utils.ers.get_first_child" title="datascience.src.utils.ers.get_first_child"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_first_child</span></code></a>(xml_element, assert_child_single=True)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.ers.make_datetime" title="datascience.src.utils.ers.make_datetime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_datetime</span></code></a>(date: str, time: Union[str, None] = None)</p></td>
+<td><p>Takes date a “2020-12-24” string and, optionnally, a time “16:49” string,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.utils.ers.make_datetime_json_serializable" title="datascience.src.utils.ers.make_datetime_json_serializable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_datetime_json_serializable</span></code></a>(date: str, time: Union[str, None] = None)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.ers.try_float" title="datascience.src.utils.ers.try_float"><code class="xref py py-obj docutils literal notranslate"><span class="pre">try_float</span></code></a>(s: str)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.utils.ers.tagged_children" title="datascience.src.utils.ers.tagged_children"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_children</span></code></a>(el)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.utils.ers.NS" title="datascience.src.utils.ers.NS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.NS">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">NS</span></span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#NS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.NS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.remove_namespace">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">remove_namespace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#remove_namespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.remove_namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes xmlns from tag string.</p>
+<p>Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">remove_namespace</span><span class="p">(</span><span class="s2">&quot;{http://ec.europa.eu/fisheries/schema/ers/v3}OPS&quot;</span><span class="p">)</span>
+<span class="go">&quot;OPS&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.xml_tag_structure_func_factory">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">xml_tag_structure_func_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nb_children</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#xml_tag_structure_func_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.xml_tag_structure_func_factory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.has_tag">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">has_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#has_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.has_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.get_elements_by_ers_tag">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">get_elements_by_ers_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ers_tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#get_elements_by_ers_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.get_elements_by_ers_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.get_root_tag">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">get_root_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_element</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#get_root_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.get_root_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.get_first_child">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">get_first_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assert_child_single</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#get_first_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.get_first_child" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.make_datetime">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">make_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#make_datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.make_datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes date a “2020-12-24” string and, optionnally, a time “16:49” string,
+Returns a datetime object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.make_datetime_json_serializable">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">make_datetime_json_serializable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#make_datetime_json_serializable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.make_datetime_json_serializable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.try_float">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">try_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#try_float"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.try_float" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.utils.ers.tagged_children">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.utils.ers.</span></span><span class="sig-name descname"><span class="pre">tagged_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/datascience/src/utils/ers.html#tagged_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.utils.ers.tagged_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../geocode/index.html" class="btn btn-neutral float-right" title="datascience.src.utils.geocode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../database/index.html" class="btn btn-neutral float-left" title="datascience.src.utils.database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.pipeline.parsers.ers &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>datascience.src.pipeline.parsers.ers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for datascience.src.pipeline.parsers.ers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">xml</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">import</span> <span class="n">ParseError</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">src.pipeline.parsers.log_parsers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">default_log_parser</span><span class="p">,</span>
+    <span class="n">parse_coe</span><span class="p">,</span>
+    <span class="n">parse_cox</span><span class="p">,</span>
+    <span class="n">parse_cro</span><span class="p">,</span>
+    <span class="n">parse_dep</span><span class="p">,</span>
+    <span class="n">parse_dis</span><span class="p">,</span>
+    <span class="n">parse_eof</span><span class="p">,</span>
+    <span class="n">parse_far</span><span class="p">,</span>
+    <span class="n">parse_lan</span><span class="p">,</span>
+    <span class="n">parse_pno</span><span class="p">,</span>
+    <span class="n">parse_rtp</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">src.utils.ers</span> <span class="kn">import</span> <span class="n">get_first_child</span><span class="p">,</span> <span class="n">get_root_tag</span><span class="p">,</span> <span class="n">make_datetime</span><span class="p">,</span> <span class="n">remove_namespace</span>
+
+
+<div class="viewcode-block" id="ERSParsingError"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.ERSParsingError">[docs]</a><span class="k">class</span> <span class="nc">ERSParsingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when an ERS message cannot be parsed.&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="simple_parser"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.simple_parser">[docs]</a><span class="k">def</span> <span class="nf">simple_parser</span><span class="p">(</span><span class="n">el</span><span class="p">:</span> <span class="n">xml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">ElementTree</span><span class="o">.</span><span class="n">Element</span><span class="p">,</span> <span class="n">pass_child</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">root_tag</span> <span class="o">=</span> <span class="n">get_root_tag</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;operation_type&quot;</span><span class="p">:</span> <span class="n">root_tag</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">pass_child</span><span class="p">:</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">get_first_child</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">assert_child_single</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">logs</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">logs</span><span class="p">,</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="parse_ops"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_ops">[docs]</a><span class="k">def</span> <span class="nf">parse_ops</span><span class="p">(</span><span class="n">ops</span><span class="p">):</span>
+    <span class="n">ops_date</span> <span class="o">=</span> <span class="n">ops</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OD&quot;</span><span class="p">)</span>
+    <span class="n">ops_time</span> <span class="o">=</span> <span class="n">ops</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OT&quot;</span><span class="p">)</span>
+
+    <span class="n">ops_datetime</span> <span class="o">=</span> <span class="n">make_datetime</span><span class="p">(</span><span class="n">ops_date</span><span class="p">,</span> <span class="n">ops_time</span><span class="p">)</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;operation_number&quot;</span><span class="p">:</span> <span class="n">ops</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ON&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;operation_country&quot;</span><span class="p">:</span> <span class="n">ops</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FR&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;operation_datetime_utc&quot;</span><span class="p">:</span> <span class="n">ops_datetime</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">child</span> <span class="o">=</span> <span class="n">get_first_child</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ops</span><span class="p">),</span> <span class="n">assert_child_single</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="parse_cor"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_cor">[docs]</a><span class="k">def</span> <span class="nf">parse_cor</span><span class="p">(</span><span class="n">cor</span><span class="p">):</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;operation_type&quot;</span><span class="p">:</span> <span class="s2">&quot;COR&quot;</span><span class="p">,</span> <span class="s2">&quot;referenced_ers_id&quot;</span><span class="p">:</span> <span class="n">cor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RN&quot;</span><span class="p">)}</span>
+    <span class="n">child</span> <span class="o">=</span> <span class="n">get_first_child</span><span class="p">(</span><span class="n">cor</span><span class="p">,</span> <span class="n">assert_child_single</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="parse_del"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_del">[docs]</a><span class="k">def</span> <span class="nf">parse_del</span><span class="p">(</span><span class="n">del_</span><span class="p">):</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;operation_type&quot;</span><span class="p">:</span> <span class="s2">&quot;DEL&quot;</span><span class="p">,</span> <span class="s2">&quot;referenced_ers_id&quot;</span><span class="p">:</span> <span class="n">del_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RN&quot;</span><span class="p">)}</span>
+
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="parse_ret"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_ret">[docs]</a><span class="k">def</span> <span class="nf">parse_ret</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;operation_type&quot;</span><span class="p">:</span> <span class="s2">&quot;RET&quot;</span><span class="p">,</span> <span class="s2">&quot;referenced_ers_id&quot;</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ON&quot;</span><span class="p">)}</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;returnStatus&quot;</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RS&quot;</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="n">rejection_cause</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RE&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">rejection_cause</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;rejectionCause&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rejection_cause</span>
+
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="parse_ers"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_ers">[docs]</a><span class="k">def</span> <span class="nf">parse_ers</span><span class="p">(</span><span class="n">ers</span><span class="p">):</span>
+    <span class="n">ers_date</span> <span class="o">=</span> <span class="n">ers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RD&quot;</span><span class="p">)</span>
+    <span class="n">ers_time</span> <span class="o">=</span> <span class="n">ers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RT&quot;</span><span class="p">)</span>
+
+    <span class="n">ers_datetime</span> <span class="o">=</span> <span class="n">make_datetime</span><span class="p">(</span><span class="n">ers_date</span><span class="p">,</span> <span class="n">ers_time</span><span class="p">)</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ers_id&quot;</span><span class="p">:</span> <span class="n">ers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RN&quot;</span><span class="p">),</span> <span class="s2">&quot;ers_datetime_utc&quot;</span><span class="p">:</span> <span class="n">ers_datetime</span><span class="p">}</span>
+
+    <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ers</span><span class="p">)</span>
+    <span class="n">child</span> <span class="o">=</span> <span class="n">get_first_child</span><span class="p">(</span>
+        <span class="n">children</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="parse_log"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_log">[docs]</a><span class="k">def</span> <span class="nf">parse_log</span><span class="p">(</span><span class="n">log</span><span class="p">):</span>
+    <span class="n">logs</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">log</span><span class="p">)</span> <span class="k">if</span> <span class="n">remove_namespace</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;ELOG&quot;</span><span class="p">]</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cfr&quot;</span><span class="p">:</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IR&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;ircs&quot;</span><span class="p">:</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RC&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;external_identification&quot;</span><span class="p">:</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;XR&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;vessel_name&quot;</span><span class="p">:</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NA&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;flag_state&quot;</span><span class="p">:</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FS&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;imo&quot;</span><span class="p">:</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IM&quot;</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="n">elogs</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">log</span><span class="p">)</span> <span class="k">if</span> <span class="n">remove_namespace</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;ELOG&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elogs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">elog</span> <span class="o">=</span> <span class="n">elogs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;trip_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elog</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TN&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">logs</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="parsers"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parsers">[docs]</a><span class="n">parsers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;DAT&quot;</span><span class="p">:</span> <span class="n">partial</span><span class="p">(</span><span class="n">simple_parser</span><span class="p">,</span> <span class="n">pass_child</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;COR&quot;</span><span class="p">:</span> <span class="n">parse_cor</span><span class="p">,</span>
+    <span class="s2">&quot;DEL&quot;</span><span class="p">:</span> <span class="n">parse_del</span><span class="p">,</span>
+    <span class="s2">&quot;RET&quot;</span><span class="p">:</span> <span class="n">parse_ret</span><span class="p">,</span>
+    <span class="s2">&quot;QUE&quot;</span><span class="p">:</span> <span class="n">partial</span><span class="p">(</span><span class="n">simple_parser</span><span class="p">,</span> <span class="n">pass_child</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="s2">&quot;RSP&quot;</span><span class="p">:</span> <span class="n">partial</span><span class="p">(</span><span class="n">simple_parser</span><span class="p">,</span> <span class="n">pass_child</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="s2">&quot;OPS&quot;</span><span class="p">:</span> <span class="n">parse_ops</span><span class="p">,</span>
+    <span class="s2">&quot;ERS&quot;</span><span class="p">:</span> <span class="n">parse_ers</span><span class="p">,</span>
+    <span class="s2">&quot;LOG&quot;</span><span class="p">:</span> <span class="n">parse_log</span><span class="p">,</span>
+    <span class="s2">&quot;DEP&quot;</span><span class="p">:</span> <span class="n">parse_dep</span><span class="p">,</span>
+    <span class="s2">&quot;FAR&quot;</span><span class="p">:</span> <span class="n">parse_far</span><span class="p">,</span>
+    <span class="s2">&quot;DIS&quot;</span><span class="p">:</span> <span class="n">parse_dis</span><span class="p">,</span>
+    <span class="s2">&quot;EOF&quot;</span><span class="p">:</span> <span class="n">parse_eof</span><span class="p">,</span>
+    <span class="s2">&quot;PNO&quot;</span><span class="p">:</span> <span class="n">parse_pno</span><span class="p">,</span>
+    <span class="s2">&quot;RTP&quot;</span><span class="p">:</span> <span class="n">parse_rtp</span><span class="p">,</span>
+    <span class="s2">&quot;LAN&quot;</span><span class="p">:</span> <span class="n">parse_lan</span><span class="p">,</span>
+    <span class="s2">&quot;RLC&quot;</span><span class="p">:</span> <span class="n">default_log_parser</span><span class="p">,</span>
+    <span class="s2">&quot;TRA&quot;</span><span class="p">:</span> <span class="n">default_log_parser</span><span class="p">,</span>
+    <span class="s2">&quot;COE&quot;</span><span class="p">:</span> <span class="n">parse_coe</span><span class="p">,</span>
+    <span class="s2">&quot;COX&quot;</span><span class="p">:</span> <span class="n">parse_cox</span><span class="p">,</span>
+    <span class="s2">&quot;CRO&quot;</span><span class="p">:</span> <span class="n">parse_cro</span><span class="p">,</span>
+    <span class="s2">&quot;TRZ&quot;</span><span class="p">:</span> <span class="n">default_log_parser</span><span class="p">,</span>
+    <span class="s2">&quot;INS&quot;</span><span class="p">:</span> <span class="n">default_log_parser</span><span class="p">,</span>
+    <span class="s2">&quot;PNT&quot;</span><span class="p">:</span> <span class="n">default_log_parser</span><span class="p">,</span></div>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="parse_"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_">[docs]</a><span class="k">def</span> <span class="nf">parse_</span><span class="p">(</span><span class="n">el</span><span class="p">):</span>
+    <span class="n">root_tag</span> <span class="o">=</span> <span class="n">get_root_tag</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">parsers</span><span class="p">[</span><span class="n">root_tag</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parser not implemented for xml tag: </span><span class="si">{</span><span class="n">root_tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ERSParsingError</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">parser</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ERSParsingError</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">el</span><span class="p">):</span>
+    <span class="n">metadata</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">logs</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">parse_</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+
+    <span class="c1"># OPS, DAT, COR and ERS elements with metadata and a child element to parse</span>
+    <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">logs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">child_metadata</span><span class="p">,</span> <span class="n">data_iter</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">child_metadata</span><span class="p">},</span> <span class="n">data_iter</span>
+
+    <span class="c1"># LOG elements with FAR, LAN, PNO... children</span>
+    <span class="k">elif</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">child</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">logs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="n">parse_</span><span class="p">,</span> <span class="n">logs</span><span class="p">)</span>
+
+    <span class="c1"># DEL, RET elements with no child, no logs</span>
+    <span class="k">elif</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">child</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">logs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="nb">iter</span><span class="p">([</span><span class="n">data</span><span class="p">])</span>
+
+    <span class="c1"># RSP, QUE elements with only metadata</span>
+    <span class="k">elif</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">child</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">logs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="nb">iter</span><span class="p">([])</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ERSParsingError</span></div>
+
+
+<div class="viewcode-block" id="parse_xml_string"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.parse_xml_string">[docs]</a><span class="k">def</span> <span class="nf">parse_xml_string</span><span class="p">(</span><span class="n">xml_string</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">el</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">xml_string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;¿&quot;</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">ParseError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ERSParsingError</span>
+    <span class="k">return</span> <span class="n">parse</span><span class="p">(</span><span class="n">el</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="batch_parse"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/parsers/ers/index.html#datascience.src.pipeline.parsers.ers.batch_parse">[docs]</a><span class="k">def</span> <span class="nf">batch_parse</span><span class="p">(</span><span class="n">ers_xmls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Parses a list of ERS messages and return 2 tables as DataFrames containing the</span>
+<span class="sd">    information extracted from the messages.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ers_xmls (List[str]): list of ERS xml messages</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: Dataframe with parsed metadata, including a &quot;value&quot; column</span>
+<span class="sd">            with json data extracted with the xml message</span>
+<span class="sd">        pd.DataFrame:  Dataframe with parsed metadata, including a &quot;xml_message&quot; column</span>
+<span class="sd">            with the original xml message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res_json</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">res_xml</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">batch_generated_errors</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">res_xml_default</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;operation_number&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;operation_country&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;operation_datetime_utc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;operation_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ers_id&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;referenced_ers_id&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ers_datetime_utc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;cfr&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ircs&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;external_identification&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;flag_state&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;imo&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;xml_message&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;integration_datetime_utc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">res_json_default</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;operation_number&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;operation_country&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;operation_datetime_utc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;operation_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ers_id&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;referenced_ers_id&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ers_datetime_utc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;cfr&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ircs&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;external_identification&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;vessel_name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;flag_state&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;imo&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;log_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;integration_datetime_utc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">xml_message</span> <span class="ow">in</span> <span class="n">ers_xmls</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">,</span> <span class="n">data_iterator</span> <span class="o">=</span> <span class="n">parse_xml_string</span><span class="p">(</span><span class="n">xml_message</span><span class="p">)</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="o">**</span><span class="n">metadata</span><span class="p">,</span>
+                <span class="s2">&quot;xml_message&quot;</span><span class="p">:</span> <span class="n">xml_message</span><span class="p">,</span>
+                <span class="s2">&quot;integration_datetime_utc&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_iterator</span><span class="p">:</span>
+                <span class="n">res_json</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="o">**</span><span class="n">res_json_default</span><span class="p">,</span>
+                            <span class="o">**</span><span class="n">metadata</span><span class="p">,</span>
+                            <span class="o">**</span><span class="n">data</span><span class="p">,</span>
+                            <span class="s2">&quot;integration_datetime_utc&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">res_xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="o">**</span><span class="n">res_xml_default</span><span class="p">,</span> <span class="o">**</span><span class="n">raw</span><span class="p">}))</span>
+        <span class="k">except</span> <span class="n">ERSParsingError</span><span class="p">:</span>
+            <span class="n">log_end</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xml_message</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">40</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;Parsing error - one ERS message will be ignored : &quot;</span>
+                <span class="o">+</span> <span class="n">xml_message</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span>
+                <span class="o">+</span> <span class="n">log_end</span>
+            <span class="p">)</span>
+            <span class="n">batch_generated_errors</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unkonwn error with message &quot;</span> <span class="o">+</span> <span class="n">xml_message</span><span class="p">)</span>
+            <span class="n">batch_generated_errors</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">res_json_default</span><span class="p">))</span>
+    <span class="n">parsed_with_xml</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">res_xml_default</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res_json</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">res_json</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res_xml</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">parsed_with_xml</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">res_xml</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;parsed&quot;</span><span class="p">:</span> <span class="n">parsed</span><span class="p">,</span>
+        <span class="s2">&quot;parsed_with_xml&quot;</span><span class="p">:</span> <span class="n">parsed_with_xml</span><span class="p">,</span>
+        <span class="s2">&quot;batch_generated_errors&quot;</span><span class="p">:</span> <span class="n">batch_generated_errors</span><span class="p">,</span></div>
+    <span class="p">}</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

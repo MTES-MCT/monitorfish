@@ -1,6 +1,4 @@
-from datetime import timedelta
-
-from prefect.schedules import CronSchedule, IntervalSchedule
+from prefect.schedules import CronSchedule
 
 from src.pipeline.flows import (
     control_anteriority,
@@ -19,13 +17,16 @@ from src.pipeline.flows import (
 )
 
 ################################ Define flow schedules ################################
-control_anteriority.flow.schedule = IntervalSchedule(interval=timedelta(hours=1))
-current_segments.flow.schedule = IntervalSchedule(interval=timedelta(minutes=10))
-ers.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
-fishing_gear_codes.flow.schedule = CronSchedule("0 3 * * *")
-last_positions.flow.schedule = IntervalSchedule(interval=timedelta(minutes=1))
-species.flow.schedule = CronSchedule("0 4 * * *")
-vessels.flow.schedule = CronSchedule("0 2 * * *")
+control_anteriority.flow.schedule = CronSchedule("5 * * * *")
+controllers.flow = CronSchedule("0 8 * * *")
+controls.flow = CronSchedule("4 * * * *")
+current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
+ers.flow.schedule = CronSchedule("* * * * *")
+fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")
+infractions.flow.schedule = CronSchedule("1 8 * * *")
+last_positions.flow.schedule = CronSchedule("* * * * *")
+species.flow.schedule = CronSchedule("0 8 * * *")
+vessels.flow.schedule = CronSchedule("5 8 * * *")
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [

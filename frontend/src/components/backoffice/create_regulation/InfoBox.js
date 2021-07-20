@@ -61,6 +61,7 @@ const InfoText = styled.span`
   font-size: 13px;
   color: ${COLORS.textGray};
   padding-left: 8px;
+  white-space: pre-line;
 `
 
 const InfoPoint = styled.a`

@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
+import sqlalchemy
 
 from src.pipeline.flows.vessels import (
     clean_vessels,
@@ -23,31 +24,31 @@ class TestVesselsFlow(unittest.TestCase):
     def test_extract_cee_vessels(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_cee_vessels.run()
-        self.assertTrue(isinstance(query, str))
+        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     @patch("src.pipeline.flows.vessels.extract")
     def test_extract_floats(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_floats.run()
-        self.assertTrue(isinstance(query, str))
+        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     @patch("src.pipeline.flows.vessels.extract")
     def test_extract_fr_vessels(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_fr_vessels.run()
-        self.assertTrue(isinstance(query, str))
+        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     @patch("src.pipeline.flows.vessels.extract")
     def test_extract_nav_licences(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_nav_licences.run()
-        self.assertTrue(isinstance(query, str))
+        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     @patch("src.pipeline.flows.vessels.extract")
     def test_extract_non_cee_vessels(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_non_cee_vessels.run()
-        self.assertTrue(isinstance(query, str))
+        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     def test_clean_vessels(self):
         all_vessels = pd.DataFrame(

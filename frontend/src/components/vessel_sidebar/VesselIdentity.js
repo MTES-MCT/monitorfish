@@ -71,7 +71,7 @@ const VesselIdentity = () => {
             <TableBody>
               <Field>
                 <Key>CFR</Key>
-                <Value data-cy={'cfr'}>
+                <Value data-cy={'vessel-cfr'}>
                   {
                     getVesselOrLastPositionProperty('internalReferenceNumber')
                   }

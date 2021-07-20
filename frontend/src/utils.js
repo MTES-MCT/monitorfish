@@ -30,9 +30,12 @@ export const getCoordinates = (coordinates, projection, coordinatesFormat) => {
   const transformedCoordinates = transform(coordinates, projection, WSG84_PROJECTION)
 
   switch (coordinatesFormat) {
-    case CoordinatesFormat.DEGREES_MINUTES_SECONDS: return getDMSCoordinates(transformedCoordinates)
-    case CoordinatesFormat.DEGREES_MINUTES_DECIMALS: return getDMDCoordinates(transformedCoordinates)
-    case CoordinatesFormat.DECIMAL_DEGREES: return getDDCoordinates(transformedCoordinates)
+    case CoordinatesFormat.DEGREES_MINUTES_SECONDS:
+      return getDMSCoordinates(transformedCoordinates)
+    case CoordinatesFormat.DEGREES_MINUTES_DECIMALS:
+      return getDMDCoordinates(transformedCoordinates)
+    case CoordinatesFormat.DECIMAL_DEGREES:
+      return getDDCoordinates(transformedCoordinates)
   }
 }
 
@@ -42,12 +45,34 @@ export const getCoordinates = (coordinates, projection, coordinatesFormat) => {
  * @returns {string[]} coordinates - The [latitude, longitude] coordinates in DD format
  */
 function getDDCoordinates (transformedCoordinates) {
-  return Array.isArray(transformedCoordinates) && transformedCoordinates.length === 2
-    ? [
+  if (!Array.isArray(transformedCoordinates) ||
+    transformedCoordinates.length !== 2 ||
+    !transformedCoordinates[0] ||
+    !transformedCoordinates[1]) {
+    return []
+  }
+
+  const negative = Math.sign(transformedCoordinates[0])
+  const degreeSplit = transformedCoordinates[0].toString().split('.')
+  if (degreeSplit.length) {
+    let degree = degreeSplit[0].trim().replace(/-/g, '')
+    switch (degree.length) {
+      case 1:
+        degree = `${negative ? '-' : ''}00${degree}.${degreeSplit[1].substring(0, 4)}`
+        break
+      case 2:
+        degree = `${negative ? '-' : ''}0${degree}.${degreeSplit[1].substring(0, 4)}`
+        break
+      default:
+        degree = `${negative ? '-' : ''}${degree}.${degreeSplit[1].substring(0, 4)}`
+        break
+    }
+
+    return [
       `${transformedCoordinates[1] ? transformedCoordinates[1].toFixed(4) : null}°`,
-      `${transformedCoordinates[0] ? transformedCoordinates[0].toFixed(4) : null}°`
-      ]
-    : []
+      `${degree}°`
+    ]
+  }
 }
 
 /**

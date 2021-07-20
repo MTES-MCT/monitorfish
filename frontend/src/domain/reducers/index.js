@@ -6,6 +6,7 @@ import gear from './Gear'
 import filter from './Filter'
 import fleetSegment from './FleetSegment'
 import regulatory from './Regulatory'
+import interestPoint from './InterestPoint'
 import { combineReducers } from '@reduxjs/toolkit'
 
 const commonReducerList = {
@@ -14,12 +15,14 @@ const commonReducerList = {
   gear,
   regulatory
 }
+
 const homeReducers = combineReducers({
   ...commonReducerList,
   layer: layer.homepage.reducer,
   vessel,
   filter,
-  fleetSegment
+  fleetSegment,
+  interestPoint
 })
 
 const backofficeReducers = combineReducers({

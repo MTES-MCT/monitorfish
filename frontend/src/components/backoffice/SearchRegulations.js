@@ -47,10 +47,6 @@ const SearchRegulations = props => {
     }
   }
 
-  function addNewRegZone () {
-    console.log('addNewRegZone clicked')
-  }
-
   const match = useRouteMatch()
 
   return (
@@ -68,7 +64,6 @@ const SearchRegulations = props => {
           to={match.url + '/newRegulation'}
           disabled={false}
           isLast={false}
-          onClick={() => addNewRegZone()}
           title={'Saisir une nouvelle réglementation'}
         />
     </SearchContainer>

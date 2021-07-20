@@ -16,13 +16,7 @@ import VesselControls from '../components/controls/VesselControls'
 import TrackDepthSelection from '../components/track_depth_selection/TrackDepthSelection'
 import TrackExport from '../components/track_export/TrackExport'
 import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
-
-export const VesselSidebarTab = {
-  SUMMARY: 1,
-  IDENTITY: 2,
-  VOYAGES: 3,
-  CONTROLS: 4
-}
+import { VesselSidebarTab } from '../domain/entities/vessel'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()

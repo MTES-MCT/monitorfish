@@ -238,3 +238,10 @@ export const vesselSize = {
 }
 
 export const TEMPORARY_VESSEL_TRACK = 'temp'
+
+export const VesselSidebarTab = {
+  SUMMARY: 1,
+  IDENTITY: 2,
+  VOYAGES: 3,
+  CONTROLS: 4
+}

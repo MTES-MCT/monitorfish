@@ -28,7 +28,7 @@ const ERSMessageSpecies = props => {
           <TitleText title={getSpeciesName(props.species)}>
             {getSpeciesName(props.species)}
           </TitleText>
-          <Weight>
+          <Weight title={`${props.species.weight} kg`}>
             <InlineKey>Poids total (estimé) </InlineKey>
             <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
           </Weight>
@@ -139,6 +139,10 @@ const Property = styled.div`
 const Kg = styled.span`
   width: 60px;
   display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 20px;
+  vertical-align: top;
 `
 
 const InlineKey = styled.div`

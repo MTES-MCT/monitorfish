@@ -20,7 +20,7 @@ import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../..//commonStyles/Buttons.style'
 
-import { Checkbox } from 'rsuite'
+import { Checkbox, DatePicker } from 'rsuite'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -166,9 +166,13 @@ const CreateRegulation = () => {
         </ContentLine>
         <ContentLine>
           <Label>Début de validité</Label>
+          <DatePicker placeholder="  /  /  " />
         </ContentLine>
         <ContentLine>
           <Label>Fin de validité</Label>
+          <DatePicker placeholder="  /  /  " />
+          ou
+          <Checkbox>jusqu'à nouvel ordre</Checkbox>
         </ContentLine>
         <BottomLine>
           <ValidyDateLine>

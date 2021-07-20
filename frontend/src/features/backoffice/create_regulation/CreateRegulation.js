@@ -16,6 +16,11 @@ import { COLORS } from '../../../constants/constants'
 import { formatDataForSelectPicker } from '../../../utils'
 import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
+import { ContentLine } from '../../commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../../commonStyles/Input.style'
+import { ValidateButton, CancelButton } from '../..//commonStyles/Buttons.style'
+
+import { Checkbox } from 'rsuite'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -35,6 +40,9 @@ const CreateRegulation = () => {
   const [selectedGeometry, setSelectedGeometry] = useState()
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
+
+  const [regulationText, setRegulatonText] = useState('')
+  const [regulationTextURL, setRegulationTextURL] = useState('')
 
   useEffect(() => {
     if (regulatoryLawTypes && regulatoryTopics && seaFronts) {
@@ -56,6 +64,22 @@ const CreateRegulation = () => {
           setGeometryObjectList(geometryListAsObject)
         }
       })
+  }
+
+  const addNewRegulationText = () => {
+    console.log('que faire quand on valide ?')
+  }
+
+  const cancelAddNewRegulationText = () => {
+    console.log('que faire quand on annule ?')
+  }
+
+  const addRegRefEnVigueur = () => {
+    console.log('ajout en vigueur')
+  }
+
+  const addRegRefAVenir = () => {
+    console.log('addRegRefAVenir')
   }
 
   return (
@@ -104,6 +128,68 @@ const CreateRegulation = () => {
           />
         </Section>
       </Content>
+      <Content>
+        <Section>
+          <SectionTitle>
+            référenceS réglementaireS en vigueur
+          </SectionTitle>
+        </Section>
+        <ContentLine>
+          <Label>Texte réglementaire 1</Label>
+          <CustomInput
+            placeholder='Nom'
+            value={regulationText}
+            onChange={setRegulatonText}
+          />
+          <CustomInput
+            placeholder='URL'
+            value={regulationTextURL}
+            onChange={setRegulationTextURL}
+          />
+          <ValidateButton
+            disabled={false}
+            isLast={false}
+            onClick={addNewRegulationText}>
+            Enregistrer
+          </ValidateButton>
+          <CancelButton
+            disabled={false}
+            isLast={false}
+            onClick={cancelAddNewRegulationText}>
+            Annuler
+          </CancelButton>
+        </ContentLine>
+        <ContentLine>
+          <Label>Type de texte</Label>
+          <Checkbox>création de la zone</Checkbox>
+          <Checkbox>réglementation de la zone</Checkbox>
+        </ContentLine>
+        <ContentLine>
+          <Label>Début de validité</Label>
+        </ContentLine>
+        <ContentLine>
+          <Label>Fin de validité</Label>
+        </ContentLine>
+        <BottomLine>
+          <ValidyDateLine>
+            <ValidityDate>{'Valide du 01/03/2021 au 31/06/2021.'}</ValidityDate>
+          </ValidyDateLine>
+          <ButtonLine>
+            <ValidateButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefEnVigueur}>
+              Ajouter une référence reg. en vigueur
+            </ValidateButton>
+            <CancelButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefAVenir}>
+              Ajouter une référence reg. à venir
+            </CancelButton>
+          </ButtonLine>
+        </BottomLine>
+      </Content>
     </CreateRegulationWrapper>
     { showRegulatoryPreview && <BaseMap />}
     </Wrapper>
@@ -114,6 +200,27 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
 `
+const BottomLine = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const ValidityDate = styled.span`
+  font-size: 13px;
+`
+
+const ButtonLine = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const ValidyDateLine = styled.div`
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 483px;
+  background-color: ${COLORS.grayBackground};
+`
+
 const Header = styled.div`
   margin-bottom: 40px;
   margin-top: 20px;

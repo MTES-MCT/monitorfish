@@ -9,7 +9,9 @@ const FARMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
   const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
+  const [speciesPresentationAndWeightArray, setSpeciesPresentationAndWeightArray] = useState([])
   const [chartHeight, setChartHeight] = useState(0)
+  const [initialChartHeight, setInitialChartHeight] = useState(0)
 
   useEffect(() => {
     if (props.speciesToWeightOfFAR) {
@@ -25,6 +27,26 @@ const FARMessageResume = props => {
       setSpeciesAndWeightArray(array)
     }
   }, [props.speciesToWeightOfFAR])
+
+  useEffect(() => {
+    if (props.speciesAndPresentationToWeightOfFAR && speciesAndWeightArray.length) {
+      const array = speciesAndWeightArray.map(species => {
+        if (props.speciesAndPresentationToWeightOfFAR[species.species] && props.speciesAndPresentationToWeightOfFAR[species.species].length) {
+          return props.speciesAndPresentationToWeightOfFAR[species.species].sort((a, b) => {
+            if (a.weight < b.weight) {
+              return 1
+            } else {
+              return -1
+            }
+          })
+        } else {
+          return []
+        }
+      })
+
+      setSpeciesPresentationAndWeightArray(array)
+    }
+  }, [props.speciesAndPresentationToWeightOfFAR, speciesAndWeightArray])
 
   useEffect(() => {
     if (isOpen) {
@@ -44,8 +66,22 @@ const FARMessageResume = props => {
       : <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - aucune capture</>
   }
 
+  useEffect(() => {
+    if (chartHeight !== 0 && initialChartHeight === 0) {
+      setInitialChartHeight(chartHeight)
+    }
+  }, [chartHeight])
+
   const resetChartHeight = () => {
     setChartHeight(0)
+  }
+
+  const increaseChartTotalHeight = number => {
+    setChartHeight(initialChartHeight + number)
+  }
+
+  const resetInitialChartHeight = () => {
+    setChartHeight(initialChartHeight)
   }
 
   return <Wrapper>
@@ -73,6 +109,9 @@ const FARMessageResume = props => {
               resetChartHeight={resetChartHeight}
               compareWithTotalWeight={true}
               speciesAndWeightArray={speciesAndWeightArray}
+              speciesPresentationAndWeightArray={speciesPresentationAndWeightArray}
+              increaseChartTotalHeight={increaseChartTotalHeight}
+              resetInitialChartHeight={resetInitialChartHeight}
             />
           </Zone>
         </ERSMessageContent>
@@ -99,22 +138,12 @@ const Wrapper = styled.li`
 
 const ERSMessageContent = styled.div`
   width: inherit;
-  height: 0;
-  opacity: 0;
+  height: ${props => props.isOpen && props.chartHeight ? props.chartHeight + 20 : 0}px;
+  opacity: ${props => props.isOpen ? 1 : 0};
   overflow: hidden;
   padding-left: 20px;
   border-bottom: 1px solid ${COLORS.gray};
-  animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-${props.id}-opening` : `list-resume-${props.name}-${props.id}-closing`} 0.2s ease forwards;
-
-  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-opening` : null} {
-    0%   { height: 0; opacity: 0; }
-    100% { height: ${props => props.chartHeight + 20}px; opacity: 1; }
-  }
-
-  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-closing` : null} {
-    0%   { opacity: 1; height: ${props => props.chartHeight + 20}px; }
-    100% { opacity: 0; height: 0; }
-  }
+  transition: all 0.2s;
 `
 
 export default FARMessageResume

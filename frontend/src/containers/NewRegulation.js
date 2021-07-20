@@ -10,6 +10,11 @@ import RegulationRegionLine from '../components/backoffice/create_regulation/Reg
 import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
 import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
 import { formatDataForSelectPicker } from '../utils'
+import { ContentLine } from '../components/commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../components/commonStyles/Input.style'
+import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
+
+import { Checkbox } from 'rsuite'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -26,11 +31,31 @@ const CreateRegulation = () => {
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [reglementationBlocName, setReglementationBlocName] = useState('')
 
+  const [regulationText, setRegulatonText] = useState('')
+  const [regulationTextURL, setRegulationTextURL] = useState('')
+
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
       dispatch(getAllRegulatoryZonesByRegTerritory())
     }
   }, [])
+
+  const addNewRegulationText = () => {
+    console.log('que faire quand on valide ?')
+  }
+
+  const cancelAddNewRegulationText = () => {
+    console.log('que faire quand on annule ?')
+  }
+
+  const addRegRefEnVigueur = () => {
+    console.log('ajout en vigueur')
+  }
+
+  const addRegRefAVenir = () => {
+    console.log('addRegRefAVenir')
+  }
+
   return (
     <CreateRegulationWrapper>
       <Header>
@@ -69,9 +94,92 @@ const CreateRegulation = () => {
           />
         </Section>
       </Content>
+      <Content>
+        <Section>
+          <SectionTitle>
+            référenceS réglementaireS en vigueur
+          </SectionTitle>
+        </Section>
+        <ContentLine>
+          <Label>Texte réglementaire 1</Label>
+          <CustomInput
+            placeholder='Nom'
+            value={regulationText}
+            onChange={setRegulatonText}
+          />
+          <CustomInput
+            placeholder='URL'
+            value={regulationTextURL}
+            onChange={setRegulationTextURL}
+          />
+          <ValidateButton
+            disabled={false}
+            isLast={false}
+            onClick={addNewRegulationText}>
+            Enregistrer
+          </ValidateButton>
+          <CancelButton
+            disabled={false}
+            isLast={false}
+            onClick={cancelAddNewRegulationText}>
+            Annuler
+          </CancelButton>
+        </ContentLine>
+        <ContentLine>
+          <Label>Type de texte</Label>
+          <Checkbox>création de la zone</Checkbox>
+          <Checkbox>réglementation de la zone</Checkbox>
+        </ContentLine>
+        <ContentLine>
+          <Label>Début de validité</Label>
+        </ContentLine>
+        <ContentLine>
+          <Label>Fin de validité</Label>
+        </ContentLine>
+        <BottomLine>
+          <ValidyDateLine>
+            <ValidityDate>{'Valide du 01/03/2021 au 31/06/2021.'}</ValidityDate>
+          </ValidyDateLine>
+          <ButtonLine>
+            <ValidateButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefEnVigueur}>
+              Ajouter une référence reg. en vigueur
+            </ValidateButton>
+            <CancelButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefAVenir}>
+              Ajouter une référence reg. à venir
+            </CancelButton>
+          </ButtonLine>
+        </BottomLine>
+      </Content>
     </CreateRegulationWrapper>
   )
 }
+
+const BottomLine = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const ValidityDate = styled.span`
+  font-size: 13px;
+`
+
+const ButtonLine = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const ValidyDateLine = styled.div`
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 483px;
+  background-color: ${COLORS.grayBackground};
+`
 
 const Header = styled.div`
   margin-bottom: 40px;

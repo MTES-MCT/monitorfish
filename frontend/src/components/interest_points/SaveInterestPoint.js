@@ -15,10 +15,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   addInterestPoint,
   endInterestPointDraw,
-  updateInterestPointBeingDrawed
+  updateInterestPointKeyBeingDrawed
 } from '../../domain/reducers/InterestPoint'
 import { getCoordinates } from '../../utils'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
+import { transform } from 'ol/proj'
 
 const SaveInterestPoint = (
   {
@@ -27,6 +28,7 @@ const SaveInterestPoint = (
   }) => {
   const dispatch = useDispatch()
 
+  const { coordinatesFormat } = useSelector(state => state.map)
   const {
     /** @type {InterestPoint | null} interestPointBeingDrawed */
     interestPointBeingDrawed
@@ -38,50 +40,72 @@ const SaveInterestPoint = (
   const [type, setType] = useState('')
 
   useEffect(() => {
-    if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates && interestPointBeingDrawed.coordinates.length) {
-      const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
-        .map(coordinate => {
-          return parseFloat(coordinate.replace(/°/g, ''))
-        })
-      setCoordinates(ddCoordinates)
+    if (!isOpen) {
+      setCoordinates([])
+      setName('')
+      setObservations('')
+      setType('')
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (coordinatesFormat) {
+      if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates && interestPointBeingDrawed.coordinates.length) {
+        const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
+          .map(coordinate => {
+            return parseFloat(coordinate.replace(/°/g, ''))
+          })
+        setCoordinates(ddCoordinates)
+      }
     }
   }, [interestPointBeingDrawed])
 
-  console.log('coordinates', coordinates)
-
   useEffect(() => {
     if (interestPointBeingDrawed && name && interestPointBeingDrawed.name !== name) {
-      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
-      nextInterestPointBeingDrawed.name = name
-      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
+      dispatch(updateInterestPointKeyBeingDrawed({
+        key: 'name',
+        value: name
+      }))
     }
   }, [name, interestPointBeingDrawed])
 
   useEffect(() => {
     if (interestPointBeingDrawed && observations && interestPointBeingDrawed.observations !== observations) {
-      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
-      nextInterestPointBeingDrawed.observations = observations
-      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
+      dispatch(updateInterestPointKeyBeingDrawed({
+        key: 'observations',
+        value: observations
+      }))
     }
   }, [observations, interestPointBeingDrawed])
 
   useEffect(() => {
     if (interestPointBeingDrawed && type && interestPointBeingDrawed.type !== type) {
-      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
-      nextInterestPointBeingDrawed.type = type
-      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
+      dispatch(updateInterestPointKeyBeingDrawed({
+        key: 'type',
+        value: type
+      }))
     }
   }, [type, interestPointBeingDrawed])
 
-  useEffect(() => {
-    // TODO Convert to OL coordinates
-    /* if (interestPointBeingDrawed && coordinates && coordinates.length && interestPointBeingDrawed.coordinates !== coordinates) {
-      console.log('COORDS', coordinates, interestPointBeingDrawed.coordinates)
-      const nextInterestPointBeingDrawed = { ...interestPointBeingDrawed }
-      nextInterestPointBeingDrawed.coordinates = coordinates
-      dispatch(updateInterestPointBeingDrawed(nextInterestPointBeingDrawed))
-    } */
-  }, [coordinates, interestPointBeingDrawed])
+  /**
+   * Update interest point coordinates
+   * @param {number[]} nextCoordinates - Coordinates ([latitude, longitude]) to update, in decimal format.
+   * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
+   */
+  const updateCoordinates = (nextCoordinates, coordinates) => {
+    if (nextCoordinates &&
+      nextCoordinates.length &&
+      coordinates &&
+      coordinates.length &&
+      (coordinates[0] !== nextCoordinates[0] ||
+      coordinates[1] !== nextCoordinates[1])) {
+      const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      dispatch(updateInterestPointKeyBeingDrawed({
+        key: 'coordinates',
+        value: updatedCoordinates
+      }))
+    }
+  }
 
   const saveInterestPoint = () => {
     if (name && type && coordinates && coordinates.length) {
@@ -100,7 +124,7 @@ const SaveInterestPoint = (
         <p>Coordonnées</p>
         <SetCoordinates
           coordinates={coordinates}
-          setCoordinates={setCoordinates}
+          updateCoordinates={updateCoordinates}
         />
         <p>Type de point</p>
         <RadioWrapper>
@@ -120,7 +144,7 @@ const SaveInterestPoint = (
               Navire de pêche
             </Radio>
             <Radio value={interestPointTypes.FISHING_GEAR}>
-              <Gear />
+              <Gear/>
               Engin de pêche
             </Radio>
           </RadioGroup>

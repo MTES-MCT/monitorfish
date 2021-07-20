@@ -5,9 +5,9 @@ import { COLORS } from '../constants/constants'
 import { expandRightMenu } from '../domain/reducers/Global'
 import unselectVessel from '../domain/use_cases/unselectVessel'
 import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
-import { ReactComponent as MeasurementSVG } from '../components/icons/Mesure.svg'
+import { ReactComponent as InterestPointSVG } from '../components/icons/Point_interet.svg'
 import SaveInterestPoint from '../components/interest_points/SaveInterestPoint'
-import { drawInterestPoint } from '../domain/reducers/InterestPoint'
+import { drawInterestPoint, endInterestPointDraw } from '../domain/reducers/InterestPoint'
 
 const InterestPoint = () => {
   const dispatch = useDispatch()
@@ -20,11 +20,13 @@ const InterestPoint = () => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    if (interestPointIsOpen === true) {
+    if (interestPointIsOpen) {
       dispatch(unselectVessel())
       firstUpdate.current = false
       document.addEventListener('keydown', escapeFromKeyboard, false)
       dispatch(drawInterestPoint())
+    } else {
+      dispatch(endInterestPointDraw())
     }
   }, [interestPointIsOpen])
 
@@ -49,7 +51,7 @@ const InterestPoint = () => {
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Créer un point d\'intérêt'}
         onClick={openOrCloseInterestPoint}>
-        <MeasurementIcon rightMenuIsOpen={rightMenuIsOpen} selectedVessel={selectedVessel}/>
+        <InterestPointIcon rightMenuIsOpen={rightMenuIsOpen} selectedVessel={selectedVessel}/>
       </InterestPointWrapper>
       <SaveInterestPoint
         healthcheckTextWarning={healthcheckTextWarning}
@@ -82,7 +84,7 @@ const InterestPointWrapper = styled(MapButtonStyle)`
   }
 `
 
-const MeasurementIcon = styled(MeasurementSVG)`
+const InterestPointIcon = styled(InterestPointSVG)`
   width: 40px;
   opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;

@@ -74,6 +74,23 @@ const interestPointSlice = createSlice({
      */
     updateInterestPointBeingDrawed(state, action) {
       state.interestPointBeingDrawed = action.payload
+    },
+    /**
+     * Update the specified key of the interest point being drawed
+     * @function updateInterestPointBeingDrawed
+     * @memberOf InterestPointReducer
+     * @param {Object=} state
+     * @param {{
+     * payload: {
+     *   key: string
+     *   value: any
+     * }
+     * }} action - The interest point to add
+     */
+    updateInterestPointKeyBeingDrawed(state, action) {
+      const nextInterestPointBeingDrawed = {...state.interestPointBeingDrawed}
+      nextInterestPointBeingDrawed[action.payload.key] = action.payload.value
+      state.interestPointBeingDrawed = nextInterestPointBeingDrawed
     }
   }
 })
@@ -83,7 +100,8 @@ export const {
   endInterestPointDraw,
   addInterestPoint,
   removeInterestPoint,
-  updateInterestPointBeingDrawed
+  updateInterestPointBeingDrawed,
+  updateInterestPointKeyBeingDrawed
 } = interestPointSlice.actions
 
 export default interestPointSlice.reducer

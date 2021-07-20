@@ -33,7 +33,7 @@ const RegulationBlocLine = props => {
     <ContentLine>
       <Label>Ensemble règlementaire</Label>
       <CustomSelectComponent
-        searchable={true}
+        searchable={false}
         placeholder='Choisir un ensemble'
         value={'Choisir un ensemble'}
         onChange={setSelectedValue}

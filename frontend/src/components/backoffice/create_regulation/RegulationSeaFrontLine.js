@@ -16,8 +16,8 @@ const RegulationSeaFrontLine = props => {
     <Label>Secteur</Label>
     <CustomSelectComponent
         searchable={false}
-        placeholder='Choisir une thématique'
-        value={'Choisir une thématique'}
+        placeholder='Choisir un secteur'
+        value={'Choisir un secteur'}
         onChange={setSelectedSeaFront}
         data={seaFrontList}
         renderMenuItem={(_, item) =>

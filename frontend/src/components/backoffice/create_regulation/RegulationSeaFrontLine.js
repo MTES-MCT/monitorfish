@@ -5,7 +5,7 @@ import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from './MenuItem'
 import Tag from './Tag'
 
-const RegulationThemeLine = props => {
+const RegulationSeaFrontLine = props => {
   const {
     selectedSeaFront,
     setSelectedSeaFront,
@@ -32,4 +32,4 @@ const RegulationThemeLine = props => {
   </ContentLine>
 }
 
-export default RegulationThemeLine
+export default RegulationSeaFrontLine

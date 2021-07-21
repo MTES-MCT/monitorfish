@@ -142,6 +142,34 @@ function getAllRegulatoryZonesFromAPI () {
 }
 
 /**
+ * Get geometry object of regulatory area without regulation reference
+ * @returns {Promise<GeoJSON>} The feature GeoJSON
+ */
+function getAllGeometryWithoutProperty () {
+  const filter = 'references_reglementaires IS NULL'
+  const REQUEST = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
+  `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=law_type,layer_name,geometry&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+  console.log(REQUEST)
+  return fetch(REQUEST)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        // TODO : Change error message
+        throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      // TODO : Change error message
+      throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
+    })
+}
+
+/**
  * Get the administrative zone GeoJSON feature
  * @memberOf API
  * @param {string} administrativeZone
@@ -428,5 +456,6 @@ export {
   getVesselControlsFromAPI,
   getAdministrativeSubZonesFromAPI,
   getAllFleetSegmentFromAPI,
-  getHealthcheckFromAPI
+  getHealthcheckFromAPI,
+  getAllGeometryWithoutProperty
 }

@@ -13,7 +13,7 @@ const showVesselTrackAndSidebar = (
   calledFromCron,
   vesselTrackDepthObject) => (dispatch, getState) => {
   const {
-    vesselIdentity: alreadySelectedVessel,
+    selectedVessel: alreadySelectedVessel,
     vesselsLayerSource
   } = getState().vessel
   unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)

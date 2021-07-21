@@ -56,7 +56,8 @@ const InterestPoint = () => {
       <SaveInterestPoint
         healthcheckTextWarning={healthcheckTextWarning}
         firstUpdate={firstUpdate.current}
-        isOpen={interestPointIsOpen}/>
+        isOpen={interestPointIsOpen}
+        close={() => setInterestPointIsOpen(false)}/>
     </Wrapper>
   )
 }

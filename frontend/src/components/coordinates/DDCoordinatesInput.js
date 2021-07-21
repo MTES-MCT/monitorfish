@@ -27,19 +27,21 @@ const DDCoordinatesInput = props => {
     setLongitudeError(null)
     setLatitudeError(null)
 
-    const floatLatitude = parseFloat(latitude)
-    if (isNaN(floatLatitude)) {
-      setLatitudeError('Champ Latitude incorrect')
-      return
-    }
+    if (latitude || longitude) {
+      const floatLatitude = parseFloat(latitude)
+      if (isNaN(floatLatitude)) {
+        setLatitudeError('Champ Latitude incorrect')
+        return
+      }
 
-    const floatLongitude = parseFloat(longitude)
-    if (isNaN(floatLongitude)) {
-      setLongitudeError('Champ Latitude incorrect')
-      return
-    }
+      const floatLongitude = parseFloat(longitude)
+      if (isNaN(floatLongitude)) {
+        setLongitudeError('Champ Longitude incorrect')
+        return
+      }
 
-    updateCoordinates([floatLatitude, floatLongitude], coordinates)
+      updateCoordinates([floatLatitude, floatLongitude], coordinates)
+    }
   }, [latitude, longitude])
 
   return <Body>

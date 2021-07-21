@@ -12,11 +12,7 @@ import { ReactComponent as ControlSVG } from '../icons/Label_controle.svg'
 import { ReactComponent as VesselSVG } from '../icons/Label_segment_de_flotte.svg'
 import SetCoordinates from '../coordinates/SetCoordinates'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  addInterestPoint,
-  endInterestPointDraw,
-  updateInterestPointKeyBeingDrawed
-} from '../../domain/reducers/InterestPoint'
+import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/reducers/InterestPoint'
 import { getCoordinates } from '../../utils'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import { transform } from 'ol/proj'
@@ -24,7 +20,8 @@ import { transform } from 'ol/proj'
 const SaveInterestPoint = (
   {
     healthcheckTextWarning,
-    isOpen
+    isOpen,
+    close
   }) => {
   const dispatch = useDispatch()
 
@@ -163,7 +160,7 @@ const SaveInterestPoint = (
         <OkButton onClick={saveInterestPoint}>
           OK
         </OkButton>
-        <CancelButton onClick={() => dispatch(endInterestPointDraw())}>
+        <CancelButton onClick={close}>
           Annuler
         </CancelButton>
       </Body>

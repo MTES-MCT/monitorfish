@@ -132,13 +132,20 @@ const CreateRegulation = () => {
         </ContentLine>
         <ContentLine>
           <Label>Début de validité</Label>
-          <DatePicker placeholder="  /  /  " />
+          <DatePicker
+            cleanable
+            placeholder="  / / "
+            apparance={'subtle'} />
         </ContentLine>
         <ContentLine>
           <Label>Fin de validité</Label>
-          <DatePicker placeholder="  /  /  " />
+          <DatePicker
+            preventOverflow
+            cleanable
+            apparance={'default'}
+            placeholder="  / / " />
           ou
-          <Checkbox>jusqu'à nouvel ordre</Checkbox>
+          <Checkbox>{"jusqu'à nouvel ordre"}</Checkbox>
         </ContentLine>
         <BottomLine>
           <ValidyDateLine>

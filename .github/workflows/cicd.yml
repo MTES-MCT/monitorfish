@@ -118,6 +118,7 @@ jobs:
         record: true
         wait-on: 'http://localhost:8880'
         env: PORT=8880
+        browser: firefox
 
     - name: Push docker image to registry
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')

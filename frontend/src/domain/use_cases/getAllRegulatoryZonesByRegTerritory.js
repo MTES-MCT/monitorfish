@@ -18,17 +18,21 @@ const getAllRegulatoryZonesByRegTerritory = () => async (dispatch) => {
 
   return getAllRegulatoryZonesFromAPI()
     .then(features => {
+      return worker.convertGeoJSONFeaturesToObjectByRegTerritory(features)
+    })
+    .then(response => {
       const {
+        seaFrontArray,
         zoneThemeArray,
         regulationBlocArray,
-        seaFrontArray,
         layersNamesByRegTerritory
-      } = worker.convertGeoJSONFeaturesToObjectByRegTerritory(features)
+      } = response
       dispatch(setZoneThemeArray(zoneThemeArray))
       dispatch(setRegulationBlocArray(regulationBlocArray))
       dispatch(setSeaFrontArray(seaFrontArray))
       dispatch(setLayersNamesByRegTerrory(layersNamesByRegTerritory))
-    }).catch(error => {
+    })
+    .catch(error => {
       dispatch(setError(error))
     })
 }

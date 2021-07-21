@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useSelector } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
@@ -31,6 +31,9 @@ const CreateRegulation = () => {
   }
 
   useEffect(() => {
+    if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
+      dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
+    }
     getRegulatoryZones()
   }, [])
   return (

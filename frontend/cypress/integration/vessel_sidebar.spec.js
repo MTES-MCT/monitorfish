@@ -18,8 +18,8 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-cfr"]').contains("GBR000B14430")
     cy.get('*[data-cy^="vessel-name"]').contains("CABO ORTEGAL (GB)")
+    cy.get('*[data-cy^="vessel-cfr"]').contains("GBR000B14430")
   })
 
   it('Identity Should contain the vessel identity', () => {

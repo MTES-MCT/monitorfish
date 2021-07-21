@@ -187,7 +187,7 @@ const VesselSummary = props => {
             <TableBody>
               <Field>
                 <Key>CFR</Key>
-                <Value>
+                <Value data-cy={'vessel-cfr'}>
                   {
                     getVesselOrLastPositionProperty('internalReferenceNumber')
                   }

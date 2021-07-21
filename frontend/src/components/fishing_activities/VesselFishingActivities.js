@@ -82,7 +82,7 @@ const VesselFishingActivities = () => {
 
   return <>
     { !loadingVessel
-      ? <Wrapper>
+      ? <Wrapper data-cy={'vessel-fishing'}>
         {
           nextFishingActivities
             ? <>

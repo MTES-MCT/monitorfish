@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 export const EmptyResult = styled.div`
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.textGray};
   text-align: left;
+  margin-top: 25px;
 `

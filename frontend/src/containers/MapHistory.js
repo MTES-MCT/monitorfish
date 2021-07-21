@@ -29,7 +29,7 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
   function initMapView () {
     if (map) {
       if (window.location.hash !== '') {
-        const hash = window.location.hash.replace('@', '')
+        const hash = window.location.hash.replace('@', '').replace('#', '')
         const viewParts = hash.split(',')
         if (viewParts.length === 3 && !Number.isNaN(viewParts[0]) && !Number.isNaN(viewParts[1]) && !Number.isNaN(viewParts[2])) {
           map.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])])
@@ -56,7 +56,7 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
       dispatch(setExtent(extent))
       dispatch(setView(view))
 
-      const url = `@${center[0].toFixed(2)},${center[1].toFixed(2)},${map.getView().getZoom().toFixed(2)}`
+      const url = `#@${center[0].toFixed(2)},${center[1].toFixed(2)},${map.getView().getZoom().toFixed(2)}`
       window.history.pushState(view, 'map', url)
     }
   }

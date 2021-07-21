@@ -192,7 +192,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
             <TableBody>
               <Field>
                 <Key>Engins à bord (JPE)</Key>
-                <Value>
+                <Value data-cy={'vessel-fishing-gears'}>
                   {
                     getGears()
                   }
@@ -221,11 +221,12 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
         <Zone>
           <Title hasTwoLines={false}>
             <Text hasTwoLines={false}>Résumé de la marée</Text>
-            <TextValue hasTwoLines={false}>
+            <TextValue hasTwoLines={false} data-cy={'vessel-fishing-trip-number'}>
               <PreviousTrip
                 disabled={!previousBeforeDateTime}
                 onClick={previousBeforeDateTime ? navigation.goToPreviousTrip : undefined}
                 title={'Marée précédente'}
+                data-cy={'vessel-fishing-previous-trip'}
               />
               {
                 depMessage && depMessage.tripNumber
@@ -241,9 +242,10 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
                 disabled={isLastVoyage}
                 onClick={!isLastVoyage ? navigation.goToLastTrip : undefined}
                 title={'Dernière marée'}
+                data-cy={'vessel-fishing-next-trip'}
               />
             </TextValue>
-            <SeeAll onClick={() => showERSMessages()}>Voir tous les messages</SeeAll>
+            <SeeAll onClick={() => showERSMessages()} data-cy={'vessel-fishing-see-all'}>Voir tous les messages</SeeAll>
             <Arrow onClick={() => showERSMessages()}/>
           </Title>
           {

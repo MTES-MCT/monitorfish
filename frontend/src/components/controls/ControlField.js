@@ -20,7 +20,7 @@ const ControlField = ({ field, type, isFirst }) => {
     <ControlResumeLine>
       <ResumeText isFirst={isFirst}>
         {text}
-        <StrongText>
+        <StrongText data-cy={'vessel-controls-last-control-date'}>
           {
             control
               ? <>le {getDate(control.controlDatetimeUtc)}</>
@@ -32,11 +32,11 @@ const ControlField = ({ field, type, isFirst }) => {
     {
       control
         ? <ControlResumeLine>
-          <LastControlResumeElement>Unité <StrongText
+          <LastControlResumeElement data-cy={'vessel-controls-last-control-unit'}>Unité <StrongText
             title={control.controller && control.controller.controller}>{control.controller && control.controller.controller
               ? control.controller.controller
               : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
-          <LastControlResumeElement>Infractions <StrongText>{numberOfInfractions
+          <LastControlResumeElement data-cy={'vessel-controls-last-control-infractions'}>Infractions <StrongText>{numberOfInfractions
             ? <> {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''}
               <Red/></>
             : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>

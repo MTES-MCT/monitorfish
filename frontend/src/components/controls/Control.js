@@ -27,7 +27,7 @@ const Control = props => {
 
   return control
     ? <Wrapper key={index} isLastItem={isLastItem}>
-      <Title>
+      <Title data-cy={'vessel-controls-title'}>
         {
           numberOfInfractions ? <GyroRed/> : <GyroGreen/>
         }

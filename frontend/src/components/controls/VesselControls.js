@@ -77,7 +77,7 @@ const VesselControls = () => {
     }
     {
       controlResumeAndControls && lastControlList && yearsToControls && !loadingVessel
-        ? <Body>
+        ? <Body data-cy={'vessel-controls'}>
           <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls}/>
           <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate}/>
           <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate}/>

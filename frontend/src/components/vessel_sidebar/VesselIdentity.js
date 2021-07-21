@@ -172,7 +172,7 @@ const VesselIdentity = () => {
               </Field>
               <Field>
                 <Key>Engins de pêche déclarés (PME)</Key>
-                <Value>
+                <Value data-cy={'vessel-identity-gears'}>
                   {
                     vesselGears
                       ? vesselGears.map(gear => {

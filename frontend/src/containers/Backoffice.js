@@ -7,7 +7,6 @@ import SearchRegulations from '../components/backoffice/SearchRegulations'
 import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZoneMetadata'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
-import { setError } from '../domain/reducers/Global'
 import { COLORS } from '../constants/constants'
 import { WhiteButton } from '../components/commonStyles/Buttons.style'
 import { EmptyResult } from '../components/commonStyles/Text.style'
@@ -16,7 +15,6 @@ import { RegulatoryTerritory } from '../domain/entities/regulatory'
 
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
-  const [regulatoryZoneListByRegTerritory, setRegulatoryZoneListByRegTerritory] = useState({})
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
@@ -25,22 +23,12 @@ const Backoffice = () => {
     isReadyToShowRegulatoryZones,
     regulatoryZoneMetadataPanelIsOpen,
     loadingRegulatoryZoneMetadata,
-    regulatoryZoneMetadata
+    regulatoryZoneMetadata,
+    layersNamesByRegTerritory
   } = useSelector(state => state.regulatory)
 
-  const getRegulatoryZones = () => {
-    dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
-      .then(response => {
-        const { layersNamesByRegTerritory } = response
-        setRegulatoryZoneListByRegTerritory(layersNamesByRegTerritory)
-      })
-      .catch(error => {
-        dispatch(setError(error))
-      })
-  }
-
   useEffect(() => {
-    getRegulatoryZones()
+    dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
     dispatch(getAllGearCodes())
   }, [])
 
@@ -95,14 +83,14 @@ const Backoffice = () => {
         >
           <SearchRegulations
             setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
-            regulatoryZoneListByRegTerritory={regulatoryZoneListByRegTerritory}
+            regulatoryZoneListByRegTerritory={layersNamesByRegTerritory}
           />
           <ButtonList>
             <WhiteButton>Brouillon (X)</WhiteButton>
             <WhiteButton>Tracé en attente (X)</WhiteButton>
             <WhiteButton disabled>Dernière publications (X)</WhiteButton>
           </ButtonList>
-          {regulatoryZoneListByRegTerritory
+          {layersNamesByRegTerritory && layersNamesByRegTerritory !== {}
             ? displaySearchResultList()
             : <div>En attente de chargement</div>}
         </RegulatoryZonePanel>

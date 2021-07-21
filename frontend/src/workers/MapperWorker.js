@@ -38,7 +38,7 @@ class MapperWorker {
   }
 
   convertGeoJSONFeaturesToObjectByRegTerritory (features) {
-    const reglementationBlocList = new Set()
+    const regulationBlocList = new Set()
     const zoneThemelist = new Set()
     const seaFrontList = new Set()
     const layerNamesArray = this.#getLayerNameList(features)
@@ -51,7 +51,7 @@ class MapperWorker {
         lawType = `${lawType} / ${zone[0].seafront}`
         seaFrontList.add(zone[0].seafront)
       }
-      reglementationBlocList.add(lawType)
+      regulationBlocList.add(lawType)
       if (!accumulatedObject[regTerritory]) {
         accumulatedObject[regTerritory] = {}
       }
@@ -64,7 +64,7 @@ class MapperWorker {
     return {
       layersNamesByRegTerritory,
       zoneThemeArray: [...zoneThemelist],
-      reglementationArray: [...reglementationBlocList],
+      regulationBlocArray: [...regulationBlocList],
       seaFrontArray: [...seaFrontList]
     }
   }

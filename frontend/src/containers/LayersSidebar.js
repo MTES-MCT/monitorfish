@@ -44,7 +44,7 @@ const LayersSidebar = () => {
       .filter(layer => layer.type === layersType.ADMINISTRATIVE)
     setAdministrativeZones(administrativeZones)
 
-    dispatch(getAllRegulatoryZones(dispatch))
+    dispatch(getAllRegulatoryZones())
       .then(regulatoryZones => setRegulatoryZones(regulatoryZones))
       .catch(error => {
         dispatch(setError(error))

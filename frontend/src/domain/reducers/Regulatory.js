@@ -11,7 +11,11 @@ const regulatorySlice = createSlice({
     regulatoryZoneMetadata: null,
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
-    lawTypeOpened: null
+    lawTypeOpened: null,
+    zoneThemeArray: [],
+    regulationBlocArray: [],
+    seaFrontArray: [],
+    layersNamesByRegTerritory: {}
   },
   reducers: {
     addRegulatoryZonesToSelection (state, action) {
@@ -56,6 +60,18 @@ const regulatorySlice = createSlice({
     },
     setLawTypeOpened (state, action) {
       state.lawTypeOpened = action.payload
+    },
+    setZoneThemeArray (state, action) {
+      state.zoneThemeArray = action.payload
+    },
+    setRegulationBlocArray (state, action) {
+      state.regulationBlocArray = action.payload
+    },
+    setSeaFrontArray (state, action) {
+      state.seaFrontArray = action.payload
+    },
+    setLayersNamesByRegTerrory (state, action) {
+      state.layersNamesByRegTerritory = action.payload
     }
   }
 })
@@ -68,7 +84,11 @@ export const {
   resetLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata,
   closeRegulatoryZoneMetadataPanel,
-  setLawTypeOpened
+  setLawTypeOpened,
+  setZoneThemeArray,
+  setRegulationBlocArray,
+  setSeaFrontArray,
+  setLayersNamesByRegTerrory
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

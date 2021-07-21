@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useSelector } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
-import { setError } from '../domain/reducers/Global'
 import RegulationBlocLine from '../components/backoffice/create_regulation/RegulationBlocLine'
 import RegulationZoneThemeLine from '../components/backoffice/create_regulation/RegulationZoneThemeLine'
 import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
@@ -14,9 +13,11 @@ import { formatDataForSelectPicker } from '../utils'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
-  const [reglementationBlocList, setReglementationBlocList] = useState([])
-  const [zoneThemeList, setZoneThemeList] = useState([])
-  const [seaFrontList, setSeaFrontList] = useState([])
+  const {
+    regulationBlocArray,
+    zoneThemeArray,
+    seaFrontArray
+  } = useSelector(state => state.regulatory)
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
@@ -27,19 +28,6 @@ const CreateRegulation = () => {
 
   const getRegulatoryZones = () => {
     dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
-      .then(response => {
-        const {
-          zoneThemeArray,
-          reglementationArray,
-          seaFrontArray
-        } = response
-        setSeaFrontList(formatDataForSelectPicker(seaFrontArray))
-        setZoneThemeList(formatDataForSelectPicker(zoneThemeArray))
-        setReglementationBlocList(formatDataForSelectPicker(reglementationArray))
-      })
-      .catch(error => {
-        dispatch(setError(error))
-      })
   }
 
   useEffect(() => {
@@ -59,14 +47,14 @@ const CreateRegulation = () => {
           <RegulationBlocLine
             setSelectedValue={setSelectedReglementationBloc}
             selectedValue={selectedReglementationBloc}
-            selectData={reglementationBlocList}
+            selectData={formatDataForSelectPicker(regulationBlocArray)}
             reglementationBlocName={reglementationBlocName}
             setReglementationBlocName={setReglementationBlocName}
           />
           <RegulationZoneThemeLine
             selectedReglementationTheme={selectedReglementationTheme}
             setSelectedReglementationTheme={setSelectedReglementationTheme}
-            zoneThemeList={zoneThemeList}
+            zoneThemeList={formatDataForSelectPicker(zoneThemeArray)}
           />
           <RegulationZoneNameLine
             nameZone={nameZone}
@@ -75,7 +63,7 @@ const CreateRegulation = () => {
           <RegulationSeaFrontLine
             selectedSeaFront={selectedSeaFront}
             setSelectedSeaFront={setSelectedSeaFront}
-            seaFrontList={seaFrontList}
+            seaFrontList={formatDataForSelectPicker(seaFrontArray)}
           />
           <RegulationRegionLine
             setSelectedRegionList={setSelectedRegionList}

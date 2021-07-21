@@ -4,12 +4,16 @@ import styled from 'styled-components'
 import { COLORS } from '../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
-import RegulationBlocLine from '../components/backoffice/create_regulation/RegulationBlocLine'
-import RegulationZoneThemeLine from '../components/backoffice/create_regulation/RegulationZoneThemeLine'
-import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
-import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
-import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
+import {
+  RegulationBlocLine,
+  RegulationZoneThemeLine,
+  RegulationRegionLine,
+  RegulationZoneNameLine,
+  RegulationSeaFrontLine,
+  RegulationGeometryLine
+} from '../components/backoffice/create_regulation/index'
 import { formatDataForSelectPicker } from '../utils'
+import getGeometryWithoutRegulationReference from '../domain/use_cases/getGeometryWithoutRegulationReference'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -19,18 +23,32 @@ const CreateRegulation = () => {
     seaFrontArray
   } = useSelector(state => state.regulatory)
 
+  const [geometryIdList, setGeometryIdList] = useState([])
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
   const [nameZone, setNameZone] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [reglementationBlocName, setReglementationBlocName] = useState('')
+  const [selectedGeometry, setSelectedGeometry] = useState()
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
       dispatch(getAllRegulatoryZonesByRegTerritory())
     }
+    getGeometryId()
   }, [])
+
+  const getGeometryId = () => {
+    dispatch(getGeometryWithoutRegulationReference(dispatch))
+      .then(geometryListAsObject => {
+        console.log(geometryListAsObject)
+        if (geometryListAsObject !== undefined) {
+          setGeometryIdList(formatDataForSelectPicker(Object.keys(geometryListAsObject)))
+        }
+      })
+  }
+
   return (
     <CreateRegulationWrapper>
       <Header>
@@ -66,6 +84,11 @@ const CreateRegulation = () => {
           <RegulationRegionLine
             setSelectedRegionList={setSelectedRegionList}
             selectedRegionList={selectedRegionList}
+          />
+          <RegulationGeometryLine
+            setSelectedGeometry={setSelectedGeometry}
+            geometryIdList={geometryIdList}
+            selectedGeometry={selectedGeometry}
           />
         </Section>
       </Content>

@@ -27,6 +27,18 @@ class MapperWorker {
       })
   }
 
+  /**
+   *
+   * @param {*} features
+   */
+  getGeometryWithoutRegulationRef (features) {
+    const geometryListAsObject = {}
+    features.features.forEach(feature => {
+      geometryListAsObject[feature.id.split('.')[1]] = feature.geometry
+    })
+    return geometryListAsObject
+  }
+
   convertGeoJSONFeaturesToObject (features) {
     const layerNamesArray = this.#getLayerNameList(features)
     const layersNamesToZones = layerNamesArray.reduce((accumulatedObject, zone) => {

@@ -58,7 +58,16 @@ def unnest(segments):
 def compute_current_segments(catches, segments):
 
     catches_ = catches[["cfr", "gear", "fao_area", "species", "weight"]]
-    segments_ = segments[["segment", "gear", "fao_area", "species"]]
+    segments_ = segments[
+        [
+            "segment",
+            "gear",
+            "fao_area",
+            "species",
+            "risk_factor",
+            "control_priority_level",
+        ]
+    ]
 
     # Merge catches and segments on gear and species
     current_segments_gear_species = pd.merge(
@@ -123,13 +132,27 @@ def compute_current_segments(catches, segments):
     ]
 
     # Finally, aggregate by vessel
-    current_segments = current_segments.groupby("cfr")[["segment", "weight"]].agg(
-        {"segment": "unique", "weight": "sum"}
+    current_segments = (
+        current_segments.groupby("cfr")[
+            ["segment", "weight", "risk_factor", "control_priority_level"]
+        ]
+        .agg(
+            {
+                "segment": "unique",
+                "weight": "sum",
+                "risk_factor": "max",
+                "control_priority_level": "max",
+            }
+        )
+        .rename(
+            columns={
+                "segment": "segments",
+                "weight": "total_weight_onboard",
+            }
+        )
     )
 
-    current_segments = current_segments.rename(
-        columns={"segment": "segments", "weight": "total_weight_onboard"}
-    )
+    current_segments = current_segments
     return current_segments
 
 
@@ -163,7 +186,9 @@ def merge_segments_catches(catches, current_segments):
     # Join departure, catches and segments information into a single table with 1 line
     # by vessel
     res = last_ers.join(species_onboard).join(current_segments).reset_index()
-    res = res.fillna({"total_weight_onboard": 0})
+    res = res.fillna(
+        {"total_weight_onboard": 0, "risk_factor": 1, "control_priority_level": 1}
+    )
 
     return res
 

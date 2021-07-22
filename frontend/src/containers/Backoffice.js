@@ -151,7 +151,7 @@ const Territory = styled.div`
 const TerritoryName = styled.div`
   display: flex;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
   text-align: left;
   color: ${COLORS.grayDarkerTwo};

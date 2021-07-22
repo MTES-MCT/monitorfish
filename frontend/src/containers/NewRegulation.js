@@ -133,12 +133,12 @@ const CreateRegulation = () => {
               onClick={addRegRefEnVigueur}>
               Ajouter une référence reg. en vigueur
             </ValidateButton>
-            <CancelButton
+            <CustomCancelButton
               disabled={false}
               isLast={false}
               onClick={addRegRefAVenir}>
               Ajouter une référence reg. à venir
-            </CancelButton>
+            </CustomCancelButton>
           </ButtonLine>
         </BottomLine>
       </Content>
@@ -146,9 +146,14 @@ const CreateRegulation = () => {
   )
 }
 
+const CustomCancelButton = styled(CancelButton)`
+  margin: 0px;
+`
 const BottomLine = styled.div`
   display: flex;
   flex-direction: column;
+  width: fit-content;
+  background-color: ${COLORS.grayBackground};
 `
 
 const ValidityDate = styled.span`
@@ -158,13 +163,12 @@ const ValidityDate = styled.span`
 const ButtonLine = styled.div`
   display: flex;
   flex-direction: row;
+  padding-top: 10px;
+  background-color: ${COLORS.background};
 `
 
 const ValidyDateLine = styled.div`
   padding: 10px;
-  margin-bottom: 10px;
-  width: 483px;
-  background-color: ${COLORS.grayBackground};
 `
 
 const Header = styled.div`
@@ -176,7 +180,8 @@ const CreateRegulationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  margin: 11px 27px 0px 27px;
+  padding: 11px 27px 0px 27px;
+  background-color: ${COLORS.background};
 `
 
 const LinkSpan = styled.span`

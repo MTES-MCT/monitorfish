@@ -43,6 +43,7 @@ grip = "^4.5.2"
 sphinxcontrib-fulltoc = "^1.2.0"
 Sphinx = "^4.0.3"
 sphinx-rtd-theme = "^0.5.2"
+Faker = "^8.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

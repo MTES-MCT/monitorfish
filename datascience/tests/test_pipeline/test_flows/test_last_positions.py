@@ -5,9 +5,8 @@ import pandas as pd
 import sqlalchemy
 
 from src.pipeline.flows.last_positions import (
-    extract_control_anteriority,
-    extract_current_segments,
     extract_last_positions,
+    extract_risk_factors,
     flow,
     load_last_positions,
 )
@@ -16,21 +15,15 @@ from tests.mocks import mock_extract_side_effect
 
 class TestLastPositionsFlow(unittest.TestCase):
     @patch("src.pipeline.flows.last_positions.extract")
-    def test_extract_current_segments(self, mock_extract):
+    def test_extract_risk_factors(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
-        query = extract_current_segments.run()
+        query = extract_risk_factors.run()
         self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     @patch("src.pipeline.flows.last_positions.extract")
     def test_extract_last_positions(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_last_positions.run()
-        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
-
-    @patch("src.pipeline.flows.last_positions.extract")
-    def test_extract_control_anteriority(self, mock_extract):
-        mock_extract.side_effect = mock_extract_side_effect
-        query = extract_control_anteriority.run()
         self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     @patch("src.pipeline.flows.last_positions.load", autospec=True)

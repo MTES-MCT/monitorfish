@@ -180,7 +180,7 @@ const Zone = styled.span`
   justify-content: space-between;
   align-items: center;
   user-select: none;
-  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
+  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.grayDarker};`}
 `
 
 const List = styled.div`
@@ -206,7 +206,7 @@ const Row = styled.li`
   border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;
-  border-bottom: ${props => props.isOpen ? `1px solid ${COLORS.squareBorder}` : 'none'};
+  border-bottom: ${props => props.isOpen ? `1px solid ${COLORS.grayDarker}` : 'none'};
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

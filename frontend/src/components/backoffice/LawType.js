@@ -88,7 +88,8 @@ const LawTypeName = styled.div`
   display: flex;
   font-size: 16px;
   color: ${COLORS.grayDarkerThree};
-  border-bottom: 2px solid ${COLORS.squareBorder};
+  font-weight: 700;
+  border-bottom: 2px solid ${COLORS.grayDarker};
   text-align: left;
   text-transform: uppercase;
   cursor: pointer;

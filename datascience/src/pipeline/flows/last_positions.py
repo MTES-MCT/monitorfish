@@ -5,19 +5,13 @@ import pandas as pd
 import prefect
 from prefect import Flow, task
 
+from src.pipeline.flows.risk_factor import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.spatial import estimate_current_position
 from src.pipeline.processing import (
     get_first_non_null_column_name,
     join_on_multiple_keys,
 )
-
-
-@task(checkpoint=False)
-def extract_current_segments():
-    return extract(
-        db_name="monitorfish_remote", query_filepath="monitorfish/current_segments.sql"
-    )
 
 
 @task(checkpoint=False)
@@ -30,11 +24,11 @@ def extract_last_positions():
 
 
 @task(checkpoint=False)
-def extract_control_anteriority():
+def extract_risk_factors():
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/control_anteriority.sql",
-        parse_dates=["last_control_datetime_utc"],
+        query_filepath="monitorfish/risk_factors.sql",
+        dtypes={"emission_period": str},
     )
 
 
@@ -69,9 +63,7 @@ def estimate_current_positions(last_positions):
 
 
 @task(checkpoint=False)
-def merge(last_positions, current_segments, control_anteriority):
-    last_positions = pd.merge(last_positions, current_segments, on="cfr", how="left")
-
+def merge(last_positions, risk_factors):
     vessel_identifier_labels = {
         "cfr": "INTERNAL_REFERENCE_NUMBER",
         "ircs": "IRCS",
@@ -85,12 +77,14 @@ def merge(last_positions, current_segments, control_anteriority):
 
     last_positions = join_on_multiple_keys(
         last_positions,
-        control_anteriority,
+        risk_factors,
         on=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
 
-    last_positions = last_positions.fillna({"total_weight_onboard": 0.0})
+    last_positions = last_positions.fillna(
+        {**default_risk_factors, "total_weight_onboard": 0.0}
+    )
 
     last_positions.loc[:, "trip_number"] = last_positions.trip_number.map(
         lambda x: str(int(x)), na_action="ignore"
@@ -123,9 +117,8 @@ def load_last_positions(last_positions):
 
 
 with Flow("Last positions") as flow:
-    current_segments = extract_current_segments()
     last_positions = extract_last_positions()
+    risk_factors = extract_risk_factors()
     last_positions = estimate_current_positions(last_positions)
-    control_anteriority = extract_control_anteriority()
-    last_positions = merge(last_positions, current_segments, control_anteriority)
+    last_positions = merge(last_positions, risk_factors)
     load_last_positions(last_positions)

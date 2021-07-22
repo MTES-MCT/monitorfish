@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 import { ContentLine } from '../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../commonStyles/Buttons.style'
-import { Checkbox, DatePicker } from 'rsuite'
+import { Checkbox } from 'rsuite'
+import CustomDatePicker from './create_regulation/CustomDatePicker'
 
 const RegulationText = props => {
   const {
@@ -25,14 +27,16 @@ const RegulationText = props => {
   }
   return <>
     <ContentLine>
-      <Label>`Texte réglementaire ${id + 1}`</Label>
+      <Label>{`Texte réglementaire ${isEmpty ? 1 : id + 1}`}</Label>
       <CustomInput
         placeholder='Nom'
+        width={'250px'}
         value={currentRegulationTextName}
         onChange={setCurrentRegulationTextName}
       />
       <CustomInput
         placeholder='URL'
+        width={'250px'}
         value={currentRegulationTextURL}
         onChange={setCurrentRegulationTextURL}
       />
@@ -51,27 +55,31 @@ const RegulationText = props => {
     </ContentLine>
     <ContentLine>
       <Label>Type de texte</Label>
-      <Checkbox>création de la zone</Checkbox>
-      <Checkbox>réglementation de la zone</Checkbox>
+      <CustomCheckbox>création de la zone</CustomCheckbox>
+      <CustomCheckbox>réglementation de la zone</CustomCheckbox>
     </ContentLine>
     <ContentLine>
       <Label>Début de validité</Label>
-      <DatePicker
-        cleanable
-        placeholder="  / / "
-        apparance={'subtle'} />
+      <CustomDatePicker />
     </ContentLine>
     <ContentLine>
       <Label>Fin de validité</Label>
-      <DatePicker
-        preventOverflow
-        cleanable
-        apparance={'default'}
-        placeholder="  / / " />
-      ou
-      <Checkbox>{"jusqu'à nouvel ordre"}</Checkbox>
+      <CustomDatePicker />
+      &nbsp;ou
+      <CustomCheckbox>{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
   </>
 }
+const CustomCheckbox = styled(Checkbox)` 
+  .rs-checkbox-wrapper {
+    top: 0px !important;
+  }
+`
+/*
+* TODO : add value for datepicker
+* Tenter de supprimer le padding dans les checkbox...
+* tous les éléments sont requis, les passer en rouge s'ils sont pas saisis
+* à voir pour la checkbox à top 8px je voudrai la faire passer à 0...
+*/
 
 export default RegulationText

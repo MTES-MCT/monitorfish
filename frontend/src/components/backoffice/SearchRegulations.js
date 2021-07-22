@@ -60,13 +60,13 @@ const SearchRegulations = props => {
           placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
           onChange={e => setSearchText(e.target.value)} />
         <SearchIcon />
-        </SearchBox>
-        <AddRegulationButton
-          disabled={false}
-          isLast={false}
-          onClick={() => addNewRegZone()}
-          title={'Saisir une nouvelle réglementation'}
-        />
+      </SearchBox>
+      <AddRegulationButton
+        disabled={false}
+        isLast={false}
+        onClick={() => addNewRegZone()}
+        title={'Saisir une nouvelle réglementation'}
+      />
     </SearchContainer>
   )
 }
@@ -83,7 +83,7 @@ const SearchBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px ${COLORS.gray} solid;
+  border: 1px ${COLORS.grayDarker} solid;
   border-radius: 0;
   background-color: white;
   margin-right: 10px;
@@ -105,6 +105,7 @@ const SearchIcon = styled(SearchIconSVG)`
   width: 40px;
   height: 40px;
   float: right;
+  color: ${COLORS.grayDarker}
 `
 
 export default SearchRegulations

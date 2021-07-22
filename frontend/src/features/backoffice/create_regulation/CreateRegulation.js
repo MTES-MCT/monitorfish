@@ -10,17 +10,14 @@ import {
   RegulationRegionLine,
   RegulationZoneNameLine,
   RegulationSeaFrontLine,
-  RegulationGeometryLine
+  RegulationGeometryLine,
+  RegulationText
 } from './index'
 import { COLORS } from '../../../constants/constants'
 import { formatDataForSelectPicker } from '../../../utils'
 import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
-import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label, CustomInput } from '../../commonStyles/Input.style'
-import { ValidateButton, CancelButton } from '../..//commonStyles/Buttons.style'
-
-import { Checkbox, DatePicker } from 'rsuite'
+import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -41,8 +38,17 @@ const CreateRegulation = () => {
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
-  const [regulationText, setRegulatonText] = useState('')
-  const [regulationTextURL, setRegulationTextURL] = useState('')
+  /*
+  * List d'objests [
+  *   {
+  *     name:
+  *     url:
+  *     dateIn:
+  *     dateOut:
+  *   }
+  * ]
+  */
+  const [regulationTextList, setRegulationTextList] = useState('')
 
   useEffect(() => {
     if (regulatoryLawTypes && regulatoryTopics && seaFronts) {
@@ -66,20 +72,22 @@ const CreateRegulation = () => {
       })
   }
 
-  const addNewRegulationText = () => {
-    console.log('que faire quand on valide ?')
-  }
-
-  const cancelAddNewRegulationText = () => {
-    console.log('que faire quand on annule ?')
-  }
-
   const addRegRefEnVigueur = () => {
     console.log('ajout en vigueur')
   }
 
   const addRegRefAVenir = () => {
     console.log('addRegRefAVenir')
+  }
+
+  const updateRegulationText = (id, regulationText) => {
+    const newRegulationTextList = Object.slice({}, regulationTextList)
+    if (!id) {
+      newRegulationTextList.append(regulationText)
+    } else {
+      newRegulationTextList[id] = regulationText
+    }
+    setRegulationTextList(newRegulationTextList)
   }
 
   return (
@@ -131,56 +139,23 @@ const CreateRegulation = () => {
       <Content>
         <Section>
           <SectionTitle>
-            référenceS réglementaireS en vigueur
+            références réglementaires en vigueur
           </SectionTitle>
         </Section>
-        <ContentLine>
-          <Label>Texte réglementaire 1</Label>
-          <CustomInput
-            placeholder='Nom'
-            value={regulationText}
-            onChange={setRegulatonText}
-          />
-          <CustomInput
-            placeholder='URL'
-            value={regulationTextURL}
-            onChange={setRegulationTextURL}
-          />
-          <ValidateButton
-            disabled={false}
-            isLast={false}
-            onClick={addNewRegulationText}>
-            Enregistrer
-          </ValidateButton>
-          <CancelButton
-            disabled={false}
-            isLast={false}
-            onClick={cancelAddNewRegulationText}>
-            Annuler
-          </CancelButton>
-        </ContentLine>
-        <ContentLine>
-          <Label>Type de texte</Label>
-          <Checkbox>création de la zone</Checkbox>
-          <Checkbox>réglementation de la zone</Checkbox>
-        </ContentLine>
-        <ContentLine>
-          <Label>Début de validité</Label>
-          <DatePicker
-            cleanable
-            placeholder="  / / "
-            apparance={'subtle'} />
-        </ContentLine>
-        <ContentLine>
-          <Label>Fin de validité</Label>
-          <DatePicker
-            preventOverflow
-            cleanable
-            apparance={'default'}
-            placeholder="  / / " />
-          ou
-          <Checkbox>{"jusqu'à nouvel ordre"}</Checkbox>
-        </ContentLine>
+        {
+          regulationTextList && regulationTextList.length > 0
+            ? regulationTextList.map((regulationText, id) => {
+              return <RegulationText
+                  key={id}
+                  isEmpty={false}
+                  regulationText={regulationText}
+                />
+            })
+            : <RegulationText
+                isEmpty={true}
+                updateRegulationText={updateRegulationText}
+              />
+        }
         <BottomLine>
           <ValidyDateLine>
             <ValidityDate>{'Valide du 01/03/2021 au 31/06/2021.'}</ValidityDate>

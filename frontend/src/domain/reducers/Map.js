@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
-import { vesselLabel } from '../entities/vesselLabel'
+import { vesselLabel } from '../entities/vesselLabelLine'
 import { baseLayers } from '../entities/layers'
 import { CoordinatesFormat } from '../entities/map'
 
@@ -40,7 +40,7 @@ const mapSlice = createSlice({
       center: null
     }, savedMapViewLocalStorageKey),
     extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
-    showingVesselsEstimatedPositions: getLocalStorageState(false, estimatedPositionsLocalStorageKey),
+    showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
     coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey)
   },
   reducers: {

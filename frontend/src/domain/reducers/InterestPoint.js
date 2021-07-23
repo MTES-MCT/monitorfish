@@ -12,6 +12,7 @@ const interestPointSlice = createSlice({
   name: 'interestPoint',
   initialState: {
     isDrawing: false,
+    isEditing: false,
     /** @type {InterestPoint | null} interestPointBeingDrawed */
     interestPointBeingDrawed: null,
     /** @type {InterestPoint[]} interestPoints */
@@ -26,6 +27,7 @@ const interestPointSlice = createSlice({
      */
     drawInterestPoint (state) {
       state.isDrawing = true
+      state.isEditing = false
     },
     /**
      * End drawing
@@ -35,19 +37,21 @@ const interestPointSlice = createSlice({
      */
     endInterestPointDraw (state) {
       state.isDrawing = false
+      state.isEditing = false
     },
     /**
      * Add a new interest point
      * @function addInterestPoint
      * @memberOf InterestPointReducer
      * @param {Object=} state
-     * @param {{
-     * payload: InterestPoint
-     * }} action - The interest point to add
      */
-    addInterestPoint(state, action) {
-      state.interestPoints = state.interestPoints.concat(action.payload)
+    addInterestPoint(state) {
+      if (!state.isEditing) {
+        state.interestPoints = state.interestPoints.concat(state.interestPointBeingDrawed)
+      }
       state.isDrawing = false
+      state.isEditing = false
+      state.interestPointBeingDrawed = null
       window.localStorage.setItem(interestPointsLocalStorageKey, JSON.stringify(state.interestPoints))
     },
     /**
@@ -62,6 +66,19 @@ const interestPointSlice = createSlice({
     removeInterestPoint(state, action) {
       state.interestPoints = state.interestPoints.filter(interestPoint => interestPoint.uuid !== action.payload)
       window.localStorage.setItem(interestPointsLocalStorageKey, JSON.stringify(state.interestPoints))
+    },
+    /**
+     * Edit an existing interest point
+     * @function editInterestPoint
+     * @memberOf InterestPointReducer
+     * @param {Object=} state
+     * @param {{
+     * payload: string
+     * }} action - The UUID of the interest point
+     */
+    editInterestPoint(state, action) {
+      state.interestPointBeingDrawed = state.interestPoints.find(interestPoint => interestPoint.uuid === action.payload)
+      state.isEditing = true
     },
     /**
      * Update the interest point being drawed
@@ -91,6 +108,16 @@ const interestPointSlice = createSlice({
       const nextInterestPointBeingDrawed = {...state.interestPointBeingDrawed}
       nextInterestPointBeingDrawed[action.payload.key] = action.payload.value
       state.interestPointBeingDrawed = nextInterestPointBeingDrawed
+
+      if (state.isEditing) {
+        state.interestPoints = state.interestPoints.map(interestPoint => {
+          if (interestPoint.uuid === state.interestPointBeingDrawed.uuid) {
+            interestPoint[action.payload.key] = action.payload.value
+          }
+
+          return interestPoint
+        })
+      }
     }
   }
 })
@@ -100,6 +127,7 @@ export const {
   endInterestPointDraw,
   addInterestPoint,
   removeInterestPoint,
+  editInterestPoint,
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
 } = interestPointSlice.actions

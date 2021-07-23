@@ -13,6 +13,7 @@ const InterestPoint = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
+  const { isEditing } = useSelector(state => state.interestPoint)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
@@ -29,6 +30,16 @@ const InterestPoint = () => {
       dispatch(endInterestPointDraw())
     }
   }, [interestPointIsOpen])
+
+  useEffect(() => {
+    if (isEditing) {
+      dispatch(unselectVessel())
+      firstUpdate.current = false
+      document.addEventListener('keydown', escapeFromKeyboard, false)
+    } else {
+      dispatch(endInterestPointDraw())
+    }
+  }, [isEditing])
 
   const escapeFromKeyboard = event => {
     const escapeKeyCode = 27
@@ -56,7 +67,7 @@ const InterestPoint = () => {
       <SaveInterestPoint
         healthcheckTextWarning={healthcheckTextWarning}
         firstUpdate={firstUpdate.current}
-        isOpen={interestPointIsOpen}
+        isOpen={interestPointIsOpen || isEditing}
         close={() => setInterestPointIsOpen(false)}/>
     </Wrapper>
   )

@@ -2,22 +2,41 @@ import React, { createRef, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import Hammer from 'hammerjs'
 
 import { ReactComponent as DeleteSVG } from '../icons/Suppression.svg'
+import { ReactComponent as EditSVG } from '../icons/Bouton_edition.svg'
 import { getCoordinates } from '../../utils'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { useMoveOverlayWhenDragging } from '../../hooks/useMoveOverlayWhenDragging'
+import { useMoveOverlayWhenZooming } from '../../hooks/useMoveOverlayWhenZooming'
+import { useSelector } from 'react-redux'
 
 const X = 0
 const Y = 1
 const initialOffsetValue = [-90, 10]
+const MIN_ZOOM = 7
 
-const InterestPointOverlay = ({ map, coordinates, observations, offset, name, featureId, moveVesselLabelLine, zoomHasChanged }) => {
+const InterestPointOverlay = props => {
+  const {
+    map,
+    coordinates,
+    uuid,
+    observations,
+    name,
+    moveLine,
+    zoomHasChanged,
+    deleteInterestPoint,
+    modifyInterestPoint
+  } = props
+
+  const { coordinatesFormat } = useSelector(state => state.map)
+
   const ref = createRef()
-
   const currentOffset = useRef(initialOffsetValue)
   const currentCoordinates = useRef([])
   const isThrottled = useRef(false)
+  const [showed, setShowed] = useState(false)
+  const [hiddenByZoom, setHiddenByZoom] = useState(false)
   const [overlay] = useState(new Overlay({
     element: ref.current,
     position: coordinates,
@@ -26,12 +45,8 @@ const InterestPointOverlay = ({ map, coordinates, observations, offset, name, fe
     positioning: 'left-center'
   }))
 
-  useEffect(() => {
-    if (overlay && offset) {
-      currentOffset.current = offset
-      overlay.setOffset(offset)
-    }
-  }, [offset, overlay])
+  useMoveOverlayWhenDragging(ref, overlay, map, currentOffset, moveInterestPointWithThrottle, showed)
+  useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveInterestPointWithThrottle)
 
   useEffect(() => {
     if (map) {
@@ -39,19 +54,7 @@ const InterestPointOverlay = ({ map, coordinates, observations, offset, name, fe
       overlay.setElement(ref.current)
 
       map.addOverlay(overlay)
-
-      const hammer = new Hammer(overlay.getElement())
-      hammer.on('pan', ({ deltaX, deltaY }) => {
-        overlay.setOffset([currentOffset.current[X] + deltaX, currentOffset.current[Y] + deltaY])
-      })
-
-      hammer.on('panend', ({ deltaX, deltaY }) => {
-        currentOffset.current = [currentOffset.current[X] + deltaX, currentOffset.current[Y] + deltaY]
-      })
-
-      overlay.on('change:offset', ({ target }) => {
-        moveInterestPointWithThrottle(target, 50)
-      })
+      setShowed(true)
 
       return () => {
         map.removeOverlay(overlay)
@@ -60,8 +63,10 @@ const InterestPointOverlay = ({ map, coordinates, observations, offset, name, fe
   }, [overlay, coordinates, map])
 
   useEffect(() => {
-    if (currentOffset.current !== initialOffsetValue) {
-      moveInterestPointWithThrottle(overlay, 100)
+    if (zoomHasChanged < MIN_ZOOM) {
+      setHiddenByZoom(true)
+    } else {
+      setHiddenByZoom(false)
     }
   }, [zoomHasChanged])
 
@@ -75,13 +80,13 @@ const InterestPointOverlay = ({ map, coordinates, observations, offset, name, fe
       const offset = target.getOffset()
       const pixel = map.getPixelFromCoordinate(coordinates)
 
-      const { width, height } = target.getElement().getBoundingClientRect()
+      const { width } = target.getElement().getBoundingClientRect()
       const nextXPixelCenter = pixel[X] + offset[X] + width / 2
-      const nextYPixelCenter = pixel[Y] + offset[Y] + height / 2
+      const nextYPixelCenter = pixel[Y] + offset[Y]
 
       const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
       currentCoordinates.current = nextCoordinates
-      // moveVesselLabelLine(featureId, coordinates, nextCoordinates, offset)
+      moveLine(uuid, coordinates, nextCoordinates, offset)
 
       isThrottled.current = false
     }, delay)
@@ -90,29 +95,33 @@ const InterestPointOverlay = ({ map, coordinates, observations, offset, name, fe
   return (
     <WrapperToBeKeptForDOMManagement>
       <div ref={ref}>
-        <InterestPointOverlayElement>
-          <Header>
-            <Name>
-              {
-                name || 'Aucun Libellé'
-              }
-            </Name>
-            <Delete></Delete>
-          </Header>
-          <Body>
-            {
-              observations || 'Aucune observation'
-            }
-          </Body>
-          <Footer>
-            {
-              coordinates && coordinates.length
-                ? getCoordinates(coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS).join(' ')
-                : null
-            }
-          </Footer>
-
-        </InterestPointOverlayElement>
+        {
+          showed && !hiddenByZoom
+            ? <InterestPointOverlayElement>
+              <Header>
+                <Name>
+                  {
+                    name || 'Aucun Libellé'
+                  }
+                </Name>
+                <Edit onClick={() => modifyInterestPoint(uuid)}/>
+                <Delete onClick={() => deleteInterestPoint(uuid)}/>
+              </Header>
+              <Body>
+                {
+                  observations || 'Aucune observation'
+                }
+              </Body>
+              <Footer>
+                {
+                  coordinates && coordinates.length
+                    ? getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat).join(' ')
+                    : null
+                }
+              </Footer>
+            </InterestPointOverlayElement>
+            : null
+        }
       </div>
     </WrapperToBeKeptForDOMManagement>
   )
@@ -126,7 +135,7 @@ const Body = styled.div`
 `
 
 const Footer = styled.div`
-  padding: 10px 3px 10px 3px;
+  padding: 3px;
   font-size: 12px;
   text-align: center;
 `
@@ -140,11 +149,21 @@ const Header = styled.div`
 
 const Delete = styled(DeleteSVG)`
   height: 30px;
-  width: 14px;
+  width: 15px;
   border-left: 1px solid ${COLORS.grayDarker};
   padding-left: 7px;
   margin-left: auto;
-  margin-right: 9px;
+  margin-right: 8px;
+  cursor: pointer;
+`
+
+const Edit = styled(EditSVG)`
+  height: 30px;
+  width: 15px;
+  border-left: 1px solid ${COLORS.grayDarker};
+  padding-left: 7px;
+  margin-left: auto;
+  margin-right: 8px;
   cursor: pointer;
 `
 
@@ -165,10 +184,10 @@ const Name = styled.span`
   display: inline-block;
   margin-left: 2px;
   padding: 6px 10px;
-  max-width: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1 1 0;
 `
 
 export default InterestPointOverlay

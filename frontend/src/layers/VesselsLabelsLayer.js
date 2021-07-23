@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import VesselLabelOverlay from '../components/overlays/VesselLabelOverlay'
 import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
-import { VesselLabelLine } from '../domain/entities/vesselLabel'
+import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
 import { labelLineStyle } from './styles/vesselLabelLine.style'
 
@@ -204,7 +204,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           map={map}
           key={feature.ol_uid}
           featureId={featureId}
-          moveVesselLabelLine={moveVesselLabelLine}
+          moveLine={moveVesselLabelLine}
           text={label}
           flagState={feature.getProperties().flagState}
           offset={offset}

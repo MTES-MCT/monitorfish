@@ -9,25 +9,46 @@ import { COLORS } from '../../constants/constants'
 import Tag from './create_regulation/Tag'
 
 const RegulationText = props => {
-  const {
-    id,
-    regulationText,
-    updateRegulationText
-  } = props
+  const { id, regulationText, updateRegulationText } = props
   const [currentRegulationTextName, setCurrentRegulationTextName] = useState(regulationText ? regulationText.name : '')
   const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState(regulationText ? regulationText.URL : '')
+  const [currentStartDate, setCurrentStartDate] = useState(regulationText ? regulationText.startDate : undefined)
+  const [currentEndDate, setCurrentEndDate] = useState(regulationText && regulationText.endDate ? regulationText.endDate : 'inifinite')
   const [isEditing, setIsEditing] = useState(false)
+
+  const [nameIsRequired, setNameIsRequired] = useState(false)
+  const [URLIsrequired, setURLIsRequired] = useState(false)
+  const [startDateIsRequired, setStartDateIsRequired] = useState(false)
+  const [endDateIsRequired, setEndDateIsRequired] = useState(false)
+
   const updateOrAddRegulationText = () => {
+    checkRequiredValueOnSubmit()
+    if (nameIsRequired || URLIsrequired || startDateIsRequired || endDateIsRequired) {
+      return
+    }
     const updatedRegulationText = {
       name: currentRegulationTextName,
-      URL: currentRegulationTextURL
+      URL: currentRegulationTextURL,
+      startDate: currentStartDate,
+      endDate: currentEndDate
     }
+    console.log('updatedRegulationText')
+    console.log(updatedRegulationText)
     updateRegulationText(regulationText ? id : undefined, updatedRegulationText)
+  }
+
+  const checkRequiredValueOnSubmit = () => {
+    setNameIsRequired(!currentRegulationTextName || currentRegulationTextName === '')
+    setURLIsRequired(!currentRegulationTextURL || currentRegulationTextURL === '')
+    setStartDateIsRequired(!currentStartDate)
+    setEndDateIsRequired(!currentEndDate)
   }
   const cancelAddNewRegulationText = () => {
     setIsEditing(false)
     setCurrentRegulationTextName(regulationText ? regulationText.name : '')
     setCurrentRegulationTextURL(regulationText ? regulationText.URL : '')
+    setCurrentStartDate(regulationText.startDate)
+    setCurrentEndDate(regulationText && regulationText.endDate ? regulationText.endDate : 'inifinite')
   }
 
   const onNameValueChange = (value) => {
@@ -48,13 +69,16 @@ const RegulationText = props => {
     <ContentLine>
       <Label>{`Texte réglementaire ${regulationText ? id + 1 : 1}`}</Label>
       {isEditing || regulationText === undefined || regulationText === {}
-        ? <><CustomInput
-          placeholder='Nom'
-          width={'250px'}
-          value={currentRegulationTextName}
-          onChange={value => onNameValueChange(value)}
+        ? <>
+          <CustomInput
+            isRed={nameIsRequired}
+            placeholder='Nom'
+            width={'250px'}
+            value={currentRegulationTextName}
+            onChange={value => onNameValueChange(value)}
           />
           <CustomInput
+            isRed={nameIsRequired}
             placeholder='URL'
             width={'250px'}
             value={currentRegulationTextURL}
@@ -87,16 +111,31 @@ const RegulationText = props => {
     </ContentLine>
     <ContentLine>
       <Label>Début de validité</Label>
-      <CustomDatePicker />
+      <CustomDatePicker
+        isRequired={startDateIsRequired}
+        value={currentStartDate}
+        onChange={setCurrentStartDate}
+        onOk={setCurrentStartDate}
+      />
     </ContentLine>
     <ContentLine>
       <Label>Fin de validité</Label>
-      <CustomDatePicker />
+      <CustomDatePicker
+        isRequired={endDateIsRequired}
+        value={!currentEndDate || currentEndDate === 'infinite' ? undefined : currentEndDate}
+        onChange={setCurrentEndDate}
+        onOk={setCurrentEndDate}
+      />
       <Or>&nbsp;ou</Or>
-      <CustomCheckbox>{"jusqu'à nouvel ordre"}</CustomCheckbox>
+      <CustomCheckbox
+        isRequired={endDateIsRequired}
+        checked={currentEndDate === 'infinite'}
+        onChange={_ => setCurrentEndDate('infinite')}
+      >{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
   </>
 }
+
 const CustomCheckbox = styled(Checkbox)`
   padding-right: 15px;
   font-size: 13px;
@@ -105,21 +144,14 @@ const CustomCheckbox = styled(Checkbox)`
     top: 0px !important;
     left: 0px !important;
     &:before {
-      border: 2px solid ${COLORS.grayDarker};
+      border: 2px solid ${props => props.isRequired ? COLORS.grayDarker : COLORS.red};
     }
   }
 `
-
 const Or = styled.span`
   padding: 0 10px;
   color: ${COLORS.textGray};
   font-size: 13px;
 `
-/*
-* TODO : add value for datepicker
-* Tenter de supprimer le padding dans les checkbox...
-* tous les éléments sont requis, les passer en rouge s'ils sont pas saisis
-* à voir pour la checkbox à top 8px je voudrai la faire passer à 0...
-*/
 
 export default RegulationText

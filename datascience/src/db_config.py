@@ -38,6 +38,14 @@ db_env = {
         "usr": "MONITORFISH_LOCAL_USER",
         "pwd": "MONITORFISH_LOCAL_PWD",
     },
+    "cacem_local": {
+        "client": "CACEM_LOCAL_CLIENT",
+        "host": "CACEM_LOCAL_HOST",
+        "port": "CACEM_LOCAL_PORT",
+        "sid": "CACEM_LOCAL_NAME",
+        "usr": "CACEM_LOCAL_USER",
+        "pwd": "CACEM_LOCAL_PWD",
+    },
 }
 
 
@@ -76,7 +84,7 @@ def create_engine(db: str, **kwargs) -> sa.engine.Engine:
 
     Args:
         db (str): Database name. Possible values :
-            'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local'
+            'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local', 'cacem_local'
 
     Returns:
         sa.engine.Engine: sqlalchemy engine for selected database.

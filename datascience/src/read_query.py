@@ -22,6 +22,7 @@ def read_saved_query(
     - 'fmc': FMC database
     - 'monitorfish_remote': Monitorfish database
     - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
@@ -58,6 +59,7 @@ def read_query(
     - 'fmc': FMC database
     - 'monitorfish_remote': Monitorfish database
     - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
@@ -80,6 +82,7 @@ def read_table(db: str, schema: str, table_name: str):
     - 'fmc': FMC database
     - 'monitorfish_remote': Monitorfish database
     - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Args:
         db (str): Database name. Possible values :

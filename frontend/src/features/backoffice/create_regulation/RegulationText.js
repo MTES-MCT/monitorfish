@@ -5,6 +5,7 @@ import { CustomInput, Label } from '../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../commonStyles/Buttons.style'
 import { Checkbox } from 'rsuite'
 import CustomDatePicker from './create_regulation/CustomDatePicker'
+import { COLORS } from '../../constants/constants'
 
 const RegulationText = props => {
   const {
@@ -65,15 +66,28 @@ const RegulationText = props => {
     <ContentLine>
       <Label>Fin de validité</Label>
       <CustomDatePicker />
-      &nbsp;ou
+      <Or>&nbsp;ou</Or>
       <CustomCheckbox>{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
   </>
 }
-const CustomCheckbox = styled(Checkbox)` 
+const CustomCheckbox = styled(Checkbox)`
+  padding-right: 15px;
+  font-size: 13px;
+  color: ${COLORS.grayDarkerThree};
   .rs-checkbox-wrapper {
     top: 0px !important;
+    left: 0px !important;
+    &:before {
+      border: 2px solid ${COLORS.grayDarker};
+    }
   }
+`
+
+const Or = styled.span`
+  padding: 0 10px;
+  color: ${COLORS.textGray};
+  font-size: 13px;
 `
 /*
 * TODO : add value for datepicker

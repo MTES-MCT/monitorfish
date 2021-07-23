@@ -55,24 +55,24 @@ function getDDCoordinates (transformedCoordinates) {
   const negative = Math.sign(transformedCoordinates[0])
   const degreeSplit = transformedCoordinates[0].toString().split('.')
   if (degreeSplit.length) {
-    let degree = degreeSplit[0].trim().replace(/-/g, '')
+    let longitude = degreeSplit[0].trim().replace(/-/g, '')
     const decimals = degreeSplit[1] ? degreeSplit[1].substring(0, 4) : '0000'
 
-    switch (degree.length) {
+    switch (longitude.length) {
       case 1:
-        degree = `${negative ? '-' : ''}00${degree}.${decimals}`
+        longitude = `${negative ? '-' : ''}00${longitude}.${decimals}`
         break
       case 2:
-        degree = `${negative ? '-' : ''}0${degree}.${decimals}`
+        longitude = `${negative ? '-' : ''}0${longitude}.${decimals}`
         break
       default:
-        degree = `${negative ? '-' : ''}${degree}.${decimals}`
+        longitude = `${negative ? '-' : ''}${longitude}.${decimals}`
         break
     }
 
     return [
       `${transformedCoordinates[1] ? transformedCoordinates[1].toFixed(4) : null}°`,
-      `${degree}°`
+      `${longitude}°`
     ]
   }
 }

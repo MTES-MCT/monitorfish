@@ -1,5 +1,5 @@
 import CoordinateInput from 'react-coordinate-input'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
@@ -11,9 +11,16 @@ const DMSCoordinatesInput = props => {
     updateCoordinates
   } = props
 
+  const [update, setUpdate] = useState([])
+
+  useEffect(() => {
+    updateCoordinates(update, coordinates)
+  }, [update, coordinates, updateCoordinates])
+
   return <Body>
     <CoordinateInput
-      onChange={(_, { dd }) => updateCoordinates(dd, coordinates)}
+      onChange={(_, { dd }) => setUpdate(dd)}
+      ddPrecision={4}
       value={getCoordinatesFromFormat(coordinates, coordinatesFormat)}
     />
     <CoordinatesType>(DMS)</CoordinatesType>
@@ -36,6 +43,7 @@ const Body = styled.div`
     border: none;
     height: 27px;
     padding-left: 8px;
+    width: 200px;
   }
 `
 

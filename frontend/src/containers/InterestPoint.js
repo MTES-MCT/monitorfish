@@ -7,7 +7,11 @@ import unselectVessel from '../domain/use_cases/unselectVessel'
 import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 import { ReactComponent as InterestPointSVG } from '../components/icons/Point_interet.svg'
 import SaveInterestPoint from '../components/interest_points/SaveInterestPoint'
-import { drawInterestPoint, endInterestPointDraw } from '../domain/reducers/InterestPoint'
+import {
+  deleteInterestPointBeingDrawed,
+  drawInterestPoint,
+  endInterestPointDraw
+} from '../domain/reducers/InterestPoint'
 
 const InterestPoint = () => {
   const dispatch = useDispatch()
@@ -25,19 +29,22 @@ const InterestPoint = () => {
       dispatch(unselectVessel())
       firstUpdate.current = false
       document.addEventListener('keydown', escapeFromKeyboard, false)
-      dispatch(drawInterestPoint())
+      if (!isEditing) {
+        dispatch(drawInterestPoint())
+      }
     } else {
       dispatch(endInterestPointDraw())
+      if (!isEditing) {
+        dispatch(deleteInterestPointBeingDrawed())
+      }
     }
   }, [interestPointIsOpen])
 
   useEffect(() => {
     if (isEditing) {
-      dispatch(unselectVessel())
-      firstUpdate.current = false
-      document.addEventListener('keydown', escapeFromKeyboard, false)
+      setInterestPointIsOpen(true)
     } else {
-      dispatch(endInterestPointDraw())
+      setInterestPointIsOpen(false)
     }
   }, [isEditing])
 
@@ -67,7 +74,7 @@ const InterestPoint = () => {
       <SaveInterestPoint
         healthcheckTextWarning={healthcheckTextWarning}
         firstUpdate={firstUpdate.current}
-        isOpen={interestPointIsOpen || isEditing}
+        isOpen={interestPointIsOpen}
         close={() => setInterestPointIsOpen(false)}/>
     </Wrapper>
   )

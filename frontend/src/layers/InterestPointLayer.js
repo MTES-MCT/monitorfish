@@ -10,9 +10,11 @@ import { measurementStyle } from './styles/measurement.style'
 import { v4 as uuidv4 } from 'uuid'
 import InterestPointOverlay from '../components/overlays/InterestPointOverlay'
 import {
+  deleteInterestPointBeingDrawed,
   editInterestPoint,
   endInterestPointDraw,
   removeInterestPoint,
+  resetInterestPointFeatureDeletion,
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
 } from '../domain/reducers/InterestPoint'
@@ -22,6 +24,8 @@ import { getInterestPointStyle } from './styles/interestPoint.style'
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from '../domain/entities/interestPointLine'
+import { usePrevious } from '../hooks/usePrevious'
+import { getLength } from 'ol/sphere'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -39,7 +43,8 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     /** @type {InterestPoint | null} interestPointBeingDrawed */
     interestPointBeingDrawed,
     /** @type {InterestPoint[]} interestPoints */
-    interestPoints
+    interestPoints,
+    triggerInterestPointFeatureDeletion
   } = useSelector(state => state.interestPoint)
 
   const [drawObject, setDrawObject] = useState(null)
@@ -53,6 +58,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   }))
   const previousMapZoom = useRef('')
   const [interestPointToCoordinates, setInterestPointToCoordinates] = useState(new Map())
+  const previousInterestPointBeingDrawed = usePrevious(interestPointBeingDrawed)
 
   useEffect(() => {
     const currentZoom = map.getView().getZoom().toFixed(2)
@@ -70,20 +76,49 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
   }, [mapMovingAndZoomEvent])
 
-  function coordinatesOrTypeAreModified (drawingFeatureToUpdate) {
+  useEffect(() => {
+    if (triggerInterestPointFeatureDeletion) {
+      deleteInterestPoint(triggerInterestPointFeatureDeletion)
+      resetInterestPointFeatureDeletion()
+    }
+  }, [triggerInterestPointFeatureDeletion])
+
+  function coordinatesOrTypeAreModified (drawingFeatureToUpdate, interestPointBeingDrawed) {
     return (
-      drawingFeatureToUpdate.getGeometry().getCoordinates()[0] !== interestPointBeingDrawed.coordinates[0] ||
-      drawingFeatureToUpdate.getGeometry().getCoordinates()[1] !== interestPointBeingDrawed.coordinates[1]
-    ) ||
-      drawingFeatureToUpdate.getProperties().type !== interestPointBeingDrawed.type
+      !isNaN(drawingFeatureToUpdate.getGeometry().getCoordinates()[0]) &&
+      !isNaN(drawingFeatureToUpdate.getGeometry().getCoordinates()[1]) &&
+      !isNaN(interestPointBeingDrawed.coordinates[0]) &&
+      !isNaN(interestPointBeingDrawed.coordinates[1])
+    ) &&
+      (
+        drawingFeatureToUpdate.getGeometry().getCoordinates()[0] !== interestPointBeingDrawed.coordinates[0] ||
+        drawingFeatureToUpdate.getGeometry().getCoordinates()[1] !== interestPointBeingDrawed.coordinates[1] ||
+        drawingFeatureToUpdate.getProperties().type !== interestPointBeingDrawed.type
+      )
+  }
+
+  function coordinatesAreModified (feature, previousFeature) {
+    return (
+      feature &&
+      previousFeature &&
+      feature.coordinates &&
+      previousFeature.coordinates &&
+      !isNaN(feature.coordinates[0]) &&
+      !isNaN(feature.coordinates[1]) &&
+      !isNaN(previousFeature.coordinates[0]) &&
+      !isNaN(previousFeature.coordinates[1])
+    ) &&
+      (
+        feature.coordinates[0] !== previousFeature.coordinates[0] ||
+        feature.coordinates[1] !== previousFeature.coordinates[1]
+      )
   }
 
   useEffect(() => {
     if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates) {
       const drawingFeatureToUpdate = vectorSource.getFeatureById(interestPointBeingDrawed.uuid)
 
-      console.log(drawingFeatureToUpdate)
-      if (drawingFeatureToUpdate && coordinatesOrTypeAreModified(drawingFeatureToUpdate)) {
+      if (drawingFeatureToUpdate && coordinatesOrTypeAreModified(drawingFeatureToUpdate, interestPointBeingDrawed)) {
         const { feature, ...interestPointWithoutFeature } = interestPointBeingDrawed
         drawingFeatureToUpdate.getGeometry().setCoordinates(interestPointWithoutFeature.coordinates)
         drawingFeatureToUpdate.setProperties(interestPointWithoutFeature)
@@ -99,13 +134,35 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
   }, [interestPointBeingDrawed])
 
+  useEffect(() => {
+    if (interestPointBeingDrawed && previousInterestPointBeingDrawed && coordinatesAreModified(interestPointBeingDrawed, previousInterestPointBeingDrawed)) {
+      const line = new LineString([interestPointBeingDrawed.coordinates, previousInterestPointBeingDrawed.coordinates])
+      const distance = getLength(line, { projection: OPENLAYERS_PROJECTION })
+
+      if (distance > 10) {
+        const featureId = InterestPointLine.getFeatureId(interestPointBeingDrawed.uuid)
+        if (interestPointToCoordinates.has(featureId)) {
+          interestPointToCoordinates.delete(featureId)
+          const feature = vectorSource.getFeatureById(featureId)
+          if (feature) {
+            feature.setGeometry(new LineString([interestPointBeingDrawed.coordinates, interestPointBeingDrawed.coordinates]))
+          }
+        }
+      }
+    }
+  }, [interestPointBeingDrawed])
+
   function moveInterestPointLine (uuid, coordinates, nextCoordinates, offset) {
     const featureId = InterestPointLine.getFeatureId(uuid)
 
     if (interestPointToCoordinates.has(featureId)) {
       const existingLabelLineFeature = vectorSource.getFeatureById(featureId)
+      const interestPointFeature = vectorSource.getFeatureById(uuid)
+
       if (existingLabelLineFeature) {
-        existingLabelLineFeature.setGeometry(new LineString([coordinates, nextCoordinates]))
+        if (interestPointFeature) {
+          existingLabelLineFeature.setGeometry(new LineString([interestPointFeature.getGeometry().getCoordinates(), nextCoordinates]))
+        }
       }
     } else {
       const interestPointLineFeature = new InterestPointLine(
@@ -153,15 +210,19 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   function drawExistingFeaturesOnMap () {
     if (interestPoints && map) {
       const features = interestPoints.map(interestPoint => {
-        const nextFeature = new GeoJSON({
-          featureProjection: OPENLAYERS_PROJECTION
-        }).readFeature(interestPoint.feature)
+        if (interestPoint.feature) {
+          const nextFeature = new GeoJSON({
+            featureProjection: OPENLAYERS_PROJECTION
+          }).readFeature(interestPoint.feature)
 
-        const { feature, ...interestPointWithoutFeature } = interestPoint
-        nextFeature.setProperties(interestPointWithoutFeature)
+          const { feature, ...interestPointWithoutFeature } = interestPoint
+          nextFeature.setProperties(interestPointWithoutFeature)
 
-        return nextFeature
-      })
+          return nextFeature
+        }
+
+        return null
+      }).filter(feature => feature)
 
       vectorSource.addFeatures(features)
     }
@@ -178,7 +239,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
       drawObject.on(DRAW_ABORT_EVENT, () => {
         unByKey(listener)
         dispatch(endInterestPointDraw())
-        dispatch(updateInterestPointBeingDrawed(null))
+        dispatch(deleteInterestPointBeingDrawed())
       })
 
       drawObject.on(DRAW_END_EVENT, event => {
@@ -266,6 +327,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
                 key={interestPoint.uuid}
                 uuid={interestPoint.uuid}
                 name={interestPoint.name}
+                featureIsShowed={true}
                 observations={interestPoint.observations}
                 coordinates={interestPoint.coordinates}
                 deleteInterestPoint={deleteInterestPoint}
@@ -282,8 +344,11 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
               map={map}
               uuid={interestPointBeingDrawed.uuid}
               name={interestPointBeingDrawed.name}
+              featureIsShowed={drawObject}
               observations={interestPointBeingDrawed.observations}
               coordinates={interestPointBeingDrawed.coordinates}
+              deleteInterestPoint={() => dispatch(endInterestPointDraw()) && dispatch(deleteInterestPointBeingDrawed())}
+              modifyInterestPoint={() => {}}
               zoomHasChanged={previousMapZoom.current}
               moveLine={moveInterestPointLine}
             />

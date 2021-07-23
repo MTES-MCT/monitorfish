@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import React, { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
@@ -10,10 +10,13 @@ import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { useMoveOverlayWhenDragging } from '../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../hooks/useMoveOverlayWhenZooming'
 import { useSelector } from 'react-redux'
+import { usePrevious } from '../../hooks/usePrevious'
+import LineString from 'ol/geom/LineString'
+import { getLength } from 'ol/sphere'
 
 const X = 0
 const Y = 1
-const initialOffsetValue = [-90, 10]
+export const initialOffsetValue = [-90, 10]
 const MIN_ZOOM = 7
 
 const InterestPointOverlay = props => {
@@ -23,6 +26,7 @@ const InterestPointOverlay = props => {
     uuid,
     observations,
     name,
+    featureIsShowed,
     moveLine,
     zoomHasChanged,
     deleteInterestPoint,
@@ -34,6 +38,7 @@ const InterestPointOverlay = props => {
   const ref = createRef()
   const currentOffset = useRef(initialOffsetValue)
   const currentCoordinates = useRef([])
+  const interestPointCoordinates = useRef(coordinates)
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
   const [hiddenByZoom, setHiddenByZoom] = useState(false)
@@ -45,8 +50,60 @@ const InterestPointOverlay = props => {
     positioning: 'left-center'
   }))
 
+  const moveInterestPointWithThrottle = useCallback((target, delay) => {
+    if (isThrottled.current) {
+      return
+    }
+
+    isThrottled.current = true
+    setTimeout(() => {
+      if (interestPointCoordinates.current) {
+        const offset = target.getOffset()
+        const pixel = map.getPixelFromCoordinate(interestPointCoordinates.current)
+
+        const { width } = target.getElement().getBoundingClientRect()
+        const nextXPixelCenter = pixel[X] + offset[X] + width / 2
+        const nextYPixelCenter = pixel[Y] + offset[Y]
+
+        const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
+        currentCoordinates.current = nextCoordinates
+        moveLine(uuid, interestPointCoordinates.current, nextCoordinates, offset)
+
+        isThrottled.current = false
+      }
+    }, delay)
+  }, [interestPointCoordinates.current])
+
   useMoveOverlayWhenDragging(ref, overlay, map, currentOffset, moveInterestPointWithThrottle, showed)
   useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveInterestPointWithThrottle)
+  const previousCoordinates = usePrevious(coordinates)
+
+  function coordinatesAreModified (coordinates, previousCoordinates) {
+    return (
+      !isNaN(coordinates[0]) &&
+      !isNaN(coordinates[1]) &&
+      !isNaN(previousCoordinates[0]) &&
+      !isNaN(previousCoordinates[1])
+    ) &&
+      (
+        coordinates[0] !== previousCoordinates[0] ||
+        coordinates[1] !== previousCoordinates[1]
+      )
+  }
+
+  useEffect(() => {
+    interestPointCoordinates.current = coordinates
+
+    if (coordinates && previousCoordinates && coordinatesAreModified(coordinates, previousCoordinates)) {
+      const line = new LineString([coordinates, previousCoordinates])
+      const distance = getLength(line, { projection: OPENLAYERS_PROJECTION })
+
+      if (distance > 10) {
+        currentOffset.current = initialOffsetValue
+        overlay.setOffset(initialOffsetValue)
+      }
+    }
+  }, [coordinates])
 
   useEffect(() => {
     if (map) {
@@ -54,7 +111,9 @@ const InterestPointOverlay = props => {
       overlay.setElement(ref.current)
 
       map.addOverlay(overlay)
-      setShowed(true)
+      if (featureIsShowed) {
+        setShowed(true)
+      }
 
       return () => {
         map.removeOverlay(overlay)
@@ -69,28 +128,6 @@ const InterestPointOverlay = props => {
       setHiddenByZoom(false)
     }
   }, [zoomHasChanged])
-
-  function moveInterestPointWithThrottle (target, delay) {
-    if (isThrottled.current) {
-      return
-    }
-
-    isThrottled.current = true
-    setTimeout(() => {
-      const offset = target.getOffset()
-      const pixel = map.getPixelFromCoordinate(coordinates)
-
-      const { width } = target.getElement().getBoundingClientRect()
-      const nextXPixelCenter = pixel[X] + offset[X] + width / 2
-      const nextYPixelCenter = pixel[Y] + offset[Y]
-
-      const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
-      currentCoordinates.current = nextCoordinates
-      moveLine(uuid, coordinates, nextCoordinates, offset)
-
-      isThrottled.current = false
-    }, delay)
-  }
 
   return (
     <WrapperToBeKeptForDOMManagement>
@@ -145,6 +182,9 @@ const Header = styled.div`
   height: 30px;
   background ${COLORS.grayBackground};
   text-align: left;
+  border: none;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 `
 
 const Delete = styled(DeleteSVG)`
@@ -176,6 +216,8 @@ const InterestPointOverlayElement = styled.div`
   cursor: grabbing;
   width: 183px;
   color: ${COLORS.grayDarkerThree};
+  border: none;
+  border-radius: 2px;
 `
 
 const Name = styled.span`

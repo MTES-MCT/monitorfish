@@ -1,7 +1,6 @@
 export const COLORS = {
   background: '#FFFFFF',
   white: '#FFFFFF',
-  red: '#E1000F',
   orange: '#F6D012',
   gainsboro: '#E5E5EB',
   lightGray: '#CCCFD6',
@@ -18,7 +17,8 @@ export const COLORS = {
   textWhite: '#EDEDF5',
   squareBorder: '#E0E0E0',
   grayVesselHidden: '#B2B2B2',
-  blue: '#05055E',
+  red: '#E1000F',
+  blue: '#0A18DF',
   vesselLightColor: '#cacce0',
   vesselColor: 'rgb(5, 5, 94)'
 }

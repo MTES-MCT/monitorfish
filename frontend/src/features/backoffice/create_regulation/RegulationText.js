@@ -6,53 +6,79 @@ import { ValidateButton, CancelButton } from '../commonStyles/Buttons.style'
 import { Checkbox } from 'rsuite'
 import CustomDatePicker from './create_regulation/CustomDatePicker'
 import { COLORS } from '../../constants/constants'
+import Tag from './create_regulation/Tag'
 
 const RegulationText = props => {
   const {
-    isEmpty,
     id,
     regulationText,
     updateRegulationText
   } = props
-  const [currentRegulationTextName, setCurrentRegulationTextName] = useState(isEmpty ? '' : regulationText.name)
-  const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState(isEmpty ? '' : regulationText.URL)
+  const [currentRegulationTextName, setCurrentRegulationTextName] = useState(regulationText ? regulationText.name : '')
+  const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState(regulationText ? regulationText.URL : '')
+  const [isEditing, setIsEditing] = useState(false)
   const updateOrAddRegulationText = () => {
-    const regulationText = {
+    const updatedRegulationText = {
       name: currentRegulationTextName,
       URL: currentRegulationTextURL
     }
-    updateRegulationText(isEmpty ? null : id, regulationText)
+    updateRegulationText(regulationText ? id : undefined, updatedRegulationText)
   }
   const cancelAddNewRegulationText = () => {
-    /* que fait-on ? On réinitilaise ? */
+    setIsEditing(false)
+    setCurrentRegulationTextName(regulationText ? regulationText.name : '')
+    setCurrentRegulationTextURL(regulationText ? regulationText.URL : '')
   }
+
+  const onNameValueChange = (value) => {
+    if (!isEditing) {
+      setIsEditing(true)
+    }
+    setCurrentRegulationTextName(value)
+  }
+
+  const onURLValueChange = (value) => {
+    if (!isEditing) {
+      setIsEditing(true)
+    }
+    setCurrentRegulationTextURL(value)
+  }
+
   return <>
     <ContentLine>
-      <Label>{`Texte réglementaire ${isEmpty ? 1 : id + 1}`}</Label>
-      <CustomInput
-        placeholder='Nom'
-        width={'250px'}
-        value={currentRegulationTextName}
-        onChange={setCurrentRegulationTextName}
-      />
-      <CustomInput
-        placeholder='URL'
-        width={'250px'}
-        value={currentRegulationTextURL}
-        onChange={setCurrentRegulationTextURL}
-      />
-      <ValidateButton
-        disabled={false}
-        isLast={false}
-        onClick={updateOrAddRegulationText}>
-        Enregistrer
-      </ValidateButton>
-      <CancelButton
-        disabled={false}
-        isLast={false}
-        onClick={cancelAddNewRegulationText}>
-        Annuler
-      </CancelButton>
+      <Label>{`Texte réglementaire ${regulationText ? id + 1 : 1}`}</Label>
+      {isEditing || regulationText === undefined || regulationText === {}
+        ? <><CustomInput
+          placeholder='Nom'
+          width={'250px'}
+          value={currentRegulationTextName}
+          onChange={value => onNameValueChange(value)}
+          />
+          <CustomInput
+            placeholder='URL'
+            width={'250px'}
+            value={currentRegulationTextURL}
+            onChange={value => onURLValueChange(value)}
+          />
+          <ValidateButton
+            disabled={false}
+            isLast={false}
+            onClick={updateOrAddRegulationText}>
+            Enregistrer
+          </ValidateButton>
+          <CancelButton
+            disabled={false}
+            isLast={false}
+            onClick={cancelAddNewRegulationText}>
+            Annuler
+          </CancelButton>
+          </>
+        : <Tag
+            selectedValue={currentRegulationTextName}
+            onCloseIconClicked={_ => updateRegulationText(id)}
+            isLink
+          />
+    }
     </ContentLine>
     <ContentLine>
       <Label>Type de texte</Label>

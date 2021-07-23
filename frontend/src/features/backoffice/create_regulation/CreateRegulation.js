@@ -81,6 +81,9 @@ const CreateRegulation = () => {
   }
 
   const updateRegulationText = (id, regulationText) => {
+    console.log('updateRegulationText')
+    console.log(id)
+    console.log(regulationText)
     const newRegulationTextList = [...regulationTextList]
     if (!id) {
       newRegulationTextList.push(regulationText)

@@ -109,7 +109,7 @@ const MeasurementLayer = ({ map }) => {
     if (measurementsDrawed && map) {
       measurementsDrawed.forEach(measurement => {
         const feature = new GeoJSON({
-          featureProjection: 'EPSG:3857'
+          featureProjection: OPENLAYERS_PROJECTION
         }).readFeature(measurement.feature)
 
         vectorSource.addFeature(feature)

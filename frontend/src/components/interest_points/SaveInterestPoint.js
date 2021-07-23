@@ -5,11 +5,12 @@ import { COLORS } from '../../constants/constants'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import RadioGroup from 'rsuite/lib/RadioGroup'
 import Radio from 'rsuite/lib/Radio'
-import { interestPointTypes } from '../../domain/entities/interestPoints'
+import { interestPointType } from '../../domain/entities/interestPoints'
 
 import { ReactComponent as GearSVG } from '../icons/Label_engin_de_peche.svg'
 import { ReactComponent as ControlSVG } from '../icons/Label_controle.svg'
 import { ReactComponent as VesselSVG } from '../icons/Label_segment_de_flotte.svg'
+import { ReactComponent as OtherSVG } from '../icons/Point_interet_autre.svg'
 import SetCoordinates from '../coordinates/SetCoordinates'
 import { useDispatch, useSelector } from 'react-redux'
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/reducers/InterestPoint'
@@ -28,13 +29,22 @@ const SaveInterestPoint = (
   const { coordinatesFormat } = useSelector(state => state.map)
   const {
     /** @type {InterestPoint | null} interestPointBeingDrawed */
-    interestPointBeingDrawed
+    interestPointBeingDrawed,
+    isEditing
   } = useSelector(state => state.interestPoint)
 
   const [coordinates, setCoordinates] = useState([])
   const [name, setName] = useState('')
   const [observations, setObservations] = useState('')
-  const [type, setType] = useState('')
+  const [type, setType] = useState(interestPointType.FISHING_VESSEL)
+
+  useEffect(() => {
+    if (isEditing && interestPointBeingDrawed) {
+      setName(interestPointBeingDrawed.name)
+      setObservations(interestPointBeingDrawed.observations)
+      setType(interestPointBeingDrawed.type)
+    }
+  }, [interestPointBeingDrawed, isEditing])
 
   useEffect(() => {
     if (!isOpen) {
@@ -42,8 +52,10 @@ const SaveInterestPoint = (
       setName('')
       setObservations('')
       setType('')
+    } else if (!interestPointBeingDrawed) {
+      setType(interestPointType.FISHING_VESSEL)
     }
-  }, [isOpen])
+  }, [isOpen, interestPointBeingDrawed])
 
   useEffect(() => {
     if (coordinatesFormat) {
@@ -90,6 +102,7 @@ const SaveInterestPoint = (
    * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
    */
   const updateCoordinates = (nextCoordinates, coordinates) => {
+    console.log(nextCoordinates, coordinates)
     if (nextCoordinates &&
       nextCoordinates.length &&
       coordinates &&
@@ -97,6 +110,7 @@ const SaveInterestPoint = (
       (coordinates[0] !== nextCoordinates[0] ||
       coordinates[1] !== nextCoordinates[1])) {
       const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      console.log(updatedCoordinates)
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'coordinates',
         value: updatedCoordinates
@@ -105,8 +119,9 @@ const SaveInterestPoint = (
   }
 
   const saveInterestPoint = () => {
-    if (name && type && coordinates && coordinates.length) {
-      dispatch(addInterestPoint(interestPointBeingDrawed))
+    if (type && coordinates && coordinates.length) {
+      dispatch(addInterestPoint())
+      close()
     }
   }
 
@@ -132,17 +147,21 @@ const SaveInterestPoint = (
               setType(value)
             }}
           >
-            <Radio value={interestPointTypes.CONTROL_ENTITY}>
+            <Radio value={interestPointType.CONTROL_ENTITY}>
               <Control/>
               Moyen de contrôle
             </Radio>
-            <Radio value={interestPointTypes.FISHING_VESSEL}>
+            <Radio value={interestPointType.FISHING_VESSEL}>
               <Vessel/>
               Navire de pêche
             </Radio>
-            <Radio value={interestPointTypes.FISHING_GEAR}>
+            <Radio value={interestPointType.FISHING_GEAR}>
               <Gear/>
               Engin de pêche
+            </Radio>
+            <Radio value={interestPointType.OTHER}>
+              <Other/>
+              Autre point
             </Radio>
           </RadioGroup>
         </RadioWrapper>
@@ -290,6 +309,10 @@ const Control = styled(ControlSVG)`
 `
 
 const Vessel = styled(VesselSVG)`
+  ${iconStyle}
+`
+
+const Other = styled(OtherSVG)`
   ${iconStyle}
 `
 

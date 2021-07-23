@@ -67,7 +67,7 @@ const Map = () => {
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselTrackCardOverlay feature={currentFeature}/>
       <LayerDetailsBox gears={gears} feature={currentFeature}/>
-      <InterestPointLayer />
+      <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
     </BaseMap>
   )
 }

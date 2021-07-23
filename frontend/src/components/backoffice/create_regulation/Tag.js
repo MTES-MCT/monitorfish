@@ -1,24 +1,39 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import { COLORS } from '../../../constants/constants'
 
 const Tag = props => {
   const {
     selectedValue,
-    onCloseIconClicked
+    onCloseIconClicked,
+    selectedURL
   } = props
 
   return <TagWrapper>
-    <SelectedValue>{selectedValue}</SelectedValue>
+    {selectedURL
+      ? <SelectedValue>{selectedValue}</SelectedValue>
+      : <Link
+          href={selectedURL}
+          target={'_blank'}
+        >{selectedValue}</Link>
+    }
     <CloseIcon onClick={_ => onCloseIconClicked(selectedValue)}/>
   </TagWrapper>
 }
+
+const Link = styled.div`
+  color: ${COLORS.blue};
+  font-size: 13px;
+  padding: 2.5px;
+  cursor: pointer;
+`
 
 const TagWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #EDEDED;
+  background-color: ${COLORS.grayBackground};
   border-radius: 2px;
   margin-right: 8px;
 `
@@ -26,6 +41,7 @@ const TagWrapper = styled.div`
 const SelectedValue = styled.span`
   font-size: 13px;
   padding: 2.5px;
+  color: ${COLORS.grayDarkerThree};
 `
 
 const CloseIcon = styled(CloseIconSVG)`

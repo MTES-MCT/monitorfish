@@ -55,11 +55,15 @@ const CreateRegulation = () => {
   }
 
   const updateRegulationText = (id, regulationText) => {
-    const newRegulationTextList = Object.slice({}, regulationTextList)
+    const newRegulationTextList = [...regulationTextList]
     if (!id) {
-      newRegulationTextList.append(regulationText)
+      newRegulationTextList.push(regulationText)
     } else {
-      newRegulationTextList[id] = regulationText
+      if (!regulationText) {
+        newRegulationTextList.slice(id, 1)
+      } else {
+        newRegulationTextList[id] = regulationText
+      }
     }
     setRegulationTextList(newRegulationTextList)
   }
@@ -113,12 +117,12 @@ const CreateRegulation = () => {
             ? regulationTextList.map((regulationText, id) => {
               return <RegulationText
                   key={id}
-                  isEmpty={false}
+                  id={id}
                   regulationText={regulationText}
+                  updateRegulationText={updateRegulationText}
                 />
             })
             : <RegulationText
-                isEmpty={true}
                 updateRegulationText={updateRegulationText}
               />
         }

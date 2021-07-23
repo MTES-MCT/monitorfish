@@ -68,7 +68,7 @@ const DMDCoordinatesInput = props => {
   return <Body>
     <IMaskInput
       value={value}
-      style={{ width: 190, border: error ? '1px solid red' : null }}
+      style={{ border: error ? '1px solid red' : null }}
       lazy={false}
       mask={'00° 00.000′ a 000° 00.000′ a'}
       radix="."
@@ -102,6 +102,7 @@ const Body = styled.div`
     border: none;
     height: 27px;
     padding-left: 8px;
+    width: 200px;
   }
 `
 

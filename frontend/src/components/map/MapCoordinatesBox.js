@@ -63,6 +63,9 @@ const Header = styled.span`
   width: 100%;
   display: inline-block;
   cursor: pointer;
+    border: none;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 `
 
 const CoordinatesTypeSelection = styled.span`

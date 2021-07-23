@@ -17,6 +17,7 @@ import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domai
 import { getCoordinates } from '../../utils'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import { transform } from 'ol/proj'
+import saveInterestPointFeature from '../../domain/use_cases/saveInterestPointFeature'
 
 const SaveInterestPoint = (
   {
@@ -47,7 +48,7 @@ const SaveInterestPoint = (
   }, [interestPointBeingDrawed, isEditing])
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen && !interestPointBeingDrawed) {
       setCoordinates([])
       setName('')
       setObservations('')
@@ -67,7 +68,7 @@ const SaveInterestPoint = (
         setCoordinates(ddCoordinates)
       }
     }
-  }, [interestPointBeingDrawed])
+  }, [interestPointBeingDrawed, isEditing])
 
   useEffect(() => {
     if (interestPointBeingDrawed && name && interestPointBeingDrawed.name !== name) {
@@ -97,20 +98,21 @@ const SaveInterestPoint = (
   }, [type, interestPointBeingDrawed])
 
   /**
-   * Update interest point coordinates
+   * Compare with previous coordinates and update interest point coordinates
    * @param {number[]} nextCoordinates - Coordinates ([latitude, longitude]) to update, in decimal format.
    * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
    */
   const updateCoordinates = (nextCoordinates, coordinates) => {
-    console.log(nextCoordinates, coordinates)
-    if (nextCoordinates &&
-      nextCoordinates.length &&
-      coordinates &&
-      coordinates.length &&
-      (coordinates[0] !== nextCoordinates[0] ||
-      coordinates[1] !== nextCoordinates[1])) {
+    if (!coordinates || !coordinates.length) {
       const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-      console.log(updatedCoordinates)
+      dispatch(updateInterestPointKeyBeingDrawed({
+        key: 'coordinates',
+        value: updatedCoordinates
+      }))
+    }
+
+    if (areDistinct(nextCoordinates, coordinates)) {
+      const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'coordinates',
         value: updatedCoordinates
@@ -118,8 +120,21 @@ const SaveInterestPoint = (
     }
   }
 
+  function areDistinct (nextCoordinates, coordinates) {
+    return nextCoordinates &&
+      nextCoordinates.length &&
+      coordinates.length &&
+      !isNaN(coordinates[0]) &&
+      !isNaN(coordinates[1]) &&
+      !isNaN(nextCoordinates[0]) &&
+      !isNaN(nextCoordinates[1]) &&
+      (coordinates[0] !== nextCoordinates[0] ||
+        coordinates[1] !== nextCoordinates[1])
+  }
+
   const saveInterestPoint = () => {
     if (type && coordinates && coordinates.length) {
+      dispatch(saveInterestPointFeature())
       dispatch(addInterestPoint())
       close()
     }
@@ -179,7 +194,7 @@ const SaveInterestPoint = (
         <OkButton onClick={saveInterestPoint}>
           OK
         </OkButton>
-        <CancelButton onClick={close}>
+        <CancelButton disabled={isEditing} onClick={close}>
           Annuler
         </CancelButton>
       </Body>

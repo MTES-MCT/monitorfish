@@ -41,7 +41,9 @@ const DatePickerStyled = styled(DatePicker)`
   .rs-picker-toggle-caret {
     display: none;
   }
-  ${props => props.isRequired ? `border-color: ${COLORS.red};` : ''}
+  .rs-picker-toggle {
+    border: 1px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker}  !important;
+  }
 `
 
 export default CustomDatePicker

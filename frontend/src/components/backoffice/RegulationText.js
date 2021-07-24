@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { ContentLine } from '../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../commonStyles/Buttons.style'
-import { Checkbox } from 'rsuite'
+import { Checkbox, CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './create_regulation/CustomDatePicker'
 import { COLORS } from '../../constants/constants'
 import Tag from './create_regulation/Tag'
@@ -14,41 +14,54 @@ const RegulationText = props => {
   const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState(regulationText ? regulationText.URL : '')
   const [currentStartDate, setCurrentStartDate] = useState(regulationText ? regulationText.startDate : undefined)
   const [currentEndDate, setCurrentEndDate] = useState(regulationText && regulationText.endDate ? regulationText.endDate : 'inifinite')
+  const [currentTextType, setCurrentTextType] = useState(regulationText && regulationText.textType ? regulationText.textType : [])
   const [isEditing, setIsEditing] = useState(false)
 
   const [nameIsRequired, setNameIsRequired] = useState(false)
-  const [URLIsrequired, setURLIsRequired] = useState(false)
+  const [URLIsrequired, setURLIsrequired] = useState(false)
   const [startDateIsRequired, setStartDateIsRequired] = useState(false)
   const [endDateIsRequired, setEndDateIsRequired] = useState(false)
+  const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
 
   const updateOrAddRegulationText = () => {
-    checkRequiredValueOnSubmit()
-    if (nameIsRequired || URLIsrequired || startDateIsRequired || endDateIsRequired) {
-      return
+    if (!checkRequiredValueOnSubmit()) {
+      const updatedRegulationText = {
+        name: currentRegulationTextName,
+        URL: currentRegulationTextURL,
+        startDate: currentStartDate,
+        endDate: currentEndDate,
+        textType: currentTextType
+      }
+      updateRegulationText(regulationText ? id : undefined, updatedRegulationText)
     }
-    const updatedRegulationText = {
-      name: currentRegulationTextName,
-      URL: currentRegulationTextURL,
-      startDate: currentStartDate,
-      endDate: currentEndDate
-    }
-    console.log('updatedRegulationText')
-    console.log(updatedRegulationText)
-    updateRegulationText(regulationText ? id : undefined, updatedRegulationText)
   }
 
   const checkRequiredValueOnSubmit = () => {
-    setNameIsRequired(!currentRegulationTextName || currentRegulationTextName === '')
-    setURLIsRequired(!currentRegulationTextURL || currentRegulationTextURL === '')
-    setStartDateIsRequired(!currentStartDate)
-    setEndDateIsRequired(!currentEndDate)
+    let required = !currentRegulationTextName || currentRegulationTextName === ''
+    let oneValueIsMissing = required
+    setNameIsRequired(required)
+    required = !currentRegulationTextURL || currentRegulationTextURL === ''
+    oneValueIsMissing = oneValueIsMissing || required
+    setURLIsrequired(required)
+    required = !currentStartDate
+    oneValueIsMissing = oneValueIsMissing || required
+    setStartDateIsRequired(required)
+    required = !currentEndDate
+    oneValueIsMissing = oneValueIsMissing || required
+    setEndDateIsRequired(required)
+    required = currentTextType.length > 0
+    oneValueIsMissing = oneValueIsMissing || required
+    setTextTypeIsRequired(required)
+    return oneValueIsMissing
   }
+
   const cancelAddNewRegulationText = () => {
     setIsEditing(false)
     setCurrentRegulationTextName(regulationText ? regulationText.name : '')
     setCurrentRegulationTextURL(regulationText ? regulationText.URL : '')
-    setCurrentStartDate(regulationText.startDate)
-    setCurrentEndDate(regulationText && regulationText.endDate ? regulationText.endDate : 'inifinite')
+    setCurrentStartDate(regulationText ? regulationText.startDate : undefined)
+    setCurrentEndDate(!regulationText || regulationText.endDate === 'infinite' ? 'infinite' : regulationText.endDate)
+    setCurrentTextType(regulationText && regulationText.textType ? regulationText.textType : [])
   }
 
   const onNameValueChange = (value) => {
@@ -78,7 +91,7 @@ const RegulationText = props => {
             onChange={value => onNameValueChange(value)}
           />
           <CustomInput
-            isRed={nameIsRequired}
+            isRed={URLIsrequired}
             placeholder='URL'
             width={'250px'}
             value={currentRegulationTextURL}
@@ -106,8 +119,21 @@ const RegulationText = props => {
     </ContentLine>
     <ContentLine>
       <Label>Type de texte</Label>
-      <CustomCheckbox>création de la zone</CustomCheckbox>
-      <CustomCheckbox>réglementation de la zone</CustomCheckbox>
+      <CheckboxGroup
+        inline
+        name="checkboxList"
+        value={currentTextType}
+        onChange={setCurrentTextType}
+      >
+        <CustomCheckbox
+          isRequired={textTypeIsRequired}
+          value='create'
+        >création de la zone</CustomCheckbox>
+        <CustomCheckbox
+          isRequired={textTypeIsRequired}
+          value='regulation'
+        >réglementation de la zone</CustomCheckbox>
+      </CheckboxGroup>
     </ContentLine>
     <ContentLine>
       <Label>Début de validité</Label>
@@ -122,7 +148,7 @@ const RegulationText = props => {
       <Label>Fin de validité</Label>
       <CustomDatePicker
         isRequired={endDateIsRequired}
-        value={!currentEndDate || currentEndDate === 'infinite' ? undefined : currentEndDate}
+        value={currentEndDate === 'infinite' ? undefined : currentEndDate}
         onChange={setCurrentEndDate}
         onOk={setCurrentEndDate}
       />
@@ -143,8 +169,10 @@ const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
+  }
+  .rs-checkbox-inner {
     &:before {
-      border: 2px solid ${props => props.isRequired ? COLORS.grayDarker : COLORS.red};
+      border: 2px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker} !important;
     }
   }
 `

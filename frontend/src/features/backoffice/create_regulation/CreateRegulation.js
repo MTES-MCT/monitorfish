@@ -84,14 +84,20 @@ const CreateRegulation = () => {
     console.log('updateRegulationText')
     console.log(id)
     console.log(regulationText)
-    const newRegulationTextList = [...regulationTextList]
-    if (!id) {
+    let newRegulationTextList = [...regulationTextList]
+    if (id === undefined) {
+      console.log('add reg')
       newRegulationTextList.push(regulationText)
     } else {
-      if (!regulationText) {
-        newRegulationTextList.slice(id, 1)
-      } else {
+      if (regulationText && regulationText !== {}) {
+        console.log('update reg')
         newRegulationTextList[id] = regulationText
+      } else {
+        if (newRegulationTextList.length === 1) {
+          newRegulationTextList = {}
+        } else {
+          newRegulationTextList.slice(id, 1)
+        }
       }
     }
     setRegulationTextList(newRegulationTextList)

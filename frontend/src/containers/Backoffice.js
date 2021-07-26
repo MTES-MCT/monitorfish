@@ -28,7 +28,7 @@ const Backoffice = () => {
   } = useSelector(state => state.regulatory)
 
   useEffect(() => {
-    dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
+    dispatch(getAllRegulatoryZonesByRegTerritory())
     dispatch(getAllGearCodes())
   }, [])
 

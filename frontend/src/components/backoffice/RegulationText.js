@@ -5,10 +5,8 @@ import { CustomInput, Label } from '../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../commonStyles/Buttons.style'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './create_regulation/CustomDatePicker'
-import { COLORS } from '../../constants/constants'
+import { COLORS, INFINITE } from '../../constants/constants'
 import Tag from './create_regulation/Tag'
-
-const INFINITE = 'infinite'
 
 const RegulationText = props => {
   const { id, regulationText, updateRegulationText } = props

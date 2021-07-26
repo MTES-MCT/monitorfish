@@ -78,6 +78,13 @@ const RegulationText = props => {
     setCurrentRegulationTextURL(value)
   }
 
+  const getValidityDate = () => {
+    const options = { day: '2-digit', year: 'numeric', month: '2-digit' }
+    const startDate = currentStartDate.toLocaleDateString('fr-FR', options)
+    const endDate = currentEndDate === INFINITE ? currentEndDate : currentEndDate.toLocaleDateString('fr-FR', options)
+    return `Valide du ${startDate} ${currentEndDate === INFINITE ? 'jusqu\'à nouvel ordre' : `au ${endDate}`}.`
+  }
+
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulationText ? id + 1 : 1}`}</Label>
@@ -142,6 +149,7 @@ const RegulationText = props => {
         value={currentStartDate}
         onChange={setCurrentStartDate}
         onOk={setCurrentStartDate}
+        format='DD/MM/YYYY'
       />
     </ContentLine>
     <ContentLine>
@@ -151,6 +159,7 @@ const RegulationText = props => {
         value={currentEndDate === INFINITE ? undefined : currentEndDate}
         onChange={setCurrentEndDate}
         onOk={setCurrentEndDate}
+        format='DD/MM/YYYY'
       />
       <Or>&nbsp;ou</Or>
       <CustomCheckbox
@@ -159,6 +168,9 @@ const RegulationText = props => {
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
+    {currentStartDate && currentEndDate && <ValidyDateLine>
+        <ValidityDate>{getValidityDate()}</ValidityDate>
+    </ValidyDateLine>}
   </>
 }
 
@@ -179,6 +191,16 @@ const CustomCheckbox = styled(Checkbox)`
 const Or = styled.span`
   padding: 0 10px;
   color: ${COLORS.textGray};
+  font-size: 13px;
+`
+
+const ValidyDateLine = styled(ContentLine)`
+  background-color: ${COLORS.grayBackground};
+  width: 484px;
+  padding: 10px;
+`
+
+const ValidityDate = styled.span`
   font-size: 13px;
 `
 

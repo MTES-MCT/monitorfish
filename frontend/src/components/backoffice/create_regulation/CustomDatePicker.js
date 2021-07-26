@@ -8,7 +8,8 @@ const CustomDatePicker = props => {
     value,
     onChange,
     onOk,
-    isRequired
+    isRequired,
+    format
   } = props
   return <DatePickerStyled
     isRequired={isRequired}
@@ -18,6 +19,7 @@ const CustomDatePicker = props => {
     cleanable={false}
     placement='topStart'
     placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    format={format}
     locale={{
       sunday: 'Dim',
       monday: 'Lundi',
@@ -42,7 +44,7 @@ const DatePickerStyled = styled(DatePicker)`
     display: none;
   }
   .rs-picker-toggle {
-    border: 2px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker}  !important;
+    border: 1px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker}  !important;
   }
 `
 

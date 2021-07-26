@@ -133,9 +133,6 @@ const CreateRegulation = () => {
               />
         }
         <BottomLine>
-          <ValidyDateLine>
-            <ValidityDate>{'Valide du 01/03/2021 au 31/06/2021.'}</ValidityDate>
-          </ValidyDateLine>
           <ButtonLine>
             <ValidateButton
               disabled={false}
@@ -163,11 +160,6 @@ const BottomLine = styled.div`
   display: flex;
   flex-direction: column;
   width: fit-content;
-  background-color: ${COLORS.grayBackground};
-`
-
-const ValidityDate = styled.span`
-  font-size: 13px;
 `
 
 const ButtonLine = styled.div`
@@ -175,10 +167,6 @@ const ButtonLine = styled.div`
   flex-direction: row;
   padding-top: 10px;
   background-color: ${COLORS.background};
-`
-
-const ValidyDateLine = styled.div`
-  padding: 10px;
 `
 
 const Header = styled.div`

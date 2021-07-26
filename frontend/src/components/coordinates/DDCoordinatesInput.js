@@ -29,29 +29,32 @@ const DDCoordinatesInput = props => {
 
     if (latitude || longitude) {
       const floatLatitude = parseFloat(latitude)
-      if (isNaN(floatLatitude)) {
+      if (isNaN(floatLatitude) || !floatLatitude) {
         setLatitudeError('Champ Latitude incorrect')
         return
       }
 
       const floatLongitude = parseFloat(longitude)
-      if (isNaN(floatLongitude)) {
+      if (isNaN(floatLongitude) || !floatLongitude) {
         setLongitudeError('Champ Longitude incorrect')
         return
       }
 
+      console.log([floatLatitude, floatLongitude])
       updateCoordinates([floatLatitude, floatLongitude], coordinates)
     }
   }, [latitude, longitude])
 
   return <Body>
     <DDInput
+      data-cy={'interest-point-coordinates-dd-input-lat'}
       style={{ border: latitudeError ? '1px solid red' : null }}
       value={latitude}
       onChange={e => setLatitude(e.target.value)}
       placeholder={'Latitude'}
     />
     <DDInput
+      data-cy={'interest-point-coordinates-dd-input-lon'}
       style={{ border: longitudeError ? '1px solid red' : null }}
       value={longitude}
       onChange={e => setLongitude(e.target.value)}

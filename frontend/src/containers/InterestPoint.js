@@ -62,6 +62,7 @@ const InterestPoint = () => {
   return (
     <Wrapper ref={wrapperRef}>
       <InterestPointWrapper
+        data-cy={'interest-point'}
         healthcheckTextWarning={healthcheckTextWarning}
         isOpen={interestPointIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}

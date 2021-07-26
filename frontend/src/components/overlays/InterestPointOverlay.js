@@ -136,20 +136,20 @@ const InterestPointOverlay = props => {
           showed && !hiddenByZoom
             ? <InterestPointOverlayElement>
               <Header>
-                <Name>
+                <Name data-cy={'interest-point-name'}>
                   {
                     name || 'Aucun Libellé'
                   }
                 </Name>
-                <Edit onClick={() => modifyInterestPoint(uuid)}/>
+                <Edit data-cy={'interest-point-edit'} onClick={() => modifyInterestPoint(uuid)}/>
                 <Delete onClick={() => deleteInterestPoint(uuid)}/>
               </Header>
-              <Body>
+              <Body data-cy={'interest-point-observations'}>
                 {
                   observations || 'Aucune observation'
                 }
               </Body>
-              <Footer>
+              <Footer data-cy={'interest-point-coordinates'}>
                 {
                   coordinates && coordinates.length
                     ? getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat).join(' ')

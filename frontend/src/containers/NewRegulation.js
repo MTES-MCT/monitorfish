@@ -55,9 +55,6 @@ const CreateRegulation = () => {
   }
 
   const updateRegulationText = (id, regulationText) => {
-    console.log('updateRegulationText')
-    console.log(id)
-    console.log(regulationText)
     let newRegulationTextList = [...regulationTextList]
     if (id === undefined) {
       console.log('add reg')

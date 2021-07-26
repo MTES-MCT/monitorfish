@@ -73,21 +73,20 @@ const CreateRegulation = () => {
   }
 
   const addRegRefEnVigueur = () => {
-    console.log('ajout en vigueur')
+    updateRegulationText()
   }
 
   const addRegRefAVenir = () => {
     console.log('addRegRefAVenir')
+    // display a modale
   }
 
   const updateRegulationText = (id, regulationText) => {
     let newRegulationTextList = [...regulationTextList]
     if (id === undefined) {
-      console.log('add reg')
       newRegulationTextList.push(regulationText)
     } else {
       if (regulationText && regulationText !== {}) {
-        console.log('update reg')
         newRegulationTextList[id] = regulationText
       } else {
         if (newRegulationTextList.length === 1) {

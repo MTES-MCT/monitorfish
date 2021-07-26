@@ -34,6 +34,7 @@ const CreateRegulation = () => {
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [reglementationBlocName, setReglementationBlocName] = useState('')
   const [selectedGeometry, setSelectedGeometry] = useState()
+  const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
@@ -41,11 +42,12 @@ const CreateRegulation = () => {
     }
     getGeometryId()
   }, [])
+
   useEffect(() => {
-    if (geometryObjectList && selectedGeometry) {
+    if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
       dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry]))
     }
-  }, [selectedGeometry, geometryObjectList])
+  }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryId = () => {
     dispatch(getGeometryWithoutRegulationReference(dispatch))
@@ -99,11 +101,13 @@ const CreateRegulation = () => {
             setSelectedGeometry={setSelectedGeometry}
             geometryIdList={geometryIdList}
             selectedGeometry={selectedGeometry}
+            setShowRegulatoryPreview={setShowRegulatoryPreview}
+            showRegulatoryPreview={showRegulatoryPreview}
           />
         </Section>
       </Content>
     </CreateRegulationWrapper>
-    <BaseMap/>
+    <BaseMap />
     </Wrapper>
   )
 }
@@ -119,6 +123,7 @@ const Header = styled.div`
 
 const CreateRegulationWrapper = styled.div`
   display: flex;
+  flex: 2;
   flex-direction: column;
   height: 100vh;
   margin: 11px 27px 0px 27px;

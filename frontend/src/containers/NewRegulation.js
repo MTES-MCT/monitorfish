@@ -176,8 +176,8 @@ const Header = styled.div`
 const CreateRegulationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  padding: 11px 27px 0px 27px;
+  height: calc(100vh - 22px);
+  padding: 11px 27px 11px 27px;
   background-color: ${COLORS.background};
 `
 

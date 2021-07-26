@@ -1,4 +1,4 @@
-
+-- Insert anonymized production data
 COPY public.last_positions (cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, trip_number, latitude, longitude, speed, course, last_position_datetime_utc, emission_period, last_ers_datetime_utc, departure_datetime_utc, width, length, registry_port, district, district_code, gear_onboard, segments, species_onboard, total_weight_onboard, id, last_control_datetime_utc, last_control_infraction, post_control_comments, vessel_identifier, estimated_current_latitude, estimated_current_longitude) FROM stdin;
 ABC000318636	ZK234630	089561865	PVE2215	OH IMAGE EH	FR	20210016	49.2719999999999985	-0.252000000000000002	0	0	2020-12-31 23:22:00	01:00:00	2020-07-12 18:39:00	2020-07-12 10:26:00	5.20000000000000018	15.5399999999999991	Valentin	Duboisdan	JC	[{"gear": "DRB", "mesh": 92.0, "dimensions": null}]	{}	[{"gear": "DRB", "weight": 1000.0, "faoZone": "27.7.d", "species": "SCE"}]	0	0	2020-04-01 22:20:00	f	\N	INTERNAL_REFERENCE_NUMBER	49.2719999999999985	-0.252000000000000002
 ABC000544989	MH650385	402621440	CGB3447	TOI DÉCOUVRIR POLITIQUE	FR	\N	49.5889999999999986	-1.26600000000000001	0	0	2020-12-31 23:18:00	00:59:00	\N	\N	4.73000000000000043	11.9800000000000004	\N	Sainte LucBourg	WU	null	{}	null	0	1	2020-06-29 20:13:00	f	2 BATONS DE 4 DRAGUES \r\nAVERTISSEMENT CAR MANQUE DE MARQUAGE SUR 1 BATON	INTERNAL_REFERENCE_NUMBER	49.5889999999999986	-1.26600000000000001
@@ -1002,16 +1002,21 @@ ABC000352523	LH002804	\N	\N	LARME OEUVRE CARTE	FR	\N	49.9239999999999995	1.08200
 ABC000568580	LV582056	\N	BIB0507	DEHORS APPARENCE PRÉVENIR	FR	\N	52.1499999999999986	-11.7129999999999992	1.80000000000000004	325	2020-12-31 23:20:00	01:00:00	\N	\N	\N	\N	\N	\N	\N	null	{}	null	0	999	\N	\N	\N	INTERNAL_REFERENCE_NUMBER	52.1672845838208019	-11.7326839592096999
 \.
 
-
+-- Shift dates to present
 update last_positions set last_position_datetime_utc = last_position_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
 update last_positions set last_ers_datetime_utc = last_ers_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
 update last_positions set departure_datetime_utc = departure_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
 update last_positions set last_control_datetime_utc = last_control_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
 
-update last_positions set last_position_datetime_utc = now() where cfr = 'GBR000B14430';
-update last_positions set last_control_datetime_utc = now() where cfr = 'GBR000B14430';
-update last_positions set post_control_comments = 'Tout va bien' where cfr = 'GBR000B14430';
-update last_positions set last_position_datetime_utc = now() where cfr = 'FRA000738677';
-update last_positions set last_control_datetime_utc = null where cfr = 'FRA000738677';
+-- Add fake data used in automated testing
+COPY public.last_positions (id, cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, trip_number, latitude, longitude, speed, course, last_position_datetime_utc, emission_period, last_ers_datetime_utc, length, width, segments, gear_onboard, species_onboard, district, district_code, last_control_datetime_utc, last_control_infraction, post_control_comments, vessel_identifier, estimated_current_latitude, estimated_current_longitude) FROM stdin;
+10000	FAK000999999	DONTSINK	\N	CALLME	PHENOMENE	GB	\N	47.921999999999997	-8.0129999999999999	8.40000000000000036	14	2021-01-15 07:32:00	00:40:00	2020-12-21 15:01:00	14.3	5.2	{"NWW10", "PEL 03"}	[{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}]	[{ "gear": "OTB","faoZone": "27.8.b","species": "BLI","weight": 13.46 },{ "gear": "OTB","faoZone": "27.8.c","species": "HKE","weight": 235.6 }]	CAEN	CN	2020-12-22 08:59:00	true	Pas de com	INTERNAL_REFERENCE_NUMBER	47.7123	-8.8123
+\.
+
+update last_positions set last_position_datetime_utc = (NOW() AT TIME ZONE 'UTC')::TIMESTAMP where cfr = 'FAK000999999';
+update last_positions set last_control_datetime_utc = now() where cfr = 'FAK000999999';
+update last_positions set post_control_comments = 'Tout va bien' where cfr = 'FAK000999999';
+update last_positions set last_position_datetime_utc = now() where cfr = 'FAK123456789';
+update last_positions set last_control_datetime_utc = null where cfr = 'FAK123456789';
 update last_positions set last_control_datetime_utc = '2106-01-15 08:13:00' where cfr = 'FRA000651332';
 

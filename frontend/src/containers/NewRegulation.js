@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../constants/constants'
+import BaseMap from './BaseMap'
+import { setRegulatoryGeometryToPreview } from '../domain/reducers/Regulatory'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import {
@@ -23,6 +25,7 @@ const CreateRegulation = () => {
     seaFrontArray
   } = useSelector(state => state.regulatory)
 
+  const [geometryObjectList, setGeometryObjectList] = useState()
   const [geometryIdList, setGeometryIdList] = useState([])
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
@@ -38,18 +41,25 @@ const CreateRegulation = () => {
     }
     getGeometryId()
   }, [])
+  useEffect(() => {
+    if (geometryObjectList && selectedGeometry) {
+      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry]))
+    }
+  }, [selectedGeometry, geometryObjectList])
 
   const getGeometryId = () => {
     dispatch(getGeometryWithoutRegulationReference(dispatch))
       .then(geometryListAsObject => {
         console.log(geometryListAsObject)
         if (geometryListAsObject !== undefined) {
+          setGeometryObjectList(geometryListAsObject)
           setGeometryIdList(formatDataForSelectPicker(Object.keys(geometryListAsObject)))
         }
       })
   }
 
   return (
+    <Wrapper>
     <CreateRegulationWrapper>
       <Header>
         <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
@@ -93,9 +103,15 @@ const CreateRegulation = () => {
         </Section>
       </Content>
     </CreateRegulationWrapper>
+    <BaseMap/>
+    </Wrapper>
   )
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
 const Header = styled.div`
   margin-bottom: 40px;
   margin-top: 20px;

@@ -12,6 +12,7 @@ import { resetAnimateToRegulatoryLayer } from '../domain/reducers/Map'
 import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
 import MapAttributionsBox from '../components/map/MapAttributionsBox'
 import BaseLayer from '../layers/BaseLayer'
+import RegulatoryPreviewLayer from '../layers/RegulatoryPreviewLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
 import ShowRegulatoryMetadata from '../components/map/ShowRegulatoryMetadata'
@@ -193,6 +194,7 @@ const BaseMap = props => {
       {map && Children.map(children, (child) => (
         child && cloneElement(child, { map, mapClickEvent })
       ))}
+      <RegulatoryPreviewLayer map={map} />
     </MapWrapper>
   )
 }

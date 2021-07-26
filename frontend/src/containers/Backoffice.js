@@ -27,29 +27,6 @@ const Backoffice = () => {
     layersNamesByRegTerritory
   } = useSelector(state => state.regulatory)
 
-<<<<<<< HEAD
-=======
-  const getRegulatoryZones = () => {
-    dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
-      .then(response => {
-        const {
-          layersNamesByRegTerritory
-          // zoneThemeArray,
-          // reglementationArray,
-          // seaFrontArray
-        } = response
-        setRegulatoryZoneListByRegTerritory(layersNamesByRegTerritory)
-        // Dans le state ?
-        // setSeaFrontList(formatData(seaFrontArray))
-        // setZoneThemeList(formatData(zoneThemeArray))
-        // setReglementationBlocList(formatData(reglementationArray))
-      })
-      .catch(error => {
-        dispatch(setError(error))
-      })
-  }
-
->>>>>>> get all geometry without regulation reference from geoserver and display it
   useEffect(() => {
     dispatch(getAllRegulatoryZonesByRegTerritory())
     dispatch(getAllGearCodes())

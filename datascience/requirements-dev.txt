@@ -41,6 +41,7 @@ docopt==0.6.2; python_version >= "3.4"
 docutils==0.16; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 entrypoints==0.3; python_version >= "3.6"
 et-xmlfile==1.0.1; python_version >= "3.6"
+faker==8.10.1; python_version >= "3.6"
 filelock==3.0.12; python_full_version >= "3.6.1"
 fiona==1.8.18; python_version >= "3.6"
 flake8==3.8.4; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")

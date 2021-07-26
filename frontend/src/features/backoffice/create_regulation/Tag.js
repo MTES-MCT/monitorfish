@@ -11,7 +11,7 @@ const Tag = props => {
   } = props
 
   return <TagWrapper>
-    {selectedURL
+    {!selectedURL
       ? <SelectedValue>{selectedValue}</SelectedValue>
       : <Link
           href={selectedURL}
@@ -22,7 +22,7 @@ const Tag = props => {
   </TagWrapper>
 }
 
-const Link = styled.div`
+const Link = styled.a`
   color: ${COLORS.blue};
   font-size: 13px;
   padding: 2.5px;

@@ -57,3 +57,5 @@ export const INFO_TEXT = {
   - ou numérique ("Zone 1"),
   - ou spécifiant une autre caractéristique ("Zone pour navire > 10m")`
 }
+
+export const INFINITE = 'infinite'

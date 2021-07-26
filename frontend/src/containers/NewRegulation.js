@@ -26,15 +26,10 @@ const CreateRegulation = () => {
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [reglementationBlocName, setReglementationBlocName] = useState('')
 
-  const getRegulatoryZones = () => {
-    dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
-  }
-
   useEffect(() => {
-    if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
-      dispatch(getAllRegulatoryZonesByRegTerritory(dispatch))
+    if (!regulationBlocArray || !zoneThemeArray || !seaFrontArray) {
+      dispatch(getAllRegulatoryZonesByRegTerritory())
     }
-    getRegulatoryZones()
   }, [])
   return (
     <CreateRegulationWrapper>

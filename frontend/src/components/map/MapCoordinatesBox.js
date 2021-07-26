@@ -34,16 +34,41 @@ const MapCoordinatesBox = ({ coordinates }) => {
 
   return (<div ref={wrapperRef}>
     <CoordinatesTypeSelection isOpen={coordinatesSelectionIsOpen}>
-      <Header onClick={() => setCoordinatesSelectionIsOpen(false)}>Unités des coordonnées</Header>
+      <Header
+        data-cy={'coordinates-selection'}
+        onClick={() => setCoordinatesSelectionIsOpen(false)}
+      >
+        Unités des coordonnées
+      </Header>
       <RadioWrapper
         inline
         name="coordinatesRadio"
         value={coordinatesFormat}
         onChange={value => dispatch(setCoordinatesFormat(value))}
       >
-        <Radio inline value={CoordinatesFormat.DEGREES_MINUTES_SECONDS} title={'Degrés Minutes Secondes'}>DMS</Radio>
-        <Radio inline value={CoordinatesFormat.DEGREES_MINUTES_DECIMALS} title={'Degrés Minutes Décimales'}>DMD</Radio>
-        <Radio inline value={CoordinatesFormat.DECIMAL_DEGREES} title={'Degrés Décimales'}>DD</Radio>
+        <Radio
+          inline
+          value={CoordinatesFormat.DEGREES_MINUTES_SECONDS}
+          title={'Degrés Minutes Secondes'}
+        >
+          DMS
+        </Radio>
+        <Radio
+          data-cy={'coordinates-selection-dmd'}
+          inline
+          value={CoordinatesFormat.DEGREES_MINUTES_DECIMALS}
+          title={'Degrés Minutes Décimales'}
+        >
+          DMD
+        </Radio>
+        <Radio
+          data-cy={'coordinates-selection-dd'}
+          inline
+          value={CoordinatesFormat.DECIMAL_DEGREES}
+          title={'Degrés Décimales'}
+        >
+          DD
+        </Radio>
       </RadioWrapper>
     </CoordinatesTypeSelection>
     <Coordinates onClick={() => setCoordinatesSelectionIsOpen(!coordinatesSelectionIsOpen)}>

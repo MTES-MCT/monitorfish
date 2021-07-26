@@ -103,20 +103,14 @@ const SaveInterestPoint = (
    * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
    */
   const updateCoordinates = (nextCoordinates, coordinates) => {
-    if (!coordinates || !coordinates.length) {
-      const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-      dispatch(updateInterestPointKeyBeingDrawed({
-        key: 'coordinates',
-        value: updatedCoordinates
-      }))
-    }
-
-    if (areDistinct(nextCoordinates, coordinates)) {
-      const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-      dispatch(updateInterestPointKeyBeingDrawed({
-        key: 'coordinates',
-        value: updatedCoordinates
-      }))
+    if (nextCoordinates && nextCoordinates.length) {
+      if (!coordinates || !coordinates.length || areDistinct(nextCoordinates, coordinates)) {
+        const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+        dispatch(updateInterestPointKeyBeingDrawed({
+          key: 'coordinates',
+          value: updatedCoordinates
+        }))
+      }
     }
   }
 
@@ -182,19 +176,27 @@ const SaveInterestPoint = (
         </RadioWrapper>
         <p>Libellé du point</p>
         <Name
+          data-cy={'interest-point-name-input'}
           type='text'
           onChange={e => setName(e.target.value)}
           value={name}
         />
         <p>Observations</p>
         <textarea
+          data-cy={'interest-point-observations-input'}
           onChange={e => setObservations(e.target.value)}
           value={observations}
         />
-        <OkButton onClick={saveInterestPoint}>
+        <OkButton
+          data-cy={'interest-point-save'}
+          onClick={saveInterestPoint}
+        >
           OK
         </OkButton>
-        <CancelButton disabled={isEditing} onClick={close}>
+        <CancelButton
+          disabled={isEditing}
+          onClick={close}
+        >
           Annuler
         </CancelButton>
       </Body>

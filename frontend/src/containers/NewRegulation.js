@@ -27,7 +27,7 @@ const CreateRegulation = () => {
   const [reglementationBlocName, setReglementationBlocName] = useState('')
 
   useEffect(() => {
-    if (!regulationBlocArray || !zoneThemeArray || !seaFrontArray) {
+    if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
       dispatch(getAllRegulatoryZonesByRegTerritory())
     }
   }, [])

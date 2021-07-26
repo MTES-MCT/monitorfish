@@ -42,7 +42,7 @@ const DatePickerStyled = styled(DatePicker)`
     display: none;
   }
   .rs-picker-toggle {
-    border: 1px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker}  !important;
+    border: 2px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker}  !important;
   }
 `
 

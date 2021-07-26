@@ -8,12 +8,14 @@ import CustomDatePicker from './create_regulation/CustomDatePicker'
 import { COLORS } from '../../constants/constants'
 import Tag from './create_regulation/Tag'
 
+const INFINITE = 'infinite'
+
 const RegulationText = props => {
   const { id, regulationText, updateRegulationText } = props
   const [currentRegulationTextName, setCurrentRegulationTextName] = useState(regulationText ? regulationText.name : '')
   const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState(regulationText ? regulationText.URL : '')
   const [currentStartDate, setCurrentStartDate] = useState(regulationText ? regulationText.startDate : undefined)
-  const [currentEndDate, setCurrentEndDate] = useState(regulationText && regulationText.endDate ? regulationText.endDate : 'inifinite')
+  const [currentEndDate, setCurrentEndDate] = useState(regulationText ? regulationText.endDate : undefined)
   const [currentTextType, setCurrentTextType] = useState(regulationText && regulationText.textType ? regulationText.textType : [])
   const [isEditing, setIsEditing] = useState(false)
 
@@ -49,7 +51,7 @@ const RegulationText = props => {
     required = !currentEndDate
     oneValueIsMissing = oneValueIsMissing || required
     setEndDateIsRequired(required)
-    required = currentTextType.length > 0
+    required = currentTextType.length === 0
     oneValueIsMissing = oneValueIsMissing || required
     setTextTypeIsRequired(required)
     return oneValueIsMissing
@@ -60,7 +62,7 @@ const RegulationText = props => {
     setCurrentRegulationTextName(regulationText ? regulationText.name : '')
     setCurrentRegulationTextURL(regulationText ? regulationText.URL : '')
     setCurrentStartDate(regulationText ? regulationText.startDate : undefined)
-    setCurrentEndDate(!regulationText || regulationText.endDate === 'infinite' ? 'infinite' : regulationText.endDate)
+    setCurrentEndDate(regulationText ? regulationText.endDate : undefined)
     setCurrentTextType(regulationText && regulationText.textType ? regulationText.textType : [])
   }
 
@@ -148,15 +150,15 @@ const RegulationText = props => {
       <Label>Fin de validité</Label>
       <CustomDatePicker
         isRequired={endDateIsRequired}
-        value={currentEndDate === 'infinite' ? undefined : currentEndDate}
+        value={currentEndDate === INFINITE ? undefined : currentEndDate}
         onChange={setCurrentEndDate}
         onOk={setCurrentEndDate}
       />
       <Or>&nbsp;ou</Or>
       <CustomCheckbox
         isRequired={endDateIsRequired}
-        checked={currentEndDate === 'infinite'}
-        onChange={_ => setCurrentEndDate('infinite')}
+        checked={currentEndDate === INFINITE}
+        onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
   </>

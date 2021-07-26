@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import Draw from 'ol/interaction/Draw'
-import { unByKey } from 'ol/Observable'
 import VectorLayer from 'ol/layer/Vector'
 import { measurementStyle } from './styles/measurement.style'
 import { v4 as uuidv4 } from 'uuid'
@@ -18,7 +17,11 @@ import {
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
 } from '../domain/reducers/InterestPoint'
-import { interestPointType } from '../domain/entities/interestPoints'
+import {
+  coordinatesAreModified,
+  coordinatesOrTypeAreModified,
+  interestPointType
+} from '../domain/entities/interestPoints'
 import saveInterestPointFeature from '../domain/use_cases/saveInterestPointFeature'
 import { getInterestPointStyle } from './styles/interestPoint.style'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -61,19 +64,30 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   const previousInterestPointBeingDrawed = usePrevious(interestPointBeingDrawed)
 
   useEffect(() => {
-    const currentZoom = map.getView().getZoom().toFixed(2)
-    if (currentZoom !== previousMapZoom.current) {
-      previousMapZoom.current = currentZoom
-      if (currentZoom < MIN_ZOOM) {
-        vectorSource.getFeatures().forEach(feature => {
-          feature.set(isHiddenByZoom, true)
-        })
-      } else {
-        vectorSource.getFeatures().forEach(feature => {
-          feature.set(isHiddenByZoom, false)
-        })
-      }
+    addLayerToMap()
+  }, [map, vectorLayer])
+
+  useEffect(() => {
+    drawExistingFeaturesOnMap()
+  }, [map, interestPoints])
+
+  useEffect(() => {
+    if (map && isDrawing) {
+      addEmptyNextMeasurement()
+      drawNewFeatureOnMap()
     }
+  }, [map, isDrawing])
+
+  useEffect(() => {
+    removeInteraction()
+  }, [isDrawing])
+
+  useEffect(() => {
+    handleDrawEvents()
+  }, [drawObject])
+
+  useEffect(() => {
+    showOrHideInterestPointsOverlays()
   }, [mapMovingAndZoomEvent])
 
   useEffect(() => {
@@ -83,39 +97,34 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
   }, [triggerInterestPointFeatureDeletion])
 
-  function coordinatesOrTypeAreModified (drawingFeatureToUpdate, interestPointBeingDrawed) {
-    return (
-      !isNaN(drawingFeatureToUpdate.getGeometry().getCoordinates()[0]) &&
-      !isNaN(drawingFeatureToUpdate.getGeometry().getCoordinates()[1]) &&
-      !isNaN(interestPointBeingDrawed.coordinates[0]) &&
-      !isNaN(interestPointBeingDrawed.coordinates[1])
-    ) &&
-      (
-        drawingFeatureToUpdate.getGeometry().getCoordinates()[0] !== interestPointBeingDrawed.coordinates[0] ||
-        drawingFeatureToUpdate.getGeometry().getCoordinates()[1] !== interestPointBeingDrawed.coordinates[1] ||
-        drawingFeatureToUpdate.getProperties().type !== interestPointBeingDrawed.type
-      )
-  }
-
-  function coordinatesAreModified (feature, previousFeature) {
-    return (
-      feature &&
-      previousFeature &&
-      feature.coordinates &&
-      previousFeature.coordinates &&
-      !isNaN(feature.coordinates[0]) &&
-      !isNaN(feature.coordinates[1]) &&
-      !isNaN(previousFeature.coordinates[0]) &&
-      !isNaN(previousFeature.coordinates[1])
-    ) &&
-      (
-        feature.coordinates[0] !== previousFeature.coordinates[0] ||
-        feature.coordinates[1] !== previousFeature.coordinates[1]
-      )
-  }
+  useEffect(() => {
+    modifyFeatureWhenCoordinatesOrTypeModified()
+  }, [interestPointBeingDrawed])
 
   useEffect(() => {
-    if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates) {
+    initLineWhenInterestPointCoordinatesModified()
+  }, [interestPointBeingDrawed])
+
+  function initLineWhenInterestPointCoordinatesModified () {
+    if (interestPointBeingDrawed && previousInterestPointBeingDrawed && coordinatesAreModified(interestPointBeingDrawed, previousInterestPointBeingDrawed)) {
+      const line = new LineString([interestPointBeingDrawed.coordinates, previousInterestPointBeingDrawed.coordinates])
+      const distance = getLength(line, { projection: OPENLAYERS_PROJECTION })
+
+      if (distance > 10) {
+        const featureId = InterestPointLine.getFeatureId(interestPointBeingDrawed.uuid)
+        if (interestPointToCoordinates.has(featureId)) {
+          interestPointToCoordinates.delete(featureId)
+          const feature = vectorSource.getFeatureById(featureId)
+          if (feature) {
+            feature.setGeometry(new LineString([interestPointBeingDrawed.coordinates, interestPointBeingDrawed.coordinates]))
+          }
+        }
+      }
+    }
+  }
+
+  function modifyFeatureWhenCoordinatesOrTypeModified () {
+    if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates && interestPointBeingDrawed.uuid) {
       const drawingFeatureToUpdate = vectorSource.getFeatureById(interestPointBeingDrawed.uuid)
 
       if (drawingFeatureToUpdate && coordinatesOrTypeAreModified(drawingFeatureToUpdate, interestPointBeingDrawed)) {
@@ -132,25 +141,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
         }))
       }
     }
-  }, [interestPointBeingDrawed])
-
-  useEffect(() => {
-    if (interestPointBeingDrawed && previousInterestPointBeingDrawed && coordinatesAreModified(interestPointBeingDrawed, previousInterestPointBeingDrawed)) {
-      const line = new LineString([interestPointBeingDrawed.coordinates, previousInterestPointBeingDrawed.coordinates])
-      const distance = getLength(line, { projection: OPENLAYERS_PROJECTION })
-
-      if (distance > 10) {
-        const featureId = InterestPointLine.getFeatureId(interestPointBeingDrawed.uuid)
-        if (interestPointToCoordinates.has(featureId)) {
-          interestPointToCoordinates.delete(featureId)
-          const feature = vectorSource.getFeatureById(featureId)
-          if (feature) {
-            feature.setGeometry(new LineString([interestPointBeingDrawed.coordinates, interestPointBeingDrawed.coordinates]))
-          }
-        }
-      }
-    }
-  }, [interestPointBeingDrawed])
+  }
 
   function moveInterestPointLine (uuid, coordinates, nextCoordinates, offset) {
     const featureId = InterestPointLine.getFeatureId(uuid)
@@ -178,32 +169,25 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     setInterestPointToCoordinates(nextVesselToCoordinates)
   }
 
-  useEffect(() => {
-    addLayerToMap()
-  }, [map, vectorLayer])
-
-  useEffect(() => {
-    drawExistingFeaturesOnMap()
-  }, [map, interestPoints])
-
-  useEffect(() => {
-    if (map && isDrawing) {
-      addEmptyNextMeasurement()
-      drawNewFeatureOnMap()
-    }
-  }, [map, isDrawing])
-
-  useEffect(() => {
-    removeInteraction()
-  }, [isDrawing])
-
-  useEffect(() => {
-    handleDrawEvents()
-  }, [drawObject])
-
   function addLayerToMap () {
     if (map && vectorLayer) {
       map.getLayers().push(vectorLayer)
+    }
+  }
+
+  function showOrHideInterestPointsOverlays () {
+    const currentZoom = map.getView().getZoom().toFixed(2)
+    if (currentZoom !== previousMapZoom.current) {
+      previousMapZoom.current = currentZoom
+      if (currentZoom < MIN_ZOOM) {
+        vectorSource.getFeatures().forEach(feature => {
+          feature.set(isHiddenByZoom, true)
+        })
+      } else {
+        vectorSource.getFeatures().forEach(feature => {
+          feature.set(isHiddenByZoom, false)
+        })
+      }
     }
   }
 
@@ -230,22 +214,17 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   function handleDrawEvents () {
     if (drawObject) {
-      let listener
-
       drawObject.on(DRAW_START_EVENT, event => {
-        listener = startDrawing(event)
+        startDrawing(event)
       })
 
       drawObject.on(DRAW_ABORT_EVENT, () => {
-        unByKey(listener)
         dispatch(endInterestPointDraw())
         dispatch(deleteInterestPointBeingDrawed())
       })
 
       drawObject.on(DRAW_END_EVENT, event => {
         dispatch(saveInterestPointFeature(event.feature))
-
-        unByKey(listener)
         dispatch(endInterestPointDraw())
       })
     }

@@ -119,8 +119,8 @@ const RegulationText = props => {
           </>
         : <Tag
             selectedValue={currentRegulationTextName}
+            selectedURL={currentRegulationTextURL}
             onCloseIconClicked={_ => updateRegulationText(id)}
-            isLink
           />
     }
     </ContentLine>

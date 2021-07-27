@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import { browserName, browserVersion } from 'react-device-detect'
@@ -15,6 +15,7 @@ import VesselList from './containers/VesselList'
 import UpdatingVesselLoader from './containers/UpdatingVesselLoader'
 import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
 import Measurement from './containers/Measurement'
+import CreateRegulation from './containers/NewRegulation'
 import VesselFilters from './containers/VesselFilters'
 import { ReactComponent as AlertSVG } from './components/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
@@ -83,11 +84,19 @@ function HomePage () {
 }
 
 function BackofficePage () {
+  const match = useRouteMatch()
   return <Provider store={backofficeStore}>
     <NamespaceContext.Provider value={'backoffice'}>
-      <BackofficeWrapper>
-        <Backoffice/>
-      </BackofficeWrapper>
+    <Switch>
+        <Route exact path={`${match.path}`}>
+          <BackofficeWrapper>
+          <Backoffice/>
+        </BackofficeWrapper>
+        </Route>
+        <Route path={`${match.path}/newRegulation`}>
+          <CreateRegulation />
+        </Route>
+      </Switch>
     </NamespaceContext.Provider>
   </Provider>
 }

@@ -93,7 +93,6 @@ const RegulatoryZoneSelectionSearchInput = props => {
             searchFields[searchProperty].searchText,
             regulatoryZones)
         } else {
-          console.log('search reg zone')
           searchFieldFoundRegulatoryZones = search(
             searchFields[searchProperty].searchText,
             searchFields[searchProperty].properties,

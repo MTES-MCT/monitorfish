@@ -27,7 +27,8 @@ const BaseMap = props => {
     children,
     showCoordinates,
     setCurrentFeature,
-    showAttributions
+    showAttributions,
+    container
   } = props
 
   const {
@@ -114,10 +115,14 @@ const BaseMap = props => {
 
       setMap(initialMap)
 
-      // Wait 15 seconds to not apply any animate() before this init phase
-      setTimeout(() => {
+      // Wait 15 seconds to not apply any animate() before this init phase only in the homepage
+      if (container === 'map') {
+        setTimeout(() => {
+          setInitRenderIsDone(true)
+        }, 15000)
+      } else {
         setInitRenderIsDone(true)
-      }, 15000)
+      }
     }
   }
 

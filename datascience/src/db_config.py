@@ -41,16 +41,21 @@ db_env = {
 }
 
 
-def create_engine(db: str, **kwargs) -> sa.engine.Engine:
-    """Returns sqlalchemy engine for designated database.
+def make_connection_string(db: str) -> str:
+    """Returns the connection string for the designated database.
 
     Args:
         db (str): Database name. Possible values :
-            'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local'
+        'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local'
 
     Returns:
-        sa.engine.Engine: sqlalchemy engine for selected database.
+        str: connection string for selected database.
+
+    Raises:
+        ValueError: with credentials for the selected database are not found in
+        environment variables.
     """
+
     try:
         CLIENT = os.environ[db_env[db]["client"]]
         HOST = os.environ[db_env[db]["host"]]
@@ -63,6 +68,21 @@ def create_engine(db: str, **kwargs) -> sa.engine.Engine:
             "Database connection credentials not found in environment: ", e.args
         )
 
-    engine = sa.create_engine(f"{CLIENT}://{USER}:{PWD}@{HOST}:{PORT}/{SID}", **kwargs)
+    return f"{CLIENT}://{USER}:{PWD}@{HOST}:{PORT}/{SID}"
+
+
+def create_engine(db: str, **kwargs) -> sa.engine.Engine:
+    """Returns sqlalchemy engine for designated database.
+
+    Args:
+        db (str): Database name. Possible values :
+            'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local'
+
+    Returns:
+        sa.engine.Engine: sqlalchemy engine for selected database.
+    """
+    connection_string = make_connection_string(db)
+
+    engine = sa.create_engine(connection_string, **kwargs)
 
     return engine

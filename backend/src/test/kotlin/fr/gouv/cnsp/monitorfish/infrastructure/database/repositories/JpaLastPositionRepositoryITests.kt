@@ -32,7 +32,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val positions = jpaLastPositionRepository.findAll()
 
         val position = positions.find {
-            it.internalReferenceNumber == "GBR000B14430"
+            it.internalReferenceNumber == "FAK000999999"
         }
         assertThat(position?.gearOnboard).hasSize(1)
         assertThat(position?.gearOnboard?.first()?.dimensions).isEqualTo(45.0)

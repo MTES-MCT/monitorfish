@@ -40,28 +40,28 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findVessel Should return a vessel When the CFR is given`() {
         // When
-        val vessel = jpaVesselRepository.findVessel("GBR000B14430", "", "")
+        val vessel = jpaVesselRepository.findVessel("FAK000999999", "", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("GBR000B14430")
+        assertThat(vessel.internalReferenceNumber).isEqualTo("FAK000999999")
     }
 
     @Test
     @Transactional
     fun `findVessel Should return a vessel When the external marking is given`() {
         // When
-        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "GR56", "")
+        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "TALK2ME", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("FRA000461560")
+        assertThat(vessel.internalReferenceNumber).isEqualTo("U_W0NTFINDME")
     }
 
     @Test
     @Transactional
     fun `search Should return a vessel When part of the CFR is given`() {
         // When
-        val vessels = jpaVesselRepository.search("GBR")
+        val vessels = jpaVesselRepository.search("FAK0")
 
         assertThat(vessels).hasSize(1)
-        assertThat(vessels.first().internalReferenceNumber).isEqualTo("GBR000B14430")
+        assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
     }
 
     @Test
@@ -87,7 +87,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `search Should return an UNDEFINED flag state When a wrong flag state is given`() {
         // When
-        val vessels = jpaVesselRepository.search("FRA000461560")
+        val vessels = jpaVesselRepository.search("U_W0NTFINDME")
 
         assertThat(vessels).hasSize(1)
         assertThat(vessels.first().flagState).isEqualTo(CountryCode.UNDEFINED)

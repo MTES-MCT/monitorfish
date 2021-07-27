@@ -100,7 +100,7 @@ const SeeMoreBackground = styled.div`
 
 const SeeMore = styled.div`
   border: 1px solid ${COLORS.charcoal};
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   padding: 5px 10px 5px 10px;
   width: max-content;
   font-size: 13px;

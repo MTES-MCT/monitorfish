@@ -78,7 +78,7 @@ const VesselTrackCard = props => {
 }
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
 `
 
@@ -156,9 +156,9 @@ const FieldName = styled.div`
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 13px;
-  font-weight: medium;
+  font-weight: 500;
   margin-top: 2px;
 `
 

@@ -27,7 +27,7 @@ const PNOMessage = props => {
               <Field>
                 <Key>Date prévue d&apos;arrivée</Key>
                 <Value>{props.message.predictedArrivalDatetimeUtc
-                  ? <>{getDateTime(props.message.predictedArrivalDatetimeUtc, true)}
+                  ? <>{getDateTime(props.message.predictedArrivalDatetimeUtc, true)}{' '}
                     <Gray>(UTC)</Gray></>
                   : <NoValue>-</NoValue>}</Value>
               </Field>
@@ -70,7 +70,7 @@ const PNOMessage = props => {
 }
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
 `
 
@@ -127,7 +127,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

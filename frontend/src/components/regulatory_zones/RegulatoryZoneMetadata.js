@@ -363,7 +363,7 @@ const Reference = styled.li`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
 `
 
@@ -378,7 +378,7 @@ const RegulatoryName = styled.span`
 `
 
 const Header = styled.div`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-left: 6px;
   margin-bottom: 6px;
   text-align: left;
@@ -396,7 +396,7 @@ const Content = styled.div`
 
 const Warning = styled.div`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   background: ${COLORS.orange};
   display: flex;
   text-align: left;
@@ -472,14 +472,14 @@ const KeyWithLineBreak = styled.div`
 `
 
 const ValueWithLineBreak = styled.div`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
 `
 
 const MarkdownValue = styled(ReactMarkdown)`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
@@ -505,7 +505,7 @@ const Key = styled.th`
 `
 
 const Value = styled.td`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

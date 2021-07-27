@@ -29,7 +29,7 @@ export const NoValue = styled.span`
 `
 
 export const StrongText = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-left: 5px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -37,6 +37,7 @@ export const StrongText = styled.span`
   max-width: 200px;
   display: inline-block;
   vertical-align: top;
+  font-weight: 500;
 `
 
 export const Red = styled.span`
@@ -52,7 +53,7 @@ export const Green = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: #8CC63F;
+  background-color: ${COLORS.mediumSeaGreen};
   border-radius: 50%;
   display: inline-block;
 `

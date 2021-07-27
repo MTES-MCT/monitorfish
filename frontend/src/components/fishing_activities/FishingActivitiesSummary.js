@@ -211,14 +211,6 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
           </Fields>
         </Zone>
         <Zone>
-          <Title>
-            <Text>Licences</Text>
-            <TextValue>{fishingActivities.isExpired
-              ? fishingActivities.isExpired
-              : <NoValue>à venir</NoValue>}</TextValue>
-          </Title>
-        </Zone>
-        <Zone>
           <Title hasTwoLines={false}>
             <Text hasTwoLines={false}>Résumé de la marée</Text>
             <TextValue hasTwoLines={false} data-cy={'vessel-fishing-trip-number'}>
@@ -386,7 +378,8 @@ const Text = styled.div`
 
 const TextValue = styled.div`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
+  font-weight: 500;
   margin: 0;
   padding-left: 10px;
   padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
@@ -454,7 +447,8 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
+  font-weight: 500;
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

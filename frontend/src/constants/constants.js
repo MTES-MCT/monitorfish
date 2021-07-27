@@ -7,7 +7,9 @@ export const COLORS = {
   lightGray: '#CCCFD6',
   charcoal: '#3B4559',
   slateGray: '#707785',
-
+  mediumSeaGreen: '#29b361',
+  gunMetal: '#282F3E',
+  shadowBlue: '#6B839E',
   grayLighter: '#F0F0F0',
   gray: '#EEEEEE',
   grayDarkerTwo: '#9A9A9A',
@@ -17,8 +19,7 @@ export const COLORS = {
   grayVesselHidden: '#B2B2B2',
   blue: '#05055E',
   vesselLightColor: '#cacce0',
-  vesselColor: 'rgb(5, 5, 94)',
-  gunMetal: '#282F3E'
+  vesselColor: 'rgb(5, 5, 94)'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

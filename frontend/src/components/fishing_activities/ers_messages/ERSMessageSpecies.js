@@ -153,7 +153,7 @@ const InlineKey = styled.div`
 `
 
 const TitleText = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
@@ -164,7 +164,7 @@ const TitleText = styled.span`
 `
 
 const Weight = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
@@ -271,7 +271,7 @@ const Key = styled.th`
 
 const TrimmedValue = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -286,7 +286,7 @@ const TrimmedValue = styled.td`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

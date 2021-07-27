@@ -30,7 +30,7 @@ const DISMessage = props => {
               <Field>
                 <Key>Date opération</Key>
                 <Value>{props.message.discardDatetimeUtc
-                  ? <>{getDateTime(props.message.discardDatetimeUtc, true)}
+                  ? <>{getDateTime(props.message.discardDatetimeUtc, true)}{' '}
                     <Gray>(UTC)</Gray></>
                   : <NoValue>-</NoValue>}</Value>
               </Field>
@@ -73,7 +73,7 @@ const FirstInlineKey = styled.div`
   font-size: 13px;
 `
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
 `
 
@@ -137,7 +137,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

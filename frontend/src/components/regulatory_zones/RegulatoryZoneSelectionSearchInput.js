@@ -228,7 +228,7 @@ const SearchBox = styled.div`
   background: ${COLORS.background};
   top: 0.5em;
   z-index: 999;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   text-decoration: none;
   border: none;
   border-radius: 0;
@@ -257,7 +257,7 @@ const Label = styled.div`
   width: 53px;
   height: 39px;
   background: ${COLORS.gray};
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   border-bottom: 1px ${COLORS.lightGray} solid;
   flex: 0 0 64px;
   font-size: 13px;
@@ -270,7 +270,7 @@ const SearchBoxInput = styled.input`
   border: none;
   border-bottom: 1px ${COLORS.gray} solid;
   border-radius: 0;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 0.8em;
   height: 40px;
   width: 100%;

@@ -129,7 +129,7 @@ const TrackDepthSelection = props => {
 }
 
 const Header = styled.div`
-  background: ${COLORS.slateGray};
+  background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   padding: 5px 0 5px 15px;
   font-size: 13px;
@@ -140,7 +140,7 @@ const TrackDepthSelectionButton = styled(MapComponentStyle)`
   top: 118px;
   height: 30px;
   width: 30px;
-  background: ${props => props.trackDepthSelectionIsOpen ? COLORS.slateGray : COLORS.charcoal};
+  background: ${props => props.trackDepthSelectionIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   position: absolute;
   right: 10px;
   margin-right: -45px;

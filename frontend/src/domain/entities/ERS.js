@@ -62,6 +62,7 @@ export const ERSMessageType = {
   CRO: {
     code: 'CRO',
     name: 'Traversée d\'une zone d\'effort',
+    fullName: 'Traversée d\'une zone d\'effort',
     component: CROMessage
   },
   DIS: {

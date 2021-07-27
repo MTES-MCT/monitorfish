@@ -203,6 +203,7 @@ const VesselsSearchBox = () => {
         onMouseEnter={() => dispatch(expandRightMenu())}
         onClick={() => dispatch(focusOnVesselSearch(focusState.CLICK_SEARCH_ICON, !selectedVessel))}
         rightMenuIsOpen={rightMenuIsOpen}
+        isOpen={selectedVessel}
         selectedVessel={selectedVessel}>
         <SearchIcon
           rightMenuIsOpen={rightMenuIsOpen}
@@ -258,7 +259,7 @@ const SearchBoxInput = styled.input`
   border: none;
   border-radius: 0;
   border-radius: 2px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 0.8em;
   height: 40px;
   width: ${props => props.isFocusedOnVesselSearch || props.vesselSidebarIsOpen ? '500px' : '320px'};
@@ -273,7 +274,7 @@ const SearchBoxInput = styled.input`
   }
   
   :hover, :focus {
-    border-bottom: 1px ${COLORS.gray} solid;
+    border: none;
   }
 `
 
@@ -283,17 +284,17 @@ const SearchButton = styled(MapButtonStyle)`
   right: 10px;
   top: 10px;
   z-index: 99;
-  background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.charcoal};
   cursor: pointer;
   border-radius: 2px;
   position: absolute;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
   border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
   
   :hover, :focus {
-      background: ${props => props.selectedVessel ? COLORS.grayDarkerTwo : COLORS.charcoal};
+      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 

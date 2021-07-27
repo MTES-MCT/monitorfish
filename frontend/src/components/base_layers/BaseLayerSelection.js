@@ -111,8 +111,8 @@ const ListItem = styled.li`
   cursor: pointer;
   margin: 0;
   background: ${COLORS.background};
-  color: ${COLORS.charcoal};
-  border-bottom: 1px solid ${COLORS.gray};
+  color: ${COLORS.gunMetal};
+  border-bottom: 1px solid ${COLORS.lightGray};
   line-height: 1.9em;
 `
 

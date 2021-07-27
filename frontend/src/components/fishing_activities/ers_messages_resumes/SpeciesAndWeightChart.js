@@ -133,9 +133,11 @@ const SpeciesAndWeightChart = ({
 const Presentation = styled.div`
   display: flex;
   height: 20px;
-  color: ${COLORS.slateGray};
-  font-size: 11px;
   margin: 2px 0 0 10px;
+  color: #282F3E;
+  font-size: 12px;
+  color: ${COLORS.gunMetal};
+  font-weight: 300;
 `
 
 const Wrapper = styled.div``
@@ -167,8 +169,8 @@ const Species = styled.div`
   min-height: 20px;
   max-height: 90px;
   align-items: center;
-  color: ${COLORS.charcoal};
-  font-size: 11px;
+  color: ${COLORS.gunMetal};
+  font-size: 12px;
   margin: 2px 0 0 10px;
   ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
   font-weight: 500;
@@ -187,7 +189,7 @@ const Weight = styled.div`
   height: ${props => props.height}px;
   min-height: 20px;
   max-height: 90px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 11px;
   display: flex;
   align-items: center;
@@ -209,6 +211,8 @@ const PresentationWeight = styled.div`
   display: flex;
   align-items: center;
   padding-left: 10px;
+  color: ${COLORS.gunMetal};
+  font-weight: 300;table-cell-
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

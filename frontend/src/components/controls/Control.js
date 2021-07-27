@@ -212,6 +212,7 @@ const Comment = styled.div`
     vertical-align: top;
     padding-top: 4px;
     font-size: 13px;
+    font-weight: 500;
 `
 
 const More = styled.div`
@@ -247,9 +248,9 @@ const Infraction = styled.div`
 `
 
 const ResumeBoxText = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0 10px 0 5px;
-  font-weight: medium;
+  font-weight: 500;
 `
 
 const ResumeBoxNumber = styled.span`
@@ -328,7 +329,7 @@ const InfractionKey = styled.th`
 
 const InfractionValue = styled.th`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-right: 10px;
   flex: initial;
   display: inline-block;
@@ -343,8 +344,9 @@ const InfractionValue = styled.th`
 
 const SubValue = styled.span`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-right: 10px;
+  font-weight: 500;
 `
 
 const GyroGreen = styled(GyroGreenSVG)`

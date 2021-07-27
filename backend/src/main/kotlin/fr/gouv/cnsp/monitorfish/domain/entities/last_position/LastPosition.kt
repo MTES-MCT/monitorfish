@@ -48,4 +48,8 @@ data class LastPosition(
         val lastControlDateTime: ZonedDateTime? = null,
         val lastControlInfraction: Boolean? = null,
         val postControlComment: String? = null,
-        val vesselIdentifier: String? = null)
+        val vesselIdentifier: String? = null,
+        val impactRiskFactor: Double? = null,
+        val probabilityRiskFactor: Double? = null,
+        val detectabilityRiskFactor: Double? = null,
+        val riskFactor: Double? = null)

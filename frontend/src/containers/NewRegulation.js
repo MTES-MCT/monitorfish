@@ -38,7 +38,7 @@ const CreateRegulation = () => {
   *   }
   * ]
   */
-  const [regulationTextList, setRegulationTextList] = useState('')
+  const [regulationTextList, setRegulationTextList] = useState([{}])
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
@@ -58,13 +58,13 @@ const CreateRegulation = () => {
   const updateRegulationText = (id, regulationText) => {
     let newRegulationTextList = [...regulationTextList]
     if (id === undefined) {
-      newRegulationTextList.push(regulationText)
+      newRegulationTextList.push(regulationText || {})
     } else {
       if (regulationText && regulationText !== {}) {
         newRegulationTextList[id] = regulationText
       } else {
         if (newRegulationTextList.length === 1) {
-          newRegulationTextList = {}
+          newRegulationTextList = [{}]
         } else {
           newRegulationTextList.slice(id, 1)
         }
@@ -169,6 +169,7 @@ const CreateRegulationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 22px);
+  overfow-y: scroll;
   padding: 11px 27px 11px 27px;
   background-color: ${COLORS.background};
 `

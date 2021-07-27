@@ -19,9 +19,9 @@ const RegulationText = props => {
 
   const [nameIsRequired, setNameIsRequired] = useState(false)
   const [URLIsrequired, setURLIsrequired] = useState(false)
-  const [startDateIsRequired, setStartDateIsRequired] = useState(false)
+  /* const [startDateIsRequired, setStartDateIsRequired] = useState(false)
   const [endDateIsRequired, setEndDateIsRequired] = useState(false)
-  const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
+  const [textTypeIsRequired, setTextTypeIsRequired] = useState(false) */
 
   const updateOrAddRegulationText = () => {
     if (!checkRequiredValueOnSubmit()) {
@@ -41,9 +41,10 @@ const RegulationText = props => {
     let oneValueIsMissing = required
     setNameIsRequired(required)
     required = !currentRegulationTextURL || currentRegulationTextURL === ''
+    // add check that it is an url with a regex
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
-    required = !currentStartDate
+    /* required = !currentStartDate
     oneValueIsMissing = oneValueIsMissing || required
     setStartDateIsRequired(required)
     required = !currentEndDate
@@ -51,17 +52,14 @@ const RegulationText = props => {
     setEndDateIsRequired(required)
     required = currentTextType.length === 0
     oneValueIsMissing = oneValueIsMissing || required
-    setTextTypeIsRequired(required)
+    setTextTypeIsRequired(required) */
     return oneValueIsMissing
   }
 
   const cancelAddNewRegulationText = () => {
-    setIsEditing(false)
-    setCurrentRegulationTextName(regulationText ? regulationText.name : '')
-    setCurrentRegulationTextURL(regulationText ? regulationText.URL : '')
-    setCurrentStartDate(regulationText ? regulationText.startDate : undefined)
-    setCurrentEndDate(regulationText ? regulationText.endDate : undefined)
-    setCurrentTextType(regulationText && regulationText.textType ? regulationText.textType : [])
+    setIsEditing(true)
+    setCurrentRegulationTextName('')
+    setCurrentRegulationTextURL('')
   }
 
   const onNameValueChange = (value) => {
@@ -85,6 +83,10 @@ const RegulationText = props => {
     return `Valide du ${startDate} ${currentEndDate === INFINITE ? 'jusqu\'à nouvel ordre' : `au ${endDate}`}.`
   }
 
+  const onCloseIconClicked = () => {
+    setIsEditing(true)
+  }
+
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulationText ? id + 1 : 1}`}</Label>
@@ -104,23 +106,24 @@ const RegulationText = props => {
             value={currentRegulationTextURL}
             onChange={value => onURLValueChange(value)}
           />
-          <ValidateButton
-            disabled={false}
-            isLast={false}
-            onClick={updateOrAddRegulationText}>
-            Enregistrer
-          </ValidateButton>
-          <CancelButton
-            disabled={false}
-            isLast={false}
-            onClick={cancelAddNewRegulationText}>
-            Annuler
-          </CancelButton>
+          {(currentRegulationTextName || currentRegulationTextURL) &&
+            <><ValidateButton
+              disabled={false}
+              isLast={false}
+              onClick={updateOrAddRegulationText}>
+              Enregistrer
+            </ValidateButton>
+            <CancelButton
+              disabled={false}
+              isLast={false}
+              onClick={cancelAddNewRegulationText}>
+              Effacer
+            </CancelButton></>}
           </>
         : <Tag
             selectedValue={currentRegulationTextName}
             selectedURL={currentRegulationTextURL}
-            onCloseIconClicked={_ => updateRegulationText(id)}
+            onCloseIconClicked={onCloseIconClicked}
           />
     }
     </ContentLine>
@@ -133,11 +136,11 @@ const RegulationText = props => {
         onChange={setCurrentTextType}
       >
         <CustomCheckbox
-          isRequired={textTypeIsRequired}
+          // isRequired={textTypeIsRequired}
           value='create'
         >création de la zone</CustomCheckbox>
         <CustomCheckbox
-          isRequired={textTypeIsRequired}
+          // isRequired={textTypeIsRequired}
           value='regulation'
         >réglementation de la zone</CustomCheckbox>
       </CheckboxGroup>
@@ -145,7 +148,7 @@ const RegulationText = props => {
     <ContentLine>
       <Label>Début de validité</Label>
       <CustomDatePicker
-        isRequired={startDateIsRequired}
+        // isRequired={startDateIsRequired}
         value={currentStartDate}
         onChange={setCurrentStartDate}
         onOk={setCurrentStartDate}
@@ -155,7 +158,7 @@ const RegulationText = props => {
     <ContentLine>
       <Label>Fin de validité</Label>
       <CustomDatePicker
-        isRequired={endDateIsRequired}
+        // isRequired={endDateIsRequired}
         value={currentEndDate === INFINITE ? undefined : currentEndDate}
         onChange={setCurrentEndDate}
         onOk={setCurrentEndDate}
@@ -163,7 +166,7 @@ const RegulationText = props => {
       />
       <Or>&nbsp;ou</Or>
       <CustomCheckbox
-        isRequired={endDateIsRequired}
+        // isRequired={endDateIsRequired}
         checked={currentEndDate === INFINITE}
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>

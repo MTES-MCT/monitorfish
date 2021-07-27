@@ -12,14 +12,11 @@ const regulatorySlice = createSlice({
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
     lawTypeOpened: null,
-<<<<<<< HEAD
     zoneThemeArray: [],
     regulationBlocArray: [],
     seaFrontArray: [],
-    layersNamesByRegTerritory: {}
-=======
+    layersNamesByRegTerritory: {},
     regulatoryGeometryToPreview: null
->>>>>>> display regulatory preview when a geometry is selected
   },
   reducers: {
     setRegulatoryGeometryToPreview (state, action) {
@@ -92,14 +89,11 @@ export const {
   setRegulatoryZoneMetadata,
   closeRegulatoryZoneMetadataPanel,
   setLawTypeOpened,
-<<<<<<< HEAD
   setZoneThemeArray,
   setRegulationBlocArray,
   setSeaFrontArray,
-  setLayersNamesByRegTerrory
-=======
+  setLayersNamesByRegTerrory,
   setRegulatoryGeometryToPreview
->>>>>>> display regulatory preview when a geometry is selected
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

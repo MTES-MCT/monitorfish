@@ -48,9 +48,6 @@ const SearchRegulations = props => {
   }
 
   const match = useRouteMatch()
-
-  const match = useRouteMatch()
-
   return (
     <SearchContainer>
       <SearchBox>

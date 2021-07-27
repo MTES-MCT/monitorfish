@@ -18,8 +18,6 @@ const zoomInSubZone = ({ subZone, feature }) => (dispatch, getState) => {
       }
     }
   } else if (feature) {
-    console.log('zoomInSubZone')
-    console.log(feature)
     const center = getCenter(feature.getGeometry().getExtent())
     if (center && center.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])) {
       dispatch(animateToRegulatoryLayer({

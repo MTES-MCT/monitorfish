@@ -21,6 +21,7 @@ const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
+const GEOMETRY_ERROR_MEESAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -159,8 +160,7 @@ function getAllGeometryWithoutProperty () {
         response.text().then(text => {
           console.error(text)
         })
-        // TODO : Change error message
-        throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
+        throw Error(GEOMETRY_ERROR_MEESAGE)
       }
     })
     .catch(error => {

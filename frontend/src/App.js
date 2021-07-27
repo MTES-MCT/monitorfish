@@ -15,11 +15,7 @@ import VesselList from './containers/VesselList'
 import UpdatingVesselLoader from './containers/UpdatingVesselLoader'
 import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
 import Measurement from './containers/Measurement'
-<<<<<<< HEAD
 import CreateRegulation from './containers/NewRegulation'
-=======
-import CreateRegulatoryZone from './containers/CreateRegulatoryZone'
->>>>>>> add a route for CreateRegulatoryZone
 import VesselFilters from './containers/VesselFilters'
 import { ReactComponent as AlertSVG } from './components/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'

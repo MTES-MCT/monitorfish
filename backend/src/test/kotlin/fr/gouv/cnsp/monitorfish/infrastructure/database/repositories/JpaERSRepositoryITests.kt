@@ -43,7 +43,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastDepartureDateAndTripNumber Should return the last departure date When the CFR is given`() {
         // When
-        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("GBR000B14430", ZonedDateTime.now())
+        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("FAK000999999", ZonedDateTime.now())
 
         // Then
         assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
@@ -77,7 +77,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     fun `findSecondDepartureDateByInternalReferenceNumber Should return the second departure date When the second DEP is not the last one`() {
         // When
         val secondDepartureDateAndTripNumber = jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber(
-                "GBR000B14430",
+                "FAK000999999",
                 ZonedDateTime.parse("2019-02-15T01:05:00Z"))
 
         // Then
@@ -90,7 +90,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     fun `findSecondDepartureDateByInternalReferenceNumber Should return the second departure date When the second DEP is the last DEP`() {
         // When
         val secondDepartureDateAndTripNumber = jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber(
-                "GBR000B14430",
+                "FAK000999999",
                 ZonedDateTime.parse("2019-02-18T01:05:00Z"))
 
         // Then
@@ -103,7 +103,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     fun `findSecondDepartureDateByInternalReferenceNumber Should throw an exception When no second DEP is found`() {
         // When
         // When
-        val throwable = catchThrowable { jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber("GBR000B14430", ZonedDateTime.parse("2019-02-28T01:05:00Z")) }
+        val throwable = catchThrowable { jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber("FAK000999999", ZonedDateTime.parse("2019-02-28T01:05:00Z")) }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
@@ -119,7 +119,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
 
         // When
         val messages = jpaERSRepository
-                .findAllMessagesBetweenDepartureDates(lastDepartureDate, now, "GBR000B14430")
+                .findAllMessagesBetweenDepartureDates(lastDepartureDate, now, "FAK000999999")
 
         // Then
         assertThat(messages).hasSize(18)
@@ -308,8 +308,8 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         val messages = jpaERSRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
 
         // Then, for the first pair of result
-        assertThat(messages.first().first.internalReferenceNumber).isEqualTo("GBR000B14430")
-        assertThat(messages.first().second?.internalReferenceNumber).isEqualTo("GBR000B14430")
+        assertThat(messages.first().first.internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(messages.first().second?.internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(messages.first().first.tripNumber).isEqualTo(9463714)
         assertThat(messages.first().second?.tripNumber).isEqualTo(9463714)
         assertThat(messages.first().first.messageType).isEqualTo(ERSMessageTypeMapping.LAN.name)

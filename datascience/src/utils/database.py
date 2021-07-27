@@ -1,9 +1,10 @@
-from typing import List
+import os
+from typing import List, Union
 
 import pandas as pd
 from sqlalchemy import inspect
 
-from src.db_config import create_engine
+from src.db_config import create_engine, make_connection_string
 from src.read_query import read_query
 
 
@@ -75,3 +76,48 @@ def print_schemas_tables(db: str, schemas=None):
             print(f"------------------------\n***{schema}***")
             for table in insp.get_table_names(schema=schema):
                 print(table)
+
+
+def pg_dump_table(db: str, table_name: str, what: Union[None, str] = None) -> str:
+    """
+    Runs ``pg_dump --schema-only`` on the selected database and returns the output as a
+    string. Useful to generate DDL statements of tables and to output test data as sql
+    scripts.
+
+      * If ``db`` is ``monitorfish_local``, the ``pg_dump`` command will be run by the
+      machine on which the command is run, so postres must be installed.
+      * If ``db`` is ``monitorfish_remote``, the command in run through in the docker
+      container with ``docker exec monitorfish_database``.
+
+    Args:
+        db (str): 'monitorfish_remote' or 'monitorfish_local'
+        table_name (str): the name of the table to export.
+        what (Union[None, str]): ``'data-only'`` ``'schema-only'`` or ``None``. If
+        ``None``, output both data and schema definition. Defaults to ``None``.
+
+    Returns:
+        str: output of ``pg_dump`` command
+    """
+    try:
+        assert db in ("monitorfish_remote", "monitorfish_local")
+    except AssertionError:
+        e = f"'db' must be 'monitorfish_local' or 'monitorfish_remote' , got {db}"
+        raise ValueError(e)
+
+    options = {"data-only": "--data-only", "schema-only": "--schema-only", None: ""}
+
+    try:
+        assert what in options
+    except AssertionError:
+        e = f"'what' must be 'data-only', 'schema-only' or None, got {what}"
+        raise ValueError(e)
+
+    connection_string = make_connection_string(db)
+
+    cmd = f"pg_dump --dbname={connection_string} {options[what]} --table {table_name}"
+
+    if db == "monitorfish_remote":
+        cmd = "docker exec monitorfish_database " + cmd
+
+    stream = os.popen(cmd)
+    return stream.read()

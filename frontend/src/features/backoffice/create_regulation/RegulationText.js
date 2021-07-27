@@ -76,13 +76,6 @@ const RegulationText = props => {
     setCurrentRegulationTextURL(value)
   }
 
-  const getValidityDate = () => {
-    const options = { day: '2-digit', year: 'numeric', month: '2-digit' }
-    const startDate = currentStartDate.toLocaleDateString('fr-FR', options)
-    const endDate = currentEndDate === INFINITE ? currentEndDate : currentEndDate.toLocaleDateString('fr-FR', options)
-    return `Valide du ${startDate} ${currentEndDate === INFINITE ? 'jusqu\'à nouvel ordre' : `au ${endDate}`}.`
-  }
-
   const onCloseIconClicked = () => {
     setIsEditing(true)
   }
@@ -171,12 +164,15 @@ const RegulationText = props => {
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
-    {currentStartDate && currentEndDate && <ValidyDateLine>
-        <ValidityDate>{getValidityDate()}</ValidityDate>
-    </ValidyDateLine>}
+    <Delimiter />
   </>
 }
 
+const Delimiter = styled.div`
+  width: 700px;
+  border-bottom: 1px solid ${COLORS.grayDarker};
+  margin-bottom: 15px;
+`
 const CustomCheckbox = styled(Checkbox)`
   padding-right: 15px;
   font-size: 13px;
@@ -194,16 +190,6 @@ const CustomCheckbox = styled(Checkbox)`
 const Or = styled.span`
   padding: 0 10px;
   color: ${COLORS.textGray};
-  font-size: 13px;
-`
-
-const ValidyDateLine = styled(ContentLine)`
-  background-color: ${COLORS.grayBackground};
-  width: 484px;
-  padding: 10px;
-`
-
-const ValidityDate = styled.span`
   font-size: 13px;
 `
 

@@ -64,8 +64,8 @@ const CreateRegulation = () => {
     <Wrapper>
     <CreateRegulationWrapper>
       <Header>
-        <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
         <Title>Saisir une nouvelle réglementation</Title>
+        <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
       </Header>
       <Content>
         <Section>
@@ -107,7 +107,7 @@ const CreateRegulation = () => {
         </Section>
       </Content>
     </CreateRegulationWrapper>
-    <BaseMap />
+    { showRegulatoryPreview && <BaseMap />}
     </Wrapper>
   )
 }
@@ -131,8 +131,8 @@ const CreateRegulationWrapper = styled.div`
 
 const LinkSpan = styled.span`
   display: flex;
-  flex-direction: row;
-  position: absolute;
+  /* flex-direction: row;
+  position: absolute; */
   cursor: pointer;
 `
 

@@ -157,14 +157,14 @@ const CorrectedMessage = styled.span`
   border-radius: 11px;
   background: ${COLORS.gainsboro};
   font-size: 11px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 7px 7px 7px 3px;
   height: 17px;
   padding: 3px 5px 0px 2px;
 `
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gainsboro};
   font-weight: 300;
 `
 
@@ -178,7 +178,7 @@ const Acknowledge = styled.div`
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   flex-grow: 4;
 `
 
@@ -188,7 +188,7 @@ const VoyageNumber = styled.div`
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   flex-grow: 3;
 `
 
@@ -198,7 +198,7 @@ const ReceptionDateTime = styled.div`
   padding: 5px 8px 9px 8px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   flex-grow: 3;
 `
 
@@ -207,7 +207,7 @@ const EmissionDateTime = styled.div`
   background: ${COLORS.background};
   padding: 5px 8px 9px 8px;
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   flex-grow: 3;
 `
 
@@ -236,7 +236,8 @@ const Header = styled.div`
 `
 
 const ERSMessageHeaderText = styled.span`
-  color: ${COLORS.gainsboro};
+  color: ${COLORS.background};
+  font-weight: 500;
   margin: 5px 5px 5px 5px;
   padding: 3px 4px 2px 0;
   font-size: 13px;
@@ -256,16 +257,17 @@ const ERSMessageName = styled.span`
 `
 
 const ERSMessageType = styled.span`
-  border: 1px solid ${COLORS.slateGray};
+  border: 2px solid ${COLORS.gainsboro};
   color: ${COLORS.gainsboro};
   margin: 5px 5px 5px 0;
-  padding: 1px 2px 1px 2px;
-  font-size: 13px;
+  padding: 0 2px 1px 2px;
+  font-size: 14px;
   vertical-align: -moz-middle-with-baseline;
   vertical-align: -webkit-baseline-middle;
-  width: 31px;
+  width: 33px;
   display: inline-block;
   text-align: center;
+  line-height: 19px;
 `
 
 const XML = styled(XMLSVG)`

@@ -192,7 +192,7 @@ const Weight = styled.div`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
   font-size: 13px;
   text-align: center;
@@ -215,13 +215,14 @@ const SubKey = styled.span`
 
 const SubValue = styled.span`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-right: 10px;
+  font-weight: 500;
 `
 
 const SubValueWeight = styled.span`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-right: 10px;
   max-width: ${props => props.withPNOWeight ? '50' : '90'}px;
   text-overflow: ellipsis;
@@ -229,6 +230,7 @@ const SubValueWeight = styled.span`
   white-space: nowrap;
   display: inline-block;
   vertical-align: bottom;
+  font-weight: 500;
 `
 
 const TableBody = styled.tbody``
@@ -267,13 +269,14 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
   background: none;
   border: none;
   line-height: normal;
+  font-weight: 500;
 `
 
 const NoValue = styled.span`

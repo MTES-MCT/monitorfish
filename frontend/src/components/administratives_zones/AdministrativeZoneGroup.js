@@ -99,7 +99,7 @@ const Text = styled.span`
   text-overflow: ellipsis;
   overflow: hidden;
   padding-bottom: 6px;
-  ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.gray};`}
+  ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
 `
 
 const Zone = styled.span`

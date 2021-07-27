@@ -24,7 +24,7 @@ const RTPMessage = props => {
               <Field>
                 <Key>Date de retour</Key>
                 <Value>{props.message.returnDatetimeUtc
-                  ? <>{getDateTime(props.message.returnDatetimeUtc, true)}
+                  ? <>{getDateTime(props.message.returnDatetimeUtc, true)}{' '}
                     <Gray>(UTC)</Gray></>
                   : <NoValue>-</NoValue>}</Value>
               </Field>
@@ -73,7 +73,7 @@ const RTPMessage = props => {
 }
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
 `
 
@@ -99,7 +99,7 @@ const SubKey = styled.span`
 
 const SubValue = styled.span`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-right: 10px;
 `
 
@@ -149,7 +149,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

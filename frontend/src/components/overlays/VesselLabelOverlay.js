@@ -118,7 +118,7 @@ const ZoneText = styled.span`
   font-weight: 500;
   display: inline-block;
   user-select: none;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   line-height: 18.5px;
   cursor: grabbing;
   margin-left: 2px;

@@ -16,6 +16,7 @@ const animatedComponents = makeAnimated()
 const options = [
   { value: 'DEP', label: 'DEP' },
   { value: 'COE', label: 'COE' },
+  { value: 'CRO', label: 'CRO' },
   { value: 'COX', label: 'COX' },
   { value: 'FAR', label: 'FAR' },
   { value: 'DIS', label: 'DIS/DIM' },

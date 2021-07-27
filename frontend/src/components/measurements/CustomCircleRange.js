@@ -62,7 +62,7 @@ const CancelButton = styled.button`
   padding: 5px 12px;
   margin: 15px 0 0 15px;
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   
   :disabled {
     border: 1px solid ${COLORS.lightGray};
@@ -118,7 +118,7 @@ const Body = styled.div`
 `
 
 const Header = styled.div`
-  background: ${COLORS.slateGray};
+  background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;

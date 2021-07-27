@@ -253,6 +253,7 @@ const VesselList = ({ namespace }) => {
       <Wrapper isFiltering={isFiltering}>
         <VesselListIcon
           healthcheckTextWarning={healthcheckTextWarning}
+          isOpen={vesselListModalIsOpen}
           selectedVessel={selectedVessel}
           onMouseEnter={() => dispatch(expandRightMenu())}
           rightMenuIsOpen={rightMenuIsOpen}
@@ -420,7 +421,6 @@ const VesselListIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.charcoal};
   padding: 8px 0px 0 1px;
   top: 68px;
   z-index: 99;
@@ -428,10 +428,11 @@ const VesselListIcon = styled(MapButtonStyle)`
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
   border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
   
   :hover, :focus {
-      background: ${COLORS.charcoal};
+      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 

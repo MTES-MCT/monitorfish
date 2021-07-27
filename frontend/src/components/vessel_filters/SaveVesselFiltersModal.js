@@ -142,7 +142,7 @@ const CancelButton = styled.button`
   padding: 4px 12px;
   margin: 20px 0;
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: -28px 0px 20px 10px;
   float: right;
   

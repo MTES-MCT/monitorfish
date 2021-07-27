@@ -10,7 +10,7 @@ export const drawStyle = new Style({
     scale: 1.5
   }),
   stroke: new Stroke({
-    color: COLORS.charcoal,
+    color: COLORS.slateGray,
     lineDash: [5, 5]
   }),
   fill: new Fill({

@@ -21,7 +21,18 @@ const VesselCard = props => {
               <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`}/>{' '}</>
             : null
         }
-        <VesselCardTitle>{props.vessel.getProperties().vesselName ? props.vessel.getProperties().vesselName : 'NOM INCONNU'} {props.vessel.getProperties().flagState ? <>({props.vessel.getProperties().flagState})</> : ''}</VesselCardTitle>
+        <VesselCardTitle>
+          {
+            props.vessel.getProperties().vesselName
+              ? props.vessel.getProperties().vesselName
+              : 'NOM INCONNU'
+          }{' '}
+          {
+            props.vessel.getProperties().flagState
+              ? <>({props.vessel.getProperties().flagState})</>
+              : ''
+          }
+        </VesselCardTitle>
         {
           props.vessel.getProperties().lastErsDateTime
             ? <ERS>
@@ -176,7 +187,7 @@ const ERS = styled.span`
   border-radius: 11px;
   background: ${COLORS.gainsboro};
   font-size: 11px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 3px 7px 7px 3px;
   height: 17px;
   padding: 3px 5px 0px 2px;
@@ -225,8 +236,8 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
-  font-weight: medium;
+  color: ${COLORS.gunMetal};
+  font-weight: 500;
   margin: 0;
   text-align: left;
   padding: 0 0 0 5px;
@@ -236,7 +247,7 @@ const Value = styled.td`
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;
-  max-width: 95px;
+  max-width: 100px;
 `
 
 const TrianglePointer = styled.div`
@@ -332,9 +343,9 @@ const FieldName = styled.div`
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 13px;
-  font-weight: medium;
+  font-weight: 500;
   margin-top: 2px;
 `
 
@@ -377,6 +388,7 @@ const VesselCardTitle = styled.span`
   display: inline-block;
   vertical-align: middle;
   margin-top: -5px;
+  font-size: 16px;
 `
 
 const VesselCardBody = styled.div`

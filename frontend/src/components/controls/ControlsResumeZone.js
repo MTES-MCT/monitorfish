@@ -78,7 +78,7 @@ const ResumesBoxes = styled.div`
 const ResumeBoxText = styled.span`
     color: ${COLORS.charcoal};
     margin: 0 10px 0 5px;
-    font-weight: medium;
+    font-weight: 500;
 `
 
 const ResumeBoxStrongText = styled.span`
@@ -92,6 +92,7 @@ const ResumeBoxStrongText = styled.span`
     text-align: center;
     font-weight: bolder;
     margin: 3px 0 0 4px;
+    font-weight: 500;
 `
 
 const ResumeBox = styled.span`

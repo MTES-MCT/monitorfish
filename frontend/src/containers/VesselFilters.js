@@ -73,6 +73,7 @@ const VesselFilters = () => {
         <VesselFilterIcon
           healthcheckTextWarning={healthcheckTextWarning}
           rightMenuIsOpen={rightMenuIsOpen}
+          isOpen={vesselFilterBoxIsOpen}
           selectedVessel={selectedVessel}
           onMouseEnter={() => dispatch(expandRightMenu())}
           title={'Mes filtres'}
@@ -135,7 +136,7 @@ const NewFilterAdded = styled.div`
   width: 86px;
   height: 18px;
   padding: 11px 12px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 13px;
   z-index: 9999;
   
@@ -172,7 +173,7 @@ const FiltersSelectedList = styled.ul`
   padding: 0;
   max-height: 550px;
   overflow-x: hidden;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
 `
 
 const Wrapper = styled.div`
@@ -183,11 +184,11 @@ const Wrapper = styled.div`
 const LastPositionInfo = styled.div`
   font-size: 13px;
   margin: 15px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
 `
 
 const Header = styled.div`
-  background: ${COLORS.slateGray};
+  background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;
@@ -213,7 +214,6 @@ const VesselFilterIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.charcoal};
   z-index: 99;
   top: 110px;
   padding: 3px 0px 0 3px;
@@ -221,10 +221,11 @@ const VesselFilterIcon = styled(MapButtonStyle)`
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
   border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
   
   :hover, :focus {
-      background: ${COLORS.charcoal};
+      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 

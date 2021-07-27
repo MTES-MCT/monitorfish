@@ -134,7 +134,7 @@ const Zones = styled.div`
   width: 335px;
   color: ${COLORS.textWhite};
   text-decoration: none;
-  background-color: ${COLORS.gray};
+  background-color: ${COLORS.gainsboro};
   padding: 1px 10px 10px 10px;
   max-height: calc(100vh - ${props => props.healthcheckTextWarning ? '210px' : '160px'});
   border-radius: 2px;
@@ -145,7 +145,7 @@ const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.charcoal};
+  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   padding: 2px 2px 2px 2px;
   margin-top: 0;
   margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px'};
@@ -154,7 +154,7 @@ const SidebarLayersIcon = styled.button`
   width: 40px;
 
   :hover, :focus {
-      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.charcoal};
+      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 
@@ -170,7 +170,7 @@ const MetadataWrapper = styled.div`
     display: block;
     color: ${COLORS.charcoal};
     text-decoration: none;
-    background-color: ${COLORS.gray};
+    background-color: ${COLORS.gainsboro};
     padding: 0;
     margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 361 : -30}px;
     margin-top: 45px;

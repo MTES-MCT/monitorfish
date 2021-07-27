@@ -132,7 +132,7 @@ const RegulatoryZoneSelectedTitle = styled.div`
   border-top-right-radius: 2px;
   border-bottom-left-radius: ${props => props.showRegulatoryZonesSelected ? '0' : '2px'};
   border-bottom-right-radius: ${props => props.showRegulatoryZonesSelected ? '0' : '2px'};
-  background: ${COLORS.lightGray};
+  background: ${COLORS.charcoal};
   
   animation: ${props => props.regulatoryZonesAddedToMySelection ? 'blink' : ''} 0.3s ease forwards;
 
@@ -157,7 +157,7 @@ const RegulatoryZoneSelectedTitle = styled.div`
     }
   }
   
-  color: ${COLORS.grayDarkerTwo};
+  color: ${COLORS.gainsboro};
   font-size: 0.8em;
   cursor: pointer;
   font-weight: 500;
@@ -175,7 +175,7 @@ const RegulatoryZoneSelectedList = styled.ul`
   padding: 0;
   max-height: 550px;
   overflow-x: hidden;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   
   animation: ${props => props.showRegulatoryZonesSelected ? 'regulatory-selected-opening' : 'regulatory-selected-closing'} 0.5s ease forwards;
 

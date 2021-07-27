@@ -164,11 +164,14 @@ const TrackExportButton = styled(MapButtonStyle)`
     0% { margin-right: 505px; opacity: 1; }
     100%   { margin-right: -45px; opacity: 0;   }
   }
+  
+  :hover, :focus {
+      background: ${COLORS.charcoal};
+  }
 `
 
 const ExportIcon = styled(ExportSVG)`
   width: 30px;
-  background: none;
 `
 
 export default TrackExport

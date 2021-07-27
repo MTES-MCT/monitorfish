@@ -80,7 +80,7 @@ const Green = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: #8CC63F;
+  background-color: ${COLORS.mediumSeaGreen};
   border-radius: 50%;
   display: inline-block;
 `
@@ -91,7 +91,7 @@ const Year = styled.span`
 `
 
 const YearResume = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 13px;
   margin-left: 15px;
   vertical-align: text-bottom;
@@ -117,7 +117,7 @@ const Row = styled.div`
   overflow: hidden !important;
   margin: 0;
   background: ${COLORS.background};
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.gray};
   line-height: 1.9em;
 `

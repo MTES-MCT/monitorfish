@@ -136,6 +136,7 @@ const VesselSidebar = () => {
                 <ObservationsIcon/> <br/> Ciblage
               </Tab>
               <Tab
+                isLast
                 disabled
               >
                 <VMSIcon/> <br/> VMS/ERS
@@ -220,7 +221,7 @@ const Panel = styled.div`
 `
 
 const Tab = styled.button`
-  padding-top: 10px;
+  padding-top: 5px;
   display: inline-block;
   width: 100px;
   margin: 0;
@@ -229,20 +230,19 @@ const Tab = styled.button`
   height: 65px;
   font-size: 13px;
   color: ${COLORS.lightGray};
-  border-right: 1px solid ${COLORS.grayDarkerTwo};
-  background: ${props => props.isActive ? COLORS.slateGray : COLORS.charcoal};
+  ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
+  background: ${props => props.isActive ? COLORS.shadowBlue : COLORS.charcoal};
   
   :hover, :focus, :active {
-    background: ${COLORS.slateGray};
-    border-right: 1px solid ${COLORS.grayDarkerTwo};
+    background: ${COLORS.shadowBlue};
+    ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
   }
 `
 
 const TabList = styled.div`
   display: flex;
   background: ${COLORS.charcoal};
-  border-bottom: 1px solid ${COLORS.grayDarkerTwo};
-  border-top: 1px solid ${COLORS.grayDarkerTwo};
+  border-top: 1px solid ${COLORS.lightGray};
 `
 
 const Wrapper = styled(MapComponentStyle)`
@@ -255,7 +255,6 @@ const Wrapper = styled(MapComponentStyle)`
   background: white;
   overflow: hidden;
   margin-right: -510px;
-  border-top: 1px solid ${COLORS.grayDarkerTwo};
  
   animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-box-opening' : 'vessel-box-closing'} 0.5s ease forwards,
   ${props => props.rightMenuIsOpen && props.openBox ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;

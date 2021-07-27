@@ -71,6 +71,7 @@ const VesselVisibility = () => {
       <VesselVisibilityIcon
         healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}
+        isOpen={vesselVisibilityBoxIsOpen}
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Affichage des dernières positions'}
@@ -177,11 +178,11 @@ const VesselShowed = styled.span`
 const LastPositionInfo = styled.div`
   font-size: 10px;
   margin: 15px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
 `
 
 const Header = styled.div`
-  background: ${COLORS.slateGray};
+  background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;
@@ -207,18 +208,18 @@ const VesselVisibilityIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.charcoal};
   padding: 3px 0px 0 3px;
   top: 152px;
   z-index: 99;
   height: 40px;
-  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  width: ${props => props.isOpen && !props.rightMenuIsOpen ? '5px' : '40px'};
+  border-radius: ${props => props.isOpen && !props.rightMenuIsOpen ? '1px' : '2px'};
+  right: ${props => props.isOpen && !props.rightMenuIsOpen ? '0' : '10px'};
+  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
-
+  
   :hover, :focus {
-      background: ${COLORS.charcoal};
+      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 

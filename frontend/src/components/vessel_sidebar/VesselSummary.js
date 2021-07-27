@@ -262,7 +262,7 @@ const VesselSummary = props => {
             <BodyWithTopPadding>
               <Field>
                 <Key>Dernier contrôle</Key>
-                <Value>{selectedVessel.lastControlDateTime ? timeago.format(selectedVessel.lastControlDateTime, 'fr') : <NoValue>à venir</NoValue>}</Value>
+                <Value>{selectedVessel.lastControlDateTime ? timeago.format(selectedVessel.lastControlDateTime, 'fr') : <NoValue>-</NoValue>}</Value>
               </Field>
 
             </BodyWithTopPadding>
@@ -274,7 +274,7 @@ const VesselSummary = props => {
 }
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
 `
 
@@ -293,17 +293,18 @@ const FieldName = styled.div`
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-size: 13px;
-  font-weight: medium;
   margin-top: 2px;
+  font-weight: 500;
 `
 
 const ValueWithLineBreak = styled.div`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
+  font-weight: 500;
 `
 
 const PhotoZone = styled.div`
@@ -369,13 +370,14 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
   background: none;
   border: none;
   line-height: normal;
+  font-weight: 500;
 `
 
 const NoValue = styled.span`

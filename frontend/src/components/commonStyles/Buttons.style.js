@@ -17,7 +17,7 @@ const baseBlackButton = css`
 
 const baseWhiteButton = css`
   border: 1px solid ${COLORS.charcoal};
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   :disabled {
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.slateGray};

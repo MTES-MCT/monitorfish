@@ -58,7 +58,7 @@ export default VesselSearchList
 
 const Results = styled.div`
   background: white;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 `

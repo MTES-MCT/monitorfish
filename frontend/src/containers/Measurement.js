@@ -96,7 +96,7 @@ const Measurement = () => {
     <Wrapper ref={wrapperRef}>
       <MeasurementWrapper
         healthcheckTextWarning={healthcheckTextWarning}
-        isMeasuring={measurementTypeToAdd}
+        isOpen={measurementIsOpen || measurementTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
@@ -138,7 +138,7 @@ const Measurement = () => {
 const MeasurementItem = styled.div`
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${COLORS.slateGray};
+  background: ${COLORS.shadowBlue};
   padding: 0;
   z-index: 99;
   right: 0;
@@ -182,7 +182,6 @@ const MeasurementWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${props => props.isMeasuring ? COLORS.slateGray : COLORS.charcoal};
   top: 207px;
   z-index: 99;
   height: 40px;
@@ -190,9 +189,10 @@ const MeasurementWrapper = styled(MapButtonStyle)`
   border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
   transition: all 0.3s;
-
+  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  
   :hover, :focus {
-      background: ${COLORS.charcoal};
+      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 

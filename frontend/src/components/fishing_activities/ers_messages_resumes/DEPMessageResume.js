@@ -106,8 +106,9 @@ const SubKey = styled.span`
 
 const SubValue = styled.span`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin-right: 10px;
+  font-weight: 500;
 `
 
 const TableBody = styled.tbody``
@@ -152,7 +153,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -162,12 +163,12 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   line-height: normal;
 `
 
 const Gray = styled.span`
-  color: ${COLORS.charcoal};
+  color: ${COLORS.gunMetal};
   font-weight: 300;
 `
 

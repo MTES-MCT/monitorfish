@@ -79,28 +79,28 @@ const Wrapper = styled.div`
 `
 
 const Flag = styled.img`
-  font-size: 25px;
-  margin-left: 5px;
-  display: inline-block;
-  width: 1em;                      
-  height: 1em;                      
   vertical-align: middle;
+  font-size: 27px;
+  margin-left: 0px;
+  display: inline-block;
+  height: 24px;
 `
 
 const VesselName = styled.span`
   display: inline-block;
-  color: ${COLORS.gainsboro};
+  color: ${COLORS.grayLighter};
   margin: 0 0 0 10px;
-  line-height: 1.9em;
+  line-height: 39px;
+  font-weight: 500;
   vertical-align: middle;
-  font-size: 20px;
+  font-size: 22px;
 `
 
 const CloseIcon = styled(CloseIconSVG)`
   width: 20px;
   float: right;
-  padding: 8px 7px 7px 7px;
-  height: 1.5em;
+  padding: 9px 4px 7px 7px;
+  height: 24px;
   cursor: pointer;
 `
 

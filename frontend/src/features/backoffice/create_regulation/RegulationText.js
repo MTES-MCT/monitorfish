@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ContentLine } from '../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../commonStyles/Input.style'
@@ -10,18 +10,30 @@ import Tag from './create_regulation/Tag'
 
 const RegulationText = props => {
   const { id, regulationText, updateRegulationText } = props
-  const [currentRegulationTextName, setCurrentRegulationTextName] = useState(regulationText ? regulationText.name : '')
-  const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState(regulationText ? regulationText.URL : '')
-  const [currentStartDate, setCurrentStartDate] = useState(regulationText ? regulationText.startDate : undefined)
-  const [currentEndDate, setCurrentEndDate] = useState(regulationText ? regulationText.endDate : undefined)
-  const [currentTextType, setCurrentTextType] = useState(regulationText && regulationText.textType ? regulationText.textType : [])
-  const [isEditing, setIsEditing] = useState(false)
+  const [currentRegulationTextName, setCurrentRegulationTextName] = useState()
+  const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState()
+  const [currentStartDate, setCurrentStartDate] = useState()
+  const [currentEndDate, setCurrentEndDate] = useState()
+  const [currentTextType, setCurrentTextType] = useState()
 
+  const [isEditing, setIsEditing] = useState(false)
   const [nameIsRequired, setNameIsRequired] = useState(false)
   const [URLIsrequired, setURLIsrequired] = useState(false)
   /* const [startDateIsRequired, setStartDateIsRequired] = useState(false)
   const [endDateIsRequired, setEndDateIsRequired] = useState(false)
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false) */
+
+  const initFormValues = () => {
+    setCurrentRegulationTextName(regulationText.name || '')
+    setCurrentRegulationTextURL(regulationText.URL || '')
+    setCurrentStartDate(regulationText.startDate || '')
+    setCurrentEndDate(regulationText.endDate || '')
+    setCurrentTextType(regulationText.textType || [])
+  }
+
+  useEffect(() => {
+    initFormValues()
+  }, [regulationText])
 
   const updateOrAddRegulationText = () => {
     if (!checkRequiredValueOnSubmit()) {
@@ -32,6 +44,7 @@ const RegulationText = props => {
         endDate: currentEndDate,
         textType: currentTextType
       }
+      setIsEditing(false)
       updateRegulationText(regulationText ? id : undefined, updatedRegulationText)
     }
   }
@@ -83,7 +96,7 @@ const RegulationText = props => {
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulationText ? id + 1 : 1}`}</Label>
-      {isEditing || regulationText === undefined || regulationText === {}
+      {isEditing || regulationText === undefined || Object.keys(regulationText).length === 0
         ? <>
           <CustomInput
             isRed={nameIsRequired}
@@ -152,7 +165,7 @@ const RegulationText = props => {
       <Label>Fin de validité</Label>
       <CustomDatePicker
         // isRequired={endDateIsRequired}
-        value={currentEndDate === INFINITE ? undefined : currentEndDate}
+        value={currentEndDate === INFINITE ? '' : currentEndDate}
         onChange={setCurrentEndDate}
         onOk={setCurrentEndDate}
         format='DD/MM/YYYY'
@@ -163,6 +176,14 @@ const RegulationText = props => {
         checked={currentEndDate === INFINITE}
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
+    </ContentLine>
+    <ContentLine>
+      <CancelButton
+        disabled={false}
+        isLast={false}
+        onClick={_ => updateRegulationText(id)}>
+        Supprimer le texte
+      </CancelButton>
     </ContentLine>
     <Delimiter />
   </>

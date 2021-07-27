@@ -27,10 +27,6 @@ class MapperWorker {
       })
   }
 
-  /**
-   *
-   * @param {*} features
-   */
   getGeometryWithoutRegulationRef (features) {
     const geometryListAsObject = {}
     features.features.forEach(feature => {

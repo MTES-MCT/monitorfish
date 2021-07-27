@@ -131,8 +131,6 @@ const CreateRegulationWrapper = styled.div`
 
 const LinkSpan = styled.span`
   display: flex;
-  /* flex-direction: row;
-  position: absolute; */
   cursor: pointer;
 `
 

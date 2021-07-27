@@ -66,7 +66,7 @@ const CreateRegulation = () => {
         if (newRegulationTextList.length === 1) {
           newRegulationTextList = [{}]
         } else {
-          newRegulationTextList.slice(id, 1)
+          newRegulationTextList.splice(id, 1)
         }
       }
     }
@@ -118,8 +118,8 @@ const CreateRegulation = () => {
           </SectionTitle>
         </Section>
         {
-          regulationTextList && regulationTextList.length > 0
-            ? regulationTextList.map((regulationText, id) => {
+          (regulationTextList && regulationTextList.length > 0) &&
+            regulationTextList.map((regulationText, id) => {
               return <RegulationText
                   key={id}
                   id={id}
@@ -127,9 +127,6 @@ const CreateRegulation = () => {
                   updateRegulationText={updateRegulationText}
                 />
             })
-            : <RegulationText
-                updateRegulationText={updateRegulationText}
-              />
         }
         <ButtonLine>
           <ValidateButton
@@ -169,7 +166,7 @@ const CreateRegulationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 22px);
-  overfow-y: scroll;
+  overflow-y: scroll;
   padding: 11px 27px 11px 27px;
   background-color: ${COLORS.background};
 `

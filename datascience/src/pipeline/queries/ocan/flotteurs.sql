@@ -15,6 +15,7 @@ ON f.idc_pays_flotteur = cp.idc_pays
 LEFT JOIN COMMUN.C_CODE_QUARTIER cq
 ON f.idc_quartier_immat = cq.idc_quartier
 WHERE f.idc_situation IN (2, 4, 5, 7, 9, 10)
+AND f.idc_statut_flotteur != 3
 AND (f.indicatif_radio IS NOT NULL
     OR f.num_cfr IS NOT NULL
     OR f.num_immat_etranger IS NOT NULL)

@@ -19,7 +19,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-name"]').contains("PHENOMENE (GB)"
+    cy.get('*[data-cy^="vessel-name"]').contains("PHENOMENE (GB)")
     cy.get('*[data-cy^="vessel-cfr"]').contains("FAK000999999")
   })
 

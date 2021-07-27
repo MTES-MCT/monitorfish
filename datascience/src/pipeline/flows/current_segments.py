@@ -152,7 +152,6 @@ def compute_current_segments(catches, segments):
         )
     )
 
-    current_segments = current_segments
     return current_segments
 
 

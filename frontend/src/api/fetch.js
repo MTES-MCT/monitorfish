@@ -163,8 +163,7 @@ function getAllGeometryWithoutProperty () {
     })
     .catch(error => {
       console.error(error)
-      // TODO : Change error message
-      throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
+      throw Error(GEOMETRY_ERROR_MEESAGE)
     })
 }
 

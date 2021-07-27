@@ -143,7 +143,9 @@ function getAllRegulatoryZonesFromAPI () {
 
 /**
  * Get geometry object of regulatory area without regulation reference
- * @returns {Promise<GeoJSON>} The feature GeoJSON
+ * @memberOf API
+ * @returns {Promise<GeoJSON>} The geometry as GeoJSON feature
+ * @throws {Error}
  */
 function getAllGeometryWithoutProperty () {
   const filter = 'references_reglementaires IS NULL AND zones IS NULL AND region IS NULL AND facade IS NULL AND law_type IS NULL AND layer_name IS NULL'

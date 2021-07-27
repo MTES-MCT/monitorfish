@@ -7,14 +7,12 @@ import { setError } from '../reducers/Global'
 const worker = new Worker()
 const MapperWorker = Comlink.wrap(worker)
 
-const getGeometryWithoutRegulationReference = dispatch => async () => {
+const getGeometryWithoutRegulationReference = () => async (dispatch) => {
   const worker = await new MapperWorker()
 
   return getAllGeometryWithoutProperty()
     .then(features => {
-      const obj = worker.getGeometryWithoutRegulationRef(features)
-      console.log(obj)
-      return obj
+      return worker.getGeometryWithoutRegulationRef(features)
     }).catch(error => {
       dispatch(setError(error))
     })

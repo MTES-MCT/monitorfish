@@ -50,7 +50,7 @@ const CreateRegulation = () => {
   }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryId = () => {
-    dispatch(getGeometryWithoutRegulationReference(dispatch))
+    dispatch(getGeometryWithoutRegulationReference())
       .then(geometryListAsObject => {
         console.log(geometryListAsObject)
         if (geometryListAsObject !== undefined) {

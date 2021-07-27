@@ -38,25 +38,41 @@ class MapperWorker {
   }
 
   convertGeoJSONFeaturesToObjectByRegTerritory (features) {
+    const regulationBlocList = new Set()
+    const zoneThemelist = new Set()
+    const seaFrontList = new Set()
     const layerNamesArray = this.#getLayerNameList(features)
     const layersNamesByRegTerritory = layerNamesArray.reduce((accumulatedObject, zone) => {
-      let lawType = zone[0].lawType
-      const layerName = zone[0].layerName
-      const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
-      if (regTerritory === 'France') {
-        lawType = `${lawType} / ${zone[0].seafront}`
+      const {
+        lawType,
+        layerName,
+        seafront
+      } = zone[0]
+      if (layerName && lawType && seafront) {
+        zoneThemelist.add(layerName)
+        const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
+        let newLawType = lawType
+        if (regTerritory === 'France') {
+          newLawType = `${lawType} / ${seafront}`
+          seaFrontList.add(seafront)
+        }
+        regulationBlocList.add(newLawType)
+        if (regTerritory && !accumulatedObject[regTerritory]) {
+          accumulatedObject[regTerritory] = {}
+        }
+        if (!accumulatedObject[regTerritory][newLawType]) {
+          accumulatedObject[regTerritory][newLawType] = {}
+        }
+        accumulatedObject[regTerritory][newLawType][layerName] = zone
       }
-
-      if (!accumulatedObject[regTerritory]) {
-        accumulatedObject[regTerritory] = {}
-      }
-      if (!accumulatedObject[regTerritory][lawType]) {
-        accumulatedObject[regTerritory][lawType] = {}
-      }
-      accumulatedObject[regTerritory][lawType][layerName] = zone
       return accumulatedObject
     }, {})
-    return layersNamesByRegTerritory
+    return {
+      layersNamesByRegTerritory,
+      zoneThemeArray: [...zoneThemelist],
+      regulationBlocArray: [...regulationBlocList],
+      seaFrontArray: [...seaFrontList]
+    }
   }
 
   getFilteredVessels (vessels, filters) {

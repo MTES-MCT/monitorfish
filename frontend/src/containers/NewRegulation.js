@@ -131,22 +131,20 @@ const CreateRegulation = () => {
                 updateRegulationText={updateRegulationText}
               />
         }
-        <BottomLine>
-          <ButtonLine>
-            <ValidateButton
-              disabled={false}
-              isLast={false}
-              onClick={addRegRefEnVigueur}>
-              Ajouter une référence reg. en vigueur
-            </ValidateButton>
-            <CustomCancelButton
-              disabled={false}
-              isLast={false}
-              onClick={addRegRefAVenir}>
-              Ajouter une référence reg. à venir
-            </CustomCancelButton>
-          </ButtonLine>
-        </BottomLine>
+        <ButtonLine>
+          <ValidateButton
+            disabled={false}
+            isLast={false}
+            onClick={addRegRefEnVigueur}>
+            Ajouter un autre texte en vigueur
+          </ValidateButton>
+          <CustomCancelButton
+            disabled={false}
+            isLast={false}
+            onClick={addRegRefAVenir}>
+            Ajouter un texte à venir
+          </CustomCancelButton>
+        </ButtonLine>
       </Content>
     </CreateRegulationWrapper>
   )
@@ -155,16 +153,10 @@ const CreateRegulation = () => {
 const CustomCancelButton = styled(CancelButton)`
   margin: 0px;
 `
-const BottomLine = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-`
 
 const ButtonLine = styled.div`
   display: flex;
   flex-direction: row;
-  padding-top: 10px;
   background-color: ${COLORS.background};
 `
 

@@ -18,6 +18,11 @@ const RegulationGeometryLine = props => {
     showRegulatoryPreview
   } = props
 
+  const onCloseIconClicked = () => {
+    setSelectedGeometry()
+    setShowRegulatoryPreview(false)
+  }
+
   return <CustomContentLine>
     <Label>Géométrie</Label>
     <CustomSelectComponent
@@ -33,12 +38,14 @@ const RegulationGeometryLine = props => {
     {selectedGeometry &&
       <><Tag
         selectedValue={selectedGeometry}
-        onCloseIconClicked={_ => setSelectedGeometry()}
+        onCloseIconClicked={onCloseIconClicked}
       />
-      { showRegulatoryPreview
-        ? <HideIcon onClick={() => setShowRegulatoryPreview(false)}/>
-        : <ShowIcon onClick={() => setShowRegulatoryPreview(true)}/>
-      }
+      <EyeWrapper>
+        { showRegulatoryPreview
+          ? <ShowIcon onClick={() => setShowRegulatoryPreview(false)}/>
+          : <HideIcon onClick={() => setShowRegulatoryPreview(true)}/>
+        }
+      </EyeWrapper>
       </>
     }
   </CustomContentLine>
@@ -48,12 +55,20 @@ const CustomContentLine = styled(ContentLine)`
   margin-top: 15px;
 `
 
+const EyeWrapper = styled.div`
+  border: 1px solid ${COLORS.grayDarker};
+  border-radius: 2px;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 const baseIcon = css`
   width: 15px;
   height: 10px;
-  padding: 8px 5px 7px 5px;
-  border: 1px solid ${COLORS.grayDarker};
-  border-radius: 2px;
   cursor: pointer;
 `
 

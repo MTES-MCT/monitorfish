@@ -6,8 +6,8 @@ const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
 const regulatorySlice = createSlice({
   name: 'regulatory',
   initialState: {
-    isReadyToShowRegulatoryZones: false,
-    selectedRegulatoryZones: getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey),
+    isReadyToShowRegulatoryLayers: false,
+    selectedRegulatoryLayers: getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey),
     regulatoryZoneMetadata: null,
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
@@ -22,29 +22,29 @@ const regulatorySlice = createSlice({
     setRegulatoryGeometryToPreview (state, action) {
       state.regulatoryGeometryToPreview = action.payload
     },
-    addRegulatoryZonesToSelection (state, action) {
-      state.selectedRegulatoryZones = action.payload
+    addRegulatoryLayersToSelection (state, action) {
+      state.selectedRegulatoryLayers = action.payload
       window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
     },
     removeRegulatoryZonesFromSelection (state, action) {
       if (action.payload.zone) {
-        state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
+        state.selectedRegulatoryLayers[action.payload.layerName] = state.selectedRegulatoryLayers[action.payload.layerName].filter(subZone => {
           return !(subZone.layerName === action.payload.layerName && subZone.zone === action.payload.zone)
         })
       } else {
-        state.selectedRegulatoryZones[action.payload.layerName] = state.selectedRegulatoryZones[action.payload.layerName].filter(subZone => {
+        state.selectedRegulatoryLayers[action.payload.layerName] = state.selectedRegulatoryLayers[action.payload.layerName].filter(subZone => {
           return !(subZone.layerName === action.payload.layerName)
         })
       }
 
-      if (!state.selectedRegulatoryZones[action.payload.layerName].length) {
-        delete state.selectedRegulatoryZones[action.payload.layerName]
+      if (!state.selectedRegulatoryLayers[action.payload.layerName].length) {
+        delete state.selectedRegulatoryLayers[action.payload.layerName]
       }
 
-      window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
+      window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryLayers))
     },
     setIsReadyToShowRegulatoryZones (state) {
-      state.isReadyToShowRegulatoryZones = true
+      state.isReadyToShowRegulatoryLayers = true
     },
     setLoadingRegulatoryZoneMetadata (state) {
       state.loadingRegulatoryZoneMetadata = true
@@ -81,7 +81,7 @@ const regulatorySlice = createSlice({
 })
 
 export const {
-  addRegulatoryZonesToSelection,
+  addRegulatoryLayersToSelection,
   removeRegulatoryZonesFromSelection,
   setIsReadyToShowRegulatoryZones,
   setLoadingRegulatoryZoneMetadata,

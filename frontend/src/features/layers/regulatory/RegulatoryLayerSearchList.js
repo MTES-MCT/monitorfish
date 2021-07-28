@@ -1,0 +1,77 @@
+import React from 'react'
+import styled from 'styled-components'
+import RegulatoryLayerSearchItem from './RegulatoryLayerSearchItem'
+import { COLORS } from '../../../constants/constants'
+
+const RegulatoryLayerSearchList = props => {
+  const {
+    toggleSelectRegulatoryLayer,
+    regulatoryLayersSelected,
+    foundRegulatoryLayers,
+    showRegulatorySection
+  } = props
+
+  return (
+    <List showRegulatorySearchInput={showRegulatorySection} foundRegulatoryLayers={foundRegulatoryLayers}>
+      {
+        foundRegulatoryLayers && Object.keys(foundRegulatoryLayers).length > 0
+          ? Object.keys(foundRegulatoryLayers).map((regulatoryLayerTopic) => {
+            return (<ListItem key={regulatoryLayerTopic}>
+              <RegulatoryLayerSearchItem
+                key={regulatoryLayerTopic}
+                regulatoryLayerZones={foundRegulatoryLayers[regulatoryLayerTopic]}
+                regulatoryLayerTopic={regulatoryLayerTopic}
+                toggleSelectRegulatoryLayer={toggleSelectRegulatoryLayer}
+                regulatoryLayersSelected={regulatoryLayersSelected}
+              />
+            </ListItem>)
+          })
+          : null
+      }
+    </List>
+  )
+}
+
+const List = styled.ul`
+  margin: 0;
+  background: ${COLORS.background};
+  border-radius: 0;
+  padding: 0;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: ${COLORS.slateGray};
+  
+  animation: ${props => props.showRegulatorySearchInput && props.foundRegulatoryLayers
+  ? Object.keys(props.foundRegulatoryLayers).length > 0
+    ? 'regulatory-result-opening'
+    : 'regulatory-result-closing'
+  : 'regulatory-result-closing'} 0.5s ease forwards;
+
+  @keyframes regulatory-result-opening {
+    0%   { height: 0;   }
+    100% { max-height: 600px; }
+  }
+
+  @keyframes regulatory-result-closing {
+    0%   { max-height: 600px; }
+    100% { height: 0;   }
+  }
+`
+
+const ListItem = styled.li`
+  padding: 0px 5px 0px 0px;
+  margin: 0;
+  font-size: 0.8em;
+  text-align: left;
+  list-style-type: none;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  cursor: pointer;
+  margin: 0;
+  line-height: 1.9em;
+`
+
+export default RegulatoryLayerSearchList

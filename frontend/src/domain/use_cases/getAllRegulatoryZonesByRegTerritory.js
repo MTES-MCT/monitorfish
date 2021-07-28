@@ -1,4 +1,4 @@
-import { getAllRegulatoryZonesFromAPI } from '../../api/fetch'
+import { getAllRegulatoryLayersFromAPI } from '../../api/fetch'
 import * as Comlink from 'comlink'
 /* eslint-disable import/no-webpack-loader-syntax */
 import Worker from 'worker-loader!../../workers/MapperWorker'
@@ -16,7 +16,7 @@ const MapperWorker = Comlink.wrap(worker)
 const getAllRegulatoryZonesByRegTerritory = () => async (dispatch) => {
   const worker = await new MapperWorker()
 
-  return getAllRegulatoryZonesFromAPI()
+  return getAllRegulatoryLayersFromAPI()
     .then(features => {
       return worker.convertGeoJSONFeaturesToObjectByRegTerritory(features)
     })

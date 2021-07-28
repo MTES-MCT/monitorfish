@@ -45,6 +45,11 @@ const DatePickerStyled = styled(DatePicker)`
   }
   .rs-picker-toggle {
     border: 1px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker}  !important;
+    box-sizing: border-box;
+  }
+  .rs-picker-toggle.rs-btn {
+    box-sizing: border-box;
+    padding: 6px;
   }
 `
 

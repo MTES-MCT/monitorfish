@@ -30,20 +30,6 @@ code {
     width: stretch;
 }
 
-.rs-checkbox-checker {
-    padding-top: 0px !important;
-    padding-left: 24px !important;
-}
-
-.rs-picker-default .rs-picker-toggle.rs-btn {
-    box-sizing: border-box;
-    padding: 6px;
-}
-
-.rs-picker-toggle {
-    box-sizing: border-box;
-}
-
 .rs-slider-mark {
     font-size: 13px;
     color: #969696;

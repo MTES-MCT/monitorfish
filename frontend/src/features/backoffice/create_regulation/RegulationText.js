@@ -207,6 +207,10 @@ const CustomCheckbox = styled(Checkbox)`
       border: 2px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker} !important;
     }
   }
+  .rs-checkbox-checker {
+    padding-top: 0px !important;
+    padding-left: 24px !important;
+} 
 `
 const Or = styled.span`
   padding: 0 10px;

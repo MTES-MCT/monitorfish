@@ -1,11 +1,15 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
+import { setIsModalOpen } from '../../../domain/reducers/Regulatory'
 import RegulationTextSection from './RegulationTextSection'
 
+import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+
 const RegulationTextModal = props => {
+  const dispatch = useDispatch()
   const { isModalOpen } = useSelector(state => state.regulatory)
   const {
     regulationTextToComeList,
@@ -14,7 +18,10 @@ const RegulationTextModal = props => {
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
-      <ModalTitle>BACKOFFISH - Ajouter une référence réglementaire à venir</ModalTitle>
+      <ModalTitle>
+        BACKOFFISH - Ajouter une référence réglementaire à venir
+        <CloseIcon onClick={() => dispatch(setIsModalOpen(false))}/>
+      </ModalTitle>
       <Section>
         <RegulationTextSection
           regulationTextList={regulationTextToComeList}
@@ -25,6 +32,13 @@ const RegulationTextModal = props => {
     </ModalContent>
   </RegulationModal>)
 }
+
+const CloseIcon = styled(CloseIconSVG)`
+  width: 16px;
+  vertical-align: text-bottom;
+  cursor: pointer;
+  float: right;
+`
 
 const RegulationModal = styled.div`
   display: ${props => props.isOpen ? 'block' : 'none'};

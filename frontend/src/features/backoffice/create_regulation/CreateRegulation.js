@@ -10,14 +10,17 @@ import {
   RegulationRegionLine,
   RegulationZoneNameLine,
   RegulationSeaFrontLine,
-  RegulationGeometryLine,
-  RegulationText
+  RegulationGeometryLine
 } from './index'
 import { COLORS } from '../../../constants/constants'
 import { formatDataForSelectPicker } from '../../../utils'
 import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
-import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
+import { ContentLine } from '../../commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../../commonStyles/Input.style'
+import { ValidateButton, CancelButton } from '../..//commonStyles/Buttons.style'
+
+import { Checkbox } from 'rsuite'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -38,17 +41,8 @@ const CreateRegulation = () => {
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
-  /*
-  * List d'objests [
-  *   {
-  *     name:
-  *     url:
-  *     dateIn:
-  *     dateOut:
-  *   }
-  * ]
-  */
-  const [regulationTextList, setRegulationTextList] = useState([{}])
+  const [regulationText, setRegulatonText] = useState('')
+  const [regulationTextURL, setRegulationTextURL] = useState('')
 
   useEffect(() => {
     if (regulatoryLawTypes && regulatoryTopics && seaFronts) {
@@ -72,31 +66,20 @@ const CreateRegulation = () => {
       })
   }
 
+  const addNewRegulationText = () => {
+    console.log('que faire quand on valide ?')
+  }
+
+  const cancelAddNewRegulationText = () => {
+    console.log('que faire quand on annule ?')
+  }
+
   const addRegRefEnVigueur = () => {
-    updateRegulationText()
+    console.log('ajout en vigueur')
   }
 
   const addRegRefAVenir = () => {
     console.log('addRegRefAVenir')
-    // display a modale
-  }
-
-  const updateRegulationText = (id, regulationText) => {
-    let newRegulationTextList = [...regulationTextList]
-    if (id === undefined) {
-      newRegulationTextList.push(regulationText || {})
-    } else {
-      if (regulationText && regulationText !== {}) {
-        newRegulationTextList[id] = regulationText
-      } else {
-        if (newRegulationTextList.length === 1) {
-          newRegulationTextList = [{}]
-        } else {
-          newRegulationTextList.splice(id, 1)
-        }
-      }
-    }
-    setRegulationTextList(newRegulationTextList)
   }
 
   return (
@@ -148,34 +131,64 @@ const CreateRegulation = () => {
       <Content>
         <Section>
           <SectionTitle>
-            références réglementaires en vigueur
+            référenceS réglementaireS en vigueur
           </SectionTitle>
         </Section>
-        {
-          (regulationTextList && regulationTextList.length > 0) &&
-            regulationTextList.map((regulationText, id) => {
-              return <RegulationText
-                  key={id}
-                  id={id}
-                  regulationText={regulationText}
-                  updateRegulationText={updateRegulationText}
-                />
-            })
-        }
-        <ButtonLine>
+        <ContentLine>
+          <Label>Texte réglementaire 1</Label>
+          <CustomInput
+            placeholder='Nom'
+            value={regulationText}
+            onChange={setRegulatonText}
+          />
+          <CustomInput
+            placeholder='URL'
+            value={regulationTextURL}
+            onChange={setRegulationTextURL}
+          />
           <ValidateButton
             disabled={false}
             isLast={false}
-            onClick={addRegRefEnVigueur}>
-            Ajouter un autre texte en vigueur
+            onClick={addNewRegulationText}>
+            Enregistrer
           </ValidateButton>
-          <CustomCancelButton
+          <CancelButton
             disabled={false}
             isLast={false}
-            onClick={addRegRefAVenir}>
-            Ajouter un texte à venir
-          </CustomCancelButton>
-        </ButtonLine>
+            onClick={cancelAddNewRegulationText}>
+            Annuler
+          </CancelButton>
+        </ContentLine>
+        <ContentLine>
+          <Label>Type de texte</Label>
+          <Checkbox>création de la zone</Checkbox>
+          <Checkbox>réglementation de la zone</Checkbox>
+        </ContentLine>
+        <ContentLine>
+          <Label>Début de validité</Label>
+        </ContentLine>
+        <ContentLine>
+          <Label>Fin de validité</Label>
+        </ContentLine>
+        <BottomLine>
+          <ValidyDateLine>
+            <ValidityDate>{'Valide du 01/03/2021 au 31/06/2021.'}</ValidityDate>
+          </ValidyDateLine>
+          <ButtonLine>
+            <ValidateButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefEnVigueur}>
+              Ajouter une référence reg. en vigueur
+            </ValidateButton>
+            <CancelButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefAVenir}>
+              Ajouter une référence reg. à venir
+            </CancelButton>
+          </ButtonLine>
+        </BottomLine>
       </Content>
     </CreateRegulationWrapper>
     { showRegulatoryPreview && <BaseMap />}
@@ -187,15 +200,25 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
 `
+const BottomLine = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
-const CustomCancelButton = styled(CancelButton)`
-  margin: 0px;
+const ValidityDate = styled.span`
+  font-size: 13px;
 `
 
 const ButtonLine = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: ${COLORS.background};
+`
+
+const ValidyDateLine = styled.div`
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 483px;
+  background-color: ${COLORS.grayBackground};
 `
 
 const Header = styled.div`
@@ -207,10 +230,8 @@ const CreateRegulationWrapper = styled.div`
   display: flex;
   flex: 2;
   flex-direction: column;
-  height: calc(100vh - 22px);
-  overflow-y: scroll;
-  padding: 11px 27px 11px 27px;
-  background-color: ${COLORS.background};
+  height: 100vh;
+  margin: 11px 27px 0px 27px;
 `
 
 const LinkSpan = styled.span`

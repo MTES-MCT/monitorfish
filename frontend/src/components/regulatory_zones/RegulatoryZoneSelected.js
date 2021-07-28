@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import RegulatoryZoneSelectedLayer from './RegulatoryZoneSelectedLayer'
 import { COLORS } from '../../constants/constants'
 import removeRegulatoryZoneFromMySelection from '../../domain/use_cases/removeRegulatoryZoneFromMySelection'
@@ -8,6 +7,7 @@ import LayersEnum, { layersType } from '../../domain/entities/layers'
 import hideLayers from '../../domain/use_cases/hideLayers'
 import { useDispatch, useSelector } from 'react-redux'
 import layer from '../../domain/reducers/Layer'
+import { ChevronIcon } from '../commonStyles/icons/ChevronIcon.style'
 
 const RegulatoryZoneSelected = props => {
   const dispatch = useDispatch()
@@ -124,9 +124,8 @@ const NoZoneSelected = styled.div`
 `
 
 const RegulatoryZoneSelectedTitle = styled.div`
-  height: 27px;
-  padding-top: 8px;
-  margin-top: 9px;
+  height: 30px;
+  padding-top: 5px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -158,11 +157,10 @@ const RegulatoryZoneSelectedTitle = styled.div`
   }
   
   color: ${COLORS.gainsboro};
-  font-size: 0.8em;
+  font-size: 16px;
   cursor: pointer;
-  font-weight: 500;
   text-align: left;
-  padding-left: 15px;
+  padding-left: 20px;
   user-select: none;
 `
 
@@ -173,7 +171,7 @@ const RegulatoryZoneSelectedList = styled.ul`
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   padding: 0;
-  max-height: 550px;
+  max-height: 70vh;
   overflow-x: hidden;
   color: ${COLORS.gunMetal};
   
@@ -197,26 +195,6 @@ const RegulatoryZoneSelectedList = styled.ul`
         opacity: 0;
         height: 0;
     }
-  }
-`
-
-const ChevronIcon = styled(ChevronIconSVG)`
-  transform: rotate(180deg);
-  width: 17px;
-  float: right;
-  margin-right: 10px;
-  margin-top: 5px;
-  
-  animation: ${props => props.isOpen ? 'chevron-zones-opening' : 'chevron-zones-closing'} 0.5s ease forwards;
-
-  @keyframes chevron-zones-opening {
-    0%   { transform: rotate(180deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  @keyframes chevron-zones-closing {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(180deg);   }
   }
 `
 

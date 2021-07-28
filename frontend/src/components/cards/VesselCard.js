@@ -197,11 +197,10 @@ const ERS = styled.span`
 `
 
 const Flag = styled.img`
-    font-size: 1.5em;
-    display: inline-block;
-    vertical-align: middle;
-    height: 24px;
-    margin-top: -5px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 0px;
 `
 
 const Body = styled.tbody``
@@ -387,7 +386,7 @@ const VesselCardTitle = styled.span`
   margin-left: 5px;
   display: inline-block;
   vertical-align: middle;
-  margin-top: -5px;
+  margin-top: 0px;
   font-size: 16px;
 `
 

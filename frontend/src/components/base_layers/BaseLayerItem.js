@@ -55,8 +55,8 @@ const BaseLayerItem = ({ layer, isShownOnInit }) => {
 const Row = styled.span`
   width: 100%;
   display: block;
-  line-height: 1.9em;
-  padding-left: 10px;
+  line-height: 18px;
+  padding-left: 20px;
   user-select: none;
 `
 

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { COLORS } from '../constants/constants'
 import BaseMap from './BaseMap'
-import { setRegulatoryGeometryToPreview } from '../domain/reducers/Regulatory'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import {
@@ -14,7 +12,9 @@ import {
   RegulationSeaFrontLine,
   RegulationGeometryLine
 } from '../components/backoffice/create_regulation/index'
+import { COLORS } from '../constants/constants'
 import { formatDataForSelectPicker } from '../utils'
+import { setRegulatoryGeometryToPreview } from '../domain/reducers/Regulatory'
 import getGeometryWithoutRegulationReference from '../domain/use_cases/getGeometryWithoutRegulationReference'
 
 const CreateRegulation = () => {
@@ -26,7 +26,6 @@ const CreateRegulation = () => {
   } = useSelector(state => state.regulatory)
 
   const [geometryObjectList, setGeometryObjectList] = useState()
-  const [geometryIdList, setGeometryIdList] = useState([])
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
   const [nameZone, setNameZone] = useState()
@@ -40,7 +39,7 @@ const CreateRegulation = () => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
       dispatch(getAllRegulatoryZonesByRegTerritory())
     }
-    getGeometryId()
+    getGeometryObjectList()
   }, [])
 
   useEffect(() => {
@@ -49,13 +48,11 @@ const CreateRegulation = () => {
     }
   }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
 
-  const getGeometryId = () => {
+  const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
       .then(geometryListAsObject => {
-        console.log(geometryListAsObject)
         if (geometryListAsObject !== undefined) {
           setGeometryObjectList(geometryListAsObject)
-          setGeometryIdList(formatDataForSelectPicker(Object.keys(geometryListAsObject)))
         }
       })
   }
@@ -99,7 +96,7 @@ const CreateRegulation = () => {
           />
           <RegulationGeometryLine
             setSelectedGeometry={setSelectedGeometry}
-            geometryIdList={geometryIdList}
+            geometryIdList={formatDataForSelectPicker(Object.keys(geometryObjectList))}
             selectedGeometry={selectedGeometry}
             setShowRegulatoryPreview={setShowRegulatoryPreview}
             showRegulatoryPreview={showRegulatoryPreview}

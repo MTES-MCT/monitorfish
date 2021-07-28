@@ -40,28 +40,28 @@ class MapperWorker {
   }
 
   convertGeoJSONFeaturesToObject (features) {
-    const layerNamesArray = this.#getLayerNameList(features)
-    const layersNamesToZones = layerNamesArray.reduce((accumulatedObject, zone) => {
+    const layerTopicsArray = this.#getLayerNameList(features)
+    const layersTopicsToZones = layerTopicsArray.reduce((accumulatedObject, zone) => {
       accumulatedObject[zone[0].layerName] = zone
       return accumulatedObject
     }, {})
 
-    return layersNamesToZones
+    return layersTopicsToZones
   }
 
   convertGeoJSONFeaturesToObjectByRegTerritory (features) {
     const regulationBlocList = new Set()
     const zoneThemelist = new Set()
     const seaFrontList = new Set()
-    const layerNamesArray = this.#getLayerNameList(features)
-    const layersNamesByRegTerritory = layerNamesArray.reduce((accumulatedObject, zone) => {
+    const layerTopicsArray = this.#getLayerNameList(features)
+    const layersTopicsByRegTerritory = layerTopicsArray.reduce((accumulatedObject, zone) => {
       const {
         lawType,
-        layerName,
+        layerTopic,
         seafront
       } = zone[0]
-      if (layerName && lawType && seafront) {
-        zoneThemelist.add(layerName)
+      if (layerTopic && lawType && seafront) {
+        zoneThemelist.add(layerTopic)
         const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
         let newLawType = lawType
         if (regTerritory === 'France') {
@@ -75,12 +75,12 @@ class MapperWorker {
         if (!accumulatedObject[regTerritory][newLawType]) {
           accumulatedObject[regTerritory][newLawType] = {}
         }
-        accumulatedObject[regTerritory][newLawType][layerName] = zone
+        accumulatedObject[regTerritory][newLawType][layerTopic] = zone
       }
       return accumulatedObject
     }, {})
     return {
-      layersNamesByRegTerritory,
+      layersTopicsByRegTerritory,
       zoneThemeArray: [...zoneThemelist],
       regulationBlocArray: [...regulationBlocList],
       seaFrontArray: [...seaFrontList]

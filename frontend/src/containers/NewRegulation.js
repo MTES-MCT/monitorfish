@@ -207,6 +207,7 @@ const ButtonLine = styled.div`
 `
 
 const Header = styled.div`
+  display: flex;
   margin-bottom: 40px;
   margin-top: 20px;
 `
@@ -214,17 +215,20 @@ const Header = styled.div`
 const CreateRegulationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 22px);
-  overflow-y: scroll;
   padding: 11px 27px 11px 27px;
   background-color: ${COLORS.background};
 `
 
 const LinkSpan = styled.span`
   display: flex;
+  flex: 1;
   flex-direction: row;
-  position: absolute;
+  justify-content: flex-start;
   cursor: pointer;
+`
+
+const Span = styled.span`
+  flex: 1;
 `
 
 const Link = styled.a`
@@ -234,14 +238,11 @@ const Link = styled.a`
   color: ${COLORS.textGray};
 `
 const Title = styled.span`
-  text-align: left;
+  text-align: center;
   font-weight: bold;
   font-size: 16px;
   color: ${COLORS.textGray};
   text-transform: uppercase;
-  left: 50%;
-  position: relative;
-  margin-left: -168px;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

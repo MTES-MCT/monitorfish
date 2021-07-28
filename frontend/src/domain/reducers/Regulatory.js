@@ -15,7 +15,8 @@ const regulatorySlice = createSlice({
     zoneThemeArray: [],
     regulationBlocArray: [],
     seaFrontArray: [],
-    layersNamesByRegTerritory: {}
+    layersNamesByRegTerritory: {},
+    isModalOpen: false
   },
   reducers: {
     addRegulatoryZonesToSelection (state, action) {
@@ -72,6 +73,9 @@ const regulatorySlice = createSlice({
     },
     setLayersNamesByRegTerrory (state, action) {
       state.layersNamesByRegTerritory = action.payload
+    },
+    setIsModalOpen (state, action) {
+      state.isModalOpen = action.payload
     }
   }
 })
@@ -88,7 +92,8 @@ export const {
   setZoneThemeArray,
   setRegulationBlocArray,
   setSeaFrontArray,
-  setLayersNamesByRegTerrory
+  setLayersNamesByRegTerrory,
+  setIsModalOpen
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

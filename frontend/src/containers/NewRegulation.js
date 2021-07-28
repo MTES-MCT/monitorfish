@@ -9,9 +9,11 @@ import RegulationZoneThemeLine from '../components/backoffice/create_regulation/
 import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
 import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
 import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
+import RegulationTextSection from '../components/backoffice/create_regulation/RegulationTextSection'
+import RegulationTextModal from '../components/backoffice/create_regulation/RegulationTextModal'
 import { formatDataForSelectPicker } from '../utils'
 import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
-import RegulationText from '../components/backoffice/RegulationText'
+import { Section, SectionTitle } from '../components/commonStyles/Backoffice.style'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -29,7 +31,8 @@ const CreateRegulation = () => {
   const [reglementationBlocName, setReglementationBlocName] = useState('')
 
   /*
-  * List d'objests [
+  *@type
+  * List d'objets [
   *   {
   *     name:
   *     url:
@@ -39,21 +42,13 @@ const CreateRegulation = () => {
   * ]
   */
   const [regulationTextList, setRegulationTextList] = useState([{}])
+  const [regulationTextToComeList, setRegulationTextToComeList] = useState([{}])
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
       dispatch(getAllRegulatoryZonesByRegTerritory())
     }
   }, [])
-
-  const addRegRefEnVigueur = () => {
-    updateRegulationText()
-  }
-
-  const addRegRefAVenir = () => {
-    console.log('addRegRefAVenir')
-    // display a modale
-  }
 
   const createRegulation = () => {
     console.log('createRegulation')
@@ -63,25 +58,8 @@ const CreateRegulation = () => {
     console.log('saveAsDraft')
   }
 
-  const updateRegulationText = (id, regulationText) => {
-    let newRegulationTextList = [...regulationTextList]
-    if (id === undefined) {
-      newRegulationTextList.push(regulationText || {})
-    } else {
-      if (regulationText && regulationText !== {}) {
-        newRegulationTextList[id] = regulationText
-      } else {
-        if (newRegulationTextList.length === 1) {
-          newRegulationTextList = [{}]
-        } else {
-          newRegulationTextList.splice(id, 1)
-        }
-      }
-    }
-    setRegulationTextList(newRegulationTextList)
-  }
-
   return (
+    <>
     <CreateRegulationWrapper>
       <Body>
         <Header>
@@ -122,36 +100,10 @@ const CreateRegulation = () => {
           </Section>
         </Content>
         <Content>
-          <Section>
-            <SectionTitle>
-              références réglementaires en vigueur
-            </SectionTitle>
-          </Section>
-          {
-            (regulationTextList && regulationTextList.length > 0) &&
-              regulationTextList.map((regulationText, id) => {
-                return <RegulationText
-                    key={id}
-                    id={id}
-                    regulationText={regulationText}
-                    updateRegulationText={updateRegulationText}
-                  />
-              })
-          }
-          <ButtonLine>
-            <ValidateButton
-              disabled={false}
-              isLast={false}
-              onClick={addRegRefEnVigueur}>
-              Ajouter un autre texte en vigueur
-            </ValidateButton>
-            <CustomCancelButton
-              disabled={false}
-              isLast={false}
-              onClick={addRegRefAVenir}>
-              Ajouter un texte à venir
-            </CustomCancelButton>
-          </ButtonLine>
+          <RegulationTextSection
+            regulationTextList={regulationTextList}
+            setRegulationTextList={setRegulationTextList}
+          />
         </Content>
       </Body>
       <Footer>
@@ -173,6 +125,11 @@ const CreateRegulation = () => {
         </FooterButton>
       </Footer>
     </CreateRegulationWrapper>
+    <RegulationTextModal
+      regulationTextToComeList={regulationTextToComeList}
+      setRegulationTextToComeList={setRegulationTextToComeList}
+    />
+    </>
   )
 }
 
@@ -183,6 +140,7 @@ const Body = styled.div`
 
 const Footer = styled.div`
   position: fixed;
+  left: O;
   bottom: 0;
   width: 100%;
   background-color:${COLORS.white};
@@ -194,16 +152,6 @@ const FooterButton = styled.div`
   justify-content: center;
   width: 100%;
   padding: 15px 0;
-`
-
-const CustomCancelButton = styled(CancelButton)`
-  margin: 0px;
-`
-
-const ButtonLine = styled.div`
-  display: flex;
-  flex-direction: row;
-  background-color: ${COLORS.background};
 `
 
 const Header = styled.div`
@@ -255,20 +203,6 @@ const ChevronIcon = styled(ChevronIconSVG)`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-`
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-const SectionTitle = styled.span`
-  text-align: left;
-  font-weight: bold;
-  font-size: 16px;
-  color: ${COLORS.textGray};
-  text-transform: uppercase;
-  width: 100%;
-  border-bottom: 1px solid ${COLORS.grayDarker};
-  margin-bottom: 20px;
 `
 
 export default CreateRegulation

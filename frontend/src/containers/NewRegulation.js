@@ -55,6 +55,14 @@ const CreateRegulation = () => {
     // display a modale
   }
 
+  const createRegulation = () => {
+    console.log('createRegulation')
+  }
+
+  const saveAsDraft = () => {
+    console.log('saveAsDraft')
+  }
+
   const updateRegulationText = (id, regulationText) => {
     let newRegulationTextList = [...regulationTextList]
     if (id === undefined) {
@@ -75,77 +83,118 @@ const CreateRegulation = () => {
 
   return (
     <CreateRegulationWrapper>
-      <Header>
-        <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
-        <Title>Saisir une nouvelle réglementation</Title>
-      </Header>
-      <Content>
-        <Section>
-          <SectionTitle>
-            identification de la zone réglementaire
-          </SectionTitle>
-          <RegulationBlocLine
-            setSelectedValue={setSelectedReglementationBloc}
-            selectedValue={selectedReglementationBloc}
-            selectData={formatDataForSelectPicker(regulationBlocArray)}
-            reglementationBlocName={reglementationBlocName}
-            setReglementationBlocName={setReglementationBlocName}
-          />
-          <RegulationZoneThemeLine
-            selectedReglementationTheme={selectedReglementationTheme}
-            setSelectedReglementationTheme={setSelectedReglementationTheme}
-            zoneThemeList={formatDataForSelectPicker(zoneThemeArray)}
-          />
-          <RegulationZoneNameLine
-            nameZone={nameZone}
-            setNameZone={setNameZone}
-          />
-          <RegulationSeaFrontLine
-            selectedSeaFront={selectedSeaFront}
-            setSelectedSeaFront={setSelectedSeaFront}
-            seaFrontList={formatDataForSelectPicker(seaFrontArray)}
-          />
-          <RegulationRegionLine
-            setSelectedRegionList={setSelectedRegionList}
-            selectedRegionList={selectedRegionList}
-          />
-        </Section>
-      </Content>
-      <Content>
-        <Section>
-          <SectionTitle>
-            références réglementaires en vigueur
-          </SectionTitle>
-        </Section>
-        {
-          (regulationTextList && regulationTextList.length > 0) &&
-            regulationTextList.map((regulationText, id) => {
-              return <RegulationText
-                  key={id}
-                  id={id}
-                  regulationText={regulationText}
-                  updateRegulationText={updateRegulationText}
-                />
-            })
-        }
-        <ButtonLine>
+      <Body>
+        <Header>
+          <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
+          <Title>Saisir une nouvelle réglementation</Title>
+          <Span />
+        </Header>
+        <Content>
+          <Section>
+            <SectionTitle>
+              identification de la zone réglementaire
+            </SectionTitle>
+            <RegulationBlocLine
+              setSelectedValue={setSelectedReglementationBloc}
+              selectedValue={selectedReglementationBloc}
+              selectData={formatDataForSelectPicker(regulationBlocArray)}
+              reglementationBlocName={reglementationBlocName}
+              setReglementationBlocName={setReglementationBlocName}
+            />
+            <RegulationZoneThemeLine
+              selectedReglementationTheme={selectedReglementationTheme}
+              setSelectedReglementationTheme={setSelectedReglementationTheme}
+              zoneThemeList={formatDataForSelectPicker(zoneThemeArray)}
+            />
+            <RegulationZoneNameLine
+              nameZone={nameZone}
+              setNameZone={setNameZone}
+            />
+            <RegulationSeaFrontLine
+              selectedSeaFront={selectedSeaFront}
+              setSelectedSeaFront={setSelectedSeaFront}
+              seaFrontList={formatDataForSelectPicker(seaFrontArray)}
+            />
+            <RegulationRegionLine
+              setSelectedRegionList={setSelectedRegionList}
+              selectedRegionList={selectedRegionList}
+            />
+          </Section>
+        </Content>
+        <Content>
+          <Section>
+            <SectionTitle>
+              références réglementaires en vigueur
+            </SectionTitle>
+          </Section>
+          {
+            (regulationTextList && regulationTextList.length > 0) &&
+              regulationTextList.map((regulationText, id) => {
+                return <RegulationText
+                    key={id}
+                    id={id}
+                    regulationText={regulationText}
+                    updateRegulationText={updateRegulationText}
+                  />
+              })
+          }
+          <ButtonLine>
+            <ValidateButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefEnVigueur}>
+              Ajouter un autre texte en vigueur
+            </ValidateButton>
+            <CustomCancelButton
+              disabled={false}
+              isLast={false}
+              onClick={addRegRefAVenir}>
+              Ajouter un texte à venir
+            </CustomCancelButton>
+          </ButtonLine>
+        </Content>
+      </Body>
+      <Footer>
+        <FooterButton>
           <ValidateButton
             disabled={false}
             isLast={false}
-            onClick={addRegRefEnVigueur}>
-            Ajouter un autre texte en vigueur
+            onClick={createRegulation}
+          >
+            Créer la réglementation
           </ValidateButton>
-          <CustomCancelButton
+          <CancelButton
             disabled={false}
             isLast={false}
-            onClick={addRegRefAVenir}>
-            Ajouter un texte à venir
-          </CustomCancelButton>
-        </ButtonLine>
-      </Content>
+            onClick={saveAsDraft}
+          >
+            Enregistrer un brouillon
+          </CancelButton>
+        </FooterButton>
+      </Footer>
     </CreateRegulationWrapper>
   )
 }
+
+const Body = styled.div`
+  height: calc(100vh - 75px);
+  overflow-y: scroll;
+`
+
+const Footer = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color:${COLORS.white};
+  z-index: 100;
+`
+
+const FooterButton = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 15px 0;
+`
 
 const CustomCancelButton = styled(CancelButton)`
   margin: 0px;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import RegulatoryZoneSelectedZone from './RegulatoryZoneSelectedZone'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
@@ -18,7 +18,6 @@ const RegulatoryZoneSelectedLayer = props => {
   const showedLayers = useSelector(state => state.layer.showedLayers)
 
   const [isOpen, setIsOpen] = useState(false)
-  const firstUpdate = useRef(true)
   const [showWholeLayer, setShowWholeLayer] = useState(undefined)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
 
@@ -44,11 +43,6 @@ const RegulatoryZoneSelectedLayer = props => {
   }, [showedLayers])
 
   useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false
-      return
-    }
-
     if (increaseNumberOfZonesOpened && decreaseNumberOfZonesOpened) {
       if (isOpen) {
         increaseNumberOfZonesOpened(regulatorySubZones.length)
@@ -117,7 +111,7 @@ const RegulatoryZoneSelectedLayer = props => {
         <Row isOpen={isOpen}>
           <Zone isLastItem={isLastItem} isOpen={isOpen}>
             <Text title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
-              <ChevronIcon firstUpdate={firstUpdate} isOpen={isOpen}/>
+              <ChevronIcon isOpen={isOpen}/>
               {regulatoryZoneName.replace(/[_]/g, ' ')}
             </Text>
             {displayNumberOfZones()}
@@ -131,7 +125,7 @@ const RegulatoryZoneSelectedLayer = props => {
             isOpen={isOpen}
             name={regulatoryZoneName.replace(/\s/g, '-')}
             length={regulatorySubZones.length}
-            firstUpdate={firstUpdate}>
+            >
             {regulatorySubZones && showedLayers && showRegulatoryZonesSelected(namespace)}
           </List>
         </Row>
@@ -158,11 +152,12 @@ const ZoneNumber = styled.span`
 
 const CloseIcon = styled(CloseIconSVG)`
   width: 16px;
-  margin: 2px 6px 0 0;
+  margin: 2px 10px 0 0;
 `
 
 const baseIcon = css`
   flex: 0 0 24px;
+  margin-right: 10px;
   align-self: center;
 `
 
@@ -180,6 +175,7 @@ const Zone = styled.span`
   justify-content: space-between;
   align-items: center;
   user-select: none;
+  font-weight: 500;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.grayDarker};`}
 `
 
@@ -214,7 +210,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   width: 16px;
   margin-right: 5px;
   margin-top: 5px;
-  transition: ${props => props.firstUpdate ? 'none' : 'all 0.5s'};
+  transition: all 0.5s;
 `
 
 export default RegulatoryZoneSelectedLayer

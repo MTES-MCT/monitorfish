@@ -5,6 +5,7 @@
 html {
     overflow-y: hidden;
     overflow-x: hidden;
+    font-size: 13px;
 }
 
 .zoom {
@@ -178,8 +179,9 @@ a:hover, a:focus {
 }
 
 .base-layers-selection > .rs-radio > .rs-radio-checker > label {
-    width: 300px;
+    width: 304px;
     display: inline-block;
+    font-weight: 500;
 }
 
 .rs-modal-full .rs-modal-dialog {

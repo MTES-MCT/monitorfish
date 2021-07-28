@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 import AdministrativeZone from './AdministrativeZone'
 import { COLORS } from '../../constants/constants'
@@ -12,6 +11,7 @@ import hideLayers from '../../domain/use_cases/hideLayers'
 import NamespaceContext from '../../domain/context/NamespaceContext'
 import layer from '../../domain/reducers/Layer'
 import { layersType } from '../../domain/entities/layers'
+import { ChevronIcon } from '../commonStyles/icons/ChevronIcon.style'
 
 const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, namespace }) => {
   const {
@@ -20,26 +20,20 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
 
   const dispatch = useDispatch()
   const showedLayers = useSelector(state => state.layer.showedLayers)
+  const { layersSidebarOpenedZone } = useSelector(state => state.layer)
 
   const [showZones, setShowZones] = useState(false)
   const [zones, setZones] = useState([])
-  const firstUpdate = useRef(true)
-
-  const { layersSidebarOpenedZone } = useSelector(state => state.layer)
 
   useEffect(() => {
     setShowZones(layersSidebarOpenedZone === layersType.ADMINISTRATIVE)
   }, [layersSidebarOpenedZone, setShowZones])
 
   useEffect(() => {
-    if (firstUpdate) {
-      firstUpdate.current = false
+    if (hideZonesListWhenSearching) {
+      setShowZones(false)
     } else {
-      if (hideZonesListWhenSearching) {
-        setShowZones(false)
-      } else {
-        setShowZones(true)
-      }
+      setShowZones(true)
     }
   }, [hideZonesListWhenSearching])
 
@@ -52,7 +46,7 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
     }
   }, [administrativeZones])
 
-  function callShowAdministrativeZone (administrativeZone, administrativeSubZone, namespace) {
+  const callShowAdministrativeZone = namespace => (administrativeZone, administrativeSubZone) => {
     dispatch(showLayer({
       type: administrativeZone,
       zone: administrativeSubZone,
@@ -60,7 +54,7 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
     }))
   }
 
-  function callHideAdministrativeZone (administrativeZone, administrativeSubZone, namespace) {
+  const callHideAdministrativeZone = namespace => (administrativeZone, administrativeSubZone) => {
     dispatch(hideLayers({
       type: administrativeZone,
       zone: administrativeSubZone,
@@ -70,17 +64,15 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
 
   const onSectionTitleClicked = () => {
     if (showZones) {
-      setShowZones(false)
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
-      setShowZones(true)
-      dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
+      dispatch(setLayersSideBarOpenedZone(layersType.ADMINISTRATIVE))
     }
   }
 
   return (
     <>
-      <SectionTitle onClick={() => onSectionTitleClicked()} showZones={showZones}>
+      <SectionTitle onClick={onSectionTitleClicked} showZones={showZones}>
         Zones administratives <ChevronIcon isOpen={showZones}/>
       </SectionTitle>
       <NamespaceContext.Consumer>
@@ -94,8 +86,8 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
                       <AdministrativeZone
                         isShownOnInit={showedLayers.some(layer_ => layer_.type === layers[0].code)}
                         layer={layers[0]}
-                        callShowAdministrativeZone={(administrativeZone, administrativeSubZone) => callShowAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
-                        callHideAdministrativeZone={(administrativeZone, administrativeSubZone) => callHideAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
+                        callShowAdministrativeZone={callShowAdministrativeZone(namespace)}
+                        callHideAdministrativeZone={callHideAdministrativeZone(namespace)}
                       />
                     </ListItem>
                   } else {
@@ -104,8 +96,8 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
                         isLastItem={zones.length === index + 1}
                         layers={layers}
                         showedLayers={showedLayers}
-                        callShowAdministrativeZone={(administrativeZone, administrativeSubZone) => callShowAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
-                        callHideAdministrativeZone={(administrativeZone, administrativeSubZone) => callHideAdministrativeZone(administrativeZone, administrativeSubZone, namespace)}
+                        callShowAdministrativeZone={callShowAdministrativeZone(namespace)}
+                        callHideAdministrativeZone={callHideAdministrativeZone(namespace)}
                       />
                     </ListItem>
                   }
@@ -121,19 +113,16 @@ const AdministrativeZones = ({ administrativeZones, hideZonesListWhenSearching, 
 }
 
 const SectionTitle = styled.div`
-  height: 27px;
-  margin-top: 10px;
-  padding-top: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  background: ${COLORS.lightGray};
-  color: ${COLORS.grayDarkerTwo};
-  font-size: 0.8em;
-  padding-top: 10px;
+  height: 30px;
+  padding-left: 20px;
+  padding-top: 5px;
+  font-size: 16px;
   cursor: pointer;
-  font-weight: 500;
+  background: ${COLORS.charcoal};
+  color: ${COLORS.gainsboro};
   text-align: left;
-  padding-left: 15px;
   user-select: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   border-bottom-left-radius: ${props => props.showZones ? '0' : '2px'};
@@ -142,53 +131,26 @@ const SectionTitle = styled.div`
 
 const ZonesList = styled.ul`
   margin: 0;
-  border-radius: 0;
   padding: 0;
-  height: 0;
   overflow-x: hidden;
-  max-height: 500px;
-  
-  animation: ${props => props.showZones ? 'admin-zones-opening' : 'admin-zones-closing'} 0.5s ease forwards;
-
-  @keyframes admin-zones-opening {
-    0%   { height: 0;   }
-    100% { height: ${props => props.zonesLength ? `${38 * props.zonesLength}px` : '175px'}; }
-  }
-
-  @keyframes admin-zones-closing {
-    0%   { height: ${props => props.zonesLength ? `${38 * props.zonesLength}px` : '175px'}; }
-    100% { height: 0;   }
-  }
-  
+  max-height: 70vh;
+  height: ${props => props.showZones && props.zonesLength ? 37 * props.zonesLength : 0}px;
+  background: ${COLORS.background};
+  transition: 0.5s all;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 `
 
 const ListItem = styled.li`
-  padding: 8px 5px 3px 0px;
-  margin: 0;
-  font-size: 0.8em;
+  line-height: 18px;
   text-align: left;
   list-style-type: none;
-  width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
   cursor: pointer;
-  margin: 0;
-  background: ${COLORS.background};
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
-  line-height: 1.9em;
-`
-
-const ChevronIcon = styled(ChevronIconSVG)`
-  width: 17px;
-  float: right;
-  margin-right: 10px;
-  margin-top: 5px;
-  transform: ${props => !props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
-  transition: all 0.5s
 `
 
 export default AdministrativeZones

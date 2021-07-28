@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 import BaseLayerItem from './BaseLayerItem'
 import { COLORS } from '../../constants/constants'
 import { baseLayers, layersType } from '../../domain/entities/layers'
 import layer from '../../domain/reducers/Layer'
+import { ChevronIcon } from '../commonStyles/icons/ChevronIcon.style'
+
 const BaseLayerSelection = ({ namespace }) => {
   const dispatch = useDispatch()
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
@@ -25,10 +26,8 @@ const BaseLayerSelection = ({ namespace }) => {
 
   const onSectionTitleClicked = () => {
     if (showBaseLayers) {
-      setShowBaseLayers(false)
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
-      setShowBaseLayers(true)
       dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
     }
   }
@@ -55,18 +54,15 @@ const BaseLayerSelection = ({ namespace }) => {
 }
 
 const SectionTitle = styled.div`
-  height: 27px;
-  margin-top: 10px;
-  padding-top: 8px;
+  height: 30px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  background: ${COLORS.lightGray};
-  color: ${COLORS.grayDarkerTwo};
-  font-size: 0.8em;
-  padding-top: 10px;
+  background: ${COLORS.charcoal};
+  color: ${COLORS.gainsboro};
+  font-size: 16px;
+  padding-top: 5px;
   cursor: pointer;
-  font-weight: 500;
   text-align: left;
-  padding-left: 15px;
+  padding-left: 20px;
   user-select: none;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -101,7 +97,6 @@ const BaseLayersList = styled.ul`
 const ListItem = styled.li`
   padding: 6px 5px 5px 0px;
   margin: 0;
-  font-size: 0.8em;
   text-align: left;
   list-style-type: none;
   width: 100%;
@@ -109,31 +104,10 @@ const ListItem = styled.li`
   text-overflow: ellipsis;
   overflow: hidden !important;
   cursor: pointer;
-  margin: 0;
   background: ${COLORS.background};
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
   line-height: 1.9em;
-`
-
-const ChevronIcon = styled(ChevronIconSVG)`
-  transform: rotate(180deg);
-  width: 17px;
-  float: right;
-  margin-right: 10px;
-  margin-top: 5px;
-  
-  animation: ${props => props.isOpen ? 'chevron-zones-opening' : 'chevron-zones-closing'} 0.5s ease forwards;
-
-  @keyframes chevron-zones-opening {
-    0%   { transform: rotate(180deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  @keyframes chevron-zones-closing {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(180deg);   }
-  }
 `
 
 export default BaseLayerSelection

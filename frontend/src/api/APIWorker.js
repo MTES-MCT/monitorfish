@@ -14,7 +14,7 @@ import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
 import getControls from '../domain/use_cases/getControls'
 import { VesselSidebarTab } from '../domain/entities/vessel'
 
-export const TWO_MINUTES = 120000
+export const TWO_MINUTES = 12000000
 
 const APIWorker = () => {
   const dispatch = useDispatch()

@@ -228,7 +228,7 @@ const Tab = styled.button`
   border: none;
   border-radius: 0;
   height: 65px;
-  font-size: 13px;
+  font-size: 12px;
   color: ${COLORS.lightGray};
   ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
   background: ${props => props.isActive ? COLORS.shadowBlue : COLORS.charcoal};

@@ -15,6 +15,7 @@ import RegulatoryZoneMetadata from '../components/regulatory_zones/RegulatoryZon
 import BaseLayerSelection from '../components/base_layers/BaseLayerSelection'
 import { MapComponentStyle } from '../components/commonStyles/MapComponent.style'
 import NamespaceContext from '../domain/context/NamespaceContext'
+import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
@@ -55,17 +56,19 @@ const LayersSidebar = () => {
     <NamespaceContext.Consumer>
       {
         namespace => (
+          <>
+          <SidebarLayersIcon
+            title={'Couches réglementaires'}
+            layersSidebarIsOpen={layersSidebarIsOpen}
+            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+            healthcheckTextWarning={healthcheckTextWarning}
+            onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
+            <Layers/>
+          </SidebarLayersIcon>
           <Sidebar
             healthcheckTextWarning={healthcheckTextWarning}
             layersSidebarIsOpen={layersSidebarIsOpen}
             firstUpdate={firstUpdate.current}>
-            <SidebarLayersIcon
-              title={'Couches réglementaires'}
-              layersSidebarIsOpen={layersSidebarIsOpen}
-              regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-              onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
-              <Layers/>
-            </SidebarLayersIcon>
             <RegulatoryZoneSelection
               regulatoryZones={regulatoryZones}
               regulatoryZonesAddedToMySelection={regulatoryZonesAddedToMySelection}
@@ -98,57 +101,38 @@ const LayersSidebar = () => {
               />
             </MetadataWrapper>
           </Sidebar>
+          </>
         )
       }
     </NamespaceContext.Consumer>)
 }
 
 const Sidebar = styled(MapComponentStyle)`
-  margin-left: -373px;
+  margin-left: ${props => props.layersSidebarIsOpen ? 0 : '-418px'};
+  opacity: ${props => props.layersSidebarIsOpen ? 1 : 0};
   top: 10px;
-  left: 12px;
+  left: 57px;
   z-index: 999;
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  animation: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '' : props.layersSidebarIsOpen ? 'left-sidebar-opening' : 'left-sidebar-closing'} 0.5s ease forwards;
-
-  @keyframes left-sidebar-hiding {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
-  }
-
-  @keyframes left-sidebar-opening {
-    0%   { margin-left: -373px;   }
-    100% { margin-left: 0; }
-  }
-
-  @keyframes left-sidebar-closing {
-    0% { margin-left: 0; }
-    100%   { margin-left: -373px;   }
-  }
+  transition: 0.5s all;
 `
 
 const Zones = styled.div`
   margin-top: 5px;
-  width: 335px;
-  color: ${COLORS.textWhite};
-  text-decoration: none;
-  background-color: ${COLORS.gainsboro};
-  padding: 1px 10px 10px 10px;
+  width: 350px;
   max-height: calc(100vh - ${props => props.healthcheckTextWarning ? '210px' : '160px'});
-  border-radius: 2px;
-  overflow: hidden;
 `
 
-const SidebarLayersIcon = styled.button`
+const SidebarLayersIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
   background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   padding: 2px 2px 2px 2px;
-  margin-top: 0;
-  margin-left: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? '190px' : props.layersSidebarIsOpen ? '187px' : '190px'};
+  top: 10px;
+  left: 12px;
   border-radius: 2px;
   height: 40px;
   width: 40px;

@@ -52,7 +52,6 @@ const CreateRegulation = () => {
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
       .then(geometryListAsObject => {
-        console.log(geometryListAsObject)
         if (geometryListAsObject !== undefined) {
           setGeometryObjectList(geometryListAsObject)
         }

@@ -79,3 +79,12 @@ test-pipeline:
 	cd datascience && poetry run coverage run -m unittest discover && poetry run coverage report && poetry run coverage html
 update-python-dependencies:
 	cd datascience && poetry export --without-hashes -o requirements.txt && poetry export --without-hashes --dev -o requirements-dev.txt
+
+# DOC commands
+update-sphinx-docs:
+	cd docs && \
+	ls --almost-all | grep -v .nojekyll | xargs rm -r && \
+	cd ../datascience/docs && \
+	make html && \
+	mv build/html/* ../../docs && \
+	rm -r build

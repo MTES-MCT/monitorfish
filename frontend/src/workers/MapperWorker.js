@@ -27,11 +27,19 @@ class MapperWorker {
       })
   }
 
+  #getGeometryIdFromFeatureId = (feature) => {
+    return feature.split('.')[1]
+  }
+
   getGeometryWithoutRegulationRef (features) {
     const geometryListAsObject = {}
+    console.log('getGeometryWithoutRegulationRef')
+    console.log(features)
     features.features.forEach(feature => {
-      geometryListAsObject[feature.id.split('.')[1]] = feature.geometry
+      geometryListAsObject[this.#getGeometryIdFromFeatureId(feature.id)] = feature.geometry
     })
+    console.log('geometryListAsObject')
+    console.log(geometryListAsObject)
     return geometryListAsObject
   }
 

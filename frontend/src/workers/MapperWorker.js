@@ -33,13 +33,9 @@ class MapperWorker {
 
   getGeometryWithoutRegulationRef (features) {
     const geometryListAsObject = {}
-    console.log('getGeometryWithoutRegulationRef')
-    console.log(features)
     features.features.forEach(feature => {
       geometryListAsObject[this.#getGeometryIdFromFeatureId(feature.id)] = feature.geometry
     })
-    console.log('geometryListAsObject')
-    console.log(geometryListAsObject)
     return geometryListAsObject
   }
 

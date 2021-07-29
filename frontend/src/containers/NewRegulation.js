@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from './BaseMap'
@@ -34,6 +34,7 @@ const CreateRegulation = () => {
   const [reglementationBlocName, setReglementationBlocName] = useState('')
   const [selectedGeometry, setSelectedGeometry] = useState()
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
+  const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
@@ -51,6 +52,7 @@ const CreateRegulation = () => {
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
       .then(geometryListAsObject => {
+        console.log(geometryListAsObject)
         if (geometryListAsObject !== undefined) {
           setGeometryObjectList(geometryListAsObject)
         }
@@ -96,7 +98,7 @@ const CreateRegulation = () => {
           />
           <RegulationGeometryLine
             setSelectedGeometry={setSelectedGeometry}
-            geometryIdList={formatDataForSelectPicker(Object.keys(geometryObjectList))}
+            geometryIdList={geometryIdList}
             selectedGeometry={selectedGeometry}
             setShowRegulatoryPreview={setShowRegulatoryPreview}
             showRegulatoryPreview={showRegulatoryPreview}

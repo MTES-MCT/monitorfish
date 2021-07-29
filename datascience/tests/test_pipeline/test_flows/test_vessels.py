@@ -108,6 +108,7 @@ class TestVesselsFlow(unittest.TestCase):
                     None,
                 ],
                 "sailing_category": ["2ème", None],
+                "beacon_number": [None, "beacbeac"],
             }
         )
 
@@ -142,6 +143,7 @@ class TestVesselsFlow(unittest.TestCase):
             "operator_emails",
             "vessel_phones",
             "vessel_emails",
+            "beacon_number",
         ]
 
         expected_values = [
@@ -174,6 +176,7 @@ class TestVesselsFlow(unittest.TestCase):
                 ["lepecheur@email.fish"],
                 ["0123456789", "9876543210"],
                 [],
+                None,
             ],
             [
                 2,
@@ -204,6 +207,7 @@ class TestVesselsFlow(unittest.TestCase):
                 ["operateur@fish.net"],
                 [],
                 [],
+                "beacbeac",
             ],
         ]
 
@@ -258,6 +262,7 @@ class TestVesselsFlow(unittest.TestCase):
             "operator_emails",
             "vessel_phones",
             "vessel_emails",
+            "beacon_number",
         ]
 
         values = [
@@ -290,6 +295,7 @@ class TestVesselsFlow(unittest.TestCase):
                 ["lepecheur@email.fish"],
                 ["0123456789", "9876543210"],
                 [],
+                None,
             ],
             [
                 2,
@@ -320,6 +326,7 @@ class TestVesselsFlow(unittest.TestCase):
                 ["operateur@fish.net"],
                 [],
                 [],
+                "beacbeac",
             ],
         ]
 

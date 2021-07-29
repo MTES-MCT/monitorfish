@@ -66,16 +66,23 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
     def test_compute_current_segments(self):
         segments_definitions = pd.DataFrame(
             data=[
-                ["A", "DRB", "27.7", "SCE"],
-                ["A", None, "37", None],
-                ["B", "OTM", "27.7.b.4", "HKE"],
-                ["B", "DRB", "27.7", "SCE"],
-                ["C", "OTM", None, "BFT"],
-                ["D", "OTB", "27.4", None],
-                ["E", "PTB", None, None],
-                ["F", None, None, "TUR"],
+                ["A", "DRB", "27.7", "SCE", 1, 1],
+                ["A", None, "37", None, 1, 1],
+                ["B", "OTM", "27.7.b.4", "HKE", 1, 2],
+                ["B", "DRB", "27.7", "SCE", 1, 2],
+                ["C", "OTM", None, "BFT", 1, 1],
+                ["D", "OTB", "27.4", None, 1, 1],
+                ["E", "PTB", None, None, 3, 1],
+                ["F", None, None, "TUR", 1, 3],
             ],
-            columns=["segment", "gear", "fao_area", "species"],
+            columns=[
+                "segment",
+                "gear",
+                "fao_area",
+                "species",
+                "risk_factor",
+                "control_priority_level",
+            ],
         )
 
         vessels_catches = pd.DataFrame(
@@ -110,6 +117,13 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
         self.assertEqual(
             set(res.loc["vessel_4", "segments"]), set(expected_segments["vessel_4"])
         )
+
+        self.assertEqual(res.loc["vessel_1", "control_priority_level"], 2)
+        self.assertEqual(res.loc["vessel_2", "control_priority_level"], 3)
+        self.assertEqual(res.loc["vessel_4", "control_priority_level"], 2)
+        self.assertEqual(res.loc["vessel_1", "risk_factor"], 1)
+        self.assertEqual(res.loc["vessel_2", "risk_factor"], 3)
+        self.assertEqual(res.loc["vessel_4", "risk_factor"], 1)
 
     def test_merge_segments_catches(self):
         catches = pd.DataFrame(
@@ -164,9 +178,17 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
         )
 
         current_segments = pd.DataFrame(
-            columns=pd.Index(["cfr", "segments", "total_weight_onboard"]),
+            columns=pd.Index(
+                [
+                    "cfr",
+                    "segments",
+                    "total_weight_onboard",
+                    "risk_factor",
+                    "control_priority_level",
+                ]
+            ),
             data=[
-                ["Vessel_A", np.array(["Segment 1", "Segment 2"]), 249.06],
+                ["Vessel_A", np.array(["Segment 1", "Segment 2"]), 249.06, 2, 3],
             ],
         ).set_index("cfr")
 
@@ -183,6 +205,8 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 "species_onboard",
                 "segments",
                 "total_weight_onboard",
+                "risk_factor",
+                "control_priority_level",
             ],
         )
 
@@ -210,6 +234,8 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                     },
                 ],
                 249.06,
+                2,
+                3,
             ],
             [
                 "Vessel_B",
@@ -219,6 +245,8 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 [{"gear": "OTM", "mesh": 70.0, "dimensions": 45.0}],
                 np.nan,
                 0.0,
+                1,
+                1,
             ],
         ]
 

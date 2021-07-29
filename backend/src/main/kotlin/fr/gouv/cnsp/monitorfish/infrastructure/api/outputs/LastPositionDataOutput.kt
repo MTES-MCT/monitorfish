@@ -39,7 +39,11 @@ data class LastPositionDataOutput(
         val lastControlDateTime: ZonedDateTime? = null,
         val lastControlInfraction: Boolean? = null,
         val postControlComment: String? = null,
-        val vesselIdentifier: String? = null) {
+        val vesselIdentifier: String? = null,
+        val impactRiskFactor: Double? = null,
+        val probabilityRiskFactor: Double? = null,
+        val detectabilityRiskFactor: Double? = null,
+        val riskFactor: Double? = null) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -75,7 +79,11 @@ data class LastPositionDataOutput(
                     lastControlDateTime = position.lastControlDateTime,
                     lastControlInfraction = position.lastControlInfraction,
                     postControlComment = position.postControlComment,
-                    vesselIdentifier = position.vesselIdentifier)
+                    vesselIdentifier = position.vesselIdentifier,
+                    impactRiskFactor = position.impactRiskFactor,
+                    probabilityRiskFactor = position.probabilityRiskFactor,
+                    detectabilityRiskFactor = position.detectabilityRiskFactor,
+                    riskFactor = position.riskFactor)
         }
     }
 }

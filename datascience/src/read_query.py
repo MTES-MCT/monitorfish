@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Union
 
 import pandas as pd
+from sqlalchemy import text
 
 from config import QUERIES_LOCATION
 
@@ -13,6 +14,7 @@ def read_saved_query(
     db: str,
     sql_filepath: Union[str, Path],
     parse_dates: Union[list, dict, None] = None,
+    params=None,
     **kwargs
 ) -> pd.DataFrame:
     """Run saved SQLquery on a database. Supported databases :
@@ -20,6 +22,7 @@ def read_saved_query(
     - 'fmc': FMC database
     - 'monitorfish_remote': Monitorfish database
     - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
@@ -35,6 +38,7 @@ def read_saved_query(
             (D, s, ns, ms, us) in case of parsing integer timestamps.
             - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
             to the keyword arguments of :func:`pandas.to_datetime`
+        params: dict of query parameters
         kwargs : passed to pd.read_sql
 
     Returns:
@@ -43,32 +47,33 @@ def read_saved_query(
     engine = create_engine(db=db)
     sql_filepath = QUERIES_LOCATION / sql_filepath
     with open(sql_filepath, "r") as sql_file:
-        query = sql_file.read()
-    return pd.read_sql(query, engine, parse_dates=parse_dates, **kwargs)
+        query = text(sql_file.read())
+    return pd.read_sql(query, engine, parse_dates=parse_dates, params=params, **kwargs)
 
 
 def read_query(
-    db: str, query: str, chunksize: Union[None, str] = None, **kwargs
+    db: str, query, chunksize: Union[None, str] = None, params=None, **kwargs
 ) -> pd.DataFrame:
     """Run SQLquery on a database. Supported databases :
     - 'ocan' : OCAN database
     - 'fmc': FMC database
     - 'monitorfish_remote': Monitorfish database
     - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
     Args:
         db (str): Database name. Possible values :
             'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
-        query (str): Query string
+        query (str): Query string or SQLAlchemy Selectable
         kwargs : passed to pd.read_sql
 
     Returns:
         pd.DataFrame: Query results
     """
     engine = create_engine(db=db, execution_options=dict(stream_results=True))
-    return pd.read_sql(query, engine, chunksize=chunksize, **kwargs)
+    return pd.read_sql(query, engine, chunksize=chunksize, params=params, **kwargs)
 
 
 def read_table(db: str, schema: str, table_name: str):
@@ -77,6 +82,7 @@ def read_table(db: str, schema: str, table_name: str):
     - 'fmc': FMC database
     - 'monitorfish_remote': Monitorfish database
     - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Args:
         db (str): Database name. Possible values :

@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 
 import pandas as pd
+import sqlalchemy
 
 from src.pipeline.flows.infractions import (
     clean_infractions,
@@ -17,7 +18,7 @@ class TestInfractionsFlow(unittest.TestCase):
     def test_extract_infractions(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_infractions.run()
-        self.assertTrue(isinstance(query, str))
+        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     def test_clean_infractions(self):
         infractions = pd.DataFrame(

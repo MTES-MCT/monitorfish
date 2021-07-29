@@ -96,7 +96,16 @@ data class LastPositionEntity(
         @Column(name = "post_control_comments")
         val postControlComment: String? = null,
         @Column(name = "vessel_identifier")
-        val vesselIdentifier: String? = null) : Serializable {
+        val vesselIdentifier: String? = null,
+        @Column(name = "impact_risk_factor")
+        val impactRiskFactor: Double? = null,
+        @Column(name = "probability_risk_factor")
+        val probabilityRiskFactor: Double? = null,
+        @Column(name = "detectability_risk_factor")
+        val detectabilityRiskFactor: Double? = null,
+        @Column(name = "risk_factor")
+        val riskFactor: Double? = null,
+        ) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,
@@ -131,5 +140,9 @@ data class LastPositionEntity(
             lastControlDateTime = lastControlDateTime,
             lastControlInfraction = lastControlInfraction,
             postControlComment = postControlComment,
-            vesselIdentifier = vesselIdentifier)
+            vesselIdentifier = vesselIdentifier,
+            impactRiskFactor = impactRiskFactor,
+            probabilityRiskFactor = probabilityRiskFactor,
+            detectabilityRiskFactor = detectabilityRiskFactor,
+            riskFactor = riskFactor)
 }

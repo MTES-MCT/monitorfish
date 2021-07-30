@@ -10,7 +10,7 @@ import RegulationRegionLine from '../components/backoffice/create_regulation/Reg
 import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
 import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
 import RegulatoryTextSection from '../components/backoffice/create_regulation/RegulatoryTextSection'
-import RegulationTextModal from '../components/backoffice/create_regulation/RegulationToComeModal'
+import RegulatoryTextToComeModal from '../components/backoffice/create_regulation/RegulatoryTextToComeModal'
 import { formatDataForSelectPicker, addTextToRegulatoryTextList } from '../utils'
 import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
 import { Section, SectionTitle, Footer, FooterButton } from '../components/commonStyles/Backoffice.style'
@@ -137,7 +137,7 @@ const CreateRegulation = () => {
         </FooterButton>
       </Footer>
     </CreateRegulationWrapper>
-    {isModalOpen && <RegulationTextModal />}
+    {isModalOpen && <RegulatoryTextToComeModal />}
     </>
   )
 }

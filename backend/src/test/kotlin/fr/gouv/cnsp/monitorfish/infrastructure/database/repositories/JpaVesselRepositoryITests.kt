@@ -66,6 +66,16 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `search Should return a vessel When part of the beacon number is given`() {
+        // When
+        val vessels = jpaVesselRepository.search("BEACON_IS")
+
+        assertThat(vessels).hasSize(1)
+        assertThat(vessels.first().beaconNumber).isEqualTo("BEACON_IS_NOT_BACON")
+    }
+
+    @Test
+    @Transactional
     fun `search Should return no vessel When no search string is given`() {
         // When
         val vessels = jpaVesselRepository.search("")

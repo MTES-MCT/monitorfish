@@ -11,7 +11,8 @@ class SearchVessels(private val vesselRepository: VesselRepository) {
             !(it.internalReferenceNumber.isNullOrEmpty() &&
                     it.externalReferenceNumber.isNullOrEmpty() &&
                     it.ircs.isNullOrEmpty() &&
-                    it.mmsi.isNullOrEmpty())
+                    it.mmsi.isNullOrEmpty() &&
+                    it.beaconNumber.isNullOrEmpty())
         }
     }
 }

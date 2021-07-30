@@ -57,6 +57,30 @@ def extract_controls():
 
 
 @task(checkpoint=False)
+def extract_catch_controls() -> pd.DataFrame:
+    return extract(
+        db_name="fmc",
+        query_filepath="fmc/catch_controls.sql",
+    )
+
+
+@task(checkpoint=False)
+def transform_catch_controls(catch_controls: pd.DataFrame) -> pd.DataFrame:
+
+    catch_controls = catch_controls.copy(deep=True)
+    catch_controls_columns = ["species_code", "catch_weight", "number_fish"]
+    catch_controls["catch_controls"] = df_to_dict_series(
+        catch_controls[catch_controls_columns], remove_nulls=True
+    )
+
+    catch_controls = (
+        catch_controls.groupby("id")["catch_controls"].apply(list).reset_index()
+    )
+
+    return catch_controls
+
+
+@task(checkpoint=False)
 def transform_controls(controls):
 
     logger = prefect.context.get("logger")
@@ -148,6 +172,12 @@ def transform_controls(controls):
 
 
 @task(checkpoint=False)
+def merge(controls: pd.DataFrame, catch_controls: pd.DataFrame) -> pd.DataFrame:
+
+    return pd.merge(controls, catch_controls, how="left", on="id")
+
+
+@task(checkpoint=False)
 def load_controls(controls):
     load(
         controls,
@@ -156,7 +186,7 @@ def load_controls(controls):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         pg_array_columns=["infraction_ids"],
-        jsonb_columns=["gear_controls"],
+        jsonb_columns=["gear_controls", "catch_controls"],
         delete_before_insert=True,
     )
 
@@ -164,4 +194,7 @@ def load_controls(controls):
 with Flow("Controls") as flow:
     controls = extract_controls()
     controls = transform_controls(controls)
+    catch_controls = extract_catch_controls()
+    catch_controls = transform_catch_controls(catch_controls)
+    controls = merge(controls, catch_controls)
     load_controls(controls)

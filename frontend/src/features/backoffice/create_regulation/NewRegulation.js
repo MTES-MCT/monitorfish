@@ -14,7 +14,7 @@ import UpcomingRegulationModal from '../components/backoffice/create_regulation/
 import { formatDataForSelectPicker, addTextToRegulatoryTextList } from '../utils'
 import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
 import { Section, SectionTitle, Footer, FooterButton } from '../components/commonStyles/Backoffice.style'
-import { setSelectedRegulation, setSelectedUpcomingRegulationId, setSelectedUpcomingRegulation } from '../domain/reducers/Regulation'
+import { setSelectedRegulation, resetModal } from '../domain/reducers/Regulation'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -57,8 +57,7 @@ const CreateRegulation = () => {
       console.log('setUpcomingRegulationList ')
       console.log(selectedUpcomingRegulation)
       setUpcomingRegulationList(addTextToRegulatoryTextList(upcomingRegulationList, selectedUpcomingRegulationId, selectedUpcomingRegulation))
-      setSelectedUpcomingRegulation(null)
-      setSelectedUpcomingRegulationId(null)
+      resetModal()
     }
   }, [isModalOpen, selectedUpcomingRegulation])
 

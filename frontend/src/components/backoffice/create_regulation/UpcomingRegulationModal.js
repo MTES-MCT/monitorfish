@@ -4,10 +4,11 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import {
+  resetModal,
   setIsModalOpen,
   setSelectedUpcomingRegulation
 } from '../../../domain/reducers/Regulation'
-import RegulationTextSection from './RegulatoryTextSection'
+import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 
@@ -17,17 +18,10 @@ const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    selectedUpcomingRegulationId,
-    selectedUpcomingRegulation,
-    selectedRegulation
+    selectedUpcomingRegulation
   } = useSelector(state => state.regulation)
 
-  const upcomingRegulation =
-    selectedRegulation && selectedRegulation.upcomingRegulation.length > 0
-      ? { ...selectedRegulation.upcomingRegulation[selectedUpcomingRegulationId] }
-      : {}
-
-  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation && upcomingRegulation.regulatoryText ? [...upcomingRegulation.regulatoryTextList] : [{}])
+  const [regulatoryTextList, setRegulatoryTextList] = useState(selectedUpcomingRegulation.regulatoryText ? [...selectedUpcomingRegulation.regulatoryTextList] : [{}])
 
   const addUpcomingRegulation = () => {
     const newUpcomingRegulation = { ...selectedUpcomingRegulation }
@@ -44,7 +38,7 @@ const UpcomingRegulationModal = () => {
           <CloseIcon onClick={() => dispatch(setIsModalOpen(false))}/>
         </ModalTitle>
         <Section>
-          <RegulationTextSection
+          <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
             source={'upcomingRegulation'}
@@ -63,7 +57,7 @@ const UpcomingRegulationModal = () => {
         <CancelButton
           disabled={false}
           isLast={false}
-          onClick={() => dispatch(setIsModalOpen(false))}
+          onClick={() => dispatch(resetModal())}
         >
           Annuler
         </CancelButton>

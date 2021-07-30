@@ -12,22 +12,22 @@ import Tag from './create_regulation/Tag'
  * RegulatoryText props
  * @type {number} id
  * @type {RegulatoryText} regulatoryText
- * @type {Function} updateRegulationText
+ * @type {Function} updateRegulatoryText
  */
 const RegulatoryText = props => {
   const {
     id,
     regulatoryText,
     /**
-     * @function updateRegulationText
+     * @function updateRegulatoryText
      * update the value of an object at a given list index
      * @param {number} regulatoryTextId
      * @parem {RegulatoryText} newRegulatoryText
      */
-    updateRegulationText
+    updateRegulatoryText
   } = props
-  const [currentRegulationTextName, setCurrentRegulationTextName] = useState()
-  const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState()
+  const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState()
+  const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState()
   const [currentStartDate, setCurrentStartDate] = useState()
   const [currentEndDate, setCurrentEndDate] = useState()
   const [currentTextType, setCurrentTextType] = useState()
@@ -40,8 +40,8 @@ const RegulatoryText = props => {
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false) */
 
   const initFormValues = () => {
-    setCurrentRegulationTextName(regulatoryText.name || '')
-    setCurrentRegulationTextURL(regulatoryText.URL || '')
+    setCurrentRegulatoryTextName(regulatoryText.name || '')
+    setCurrentRegulatoryTextURL(regulatoryText.URL || '')
     setCurrentStartDate(regulatoryText.startDate || '')
     setCurrentEndDate(regulatoryText.endDate || '')
     setCurrentTextType(regulatoryText.textType || [])
@@ -55,24 +55,24 @@ const RegulatoryText = props => {
    * @funtion updateOrAddRegulatoryText
    * Create a new regulatory text object
    * with the current values.
-   * And call updateRegulationText() function
+   * And call updateRegulatoryText() function
    */
   const updateOrAddRegulatoryText = () => {
-    const updatedRegulationText = {
-      name: currentRegulationTextName,
-      URL: currentRegulationTextURL,
+    const updatedRegulatoryText = {
+      name: currentRegulatoryTextName,
+      URL: currentRegulatoryTextURL,
       startDate: currentStartDate,
       endDate: currentEndDate,
       textType: currentTextType
     }
-    updateRegulationText(regulatoryText ? id : undefined, updatedRegulationText)
+    updateRegulatoryText(regulatoryText ? id : undefined, updatedRegulatoryText)
   }
 
   /* const checkRequiredValueOnSubmit = () => {
-    let required = !currentRegulationTextName || currentRegulationTextName === ''
+    let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
-    required = !currentRegulationTextURL || currentRegulationTextURL === ''
+    required = !currentRegulatoryTextURL || currentRegulatoryTextURL === ''
     // add check that it is an url with a regex
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
@@ -88,24 +88,24 @@ const RegulatoryText = props => {
     return oneValueIsMissing
   } */
 
-  const cancelAddNewRegulationText = () => {
+  const cancelAddNewRegulatoryText = () => {
     setIsEditing(true)
-    setCurrentRegulationTextName('')
-    setCurrentRegulationTextURL('')
+    setCurrentRegulatoryTextName('')
+    setCurrentRegulatoryTextURL('')
   }
 
   const onNameValueChange = (value) => {
     if (!isEditing) {
       setIsEditing(true)
     }
-    setCurrentRegulationTextName(value)
+    setCurrentRegulatoryTextName(value)
   }
 
   const onURLValueChange = (value) => {
     if (!isEditing) {
       setIsEditing(true)
     }
-    setCurrentRegulationTextURL(value)
+    setCurrentRegulatoryTextURL(value)
   }
 
   const onCloseIconClicked = () => {
@@ -119,10 +119,10 @@ const RegulatoryText = props => {
    * update the regulatory text object
    */
   const onValidateButtonClicked = () => {
-    let required = !currentRegulationTextName || currentRegulationTextName === ''
+    let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
-    required = !currentRegulationTextURL || currentRegulationTextURL === ''
+    required = !currentRegulatoryTextURL || currentRegulatoryTextURL === ''
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
     if (!oneValueIsMissing) {
@@ -148,17 +148,17 @@ const RegulatoryText = props => {
             isRed={nameIsRequired}
             placeholder='Nom'
             width={'250px'}
-            value={currentRegulationTextName}
+            value={currentRegulatoryTextName}
             onChange={value => onNameValueChange(value)}
           />
           <CustomInput
             isRed={URLIsrequired}
             placeholder='URL'
             width={'250px'}
-            value={currentRegulationTextURL}
+            value={currentRegulatoryTextURL}
             onChange={value => onURLValueChange(value)}
           />
-          {(currentRegulationTextName || currentRegulationTextURL) &&
+          {(currentRegulatoryTextName || currentRegulatoryTextURL) &&
             <><ValidateButton
               disabled={false}
               isLast={false}
@@ -168,13 +168,13 @@ const RegulatoryText = props => {
             <CancelButton
               disabled={false}
               isLast={false}
-              onClick={cancelAddNewRegulationText}>
+              onClick={cancelAddNewRegulatoryText}>
               Effacer
             </CancelButton></>}
           </>
         : <Tag
-            selectedValue={currentRegulationTextName}
-            selectedURL={currentRegulationTextURL}
+            selectedValue={currentRegulatoryTextName}
+            selectedURL={currentRegulatoryTextURL}
             onCloseIconClicked={onCloseIconClicked}
           />
     }
@@ -227,7 +227,7 @@ const RegulatoryText = props => {
       <CancelButton
         disabled={false}
         isLast={false}
-        onClick={_ => updateRegulationText(id)}>
+        onClick={_ => updateRegulatoryText(id)}>
         Supprimer le texte
       </CancelButton>
     </ContentLine>

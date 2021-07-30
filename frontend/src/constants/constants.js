@@ -17,7 +17,8 @@ export const COLORS = {
   orange: '#F6D012',
   blue: '#0A18DF',
   vesselLightColor: '#cacce0',
-  vesselColor: 'rgb(5, 5, 94)'
+  vesselColor: 'rgb(5, 5, 94)',
+  newGray: '#CCCFD6'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

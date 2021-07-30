@@ -8,8 +8,8 @@ import CustomDatePicker from './create_regulation/CustomDatePicker'
 import { COLORS, INFINITE } from '../../constants/constants'
 import Tag from './create_regulation/Tag'
 
-const RegulationText = props => {
-  const { id, regulationText, updateRegulationText } = props
+const RegulatoryText = props => {
+  const { id, regulatoryText, updateRegulationText } = props
   const [currentRegulationTextName, setCurrentRegulationTextName] = useState()
   const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState()
   const [currentStartDate, setCurrentStartDate] = useState()
@@ -24,32 +24,29 @@ const RegulationText = props => {
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false) */
 
   const initFormValues = () => {
-    setCurrentRegulationTextName(regulationText.name || '')
-    setCurrentRegulationTextURL(regulationText.URL || '')
-    setCurrentStartDate(regulationText.startDate || '')
-    setCurrentEndDate(regulationText.endDate || '')
-    setCurrentTextType(regulationText.textType || [])
+    setCurrentRegulationTextName(regulatoryText.name || '')
+    setCurrentRegulationTextURL(regulatoryText.URL || '')
+    setCurrentStartDate(regulatoryText.startDate || '')
+    setCurrentEndDate(regulatoryText.endDate || '')
+    setCurrentTextType(regulatoryText.textType || [])
   }
 
   useEffect(() => {
     initFormValues()
-  }, [regulationText])
+  }, [regulatoryText])
 
   const updateOrAddRegulationText = () => {
-    if (!checkRequiredValueOnSubmit()) {
-      const updatedRegulationText = {
-        name: currentRegulationTextName,
-        URL: currentRegulationTextURL,
-        startDate: currentStartDate,
-        endDate: currentEndDate,
-        textType: currentTextType
-      }
-      setIsEditing(false)
-      updateRegulationText(regulationText ? id : undefined, updatedRegulationText)
+    const updatedRegulationText = {
+      name: currentRegulationTextName,
+      URL: currentRegulationTextURL,
+      startDate: currentStartDate,
+      endDate: currentEndDate,
+      textType: currentTextType
     }
+    updateRegulationText(regulatoryText ? id : undefined, updatedRegulationText)
   }
 
-  const checkRequiredValueOnSubmit = () => {
+  /* const checkRequiredValueOnSubmit = () => {
     let required = !currentRegulationTextName || currentRegulationTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
@@ -57,7 +54,7 @@ const RegulationText = props => {
     // add check that it is an url with a regex
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
-    /* required = !currentStartDate
+    required = !currentStartDate
     oneValueIsMissing = oneValueIsMissing || required
     setStartDateIsRequired(required)
     required = !currentEndDate
@@ -65,9 +62,9 @@ const RegulationText = props => {
     setEndDateIsRequired(required)
     required = currentTextType.length === 0
     oneValueIsMissing = oneValueIsMissing || required
-    setTextTypeIsRequired(required) */
+    setTextTypeIsRequired(required)
     return oneValueIsMissing
-  }
+  } */
 
   const cancelAddNewRegulationText = () => {
     setIsEditing(true)
@@ -93,10 +90,23 @@ const RegulationText = props => {
     setIsEditing(true)
   }
 
+  const onValidateButtonClicked = () => {
+    let required = !currentRegulationTextName || currentRegulationTextName === ''
+    let oneValueIsMissing = required
+    setNameIsRequired(required)
+    required = !currentRegulationTextURL || currentRegulationTextURL === ''
+    oneValueIsMissing = oneValueIsMissing || required
+    setURLIsrequired(required)
+    if (!oneValueIsMissing) {
+      setIsEditing(false)
+      updateOrAddRegulationText()
+    }
+  }
+
   return <>
     <ContentLine>
-      <Label>{`Texte réglementaire ${regulationText ? id + 1 : 1}`}</Label>
-      {isEditing || regulationText === undefined || Object.keys(regulationText).length === 0
+      <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
+      {isEditing || regulatoryText === undefined || Object.keys(regulatoryText).length === 0
         ? <>
           <CustomInput
             isRed={nameIsRequired}
@@ -116,7 +126,7 @@ const RegulationText = props => {
             <><ValidateButton
               disabled={false}
               isLast={false}
-              onClick={updateOrAddRegulationText}>
+              onClick={onValidateButtonClicked}>
               Enregistrer
             </ValidateButton>
             <CancelButton
@@ -218,4 +228,4 @@ const Or = styled.span`
   font-size: 13px;
 `
 
-export default RegulationText
+export default RegulatoryText

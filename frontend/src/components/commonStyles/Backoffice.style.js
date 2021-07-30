@@ -23,3 +23,19 @@ export const SectionTitle = styled.span`
   border-bottom: 1px solid ${COLORS.grayDarker};
   margin-bottom: 20px;
 `
+
+export const Footer = styled.div`
+position: fixed;
+left: O;
+bottom: 0;
+width: 100%;
+background-color:${COLORS.white};
+z-index: 100;
+`
+
+export const FooterButton = styled.div`
+display: flex;
+justify-content: center;
+width: 100%;
+padding: 15px 0;
+`

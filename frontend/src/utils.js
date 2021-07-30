@@ -362,3 +362,21 @@ export const formatDataForSelectPicker = list => {
   })
   return array
 }
+
+export const addTextToRegulatoryTextList = (regulatoryTextList, id, regulatoryText) => {
+  let newRegulatoryTextList = [...regulatoryTextList]
+  if (id === undefined || id === -1) {
+    newRegulatoryTextList.push(regulatoryText || {})
+  } else {
+    if (regulatoryText && regulatoryText !== {}) {
+      newRegulatoryTextList[id] = regulatoryText
+    } else {
+      if (newRegulatoryTextList.length === 1) {
+        newRegulatoryTextList = [{}]
+      } else {
+        newRegulatoryTextList.splice(id, 1)
+      }
+    }
+  }
+  return newRegulatoryTextList
+}

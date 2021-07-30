@@ -6,6 +6,7 @@ import gear from './Gear'
 import filter from './Filter'
 import fleetSegment from './FleetSegment'
 import regulatory from './Regulatory'
+import regulation from './Regulation'
 import { combineReducers } from '@reduxjs/toolkit'
 
 const commonReducerList = {
@@ -24,7 +25,8 @@ const homeReducers = combineReducers({
 
 const backofficeReducers = combineReducers({
   ...commonReducerList,
-  layer: layer.backoffice.reducer
+  layer: layer.backoffice.reducer,
+  regulation
 })
 
 export { homeReducers, backofficeReducers }

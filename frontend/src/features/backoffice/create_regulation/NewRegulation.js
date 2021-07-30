@@ -9,11 +9,12 @@ import RegulationZoneThemeLine from '../components/backoffice/create_regulation/
 import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
 import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
 import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
-import RegulationTextSection from '../components/backoffice/create_regulation/RegulationTextSection'
-import RegulationTextModal from '../components/backoffice/create_regulation/RegulationTextModal'
-import { formatDataForSelectPicker } from '../utils'
+import RegulatoryTextSection from '../components/backoffice/create_regulation/RegulatoryTextSection'
+import RegulationTextModal from '../components/backoffice/create_regulation/RegulationToComeModal'
+import { formatDataForSelectPicker, addTextToRegulatoryTextList } from '../utils'
 import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
-import { Section, SectionTitle } from '../components/commonStyles/Backoffice.style'
+import { Section, SectionTitle, Footer, FooterButton } from '../components/commonStyles/Backoffice.style'
+import { setSelectedRegulation, setSelectedRegulatoryTextToComeId, setSelectedRegulatoryTextToCome } from '../domain/shared_slice/Regulation'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -23,6 +24,11 @@ const CreateRegulation = () => {
     seaFrontArray
   } = useSelector(state => state.regulatory)
 
+  const {
+    isModalOpen,
+    selectedRegulatoryTextToCome
+  } = useSelector(state => state.regulation)
+
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
   const [nameZone, setNameZone] = useState()
@@ -30,25 +36,29 @@ const CreateRegulation = () => {
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [reglementationBlocName, setReglementationBlocName] = useState('')
 
-  /*
-  *@type
-  * List d'objets [
-  *   {
-  *     name:
-  *     url:
-  *     dateIn:
-  *     dateOut:
-  *   }
-  * ]
-  */
-  const [regulationTextList, setRegulationTextList] = useState([{}])
-  const [regulationTextToComeList, setRegulationTextToComeList] = useState([{}])
+  // TODO a typer
+  const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
+  const [regulatoryTextToComeList, setRegulatoryTextToComeList] = useState([{}])
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
       dispatch(getAllRegulatoryZonesByRegTerritory())
     }
+    const newRegulation = {
+      regulatoryText: [{}],
+      regulatoryTextToCome: [{}]
+    }
+    dispatch(setSelectedRegulation(newRegulation))
   }, [])
+
+  useEffect(() => {
+    console.log('selectedRegulatoryTextToCome has changed')
+    if (!isModalOpen && selectedRegulatoryTextToCome) {
+      setRegulatoryTextToComeList(addTextToRegulatoryTextList(regulatoryTextList, setSelectedRegulatoryTextToComeId, selectedRegulatoryTextToCome))
+      setSelectedRegulatoryTextToCome(null)
+      setSelectedRegulatoryTextToComeId(null)
+    }
+  }, [isModalOpen, selectedRegulatoryTextToCome])
 
   const createRegulation = () => {
     console.log('createRegulation')
@@ -100,9 +110,11 @@ const CreateRegulation = () => {
           </Section>
         </Content>
         <Content>
-          <RegulationTextSection
-            regulationTextList={regulationTextList}
-            setRegulationTextList={setRegulationTextList}
+          <RegulatoryTextSection
+            regulatoryTextList={regulatoryTextList}
+            setRegulatoryTextList={setRegulatoryTextList}
+            regulatoryTextToComeList={regulatoryTextToComeList}
+            source={'regulation'}
           />
         </Content>
       </Body>
@@ -125,10 +137,7 @@ const CreateRegulation = () => {
         </FooterButton>
       </Footer>
     </CreateRegulationWrapper>
-    <RegulationTextModal
-      regulationTextToComeList={regulationTextToComeList}
-      setRegulationTextToComeList={setRegulationTextToComeList}
-    />
+    <RegulationTextModal />
     </>
   )
 }
@@ -136,22 +145,6 @@ const CreateRegulation = () => {
 const Body = styled.div`
   height: calc(100vh - 75px);
   overflow-y: scroll;
-`
-
-const Footer = styled.div`
-  position: fixed;
-  left: O;
-  bottom: 0;
-  width: 100%;
-  background-color:${COLORS.white};
-  z-index: 100;
-`
-
-const FooterButton = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 15px 0;
 `
 
 const Header = styled.div`

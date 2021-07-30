@@ -13,6 +13,13 @@ import {
   setSelectedRegulatoryTextToCome
 } from '../../../domain/reducers/Regulation'
 
+/**
+ * @typedef {object} Props
+ * @prop {[RegulatoryText]} regulatoryTextList
+ * @prop {[RegulatoryTextToCome]} regulatoryTextToComeList
+ * @prop {Function} setRegulatoryTextList
+ * @prop {'regulation' | 'regulatoryTextToCome'} source
+ */
 const RegulationTextSection = props => {
   const {
     regulatoryTextList,

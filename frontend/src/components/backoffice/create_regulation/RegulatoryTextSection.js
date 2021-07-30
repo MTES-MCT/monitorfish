@@ -8,8 +8,7 @@ import RegulatoryText from '../RegulatoryText'
 import { addTextToRegulatoryTextList } from '../../../utils'
 
 import {
-  setIsModalOpen,
-  setSelectedUpcomingRegulationId
+  openModal
 } from '../../../domain/reducers/Regulation'
 
 /**
@@ -19,7 +18,7 @@ import {
  * @prop {Function} setRegulatoryTextList
  * @prop {'regulation' | 'upcomingRegulation'} source
  */
-const RegulationTextSection = props => {
+const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
     setRegulatoryTextList,
@@ -36,8 +35,7 @@ const RegulationTextSection = props => {
     if (source === 'upcomingRegulation') {
       updateRegulatoryTextList()
     } else {
-      dispatch(setIsModalOpen(true))
-      dispatch(setSelectedUpcomingRegulationId(-1))
+      dispatch(openModal(-1))
     }
   }
 
@@ -58,7 +56,7 @@ const RegulationTextSection = props => {
               id={id}
               regulatoryText={regulatoryText}
               setRegulatoryTextList={setRegulatoryTextList}
-              updateRegulationText={updateRegulatoryTextList}
+              updateRegulatoryText={updateRegulatoryTextList}
             />
         })
     }
@@ -90,4 +88,4 @@ const ButtonLine = styled.div`
   background-color: ${COLORS.background};
 `
 
-export default RegulationTextSection
+export default RegulatoryTextSection

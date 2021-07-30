@@ -26,7 +26,8 @@ const CreateRegulation = () => {
 
   const {
     isModalOpen,
-    selectedRegulatoryTextToCome
+    selectedRegulatoryTextToCome,
+    selectedRegulatoryTextToComeId
   } = useSelector(state => state.regulation)
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
@@ -38,7 +39,7 @@ const CreateRegulation = () => {
 
   // TODO a typer
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
-  const [regulatoryTextToComeList, setRegulatoryTextToComeList] = useState([{}])
+  const [regulatoryTextToComeList, setRegulatoryTextToComeList] = useState([])
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
@@ -52,9 +53,8 @@ const CreateRegulation = () => {
   }, [])
 
   useEffect(() => {
-    console.log('selectedRegulatoryTextToCome has changed')
     if (!isModalOpen && selectedRegulatoryTextToCome) {
-      setRegulatoryTextToComeList(addTextToRegulatoryTextList(regulatoryTextList, setSelectedRegulatoryTextToComeId, selectedRegulatoryTextToCome))
+      setRegulatoryTextToComeList(addTextToRegulatoryTextList(regulatoryTextToComeList, selectedRegulatoryTextToComeId, selectedRegulatoryTextToCome))
       setSelectedRegulatoryTextToCome(null)
       setSelectedRegulatoryTextToComeId(null)
     }
@@ -137,7 +137,7 @@ const CreateRegulation = () => {
         </FooterButton>
       </Footer>
     </CreateRegulationWrapper>
-    <RegulationTextModal />
+    {isModalOpen && <RegulationTextModal />}
     </>
   )
 }

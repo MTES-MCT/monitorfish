@@ -15,9 +15,13 @@ const regulatorySlice = createSlice({
     zoneThemeArray: [],
     regulationBlocArray: [],
     seaFrontArray: [],
-    layersNamesByRegTerritory: {}
+    layersNamesByRegTerritory: {},
+    regulatoryGeometryToPreview: null
   },
   reducers: {
+    setRegulatoryGeometryToPreview (state, action) {
+      state.regulatoryGeometryToPreview = action.payload
+    },
     addRegulatoryZonesToSelection (state, action) {
       state.selectedRegulatoryZones = action.payload
       window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
@@ -88,7 +92,8 @@ export const {
   setZoneThemeArray,
   setRegulationBlocArray,
   setSeaFrontArray,
-  setLayersNamesByRegTerrory
+  setLayersNamesByRegTerrory,
+  setRegulatoryGeometryToPreview
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

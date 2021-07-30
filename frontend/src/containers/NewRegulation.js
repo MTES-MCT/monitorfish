@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { COLORS } from '../constants/constants'
+import BaseMap from './BaseMap'
 import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
 import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
-import RegulationBlocLine from '../components/backoffice/create_regulation/RegulationBlocLine'
-import RegulationZoneThemeLine from '../components/backoffice/create_regulation/RegulationZoneThemeLine'
-import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
-import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
-import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
+import {
+  RegulationBlocLine,
+  RegulationZoneThemeLine,
+  RegulationRegionLine,
+  RegulationZoneNameLine,
+  RegulationSeaFrontLine,
+  RegulationGeometryLine
+} from '../components/backoffice/create_regulation/index'
+import { COLORS } from '../constants/constants'
 import { formatDataForSelectPicker } from '../utils'
+import { setRegulatoryGeometryToPreview } from '../domain/reducers/Regulatory'
+import getGeometryWithoutRegulationReference from '../domain/use_cases/getGeometryWithoutRegulationReference'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -19,23 +25,45 @@ const CreateRegulation = () => {
     seaFrontArray
   } = useSelector(state => state.regulatory)
 
+  const [geometryObjectList, setGeometryObjectList] = useState()
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
   const [nameZone, setNameZone] = useState()
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [reglementationBlocName, setReglementationBlocName] = useState('')
+  const [selectedGeometry, setSelectedGeometry] = useState()
+  const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
+  const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
       dispatch(getAllRegulatoryZonesByRegTerritory())
     }
+    getGeometryObjectList()
   }, [])
+
+  useEffect(() => {
+    if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
+      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry]))
+    }
+  }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
+
+  const getGeometryObjectList = () => {
+    dispatch(getGeometryWithoutRegulationReference())
+      .then(geometryListAsObject => {
+        if (geometryListAsObject !== undefined) {
+          setGeometryObjectList(geometryListAsObject)
+        }
+      })
+  }
+
   return (
+    <Wrapper>
     <CreateRegulationWrapper>
       <Header>
-        <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
         <Title>Saisir une nouvelle réglementation</Title>
+        <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
       </Header>
       <Content>
         <Section>
@@ -67,12 +95,25 @@ const CreateRegulation = () => {
             setSelectedRegionList={setSelectedRegionList}
             selectedRegionList={selectedRegionList}
           />
+          <RegulationGeometryLine
+            setSelectedGeometry={setSelectedGeometry}
+            geometryIdList={geometryIdList}
+            selectedGeometry={selectedGeometry}
+            setShowRegulatoryPreview={setShowRegulatoryPreview}
+            showRegulatoryPreview={showRegulatoryPreview}
+          />
         </Section>
       </Content>
     </CreateRegulationWrapper>
+    { showRegulatoryPreview && <BaseMap />}
+    </Wrapper>
   )
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
 const Header = styled.div`
   margin-bottom: 40px;
   margin-top: 20px;
@@ -80,6 +121,7 @@ const Header = styled.div`
 
 const CreateRegulationWrapper = styled.div`
   display: flex;
+  flex: 2;
   flex-direction: column;
   height: 100vh;
   margin: 11px 27px 0px 27px;
@@ -87,8 +129,6 @@ const CreateRegulationWrapper = styled.div`
 
 const LinkSpan = styled.span`
   display: flex;
-  flex-direction: row;
-  position: absolute;
   cursor: pointer;
 `
 

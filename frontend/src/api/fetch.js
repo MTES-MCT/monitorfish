@@ -21,6 +21,7 @@ const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
+const GEOMETRY_ERROR_MEESAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -138,6 +139,33 @@ function getAllRegulatoryZonesFromAPI () {
     .catch(error => {
       console.error(error)
       throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
+    })
+}
+
+/**
+ * Get geometry object of regulatory area without regulation reference
+ * @memberOf API
+ * @returns {Promise<GeoJSON>} The geometry as GeoJSON feature
+ * @throws {Error}
+ */
+function getAllGeometryWithoutProperty () {
+  const filter = 'references_reglementaires IS NULL AND zones IS NULL AND region IS NULL AND facade IS NULL AND law_type IS NULL AND layer_name IS NULL'
+  const REQUEST = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
+  `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+  return fetch(REQUEST)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(GEOMETRY_ERROR_MEESAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(GEOMETRY_ERROR_MEESAGE)
     })
 }
 
@@ -428,5 +456,6 @@ export {
   getVesselControlsFromAPI,
   getAdministrativeSubZonesFromAPI,
   getAllFleetSegmentFromAPI,
-  getHealthcheckFromAPI
+  getHealthcheckFromAPI,
+  getAllGeometryWithoutProperty
 }

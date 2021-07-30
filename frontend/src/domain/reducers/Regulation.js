@@ -5,10 +5,10 @@ const regulationSlice = createSlice({
   initialState: {
     /** @type {RegulatoryText} selectedRegulation */
     selectedRegulation: null,
-    /** @type {number} selectedRegulatoryTextToComeId */
-    selectedRegulatoryTextToComeId: null,
-    /** @type {RegulatoryTextToCome} selectedRegulatoryTextToCome */
-    selectedRegulatoryTextToCome: null,
+    /** @type {number} selectedUpcomingRegulationId */
+    selectedUpcomingRegulationId: null,
+    /** @type {UpcomingRegulation} selectedUpcomingRegulation */
+    selectedUpcomingRegulation: null,
     /** @type {boolean} isModalOpen */
     isModalOpen: false
   },
@@ -19,11 +19,11 @@ const regulationSlice = createSlice({
     setIsModalOpen (state, action) {
       state.isModalOpen = action.payload
     },
-    setSelectedRegulatoryTextToComeId (state, action) {
-      state.selectedRegulatoryTextToComeId = action.payload
+    Id (state, action) {
+      state.selectedUpcomingRegulationId = action.payload
     },
-    setSelectedRegulatoryTextToCome (state, action) {
-      state.selectedRegulatoryTextToCome = action.payload
+    setSelectedUpcomingRegulation (state, action) {
+      state.selectedUpcomingRegulation = action.payload
     }
   }
 })
@@ -31,8 +31,8 @@ const regulationSlice = createSlice({
 export const {
   setSelectedRegulation,
   setIsModalOpen,
-  setSelectedRegulatoryTextToComeId,
-  setSelectedRegulatoryTextToCome
+  setSelectedUpcomingRegulationId,
+  setSelectedUpcomingRegulation
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

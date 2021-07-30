@@ -335,6 +335,16 @@ const Layers = {
     showMultipleZonesInAdministrativeZones: true,
     subZoneFieldKey: 'nom',
     isIntersectable: true
+  },
+  REGULATORY_PREVIEW: {
+    code: 'regulatory_preview',
+    name: '',
+    group: null,
+    type: null,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
   }
 }
 

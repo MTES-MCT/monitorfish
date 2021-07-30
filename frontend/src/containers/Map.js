@@ -46,6 +46,7 @@ const Map = () => {
       setCurrentFeature={setCurrentFeature}
       showCoordinates={true}
       showAttributions={true}
+      container={'map'}
     >
       <MapVesselAnimation
         mapMovingAndZoomEvent={mapMovingAndZoomEvent}

@@ -12,6 +12,7 @@ import { resetAnimateToRegulatoryLayer } from '../domain/reducers/Map'
 import MapCoordinatesBox from '../components/map/MapCoordinatesBox'
 import MapAttributionsBox from '../components/map/MapAttributionsBox'
 import BaseLayer from '../layers/BaseLayer'
+import RegulatoryPreviewLayer from '../layers/RegulatoryPreviewLayer'
 import RegulatoryLayers from '../layers/RegulatoryLayers'
 import AdministrativeLayers from '../layers/AdministrativeLayers'
 import ShowRegulatoryMetadata from '../components/map/ShowRegulatoryMetadata'
@@ -26,7 +27,8 @@ const BaseMap = props => {
     children,
     showCoordinates,
     setCurrentFeature,
-    showAttributions
+    showAttributions,
+    container
   } = props
 
   const {
@@ -113,10 +115,14 @@ const BaseMap = props => {
 
       setMap(initialMap)
 
-      // Wait 15 seconds to not apply any animate() before this init phase
-      setTimeout(() => {
+      // Wait 15 seconds to not apply any animate() before this init phase only in the homepage
+      if (container === 'map') {
+        setTimeout(() => {
+          setInitRenderIsDone(true)
+        }, 15000)
+      } else {
         setInitRenderIsDone(true)
-      }, 15000)
+      }
     }
   }
 
@@ -193,6 +199,7 @@ const BaseMap = props => {
       {map && Children.map(children, (child) => (
         child && cloneElement(child, { map, mapClickEvent })
       ))}
+      <RegulatoryPreviewLayer map={map} />
     </MapWrapper>
   )
 }

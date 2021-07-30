@@ -3,9 +3,13 @@ import { createSlice } from '@reduxjs/toolkit'
 const regulationSlice = createSlice({
   name: 'regulation',
   initialState: {
+    /** @type {RegulatoryText} selectedRegulation */
     selectedRegulation: null,
+    /** @type {number} selectedRegulatoryTextToComeId */
     selectedRegulatoryTextToComeId: null,
+    /** @type {RegulatoryTextToCome} selectedRegulatoryTextToCome */
     selectedRegulatoryTextToCome: null,
+    /** @type {boolean} isModalOpen */
     isModalOpen: false
   },
   reducers: {

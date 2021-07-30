@@ -8,8 +8,24 @@ import CustomDatePicker from './create_regulation/CustomDatePicker'
 import { COLORS, INFINITE } from '../../constants/constants'
 import Tag from './create_regulation/Tag'
 
+/**
+ * RegulatoryText props
+ * @type {number} id
+ * @type {RegulatoryText} regulatoryText
+ * @type {Function} updateRegulationText
+ */
 const RegulatoryText = props => {
-  const { id, regulatoryText, updateRegulationText } = props
+  const {
+    id,
+    regulatoryText,
+    /**
+     * @function updateRegulationText
+     * update the value of an object at a given list index
+     * @param {number} regulatoryTextId
+     * @parem {RegulatoryText} newRegulatoryText
+     */
+    updateRegulationText
+  } = props
   const [currentRegulationTextName, setCurrentRegulationTextName] = useState()
   const [currentRegulationTextURL, setCurrentRegulationTextURL] = useState()
   const [currentStartDate, setCurrentStartDate] = useState()
@@ -35,7 +51,13 @@ const RegulatoryText = props => {
     initFormValues()
   }, [regulatoryText])
 
-  const updateOrAddRegulationText = () => {
+  /**
+   * @funtion updateOrAddRegulatoryText
+   * Create a new regulatory text object
+   * with the current values.
+   * And call updateRegulationText() function
+   */
+  const updateOrAddRegulatoryText = () => {
     const updatedRegulationText = {
       name: currentRegulationTextName,
       URL: currentRegulationTextURL,
@@ -90,6 +112,12 @@ const RegulatoryText = props => {
     setIsEditing(true)
   }
 
+  /**
+   * @function onValidateButtonClicked
+   * check the required values
+   * if no value are missing
+   * update the regulatory text object
+   */
   const onValidateButtonClicked = () => {
     let required = !currentRegulationTextName || currentRegulationTextName === ''
     let oneValueIsMissing = required
@@ -99,8 +127,16 @@ const RegulatoryText = props => {
     setURLIsrequired(required)
     if (!oneValueIsMissing) {
       setIsEditing(false)
-      updateOrAddRegulationText()
+      updateOrAddRegulatoryText()
     }
+  }
+
+  /**
+  * @enum {RegulatoryTextType}
+  */
+  const REGULATORY_TEXT_TYPE = {
+    CREATION: 'creation',
+    REGULATION: 'regulation'
   }
 
   return <>
@@ -153,11 +189,11 @@ const RegulatoryText = props => {
       >
         <CustomCheckbox
           // isRequired={textTypeIsRequired}
-          value='create'
+          value={REGULATORY_TEXT_TYPE.CREATION}
         >création de la zone</CustomCheckbox>
         <CustomCheckbox
           // isRequired={textTypeIsRequired}
-          value='regulation'
+          value={REGULATORY_TEXT_TYPE.REGULATION}
         >réglementation de la zone</CustomCheckbox>
       </CheckboxGroup>
     </ContentLine>

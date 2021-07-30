@@ -13,7 +13,7 @@ import { Footer, FooterButton } from '../../commonStyles/Backoffice.style'
 
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 
-const RegulationToComeModal = props => {
+const RegulatoryTextToComeModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
@@ -111,4 +111,4 @@ const Section = styled.div`
   padding: 40px 60px;
 `
 
-export default RegulationToComeModal
+export default RegulatoryTextToComeModal

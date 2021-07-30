@@ -9,7 +9,7 @@ import {
 } from '../../../domain/shared_slices/Regulation'
 import RegulationTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
-import { Footer, FooterButton } from '../../commonStyles/Backoffice.style'
+import { FooterButton } from '../../commonStyles/Backoffice.style'
 
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 
@@ -38,18 +38,20 @@ const RegulatoryTextToComeModal = () => {
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
-      <ModalTitle>
-        BACKOFFISH - Ajouter une référence réglementaire à venir
-        <CloseIcon onClick={() => dispatch(setIsModalOpen(false))}/>
-      </ModalTitle>
-      <Section>
-        <RegulationTextSection
-          regulatoryTextList={regulatoryTextList}
-          setRegulatoryTextList={setRegulatoryTextList}
-          source={'regulatoryTextToCome'}
-        />
-      </Section>
-      <CustomFooter>
+      <Body>
+        <ModalTitle>
+          BACKOFFISH - Ajouter une référence réglementaire à venir
+          <CloseIcon onClick={() => dispatch(setIsModalOpen(false))}/>
+        </ModalTitle>
+        <Section>
+          <RegulationTextSection
+            regulatoryTextList={regulatoryTextList}
+            setRegulatoryTextList={setRegulatoryTextList}
+            source={'regulatoryTextToCome'}
+          />
+        </Section>
+      </Body>
+      <Footer>
       <FooterButton>
         <ValidateButton
           disabled={false}
@@ -66,13 +68,21 @@ const RegulatoryTextToComeModal = () => {
           Annuler
         </CancelButton>
       </FooterButton>
-    </CustomFooter>
+    </Footer>
     </ModalContent>
   </RegulationModal>)
 }
 
-const CustomFooter = styled(Footer)`
-  bordor-top: 1px solid ${COLORS.newGray};
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: calc(100vh - 260px);
+`
+
+const Footer = styled.div`
+  background-color: ${COLORS.background};
+  border-top: 1px solid ${COLORS.newGray};
 `
 
 const CloseIcon = styled(CloseIconSVG)`
@@ -93,10 +103,8 @@ const RegulationModal = styled.div`
 `
 
 const ModalContent = styled.div`
-  height: calc(100vh - 200px);
   margin: 100px 160px;
   background-color: ${COLORS.background};
-  overflow-y: scroll;
 `
 
 const ModalTitle = styled.div`

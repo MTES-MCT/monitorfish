@@ -9,22 +9,21 @@ import { addTextToRegulatoryTextList } from '../../../utils'
 
 import {
   setIsModalOpen,
-  setSelectedRegulatoryTextToComeId,
-  setSelectedRegulatoryTextToCome
+  setSelectedUpcomingRegulationId
 } from '../../../domain/reducers/Regulation'
 
 /**
  * @typedef {object} Props
  * @prop {[RegulatoryText]} regulatoryTextList
- * @prop {[RegulatoryTextToCome]} regulatoryTextToComeList
+ * @prop {[UpcomingRegulation]} upcomingRegulationList
  * @prop {Function} setRegulatoryTextList
- * @prop {'regulation' | 'regulatoryTextToCome'} source
+ * @prop {'regulation' | 'upcomingRegulation'} source
  */
 const RegulationTextSection = props => {
   const {
     regulatoryTextList,
     setRegulatoryTextList,
-    regulatoryTextToComeList,
+    upcomingRegulationList,
     source
   } = props
   const dispatch = useDispatch()
@@ -33,13 +32,12 @@ const RegulationTextSection = props => {
     updateRegulatoryTextList()
   }
 
-  const addTextToCome = () => {
-    if (source === 'regulatoryTextToCome') {
+  const addUpcomingText = () => {
+    if (source === 'upcomingRegulation') {
       updateRegulatoryTextList()
     } else {
       dispatch(setIsModalOpen(true))
-      dispatch(setSelectedRegulatoryTextToComeId(-1))
-      dispatch(setSelectedRegulatoryTextToCome({}))
+      dispatch(setSelectedUpcomingRegulationId(-1))
     }
   }
 
@@ -64,7 +62,7 @@ const RegulationTextSection = props => {
             />
         })
     }
-    { regulatoryTextToComeList && <span>il y a {regulatoryTextToComeList.length} textes réglementaires à venir à afficher</span>}
+    { upcomingRegulationList && <span>il y a {upcomingRegulationList.length} textes réglementaires à venir à afficher</span>}
     <ButtonLine>
       {source === 'regulation' && <ValidateButton
         disabled={false}
@@ -75,7 +73,7 @@ const RegulationTextSection = props => {
       <CustomCancelButton
         disabled={false}
         isLast={false}
-        onClick={addTextToCome}>
+        onClick={addUpcomingText}>
         Ajouter un texte à venir
       </CustomCancelButton>
     </ButtonLine>

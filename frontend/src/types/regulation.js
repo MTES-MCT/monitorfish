@@ -7,7 +7,7 @@
  * @property {string} region
  * @property {GeoJSONGeometry} geometry
  * @property {[RegulatoryText]} regulatoryTextList
- * @property {[RegulatoryTextToCome]} regulatoryTextToComeList
+ * @property {[UpcomingRegulation]} UpcomingRegulationList
  * @property {string} color
  * @property {boolean} showed
  * @property {string} uuid
@@ -27,6 +27,6 @@
  */
 
 /**
- * @typedef RegulatoryTextToCome
+ * @typedef UpcomingRegulationList
  * @property {[RegulatoryText]} regulatoryTextList
  */

@@ -10,11 +10,11 @@ import RegulationRegionLine from '../components/backoffice/create_regulation/Reg
 import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
 import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
 import RegulatoryTextSection from '../components/backoffice/create_regulation/RegulatoryTextSection'
-import RegulatoryTextToComeModal from '../components/backoffice/create_regulation/RegulatoryTextToComeModal'
+import UpcomingRegulationModal from '../components/backoffice/create_regulation/UpcomingRegulationModal'
 import { formatDataForSelectPicker, addTextToRegulatoryTextList } from '../utils'
 import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
 import { Section, SectionTitle, Footer, FooterButton } from '../components/commonStyles/Backoffice.style'
-import { setSelectedRegulation, setSelectedRegulatoryTextToComeId, setSelectedRegulatoryTextToCome } from '../domain/reducers/Regulation'
+import { setSelectedRegulation, setSelectedUpcomingRegulationId, setSelectedUpcomingRegulation } from '../domain/reducers/Regulation'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -26,8 +26,8 @@ const CreateRegulation = () => {
 
   const {
     isModalOpen,
-    selectedRegulatoryTextToCome,
-    selectedRegulatoryTextToComeId
+    selectedUpcomingRegulation,
+    selectedUpcomingRegulationId
   } = useSelector(state => state.regulation)
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
@@ -39,7 +39,7 @@ const CreateRegulation = () => {
 
   // TODO a typer
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
-  const [regulatoryTextToComeList, setRegulatoryTextToComeList] = useState([])
+  const [upcomingRegulationList, setUpcomingRegulationList] = useState([])
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
@@ -47,18 +47,20 @@ const CreateRegulation = () => {
     }
     const newRegulation = {
       regulatoryText: [{}],
-      regulatoryTextToCome: [{}]
+      upcomingRegulation: [{}]
     }
     dispatch(setSelectedRegulation(newRegulation))
   }, [])
 
   useEffect(() => {
-    if (!isModalOpen && selectedRegulatoryTextToCome) {
-      setRegulatoryTextToComeList(addTextToRegulatoryTextList(regulatoryTextToComeList, selectedRegulatoryTextToComeId, selectedRegulatoryTextToCome))
-      setSelectedRegulatoryTextToCome(null)
-      setSelectedRegulatoryTextToComeId(null)
+    if (!isModalOpen && selectedUpcomingRegulation) {
+      console.log('setUpcomingRegulationList ')
+      console.log(selectedUpcomingRegulation)
+      setUpcomingRegulationList(addTextToRegulatoryTextList(upcomingRegulationList, selectedUpcomingRegulationId, selectedUpcomingRegulation))
+      setSelectedUpcomingRegulation(null)
+      setSelectedUpcomingRegulationId(null)
     }
-  }, [isModalOpen, selectedRegulatoryTextToCome])
+  }, [isModalOpen, selectedUpcomingRegulation])
 
   const createRegulation = () => {
     console.log('createRegulation')
@@ -113,7 +115,7 @@ const CreateRegulation = () => {
           <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
-            regulatoryTextToComeList={regulatoryTextToComeList}
+            upcomingRegulationList={upcomingRegulationList}
             source={'regulation'}
           />
         </Content>
@@ -137,7 +139,7 @@ const CreateRegulation = () => {
         </FooterButton>
       </Footer>
     </CreateRegulationWrapper>
-    {isModalOpen && <RegulatoryTextToComeModal />}
+    {isModalOpen && <UpcomingRegulationModal />}
     </>
   )
 }

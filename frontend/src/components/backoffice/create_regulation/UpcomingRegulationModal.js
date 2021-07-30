@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
-  setSelectedRegulatoryTextToCome
+  setSelectedUpcomingRegulation
 } from '../../../domain/reducers/Regulation'
 import RegulationTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -13,26 +13,26 @@ import { FooterButton } from '../../commonStyles/Backoffice.style'
 
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 
-const RegulatoryTextToComeModal = () => {
+const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    selectedRegulatoryTextToComeId,
-    selectedRegulatoryTextToCome,
+    selectedUpcomingRegulationId,
+    selectedUpcomingRegulation,
     selectedRegulation
   } = useSelector(state => state.regulation)
 
-  const regulatoryTextToCome =
-    selectedRegulation && selectedRegulation.regulatoryTextToCome.length > 0
-      ? selectedRegulation.regulatoryTextToCome[selectedRegulatoryTextToComeId]
+  const upcomingRegulation =
+    selectedRegulation && selectedRegulation.upcomingRegulation.length > 0
+      ? { ...selectedRegulation.upcomingRegulation[selectedUpcomingRegulationId] }
       : {}
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(regulatoryTextToCome && regulatoryTextToCome.regulatoryText ? regulatoryTextToCome.regulatoryTextList : [{}])
+  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation && upcomingRegulation.regulatoryText ? [...upcomingRegulation.regulatoryTextList] : [{}])
 
-  const addRegulatoryTextToCome = () => {
-    const newRegulatoryTextToCome = { ...selectedRegulatoryTextToCome }
-    newRegulatoryTextToCome.regulatoryTextList = regulatoryTextList
-    dispatch(setSelectedRegulatoryTextToCome(newRegulatoryTextToCome))
+  const addUpcomingRegulation = () => {
+    const newUpcomingRegulation = { ...selectedUpcomingRegulation }
+    newUpcomingRegulation.regulatoryTextList = regulatoryTextList
+    dispatch(setSelectedUpcomingRegulation(newUpcomingRegulation))
     dispatch(setIsModalOpen(false))
   }
 
@@ -47,7 +47,7 @@ const RegulatoryTextToComeModal = () => {
           <RegulationTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
-            source={'regulatoryTextToCome'}
+            source={'upcomingRegulation'}
           />
         </Section>
       </Body>
@@ -56,7 +56,7 @@ const RegulatoryTextToComeModal = () => {
         <ValidateButton
           disabled={false}
           isLast={false}
-          onClick={() => addRegulatoryTextToCome()}
+          onClick={() => addUpcomingRegulation()}
         >
           Ajouter la réglementation à venir
         </ValidateButton>
@@ -119,4 +119,4 @@ const Section = styled.div`
   padding: 40px 60px;
 `
 
-export default RegulatoryTextToComeModal
+export default UpcomingRegulationModal

@@ -5,7 +5,7 @@ import Layers, { layersType } from '../domain/entities/layers'
 const AdministrativeLayers = ({ map }) => {
   const layer = useSelector(state => state.layer)
   const administrativeLayers = Object.keys(Layers)
-    .map(layerName => Layers[layerName])
+    .map(topic => Layers[topic])
     .filter(layer => layer.type === layersType.ADMINISTRATIVE)
 
   useEffect(() => {

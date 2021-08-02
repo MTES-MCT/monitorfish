@@ -1,18 +1,19 @@
 import { getAllRegulatoryLayersFromAPI } from '../../api/fetch'
 import * as Comlink from 'comlink'
 /* eslint-disable import/no-webpack-loader-syntax */
-import Worker from 'worker-loader!../../workers/MapperWorker'
+import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import { setError } from '../reducers/Global'
 
 const worker = new Worker()
-const MapperWorker = Comlink.wrap(worker)
+const MonitorFishWorker = Comlink.wrap(worker)
 
 const getAllRegulatoryLayers = () => async (dispatch) => {
-  const worker = await new MapperWorker()
+  const worker = await new MonitorFishWorker()
 
+  worker.toString()
   return getAllRegulatoryLayersFromAPI()
     .then(features => {
-      return worker.convertGeoJSONFeaturesToObject(features)
+      // return worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
     }).catch(error => {
       dispatch(setError(error))
     })

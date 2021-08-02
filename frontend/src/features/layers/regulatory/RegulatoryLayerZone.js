@@ -1,38 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { ReactComponent as ShowIconSVG } from '../../icons/oeil_affiche.svg'
-import { ReactComponent as HideIconSVG } from '../../icons/oeil_masque.svg'
 import styled, { css } from 'styled-components'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper.svg'
 import { ReactComponent as REGPaperDarkSVG } from '../../icons/reg_paper_dark.svg'
 import { COLORS } from '../../../constants/constants'
-import showLayer from '../../../domain/use_cases/showLayer'
 import LayersEnum from '../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
-import zoomInZone from '../../../domain/use_cases/zoomInSubZone'
-import hideLayers from '../../../domain/use_cases/hideLayers'
+import zoomInLayer from '../../../domain/use_cases/zoomInLayer'
+import hideLayer from '../../../domain/use_cases/hideLayer'
+import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
+import showRegulatoryLayer from '../../../domain/use_cases/showRegulatoryLayer'
+import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
+import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 
 const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
   const {
     callRemoveRegulatoryZoneFromMySelection,
-    regulatoryZoneMetadata,
-    subZone,
+    zone,
     showWholeLayer,
     zoneIsShown,
-    isReadyToShowRegulatoryLayers,
     allowRemoveZone,
-    namespace
+    namespace,
+    vectorLayerStyle
   } = props
+
+  const {
+    isReadyToShowRegulatoryLayers,
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
 
   const [showZone, setShowZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
-  const callShowRegulatoryZoneMetadata = subZone => {
+  const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {
-      dispatch(showRegulatoryZoneMetadata(subZone))
+      dispatch(showRegulatoryZoneMetadata(zone))
       setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
@@ -41,20 +45,18 @@ const RegulatoryLayerZone = props => {
   }
 
   useEffect(() => {
-    if (regulatoryZoneMetadata &&
-      subZone &&
-      (subZone.layerName !== regulatoryZoneMetadata.layerName ||
-        subZone.zone !== regulatoryZoneMetadata.zone)) {
+    if (regulatoryZoneMetadata && zone &&
+      (zone.topic !== regulatoryZoneMetadata.topic ||
+        zone.zone !== regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(false)
-    } else if (regulatoryZoneMetadata &&
-      subZone &&
-      (subZone.layerName === regulatoryZoneMetadata.layerName &&
-        subZone.zone === regulatoryZoneMetadata.zone)) {
+    } else if (regulatoryZoneMetadata && zone &&
+      (zone.topic === regulatoryZoneMetadata.topic &&
+        zone.zone === regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(true)
-    } else if (!regulatoryZoneMetadata && subZone) {
+    } else if (!regulatoryZoneMetadata && zone) {
       setMetadataIsShown(false)
     }
-  }, [regulatoryZoneMetadata, subZone])
+  }, [regulatoryZoneMetadata, zone])
 
   useEffect(() => {
     if (showWholeLayer) {
@@ -74,42 +76,43 @@ const RegulatoryLayerZone = props => {
 
   useEffect(() => {
     if (showZone && isReadyToShowRegulatoryLayers) {
-      dispatch(showLayer({
-        type: LayersEnum.REGULATORY.code,
-        zone: props.subZone,
-        namespace
-      }))
+      dispatch(showRegulatoryLayer({ ...zone, namespace }))
     } else {
-      dispatch(hideLayers({
+      dispatch(hideLayer({
         type: LayersEnum.REGULATORY.code,
-        zone: props.subZone,
+        ...zone,
         namespace
       }))
     }
   }, [showZone, isReadyToShowRegulatoryLayers, namespace])
 
   return (
-    <SubZone>
-      <Rectangle onClick={() => dispatch(zoomInZone({ subZone: props.subZone }))} vectorLayerStyle={props.vectorLayerStyle}/>
-      <SubZoneText
-        title={subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
-        onClick={() => setShowZone(!showZone)}>
-        {subZone.zone ? subZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
-      </SubZoneText>
+    <Zone>
+      <Rectangle onClick={() => dispatch(zoomInLayer({ subZone: zone }))} vectorLayerStyle={vectorLayerStyle}/>
+      <ZoneText
+        title={zone.zone ? zone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+        onClick={() => setShowZone(!showZone)}
+      >
+        {
+          zone.zone
+            ? zone.zone.replace(/[_]/g, ' ')
+            : 'AUCUN NOM'
+        }
+      </ZoneText>
       <Icons>
         {
           metadataIsShown
-            ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => callShowRegulatoryZoneMetadata(subZone)}/>
-            : <REGPaperIcon title="Afficher la réglementation" onClick={() => callShowRegulatoryZoneMetadata(subZone)}/>
+            ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => callShowRegulatoryZoneMetadata(zone)}/>
+            : <REGPaperIcon title="Afficher la réglementation" onClick={() => callShowRegulatoryZoneMetadata(zone)}/>
         }
         {showZone
           ? <ShowIcon title="Cacher la zone" onClick={() => setShowZone(!showZone)}/>
           : <HideIcon
             title="Afficher la zone" onClick={() => setShowZone(!showZone)}/>}
         {allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection"
-                                       onClick={() => callRemoveRegulatoryZoneFromMySelection(subZone, 1)}/>}
+                                       onClick={() => callRemoveRegulatoryZoneFromMySelection(zone, 1)}/>}
       </Icons>
-    </SubZone>
+    </Zone>
   )
 }
 
@@ -131,7 +134,7 @@ const Icons = styled.span`
   flex: 1;
 `
 
-const SubZone = styled.span`
+const Zone = styled.span`
   display: flex;
   justify-content: flex-start;
   line-height: 1.9em;
@@ -143,7 +146,7 @@ const SubZone = styled.span`
   font-weight: 300;
 `
 
-const SubZoneText = styled.span`
+const ZoneText = styled.span`
   width: 63%;
   display: inline-block;
   text-overflow: ellipsis;
@@ -154,15 +157,10 @@ const SubZoneText = styled.span`
   margin-top: 8px;
 `
 
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  margin-top: 7px;
-  margin-left: 8px;
-`
 const baseREGPaperIcon = css`
-  width: 17px;
+  width: 20px;
   align-self: center;
-  margin-right: 12px;
+  margin-right: 7px;
 `
 const REGPaperIcon = styled(REGPaperSVG)`
   ${baseREGPaperIcon}
@@ -170,17 +168,6 @@ const REGPaperIcon = styled(REGPaperSVG)`
 
 const REGPaperDarkIcon = styled(REGPaperDarkSVG)`
   ${baseREGPaperIcon}
-`
-const baseIcon = css`
-  flex: 0 0 24px;
-  align-self: center;
-`
-const ShowIcon = styled(ShowIconSVG)`
-  ${baseIcon}
-`
-
-const HideIcon = styled(HideIconSVG)`
-  ${baseIcon}
 `
 
 export default RegulatoryLayerZone

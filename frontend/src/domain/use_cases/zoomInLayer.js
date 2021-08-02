@@ -2,21 +2,21 @@ import { animateToRegulatoryLayer } from '../reducers/Map'
 import Layers from '../entities/layers'
 import { getCenter } from 'ol/extent'
 
-const dispatchAnimateToRegulatoryLayer = (center, dispatch, layerName) => {
+const dispatchAnimateToRegulatoryLayer = (center, dispatch, className) => {
   if (center && center.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])) {
     dispatch(animateToRegulatoryLayer({
-      name: layerName,
+      name: className,
       center: center
     }))
   }
 }
-const zoomInSubZone = ({ subZone, feature }) => (dispatch, getState) => {
+const zoomInLayer = ({ subZone, feature }) => (dispatch, getState) => {
   if (subZone) {
-    const layerName = `${Layers.REGULATORY.code}:${subZone.layerName}:${subZone.zone}`
-    const layerToZoomIn = getState().layer.layers.find(layer => layer.className_ === layerName)
+    const className = `${Layers.REGULATORY.code}:${subZone.topic}:${subZone.zone}`
+    const layerToZoomIn = getState().layer.layers.find(layer => layer.className_ === className)
     if (layerToZoomIn) {
       const center = getCenter(layerToZoomIn.getSource().getExtent())
-      dispatchAnimateToRegulatoryLayer(center, dispatch, layerName)
+      dispatchAnimateToRegulatoryLayer(center, dispatch, className)
     }
   } else if (feature) {
     const center = getCenter(feature.getGeometry().getExtent())
@@ -24,4 +24,4 @@ const zoomInSubZone = ({ subZone, feature }) => (dispatch, getState) => {
   }
 }
 
-export default zoomInSubZone
+export default zoomInLayer

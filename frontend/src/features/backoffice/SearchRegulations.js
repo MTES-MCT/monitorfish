@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useRouteMatch } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
-import { search } from '../../utils'
-import { COLORS, BACKOFFICE_SEARCH_PROPERTIES } from '../../constants/constants'
+import { COLORS } from '../../constants/constants'
 import { AddRegulationButton } from '../commonStyles/Buttons.style'
+// import { searchByLawType } from '../../domain/entities/regulatory'
+// import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
 
 const SearchRegulations = props => {
   const {
@@ -30,19 +31,12 @@ const SearchRegulations = props => {
     if (searchText === '') {
       setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
     } else {
-      Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
-        const searchResultByLawType = {}
-        Object.keys(regulatoryZoneListByRegTerritory[territory]).forEach(lawType => {
-          const regulatoryZone = Object.assign({}, regulatoryZoneListByRegTerritory[territory][lawType])
-          const foundRegulatoryZones = search(searchText, BACKOFFICE_SEARCH_PROPERTIES, regulatoryZone)
-          if (foundRegulatoryZones && Object.keys(foundRegulatoryZones).length !== 0) {
-            searchResultByLawType[lawType] = foundRegulatoryZones
-          }
-        })
-        if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
-          searchResult[territory] = searchResultByLawType
-        }
-      })
+      // Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
+      //   const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
+      //   if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
+      //     searchResult[territory] = searchResultByLawType
+      //   }
+      // })
       setFoundRegulatoryZonesByRegTerritory(searchResult)
     }
   }
@@ -81,7 +75,7 @@ const SearchBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px ${COLORS.grayDarker} solid;
+  border: 1px ${COLORS.lightGray} solid;
   border-radius: 0;
   background-color: white;
   margin-right: 10px;
@@ -103,7 +97,7 @@ const SearchIcon = styled(SearchIconSVG)`
   width: 40px;
   height: 40px;
   float: right;
-  color: ${COLORS.grayDarker}
+  color: ${COLORS.lightGray}
 `
 
 export default SearchRegulations

@@ -7,12 +7,12 @@
     </defs>
     <g id="Plan_de_travail_1" data-name="Plan de travail – 1" clip-path="url(#clip-Plan_de_travail_1)">
         <g id="Loupe" transform="translate(8 8)">
-            <g id="Ellipse_1" data-name="Ellipse 1" fill="none" stroke="#3B4559" stroke-width="2">
+            <g id="Ellipse_1" data-name="Ellipse 1" fill="none" stroke="#707785" stroke-width="2">
                 <circle cx="12" cy="12" r="12" stroke="none"/>
                 <circle cx="12" cy="12" r="11" fill="none"/>
             </g>
             <line id="Ligne_1" data-name="Ligne 1" x2="10" y2="10" transform="translate(20 20)" fill="none"
-                  stroke="#3B4559" stroke-width="2"/>
+                  stroke="#707785" stroke-width="2"/>
         </g>
     </g>
 </svg>

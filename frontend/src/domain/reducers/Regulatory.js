@@ -3,11 +3,30 @@ import { getLocalStorageState } from '../../utils'
 
 const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
 
+export const reOrderOldObjectHierarchyIfFound = layers => {
+  Object.keys(layers)
+    .forEach(layer => {
+      layers[layer] = layers[layer].map(zone => {
+        if (zone && zone.layerName) {
+          return {
+            topic: zone.layerName,
+            ...zone
+          }
+        }
+
+        return zone
+      })
+    })
+
+  return layers
+}
+
 const regulatorySlice = createSlice({
   name: 'regulatory',
   initialState: {
     isReadyToShowRegulatoryLayers: false,
-    selectedRegulatoryLayers: getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey),
+    /** @type {Object.<string, SelectedRegulatoryZone[]>} selectedRegulatoryLayers */
+    selectedRegulatoryLayers: reOrderOldObjectHierarchyIfFound(getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey)),
     regulatoryZoneMetadata: null,
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
@@ -22,23 +41,33 @@ const regulatorySlice = createSlice({
     setRegulatoryGeometryToPreview (state, action) {
       state.regulatoryGeometryToPreview = action.payload
     },
+    /**
+     * Add regulatory layers to search selection
+     * @param {Object=} state
+     * @param {{payload: Object.<string, SelectedRegulatoryZone[]>}} action - The regulatory layers
+     */
     addRegulatoryLayersToSelection (state, action) {
       state.selectedRegulatoryLayers = action.payload
       window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
     },
+    /**
+     * Remove a regulatory zone to search selection
+     * @param {Object=} state
+     * @param {{payload: Object.<string, SelectedRegulatoryZone>}} action - The regulatory zone to remove
+     */
     removeRegulatoryZonesFromSelection (state, action) {
       if (action.payload.zone) {
-        state.selectedRegulatoryLayers[action.payload.layerName] = state.selectedRegulatoryLayers[action.payload.layerName].filter(subZone => {
-          return !(subZone.layerName === action.payload.layerName && subZone.zone === action.payload.zone)
+        state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
+          return !(subZone.topic === action.payload.topic && subZone.zone === action.payload.zone)
         })
       } else {
-        state.selectedRegulatoryLayers[action.payload.layerName] = state.selectedRegulatoryLayers[action.payload.layerName].filter(subZone => {
-          return !(subZone.layerName === action.payload.layerName)
+        state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
+          return !(subZone.topic === action.payload.topic)
         })
       }
 
-      if (!state.selectedRegulatoryLayers[action.payload.layerName].length) {
-        delete state.selectedRegulatoryLayers[action.payload.layerName]
+      if (!state.selectedRegulatoryLayers[action.payload.topic].length) {
+        delete state.selectedRegulatoryLayers[action.payload.topic]
       }
 
       window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryLayers))

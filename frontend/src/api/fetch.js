@@ -28,7 +28,7 @@ function throwIrretrievableAdministrativeZoneError (e, type) {
 }
 
 function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
-  return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.layerName}/${regulatoryZone.zone} : ${e}`)
+  return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`)
 }
 
 /**
@@ -251,14 +251,14 @@ function getRegulatoryZoneFromAPI (type, regulatoryZone) {
 }
 
 function getRegulatoryZoneURL (type, regulatoryZone) {
-  if (!regulatoryZone.layerName) {
+  if (!regulatoryZone.topic) {
     throw new Error('Le nom de la couche n\'est pas renseigné')
   }
   if (!regulatoryZone.zone) {
     throw new Error('Le nom de la zone n\'est pas renseigné')
   }
 
-  const filter = `layer_name='${regulatoryZone.layerName.replace(/'/g, '\'\'')}' AND zones='${regulatoryZone.zone.replace(/'/g, '\'\'')}'`
+  const filter = `layer_name='${regulatoryZone.topic.replace(/'/g, '\'\'')}' AND zones='${regulatoryZone.zone.replace(/'/g, '\'\'')}'`
   return (
     `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS` +
     `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +

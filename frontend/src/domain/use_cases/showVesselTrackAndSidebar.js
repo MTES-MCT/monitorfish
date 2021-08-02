@@ -6,6 +6,7 @@ import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 import { IS_SELECTED_PROPERTY, Vessel, vesselsAreEquals } from '../entities/vessel'
 import { setUpdatedFromCron } from '../reducers/Map'
 import unselectVessel from './unselectVessel'
+import { batch } from 'react-redux'
 
 const showVesselTrackAndSidebar = (
   vesselIdentity,
@@ -44,12 +45,14 @@ const showVesselTrackAndSidebar = (
 }
 
 function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
-  dispatch(setUpdatedFromCron(calledFromCron))
-  dispatch(removeError())
-  dispatch(loadingVessel({
-    vesselIdentity,
-    calledFromCron
-  }))
+  batch(() => {
+    dispatch(setUpdatedFromCron(calledFromCron))
+    dispatch(removeError())
+    dispatch(loadingVessel({
+      vesselIdentity,
+      calledFromCron
+    }))
+  })
 }
 
 function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch) {

@@ -6,14 +6,20 @@ import AdministrativeLayer from './AdministrativeLayer'
 import { COLORS } from '../../../constants/constants'
 import AdministrativeLayerGroup from './AdministrativeLayerGroup'
 import getAdministrativeZonesAndSubZones from '../../../domain/use_cases/getAdministrativeZonesAndSubZones'
-import showLayer from '../../../domain/use_cases/showLayer'
-import hideLayers from '../../../domain/use_cases/hideLayers'
+import hideLayer from '../../../domain/use_cases/hideLayer'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import layer from '../../../domain/reducers/Layer'
 import { layersType } from '../../../domain/entities/layers'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import showAdministrativeLayer from '../../../domain/use_cases/showAdministrativeLayer'
 
-const AdministrativeLayers = ({ administrativeZones, hideZonesListWhenSearching, namespace }) => {
+const AdministrativeLayers = props => {
+  const {
+    administrativeLayers,
+    hideLayersListWhenSearching,
+    namespace
+  } = props
+
   const {
     setLayersSideBarOpenedZone
   } = layer[namespace].actions
@@ -30,24 +36,22 @@ const AdministrativeLayers = ({ administrativeZones, hideZonesListWhenSearching,
   }, [layersSidebarOpenedLayer, setShowZones])
 
   useEffect(() => {
-    if (hideZonesListWhenSearching) {
+    if (hideLayersListWhenSearching) {
       setShowZones(false)
-    } else {
-      setShowZones(true)
     }
-  }, [hideZonesListWhenSearching])
+  }, [hideLayersListWhenSearching])
 
   useEffect(() => {
-    if (administrativeZones && administrativeZones.length) {
-      dispatch(getAdministrativeZonesAndSubZones(administrativeZones))
+    if (administrativeLayers && administrativeLayers.length) {
+      dispatch(getAdministrativeZonesAndSubZones(administrativeLayers))
         .then(nextZones => {
           setZones(nextZones)
         })
     }
-  }, [administrativeZones])
+  }, [administrativeLayers])
 
   const callShowAdministrativeZone = namespace => (administrativeZone, administrativeSubZone) => {
-    dispatch(showLayer({
+    dispatch(showAdministrativeLayer({
       type: administrativeZone,
       zone: administrativeSubZone,
       namespace
@@ -55,9 +59,9 @@ const AdministrativeLayers = ({ administrativeZones, hideZonesListWhenSearching,
   }
 
   const callHideAdministrativeZone = namespace => (administrativeZone, administrativeSubZone) => {
-    dispatch(hideLayers({
+    dispatch(hideLayer({
       type: administrativeZone,
-      zone: administrativeSubZone,
+      ...administrativeSubZone,
       namespace
     }))
   }

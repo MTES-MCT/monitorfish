@@ -1,108 +1,107 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import { getHash } from '../../../utils'
-import { getGearCategory } from '../../../domain/use_cases/showLayer'
 import { getVectorLayerStyle } from '../../../layers/styles/vectorLayer.style'
-import Layers from '../../../domain/entities/layers'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import Layers, { getGearCategory } from '../../../domain/entities/layers'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ShowIconSVG } from '../../icons/oeil_affiche.svg'
-import { ReactComponent as HideIconSVG } from '../../icons/oeil_masque.svg'
 import { useSelector } from 'react-redux'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
+import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
+import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
+import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 
 const RegulatoryLayerTopic = props => {
+  const {
+    callRemoveRegulatoryZoneFromMySelection,
+    regulatoryTopic,
+    allowRemoveZone,
+    increaseNumberOfZonesOpened,
+    decreaseNumberOfZonesOpened,
+    regulatoryZones,
+    isLastItem
+  } = props
+
   const gears = useSelector(state => state.gear.gears)
   const showedLayers = useSelector(state => state.layer.showedLayers)
+  const {
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
 
   const [isOpen, setIsOpen] = useState(false)
   const [showWholeLayer, setShowWholeLayer] = useState(undefined)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
 
-  const {
-    callRemoveRegulatoryZoneFromMySelection,
-    isReadyToShowRegulatoryLayers,
-    regulatoryZoneName,
-    allowRemoveZone,
-    increaseNumberOfZonesOpened,
-    decreaseNumberOfZonesOpened,
-    regulatorySubZones,
-    regulatoryZoneMetadata,
-    isLastItem
-  } = props
-
   useEffect(() => {
-    if (showedLayers && regulatoryZoneName) {
-      const showLayer = showedLayers
-        .filter(layer => layer.type === Layers.REGULATORY.code)
-        .some(layer => layer.zone.layerName === regulatoryZoneName)
-      setAtLeastOneLayerIsShowed(showLayer)
+    if (showedLayers && regulatoryTopic) {
+      const topicFoundInShowedLayers = showedLayers
+        .some(layer => layer.topic === regulatoryTopic)
+      const topicFoundInSelectedLayers = regulatoryZones
+        .some(layer => layer.topic === regulatoryTopic)
+
+      setAtLeastOneLayerIsShowed(topicFoundInShowedLayers && topicFoundInSelectedLayers)
     }
-  }, [showedLayers])
+  }, [showedLayers, regulatoryZones, regulatoryTopic])
 
   useEffect(() => {
     if (increaseNumberOfZonesOpened && decreaseNumberOfZonesOpened) {
       if (isOpen) {
-        increaseNumberOfZonesOpened(regulatorySubZones.length)
+        increaseNumberOfZonesOpened(regulatoryZones.length)
       } else {
-        decreaseNumberOfZonesOpened(regulatorySubZones.length)
+        decreaseNumberOfZonesOpened(regulatoryZones.length)
       }
     }
   }, [isOpen])
 
   useEffect(() => {
-    if (regulatoryZoneMetadata && regulatoryZoneName && regulatoryZoneMetadata.layerName === regulatoryZoneName) {
+    if (regulatoryZoneMetadata && regulatoryTopic && regulatoryZoneMetadata.topic === regulatoryTopic) {
       setIsOpen(true)
     }
-  }, [regulatoryZoneMetadata, regulatoryZoneName, setIsOpen])
+  }, [regulatoryZoneMetadata, regulatoryTopic, setIsOpen])
 
   const getRegulatoryLayerName = regulatoryZones => {
     return {
-      layerName: regulatoryZones[0].layerName
+      topic: regulatoryZones[0].topic
     }
   }
 
   const displayNumberOfZones = () => {
-    const zoneNumber = regulatorySubZones.length
-    return (<ZoneNumber>
+    const zoneNumber = regulatoryZones.length
+    return (<ZonesNumber>
         {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
-      </ZoneNumber>
+      </ZonesNumber>
     )
   }
 
   const showRegulatoryZonesSelected = namespace => {
-    return regulatorySubZones.map(subZone => {
+    return regulatoryZones.map(zone => {
       let vectorLayerStyle
-      if (subZone.zone && subZone.layerName && subZone.gears && gears) {
-        const hash = getHash(`${subZone.layerName}:${subZone.zone}`)
-        const gearCategory = getGearCategory(subZone.gears, gears)
+      if (zone.zone && zone.topic && zone.gears && gears) {
+        const hash = getHash(`${zone.topic}:${zone.zone}`)
+        const gearCategory = getGearCategory(zone.gears, gears)
         vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
       }
 
       return (
         <RegulatoryLayerZone
-          subZone={subZone}
+          zone={zone}
           vectorLayerStyle={vectorLayerStyle}
-          key={`${subZone.layerName}:${subZone.zone}`}
-          isReadyToShowRegulatoryLayers={isReadyToShowRegulatoryLayers}
+          key={`${zone.topic}:${zone.zone}`}
           callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
-          regulatoryZoneMetadata={props.regulatoryZoneMetadata}
           showWholeLayer={showWholeLayer}
           namespace={namespace}
-          zoneIsShown={getZoneIsShown(subZone)}
+          zoneIsShown={getZoneIsShown(zone)}
           allowRemoveZone={allowRemoveZone}
         />
       )
     })
   }
-  const getZoneIsShown = useCallback(subZone => {
+  const getZoneIsShown = useCallback(zone => {
     return showedLayers
-      .filter(layer => layer.type === Layers.REGULATORY.code)
       .some(layer =>
-        layer.zone.layerName === subZone.layerName &&
-        layer.zone.zone === subZone.zone)
+        layer.topic === zone.topic &&
+        layer.zone === zone.zone)
   }, [showedLayers])
 
   return (
@@ -110,10 +109,10 @@ const RegulatoryLayerTopic = props => {
       {namespace => (
         <Row isOpen={isOpen}>
           <Zone isLastItem={isLastItem} isOpen={isOpen}>
-            <Name title={regulatoryZoneName.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
+            <Name title={regulatoryTopic.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
               <ChevronIcon isOpen={isOpen}/>
               <Text>
-                {regulatoryZoneName.replace(/[_]/g, ' ')}
+                {regulatoryTopic.replace(/[_]/g, ' ')}
               </Text>
             </Name>
             {displayNumberOfZones()}
@@ -122,14 +121,14 @@ const RegulatoryLayerTopic = props => {
               : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })}/>}
             {allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection"
                                            onClick={() => callRemoveRegulatoryZoneFromMySelection(
-                                             getRegulatoryLayerName(regulatorySubZones), regulatorySubZones.length)}/>}
+                                             getRegulatoryLayerName(regulatoryZones), regulatoryZones.length)}/>}
           </Zone>
           <List
             isOpen={isOpen}
-            name={regulatoryZoneName.replace(/\s/g, '-')}
-            length={regulatorySubZones.length}
+            name={regulatoryTopic.replace(/\s/g, '-')}
+            zonesLength={regulatoryZones.length}
             >
-            {regulatorySubZones && showedLayers && showRegulatoryZonesSelected(namespace)}
+            {regulatoryZones && showedLayers && showRegulatoryZonesSelected(namespace)}
           </List>
         </Row>
       )}
@@ -151,29 +150,10 @@ const Name = styled.span`
   overflow: hidden;
 `
 
-const ZoneNumber = styled.span`
+const ZonesNumber = styled.span`
   font-size: 11px;
   color: ${COLORS.slateGray};
-  margin-right: 12px;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 16px;
-  margin: 2px 10px 0 0;
-`
-
-const baseIcon = css`
-  flex: 0 0 24px;
   margin-right: 10px;
-  align-self: center;
-`
-
-const ShowIcon = styled(ShowIconSVG)`
-  ${baseIcon}
-`
-
-const HideIcon = styled(HideIconSVG)`
-  ${baseIcon}
 `
 
 const Zone = styled.span`
@@ -187,11 +167,10 @@ const Zone = styled.span`
 `
 
 const List = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'};
   height: inherit;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${props => props.isOpen ? props.length * 38.5 : '0px'};
+  height: ${props => props.isOpen ? props.zonesLength * 38.5 : 0}px;
 `
 
 const Row = styled.li`
@@ -209,7 +188,6 @@ const Row = styled.li`
   border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;
-  border-bottom: ${props => props.isOpen ? `1px solid ${COLORS.grayDarker}` : 'none'};
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

@@ -16,7 +16,6 @@ import unselectVessel from '../../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../../domain/use_cases/getFilteredVessels'
 import VesselListFilters from './VesselListFilters'
 import { getVesselObjectFromFeature } from './dataFormatting'
-import getUniqueSpeciesAndDistricts from '../../domain/use_cases/getUniqueSpeciesAndDistricts'
 import SaveVesselFiltersModal from '../vessel_filters/SaveVesselFiltersModal'
 import { addFilter } from '../../domain/reducers/Filter'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
@@ -25,8 +24,12 @@ import { MapButtonStyle } from '../commonStyles/MapButton.style'
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const vesselsLayerSource = useSelector(state => state.vessel.vesselsLayerSource)
-  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const {
+    vesselsLayerSource,
+    selectedVessel,
+    uniqueVesselsSpecies: species,
+    uniqueVesselsDistricts: districts
+  } = useSelector(state => state.vessel)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
   const { healthcheckTextWarning } = useSelector(state => state.global)
@@ -42,8 +45,6 @@ const VesselList = ({ namespace }) => {
   const [vesselsCountTotal, setVesselsCountTotal] = useState(0)
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState({ globalCheckbox: true })
-  const [species, setSpecies] = useState([])
-  const [districts, setDistricts] = useState([])
   const [zoneGroups, setZoneGroups] = useState([])
 
   // Filters
@@ -80,13 +81,6 @@ const VesselList = ({ namespace }) => {
       setZonesFilter(nextZonesWithoutNulls)
     })
   }, [])
-
-  useEffect(() => {
-    dispatch(getUniqueSpeciesAndDistricts(vessels)).then(speciesAndDistricts => {
-      setSpecies(speciesAndDistricts.species)
-      setDistricts(speciesAndDistricts.districts)
-    })
-  }, [vessels])
 
   useEffect(() => {
     if (vesselListModalIsOpen === true) {

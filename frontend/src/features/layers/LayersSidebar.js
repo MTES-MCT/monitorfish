@@ -1,12 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { setError } from '../../domain/reducers/Global'
 
 import { ReactComponent as LayersSVG } from '../icons/Couches.svg'
 import LayersEnum, { layersType } from '../../domain/entities/layers'
-import getAllRegulatoryLayers from '../../domain/use_cases/getAllRegulatoryLayers'
-import RegulatoryLayerSearch from './regulatory/RegulatoryLayerSearch'
+import RegulatoryLayerSearch from './regulatory/search/RegulatoryLayerSearch'
 import AdministrativeLayers from './administrative/AdministrativeLayers'
 import RegulatoryLayers from './regulatory/RegulatoryLayers'
 import { COLORS } from '../../constants/constants'
@@ -16,24 +15,20 @@ import BaseLayers from './base/BaseLayers'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import NamespaceContext from '../../domain/context/NamespaceContext'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import getAllRegulatoryZonesByRegTerritory from '../../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
   const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
-  const firstUpdate = useRef(true)
   const [regulatoryLayers, setRegulatoryLayers] = useState()
   const [administrativeLayers, setAdministrativeLayers] = useState([])
   const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false)
-  const [regulatoryLayersAddedToMySelection, setRegulatoryLayersAddedToMySelection] = useState(0)
+  const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
   const [hideLayersListWhenSearching, setHideLayersListWhenSearching] = useState(false)
 
   useEffect(() => {
-    if (layersSidebarIsOpen === true) {
-      firstUpdate.current = false
-    }
-
     if (!layersSidebarIsOpen) {
       dispatch(closeRegulatoryZoneMetadata())
     }
@@ -41,12 +36,19 @@ const LayersSidebar = () => {
 
   useEffect(() => {
     const administrativeZones = Object.keys(LayersEnum)
-      .map(layerName => LayersEnum[layerName])
+      .map(layer => LayersEnum[layer])
       .filter(layer => layer.type === layersType.ADMINISTRATIVE)
     setAdministrativeLayers(administrativeZones)
 
-    dispatch(getAllRegulatoryLayers())
-      .then(regulatoryLayers => setRegulatoryLayers(regulatoryLayers))
+    dispatch(getAllRegulatoryZonesByRegTerritory())
+      .then(regulatoryLayers => {
+        let nextRegulatoryLayersWithoutTerritory = {}
+        Object.keys(regulatoryLayers).forEach(territory => {
+          nextRegulatoryLayersWithoutTerritory = { ...nextRegulatoryLayersWithoutTerritory, ...regulatoryLayers[territory] }
+        })
+
+        setRegulatoryLayers(nextRegulatoryLayersWithoutTerritory)
+      })
       .catch(error => {
         dispatch(setError(error))
       })
@@ -57,50 +59,43 @@ const LayersSidebar = () => {
       {
         namespace => (
           <>
-          <SidebarLayersIcon
-            title={'Couches réglementaires'}
-            layersSidebarIsOpen={layersSidebarIsOpen}
-            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-            healthcheckTextWarning={healthcheckTextWarning}
-            onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
-            <Layers/>
-          </SidebarLayersIcon>
-          <Sidebar
-            healthcheckTextWarning={healthcheckTextWarning}
-            layersSidebarIsOpen={layersSidebarIsOpen}
-            firstUpdate={firstUpdate.current}>
-            <RegulatoryLayerSearch
-              regulatoryLayers={regulatoryLayers}
-              regulatoryLayersAddedToMySelection={regulatoryLayersAddedToMySelection}
-              setRegulatoryLayersAddedToMySelection={setRegulatoryLayersAddedToMySelection}
-              layersSidebarIsOpen={layersSidebarIsOpen}
-              setHideLayersListWhenSearching={setHideLayersListWhenSearching}
-            />
-            <Zones
-              healthcheckTextWarning={healthcheckTextWarning}
-            >
-              <RegulatoryLayers
-                regulatoryZonesAddedToMySelection={regulatoryLayersAddedToMySelection}
-                hideZonesListWhenSearching={hideLayersListWhenSearching}
-                namespace={namespace}
-              />
-              <AdministrativeLayers
-                administrativeZones={administrativeLayers}
-                hideZonesListWhenSearching={hideLayersListWhenSearching}
-                namespace={namespace}
-              />
-              <BaseLayers namespace={namespace}/>
-            </Zones>
-            <MetadataWrapper
-              healthcheckTextWarning={healthcheckTextWarning}
-              firstUpdate={firstUpdate.current}
+            <SidebarLayersIcon
+              title={'Couches réglementaires'}
+              isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}
               regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-            >
-              <RegulatoryLayerZoneMetadata
+              healthcheckTextWarning={healthcheckTextWarning}
+              onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
+              <LayersIcon/>
+            </SidebarLayersIcon>
+            <Sidebar
+              healthcheckTextWarning={healthcheckTextWarning}
+              layersSidebarIsOpen={layersSidebarIsOpen}
+              isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}>
+              <RegulatoryLayerSearch
+                regulatoryLayers={regulatoryLayers}
+                numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
+                setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
                 layersSidebarIsOpen={layersSidebarIsOpen}
+                setHideLayersListWhenSearching={setHideLayersListWhenSearching}
+                namespace={namespace}
               />
-            </MetadataWrapper>
-          </Sidebar>
+              <Layers
+                healthcheckTextWarning={healthcheckTextWarning}
+              >
+                <RegulatoryLayers
+                  regulatoryLayersAddedToMySelection={numberOfRegulatoryLayersSaved}
+                  hideLayersListWhenSearching={hideLayersListWhenSearching}
+                  namespace={namespace}
+                />
+                <AdministrativeLayers
+                  administrativeLayers={administrativeLayers}
+                  hideLayersListWhenSearching={hideLayersListWhenSearching}
+                  namespace={namespace}
+                />
+                <BaseLayers namespace={namespace}/>
+              </Layers>
+              <RegulatoryLayerZoneMetadata/>
+            </Sidebar>
           </>
         )
       }
@@ -109,7 +104,7 @@ const LayersSidebar = () => {
 
 const Sidebar = styled(MapComponentStyle)`
   margin-left: ${props => props.layersSidebarIsOpen ? 0 : '-418px'};
-  opacity: ${props => props.layersSidebarIsOpen ? 1 : 0};
+  opacity: ${props => props.isVisible ? 1 : 0};
   top: 10px;
   left: 57px;
   z-index: 999;
@@ -119,7 +114,7 @@ const Sidebar = styled(MapComponentStyle)`
   transition: 0.5s all;
 `
 
-const Zones = styled.div`
+const Layers = styled.div`
   margin-top: 5px;
   width: 350px;
   max-height: calc(100vh - ${props => props.healthcheckTextWarning ? '210px' : '160px'});
@@ -129,7 +124,7 @@ const SidebarLayersIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
   padding: 2px 2px 2px 2px;
   top: 10px;
   left: 12px;
@@ -138,38 +133,13 @@ const SidebarLayersIcon = styled(MapButtonStyle)`
   width: 40px;
 
   :hover, :focus {
-      background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.charcoal : props.layersSidebarIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
+      background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 
-const Layers = styled(LayersSVG)`
+const LayersIcon = styled(LayersSVG)`
   width: 35px;
   height: 35px;
-`
-
-const MetadataWrapper = styled.div`
-    border-radius: 2px;
-    width: 380px;
-    position: absolute;
-    display: block;
-    color: ${COLORS.charcoal};
-    text-decoration: none;
-    background-color: ${COLORS.gainsboro};
-    padding: 0;
-    margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 361 : -30}px;
-    margin-top: 45px;
-    top: 0px;
-    opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
-    z-index: -1;
-    max-height: calc(100vh - ${props => props.healthcheckTextWarning ? '210px' : '160px'});
-    padding: 10px 10px 0 10px;
-    overflow-x: hidden;
-    overflow-y: no-scroll;
-    border-bottom: 10px solid #EEE;
-    min-height: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 400 : 100}px;
-    transition: all 0.5s;
-    
-   
 `
 
 export default LayersSidebar

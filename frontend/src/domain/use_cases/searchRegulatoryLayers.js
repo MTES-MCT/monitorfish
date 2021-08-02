@@ -5,10 +5,11 @@ import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
-const getUniqueSpeciesAndDistricts = vessels => async () => {
+const searchRegulatoryLayers = (searchFields, regulatoryLayers) => async () => {
   const worker = await new MonitorFishWorker()
 
-  return worker.getUniqueSpeciesAndDistricts(vessels)
+  // console.log(getState, 'getState')
+  return worker.searchLayers(searchFields, regulatoryLayers, null)
 }
 
-export default getUniqueSpeciesAndDistricts
+export default searchRegulatoryLayers

@@ -9,6 +9,7 @@ import {
 } from '../reducers/Vessel'
 import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
+import { batch } from 'react-redux'
 
 export const NAVIGATE_TO = {
   PREVIOUS: 'PREVIOUS',
@@ -75,8 +76,10 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(removeError())
     }).catch(error => {
       console.error(error)
-      dispatch(setError(error))
-      dispatch(resetLoadingVessel())
+      batch(() => {
+        dispatch(setError(error))
+        dispatch(resetLoadingVessel())
+      })
     })
   }
 }

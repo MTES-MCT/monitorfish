@@ -12,6 +12,8 @@ const vesselSlice = createSlice({
   initialState: {
     selectedVesselIdentity: null,
     vessels: [],
+    uniqueVesselsSpecies: [],
+    uniqueVesselsDistricts: [],
     filteredVesselsFeaturesUids: [],
     vesselsLayerSource: null,
     /** @type {SelectedVessel | null} selectedVessel */
@@ -44,6 +46,9 @@ const vesselSlice = createSlice({
   reducers: {
     setVessels (state, action) {
       state.vessels = action.payload
+    },
+    resetVessels (state) {
+      state.vessels = []
     },
     /**
      * Set the list of vessel features Uids for filtering features (using JS indexOf is good for performance)
@@ -212,12 +217,17 @@ const vesselSlice = createSlice({
      */
     setControlFromDate (state, action) {
       state.controlsFromDate = action.payload
-    }
+    },
+    setVesselsSpeciesAndDistricts (state, action) {
+      state.uniqueVesselsSpecies = action.payload.species
+      state.uniqueVesselsDistricts = action.payload.districts
+    },
   }
 })
 
 export const {
   setVessels,
+  resetVessels,
   setFilteredVesselsFeaturesUids,
   setVesselsLayerSource,
   loadingVessel,
@@ -246,7 +256,8 @@ export const {
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,
-  setControlFromDate
+  setControlFromDate,
+  setVesselsSpeciesAndDistricts
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

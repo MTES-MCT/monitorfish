@@ -1,9 +1,14 @@
 import * as Comlink from 'comlink'
-import { lawTypeList, mapToRegulatoryZone } from '../domain/entities/regulatory'
-import { vesselSize } from '../domain/entities/vessel'
+import {
+  getMergedRegulatoryLayers,
+  lawTypeList,
+  mapToRegulatoryZone, orderByAlphabeticalLayer,
+  searchByLawType
+} from '../domain/entities/regulatory'
 import { getDateMonthsBefore } from '../utils'
+import { vesselSize } from '../domain/entities/vessel'
 
-class MapperWorker {
+class MonitorFishWorker {
   #getLayerNameList = (features) => {
     const featuresWithoutGeometry = features.features.map(feature => {
       return mapToRegulatoryZone(feature.properties)
@@ -11,7 +16,7 @@ class MapperWorker {
 
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
       const found = acc.find(item =>
-        item.layerName === current.layerName &&
+        item.topic === current.topic &&
         item.zone === current.zone)
       if (!found) {
         return acc.concat([current])
@@ -21,9 +26,9 @@ class MapperWorker {
     }, [])
 
     return uniqueFeaturesWithoutGeometry
-      .map(layer => layer.layerName)
-      .map(layerName => {
-        return uniqueFeaturesWithoutGeometry.filter(layer => layer.layerName === layerName)
+      .map(layer => layer.topic)
+      .map(topic => {
+        return uniqueFeaturesWithoutGeometry.filter(layer => layer.topic === topic)
       })
   }
 
@@ -42,14 +47,67 @@ class MapperWorker {
   convertGeoJSONFeaturesToObject (features) {
     const layerTopicsArray = this.#getLayerNameList(features)
     const layersTopicsToZones = layerTopicsArray.reduce((accumulatedObject, zone) => {
-      accumulatedObject[zone[0].layerName] = zone
+      accumulatedObject[zone[0].topic] = zone
       return accumulatedObject
     }, {})
 
     return layersTopicsToZones
   }
 
-  convertGeoJSONFeaturesToObjectByRegTerritory (features) {
+  /**
+   * Get all regulatory data structured as
+   * Territory: {
+   *  LawType: {
+   *    Topic: Zone[]
+   *  }
+   * }
+   * (see example)
+   * @param {GeoJSON} features
+   * @returns {Object} The structured regulatory data
+   * @example
+   * "France": {
+   *    "Reg locale / NAMO": {
+   *       "Armor_CSJ_Dragues": [
+   *         {
+   *           bycatch: undefined,
+   *           closingDate: undefined,
+   *           deposit: undefined,
+   *           gears: "DRB",
+   *           lawType: "Reg locale",
+   *           mandatoryDocuments: undefined,
+   *           obligations: undefined,
+   *           openingDate: undefined,
+   *           period: undefined,
+   *           permissions: undefined,
+   *           prohibitedGears: null,
+   *           prohibitedSpecies: null,
+   *           prohibitions: undefined,
+   *           quantity: undefined,
+   *           region: "Bretagne",
+   *           regulatoryReferences: "[
+   *             {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\",
+   *             \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
+   *           rejections: undefined,
+   *           seafront: "NAMO",
+   *           size: undefined,
+   *           species: "SCE",
+   *           state: undefined,
+   *           technicalMeasurements: undefined,
+   *           topic: "Armor_CSJ_Dragues",
+   *           zone: "Secteur 3"
+   *         }
+   *       ]
+   *       "GlÃ©nan_CSJ_Dragues": (1) […],
+   *       "Bretagne_Laminaria_Hyperborea_Scoubidous - 2019": (1) […],
+   *    },
+   *     "Reg locale / Sud-Atlantique, SA": {
+   *       "Embouchure_Gironde": (1) […],
+   *       "Pertuis_CSJ_Dragues": (6) […],
+   *       "SA_Chaluts_Pelagiques": (5) […]
+   *     }
+   * }
+   */
+  convertGeoJSONFeaturesToStructuredRegulatoryObject (features) {
     const regulationBlocList = new Set()
     const zoneThemelist = new Set()
     const seaFrontList = new Set()
@@ -57,11 +115,11 @@ class MapperWorker {
     const layersTopicsByRegTerritory = layerTopicsArray.reduce((accumulatedObject, zone) => {
       const {
         lawType,
-        layerTopic,
+        topic,
         seafront
       } = zone[0]
-      if (layerTopic && lawType && seafront) {
-        zoneThemelist.add(layerTopic)
+      if (topic && lawType && seafront) {
+        zoneThemelist.add(topic)
         const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
         let newLawType = lawType
         if (regTerritory === 'France') {
@@ -75,7 +133,7 @@ class MapperWorker {
         if (!accumulatedObject[regTerritory][newLawType]) {
           accumulatedObject[regTerritory][newLawType] = {}
         }
-        accumulatedObject[regTerritory][newLawType][layerTopic] = zone
+        accumulatedObject[regTerritory][newLawType][topic] = zone
       }
       return accumulatedObject
     }, {})
@@ -85,6 +143,38 @@ class MapperWorker {
       regulationBlocArray: [...regulationBlocList],
       seaFrontArray: [...seaFrontList]
     }
+  }
+
+  getUniqueSpeciesAndDistricts (vessels) {
+    const species = vessels
+      .map(vessel => vessel.speciesArray)
+      .flat()
+      .reduce((acc, species) => {
+        if (acc.indexOf(species) < 0) {
+          acc.push(species)
+        }
+
+        return acc
+      }, [])
+
+    const districts = vessels
+      .map(vessel => {
+        return {
+          district: vessel.district,
+          districtCode: vessel.districtCode
+        }
+      })
+      .reduce((acc, district) => {
+        const found = acc.find(item => item.district === district.district)
+
+        if (!found) {
+          return acc.concat([district])
+        } else {
+          return acc
+        }
+      }, [])
+
+    return { species, districts }
   }
 
   getFilteredVessels (vessels, filters) {
@@ -194,37 +284,32 @@ class MapperWorker {
     }
   }
 
-  getUniqueSpeciesAndDistricts (vessels) {
-    const species = vessels
-      .map(vessel => vessel.speciesArray)
-      .flat()
-      .reduce((acc, species) => {
-        if (acc.indexOf(species) < 0) {
-          acc.push(species)
+  searchLayers (searchFields, regulatoryLayers, gears) {
+    let foundRegulatoryLayers = {}
+
+    console.log('searchLayers', searchFields, regulatoryLayers, gears)
+
+    Object.keys(searchFields).forEach(searchProperty => {
+      if (searchFields[searchProperty].searchText.length > 0) {
+        const searchResultByLawType = searchByLawType(
+          regulatoryLayers,
+          searchFields[searchProperty].properties,
+          searchFields[searchProperty].searchText,
+          gears)
+
+        if (foundRegulatoryLayers && Object.keys(foundRegulatoryLayers).length === 0) {
+          foundRegulatoryLayers = searchResultByLawType
+        } else if (foundRegulatoryLayers) {
+          foundRegulatoryLayers = getMergedRegulatoryLayers(foundRegulatoryLayers, searchResultByLawType)
         }
+      }
+    })
 
-        return acc
-      }, [])
+    console.log('searchLayers FINAL', foundRegulatoryLayers)
+    orderByAlphabeticalLayer(foundRegulatoryLayers)
 
-    const districts = vessels
-      .map(vessel => {
-        return {
-          district: vessel.district,
-          districtCode: vessel.districtCode
-        }
-      })
-      .reduce((acc, district) => {
-        const found = acc.find(item => item.district === district.district)
-
-        if (!found) {
-          return acc.concat([district])
-        } else {
-          return acc
-        }
-      }, [])
-
-    return { species, districts }
+    return foundRegulatoryLayers
   }
 }
 
-Comlink.expose(MapperWorker)
+Comlink.expose(MonitorFishWorker)

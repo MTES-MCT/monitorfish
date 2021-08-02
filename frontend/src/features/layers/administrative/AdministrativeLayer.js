@@ -64,12 +64,13 @@ const LayerName = styled.span`
   display: inline-block;
   text-overflow: ellipsis;
   overflow: hidden;
+  padding-top: 5px;
 `
 
 const Row = styled.span`
   margin-top: ${props => props.isFirst ? 5 : 0}px;
   margin-left: ${props => props.isGrouped ? '18px' : '0'};
-  padding: ${props => props.isGrouped ? '4px 0 3px 20px' : '9px 0 4px 20px'};
+  padding: ${props => props.isGrouped ? '4px 0 3px 20px' : '4px 0 4px 20px'};
   line-height: 18px;
   display: block;
   user-select: none;

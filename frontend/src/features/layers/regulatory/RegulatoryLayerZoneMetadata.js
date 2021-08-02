@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper.svg'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper_dark.svg'
 import { ReactComponent as AlertSVG } from '../../icons/Picto_alerte.svg'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { getDateTime } from '../../../utils'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { useDispatch, useSelector } from 'react-redux'
+import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 
 const RegulatoryLayerZoneMetadata = () => {
   const dispatch = useDispatch()
@@ -17,6 +17,7 @@ const RegulatoryLayerZoneMetadata = () => {
     regulatoryZoneMetadata,
     regulatoryZoneMetadataPanelIsOpen
   } = useSelector(state => state.regulatory)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const [formattedGears, setFormattedGears] = useState([])
   const [prohibitedGears, setProhibitedGears] = useState([])
@@ -60,11 +61,13 @@ const RegulatoryLayerZoneMetadata = () => {
   }, [gears, regulatoryZoneMetadata])
 
   const getTitle = regulatory => regulatory
-    ? `${regulatory.layerName.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+    ? `${regulatory.topic.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
     : ''
 
   return (
-    <>
+    <Wrapper
+      healthcheckTextWarning={healthcheckTextWarning}
+      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
       {
         regulatoryZoneMetadataPanelIsOpen && regulatoryZoneMetadata
           ? <>
@@ -293,7 +296,7 @@ const RegulatoryLayerZoneMetadata = () => {
                 regulatoryZoneMetadata.prohibitions ||
                 regulatoryZoneMetadata.permissions ||
                 (regulatoryReferences && regulatoryReferences.length)
-                  ? <ZoneWithLineBreak>
+                  ? <ZoneWithLineBreak isLast>
                     {
                       regulatoryZoneMetadata.mandatoryDocuments
                         ? <>
@@ -352,9 +355,26 @@ const RegulatoryLayerZoneMetadata = () => {
           </>
           : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
       }
-    </>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  border-radius: 2px;
+  width: 400px;
+  position: absolute;
+  display: block;
+  color: ${COLORS.charcoal};
+  background-color: ${COLORS.gainsboro};
+  margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 355 : -30}px;
+  margin-top: 45px;
+  top: 0px;
+  opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
+  z-index: -1;
+  padding: 0;
+  min-height: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 400 : 0}px;
+  transition: all 0.5s;
+`
 
 const Reference = styled.li`
   list-style-type: "→";
@@ -373,17 +393,21 @@ const RegulatoryZoneName = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 13px;
+  font-size: 15px;
   margin-left: 5px;
+  margin-right: 5px;
 `
 
 const Header = styled.div`
   color: ${COLORS.gunMetal};
   margin-left: 6px;
-  margin-bottom: 6px;
   text-align: left;
-  height: 1.5em;
+  height: 40px;
   display: flex;
+  font-weight: 500;
+  font-size: 15px;
+  align-items: center;
+  justify-content: center;
 `
 
 const Content = styled.div`
@@ -391,7 +415,7 @@ const Content = styled.div`
   color: ${COLORS.lightGray};
   background: ${COLORS.background};
   overflow-y: auto;
-  max-height: calc(100vh - 145px);
+  max-height: 72vh;
 `
 
 const Warning = styled.div`
@@ -412,13 +436,8 @@ const WarningIcon = styled(AlertSVG)`
 `
 
 const REGPaperIcon = styled(REGPaperSVG)`
-  width: 20px;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  float: right;
-  cursor: pointer;
+  margin-left: 3px;
+  width: 25px;
 `
 
 const Body = styled.tbody``
@@ -437,7 +456,8 @@ const ZoneWithLineBreak = styled.div`
   padding: 10px 5px 9px 16px;
   text-align: left;
   display: block;
-  border-bottom: 1px solid ${COLORS.lightGray};
+  ${props => !props.isLast ? `border-bottom: 1px solid ${COLORS.lightGray};` : null}
+  
 `
 
 const Fields = styled.table`
@@ -476,6 +496,7 @@ const ValueWithLineBreak = styled.div`
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
+  font-weight: 500;
 `
 
 const MarkdownValue = styled(ReactMarkdown)`
@@ -483,6 +504,7 @@ const MarkdownValue = styled(ReactMarkdown)`
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
+  font-weight: 500;
   * {
     font-size: inherit;
     margin: 0px;
@@ -513,6 +535,7 @@ const Value = styled.td`
   border: none;
   line-height: normal;
   font-size: 13px;
+  font-weight: 500;
 `
 
 const NoValue = styled.span`

@@ -6,6 +6,7 @@ import gear from './Gear'
 import filter from './Filter'
 import fleetSegment from './FleetSegment'
 import regulatory from './Regulatory'
+import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import interestPoint from './InterestPoint'
 import { combineReducers } from '@reduxjs/toolkit'
 
@@ -22,7 +23,8 @@ const homeReducers = combineReducers({
   vessel,
   filter,
   fleetSegment,
-  interestPoint
+  interestPoint,
+  regulatoryLayerSearch
 })
 
 const backofficeReducers = combineReducers({

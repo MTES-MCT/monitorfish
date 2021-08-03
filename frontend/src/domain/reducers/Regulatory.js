@@ -28,6 +28,8 @@ const regulatorySlice = createSlice({
     /** @type {Object.<string, SelectedRegulatoryZone[]>} selectedRegulatoryLayers */
     selectedRegulatoryLayers: reOrderOldObjectHierarchyIfFound(getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey)),
     regulatoryZoneMetadata: null,
+    /** @type RegulatoryLawTypes regulatoryLayers */
+    regulatoryLayers: [],
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
     lawTypeOpened: null,
@@ -42,25 +44,43 @@ const regulatorySlice = createSlice({
       state.regulatoryGeometryToPreview = action.payload
     },
     /**
-     * Add regulatory layers to search selection
+     * Add regulatory zones to "My Zones" regulatory selection
      * @param {Object=} state
-     * @param {{payload: Object.<string, SelectedRegulatoryZone[]>}} action - The regulatory layers
+     * @param {SelectedRegulatoryZone[]} action - The regulatory zones
      */
-    addRegulatoryLayersToSelection (state, action) {
-      state.selectedRegulatoryLayers = action.payload
-      window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryZones))
+    addRegulatoryZonesToMyLayers (state, action) {
+      const myRegulatoryLayers = { ...state.selectedRegulatoryLayers }
+
+      action.payload.forEach(regulatoryZone => {
+        if (!myRegulatoryLayers[regulatoryZone.topic] || !myRegulatoryLayers[regulatoryZone.topic].length) {
+          myRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
+        } else {
+          if (!myRegulatoryLayers[regulatoryZone.topic].some(zone =>
+            zone.topic === regulatoryZone.topic &&
+            zone.zone === regulatoryZone.zone)) {
+            myRegulatoryLayers[regulatoryZone.topic] = myRegulatoryLayers[regulatoryZone.topic].concat(regulatoryZone)
+          }
+        }
+      })
+
+      state.selectedRegulatoryLayers = myRegulatoryLayers
+      window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryLayers))
     },
     /**
-     * Remove a regulatory zone to search selection
+     * Remove regulatory zone(s) from "My Zones" regulatory selection, by providing a topic name to remove multiple zones
+     * or simply the zone name to remove a specified zone
      * @param {Object=} state
-     * @param {{payload: Object.<string, SelectedRegulatoryZone>}} action - The regulatory zone to remove
+     * @param {{
+     *          topic: string=,
+     *          zone: string=
+     *          }} action - The regulatory zone(s) to remove
      */
-    removeRegulatoryZonesFromSelection (state, action) {
-      if (action.payload.zone) {
+    removeRegulatoryZonesFromMyLayers (state, action) {
+      if (action.payload.zone && action.payload.topic) {
         state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
           return !(subZone.topic === action.payload.topic && subZone.zone === action.payload.zone)
         })
-      } else {
+      } else if (action.payload.topic) {
         state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
           return !(subZone.topic === action.payload.topic)
         })
@@ -94,6 +114,60 @@ const regulatorySlice = createSlice({
     setLawTypeOpened (state, action) {
       state.lawTypeOpened = action.payload
     },
+    /**
+     * Set regulatory data structured as
+     * LawType: {
+     *   Topic: Zone[]
+     * }
+     * (see example)
+     * @param {Object=} state
+     * @param {{payload: RegulatoryLawTypes}} action - The regulatory data
+     * @example
+     * {
+     *  "Reg locale / NAMO": {
+     *   "Armor_CSJ_Dragues": [
+     *     {
+     *       bycatch: undefined,
+     *       closingDate: undefined,
+     *       deposit: undefined,
+     *       gears: "DRB",
+     *       lawType: "Reg locale",
+     *       mandatoryDocuments: undefined,
+     *       obligations: undefined,
+     *       openingDate: undefined,
+     *       period: undefined,
+     *       permissions: undefined,
+     *       prohibitedGears: null,
+     *       prohibitedSpecies: null,
+     *       prohibitions: undefined,
+     *       quantity: undefined,
+     *       region: "Bretagne",
+     *       regulatoryReferences: "[
+     *         {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\",
+     *         \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
+     *       rejections: undefined,
+     *       seafront: "NAMO",
+     *       size: undefined,
+     *       species: "SCE",
+     *       state: undefined,
+     *       technicalMeasurements: undefined,
+     *       topic: "Armor_CSJ_Dragues",
+     *       zone: "Secteur 3"
+     *     }
+     *   ]
+     *   "GlÃ©nan_CSJ_Dragues": (1) […],
+     *   "Bretagne_Laminaria_Hyperborea_Scoubidous - 2019": (1) […],
+     *  },
+     *  "Reg locale / Sud-Atlantique, SA": {
+     *   "Embouchure_Gironde": (1) […],
+     *   "Pertuis_CSJ_Dragues": (6) […],
+     *   "SA_Chaluts_Pelagiques": (5) […]
+     *  }
+     * }
+     */
+    setRegulatoryLayers (state, action) {
+      state.regulatoryLayers = action.payload
+    },
     setZoneThemeArray (state, action) {
       state.zoneThemeArray = action.payload
     },
@@ -110,13 +184,14 @@ const regulatorySlice = createSlice({
 })
 
 export const {
-  addRegulatoryLayersToSelection,
-  removeRegulatoryZonesFromSelection,
+  addRegulatoryZonesToMyLayers,
+  removeRegulatoryZonesFromMyLayers,
   setIsReadyToShowRegulatoryZones,
   setLoadingRegulatoryZoneMetadata,
   resetLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata,
   closeRegulatoryZoneMetadataPanel,
+  setRegulatoryLayers,
   setLawTypeOpened,
   setZoneThemeArray,
   setRegulationBlocArray,

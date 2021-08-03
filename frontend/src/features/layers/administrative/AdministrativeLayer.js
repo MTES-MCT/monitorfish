@@ -57,7 +57,8 @@ const AdministrativeLayer = props => {
           }
         </Row>
         : null
-  }</>
+    }
+  </>
 }
 
 const LayerName = styled.span`

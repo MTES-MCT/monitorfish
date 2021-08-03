@@ -1,128 +1,84 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import RegulatoryLayerSearchInput from './RegulatoryLayerSearchInput'
 import RegulatoryLayerSearchResultList from './RegulatoryLayerSearchResultList'
+import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './RegulatoryLayerSearch.slice'
 import { COLORS } from '../../../../constants/constants'
-import { useDispatch, useSelector } from 'react-redux'
-import addRegulatoryLayersToMySelection from '../../../../domain/use_cases/addRegulatoryLayersToMySelection'
-import { useClickOutsideComponent } from '../../../../hooks/useClickOutside'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import layer from '../../../../domain/reducers/Layer'
+import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
+import { addRegulatoryZonesToMyLayers } from '../../../../domain/reducers/Regulatory'
 
 const RegulatoryLayerSearch = props => {
   const {
     namespace,
     numberOfRegulatoryLayersSaved,
     setNumberOfRegulatoryLayersSaved,
-    regulatoryLayers,
     layersSidebarIsOpen
   } = props
 
   const dispatch = useDispatch()
   const { setLayersSideBarOpenedZone } = layer[namespace].actions
-  const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
   const { layersSidebarOpenedLayer } = useSelector(state => state.layer)
+  const {
+    regulatoryLayersSearchResult,
+    regulatoryZonesChecked
+  } = useSelector(state => state.regulatoryLayerSearch)
 
-  const [showRegulatorySearch, setShowRegulatorySearch] = useState(false)
-  const [foundRegulatoryLayers, setFoundRegulatoryLayers] = useState({})
-  const [regulatoryLayersSelected, setRegulatoryLayersSelected] = useState({})
   const [initSearchFields, setInitSearchFields] = useState(false)
 
+  const escape = useEscapeFromKeyboard()
+
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
 
   useEffect(() => {
     if (layersSidebarOpenedLayer !== '') {
-      setFoundRegulatoryLayers(null)
-      setRegulatoryLayersSelected({})
+      batch(() => {
+        dispatch(setRegulatoryLayersSearchResult(null))
+        dispatch(resetRegulatoryZonesChecked())
+      })
     }
   }, [layersSidebarOpenedLayer])
 
   useEffect(() => {
-    if (clickedOutsideComponent && foundRegulatoryLayers) {
-      setFoundRegulatoryLayers(null)
-      setRegulatoryLayersSelected({})
-    }
-  }, [clickedOutsideComponent, foundRegulatoryLayers])
-
-  useEffect(() => {
-    if (regulatoryZoneMetadataPanelIsOpen) {
-      setFoundRegulatoryLayers(null)
-      setRegulatoryLayersSelected({})
-    }
-  }, [regulatoryZoneMetadataPanelIsOpen])
-
-  const resetSelectedRegulatoryZones = () => {
-    setRegulatoryLayersSelected({})
-  }
-
-  useEffect(() => {
-    if (foundRegulatoryLayers && Object.keys(foundRegulatoryLayers).length > 0) {
-      dispatch(setLayersSideBarOpenedZone(''))
-    }
-  }, [foundRegulatoryLayers])
-
-  const toggleSelectRegulatoryLayer = useCallback((regulatoryLayerTopic, regulatoryLayerZone) => {
-    const existingSelectedLayers = { ...regulatoryLayersSelected }
-
-    if (!regulatoryLayersSelected[regulatoryLayerTopic] || !regulatoryLayersSelected[regulatoryLayerTopic].length) {
-      existingSelectedLayers[regulatoryLayerTopic] = regulatoryLayerZone
-      setRegulatoryLayersSelected(existingSelectedLayers)
-    } else {
-      regulatoryLayerZone.forEach(regulatorySubZone => {
-        if (existingSelectedLayers[regulatoryLayerTopic].some(item =>
-          item.topic === regulatorySubZone.topic &&
-          item.zone === regulatorySubZone.zone)) {
-          existingSelectedLayers[regulatoryLayerTopic] = existingSelectedLayers[regulatoryLayerTopic].filter(item =>
-            !(item.topic === regulatorySubZone.topic &&
-              item.zone === regulatorySubZone.zone))
-          if (!existingSelectedLayers[regulatoryLayerTopic].length) {
-            delete existingSelectedLayers[regulatoryLayerTopic]
-          }
-        } else {
-          existingSelectedLayers[regulatoryLayerTopic] = existingSelectedLayers[regulatoryLayerTopic].concat(regulatorySubZone)
-        }
-        setRegulatoryLayersSelected(existingSelectedLayers)
+    if (escape) {
+      batch(() => {
+        dispatch(setRegulatoryLayersSearchResult(null))
+        dispatch(resetRegulatoryZonesChecked())
       })
     }
-  }, [regulatoryLayersSelected])
+  }, [escape])
 
-  function saveRegulatoryLayers (regulatoryLayersSelected) {
-    const numberOfLayersAdded = Object.keys(regulatoryLayersSelected)
-      .map(regulatoryLayerKey => regulatoryLayersSelected[regulatoryLayerKey].length)
-      .reduce((a, b) => a + b, 0)
+  useEffect(() => {
+    if (regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0) {
+      dispatch(setLayersSideBarOpenedZone(''))
+    }
+  }, [regulatoryLayersSearchResult])
 
-    setNumberOfRegulatoryLayersSaved(numberOfLayersAdded)
+  function saveRegulatoryLayers (regulatoryZonesChecked) {
+    setNumberOfRegulatoryLayersSaved(regulatoryZonesChecked.length)
     setTimeout(() => { setNumberOfRegulatoryLayersSaved(0) }, 2000)
-    dispatch(addRegulatoryLayersToMySelection(regulatoryLayersSelected))
-    setRegulatoryLayersSelected({})
+    dispatch(addRegulatoryZonesToMyLayers(regulatoryZonesChecked))
+    dispatch(resetRegulatoryZonesChecked())
   }
 
-  return (<Search ref={wrapperRef}>
+  return (
+    <Search ref={wrapperRef}>
       <RegulatoryLayerSearchInput
-        setShowRegulatorySection={setShowRegulatorySearch}
-        regulatoryLayers={regulatoryLayers}
-        setFoundRegulatoryLayers={setFoundRegulatoryLayers}
-        foundRegulatoryLayers={foundRegulatoryLayers}
         initSearchFields={initSearchFields}
         setInitSearchFields={setInitSearchFields}
         layersSidebarIsOpen={layersSidebarIsOpen}
-        resetSelectedRegulatoryLayer={resetSelectedRegulatoryZones}
       />
-      <RegulatoryLayerSearchResultList
-        foundRegulatoryLayers={foundRegulatoryLayers}
-        showRegulatorySection={showRegulatorySearch}
-        regulatoryLayersSelected={regulatoryLayersSelected}
-        toggleSelectRegulatoryLayer={toggleSelectRegulatoryLayer}
-      />
+      <RegulatoryLayerSearchResultList/>
       <AddRegulatoryLayer
-        onClick={() => saveRegulatoryLayers(regulatoryLayersSelected)}
-        foundRegulatoryZones={foundRegulatoryLayers}
+        onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
+        isShown={regulatoryZonesChecked && regulatoryZonesChecked.length}
       >
         {
           numberOfRegulatoryLayersSaved
             ? `${numberOfRegulatoryLayersSaved} zones ajoutées`
-            : 'Ajouter à mes zones'
+            : `Ajouter ${regulatoryZonesChecked.length} zone${regulatoryZonesChecked.length > 1 ? 's' : ''}`
         }
       </AddRegulatoryLayer>
     </Search>
@@ -146,7 +102,7 @@ const AddRegulatoryLayer = styled.div`
   width: 100%;
   overflow: hidden;
   user-select: none;
-  height: ${props => props.foundRegulatoryZones && Object.keys(props.foundRegulatoryZones).length > 0 ? '36' : '0'}px;
+  height: ${props => props.isShown ? '36' : '0'}px;
   max-height: 600px;
   transition: 0.5s all;
 `

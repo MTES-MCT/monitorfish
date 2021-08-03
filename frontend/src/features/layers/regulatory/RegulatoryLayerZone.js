@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
-import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper.svg'
-import { ReactComponent as REGPaperDarkSVG } from '../../icons/reg_paper_dark.svg'
+import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
@@ -13,12 +11,13 @@ import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import showRegulatoryLayer from '../../../domain/use_cases/showRegulatoryLayer'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
+import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 
 const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
   const {
     callRemoveRegulatoryZoneFromMySelection,
-    zone,
+    regulatoryZone,
     showWholeLayer,
     zoneIsShown,
     allowRemoveZone,
@@ -31,7 +30,7 @@ const RegulatoryLayerZone = props => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
-  const [showZone, setShowZone] = useState(undefined)
+  const [showRegulatoryZone, setShowRegulatoryZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const callShowRegulatoryZoneMetadata = zone => {
@@ -45,72 +44,72 @@ const RegulatoryLayerZone = props => {
   }
 
   useEffect(() => {
-    if (regulatoryZoneMetadata && zone &&
-      (zone.topic !== regulatoryZoneMetadata.topic ||
-        zone.zone !== regulatoryZoneMetadata.zone)) {
+    if (regulatoryZoneMetadata && regulatoryZone &&
+      (regulatoryZone.topic !== regulatoryZoneMetadata.topic ||
+        regulatoryZone.zone !== regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(false)
-    } else if (regulatoryZoneMetadata && zone &&
-      (zone.topic === regulatoryZoneMetadata.topic &&
-        zone.zone === regulatoryZoneMetadata.zone)) {
+    } else if (regulatoryZoneMetadata && regulatoryZone &&
+      (regulatoryZone.topic === regulatoryZoneMetadata.topic &&
+        regulatoryZone.zone === regulatoryZoneMetadata.zone)) {
       setMetadataIsShown(true)
-    } else if (!regulatoryZoneMetadata && zone) {
+    } else if (!regulatoryZoneMetadata && regulatoryZone) {
       setMetadataIsShown(false)
     }
-  }, [regulatoryZoneMetadata, zone])
+  }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {
     if (showWholeLayer) {
       if (!zoneIsShown && showWholeLayer.show) {
-        setShowZone(true)
+        setShowRegulatoryZone(true)
       } else if (zoneIsShown && !showWholeLayer.show) {
-        setShowZone(false)
+        setShowRegulatoryZone(false)
       }
     }
   }, [showWholeLayer])
 
   useEffect(() => {
     if (zoneIsShown) {
-      setShowZone(zoneIsShown)
+      setShowRegulatoryZone(zoneIsShown)
     }
   }, [zoneIsShown])
 
   useEffect(() => {
-    if (showZone && isReadyToShowRegulatoryLayers) {
-      dispatch(showRegulatoryLayer({ ...zone, namespace }))
+    if (showRegulatoryZone && isReadyToShowRegulatoryLayers) {
+      dispatch(showRegulatoryLayer({ ...regulatoryZone, namespace }))
     } else {
       dispatch(hideLayer({
         type: LayersEnum.REGULATORY.code,
-        ...zone,
+        ...regulatoryZone,
         namespace
       }))
     }
-  }, [showZone, isReadyToShowRegulatoryLayers, namespace])
+  }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
   return (
     <Zone>
-      <Rectangle onClick={() => dispatch(zoomInLayer({ subZone: zone }))} vectorLayerStyle={vectorLayerStyle}/>
+      <Rectangle onClick={() => dispatch(zoomInLayer({ subZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
-        title={zone.zone ? zone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
-        onClick={() => setShowZone(!showZone)}
+        title={regulatoryZone.zone ? regulatoryZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+        onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}
       >
         {
-          zone.zone
-            ? zone.zone.replace(/[_]/g, ' ')
+          regulatoryZone.zone
+            ? regulatoryZone.zone.replace(/[_]/g, ' ')
             : 'AUCUN NOM'
         }
       </ZoneText>
       <Icons>
         {
           metadataIsShown
-            ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => callShowRegulatoryZoneMetadata(zone)}/>
-            : <REGPaperIcon title="Afficher la réglementation" onClick={() => callShowRegulatoryZoneMetadata(zone)}/>
+            ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}/>
+            : <REGPaperIcon title="Afficher la réglementation" onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}/>
         }
-        {showZone
-          ? <ShowIcon title="Cacher la zone" onClick={() => setShowZone(!showZone)}/>
+        {showRegulatoryZone
+          ? <ShowIcon title="Cacher la zone" onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}/>
           : <HideIcon
-            title="Afficher la zone" onClick={() => setShowZone(!showZone)}/>}
+            title="Afficher la zone" onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}/>}
         {allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection"
-                                       onClick={() => callRemoveRegulatoryZoneFromMySelection(zone, 1)}/>}
+                                       onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1)}/>}
       </Icons>
     </Zone>
   )
@@ -155,19 +154,6 @@ const ZoneText = styled.span`
   padding-bottom: 3px;
   padding-left: 0;
   margin-top: 8px;
-`
-
-const baseREGPaperIcon = css`
-  width: 20px;
-  align-self: center;
-  margin-right: 7px;
-`
-const REGPaperIcon = styled(REGPaperSVG)`
-  ${baseREGPaperIcon}
-`
-
-const REGPaperDarkIcon = styled(REGPaperDarkSVG)`
-  ${baseREGPaperIcon}
 `
 
 export default RegulatoryLayerZone

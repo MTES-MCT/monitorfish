@@ -2,17 +2,19 @@ import { useEffect, useState } from 'react'
 import { useToasts } from 'react-toast-notifications'
 
 import showAllVessels from '../domain/use_cases/showVesselsLastPosition'
-import { useDispatch, useSelector } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
 import updateVesselTrackAndSidebar from '../domain/use_cases/updateVesselTrackAndSidebar'
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
-import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/reducers/Global'
+import { resetIsUpdatingVessels, setError, setIsUpdatingVessels } from '../domain/reducers/Global'
 import { errorType } from '../domain/entities/errors'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 import getHealthcheck from '../domain/use_cases/getHealthcheck'
 import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
 import getControls from '../domain/use_cases/getControls'
 import { VesselSidebarTab } from '../domain/entities/vessel'
+import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
+import { setRegulatoryLayers } from '../domain/reducers/Regulatory'
 
 export const TWO_MINUTES = 12000000
 
@@ -27,18 +29,39 @@ const APIWorker = () => {
   const { addToast } = useToasts()
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
-  useEffect(() => {
-    dispatch(setIsUpdatingVessels())
-    dispatch(getHealthcheck())
-    dispatch(getAllGearCodes())
-    dispatch(getAllFleetSegments())
-    dispatch(showAllVessels())
+  const getRegulatoryLayers = () => {
+    return dispatch(getAllRegulatoryLayersByRegTerritory(dispatch))
+      .then(regulatoryLayers => {
+        let nextRegulatoryLayersWithoutTerritory = {}
+        Object.keys(regulatoryLayers).forEach(territory => {
+          nextRegulatoryLayersWithoutTerritory = { ...nextRegulatoryLayersWithoutTerritory, ...regulatoryLayers[territory] }
+        })
 
-    const interval = setInterval(() => {
+        return Promise.resolve(nextRegulatoryLayersWithoutTerritory)
+      })
+      .catch(error => {
+        dispatch(setError(error))
+      })
+  }
+
+  useEffect(() => {
+    batch(() => {
       dispatch(setIsUpdatingVessels())
       dispatch(getHealthcheck())
+      dispatch(getAllGearCodes())
+      dispatch(getAllFleetSegments())
       dispatch(showAllVessels())
-      dispatch(updateVesselTrackAndSidebar())
+      getRegulatoryLayers()
+        .then(regulatoryLayers => dispatch(setRegulatoryLayers(regulatoryLayers)))
+    })
+
+    const interval = setInterval(() => {
+      batch(() => {
+        dispatch(setIsUpdatingVessels())
+        dispatch(getHealthcheck())
+        dispatch(showAllVessels())
+        dispatch(updateVesselTrackAndSidebar())
+      })
 
       setUpdateVesselSidebarTab(true)
     }, TWO_MINUTES)

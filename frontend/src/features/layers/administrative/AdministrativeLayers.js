@@ -9,13 +9,12 @@ import getAdministrativeZonesAndSubZones from '../../../domain/use_cases/getAdmi
 import hideLayer from '../../../domain/use_cases/hideLayer'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import layer from '../../../domain/reducers/Layer'
-import { layersType } from '../../../domain/entities/layers'
+import LayersEnum, { layersType } from '../../../domain/entities/layers'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 import showAdministrativeLayer from '../../../domain/use_cases/showAdministrativeLayer'
 
 const AdministrativeLayers = props => {
   const {
-    administrativeLayers,
     hideLayersListWhenSearching,
     namespace
   } = props
@@ -32,6 +31,19 @@ const AdministrativeLayers = props => {
   const [zones, setZones] = useState([])
 
   useEffect(() => {
+    const administrativeLayers = Object.keys(LayersEnum)
+      .map(layer => LayersEnum[layer])
+      .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+
+    if (administrativeLayers && administrativeLayers.length) {
+      dispatch(getAdministrativeZonesAndSubZones(administrativeLayers))
+        .then(nextZones => {
+          setZones(nextZones)
+        })
+    }
+  }, [])
+
+  useEffect(() => {
     setShowZones(layersSidebarOpenedLayer === layersType.ADMINISTRATIVE)
   }, [layersSidebarOpenedLayer, setShowZones])
 
@@ -40,15 +52,6 @@ const AdministrativeLayers = props => {
       setShowZones(false)
     }
   }, [hideLayersListWhenSearching])
-
-  useEffect(() => {
-    if (administrativeLayers && administrativeLayers.length) {
-      dispatch(getAdministrativeZonesAndSubZones(administrativeLayers))
-        .then(nextZones => {
-          setZones(nextZones)
-        })
-    }
-  }, [administrativeLayers])
 
   const callShowAdministrativeZone = namespace => (administrativeZone, administrativeSubZone) => {
     dispatch(showAdministrativeLayer({
@@ -88,6 +91,7 @@ const AdministrativeLayers = props => {
                   if (layers.length === 1 && layers[0]) {
                     return <ListItem key={layers[0].code}>
                       <AdministrativeLayer
+                        key={layers[0].code}
                         isShownOnInit={showedLayers.some(layer_ => layer_.type === layers[0].code)}
                         layer={layers[0]}
                         callShowAdministrativeZone={callShowAdministrativeZone(namespace)}

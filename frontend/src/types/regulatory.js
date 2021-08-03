@@ -11,3 +11,11 @@
  * @property {string} region
  * @property {string} seafront
  */
+
+/**
+ * @typedef RegulatoryTopics {Object.<string, SelectedRegulatoryZone[]>}
+ **/
+
+/**
+ * @typedef RegulatoryLawTypes {Object.<string, RegulatoryTopics>}
+ **/

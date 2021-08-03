@@ -8,12 +8,12 @@ import { ReactComponent as CircleRangeSVG } from '../icons/Mesure_rayon_action.s
 import { COLORS } from '../../constants/constants'
 import { setCircleMeasurementToAdd, setMeasurementTypeToAdd } from '../../domain/reducers/Map'
 import { expandRightMenu } from '../../domain/reducers/Global'
-import unselectVessel from '../../domain/use_cases/unselectVessel'
 import { MeasurementTypes } from '../../domain/entities/map'
 import CustomCircleRange from './CustomCircleRange'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
+import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
 
 const Measurement = () => {
   const dispatch = useDispatch()
@@ -28,6 +28,7 @@ const Measurement = () => {
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
   const wrapperRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {
     if (clickedOutsideComponent) {
@@ -36,20 +37,11 @@ const Measurement = () => {
   }, [clickedOutsideComponent])
 
   useEffect(() => {
-    if (measurementIsOpen === true) {
-      dispatch(unselectVessel())
-      firstUpdate.current = false
-      document.addEventListener('keydown', escapeFromKeyboard, false)
-    }
-  }, [measurementIsOpen])
-
-  const escapeFromKeyboard = event => {
-    const escapeKeyCode = 27
-    if (event.keyCode === escapeKeyCode) {
+    if (escapeFromKeyboard) {
       dispatch(setMeasurementTypeToAdd(null))
       setMeasurementIsOpen(false)
     }
-  }
+  }, [escapeFromKeyboard])
 
   const makeMeasurement = measurementType => {
     dispatch(setMeasurementTypeToAdd(measurementType))

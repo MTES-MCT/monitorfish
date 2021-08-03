@@ -2,25 +2,22 @@ import React from 'react'
 import styled from 'styled-components'
 import RegulatoryLayerSearchResultLawType from './RegulatoryLayerSearchResultLawType'
 import { COLORS } from '../../../../constants/constants'
+import { useSelector } from 'react-redux'
 
-const RegulatoryLayerSearchResultList = props => {
+const RegulatoryLayerSearchResultList = () => {
   const {
-    toggleSelectRegulatoryLayer,
-    foundRegulatoryLayers
-  } = props
+    regulatoryLayersSearchResult
+  } = useSelector(state => state.regulatoryLayerSearch)
 
   return (
     <List>
       {
-        foundRegulatoryLayers && Object.keys(foundRegulatoryLayers).length > 0
-          ? Object.keys(foundRegulatoryLayers).map((lawType) => {
+        regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0
+          ? Object.keys(regulatoryLayersSearchResult).map((lawType) => {
             return (
               <RegulatoryLayerSearchResultLawType
                 key={lawType}
-                regulatoryLayerTopics={Object.keys(foundRegulatoryLayers[lawType])}
                 regulatoryLayerLawType={lawType}
-                toggleSelectRegulatoryLayer={toggleSelectRegulatoryLayer}
-                foundRegulatoryLayers={foundRegulatoryLayers}
               />
             )
           })

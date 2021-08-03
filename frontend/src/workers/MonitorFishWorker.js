@@ -287,8 +287,6 @@ class MonitorFishWorker {
   searchLayers (searchFields, regulatoryLayers, gears) {
     let foundRegulatoryLayers = {}
 
-    console.log('searchLayers', searchFields, regulatoryLayers, gears)
-
     Object.keys(searchFields).forEach(searchProperty => {
       if (searchFields[searchProperty].searchText.length > 0) {
         const searchResultByLawType = searchByLawType(
@@ -305,7 +303,6 @@ class MonitorFishWorker {
       }
     })
 
-    console.log('searchLayers FINAL', foundRegulatoryLayers)
     orderByAlphabeticalLayer(foundRegulatoryLayers)
 
     return foundRegulatoryLayers

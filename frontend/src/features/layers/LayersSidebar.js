@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { setError } from '../../domain/reducers/Global'
 
 import { ReactComponent as LayersSVG } from '../icons/Couches.svg'
-import LayersEnum, { layersType } from '../../domain/entities/layers'
 import RegulatoryLayerSearch from './regulatory/search/RegulatoryLayerSearch'
 import AdministrativeLayers from './administrative/AdministrativeLayers'
 import RegulatoryLayers from './regulatory/RegulatoryLayers'
@@ -15,15 +13,14 @@ import BaseLayers from './base/BaseLayers'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import NamespaceContext from '../../domain/context/NamespaceContext'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import getAllRegulatoryZonesByRegTerritory from '../../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
-  const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
+  const {
+    regulatoryZoneMetadataPanelIsOpen
+  } = useSelector(state => state.regulatory)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
-  const [regulatoryLayers, setRegulatoryLayers] = useState()
-  const [administrativeLayers, setAdministrativeLayers] = useState([])
   const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false)
   const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
   const [hideLayersListWhenSearching, setHideLayersListWhenSearching] = useState(false)
@@ -33,26 +30,6 @@ const LayersSidebar = () => {
       dispatch(closeRegulatoryZoneMetadata())
     }
   }, [layersSidebarIsOpen])
-
-  useEffect(() => {
-    const administrativeZones = Object.keys(LayersEnum)
-      .map(layer => LayersEnum[layer])
-      .filter(layer => layer.type === layersType.ADMINISTRATIVE)
-    setAdministrativeLayers(administrativeZones)
-
-    dispatch(getAllRegulatoryZonesByRegTerritory())
-      .then(regulatoryLayers => {
-        let nextRegulatoryLayersWithoutTerritory = {}
-        Object.keys(regulatoryLayers).forEach(territory => {
-          nextRegulatoryLayersWithoutTerritory = { ...nextRegulatoryLayersWithoutTerritory, ...regulatoryLayers[territory] }
-        })
-
-        setRegulatoryLayers(nextRegulatoryLayersWithoutTerritory)
-      })
-      .catch(error => {
-        dispatch(setError(error))
-      })
-  }, [])
 
   return (
     <NamespaceContext.Consumer>
@@ -72,7 +49,6 @@ const LayersSidebar = () => {
               layersSidebarIsOpen={layersSidebarIsOpen}
               isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}>
               <RegulatoryLayerSearch
-                regulatoryLayers={regulatoryLayers}
                 numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
                 setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
                 layersSidebarIsOpen={layersSidebarIsOpen}
@@ -88,7 +64,6 @@ const LayersSidebar = () => {
                   namespace={namespace}
                 />
                 <AdministrativeLayers
-                  administrativeLayers={administrativeLayers}
                   hideLayersListWhenSearching={hideLayersListWhenSearching}
                   namespace={namespace}
                 />

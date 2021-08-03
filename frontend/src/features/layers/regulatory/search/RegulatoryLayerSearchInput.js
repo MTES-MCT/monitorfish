@@ -4,17 +4,20 @@ import { COLORS } from '../../../../constants/constants'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg'
 import { REGULATORY_SEARCH_PROPERTIES } from '../../../../domain/entities/regulatory'
 import searchRegulatoryLayers from '../../../../domain/use_cases/searchRegulatoryLayers'
-import { useDispatch } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
+import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './RegulatoryLayerSearch.slice'
+
+const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
 
 const RegulatoryLayerSearchInput = props => {
   const {
     initSearchFields,
-    setInitSearchFields,
-    setFoundRegulatoryLayers,
-    resetSelectedRegulatoryLayer,
-    regulatoryLayers
+    setInitSearchFields
   } = props
   const dispatch = useDispatch()
+  const {
+    regulatoryLayers
+  } = useSelector(state => state.regulatory)
 
   const [advancedSearchIsOpen, setAdvancedSearchIsOpen] = useState(false)
   const [nameSearchText, setNameSearchText] = useState('')
@@ -58,18 +61,23 @@ const RegulatoryLayerSearchInput = props => {
   }
 
   useEffect(() => {
-    if (nameSearchText.length < 1 &&
-      placeSearchText.length < 1 &&
-      gearSearchText.length < 1 &&
-      regulatoryReferencesSearchText.length < 1 &&
-      speciesSearchText.length < 1) {
-      setFoundRegulatoryLayers({})
+    if (nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+      placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+      gearSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+      regulatoryReferencesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+      speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) {
+      batch(() => {
+        dispatch(setRegulatoryLayersSearchResult({}))
+        dispatch(resetRegulatoryZonesChecked())
+      })
       return
     }
 
-    resetSelectedRegulatoryLayer()
-    dispatch(searchRegulatoryLayers(searchFields, regulatoryLayers)).then(foundRegulatoryLayers => {
-      setFoundRegulatoryLayers(foundRegulatoryLayers)
+    batch(() => {
+      dispatch(resetRegulatoryZonesChecked())
+      dispatch(searchRegulatoryLayers(searchFields, regulatoryLayers)).then(foundRegulatoryLayers => {
+        dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
+      })
     })
   }, [nameSearchText, placeSearchText, speciesSearchText, gearSearchText, regulatoryReferencesSearchText])
 
@@ -85,7 +93,7 @@ const RegulatoryLayerSearchInput = props => {
       </PrincipalSearchInput>
       <AdvancedSearchBox advancedSearchIsOpen={advancedSearchIsOpen}>
       </AdvancedSearchBox>
-      </>)
+    </>)
 }
 
 const AdvancedSearchBox = styled.div`

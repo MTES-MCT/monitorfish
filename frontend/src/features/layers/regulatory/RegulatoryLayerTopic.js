@@ -75,23 +75,23 @@ const RegulatoryLayerTopic = props => {
   }
 
   const showRegulatoryZonesSelected = namespace => {
-    return regulatoryZones.map(zone => {
+    return regulatoryZones.map(regulatoryZone => {
       let vectorLayerStyle
-      if (zone.zone && zone.topic && zone.gears && gears) {
-        const hash = getHash(`${zone.topic}:${zone.zone}`)
-        const gearCategory = getGearCategory(zone.gears, gears)
+      if (regulatoryZone.zone && regulatoryZone.topic && regulatoryZone.gears && gears) {
+        const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
+        const gearCategory = getGearCategory(regulatoryZone.gears, gears)
         vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
       }
 
       return (
         <RegulatoryLayerZone
-          zone={zone}
+          regulatoryZone={regulatoryZone}
           vectorLayerStyle={vectorLayerStyle}
-          key={`${zone.topic}:${zone.zone}`}
+          key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
           callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
           showWholeLayer={showWholeLayer}
           namespace={namespace}
-          zoneIsShown={getZoneIsShown(zone)}
+          zoneIsShown={getZoneIsShown(regulatoryZone)}
           allowRemoveZone={allowRemoveZone}
         />
       )

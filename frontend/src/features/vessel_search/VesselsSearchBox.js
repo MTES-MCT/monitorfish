@@ -15,6 +15,8 @@ import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import VesselSearchList from './VesselSearchList'
 import SelectedVessel from './SelectedVessel'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
+import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
+import { findMatchingFeature, removeDuplicatedFoundVessels } from './vesselsSearch'
 
 const VesselsSearchBox = () => {
   const dispatch = useDispatch()
@@ -40,13 +42,14 @@ const VesselsSearchBox = () => {
   const firstUpdate = useRef(true)
   const wrapperRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {
-    if (clickedOutsideComponent) {
+    if (clickedOutsideComponent || escapeFromKeyboard) {
       dispatch(focusOnVesselSearch())
       setSearchText('')
     }
-  }, [clickedOutsideComponent])
+  }, [clickedOutsideComponent, escapeFromKeyboard])
 
   useEffect(() => {
     let doNotFocus = false
@@ -65,30 +68,9 @@ const VesselsSearchBox = () => {
     setSelectedVesselIdentity(vesselIdentity)
   }, [vesselIdentity])
 
-  function getTextForSearch (text) {
-    return text
-      .toLowerCase()
-      .replace(/[ ]/g, '')
-      .replace(/[']/g, '')
-      .replace(/["]/g, '')
-  }
-
-  function findMatchingFeature (feature) {
-    return (feature.getProperties().internalReferenceNumber &&
-      getTextForSearch(feature.getProperties().internalReferenceNumber).includes(getTextForSearch(searchText))) ||
-      (feature.getProperties().externalReferenceNumber &&
-        getTextForSearch(feature.getProperties().externalReferenceNumber).includes(getTextForSearch(searchText))) ||
-      (feature.getProperties().mmsi &&
-        getTextForSearch(feature.getProperties().mmsi).includes(getTextForSearch(searchText))) ||
-      (feature.getProperties().ircs &&
-        getTextForSearch(feature.getProperties().ircs).includes(getTextForSearch(searchText))) ||
-      (feature.getProperties().vesselName &&
-        getTextForSearch(feature.getProperties().vesselName).includes(getTextForSearch(searchText)))
-  }
-
   function getFoundVesselsOnMap () {
     const vessels = vesselsLayerSource.getFeatures().map(feature => {
-      if (findMatchingFeature(feature)) {
+      if (findMatchingFeature(feature, searchText)) {
         return feature
       }
 
@@ -98,21 +80,6 @@ const VesselsSearchBox = () => {
     const firstThirtyVessels = vessels.slice(0, 30)
 
     return firstThirtyVessels
-  }
-
-  function removeDuplicatedFoundVessels (foundVesselsFromAPI, foundVesselsOnMap) {
-    return foundVesselsFromAPI.filter(vessel => {
-      return !(
-        (vessel.internalReferenceNumber
-          ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().internalReferenceNumber === vessel.internalReferenceNumber)
-          : false) ||
-        (vessel.externalReferenceNumber
-          ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().externalReferenceNumber === vessel.externalReferenceNumber)
-          : false) ||
-        (vessel.ircs
-          ? foundVesselsOnMap.some(vesselFromMap => vesselFromMap.getProperties().ircs === vessel.ircs)
-          : false))
-    })
   }
 
   useEffect(() => {
@@ -131,11 +98,6 @@ const VesselsSearchBox = () => {
   }, [searchText, setFoundVesselsOnMap, selectedVesselIdentity])
 
   useEffect(() => {
-    firstUpdate.current = false
-    document.addEventListener('keydown', escapeFromKeyboard, false)
-  }, [])
-
-  useEffect(() => {
     if (selectedVesselIdentity) {
       if (!vesselsHasBeenUpdated) {
         if (!vesselIdentity ||
@@ -151,14 +113,6 @@ const VesselsSearchBox = () => {
       dispatch(unselectVessel())
     }
   }, [selectedVesselIdentity])
-
-  const escapeFromKeyboard = event => {
-    const escapeKeyCode = 27
-    if (event.keyCode === escapeKeyCode) {
-      dispatch(focusOnVesselSearch())
-      setSearchText('')
-    }
-  }
 
   return (
     <>
@@ -260,7 +214,7 @@ const SearchBoxInput = styled.input`
   border-radius: 0;
   border-radius: 2px;
   color: ${COLORS.gunMetal};
-  font-size: 0.8em;
+  font-size: 13px;
   height: 40px;
   width: ${props => props.isFocusedOnVesselSearch || props.vesselSidebarIsOpen ? '500px' : '320px'};
   padding: 0 5px 0 10px;

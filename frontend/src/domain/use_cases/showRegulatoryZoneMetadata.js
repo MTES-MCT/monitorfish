@@ -4,9 +4,9 @@ import {
   resetLoadingRegulatoryZoneMetadata,
   setLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata
-} from '../reducers/Regulatory'
+} from '../shared_slices/Regulatory'
 import { mapToRegulatoryZone } from '../entities/regulatory'
-import { setError } from '../reducers/Global'
+import { setError } from '../shared_slices/Global'
 import { batch } from 'react-redux'
 
 const showRegulatoryZoneMetadata = regulatoryZone => dispatch => {

@@ -35,7 +35,11 @@ const Button = styled.button`
   }
 `
 
-const ButtonText = styled.span``
+const ButtonText = styled.span`
+  font-size: 13px;
+  vertical-align: -moz-middle-with-baseline;
+  vertical-align: -webkit-baseline-middle;
+`
 
 const List = styled.ul`
   font-size: 0.9em;
@@ -48,7 +52,7 @@ const List = styled.ul`
 `
 
 const ListItem = styled.li`
-  font-size: 0.8em;
+  font-size: 13px;
   list-style-type: none;
   margin: 0;
 `

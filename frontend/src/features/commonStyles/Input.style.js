@@ -3,11 +3,11 @@ import { COLORS } from '../../constants/constants'
 import { Input } from 'rsuite'
 
 export const Label = styled.span`
-text-align: left;
-color: ${COLORS.textGray};
-min-width: 154px;
-font-size: 13px;
-margin-right: 8px;
+  text-align: left;
+  color: ${COLORS.gunMetal};
+  min-width: 154px;
+  font-size: 13px;
+  margin-right: 8px;
 `
 
 export const CustomInput = styled(Input)`

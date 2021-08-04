@@ -85,7 +85,7 @@ const SearchBox = styled.div`
 const SearchBoxInput = styled.input`
   margin: 0;
   color: ${COLORS.gunMetal};
-  font-size: 0.8em;
+  font-size: 13px;
   height: 40px;
   width: 100%;
   padding: 0 5px 0 10px;

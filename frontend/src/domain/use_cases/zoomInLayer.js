@@ -1,4 +1,4 @@
-import { animateToRegulatoryLayer } from '../reducers/Map'
+import { animateToRegulatoryLayer } from '../shared_slices/Map'
 import Layers from '../entities/layers'
 import { getCenter } from 'ol/extent'
 

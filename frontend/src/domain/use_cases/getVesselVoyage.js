@@ -1,12 +1,12 @@
 import { getVesselVoyageFromAPI } from '../../api/fetch'
-import { removeError, setError } from '../reducers/Global'
+import { removeError, setError } from '../shared_slices/Global'
 import {
   loadingFisheriesActivities,
   resetLoadingVessel,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage
-} from '../reducers/Vessel'
+} from '../shared_slices/Vessel'
 import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
 import { batch } from 'react-redux'

@@ -6,7 +6,7 @@ import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/remov
 import LayersEnum, { layersType } from '../../../domain/entities/layers'
 import hideLayer from '../../../domain/use_cases/hideLayer'
 import { useDispatch, useSelector } from 'react-redux'
-import layer from '../../../domain/reducers/Layer'
+import layer from '../../../domain/shared_slices/Layer'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 
 const RegulatoryLayers = props => {

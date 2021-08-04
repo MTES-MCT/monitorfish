@@ -1,6 +1,6 @@
 import { getAdministrativeZoneFromAPI } from '../../api/fetch'
-import { addZoneSelected } from '../reducers/Map'
-import layer from '../reducers/Layer'
+import { addZoneSelected } from '../shared_slices/Map'
+import layer from '../shared_slices/Layer'
 
 const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zoneName, namespace) => (dispatch, getState) => {
   const { addAdministrativeZoneGeometryToCache } = layer[namespace].actions

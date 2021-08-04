@@ -87,7 +87,7 @@ const Gray = styled.span`
 const ERSMessageResumeText = styled.span`
   color: ${COLORS.gunMetal};
   margin: 5px 5px 5px 5px;
-  padding: 0 4px 2px 0;
+  padding: 2px 4px 2px 0;
   font-size: 13px;
   font-weight: 500;
   vertical-align: -moz-middle-with-baseline;
@@ -104,7 +104,7 @@ const ERSMessageName = styled.span`
   color: ${props => props.isNotAcknowledged ? COLORS.red : COLORS.slateGray};
   font-weight: 500;
   margin: 5px 0 5px ${props => props.hasNoMessage ? '27px' : '0px'};
-  padding: 0 4px 2px 4px;
+  padding: 2px 4px 2px 4px;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
   vertical-align: -webkit-baseline-middle;

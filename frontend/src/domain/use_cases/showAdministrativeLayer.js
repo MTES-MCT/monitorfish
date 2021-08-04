@@ -1,5 +1,5 @@
 import VectorLayer from 'ol/layer/Vector'
-import layer from '../reducers/Layer'
+import layer from '../shared_slices/Layer'
 import { getVectorLayerStyle } from '../../layers/styles/vectorLayers.style'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'

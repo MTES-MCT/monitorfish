@@ -69,13 +69,21 @@ const LayersSidebar = () => {
                 />
                 <BaseLayers namespace={namespace}/>
               </Layers>
-              <RegulatoryLayerZoneMetadata/>
+              <RegulatoryZoneMetadataShifter regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
+                <RegulatoryLayerZoneMetadata/>
+              </RegulatoryZoneMetadataShifter>
             </Sidebar>
           </>
         )
       }
     </NamespaceContext.Consumer>)
 }
+
+const RegulatoryZoneMetadataShifter = styled.div`
+  position: absolute;
+  margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 355 : -30}px;
+  margin-top: 45px;
+`
 
 const Sidebar = styled(MapComponentStyle)`
   margin-left: ${props => props.layersSidebarIsOpen ? 0 : '-418px'};

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import BaseLayerItem from './BaseLayerItem'
 import { COLORS } from '../../../constants/constants'
 import { baseLayers, layersType } from '../../../domain/entities/layers'
-import layer from '../../../domain/reducers/Layer'
+import layer from '../../../domain/shared_slices/Layer'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 
 const BaseLayers = ({ namespace }) => {

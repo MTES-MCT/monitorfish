@@ -44,7 +44,7 @@ const FilterTags = styled.div`
   padding: ${props => props.isOpen ? '15px 15px 5px 15px' : '0'};
   height: ${props => props.isOpen ? 'inherit' : '0'};
   opacity: ${props => props.isOpen ? '1' : '0'};
-  ${props => props.isOpen && !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => props.isOpen && !props.isLastItem ? `border-bottom: 1px solid ${COLORS.lightGray};` : null}
   transition: all 0.3s;
 `
 
@@ -62,7 +62,7 @@ const Text = styled.span`
   display: inline-block;
   text-overflow: ellipsis;
   overflow: hidden;
-  color: ${COLORS.slateGray};
+  color: ${COLORS.gunMetal};
   font-weight: 500;
 `
 
@@ -90,14 +90,14 @@ const FilterItem = styled.span`
   width: 100%;
   display: flex;
   user-select: none;
-  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.gray};`}
+  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
   cursor: pointer;
 `
 
 const FilterWrapper = styled.li`
   padding: 0px 5px 0px 0px;
   margin: 0;
-  font-size: 0.8em;
+  font-size: 13px;
   text-align: left;
   list-style-type: none;
   width: 100%;
@@ -105,7 +105,6 @@ const FilterWrapper = styled.li`
   text-overflow: ellipsis;
   overflow: hidden !important;
   margin: 0;
-  border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;
 `

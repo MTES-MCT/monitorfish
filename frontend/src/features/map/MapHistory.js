@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setExtent, setView } from '../../domain/reducers/Map'
+import { setExtent, setView } from '../../domain/shared_slices/Map'
 
 const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
   const mapState = useSelector(state => state.map)

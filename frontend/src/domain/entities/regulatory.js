@@ -29,7 +29,7 @@ export const mapToRegulatoryZone = properties => {
   }
 }
 
-export const lawTypeList = {
+export const LawTypesToTerritory = {
   'Reg locale': 'France',
   'Reg 494 - Merlu': 'UE',
   'R(UE) 2019/1241': 'UE',

@@ -5,7 +5,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
-import zoomInSubZone from '../domain/use_cases/zoomInSubZone'
+import zoomInLayer from '../domain/use_cases/zoomInLayer'
 
 const RegulatoryPreviewLayer = ({ map }) => {
   const dispatch = useDispatch()
@@ -28,7 +28,7 @@ const RegulatoryPreviewLayer = ({ map }) => {
         featureProjection: OPENLAYERS_PROJECTION
       }).readFeature(regulatoryGeometryToPreview)
       vectorSource.addFeature(feature)
-      dispatch(zoomInSubZone({ feature }))
+      dispatch(zoomInLayer({ feature }))
     }
   }, [map, regulatoryGeometryToPreview])
 

@@ -1,4 +1,4 @@
-import { setFocusOnVesselSearch } from '../reducers/Vessel'
+import { setFocusOnVesselSearch } from '../shared_slices/Vessel'
 
 export const focusState = {
   CLICK_VESSEL_SEARCH_RESULT: 'CLICK_VESSEL_SEARCH_RESULT',

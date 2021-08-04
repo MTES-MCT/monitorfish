@@ -34,7 +34,7 @@ const RegulatoryLayerSearchResultLawType = props => {
 const Wrapper = styled.li`
   padding: 0px 5px 0px 0px;
   margin: 0;
-  font-size: 0.8em;
+  font-size: 13px;
   text-align: left;
   list-style-type: none;
   width: 100%;

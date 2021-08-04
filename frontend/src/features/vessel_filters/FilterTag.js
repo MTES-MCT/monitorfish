@@ -35,6 +35,8 @@ const TagName = styled.span`
   vertical-align: middle;
   height: 30px;
   display: inline-block;
+  color: ${COLORS.gunMetal};
+  font-weight: 500;
 `
 
 const TagWrapper = styled.span`

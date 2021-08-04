@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ReactComponent as FilterSVG } from '../icons/Icone_filtres.svg'
 import { COLORS } from '../../constants/constants'
-import { expandRightMenu } from '../../domain/reducers/Global'
+import { expandRightMenu } from '../../domain/shared_slices/Global'
 import Filter from './Filter'
 import {
   hideFilters,
@@ -12,7 +12,7 @@ import {
   removeTagFromFilter,
   setNonFilteredVesselsAreHidden,
   showFilter
-} from '../../domain/reducers/Filter'
+} from '../../domain/shared_slices/Filter'
 import HideNonFilteredVessels from './HideNonFilteredVessels'
 import { usePrevious } from '../../hooks/usePrevious'
 import unselectVessel from '../../domain/use_cases/unselectVessel'

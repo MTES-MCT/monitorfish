@@ -44,8 +44,8 @@ const InfoTextParent = styled.div`
 const InfoTextWrapper = styled.div`
   display: flex;
   ${props => props.isFormOpened ? '' : 'position: absolute;'};
-  border: 1px solid ${COLORS.grayDarker};
-  background: ${COLORS.grayBackground} 0% 0% no-repeat padding-box;
+  border: 1px solid ${COLORS.lightGray};
+  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
   border-radius: 2px;
   min-width: 560px;
   max-width: 600px;
@@ -60,7 +60,7 @@ const InfoText = styled.span`
   align-self: center;
   display: 'flex';
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.gunMetal};
   padding-left: 8px;
   white-space: pre-line;
 `
@@ -73,19 +73,19 @@ const InfoPoint = styled.a`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: ${COLORS.grayDarkerThree} 0% 0% no-repeat padding-box;
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
+  color: ${COLORS.gunMetal};
   text-align: center;
   font: normal normal bold 13px Arial;
   text-align: center;
   line-height: 20px;
   &:hover {
     text-decoration: none;
-    color: ${COLORS.grayBackground};
+    color: ${COLORS.gunMetal};
   }
   &:focus {
     text-decoration: none;
-    color: ${COLORS.grayBackground};
+    color: ${COLORS.gunMetal};
   }
 `
 

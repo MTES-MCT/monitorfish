@@ -6,9 +6,9 @@ import RegulatoryLayerSearchResultList from './RegulatoryLayerSearchResultList'
 import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './RegulatoryLayerSearch.slice'
 import { COLORS } from '../../../../constants/constants'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import layer from '../../../../domain/reducers/Layer'
+import layer from '../../../../domain/shared_slices/Layer'
 import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
-import { addRegulatoryZonesToMyLayers } from '../../../../domain/reducers/Regulatory'
+import { addRegulatoryZonesToMyLayers } from '../../../../domain/shared_slices/Regulatory'
 
 const RegulatoryLayerSearch = props => {
   const {

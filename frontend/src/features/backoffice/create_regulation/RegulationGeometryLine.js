@@ -56,7 +56,7 @@ const CustomContentLine = styled(ContentLine)`
 `
 
 const EyeWrapper = styled.div`
-  border: 1px solid ${COLORS.grayDarker};
+  border: 1px solid ${COLORS.lightGray};
   border-radius: 2px;
   cursor: pointer;
   height: 25px;

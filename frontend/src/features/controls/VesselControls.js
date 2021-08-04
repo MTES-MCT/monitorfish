@@ -11,7 +11,7 @@ import {
   resetNextControlResumeAndControls,
   setControlFromDate,
   setControlResumeAndControls
-} from '../../domain/reducers/Vessel'
+} from '../../domain/shared_slices/Vessel'
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
 

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { baseLayers } from '../../../domain/entities/layers'
 import { Radio } from 'rsuite'
-import { selectBaseLayer } from '../../../domain/reducers/Map'
+import { selectBaseLayer } from '../../../domain/shared_slices/Map'
 import { useDispatch } from 'react-redux'
 
 const BaseLayerItem = ({ layer, isShownOnInit }) => {

@@ -364,12 +364,9 @@ const RegulatoryLayerZoneMetadata = () => {
 const Wrapper = styled.div`
   border-radius: 2px;
   width: 400px;
-  position: absolute;
   display: block;
   color: ${COLORS.charcoal};
   background-color: ${COLORS.gainsboro};
-  margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 355 : -30}px;
-  margin-top: 45px;
   top: 0px;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
   z-index: -1;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import BaseMap from './BaseMap'
-import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
-import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
+import BaseMap from './../../map/BaseMap'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
   RegulationBlocLine,
   RegulationZoneThemeLine,
@@ -11,18 +11,18 @@ import {
   RegulationZoneNameLine,
   RegulationSeaFrontLine,
   RegulationGeometryLine
-} from '../components/backoffice/create_regulation/index'
-import { COLORS } from '../constants/constants'
-import { formatDataForSelectPicker } from '../utils'
-import { setRegulatoryGeometryToPreview } from '../domain/reducers/Regulatory'
-import getGeometryWithoutRegulationReference from '../domain/use_cases/getGeometryWithoutRegulationReference'
+} from './index'
+import { COLORS } from '../../../constants/constants'
+import { formatDataForSelectPicker } from '../../../utils'
+import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
+import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
   const {
-    regulationBlocArray,
-    zoneThemeArray,
-    seaFrontArray
+    regulatoryLawTypes,
+    regulatoryTopics,
+    seaFronts
   } = useSelector(state => state.regulatory)
 
   const [geometryObjectList, setGeometryObjectList] = useState()
@@ -37,8 +37,8 @@ const CreateRegulation = () => {
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
   useEffect(() => {
-    if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
-      dispatch(getAllRegulatoryZonesByRegTerritory())
+    if (regulatoryLawTypes && regulatoryTopics && seaFronts) {
+      dispatch(getAllRegulatoryLayersByRegTerritory())
     }
     getGeometryObjectList()
   }, [])
@@ -73,14 +73,14 @@ const CreateRegulation = () => {
           <RegulationBlocLine
             setSelectedValue={setSelectedReglementationBloc}
             selectedValue={selectedReglementationBloc}
-            selectData={formatDataForSelectPicker(regulationBlocArray)}
+            selectData={formatDataForSelectPicker(regulatoryLawTypes)}
             reglementationBlocName={reglementationBlocName}
             setReglementationBlocName={setReglementationBlocName}
           />
           <RegulationZoneThemeLine
             selectedReglementationTheme={selectedReglementationTheme}
             setSelectedReglementationTheme={setSelectedReglementationTheme}
-            zoneThemeList={formatDataForSelectPicker(zoneThemeArray)}
+            zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
           />
           <RegulationZoneNameLine
             nameZone={nameZone}
@@ -89,7 +89,7 @@ const CreateRegulation = () => {
           <RegulationSeaFrontLine
             selectedSeaFront={selectedSeaFront}
             setSelectedSeaFront={setSelectedSeaFront}
-            seaFrontList={formatDataForSelectPicker(seaFrontArray)}
+            seaFrontList={formatDataForSelectPicker(seaFronts)}
           />
           <RegulationRegionLine
             setSelectedRegionList={setSelectedRegionList}
@@ -136,13 +136,13 @@ const Link = styled.a`
   text-decoration: underline;
   font: normal normal normal 13px;
   letter-spacing: 0px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.gunMetal};
 `
 const Title = styled.span`
   text-align: left;
   font-weight: bold;
   font-size: 16px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.gunMetal};
   text-transform: uppercase;
   left: 50%;
   position: relative;
@@ -168,10 +168,10 @@ const SectionTitle = styled.span`
   text-align: left;
   font-weight: bold;
   font-size: 16px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.gunMetal};
   text-transform: uppercase;
   width: 100%;
-  border-bottom: 1px solid ${COLORS.grayDarker};
+  border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 20px;
 `
 

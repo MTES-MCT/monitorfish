@@ -2,7 +2,7 @@ import { getAllRegulatoryLayersFromAPI } from '../../api/fetch'
 import * as Comlink from 'comlink'
 /* eslint-disable import/no-webpack-loader-syntax */
 import Worker from 'worker-loader!../../workers/MonitorFishWorker'
-import { setError } from '../reducers/Global'
+import { setError } from '../shared_slices/Global'
 
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)

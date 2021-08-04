@@ -8,7 +8,7 @@ import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
-import { setTemporaryTrackDepth } from '../../../domain/reducers/Vessel'
+import { setTemporaryTrackDepth } from '../../../domain/shared_slices/Vessel'
 import showVesselTrackAndSidebar from '../../../domain/use_cases/showVesselTrackAndSidebar'
 
 const TrackDepthSelection = props => {

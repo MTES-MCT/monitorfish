@@ -279,6 +279,7 @@ const Title = styled.div`
   font-size: 13px;
   font-weight: bolder;
   margin-bottom: 5px;
+  height: 40px;
 `
 
 const NoValue = styled.span`
@@ -314,6 +315,7 @@ const Key = styled.span`
   margin-right: 10px;
   width: ${props => props.width ? props.width : '47'}px;
   display: inline-block;
+  vertical-align: bottom;
 `
 
 const InfractionKey = styled.th`

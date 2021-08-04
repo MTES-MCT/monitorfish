@@ -1,4 +1,4 @@
-import { removeRegulatoryZonesFromMyLayers } from '../reducers/Regulatory'
+import { removeRegulatoryZonesFromMyLayers } from '../shared_slices/Regulatory'
 
 const removeRegulatoryZoneFromMySelection = regulatoryZone => (dispatch) => {
   dispatch(removeRegulatoryZonesFromMyLayers(regulatoryZone))

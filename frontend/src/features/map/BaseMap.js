@@ -8,14 +8,14 @@ import ScaleLine from 'ol/control/ScaleLine'
 import Zoom from 'ol/control/Zoom'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
-import { resetAnimateToRegulatoryLayer } from '../../domain/reducers/Map'
+import { resetAnimateToRegulatoryLayer } from '../../domain/shared_slices/Map'
 import MapCoordinatesBox from './controls/MapCoordinatesBox'
 import MapAttributionsBox from './controls/MapAttributionsBox'
 import BaseLayer from '../../layers/BaseLayer'
 import RegulatoryLayers from '../../layers/RegulatoryLayers'
 import AdministrativeLayers from '../../layers/AdministrativeLayers'
 import ShowRegulatoryMetadata from './ShowRegulatoryMetadata'
-import RegulatoryPreviewLayer from '../layers/RegulatoryPreviewLayer'
+import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove

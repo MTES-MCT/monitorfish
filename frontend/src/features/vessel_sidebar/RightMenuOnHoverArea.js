@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { contractRightMenu } from '../../domain/reducers/Global'
+import { contractRightMenu } from '../../domain/shared_slices/Global'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 
 const RightMenuOnHoverArea = () => {

@@ -17,7 +17,7 @@ const CustomSelectComponent = props => {
   const selectPickerStyle = {
     width: 180,
     margin: '0',
-    borderColor: COLORS.grayDarker,
+    borderColor: COLORS.lightGray,
     boxSizing: 'border-box',
     textOverflow: 'ellipsis'
   }

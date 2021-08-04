@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetAnimateTo } from '../../domain/reducers/Map'
+import { resetAnimateTo } from '../../domain/shared_slices/Map'
 import { getVesselIdentityFromFeature } from '../../domain/entities/vessel'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'

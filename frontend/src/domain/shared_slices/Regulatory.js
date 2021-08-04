@@ -33,10 +33,10 @@ const regulatorySlice = createSlice({
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
     lawTypeOpened: null,
-    zoneThemeArray: [],
-    regulationBlocArray: [],
-    seaFrontArray: [],
-    layersNamesByRegTerritory: {},
+    regulatoryTopics: [],
+    regulatoryLawTypes: [],
+    seaFronts: [],
+    layersTopicsByRegTerritory: {},
     regulatoryGeometryToPreview: null
   },
   reducers: {
@@ -168,17 +168,17 @@ const regulatorySlice = createSlice({
     setRegulatoryLayers (state, action) {
       state.regulatoryLayers = action.payload
     },
-    setZoneThemeArray (state, action) {
-      state.zoneThemeArray = action.payload
+    setRegulatoryTopics (state, action) {
+      state.regulatoryTopics = action.payload
     },
-    setRegulationBlocArray (state, action) {
-      state.regulationBlocArray = action.payload
+    setRegulatoryLawTypes (state, action) {
+      state.regulatoryLawTypes = action.payload
     },
-    setSeaFrontArray (state, action) {
-      state.seaFrontArray = action.payload
+    setSeaFronts (state, action) {
+      state.seaFronts = action.payload
     },
-    setLayersNamesByRegTerrory (state, action) {
-      state.layersNamesByRegTerritory = action.payload
+    setLayersTopicsByRegTerritory (state, action) {
+      state.layersTopicsByRegTerritory = action.payload
     }
   }
 })
@@ -193,10 +193,10 @@ export const {
   closeRegulatoryZoneMetadataPanel,
   setRegulatoryLayers,
   setLawTypeOpened,
-  setZoneThemeArray,
-  setRegulationBlocArray,
-  setSeaFrontArray,
-  setLayersNamesByRegTerrory,
+  setRegulatoryTopics,
+  setRegulatoryLawTypes,
+  setSeaFronts,
+  setLayersTopicsByRegTerritory,
   setRegulatoryGeometryToPreview
 } = regulatorySlice.actions
 

@@ -10,11 +10,11 @@ import {
   setVesselLabelsShowedOnMap,
   setVesselsLastPositionVisibility,
   setVesselTrackDepth
-} from '../../domain/reducers/Map'
+} from '../../domain/shared_slices/Map'
 import TrackDepthRadio from './TrackDepthRadio'
 import VesselLabelSelection from './VesselLabelSelection'
 import ShowVesselLabel from './ShowVesselLabel'
-import { expandRightMenu } from '../../domain/reducers/Global'
+import { expandRightMenu } from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
 import ShowVesselEstimatedPositions from './ShowVesselEstimatedPositions'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'

@@ -4,10 +4,10 @@ import { transform } from 'ol/proj'
 import { useDispatch, useSelector } from 'react-redux'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { getCoordinates } from '../../../utils'
-import { highlightVesselTrackPosition } from '../../../domain/reducers/Vessel'
+import { highlightVesselTrackPosition } from '../../../domain/shared_slices/Vessel'
 import { CSVOptions } from '../../vessel_list/dataFormatting'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map'
-import { animateTo } from '../../../domain/reducers/Map'
+import { animateTo } from '../../../domain/shared_slices/Map'
 import { useClickOutsideComponent } from '../../../hooks/useClickOutside'
 
 const { Column, HeaderCell, Cell } = Table

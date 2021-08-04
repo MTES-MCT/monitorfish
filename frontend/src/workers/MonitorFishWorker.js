@@ -1,7 +1,7 @@
 import * as Comlink from 'comlink'
 import {
   getMergedRegulatoryLayers,
-  lawTypeList,
+  LawTypesToTerritory,
   mapToRegulatoryZone, orderByAlphabeticalLayer,
   searchByLawType
 } from '../domain/entities/regulatory'
@@ -9,7 +9,7 @@ import { getDateMonthsBefore } from '../utils'
 import { vesselSize } from '../domain/entities/vessel'
 
 class MonitorFishWorker {
-  #getLayerNameList = (features) => {
+  #getLayerTopicList = features => {
     const featuresWithoutGeometry = features.features.map(feature => {
       return mapToRegulatoryZone(feature.properties)
     })
@@ -45,7 +45,7 @@ class MonitorFishWorker {
   }
 
   convertGeoJSONFeaturesToObject (features) {
-    const layerTopicsArray = this.#getLayerNameList(features)
+    const layerTopicsArray = this.#getLayerTopicList(features)
     const layersTopicsToZones = layerTopicsArray.reduce((accumulatedObject, zone) => {
       accumulatedObject[zone[0].topic] = zone
       return accumulatedObject
@@ -108,40 +108,47 @@ class MonitorFishWorker {
    * }
    */
   convertGeoJSONFeaturesToStructuredRegulatoryObject (features) {
-    const regulationBlocList = new Set()
-    const zoneThemelist = new Set()
+    const lawTypeList = new Set()
+    const regulatoryTopicList = new Set()
     const seaFrontList = new Set()
-    const layerTopicsArray = this.#getLayerNameList(features)
-    const layersTopicsByRegTerritory = layerTopicsArray.reduce((accumulatedObject, zone) => {
+    const layerTopicArray = this.#getLayerTopicList(features)
+    const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
       const {
         lawType,
         topic,
         seafront
       } = zone[0]
+
       if (topic && lawType && seafront) {
-        zoneThemelist.add(topic)
-        const regTerritory = lawTypeList[lawType] ? lawTypeList[lawType] : 'Autres'
+        regulatoryTopicList.add(topic)
+
+        const regulatoryTerritory = LawTypesToTerritory[lawType] ? LawTypesToTerritory[lawType] : 'Autres'
         let newLawType = lawType
-        if (regTerritory === 'France') {
+        if (regulatoryTerritory === 'France') {
           newLawType = `${lawType} / ${seafront}`
           seaFrontList.add(seafront)
         }
-        regulationBlocList.add(newLawType)
-        if (regTerritory && !accumulatedObject[regTerritory]) {
-          accumulatedObject[regTerritory] = {}
+
+        lawTypeList.add(newLawType)
+        if (regulatoryTerritory && !accumulatedObject[regulatoryTerritory]) {
+          accumulatedObject[regulatoryTerritory] = {}
         }
-        if (!accumulatedObject[regTerritory][newLawType]) {
-          accumulatedObject[regTerritory][newLawType] = {}
+
+        if (!accumulatedObject[regulatoryTerritory][newLawType]) {
+          accumulatedObject[regulatoryTerritory][newLawType] = {}
         }
-        accumulatedObject[regTerritory][newLawType][topic] = zone
+
+        accumulatedObject[regulatoryTerritory][newLawType][topic] = zone
       }
+
       return accumulatedObject
     }, {})
+
     return {
-      layersTopicsByRegTerritory,
-      zoneThemeArray: [...zoneThemelist],
-      regulationBlocArray: [...regulationBlocList],
-      seaFrontArray: [...seaFrontList]
+      layersTopicsByRegulatoryTerritory,
+      regulatoryTopics: [...regulatoryTopicList],
+      regulatoryLawTypes: [...lawTypeList],
+      seaFronts: [...seaFrontList]
     }
   }
 

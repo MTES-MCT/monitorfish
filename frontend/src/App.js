@@ -16,7 +16,7 @@ import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader
 import RightMenuOnHoverZone from './features/vessel_sidebar/RightMenuOnHoverZone'
 import Measurement from './features/measurements/Measurement'
 import VesselFilters from './features/vessel_filters/VesselFilters'
-import CreateRegulation from './containers/NewRegulation'
+import CreateRegulation from './features/backoffice/create_regulation/CreateRegulation'
 import { ReactComponent as AlertSVG } from './features/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
 import { backofficeStore, homeStore } from './Store'

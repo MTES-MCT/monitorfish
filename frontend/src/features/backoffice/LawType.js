@@ -5,17 +5,15 @@ import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryLayerTopic'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import { setLawTypeOpened } from '../../domain/reducers/Regulatory'
+import { setLawTypeOpened } from '../../domain/shared_slices/Regulatory'
 
 const LawType = props => {
   const dispatch = useDispatch()
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
-  const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   const lawTypeOpened = useSelector(state => state.regulatory.lawTypeOpened)
   const {
     lawType,
-    regZoneByLawType,
-    isReadyToShowRegulatoryLayers
+    regZoneByLawType
   } = props
   const [isOpen, setIsOpen] = useState(false)
 
@@ -36,19 +34,17 @@ const LawType = props => {
     }
   }
 
-  const displayRegulatoryZoneList = (regulatoryZoneList) => {
+  const displayRegulatoryTopics = (regulatoryTopics) => {
     return (
-      regulatoryZoneList && Object.keys(regulatoryZoneList).length > 0
-        ? Object.keys(regulatoryZoneList).map((regulatoryZoneLayerName, index) => {
+      regulatoryTopics && Object.keys(regulatoryTopics).length > 0
+        ? Object.keys(regulatoryTopics).map((regulatoryTopic, index) => {
           return <RegulatoryLayerTopic
-            key={regulatoryZoneLayerName}
+            key={regulatoryTopic}
             increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
             decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-            isReadyToShowRegulatoryLayers={isReadyToShowRegulatoryLayers}
-            regulatoryZoneName={regulatoryZoneLayerName}
-            regulatorySubZones={regulatoryZoneList[regulatoryZoneLayerName]}
-            regulatoryZoneMetadata={regulatoryZoneMetadata}
-            isLastItem={Object.keys(regulatoryZoneList).length === index + 1}
+            regulatoryTopic={regulatoryTopic}
+            regulatoryZones={regulatoryTopics[regulatoryTopic]}
+            isLastItem={Object.keys(regulatoryTopics).length === index + 1}
             allowRemoveZone={false}
           />
         })
@@ -71,7 +67,7 @@ const LawType = props => {
       <ChevronIcon isOpen={isOpen}/>
     </LawTypeName>
     {isOpen && <RegulatoryZoneLayerList isOpen={isOpen}>
-      {displayRegulatoryZoneList(regZoneByLawType[lawType])}
+      {displayRegulatoryTopics(regZoneByLawType[lawType])}
     </RegulatoryZoneLayerList>}
   </LawTypeContainer>)
 }

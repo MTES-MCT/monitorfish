@@ -5,7 +5,7 @@ import BaseMap from '../map/BaseMap'
 import LawType from './LawType'
 import SearchRegulations from './SearchRegulations'
 import RegulatoryLayerZoneMetadata from '../layers/regulatory/RegulatoryLayerZoneMetadata'
-import getAllRegulatoryZonesByRegTerritory from '../../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
+import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import getAllGearCodes from '../../domain/use_cases/getAllGearCodes'
 import { COLORS } from '../../constants/constants'
 import { WhiteButton } from '../commonStyles/Buttons.style'
@@ -20,15 +20,14 @@ const Backoffice = () => {
   const dispatch = useDispatch()
 
   const {
-    isReadyToShowRegulatoryLayers,
     regulatoryZoneMetadataPanelIsOpen,
     loadingRegulatoryZoneMetadata,
     regulatoryZoneMetadata,
-    layersNamesByRegTerritory
+    layersTopicsByRegTerritory
   } = useSelector(state => state.regulatory)
 
   useEffect(() => {
-    dispatch(getAllRegulatoryZonesByRegTerritory())
+    dispatch(getAllRegulatoryLayersByRegTerritory())
     dispatch(getAllGearCodes())
   }, [])
 
@@ -46,7 +45,6 @@ const Backoffice = () => {
             regZoneByLawType={regZoneByLawType}
             showedLayers={showedLayers}
             gears={gears}
-            isReadyToShowRegulatoryLayers={isReadyToShowRegulatoryLayers}
             callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
           />
         })
@@ -83,14 +81,14 @@ const Backoffice = () => {
         >
           <SearchRegulations
             setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
-            regulatoryZoneListByRegTerritory={layersNamesByRegTerritory}
+            regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
           />
           <ButtonList>
             <WhiteButton>Brouillon (X)</WhiteButton>
             <WhiteButton>Tracé en attente (X)</WhiteButton>
             <WhiteButton disabled>Dernière publications (X)</WhiteButton>
           </ButtonList>
-          {layersNamesByRegTerritory && layersNamesByRegTerritory !== {}
+          {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
             ? displaySearchResultList()
             : <div>En attente de chargement</div>}
         </RegulatoryZonePanel>
@@ -183,11 +181,7 @@ const MetadataWrapper = styled.div`
   left: 50%;
   z-index: 1;
   width: 380px;
-  border-radius: 2px;
   color: ${COLORS.gunMetal};
-  text-decoration: none;
-  background-color: #EEEEEE;
-  padding: 10px;
   margin: 6px 0 0 6px;
   flex-direction: column;
   max-height: 95vh;

@@ -1,11 +1,11 @@
 import { getVesselControlsFromAPI } from '../../api/fetch'
-import { removeError, setError } from '../reducers/Global'
+import { removeError, setError } from '../shared_slices/Global'
 import {
   loadingControls,
   resetLoadingVessel,
   setControlResumeAndControls,
   setNextControlResumeAndControls
-} from '../reducers/Vessel'
+} from '../shared_slices/Vessel'
 import NoControlsFoundError from '../../errors/NoControlsFoundError'
 import { batch } from 'react-redux'
 

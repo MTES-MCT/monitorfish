@@ -1,4 +1,4 @@
-import layer from '../reducers/Layer'
+import layer from '../shared_slices/Layer'
 import { batch } from 'react-redux'
 
 /**

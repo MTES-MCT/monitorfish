@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
-import { resetVessels, setFilteredVesselsFeaturesUids, setVesselsLayerSource } from '../domain/reducers/Vessel'
+import { resetVessels, setFilteredVesselsFeaturesUids, setVesselsLayerSource } from '../domain/shared_slices/Vessel'
 import {
   FILTER_COLOR_PROPERTY,
   IS_LIGHT_PROPERTY,

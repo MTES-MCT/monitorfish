@@ -1,6 +1,6 @@
 import { getAllFleetSegmentFromAPI } from '../../api/fetch'
-import { setError } from '../reducers/Global'
-import { setFleetSegments } from '../reducers/FleetSegment'
+import { setError } from '../shared_slices/Global'
+import { setFleetSegments } from '../shared_slices/FleetSegment'
 
 const getAllFleetSegments = () => dispatch => {
   getAllFleetSegmentFromAPI().then(fleetSegments => {

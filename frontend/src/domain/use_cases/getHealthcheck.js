@@ -1,5 +1,5 @@
 import { getHealthcheckFromAPI } from '../../api/fetch'
-import { setError, setHealthcheckTextWarning } from '../reducers/Global'
+import { setError, setHealthcheckTextWarning } from '../shared_slices/Global'
 
 const FIVE_MINUTES = 5
 

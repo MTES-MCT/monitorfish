@@ -74,7 +74,7 @@ const RegulatoryLayerTopic = props => {
     )
   }
 
-  const showRegulatoryZonesSelected = namespace => {
+  const showRegulatoryZones = namespace => {
     return regulatoryZones.map(regulatoryZone => {
       let vectorLayerStyle
       if (regulatoryZone.zone && regulatoryZone.topic && regulatoryZone.gears && gears) {
@@ -128,7 +128,7 @@ const RegulatoryLayerTopic = props => {
             name={regulatoryTopic.replace(/\s/g, '-')}
             zonesLength={regulatoryZones.length}
             >
-            {regulatoryZones && showedLayers && showRegulatoryZonesSelected(namespace)}
+            {regulatoryZones && showedLayers && showRegulatoryZones(namespace)}
           </List>
         </Row>
       )}

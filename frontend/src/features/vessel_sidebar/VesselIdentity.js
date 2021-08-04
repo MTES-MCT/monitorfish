@@ -377,7 +377,7 @@ const NoPersonalData = styled.div`
 
 const PersonalData = styled.div`
   line-height: inherit;
-  font-size: 0.8rem !important;
+  font-size: 13px !important;
   margin-top: -5px;
 `
 

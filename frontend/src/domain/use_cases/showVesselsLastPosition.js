@@ -1,6 +1,6 @@
 import { getVesselsLastPositionsFromAPI } from '../../api/fetch'
-import { setError } from '../reducers/Global'
-import { setVessels, setVesselsSpeciesAndDistricts } from '../reducers/Vessel'
+import { setError } from '../shared_slices/Global'
+import { setVessels, setVesselsSpeciesAndDistricts } from '../shared_slices/Vessel'
 import getUniqueSpeciesAndDistricts from './getUniqueSpeciesAndDistricts'
 
 const showVesselsLastPosition = () => dispatch => {

@@ -23,10 +23,7 @@ const SetCoordinates = ({ coordinates, updateCoordinates }) => {
           ? getCoordinates([coordinates[1], coordinates[0]], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)
             .map(coordinate => {
               return coordinate
-                .replace(/°/g, '')
-                .replace(/′/g, '')
-                .replace(/\./g, '')
-                .replace(/ /g, '')
+                .replace(/[°′. ]/g, '')
             })
             .join('')
           : ''

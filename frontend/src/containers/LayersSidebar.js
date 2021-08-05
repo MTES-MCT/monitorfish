@@ -144,7 +144,7 @@ const Zones = styled.div`
 const SidebarLayersIcon = styled.button`
   position: absolute;
   display: inline-block;
-  color: #05055E;
+  color: ${COLORS.blue};
   background: ${props => props.firstUpdate && !props.layersSidebarIsOpen ? COLORS.grayDarkerThree : props.layersSidebarIsOpen ? COLORS.grayDarkerTwo : COLORS.grayDarkerThree};
   padding: 2px 2px 2px 2px;
   margin-top: 0;

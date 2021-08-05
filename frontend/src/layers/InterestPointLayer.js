@@ -323,9 +323,9 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
               map={map}
               uuid={interestPointBeingDrawed.uuid}
               name={interestPointBeingDrawed.name}
-              featureIsShowed={drawObject}
               observations={interestPointBeingDrawed.observations}
               coordinates={interestPointBeingDrawed.coordinates}
+              featureIsShowed={drawObject}
               deleteInterestPoint={() => dispatch(endInterestPointDraw()) && dispatch(deleteInterestPointBeingDrawed())}
               modifyInterestPoint={() => {}}
               zoomHasChanged={previousMapZoom.current}

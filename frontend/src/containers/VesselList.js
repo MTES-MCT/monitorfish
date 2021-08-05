@@ -419,7 +419,7 @@ const Title = styled.div`
 const VesselListIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
-  color: #05055E;
+  color: ${COLORS.blue};
   background: ${COLORS.grayDarkerThree};
   padding: 8px 0px 0 1px;
   top: 68px;

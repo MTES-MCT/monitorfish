@@ -16,9 +16,11 @@ import {
 const InterestPoint = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
-  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const { isEditing } = useSelector(state => state.interestPoint)
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    rightMenuIsOpen
+  } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
   const [interestPointIsOpen, setInterestPointIsOpen] = useState(false)
@@ -41,11 +43,7 @@ const InterestPoint = () => {
   }, [interestPointIsOpen])
 
   useEffect(() => {
-    if (isEditing) {
-      setInterestPointIsOpen(true)
-    } else {
-      setInterestPointIsOpen(false)
-    }
+    setInterestPointIsOpen(isEditing)
   }, [isEditing])
 
   const escapeFromKeyboard = event => {
@@ -89,7 +87,7 @@ const Wrapper = styled.div`
 const InterestPointWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
-  color: #05055E;
+  color: ${COLORS.blue};
   background: ${props => props.isOpen ? COLORS.textGray : COLORS.grayDarkerThree};
   top: 249px;
   z-index: 99;

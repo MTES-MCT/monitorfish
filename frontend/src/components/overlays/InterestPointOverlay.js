@@ -142,7 +142,7 @@ const InterestPointOverlay = props => {
                   }
                 </Name>
                 <Edit data-cy={'interest-point-edit'} onClick={() => modifyInterestPoint(uuid)}/>
-                <Delete onClick={() => deleteInterestPoint(uuid)}/>
+                <Delete data-cy={'interest-point-delete'} onClick={() => deleteInterestPoint(uuid)}/>
               </Header>
               <Body data-cy={'interest-point-observations'}>
                 {

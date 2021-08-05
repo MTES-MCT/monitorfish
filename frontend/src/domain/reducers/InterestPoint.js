@@ -66,6 +66,7 @@ const interestPointSlice = createSlice({
      */
     removeInterestPoint(state, action) {
       state.interestPoints = state.interestPoints.filter(interestPoint => interestPoint.uuid !== action.payload)
+      state.isEditing = false
       window.localStorage.setItem(interestPointsLocalStorageKey, JSON.stringify(state.interestPoints))
     },
     /**

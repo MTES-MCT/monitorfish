@@ -212,7 +212,7 @@ const VesselFilterBox = styled(MapComponentStyle)`
 const VesselFilterIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
-  color: #05055E;
+  color: ${COLORS.blue};
   background: ${COLORS.grayDarkerThree};
   z-index: 99;
   top: 110px;

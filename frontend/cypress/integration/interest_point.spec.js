@@ -62,4 +62,17 @@ context('InterestPoint', () => {
     // Then
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 58.483′ N 007° 54.500′ W", { timeout: 20000 })
   })
+
+  it('An interest Should be deleted When it is in edit mode', () => {
+    // When
+    cy.get('*[data-cy="interest-point"]').click({ timeout: 20000 })
+    cy.get('#root').click(490, 510, { timeout: 20000 })
+    cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="interest-point-observations-input"]').type('Est dans la bergerie')
+    cy.get('*[data-cy="interest-point-delete"]').click({ timeout: 20000 })
+
+    // Then
+    cy.get('*[data-cy="interest-point-observations-input"]').should('have.value', '');
+  })
 })

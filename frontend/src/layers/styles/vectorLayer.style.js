@@ -4,6 +4,7 @@ import Text from 'ol/style/Text'
 import Fill from 'ol/style/Fill'
 import Layers from '../../domain/entities/layers'
 import { getColorWithAlpha } from '../../utils'
+import { COLORS } from '../../constants/constants'
 
 export const getVectorLayerStyle = type => {
   switch (type) {
@@ -16,7 +17,7 @@ export const getVectorLayerStyle = type => {
         text: new Text({
           font: '12px Avenir',
           text: `${feature.get(Layers.EEZ.subZoneFieldKey) ? feature.get(Layers.EEZ.subZoneFieldKey) : ''}`,
-          fill: new Fill({ color: '#05055E' }),
+          fill: new Fill({ color: COLORS.blue }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 })
         })
       })
@@ -30,7 +31,7 @@ export const getVectorLayerStyle = type => {
           font: '12px Avenir',
           overflow: true,
           text: Layers.FAO.getZoneName(feature),
-          fill: new Fill({ color: '#05055E' }),
+          fill: new Fill({ color: COLORS.blue }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })
@@ -43,7 +44,7 @@ export const getVectorLayerStyle = type => {
         text: new Text({
           font: '12px Avenir',
           text: `${feature.get(Layers.AEM.subZoneFieldKey) ? feature.get(Layers.AEM.subZoneFieldKey) : ''}`,
-          fill: new Fill({ color: '#05055E' }),
+          fill: new Fill({ color: COLORS.blue }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })
@@ -56,7 +57,7 @@ export const getVectorLayerStyle = type => {
         text: new Text({
           font: '12px Avenir',
           text: `${feature.get(Layers.cormoran.subZoneFieldKey) ? feature.get(Layers.cormoran.subZoneFieldKey) : ''}`,
-          fill: new Fill({ color: '#05055E' }),
+          fill: new Fill({ color: COLORS.blue }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })
@@ -69,7 +70,7 @@ export const getVectorLayerStyle = type => {
         text: new Text({
           font: '12px Avenir',
           text: `${feature.get(Layers.situations.subZoneFieldKey) ? feature.get(Layers.situations.subZoneFieldKey) : ''}`,
-          fill: new Fill({ color: '#05055E' }),
+          fill: new Fill({ color: COLORS.blue }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })
@@ -82,7 +83,7 @@ export const getVectorLayerStyle = type => {
         text: new Text({
           font: '12px Avenir',
           text: `${feature.get(Layers.brexit.subZoneFieldKey) ? feature.get(Layers.brexit.subZoneFieldKey) : ''}`,
-          fill: new Fill({ color: '#05055E' }),
+          fill: new Fill({ color: COLORS.blue }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })
@@ -95,7 +96,7 @@ export const getVectorLayerStyle = type => {
         text: new Text({
           font: '12px Avenir',
           text: `${feature.get(Layers.rectangles_stat.subZoneFieldKey) ? feature.get(Layers.rectangles_stat.subZoneFieldKey) : ''}`,
-          fill: new Fill({ color: '#05055E' }),
+          fill: new Fill({ color: COLORS.blue }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })

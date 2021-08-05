@@ -206,7 +206,7 @@ const VesselVisibilityBox = styled(MapComponentStyle)`
 const VesselVisibilityIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
-  color: #05055E;
+  color: ${COLORS.blue};
   background: ${COLORS.grayDarkerThree};
   padding: 3px 0px 0 3px;
   top: 152px;

@@ -48,6 +48,15 @@ const SaveInterestPoint = (
   }, [interestPointBeingDrawed, isEditing])
 
   useEffect(() => {
+    if (!isEditing) {
+      setName('')
+      setObservations('')
+      setType(interestPointType.FISHING_VESSEL)
+      setCoordinates([])
+    }
+  }, [isEditing])
+
+  useEffect(() => {
     if (!isOpen && !interestPointBeingDrawed) {
       setCoordinates([])
       setName('')

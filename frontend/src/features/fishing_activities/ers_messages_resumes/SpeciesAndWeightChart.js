@@ -134,7 +134,6 @@ const Presentation = styled.div`
   display: flex;
   height: 20px;
   margin: 2px 0 0 10px;
-  color: #282F3E;
   font-size: 12px;
   color: ${COLORS.gunMetal};
   font-weight: 300;

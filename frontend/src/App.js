@@ -13,7 +13,7 @@ import APIWorker from './api/APIWorker'
 import VesselVisibility from './features/vessel_visibility/VesselVisibility'
 import VesselList from './features/vessel_list/VesselList'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
-import RightMenuOnHoverZone from './features/vessel_sidebar/RightMenuOnHoverZone'
+import RightMenuOnHoverArea from './features/vessel_sidebar/RightMenuOnHoverArea'
 import Measurement from './features/measurements/Measurement'
 import VesselFilters from './features/vessel_filters/VesselFilters'
 import CreateRegulation from './features/backoffice/create_regulation/CreateRegulation'
@@ -22,7 +22,7 @@ import { Provider } from 'react-redux'
 import { backofficeStore, homeStore } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
-import InterestPoint from './containers/InterestPoint'
+import InterestPoint from './features/interest_points/InterestPoint'
 
 function App () {
   switch (browserName) {
@@ -71,7 +71,7 @@ function HomePage () {
         <Map/>
         <LayersSidebar/>
         <VesselsSearchBox/>
-        <RightMenuOnHoverZone/>
+        <RightMenuOnHoverArea/>
         <VesselList namespace={'homepage'}/>
         <VesselFilters/>
         <VesselVisibility/>

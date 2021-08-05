@@ -12,7 +12,7 @@ const MapAttributionsBox = () => {
     </List>
     <Button onClick={() => setIsVisible(!isVisible)} type="button" title="Attributions" data-bcup-haslogintext="no">
       <ButtonText>
-        {isVisible ? '^' : 'i'}
+        ©
       </ButtonText>
     </Button>
   </Wrapper>)
@@ -27,17 +27,15 @@ const Wrapper = styled.div`
 
 const Button = styled.button`
   float: left;
+  width: 25px !important;
+  height: 25px !important;
   
   :hover {
     background: none;
   }
 `
 
-const ButtonText = styled.span`
-  font-size: 0.8em;
-  vertical-align: -moz-middle-with-baseline;
-  vertical-align: -webkit-baseline-middle;
-`
+const ButtonText = styled.span``
 
 const List = styled.ul`
   font-size: 0.9em;

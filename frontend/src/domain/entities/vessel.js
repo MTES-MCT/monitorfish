@@ -4,7 +4,7 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { toStringHDMS } from 'ol/coordinate'
 import Layers, { baseLayers } from './layers'
-import { vesselLabel as vesselLabelEnum } from './vesselLabel'
+import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 import countries from 'i18n-iso-countries'
 
 export const VESSEL_ICON_STYLE = 10

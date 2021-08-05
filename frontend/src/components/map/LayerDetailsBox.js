@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { getHash } from '../../utils'
 import { getGearCategory } from '../../domain/use_cases/showLayer'
-import { getVectorLayerStyle } from '../../layers/styles/vectorLayers.style'
+import { getVectorLayerStyle } from '../../layers/styles/vectorLayer.style'
 import Layers from '../../domain/entities/layers'
 
 const LayerDetailsBox = props => {

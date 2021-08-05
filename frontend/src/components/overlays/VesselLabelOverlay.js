@@ -2,13 +2,14 @@ import React, { createRef, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import Hammer from 'hammerjs'
+import { useMoveOverlayWhenDragging } from '../../hooks/useMoveOverlayWhenDragging'
+import { useMoveOverlayWhenZooming } from '../../hooks/useMoveOverlayWhenZooming'
 
 const X = 0
 const Y = 1
 const initialOffsetValue = [5, -30]
 
-const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, featureId, moveVesselLabelLine, zoomHasChanged }) => {
+const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, featureId, moveLine, zoomHasChanged }) => {
   const ref = createRef()
 
   const currentOffset = useRef(initialOffsetValue)
@@ -23,12 +24,8 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, feature
     positioning: 'left-center'
   }))
 
-  useEffect(() => {
-    if (overlay && offset) {
-      currentOffset.current = offset
-      overlay.setOffset(offset)
-    }
-  }, [offset, overlay])
+  useMoveOverlayWhenDragging(ref, overlay, map, currentOffset, moveVesselLabelWithThrottle, showed)
+  useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveVesselLabelWithThrottle)
 
   useEffect(() => {
     if (map) {
@@ -38,10 +35,6 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, feature
       map.addOverlay(overlay)
       setShowed(true)
 
-      overlay.on('change:offset', ({ target }) => {
-        moveVesselLabelWithThrottle(target, 50)
-      })
-
       return () => {
         map.removeOverlay(overlay)
       }
@@ -49,23 +42,11 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, feature
   }, [overlay, coordinates, map])
 
   useEffect(() => {
-    if (currentOffset.current !== initialOffsetValue) {
-      moveVesselLabelWithThrottle(overlay, 100)
+    if (overlay && offset) {
+      currentOffset.current = offset
+      overlay.setOffset(offset)
     }
-  }, [zoomHasChanged])
-
-  useEffect(() => {
-    if (showed) {
-      const hammer = new Hammer(overlay.getElement())
-      hammer.on('pan', ({ deltaX, deltaY }) => {
-        overlay.setOffset([currentOffset.current[X] + deltaX, currentOffset.current[Y] + deltaY])
-      })
-
-      hammer.on('panend', ({ deltaX, deltaY }) => {
-        currentOffset.current = [currentOffset.current[X] + deltaX, currentOffset.current[Y] + deltaY]
-      })
-    }
-  }, [showed])
+  }, [offset, overlay])
 
   function moveVesselLabelWithThrottle (target, delay) {
     if (isThrottled.current) {
@@ -83,7 +64,7 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, feature
 
       const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
       currentCoordinates.current = nextCoordinates
-      moveVesselLabelLine(featureId, coordinates, nextCoordinates, offset)
+      moveLine(featureId, coordinates, nextCoordinates, offset)
 
       isThrottled.current = false
     }, delay)

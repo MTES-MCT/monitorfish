@@ -18,19 +18,19 @@ export const selectedVesselStyle = new Style({
   zIndex: VESSEL_SELECTOR_STYLE
 })
 
-export const getIconStyle = object => {
-  const key = JSON.stringify(object)
+export const getIconStyle = vesselObject => {
+  const key = JSON.stringify(vesselObject)
 
   if (!iconStyleCache.has(key)) {
     iconStyleCache.set(key, new Style({
       image: new Icon({
-        src: object.vesselFileName,
+        src: vesselObject.vesselFileName,
         offset: [0, 0],
         imgSize: [8, 16],
-        rotation: degreesToRadian(object.course),
+        rotation: degreesToRadian(vesselObject.course),
         // See https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210
         color: 'white',
-        opacity: object.opacity
+        opacity: vesselObject.opacity
       }),
       zIndex: VESSEL_ICON_STYLE
     }))
@@ -39,13 +39,13 @@ export const getIconStyle = object => {
   return iconStyleCache.get(key)
 }
 
-export const getCircleStyle = object => {
-  const key = JSON.stringify(object)
+export const getCircleStyle = vesselObject => {
+  const key = JSON.stringify(vesselObject)
 
   if (!circleStyleCache.has(key)) {
-    let color = asArray(object.vesselColor)
+    let color = asArray(vesselObject.vesselColor)
     color = color.slice()
-    color[3] = object.opacity
+    color[3] = vesselObject.opacity
 
     circleStyleCache.set(key, new Style({
       image: new CircleStyle({

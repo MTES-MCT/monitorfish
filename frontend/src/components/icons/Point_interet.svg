@@ -1,0 +1,10 @@
+<svg id="Point_sur_la_carte_40_px" data-name="Point sur la carte_40 px" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <rect id="Rectangle_1591" data-name="Rectangle 1591" width="40" height="40" fill="#515151"/>
+  <g id="Groupe_309" data-name="Groupe 309" transform="translate(-340 -85)">
+    <rect id="Rectangle_1592" data-name="Rectangle 1592" width="2" height="22" transform="translate(352 94)" fill="#ededed"/>
+    <g id="Tracé_349" data-name="Tracé 349" transform="translate(1565.657 15590.864)" fill="#ededed">
+      <path d="M -1209.657470703125 -15484.39453125 L -1209.657470703125 -15495.3369140625 L -1197.15234375 -15489.8759765625 L -1209.657470703125 -15484.39453125 Z" stroke="none"/>
+      <path d="M -1208.657470703125 -15493.80859375 L -1208.657470703125 -15485.9248046875 L -1199.647216796875 -15489.8740234375 L -1208.657470703125 -15493.80859375 M -1210.657470703125 -15496.8642578125 L -1194.657470703125 -15489.8779296875 L -1210.657470703125 -15482.8642578125 L -1210.657470703125 -15496.8642578125 Z" stroke="none" fill="#ededed"/>
+    </g>
+  </g>
+</svg>

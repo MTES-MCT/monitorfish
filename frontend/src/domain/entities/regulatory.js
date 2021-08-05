@@ -52,7 +52,9 @@ export const REGULATORY_SEARCH_PROPERTIES = {
 }
 
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
-  return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false
+  return zone[propertiesToSearch] && searchText
+    ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))
+    : false
 }
 
 export function searchByLawType (lawTypes, properties, searchText, gears) {
@@ -98,7 +100,7 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
             let searchStringIncludedInProperty = false
             propertiesToSearch.forEach(property => {
               if (property === REGULATORY_SEARCH_PROPERTIES.GEARS) {
-                return findIfStringIsIncludedInZoneGears(zone, searchText, uniqueGearCodes)
+                searchStringIncludedInProperty = findIfStringIsIncludedInZoneGears(zone, searchText, uniqueGearCodes)
               } else {
                 searchStringIncludedInProperty =
                   searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)
@@ -148,20 +150,29 @@ export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFo
   const mergedRegulatoryLayers = {}
 
   Object.keys(previousFoundRegulatoryLayers).forEach(lawType => {
-    previousFoundRegulatoryLayers[lawType].forEach(regulatoryTopic => {
-      previousFoundRegulatoryLayers[regulatoryTopic].forEach(zone => {
-        if (nextFoundRegulatoryLayers[lawType][regulatoryTopic] &&
-          nextFoundRegulatoryLayers[lawType][regulatoryTopic].length &&
-          nextFoundRegulatoryLayers[lawType][regulatoryTopic].some(searchZone =>
-            searchZone.topic === zone.topic &&
-            searchZone.zone === zone.zone
-          )) {
-          mergedRegulatoryLayers[lawType][regulatoryTopic] = mergedRegulatoryLayers[lawType][regulatoryTopic]
-            ? mergedRegulatoryLayers[lawType][regulatoryTopic].concat(zone)
-            : [].concat(zone)
-        }
+    if (previousFoundRegulatoryLayers[lawType]) {
+      Object.keys(previousFoundRegulatoryLayers[lawType]).forEach(regulatoryTopic => {
+        previousFoundRegulatoryLayers[lawType][regulatoryTopic].forEach(zone => {
+          if (nextFoundRegulatoryLayers &&
+            nextFoundRegulatoryLayers[lawType] &&
+            nextFoundRegulatoryLayers[lawType][regulatoryTopic] &&
+            nextFoundRegulatoryLayers[lawType][regulatoryTopic].length &&
+            nextFoundRegulatoryLayers[lawType][regulatoryTopic].some(searchZone =>
+              searchZone.topic === zone.topic &&
+              searchZone.zone === zone.zone
+            )) {
+            if (mergedRegulatoryLayers[lawType] && mergedRegulatoryLayers[lawType][regulatoryTopic]) {
+              mergedRegulatoryLayers[lawType][regulatoryTopic] = mergedRegulatoryLayers[lawType][regulatoryTopic].concat(zone)
+            } else {
+              if (!mergedRegulatoryLayers[lawType]) {
+                mergedRegulatoryLayers[lawType] = {}
+              }
+              mergedRegulatoryLayers[lawType][regulatoryTopic] = [].concat(zone)
+            }
+          }
+        })
       })
-    })
+    }
   })
 
   return mergedRegulatoryLayers

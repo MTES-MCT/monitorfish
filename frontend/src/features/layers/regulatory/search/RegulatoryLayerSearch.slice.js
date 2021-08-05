@@ -6,7 +6,8 @@ const regulatoryLayerSearchSlice = createSlice({
     /** @type SelectedRegulatoryZone[] regulatoryZonesChecked */
     regulatoryZonesChecked: [],
     /** @type RegulatoryLawTypes regulatoryLayersSearchResult */
-    regulatoryLayersSearchResult: null
+    regulatoryLayersSearchResult: null,
+    advancedSearchIsOpen: false
   },
   reducers: {
     /**
@@ -45,6 +46,14 @@ const regulatoryLayerSearchSlice = createSlice({
      */
     setRegulatoryLayersSearchResult (state, action) {
       state.regulatoryLayersSearchResult = action.payload
+    },
+    /**
+     * Set regulatory advanced search as open or closed
+     * @param {Object=} state
+     * @param {boolean} action - the open or close boolean
+     */
+    setAdvancedSearchIsOpen (state, action) {
+      state.advancedSearchIsOpen = action.payload
     }
   }
 })
@@ -53,7 +62,8 @@ export const {
   checkRegulatoryZones,
   uncheckRegulatoryZones,
   resetRegulatoryZonesChecked,
-  setRegulatoryLayersSearchResult
+  setRegulatoryLayersSearchResult,
+  setAdvancedSearchIsOpen
 } = regulatoryLayerSearchSlice.actions
 
 export default regulatoryLayerSearchSlice.reducer

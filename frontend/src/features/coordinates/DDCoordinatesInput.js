@@ -40,7 +40,6 @@ const DDCoordinatesInput = props => {
         return
       }
 
-      console.log([floatLatitude, floatLongitude])
       updateCoordinates([floatLatitude, floatLongitude], coordinates)
     }
   }, [latitude, longitude])

@@ -104,8 +104,15 @@ const RegulatoryLayerZone = props => {
       <Icons>
         {
           metadataIsShown
-            ? <REGPaperDarkIcon title="Fermer la réglementation" onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}/>
-            : <REGPaperIcon title="Afficher la réglementation" onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}/>
+            ? <REGPaperDarkIcon
+              title="Fermer la réglementation"
+              onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+            />
+            : <REGPaperIcon
+              data-cy={'regulatory-layers-show-metadata'}
+              title="Afficher la réglementation"
+              onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+            />
         }
         {showRegulatoryZone
           ? <ShowIcon title="Cacher la zone" onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}/>

@@ -33,4 +33,21 @@ context('LayersSidebar', () => {
     // Close the layers sidebar
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
   })
+
+  it.only('A regulation metadata Should be opened', () => {
+    // When
+    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+
+    cy.get('*[data-cy^="regulatory-search-input"]').type('Cotentin')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="regulatory-search-add-zones-button"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
+
+    // Then show the metadata
+    cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
+    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues remorquées par bateau (DRB)')
+  })
 })

@@ -77,6 +77,7 @@ const RegulatoryLayers = props => {
   return (
     <>
       <RegulatoryLayersTitle
+        data-cy={'regulatory-layers-my-zones'}
         onClick={() => onTitleClicked()}
         regulatoryLayersAddedToMySelection={regulatoryLayersAddedToMySelection}
         showRegulatoryLayers={showRegulatoryLayers}
@@ -166,7 +167,11 @@ const RegulatoryLayersList = styled.ul`
   max-height: 70vh;
   overflow-x: hidden;
   color: ${COLORS.gunMetal};
-  height: ${props => props.showRegulatoryLayers ? 37 * props.topicLength + props.zoneLength * 39 : 0}px;
+  height: ${props => props.showRegulatoryLayers
+  ? props.topicLength || props.zoneLength
+      ? 37 * props.topicLength + props.zoneLength * 39
+      : 40
+  : 0}px;
   transition: 0.5s all;
 `
 

@@ -89,7 +89,10 @@ const RegulatoryLayerZone = props => {
     <Zone>
       <Rectangle onClick={() => dispatch(zoomInLayer({ subZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
-        title={regulatoryZone.zone ? regulatoryZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+        data-cy={'regulatory-layers-my-zones-zone'}
+        title={regulatoryZone.zone
+          ? regulatoryZone.zone.replace(/[_]/g, ' ')
+          : 'AUCUN NOM'}
         onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}
       >
         {
@@ -109,6 +112,7 @@ const RegulatoryLayerZone = props => {
           : <HideIcon
             title="Afficher la zone" onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}/>}
         {allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection"
+                                       data-cy={'regulatory-layers-my-zones-zone-delete'}
                                        onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1)}/>}
       </Icons>
     </Zone>

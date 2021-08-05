@@ -109,7 +109,11 @@ const RegulatoryLayerTopic = props => {
       {namespace => (
         <Row isOpen={isOpen}>
           <Zone isLastItem={isLastItem} isOpen={isOpen}>
-            <Name title={regulatoryTopic.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
+            <Name
+              data-cy={'regulatory-layers-my-zones-topic'}
+              title={regulatoryTopic.replace(/[_]/g, ' ')}
+              onClick={() => setIsOpen(!isOpen)}
+            >
               <ChevronIcon isOpen={isOpen}/>
               <Text>
                 {regulatoryTopic.replace(/[_]/g, ' ')}

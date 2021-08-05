@@ -37,6 +37,7 @@ const LayersSidebar = () => {
         namespace => (
           <>
             <SidebarLayersIcon
+              data-cy={'layers-sidebar'}
               title={'Couches réglementaires'}
               isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}
               regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
@@ -47,7 +48,8 @@ const LayersSidebar = () => {
             <Sidebar
               healthcheckTextWarning={healthcheckTextWarning}
               layersSidebarIsOpen={layersSidebarIsOpen}
-              isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}>
+              isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}
+            >
               <RegulatoryLayerSearch
                 numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
                 setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
@@ -69,7 +71,9 @@ const LayersSidebar = () => {
                 />
                 <BaseLayers namespace={namespace}/>
               </Layers>
-              <RegulatoryZoneMetadataShifter regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
+              <RegulatoryZoneMetadataShifter
+                regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+              >
                 <RegulatoryLayerZoneMetadata/>
               </RegulatoryZoneMetadataShifter>
             </Sidebar>

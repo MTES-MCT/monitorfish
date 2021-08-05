@@ -88,6 +88,7 @@ const RegulatoryLayerSearchResultTopic = props => {
     <>
       <LayerTopic>
         <TopicName
+          data-cy={'regulatory-layer-topic'}
           onClick={() => setZonesAreOpen(!zonesAreOpen)}
           title={regulatoryLayerTopic.replace(/[_]/g, ' ')}
         >

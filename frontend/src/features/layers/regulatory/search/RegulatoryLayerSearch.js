@@ -72,6 +72,7 @@ const RegulatoryLayerSearch = props => {
       />
       <RegulatoryLayerSearchResultList/>
       <AddRegulatoryLayer
+        data-cy={'regulatory-search-add-zones-button'}
         onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
         isShown={regulatoryZonesChecked && regulatoryZonesChecked.length}
       >

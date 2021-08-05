@@ -104,7 +104,10 @@ const RegulatoryLayerSearchResultZone = props => {
               onChange={setZoneSelection}
               style={{ marginLeft: 'auto', height: 20 }}
           >
-            <Checkbox value={regulatoryZone.zone}/>
+            <Checkbox
+              data-cy={'regulatory-zone-check'}
+              value={regulatoryZone.zone}
+            />
           </CheckboxGroup>
           </>
           : null

@@ -16,7 +16,7 @@ import { VesselSidebarTab } from '../domain/entities/vessel'
 import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
 
-export const TWO_MINUTES = 12000000
+export const TWO_MINUTES = 120000
 
 const APIWorker = () => {
   const dispatch = useDispatch()

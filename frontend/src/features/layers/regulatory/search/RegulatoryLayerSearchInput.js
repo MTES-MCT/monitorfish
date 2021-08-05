@@ -85,6 +85,7 @@ const RegulatoryLayerSearchInput = props => {
     <>
       <PrincipalSearchInput>
         <SearchBoxInput
+          data-cy={'regulatory-search-input'}
           type="text"
           value={nameSearchText}
           placeholder={'Rechercher une zone reg. par son nom'}

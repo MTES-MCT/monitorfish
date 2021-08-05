@@ -94,7 +94,7 @@ const RegulatoryLayerZoneMetadata = () => {
                         <Body>
                           <Field>
                             <Key>Façade</Key>
-                            <Value>{regulatoryZoneMetadata.seafront
+                            <Value data-cy={'regulatory-layers-metadata-seafront'}>{regulatoryZoneMetadata.seafront
                               ? regulatoryZoneMetadata.seafront
                               : <NoValue>-</NoValue>}</Value>
                           </Field>
@@ -192,7 +192,7 @@ const RegulatoryLayerZoneMetadata = () => {
                             {
                               formattedGears.map(gear => {
                                 return gear.name
-                                  ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
+                                  ? <ValueWithLineBreak data-cy={'regulatory-layers-metadata-gears'} key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
                                   : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
                               })
                             }
@@ -367,7 +367,6 @@ const Wrapper = styled.div`
   display: block;
   color: ${COLORS.charcoal};
   background-color: ${COLORS.gainsboro};
-  top: 0px;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
   z-index: -1;
   padding: 0;

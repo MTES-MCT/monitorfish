@@ -87,6 +87,7 @@ const RegulatoryZoneMetadataShifter = styled.div`
   position: absolute;
   margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 355 : -30}px;
   margin-top: 45px;
+  top: 0px;
 `
 
 const Sidebar = styled(MapComponentStyle)`

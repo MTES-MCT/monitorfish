@@ -24,10 +24,13 @@ const DRAW_ABORT_EVENT = 'drawabort'
 const DRAW_END_EVENT = 'drawend'
 
 const MeasurementLayer = ({ map }) => {
-  const measurementType = useSelector(state => state.map.measurementTypeToAdd)
-  const measurementsDrawed = useSelector(state => state.map.measurementsDrawed)
-  const circleMeasurementToAdd = useSelector(state => state.map.circleMeasurementToAdd)
   const dispatch = useDispatch()
+
+  const {
+    measurementType,
+    measurementsDrawed,
+    circleMeasurementToAdd
+  } = useSelector(state => state.map)
 
   const [measurementInProgress, _setMeasurementInProgress] = useState(null)
   const measurementInProgressRef = useRef(measurementInProgress)
@@ -106,7 +109,7 @@ const MeasurementLayer = ({ map }) => {
     if (measurementsDrawed && map) {
       measurementsDrawed.forEach(measurement => {
         const feature = new GeoJSON({
-          featureProjection: 'EPSG:3857'
+          featureProjection: OPENLAYERS_PROJECTION
         }).readFeature(measurement.feature)
 
         vectorSource.addFeature(feature)

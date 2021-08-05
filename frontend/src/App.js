@@ -11,7 +11,6 @@ import VesselSidebar from './containers/VesselSidebar'
 import LayersSidebar from './containers/LayersSidebar'
 import APIWorker from './api/APIWorker'
 import VesselVisibility from './containers/VesselVisibility'
-import VesselList from './containers/VesselList'
 import UpdatingVesselLoader from './containers/UpdatingVesselLoader'
 import RightMenuOnHoverZone from './containers/RightMenuOnHoverZone'
 import Measurement from './containers/Measurement'
@@ -22,6 +21,8 @@ import { Provider } from 'react-redux'
 import { backofficeStore, homeStore } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './components/healthcheck/Healthcheck'
+import VesselList from './containers/VesselList'
+import InterestPoint from './containers/InterestPoint'
 
 function App () {
   switch (browserName) {
@@ -77,6 +78,7 @@ function HomePage () {
         <VesselSidebar/>
         <UpdatingVesselLoader/>
         <Measurement/>
+        <InterestPoint/>
         <APIWorker/>
       </Wrapper>
     </NamespaceContext.Provider>

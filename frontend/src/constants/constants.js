@@ -14,6 +14,7 @@ export const COLORS = {
   red: '#E1000F',
   white: '#FFFFFF',
   orange: '#F6D012',
+  blue: '#05055E',
   vesselLightColor: '#cacce0',
   vesselColor: 'rgb(5, 5, 94)'
 }

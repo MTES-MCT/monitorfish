@@ -5,7 +5,11 @@ import SearchIconSVG from '../../../icons/Loupe_dark.svg'
 import { REGULATORY_SEARCH_PROPERTIES } from '../../../../domain/entities/regulatory'
 import searchRegulatoryLayers from '../../../../domain/use_cases/searchRegulatoryLayers'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './RegulatoryLayerSearch.slice'
+import {
+  resetRegulatoryZonesChecked,
+  setAdvancedSearchIsOpen,
+  setRegulatoryLayersSearchResult
+} from './RegulatoryLayerSearch.slice'
 
 const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
 
@@ -18,8 +22,10 @@ const RegulatoryLayerSearchInput = props => {
   const {
     regulatoryLayers
   } = useSelector(state => state.regulatory)
+  const {
+    advancedSearchIsOpen
+  } = useSelector(state => state.regulatoryLayerSearch)
 
-  const [advancedSearchIsOpen, setAdvancedSearchIsOpen] = useState(false)
   const [nameSearchText, setNameSearchText] = useState('')
   const [placeSearchText, setPlaceSearchText] = useState('')
   const [gearSearchText, setGearSearchText] = useState('')
@@ -28,14 +34,23 @@ const RegulatoryLayerSearchInput = props => {
 
   useEffect(() => {
     if (initSearchFields) {
-      setPlaceSearchText('')
       setNameSearchText('')
+      setPlaceSearchText('')
       setGearSearchText('')
       setSpeciesSearchText('')
       setRegulatoryReferenceSearchText('')
       setInitSearchFields(false)
     }
   }, [initSearchFields])
+
+  useEffect(() => {
+    if (!advancedSearchIsOpen) {
+      setPlaceSearchText('')
+      setGearSearchText('')
+      setSpeciesSearchText('')
+      setRegulatoryReferenceSearchText('')
+    }
+  }, [advancedSearchIsOpen])
 
   const searchFields = {
     nameSearchText: {
@@ -86,22 +101,56 @@ const RegulatoryLayerSearchInput = props => {
       <PrincipalSearchInput>
         <SearchBoxInput
           data-cy={'regulatory-search-input'}
+          placeholder={'Rechercher une zone reg. par son nom'}
           type="text"
           value={nameSearchText}
-          placeholder={'Rechercher une zone reg. par son nom'}
           onChange={e => setNameSearchText(e.target.value)}/>
-        <AdvancedSearch onClick={() => setAdvancedSearchIsOpen(!advancedSearchIsOpen)}>+</AdvancedSearch>
+        <AdvancedSearch onClick={() => dispatch(setAdvancedSearchIsOpen(!advancedSearchIsOpen))}>
+          {
+            advancedSearchIsOpen
+              ? '-'
+              : '+'
+          }
+        </AdvancedSearch>
       </PrincipalSearchInput>
       <AdvancedSearchBox advancedSearchIsOpen={advancedSearchIsOpen}>
+        <AdvancedSearchInput
+          placeholder={'Zone (ex. Med, Bretagne, mer Celtique…)'}
+          type="text"
+          value={placeSearchText}
+          onChange={e => setPlaceSearchText(e.target.value)}
+        />
+        <AdvancedSearchInput
+          placeholder={'Engins (ex. chaluts, casiers, FPO, GNS…)'}
+          type="text"
+          value={gearSearchText}
+          onChange={e => setGearSearchText(e.target.value)}
+        />
+        <AdvancedSearchInput
+          placeholder={'Espèces (ex. merlu, coque, SCE, PIL...)'}
+          type="text"
+          value={speciesSearchText}
+          onChange={e => setSpeciesSearchText(e.target.value)}
+        />
+        <AdvancedSearchInput
+          placeholder={'Référence reg. (ex. 58/2007, 171/2020, 1241...)'}
+          type="text"
+          value={regulatoryReferencesSearchText}
+          onChange={e => setRegulatoryReferenceSearchText(e.target.value)}
+        />
       </AdvancedSearchBox>
     </>)
 }
 
 const AdvancedSearchBox = styled.div`
-  background: ${COLORS.background};
-  height: ${props => props.advancedSearchIsOpen ? 238 : 0}px;
-  width: 350px;
+  background-color: white;
+  height: ${props => props.advancedSearchIsOpen ? 160 : 0}px;
+  width: 320px;
   transition: 0.5s all;
+  padding: ${props => props.advancedSearchIsOpen ? 10 : 0}px 15px;
+  overflow: hidden;
+  text-align: left;
+  border-bottom: ${props => props.advancedSearchIsOpen ? 1 : 0}px ${COLORS.lightGray} solid;
 `
 
 const PrincipalSearchInput = styled.div`
@@ -113,7 +162,7 @@ const SearchBoxInput = styled.input`
   margin: 0;
   background-color: white;
   border: none;
-  border-bottom: 1px ${COLORS.gray} solid;
+  border-bottom: 1px ${COLORS.lightGray} solid;
   border-radius: 0;
   color: ${COLORS.gunMetal};
   font-size: 13px;
@@ -127,7 +176,21 @@ const SearchBoxInput = styled.input`
   background-repeat: no-repeat;
   
   :hover, :focus {
-    border-bottom: 1px ${COLORS.gray} solid;
+    border-bottom: 1px ${COLORS.lightGray} solid;
+  }
+`
+
+const AdvancedSearchInput = styled.input`
+  border: none !important;
+  border-bottom: 1px ${COLORS.lightGray} solid !important;
+  background: ${COLORS.background} !important;
+  overflow: none !important;
+  width: 265px;
+  margin: 5px 0 15px 0 !important;
+  font-size: 13px;
+
+  :hover, :focus {
+    border-bottom: 1px ${COLORS.lightGray} solid;
   }
 `
 

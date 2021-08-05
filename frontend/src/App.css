@@ -49,7 +49,7 @@ html {
 .ol-control button, .ol-control button:hover, .ol-control button:focus {
     background-color: #3B4559;
     border-radius: 2px;
-    font-size: 1em;
+    font-size: 15px;
     padding-bottom: 5px;
 }
 

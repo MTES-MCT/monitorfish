@@ -1,6 +1,6 @@
 import VectorLayer from 'ol/layer/Vector'
 import layer from '../shared_slices/Layer'
-import { getVectorLayerStyle } from '../../layers/styles/vectorLayers.style'
+import { getVectorLayerStyle } from '../../layers/styles/vectorLayer.style'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'

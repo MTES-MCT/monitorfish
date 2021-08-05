@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { COLORS } from '../constants/constants'
-import { expandRightMenu } from '../domain/reducers/Global'
-import unselectVessel from '../domain/use_cases/unselectVessel'
-import { MapButtonStyle } from '../components/commonStyles/MapButton.style'
-import { ReactComponent as InterestPointSVG } from '../components/icons/Point_interet.svg'
-import SaveInterestPoint from '../components/interest_points/SaveInterestPoint'
+import { COLORS } from '../../constants/constants'
+import { expandRightMenu } from '../../domain/shared_slices/Global'
+import unselectVessel from '../../domain/use_cases/unselectVessel'
+import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import { ReactComponent as InterestPointSVG } from '../icons/Point_interet.svg'
+import SaveInterestPoint from './SaveInterestPoint'
 import {
   deleteInterestPointBeingDrawed,
   drawInterestPoint,
   endInterestPointDraw
-} from '../domain/reducers/InterestPoint'
+} from '../../domain/shared_slices/InterestPoint'
 
 const InterestPoint = () => {
   const dispatch = useDispatch()
@@ -87,8 +87,7 @@ const Wrapper = styled.div`
 const InterestPointWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
-  color: ${COLORS.blue};
-  background: ${props => props.isOpen ? COLORS.textGray : COLORS.grayDarkerThree};
+  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   top: 249px;
   z-index: 99;
   height: 40px;
@@ -97,8 +96,12 @@ const InterestPointWrapper = styled(MapButtonStyle)`
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
   transition: all 0.3s;
 
-  :hover, :focus {
-      background: ${COLORS.grayDarkerThree};
+  :hover {
+      background: ${COLORS.charcoal};
+  }
+  
+  :focus {
+      background: ${COLORS.shadowBlue};
   }
 `
 

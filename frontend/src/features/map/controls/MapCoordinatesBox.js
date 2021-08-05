@@ -114,17 +114,16 @@ const CoordinatesTypeSelection = styled.span`
 
 const Coordinates = styled.span`
   position: absolute;
-  bottom: 10px;
+  bottom: 11px;
   left: 40px;
   display: inline-block;
-  margin: 1px;
   padding: 2px 0 6px 2px;
   color: ${COLORS.textWhite};
   font-size: 13px;
   font-weight: 300;
   text-decoration: none;
   text-align: center;
-  height: 1.275em;
+  height: 17px;
   background-color: ${COLORS.charcoal};
   border: none;
   border-radius: 2px;

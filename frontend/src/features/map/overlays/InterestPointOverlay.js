@@ -1,16 +1,16 @@
 import React, { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
+import { COLORS } from '../../../constants/constants'
 
-import { ReactComponent as DeleteSVG } from '../icons/Suppression.svg'
-import { ReactComponent as EditSVG } from '../icons/Bouton_edition.svg'
-import { getCoordinates } from '../../utils'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
-import { useMoveOverlayWhenDragging } from '../../hooks/useMoveOverlayWhenDragging'
-import { useMoveOverlayWhenZooming } from '../../hooks/useMoveOverlayWhenZooming'
+import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
+import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
+import { getCoordinates } from '../../../utils'
+import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
+import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
+import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
 import { useSelector } from 'react-redux'
-import { usePrevious } from '../../hooks/usePrevious'
+import { usePrevious } from '../../../hooks/usePrevious'
 import LineString from 'ol/geom/LineString'
 import { getLength } from 'ol/sphere'
 
@@ -167,20 +167,22 @@ const InterestPointOverlay = props => {
 const Body = styled.div`
   padding: 10px;
   font-size: 13px;
+  font-weight: 500;
   text-align: left;
-  border-bottom: 1px solid ${COLORS.grayDarker};
+  border-bottom: 1px solid ${COLORS.lightGray};
 `
 
 const Footer = styled.div`
   padding: 3px;
   font-size: 12px;
   text-align: center;
+  color: ${COLORS.slateGray}
 `
 
 const Header = styled.div`
   display: flex;
   height: 30px;
-  background ${COLORS.grayBackground};
+  background ${COLORS.gainsboro};
   text-align: left;
   border: none;
   border-top-left-radius: 2px;
@@ -190,7 +192,7 @@ const Header = styled.div`
 const Delete = styled(DeleteSVG)`
   height: 30px;
   width: 15px;
-  border-left: 1px solid ${COLORS.grayDarker};
+  border-left: 1px solid ${COLORS.lightGray};
   padding-left: 7px;
   margin-left: auto;
   margin-right: 8px;
@@ -200,7 +202,7 @@ const Delete = styled(DeleteSVG)`
 const Edit = styled(EditSVG)`
   height: 30px;
   width: 15px;
-  border-left: 1px solid ${COLORS.grayDarker};
+  border-left: 1px solid ${COLORS.lightGray};
   padding-left: 7px;
   margin-left: auto;
   margin-right: 8px;
@@ -215,7 +217,7 @@ const InterestPointOverlayElement = styled.div`
   background: ${COLORS.background};
   cursor: grabbing;
   width: 183px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.gunMetal};
   border: none;
   border-radius: 2px;
 `

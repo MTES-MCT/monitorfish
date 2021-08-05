@@ -7,7 +7,7 @@ import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import { measurementStyle } from './styles/measurement.style'
 import { v4 as uuidv4 } from 'uuid'
-import InterestPointOverlay from '../components/overlays/InterestPointOverlay'
+import InterestPointOverlay from '../features/map/overlays/InterestPointOverlay'
 import {
   deleteInterestPointBeingDrawed,
   editInterestPoint,
@@ -16,7 +16,7 @@ import {
   resetInterestPointFeatureDeletion,
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
-} from '../domain/reducers/InterestPoint'
+} from '../domain/shared_slices/InterestPoint'
 import {
   coordinatesAreModified,
   coordinatesOrTypeAreModified,

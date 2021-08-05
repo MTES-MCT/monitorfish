@@ -19,7 +19,7 @@ const MapAttributionsBox = () => {
 }
 
 const Wrapper = styled.div`
-  bottom: .5em;
+  bottom: 8px;
   left: .5em;
   max-width: calc(100% - 1.3em);  
   background: none;
@@ -37,8 +37,6 @@ const Button = styled.button`
 
 const ButtonText = styled.span`
   font-size: 13px;
-  vertical-align: -moz-middle-with-baseline;
-  vertical-align: -webkit-baseline-middle;
 `
 
 const List = styled.ul`

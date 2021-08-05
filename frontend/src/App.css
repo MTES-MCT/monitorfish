@@ -149,7 +149,7 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
     font-size: 0.9em;
     text-decoration: none;
     text-align: center;
-    height: 1.275em;
+    height: 18px;
     background-color: #3B4559;
     border: none;
     border-radius: 2px;

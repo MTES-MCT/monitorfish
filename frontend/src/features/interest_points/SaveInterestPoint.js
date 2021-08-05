@@ -13,7 +13,7 @@ import { ReactComponent as VesselSVG } from '../icons/Label_segment_de_flotte.sv
 import { ReactComponent as OtherSVG } from '../icons/Point_interet_autre.svg'
 import SetCoordinates from '../coordinates/SetCoordinates'
 import { useDispatch, useSelector } from 'react-redux'
-import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/reducers/InterestPoint'
+import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/shared_slices/InterestPoint'
 import { getCoordinates } from '../../utils'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import { transform } from 'ol/proj'
@@ -222,36 +222,36 @@ const RadioWrapper = styled.div`
 `
 
 const CancelButton = styled.button`
-  border: 1px solid ${COLORS.grayDarkerThree};
+  border: 1px solid ${COLORS.lightGray};
   width: 130px;
   padding: 5px 12px;
   margin: 15px 0 0 15px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.gunMetal};
   
   :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.grayDarker};
+    border: 1px solid ${COLORS.lightGray};
+    color: ${COLORS.slateGray};
   }
 `
 
 const OkButton = styled.button`
-  background: ${COLORS.grayDarkerThree};
+  background: ${COLORS.charcoal};
   width: 130px;
   padding: 5px 12px;
   margin: 15px 0 0;
   font-size: 13px;
-  color: ${COLORS.grayBackground};
+  color: ${COLORS.gainsboro};
   
   :hover, :focus {
-    background: ${COLORS.grayDarkerThree};
+    background: ${COLORS.charcoal};
   }
 `
 
 const Body = styled.div`
   text-align: left;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   margin: 10px 15px;
   
   p {
@@ -276,7 +276,7 @@ const Body = styled.div`
   
   input {
     margin-top: 7px;
-    color: ${COLORS.grayDarkerThree};
+    color: ${COLORS.gunMetal};
     background: ${COLORS.grayLighter};
     border: none;
     height: 27px;
@@ -284,7 +284,7 @@ const Body = styled.div`
   }
   
   textarea {
-    color: ${COLORS.grayDarkerThree};
+    color: ${COLORS.gunMetal};
     margin-top: 7px;
     background: ${COLORS.grayLighter};
     border: none;
@@ -297,8 +297,8 @@ const Body = styled.div`
 `
 
 const Header = styled.div`
-  background: ${COLORS.textGray};
-  color: ${COLORS.grayBackground};
+  background: ${COLORS.charcoal};
+  color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;

@@ -26,6 +26,7 @@ services:
       - ENV_DB_URL=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
       - SPRING_PROFILES_ACTIVE=prod
       - HOST_IP=127.0.0.1
+      - REACT_APP_GEOSERVER_LOCAL_URL=0.0.0.0:8081
     ports:
       - 8880:8880
       - 8000:8000

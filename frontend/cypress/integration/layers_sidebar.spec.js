@@ -34,7 +34,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
   })
 
-  it.only('A regulation metadata Should be opened', () => {
+  it('A regulation metadata Should be opened', () => {
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
 
@@ -49,5 +49,18 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues remorquées par bateau (DRB)')
+  })
+
+  it('An advanced search Should filter the search result', () => {
+    // When
+    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+
+    cy.get('*[data-cy^="regulatory-search-input"]').type('Cotentin')
+    cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
+
+    cy.get('*[data-cy^="regulatory-layers-advanced-search-zone"]').type('MEMN')
+    cy.get('*[data-cy^="regulatory-layers-advanced-search-gears"]').type('DRB')
+    cy.get('*[data-cy^="regulatory-layers-advanced-search-species"]').type('VEV')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
   })
 })

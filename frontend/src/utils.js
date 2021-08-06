@@ -325,7 +325,7 @@ const accentsMap = {
 }
 
 export const removeAccents = text => Object.keys(accentsMap)
-  .reduce((acc, cur) => acc.replace(new RegExp(accentsMap[cur], 'g'), cur), text)
+  .reduce((acc, cur) => acc.toString().replace(new RegExp(accentsMap[cur], 'g'), cur), text)
 
 export function getTextForSearch (text) {
   return removeAccents(text)

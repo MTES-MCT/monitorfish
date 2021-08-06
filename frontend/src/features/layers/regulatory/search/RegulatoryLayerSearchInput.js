@@ -105,7 +105,10 @@ const RegulatoryLayerSearchInput = props => {
           type="text"
           value={nameSearchText}
           onChange={e => setNameSearchText(e.target.value)}/>
-        <AdvancedSearch onClick={() => dispatch(setAdvancedSearchIsOpen(!advancedSearchIsOpen))}>
+        <AdvancedSearch
+          data-cy={'regulatory-layers-advanced-search'}
+          onClick={() => dispatch(setAdvancedSearchIsOpen(!advancedSearchIsOpen))}
+        >
           {
             advancedSearchIsOpen
               ? '-'
@@ -115,24 +118,28 @@ const RegulatoryLayerSearchInput = props => {
       </PrincipalSearchInput>
       <AdvancedSearchBox advancedSearchIsOpen={advancedSearchIsOpen}>
         <AdvancedSearchInput
+          data-cy={'regulatory-layers-advanced-search-zone'}
           placeholder={'Zone (ex. Med, Bretagne, mer Celtique…)'}
           type="text"
           value={placeSearchText}
           onChange={e => setPlaceSearchText(e.target.value)}
         />
         <AdvancedSearchInput
+          data-cy={'regulatory-layers-advanced-search-gears'}
           placeholder={'Engins (ex. chaluts, casiers, FPO, GNS…)'}
           type="text"
           value={gearSearchText}
           onChange={e => setGearSearchText(e.target.value)}
         />
         <AdvancedSearchInput
+          data-cy={'regulatory-layers-advanced-search-species'}
           placeholder={'Espèces (ex. merlu, coque, SCE, PIL...)'}
           type="text"
           value={speciesSearchText}
           onChange={e => setSpeciesSearchText(e.target.value)}
         />
         <AdvancedSearchInput
+          data-cy={'regulatory-layers-advanced-search-reg'}
           placeholder={'Référence reg. (ex. 58/2007, 171/2020, 1241...)'}
           type="text"
           value={regulatoryReferencesSearchText}

@@ -109,7 +109,7 @@ jobs:
       run: make docker-compose-up
 
     - name: Curl stubbed geoserver
-      run: curl http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulatory_areas&outputFormat=application/json&CQL_FILTER=layer_name=%27Ouest_Cotentin_Bivalves%27%20AND%20zones=%27Praires_Ouest_cotentin%27
+      run: curl "http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulatory_areas&outputFormat=application/json&CQL_FILTER=layer_name=%27Ouest_Cotentin_Bivalves%27%20AND%20zones=%27Praires_Ouest_cotentin%27"
 
     - name: Run Cypress tests
       uses: cypress-io/github-action@v2

@@ -119,7 +119,7 @@ RUN chown monitorfish /home/monitorfish/env.sh
 RUN chmod +x /home/monitorfish/env.sh
 USER monitorfish
 
-ENV REACT_APP_GEOSERVER_LOCAL_URL= 
+ENV REACT_APP_GEOSERVER_LOCAL_URL=
 
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 

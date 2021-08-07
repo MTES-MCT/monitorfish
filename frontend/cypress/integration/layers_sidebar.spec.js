@@ -6,6 +6,11 @@ context('LayersSidebar', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
+
+    cy.window().then((win) => {
+       console.log(win.env)
+    })
+    
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
   })

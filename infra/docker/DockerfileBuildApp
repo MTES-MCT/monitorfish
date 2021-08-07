@@ -114,6 +114,8 @@ ENV SPRING_PROFILES_ACTIVE ${ENV_PROFILE}
 
 RUN echo ${ENV_PROFILE}
 
+RUN chmod +x /home/monitorfish/env.sh
+
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}-exec.jar"

@@ -10,7 +10,7 @@ context('LayersSidebar', () => {
     cy.window().then((win) => {
        console.log(win.env)
     })
-    
+
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
   })

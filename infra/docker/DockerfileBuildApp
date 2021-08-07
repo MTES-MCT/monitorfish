@@ -119,6 +119,8 @@ RUN chown monitorfish /home/monitorfish/env.sh
 RUN chmod +x /home/monitorfish/env.sh
 USER monitorfish
 
+ENV REACT_APP_GEOSERVER_LOCAL_URL
+
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}-exec.jar"

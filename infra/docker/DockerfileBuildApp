@@ -114,7 +114,10 @@ ENV SPRING_PROFILES_ACTIVE ${ENV_PROFILE}
 
 RUN echo ${ENV_PROFILE}
 
+USER root
+chown monitorfish /home/monitorfish/env.sh
 RUN chmod +x /home/monitorfish/env.sh
+USER monitorfish
 
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 

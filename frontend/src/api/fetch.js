@@ -6,7 +6,6 @@ const API = null // eslint-disable-line
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 
-
 const OK = 200
 const NOT_FOUND = 404
 const ACCEPTED = 202
@@ -30,6 +29,10 @@ function throwIrretrievableAdministrativeZoneError (e, type) {
 function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
   return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`)
 }
+
+const GEOSERVER_URL = window.env.REACT_APP_GEOSERVER_LOCAL_URL
+  ? window.env.REACT_APP_GEOSERVER_LOCAL_URL
+  : process.env.REACT_APP_GEOSERVER_LOCAL_URL
 
 /**
  * Get all vessels last positions
@@ -124,7 +127,7 @@ function searchVesselsFromAPI (searched) {
 }
 
 function getAllRegulatoryLayersFromAPI () {
-  return fetch(`${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
+  return fetch(`${GEOSERVER_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
     `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`)
     .then(response => {
       if (response.status === OK) {
@@ -150,7 +153,7 @@ function getAllRegulatoryLayersFromAPI () {
  */
 function getAllGeometryWithoutProperty () {
   const filter = 'references_reglementaires IS NULL AND zones IS NULL AND region IS NULL AND facade IS NULL AND law_type IS NULL AND layer_name IS NULL'
-  const REQUEST = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
+  const REQUEST = `${GEOSERVER_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
   `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
     .then(response => {
@@ -221,7 +224,7 @@ function getAdministrativeZoneURL (type, extent, subZone) {
   }
 
   return (
-    `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
+    `${GEOSERVER_URL}/geoserver/wfs?service=WFS&` +
     `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
     `outputFormat=application/json&srsname=${WSG84_PROJECTION}` + extentFilter + subZoneFilter
   )
@@ -260,7 +263,7 @@ function getRegulatoryZoneURL (type, regulatoryZone) {
 
   const filter = `layer_name='${regulatoryZone.topic.replace(/'/g, '\'\'')}' AND zones='${regulatoryZone.zone.replace(/'/g, '\'\'')}'`
   return (
-    `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS` +
+    `${GEOSERVER_URL}/geoserver/wfs?service=WFS` +
     `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
     '&outputFormat=application/json&CQL_FILTER=' +
     filter.replace(/'/g, '%27').replace(/ /g, '%20')
@@ -373,12 +376,12 @@ function getAdministrativeSubZonesFromAPI (type) {
   if (type === Layers.FAO.code) {
     const filter = 'f_level=\'DIVISION\''
 
-    query = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
+    query = `${GEOSERVER_URL}/geoserver/wfs?service=WFS&` +
       `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
       `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
       filter.replace(/'/g, '%27').replace(/ /g, '%20')
   } else {
-    query = `${process.env.REACT_APP_GEOSERVER_LOCAL_URL}/geoserver/wfs?service=WFS&` +
+    query = `${GEOSERVER_URL}/geoserver/wfs?service=WFS&` +
       `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
       `outputFormat=application/json&srsname=${WSG84_PROJECTION}`
   }

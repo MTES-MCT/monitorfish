@@ -100,17 +100,20 @@ USER monitorfish
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
 COPY --from=buildFront /tmp/frontend/build /home/monitorfish/public/
+COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
 
 # Set up environement variable that define the root folder use for serving static files
-# It must point to the front (angular) files
+# It must point to the front (React) files
 ENV STATIC_FILES_PATH /home/monitorfish/public
 
 # Default profile is for local. Can be overiden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
 ENV SPRING_PROFILES_ACTIVE ${ENV_PROFILE}
 
 RUN echo ${ENV_PROFILE}
+
+ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}-exec.jar"

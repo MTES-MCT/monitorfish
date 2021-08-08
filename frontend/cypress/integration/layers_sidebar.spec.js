@@ -13,12 +13,6 @@ context('LayersSidebar', () => {
       }
     )
 
-    cy.request('GET', 'http://0.0.0.0:8081').then(
-      (response) => {
-        cy.log(response.body)
-      }
-    )
-
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
   })

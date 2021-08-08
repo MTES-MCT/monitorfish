@@ -7,9 +7,23 @@ context('LayersSidebar', () => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
 
-    cy.window().then((win) => {
-       console.log(win.env)
-    })
+    cy.request('GET', 'http://geoserver:8081').then(
+      (response) => {
+        cy.log(response.body)
+      }
+    )
+
+    cy.request('GET', 'http://geoserver:8081/geoserver').then(
+      (response) => {
+        cy.log(response.body)
+      }
+    )
+
+    cy.request('GET', 'http://0.0.0.0:8081').then(
+      (response) => {
+        cy.log(response.body)
+      }
+    )
 
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')

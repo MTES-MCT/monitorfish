@@ -7,18 +7,6 @@ context('LayersSidebar', () => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
 
-    cy.request('GET', 'http://geoserver:8081').then(
-      (response) => {
-        cy.log(response.body)
-      }
-    )
-
-    cy.request('GET', 'http://geoserver:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulatory_areas&outputFormat=application/json&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region').then(
-      (response) => {
-        cy.log(response.body)
-      }
-    )
-
     cy.request('GET', 'http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulatory_areas&outputFormat=application/json&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region').then(
       (response) => {
         cy.log(response.body)

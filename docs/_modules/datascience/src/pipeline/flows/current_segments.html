@@ -87,11 +87,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -219,7 +221,16 @@
 <div class="viewcode-block" id="compute_current_segments"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/current_segments/index.html#datascience.src.pipeline.flows.current_segments.compute_current_segments">[docs]</a><span class="k">def</span> <span class="nf">compute_current_segments</span><span class="p">(</span><span class="n">catches</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
 
     <span class="n">catches_</span> <span class="o">=</span> <span class="n">catches</span><span class="p">[[</span><span class="s2">&quot;cfr&quot;</span><span class="p">,</span> <span class="s2">&quot;gear&quot;</span><span class="p">,</span> <span class="s2">&quot;fao_area&quot;</span><span class="p">,</span> <span class="s2">&quot;species&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">]]</span>
-    <span class="n">segments_</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[[</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="s2">&quot;gear&quot;</span><span class="p">,</span> <span class="s2">&quot;fao_area&quot;</span><span class="p">,</span> <span class="s2">&quot;species&quot;</span><span class="p">]]</span>
+    <span class="n">segments_</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;segment&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gear&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fao_area&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;species&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;risk_factor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;control_priority_level&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">]</span>
 
     <span class="c1"># Merge catches and segments on gear and species</span>
     <span class="n">current_segments_gear_species</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
@@ -284,13 +295,26 @@
     <span class="p">]</span>
 
     <span class="c1"># Finally, aggregate by vessel</span>
-    <span class="n">current_segments</span> <span class="o">=</span> <span class="n">current_segments</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;cfr&quot;</span><span class="p">)[[</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="s2">&quot;unique&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">}</span>
+    <span class="n">current_segments</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">current_segments</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;cfr&quot;</span><span class="p">)[</span>
+            <span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;risk_factor&quot;</span><span class="p">,</span> <span class="s2">&quot;control_priority_level&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="s2">&quot;unique&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;risk_factor&quot;</span><span class="p">:</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;control_priority_level&quot;</span><span class="p">:</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="s2">&quot;segments&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;total_weight_onboard&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">current_segments</span> <span class="o">=</span> <span class="n">current_segments</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="s2">&quot;segments&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;total_weight_onboard&quot;</span><span class="p">}</span>
-    <span class="p">)</span>
     <span class="k">return</span> <span class="n">current_segments</span></div>
 
 
@@ -324,7 +348,9 @@
     <span class="c1"># Join departure, catches and segments information into a single table with 1 line</span>
     <span class="c1"># by vessel</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">last_ers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">species_onboard</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_segments</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">fillna</span><span class="p">({</span><span class="s2">&quot;total_weight_onboard&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;total_weight_onboard&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;risk_factor&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;control_priority_level&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">res</span></div>
 

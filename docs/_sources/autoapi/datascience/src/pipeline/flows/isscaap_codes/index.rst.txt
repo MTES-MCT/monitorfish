@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.flows.isscaap_codes`
-===================================================
+:py:mod:`datascience.src.pipeline.flows.isscaap_codes`
+======================================================
 
 .. py:module:: datascience.src.pipeline.flows.isscaap_codes
 
@@ -29,7 +29,7 @@ Attributes
    datascience.src.pipeline.flows.isscaap_codes.csv_filepath
 
 
-.. function:: join_values_by_column(df: pandas.DataFrame, join_string: str = ' ') -> list
+.. py:function:: join_values_by_column(df: pandas.DataFrame, join_string: str = ' ') -> list
 
    Takes a `pandas.DataFrame` and returns a list whose length is the same as the
    number of columns in the input DataFrame and whose values are made of the values
@@ -44,19 +44,19 @@ Attributes
    :returns: list
 
 
-.. function:: extract_isscaap_codes_pdf() -> io.BytesIO
+.. py:function:: extract_isscaap_codes_pdf() -> io.BytesIO
 
 
-.. function:: parse_pdf(isscaap_codes_pdf: io.BytesIO)
+.. py:function:: parse_pdf(isscaap_codes_pdf: io.BytesIO)
 
 
-.. function:: transform_isscaap_codes(isscaap_codes: pandas.DataFrame) -> pandas.DataFrame
+.. py:function:: transform_isscaap_codes(isscaap_codes: pandas.DataFrame) -> pandas.DataFrame
 
 
-.. function:: export_isscaap_codes(isscaap_codes: pandas.DataFrame, csv_filepath: str) -> None
+.. py:function:: export_isscaap_codes(isscaap_codes: pandas.DataFrame, csv_filepath: str) -> None
 
 
-.. data:: csv_filepath
+.. py:data:: csv_filepath
    
 
    

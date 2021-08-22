@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.flows.ers`
-=========================================
+:py:mod:`datascience.src.pipeline.flows.ers`
+============================================
 
 .. py:module:: datascience.src.pipeline.flows.ers
 
@@ -34,27 +34,27 @@ Attributes
    datascience.src.pipeline.flows.ers.zipfiles
 
 
-.. data:: RECEIVED_DIRECTORY
+.. py:data:: RECEIVED_DIRECTORY
    
 
    
 
-.. data:: TREATED_DIRECTORY
+.. py:data:: TREATED_DIRECTORY
    
 
    
 
-.. data:: NON_TREATED_DIRECTORY
+.. py:data:: NON_TREATED_DIRECTORY
    
 
    
 
-.. data:: ERROR_DIRECTORY
+.. py:data:: ERROR_DIRECTORY
    
 
    
 
-.. function:: get_message_type(zipfile_name: str) -> str
+.. py:function:: get_message_type(zipfile_name: str) -> str
 
    For a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
    extract the message type, which may be one of :
@@ -64,7 +64,7 @@ Attributes
    - UN (a set of FLUX messages)
 
 
-.. function:: extract_zipfiles(input_dir: pathlib.Path, treated_dir: pathlib.Path, non_treated_dir: pathlib.Path, error_dir: pathlib.Path) -> List[dict]
+.. py:function:: extract_zipfiles(input_dir: pathlib.Path, treated_dir: pathlib.Path, non_treated_dir: pathlib.Path, error_dir: pathlib.Path) -> List[dict]
 
    Scans ``input_dir``, in which ers zipfiles are expected to be arranged in a
    hierarchy folders like : year / month / zipfiles. Yields found zipfiles
@@ -78,16 +78,16 @@ Attributes
    - ``error_directory`` if an error occurs during the treatment of messages.
 
 
-.. function:: extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]
+.. py:function:: extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]
 
 
-.. function:: parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]
+.. py:function:: parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]
 
 
-.. function:: clean(zipfile: Union[None, dict]) -> Union[None, dict]
+.. py:function:: clean(zipfile: Union[None, dict]) -> Union[None, dict]
 
 
-.. function:: load_ers(cleaned_data: List[dict])
+.. py:function:: load_ers(cleaned_data: List[dict])
 
    Loads ERS data into public.ers and public.ers_messages tables.
 
@@ -95,7 +95,7 @@ Attributes
    :type cleaned_data: list
 
 
-.. data:: zipfiles
+.. py:data:: zipfiles
    
 
    

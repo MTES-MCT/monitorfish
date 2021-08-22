@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.generic_tasks`
-=============================================
+:py:mod:`datascience.src.pipeline.generic_tasks`
+================================================
 
 .. py:module:: datascience.src.pipeline.generic_tasks
 
@@ -18,7 +18,7 @@ Functions
 
 
 
-.. function:: extract(db_name: str, query_filepath: Union[pathlib.Path, str], dtypes: Union[None, dict] = None, parse_dates: Union[list, dict, None] = None) -> pandas.DataFrame
+.. py:function:: extract(db_name: str, query_filepath: Union[pathlib.Path, str], dtypes: Union[None, dict] = None, parse_dates: Union[list, dict, None] = None, params=None) -> pandas.DataFrame
 
    Run SQL query against the indicated database and return the result as a
    `pandas.DataFrame`.
@@ -49,6 +49,6 @@ Functions
    :rtype: pd.DataFrame
 
 
-.. function:: load(df: pandas.DataFrame, table_name: str, schema: str, db_name: str, logger: Union[None, logging.Logger], delete_before_insert: bool = False, pg_array_columns: Union[None, list] = None, handle_array_conversion_errors: bool = True, value_on_array_conversion_error='{}', jsonb_columns: Union[None, list] = None)
+.. py:function:: load(df: pandas.DataFrame, table_name: str, schema: str, db_name: str, logger: Union[None, logging.Logger], delete_before_insert: bool = False, pg_array_columns: Union[None, list] = None, handle_array_conversion_errors: bool = True, value_on_array_conversion_error='{}', jsonb_columns: Union[None, list] = None)
 
 

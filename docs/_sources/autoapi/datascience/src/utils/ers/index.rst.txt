@@ -1,5 +1,5 @@
-:mod:`datascience.src.utils.ers`
-================================
+:py:mod:`datascience.src.utils.ers`
+===================================
 
 .. py:module:: datascience.src.utils.ers
 
@@ -34,12 +34,12 @@ Attributes
    datascience.src.utils.ers.NS
 
 
-.. data:: NS
+.. py:data:: NS
    
 
    
 
-.. function:: remove_namespace(tag: str)
+.. py:function:: remove_namespace(tag: str)
 
    Removes xmlns from tag string.
 
@@ -50,33 +50,33 @@ Attributes
    "OPS"
 
 
-.. function:: xml_tag_structure_func_factory(max_depth, max_nb_children)
+.. py:function:: xml_tag_structure_func_factory(max_depth, max_nb_children)
 
 
-.. function:: has_tag(tag)
+.. py:function:: has_tag(tag)
 
 
-.. function:: get_elements_by_ers_tag(xml_element, ers_tag)
+.. py:function:: get_elements_by_ers_tag(xml_element, ers_tag)
 
 
-.. function:: get_root_tag(xml_element)
+.. py:function:: get_root_tag(xml_element)
 
 
-.. function:: get_first_child(xml_element, assert_child_single=True)
+.. py:function:: get_first_child(xml_element, assert_child_single=True)
 
 
-.. function:: make_datetime(date: str, time: Union[str, None] = None)
+.. py:function:: make_datetime(date: str, time: Union[str, None] = None)
 
    Takes date a "2020-12-24" string and, optionnally, a time "16:49" string,
    Returns a datetime object
 
 
-.. function:: make_datetime_json_serializable(date: str, time: Union[str, None] = None)
+.. py:function:: make_datetime_json_serializable(date: str, time: Union[str, None] = None)
 
 
-.. function:: try_float(s: str)
+.. py:function:: try_float(s: str)
 
 
-.. function:: tagged_children(el)
+.. py:function:: tagged_children(el)
 
 

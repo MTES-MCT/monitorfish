@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.parsers`
-=======================================
+:py:mod:`datascience.src.pipeline.parsers`
+==========================================
 
 .. py:module:: datascience.src.pipeline.parsers
 

@@ -87,11 +87,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -166,19 +168,13 @@
 <span class="kn">import</span> <span class="nn">prefect</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">task</span>
 
+<span class="kn">from</span> <span class="nn">src.pipeline.flows.risk_factor</span> <span class="kn">import</span> <span class="n">default_risk_factors</span>
 <span class="kn">from</span> <span class="nn">src.pipeline.generic_tasks</span> <span class="kn">import</span> <span class="n">extract</span><span class="p">,</span> <span class="n">load</span>
 <span class="kn">from</span> <span class="nn">src.pipeline.helpers.spatial</span> <span class="kn">import</span> <span class="n">estimate_current_position</span>
 <span class="kn">from</span> <span class="nn">src.pipeline.processing</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_first_non_null_column_name</span><span class="p">,</span>
     <span class="n">join_on_multiple_keys</span><span class="p">,</span>
 <span class="p">)</span>
-
-
-<span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="extract_current_segments"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/last_positions/index.html#datascience.src.pipeline.flows.last_positions.extract_current_segments">[docs]</a><span class="k">def</span> <span class="nf">extract_current_segments</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">extract</span><span class="p">(</span>
-        <span class="n">db_name</span><span class="o">=</span><span class="s2">&quot;monitorfish_remote&quot;</span><span class="p">,</span> <span class="n">query_filepath</span><span class="o">=</span><span class="s2">&quot;monitorfish/current_segments.sql&quot;</span></div>
-    <span class="p">)</span>
 
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -191,11 +187,11 @@
 
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="extract_last_controls"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/last_positions/index.html#datascience.src.pipeline.flows.last_positions.extract_last_controls">[docs]</a><span class="k">def</span> <span class="nf">extract_last_controls</span><span class="p">():</span>
+<div class="viewcode-block" id="extract_risk_factors"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/last_positions/index.html#datascience.src.pipeline.flows.last_positions.extract_risk_factors">[docs]</a><span class="k">def</span> <span class="nf">extract_risk_factors</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">extract</span><span class="p">(</span>
         <span class="n">db_name</span><span class="o">=</span><span class="s2">&quot;monitorfish_remote&quot;</span><span class="p">,</span>
-        <span class="n">query_filepath</span><span class="o">=</span><span class="s2">&quot;monitorfish/last_controls.sql&quot;</span><span class="p">,</span>
-        <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;last_control_datetime_utc&quot;</span><span class="p">],</span></div>
+        <span class="n">query_filepath</span><span class="o">=</span><span class="s2">&quot;monitorfish/risk_factors.sql&quot;</span><span class="p">,</span>
+        <span class="n">dtypes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;emission_period&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span></div>
     <span class="p">)</span>
 
 
@@ -230,9 +226,7 @@
 
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="merge"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/last_positions/index.html#datascience.src.pipeline.flows.last_positions.merge">[docs]</a><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">last_positions</span><span class="p">,</span> <span class="n">current_segments</span><span class="p">,</span> <span class="n">last_controls</span><span class="p">):</span>
-    <span class="n">last_positions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">last_positions</span><span class="p">,</span> <span class="n">current_segments</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;cfr&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
-
+<div class="viewcode-block" id="merge"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/last_positions/index.html#datascience.src.pipeline.flows.last_positions.merge">[docs]</a><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">last_positions</span><span class="p">,</span> <span class="n">risk_factors</span><span class="p">):</span>
     <span class="n">vessel_identifier_labels</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;cfr&quot;</span><span class="p">:</span> <span class="s2">&quot;INTERNAL_REFERENCE_NUMBER&quot;</span><span class="p">,</span>
         <span class="s2">&quot;ircs&quot;</span><span class="p">:</span> <span class="s2">&quot;IRCS&quot;</span><span class="p">,</span>
@@ -246,12 +240,14 @@
 
     <span class="n">last_positions</span> <span class="o">=</span> <span class="n">join_on_multiple_keys</span><span class="p">(</span>
         <span class="n">last_positions</span><span class="p">,</span>
-        <span class="n">last_controls</span><span class="p">,</span>
+        <span class="n">risk_factors</span><span class="p">,</span>
         <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cfr&quot;</span><span class="p">,</span> <span class="s2">&quot;ircs&quot;</span><span class="p">,</span> <span class="s2">&quot;external_immatriculation&quot;</span><span class="p">],</span>
         <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">last_positions</span> <span class="o">=</span> <span class="n">last_positions</span><span class="o">.</span><span class="n">fillna</span><span class="p">({</span><span class="s2">&quot;total_weight_onboard&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+    <span class="n">last_positions</span> <span class="o">=</span> <span class="n">last_positions</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+        <span class="p">{</span><span class="o">**</span><span class="n">default_risk_factors</span><span class="p">,</span> <span class="s2">&quot;total_weight_onboard&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
+    <span class="p">)</span>
 
     <span class="n">last_positions</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;trip_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_positions</span><span class="o">.</span><span class="n">trip_number</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">na_action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span>
@@ -284,11 +280,10 @@
 
 
 <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;Last positions&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
-<div class="viewcode-block" id="current_segments"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/last_positions/index.html#datascience.src.pipeline.flows.last_positions.current_segments">[docs]</a>    <span class="n">current_segments</span> <span class="o">=</span> <span class="n">extract_current_segments</span><span class="p">()</span></div>
-    <span class="n">last_positions</span> <span class="o">=</span> <span class="n">extract_last_positions</span><span class="p">()</span>
+<div class="viewcode-block" id="last_positions"><a class="viewcode-back" href="../../../../../autoapi/datascience/src/pipeline/flows/last_positions/index.html#datascience.src.pipeline.flows.last_positions.last_positions">[docs]</a>    <span class="n">last_positions</span> <span class="o">=</span> <span class="n">extract_last_positions</span><span class="p">()</span></div>
+    <span class="n">risk_factors</span> <span class="o">=</span> <span class="n">extract_risk_factors</span><span class="p">()</span>
     <span class="n">last_positions</span> <span class="o">=</span> <span class="n">estimate_current_positions</span><span class="p">(</span><span class="n">last_positions</span><span class="p">)</span>
-    <span class="n">last_controls</span> <span class="o">=</span> <span class="n">extract_last_controls</span><span class="p">()</span>
-    <span class="n">last_positions</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">last_positions</span><span class="p">,</span> <span class="n">current_segments</span><span class="p">,</span> <span class="n">last_controls</span><span class="p">)</span>
+    <span class="n">last_positions</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">last_positions</span><span class="p">,</span> <span class="n">risk_factors</span><span class="p">)</span>
     <span class="n">load_last_positions</span><span class="p">(</span><span class="n">last_positions</span><span class="p">)</span>
 </pre></div>
 

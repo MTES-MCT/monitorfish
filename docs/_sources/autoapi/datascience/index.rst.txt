@@ -1,5 +1,5 @@
-:mod:`datascience`
-==================
+:py:mod:`datascience`
+=====================
 
 .. py:module:: datascience
 

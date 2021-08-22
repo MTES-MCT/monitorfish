@@ -1,5 +1,5 @@
-:mod:`datascience.src.read_query`
-=================================
+:py:mod:`datascience.src.read_query`
+====================================
 
 .. py:module:: datascience.src.read_query
 
@@ -19,13 +19,14 @@ Functions
 
 
 
-.. function:: read_saved_query(db: str, sql_filepath: Union[str, pathlib.Path], parse_dates: Union[list, dict, None] = None, **kwargs) -> pandas.DataFrame
+.. py:function:: read_saved_query(db: str, sql_filepath: Union[str, pathlib.Path], parse_dates: Union[list, dict, None] = None, params=None, **kwargs) -> pandas.DataFrame
 
    Run saved SQLquery on a database. Supported databases :
    - 'ocan' : OCAN database
    - 'fmc': FMC database
    - 'monitorfish_remote': Monitorfish database
    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+   - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
    Database credentials must be present in the environement.
 
@@ -43,26 +44,28 @@ Functions
                        - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
                        to the keyword arguments of :func:`pandas.to_datetime`
    :type parse_dates: Union[list, dict, None], optional
+   :param params: dict of query parameters
    :param kwargs: passed to pd.read_sql
 
    :returns: Query results
    :rtype: pd.DataFrame
 
 
-.. function:: read_query(db: str, query: str, chunksize: Union[None, str] = None, **kwargs) -> pandas.DataFrame
+.. py:function:: read_query(db: str, query, chunksize: Union[None, str] = None, params=None, **kwargs) -> pandas.DataFrame
 
    Run SQLquery on a database. Supported databases :
    - 'ocan' : OCAN database
    - 'fmc': FMC database
    - 'monitorfish_remote': Monitorfish database
    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+   - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
    Database credentials must be present in the environement.
 
    :param db: Database name. Possible values :
               'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
    :type db: str
-   :param query: Query string
+   :param query: Query string or SQLAlchemy Selectable
    :type query: str
    :param kwargs: passed to pd.read_sql
 
@@ -70,13 +73,14 @@ Functions
    :rtype: pd.DataFrame
 
 
-.. function:: read_table(db: str, schema: str, table_name: str)
+.. py:function:: read_table(db: str, schema: str, table_name: str)
 
    Loads database table into pandas Dataframe. Supported databases :
    - 'ocan' : OCAN database
    - 'fmc': FMC database
    - 'monitorfish_remote': Monitorfish database
    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+   - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
    :param db: Database name. Possible values :
               'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'

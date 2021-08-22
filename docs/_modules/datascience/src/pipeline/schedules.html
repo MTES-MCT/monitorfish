@@ -87,11 +87,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -159,9 +161,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for datascience.src.pipeline.schedules</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
-
-<span class="kn">from</span> <span class="nn">prefect.schedules</span> <span class="kn">import</span> <span class="n">CronSchedule</span><span class="p">,</span> <span class="n">IntervalSchedule</span>
+<span></span><span class="kn">from</span> <span class="nn">prefect.schedules</span> <span class="kn">import</span> <span class="n">CronSchedule</span>
 
 <span class="kn">from</span> <span class="nn">src.pipeline.flows</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">control_anteriority</span><span class="p">,</span>
@@ -180,13 +180,16 @@
 <span class="p">)</span>
 
 <span class="c1">################################ Define flow schedules ################################</span>
-<span class="n">control_anteriority</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">IntervalSchedule</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">current_segments</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">IntervalSchedule</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">ers</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">IntervalSchedule</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">fishing_gear_codes</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;0 3 * * *&quot;</span><span class="p">)</span>
-<span class="n">last_positions</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">IntervalSchedule</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">species</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;0 4 * * *&quot;</span><span class="p">)</span>
-<div class="viewcode-block" id="schedule"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/schedules/index.html#datascience.src.pipeline.schedules.schedule">[docs]</a><span class="n">vessels</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;0 2 * * *&quot;</span><span class="p">)</span></div>
+<span class="n">control_anteriority</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;5 * * * *&quot;</span><span class="p">)</span>
+<span class="n">controllers</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;0 8 * * *&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="flow"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/schedules/index.html#datascience.src.pipeline.schedules.flow">[docs]</a><span class="n">controls</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;4 * * * *&quot;</span><span class="p">)</span></div>
+<span class="n">current_segments</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;2,12,22,32,42,52 * * * *&quot;</span><span class="p">)</span>
+<span class="n">ers</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;* * * * *&quot;</span><span class="p">)</span>
+<span class="n">fishing_gear_codes</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;0 8 * * *&quot;</span><span class="p">)</span>
+<span class="n">infractions</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;1 8 * * *&quot;</span><span class="p">)</span>
+<span class="n">last_positions</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;* * * * *&quot;</span><span class="p">)</span>
+<span class="n">species</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;0 8 * * *&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="schedule"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/schedules/index.html#datascience.src.pipeline.schedules.schedule">[docs]</a><span class="n">vessels</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">CronSchedule</span><span class="p">(</span><span class="s2">&quot;5 8 * * *&quot;</span><span class="p">)</span></div>
 
 <span class="c1">###################### List flows to register with prefect server #####################</span>
 <div class="viewcode-block" id="flows_to_register"><a class="viewcode-back" href="../../../../autoapi/datascience/src/pipeline/schedules/index.html#datascience.src.pipeline.schedules.flows_to_register">[docs]</a><span class="n">flows_to_register</span> <span class="o">=</span> <span class="p">[</span>

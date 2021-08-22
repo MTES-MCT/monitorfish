@@ -3,14 +3,26 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. include:: ../README.rst
+===========
+Monitorfish
+===========
+   
+.. include:: overview.rst
+
+
+----
+
+Table of contents
+=================
 
 .. toctree::
    :maxdepth: 1
 
+   feature-presentation
    architecture
    data-sources
    flows
    containerization
    deployment
+   contributing
    reference

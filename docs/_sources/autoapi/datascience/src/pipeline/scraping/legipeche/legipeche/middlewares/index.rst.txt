@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.middlewares`
-========================================================================
+:py:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.middlewares`
+===========================================================================
 
 .. py:module:: datascience.src.pipeline.scraping.legipeche.legipeche.middlewares
 
@@ -18,44 +18,44 @@ Classes
 
 
 
-.. class:: LegipecheSpiderMiddleware
+.. py:class:: LegipecheSpiderMiddleware
 
-   .. method:: from_crawler(cls, crawler)
+   .. py:method:: from_crawler(cls, crawler)
       :classmethod:
 
 
-   .. method:: process_spider_input(self, response, spider)
+   .. py:method:: process_spider_input(self, response, spider)
 
 
-   .. method:: process_spider_output(self, response, result, spider)
+   .. py:method:: process_spider_output(self, response, result, spider)
 
 
-   .. method:: process_spider_exception(self, response, exception, spider)
+   .. py:method:: process_spider_exception(self, response, exception, spider)
 
 
-   .. method:: process_start_requests(self, start_requests, spider)
+   .. py:method:: process_start_requests(self, start_requests, spider)
 
 
-   .. method:: spider_opened(self, spider)
+   .. py:method:: spider_opened(self, spider)
 
 
 
-.. class:: LegipecheDownloaderMiddleware
+.. py:class:: LegipecheDownloaderMiddleware
 
-   .. method:: from_crawler(cls, crawler)
+   .. py:method:: from_crawler(cls, crawler)
       :classmethod:
 
 
-   .. method:: process_request(self, request, spider)
+   .. py:method:: process_request(self, request, spider)
 
 
-   .. method:: process_response(self, request, response, spider)
+   .. py:method:: process_response(self, request, response, spider)
 
 
-   .. method:: process_exception(self, request, exception, spider)
+   .. py:method:: process_exception(self, request, exception, spider)
 
 
-   .. method:: spider_opened(self, spider)
+   .. py:method:: spider_opened(self, spider)
 
 
 

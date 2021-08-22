@@ -1,5 +1,5 @@
-:mod:`datascience.src.utils`
-============================
+:py:mod:`datascience.src.utils`
+===============================
 
 .. py:module:: datascience.src.utils
 
@@ -10,9 +10,11 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   anonymization/index.rst
    database/index.rst
    ers/index.rst
    geocode/index.rst
    graphs/index.rst
+   update_test_data/index.rst
 
 

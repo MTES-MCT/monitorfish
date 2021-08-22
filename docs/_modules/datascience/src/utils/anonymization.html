@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>datascience.src.utils.anonymization &mdash; Monitorfish  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Monitorfish
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../feature-presentation.html">Feature presentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data-sources.html">External data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../flows.html">Flows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containerization.html">Containerization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Monitorfish</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>datascience.src.utils.anonymization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for datascience.src.utils.anonymization</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Faker</span>
+
+
+<div class="viewcode-block" id="DataAnonymizer"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer">[docs]</a><span class="k">class</span> <span class="nc">DataAnonymizer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataAnonymizer.__faker"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.__faker">[docs]</a>    <span class="n">__faker</span> <span class="o">=</span> <span class="n">Faker</span><span class="p">(</span><span class="s2">&quot;FR&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cfr&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cfr_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_fake_cfr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__external_immatriculation_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_fake_external_immatriculation</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mmsi_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_fake_mmsi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ircs_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_fake_ircs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__vessel_name_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_fake_vessel_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__registry_port_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_fake_port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__district_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_fake_port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__district_code_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_fake_district_code</span><span class="p">)</span>
+
+    <span class="c1"># CFR</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_cfr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_cfr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_cfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cfr_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_cfr_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_cfr_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_cfr_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_cfr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span></div>
+
+    <span class="c1"># External immatriculation</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_external_immatriculation"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_external_immatriculation">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_external_immatriculation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__external_immatriculation_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_external_immatriculation_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_external_immatriculation_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_external_immatriculation_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_external_immatriculation</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span></div>
+        <span class="p">)</span>
+
+    <span class="c1"># MMSI</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_mmsi"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_mmsi">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_mmsi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mmsi_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_mmsi_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_mmsi_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_mmsi_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_mmsi</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span></div>
+
+    <span class="c1"># IRCS</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_ircs"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_ircs">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_ircs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ircs_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_ircs_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_ircs_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_ircs_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_ircs</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span></div>
+
+    <span class="c1"># Vessel name</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_vessel_name"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_vessel_name">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_vessel_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vessel_name_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_vessel_name_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_vessel_name_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_vessel_name_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_vessel_name</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span></div>
+
+    <span class="c1"># Registry port</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_registry_port"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_registry_port">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_registry_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__registry_port_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_registry_port_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_registry_port_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_registry_port_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_registry_port</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span></div>
+
+    <span class="c1"># District</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_district"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_district">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_district</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__district_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_district_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_district_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_district_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_district</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span></div>
+
+    <span class="c1"># District code</span>
+<div class="viewcode-block" id="DataAnonymizer.anonymize_district_code"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_district_code">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_district_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__district_code_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="DataAnonymizer.anonymize_district_code_arr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.anonymize_district_code_arr">[docs]</a>    <span class="k">def</span> <span class="nf">anonymize_district_code_arr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">anonymize_district_code</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_random_upper_case_letters"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_random_upper_case_letters">[docs]</a>    <span class="k">def</span> <span class="nf">make_random_upper_case_letters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__faker</span><span class="o">.</span><span class="n">random_uppercase_letter</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_fake_cfr"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_fake_cfr">[docs]</a>    <span class="k">def</span> <span class="nf">make_fake_cfr</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">fake_cfr</span> <span class="o">=</span> <span class="s2">&quot;ABC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">999999</span><span class="p">))</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fake_cfr</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_fake_external_immatriculation"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_fake_external_immatriculation">[docs]</a>    <span class="k">def</span> <span class="nf">make_fake_external_immatriculation</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">fake_external_immatriculation</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">make_random_upper_case_letters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">999999</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fake_external_immatriculation</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_fake_mmsi"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_fake_mmsi">[docs]</a>    <span class="k">def</span> <span class="nf">make_fake_mmsi</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">fake_mmsi</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">999999999</span><span class="p">))</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fake_mmsi</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_fake_ircs"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_fake_ircs">[docs]</a>    <span class="k">def</span> <span class="nf">make_fake_ircs</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">n_letters</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__faker</span><span class="o">.</span><span class="n">random_element</span><span class="p">(</span><span class="n">elements</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">letters</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">make_random_upper_case_letters</span><span class="p">(</span><span class="n">n_letters</span><span class="p">)</span>
+        <span class="n">digits</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">n_letters</span> <span class="o">==</span> <span class="mi">4</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9999</span><span class="p">))</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">fake_ircs</span> <span class="o">=</span> <span class="n">letters</span> <span class="o">+</span> <span class="n">digits</span>
+        <span class="k">return</span> <span class="n">fake_ircs</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_fake_vessel_name"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_fake_vessel_name">[docs]</a>    <span class="k">def</span> <span class="nf">make_fake_vessel_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__faker</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_fake_port"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_fake_port">[docs]</a>    <span class="k">def</span> <span class="nf">make_fake_port</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__faker</span><span class="o">.</span><span class="n">city</span><span class="p">()</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataAnonymizer.make_fake_district_code"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/anonymization/index.html#datascience.src.utils.anonymization.DataAnonymizer.make_fake_district_code">[docs]</a>    <span class="k">def</span> <span class="nf">make_fake_district_code</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">make_random_upper_case_letters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Vincent Chéry.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

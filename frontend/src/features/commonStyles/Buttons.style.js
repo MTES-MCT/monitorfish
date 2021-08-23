@@ -103,15 +103,15 @@ position: relative;
 cursor: pointer;
 width: 35px;
 height: 35px;
-border: 1px solid ${COLORS.grayDarker};
+border: 1px solid ${COLORS.lightGray};
 border-radius: 2px;
-color: ${COLORS.grayDarker};
+color: ${COLORS.lightGray};
 margin-right: 8px;
 
 &:after {
   content: "";  
   display: block;
-  background-color: ${COLORS.grayDarker};
+  background-color: ${COLORS.lightGray};
   position: absolute;
   top: 50%;
   left: 50%;
@@ -121,7 +121,7 @@ margin-right: 8px;
 &:before {
   content: "";  
   display: block;
-  background-color: ${COLORS.grayDarker};
+  background-color: ${COLORS.lightGray};
   position: absolute;
   top: 50%;
   left: 50%;

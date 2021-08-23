@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:2
+#: ea3bfaa1e0f64ee0b9cc95d92242d8c5
+msgid ":py:mod:`datascience.src.pipeline.flows.init_species_groups`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:8
+#: 43fb8568033c483ea088f7c2e33aa7c8
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:12
+#: d257360db688448eb5a1c4700c7d19cc
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:21:<autosummary>:1
+#: eb2736e8fa744d498b5ba64660bafbc2
+msgid ""
+":obj:`extract_species_groups "
+"<datascience.src.pipeline.flows.init_species_groups.extract_species_groups>`\\"
+" \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:21:<autosummary>:1
+#: e1358677de974d6d89e474e318d8a819
+msgid ""
+":obj:`extract_species_codes_groups "
+"<datascience.src.pipeline.flows.init_species_groups.extract_species_codes_groups>`\\"
+" \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:21:<autosummary>:1
+#: 54f742cf94ee4eeb83040f2e0cdf0092
+msgid ""
+":obj:`load_species_groups "
+"<datascience.src.pipeline.flows.init_species_groups.load_species_groups>`\\ "
+"\\(species\\_groups\\, species\\_codes\\_groups\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:23
+#: f62ab38f68664f4a99e39396203330e9
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:29:<autosummary>:1
+#: 0ef18bcc80c741b5b17337719b4d8338
+msgid ""
+":obj:`species_groups "
+"<datascience.src.pipeline.flows.init_species_groups.species_groups>`\\"
+msgstr ""

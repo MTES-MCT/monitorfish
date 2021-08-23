@@ -1,0 +1,343 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/risk-factor.rst:3 f04e40d6a9394dd49135fb8e9924776f
+msgid "Risk factor"
+msgstr ""
+
+#: ../source/risk-factor.rst:5 904fc83f7a9240ab95ae621c618dc88f
+msgid ""
+"The risk factor is a metric computed for each vessel based its historical "
+"and real time data aimed at helping FMC agents prioritize vessels to "
+"control."
+msgstr ""
+
+#: ../source/risk-factor.rst:8 8826affcf5ae4a9a8668afd226a7812c
+msgid ""
+"It is computed and constantly updated by the :doc:`flows/risk-factor` flow."
+msgstr ""
+
+#: ../source/risk-factor.rst:13 ae0d9f625e0c42e2af9b86f2251b78e7
+msgid "Principle"
+msgstr ""
+
+#: ../source/risk-factor.rst:15 4428f9f53d9a4f1fb23f3fcce2abc981
+msgid ""
+"In accordance with EFCA's `Guidelines on Risk Assessment Methodology "
+"<https://www.efca.europa.eu/en/content/guidelines-risk-assessment-"
+"methodology-fisheries-compliance>`_, the computation of the risk factor of "
+"each vessel is based on an estimatation of the *probability* that a given "
+"vessel is in a non-compliance situation and an estimation of the potential "
+"*impact* of the non-compliance."
+msgstr ""
+
+#: ../source/risk-factor.rst:19 bc5fc4e1150547b595d0f7be37d65ac1
+msgid ""
+"In addition, in order to reflect the objective of FMCs to efficiently "
+"distribute control efforts across all segments and vessels in order to "
+"miminize the possibility of violations to go undetected, a third component "
+"of *detectability* is added, which measures how well distributed accross "
+"fleet segments and accross fishing vessels of each fleet segment."
+msgstr ""
+
+#: ../source/risk-factor.rst:23 ae9eb23b18d84d2f8240e8018e097f8b
+msgid ""
+"The obtained metric is therefore analogous to the *risk priority number "
+"(RPN)* of the widely used `FMEA "
+"<https://en.wikipedia.org/wiki/Failure_mode_and_effects_analysis>`_ risk "
+"assessment methodology, in which *probability*, *severity* and "
+"*detectability* are the 3 components of the RPN."
+msgstr ""
+
+#: ../source/risk-factor.rstNone d4038323a36d4de5a7c566e2cd98f9fb
+msgid "Risk factor components"
+msgstr ""
+
+#: ../source/risk-factor.rst:31 bb391b2452c845b991e5eccda678feca
+msgid ""
+"Fishing vessels with higher risk factors constitute priority control target."
+msgstr ""
+
+#: ../source/risk-factor.rst:36 2b1f44a10b634fe0b1c782918e4874a0
+msgid "Computation"
+msgstr ""
+
+#: ../source/risk-factor.rst:39 ../source/risk-factor.rst:80
+#: b9bf399d736947f19f7b83805581bcf6 ca768bdc89444bd5922846e3a2177bd3
+msgid "Probability score"
+msgstr ""
+
+#: ../source/risk-factor.rst:41 58216b64828246898a65682181e739df
+msgid ""
+"The *probability* estimate of each fishing vessel is based on its historical"
+" control results. Put simply, a fishing vessel which was caught many times "
+"in a situation of non-compliance in the past is estimated  to have a higher "
+"probability of future infringements than a fishing vessel which was "
+"historically controlled without non-compliance."
+msgstr ""
+
+#: ../source/risk-factor.rst:46 78d4205d70fc4475af7bdb57dcfb22db
+msgid "The computation is performed in two steps :"
+msgstr ""
+
+#: ../source/risk-factor.rst:49 c619a1cd66264426a793d038815faaef
+msgid "1. Computation of an infraction score"
+msgstr ""
+
+#: ../source/risk-factor.rst:51 8000fdb358814c9588d94015a9dd5a2e
+msgid ""
+"Taking into account control results of the last 5 years, the last 10 control"
+" results are assigned :"
+msgstr ""
+
+#: ../source/risk-factor.rst:53 be24b17ff210436cbdecd88cc0f5b3f9
+msgid ""
+"a **score** equal to -1 if the control did not reveal any fishing non-"
+"compliance, and equal to 10"
+msgstr ""
+
+#: ../source/risk-factor.rst:54 6b980b6dc71f4c128d2a8961ca1f00c9
+msgid ""
+"a **coefficient** equal to 1 for the last control,----- 0.9 for the second-"
+"to-last control, ..."
+msgstr ""
+
+#: ../source/risk-factor.rst:56 2c55931baa224fc1beeafd567d4cb37f
+msgid "An **infraction score** is then computed as follows :"
+msgstr ""
+
+#: ../source/risk-factor.rst:58 bad2beb57b28441ca6ead22f01bfd6b6
+msgid "infraction\\ score=\\sum_{i=0}^{9}(1-\\frac{i}{10})(10*I_i-\\delta_{0I_i})"
+msgstr ""
+
+#: ../source/risk-factor.rst:62 d78798873de847a7815e261353006d87
+msgid "Where"
+msgstr ""
+
+#: ../source/risk-factor.rst:0 184ec9937507498492de39fcc592e9dd
+msgid ""
+":math:`i` is the index of the control, from most recent (0) to least recent "
+"(9)"
+msgstr ""
+
+#: ../source/risk-factor.rst:0 37e76e8ccf4641be91c4cf105681daa8
+msgid ""
+":math:`I_i` is the number of fishing infractions committed and picked up "
+"during the control :math:`i`"
+msgstr ""
+
+#: ../source/risk-factor.rst:0 e1a429966ec64314b8875100dacdbfea
+msgid ""
+":math:`\\delta_{0I_i}` is equal to 1 if :math:`I_i=0` and equal to 0 "
+"otherwise"
+msgstr ""
+
+#: ../source/risk-factor.rst:68 0deeaca43e19471b8cb008bc1a3480f4
+msgid "This can be illustrated as follows :"
+msgstr ""
+
+#: ../source/risk-factor.rstNone 1bbcfb8c137f49ae9f6a5a020d49c338
+msgid "Schematic of the computation of the infraction score"
+msgstr ""
+
+#: ../source/risk-factor.rst:75 5c285dbb8ce744af943a20cc25a5dab1
+msgid "2. Binning of the infraction score"
+msgstr ""
+
+#: ../source/risk-factor.rst:77 49e5c5a4e58947378101af7ed9687fa2
+msgid ""
+"The *probability* component of the risk factor is defined based on the "
+"infraction score of the vessel :"
+msgstr ""
+
+#: ../source/risk-factor.rst:80 4f375d46385c4672a2732ef71ebe28c2
+msgid "Infraction score"
+msgstr ""
+
+#: ../source/risk-factor.rst:82 770a61ebaf4c45d5b7bb7dbe8183afb9
+msgid "< 0"
+msgstr ""
+
+#: ../source/risk-factor.rst:82 2f0523594b1a434dba20a1839e8733f3
+msgid "1 (best)"
+msgstr ""
+
+#: ../source/risk-factor.rst:83 0cd10b46d31e44c390ab6e6549092ea1
+msgid "0 - 11"
+msgstr ""
+
+#: ../source/risk-factor.rst:83 f8cc88ba34a04c629e2bd85f57e631e6
+msgid "2"
+msgstr ""
+
+#: ../source/risk-factor.rst:84 2a58fee2accd48a7b68cc425bbddc48c
+msgid "11 - 21"
+msgstr ""
+
+#: ../source/risk-factor.rst:84 00e50127106c495d8df3724334983f06
+msgid "3"
+msgstr ""
+
+#: ../source/risk-factor.rst:85 70de6f7a525b4114b4bb470be28ee733
+msgid "> 21"
+msgstr ""
+
+#: ../source/risk-factor.rst:85 f1d8bb763d4f48d99562365598664360
+msgid "4 (worst)"
+msgstr ""
+
+#: ../source/risk-factor.rst:88 740b86c2b5ae484daa9e17fe7828cd5f
+msgid ""
+"A vessel that never committed any violation has a negative infraction score "
+"and therefore a probability score of 1, whereas a fishing vessel that "
+"committed many violations can have a score of more than 50 and will "
+"therefore have the highest probability score of 4."
+msgstr ""
+
+#: ../source/risk-factor.rst:92 68f045e3c8f943b8a296fba444f02e4f
+msgid ""
+"In the above example, with the infraction score of 13.4, the vessel has a "
+"probability score of 3."
+msgstr ""
+
+#: ../source/risk-factor.rst:97 2904a46b022d408b92682ad2ae4d3c12
+msgid "Impact score"
+msgstr ""
+
+#: ../source/risk-factor.rst:99 4bb18a99d24b44e9ad419ca84eda720f
+msgid ""
+"The *impact* score is defined by taking the risk level of the :doc:`fleet "
+"segment <fleet-segments>` a fishing vessel belongs to in real time. This "
+"risk level is evaluated each year for each fleet segment during the *risk "
+"assessment* process."
+msgstr ""
+
+#: ../source/risk-factor.rst:102 656091d99b2445d28c21f7797d3218dc
+msgid ""
+"If a fishing vessel belongs to several fleet segments, its *impact score* is"
+" defined as the highest risk level among the fleet segments it belongs to."
+msgstr ""
+
+#: ../source/risk-factor.rst:109 2ce2d608749347278b098e166d7da3a2
+msgid "Detectability score"
+msgstr ""
+
+#: ../source/risk-factor.rst:111 432f19a504f8492cad9a0d23a82f5ac0
+msgid ""
+"The *detectability* score is higher for vessels that have been little "
+"controlled over the past years and for vessels that belong to fleet segments"
+" that have a higher :doc:`control priority level <control-priority-"
+"steering>`. It is based on two components :"
+msgstr ""
+
+#: ../source/risk-factor.rst:116 c7c33ddbc53046ada77e6cb66d36f71d
+msgid ""
+"the fishing vessel's fleet segment :doc:`control priority level <control-"
+"priority-steering>`"
+msgstr ""
+
+#: ../source/risk-factor.rst:117 54fb38c04b22418b9eae1ce205141c89
+msgid "the fishing vessel's :ref:`control level <control-level>`"
+msgstr ""
+
+#: ../source/risk-factor.rst:123 631468ab198846b0a5d23d39c6fe169a
+msgid "Control level"
+msgstr ""
+
+#: ../source/risk-factor.rst:125 4d426fba77954057ac39a294a1609f07
+msgid "A fishing vessel's control level is defined in two steps :"
+msgstr ""
+
+#: ../source/risk-factor.rst:128 e27f4f4dd9ed4c068faa5aae07976372
+msgid "1. Time-base weighting of the number of controls"
+msgstr ""
+
+#: ../source/risk-factor.rst:130 b839b1ec9b424320bdd1970bc9ebf6c3
+msgid ""
+"The controls of the past 3 years are counted with a linearly decreasing "
+"weight :"
+msgstr ""
+
+#: ../source/risk-factor.rstNone 25052b96cf0a489e952c2170fe620568
+msgid "Schematic of the number of recent controls computation method"
+msgstr ""
+
+#: ../source/risk-factor.rst:137 728afbef81ac454eb380c2781a2768a2
+msgid "We thus obtain a **'number of recent controls'**."
+msgstr ""
+
+#: ../source/risk-factor.rst:140 82547cb811ff4373891f629690e27e55
+msgid "2. Binning on the number of controls and time since the last control"
+msgstr ""
+
+#: ../source/risk-factor.rst:142 ec82a3fdf89043a69ee5b1caad86c907
+msgid ""
+"Based on the above *number of recent controls*, as well as on the date of "
+"the most recent control, the *control level* is defined by binning according"
+" to the following schema :"
+msgstr ""
+
+#: ../source/risk-factor.rstNone 4c001b160f084301aa72267f50b0edd5
+msgid "Schematic of the control level computation metho"
+msgstr ""
+
+#: ../source/risk-factor.rst:150 2816ef4a059f4e6e91e10dfc2b95a8d3
+msgid "Detectability score computation"
+msgstr ""
+
+#: ../source/risk-factor.rst:152 6f8e0c2838db443c8e16fa14ab2a20b6
+msgid ""
+"The detectability score of the fishing vessel is simply the geometric mean "
+"between the fishing vessel's control level and the control priority level of"
+" its fleet segment(s)."
+msgstr ""
+
+#: ../source/risk-factor.rst:155 3ae0150b801b4dda9d50e814874d8cec
+msgid ""
+"detactability\\ score=\\sqrt{Vessel\\ Control\\ Level*Fleet\\ Segment\\ "
+"Control\\ Priority\\ Level}"
+msgstr ""
+
+#: ../source/risk-factor.rst:160 56744f85866243a5b5bbb9e4ae98934c
+msgid ""
+"Like for the impact score, of the vessel belongs to several fleet segments, "
+"the highest of the control priority levels is used, and if it does not "
+"belong to any fleet segment, the minimum control priority (1) is used."
+msgstr ""
+
+#: ../source/risk-factor.rst:166 cccec0795de64cdd997e36d3314ee8c0
+msgid "Risk factor calculation"
+msgstr ""
+
+#: ../source/risk-factor.rst:168 f897dd00a76a4aee92b108e0ff2093ae
+msgid "The risk factor is a weighted geometric mean of its 3 components :"
+msgstr ""
+
+#: ../source/risk-factor.rst:170 f9f6b76cd24e4b539ecbc6b2f81f9057
+msgid ""
+"risk\\ factor= impact\\ score^{0.2}*probability\\ "
+"score^{0.3}*detectability\\ score^{0.5}"
+msgstr ""
+
+#: ../source/risk-factor.rst:174 75723eb731fa43a99f77bfb2cb614d97
+msgid ""
+"The coefficients were adjusted based on workshops conducted with agents of "
+"the french FMC. Case studies using real data from the application were used "
+"to determine the importance of each factor in the FMC agents' judgement."
+msgstr ""

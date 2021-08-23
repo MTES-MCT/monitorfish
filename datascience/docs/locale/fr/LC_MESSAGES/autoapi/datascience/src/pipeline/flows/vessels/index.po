@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:2
+#: 27a3d2718f374bf8847c06cd798a7862
+msgid ":py:mod:`datascience.src.pipeline.flows.vessels`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:8
+#: 9102b5059239478c8c2e81d9e96d5d6b
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:12
+#: 8f02651986c249178a279d119dfc72f7
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: 560b3b52f9494577afa803f6b4dc3b06
+msgid ""
+":obj:`extract_fr_vessels "
+"<datascience.src.pipeline.flows.vessels.extract_fr_vessels>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: efd2c5489f20481f9baf9260924655d0
+msgid ""
+":obj:`extract_cee_vessels "
+"<datascience.src.pipeline.flows.vessels.extract_cee_vessels>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: 976c00e4715b4aba92815eeb4ad1a0d3
+msgid ""
+":obj:`extract_non_cee_vessels "
+"<datascience.src.pipeline.flows.vessels.extract_non_cee_vessels>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: a70b4de1bf7649fc91ef55b01b43f4f0
+msgid ""
+":obj:`extract_floats "
+"<datascience.src.pipeline.flows.vessels.extract_floats>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: 1bd3ebed495444c68f67c2c13a83d0d2
+msgid ""
+":obj:`extract_nav_licences "
+"<datascience.src.pipeline.flows.vessels.extract_nav_licences>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: 84055823b7ad4e14b6cd773df3098c8f
+msgid ""
+":obj:`merge_vessels "
+"<datascience.src.pipeline.flows.vessels.merge_vessels>`\\ \\(floats\\, "
+"fr\\_vessels\\, cee\\_vessels\\, non\\_cee\\_vessels\\, licences\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: 2c1bf4784af1472db9a851c822442cd2
+msgid ""
+":obj:`clean_vessels "
+"<datascience.src.pipeline.flows.vessels.clean_vessels>`\\ "
+"\\(all\\_vessels\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:26:<autosummary>:1
+#: 2be9c773d6a44607abddde12c3db8830
+msgid ""
+":obj:`load_vessels <datascience.src.pipeline.flows.vessels.load_vessels>`\\ "
+"\\(all\\_vessels\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:28
+#: fd90ef8968f9451696d728a2b617aa5c
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/vessels/index.rst:34:<autosummary>:1
+#: d32e104201aa470ca8898e591105fbbe
+msgid ":obj:`fr_vessels <datascience.src.pipeline.flows.vessels.fr_vessels>`\\"
+msgstr ""

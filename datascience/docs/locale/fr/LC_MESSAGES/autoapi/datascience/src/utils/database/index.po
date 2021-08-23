@@ -1,0 +1,219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:2
+#: 81678f1749b848feabf1f970a6882802
+msgid ":py:mod:`datascience.src.utils.database`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:8
+#: d6679b8c8d2748428e0d98ae35e6ab60
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:12
+#: e2f4a1af4cdd4438931afd9c74d5277a
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: f0064fbd374045b8990878d3bdf5e92a
+msgid ""
+":obj:`get_tables_sizes <datascience.src.utils.database.get_tables_sizes>`\\ "
+"\\(db\\: str\\, table\\_names\\: List\\[str\\]\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: ../source/autoapi/datascience/src/utils/database/index.rst:26
+#: 8e274b6128e64a76a54e77862984e66b ccff4de1e2d3438a81f7746cb5947747
+msgid ""
+"Returns a pandas DataFrame with the size of each table in tables_names, in "
+"Mb."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: 6dffda623659449ea3d587f747b79a42
+msgid ""
+":obj:`print_view_query_string "
+"<datascience.src.utils.database.print_view_query_string>`\\ \\(db\\: str\\, "
+"view\\_name\\: str\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: 55d84b48dd024aa39828830595d8d3b6
+msgid ""
+"View the SQL query string that was used to create an existing view in an "
+"Oracle"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: aff7f592af5048c08f6960899e9d45e9
+msgid ""
+":obj:`find_table_schema "
+"<datascience.src.utils.database.find_table_schema>`\\ \\(db\\: str\\, "
+"table\\_name\\: str\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: bc0b7f9548b14a1e97269774d2dada4d
+msgid "Looks for a table named table_name in all schemas of"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: 843f72b225304067a0adc244a30da097
+msgid ""
+":obj:`print_schemas_tables "
+"<datascience.src.utils.database.print_schemas_tables>`\\ \\(db\\: str\\, "
+"schemas\\=None\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: 5b38683570c8484ba25d835aca9a6f36
+msgid "Prints all schemas and associated tables in a database."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: cf1eca704e4744f0b9bbe38f9c53ffa3
+msgid ""
+":obj:`pg_dump_table <datascience.src.utils.database.pg_dump_table>`\\ "
+"\\(db\\: str\\, table\\_name\\: str\\, what\\: Union\\[None\\, str\\] \\= "
+"None\\) → str"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:23:<autosummary>:1
+#: d1b3d96913b7428c8a5fcd1ace982d5f
+msgid ""
+"Runs ``pg_dump --schema-only`` on the selected database and returns the "
+"output as a"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:28
+#: ../source/autoapi/datascience/src/utils/database/index.rst:37
+#: 4579bac4705b4dc29fbea3c16ad5beae f36fb6b487f84663b2c697e9b6262d57
+msgid "db : 'ocan', 'fmc' view_name : the name of the view to inspect."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:34
+#: 4ee44f91b2c548039b8dc21befca7548
+msgid ""
+"View the SQL query string that was used to create an existing view in an "
+"Oracle database."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:43
+#: 0ae922ba31a04579a04cccb0bcfc197d
+msgid ""
+"Looks for a table named table_name in all schemas of the designated database"
+" and return the name of the schema in which the table is found."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:47
+#: 998bfbb2a06c4c64857e23046d784038
+msgid "If the table is not found, returns None."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:49
+#: f541c0dc34764fd8a1e131ec635af118
+msgid "Possible values for db"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rstNone
+#: 9a6042b0f5f5495eb2660b3b6753634d
+msgid "'ocan', 'monitorfish_remote',"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:50
+#: dadc75c886424f6f881e75b896c84627
+msgid "'fmc', 'monitorfish_local'"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:55
+#: 9bcdd7686b0b47579acb101206f76967
+msgid ""
+"Prints all schemas and associated tables in a database. Optionnal argument "
+"'schemas' takes a list of schemas to restrict the scan."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:58
+#: 9665b0718f004b3d8af7bc061b1c137b
+msgid "Possible values for db :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:59
+#: 09bc4e80a5bf4ce3ad1820bf2aca2d22
+msgid "'ocan', 'monitorfish_remote', 'fmc', 'monitorfish_local'"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:64
+#: 1dc36bdc208a4d44807032c701f2f48d
+msgid ""
+"Runs ``pg_dump --schema-only`` on the selected database and returns the "
+"output as a string. Useful to generate DDL statements of tables and to "
+"output test data as sql scripts."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:68
+#: 523def70ed3a4a499c32d30e1e3b921b
+msgid ""
+"If ``db`` is ``monitorfish_local``, the ``pg_dump`` command will be run by "
+"the"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:69
+#: 6b951c60d6204170a00e21c3e7d05a2b
+msgid ""
+"machine on which the command is run, so postres must be installed. * If "
+"``db`` is ``monitorfish_remote``, the command in run through in the docker "
+"container with ``docker exec monitorfish_database``."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:0
+#: 8a8275ff03b3439a861c6b9f10b00952
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:73
+#: 2dae97501509468195452b9b801428d2
+msgid "'monitorfish_remote' or 'monitorfish_local'"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:75
+#: c0d06e78dc3f40f3ba9cfbb353a72787
+msgid "the name of the table to export."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:77
+#: 06779a6a09644d15a131d2143f209b94
+msgid "``'data-only'`` ``'schema-only'`` or ``None``. If"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:0
+#: 2bf630b771e34875b8dfd1299d79d3b3
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:82
+#: 1c2c3450d0c746ec93a831f20ca119d5
+msgid "output of ``pg_dump`` command"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/database/index.rst:0
+#: eda7f8598ef3476c829293be3ed8a0c7
+msgid "Return type"
+msgstr ""

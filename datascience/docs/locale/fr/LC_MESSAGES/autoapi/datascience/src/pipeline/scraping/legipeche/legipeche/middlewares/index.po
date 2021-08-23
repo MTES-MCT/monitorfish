@@ -1,0 +1,48 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/middlewares/index.rst:2
+#: c53e8f20ccf74f72a402e3040b98d69e
+msgid ""
+":py:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.middlewares`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/middlewares/index.rst:8
+#: 9f9e40d11e0f44fc9d29b47653b64769
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/middlewares/index.rst:11
+#: 35cc32e65d3c40a59fce59c6b87e415e
+msgid "Classes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/middlewares/index.rst:20:<autosummary>:1
+#: d51920572ba64285b5a418d04f64372c
+msgid ""
+":obj:`LegipecheSpiderMiddleware "
+"<datascience.src.pipeline.scraping.legipeche.legipeche.middlewares.LegipecheSpiderMiddleware>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/middlewares/index.rst:20:<autosummary>:1
+#: 4c604be299ab4bb0afc0df939187cde5
+msgid ""
+":obj:`LegipecheDownloaderMiddleware "
+"<datascience.src.pipeline.scraping.legipeche.legipeche.middlewares.LegipecheDownloaderMiddleware>`\\"
+msgstr ""

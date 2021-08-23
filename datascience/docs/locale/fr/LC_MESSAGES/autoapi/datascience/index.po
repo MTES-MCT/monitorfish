@@ -1,0 +1,30 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/index.rst:2 3b4d40fc72a347d98d18e620c55c6b4d
+msgid ":py:mod:`datascience`"
+msgstr ""
+
+#: ../source/autoapi/datascience/index.rst:8 e12f4a6f914f4429805f3d4b5ef11776
+msgid "Subpackages"
+msgstr ""
+
+#: ../source/autoapi/datascience/index.rst:17 40c39283b33545ea8cd6fcf1e022574c
+msgid "Submodules"
+msgstr ""

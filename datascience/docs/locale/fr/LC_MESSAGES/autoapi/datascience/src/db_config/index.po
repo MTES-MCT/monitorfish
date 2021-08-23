@@ -1,0 +1,119 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:2
+#: cdfb8efa0a664d6ba831ad20be78bbdd
+msgid ":py:mod:`datascience.src.db_config`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:8
+#: 9eb95256754c4affb1350c462ecfda36
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:12
+#: c7c986ef4b504df0b77edbcbb5b0b56c
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:20:<autosummary>:1
+#: db3b0ad92ff54fcc9f1acbdbf2397482
+msgid ""
+":obj:`make_connection_string "
+"<datascience.src.db_config.make_connection_string>`\\ \\(db\\: str\\) → str"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:20:<autosummary>:1
+#: ../source/autoapi/datascience/src/db_config/index.rst:36
+#: 010bf06cfb6c47c7800ef0e83e289920 2cb20894f35641daa27cc309588da9a3
+msgid "Returns the connection string for the designated database."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:20:<autosummary>:1
+#: 51be27f5d586441e9f6a5a386d589622
+msgid ""
+":obj:`create_engine <datascience.src.db_config.create_engine>`\\ \\(db\\: "
+"str\\, \\*\\*kwargs\\) → sqlalchemy.engine.Engine"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:20:<autosummary>:1
+#: ../source/autoapi/datascience/src/db_config/index.rst:54
+#: 9cce89a8b621487eb30fd7bb4fe0fda4 9a0b782c84bb4e34b21b4eb6bc0272a8
+msgid "Returns sqlalchemy engine for designated database."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:22
+#: 3aa20ac049404aef9f97d6d31eb2a997
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:28:<autosummary>:1
+#: 36050fbca5ff4a1f955021aa58f8af52
+msgid ":obj:`db_env <datascience.src.db_config.db_env>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:0
+#: ../source/autoapi/datascience/src/db_config/index.rst:0
+#: cbdea320643b48f8807f1dce34fd24b4 2fe2d6d548c54b5580402007a5e1162b
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:38
+#: 8d27c33ad7af48bc9e730a2d39911963
+msgid "Database name. Possible values :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:0
+#: ../source/autoapi/datascience/src/db_config/index.rst:0
+#: 114cc6e6b47e4eeea89a72a8657ed9a2 703c1f6b172944788087e636eae2eca0
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:45
+#: 27d3edb3ae8941ccaa455847764b8125
+msgid "connection string for selected database."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:0
+#: ../source/autoapi/datascience/src/db_config/index.rst:0
+#: 3e31b675685f447eb8e04825a0c35ba8 5df640a42a7742f7bbe5cbccbcf5a674
+msgid "Return type"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:0
+#: d6e3ee2cdb234511ba00c0bd8155b45e
+msgid "Raises"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:48
+#: 2aee5fd9c3a948fab9aaf89342227304
+msgid "with credentials for the selected database are not found in"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:56
+#: 81cb5673df44422cb0d0435064e67c7a
+msgid ""
+"Database name. Possible values : 'ocan', 'fmc', 'monitorfish_remote', "
+"'monistorfish_local', 'cacem_local'"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/db_config/index.rst:60
+#: a435a58a62484c3b9c4add4706ed630c
+msgid "sqlalchemy engine for selected database."
+msgstr ""

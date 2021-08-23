@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:2
+#: 72fceaf5724440b098aed8569a39f92e
+msgid ":py:mod:`datascience.src.pipeline.parsers.ers`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:8
+#: bdf3462547a94522b9f91f7cd5ca0ad1
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:12
+#: ef75f60e17964175b940f0be6eb8ce0a
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 2ce40c12c5c54f9aa6e58259ada65888
+msgid ""
+":obj:`simple_parser <datascience.src.pipeline.parsers.ers.simple_parser>`\\ "
+"\\(el\\: xml.etree.ElementTree.Element\\, pass\\_child\\: bool \\= False\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 1e9ec1d1c60043b68cdf1c1cd701e53a
+msgid ""
+":obj:`parse_ops <datascience.src.pipeline.parsers.ers.parse_ops>`\\ "
+"\\(ops\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: b8844306159b46e88c7246e77fa35b70
+msgid ""
+":obj:`parse_cor <datascience.src.pipeline.parsers.ers.parse_cor>`\\ "
+"\\(cor\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 3b45aae972604ed2a348ec94f33dc02b
+msgid ""
+":obj:`parse_del <datascience.src.pipeline.parsers.ers.parse_del>`\\ "
+"\\(del\\_\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 4aa362b9476d427895f84fc726fb0147
+msgid ""
+":obj:`parse_ret <datascience.src.pipeline.parsers.ers.parse_ret>`\\ "
+"\\(ret\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 762035647d0a45349ff2dcd76dc3a870
+msgid ""
+":obj:`parse_ers <datascience.src.pipeline.parsers.ers.parse_ers>`\\ "
+"\\(ers\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: c913c7509e164c1ca24837e491a308f2
+msgid ""
+":obj:`parse_log <datascience.src.pipeline.parsers.ers.parse_log>`\\ "
+"\\(log\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 41e89f88278445c08afb1ed0817736dd
+msgid ":obj:`parse_ <datascience.src.pipeline.parsers.ers.parse_>`\\ \\(el\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: d3dc253839bc4bd7b3ae0ad6fadcfa56
+msgid ":obj:`parse <datascience.src.pipeline.parsers.ers.parse>`\\ \\(el\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 254e018131d14347afeb476ec58df3f8
+msgid ""
+":obj:`parse_xml_string "
+"<datascience.src.pipeline.parsers.ers.parse_xml_string>`\\ "
+"\\(xml\\_string\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 387736c844d34e9b870da5c181e0a5c2
+msgid ""
+":obj:`batch_parse <datascience.src.pipeline.parsers.ers.batch_parse>`\\ "
+"\\(ers\\_xmls\\: List\\[str\\]\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:29:<autosummary>:1
+#: 5dd0018fd21b4b349ce3030e1b1eb585
+msgid ""
+"Parses a list of ERS messages and return 2 tables as DataFrames containing "
+"the"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:31
+#: cf398caf257c4f578d07140a9bc81c08
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:37:<autosummary>:1
+#: 760e9b594e6943ecb62755e93881083f
+msgid ":obj:`parsers <datascience.src.pipeline.parsers.ers.parsers>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:40
+#: a67a1a4678434de885c3549ca9105d0c
+msgid "Bases: :py:obj:`Exception`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:42
+#: fd99149c486c42a89cda435f98e3c352
+msgid "Raised when an ERS message cannot be parsed."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:82
+#: 5f51dd93a32d433a9123f891f9bd6990
+msgid ""
+"Parses a list of ERS messages and return 2 tables as DataFrames containing "
+"the information extracted from the messages."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:0
+#: ca348ac924f44abdbbc6c6ed1ca25ec6
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:85
+#: cfe4811249014b0bb6b92c462076bd35
+msgid "list of ERS xml messages"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:0
+#: 4ffe7381aa394b67b96697d5522dd2ea
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:88
+#: f1f61af1a3584ce1a6865af180abc28e
+msgid ""
+"Dataframe with parsed metadata, including a \"value\" column     with json "
+"data extracted with the xml message pd.DataFrame:  Dataframe with parsed "
+"metadata, including a \"xml_message\" column     with the original xml "
+"message"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:90
+#: a5e7e34907d942c6bca3e59bdd5528c5
+msgid "Dataframe with parsed metadata, including a \"value\" column"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:91
+#: 258b543d46ec4e878123681b02107162
+msgid "with json data extracted with the xml message"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:92
+#: 55bef33234a449369368bac829d71461
+msgid ""
+"pd.DataFrame:  Dataframe with parsed metadata, including a \"xml_message\" "
+"column"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:93
+#: 5733dd0a012d4252bff9a10aaf7954c6
+msgid "with the original xml message"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/parsers/ers/index.rst:0
+#: 1400277965824d16b6c4e625fa2daab8
+msgid "Return type"
+msgstr ""

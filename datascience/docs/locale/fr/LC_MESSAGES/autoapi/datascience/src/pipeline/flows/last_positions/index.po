@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:2
+#: 816e6a218e70425a9db6b875c05b948a
+msgid ":py:mod:`datascience.src.pipeline.flows.last_positions`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:8
+#: f11e371124a94dc48208cdeabc42bcd2
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:12
+#: f979fb9accec44d98c3539727cbdf567
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:23:<autosummary>:1
+#: 8ef31440fe334a89b038e5e6173c8a2e
+msgid ""
+":obj:`extract_last_positions "
+"<datascience.src.pipeline.flows.last_positions.extract_last_positions>`\\ "
+"\\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:23:<autosummary>:1
+#: 1318f42031614f4db56261af1d79f462
+msgid ""
+":obj:`extract_risk_factors "
+"<datascience.src.pipeline.flows.last_positions.extract_risk_factors>`\\ "
+"\\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:23:<autosummary>:1
+#: c5a899636b254e35b0c398d4efff0ad9
+msgid ""
+":obj:`estimate_current_positions "
+"<datascience.src.pipeline.flows.last_positions.estimate_current_positions>`\\"
+" \\(last\\_positions\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:23:<autosummary>:1
+#: e849008881f04f878f636dd40aef59e7
+msgid ""
+":obj:`merge <datascience.src.pipeline.flows.last_positions.merge>`\\ "
+"\\(last\\_positions\\, risk\\_factors\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:23:<autosummary>:1
+#: 0015b74443534b319b97003070d23119
+msgid ""
+":obj:`load_last_positions "
+"<datascience.src.pipeline.flows.last_positions.load_last_positions>`\\ "
+"\\(last\\_positions\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:25
+#: c57a4ce553214ad2a2b084296b4f20d8
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/last_positions/index.rst:31:<autosummary>:1
+#: d638be387e8040788f251a11512edcf3
+msgid ""
+":obj:`last_positions "
+"<datascience.src.pipeline.flows.last_positions.last_positions>`\\"
+msgstr ""

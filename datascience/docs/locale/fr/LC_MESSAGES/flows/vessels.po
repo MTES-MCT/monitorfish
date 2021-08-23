@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:50+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/flows/vessels.rst:3 0d5aebc390b74b8ea937681f52bca02b
+msgid "Vessels"
+msgstr ""
+
+#: ../source/flows/vessels.rst:5 191ef9f1f4864134b739adb083660d8a
+msgid ""
+"The ``vessels`` flow extracts the list of vessels from the OCAN database and"
+" loads the data into the ``vessels`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/vessels.rst:8 2cdb8005116d473a9b0ee13ef6975653
+msgid "It is scheduled to run every day."
+msgstr ""

@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controllers/index.rst:2
+#: 63d5c34141604dcb9e9294007361ffde
+msgid ":py:mod:`datascience.src.pipeline.flows.controllers`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controllers/index.rst:8
+#: c6619fb0ad2749a0abc638b60a8bd067
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controllers/index.rst:12
+#: a0cf3b1a6229485d8a7dc80bdb2ab5d2
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controllers/index.rst:20:<autosummary>:1
+#: d569fd5503ef45729bd4a5d616343115
+msgid ""
+":obj:`extract_controllers "
+"<datascience.src.pipeline.flows.controllers.extract_controllers>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controllers/index.rst:20:<autosummary>:1
+#: c7f4c48355a246a6a35457b590e6f97a
+msgid ""
+":obj:`load_controllers "
+"<datascience.src.pipeline.flows.controllers.load_controllers>`\\ "
+"\\(controllers\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controllers/index.rst:22
+#: e4453da38dc34a04b76060b5b56bdd24
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controllers/index.rst:28:<autosummary>:1
+#: 21bed00790684e85a43b840da2555526
+msgid ""
+":obj:`controllers "
+"<datascience.src.pipeline.flows.controllers.controllers>`\\"
+msgstr ""

@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:2
+#: 0e0f0aba08084913894aae63dfafe923
+msgid ":py:mod:`datascience.src.pipeline.flows.controls`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:8
+#: 65b71111a7d04fce9a3499aa2f6da003
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:12
+#: 618b06c5352e48da93b7d36befddabd9
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:21:<autosummary>:1
+#: 114e06a9e89b49978e4c4201bba7c041
+msgid ""
+":obj:`extract_controls "
+"<datascience.src.pipeline.flows.controls.extract_controls>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:21:<autosummary>:1
+#: aae8dcf9b3aa47f295c8be339d1d7d4c
+msgid ""
+":obj:`transform_controls "
+"<datascience.src.pipeline.flows.controls.transform_controls>`\\ "
+"\\(controls\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:21:<autosummary>:1
+#: cf85258375cb4da397c698ed38a3701b
+msgid ""
+":obj:`load_controls "
+"<datascience.src.pipeline.flows.controls.load_controls>`\\ \\(controls\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:23
+#: 04b973b6db51488380e8a657a6f815ed
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:29:<autosummary>:1
+#: 7d774a9111ab4462b39f6bc71d8ad638
+msgid ":obj:`controls <datascience.src.pipeline.flows.controls.controls>`\\"
+msgstr ""

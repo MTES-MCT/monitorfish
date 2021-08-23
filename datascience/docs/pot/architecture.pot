@@ -1,0 +1,177 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/architecture.rst:3
+#: 05f33d9404d94abba3fe57355372ad0f
+msgid "Architecture"
+msgstr ""
+
+#: ../source/architecture.rst:5
+#: bb47f1040dbb4b63b4a62100433aff38
+msgid "Monitorfish is built around 3 main components :"
+msgstr ""
+
+#: ../source/architecture.rst:15
+#: a2d5b016153f46c49a6bbc59ccaa73ae
+msgid "Data pipeline"
+msgstr ""
+
+#: ../source/architecture.rst:17
+#: 48b341ac95354f7db836dc62fc3f2174
+msgid "The data processing service executes python batch jobs to :"
+msgstr ""
+
+#: ../source/architecture.rst:19
+#: 98f881b9b0ee4c9bbbec2782e9c1e2b6
+msgid "pull data from external sources into the Monitorfish database (ETL)"
+msgstr ""
+
+#: ../source/architecture.rst:20
+#: f5261087cf8e459384440688a85933fd
+msgid "process data in the Monitorfish database to enrich and update tables that the backend makes available to the frontend through an API"
+msgstr ""
+
+#: ../source/architecture.rst:23
+#: 3a48fec3d7b44e1d88688e2dc2221f29
+msgid "Database schema"
+msgstr ""
+
+#: ../source/architecture.rst:25
+#: e1fafc1532e74badb4c93089dc15feab
+msgid "Database tables are created by the :ref:`back-end`. Jobs of the data pipeline require tables to already exist and to have the right columns and data types. It is therefore necessary to keep the back end and the data pipeline applications \"in sync\". For this reason, the back end and the data pipeline should always be deployed with the **same version number** (see :ref:`environment_variables`)."
+msgstr ""
+
+#: ../source/architecture.rst:30
+#: 6891830edd6a4c4e810de6443f040776
+msgid "Orchestration"
+msgstr ""
+
+#: ../source/architecture.rst:32
+#: bdf771e93c214101a0bb1e243362f02f
+msgid "Batch jobs are orchestrated by `Prefect <https://prefect.io>`__. For more information see `Prefect documentation <https://docs.prefect.io/orchestration/>`__."
+msgstr ""
+
+#: ../source/architecture.rst:35
+#: 8ade6554d10746dbaaf982c9aef1b0b1
+msgid "The prefect UI  enables administrators to view each flow as a diagram of its constituent tasks, to monitor their execution, see the logs and debug in case any flow run fails..."
+msgstr ""
+
+#: ../source/architecture.rst:38
+#: e8af66dffaac4a0b9cc14baef10b6556
+msgid "Execution"
+msgstr ""
+
+#: ../source/architecture.rst:41
+#: 2f80a059b084435f81518e359785a6b0
+msgid "Stack"
+msgstr ""
+
+#: ../source/architecture.rst:43
+#: 9383983e81864a95a02f874a418e7597
+msgid "The main tools used to extract data, process it in python and load it to the PostgreSQL database of Monitorfish are :"
+msgstr ""
+
+#: ../source/architecture.rst:45
+#: 88f8e60ea2b14915b9ec7909d80cba96
+msgid "python 3.8.7"
+msgstr ""
+
+#: ../source/architecture.rst:46
+#: 2980eafabc1449a2ba742ec161ca059f
+msgid "`SQLAlchemy <https://www.sqlalchemy.org/>`__ as a python SQL toolkit to interact with SQL databases"
+msgstr ""
+
+#: ../source/architecture.rst:47
+#: 3404084725f642ee9c9a0718ec541b95
+msgid "Database adapters `cx_Oracle <https://oracle.github.io/python-cx_Oracle/>`__ and  `psycopg2 <https://github.com/psycopg/psycopg2/>`__ for connectivity to Oracle and PostgreSQL databases respectively"
+msgstr ""
+
+#: ../source/architecture.rst:49
+#: f36dd2cba6b940f393dab68c15391650
+msgid "`pandas <https://pandas.pydata.org/>`__ for data manipulation in python"
+msgstr ""
+
+#: ../source/architecture.rst:50
+#: b9789bb7931a4faaab76d4a9b5c76430
+msgid "the `prefect python library <https://github.com/prefecthq/prefect>`__ to write batch jobs as flows of tasks"
+msgstr ""
+
+#: ../source/architecture.rst:53
+#: ff882b6bdfd94ab2ba34818bd1b45166
+msgid "Flows : one for each job"
+msgstr ""
+
+#: ../source/architecture.rst:55
+#: 6885fe0b4aac47b8bc65c2339b20856e
+msgid "Batch jobs are written in python as prefect :ref:`flows <flows>` : each flow is responsible for one particular task, such as updating the ``vessels`` referencial or refreshing the table of ``last_positions``."
+msgstr ""
+
+#: ../source/architecture.rst:59
+#: 926836cedbc24080a5e13e45c6a9efa8
+msgid "Execution in a dockerized service"
+msgstr ""
+
+#: ../source/architecture.rst:61
+#: 888ad8191f0f450a92194a8853341006
+msgid "A dockerized python service runs a `prefect agent <https://docs.prefect.io/orchestration/agents/overview.html>`__, a small process which queries the API of the  prefect server orchestrator every second in order to know if any flow must be executed. When a flow must be executed, perfect server tells the agent, which spawns a local python process that runs the flow."
+msgstr ""
+
+#: ../source/architecture.rst:68
+#: 124255fb6e9f4d05a89ef8f801c1fa28
+msgid "Back end"
+msgstr ""
+
+#: ../source/architecture.rst:70
+#: ac2dff86ab7941798c1a4a2f2a152875
+msgid "Kotlin"
+msgstr ""
+
+#: ../source/architecture.rst:71
+#: 814dcbf8f4a946a094505819f006f58f
+msgid "Spring Boot"
+msgstr ""
+
+#: ../source/architecture.rst:72
+#: e442946ca5804e3ab9b7552376656122
+msgid "Flyway (database migration)"
+msgstr ""
+
+#: ../source/architecture.rst:73
+#: b31833fa915f4dcc9fcffe2e355187ac
+msgid "PostgreSQL with PostGIS/TimescaleDB"
+msgstr ""
+
+#: ../source/architecture.rst:74
+#: 1d653240aa5a49b6bf7b700293ac3707
+msgid "Tomcat (version 9.0.37)"
+msgstr ""
+
+#: ../source/architecture.rst:77
+#: f9f78aad0ecf4c91869a222c6f79da84
+msgid "Front end"
+msgstr ""
+
+#: ../source/architecture.rst:79
+#: e726755c9cae49ff9e38c5f3e9209839
+msgid "Openlayers"
+msgstr ""
+
+#: ../source/architecture.rst:80
+#: b53e6fe0a11d43e9a093f1005835ce73
+msgid "React"
+msgstr ""

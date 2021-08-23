@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/overview.rst:3
+#: 79e5cedcc8af4db6b228254056178995
+msgid "Overview"
+msgstr ""
+
+#: ../source/overview.rst:5
+#: 12c66df8b11a4c01b6ad7c1320259f6c
+msgid "**Monitorfish** is a **fishing vessels monitoring software** developped by the French adminitration for the french **Fishing Monitoring Center (FMC)** - the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners."
+msgstr ""
+
+#: ../source/overview.rst:8
+#: 099b774fa6864beaa1e554bc6d41dd8e
+msgid "Features"
+msgstr ""
+
+#: ../source/overview.rst:10
+#: bfe5e62680be4b48bd85a39c3780ed50
+msgid "Visualization of fishing vessels' real time **positions** (VMS)"
+msgstr ""
+
+#: ../source/overview.rst:11
+#: 56ada8cf08e54d40940426bcbc4c7975
+msgid "Visualization of fishing vessels' declarative **fishing activity** data (ERS)"
+msgstr ""
+
+#: ../source/overview.rst:12
+#: d67493481c1d46b4b2946a62992b5923
+msgid "Visualization of fishing vessels' historical **controls** and **violations**"
+msgstr ""
+
+#: ../source/overview.rst:13
+#: bb36f38c60c844ec85a3d5dc971bbca3
+msgid "Visualization of :doc:`regulated fishing areas <regulation>` of the french and european regulations"
+msgstr ""
+
+#: ../source/overview.rst:14
+#: c6f7a11f5e4a47c1b1c01ee495b36a60
+msgid "Computation of fishing vessels' real time belonging to :doc:`fleet segments <fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) <https://www.efca.europa.eu/en>`_ in its `risk assessment methodology <https://www.efca.europa.eu/en/content/guidelines-risk-assessment-methodology-fisheries-compliance>`_"
+msgstr ""
+
+#: ../source/overview.rst:15
+#: 3a81c8d6ac2b4e52a0a3c38fdbe1f385
+msgid "Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements"
+msgstr ""
+
+#: ../source/overview.rst:16
+#: 25fed747679e4b289916be91d5a14a2e
+msgid "Administration panel that allows admins to"
+msgstr ""
+
+#: ../source/overview.rst:18
+#: 4ceacbddad5a4b28b625fb26c75dda78
+msgid "Update regulation data : update authorized fishing areas / periods / gears..."
+msgstr ""
+
+#: ../source/overview.rst:19
+#: f65378e12da74124b2eb16bec36f7a4e
+msgid ":doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segment"
+msgstr ""
+
+#: ../source/overview.rst:23
+#: 6a87a0b4dc4e4bf39c384bb60fa654b2
+msgid "Demo"
+msgstr ""

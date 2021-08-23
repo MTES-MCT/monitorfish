@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/data-sources.rst:2
+#: 041a30f4df90460c8333e9c8a174c297
+msgid "External data sources"
+msgstr ""
+
+#: ../source/data-sources.rst:5
+#: 3f4b9f815def444dbc79812f9f54fea2
+msgid "VMS positions"
+msgstr ""
+
+#: ../source/data-sources.rst:7
+#: 872600762603413eae66b5b9365c61f1
+msgid "VMS positions are received on an API endpoint provided by the Kotlin Springboot backend service."
+msgstr ""
+
+#: ../source/data-sources.rst:10
+#: 83b279a613f94ff38f55dc911c584c9e
+msgid "ERS xml files"
+msgstr ""
+
+#: ../source/data-sources.rst:12
+#: 9ea3dbcc78454d8999d942a81c49422f
+msgid "ERS raw xml files are ingested by the :doc:`ers` flow from the `configured location <https://github.com/MTES-MCT/monitorfish/blob/master/datascience/config.py>`__ where ERS xml files must be deposited."
+msgstr ""
+
+#: ../source/data-sources.rst:17
+#: adb72057da254b80abc6a438df2c6bfd
+msgid "Databases"
+msgstr ""
+
+#: ../source/data-sources.rst:19
+#: a4918194c2864d93a99f2bd5c08dbf76
+msgid "Data is imported (and constantly updated) from external databases for :doc:`flows/controls`, :doc:`flows/controllers`, :doc:`flows/fishing-gears` and :doc:`flows/vessels`."
+msgstr ""
+
+#: ../source/data-sources.rst:21
+#: e45e012cb6b7424c94821edc1a7c38de
+msgid "These databases are :"
+msgstr ""
+
+#: ../source/data-sources.rst:23
+#: b10a25185aa74c8a9d4591bd1e66ef48
+msgid "OCAN"
+msgstr ""
+
+#: ../source/data-sources.rst:24
+#: bc5a343e1e8743869d7dc55fa021b15d
+msgid "FMC2"
+msgstr ""
+
+#: ../source/data-sources.rst:26
+#: 70614a1374304c118f55d77cf2a22798
+msgid "Credentials for these data sources must be configured for Monitorfish to connect to them. See :ref:`environment_variables`."
+msgstr ""

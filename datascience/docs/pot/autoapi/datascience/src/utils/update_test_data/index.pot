@@ -1,0 +1,106 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:2
+#: 45929a71153b49a6abfe8b2ed806a518
+msgid ":py:mod:`datascience.src.utils.update_test_data`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:8
+#: 6105ba7c74a44aa69c5e2c21fd57efbc
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:12
+#: 15540bbbd29d4e55b75ad87de3fcd7a5
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: c129a115831b4ff7899c58f865761b6a
+msgid ":obj:`extract_last_positions <datascience.src.utils.update_test_data.extract_last_positions>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: 6c2604b391ed4d9b84eec0c24b447ce3
+msgid ":obj:`extract_positions <datascience.src.utils.update_test_data.extract_positions>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: 9997bb7eb76040b0aa8a4c7e12198656
+msgid ":obj:`anonymize_positions <datascience.src.utils.update_test_data.anonymize_positions>`\\ \\(positions\\: pandas.DataFrame\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: a9fa79a161a54c9e96f4edb575a63661
+msgid ":obj:`anonymize_last_positions <datascience.src.utils.update_test_data.anonymize_last_positions>`\\ \\(last\\_positions\\: pandas.DataFrame\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: d57e5a4117914fcf973e8684c71ba4d3
+msgid ":obj:`get_timedelta <datascience.src.utils.update_test_data.get_timedelta>`\\ \\(s\\: pandas.Series\\) → datetime.timedelta"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: 623d18249f514e74889f0da5a2e18579
+msgid "Takes a ``pandas.Series`` of ``datetime`` dtype, returns the ``timedelta``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: 92031f4b32f64fd892c05513ecfe86f8
+msgid ":obj:`shift_positions_datetimes <datascience.src.utils.update_test_data.shift_positions_datetimes>`\\ \\(df\\: pandas.DataFrame\\, datetime\\_column\\: str\\, td\\: datetime.timedelta\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: 48c2beae6ea749e5b02b98fc6f9384ce
+#: 7949d96bf99347c29902ba538876ab2f
+msgid "Takes a ``pandas.DataFrame`` containing a column of ``datetime`` dtype, shifts all"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:25:<autosummary>:1
+#: db3a5e61f0b3455eb4296de044f6a516
+msgid ":obj:`shift_last_positions_datetimes <datascience.src.utils.update_test_data.shift_last_positions_datetimes>`\\ \\(df\\: pandas.DataFrame\\, datetime\\_column\\: str\\, td\\: datetime.timedelta\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:27
+#: b9144758319041529fcaf82d9fa30075
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:34:<autosummary>:1
+#: ae71a548a1fc4c3ba086643c54f181df
+msgid ":obj:`da <datascience.src.utils.update_test_data.da>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:34:<autosummary>:1
+#: 37cd10f7224e462ea100a90c7e5cccce
+msgid ":obj:`positions <datascience.src.utils.update_test_data.positions>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:54
+#: 7e745bb4deb347be906a05fdc9f0621c
+msgid "Takes a ``pandas.Series`` of ``datetime`` dtype, returns the ``timedelta`` between its maximum and January 1st 2021 ``s.max() - datetime(2021, 1, 1)``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:60
+#: ../source/autoapi/datascience/src/utils/update_test_data/index.rst:67
+#: 33dffacdcd8d419eb794e0c730003cf6
+#: 8a33ad16f0dc4281aa4605f2f64548c1
+msgid "Takes a ``pandas.DataFrame`` containing a column of ``datetime`` dtype, shifts all values of the datetime column by ``-td`` and return the modified dataframe, all other columns untouched."
+msgstr ""

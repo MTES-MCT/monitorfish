@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/control-priority-steering.rst:3
+#: f1f818c56113462ebe9ac969a6e6dada
+msgid "Control priority steering"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:6
+#: 9bd19b83b2e046b183aee76fe49c396d
+msgid "Why it is needed"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:8
+#: e225155f7158400e8a48798e43a7a02b
+msgid "Reaching the :ref:`control objectives <risk-assessment>` defined at the national level is one of the missions of the FMC. In order to reach these objectives, the FMC needs a way to **target certain fleet segments** and to **dynamically adapt control priorities** depending on the level of achievement of the control objectives of each segment."
+msgstr ""
+
+#: ../source/control-priority-steering.rst:12
+#: e0a120c7dadc4dbb945af6612de20a74
+msgid "In addition to the control objectives, the **seasonality of the activity** on the various segments is another factor that makes it necessary for the FMC to be able to adapt its control priorities dynamically. Indeed, certain fleet segments are of particular interest at known periods in the year."
+msgstr ""
+
+#: ../source/control-priority-steering.rst:17
+#: 840f5502b7cc4939a8d4b64b39dbb72b
+msgid "How it works"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:19
+#: f6ad0650ba92424eb513ba54ec78a206
+msgid "The administration panel allows Monitorfish admins to steer control priorities by dynamically assigning a **control priority level** to each fleet segment :"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:23
+#: ../source/control-priority-steering.rst:23
+#: 903e7ec8cb1e43df94fab8400a90f6c7
+#: 39864b952b8a40f0970745e7b508354d
+msgid "Control priority level"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:25
+#: 0337992cb29e49deb7286acb38603bc1
+msgid "Low"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:25
+#: e6298997666e4bcabf1d006fb9907b7a
+msgid "1"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:26
+#: 822e92a514154e5f980dd8d987794d39
+msgid "Moderate"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:26
+#: df86235d4edd415a9a0558b43e86fa27
+msgid "2"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:27
+#: 2c0d1690cc2b42d49b5a6e7d4f22918e
+msgid "High"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:27
+#: 7d705d85549241b99304124363e73235
+msgid "3"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:28
+#: 610b005afeca47018bfc1ef60d985a23
+msgid "Very high"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:28
+#: 22282e19eb1446d9b6122ac69007ba1d
+msgid "4"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:31
+#: 8730c37d4da540068dbbe2f1c48b62dd
+msgid "The control priority level is then included  in the computation of the :ref:`detectability score <detectability-score>` component of the risk factor. By assigning a higher control priority level to a certain fleet segment, the risk factor of all vessels belonging to this fleet segment in real time will be increased, and Monitorfish will automatically recommend control targets that correspond to this fleet segment, thus helping the FMC to reach its objectives."
+msgstr ""

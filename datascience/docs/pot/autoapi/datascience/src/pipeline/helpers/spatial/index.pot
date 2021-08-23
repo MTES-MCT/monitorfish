@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:2
+#: 7162b1b4f79e4606a549ed1022c6795c
+msgid ":py:mod:`datascience.src.pipeline.helpers.spatial`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:8
+#: d442757c5af945b2a737a73c79547022
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:12
+#: ced8181003c14e8e8324d2093995a3a1
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:19:<autosummary>:1
+#: 7a8c82416b97449ea3179d83e08edd7b
+msgid ":obj:`estimate_current_position <datascience.src.pipeline.helpers.spatial.estimate_current_position>`\\ \\(last\\_latitude\\: float\\, last\\_longitude\\: float\\, course\\: float\\, speed\\: float\\, time\\_since\\_last\\_position\\: float\\, max\\_time\\_since\\_last\\_position\\: float \\= 2\\, on\\_error\\: str \\= \\'ignore\\'\\) → Tuple\\[float\\, float\\]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:19:<autosummary>:1
+#: 04324ea77fd940c8a1296fd80d28c091
+msgid "Estimate the current position of a vessel based on its last position, course and"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:22
+#: 289e6cecfd094c09a59cdf83c48a1379
+msgid "Estimate the current position of a vessel based on its last position, course and speed. If the last position is older than max_time_since_last_position, returns None."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
+#: 6ded0244e03842928e2a94f76c5ffd0a
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:26
+#: fef84192ef5c4d228d3e5cdb45578b5c
+msgid "last known latitude of vessel"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:28
+#: 3a9f6d7da57b4bcea7e5a8f44d756fb4
+msgid "last known longitude of vessel"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:30
+#: 047182d7296a4f08bb576ff910a5869f
+msgid "last known route of vessel in degrees"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:32
+#: 8c87281da7b3470a8277c3a59a4312cc
+msgid "last known speed of vessel in nots"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:34
+#: af9d3db7941842d38600535e5cc25996
+msgid "time since last known position of vessel, in hours"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:36
+#: 5029f8cfc29448eca0c7003afef469e7
+msgid "maximum time in hours since last position, after which the estimation is not performed (returns None instead). Defaults to 2."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:40
+#: b4f8be96137d4e798342cd5c5e2d1a98
+msgid "'ignore' or 'raise'."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
+#: d1a19a9a56d448c4a97e4c3820f83c09
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:43
+#: aa60fbdd84dc455ab90151d4f0925dc9
+msgid "estimated current latitude float: estimated current longitude"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
+#: fa6adea9d31742d1aa107cefb9804706
+msgid "Return type"
+msgstr ""

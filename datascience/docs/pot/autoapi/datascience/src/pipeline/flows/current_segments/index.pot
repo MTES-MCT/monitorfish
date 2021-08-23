@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:2
+#: 47c329676e604a81a18805a65b33f7a0
+msgid ":py:mod:`datascience.src.pipeline.flows.current_segments`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:8
+#: 1ebea91f3a4844f98ff9ee24b01b9fef
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:12
+#: 2d8a08447bf14609a5e90d66460cdc4d
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 947d36f8601e4396a6cd76a967ce9d3c
+msgid ":obj:`catch_zone_isin_fao_area <datascience.src.pipeline.flows.current_segments.catch_zone_isin_fao_area>`\\ \\(catch\\_zone\\: Union\\[None\\, str\\]\\, fao\\_area\\: Union\\[None\\, str\\]\\) → bool"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 10e6f28e498e4d6c93f9fea9639a425a
+msgid "Return"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 5a20bb03e5f14cf98c223dc1291879c3
+msgid ":obj:`extract_catches <datascience.src.pipeline.flows.current_segments.extract_catches>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: f674d9bceaa34debb71401ae301b707b
+msgid ":obj:`extract_segments <datascience.src.pipeline.flows.current_segments.extract_segments>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 60e5a01102b84da49ff518f82311b303
+msgid ":obj:`unnest <datascience.src.pipeline.flows.current_segments.unnest>`\\ \\(segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 015920a5b32247898332febffec0202c
+msgid ":obj:`compute_current_segments <datascience.src.pipeline.flows.current_segments.compute_current_segments>`\\ \\(catches\\, segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 74c8b4af02be4f668833cfdda2aa269d
+msgid ":obj:`merge_segments_catches <datascience.src.pipeline.flows.current_segments.merge_segments_catches>`\\ \\(catches\\, current\\_segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 7becbf87d9974562b94610543bf9c19e
+msgid ":obj:`load_current_segments <datascience.src.pipeline.flows.current_segments.load_current_segments>`\\ \\(vessels\\_segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:27
+#: 423228110b0b471598b0dc88c75e9875
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:33:<autosummary>:1
+#: f5de5284116249618f8b3e9e1878e35c
+msgid ":obj:`catches <datascience.src.pipeline.flows.current_segments.catches>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:36
+#: fecb614a776a43b5b42fdef320e65ccd
+msgid "Return - True if a catch zone (e.g. '27.7.b') is in a given fao_area (e.g. '27.7.b' or '27') - False if a catch zone (e.g. '27.7.b') is NOT in a given fao_area (e.g. '28.6' or '27.7.b.4') - True if the fao_area if None (whatever the value of the catch_zone) - False if the fao_area is not None and the catch_zone is None"
+msgstr ""

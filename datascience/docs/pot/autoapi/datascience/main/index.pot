@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/autoapi/datascience/main/index.rst:2
+#: 24c1ff5ce5fb47cb9e69d9fa961d89ca
+msgid ":py:mod:`datascience.main`"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:8
+#: 88f1b85059e24e59b526aa97f4c82d2d
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:12
+#: fdfda708d526444bbd8e947a7846a11b
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:20:<autosummary>:1
+#: 8c7faff07c244de49c57909445d39529
+msgid ":obj:`create_project_if_not_exists <datascience.main.create_project_if_not_exists>`\\ \\(client\\: prefect.Client\\, project\\_name\\: str\\) → None"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:20:<autosummary>:1
+#: 79b1990bb6ef4131ac0208237d7b6cda
+msgid "Checks whether a project named \"Monitorfish\" already exists in Prefect Server."
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:20:<autosummary>:1
+#: 24fe32147b5f44ad83e3f617b9c0e048
+msgid ":obj:`register_flow <datascience.main.register_flow>`\\ \\(f\\: prefect.Flow\\, project\\_name\\: str\\) → None"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:20:<autosummary>:1
+#: ../source/autoapi/datascience/main/index.rst:48
+#: f80c2e8d625b40f387851e31150fe3b3
+#: 652f954348664177a2d3cc2ee93d6954
+msgid "Registers f to \"Monitorfich\" project."
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:22
+#: 6c7f23ebabb0460a86d5b12c6f40d34a
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:29:<autosummary>:1
+#: 3aebb6516d72466fbf28eb8a10d757a9
+msgid ":obj:`PROJECT_NAME <datascience.main.PROJECT_NAME>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:29:<autosummary>:1
+#: d2ee8ed9ec7b46d4a7b08a92dd811829
+msgid ":obj:`client <datascience.main.client>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:37
+#: f1d6de48dda4402f8eb80aacce15cee2
+msgid "Checks whether a project named \"Monitorfish\" already exists in Prefect Server. If not, the project is created."
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:0
+#: ../source/autoapi/datascience/main/index.rst:0
+#: 9a727239b82041b6b3dd364ecfb4be72
+#: fe1a0d6366b040d584d57cfb2c816d47
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:40
+#: 89f2cd821ec841a78368e23ef8348784
+msgid "Prefect client instance"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:0
+#: bc19f53bc1ea425181cf30045c2d6dd5
+msgid "Raises"
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:43
+#: 900b486d42bd4a769dd904bb9289a02a
+msgid "if more than 1 project with the name \"Monitorfish\" are found."
+msgstr ""
+
+#: ../source/autoapi/datascience/main/index.rst:50
+#: 99ffd26e61a4449ba3d383da2b833ce2
+msgid "Prefect flow"
+msgstr ""

@@ -1,0 +1,164 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:2
+#: 9ac0ffa5ca224010bc5457e802953b3c
+msgid ":py:mod:`datascience.src.pipeline.flows.ers`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:8
+#: 7ff3276cd66646b8ae0fd1fcebb58060
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:12
+#: 592a91e59fe0461385e306c1e00e8785
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: bef96e2d446c4bb5889c6d81f7a99b89
+msgid ":obj:`get_message_type <datascience.src.pipeline.flows.ers.get_message_type>`\\ \\(zipfile\\_name\\: str\\) → str"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: 67fca907f0d24661b2a61efcf9d3cfc9
+msgid "For a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: efba1a26b46b4ce0a167b68a80c4047e
+msgid ":obj:`extract_zipfiles <datascience.src.pipeline.flows.ers.extract_zipfiles>`\\ \\(input\\_dir\\: pathlib.Path\\, treated\\_dir\\: pathlib.Path\\, non\\_treated\\_dir\\: pathlib.Path\\, error\\_dir\\: pathlib.Path\\) → List\\[dict\\]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: 968fe213b4a64af2aa13972f9e55d2e7
+msgid "Scans ``input_dir``, in which ers zipfiles are expected to be arranged in a"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: 343ec724e89042e88a6a173f993f07c1
+msgid ":obj:`extract_xmls_from_zipfile <datascience.src.pipeline.flows.ers.extract_xmls_from_zipfile>`\\ \\(zipfile\\: Union\\[None\\, dict\\]\\) → Union\\[None\\, dict\\]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: 9c5b8c5a75554afd9dc1b8970f61e94d
+msgid ":obj:`parse_xmls <datascience.src.pipeline.flows.ers.parse_xmls>`\\ \\(zipfile\\: Union\\[None\\, dict\\]\\) → Union\\[None\\, dict\\]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: 81692d41e5a1472fbc784ce45ed1011d
+msgid ":obj:`clean <datascience.src.pipeline.flows.ers.clean>`\\ \\(zipfile\\: Union\\[None\\, dict\\]\\) → Union\\[None\\, dict\\]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: 83fe2a4c3f6a4bf0bc527bc3696a38c6
+msgid ":obj:`load_ers <datascience.src.pipeline.flows.ers.load_ers>`\\ \\(cleaned\\_data\\: List\\[dict\\]\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:24:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:92
+#: f1530301d81c4bd1a32b6ee7f334fed4
+#: 20d11b92519d4720812b59ba1aabfd66
+msgid "Loads ERS data into public.ers and public.ers_messages tables."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:26
+#: c42f91f2fcee4826a79fa41b455da905
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:36:<autosummary>:1
+#: e0107257651b483c8c0bb294cc7e8e56
+msgid ":obj:`RECEIVED_DIRECTORY <datascience.src.pipeline.flows.ers.RECEIVED_DIRECTORY>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:36:<autosummary>:1
+#: 929207fee27d41c2b3a9aa51b7dea802
+msgid ":obj:`TREATED_DIRECTORY <datascience.src.pipeline.flows.ers.TREATED_DIRECTORY>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:36:<autosummary>:1
+#: f3c47bb748264690b87b9425de5d3692
+msgid ":obj:`NON_TREATED_DIRECTORY <datascience.src.pipeline.flows.ers.NON_TREATED_DIRECTORY>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:36:<autosummary>:1
+#: f102c99441284ca8b57fae96cf8782d3
+msgid ":obj:`ERROR_DIRECTORY <datascience.src.pipeline.flows.ers.ERROR_DIRECTORY>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:36:<autosummary>:1
+#: 586fedb0d3da442485fd6ebfacb8f785
+msgid ":obj:`zipfiles <datascience.src.pipeline.flows.ers.zipfiles>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:59
+#: 0ff45e2c0a8d4ff4a8edf7cbdae73b32
+msgid "For a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip, extract the message type, which may be one of :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:62
+#: 860bdb4784904780a334b01bc51bee68
+msgid "ERS3 (a set of messages in ERS3 format)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:63
+#: 07cfd4374dae4065b552d92c18a35a35
+msgid "ERS3_ACK (a set of acknowledgement statuses from BIA for ERS3 messages)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:64
+#: 29c4d07ba31347a889d5ecfae96f07a5
+msgid "UN (a set of FLUX messages)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:69
+#: 0bbac32110664948b9066dc2be7e3676
+msgid "Scans ``input_dir``, in which ers zipfiles are expected to be arranged in a hierarchy folders like : year / month / zipfiles. Yields found zipfiles along with the corresponding paths of :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:73
+#: 7e1539fe52bf4ff992c6894059403ee9
+msgid "``input_directory`` where the zipfile is located"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:74
+#: dd94af50b9ce494b9a6eb97a4ebbfab7
+msgid "``treated_directory`` where the zipfile will be transfered after integration into the monitorfish database"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:76
+#: a2ca257f430c414fb5aae092a046af42
+msgid "``non_treated_directory`` where the zipfile will be transfered if it is a FLUX type of message (currently not handled)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:78
+#: 91d0350ca4ae4d6abfe96815781f0d9f
+msgid "``error_directory`` if an error occurs during the treatment of messages."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:0
+#: 09e57e773e4441f79957bfe6ec81ffa5
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/ers/index.rst:94
+#: f7a74885dd7b4fb38f7fea06f2f09b8f
+msgid "list of dictionaries (output of `clean` task)"
+msgstr ""

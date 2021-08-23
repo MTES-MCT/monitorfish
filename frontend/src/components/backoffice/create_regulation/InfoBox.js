@@ -13,12 +13,13 @@ const InfoBox = props => {
     <InfoTextParent
       isInfoTextShown={isInfoTextShown}
       isFormOpened={isFormOpened}
-      onMouseLeave={() => !isFormOpened && setIsInfoTextShown(false)}
+      onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
+      pointer={setIsInfoTextShown}
     >
       {isInfoTextShown
         ? <InfoTextWrapper
           isFormOpened={isFormOpened}
-          onMouseLeave={() => !isFormOpened && setIsInfoTextShown(false)}
+          onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
           >
           <InfoPoint>!</InfoPoint>
           <InfoText>
@@ -26,8 +27,8 @@ const InfoBox = props => {
           </InfoText>
         </InfoTextWrapper>
         : <InfoPoint
-          onMouseEnter={() => setIsInfoTextShown(true)}
-          onMouseOut={() => setIsInfoTextShown(false)}
+          onMouseEnter={() => setIsInfoTextShown && setIsInfoTextShown(true)}
+          onMouseOut={() => setIsInfoTextShown && setIsInfoTextShown(false)}
         >!</InfoPoint>}
     </InfoTextParent>)
 }
@@ -37,7 +38,7 @@ const InfoTextParent = styled.div`
   min-height: 20px;
   min-width: 20px;
   position: relative;
-  cursor: pointer;
+  ${props => props.pointer ? 'cursor: pointer' : ''};
   ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
 `
 

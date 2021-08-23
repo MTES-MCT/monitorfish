@@ -87,11 +87,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -172,7 +174,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.db_config.create_engine" title="datascience.src.db_config.create_engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_engine</span></code></a>(db: str, **kwargs) → sqlalchemy.engine.Engine</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.db_config.make_connection_string" title="datascience.src.db_config.make_connection_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_connection_string</span></code></a>(db: str) → str</p></td>
+<td><p>Returns the connection string for the designated database.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.db_config.create_engine" title="datascience.src.db_config.create_engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_engine</span></code></a>(db: str, **kwargs) → sqlalchemy.engine.Engine</p></td>
 <td><p>Returns sqlalchemy engine for designated database.</p></td>
 </tr>
 </tbody>
@@ -197,13 +202,42 @@
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.db_config.make_connection_string">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.db_config.</span></span><span class="sig-name descname"><span class="pre">make_connection_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../../../../_modules/datascience/src/db_config.html#make_connection_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.db_config.make_connection_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the connection string for the designated database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> (<em>str</em>) – Database name. Possible values :</p></li>
+<li><p><strong>'ocan'</strong> – </p></li>
+<li><p><strong>'fmc'</strong> – </p></li>
+<li><p><strong>'monitorfish_remote'</strong> – </p></li>
+<li><p><strong>'monistorfish_local'</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>connection string for selected database.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – with credentials for the selected database are not found in</p></li>
+<li><p><strong>environment variables.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="datascience.src.db_config.create_engine">
 <span class="sig-prename descclassname"><span class="pre">datascience.src.db_config.</span></span><span class="sig-name descname"><span class="pre">create_engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">sqlalchemy.engine.Engine</span><a class="reference internal" href="../../../../_modules/datascience/src/db_config.html#create_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.db_config.create_engine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns sqlalchemy engine for designated database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>db</strong> (<em>str</em>) – Database name. Possible values :
-‘ocan’, ‘fmc’, ‘monitorfish_remote’, ‘monistorfish_local’</p>
+‘ocan’, ‘fmc’, ‘monitorfish_remote’, ‘monistorfish_local’, ‘cacem_local’</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>sqlalchemy engine for selected database.</p>

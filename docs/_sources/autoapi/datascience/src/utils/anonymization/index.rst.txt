@@ -1,0 +1,109 @@
+:py:mod:`datascience.src.utils.anonymization`
+=============================================
+
+.. py:module:: datascience.src.utils.anonymization
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.utils.anonymization.DataAnonymizer
+
+
+
+
+.. py:class:: DataAnonymizer(data_type: str = 'cfr')
+
+   Bases: :py:obj:`object`
+
+   .. py:attribute:: __faker
+      
+
+      
+
+   .. py:method:: anonymize_cfr(self, value)
+
+
+   .. py:method:: anonymize_cfr_arr(self, values)
+
+
+   .. py:method:: anonymize_external_immatriculation(self, value)
+
+
+   .. py:method:: anonymize_external_immatriculation_arr(self, values)
+
+
+   .. py:method:: anonymize_mmsi(self, value)
+
+
+   .. py:method:: anonymize_mmsi_arr(self, values)
+
+
+   .. py:method:: anonymize_ircs(self, value)
+
+
+   .. py:method:: anonymize_ircs_arr(self, values)
+
+
+   .. py:method:: anonymize_vessel_name(self, value)
+
+
+   .. py:method:: anonymize_vessel_name_arr(self, values)
+
+
+   .. py:method:: anonymize_registry_port(self, value)
+
+
+   .. py:method:: anonymize_registry_port_arr(self, values)
+
+
+   .. py:method:: anonymize_district(self, value)
+
+
+   .. py:method:: anonymize_district_arr(self, values)
+
+
+   .. py:method:: anonymize_district_code(self, value)
+
+
+   .. py:method:: anonymize_district_code_arr(self, values)
+
+
+   .. py:method:: make_random_upper_case_letters(cls, n: int) -> str
+      :classmethod:
+
+
+   .. py:method:: make_fake_cfr(cls)
+      :classmethod:
+
+
+   .. py:method:: make_fake_external_immatriculation(cls)
+      :classmethod:
+
+
+   .. py:method:: make_fake_mmsi(cls)
+      :classmethod:
+
+
+   .. py:method:: make_fake_ircs(cls)
+      :classmethod:
+
+
+   .. py:method:: make_fake_vessel_name(cls)
+      :classmethod:
+
+
+   .. py:method:: make_fake_port(cls)
+      :classmethod:
+
+
+   .. py:method:: make_fake_district_code(cls)
+      :classmethod:
+
+
+

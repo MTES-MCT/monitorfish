@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.flows.vessels`
-=============================================
+:py:mod:`datascience.src.pipeline.flows.vessels`
+================================================
 
 .. py:module:: datascience.src.pipeline.flows.vessels
 
@@ -32,31 +32,31 @@ Attributes
    datascience.src.pipeline.flows.vessels.fr_vessels
 
 
-.. function:: extract_fr_vessels()
+.. py:function:: extract_fr_vessels()
 
 
-.. function:: extract_cee_vessels()
+.. py:function:: extract_cee_vessels()
 
 
-.. function:: extract_non_cee_vessels()
+.. py:function:: extract_non_cee_vessels()
 
 
-.. function:: extract_floats()
+.. py:function:: extract_floats()
 
 
-.. function:: extract_nav_licences()
+.. py:function:: extract_nav_licences()
 
 
-.. function:: merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences)
+.. py:function:: merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences)
 
 
-.. function:: clean_vessels(all_vessels)
+.. py:function:: clean_vessels(all_vessels)
 
 
-.. function:: load_vessels(all_vessels)
+.. py:function:: load_vessels(all_vessels)
 
 
-.. data:: fr_vessels
+.. py:data:: fr_vessels
    
 
    

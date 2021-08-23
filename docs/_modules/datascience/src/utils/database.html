@@ -87,11 +87,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -159,12 +161,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for datascience.src.utils.database</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">inspect</span>
 
-<span class="kn">from</span> <span class="nn">src.db_config</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">src.db_config</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">make_connection_string</span>
 <span class="kn">from</span> <span class="nn">src.read_query</span> <span class="kn">import</span> <span class="n">read_query</span>
 
 
@@ -236,6 +239,51 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;------------------------</span><span class="se">\n</span><span class="s2">***</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">***&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">insp</span><span class="o">.</span><span class="n">get_table_names</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pg_dump_table"><a class="viewcode-back" href="../../../../autoapi/datascience/src/utils/database/index.html#datascience.src.utils.database.pg_dump_table">[docs]</a><span class="k">def</span> <span class="nf">pg_dump_table</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">what</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runs ``pg_dump --schema-only`` on the selected database and returns the output as a</span>
+<span class="sd">    string. Useful to generate DDL statements of tables and to output test data as sql</span>
+<span class="sd">    scripts.</span>
+
+<span class="sd">      * If ``db`` is ``monitorfish_local``, the ``pg_dump`` command will be run by the</span>
+<span class="sd">      machine on which the command is run, so postres must be installed.</span>
+<span class="sd">      * If ``db`` is ``monitorfish_remote``, the command in run through in the docker</span>
+<span class="sd">      container with ``docker exec monitorfish_database``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        db (str): &#39;monitorfish_remote&#39; or &#39;monitorfish_local&#39;</span>
+<span class="sd">        table_name (str): the name of the table to export.</span>
+<span class="sd">        what (Union[None, str]): ``&#39;data-only&#39;`` ``&#39;schema-only&#39;`` or ``None``. If</span>
+<span class="sd">        ``None``, output both data and schema definition. Defaults to ``None``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: output of ``pg_dump`` command</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">db</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;monitorfish_remote&quot;</span><span class="p">,</span> <span class="s2">&quot;monitorfish_local&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;db&#39; must be &#39;monitorfish_local&#39; or &#39;monitorfish_remote&#39; , got </span><span class="si">{</span><span class="n">db</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data-only&quot;</span><span class="p">:</span> <span class="s2">&quot;--data-only&quot;</span><span class="p">,</span> <span class="s2">&quot;schema-only&quot;</span><span class="p">:</span> <span class="s2">&quot;--schema-only&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">what</span> <span class="ow">in</span> <span class="n">options</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;what&#39; must be &#39;data-only&#39;, &#39;schema-only&#39; or None, got </span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="n">connection_string</span> <span class="o">=</span> <span class="n">make_connection_string</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;pg_dump --dbname=</span><span class="si">{</span><span class="n">connection_string</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">options</span><span class="p">[</span><span class="n">what</span><span class="p">]</span><span class="si">}</span><span class="s2"> --table </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">if</span> <span class="n">db</span> <span class="o">==</span> <span class="s2">&quot;monitorfish_remote&quot;</span><span class="p">:</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;docker exec monitorfish_database &quot;</span> <span class="o">+</span> <span class="n">cmd</span>
+
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
 </pre></div>
 
            </div>

@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.spiders`
-====================================================================
+:py:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.spiders`
+=======================================================================
 
 .. py:module:: datascience.src.pipeline.scraping.legipeche.legipeche.spiders
 

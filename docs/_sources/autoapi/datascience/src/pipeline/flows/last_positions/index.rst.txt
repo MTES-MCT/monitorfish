@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.flows.last_positions`
-====================================================
+:py:mod:`datascience.src.pipeline.flows.last_positions`
+=======================================================
 
 .. py:module:: datascience.src.pipeline.flows.last_positions
 
@@ -13,9 +13,8 @@ Functions
 
 .. autoapisummary::
 
-   datascience.src.pipeline.flows.last_positions.extract_current_segments
    datascience.src.pipeline.flows.last_positions.extract_last_positions
-   datascience.src.pipeline.flows.last_positions.extract_last_controls
+   datascience.src.pipeline.flows.last_positions.extract_risk_factors
    datascience.src.pipeline.flows.last_positions.estimate_current_positions
    datascience.src.pipeline.flows.last_positions.merge
    datascience.src.pipeline.flows.last_positions.load_last_positions
@@ -27,28 +26,25 @@ Attributes
 
 .. autoapisummary::
 
-   datascience.src.pipeline.flows.last_positions.current_segments
+   datascience.src.pipeline.flows.last_positions.last_positions
 
 
-.. function:: extract_current_segments()
+.. py:function:: extract_last_positions()
 
 
-.. function:: extract_last_positions()
+.. py:function:: extract_risk_factors()
 
 
-.. function:: extract_last_controls()
+.. py:function:: estimate_current_positions(last_positions)
 
 
-.. function:: estimate_current_positions(last_positions)
+.. py:function:: merge(last_positions, risk_factors)
 
 
-.. function:: merge(last_positions, current_segments, last_controls)
+.. py:function:: load_last_positions(last_positions)
 
 
-.. function:: load_last_positions(last_positions)
-
-
-.. data:: current_segments
+.. py:data:: last_positions
    
 
    

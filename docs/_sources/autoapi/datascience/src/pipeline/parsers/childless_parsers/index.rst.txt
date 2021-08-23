@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.parsers.childless_parsers`
-=========================================================
+:py:mod:`datascience.src.pipeline.parsers.childless_parsers`
+============================================================
 
 .. py:module:: datascience.src.pipeline.parsers.childless_parsers
 
@@ -21,18 +21,18 @@ Functions
 
 
 
-.. function:: parse_ras(ras)
+.. py:function:: parse_ras(ras)
 
 
-.. function:: parse_pro(pro)
+.. py:function:: parse_pro(pro)
 
 
-.. function:: parse_spe(spe)
+.. py:function:: parse_spe(spe)
 
 
-.. function:: parse_pos(pos)
+.. py:function:: parse_pos(pos)
 
 
-.. function:: parse_gea(gea)
+.. py:function:: parse_gea(gea)
 
 

@@ -89,11 +89,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -180,11 +182,32 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.extract_control_anteriority" title="datascience.src.pipeline.flows.control_anteriority.extract_control_anteriority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_control_anteriority</span></code></a>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.compute_control_dates_coefficients" title="datascience.src.pipeline.flows.control_anteriority.compute_control_dates_coefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_control_dates_coefficients</span></code></a>(control_dates: pandas.Series, from_date: datetime.datetime, to_date: datetime.datetime) → pandas.Series</p></td>
+<td><p>For each date in <code class="docutils literal notranslate"><span class="pre">control_dates</span></code>, computes a coefficient determined by its</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.load_control_anteriority" title="datascience.src.pipeline.flows.control_anteriority.load_control_anteriority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_control_anteriority</span></code></a>(control_anteriority)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.compute_control_ranks_coefficients" title="datascience.src.pipeline.flows.control_anteriority.compute_control_ranks_coefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_control_ranks_coefficients</span></code></a>(control_ranks: numpy.array) → numpy.array</p></td>
+<td><p>Given a <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> of integers representing the rank of vessels controls</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.extract_last_years_controls" title="datascience.src.pipeline.flows.control_anteriority.extract_last_years_controls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_last_years_controls</span></code></a>(years: float = 5) → pandas.DataFrame</p></td>
+<td><p>Extracts controls data of the last <code class="docutils literal notranslate"><span class="pre">years</span></code> years for all vessels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.extract_fishing_infraction_ids" title="datascience.src.pipeline.flows.control_anteriority.extract_fishing_infraction_ids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_fishing_infraction_ids</span></code></a>() → set</p></td>
+<td><p>Extracts all <code class="docutils literal notranslate"><span class="pre">ids</span></code> of <code class="docutils literal notranslate"><span class="pre">infractions</span></code> related to fishing non-compliance</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.get_last_controls" title="datascience.src.pipeline.flows.control_anteriority.get_last_controls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_last_controls</span></code></a>(controls: pandas.DataFrame) → pandas.DataFrame</p></td>
+<td><p>Filters the input <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> of controls data to keep only</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.compute_control_rate_risk_factors" title="datascience.src.pipeline.flows.control_anteriority.compute_control_rate_risk_factors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_control_rate_risk_factors</span></code></a>(controls: pandas.DataFrame) → pandas.DataFrame</p></td>
+<td><p>Given controls data on 3+ years, computes the control rate risk factor of each</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.compute_infraction_rate_risk_factors" title="datascience.src.pipeline.flows.control_anteriority.compute_infraction_rate_risk_factors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_infraction_rate_risk_factors</span></code></a>(controls: pandas.DataFrame, fishing_infraction_ids: set) → pandas.DataFrame</p></td>
+<td><p>Given control results data of vessels over the past 3+ years, computes the</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.merge" title="datascience.src.pipeline.flows.control_anteriority.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge</span></code></a>(control_rate_risk_factors: pandas.DataFrame, infraction_rate_risk_factor: pandas.DataFrame, last_controls: pandas.DataFrame) → pandas.DataFrame</p></td>
+<td><p>Merge of <a href="#id1"><span class="problematic" id="id2">``</span></a>pd.DataFrame``s to produce output of the flow. The join is performed</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.load_control_anteriority" title="datascience.src.pipeline.flows.control_anteriority.load_control_anteriority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_control_anteriority</span></code></a>(control_anteriority: pandas.DataFrame)</p></td>
+<td><p>Load the output of <code class="docutils literal notranslate"><span class="pre">merge</span></code> task into <code class="docutils literal notranslate"><span class="pre">control_anteriority</span></code> table.</p></td>
 </tr>
 </tbody>
 </table>
@@ -197,24 +220,271 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.control_anteriority" title="datascience.src.pipeline.flows.control_anteriority.control_anteriority"><code class="xref py py-obj docutils literal notranslate"><span class="pre">control_anteriority</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.control_rate_bins" title="datascience.src.pipeline.flows.control_anteriority.control_rate_bins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">control_rate_bins</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.control_rate_bins_risk_factors" title="datascience.src.pipeline.flows.control_anteriority.control_rate_bins_risk_factors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">control_rate_bins_risk_factors</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.infraction_rate_bins" title="datascience.src.pipeline.flows.control_anteriority.infraction_rate_bins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infraction_rate_bins</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.control_anteriority.controls" title="datascience.src.pipeline.flows.control_anteriority.controls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">controls</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.extract_control_anteriority">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">extract_control_anteriority</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#extract_control_anteriority"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.extract_control_anteriority" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.load_control_anteriority">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">load_control_anteriority</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_anteriority</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#load_control_anteriority"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.load_control_anteriority" title="Permalink to this definition">¶</a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.control_rate_bins">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">control_rate_bins</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#control_rate_bins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.control_rate_bins" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.control_anteriority">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">control_anteriority</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#control_anteriority"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.control_anteriority" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.control_rate_bins_risk_factors">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">control_rate_bins_risk_factors</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#control_rate_bins_risk_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.control_rate_bins_risk_factors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.infraction_rate_bins">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">infraction_rate_bins</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#infraction_rate_bins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.infraction_rate_bins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.compute_control_dates_coefficients">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">compute_control_dates_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_dates</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_date</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_date</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.Series</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#compute_control_dates_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.compute_control_dates_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each date in <code class="docutils literal notranslate"><span class="pre">control_dates</span></code>, computes a coefficient determined by its
+distance from <code class="docutils literal notranslate"><span class="pre">from_date</span></code> relative to the distance between <code class="docutils literal notranslate"><span class="pre">from_date</span></code> and
+<code class="docutils literal notranslate"><span class="pre">to_date</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>control_dates</strong> (<em>pd.Series</em>) – Series of <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code></p></li>
+<li><p><strong>from_date</strong> (<em>datetime</em>) – Start of time interval considered</p></li>
+<li><p><strong>to_date</strong> (<em>datetime</em>) – Start of time interval considered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">from_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dates</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span>
+<span class="go">            datetime(2019, 6, 5),</span>
+<span class="go">            datetime(2021, 1, 1),</span>
+<span class="go">            datetime(2022, 1, 1),</span>
+<span class="go">            datetime(2025, 5, 2)</span>
+<span class="go">    ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compute_control_dates_coefficients</span><span class="p">(</span>
+<span class="go">            dates,</span>
+<span class="go">            from_date=from_date,</span>
+<span class="go">            to_date=to_date</span>
+<span class="go">    )</span>
+<span class="go">0    0.0</span>
+<span class="go">1    0.0</span>
+<span class="go">2    0.5</span>
+<span class="go">3    0.0</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.compute_control_ranks_coefficients">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">compute_control_ranks_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_ranks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#compute_control_ranks_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.compute_control_ranks_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> of integers representing the rank of vessels controls
+over time, returns the corresponding coefficients with which they must be taken
+into account in the risk factor.</p>
+<p>The input array represents the controls of several vessels. For each vessel,
+controls are sorted from most to least recent and ranked (1, 2, 3…).</p>
+<p>The output is an array with the same shape which contains coefficients defined as:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>1.0 for controls of rank 1</p></li>
+<li><p>0.9 for controls of rank 2</p></li>
+<li><p>…</p></li>
+<li><p>0.1 for controls of rank 10</p></li>
+<li><p>0.0 for controls of rank 11+</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>control_ranks</strong> (<em>np.array</em>) – 1D-array of integers &gt;= 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the same shape and with coefficients between 1 (for
+controls of rank 1) and 0 (for controls of rank &gt;= 10).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compute_control_ranks_coefficients</span><span class="p">(</span><span class="n">ranks</span><span class="p">)</span>
+<span class="go">np.array([1.0, 0.7, 0.9, 0.9, 0.0, 0.9, 0.7])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.extract_last_years_controls">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">extract_last_years_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">years</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#extract_last_years_controls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.extract_last_years_controls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts controls data of the last <code class="docutils literal notranslate"><span class="pre">years</span></code> years for all vessels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>years</strong> (<em>float</em><em>, </em><em>optional</em>) – Number of years to extract. Defaults to 5.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>all vessels’ controls data for the last years</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.extract_fishing_infraction_ids">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">extract_fishing_infraction_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">set</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#extract_fishing_infraction_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.extract_fishing_infraction_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts all <code class="docutils literal notranslate"><span class="pre">ids</span></code> of <code class="docutils literal notranslate"><span class="pre">infractions</span></code> related to fishing non-compliance
+(safety non compliance events are excluded).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Set of infractions ids related to fishing</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.get_last_controls">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">get_last_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">controls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#get_last_controls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.get_last_controls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters the input <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> of controls data to keep only</p>
+<ul class="simple">
+<li><p>the most recent control of each vessel</p></li>
+<li><p>the following columns:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">vessel_id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cfr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ircs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">external_immatriculation</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">control_datetime_utc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">infraction</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post_control_comments</span></code></p></li>
+</ul>
+</li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>controls</strong> (<em>pd.DataFrame</em>) – <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> with controls data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>filtered input with only the most recent control of each vessel
+and a subset of columns</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.compute_control_rate_risk_factors">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">compute_control_rate_risk_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">controls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#compute_control_rate_risk_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.compute_control_rate_risk_factors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given controls data on 3+ years, computes the control rate risk factor of each
+vessel.</p>
+<p>The idea is that vessels that have been controlled less over the past 3 years and
+that have not been controlled for a certain time have a higher priority of control
+than vessels that were controlled many times over the past 3 years and that were
+controlled recently.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>controls</strong> (<em>pd.DataFrame</em>) – <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> of controls data on the last 3+ years</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>for each vessel, the component of the risk factor related to the
+control rate of each vessel.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.compute_infraction_rate_risk_factors">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">compute_infraction_rate_risk_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">controls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fishing_infraction_ids</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">set</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#compute_infraction_rate_risk_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.compute_infraction_rate_risk_factors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given control results data of vessels over the past 3+ years, computes the
+infraction rate risk factor of each vessel.</p>
+<p>The idea is that vessels which committed infractions in the past have a higher
+priority of control than vessels that were in order.</p>
+<p>Only violations related to fishing non-compliance are taken into account. Safety
+non-compliance evens are not taken into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>controls</strong> (<em>pd.DataFrame</em>) – control results data</p></li>
+<li><p><strong>fishing_infraction_ids</strong> (<em>set</em>) – set of infractions ids related to fishing
+non-compliance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>for each vessel, the component of the risk factor related to the
+infraction rate of each vessel.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.merge">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_rate_risk_factors</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infraction_rate_risk_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_controls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge of <code class="docutils literal notranslate"><span class="pre">pd.DataFrame``s</span> <span class="pre">to</span> <span class="pre">produce</span> <span class="pre">output</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">flow.</span> <span class="pre">The</span> <span class="pre">join</span> <span class="pre">is</span> <span class="pre">performed</span>
+<span class="pre">on</span> <span class="pre">``vessel_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>control_rate_risk_factors</strong> (<em>pd.DataFrame</em>) – output of</p></li>
+<li><p><strong>task</strong> (<em>compute_infraction_rate_risk_factors</em>) – </p></li>
+<li><p><strong>infraction_rate_risk_factor</strong> (<em>pd.DataFrame</em>) – output of</p></li>
+<li><p><strong>task</strong> – </p></li>
+<li><p><strong>last_controls</strong> (<em>pd.DataFrame</em>) – output of <code class="docutils literal notranslate"><span class="pre">get_last_controls</span></code> task</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>join of the 3 input <a href="#id3"><span class="problematic" id="id4">``</span></a>pd.DataFrame``s</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.load_control_anteriority">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">load_control_anteriority</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_anteriority</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#load_control_anteriority"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.load_control_anteriority" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the output of <code class="docutils literal notranslate"><span class="pre">merge</span></code> task into <code class="docutils literal notranslate"><span class="pre">control_anteriority</span></code> table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>control_anteriority</strong> (<em>pd.DataFrame</em>) – output of <code class="docutils literal notranslate"><span class="pre">merge</span></code> task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.control_anteriority.controls">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.control_anteriority.</span></span><span class="sig-name descname"><span class="pre">controls</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/control_anteriority.html#controls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.control_anteriority.controls" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.processing`
-==========================================
+:py:mod:`datascience.src.pipeline.processing`
+=============================================
 
 .. py:module:: datascience.src.pipeline.processing
 
@@ -31,7 +31,7 @@ Functions
 
 
 
-.. function:: is_a_value(x) -> bool
+.. py:function:: is_a_value(x) -> bool
 
    Returns False if pd.isna(x), True otherwise.
 
@@ -46,7 +46,7 @@ Functions
    :rtype: bool
 
 
-.. function:: concatenate_values(row: pandas.Series) -> List
+.. py:function:: concatenate_values(row: pandas.Series) -> List
 
    Filters the input pandas Series to keep only distinct non null values
    and returns the result as a python list.
@@ -58,7 +58,7 @@ Functions
    :rtype: List
 
 
-.. function:: concatenate_columns(df: pandas.DataFrame, input_col_names: List) -> pandas.Series
+.. py:function:: concatenate_columns(df: pandas.DataFrame, input_col_names: List) -> pandas.Series
 
    For each row in the input DataFrame, the distinct and non null values contained in
    the columns input_col_names are stored in a list. A pandas Series of the same length
@@ -73,7 +73,7 @@ Functions
    :rtype: pd.Series
 
 
-.. function:: combine_overlapping_columns(df: pandas.DataFrame, ordered_cols_list: List) -> pandas.Series
+.. py:function:: combine_overlapping_columns(df: pandas.DataFrame, ordered_cols_list: List) -> pandas.Series
 
    Combines several columns into one by taking the first_valid_value in each row,
    in the order of the ordered_cols_list.
@@ -92,7 +92,7 @@ Functions
    :rtype: pd.Series
 
 
-.. function:: get_first_non_null_column_name(df: pandas.DataFrame, result_labels: Union[None, dict] = None) -> pandas.Series
+.. py:function:: get_first_non_null_column_name(df: pandas.DataFrame, result_labels: Union[None, dict] = None) -> pandas.Series
 
    Returns a Series with the same index as the input DataFrame, whose values are
    the name of the first column (or the corresponding label, if provided) with a
@@ -111,7 +111,7 @@ Functions
    :rtype: pd.Series
 
 
-.. function:: df_to_dict_series(df: pandas.DataFrame, result_colname: str = 'json_col')
+.. py:function:: df_to_dict_series(df: pandas.DataFrame, result_colname: str = 'json_col')
 
    Converts a pandas DataFrame into a Series with the same index as the input
    DataFrame and whose values are dictionnaries like :
@@ -127,7 +127,7 @@ Functions
    :rtype: pd.Series
 
 
-.. function:: zeros_ones_to_bools(df: pandas.DataFrame) -> pandas.DataFrame
+.. py:function:: zeros_ones_to_bools(df: pandas.DataFrame) -> pandas.DataFrame
 
    Converts a pandas DataFrame containing "0", "1" and None values
    to a DataFrame with False, True and None values respectively.
@@ -136,7 +136,7 @@ Functions
    not have a boolean data type and boolean data is often stored as "0"s and "1"s.
 
 
-.. function:: to_pgarr(x: Union[list, set, numpy.ndarray], handle_errors: bool = False, value_on_error: Union[str, None] = None) -> Union[str, None]
+.. py:function:: to_pgarr(x: Union[list, set, numpy.ndarray], handle_errors: bool = False, value_on_error: Union[str, None] = None) -> Union[str, None]
 
    Converts a python `list`, `set` or `numpy.ndarray` to a string with Postgresql
    array syntax.
@@ -176,7 +176,7 @@ Functions
    >>> to_pgarr(np.nan, handle_errors=True, value_on_error=None)
 
 
-.. function:: df_values_to_psql_arrays(df: pandas.DataFrame, handle_errors: bool = False, value_on_error: Union[str, None] = None) -> pandas.DataFrame
+.. py:function:: df_values_to_psql_arrays(df: pandas.DataFrame, handle_errors: bool = False, value_on_error: Union[str, None] = None) -> pandas.DataFrame
 
    Returns a `pandas.DataFrame` with all values serialized as strings
    with Postgresql array syntax. All values must be of type list, set or numpy array.
@@ -205,17 +205,17 @@ Functions
        1   {a,b}
 
 
-.. function:: json_converter(x)
+.. py:function:: json_converter(x)
 
    Converter for types not natively handled by json.dumps
 
 
-.. function:: to_json(x: Any) -> str
+.. py:function:: to_json(x: Any) -> str
 
    Converts python object to json string.
 
 
-.. function:: df_values_to_json(df: pandas.DataFrame) -> pandas.DataFrame
+.. py:function:: df_values_to_json(df: pandas.DataFrame) -> pandas.DataFrame
 
    Returns a `pandas.DataFrame` with all values serialized to json string.
 
@@ -234,17 +234,17 @@ Functions
    :rtype: pd.DataFrame
 
 
-.. function:: drop_rows_already_in_table(df: pandas.DataFrame, df_column_name: str, table: sqlalchemy.Table, table_column_name: str, connection: sqlalchemy.engine.base.Connection, logger: logging.Logger) -> pandas.DataFrame
+.. py:function:: drop_rows_already_in_table(df: pandas.DataFrame, df_column_name: str, table: sqlalchemy.Table, table_column_name: str, connection: sqlalchemy.engine.base.Connection, logger: logging.Logger) -> pandas.DataFrame
 
    Removes rows from the input DataFrame `df` in which the column `df_column_name`
    contains values that are already present in the column `table_column_name` of the
    table `table`, and returns the filtered DataFrame.
 
 
-.. function:: prepare_df_for_loading(df: pandas.DataFrame, logger: logging.Logger, pg_array_columns: Union[None, list] = None, handle_array_conversion_errors: bool = True, value_on_array_conversion_error='{}', jsonb_columns: Union[None, list] = None)
+.. py:function:: prepare_df_for_loading(df: pandas.DataFrame, logger: logging.Logger, pg_array_columns: Union[None, list] = None, handle_array_conversion_errors: bool = True, value_on_array_conversion_error='{}', jsonb_columns: Union[None, list] = None)
 
 
-.. function:: join_on_multiple_keys(left: pandas.DataFrame, right: pandas.DataFrame, on: list, how: str = 'inner')
+.. py:function:: join_on_multiple_keys(left: pandas.DataFrame, right: pandas.DataFrame, on: list, how: str = 'inner')
 
    Join two pandas DataFrames, attempting to match rows on several keys by
    decreasing order of priority.

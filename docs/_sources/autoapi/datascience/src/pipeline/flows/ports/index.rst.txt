@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.flows.ports`
-===========================================
+:py:mod:`datascience.src.pipeline.flows.ports`
+==============================================
 
 .. py:module:: datascience.src.pipeline.flows.ports
 
@@ -52,101 +52,101 @@ Attributes
    datascience.src.pipeline.flows.ports.ports
 
 
-.. function:: make_date(date_string: str)
+.. py:function:: make_date(date_string: str)
 
 
-.. function:: make_lat_lon(lat_lon: str)
+.. py:function:: make_lat_lon(lat_lon: str)
 
 
-.. function:: extract_unece_locations(csv_directory_path)
+.. py:function:: extract_unece_locations(csv_directory_path)
 
 
-.. function:: clean_unece(locations)
+.. py:function:: clean_unece(locations)
 
 
-.. function:: load_unece(locations)
+.. py:function:: load_unece(locations)
 
 
-.. data:: csv_directory_path
+.. py:data:: csv_directory_path
    
 
    
 
-.. function:: extract_circabc_locations(csv_filepath)
+.. py:function:: extract_circabc_locations(csv_filepath)
 
 
-.. function:: clean_circabc(locations)
+.. py:function:: clean_circabc(locations)
 
 
-.. function:: load_circabc(locations)
+.. py:function:: load_circabc(locations)
 
 
-.. data:: csv_filepath
+.. py:data:: csv_filepath
    
 
    
 
-.. function:: extract_unece_ports()
+.. py:function:: extract_unece_ports()
 
 
-.. function:: extract_circabc_ports()
+.. py:function:: extract_circabc_ports()
 
 
-.. function:: merge_circabc_unece(circabc_ports, unece_ports)
+.. py:function:: merge_circabc_unece(circabc_ports, unece_ports)
 
 
-.. function:: combine_columns_into_value(ports)
+.. py:function:: combine_columns_into_value(ports)
 
 
-.. function:: load_port_codes(ports)
+.. py:function:: load_port_codes(ports)
 
 
-.. data:: circabc_ports
+.. py:data:: circabc_ports
    
 
    
 
-.. function:: geocode_row(row)
+.. py:function:: geocode_row(row)
 
 
-.. function:: extract_port_codes()
+.. py:function:: extract_port_codes()
 
 
-.. function:: geocode_ports(ports)
+.. py:function:: geocode_ports(ports)
 
 
-.. function:: load_geocoded_ports(geocoded_ports)
+.. py:function:: load_geocoded_ports(geocoded_ports)
 
 
-.. data:: ports
+.. py:data:: ports
    
 
    
 
-.. function:: extract_geocoded_ports()
+.. py:function:: extract_geocoded_ports()
 
 
-.. function:: merge_lat_lon(geocoded_ports)
+.. py:function:: merge_lat_lon(geocoded_ports)
 
 
-.. function:: add_manual_fixes(ports)
+.. py:function:: add_manual_fixes(ports)
 
 
-.. function:: load_ports(ports)
+.. py:function:: load_ports(ports)
 
 
-.. data:: geocoded_ports
+.. py:data:: geocoded_ports
    
 
    
 
-.. function:: extract_datagouv_ports(ports_url: str = PORTS_URL, proxies: dict = None)
+.. py:function:: extract_datagouv_ports(ports_url: str = PORTS_URL, proxies: dict = None)
 
 
-.. function:: load_ports_to_monitorfish(ports)
+.. py:function:: load_ports_to_monitorfish(ports)
 
 
-.. data:: ports
+.. py:data:: ports
    
 
    

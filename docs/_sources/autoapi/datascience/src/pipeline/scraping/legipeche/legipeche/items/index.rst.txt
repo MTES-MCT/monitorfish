@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.items`
-==================================================================
+:py:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.items`
+=====================================================================
 
 .. py:module:: datascience.src.pipeline.scraping.legipeche.legipeche.items
 
@@ -17,8 +17,7 @@ Classes
 
 
 
-.. class:: LegipecheItem(*args, **kwargs)
-
+.. py:class:: LegipecheItem(*args, **kwargs)
 
    Bases: :py:obj:`scrapy.Item`
 

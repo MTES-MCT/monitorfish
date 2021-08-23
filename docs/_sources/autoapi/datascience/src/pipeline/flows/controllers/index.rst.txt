@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.flows.controllers`
-=================================================
+:py:mod:`datascience.src.pipeline.flows.controllers`
+====================================================
 
 .. py:module:: datascience.src.pipeline.flows.controllers
 
@@ -26,13 +26,13 @@ Attributes
    datascience.src.pipeline.flows.controllers.controllers
 
 
-.. function:: extract_controllers()
+.. py:function:: extract_controllers()
 
 
-.. function:: load_controllers(controllers)
+.. py:function:: load_controllers(controllers)
 
 
-.. data:: controllers
+.. py:data:: controllers
    
 
    

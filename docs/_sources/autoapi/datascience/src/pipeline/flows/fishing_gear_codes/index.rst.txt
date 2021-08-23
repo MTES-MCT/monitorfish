@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.flows.fishing_gear_codes`
-========================================================
+:py:mod:`datascience.src.pipeline.flows.fishing_gear_codes`
+===========================================================
 
 .. py:module:: datascience.src.pipeline.flows.fishing_gear_codes
 
@@ -27,16 +27,16 @@ Attributes
    datascience.src.pipeline.flows.fishing_gear_codes.fishing_gear_codes
 
 
-.. function:: extract_fishing_gear_codes()
+.. py:function:: extract_fishing_gear_codes()
 
 
-.. function:: clean_fishing_gear_codes(fishing_gear_codes)
+.. py:function:: clean_fishing_gear_codes(fishing_gear_codes)
 
 
-.. function:: load_fishing_gear_codes(fishing_gear_codes)
+.. py:function:: load_fishing_gear_codes(fishing_gear_codes)
 
 
-.. data:: fishing_gear_codes
+.. py:data:: fishing_gear_codes
    
 
    

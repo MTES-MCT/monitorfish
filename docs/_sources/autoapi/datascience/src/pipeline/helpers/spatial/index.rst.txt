@@ -1,5 +1,5 @@
-:mod:`datascience.src.pipeline.helpers.spatial`
-===============================================
+:py:mod:`datascience.src.pipeline.helpers.spatial`
+==================================================
 
 .. py:module:: datascience.src.pipeline.helpers.spatial
 
@@ -17,7 +17,7 @@ Functions
 
 
 
-.. function:: estimate_current_position(last_latitude: float, last_longitude: float, course: float, speed: float, time_since_last_position: float, max_time_since_last_position: float = 2, on_error: str = 'ignore') -> Tuple[float, float]
+.. py:function:: estimate_current_position(last_latitude: float, last_longitude: float, course: float, speed: float, time_since_last_position: float, max_time_since_last_position: float = 2, on_error: str = 'ignore') -> Tuple[float, float]
 
    Estimate the current position of a vessel based on its last position, course and
    speed. If the last position is older than max_time_since_last_position, returns

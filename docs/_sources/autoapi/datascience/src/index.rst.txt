@@ -1,5 +1,5 @@
-:mod:`datascience.src`
-======================
+:py:mod:`datascience.src`
+=========================
 
 .. py:module:: datascience.src
 

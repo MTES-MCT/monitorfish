@@ -87,11 +87,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference.html">API reference</a></li>
 </ul>
 
@@ -164,6 +166,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">text</span>
 
 <span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">QUERIES_LOCATION</span>
 
@@ -174,6 +177,7 @@
     <span class="n">db</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">sql_filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
     <span class="n">parse_dates</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Run saved SQLquery on a database. Supported databases :</span>
@@ -181,6 +185,7 @@
 <span class="sd">    - &#39;fmc&#39;: FMC database</span>
 <span class="sd">    - &#39;monitorfish_remote&#39;: Monitorfish database</span>
 <span class="sd">    - &#39;monitorfish_local&#39;: Monitorfish PostGIS database hosted in CNSP</span>
+<span class="sd">    - &#39;cacem_local&#39; : CACEM PostGIS database hosted in CNSP</span>
 
 <span class="sd">    Database credentials must be present in the environement.</span>
 
@@ -196,6 +201,7 @@
 <span class="sd">            (D, s, ns, ms, us) in case of parsing integer timestamps.</span>
 <span class="sd">            - Dict of ``{column_name: arg dict}``, where the arg dict corresponds</span>
 <span class="sd">            to the keyword arguments of :func:`pandas.to_datetime`</span>
+<span class="sd">        params: dict of query parameters</span>
 <span class="sd">        kwargs : passed to pd.read_sql</span>
 
 <span class="sd">    Returns:</span>
@@ -204,32 +210,33 @@
     <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
     <span class="n">sql_filepath</span> <span class="o">=</span> <span class="n">QUERIES_LOCATION</span> <span class="o">/</span> <span class="n">sql_filepath</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sql_filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sql_file</span><span class="p">:</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="n">sql_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="n">parse_dates</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span><span class="n">sql_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="n">parse_dates</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="read_query"><a class="viewcode-back" href="../../../autoapi/datascience/src/read_query/index.html#datascience.src.read_query.read_query">[docs]</a><span class="k">def</span> <span class="nf">read_query</span><span class="p">(</span>
-    <span class="n">db</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">db</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Run SQLquery on a database. Supported databases :</span>
 <span class="sd">    - &#39;ocan&#39; : OCAN database</span>
 <span class="sd">    - &#39;fmc&#39;: FMC database</span>
 <span class="sd">    - &#39;monitorfish_remote&#39;: Monitorfish database</span>
 <span class="sd">    - &#39;monitorfish_local&#39;: Monitorfish PostGIS database hosted in CNSP</span>
+<span class="sd">    - &#39;cacem_local&#39; : CACEM PostGIS database hosted in CNSP</span>
 
 <span class="sd">    Database credentials must be present in the environement.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        db (str): Database name. Possible values :</span>
 <span class="sd">            &#39;ocan&#39;, &#39;fmc&#39;, &#39;monitorfish_remote&#39;, &#39;monitorfish_local&#39;</span>
-<span class="sd">        query (str): Query string</span>
+<span class="sd">        query (str): Query string or SQLAlchemy Selectable</span>
 <span class="sd">        kwargs : passed to pd.read_sql</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        pd.DataFrame: Query results</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">execution_options</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">stream_results</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="read_table"><a class="viewcode-back" href="../../../autoapi/datascience/src/read_query/index.html#datascience.src.read_query.read_table">[docs]</a><span class="k">def</span> <span class="nf">read_table</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -238,6 +245,7 @@
 <span class="sd">    - &#39;fmc&#39;: FMC database</span>
 <span class="sd">    - &#39;monitorfish_remote&#39;: Monitorfish database</span>
 <span class="sd">    - &#39;monitorfish_local&#39;: Monitorfish PostGIS database hosted in CNSP</span>
+<span class="sd">    - &#39;cacem_local&#39; : CACEM PostGIS database hosted in CNSP</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        db (str): Database name. Possible values :</span>

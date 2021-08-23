@@ -1,0 +1,64 @@
+:py:mod:`datascience.src.pipeline.flows.risk_factor`
+====================================================
+
+.. py:module:: datascience.src.pipeline.flows.risk_factor
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.pipeline.flows.risk_factor.extract_current_segments
+   datascience.src.pipeline.flows.risk_factor.extract_control_anteriority
+   datascience.src.pipeline.flows.risk_factor.compute_risk_factors
+   datascience.src.pipeline.flows.risk_factor.load_risk_factors
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   datascience.src.pipeline.flows.risk_factor.risk_factor_coefficients
+   datascience.src.pipeline.flows.risk_factor.default_risk_factors
+   datascience.src.pipeline.flows.risk_factor.current_segments
+
+
+.. py:data:: risk_factor_coefficients
+   
+
+   
+
+.. py:data:: default_risk_factors
+   
+
+   
+
+.. py:function:: extract_current_segments()
+
+
+.. py:function:: extract_control_anteriority()
+
+
+.. py:function:: compute_risk_factors(current_segments: pandas.DataFrame, control_anteriority: pandas.DataFrame)
+
+
+.. py:function:: load_risk_factors(risk_factors: pandas.DataFrame)
+
+   Load the output of ``compute_risk_factors`` task into ``risk_factors`` table.
+
+   :param risk_factors: output of ``compute_risk_factors`` task.
+   :type risk_factors: pd.DataFrame
+
+
+.. py:data:: current_segments
+   
+
+   
+

@@ -89,11 +89,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -180,22 +182,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.extract_current_segments" title="datascience.src.pipeline.flows.last_positions.extract_current_segments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_current_segments</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.extract_last_positions" title="datascience.src.pipeline.flows.last_positions.extract_last_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_last_positions</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.extract_last_positions" title="datascience.src.pipeline.flows.last_positions.extract_last_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_last_positions</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.extract_risk_factors" title="datascience.src.pipeline.flows.last_positions.extract_risk_factors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_risk_factors</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.extract_last_controls" title="datascience.src.pipeline.flows.last_positions.extract_last_controls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_last_controls</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.estimate_current_positions" title="datascience.src.pipeline.flows.last_positions.estimate_current_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">estimate_current_positions</span></code></a>(last_positions)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.estimate_current_positions" title="datascience.src.pipeline.flows.last_positions.estimate_current_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">estimate_current_positions</span></code></a>(last_positions)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.merge" title="datascience.src.pipeline.flows.last_positions.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge</span></code></a>(last_positions, risk_factors)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.merge" title="datascience.src.pipeline.flows.last_positions.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge</span></code></a>(last_positions, current_segments, last_controls)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.load_last_positions" title="datascience.src.pipeline.flows.last_positions.load_last_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_last_positions</span></code></a>(last_positions)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.load_last_positions" title="datascience.src.pipeline.flows.last_positions.load_last_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_last_positions</span></code></a>(last_positions)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -209,24 +208,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.current_segments" title="datascience.src.pipeline.flows.last_positions.current_segments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_segments</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.pipeline.flows.last_positions.last_positions" title="datascience.src.pipeline.flows.last_positions.last_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_positions</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="datascience.src.pipeline.flows.last_positions.extract_current_segments">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">extract_current_segments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#extract_current_segments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.extract_current_segments" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="datascience.src.pipeline.flows.last_positions.extract_last_positions">
 <span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">extract_last_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#extract_last_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.extract_last_positions" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="datascience.src.pipeline.flows.last_positions.extract_last_controls">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">extract_last_controls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#extract_last_controls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.extract_last_controls" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.last_positions.extract_risk_factors">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">extract_risk_factors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#extract_risk_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.extract_risk_factors" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -236,7 +230,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="datascience.src.pipeline.flows.last_positions.merge">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_segments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_controls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.merge" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">risk_factors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.merge" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -245,8 +239,8 @@
 <dd></dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="datascience.src.pipeline.flows.last_positions.current_segments">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">current_segments</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#current_segments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.current_segments" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="datascience.src.pipeline.flows.last_positions.last_positions">
+<span class="sig-prename descclassname"><span class="pre">datascience.src.pipeline.flows.last_positions.</span></span><span class="sig-name descname"><span class="pre">last_positions</span></span><a class="reference internal" href="../../../../../../_modules/datascience/src/pipeline/flows/last_positions.html#last_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.pipeline.flows.last_positions.last_positions" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

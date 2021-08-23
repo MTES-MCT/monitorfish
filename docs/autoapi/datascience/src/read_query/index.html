@@ -87,11 +87,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../data-sources.html">External data sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">API reference</a></li>
 </ul>
 
@@ -172,10 +174,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.read_query.read_saved_query" title="datascience.src.read_query.read_saved_query"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_saved_query</span></code></a>(db: str, sql_filepath: Union[str, pathlib.Path], parse_dates: Union[list, dict, None] = None, **kwargs) → pandas.DataFrame</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.read_query.read_saved_query" title="datascience.src.read_query.read_saved_query"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_saved_query</span></code></a>(db: str, sql_filepath: Union[str, pathlib.Path], parse_dates: Union[list, dict, None] = None, params=None, **kwargs) → pandas.DataFrame</p></td>
 <td><p>Run saved SQLquery on a database. Supported databases :</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.read_query.read_query" title="datascience.src.read_query.read_query"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_query</span></code></a>(db: str, query: str, chunksize: Union[None, str] = None, **kwargs) → pandas.DataFrame</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#datascience.src.read_query.read_query" title="datascience.src.read_query.read_query"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_query</span></code></a>(db: str, query, chunksize: Union[None, str] = None, params=None, **kwargs) → pandas.DataFrame</p></td>
 <td><p>Run SQLquery on a database. Supported databases :</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#datascience.src.read_query.read_table" title="datascience.src.read_query.read_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_table</span></code></a>(db: str, schema: str, table_name: str)</p></td>
@@ -185,12 +187,13 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="datascience.src.read_query.read_saved_query">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.read_query.</span></span><span class="sig-name descname"><span class="pre">read_saved_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse_dates</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../_modules/datascience/src/read_query.html#read_saved_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.read_query.read_saved_query" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">datascience.src.read_query.</span></span><span class="sig-name descname"><span class="pre">read_saved_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse_dates</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../_modules/datascience/src/read_query.html#read_saved_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.read_query.read_saved_query" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run saved SQLquery on a database. Supported databases :
 - ‘ocan’ : OCAN database
 - ‘fmc’: FMC database
 - ‘monitorfish_remote’: Monitorfish database
-- ‘monitorfish_local’: Monitorfish PostGIS database hosted in CNSP</p>
+- ‘monitorfish_local’: Monitorfish PostGIS database hosted in CNSP
+- ‘cacem_local’ : CACEM PostGIS database hosted in CNSP</p>
 <p>Database credentials must be present in the environement.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -208,6 +211,7 @@ example : “ocan/nav_fr_peche.sql”</p></li>
 - Dict of <code class="docutils literal notranslate"><span class="pre">{column_name:</span> <span class="pre">arg</span> <span class="pre">dict}</span></code>, where the arg dict corresponds
 to the keyword arguments of <code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.to_datetime()</span></code></p>
 </p></li>
+<li><p><strong>params</strong> – dict of query parameters</p></li>
 <li><p><strong>kwargs</strong> – passed to pd.read_sql</p></li>
 </ul>
 </dd>
@@ -222,19 +226,20 @@ to the keyword arguments of <code class="xref py py-func docutils literal notran
 
 <dl class="py function">
 <dt class="sig sig-object py" id="datascience.src.read_query.read_query">
-<span class="sig-prename descclassname"><span class="pre">datascience.src.read_query.</span></span><span class="sig-name descname"><span class="pre">read_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../_modules/datascience/src/read_query.html#read_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.read_query.read_query" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">datascience.src.read_query.</span></span><span class="sig-name descname"><span class="pre">read_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.DataFrame</span><a class="reference internal" href="../../../../_modules/datascience/src/read_query.html#read_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datascience.src.read_query.read_query" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run SQLquery on a database. Supported databases :
 - ‘ocan’ : OCAN database
 - ‘fmc’: FMC database
 - ‘monitorfish_remote’: Monitorfish database
-- ‘monitorfish_local’: Monitorfish PostGIS database hosted in CNSP</p>
+- ‘monitorfish_local’: Monitorfish PostGIS database hosted in CNSP
+- ‘cacem_local’ : CACEM PostGIS database hosted in CNSP</p>
 <p>Database credentials must be present in the environement.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>db</strong> (<em>str</em>) – Database name. Possible values :
 ‘ocan’, ‘fmc’, ‘monitorfish_remote’, ‘monitorfish_local’</p></li>
-<li><p><strong>query</strong> (<em>str</em>) – Query string</p></li>
+<li><p><strong>query</strong> (<em>str</em>) – Query string or SQLAlchemy Selectable</p></li>
 <li><p><strong>kwargs</strong> – passed to pd.read_sql</p></li>
 </ul>
 </dd>
@@ -254,7 +259,8 @@ to the keyword arguments of <code class="xref py py-func docutils literal notran
 - ‘ocan’ : OCAN database
 - ‘fmc’: FMC database
 - ‘monitorfish_remote’: Monitorfish database
-- ‘monitorfish_local’: Monitorfish PostGIS database hosted in CNSP</p>
+- ‘monitorfish_local’: Monitorfish PostGIS database hosted in CNSP
+- ‘cacem_local’ : CACEM PostGIS database hosted in CNSP</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

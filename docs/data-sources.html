@@ -89,9 +89,10 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="feature-presentation.html">Feature presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">External data sources</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#poseidon-positions">Poséidon positions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vms-positions">VMS positions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ers-xml-files">ERS xml files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#databases">Databases</a></li>
 </ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="flows.html">Flows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="containerization.html">Containerization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">API reference</a></li>
 </ul>
 
@@ -169,17 +171,20 @@
             
   <div class="section" id="external-data-sources">
 <h1>External data sources<a class="headerlink" href="#external-data-sources" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="poseidon-positions">
-<h2>Poséidon positions<a class="headerlink" href="#poseidon-positions" title="Permalink to this headline">¶</a></h2>
-<p>VMS positions are received from the <code class="docutils literal notranslate"><span class="pre">Poséidon</span></code> application on an API endpoint provided by the Kotlin Springboot backend service.</p>
+<div class="section" id="vms-positions">
+<h2>VMS positions<a class="headerlink" href="#vms-positions" title="Permalink to this headline">¶</a></h2>
+<p>VMS positions are received on an API endpoint provided by the Kotlin Springboot backend service.</p>
 </div>
 <div class="section" id="ers-xml-files">
 <h2>ERS xml files<a class="headerlink" href="#ers-xml-files" title="Permalink to this headline">¶</a></h2>
-<p>ERS raw xml files are ingested by the <span class="xref std std-ref">ERS</span> from the
-<a class="reference external" href="https://github.com/MTES-MCT/monitorfish/blob/master/datascience/config.py">configured location</a>.</p>
+<p>ERS raw xml files are ingested by the <span class="xref std std-doc">ers</span> flow from the
+<a class="reference external" href="https://github.com/MTES-MCT/monitorfish/blob/master/datascience/config.py">configured location</a>
+where ERS xml files must be deposited.</p>
 </div>
 <div class="section" id="databases">
 <h2>Databases<a class="headerlink" href="#databases" title="Permalink to this headline">¶</a></h2>
+<p>Data is imported (and constantly updated) from external databases for <a class="reference internal" href="flows/controls.html"><span class="doc">Controls</span></a>, <a class="reference internal" href="flows/controllers.html"><span class="doc">Controllers</span></a>, <a class="reference internal" href="flows/fishing-gears.html"><span class="doc">Fishing gears</span></a> and <a class="reference internal" href="flows/vessels.html"><span class="doc">Vessels</span></a>.</p>
+<p>These databases are :</p>
 <ul class="simple">
 <li><p>OCAN</p></li>
 <li><p>FMC2</p></li>

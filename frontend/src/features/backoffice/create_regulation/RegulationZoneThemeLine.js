@@ -55,12 +55,7 @@ const RegulationZoneThemeLine = props => {
         <Label>Créer une nouvelle thématique</Label></>
         }
       </Wrapper>
-      <InfoBox
-        isInfoTextShown={isInfoTextShown}
-        setIsInfoTextShown={setIsInfoTextShown}
-        isFormOpened={isAddThemeClicked}
-        message={'zoneTheme'}
-      />
+      <InfoBox />
       </ContentLine>
 }
 

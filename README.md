@@ -6,6 +6,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MTES-MCT_monitorfish&metric=alert_status)](https://sonarcloud.io/dashboard?id=MTES-MCT_monitorfish) 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![License](https://img.shields.io/github/license/MTES-MCT/monitorfish)](https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE)
+[![Documentation Status](https://readthedocs.org/projects/monitorfish/badge/?version=latest)](https://monitorfish.readthedocs.io/en/latest/?badge=latest)
 
 > Improve monitoring and controlling of the activities of fishing vessels
 

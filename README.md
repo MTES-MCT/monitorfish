@@ -28,7 +28,7 @@
 [GNU Affero GPL Version 3](https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE)
 
 ## Documentation
-The full documentation is hosted [here](https://mtes-mct.github.io/monitorfish/).
+The full documentation is hosted [here](https://monitorfish.readthedocs.io/en/latest/).
 
 ## Background
 The motivation of the french FMC was to streamline its operations and better enforce fishing regulations by developing an **integrated tool** that makes all information relevant to the coordination of fishing control easily accessible. Furthermore, the tool was to act as a **decision support system** to better detect and prevent violations.

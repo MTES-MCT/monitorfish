@@ -190,13 +190,16 @@ To run tests on the data pipeline, run
 Documentation
 =============
 
-Documentation is written as ``.rst`` source files, from which the documentation (this website) is built using `sphinx <https://www.sphinx-doc.org/en/master/>`__ and hosted on Github pages.
+Writing documentation 
+---------------------
+
+Documentation is written as ``.rst`` source files, from which the documentation (this website) is built using `sphinx <https://www.sphinx-doc.org/en/master/>`__ and hosted on ReadTheDocs.
 
 ``.rst`` sources are in ``datascience/docs/source``.
 
 * To build the documentation locally, you need to install the python development dependencies as described in :ref:`data-install`
 
-* To build the html documentation locally, run :
+* To build the html documentation, run :
 
   .. code-block:: shell
 
@@ -204,15 +207,17 @@ Documentation is written as ``.rst`` source files, from which the documentation 
 
   This builds the documentation in ``datascience/docs`` and moves the built html to ``/docs``. You can then view the documentation by opening ``/docs/index.html`` in a web browser.
 
-* To build a pdf version of the documentation, the following dependencies are required :
+    The online documentation is built be ReadTheDocs from source files; building the documentation locally 
+    is only useful to view the result before pushing to ReadTheDocs.
 
-  .. code-block:: shell
+Updating the documentation online
+---------------------------------
 
-    sudo apt-get update
-    sudo apt-get install texlive-latex-recommended texlive-fonts-recommended tex-gyre texlive-latex-extra latexmk
+The documentation is automatically built by ReadTheDocs and hosted on ReadTheDocs. One the source ``.rst`` files are updated, 
+push them to ``master`` (better, create a branch and PR) and ReadTheDocs will update the documentation online automatically.
 
-* To build the pdf documentation, from ``/datascience/docs``, run :
+Translations
+------------
 
-  .. code-block:: shell
-
-    make latexpdf
+The documentation is translated with the `recommended process of ReadTheDocs <https://docs.readthedocs.io/en/latest/guides/manage-translations.html>`_
+using `Transifex <https://www.transifex.com/>`_.

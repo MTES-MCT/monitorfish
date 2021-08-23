@@ -46,6 +46,7 @@ sphinx-rtd-theme = "^0.5.2"
 Faker = "^8.10.1"
 sphinx-intl = "^2.0.1"
 sphinx-autoapi = "^1.8.4"
+transifex-client = "^0.14.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

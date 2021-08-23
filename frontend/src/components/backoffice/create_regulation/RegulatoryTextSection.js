@@ -5,6 +5,7 @@ import { COLORS } from '../../../constants/constants'
 import { Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from '../RegulatoryText'
+import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { addTextToRegulatoryTextList } from '../../../utils'
 
 import {
@@ -61,6 +62,7 @@ const RegulatoryTextSection = props => {
         })
     }
     { upcomingRegulationList && <span>il y a {upcomingRegulationList.length} textes réglementaires à venir à afficher</span>}
+    <UpcommingRegulationSection />
     <ButtonLine>
       {source === 'regulation' && <ValidateButton
         disabled={false}

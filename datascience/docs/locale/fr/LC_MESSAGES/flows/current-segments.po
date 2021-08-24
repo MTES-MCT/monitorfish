@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:50+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/flows/current-segments.rst:3 841a6b8f7baf400b89df359ac273ef50
+#: ../source/flows/current-segments.rst:3 054e6f23c5844f178a985f2734deb054
 msgid "Current segments"
 msgstr ""
 
-#: ../source/flows/current-segments.rst:5 aec648e00bac443890924487dcb77e23
+#: ../source/flows/current-segments.rst:5 9f53407f10b147a591dafa728219bfc9
 msgid ""
 "The ``current_segments`` flow extracts all catches of each vessel since its "
 "last DEP message and crosses its catch (species, area and fishing gear) with"
@@ -29,6 +29,6 @@ msgid ""
 "segment(s) <../fleet-segments>` to which each vessel belongs in real time."
 msgstr ""
 
-#: ../source/flows/current-segments.rst:10 0c49b1028fc04e4d954d196d5026c42f
+#: ../source/flows/current-segments.rst:10 52b91351905e4ebebdc302a394fca9ca
 msgid "It is scheduled to run every 10 minutes.prefect"
 msgstr ""

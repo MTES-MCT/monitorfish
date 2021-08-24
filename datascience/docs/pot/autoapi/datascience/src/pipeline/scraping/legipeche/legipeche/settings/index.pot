@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/settings/index.rst:2
-#: 411440736f264812a2e460937ab67d24
+#: b89381a17ada4a9aa33e7d532a65e8f1
 msgid ":py:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.settings`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/settings/index.rst:8
-#: a1987fea9d83412599bbc96cec405423
+#: 65fb972d8a904e9d85fcd037f294d2c7
 msgid "Module Contents"
 msgstr ""

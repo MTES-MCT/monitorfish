@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows.rst:5
-#: 36b9ca4f31674a0d9d1ffcb0b89d5bc4
+#: 5f29758e07954bd58e67ed78825b0c05
 msgid "Flows"
 msgstr ""
 
 #: ../source/flows.rst:9
-#: 51e6469d5c7c4758831e38a9c244dae0
+#: de859b46d0b14429bd58faedf75597cf
 msgid "What are flows?"
 msgstr ""
 
 #: ../source/flows.rst:11
-#: a83d4318780e4456baf88fa3388728fe
+#: 794d0cd906ed4fd2b69308b60028cf1f
 msgid "*Flows* are batch jobs that move and transform data. Collectively, they constitute the :ref:`data pipeline` part of the Monitorfish architecture."
 msgstr ""
 
 #: ../source/flows.rst:14
-#: 0758749b42a442cf8f3ec3013e2ae69f
+#: e1670a7236de443e8bbedc351b33d48b
 msgid "Each batch job is written as a `Prefect flow <https://docs.prefect.io/core/concepts/flows.html#overview>`__ which typically extracts data  (from external sources and / or from tables in the Monitorfish database), processes the data and loads it back into a table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows.rst:18
-#: a5fcfcebf2404c2bacddff0822352c9f
+#: d5ef6c058f86431dadd3cbcdc42553bb
 msgid "Flows are composed of `tasks <https://docs.prefect.io/core/concepts/tasks.html#overview>`__ typically written as python pure functions. `The UI <http://prefect.csam.e2.rie.gouv.fr/>`__ (restricted access) enables administrators to view each flow as a diagram of its constituent tasks, to monitor their execution, see the logs and debug in case any flow run fails..."
 msgstr ""
 
 #: ../source/flows.rst:23
-#: ae9cd2502faa4021a877a50ea5339119
+#: 1746550ec6d0467f9ae1c5d4bd07a5e5
 msgid "Overall view of data flows in Monitorfish :"
 msgstr ""
 
 #: ../source/flows.rst:None
-#: c36864aa1c35490ca83e8a4d34bde01d
+#: b72a3d3af8b340d582985db7b67bd35a
 msgid "Schematic of data flows in Monitorfish"
 msgstr ""
 
 #: ../source/flows.rst:33
-#: fbfc45e8e3504c168d78a9e57375f65b
+#: ec91d154d38946d690335e716ff04176
 msgid "List of flows"
 msgstr ""

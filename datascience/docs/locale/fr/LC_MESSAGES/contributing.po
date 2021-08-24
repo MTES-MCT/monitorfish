@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -17,113 +17,113 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/contributing.rst:4 ee7b668d1b7641ddbdba42d1888964ee
+#: ../source/contributing.rst:4 75563c67f8364d1bacb33e82532a0439
 msgid "Contributing"
 msgstr ""
 
-#: ../source/contributing.rst:6 feb1033d8b794c239b72c5375aec417b
+#: ../source/contributing.rst:6 83e6340d78e842d094256ef2a9c9e28e
 msgid "This guide explains how to contribute to the project."
 msgstr ""
 
-#: ../source/contributing.rst:15 095c1f4f38bd4161a0f2d46f6775b864
+#: ../source/contributing.rst:15 d73ea4950bb54ddfa6d28d55ca4a36c9
 msgid "Joining the project team"
 msgstr ""
 
-#: ../source/contributing.rst:18 09b48373a0314b76b026cadd009b96d0
+#: ../source/contributing.rst:18 5832a99c227e4bd8a67ea0a5c3bb7c7b
 msgid "Communication"
 msgstr ""
 
-#: ../source/contributing.rst:20 3eef7b65b1544151a36518317b3b9629
+#: ../source/contributing.rst:20 9664baff52114ddfa9e7723c1ff4d1ee
 msgid "Communication within the team is done on :"
 msgstr ""
 
-#: ../source/contributing.rst:22 b52f19ace6da4389b944768722b0b747
+#: ../source/contributing.rst:22 7afad648d97746b9ba7dbab3b5fcdc5c
 msgid "a Slack workspace"
 msgstr ""
 
-#: ../source/contributing.rst:23 5bf65fed16974d2fb84622d63279bf86
+#: ../source/contributing.rst:23 dd33bdbc264b45a5a77c9f141f42201e
 msgid "daily standup meetings"
 msgstr ""
 
-#: ../source/contributing.rst:25 6c5a5e0cdf1341b9b445b208c6274a22
+#: ../source/contributing.rst:25 c0e553413056496cbd0d448007fddea0
 msgid ""
 "The first thing to do when joining the project is to `get in touch "
 "<mailto:vincent.chery@m4x.org>`_ so we help you join these spaces."
 msgstr ""
 
-#: ../source/contributing.rst:28 73070b46d78642919dbf4aa490d0fc34
+#: ../source/contributing.rst:28 58f1f067b3144d9db529054df7d4fa9c
 msgid "Project management"
 msgstr ""
 
-#: ../source/contributing.rst:30 ec01c40182164cc0af1bcc83ac3b0c36
+#: ../source/contributing.rst:30 12e42fd58f964b24a18637319bfa683e
 msgid "We use :"
 msgstr ""
 
-#: ../source/contributing.rst:32 ee43facc323e4f6db7e10111b3d43505
+#: ../source/contributing.rst:32 51b89286a2b74176b169062609df4612
 msgid ""
 "a board with the `roadmap of the project <https://github.com/MTES-"
 "MCT/monitorfish/projects/3>`_"
 msgstr ""
 
-#: ../source/contributing.rst:33 73d30982fb4e47eaa366980320c5c37a
+#: ../source/contributing.rst:33 de9fb41b1b9c435ea891f6955479f7bb
 msgid ""
 "a more detailed `board of the tasks <https://github.com/MTES-"
 "MCT/monitorfish/projects/1>`_ (issues)"
 msgstr ""
 
-#: ../source/contributing.rst:34 e2979947f01e4b029dd25a156dd38277
+#: ../source/contributing.rst:34 6123f22ba9294935bb79ad5a62632d9b
 msgid ""
 "work on issues is always done on feature branches which are merged into "
 "``master`` after review"
 msgstr ""
 
-#: ../source/contributing.rst:39 dee5d661615e4e9db15d14e71b3698c5
+#: ../source/contributing.rst:39 31ee9c3103c944bda759919ec8a85e64
 msgid "Front end and back end development"
 msgstr ""
 
 #: ../source/contributing.rst:42 ../source/contributing.rst:156
-#: 5dd6bb4335fc4f24904126f3a0bbe1a6 06f94443b6384f298c4236f9a3559ad6
+#: a9621344d72c499e9e6224e65aaa955a adf17d1e331a417bae3948832416349e
 msgid "Install"
 msgstr ""
 
-#: ../source/contributing.rst:44 1721db0e7790459686b4a836d8c90a70
+#: ../source/contributing.rst:44 08d10b74ce4145f1b54b42d028cdef95
 msgid "To install front end dependencies, execute:"
 msgstr ""
 
-#: ../source/contributing.rst:51 c04521cdbf704b59b388e4e69527d115
+#: ../source/contributing.rst:51 7083720594fb4d5ca49cccf9644aa4c1
 msgid "Run"
 msgstr ""
 
-#: ../source/contributing.rst:53 440e2bd96c5741ac9c3f526dea853509
+#: ../source/contributing.rst:53 55dbaa0cf3dd409090f978668062d3fe
 msgid ""
 "To run the frontend for development purposes, open a terminal and execute:"
 msgstr ""
 
-#: ../source/contributing.rst:59 19e7b94fee28412aa382491cffdc6ef0
+#: ../source/contributing.rst:59 15fd16e3bdad4c898a1efe849eada0b5
 msgid ""
 "To run the backend for development purpose (with hot-reload), open another "
 "terminal and execute:"
 msgstr ""
 
-#: ../source/contributing.rst:65 77cb1924a4644fc69720038c763dab67
+#: ../source/contributing.rst:65 24aac9117d824fc5a6c1842a3a3fb5a2
 msgid "During the first run, dependencies will be downloaded"
 msgstr ""
 
-#: ../source/contributing.rst:66 ddf2ffcb69004b6a9b8996e1a3034fce
+#: ../source/contributing.rst:66 ad84a41a97604fae84db717e662c6b54
 msgid "You'll need to install `psql` to interact with the Postgres database"
 msgstr ""
 
-#: ../source/contributing.rst:68 bba2c88d077a4a96a4094665b9bf422e
+#: ../source/contributing.rst:68 fea16b5053a248b08ee633b15c3431b0
 msgid ""
 "Then, insert the GIS layers to the postgres database by executing (make sure"
 " you have `psql` installed):"
 msgstr ""
 
-#: ../source/contributing.rst:75 71b76d0c90604fdcbd4150fc3baaecf1
+#: ../source/contributing.rst:75 7d9e058abff04bf8bd3abf709c7d1c47
 msgid "Export the required environment variables:"
 msgstr ""
 
-#: ../source/contributing.rst:86 cf4fc690a53f47a7bbe44ca7c2c59798
+#: ../source/contributing.rst:86 6a053fbcbf67410abf318889e8bc254a
 msgid ""
 "Finally add to Geoserver the layers by executing (make sure to remove your "
 "proxy if you have one configured with `unset HTTP_PROXY` and `unset "
@@ -131,193 +131,296 @@ msgid ""
 msgstr ""
 
 #: ../source/contributing.rst:94 ../source/contributing.rst:180
-#: a5f99d58e8f7460e8b31edc7024933c9 2e6a3f62d6c841ddb53311958f3012ea
+#: b92cb39c1f6044abb3175171d0b0dd03 1139057b12c247d9bffc5854fd029451
 msgid "Test"
 msgstr ""
 
-#: ../source/contributing.rst:96 befe9cb269124173b3076709e22702c0
+#: ../source/contributing.rst:96 9708f0a3057a40f591d054db87786121
 msgid ""
 "To run all tests and checks clean architecture principles are respected, "
 "execute:"
 msgstr ""
 
-#: ../source/contributing.rst:102 6db6aa25b2fd4cf5bdafa52cfef07057
+#: ../source/contributing.rst:102 883cea95cff144d7888e9ce91fc9f601
 msgid ""
 "To manually add a VMS position (in NAF format) for the vessel `CABO ARTA`:"
 msgstr ""
 
 #: ../source/contributing.rst:110 ../source/contributing.rst:191
-#: 014881a3a2fc4b689319f2c8513e9b7f 8ac05023f903451e89b40fe3d1aff48b
+#: f8164a35b92f403c973a6b4aeb217ce2 10511e6ef9f745e58b1912b619eaf637
 msgid "Documentation"
 msgstr ""
 
-#: ../source/contributing.rst:112 81b147758ef84bc3807040c9d4ee8859
+#: ../source/contributing.rst:112 c65007c69f9f4f2ba4b26ec240d062dd
 msgid ""
 "API documentation can be found at http://localhost:8880/swagger-ui.html"
 msgstr ""
 
-#: ../source/contributing.rst:113 ab6ea6f3c2f64737b446d322073206bf
+#: ../source/contributing.rst:113 941d789563694a7693faf9ee004a0600
 msgid "Frontend documentation can be generated with"
 msgstr ""
 
-#: ../source/contributing.rst:120 a5150462baed4ff293b8c62edf1644f9
+#: ../source/contributing.rst:120 78caeb85c2604d78b2444e28f878cd01
 msgid "Problems & solutions"
 msgstr ""
 
-#: ../source/contributing.rst:124 2066d1a0926d495294a93bf8cce90570
+#: ../source/contributing.rst:124 7db15d87d0754590b8475d6aa46a9759
 msgid "Windows & Docker"
 msgstr ""
 
-#: ../source/contributing.rst:126 ccd8f2850fde4dca9feae864adb3c235
+#: ../source/contributing.rst:126 4881d371ca1b4921bc3f81f490ebc836
 msgid ""
 "*During the build, there is an error while seting up docker which is used "
 "for the test database*"
 msgstr ""
 
-#: ../source/contributing.rst:128 43075b3ec21d4176bfbfa53b04343d71
+#: ../source/contributing.rst:128 9356402302fd43708df0995c61076b10
 msgid ""
 "**Explanation** : Testing uses docker. To be able to connect to docker, "
 "Intellij requires that TLS is disabled in docker."
 msgstr ""
 
-#: ../source/contributing.rst:130 0d4e5f3173e54c89a41fa73a22a0b470
+#: ../source/contributing.rst:130 eea51455079d421591f0f81aa147681a
 msgid ""
 "**Solution** : Open docker Configuration, General and click on \"Expose "
 "Daemon on xxxx Witout TLS\""
 msgstr ""
 
-#: ../source/contributing.rst:133 573a9fb99ed944caa329f9573581a51c
+#: ../source/contributing.rst:133 ec7a7da7b6da4943b1d7ce030bb072e2
 msgid ""
 "*Running the application with IntelliJ does not work. Spring complains about"
 " a BuildProperties beans that is missing*"
 msgstr ""
 
-#: ../source/contributing.rst:135 2975e0e607ec4b28988696bfa4a9796f
+#: ../source/contributing.rst:135 682e5dd56df3475ba05d8b0414194e89
 msgid ""
 "**Explanation**: The buildProperties bean is constructed based on the META-"
 "INF/build-info.properties file. This file is generated by Maven, but not by "
 "IntelliJ"
 msgstr ""
 
-#: ../source/contributing.rst:136 1d8d5fedc2b647858f3084f37e521765
+#: ../source/contributing.rst:136 b4e7a98d33b74e8fa614e9f639718913
 msgid ""
 "**Solution**: Tell IntelliJ to delegate the build to maven. To do this you "
 "must:"
 msgstr ""
 
-#: ../source/contributing.rst:138 4c0089d27bf7445b8f6b3dcff064f28f
+#: ../source/contributing.rst:138 8686e89531e34978a34fdc08c31522a3
 msgid "go to Build,Execution,Deployment> Build Tools > Maven > Runner"
 msgstr ""
 
-#: ../source/contributing.rst:139 e62bf7a5115b461bba1b216c2aa1dfd3
+#: ../source/contributing.rst:139 43b5ecd00f194c2fa2a3ab4f2fb2e663
 msgid "click the checkbox : \"Delegate IDE Build/run actions to maven\""
 msgstr ""
 
-#: ../source/contributing.rst:144 cdb3fd9ac4da4cd6b0cb7e362d2ed9a3
+#: ../source/contributing.rst:144 837027a5805e423e9220742c152c3666
 msgid "Data pipeline development and data science"
 msgstr ""
 
-#: ../source/contributing.rst:146 fca0dd11c0a440a4874230385deda786
+#: ../source/contributing.rst:146 2d7de02b535c4c27997055cc956e9586
 msgid ""
 "Data processing and ETL operations are done in python using `prefect "
 "<https://docs.prefect.io/core/>`_ and `pandas "
 "<https://pandas.pydata.org/>`_."
 msgstr ""
 
-#: ../source/contributing.rst:149 88b9a567eab3480ebd559c8432d4598d
+#: ../source/contributing.rst:149 4dc8a606ab59437b97080e12ad37a044
 msgid "Data and data sources"
 msgstr ""
 
-#: ../source/contributing.rst:151 3f5d9b92868b45b68631735f9af86fad
+#: ../source/contributing.rst:151 da5bd4b98b9a4ef0840fea2e9c96fa0b
 msgid ""
 "Data is not open and can only be accessed from inside the RIE network. To "
 "work with data, you will need to either access the private development "
 "server or work with data extracts."
 msgstr ""
 
-#: ../source/contributing.rst:158 d0880605ed3b4e21a3fe33eda52692dc
+#: ../source/contributing.rst:158 31fe19702c6a4331a9b6d412c884d227
 msgid ""
 "The project runs on **python 3.8.7**. To manage python versions, we suggest "
 "you use `pyenv <https://github.com/pyenv/pyenv>`_. See the official "
 "documentation for installation instructions."
 msgstr ""
 
-#: ../source/contributing.rst:159 3ffcf7e10f6d47b39c19f7301a4cd5a5
+#: ../source/contributing.rst:159 5e09d10eb0aa4873978b15c04bba7182
 msgid "After installing python 3.8.7, install development dependencies :"
 msgstr ""
 
-#: ../source/contributing.rst:161 662cec2dc6224c3aa56b74f6b27d92af
+#: ../source/contributing.rst:161 fed92ac53c5748a0ae941fdb7a549df6
 msgid ""
 "If you do not have ``poetry``, install it to manage python dependencies:"
 msgstr ""
 
-#: ../source/contributing.rst:167 0e5207205b954cbdbf885c6e6a302ff0
+#: ../source/contributing.rst:167 8bb0e0280ae2442ab7f199a74b43e9e9
 msgid "Within the `datascience` folder, install python dependencies :"
 msgstr ""
 
-#: ../source/contributing.rst:173 767238a3c53f423aae5d208c7b0623e2
+#: ../source/contributing.rst:173 2f88ca1e182e434abb47443a4d962c1a
 msgid ""
 "To install pre-commit hooks (isort, black and flake8 are configured in the "
 "pyproject.toml), run"
 msgstr ""
 
-#: ../source/contributing.rst:182 60c10cb9e4be4f5ea872233bc222765c
+#: ../source/contributing.rst:182 f82e52185d084656bffe0bc46fb884fe
 msgid "To run tests on the data pipeline, run"
 msgstr ""
 
-#: ../source/contributing.rst:194 b62a2e2b6d3a455594b58ffb6aaad72b
-msgid "Writing documentation"
-msgstr ""
-
-#: ../source/contributing.rst:196 6d4acc2b3a5649ec8935c4b5106252aa
+#: ../source/contributing.rst:193 4c65d5e7ed784e6bb516a3602dc37270
 msgid ""
 "Documentation is written as ``.rst`` source files, from which the "
 "documentation (this website) is built using `sphinx <https://www.sphinx-"
 "doc.org/en/master/>`__ and hosted on ReadTheDocs."
 msgstr ""
 
-#: ../source/contributing.rst:198 a55dbb81e4f542b6b8395895b9e1a4bb
-msgid "``.rst`` sources are in ``datascience/docs/source``."
+#: ../source/contributing.rst:198 9798639e11d44f6daea6585424be6341
+msgid "Writing documentation"
 msgstr ""
 
-#: ../source/contributing.rst:200 a4d6588502734b949d1e81f42d051bbd
+#: ../source/contributing.rst:200 e918a100e2e54ce391ee7aae7367db18
 msgid ""
-"To build the documentation locally, you need to install the python "
-"development dependencies as described in :ref:`data-install`"
+"To update the documentation, simply edit the ``.rst`` source file in "
+"``datascience/docs/source``."
 msgstr ""
 
-#: ../source/contributing.rst:202 223784272d9242fb9f7327b012a566f5
-msgid "To build the html documentation locally, run :"
-msgstr ""
-
-#: ../source/contributing.rst:208 9297f0f5b06945c1a93f062846fc6255
+#: ../source/contributing.rst:201 d0b9de8d30074e6ead3c6d0fc4d9b459
 msgid ""
-"This builds the documentation in ``datascience/docs`` and moves the built "
-"html to ``/docs``. You can then view the documentation by opening "
-"``/docs/index.html`` in a web browser."
+"To build the documentation locally and see the result of your updates :"
 msgstr ""
 
-#: ../source/contributing.rst:211 c5bfbbb7aa884eaf9691700abe3d6eb4
+#: ../source/contributing.rst:203 e0d962ad17544fd38fa07c2653845925
+msgid ""
+"you need to install the python development dependencies as described in :ref"
+":`data-install` if you have not yet done so"
+msgstr ""
+
+#: ../source/contributing.rst:204 3e093757dc704730b96a8cc014630623
+msgid "build the html documentation with :"
+msgstr ""
+
+#: ../source/contributing.rst:210 e523cf3e270f40e1a7b439708328f6bf
+msgid ""
+"This builds the documentation in ``datascience/docs/build/html``. You can "
+"view the built documentation in english en in french by opening "
+"``en/index.html`` and ``fr/index.html`` in a web browser."
+msgstr ""
+
+#: ../source/contributing.rst:213 17cfa78aae3b46519dfb38209919ea64
+msgid "Translations"
+msgstr ""
+
+#: ../source/contributing.rst:215 33fffcf81b8e45a99c86ca3946fe2b57
+msgid ""
+"The documentation is translated with the `recommended process of ReadTheDocs"
+" <https://docs.readthedocs.io/en/latest/guides/manage-translations.html>`_ "
+"using `Transifex <https://www.transifex.com/>`_."
+msgstr ""
+
+#: ../source/contributing.rst:219 b827d7fbcb8f410e8ff95aedc36897f7
+msgid "Setting up Transifex"
+msgstr ""
+
+#: ../source/contributing.rst:221 1fed593d7b0547f5869386b3e51c9e34
+msgid ""
+"In order to translate documentation using Transifex, you must set it up :"
+msgstr ""
+
+#: ../source/contributing.rst:223 7c2dfc5894414b7ab1f25fc63a645bc0
+msgid ""
+"you need to have ``transifex-client`` installed, which is part of the "
+":ref:`python development dependencies <data-install>`. If you have not yet "
+"done so, install development dependencies"
+msgstr ""
+
+#: ../source/contributing.rst:224 8bb186feccda418fba6e77d1dfbb2dcb
+msgid "ask us for an invitation to join our organization on Transifex"
+msgstr ""
+
+#: ../source/contributing.rst:225 9bc7d196c2e241d287cf89855a20502a
+msgid ""
+"in your Transifex account, create an API token in ``User Setttings`` > ``API"
+" token``"
+msgstr ""
+
+#: ../source/contributing.rst:226 ca4052c5470e41f0a0fc7e0a26a84e0a
+msgid "in ``datascience/docs``, run :"
+msgstr ""
+
+#: ../source/contributing.rst:228 e91a64a7dcb449b5b4bd0e2fad8245d0
+msgid "tx init --token $TOKEN --no-interactive"
+msgstr ""
+
+#: ../source/contributing.rst:229 1fc0745d4c994f14bae9a042338e8cec
+msgid "(with your API token instead of ``$TOKEN``)"
+msgstr ""
+
+#: ../source/contributing.rst:232 6f96d2105fa04354be1df94563a1ee86
+msgid "Pushing documentation to Transifex for translation"
+msgstr ""
+
+#: ../source/contributing.rst:234 6fc572db5c8540b0bfba85845ba852ab
+msgid ""
+"After updating the ``.rst`` sources in english, if you wish to translate it "
+":"
+msgstr ""
+
+#: ../source/contributing.rst:236 f16397acf47e4891a2e9df03203eba70
+msgid "push the documentation to Transifex with :"
+msgstr ""
+
+#: ../source/contributing.rst:242 a11e9e4f8cb94093bd1c61dbe28eb01c
+msgid "This does several things :"
+msgstr ""
+
+#: ../source/contributing.rst:244 894d4a3c386343668f35ac1bf67c1903
+msgid "cut the ``.rst`` sources into strings of uninterrupted text"
+msgstr ""
+
+#: ../source/contributing.rst:245 a1bf0c6762b146afa20d6ff3029ea0ed
+msgid ""
+"create a mapping of these strings that Transifex uses to keep translation "
+"synchronized"
+msgstr ""
+
+#: ../source/contributing.rst:246 cb4f46481d46404cb8ae1c5c26f74333
+msgid "push everything to Transifex"
+msgstr ""
+
+#: ../source/contributing.rst:248 a712b1f231e54fe8a2e4bbbeebe78b7f
+msgid "translate the corresponding strings in Transifex"
+msgstr ""
+
+#: ../source/contributing.rst:251 c45faa5f57ae41829f9789473f73c460
+msgid "Pulling the translated documentation from Transifex"
+msgstr ""
+
+#: ../source/contributing.rst:253 875d41c293f74d41b03aa777e67c155e
+msgid ""
+"When you are done translating in Transifex, you can pull the translated "
+"material back from Transifex with :"
+msgstr ""
+
+#: ../source/contributing.rst:259 4a918ae6bca04c858a7fea1898cd7643
+msgid ""
+"Translated material comes in the form of ``.po`` and ``.mo`` files in the "
+"``locale`` directory, from which sphinx will look for translations during "
+"the build."
+msgstr ""
+
+#: ../source/contributing.rst:261 6f54bc4b3eb045be9a5c333a44cf79cd
+msgid ""
+"You can then :ref:`build the documentation locally <writing-documentation>` "
+"to check the result."
+msgstr ""
+
+#: ../source/contributing.rst:264 dd7b6ace1a38400c809da152851048d8
 msgid "Updating the documentation online"
 msgstr ""
 
-#: ../source/contributing.rst:213 b5950ad689954fe7bbc7bfa0928a71f6
+#: ../source/contributing.rst:266 5160f2fb3b4f4f3c9dc1274ef6139b37
 msgid ""
-"The documentation is automatically built by ReadTheDocs and hosted on "
-"ReadTheDocs. Simply update the source ``.rst`` files, push to ``master`` and"
-" ReadTheDocs will update the documentation online."
-msgstr ""
-
-#: ../source/contributing.rst:217 814d8e865206466792b9075bbdcb9627
-msgid "Translating the documentation"
-msgstr ""
-
-#: ../source/contributing.rst:219 530979e8dfa64ff984519cc01c910402
-msgid ""
-"The documentation is translated using `Transifex "
-"<https://www.transifex.com/>`_"
-msgstr ""
-
-#: ../source/contributing.rst:221 2c8120cfa28a470ab13e4bd32e4bf576
-msgid "tx init --token $TOKEN --no-interactive"
+"The documentation is built by ReadTheDocs and hosted on ReadTheDocs. One the"
+" ``.rst`` source files and the translations are updated and pulled from "
+"Transifex, simply pushed the changes to ``master`` (better, create a branch "
+"and PR) and ReadTheDocs will build and update the documentation online "
+"automatically."
 msgstr ""

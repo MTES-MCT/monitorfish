@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:49+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,36 +18,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:2
-#: 2f1e1d19aad34664bfc772d8d6cd930f
+#: f5dfb9e8c34d493faebd36118f6ed9f1
 msgid ":py:mod:`datascience.src.pipeline.flows.ports`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:8
-#: 7d5b5a4027d14f48877f5cde9f267f7c
+#: 6672486086bb43439e6551e831033f6c
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:12
-#: c18db68f080145f080c95813eca3b30a
+#: 46bbd979c477493492ab18ec11abb76f
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: c7a5b0414314499593c6782964381371
+#: ecbb39a8ca2148e6b6555d43675eabac
 msgid ""
 ":obj:`make_date <datascience.src.pipeline.flows.ports.make_date>`\\ "
 "\\(date\\_string\\: str\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 476280bf307e4c78b428a9d9a9fff24a
+#: c9f8d62d5aa741cc81abcd2fcf978ad9
 msgid ""
 ":obj:`make_lat_lon <datascience.src.pipeline.flows.ports.make_lat_lon>`\\ "
 "\\(lat\\_lon\\: str\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: a1c3616a966246f498cce81956fcf046
+#: 52994dd8e5d340e790d4acb1df95b193
 msgid ""
 ":obj:`extract_unece_locations "
 "<datascience.src.pipeline.flows.ports.extract_unece_locations>`\\ "
@@ -55,21 +55,21 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 09b73642dc5d481cafdbf0ec7da8cdb3
+#: fac368b75b9f49b7b78e0ab654a188b8
 msgid ""
 ":obj:`clean_unece <datascience.src.pipeline.flows.ports.clean_unece>`\\ "
 "\\(locations\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 441c87b1c10449f791d43dbc4c994225
+#: 41e4c0cf029f45698f0d4487b6446d11
 msgid ""
 ":obj:`load_unece <datascience.src.pipeline.flows.ports.load_unece>`\\ "
 "\\(locations\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: b8e4460a463640aaaa455ca1750eafdb
+#: 54f299d321f94b68a21496be29f291c8
 msgid ""
 ":obj:`extract_circabc_locations "
 "<datascience.src.pipeline.flows.ports.extract_circabc_locations>`\\ "
@@ -77,35 +77,35 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 8ede8654372c491db9bf860617b3cd59
+#: d6f74870f0464e49bf8c2420a0e1caf0
 msgid ""
 ":obj:`clean_circabc <datascience.src.pipeline.flows.ports.clean_circabc>`\\ "
 "\\(locations\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 6ad6cad6085849499182dd12a0aa1376
+#: 7d8aa55d4a1c4e78a410d8dd8f0eb314
 msgid ""
 ":obj:`load_circabc <datascience.src.pipeline.flows.ports.load_circabc>`\\ "
 "\\(locations\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 67ed090d078f42bab1917d336daafb28
+#: 1cd94531d28e4d0c876618ceb9cb6ce1
 msgid ""
 ":obj:`extract_unece_ports "
 "<datascience.src.pipeline.flows.ports.extract_unece_ports>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 0143385e279a4a6d8aeec0ba4138313d
+#: caf225c5d896400da5c71890e1c02d1b
 msgid ""
 ":obj:`extract_circabc_ports "
 "<datascience.src.pipeline.flows.ports.extract_circabc_ports>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 5ec5fe485f134621b9561cd0167d26aa
+#: 616f9fab7d9b435d9013cd6c8e964f37
 msgid ""
 ":obj:`merge_circabc_unece "
 "<datascience.src.pipeline.flows.ports.merge_circabc_unece>`\\ "
@@ -113,7 +113,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 0d747269178e4f43b6c669b6d9808f72
+#: c75fe2a8d7b8409aa2f04761c656c572
 msgid ""
 ":obj:`combine_columns_into_value "
 "<datascience.src.pipeline.flows.ports.combine_columns_into_value>`\\ "
@@ -121,35 +121,35 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 2a037454079a4292bf6c54502207f53c
+#: 9c1e2e5759e54d17ac1bfea41e64fe43
 msgid ""
 ":obj:`load_port_codes "
 "<datascience.src.pipeline.flows.ports.load_port_codes>`\\ \\(ports\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: c5ffe6a33432490d906f36f6a7b50558
+#: 9e4fcb5df2ed4a5abf930fad1574d81c
 msgid ""
 ":obj:`geocode_row <datascience.src.pipeline.flows.ports.geocode_row>`\\ "
 "\\(row\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 3b34b4150bb9490ab039fa13ef49c422
+#: a674fbbc5c924f5f88597092792e43b7
 msgid ""
 ":obj:`extract_port_codes "
 "<datascience.src.pipeline.flows.ports.extract_port_codes>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 51d69532e67a4caa860dc695ef427337
+#: eec08fca2ee743c5ab85125ae04b4dd4
 msgid ""
 ":obj:`geocode_ports <datascience.src.pipeline.flows.ports.geocode_ports>`\\ "
 "\\(ports\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 4a3d830838994110b52fbd7f3b9f4de6
+#: 5a5e62c3526a43bfb50e0acf0a2c8e24
 msgid ""
 ":obj:`load_geocoded_ports "
 "<datascience.src.pipeline.flows.ports.load_geocoded_ports>`\\ "
@@ -157,35 +157,35 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 2a1363af1bba4e2cb4d7202b1ca1eae7
+#: c93dc38d9dbd4d23b08dff5c0af6b21a
 msgid ""
 ":obj:`extract_geocoded_ports "
 "<datascience.src.pipeline.flows.ports.extract_geocoded_ports>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 8bc350818d344d46aa2f46ef41a6410c
+#: 6da9e18849924d64b45e6502ca27076f
 msgid ""
 ":obj:`merge_lat_lon <datascience.src.pipeline.flows.ports.merge_lat_lon>`\\ "
 "\\(geocoded\\_ports\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: bd604b7b4ca347da8d1d680525b296e2
+#: a0c218f7be584b8882aca42d32ab0e82
 msgid ""
 ":obj:`add_manual_fixes "
 "<datascience.src.pipeline.flows.ports.add_manual_fixes>`\\ \\(ports\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 8e706a861c564f3d8c9d50ff390ffb29
+#: 43c67bf5c5414364a38d2aa214feeb93
 msgid ""
 ":obj:`load_ports <datascience.src.pipeline.flows.ports.load_ports>`\\ "
 "\\(ports\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 44e4e719f98046f9a69860aef3d4569b
+#: 128c3c0e2e74413393648b8e10fdb638
 msgid ""
 ":obj:`extract_datagouv_ports "
 "<datascience.src.pipeline.flows.ports.extract_datagouv_ports>`\\ "
@@ -193,7 +193,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:41:<autosummary>:1
-#: 45768ce62c064c82885db21cfb8af5d9
+#: 62766af75f514929980380a8e7a3242f
 msgid ""
 ":obj:`load_ports_to_monitorfish "
 "<datascience.src.pipeline.flows.ports.load_ports_to_monitorfish>`\\ "
@@ -201,37 +201,37 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:43
-#: 784fda063f694c3ca33a7062cc00b2b9
+#: 2c6814ba0b164cbd80f3c12812ebdd2c
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:54:<autosummary>:1
-#: 7d780e5c912d47558959f3de67199bb6
+#: b5fd4751ae174db888c142e12c0fde91
 msgid ""
 ":obj:`csv_directory_path "
 "<datascience.src.pipeline.flows.ports.csv_directory_path>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:54:<autosummary>:1
-#: 38dce3af77b04e02aea0161aa4826aae
+#: 59ca8e2a76d6491aa44a3e45634a422e
 msgid ""
 ":obj:`csv_filepath <datascience.src.pipeline.flows.ports.csv_filepath>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:54:<autosummary>:1
-#: 3e060b1cdeab449e8aed282736b4caf8
+#: 2203b1bfda614956bd243fa7d070fc50
 msgid ""
 ":obj:`circabc_ports <datascience.src.pipeline.flows.ports.circabc_ports>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:54:<autosummary>:1
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:54:<autosummary>:1
-#: 49fc8b3cc594484dbdc7f799a16cb861 fca4e0a069d24fd4b9ba8fa7ee3e235f
+#: 80a5966cbc5240cba0031ce69d5537d3 0cf5f227d4254f8c80fad6f875906cff
 msgid ":obj:`ports <datascience.src.pipeline.flows.ports.ports>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/ports/index.rst:54:<autosummary>:1
-#: bf20fccde7084331a5c7a350ab009439
+#: 281414db5ec94bbc9e2c4a5975e01596
 msgid ""
 ":obj:`geocoded_ports "
 "<datascience.src.pipeline.flows.ports.geocoded_ports>`\\"

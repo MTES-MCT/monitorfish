@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:49+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:2
-#: 531dbe36cdf04f35aa5d82511c04ab8e
+#: 0979a65b22214da395b2874ce333706a
 msgid ":py:mod:`datascience.src.utils.ers`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:8
-#: c8201848e9b34ad897982dbb6ce681a2
+#: cdc0a610bd1e4f29aa22a80e35fac5d0
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:12
-#: ffcfe24388574483a37b9634060dec81
+#: 2b29b38af1964d68b067f5db0794c886
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 0e0d4f74a4314a32aa72ebf7b6271632
+#: 293fec81a2ad4ceda951a425d2086f46
 msgid ""
 ":obj:`remove_namespace <datascience.src.utils.ers.remove_namespace>`\\ "
 "\\(tag\\: str\\)"
@@ -41,12 +41,12 @@ msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:44
-#: 49a67ccdea3f4ebe9557b1e2c20e98b9 b263fbea6fd84de68fa8d1ef3b6a8f8e
+#: adcf4536f536402685de5067d997360f ff17f6cbff1949b8be2885f11c87d9dd
 msgid "Removes xmlns from tag string."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 8816159f243341668ef91a5efd4b9a83
+#: 3e66a727a62a4c1fb795550d566f0ae0
 msgid ""
 ":obj:`xml_tag_structure_func_factory "
 "<datascience.src.utils.ers.xml_tag_structure_func_factory>`\\ "
@@ -54,12 +54,12 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 2ef10356494c4cd283a59eef74d6c619
+#: 87bd171800fe4868a5659fad750e6e02
 msgid ":obj:`has_tag <datascience.src.utils.ers.has_tag>`\\ \\(tag\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 77df582745e84085bb807d73db874edf
+#: c907c8f78b1e4272ad86cc0f898adb34
 msgid ""
 ":obj:`get_elements_by_ers_tag "
 "<datascience.src.utils.ers.get_elements_by_ers_tag>`\\ \\(xml\\_element\\, "
@@ -67,33 +67,33 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 681b05ef9bcc4a16ae25b55f1806f0cd
+#: 44847921518b47bc9fe56763ab506365
 msgid ""
 ":obj:`get_root_tag <datascience.src.utils.ers.get_root_tag>`\\ "
 "\\(xml\\_element\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 272f181316de4ce598ab90c2b81d8b86
+#: 3f22a87b36d44e4ba7359594ad9844bb
 msgid ""
 ":obj:`get_first_child <datascience.src.utils.ers.get_first_child>`\\ "
 "\\(xml\\_element\\, assert\\_child\\_single\\=True\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 291b9dcfe1674b938b5a1216caafa31f
+#: 66404dcfeb5f4b15b2111aba3ae1a1e5
 msgid ""
 ":obj:`make_datetime <datascience.src.utils.ers.make_datetime>`\\ \\(date\\: "
 "str\\, time\\: Union\\[str\\, None\\] \\= None\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: a5b657f006c545df9f001c9218cef78e
+#: be6a15cd76414a4a8bfa0cf52be3be60
 msgid "Takes date a \"2020-12-24\" string and, optionnally, a time \"16:49\" string,"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 17d1f1a4fa724ff3918411c1e651462e
+#: 2d81b7db5aca458b94263e858367360f
 msgid ""
 ":obj:`make_datetime_json_serializable "
 "<datascience.src.utils.ers.make_datetime_json_serializable>`\\ \\(date\\: "
@@ -101,34 +101,34 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 094066a064d74db6a1e33ee105b89a6f
+#: 035207df07684069b3e21614aa156d97
 msgid ":obj:`try_float <datascience.src.utils.ers.try_float>`\\ \\(s\\: str\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 061c31f11d6840929d93001d41b4d0a5
+#: c14e96906bb4402b86e471929937c6e8
 msgid ""
 ":obj:`tagged_children <datascience.src.utils.ers.tagged_children>`\\ "
 "\\(el\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:30
-#: 6b37ce01da3040a88b7f95b069250f05
+#: 6fa0c0ebb0514c7c825fcfd1f042ff24
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:36:<autosummary>:1
-#: 6ab2d97acd8f498f85e9116d4ab7a3f1
+#: cde0ec5b13ea4ad18f05276e199f667e
 msgid ":obj:`NS <datascience.src.utils.ers.NS>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:47
-#: 32ffd0719ab742529c18f2a607234750
+#: 5a67eee295554ac991136dd936eff355
 msgid "Examples"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:70
-#: 56aba5fd0c254229ae179db4e9c14122
+#: 550c64febaf146cba6a16cb54a348047
 msgid ""
 "Takes date a \"2020-12-24\" string and, optionnally, a time \"16:49\" "
 "string, Returns a datetime object"

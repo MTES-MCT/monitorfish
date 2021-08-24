@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:2
-#: b7f0d89690b445f2a45f161df7370bd1
+#: 4368a5e0bca84a3faadf7ca05ddd2a13
 msgid ":py:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.items`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:8
-#: edc1294d80194698ac5e0638eb468347
+#: d63a1f3eb10b409080091d8766c39ec6
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:11
-#: 553baad4c1aa4c7985f079a028add5af
+#: 3fbd01cf6b1d4da1ac055ae73c6c3555
 msgid "Classes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:19:<autosummary>:1
-#: 6fa87e7c6ce64f659fb5e8baa74201b4
+#: 48b08346e3f34caf8c3f715b2a58cc29
 msgid ""
 ":obj:`LegipecheItem "
 "<datascience.src.pipeline.scraping.legipeche.legipeche.items.LegipecheItem>`\\"
@@ -41,17 +41,17 @@ msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:19:<autosummary>:1
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:24
-#: 2e01118aaa6e45dbb10d7f4d8ec2714e 8f41a746cb9744cd8f188acbba2d5877
+#: c87f4ff209aa41cea43eb110cdd17c02 3f83bcef04954aa8aaa8b08887bedb73
 msgid "Base class for scraped items."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:22
-#: 6a5bbdcec9924c3da3ea8a15f6212af8
+#: f5a86d7f503146559dcbb62caed1141d
 msgid "Bases: :py:obj:`scrapy.Item`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:26
-#: 6d93eef07f99487892689ffbc511a40f
+#: 83e22fcd25074fce8f1517c3a1c970ef
 msgid ""
 "In Scrapy, an object is considered an ``item`` if it is an instance of "
 "either :class:`Item` or :class:`dict`, or any subclass. For example, when "
@@ -61,14 +61,14 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:31
-#: d78245794801479daec354975ac0ea76
+#: 6dfe8825125b4ba5ae6a1143544daa1e
 msgid ""
 "If you need instances of a custom class to be considered items by Scrapy, "
 "you must inherit from either :class:`Item` or :class:`dict`."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:34
-#: 86bd13ee46764f369c8eac3c45744fe4
+#: 1a8edf81488343fa8f5338ebb6d38701
 msgid ""
 "Items must declare :class:`Field` attributes, which are processed and stored"
 " in the ``fields`` attribute. This restricts the set of allowed field names "
@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/items/index.rst:41
-#: 235b996a77ac42f6b312d67bca18ca93
+#: e287aaf0850a4d5d9e3dd8eb70df8577
 msgid ""
 "Unlike instances of :class:`dict`, instances of :class:`Item` may be "
 ":ref:`tracked <topics-leaks-trackrefs>` to debug memory leaks."

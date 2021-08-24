@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/damsijupyterconfig/index.rst:2
-#: 4e62abdf145b4fb9b144a3e563d7e7ee
+#: 5555fd188cbd40c09d456b690f47a02c
 msgid ":py:mod:`datascience.dam-si-jupyter-config`"
 msgstr ""
 
 #: ../source/autoapi/datascience/damsijupyterconfig/index.rst:8
-#: 880ecfafcdcf49509b08b29612e8478f
+#: 943e0fc37f6a4913844c4461bf663775
 msgid "Module Contents"
 msgstr ""

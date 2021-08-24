@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows/controllers.rst:3
-#: c6f96ed4d7634fb19597047b3db02954
+#: 5ae3b206918943748003ff8c61a56835
 msgid "Controllers"
 msgstr ""
 
 #: ../source/flows/controllers.rst:5
-#: 385e61786088474ab22fc6a1d86b1502
+#: c8b6f14695b6455f9ca08cf35365e1da
 msgid "The ``controllers`` flow extracts the list of control units from the FMC2 database and inserts the data into the ``controllers`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/controllers.rst:8
-#: 2ab0cb6c9123424e8549150a10b9f5a9
+#: 425be0206fb24c2292d94d52afb861fd
 msgid "It is scheduled to run every day."
 msgstr ""

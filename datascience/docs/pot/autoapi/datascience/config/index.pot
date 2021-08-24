@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/config/index.rst:2
-#: 27bf5a3218a641d48552b52dda64a857
+#: b466985fd1c5429fb6dc1112f408faeb
 msgid ":py:mod:`datascience.config`"
 msgstr ""
 
 #: ../source/autoapi/datascience/config/index.rst:8
-#: 0ed7bf0e8a444690a234b64ef402aea6
+#: 28bbfc9233b2441bbd2fa06dd15adaea
 msgid "Module Contents"
 msgstr ""

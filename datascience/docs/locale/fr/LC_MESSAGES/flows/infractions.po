@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:50+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/flows/infractions.rst:3 24556f93d83745edb4c1e99a6c97dae2
+#: ../source/flows/infractions.rst:3 34f4bf7aad064aeca276107e02efa531
 msgid "Infractions"
 msgstr ""
 
-#: ../source/flows/infractions.rst:5 b01898d96fb94fa988b6defbf2461b2b
+#: ../source/flows/infractions.rst:5 0b1f83e8124f41af895dba508d0a7ec8
 msgid ""
 "The ``infractions`` flow extracts the list of infractions with their NATINF "
 "code and description from the FMC2 database and loads the data into the "
 "``infractions`` table of the Monitorfish database."
 msgstr ""
 
-#: ../source/flows/infractions.rst:9 73a43dd5373c469183fbdb57fd63061f
+#: ../source/flows/infractions.rst:9 7077709725054693bf47065e1bb4d585
 msgid "It is scheduled to run every day."
 msgstr ""

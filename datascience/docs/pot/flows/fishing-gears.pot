@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows/fishing-gears.rst:3
-#: b1d1d70738fd4fd4bb57a0349e7487eb
+#: 7c3fc64a07dc4a008adb5282030a0fc5
 msgid "Fishing gears"
 msgstr ""
 
 #: ../source/flows/fishing-gears.rst:5
-#: 82881263f0e04e8797d0a05a75b54493
+#: 06ff40e056a14108a09ec937e88d0cef
 msgid "The ``fishing_gear_codes`` flow extracts the referential of fishing_gears from the OCAN database, modifies a few fishing gear categories loads the data into the ``fishing_gear_codes`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/fishing-gears.rst:9
-#: e18da580e2294642a9e40dd37d382240
+#: f6670eee6e504ffab71f4f8f7079326b
 msgid "It is scheduled to run every day."
 msgstr ""

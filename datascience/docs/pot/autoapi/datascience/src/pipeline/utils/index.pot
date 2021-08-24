@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,88 +17,88 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:2
-#: d59e5dcc54c8437bbc967f3cbe010dc8
+#: 491187290f7248c8b1a24679f0679cc5
 msgid ":py:mod:`datascience.src.pipeline.utils`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:8
-#: d6fbdad0626046cca9e3597174dac3d6
+#: 1ae8220c5ea64e6f8470f75179739c0f
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:12
-#: c8a487b3398d494c9f4b796a990e7783
+#: 3ea2e1e0f7064e2e9b856b169266932d
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
-#: 757bb0efdb31407785bc32bbde1e1e33
+#: 533f45bb0d1348529fe4bff4e6da9fe8
 msgid ":obj:`get_table <datascience.src.pipeline.utils.get_table>`\\ \\(table\\_name\\: str\\, schema\\: str\\, engine\\: sqlalchemy.engine.base.Engine\\, logger\\: logging.Logger\\) → sqlalchemy.Table"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
-#: 94cfdf40f0124e24acceefdea8aa73b8
+#: 5c97a4405b2a429ab98b210c55fbd8ea
 msgid "Performs reflection to get a sqlalchemy Table object with metadata reflecting"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
-#: a76cfa50017b41e78fcdd03a5ae96499
+#: a6a73373040042968ced5cc3818ac66f
 msgid ":obj:`delete <datascience.src.pipeline.utils.delete>`\\ \\(table\\: sqlalchemy.Table\\, connection\\: sqlalchemy.engine.base.Connection\\, logger\\: logging.Logger\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
-#: a2e709f6148d46aea75854523c29b112
+#: 5b39fd75aa8d44b494eb4658c868ce89
 msgid "Deletes all row from a table."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
-#: 8ee2faec217b4105ba0fb88e37ad957e
+#: 76738d1de56f4717910574bf3bb94b07
 msgid ":obj:`psql_insert_copy <datascience.src.pipeline.utils.psql_insert_copy>`\\ \\(table\\, conn\\, keys\\, data\\_iter\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:39
-#: 3292df7f24a34668809456ec83e488d2
-#: 21b4844e23fd4fc8be50a0d473a516b6
+#: b8b051ee424c4ab18c0001f823034352
+#: 1756ecf1adc64d3fbb584182caf537f1
 msgid "Execute SQL statement inserting data"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
-#: e40814365df940ec993230c1ff0b1c49
+#: 364fbb8b9e3a405b8e2f7682a4a26c3f
 msgid ":obj:`move <datascience.src.pipeline.utils.move>`\\ \\(src\\_fp\\: pathlib.Path\\, dest\\_dirpath\\: pathlib.Path\\, if\\_exists\\: str \\= \\'raise\\'\\) → None"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
-#: 6447948917d64d9e959e9a29e84b5c1a
+#: 417d8f4a84744bd18934a4030554a286
 msgid "Moves a file to another directory. If the destination directory"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:25
-#: db87ab47486d43d7997de1d2c7a3dfb9
+#: 84b4cd501c8f413e965b94e732fec0f6
 msgid "Performs reflection to get a sqlalchemy Table object with metadata reflecting the table found in the databse. Returns resulting Table object."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:28
-#: a6e426fc92ba41ebba088e0baf66fc2f
+#: d04bd4b65f734ecbb45cb0bd10cc1fc8
 msgid "If the table is not found in the database, raises an error."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:33
-#: 510006ef8fd444f38183daf674866630
+#: 30eec434c0784a13836b87b141945e09
 msgid "Deletes all row from a table. Useful to wipe a table before re-inserting fresh data in ETL jobs."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:0
-#: 8e412bdc85334f36b32c9005cc0b64af
+#: 6a19d351506c4f7ca86499aa0508434a
 msgid "Parameters"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:45
-#: 5897b898cba5494d89700bcbb1d816c1
+#: d96a1093843b4b978b06b8f47e7be90d
 msgid "Column names"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/utils/index.rst:53
-#: d7ab0af336e24cb2afce6918211635c1
+#: 2df872085ed443c5b512eeb32420c1bf
 msgid "Moves a file to another directory. If the destination directory does not exist, it is created, as well as all intermediate directories."
 msgstr ""

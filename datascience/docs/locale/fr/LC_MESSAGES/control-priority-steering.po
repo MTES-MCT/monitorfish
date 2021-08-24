@@ -3,13 +3,17 @@
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,15 +21,15 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/control-priority-steering.rst:3 f1f818c56113462ebe9ac969a6e6dada
+#: ../source/control-priority-steering.rst:3 69e7b9408df74cc8820f232573740585
 msgid "Control priority steering"
-msgstr ""
+msgstr "Pilotage des priorités de contrôle"
 
-#: ../source/control-priority-steering.rst:6 9bd19b83b2e046b183aee76fe49c396d
+#: ../source/control-priority-steering.rst:6 7211eec9a7214c54ba90b7c991580af5
 msgid "Why it is needed"
-msgstr ""
+msgstr "A quoi ça sert"
 
-#: ../source/control-priority-steering.rst:8 e225155f7158400e8a48798e43a7a02b
+#: ../source/control-priority-steering.rst:8 a6acb4841d3f4417969465530a10df75
 msgid ""
 "Reaching the :ref:`control objectives <risk-assessment>` defined at the "
 "national level is one of the missions of the FMC. In order to reach these "
@@ -33,65 +37,78 @@ msgid ""
 "**dynamically adapt control priorities** depending on the level of "
 "achievement of the control objectives of each segment."
 msgstr ""
+"Atteindre les :ref:`objectifs de contrôle <risk-assessment>` définis au "
+"niveau national est l'une des missions du FMC. Afin d'atteindre ces "
+"objectifs, le FMC doit pouvoir **cibler certains segments de flotte** et "
+"**adapter dynamiquement les priorités de contrôle** en fonction du niveau de"
+" réalisation des objectifs de contrôle de chaque segment."
 
-#: ../source/control-priority-steering.rst:12 e0a120c7dadc4dbb945af6612de20a74
+#: ../source/control-priority-steering.rst:12 47caa6c7a74b4a0fbd1f91250c04c7ae
 msgid ""
 "In addition to the control objectives, the **seasonality of the activity** "
 "on the various segments is another factor that makes it necessary for the "
 "FMC to be able to adapt its control priorities dynamically. Indeed, certain "
 "fleet segments are of particular interest at known periods in the year."
 msgstr ""
+"En plus des objectifs de contrôle, la **saisonnalité de l'activité** sur les"
+" différents segments est un autre facteur qui rend utile la possibilité pour"
+" le CSP d'adapter ses priorités de contrôle de manière dynamique. En effet, "
+"certains segments de flotte présentent un intérêt particulier à des périodes"
+" déterminées de l'année."
 
-#: ../source/control-priority-steering.rst:17 840f5502b7cc4939a8d4b64b39dbb72b
+#: ../source/control-priority-steering.rst:17 56a6dcc89f3147b699c44f09a26c7e4c
 msgid "How it works"
-msgstr ""
+msgstr "Fonctionnement"
 
-#: ../source/control-priority-steering.rst:19 f6ad0650ba92424eb513ba54ec78a206
+#: ../source/control-priority-steering.rst:19 d7951aca036345d588f143871d3027bb
 msgid ""
 "The administration panel allows Monitorfish admins to steer control "
 "priorities by dynamically assigning a **control priority level** to each "
 "fleet segment :"
 msgstr ""
+"Le panneau d'administration permet aux administrateurs de Monitorfish de "
+"gérer les priorités de contrôle en attribuant dynamiquement un **niveau de "
+"priorité de contrôle** à chaque segment de flotte :"
 
 #: ../source/control-priority-steering.rst:23
-#: ../source/control-priority-steering.rst:23 903e7ec8cb1e43df94fab8400a90f6c7
-#: 39864b952b8a40f0970745e7b508354d
+#: ../source/control-priority-steering.rst:23 1383b56298e346b9ab61dc8110e4fafa
+#: 7c23a2fd6a16438a915c7ee26716c58c
 msgid "Control priority level"
-msgstr ""
+msgstr "Niveau de priorité du contrôle"
 
-#: ../source/control-priority-steering.rst:25 0337992cb29e49deb7286acb38603bc1
+#: ../source/control-priority-steering.rst:25 1a985948af39460c9a688e37e11713f0
 msgid "Low"
-msgstr ""
+msgstr "Faible"
 
-#: ../source/control-priority-steering.rst:25 e6298997666e4bcabf1d006fb9907b7a
+#: ../source/control-priority-steering.rst:25 2acebfb850584394bf3597a13cfc26e7
 msgid "1"
-msgstr ""
+msgstr "1"
 
-#: ../source/control-priority-steering.rst:26 822e92a514154e5f980dd8d987794d39
+#: ../source/control-priority-steering.rst:26 912ec9f3f61a4b63bbd3ecf1a9909314
 msgid "Moderate"
-msgstr ""
+msgstr "Moyen"
 
-#: ../source/control-priority-steering.rst:26 df86235d4edd415a9a0558b43e86fa27
+#: ../source/control-priority-steering.rst:26 107cd8fb42ce494898c4cfde9ab91ba7
 msgid "2"
-msgstr ""
+msgstr "2"
 
-#: ../source/control-priority-steering.rst:27 2c0d1690cc2b42d49b5a6e7d4f22918e
+#: ../source/control-priority-steering.rst:27 21cfb671174741c58a5980fcbe2faa3b
 msgid "High"
-msgstr ""
+msgstr "Elevé"
 
-#: ../source/control-priority-steering.rst:27 7d705d85549241b99304124363e73235
+#: ../source/control-priority-steering.rst:27 1f8e93f1e3374167be602f8c42bb9003
 msgid "3"
-msgstr ""
+msgstr "3"
 
-#: ../source/control-priority-steering.rst:28 610b005afeca47018bfc1ef60d985a23
+#: ../source/control-priority-steering.rst:28 07cff67515f44c3fb473ae1e8793a73f
 msgid "Very high"
-msgstr ""
+msgstr "Très élevé"
 
-#: ../source/control-priority-steering.rst:28 22282e19eb1446d9b6122ac69007ba1d
+#: ../source/control-priority-steering.rst:28 29150e4c014d423aa08b6a22bc811615
 msgid "4"
-msgstr ""
+msgstr "4"
 
-#: ../source/control-priority-steering.rst:31 8730c37d4da540068dbbe2f1c48b62dd
+#: ../source/control-priority-steering.rst:31 63cb68c111704c519596fc543791db8f
 msgid ""
 "The control priority level is then included  in the computation of the "
 ":ref:`detectability score <detectability-score>` component of the risk "
@@ -101,3 +118,10 @@ msgid ""
 "control targets that correspond to this fleet segment, thus helping the FMC "
 "to reach its objectives."
 msgstr ""
+"Le niveau de priorité de contrôle est ensuite inclus dans le calcul de la "
+"composante :ref:`score de détectabilité <detectability-score>` du facteur de"
+" risque. En attribuant un niveau de priorité de contrôle plus élevé à un "
+"segment de flotte, le facteur de risque de tous les navires appartenant à ce"
+" segment de flotte en temps réel sera augmenté, et Monitorfish recommandera "
+"automatiquement des cibles de contrôle correspondant à ce segment de flotte,"
+" aidant ainsi le FMC à atteindre ses objectifs."

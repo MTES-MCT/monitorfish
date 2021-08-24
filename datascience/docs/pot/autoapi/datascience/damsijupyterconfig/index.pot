@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/damsijupyterconfig/index.rst:2
-#: 4e62abdf145b4fb9b144a3e563d7e7ee
+#: e75abdbbcb41440f849c8032ddf99346
 msgid ":py:mod:`datascience.dam-si-jupyter-config`"
 msgstr ""
 
 #: ../source/autoapi/datascience/damsijupyterconfig/index.rst:8
-#: 880ecfafcdcf49509b08b29612e8478f
+#: ff8355c805704de79945e18f6b72c8cb
 msgid "Module Contents"
 msgstr ""

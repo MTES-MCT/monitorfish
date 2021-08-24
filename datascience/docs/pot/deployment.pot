@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,106 +17,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/deployment.rst:3
-#: 9c7f49f1712242d29dc65b6d90396bc1
+#: a469ee8bd44b430d964d687568903d48
 msgid "Deployment"
 msgstr ""
 
 #: ../source/deployment.rst:6
-#: 37ccf2db4b0842a492aa00fb7591e996
+#: 41c832a7029b4eb8a1fcc3c0cc969807
 msgid "Prerequisites"
 msgstr ""
 
 #: ../source/deployment.rst:9
-#: 21dcfdced8974f619ac172b4da74b096
+#: 5b2cb8bd00334d3c84adad01d9a84912
 msgid "Dependencies"
 msgstr ""
 
 #: ../source/deployment.rst:11
-#: 2955b099945a443ebdd148ff695612d6
+#: bd3c0f6601f246428a203541ec87613d
 msgid "The following dependencies must be installed on the production machine :"
 msgstr ""
 
 #: ../source/deployment.rst:13
-#: 0975ee3fb1fb4fc38597a0273f482e8c
+#: 8f2e4d7928f345d6a846c34eb0674d32
 msgid "`git <https://git-scm.com/>`__"
 msgstr ""
 
 #: ../source/deployment.rst:14
-#: ff3474c1924543f58c82d4b7dbdf563d
+#: a6dec34cfe8e494986fb622085c3e84b
 msgid "`docker <https://docs.docker.com/get-docker/>`__"
 msgstr ""
 
 #: ../source/deployment.rst:15
-#: 5c0b24ffdbd641739c2dbc308fe6df75
+#: 364ecde2fc934fb5876bf90074338a0a
 msgid "`make <https://www.gnu.org/software/make/>`__"
 msgstr ""
 
 #: ../source/deployment.rst:18
-#: 6184ce2dc64a4bb2a45070f7e4613324
+#: bced2dbb027e4568bbfce515a0e81ea8
 msgid "Configuration"
 msgstr ""
 
 #: ../source/deployment.rst:21
-#: 8c718397ed594f72acf9dc697cfbb674
+#: 7f33e7db223b46c89fa67fa7a39c7955
 msgid "Cloning the repository"
 msgstr ""
 
 #: ../source/deployment.rst:23
-#: cf04fa40bc1d4a9a90fa1a02f1a3d621
+#: 0b370f92fbad4ea9b0f859a828efeae0
 msgid "Clone the repo with :"
 msgstr ""
 
 #: ../source/deployment.rst:32
-#: 24743ea71c524234a3f67f9fb97a7c5b
+#: a861d84c16f44946b0a774cf863ef6c3
 msgid "Environment variables"
 msgstr ""
 
 #: ../source/deployment.rst:34
-#: 2db05c52d1a944238b49c9c3409f8cce
+#: 5430e26a5386428d83a83d6c8f38aaba
 msgid "A ``.env`` file must be created in the ``datascience`` folder, with all the variables listed in ``.env.template`` filled in."
 msgstr ""
 
 #: ../source/deployment.rst:35
-#: 82ad3b24848a4e48bd490c3d1bf77068
+#: 0029cdb020184b84995479bc4fb75ec1
 msgid "Set the ``MONITORFISH_VERSION`` environment variable. This will determine which docker images to pull when running ```make`` commands."
 msgstr ""
 
 #: ../source/deployment.rst:38
-#: b1403c57b967456b885483f70cf1b93a
+#: 95aa81e03b7d48cea6c8a329d764b287
 msgid "ERS files"
 msgstr ""
 
 #: ../source/deployment.rst:40
-#: fc330094ade34ea4b9015a6c635aaede
+#: f8448faf88f4443f8cde74701a514b8c
 msgid "ERS raw xml files are ingested by the ERS flow from the configured ``ERS_FILES_LOCATION`` in ``datascience/config.py``. In order to make ERS data available to Monitorfish, ERS files should therefore be deposited in this directory."
 msgstr ""
 
 #: ../source/deployment.rst:44
-#: 69ca8101149b43938bb65451c43dd296
+#: 48ca5b6874074d668273b897c98f00d9
 msgid "Running the database service"
 msgstr ""
 
 #: ../source/deployment.rst:46
-#: d20178353ec340dbb635654858ab1a04
+#: 16399d29543f49e485a12ffbe2202c99
 msgid "The Monitorfish database must be running for data processing operations to be carried out. For this, run the backend service first."
 msgstr ""
 
 #: ../source/deployment.rst:49
-#: 6be923d3c6fd417d9d9438fc5d1adc20
+#: 9efa4a35fa004fcaaadc5ebea28381d3
 msgid "Running the orchestration service"
 msgstr ""
 
 #: ../source/deployment.rst:51
-#: e6693a9be4cd42f4bf369eabaf26601d
+#: d869a54a95f942e8babd551d9a82167f
 msgid "The orchestration service can be started with :"
 msgstr ""
 
 #: ../source/deployment.rst:59
-#: f6b2bc8ae6fa45bf83a73cfc4d695557
+#: eebc600719524e148610174ead696bea
 msgid "Running the execution service"
 msgstr ""
 
 #: ../source/deployment.rst:61
-#: edc4e693e97948a6a7d64a3974fbc606
+#: 7c58a51c30f24c1bb222694dc6addc86
 msgid "The execution service can be started with :"
 msgstr ""

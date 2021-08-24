@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:49+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/utils/anonymization/index.rst:2
-#: bb39b5df0d024f96bd425b7e42452374
+#: a2571607fbd4453b85589988c381e1f7
 msgid ":py:mod:`datascience.src.utils.anonymization`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/anonymization/index.rst:8
-#: 296113ae09444bcab6ce7074ba072656
+#: 603ce92a68a94f83aaffa5797fa9d5c3
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/anonymization/index.rst:11
-#: caeff38b9d834f0897d54ade22a9d88e
+#: dfbcae3916fd4a449f27c971eeb7d223
 msgid "Classes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/anonymization/index.rst:19:<autosummary>:1
-#: 7482bc13c8b4437d827f3840540cb7e4
+#: b0642b217eb34be489d86acafa33c076
 msgid ""
 ":obj:`DataAnonymizer <datascience.src.utils.anonymization.DataAnonymizer>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/anonymization/index.rst:22
-#: ab953a381ffc4953bd7ee711427f7e63
+#: 66cae71c78ef47f6b2362cebde56ad31
 msgid "Bases: :py:obj:`object`"
 msgstr ""

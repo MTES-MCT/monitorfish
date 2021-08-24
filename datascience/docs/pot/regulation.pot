@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/regulation.rst:3
-#: 80faec06649647ff81951380182cfb43
+#: 8bf282f2b86c44e48d983530c07c27d4
 msgid "Regulation"
 msgstr ""
 
 #: ../source/regulation.rst:5
-#: dea2b1407a7f447bb26629b18a4b827a
+#: aaf29ce05fb94e37afe50ff6b6f0fd79
 msgid "A dedicated team of the FMC watches fishing regulation evolutions and captures it as semi-structured data in the admin panel of Monitorfish."
 msgstr ""
 
 #: ../source/regulation.rst:8
-#: f4730512396a42fab7bc71c41b0a1166
+#: a8dc3e3f43f84ba2972e62944e749786
 msgid "This data can be then displayed in Monitorfish to show regulated fishing areas."
 msgstr ""
 
 #: ../source/regulation.rst:None
-#: 8dfc256ddaa64d40b4eb3d82b223226e
+#: 5643e8d4065249a79443ec219038799d
 msgid "Map with regulated fishing areas showed in Monitorfish"
 msgstr ""

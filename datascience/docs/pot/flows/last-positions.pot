@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,36 +17,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows/last-positions.rst:3
-#: 3d61819e110d43c88cec69b09126597f
+#: 1346e25c244840f8a8d92323a43c1a74
 msgid "Last Positions"
 msgstr ""
 
 #: ../source/flows/last-positions.rst:5
-#: c6d815a5beee427384cd698f17e1c16d
+#: 16030a81fe7e4469a67c29c0b01af8ad
 msgid "The ``last_positions`` flow extracts"
 msgstr ""
 
 #: ../source/flows/last-positions.rst:7
-#: 5b48a3fe91aa4394b1d237bf39e5a78a
+#: 733f57791098419e9e0c7f2c910db315
 msgid "the most recent **position** of each vessels from the ``positions`` table"
 msgstr ""
 
 #: ../source/flows/last-positions.rst:8
-#: be57db27f2404425beaadb25ac37929e
+#: e5fbc10ce7cb43bfac921cad7fd44506
 msgid "the most recent **control** of each vessels from the ``controls`` table"
 msgstr ""
 
 #: ../source/flows/last-positions.rst:9
-#: 59ff734ce41d44c897b01690d18d07f1
+#: 0a753a570d8049d79e1cb6e35ab15e54
 msgid "the current **fleet segments** of each vessel from the ``current_segments`` table"
 msgstr ""
 
 #: ../source/flows/last-positions.rst:11
-#: 55a52ce69be04775b3c28145b22a25a0
+#: c461a12854b34727b1eb3d97f2e4a956
 msgid "then joins the results and dumps them in the ``last_positions`` table, which is used by the backend to to display vessels on the map."
 msgstr ""
 
 #: ../source/flows/last-positions.rst:14
-#: 7bb1d4e53d034f6f8ed69db3c3a761e1
+#: beb2d4d1d0d64c8d8f25db478a1db35b
 msgid "It is scheduled to run every minute."
 msgstr ""

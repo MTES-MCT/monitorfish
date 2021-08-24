@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:2
-#: 0e0f0aba08084913894aae63dfafe923
+#: 03bef8a62c934b89af147f72f1da355d
 msgid ":py:mod:`datascience.src.pipeline.flows.controls`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:8
-#: 65b71111a7d04fce9a3499aa2f6da003
+#: 38229c9be7fd4fdbae5e0ff7108590ee
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:12
-#: 618b06c5352e48da93b7d36befddabd9
+#: 80175d2d75e44c078b9bd1629e889002
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:21:<autosummary>:1
-#: 114e06a9e89b49978e4c4201bba7c041
+#: 23e9b34154cc449b855c4612ccacc112
 msgid ":obj:`extract_controls <datascience.src.pipeline.flows.controls.extract_controls>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:21:<autosummary>:1
-#: aae8dcf9b3aa47f295c8be339d1d7d4c
+#: 91bf7535c2d8495b9e10bd23ded2234f
 msgid ":obj:`transform_controls <datascience.src.pipeline.flows.controls.transform_controls>`\\ \\(controls\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:21:<autosummary>:1
-#: cf85258375cb4da397c698ed38a3701b
+#: 1607c154a2e245df8a36cf610bc441f5
 msgid ":obj:`load_controls <datascience.src.pipeline.flows.controls.load_controls>`\\ \\(controls\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:23
-#: 04b973b6db51488380e8a657a6f815ed
+#: 643fd51cee8349d6a20c5cf7ec8cec8e
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/controls/index.rst:29:<autosummary>:1
-#: 7d774a9111ab4462b39f6bc71d8ad638
+#: 7ddf161b15d747febb1c34280baa8b7d
 msgid ":obj:`controls <datascience.src.pipeline.flows.controls.controls>`\\"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,83 +17,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/control-priority-steering.rst:3
-#: f1f818c56113462ebe9ac969a6e6dada
+#: e68222c11a5b41e593795baaa86f4df0
 msgid "Control priority steering"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:6
-#: 9bd19b83b2e046b183aee76fe49c396d
+#: 49a8b312194d42a09e271a4382863cb8
 msgid "Why it is needed"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:8
-#: e225155f7158400e8a48798e43a7a02b
+#: f17667bca19a4b32a6a1f4c0cab2ba8f
 msgid "Reaching the :ref:`control objectives <risk-assessment>` defined at the national level is one of the missions of the FMC. In order to reach these objectives, the FMC needs a way to **target certain fleet segments** and to **dynamically adapt control priorities** depending on the level of achievement of the control objectives of each segment."
 msgstr ""
 
 #: ../source/control-priority-steering.rst:12
-#: e0a120c7dadc4dbb945af6612de20a74
+#: 8cc3307f0133427695036396d0731562
 msgid "In addition to the control objectives, the **seasonality of the activity** on the various segments is another factor that makes it necessary for the FMC to be able to adapt its control priorities dynamically. Indeed, certain fleet segments are of particular interest at known periods in the year."
 msgstr ""
 
 #: ../source/control-priority-steering.rst:17
-#: 840f5502b7cc4939a8d4b64b39dbb72b
+#: f288452274934a01ab61cd03eb3732b8
 msgid "How it works"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:19
-#: f6ad0650ba92424eb513ba54ec78a206
+#: 1eee6b0c8e144e40933066a313db11f4
 msgid "The administration panel allows Monitorfish admins to steer control priorities by dynamically assigning a **control priority level** to each fleet segment :"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:23
 #: ../source/control-priority-steering.rst:23
-#: 903e7ec8cb1e43df94fab8400a90f6c7
-#: 39864b952b8a40f0970745e7b508354d
+#: df16fb47eaf949ff80c77885ffc6121f
+#: 6ba2cf8643e243e5aff7b3f5e0e851ea
 msgid "Control priority level"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:25
-#: 0337992cb29e49deb7286acb38603bc1
+#: 6da00fc670f3406ba695e39a07b0edc4
 msgid "Low"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:25
-#: e6298997666e4bcabf1d006fb9907b7a
+#: 73f6e0a437e6443fa6e18c1e693173ad
 msgid "1"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:26
-#: 822e92a514154e5f980dd8d987794d39
+#: 3a4806be29eb4b4d9987eb10af069033
 msgid "Moderate"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:26
-#: df86235d4edd415a9a0558b43e86fa27
+#: ed658bb610b64ae4900226993c46d4c5
 msgid "2"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:27
-#: 2c0d1690cc2b42d49b5a6e7d4f22918e
+#: 30704c17c3ce424ba14c8b127b0a2474
 msgid "High"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:27
-#: 7d705d85549241b99304124363e73235
+#: 09df6e341dac4a49a4ac9a430ae5b989
 msgid "3"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:28
-#: 610b005afeca47018bfc1ef60d985a23
+#: 8a2531e94f2a4b17acede4a57885ba04
 msgid "Very high"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:28
-#: 22282e19eb1446d9b6122ac69007ba1d
+#: 9d64ef0065a743b18f1d3116964abed4
 msgid "4"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:31
-#: 8730c37d4da540068dbbe2f1c48b62dd
+#: e1be72e47a38456697737824ba2fca70
 msgid "The control priority level is then included  in the computation of the :ref:`detectability score <detectability-score>` component of the risk factor. By assigning a higher control priority level to a certain fleet segment, the risk factor of all vessels belonging to this fleet segment in real time will be increased, and Monitorfish will automatically recommend control targets that correspond to this fleet segment, thus helping the FMC to reach its objectives."
 msgstr ""

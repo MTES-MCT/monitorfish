@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows/vessels.rst:3
-#: 0d5aebc390b74b8ea937681f52bca02b
+#: f8ac48450c01491790425a6c95dfbd28
 msgid "Vessels"
 msgstr ""
 
 #: ../source/flows/vessels.rst:5
-#: 191ef9f1f4864134b739adb083660d8a
+#: af53d0b0391d43f8b820354465395771
 msgid "The ``vessels`` flow extracts the list of vessels from the OCAN database and loads the data into the ``vessels`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/vessels.rst:8
-#: 2cdb8005116d473a9b0ee13ef6975653
+#: 5dde0431ade94c77a386739035477024
 msgid "It is scheduled to run every day."
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:50+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/flows/fishing-gears.rst:3 b1d1d70738fd4fd4bb57a0349e7487eb
+#: ../source/flows/fishing-gears.rst:3 8367b3c4eaa94d2ba90ff88da26e37ec
 msgid "Fishing gears"
 msgstr ""
 
-#: ../source/flows/fishing-gears.rst:5 82881263f0e04e8797d0a05a75b54493
+#: ../source/flows/fishing-gears.rst:5 854ac6cd3bf84666beec8f904a6b8ffe
 msgid ""
 "The ``fishing_gear_codes`` flow extracts the referential of fishing_gears "
 "from the OCAN database, modifies a few fishing gear categories loads the "
 "data into the ``fishing_gear_codes`` table of the Monitorfish database."
 msgstr ""
 
-#: ../source/flows/fishing-gears.rst:9 e18da580e2294642a9e40dd37d382240
+#: ../source/flows/fishing-gears.rst:9 9d7629bfa8dc40eb8fa89c3db0692dff
 msgid "It is scheduled to run every day."
 msgstr ""

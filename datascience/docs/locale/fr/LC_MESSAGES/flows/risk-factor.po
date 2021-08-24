@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:50+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/flows/risk-factor.rst:3 920d5a147c214140a5d542b21372e9a2
+#: ../source/flows/risk-factor.rst:3 c723d184aecb40aa91afd6e4e14be8b1
 msgid "Risk factor"
 msgstr ""
 
-#: ../source/flows/risk-factor.rst:5 f89b3f36216a40f5bc961de3ec69fa31
+#: ../source/flows/risk-factor.rst:5 1a8fad9b127847ee8e23690bf21b5077
 msgid ""
 "The ``risk factor`` flow computes the :doc:`risk factor <../risk-factor>` of"
 " each fishing vessel."
 msgstr ""
 
-#: ../source/flows/risk-factor.rst:7 bca90ba25b9c4cb98634650def56fa51
+#: ../source/flows/risk-factor.rst:7 cc08a799dd1c483aa2028d6c6bac3c96
 msgid "It runs every 10 minutes."
 msgstr ""

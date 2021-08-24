@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows/ers.rst:3
-#: 50e02c25dd5f4b72bce23df4dee1ba0d
+#: e487f697c54e4a4eb30ad91ee1c924fc
 msgid "ERS"
 msgstr ""
 
 #: ../source/flows/ers.rst:5
-#: 9bc616553cfb45189b9106f0d63ca648
+#: 187cad52de2346ed9b66cc37a055eef4
 msgid "The ``ERS`` flow processes ERS xml messages and inserts the result into the ``ers`` and ``ers_messages`` tables of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/ers.rst:8
-#: f72b92d522c44ea39816fa9cfbe9c813
+#: 87cc510bed894e13aa8b72a0fa590b65
 msgid "It is scheduled to run every minute."
 msgstr ""

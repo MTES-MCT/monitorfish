@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,40 +18,40 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/spiders/legipeche_spider/index.rst:2
-#: 14050a9a023f4f1d959fb46ba6acd84d
+#: dd54bfe0d7134d959cc9deb20c30f61d
 msgid ""
 ":py:mod:`datascience.src.pipeline.scraping.legipeche.legipeche.spiders.legipeche_spider`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/spiders/legipeche_spider/index.rst:8
-#: aca325773af54aa7b1f8b59dd480d040
+#: 0a9ddbea7cdf429d81f15704c179a214
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/spiders/legipeche_spider/index.rst:11
-#: 23160b2cfab64e2d837578c6f60c5dc8
+#: a305c2da6d344bb1be54aa47da543ec1
 msgid "Classes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/spiders/legipeche_spider/index.rst:19:<autosummary>:1
-#: e3dde732ea4c4d83ae24707c02a68978
+#: b959bec095d341b38cda9644f94a8b6e
 msgid ""
 ":obj:`LegipecheSpider "
 "<datascience.src.pipeline.scraping.legipeche.legipeche.spiders.legipeche_spider.LegipecheSpider>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/spiders/legipeche_spider/index.rst:19:<autosummary>:1
-#: e39c27a4a92f49a484f5c46661114020
+#: d58f0e066234469b955764e30976c0f5
 msgid "Base class for scrapy spiders. All spiders must inherit from this"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/spiders/legipeche_spider/index.rst:22
-#: 88ccc3df31cf4cc0aa7b81ea2600fb8d
+#: f8d0387fdfc1424195283a35207f357d
 msgid "Bases: :py:obj:`scrapy.Spider`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/scraping/legipeche/legipeche/spiders/legipeche_spider/index.rst:24
-#: a90dc831bd574881b38ced7abb9faf57
+#: 0e4eba15a19b4ca38675a204cb8395c4
 msgid ""
 "Base class for scrapy spiders. All spiders must inherit from this class."
 msgstr ""

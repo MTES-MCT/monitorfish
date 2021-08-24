@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:49+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,38 +18,38 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:2
-#: 34b92609b42646c48cbf36033f2e7110
+#: 4a029bc18ece49948e11d4e44e5b708a
 msgid ":py:mod:`datascience.src.utils.graphs`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:8
-#: 5da7d099e7bb4f7895b8e015edecba4b
+#: 5660dbdf65b443c88800cebe1dcc1776
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:11
-#: 1828a6c3fe2c4d068513051921429d6f
+#: 0e7af66f317f482084aee83cf755bd4b
 msgid "Classes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:18:<autosummary>:1
-#: d28ab5706cc94323b5f6120e7843973f
+#: b0780b6360d84b36aee461907e08c4e9
 msgid ":obj:`pcolor <datascience.src.utils.graphs.pcolor>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:18:<autosummary>:1
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:41
-#: f49673057f814fc0b73acda82ec95e19 3b9098daa15f422297aecd67cb720961
+#: 4d28cff1a73b4d45bf1db8790ab4fe49 3fe7f4ca664043119576d0f46434561f
 msgid "Helper class for formatted printing."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:20
-#: 111d08970b5b4c51893f56621fbc950e
+#: 947b8f0f62a84bfcb3ecbd1158fef0f6
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:29:<autosummary>:1
-#: 09588987a6d74820a38d1fcc0665bdb1
+#: 79ad8c79e4674e01a3db0b5c359d5900
 msgid ""
 ":obj:`dataframe_inventory "
 "<datascience.src.utils.graphs.dataframe_inventory>`\\ \\(df\\: "
@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:29:<autosummary>:1
-#: e127bc934cdf483798dce65cef04363f
+#: a2eab0c0c357412dade883bb63bb67f7
 msgid ""
 ":obj:`compare_2_columns_values "
 "<datascience.src.utils.graphs.compare_2_columns_values>`\\ \\(df\\: "
@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:29:<autosummary>:1
-#: 53c516fc9f7e4aa998dda67acc8889b2
+#: 6a296de5c657444fb13463ece8fe28fd
 msgid ""
 ":obj:`compare_2_columns_availability "
 "<datascience.src.utils.graphs.compare_2_columns_availability>`\\ \\(df\\: "
@@ -73,6 +73,6 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/graphs/index.rst:43
-#: bef9615d39d14d04949ff350c53f9718
+#: aa4c9f374cf54941b60f3f128ce3ea64
 msgid "Example : print(pcolor.BOLD + 'Hello World !' + pcolor.END)"
 msgstr ""

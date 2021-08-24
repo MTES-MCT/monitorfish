@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows/infractions.rst:3
-#: 24556f93d83745edb4c1e99a6c97dae2
+#: 974da77bf89f423faef307759d4c4e23
 msgid "Infractions"
 msgstr ""
 
 #: ../source/flows/infractions.rst:5
-#: b01898d96fb94fa988b6defbf2461b2b
+#: fab89f139cab4c5495613d4218666e64
 msgid "The ``infractions`` flow extracts the list of infractions with their NATINF code and description from the FMC2 database and loads the data into the ``infractions`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/infractions.rst:9
-#: 73a43dd5373c469183fbdb57fd63061f
+#: 59f76e6f0f4d4bf39f1c8bcd6a40be4f
 msgid "It is scheduled to run every day."
 msgstr ""

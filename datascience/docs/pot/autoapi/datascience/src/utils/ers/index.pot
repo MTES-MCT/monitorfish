@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,98 +17,98 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:2
-#: 531dbe36cdf04f35aa5d82511c04ab8e
+#: 4d398bd5c24e49a2a80aba5219387c7a
 msgid ":py:mod:`datascience.src.utils.ers`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:8
-#: c8201848e9b34ad897982dbb6ce681a2
+#: 1b9e5de826c14a92ba74b728852c78be
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:12
-#: ffcfe24388574483a37b9634060dec81
+#: 7c087e848d3d4e5cbb2b4aacb1341b90
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 0e0d4f74a4314a32aa72ebf7b6271632
+#: 709de59db735443da974b6028098619c
 msgid ":obj:`remove_namespace <datascience.src.utils.ers.remove_namespace>`\\ \\(tag\\: str\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:44
-#: 49a67ccdea3f4ebe9557b1e2c20e98b9
-#: b263fbea6fd84de68fa8d1ef3b6a8f8e
+#: e3b5d5bc6c88423990cd8dfab435c89d
+#: e3642a358f064618bbd3397aad17a28f
 msgid "Removes xmlns from tag string."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 8816159f243341668ef91a5efd4b9a83
+#: e74210ba6924453c8e952a65288547d8
 msgid ":obj:`xml_tag_structure_func_factory <datascience.src.utils.ers.xml_tag_structure_func_factory>`\\ \\(max\\_depth\\, max\\_nb\\_children\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 2ef10356494c4cd283a59eef74d6c619
+#: 0d710c037c72486ba697e92423f413e6
 msgid ":obj:`has_tag <datascience.src.utils.ers.has_tag>`\\ \\(tag\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 77df582745e84085bb807d73db874edf
+#: d019c68beaa045a78127979166ecb1c9
 msgid ":obj:`get_elements_by_ers_tag <datascience.src.utils.ers.get_elements_by_ers_tag>`\\ \\(xml\\_element\\, ers\\_tag\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 681b05ef9bcc4a16ae25b55f1806f0cd
+#: cda50f67f3ec48e894eee44afb4ae075
 msgid ":obj:`get_root_tag <datascience.src.utils.ers.get_root_tag>`\\ \\(xml\\_element\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 272f181316de4ce598ab90c2b81d8b86
+#: d0a05714d0d44bdfaa829fa630258ad5
 msgid ":obj:`get_first_child <datascience.src.utils.ers.get_first_child>`\\ \\(xml\\_element\\, assert\\_child\\_single\\=True\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 291b9dcfe1674b938b5a1216caafa31f
+#: 74bff3c1d6ac49a486affc31e66d12c7
 msgid ":obj:`make_datetime <datascience.src.utils.ers.make_datetime>`\\ \\(date\\: str\\, time\\: Union\\[str\\, None\\] \\= None\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: a5b657f006c545df9f001c9218cef78e
+#: 6e27eb2de2a64b7184410e6bdf16363e
 msgid "Takes date a \"2020-12-24\" string and, optionnally, a time \"16:49\" string,"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 17d1f1a4fa724ff3918411c1e651462e
+#: 118846a7337648c2a2108815927bcfd2
 msgid ":obj:`make_datetime_json_serializable <datascience.src.utils.ers.make_datetime_json_serializable>`\\ \\(date\\: str\\, time\\: Union\\[str\\, None\\] \\= None\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 094066a064d74db6a1e33ee105b89a6f
+#: db0efd1dfd7c4fd297216b64ad1a9634
 msgid ":obj:`try_float <datascience.src.utils.ers.try_float>`\\ \\(s\\: str\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:28:<autosummary>:1
-#: 061c31f11d6840929d93001d41b4d0a5
+#: 0329e3ca39384f4b9df9631b9801837b
 msgid ":obj:`tagged_children <datascience.src.utils.ers.tagged_children>`\\ \\(el\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:30
-#: 6b37ce01da3040a88b7f95b069250f05
+#: 645cc8a1103848bbbde860364af798a2
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:36:<autosummary>:1
-#: 6ab2d97acd8f498f85e9116d4ab7a3f1
+#: d94ed52bbe454f22acc9f31c67faace5
 msgid ":obj:`NS <datascience.src.utils.ers.NS>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:47
-#: 32ffd0719ab742529c18f2a607234750
+#: dad370e181f24d5796e99b0c8f6ca810
 msgid "Examples"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/utils/ers/index.rst:70
-#: 56aba5fd0c254229ae179db4e9c14122
+#: c229d146145144c98b3454ba89f388b3
 msgid "Takes date a \"2020-12-24\" string and, optionnally, a time \"16:49\" string, Returns a datetime object"
 msgstr ""

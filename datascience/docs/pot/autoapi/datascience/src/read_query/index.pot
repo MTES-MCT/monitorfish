@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,168 +17,168 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:2
-#: c67253c614ea4543b145c52c76d50591
+#: eaefef1869984a4891c0e316a6470293
 msgid ":py:mod:`datascience.src.read_query`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:8
-#: d0f618f116d948ca8d7a0698eb0ca897
+#: 640e40bf892344799428ab2447016455
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:12
-#: 0092f899159b44e386c76df8fba04fd4
+#: f50b84f1b8694035840d95ebe6b662e5
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
-#: d9615960c94d4b9da24acccb4fd4b7ab
+#: 90aaeff627cf4c9f8999d1181ae52bea
 msgid ":obj:`read_saved_query <datascience.src.read_query.read_saved_query>`\\ \\(db\\: str\\, sql\\_filepath\\: Union\\[str\\, pathlib.Path\\]\\, parse\\_dates\\: Union\\[list\\, dict\\, None\\] \\= None\\, params\\=None\\, \\*\\*kwargs\\) → pandas.DataFrame"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
-#: 9dbd47d6ca71457c9d77b0aaeb1fa5e3
+#: 44cf098a120a4490b15e777d6e83e322
 msgid "Run saved SQLquery on a database. Supported databases :"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
-#: 9d24476eb4844d2eb373c2dbe415e5ee
+#: b56857c9de764df18a0b5b37a1a5e02c
 msgid ":obj:`read_query <datascience.src.read_query.read_query>`\\ \\(db\\: str\\, query\\, chunksize\\: Union\\[None\\, str\\] \\= None\\, params\\=None\\, \\*\\*kwargs\\) → pandas.DataFrame"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
-#: 84942fcf0c684c2b94c26e4d16f29a18
+#: a52b1002fbac4cac8205f2481e07b5ef
 msgid "Run SQLquery on a database. Supported databases :"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
-#: 5c399fbe139640c9add7ad7df59e0e2a
+#: 05e1540503f24f12b78f15a780e9a136
 msgid ":obj:`read_table <datascience.src.read_query.read_table>`\\ \\(db\\: str\\, schema\\: str\\, table\\_name\\: str\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
-#: ea37232de094454ab2a494558bbf986c
+#: 71478ff8b80b4c58b926b86b13a89d31
 msgid "Loads database table into pandas Dataframe. Supported databases :"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:24
-#: ce4ed2101f1b4ed188c4efc01fffe48c
+#: e5e4faf6f5e84fa2ab74fe2d061366db
 msgid "Run saved SQLquery on a database. Supported databases : - 'ocan' : OCAN database - 'fmc': FMC database - 'monitorfish_remote': Monitorfish database - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP - 'cacem_local' : CACEM PostGIS database hosted in CNSP"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:31
 #: ../source/autoapi/datascience/src/read_query/index.rst:63
-#: cc0ef790cf1a47c3ac091e8ca8cab331
-#: fd3adae1649f4bdba25b1fe5b5d8aacc
+#: f8e705f82ab64c368f2a9361dbad0f8e
+#: 70af49aa4bba499ebe32f30dd1c50255
 msgid "Database credentials must be present in the environement."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
-#: e94420e419124dc785cae78b9f94c2c1
-#: de91bdaac648471bae83de59dd7c0708
-#: 98775a2263ac455d9899203f9e7e1a84
+#: a7b94f6d088e4dc9840375079d800019
+#: 4f92cf4d49d146fc9ff7ede6f2dcdf10
+#: ca71c084b9d44406abb47b7bae79c12d
 msgid "Parameters"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:33
 #: ../source/autoapi/datascience/src/read_query/index.rst:65
 #: ../source/autoapi/datascience/src/read_query/index.rst:85
-#: 40d73846237647429aa2ce034b95b26a
-#: de1ac6a9221541099f8103bfac5d1ac8
-#: a9f83fc7f0cd4aa59add526716a26caf
+#: 2f0ef9f209b84d5b9f067ca2c2465e20
+#: 2129e71c1a74488199c63305ae40cd47
+#: 95a19305652f4d648e69e1cfd0ceb802
 msgid "Database name. Possible values : 'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:36
-#: d9e69afe18cc4b7eba3d91c2a4080789
+#: a54a05c6008f4f9393584a50981000bb
 msgid "path to .sql file, starting from the saved queries folder. example : \"ocan/nav_fr_peche.sql\""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:39
-#: df0e6e93eab24c008c240049d7b7cd07
+#: 4dfb374203484a888a752fce95b20529
 msgid "- List of column names to parse as dates. - Dict of ``{column_name: format string}`` where format string is strftime compatible in case of parsing string times or is one of (D, s, ns, ms, us) in case of parsing integer timestamps. - Dict of ``{column_name: arg dict}``, where the arg dict corresponds to the keyword arguments of :func:`pandas.to_datetime`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:40
-#: 14ab36cc27c046d7979cdf51b552bbde
+#: 37e7c46657254b47ac0a7b8dcbdb01cc
 msgid "List of column names to parse as dates."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:41
-#: 6e6144fab285407db23896e7a328b766
+#: 186d8ab0175e47dfa46c8f99f4a3de0f
 msgid "Dict of ``{column_name: format string}`` where format string is"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:42
-#: 0281565605654d04a44b0b7a2326ebab
+#: 144c9c6ea6d446fa9fcf235976d22fb8
 msgid "strftime compatible in case of parsing string times or is one of (D, s, ns, ms, us) in case of parsing integer timestamps. - Dict of ``{column_name: arg dict}``, where the arg dict corresponds to the keyword arguments of :func:`pandas.to_datetime`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:47
-#: 35f9e539bec044d19e41545be9f27472
+#: 636947564f4b4c57bf5277c66f741f05
 msgid "dict of query parameters"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:48
 #: ../source/autoapi/datascience/src/read_query/index.rst:70
-#: 0774f04922f0411693edb656e46bad35
-#: e14ad8c4882f4c45862393bc3c57a0e2
+#: f6e07e9c817547e8b244609a36a07b5c
+#: d97ca1611fc54e49b3c5823d3379eadf
 msgid "passed to pd.read_sql"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
-#: c9d41ee5ab2544b8a491dd54e8beb034
-#: 7e0e44b991b1451380386d2ff1e7396c
-#: 52947647072a4f829b56c07ef62dfd32
+#: 849d42c9cb9443bf991533da44f92d99
+#: 2f0bae12b7f843c7a82e854ed8afb4d1
+#: f1255d3b75ae4797a891d556f79bbb61
 msgid "Returns"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:50
 #: ../source/autoapi/datascience/src/read_query/index.rst:72
-#: 994ccef6bda645c58fa7b47dfe20d321
-#: 8801fc89b9964b9eb14279f8c34e63d3
+#: fe56f001282840acba3cf85c4fc8f251
+#: eb15a4169a54455ab7d217575532952d
 msgid "Query results"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
 #: ../source/autoapi/datascience/src/read_query/index.rst:0
-#: 47c4b4a3316046fcb9fb9fcec7aea653
-#: 1dedb7b6d3a547f3aa999e62fe49a741
-#: d7a5686445744ca289782ab14cc904c2
+#: c30df09483104883a80a118d0e6fae29
+#: bd300213d8a94aef9f779ea6c8e34593
+#: c9a148ff0912410cb1d00d6bbc9f8811
 msgid "Return type"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:56
-#: cd0feda8b3c343f2bba143ccef239764
+#: 802baacdf0ac41479989f35c2ef52ca1
 msgid "Run SQLquery on a database. Supported databases : - 'ocan' : OCAN database - 'fmc': FMC database - 'monitorfish_remote': Monitorfish database - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP - 'cacem_local' : CACEM PostGIS database hosted in CNSP"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:68
-#: 6a4cb998ec6c430fa6b66e2fa2bb9459
+#: 6966adfc09114561b51e125d84ed2e67
 msgid "Query string or SQLAlchemy Selectable"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:78
-#: e62d21dbc1734d42a7516408be2cc6c8
+#: ae21c3d6f6824ea291effc8c9538ff9a
 msgid "Loads database table into pandas Dataframe. Supported databases : - 'ocan' : OCAN database - 'fmc': FMC database - 'monitorfish_remote': Monitorfish database - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP - 'cacem_local' : CACEM PostGIS database hosted in CNSP"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:88
-#: 52ee6a826f7548fa902bb3fb5da46fab
+#: 26fe52be615f4305974924ad52111e7d
 msgid "Schema name"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:90
-#: cb0868f481414146aff3c5df7a4380d6
+#: c277daa2c4c04911b5e928f2136638ba
 msgid "Table name"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/read_query/index.rst:93
-#: e7c2f6948fc54ca581951cf89e20cb78
+#: 0f883a618313494bbfda5755aa0819f1
 msgid "Dataframe containing the entire table"
 msgstr ""

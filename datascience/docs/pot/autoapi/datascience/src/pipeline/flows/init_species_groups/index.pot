@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:2
-#: ea3bfaa1e0f64ee0b9cc95d92242d8c5
+#: dba07bb851004bddbdf7f984b529e846
 msgid ":py:mod:`datascience.src.pipeline.flows.init_species_groups`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:8
-#: 43fb8568033c483ea088f7c2e33aa7c8
+#: 4df18ccd778a4395b0e71db8564af5a9
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:12
-#: d257360db688448eb5a1c4700c7d19cc
+#: 41e884b90cd349bb8cc3d92245c5a95f
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:21:<autosummary>:1
-#: eb2736e8fa744d498b5ba64660bafbc2
+#: e08564b684b546c381e9e64375e8c929
 msgid ":obj:`extract_species_groups <datascience.src.pipeline.flows.init_species_groups.extract_species_groups>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:21:<autosummary>:1
-#: e1358677de974d6d89e474e318d8a819
+#: d91ae175e5e2449b996cd65360d53293
 msgid ":obj:`extract_species_codes_groups <datascience.src.pipeline.flows.init_species_groups.extract_species_codes_groups>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:21:<autosummary>:1
-#: 54f742cf94ee4eeb83040f2e0cdf0092
+#: 6b498fb96ec8422aa4311bc30860ce94
 msgid ":obj:`load_species_groups <datascience.src.pipeline.flows.init_species_groups.load_species_groups>`\\ \\(species\\_groups\\, species\\_codes\\_groups\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:23
-#: f62ab38f68664f4a99e39396203330e9
+#: 69ac8f97696d473e92439664b14b71b8
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/init_species_groups/index.rst:29:<autosummary>:1
-#: 0ef18bcc80c741b5b17337719b4d8338
+#: ca28d9c6e24948d28b6919806ecc3945
 msgid ":obj:`species_groups <datascience.src.pipeline.flows.init_species_groups.species_groups>`\\"
 msgstr ""

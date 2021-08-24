@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:2
-#: 7162b1b4f79e4606a549ed1022c6795c
+#: 3f1ec8298a5d40d19ac26d42cb23ba5d
 msgid ":py:mod:`datascience.src.pipeline.helpers.spatial`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:8
-#: d442757c5af945b2a737a73c79547022
+#: 86d480abf1f74920b5dce0dd29d54d8e
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:12
-#: ced8181003c14e8e8324d2093995a3a1
+#: 95afe1a92044428eb6c452e8665a1dcd
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:19:<autosummary>:1
-#: 7a8c82416b97449ea3179d83e08edd7b
+#: a0a0ef71a7c145ea94b9a596d6f189a6
 msgid ""
 ":obj:`estimate_current_position "
 "<datascience.src.pipeline.helpers.spatial.estimate_current_position>`\\ "
@@ -44,14 +44,14 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:19:<autosummary>:1
-#: 04324ea77fd940c8a1296fd80d28c091
+#: 7fd3236dbb714cfc84a68a2fb52e8514
 msgid ""
 "Estimate the current position of a vessel based on its last position, course"
 " and"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:22
-#: 289e6cecfd094c09a59cdf83c48a1379
+#: f38eb3a1da6f43e2a7c50d4854152446
 msgid ""
 "Estimate the current position of a vessel based on its last position, course"
 " and speed. If the last position is older than max_time_since_last_position,"
@@ -59,58 +59,58 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
-#: 6ded0244e03842928e2a94f76c5ffd0a
+#: c6026da8527248349b60cc05ed89a060
 msgid "Parameters"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:26
-#: fef84192ef5c4d228d3e5cdb45578b5c
+#: 9ba0f7a5124749cebcb7a42ae915146a
 msgid "last known latitude of vessel"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:28
-#: 3a9f6d7da57b4bcea7e5a8f44d756fb4
+#: 9bf854128bfb4e5c87a400a390a2b4b9
 msgid "last known longitude of vessel"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:30
-#: 047182d7296a4f08bb576ff910a5869f
+#: fc3dd12071044ac0b337a6760df32849
 msgid "last known route of vessel in degrees"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:32
-#: 8c87281da7b3470a8277c3a59a4312cc
+#: d3e277c79de74f30a1db3aa39c05e83c
 msgid "last known speed of vessel in nots"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:34
-#: af9d3db7941842d38600535e5cc25996
+#: 9a9f98d939c1495f9afad7d2f1565a76
 msgid "time since last known position of vessel, in hours"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:36
-#: 5029f8cfc29448eca0c7003afef469e7
+#: 7e41ce336b3742fdad571faf7e9fb745
 msgid ""
 "maximum time in hours since last position, after which the estimation is not"
 " performed (returns None instead). Defaults to 2."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:40
-#: b4f8be96137d4e798342cd5c5e2d1a98
+#: 0f5187fe82e9485a84c2b2ba72aec8a6
 msgid "'ignore' or 'raise'."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
-#: d1a19a9a56d448c4a97e4c3820f83c09
+#: 5fa7c6b174454ae2a38160c59f484dcb
 msgid "Returns"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:43
-#: aa60fbdd84dc455ab90151d4f0925dc9
+#: 93609f029de74239bd014b1ddab5940f
 msgid "estimated current latitude float: estimated current longitude"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
-#: fa6adea9d31742d1aa107cefb9804706
+#: 5078d8fc4e454bec9a21c398f12ef26b
 msgid "Return type"
 msgstr ""

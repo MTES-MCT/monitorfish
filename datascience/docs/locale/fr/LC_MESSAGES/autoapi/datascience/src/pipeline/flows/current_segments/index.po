@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:49+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:2
-#: 47c329676e604a81a18805a65b33f7a0
+#: 18e98f09f15244b5a411fa3dc3a058de
 msgid ":py:mod:`datascience.src.pipeline.flows.current_segments`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:8
-#: 1ebea91f3a4844f98ff9ee24b01b9fef
+#: bfe854421c0e49bc97d213b9f6a6bb1e
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:12
-#: 2d8a08447bf14609a5e90d66460cdc4d
+#: c690078eb785434c9ae3938954afe19d
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: 947d36f8601e4396a6cd76a967ce9d3c
+#: 078fcd1df09746a19c46a59a316089da
 msgid ""
 ":obj:`catch_zone_isin_fao_area "
 "<datascience.src.pipeline.flows.current_segments.catch_zone_isin_fao_area>`\\"
@@ -42,33 +42,33 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: 10e6f28e498e4d6c93f9fea9639a425a
+#: 68faad8d9ddb49c9befec5231c18f513
 msgid "Return"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: 5a20bb03e5f14cf98c223dc1291879c3
+#: 5f9861ad71b54e1d8dd4693ed48ccb76
 msgid ""
 ":obj:`extract_catches "
 "<datascience.src.pipeline.flows.current_segments.extract_catches>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: f674d9bceaa34debb71401ae301b707b
+#: 92a652972bfe4a19aa1ae23cb8c9c018
 msgid ""
 ":obj:`extract_segments "
 "<datascience.src.pipeline.flows.current_segments.extract_segments>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: 60e5a01102b84da49ff518f82311b303
+#: abb76099048b406d96325d5b3ea32e5d
 msgid ""
 ":obj:`unnest <datascience.src.pipeline.flows.current_segments.unnest>`\\ "
 "\\(segments\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: 015920a5b32247898332febffec0202c
+#: 73e8329f43b74996bf95e9b2fca33098
 msgid ""
 ":obj:`compute_current_segments "
 "<datascience.src.pipeline.flows.current_segments.compute_current_segments>`\\"
@@ -76,7 +76,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: 74c8b4af02be4f668833cfdda2aa269d
+#: f7c9c5ebd7aa4cbaa155b293601b19c2
 msgid ""
 ":obj:`merge_segments_catches "
 "<datascience.src.pipeline.flows.current_segments.merge_segments_catches>`\\ "
@@ -84,7 +84,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
-#: 7becbf87d9974562b94610543bf9c19e
+#: 447520926e794159bbacd08ece8a6e6b
 msgid ""
 ":obj:`load_current_segments "
 "<datascience.src.pipeline.flows.current_segments.load_current_segments>`\\ "
@@ -92,18 +92,18 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:27
-#: 423228110b0b471598b0dc88c75e9875
+#: 12b752345f0449ad8ac03e3ea61493d3
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:33:<autosummary>:1
-#: f5de5284116249618f8b3e9e1878e35c
+#: 080d670f84734c1589881ef56c714c98
 msgid ""
 ":obj:`catches <datascience.src.pipeline.flows.current_segments.catches>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:36
-#: fecb614a776a43b5b42fdef320e65ccd
+#: 6224c5e197004afd962015a9a6eaef54
 msgid ""
 "Return - True if a catch zone (e.g. '27.7.b') is in a given fao_area (e.g. "
 "'27.7.b' or '27') - False if a catch zone (e.g. '27.7.b') is NOT in a given "

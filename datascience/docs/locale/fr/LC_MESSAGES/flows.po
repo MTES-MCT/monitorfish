@@ -3,13 +3,17 @@
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,21 +21,24 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/flows.rst:5 36b9ca4f31674a0d9d1ffcb0b89d5bc4
+#: ../source/flows.rst:5 9185a1a6f7a843099b5cfa744ce0364f
 msgid "Flows"
-msgstr ""
+msgstr "Flows"
 
-#: ../source/flows.rst:9 51e6469d5c7c4758831e38a9c244dae0
+#: ../source/flows.rst:9 bc8a5878a8ce4686b3ecd0c1c110ed8b
 msgid "What are flows?"
-msgstr ""
+msgstr "Que sont les flows ?"
 
-#: ../source/flows.rst:11 a83d4318780e4456baf88fa3388728fe
+#: ../source/flows.rst:11 43cf3debbf504a7991e2dbb68d947593
 msgid ""
 "*Flows* are batch jobs that move and transform data. Collectively, they "
 "constitute the :ref:`data pipeline` part of the Monitorfish architecture."
 msgstr ""
+"Les *flows* sont des traitements qui déplacent et transforment les données. "
+"Collectivement, ils constituent la partie :ref:`data pipeline` de "
+"l'architecture Monitorfish."
 
-#: ../source/flows.rst:14 0758749b42a442cf8f3ec3013e2ae69f
+#: ../source/flows.rst:14 7e1dd71384c84913a918064701b9da05
 msgid ""
 "Each batch job is written as a `Prefect flow "
 "<https://docs.prefect.io/core/concepts/flows.html#overview>`__ which "
@@ -39,8 +46,13 @@ msgid ""
 "Monitorfish database), processes the data and loads it back into a table of "
 "the Monitorfish database."
 msgstr ""
+"Chaque traitement est écrit comme un `Flow Prefect "
+"<https://docs.prefect.io/core/concepts/flows.html#overview>`__ qui extrait "
+"typiquement des données (de sources externes et/ou de tables de la base de "
+"données Monitorfish), traite les données et les recharge dans une table de "
+"la base de données Monitorfish."
 
-#: ../source/flows.rst:18 a5fcfcebf2404c2bacddff0822352c9f
+#: ../source/flows.rst:18 cbfc192b313a4fb8a15772339214141e
 msgid ""
 "Flows are composed of `tasks "
 "<https://docs.prefect.io/core/concepts/tasks.html#overview>`__ typically "
@@ -50,15 +62,22 @@ msgid ""
 "monitor their execution, see the logs and debug in case any flow run "
 "fails..."
 msgstr ""
+"Les flows sont composés de `tâches "
+"<https://docs.prefect.io/core/concepts/tasks.html#overview>`__ typiquement "
+"écrites comme des fonctions pures en python. `L'interface utilisateur "
+"<http://prefect.csam.e2.rie.gouv.fr/>`__ (accès restreint) permet aux "
+"administrateurs de visualiser chaque flow sous la forme d'un diagramme des "
+"tâches qui le composent, de suivre leur exécution, de voir les logs, de "
+"déboguer en cas d'échec de l'exécution d'un flow..."
 
-#: ../source/flows.rst:23 ae9cd2502faa4021a877a50ea5339119
+#: ../source/flows.rst:23 bc4427b447f94ccc87e206567946420f
 msgid "Overall view of data flows in Monitorfish :"
-msgstr ""
+msgstr "Vue d'ensemble des flux de données dans Monitorfish :"
 
-#: ../source/flows.rstNone c36864aa1c35490ca83e8a4d34bde01d
+#: ../source/flows.rstNone 3d00487756384045860c7cc22063f38e
 msgid "Schematic of data flows in Monitorfish"
-msgstr ""
+msgstr "Schéma des flux de données dans Monitorfish"
 
-#: ../source/flows.rst:33 fbfc45e8e3504c168d78a9e57375f65b
+#: ../source/flows.rst:33 1198b0d815de495591b178848191297e
 msgid "List of flows"
-msgstr ""
+msgstr "Liste des flows"

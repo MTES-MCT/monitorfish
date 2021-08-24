@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:2
-#: 28424497591d4cd2b8837d19ceec4f39
+#: 0a633586d24c4a3b9a9533f6b31abd19
 msgid ":py:mod:`datascience.src.pipeline.flows.fishing_gear_codes`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:8
-#: 2ce343ac5717453ab05e16cd566a0e05
+#: 6792c841cdc54c61afa03acf9b558f73
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:12
-#: a060c97d5fb1434f9939e32f14a08d9a
+#: a787536d825a448ebb37ca3e18bf899a
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:21:<autosummary>:1
-#: c6c57fd9ffbb4c3b84f2d7f36f465de8
+#: 34f58cf58cd5482691888b1a2dd0dee3
 msgid ":obj:`extract_fishing_gear_codes <datascience.src.pipeline.flows.fishing_gear_codes.extract_fishing_gear_codes>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:21:<autosummary>:1
-#: 31551b7d17a746ad8d372a489c064e84
+#: a9ba4da1d654499b89c19f6fb40a4d5a
 msgid ":obj:`clean_fishing_gear_codes <datascience.src.pipeline.flows.fishing_gear_codes.clean_fishing_gear_codes>`\\ \\(fishing\\_gear\\_codes\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:21:<autosummary>:1
-#: 7abe178b4d204dd795676a7f5fedd1eb
+#: 1b05fad660694126a5737454a642e8b3
 msgid ":obj:`load_fishing_gear_codes <datascience.src.pipeline.flows.fishing_gear_codes.load_fishing_gear_codes>`\\ \\(fishing\\_gear\\_codes\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:23
-#: bcfcdd1ef36549e39dddcc2f67d469cd
+#: 8620039f72f34e2380b42eb27061ee67
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fishing_gear_codes/index.rst:29:<autosummary>:1
-#: 0d1454561504427aa4739f66a222564f
+#: 69ce89e85705499bb1fdf64822886daf
 msgid ":obj:`fishing_gear_codes <datascience.src.pipeline.flows.fishing_gear_codes.fishing_gear_codes>`\\"
 msgstr ""

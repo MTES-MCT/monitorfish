@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
 "PO-Revision-Date: 2021-08-23 14:50+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -17,36 +17,36 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/flows/last-positions.rst:3 3d61819e110d43c88cec69b09126597f
+#: ../source/flows/last-positions.rst:3 8ecfc7a1db354ba69a01f798db93ae7a
 msgid "Last Positions"
 msgstr ""
 
-#: ../source/flows/last-positions.rst:5 c6d815a5beee427384cd698f17e1c16d
+#: ../source/flows/last-positions.rst:5 11420373423540a5a802909cc283cdc0
 msgid "The ``last_positions`` flow extracts"
 msgstr ""
 
-#: ../source/flows/last-positions.rst:7 5b48a3fe91aa4394b1d237bf39e5a78a
+#: ../source/flows/last-positions.rst:7 daa75d95e0a44228857668faa8b0c48c
 msgid ""
 "the most recent **position** of each vessels from the ``positions`` table"
 msgstr ""
 
-#: ../source/flows/last-positions.rst:8 be57db27f2404425beaadb25ac37929e
+#: ../source/flows/last-positions.rst:8 e6b74af19d7d48f78e51d0a55fde6075
 msgid ""
 "the most recent **control** of each vessels from the ``controls`` table"
 msgstr ""
 
-#: ../source/flows/last-positions.rst:9 59ff734ce41d44c897b01690d18d07f1
+#: ../source/flows/last-positions.rst:9 1d9fc61c068a471b9463eddb1cf8871c
 msgid ""
 "the current **fleet segments** of each vessel from the ``current_segments`` "
 "table"
 msgstr ""
 
-#: ../source/flows/last-positions.rst:11 55a52ce69be04775b3c28145b22a25a0
+#: ../source/flows/last-positions.rst:11 f7eca7cbf05b473c967ae806e2740fac
 msgid ""
 "then joins the results and dumps them in the ``last_positions`` table, which"
 " is used by the backend to to display vessels on the map."
 msgstr ""
 
-#: ../source/flows/last-positions.rst:14 7bb1d4e53d034f6f8ed69db3c3a761e1
+#: ../source/flows/last-positions.rst:14 5f4b00e281d74450950f33bfdd2c2530
 msgid "It is scheduled to run every minute."
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/flows/current-segments.rst:3
-#: 841a6b8f7baf400b89df359ac273ef50
+#: 774e8306ee53458487cc592ed2701e7a
 msgid "Current segments"
 msgstr ""
 
 #: ../source/flows/current-segments.rst:5
-#: aec648e00bac443890924487dcb77e23
+#: 6a15f25aad864fa3a4607639de49c353
 msgid "The ``current_segments`` flow extracts all catches of each vessel since its last DEP message and crosses its catch (species, area and fishing gear) with the definition of fleet segments in order to determine the :doc:`fleet segment(s) <../fleet-segments>` to which each vessel belongs in real time."
 msgstr ""
 
 #: ../source/flows/current-segments.rst:10
-#: 0c49b1028fc04e4d954d196d5026c42f
+#: d639bb482008464f97aa8a1569e7cd3f
 msgid "It is scheduled to run every 10 minutes.prefect"
 msgstr ""

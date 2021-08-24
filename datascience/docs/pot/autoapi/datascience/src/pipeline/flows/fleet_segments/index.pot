@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 16:34+0200\n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,36 +17,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fleet_segments/index.rst:2
-#: 3fdf398405d049e2877743531f158ead
+#: 5c81d5a9e86a4582bd1892660cd9bf8a
 msgid ":py:mod:`datascience.src.pipeline.flows.fleet_segments`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fleet_segments/index.rst:8
-#: 1b6e3b1aeb6d417589aae73d38770131
+#: 805087496de244b5baf5e8e321458fe8
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fleet_segments/index.rst:12
-#: e54c7d38d23e4865bb6af99b8a0fb7e2
+#: 39a45669549746cead7139c60bd0ea3b
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fleet_segments/index.rst:20:<autosummary>:1
-#: ed77a0c501174d16910c31111c856c51
+#: 625c932f80564cb0a1f9c324d1628ef4
 msgid ":obj:`extract_segments <datascience.src.pipeline.flows.fleet_segments.extract_segments>`\\ \\(\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fleet_segments/index.rst:20:<autosummary>:1
-#: e5286795a0b041b79fe89a4c2c4641ca
+#: 335acc45df724438a6a69c4b055a965d
 msgid ":obj:`load_segments <datascience.src.pipeline.flows.fleet_segments.load_segments>`\\ \\(segments\\)"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fleet_segments/index.rst:22
-#: 1db2253a99a14d9c985de0571fee41f8
+#: 1ab83af2c6994940878fd3acaa8356f2
 msgid "Attributes"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/fleet_segments/index.rst:28:<autosummary>:1
-#: 12687b1adf7a43bfb8cae187390491c7
+#: 65c09242965b4a11903dca69bde57379
 msgid ":obj:`segments <datascience.src.pipeline.flows.fleet_segments.segments>`\\"
 msgstr ""

@@ -25,8 +25,10 @@ const regulationSlice = createSlice({
       state.selectedUpcomingRegulation = null
     },
     openModal (state, action) {
+      console.log('action.payload')
+      console.log(action.payload)
       state.isModalOpen = true
-      state.selectedUpcomingRegulation = action.id > -1 ? { ...state.selectedUpcomingRegulation[action.id] } : {}
+      state.selectedUpcomingRegulation = action.payload
     }
   }
 })

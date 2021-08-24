@@ -7,10 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from '../RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { addTextToRegulatoryTextList } from '../../../utils'
-
-import {
-  openModal
-} from '../../../domain/reducers/Regulation'
+import { openModal } from '../../../domain/reducers/Regulation'
 
 /**
  * @typedef {object} Props
@@ -36,7 +33,7 @@ const RegulatoryTextSection = props => {
     if (source === 'upcomingRegulation') {
       updateRegulatoryTextList()
     } else {
-      dispatch(openModal(-1))
+      dispatch(openModal({}))
     }
   }
 
@@ -84,7 +81,7 @@ const RegulatoryTextSection = props => {
     </ButtonLine>
     {source === 'regulation' &&
       upcomingRegulation &&
-        <UpcommingRegulationSection upcomingRegulationTextList={upcomingRegulation.regulatoryTextList} />
+        <UpcommingRegulationSection upcomingRegulation={upcomingRegulation} />
     }
   </Section>)
 }

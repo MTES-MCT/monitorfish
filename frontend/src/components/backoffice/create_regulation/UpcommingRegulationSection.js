@@ -1,13 +1,16 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import InfoBox from './InfoBox'
 import { CancelButton } from '../../commonStyles/Buttons.style'
 import { Link } from '../../commonStyles/Backoffice.style'
+import { openModal } from '../../../domain/reducers/Regulation'
 
 /**
  * @type {[RegulatoryText]} upcomingRegulationText
  */
-const UpcommingRegulationSection = ({ upcomingRegulationTextList }) => {
+const UpcommingRegulationSection = ({ upcomingRegulation }) => {
+  const dispatch = useDispatch()
   const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
       <>
@@ -15,7 +18,7 @@ const UpcommingRegulationSection = ({ upcomingRegulationTextList }) => {
         <YellowRectangle />
         <UpcomingRegulation>
           <Row><InfoBox /> <GrayText >Réglementation à venir</ GrayText></Row>
-          {upcomingRegulationTextList?.length > 0 && upcomingRegulationTextList.map((upcomingRegulationText, id) => {
+          {upcomingRegulation?.regulatoryTextList?.length > 0 && upcomingRegulation.regulatoryTextList.map((upcomingRegulationText, id) => {
             const {
               name,
               URL,
@@ -34,7 +37,7 @@ const UpcommingRegulationSection = ({ upcomingRegulationTextList }) => {
           <Row><CancelButton
             disabled={false}
             isLast={false}
-            onClick={() => console.log('open a modale in edition, set the upcomming reg id in state')}
+            onClick={() => dispatch(openModal(upcomingRegulation))}
           >
             Éditer la réglementation
           </CancelButton>

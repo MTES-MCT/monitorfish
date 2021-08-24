@@ -111,6 +111,7 @@ const CreateRegulation = () => {
           <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
+            setUpcomingRegulation={setUpcomingRegulation}
             upcomingRegulation={upcomingRegulation}
             source={'regulation'}
           />

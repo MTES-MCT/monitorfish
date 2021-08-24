@@ -190,34 +190,79 @@ To run tests on the data pipeline, run
 Documentation
 =============
 
+Documentation is written as ``.rst`` source files, from which the documentation (this website) is built using `sphinx <https://www.sphinx-doc.org/en/master/>`__ and hosted on ReadTheDocs.
+
+.. _writing-documentation:
+
 Writing documentation 
 ---------------------
 
-Documentation is written as ``.rst`` source files, from which the documentation (this website) is built using `sphinx <https://www.sphinx-doc.org/en/master/>`__ and hosted on ReadTheDocs.
+* To update the documentation, simply edit the ``.rst`` source file in ``datascience/docs/source``. 
+* To build the documentation locally and see the result of your updates :
 
-``.rst`` sources are in ``datascience/docs/source``.
+  * you need to install the python development dependencies as described in :ref:`data-install` if you have not yet done so
+  * build the html documentation with :
 
-* To build the documentation locally, you need to install the python development dependencies as described in :ref:`data-install`
+    .. code-block:: shell
 
-* To build the html documentation, run :
+        make build-docs-locally
 
-  .. code-block:: shell
-
-    make update-sphinx-docs
-
-  This builds the documentation in ``datascience/docs`` and moves the built html to ``/docs``. You can then view the documentation by opening ``/docs/index.html`` in a web browser.
-
-    The online documentation is built be ReadTheDocs from source files; building the documentation locally 
-    is only useful to view the result before pushing to ReadTheDocs.
-
-Updating the documentation online
----------------------------------
-
-The documentation is automatically built by ReadTheDocs and hosted on ReadTheDocs. One the source ``.rst`` files are updated, 
-push them to ``master`` (better, create a branch and PR) and ReadTheDocs will update the documentation online automatically.
+  This builds the documentation in ``datascience/docs/build/html``. You can view the built documentation in english and in french by opening ``en/index.html`` and ``fr/index.html`` in a web browser.
 
 Translations
 ------------
 
 The documentation is translated with the `recommended process of ReadTheDocs <https://docs.readthedocs.io/en/latest/guides/manage-translations.html>`_
 using `Transifex <https://www.transifex.com/>`_.
+
+Setting up Transifex
+""""""""""""""""""""
+
+In order to translate documentation using Transifex, you must set it up :
+
+* you need to have ``transifex-client`` installed, which is part of the :ref:`python development dependencies <data-install>`. If you have not yet done so, install development dependencies
+* ask us for an invitation to join our organization on Transifex
+* in your Transifex account, create an API token in ``User Setttings`` > ``API token``
+* in ``datascience/docs``, run :
+  
+    tx init --token $TOKEN --no-interactive
+  (with your API token instead of ``$TOKEN``)
+
+Pushing documentation to Transifex for translation
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+After updating the ``.rst`` sources in english, if you wish to translate it :
+
+* push the documentation to Transifex with :
+
+  .. code-block:: shell
+
+    make push-docs-to-transifex
+
+  This does several things :
+
+  * cut the ``.rst`` sources into strings of uninterrupted text
+  * create a mapping of these strings that Transifex uses to keep translation synchronized
+  * push everything to Transifex
+
+* translate the corresponding strings in Transifex
+
+Pulling the translated documentation from Transifex
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+When you are done translating in Transifex, you can pull the translated material back from Transifex with :
+
+.. code-block:: shell
+
+  make pull-translated-docs-from-transifex
+
+Translated material comes in the form of ``.po`` and ``.mo`` files in the ``locale`` directory, from which sphinx will look for translations during the build.
+
+You can then :ref:`build the documentation locally <writing-documentation>` to check the result.
+
+Updating the documentation online
+---------------------------------
+
+The documentation is built by ReadTheDocs and hosted on ReadTheDocs. One the ``.rst`` source files and the translations are updated and pulled from Transifex, 
+simply pushed the changes to ``master`` (better, create a branch and PR) and ReadTheDocs will build and update the documentation online automatically.
+

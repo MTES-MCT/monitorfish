@@ -9,7 +9,7 @@ import { openModal } from '../../../domain/reducers/Regulation'
 /**
  * @type {[RegulatoryText]} upcomingRegulationText
  */
-const UpcommingRegulationSection = ({ upcomingRegulation }) => {
+const UpcommingRegulationSection = ({ upcomingRegulation, setUpcomingRegulation }) => {
   const dispatch = useDispatch()
   const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
@@ -44,7 +44,7 @@ const UpcommingRegulationSection = ({ upcomingRegulation }) => {
           <CancelButton
             disabled={false}
             isLast={false}
-            onClick={() => console.log('remove upcomming regulation from the list in the Regulation Text Section state')}
+            onClick={() => setUpcomingRegulation(undefined)}
           >
             Supprimer la réglementation
           </CancelButton></Row>

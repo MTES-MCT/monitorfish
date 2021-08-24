@@ -21,6 +21,7 @@ const RegulatoryTextSection = props => {
     regulatoryTextList,
     setRegulatoryTextList,
     upcomingRegulation,
+    setUpcomingRegulation,
     source
   } = props
   const dispatch = useDispatch()
@@ -81,7 +82,10 @@ const RegulatoryTextSection = props => {
     </ButtonLine>
     {source === 'regulation' &&
       upcomingRegulation &&
-        <UpcommingRegulationSection upcomingRegulation={upcomingRegulation} />
+        <UpcommingRegulationSection
+          upcomingRegulation={upcomingRegulation}
+          setUpcomingRegulation={setUpcomingRegulation}
+        />
     }
   </Section>)
 }

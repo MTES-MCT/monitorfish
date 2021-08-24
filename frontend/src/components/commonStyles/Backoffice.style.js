@@ -45,3 +45,10 @@ export const Delimiter = styled.div`
   border-bottom: 1px solid ${COLORS.grayDarker};
   margin-bottom: 15px;
 `
+
+export const Link = styled.a`
+color: #0A18DF;
+font-size: 13px;
+padding: 2.5px;
+cursor: pointer;
+`

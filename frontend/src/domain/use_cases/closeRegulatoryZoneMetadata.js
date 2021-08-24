@@ -1,4 +1,4 @@
-import { closeRegulatoryZoneMetadataPanel } from '../reducers/Regulatory'
+import { closeRegulatoryZoneMetadataPanel } from '../shared_slices/Regulatory'
 
 const closeRegulatoryZoneMetadata = () => dispatch => {
   dispatch(closeRegulatoryZoneMetadataPanel())

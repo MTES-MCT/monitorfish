@@ -1,12 +1,15 @@
 import { getAllGearCodesFromAPI } from '../../api/fetch'
-import { setCategoriesToGears, setGears } from '../reducers/Gear'
-import { setIsReadyToShowRegulatoryZones } from '../reducers/Regulatory'
-import { setError } from '../reducers/Global'
+import { setCategoriesToGears, setGears } from '../shared_slices/Gear'
+import { setIsReadyToShowRegulatoryZones } from '../shared_slices/Regulatory'
+import { setError } from '../shared_slices/Global'
+import { batch } from 'react-redux'
 
 const getAllGearCodes = () => dispatch => {
   getAllGearCodesFromAPI().then(gears => {
-    dispatch(setGears(gears))
-    dispatch(setIsReadyToShowRegulatoryZones())
+    batch(() => {
+      dispatch(setGears(gears))
+      dispatch(setIsReadyToShowRegulatoryZones())
+    })
 
     const categories = [...new Set(gears.map(gear => gear.category))]
     const categoriesToGears = {}

@@ -1,14 +1,15 @@
 import { getVesselVoyageFromAPI } from '../../api/fetch'
-import { removeError, setError } from '../reducers/Global'
+import { removeError, setError } from '../shared_slices/Global'
 import {
   loadingFisheriesActivities,
   resetLoadingVessel,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage
-} from '../reducers/Vessel'
+} from '../shared_slices/Vessel'
 import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
+import { batch } from 'react-redux'
 
 export const NAVIGATE_TO = {
   PREVIOUS: 'PREVIOUS',
@@ -75,8 +76,10 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(removeError())
     }).catch(error => {
       console.error(error)
-      dispatch(setError(error))
-      dispatch(resetLoadingVessel())
+      batch(() => {
+        dispatch(setError(error))
+        dispatch(resetLoadingVessel())
+      })
     })
   }
 }

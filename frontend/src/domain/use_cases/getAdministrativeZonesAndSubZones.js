@@ -20,7 +20,7 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async () => {
   })
 
   const nextSubZonesPromises = Object.keys(LayersEnum)
-    .map(layerName => LayersEnum[layerName])
+    .map(layer => LayersEnum[layer])
     .filter(zone => zone.type === layersType.ADMINISTRATIVE)
     .filter(zone => zone.showMultipleZonesInAdministrativeZones)
     .map(zone => {

@@ -1,11 +1,12 @@
 import { getVesselFromAPI } from '../../api/fetch'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../reducers/Vessel'
-import { removeError, setError } from '../reducers/Global'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../shared_slices/Vessel'
+import { removeError, setError } from '../shared_slices/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 import { IS_SELECTED_PROPERTY, Vessel, vesselsAreEquals } from '../entities/vessel'
-import { setUpdatedFromCron } from '../reducers/Map'
+import { setUpdatedFromCron } from '../shared_slices/Map'
 import unselectVessel from './unselectVessel'
+import { batch } from 'react-redux'
 
 const showVesselTrackAndSidebar = (
   vesselIdentity,
@@ -44,12 +45,14 @@ const showVesselTrackAndSidebar = (
 }
 
 function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
-  dispatch(setUpdatedFromCron(calledFromCron))
-  dispatch(removeError())
-  dispatch(loadingVessel({
-    vesselIdentity,
-    calledFromCron
-  }))
+  batch(() => {
+    dispatch(setUpdatedFromCron(calledFromCron))
+    dispatch(removeError())
+    dispatch(loadingVessel({
+      vesselIdentity,
+      calledFromCron
+    }))
+  })
 }
 
 function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch) {

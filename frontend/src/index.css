@@ -32,7 +32,7 @@ code {
 
 .rs-slider-mark {
     font-size: 13px;
-    color: #969696;
+    color: #707785;
 }
 
 .rs-slider {
@@ -72,7 +72,7 @@ code {
 }
 
 .noUi-connect:nth-child(3) {
-    background: #515151;
+    background: #3B4559;
 }
 
 .rs-slider-graduator > ul > li::before {
@@ -105,7 +105,7 @@ code {
 }
 
 .rs-slider-graduated > div:nth-child(3)::before {
-    background: #515151;
+    background: #3B4559;
     z-index: 99;
 }
 
@@ -125,17 +125,17 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 }
 
 .rs-radio-wrapper::before {
-    background: #EDEDED 0% 0% no-repeat padding-box;
-    border: 2px solid #D6D6D6;
+    background: #E5E5EB 0% 0% no-repeat padding-box;
+    border: 2px solid #CCCFD6;
 }
 
 .rs-radio-checked .rs-radio-wrapper .rs-radio-inner::before {
-    background: #EDEDED 0% 0% no-repeat padding-box;
-    border: 2px solid #969696;
+    background: #E5E5EB 0% 0% no-repeat padding-box;
+    border: 2px solid #707785;
 }
 
 .rs-radio-wrapper .rs-radio-inner::after {
-    background: #969696;
+    background: #707785;
     width: 6px;
     height: 6px;
     margin-top: 4px;
@@ -143,8 +143,8 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 }
 
 .rs-radio-wrapper .rs-radio-inner::before {
-    background: #EDEDED 0% 0% no-repeat padding-box;
-    border: 2px solid #D6D6D6;
+    background: #E5E5EB 0% 0% no-repeat padding-box;
+    border: 2px solid #CCCFD6;
 }
 
 .rs-radio-wrapper::before, .rs-radio-wrapper .rs-radio-inner::before, .rs-radio-wrapper {
@@ -154,7 +154,7 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 
 .rs-radio-checker > label {
     font-size: 13px;
-    color: #515151;
+    color: #3B4559;
     padding: unset unset unset 7px;
 }
 
@@ -188,7 +188,7 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 
 .rs-checkbox-checker > label {
     font-size: 13px;
-    color: #515151;
+    color: #282F3E;
 }
 
 .rs-checkbox-checker {
@@ -200,12 +200,12 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 }
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before {
-    border-color: #969696;
-    background-color: #EDEDED;
+    border-color: #707785;
+    background-color: #E5E5EB;
 }
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::after {
-    border: solid #969696;
+    border: solid #707785;
     border-width: 0 2px 2px 0;
 }
 
@@ -222,19 +222,19 @@ label {
 }
 
 .rs-picker-default:not(.rs-picker-disabled) .rs-btn:hover, .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle:hover, .rs-picker-default:not(.rs-picker-disabled) .rs-btn.active, .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle.active {
-    border-color: #969696 !important;
+    border-color: #707785 !important;
 }
 
 .rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover ~ .rs-table-column-resize-spanner, .rs-table:not(.rs-table-column-resizing) .rs-table-column-resize-spanner:hover {
-    background-color: #969696;
+    background-color: #707785;
 }
 
 .rs-table-column-resize-spanner::before {
-    border-color: transparent #969696 transparent transparent;
+    border-color: transparent #707785 transparent transparent;
 }
 
 .rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
-    border: 1px solid #969696 !important;
+    border: 1px solid #707785 !important;
 }
 
 .rs-picker-toggle.rs-btn-sm {
@@ -251,8 +251,8 @@ label {
 
 .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
     color: #F0F0F0;
-    border-color: #515151;
-    background-color: #515151;
+    border-color: #3B4559;
+    background-color: #3B4559;
 }
 
 .rs-calendar-table-cell-in-range::before {
@@ -265,15 +265,15 @@ label {
     line-height: 1.42857143;
     border-radius: 2px;
     color: #fff;
-    background-color: #515151;
+    background-color: #3B4559;
 }
 
 .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled, .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover, .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover:active {
-    background-color: #515151;
+    background-color: #3B4559;
 }
 
 .rs-picker-toolbar-right-btn-ok:not(.rs-btn-disabled):hover {
-    background-color: #515151;
+    background-color: #3B4559;
 }
 
 .rs-input-group.rs-input-group-inside .rs-input-group-addon {
@@ -282,7 +282,7 @@ label {
 
 .rs-input {
     height: 36px;
-    color: #969696;
+    color: #707785;
 }
 
 .rs-modal-body {

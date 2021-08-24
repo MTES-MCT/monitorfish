@@ -373,7 +373,7 @@ export const baseLayers = {
 
 export const getZonesAndSubZonesPromises = () => {
   return Object.keys(Layers)
-    .map(layerName => Layers[layerName])
+    .map(layer => Layers[layer])
     .filter(layer => layer.type === layersType.ADMINISTRATIVE)
     .filter(layer => layer.isIntersectable)
     .map(zone => {
@@ -403,6 +403,40 @@ export const getZonesAndSubZonesPromises = () => {
 
       return nextZone
     })
+}
+
+function removeMiscellaneousGears (layerGearsArray) {
+  return layerGearsArray
+    .filter(gearCode => gearCode !== 'MIS')
+    .map(gearCode => gearCode)
+}
+
+function removeVariousLonglineGears (layerGearsArray) {
+  return layerGearsArray
+    .filter(gearCode => gearCode !== 'LL')
+    .map(gearCode => gearCode)
+}
+
+export function getGearCategory (layerGears, gears) {
+  let gear = null
+  if (layerGears) {
+    let layerGearsArray = layerGears.replace(/ /g, '').split(',')
+    if (layerGearsArray.length > 1) {
+      layerGearsArray = removeMiscellaneousGears(layerGearsArray)
+    }
+    if (layerGearsArray.length > 1) {
+      layerGearsArray = removeVariousLonglineGears(layerGearsArray)
+    }
+
+    gear = gears
+      .find(gear => {
+        return layerGearsArray
+          .some(gearCode => {
+            return gearCode === gear.code
+          })
+      })
+  }
+  return gear ? gear.category : null
 }
 
 export default Layers

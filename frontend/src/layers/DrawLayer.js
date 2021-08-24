@@ -5,7 +5,7 @@ import VectorSource from 'ol/source/Vector'
 import { layersType as LayersType } from '../domain/entities/layers'
 import { InteractionTypes, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Draw, { createBox } from 'ol/interaction/Draw'
-import { addZoneSelected, resetInteraction } from '../domain/reducers/Map'
+import { addZoneSelected, resetInteraction } from '../domain/shared_slices/Map'
 import GeoJSON from 'ol/format/GeoJSON'
 import { drawStyle } from './styles/draw.style'
 

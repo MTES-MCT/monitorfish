@@ -325,28 +325,9 @@ const accentsMap = {
 }
 
 export const removeAccents = text => Object.keys(accentsMap)
-  .reduce((acc, cur) => acc.replace(new RegExp(accentsMap[cur], 'g'), cur), text)
+  .reduce((acc, cur) => acc.toString().replace(new RegExp(accentsMap[cur], 'g'), cur), text)
 
-export function getNauticalMilesFromMeters (length) {
-  return Math.round((length / 1000) * 100 * 0.539957) / 100
-}
-
-export function createGenericSlice (initialState, reducers, layerName) {
-  const initialStateCopy = Object.assign({}, initialState)
-  const reducersCopy = Object.assign({}, reducers)
-  const sliceObject = {
-    name: layerName,
-    initialState: initialStateCopy,
-    reducers: reducersCopy
-  }
-  return createSlice(sliceObject)
-}
-
-export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
-  return zone[propertiesToSearch] && searchText ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText)) : false
-}
-
-function getTextForSearch (text) {
+export function getTextForSearch (text) {
   return removeAccents(text)
     .toLowerCase()
     .replace(/[ ]/g, '')
@@ -356,27 +337,19 @@ function getTextForSearch (text) {
     .replace(/["]/g, '')
 }
 
-export function search (searchText, propertiesToSearch, regulatoryZones) {
-  if (regulatoryZones) {
-    const foundRegulatoryZones = { ...regulatoryZones }
-    Object.keys(foundRegulatoryZones)
-      .forEach(key => {
-        foundRegulatoryZones[key] = foundRegulatoryZones[key]
-          .filter(zone => {
-            let searchStringIncludedInProperty = false
-            propertiesToSearch.forEach(property => {
-              searchStringIncludedInProperty =
-                searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)
-            })
-            return searchStringIncludedInProperty
-          })
-        if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
-          delete foundRegulatoryZones[key]
-        }
-      })
+export function getNauticalMilesFromMeters (length) {
+  return Math.round((length / 1000) * 100 * 0.539957) / 100
+}
 
-    return foundRegulatoryZones
+export function createGenericSlice (initialState, reducers, topic) {
+  const initialStateCopy = Object.assign({}, initialState)
+  const reducersCopy = Object.assign({}, reducers)
+  const sliceObject = {
+    name: topic,
+    initialState: initialStateCopy,
+    reducers: reducersCopy
   }
+  return createSlice(sliceObject)
 }
 
 export const formatDataForSelectPicker = list => {

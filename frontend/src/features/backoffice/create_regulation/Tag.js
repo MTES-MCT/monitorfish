@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { COLORS } from '../../../constants/constants'
+import { Link } from '../../commonStyles/Backoffice.style'
 
 const Tag = props => {
   const {
@@ -21,13 +22,6 @@ const Tag = props => {
     <CloseIcon onClick={_ => onCloseIconClicked(selectedValue)}/>
   </TagWrapper>
 }
-
-const Link = styled.a`
-  color: ${COLORS.blue};
-  font-size: 13px;
-  padding: 2.5px;
-  cursor: pointer;
-`
 
 const TagWrapper = styled.div`
   display: flex;

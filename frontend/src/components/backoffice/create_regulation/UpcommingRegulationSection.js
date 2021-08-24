@@ -2,19 +2,36 @@ import React from 'react'
 import styled from 'styled-components'
 import InfoBox from './InfoBox'
 import { CancelButton } from '../../commonStyles/Buttons.style'
-import { Delimiter } from '../../commonStyles/Backoffice.style'
+import { Delimiter, Link } from '../../commonStyles/Backoffice.style'
 
-const UpcommingRegulationSection = props => {
+/**
+ * @type {[RegulatoryText]} upcomingRegulationText
+ */
+const UpcommingRegulationSection = ({ upcomingRegulationTextList }) => {
+  const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
       <>
       <Container>
         <YellowRectangle />
         <UpcomingRegulation>
           <Row><InfoBox /> <GrayText >Réglementation à venir</ GrayText></Row>
-          <TextRow>
-            <TextWithGrayBg color={'#0A18DF'}>Arrêté Ministériel du 16/06/2021</TextWithGrayBg>
-            <TextWithGrayBg color={'#282F3E'}>Du 01/07/2021 au 31/09/2021</TextWithGrayBg>
-          </TextRow>
+          {upcomingRegulationTextList?.length > 0 && upcomingRegulationTextList.map((upcomingRegulationText, id) => {
+            const {
+              name,
+              URL,
+              startDate,
+              endDate
+            } = upcomingRegulationText
+            console.log(upcomingRegulationText)
+            return (
+            <TextRow key={id}>
+              <LinkWithGrayBg
+                href={URL}
+                target={'_blank'}
+              >{name}</LinkWithGrayBg>
+              <TextWithGrayBg color={'#282F3E'}>Du {startDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)} au {endDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)}</TextWithGrayBg>
+            </TextRow>)
+          })}
           <Row><CancelButton
             disabled={false}
             isLast={false}
@@ -36,14 +53,25 @@ const UpcommingRegulationSection = props => {
   )
 }
 
+const LinkWithGrayBg = styled(Link)` 
+  background-color: #E5E5EB;
+  padding: 5px 10px;
+  font-size: 13px;
+  margin-bottom: 5px;
+  width: max-content;
+`
+
 const TextRow = styled.div`
-  padding: 15px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0 10px 0;
 `
 
 const Row = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 5px 0px;
 `
 
 const TextWithGrayBg = styled.p`
@@ -53,10 +81,10 @@ const TextWithGrayBg = styled.p`
   margin: 0 0 5px 0;
   width: max-content;
   padding: 5px 10px;
+  font-size: 13px;
 `
 
 const GrayText = styled.p`
-  margin: 0 0 0 5px;
   color: #707785;
 `
 
@@ -75,7 +103,7 @@ const YellowRectangle = styled.div`
 `
 
 const UpcomingRegulation = styled.div`
-  padding: 15px;
+  padding: 10px 15px;
 `
 
 export default UpcommingRegulationSection

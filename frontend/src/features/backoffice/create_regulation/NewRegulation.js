@@ -11,7 +11,7 @@ import RegulationZoneNameLine from '../components/backoffice/create_regulation/R
 import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
 import RegulatoryTextSection from '../components/backoffice/create_regulation/RegulatoryTextSection'
 import UpcomingRegulationModal from '../components/backoffice/create_regulation/UpcomingRegulationModal'
-import { formatDataForSelectPicker, addTextToRegulatoryTextList } from '../utils'
+import { formatDataForSelectPicker } from '../utils'
 import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
 import { Section, SectionTitle, Footer, FooterButton } from '../components/commonStyles/Backoffice.style'
 import { setSelectedRegulation, resetModal } from '../domain/reducers/Regulation'
@@ -26,8 +26,7 @@ const CreateRegulation = () => {
 
   const {
     isModalOpen,
-    selectedUpcomingRegulation,
-    selectedUpcomingRegulationId
+    selectedUpcomingRegulation
   } = useSelector(state => state.regulation)
 
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
@@ -37,9 +36,9 @@ const CreateRegulation = () => {
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [reglementationBlocName, setReglementationBlocName] = useState('')
 
-  // TODO a typer
+  // TODO a type
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
-  const [upcomingRegulationList, setUpcomingRegulationList] = useState([])
+  const [upcomingRegulation, setUpcomingRegulation] = useState(undefined)
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
@@ -54,7 +53,7 @@ const CreateRegulation = () => {
 
   useEffect(() => {
     if (!isModalOpen && selectedUpcomingRegulation) {
-      setUpcomingRegulationList(addTextToRegulatoryTextList(upcomingRegulationList, selectedUpcomingRegulationId, selectedUpcomingRegulation))
+      setUpcomingRegulation(selectedUpcomingRegulation)
       resetModal()
     }
   }, [isModalOpen, selectedUpcomingRegulation])
@@ -112,7 +111,7 @@ const CreateRegulation = () => {
           <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
-            upcomingRegulationList={upcomingRegulationList}
+            upcomingRegulation={upcomingRegulation}
             source={'regulation'}
           />
         </Content>

@@ -34,7 +34,7 @@ const UpcomingRegulationModal = () => {
     <ModalContent>
       <Body>
         <ModalTitle>
-          BACKOFFISH - Ajouter une référence réglementaire à venir
+          BACKOFFISH - Ajouter une réglementation à venir
           <CloseIcon onClick={() => dispatch(setIsModalOpen(false))}/>
         </ModalTitle>
         <Section>

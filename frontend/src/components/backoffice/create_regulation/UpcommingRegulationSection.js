@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import InfoBox from './InfoBox'
 import { CancelButton } from '../../commonStyles/Buttons.style'
-import { Delimiter, Link } from '../../commonStyles/Backoffice.style'
+import { Link } from '../../commonStyles/Backoffice.style'
 
 /**
  * @type {[RegulatoryText]} upcomingRegulationText
@@ -22,7 +22,6 @@ const UpcommingRegulationSection = ({ upcomingRegulationTextList }) => {
               startDate,
               endDate
             } = upcomingRegulationText
-            console.log(upcomingRegulationText)
             return (
             <TextRow key={id}>
               <LinkWithGrayBg
@@ -37,18 +36,17 @@ const UpcommingRegulationSection = ({ upcomingRegulationTextList }) => {
             isLast={false}
             onClick={() => console.log('open a modale in edition, set the upcomming reg id in state')}
           >
-            Éditer le texte
+            Éditer la réglementation
           </CancelButton>
           <CancelButton
             disabled={false}
             isLast={false}
             onClick={() => console.log('remove upcomming regulation from the list in the Regulation Text Section state')}
           >
-            Supprimer le texte
+            Supprimer la réglementation
           </CancelButton></Row>
         </ UpcomingRegulation>
       </Container>
-      <Delimiter />
       </>
   )
 }
@@ -85,6 +83,7 @@ const TextWithGrayBg = styled.p`
 `
 
 const GrayText = styled.p`
+  margin: 0 0 0 5px;
   color: #707785;
 `
 

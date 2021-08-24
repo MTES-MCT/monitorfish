@@ -63,25 +63,32 @@ const RegulatoryTextSection = props => {
             />
         })
     }
+    <ButtonLine>
+    {source === 'regulation'
+      ? <><ValidateButton
+        disabled={false}
+        isLast={false}
+        onClick={addRegRefInEffect}>
+        Ajouter un autre texte en vigueur
+      </ValidateButton>
+      <CustomCancelButton
+        disabled={false}
+        isLast={false}
+        onClick={addUpcomingText}>
+        Ajouter un texte à venir
+      </CustomCancelButton></>
+      : <ValidateButton
+        disabled={false}
+        isLast={false}
+        onClick={addUpcomingText}>
+        Ajouter un texte à venir
+      </ValidateButton>}
+    </ButtonLine>
     {source === 'regulation' &&
     upcomingRegulationList?.length > 0 && upcomingRegulationList.map((upcomingRegulation, id) => {
       return <UpcommingRegulationSection key={id} upcomingRegulationTextList={upcomingRegulation.regulatoryTextList} />
     })
     }
-    <ButtonLine>
-    {source === 'regulation' && <ValidateButton
-        disabled={false}
-        isLast={false}
-        onClick={addRegRefInEffect}>
-        Ajouter un autre texte en vigueur
-      </ValidateButton>}
-       <CustomCancelButton
-        disabled={false}
-        isLast={false}
-        onClick={addUpcomingText}>
-        Ajouter un texte à venir
-      </CustomCancelButton>
-    </ButtonLine>
   </Section>)
 }
 

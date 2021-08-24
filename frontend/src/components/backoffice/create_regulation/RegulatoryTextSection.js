@@ -23,7 +23,6 @@ const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
     setRegulatoryTextList,
-    upcomingRegulationList,
     source
   } = props
   const dispatch = useDispatch()
@@ -47,7 +46,7 @@ const RegulatoryTextSection = props => {
 
   return (<Section>
     <SectionTitle>
-      références réglementaires en vigueur
+      {source === 'upcomingRegulation' ? 'références réglementaires À VENIR' : 'références réglementaires en vigueur'}
     </SectionTitle>
     {
       (regulatoryTextList && regulatoryTextList.length > 0) &&
@@ -61,22 +60,22 @@ const RegulatoryTextSection = props => {
             />
         })
     }
-    { upcomingRegulationList && <span>il y a {upcomingRegulationList.length} textes réglementaires à venir à afficher</span>}
-    <UpcommingRegulationSection />
+    {source === 'regulation' &&
+    <><UpcommingRegulationSection />
     <ButtonLine>
-      {source === 'regulation' && <ValidateButton
+      <ValidateButton
         disabled={false}
         isLast={false}
         onClick={addRegRefInEffect}>
         Ajouter un autre texte en vigueur
-      </ValidateButton>}
+      </ValidateButton>
       <CustomCancelButton
         disabled={false}
         isLast={false}
         onClick={addUpcomingText}>
         Ajouter un texte à venir
       </CustomCancelButton>
-    </ButtonLine>
+    </ButtonLine></>}
   </Section>)
 }
 

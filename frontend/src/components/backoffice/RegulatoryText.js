@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { ContentLine } from '../commonStyles/Backoffice.style'
+import { ContentLine, Delimiter } from '../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../commonStyles/Buttons.style'
 import { Checkbox, CheckboxGroup } from 'rsuite'
@@ -235,11 +235,6 @@ const RegulatoryText = props => {
   </>
 }
 
-const Delimiter = styled.div`
-  width: 700px;
-  border-bottom: 1px solid ${COLORS.grayDarker};
-  margin-bottom: 15px;
-`
 const CustomCheckbox = styled(Checkbox)`
   padding-right: 15px;
   font-size: 13px;

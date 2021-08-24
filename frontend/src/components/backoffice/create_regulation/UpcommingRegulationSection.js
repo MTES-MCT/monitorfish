@@ -2,10 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import InfoBox from './InfoBox'
 import { CancelButton } from '../../commonStyles/Buttons.style'
+import { Delimiter } from '../../commonStyles/Backoffice.style'
 
-const UpcommingRegulationSection = () => {
-  // selectionner dans le state la liste ?
+const UpcommingRegulationSection = props => {
   return (
+      <>
       <Container>
         <YellowRectangle />
         <UpcomingRegulation>
@@ -30,11 +31,13 @@ const UpcommingRegulationSection = () => {
           </CancelButton></Row>
         </ UpcomingRegulation>
       </Container>
+      <Delimiter />
+      </>
   )
 }
 
 const TextRow = styled.div`
-  margin: 15px 0 10px 0;
+  padding: 15px 0 10px 0;
 `
 
 const Row = styled.span`

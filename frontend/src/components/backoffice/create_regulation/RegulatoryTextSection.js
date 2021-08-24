@@ -23,7 +23,7 @@ const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
     setRegulatoryTextList,
-    upcomingRegulationList,
+    upcomingRegulation,
     source
   } = props
   const dispatch = useDispatch()
@@ -41,8 +41,6 @@ const RegulatoryTextSection = props => {
   }
 
   const updateRegulatoryTextList = (id, regulatoryText) => {
-    console.log('regulatoryText')
-    console.log(regulatoryText)
     const newRegulatoryTextList = addTextToRegulatoryTextList(regulatoryTextList, id, regulatoryText)
     setRegulatoryTextList(newRegulatoryTextList)
   }
@@ -71,12 +69,12 @@ const RegulatoryTextSection = props => {
         onClick={addRegRefInEffect}>
         Ajouter un autre texte en vigueur
       </ValidateButton>
-      <CustomCancelButton
+      {!upcomingRegulation && <CustomCancelButton
         disabled={false}
         isLast={false}
         onClick={addUpcomingText}>
         Ajouter un texte à venir
-      </CustomCancelButton></>
+      </CustomCancelButton>}</>
       : <ValidateButton
         disabled={false}
         isLast={false}
@@ -85,9 +83,8 @@ const RegulatoryTextSection = props => {
       </ValidateButton>}
     </ButtonLine>
     {source === 'regulation' &&
-    upcomingRegulationList?.length > 0 && upcomingRegulationList.map((upcomingRegulation, id) => {
-      return <UpcommingRegulationSection key={id} upcomingRegulationTextList={upcomingRegulation.regulatoryTextList} />
-    })
+      upcomingRegulation &&
+        <UpcommingRegulationSection upcomingRegulationTextList={upcomingRegulation.regulatoryTextList} />
     }
   </Section>)
 }

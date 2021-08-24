@@ -40,16 +40,32 @@ const RegulatoryText = props => {
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false) */
 
   const initFormValues = () => {
-    setCurrentRegulatoryTextName(regulatoryText.name || '')
-    setCurrentRegulatoryTextURL(regulatoryText.URL || '')
-    setCurrentStartDate(regulatoryText.startDate || '')
-    setCurrentEndDate(regulatoryText.endDate || '')
-    setCurrentTextType(regulatoryText.textType || [])
+    const {
+      name,
+      URL,
+      startDate,
+      endDate,
+      textType
+    } = regulatoryText
+    setCurrentRegulatoryTextName(name || '')
+    setCurrentRegulatoryTextURL(URL || '')
+    setCurrentStartDate(startDate || '')
+    setCurrentEndDate(endDate || '')
+    setCurrentTextType(textType || [])
+    setIsEditing(name === undefined || name === '' || URL === undefined || URL === '')
   }
 
   useEffect(() => {
     initFormValues()
-  }, [regulatoryText])
+  }, [])
+
+  useEffect(() => {
+    if ((currentStartDate && currentStartDate !== '') ||
+    (currentEndDate && currentEndDate !== '') ||
+    (currentTextType && currentTextType !== '')) {
+      updateOrAddRegulatoryText()
+    }
+  }, [currentStartDate, currentEndDate, currentTextType])
 
   /**
    * @funtion updateOrAddRegulatoryText
@@ -58,6 +74,7 @@ const RegulatoryText = props => {
    * And call updateRegulatoryText() function
    */
   const updateOrAddRegulatoryText = () => {
+    console.log('updateOrAddRegulatoryText')
     const updatedRegulatoryText = {
       name: currentRegulatoryTextName,
       URL: currentRegulatoryTextURL,
@@ -118,7 +135,7 @@ const RegulatoryText = props => {
    * if no value are missing
    * update the regulatory text object
    */
-  const onValidateButtonClicked = () => {
+  const onSaveButtonClicked = () => {
     let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
@@ -139,10 +156,25 @@ const RegulatoryText = props => {
     REGULATION: 'regulation'
   }
 
+  const onCurrentStartDateChange = (date) => {
+    setCurrentStartDate(date)
+    // updateOrAddRegulatoryText()
+  }
+
+  const onCurrentEndDateChange = (date) => {
+    setCurrentEndDate(date)
+    // updateOrAddRegulatoryText()
+  }
+
+  const onTypeChange = (type) => {
+    setCurrentTextType(type)
+    // updateOrAddRegulatoryText()
+  }
+
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
-      {isEditing || regulatoryText === undefined || Object.keys(regulatoryText).length === 0
+      {isEditing
         ? <>
           <CustomInput
             isRed={nameIsRequired}
@@ -162,7 +194,7 @@ const RegulatoryText = props => {
             <><ValidateButton
               disabled={false}
               isLast={false}
-              onClick={onValidateButtonClicked}>
+              onClick={onSaveButtonClicked}>
               Enregistrer
             </ValidateButton>
             <CancelButton
@@ -185,7 +217,7 @@ const RegulatoryText = props => {
         inline
         name="checkboxList"
         value={currentTextType}
-        onChange={setCurrentTextType}
+        onChange={onTypeChange}
       >
         <CustomCheckbox
           // isRequired={textTypeIsRequired}
@@ -202,8 +234,8 @@ const RegulatoryText = props => {
       <CustomDatePicker
         // isRequired={startDateIsRequired}
         value={currentStartDate}
-        onChange={setCurrentStartDate}
-        onOk={setCurrentStartDate}
+        onChange={(date) => onCurrentStartDateChange(date)}
+        onOk={(date, _) => onCurrentStartDateChange(date)}
         format='DD/MM/YYYY'
       />
     </ContentLine>
@@ -212,8 +244,8 @@ const RegulatoryText = props => {
       <CustomDatePicker
         // isRequired={endDateIsRequired}
         value={currentEndDate === INFINITE ? '' : currentEndDate}
-        onChange={setCurrentEndDate}
-        onOk={setCurrentEndDate}
+        onChange={(date) => onCurrentEndDateChange(date)}
+        onOk={(date, _) => onCurrentEndDateChange(date)}
         format='DD/MM/YYYY'
       />
       <Or>&nbsp;ou</Or>

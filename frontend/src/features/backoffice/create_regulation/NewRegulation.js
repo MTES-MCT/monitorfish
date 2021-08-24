@@ -54,8 +54,6 @@ const CreateRegulation = () => {
 
   useEffect(() => {
     if (!isModalOpen && selectedUpcomingRegulation) {
-      console.log('setUpcomingRegulationList ')
-      console.log(selectedUpcomingRegulation)
       setUpcomingRegulationList(addTextToRegulatoryTextList(upcomingRegulationList, selectedUpcomingRegulationId, selectedUpcomingRegulation))
       resetModal()
     }

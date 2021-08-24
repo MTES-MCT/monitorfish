@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="14"
+     viewBox="0 0 8 14">
+    <defs>
+        <clipPath id="clip-Plan_de_travail_1">
+            <rect width="8" height="14"/>
+        </clipPath>
+    </defs>
+    <g id="Plan_de_travail_1" data-name="Plan de travail – 1" clip-path="url(#clip-Plan_de_travail_1)">
+        <g id="Flèche_droite_gris_clair" data-name="Flèche droite_gris clair" transform="translate(1 1)">
+            <path id="Flèche_droite_gris_clair-2" data-name="Flèche droite_gris clair" d="M0,0,6,6,0,12"
+                  fill="#707785"/>
+        </g>
+    </g>
+</svg>

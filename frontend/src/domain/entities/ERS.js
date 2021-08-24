@@ -9,7 +9,7 @@ import {
   LANMessage,
   PNOMessage,
   RTPMessage
-} from '../../components/fishing_activities/ers_messages/index.js'
+} from '../../features/fishing_activities/ers_messages/index.js'
 
 export const ERSMessageType = {
   DEP: {
@@ -62,6 +62,7 @@ export const ERSMessageType = {
   CRO: {
     code: 'CRO',
     name: 'Traversée d\'une zone d\'effort',
+    fullName: 'Traversée d\'une zone d\'effort',
     component: CROMessage
   },
   DIS: {

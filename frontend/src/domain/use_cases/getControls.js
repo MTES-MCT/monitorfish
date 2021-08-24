@@ -1,12 +1,13 @@
 import { getVesselControlsFromAPI } from '../../api/fetch'
-import { removeError, setError } from '../reducers/Global'
+import { removeError, setError } from '../shared_slices/Global'
 import {
   loadingControls,
   resetLoadingVessel,
   setControlResumeAndControls,
   setNextControlResumeAndControls
-} from '../reducers/Vessel'
+} from '../shared_slices/Vessel'
 import NoControlsFoundError from '../../errors/NoControlsFoundError'
+import { batch } from 'react-redux'
 
 const getControls = userRequest => (dispatch, getState) => {
   const {
@@ -34,14 +35,18 @@ const getControls = userRequest => (dispatch, getState) => {
       dispatch(removeError())
     }).catch(error => {
       console.error(error)
-      dispatch(setError(error))
-      dispatch(resetLoadingVessel())
+      batch(() => {
+        dispatch(setError(error))
+        dispatch(resetLoadingVessel())
+      })
     })
   } else {
-    dispatch(setError(new NoControlsFoundError('Ce navire n\'a aucun contrôle')))
-    dispatch(setControlResumeAndControls({
-      controls: []
-    }))
+    batch(() => {
+      dispatch(setError(new NoControlsFoundError('Ce navire n\'a aucun contrôle')))
+      dispatch(setControlResumeAndControls({
+        controls: []
+      }))
+    })
   }
 }
 

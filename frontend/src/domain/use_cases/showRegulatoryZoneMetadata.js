@@ -4,9 +4,10 @@ import {
   resetLoadingRegulatoryZoneMetadata,
   setLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata
-} from '../reducers/Regulatory'
+} from '../shared_slices/Regulatory'
 import { mapToRegulatoryZone } from '../entities/regulatory'
-import { setError } from '../reducers/Global'
+import { setError } from '../shared_slices/Global'
+import { batch } from 'react-redux'
 
 const showRegulatoryZoneMetadata = regulatoryZone => dispatch => {
   if (regulatoryZone) {
@@ -16,9 +17,11 @@ const showRegulatoryZoneMetadata = regulatoryZone => dispatch => {
       dispatch(setRegulatoryZoneMetadata(regulatoryZone))
     }).catch(error => {
       console.error(error)
-      dispatch(closeRegulatoryZoneMetadataPanel())
-      dispatch(setError(error))
-      dispatch(resetLoadingRegulatoryZoneMetadata())
+      batch(() => {
+        dispatch(closeRegulatoryZoneMetadataPanel())
+        dispatch(setError(error))
+        dispatch(resetLoadingRegulatoryZoneMetadata())
+      })
     })
   }
 }

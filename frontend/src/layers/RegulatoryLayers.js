@@ -31,7 +31,7 @@ const RegulatoryLayers = ({ map }) => {
       const regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
       if (regulatoryZoneMetadata) {
         const layerToAddProperty = regulatoryLayers.find(layer => {
-          return layer.className_ === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.layerName}:${regulatoryZoneMetadata.zone}`
+          return layer.className_ === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
         })
 
         if (layerToAddProperty) {

@@ -1,13 +1,13 @@
 import * as Comlink from 'comlink'
 /* eslint-disable import/no-webpack-loader-syntax */
-import Worker from 'worker-loader!../../workers/MapperWorker'
+import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 import { all } from 'ol/loadingstrategy'
 
 const worker = new Worker()
-const MapperWorker = Comlink.wrap(worker)
+const MonitorFishWorker = Comlink.wrap(worker)
 
 const vectorSource = new VectorSource({
   format: new GeoJSON({
@@ -18,7 +18,7 @@ const vectorSource = new VectorSource({
 })
 
 const getFilteredVessels = (vessels, filters) => async () => {
-  const worker = await new MapperWorker()
+  const worker = await new MonitorFishWorker()
 
   const workerFilters = getFiltersWithoutZonesSelected(filters)
 

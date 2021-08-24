@@ -5,6 +5,7 @@
 html {
     overflow-y: hidden;
     overflow-x: hidden;
+    font-size: 13px;
 }
 
 .zoom {
@@ -34,7 +35,7 @@ html {
 }
 
 .ol-control button {
-    background-color: #515151;
+    background-color: #3B4559;
 }
 
 .ol-control {
@@ -46,9 +47,9 @@ html {
 }
 
 .ol-control button, .ol-control button:hover, .ol-control button:focus {
-    background-color: #515151;
+    background-color: #3B4559;
     border-radius: 2px;
-    font-size: 1em;
+    font-size: 15px;
     padding-bottom: 5px;
 }
 
@@ -66,7 +67,7 @@ button:hover, button:focus {
 }
 
 .active-tab {
-    background-color: #969696;
+    background-color: #707785;
 }
 
 table:not(.horizontal) th, table:not(.horizontal) td {
@@ -105,12 +106,12 @@ tbody {
 
 .update-vessels .fingerprint-spinner {
     border: 1px solid transparent !important;
-    border-top-color: #515151 !important;
+    border-top-color: #3B4559 !important;
 }
 
 .update-vessels > .spinner-ring {
     border: 1px solid transparent !important;
-    border-top-color: #515151 !important;
+    border-top-color: #3B4559 !important;
 }
 
 a:focus {
@@ -128,7 +129,7 @@ input:focus {
 .highlight {
     margin: 0;
     padding: 0;
-    background-color: #D6D6D6;
+    background-color: #CCCFD6;
     color: rgb(81, 81, 81);
 }
 
@@ -148,8 +149,8 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
     font-size: 0.9em;
     text-decoration: none;
     text-align: center;
-    height: 1.275em;
-    background-color: #515151;
+    height: 18px;
+    background-color: #3B4559;
     border: none;
     border-radius: 2px;
 }
@@ -161,7 +162,7 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
 }
 
 a:hover, a:focus {
-    color: #515151;
+    color: #282F3E;
 }
 
 .base-layers-selection > .rs-radio > .rs-radio-checker > label > .rs-radio-wrapper {
@@ -178,8 +179,9 @@ a:hover, a:focus {
 }
 
 .base-layers-selection > .rs-radio > .rs-radio-checker > label {
-    width: 300px;
+    width: 304px;
     display: inline-block;
+    font-weight: 500;
 }
 
 .rs-modal-full .rs-modal-dialog {
@@ -203,7 +205,7 @@ a:hover, a:focus {
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     padding: 5px 14px 8px 14px;
-    background: #515151;
+    background: #3B4559;
 }
 
 .rs-modal-header .rs-modal-title {
@@ -213,16 +215,16 @@ a:hover, a:focus {
 }
 
 .rs-table-cell-header, .rs-table-cell[role="columnheader"], .rs-table-cell-header:focus, .rs-table-cell[role="columnheader"]:focus, .rs-table-cell-header:hover, .rs-table-cell[role="columnheader"]:hover {
-    background: #EDEDED;
+    background: #E5E5EB;
     color: white;
 }
 
 .rs-table-hover .rs-table-row-header:hover .rs-table-cell-group, .rs-table-hover .rs-table-row-header:hover .rs-table-cell {
-    background: #EDEDED;
+    background: #E5E5EB;
 }
 
 .rs-table-cell[role="columnheader"] > .rs-table-cell-content {
-    color: #9A9A9A;
+    color: #707785;
 }
 
 .rs-table-cell {
@@ -231,8 +233,8 @@ a:hover, a:focus {
 
 .rs-table-cell-content {
     font-size: 13px;
-    font-weight: normal;
-    color: #515151;
+    font-weight: 500;
+    color: #282F3E;
     padding: 9px 7px;
     text-align: left;
 }
@@ -244,7 +246,7 @@ a:hover, a:focus {
     padding-left: 15px;
     font-size: 13px;
     font-weight: normal;
-    color: #515151;
+    color: #282F3E;
 }
 
 .rs-table-scrollbar-handle, .rs-table-scrollbar-handle:hover, .rs-table-scrollbar-handle:focus {
@@ -263,7 +265,7 @@ a:hover, a:focus {
     right: 10px !important;
     top: 9px !important;
     font-size: 15px !important;
-    color: #EDEDED !important;
+    color: #E5E5EB !important;
 }
 
 .rs-picker-default .rs-btn, .rs-picker-input .rs-btn, .rs-picker-default .rs-picker-toggle, .rs-picker-input .rs-picker-toggle {
@@ -285,10 +287,11 @@ a:hover, a:focus {
 
 .rs-picker-toggle-placeholder {
     font-size: 13px;
+    color: #707785 !important;
 }
 
 .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
-    color: #969696;
+    color: #707785;
     font-size: 13px;
     font-weight: normal;
 }
@@ -299,7 +302,7 @@ a:hover, a:focus {
 
 .rs-picker-select-menu-item.rs-picker-select-menu-item-active, .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
 .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover, .rs-picker-select-menu-item.rs-picker-select-menu-item-focus, .rs-picker-select-menu-item {
-    color: #969696;
+    color: #707785;
     font-size: 13px;
     font-weight: normal;
 }
@@ -309,16 +312,16 @@ a:hover, a:focus {
 }
 
 .rs-picker-toggle-clean, .rs-picker-toggle-caret {
-    color: #969696;
+    color: #707785;
 }
 
 .rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before, .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::before {
-    border-color: #969696;
-    background-color: #EDEDED;
+    border-color: #707785;
+    background-color: #E5E5EB;
 }
 
 .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::after {
-    border: solid #D6D6D6;
+    border: solid #CCCFD6;
     border-width: 0 0 2px;
     -webkit-transform: rotate(0deg) scale(1);
     transform: rotate(0deg) scale(1);
@@ -344,8 +347,8 @@ a:hover, a:focus {
 }
 
 .rs-checkbox-wrapper .rs-checkbox-inner::before {
-    border: 2px solid #D6D6D6 !important;
-    background: #EDEDED 0% 0% no-repeat padding-box !important;
+    border: 2px solid #CCCFD6 !important;
+    background: #E5E5EB 0% 0% no-repeat padding-box !important;
     border-radius: 1px !important;
 }
 
@@ -363,7 +366,7 @@ a:hover, a:focus {
 }
 
 .rs-table-cell-header-icon-sort {
-    color: #9A9A9A;
+    color: #707785;
     line-height: 1.66666667;
     position: absolute;
     right: 9px;
@@ -371,15 +374,15 @@ a:hover, a:focus {
 }
 
 .rs-table-cell-header-icon-sort-asc::after {
-    color: #9A9A9A;
+    color: #707785;
 }
 
 .rs-table-cell-header-icon-sort-desc::after {
-    color: #9A9A9A;
+    color: #707785;
 }
 
 .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover, .rs-table-hover .rs-table-row:hover .rs-table-cell-group, .rs-table-hover .rs-table-row:hover .rs-table-cell {
-  background: #D6D6D6 !important;
+  background: #CCCFD6 !important;
 }
 
 .rs-table-cell, .rs-table-cell-group, .rs-table-row {

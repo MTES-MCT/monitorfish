@@ -1,4 +1,4 @@
-import { closeVesselSidebar } from '../reducers/Vessel'
+import { closeVesselSidebar } from '../shared_slices/Vessel'
 import { IS_SELECTED_PROPERTY, Vessel } from '../entities/vessel'
 
 const unselectVessel = () => (dispatch, getState) => {

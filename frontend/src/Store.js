@@ -1,4 +1,4 @@
-import { backofficeReducers, homeReducers } from './domain/reducers'
+import { backofficeReducers, homeReducers } from './domain/shared_slices'
 import { configureStore } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
 

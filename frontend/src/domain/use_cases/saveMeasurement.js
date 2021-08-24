@@ -2,7 +2,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { OPENLAYERS_PROJECTION } from '../entities/map'
 import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
-import { addMeasurementDrawed } from '../reducers/Map'
+import { addMeasurementDrawed } from '../shared_slices/Map'
 
 const saveMeasurement = (feature, measurement) => dispatch => {
   feature.setId(feature.ol_uid)

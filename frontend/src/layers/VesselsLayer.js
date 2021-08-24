@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
-import { setFilteredVesselsFeaturesUids, setVesselsLayerSource } from '../domain/reducers/Vessel'
+import { resetVessels, setFilteredVesselsFeaturesUids, setVesselsLayerSource } from '../domain/shared_slices/Vessel'
 import {
   FILTER_COLOR_PROPERTY,
   IS_LIGHT_PROPERTY,
@@ -12,7 +12,7 @@ import {
   Vessel,
   vesselAndVesselFeatureAreEquals
 } from '../domain/entities/vessel'
-import { getVesselObjectFromFeature } from '../components/vessel_list/dataFormatting'
+import { getVesselObjectFromFeature } from '../features/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import { Vector } from 'ol/layer'
 import { getVesselStyle } from './styles/vessel.style'
@@ -157,6 +157,7 @@ const VesselsLayer = ({ map }) => {
           vesselsLastPositionVisibility,
           selectedBaseLayer
         })
+        dispatch(resetVessels())
       })
     }
   }

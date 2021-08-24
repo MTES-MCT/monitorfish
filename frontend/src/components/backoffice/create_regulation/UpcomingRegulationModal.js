@@ -20,8 +20,10 @@ const UpcomingRegulationModal = () => {
     isModalOpen,
     selectedUpcomingRegulation
   } = useSelector(state => state.regulation)
+  console.log('selectedUpcomingRegulation from state')
+  console.log(selectedUpcomingRegulation)
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(selectedUpcomingRegulation.regulatoryText ? [...selectedUpcomingRegulation.regulatoryTextList] : [{}])
+  const [regulatoryTextList, setRegulatoryTextList] = useState(selectedUpcomingRegulation.regulatoryTextList ? [...selectedUpcomingRegulation.regulatoryTextList] : [{}])
 
   const addUpcomingRegulation = () => {
     const newUpcomingRegulation = { ...selectedUpcomingRegulation }

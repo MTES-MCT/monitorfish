@@ -39,3 +39,9 @@ justify-content: center;
 width: 100%;
 padding: 15px 0;
 `
+
+export const Delimiter = styled.div`
+  width: 700px;
+  border-bottom: 1px solid ${COLORS.grayDarker};
+  margin-bottom: 15px;
+`

@@ -11,7 +11,7 @@ import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../../domain/entities/regulatory'
-import { SecondaryButton } from '../components/commonStyles/Buttons.style'
+import { SecondaryButton } from '../commonStyles/Buttons.style'
 
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})

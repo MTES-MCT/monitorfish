@@ -5,14 +5,13 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import {
   resetModal,
-  setIsModalOpen,
   setUpcomingRegulation
-} from '../../../domain/reducers/Regulation'
+} from '../../../domain/shared_slices/Regulation'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
 
 const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
@@ -29,7 +28,7 @@ const UpcomingRegulationModal = () => {
     const newUpcomingRegulation = { ...upcomingRegulation }
     newUpcomingRegulation.regulatoryTextList = regulatoryTextList
     dispatch(setUpcomingRegulation(newUpcomingRegulation))
-    dispatch(setIsModalOpen(false))
+    dispatch(resetModal())
   }
 
   return (<RegulationModal isOpen={isModalOpen}>
@@ -37,7 +36,7 @@ const UpcomingRegulationModal = () => {
       <Body>
         <ModalTitle>
           BACKOFFISH - Ajouter une réglementation à venir
-          <CloseIcon onClick={() => dispatch(setIsModalOpen(false))}/>
+          <CloseIcon onClick={() => dispatch(resetModal())}/>
         </ModalTitle>
         <Section>
           <RegulatoryTextSection
@@ -104,7 +103,7 @@ const ModalContent = styled.div`
 `
 
 const ModalTitle = styled.div`
-  background-color: ${COLORS.modalBackground};
+  background-color: ${COLORS.charcoal};
   text-align: center;
   padding: 9px;
   font-size:13px;

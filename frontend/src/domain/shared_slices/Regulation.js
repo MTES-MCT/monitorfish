@@ -3,9 +3,11 @@ import { createSlice } from '@reduxjs/toolkit'
 const regulationSlice = createSlice({
   name: 'regulation',
   initialState: {
-    selectedRegulation: null,
-    selectedRegulatoryTextToComeId: null,
-    selectedRegulatoryTextToCome: null,
+    /** @type {RegulatoryText} selectedRegulation */
+    selectedRegulation: undefined,
+    /** @type {UpcomingRegulation} selectedUpcomingRegulation */
+    upcomingRegulation: undefined,
+    /** @type {boolean} isModalOpen */
     isModalOpen: false
   },
   reducers: {
@@ -15,11 +17,14 @@ const regulationSlice = createSlice({
     setIsModalOpen (state, action) {
       state.isModalOpen = action.payload
     },
-    setSelectedRegulatoryTextToComeId (state, action) {
-      state.selectedRegulatoryTextToComeId = action.payload
+    setUpcomingRegulation (state, action) {
+      state.upcomingRegulation = action.payload
     },
-    setSelectedRegulatoryTextToCome (state, action) {
-      state.selectedRegulatoryTextToCome = action.payload
+    resetModal (state) {
+      state.isModalOpen = false
+    },
+    openModal (state, action) {
+      state.isModalOpen = true
     }
   }
 })
@@ -27,8 +32,9 @@ const regulationSlice = createSlice({
 export const {
   setSelectedRegulation,
   setIsModalOpen,
-  setSelectedRegulatoryTextToComeId,
-  setSelectedRegulatoryTextToCome
+  setUpcomingRegulation,
+  resetModal,
+  openModal
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

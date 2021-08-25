@@ -2,7 +2,7 @@ import { COLORS } from '../../constants/constants'
 import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
-const baseBlackButton = css`
+const basePrimaryButton = css`
   background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   :hover, :focus {
@@ -15,7 +15,7 @@ const baseBlackButton = css`
   }
 `
 
-const baseWhiteButton = css`
+const baseSecondaryButton = css`
   border: 1px solid ${COLORS.charcoal};
   color: ${COLORS.gunMetal};
   :disabled {
@@ -36,16 +36,16 @@ const BackofficeButton = styled.button`
   margin: 15px ${props => props.isLast ? '20px' : '0'} 15px 10px;
 `
 
-export const BlackButton = styled(Button)`
-  ${baseBlackButton}
+export const PrimaryButton = styled(Button)`
+  ${basePrimaryButton}
 `
 
-export const WhiteButton = styled(Button)`
-  ${baseWhiteButton}
+export const SecondaryButton = styled(Button)`
+  ${baseSecondaryButton}
 `
 
-export const BackofficeWhiteButton = styled(BackofficeButton)`
-  ${baseWhiteButton}
+export const BackofficeSecondaryButton = styled(BackofficeButton)`
+  ${baseSecondaryButton}
 `
 
 const baseAddButton = css`
@@ -90,11 +90,11 @@ export const AddRegulationButton = styled(Link)`
   }
 `
 
-export const ValidateButton = styled(BlackButton)`
+export const ValidateButton = styled(PrimaryButton)`
   margin: 0px 10px 0px 0px;
 `
 
-export const CancelButton = styled(WhiteButton)`
+export const CancelButton = styled(SecondaryButton)`
   margin: 0px 10px 0px 0px;
 `
 

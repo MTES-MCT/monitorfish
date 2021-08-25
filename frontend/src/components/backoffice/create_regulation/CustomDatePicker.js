@@ -18,7 +18,7 @@ const CustomDatePicker = props => {
     onOk={onOk}
     cleanable={false}
     placement='topStart'
-    placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     format={format}
     locale={{
       sunday: 'Dim',
@@ -38,7 +38,7 @@ const CustomDatePicker = props => {
 }
 
 const DatePickerStyled = styled(DatePicker)`
-  width: 90px;
+  width: 87px;
   box-sizing: border-box;
   .rs-picker-toggle-caret {
     display: none;

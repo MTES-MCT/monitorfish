@@ -26,11 +26,22 @@ const RegulatoryText = props => {
      */
     updateRegulatoryText
   } = props
-  const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState()
-  const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState()
+
+  const TEXT_NAME_DEFAULT_VALUE = 'Nom'
+  const TEXT_URL_DEFAULT_VALUE = 'URL'
+  /**
+  * @enum {RegulatoryTextType}
+  */
+  const REGULATORY_TEXT_TYPE = {
+    CREATION: 'creation',
+    REGULATION: 'regulation'
+  }
+
+  const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState(TEXT_NAME_DEFAULT_VALUE)
+  const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState(TEXT_URL_DEFAULT_VALUE)
   const [currentStartDate, setCurrentStartDate] = useState()
   const [currentEndDate, setCurrentEndDate] = useState()
-  const [currentTextType, setCurrentTextType] = useState()
+  const [currentTextType, setCurrentTextType] = useState([])
 
   const [isEditing, setIsEditing] = useState(false)
   const [nameIsRequired, setNameIsRequired] = useState(false)
@@ -47,12 +58,12 @@ const RegulatoryText = props => {
       endDate,
       textType
     } = regulatoryText
-    setCurrentRegulatoryTextName(name || '')
-    setCurrentRegulatoryTextURL(URL || '')
-    setCurrentStartDate(startDate || '')
-    setCurrentEndDate(endDate || '')
+    setCurrentRegulatoryTextName(name || TEXT_NAME_DEFAULT_VALUE)
+    setCurrentRegulatoryTextURL(URL || TEXT_URL_DEFAULT_VALUE)
+    setCurrentStartDate(startDate || undefined)
+    setCurrentEndDate(endDate || undefined)
     setCurrentTextType(textType || [])
-    setIsEditing(name === undefined || name === '' || URL === undefined || URL === '')
+    setIsEditing(name === undefined || name === TEXT_NAME_DEFAULT_VALUE || URL === undefined || URL === TEXT_URL_DEFAULT_VALUE)
   }
 
   useEffect(() => {
@@ -147,14 +158,6 @@ const RegulatoryText = props => {
     }
   }
 
-  /**
-  * @enum {RegulatoryTextType}
-  */
-  const REGULATORY_TEXT_TYPE = {
-    CREATION: 'creation',
-    REGULATION: 'regulation'
-  }
-
   const onCurrentStartDateChange = (date) => {
     setCurrentStartDate(date)
     // updateOrAddRegulatoryText()
@@ -165,29 +168,24 @@ const RegulatoryText = props => {
     // updateOrAddRegulatoryText()
   }
 
-  const onTypeChange = (type) => {
-    setCurrentTextType(type)
-    // updateOrAddRegulatoryText()
-  }
-
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
       {isEditing
         ? <>
           <CustomInput
+            placeholder={TEXT_NAME_DEFAULT_VALUE}
             isRed={nameIsRequired}
-            placeholder='Nom'
             width={'250px'}
             value={currentRegulatoryTextName}
-            onChange={value => onNameValueChange(value)}
+            onChange={onNameValueChange}
           />
           <CustomInput
+            placeholder={TEXT_URL_DEFAULT_VALUE}
             isRed={URLIsrequired}
-            placeholder='URL'
             width={'250px'}
             value={currentRegulatoryTextURL}
-            onChange={value => onURLValueChange(value)}
+            onChange={onURLValueChange}
           />
           {(currentRegulatoryTextName || currentRegulatoryTextURL) &&
             <><ValidateButton
@@ -216,7 +214,7 @@ const RegulatoryText = props => {
         inline
         name="checkboxList"
         value={currentTextType}
-        onChange={onTypeChange}
+        onChange={setCurrentTextType}
       >
         <CustomCheckbox
           // isRequired={textTypeIsRequired}

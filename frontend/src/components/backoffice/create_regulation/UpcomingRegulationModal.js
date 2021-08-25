@@ -6,7 +6,7 @@ import { COLORS } from '../../../constants/constants'
 import {
   resetModal,
   setIsModalOpen,
-  setSelectedUpcomingRegulation
+  setUpcomingRegulation
 } from '../../../domain/reducers/Regulation'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -18,17 +18,17 @@ const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    selectedUpcomingRegulation
+    upcomingRegulation
   } = useSelector(state => state.regulation)
-  console.log('selectedUpcomingRegulation from state')
-  console.log(selectedUpcomingRegulation)
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(selectedUpcomingRegulation.regulatoryTextList ? [...selectedUpcomingRegulation.regulatoryTextList] : [{}])
+  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
+    ? [...upcomingRegulation.regulatoryTextList]
+    : [{}])
 
   const addUpcomingRegulation = () => {
-    const newUpcomingRegulation = { ...selectedUpcomingRegulation }
+    const newUpcomingRegulation = { ...upcomingRegulation }
     newUpcomingRegulation.regulatoryTextList = regulatoryTextList
-    dispatch(setSelectedUpcomingRegulation(newUpcomingRegulation))
+    dispatch(setUpcomingRegulation(newUpcomingRegulation))
     dispatch(setIsModalOpen(false))
   }
 

@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:50+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/flows/ports.rst:3 85da0e89290c4f29889f1776678a4e05
+msgid "Ports"
+msgstr ""
+
+#: ../source/flows/ports.rst:5 09df1364834c4af3ae78d19b0aaa9b9a
+msgid ""
+"The ``ports`` flow extracts the list of ports from `data.gouv.fr "
+"<https://www.data.gouv.fr/fr/datasets/liste-des-ports-du-systeme-ers-avec-"
+"donnees-de-position/>`__. and loads it to the ``ports`` table of the "
+"Monitorfish database."
+msgstr ""
+
+#: ../source/flows/ports.rst:9 0242fc0fa15e4d5b972794f0073d8ffb
+msgid ""
+"It is not scheduled to run and it only required to run when the list of "
+"ports has been manually updated on data.gouv.fr by the development team."
+msgstr ""

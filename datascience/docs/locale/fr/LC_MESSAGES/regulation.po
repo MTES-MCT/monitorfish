@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/regulation.rst:3 2551a8f274cb48d0ace045ac07ebf011
+msgid "Regulation"
+msgstr "Réglementation"
+
+#: ../source/regulation.rst:5 97a30f8d06f34e0e9cfb075803ab8e40
+msgid ""
+"A dedicated team of the FMC watches fishing regulation evolutions and "
+"captures it as semi-structured data in the admin panel of Monitorfish."
+msgstr ""
+"Une équipe dédiée du FMC suit les évolutions de la réglementation des pêches"
+" et les saisit sous forme de données semi-structurées dans le panneau "
+"d'administration de Monitorfish."
+
+#: ../source/regulation.rst:8 8e43fdb63c7a4b978c5e021f181319b0
+msgid ""
+"This data can be then displayed in Monitorfish to show regulated fishing "
+"areas."
+msgstr ""
+"Ces données peuvent ensuite être affichées dans Monitorfish pour montrer les"
+" zones de pêche réglementées."
+
+#: ../source/regulation.rstNone 0390fab8c13b44a89ae13fce8bb63f7d
+msgid "Map with regulated fishing areas showed in Monitorfish"
+msgstr "Carte avec les zones de pêche réglementées affichées dans Monitorfish"

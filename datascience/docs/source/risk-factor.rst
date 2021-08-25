@@ -50,8 +50,8 @@ The computation is performed in two steps :
 
 Taking into account control results of the last 5 years, the last 10 control results are assigned :
 
-* a **score** equal to -1 if the control did not reveal any fishing non-compliance, and equal to 10 
-* a **coefficient** equal to 1 for the last control,----- 0.9 for the second-to-last control, ...
+* a **score** equal to -1 if the control did not reveal any fishing non-compliance, and equal to 10 times the number of fishing violations committed if there were any
+* a **coefficient** equal to 1 for the last control, 0.9 for the second-to-last control, ...
 
 An **infraction score** is then computed as follows :
 
@@ -144,7 +144,7 @@ the *control level* is defined by binning according to the following schema :
 
 .. image:: _static/img/control-level.png
   :width: 800
-  :alt: Schematic of the control level computation metho
+  :alt: Schematic of the control level computation method
 
 Detectability score computation
 -------------------------------

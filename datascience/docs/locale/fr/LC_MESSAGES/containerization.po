@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/containerization.rst:2 2ca020a7de6e4f8387d817e080cd9411
+msgid "Containerization"
+msgstr "Conteneurisation"
+
+#: ../source/containerization.rst:4 84ebd23c93db467388d470c02edc54d7
+msgid ""
+"For each `release <https://github.com/MTES-MCT/monitorfish/releases>`__, 2 "
+"docker images are created :"
+msgstr ""
+"Pour chaque `release <https://github.com/MTES-MCT/monitorfish/releases>`__, "
+"2 images docker sont créées :"
+
+#: ../source/containerization.rst:6 67275df516c04c92a7c2c697ca4dae20
+msgid ""
+"``monitorfish_app`` : service with back end (Kotlin Springboot) and front "
+"end (React) apps"
+msgstr ""
+"``monitorfish_app`` : service avec les applications back-end (Kotlin "
+"Springboot) et front-end (React)"
+
+#: ../source/containerization.rst:7 af40df9078604878bf37311377f1ee49
+msgid ""
+"``monitorfish_pipeline`` : service with python data ingestion and processing"
+" app"
+msgstr ""
+"``monitorfish_pipeline`` : service avec l'application python d'ingestion et "
+"de traitement de données"
+
+#: ../source/containerization.rst:9 01a1d9f5e7ef476d9ff52fb5c67eafa1
+msgid ""
+"These two images are pushed to the `Github package regitry "
+"<https://github.com/orgs/MTES-MCT/packages?repo_name=monitorfish>`__."
+msgstr ""
+"Ces deux images sont poussées dans le registre de paquets de `Github "
+"<https://github.com/orgs/MTES-MCT/packages?repo_name=monitorfish>`__."
+
+#: ../source/containerization.rst:11 b3ca456b397d43e1aa926d742ee5e577
+msgid ""
+"To choose which version to pull from this registry when deploying, set the "
+"right :ref:`environment_variables`."
+msgstr ""
+"Pour choisir la version à extraire de ce registre lors du déploiement, "
+"définissez la variable environnement correspondante (voir "
+":ref:`environment_variables`)."

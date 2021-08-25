@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/containerization.rst:2
+#: 78e6252011c1489eb014bccf04dd4048
+msgid "Containerization"
+msgstr ""
+
+#: ../source/containerization.rst:4
+#: d5b94359fd2d481c92205eea76bb0214
+msgid "For each `release <https://github.com/MTES-MCT/monitorfish/releases>`__, 2 docker images are created :"
+msgstr ""
+
+#: ../source/containerization.rst:6
+#: b379046008c1454488d8e337b10f50db
+msgid "``monitorfish_app`` : service with back end (Kotlin Springboot) and front end (React) apps"
+msgstr ""
+
+#: ../source/containerization.rst:7
+#: 5c20455f08574cdfa1527e09154a7209
+msgid "``monitorfish_pipeline`` : service with python data ingestion and processing app"
+msgstr ""
+
+#: ../source/containerization.rst:9
+#: b453f0d3b3f442648efba439b5450dcf
+msgid "These two images are pushed to the `Github package regitry <https://github.com/orgs/MTES-MCT/packages?repo_name=monitorfish>`__."
+msgstr ""
+
+#: ../source/containerization.rst:11
+#: be7ed26dae1449c3b61cb60bc923054a
+msgid "To choose which version to pull from this registry when deploying, set the right :ref:`environment_variables`."
+msgstr ""

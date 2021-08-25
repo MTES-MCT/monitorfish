@@ -1,0 +1,110 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:2
+#: b1a4134bed714366adb3db73ec0d9a5e
+msgid ":py:mod:`datascience.src.pipeline.flows.risk_factor`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:8
+#: 669cfd7f3b4b45bcaa4766fc2a0ae21e
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:12
+#: eb92dd4f4f044060a0adf44ba5b1095c
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
+#: 5671bf93d79f4d54aaa44cd14c4e7c5d
+msgid ""
+":obj:`extract_current_segments "
+"<datascience.src.pipeline.flows.risk_factor.extract_current_segments>`\\ "
+"\\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
+#: 0006d80537164013aa4ab135700661b6
+msgid ""
+":obj:`extract_control_anteriority "
+"<datascience.src.pipeline.flows.risk_factor.extract_control_anteriority>`\\ "
+"\\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
+#: 5d8176456e7f458a90afc5ca8dc73a01
+msgid ""
+":obj:`compute_risk_factors "
+"<datascience.src.pipeline.flows.risk_factor.compute_risk_factors>`\\ "
+"\\(current\\_segments\\: pandas.DataFrame\\, control\\_anteriority\\: "
+"pandas.DataFrame\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
+#: 33da0ebcc7db491bbfa8b684f0f16cef
+msgid ""
+":obj:`load_risk_factors "
+"<datascience.src.pipeline.flows.risk_factor.load_risk_factors>`\\ "
+"\\(risk\\_factors\\: pandas.DataFrame\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:54
+#: a8622568e7ce436aa48c021abe13190b 00e1fa92e6774c3ba54538afb2b1b2fc
+msgid ""
+"Load the output of ``compute_risk_factors`` task into ``risk_factors`` "
+"table."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:24
+#: b5968831896f4938b34cab06fab835f5
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
+#: 569ae43c24a44710ae343ab6b707ced2
+msgid ""
+":obj:`risk_factor_coefficients "
+"<datascience.src.pipeline.flows.risk_factor.risk_factor_coefficients>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
+#: 7b1b61a2906546718dde51c0ffec5922
+msgid ""
+":obj:`default_risk_factors "
+"<datascience.src.pipeline.flows.risk_factor.default_risk_factors>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
+#: 293e437ad8574e598772296c9dd33121
+msgid ""
+":obj:`current_segments "
+"<datascience.src.pipeline.flows.risk_factor.current_segments>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:0
+#: 7b21037822734495ad28e6e8aeba4bce
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:56
+#: e5c28285bce242569ec68eb17784fb42
+msgid "output of ``compute_risk_factors`` task."
+msgstr ""

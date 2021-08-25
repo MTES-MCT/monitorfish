@@ -1,0 +1,128 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/fleet-segments.rst:3 6059346aed044a7a8249e2448105ecdc
+msgid "Fleet segments"
+msgstr "Segments de flotte"
+
+#: ../source/fleet-segments.rst:5 1bf4fb5314154c5c908142037bb39b2e
+msgid ""
+"The European Fishing Control Agency's `Guidelines on Risk Assessment "
+"Methodology <https://www.efca.europa.eu/en/content/guidelines-risk-"
+"assessment-methodology-fisheries-compliance>`_ define fleet segments as "
+"*'fishery units with similar fishing characteristics (e.g., gear, area and "
+"target species)'*."
+msgstr ""
+"Les `Lignes directrices sur la méthodologie d'évaluation des risques "
+"<https://www.efca.europa.eu/en/content/guidelines-risk-assessment-"
+"methodology-fisheries-compliance>`_ de l'Agence européenne de contrôle des "
+"pêches définissent les segments de flotte comme *\"des unités de pêche "
+"présentant des caractéristiques de pêche similaires (par exemple, engin, "
+"zone et espèces cibles) \"*."
+
+#: ../source/fleet-segments.rst:9 526d19688f35478eac8fc9489c28feb8
+msgid ""
+"Each member state is responsible for defining the fleet segments relevant to"
+" its waters and to perform risk assessments on each segment."
+msgstr ""
+"Chaque État membre est chargé de définir les segments de flotte pertinents "
+"pour ses eaux et d'effectuer une évaluation des risques pour chaque segment."
+
+#: ../source/fleet-segments.rst:15 e4977f3cfb4f40a58729c70398561b50
+msgid "Fleet segment risk assessment and control objectives"
+msgstr "Évaluation des risques et objectifs de contrôle du segment de flotte"
+
+#: ../source/fleet-segments.rst:17 411e0ee52cca4f5a881ab448bf27ce84
+msgid ""
+"In France, fleet segments were defined by the `Direction des Pêches "
+"Maritimes et de l'Aquaculture <https://agriculture.gouv.fr/administration-"
+"centrale>`_, and risk assessments on these fleet segments are performed each"
+" year by the `Directions Interrégionales de la Mer "
+"<https://fr.wikipedia.org/wiki/Direction_interr%C3%A9gionale_de_la_Mer#:~:text=Les%20directions%20interr%C3%A9gionales%20de%20la,marin%20et%20gestion%20des%20ressources>`_."
+msgstr ""
+"En France, les segments de flotte ont été définis par la `Direction des "
+"Pêches Maritimes et de l'Aquaculture <https://agriculture.gouv.fr"
+"/administration-centrale>`_, et les évaluations des risques sur ces segments"
+" de flotte sont réalisées chaque année par les `Directions Interrégionales "
+"de la Mer "
+"<https://fr.wikipedia.org/wiki/Direction_interr%C3%A9gionale_de_la_Mer#:~:text=Les%20directions%20interr%C3%A9gionales%20de%20la,marin%20et%20gestion%20des%20ressources>`_."
+
+#: ../source/fleet-segments.rst:21 40c1cfb58e18417eb3a55bfdcf45b6bf
+msgid ""
+"During this process, a risk level is computed for each fleet segment based "
+"on"
+msgstr ""
+"Au cours de ce processus, un niveau de risque est calculé pour chaque "
+"segment de flotte sur la base des éléments suivants"
+
+#: ../source/fleet-segments.rst:23 e7efc41cbe534bdda5e4873ce8ba7844
+msgid ""
+"scientific data on the **state of the stock** (healthy, threatened, "
+"collapsed...)"
+msgstr ""
+"des données scientifiques sur l' **état du stock** (sain, menacé, "
+"effondré...)"
+
+#: ../source/fleet-segments.rst:24 92179397d1794badb0832b148c1b7dbd
+msgid ""
+"national metrics to estimate the pressure that the fishing activity puts on "
+"the stock and the level of non-compliance observed on the fleet segment"
+msgstr ""
+"des métriques nationales pour estimer la pression exercée par l'activité de "
+"pêche sur le stock et le niveau de non-conformité observé sur le segment de "
+"flotte."
+
+#: ../source/fleet-segments.rst:26 dee34fea1bd844e68e033c401387cc13
+msgid ""
+"In addition, and based on the risk assessment conclusions, an objective of a"
+" minimum number of controls to perform on each fleet segment is defined."
+msgstr ""
+"De plus, et sur la base des conclusions de l'évaluation des risques, un "
+"objectif d'un nombre minimum de contrôles à effectuer sur chaque segment de "
+"flotte est défini."
+
+#: ../source/fleet-segments.rst:29 2b3afbb835924b7bac08a98604f36598
+msgid "Fleet segments computation and display"
+msgstr "Calcul et affichage des segments de flotte"
+
+#: ../source/fleet-segments.rst:31 1454bf52741a4c4db5ba4c21f67037ee
+msgid ""
+"The :doc:`flows/current-segments` flow computes the fleet segments each "
+"vessel belongs to in real time, based on ERS data."
+msgstr ""
+"Le flow :doc:`flows/current-segments` calcule les segments de flotte "
+"auxquels appartient chaque navire en temps réel, sur la base des données "
+"ERS."
+
+#: ../source/fleet-segments.rst:33 a3509412c20b4a94beef997abce8558f
+msgid ""
+"Fishing vessels' fleet segment(s) can then be visualized on the map in real "
+"time, filtered based on their fleet segments..."
+msgstr ""
+"Le ou les segments de flotte des navires de pêche peuvent alors être "
+"visualisés sur la carte en temps réel, les navires peuvent être filtrés en "
+"fonction de leurs segments de flotte..."
+
+#: ../source/fleet-segments.rstNone 5e9433745c3045b1803745a7b2d62870
+msgid "Map showing vessels with fleet segments labels"
+msgstr "Carte montrant les navires avec des étiquettes de segments de flotte"

@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:2
+#: ddacf3e489cb44cea385ed655e8c58d0
+msgid ":py:mod:`datascience.src.pipeline.utils`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:8
+#: ae18af47f67f40fbba1bec4962a8353b
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:12
+#: e4f684e2423b4c1183fdb084f62e10b7
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: f30b8911908d490c9060ffff8aa9ceb6
+msgid ""
+":obj:`get_table <datascience.src.pipeline.utils.get_table>`\\ "
+"\\(table\\_name\\: str\\, schema\\: str\\, engine\\: "
+"sqlalchemy.engine.base.Engine\\, logger\\: logging.Logger\\) → "
+"sqlalchemy.Table"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: cfce3a534c614c6bbf2367fcbb2b35b8
+msgid ""
+"Performs reflection to get a sqlalchemy Table object with metadata "
+"reflecting"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: c08a3dc65f6644b0ab3ac4d25d927c69
+msgid ""
+":obj:`delete <datascience.src.pipeline.utils.delete>`\\ \\(table\\: "
+"sqlalchemy.Table\\, connection\\: sqlalchemy.engine.base.Connection\\, "
+"logger\\: logging.Logger\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: 87f6b9f752554f4885ae00c839fd8ee0
+msgid "Deletes all row from a table."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: 099f4f80a53c4c899fca25b32874a5f0
+msgid ""
+":obj:`psql_insert_copy <datascience.src.pipeline.utils.psql_insert_copy>`\\ "
+"\\(table\\, conn\\, keys\\, data\\_iter\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:39
+#: 0a2115649ef1473a8aaa07a6e756dc46 e6f85bf90bf743d39e92bd35ecb0483d
+msgid "Execute SQL statement inserting data"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: 709e59db98eb4ac195b42868907e1f46
+msgid ""
+":obj:`move <datascience.src.pipeline.utils.move>`\\ \\(src\\_fp\\: "
+"pathlib.Path\\, dest\\_dirpath\\: pathlib.Path\\, if\\_exists\\: str \\= "
+"\\'raise\\'\\) → None"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:22:<autosummary>:1
+#: 9f6d42da78e449bebe9f50bf437c2249
+msgid "Moves a file to another directory. If the destination directory"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:25
+#: 20e2a64ad4c84bc8842a36a765a23081
+msgid ""
+"Performs reflection to get a sqlalchemy Table object with metadata "
+"reflecting the table found in the databse. Returns resulting Table object."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:28
+#: e03699b6915f4bfea6ee5c6636610597
+msgid "If the table is not found in the database, raises an error."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:33
+#: 5806c0d46e60427b80d35029f177a0b3
+msgid ""
+"Deletes all row from a table. Useful to wipe a table before re-inserting "
+"fresh data in ETL jobs."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:0
+#: 0bb83f496897472fb9a149d0eae1f4d8
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:45
+#: e8b0ecea6b634407afcb8e88ce600e91
+msgid "Column names"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/utils/index.rst:53
+#: 2337633f3f6648dcb8384ac0d1e3a9c4
+msgid ""
+"Moves a file to another directory. If the destination directory does not "
+"exist, it is created, as well as all intermediate directories."
+msgstr ""

@@ -1,0 +1,145 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:2
+#: 48bd8631b1d344ca9300c8723855ec32
+msgid ":py:mod:`datascience.src.pipeline.generic_tasks`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:8
+#: 71b942e27566470e845e12569ce6d548
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:12
+#: 0e29644d8a324a22808ea07b2f3befee
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:20:<autosummary>:1
+#: 60f1a235ad5d4ddfa1f91412b5f1a291
+msgid ""
+":obj:`extract <datascience.src.pipeline.generic_tasks.extract>`\\ "
+"\\(db\\_name\\: str\\, query\\_filepath\\: Union\\[pathlib.Path\\, str\\]\\,"
+" dtypes\\: Union\\[None\\, dict\\] \\= None\\, parse\\_dates\\: "
+"Union\\[list\\, dict\\, None\\] \\= None\\, params\\=None\\) → "
+"pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:20:<autosummary>:1
+#: baced60035d9456e98145ae2ae4d6dc4
+msgid ""
+"Run SQL query against the indicated database and return the result as a"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:20:<autosummary>:1
+#: 83a33cfbbdd64c91bf7369eb2d0e3a98
+msgid ""
+":obj:`load <datascience.src.pipeline.generic_tasks.load>`\\ \\(df\\: "
+"pandas.DataFrame\\, table\\_name\\: str\\, schema\\: str\\, db\\_name\\: "
+"str\\, logger\\: Union\\[None\\, logging.Logger\\]\\, "
+"delete\\_before\\_insert\\: bool \\= False\\, pg\\_array\\_columns\\: "
+"Union\\[None\\, list\\] \\= None\\, handle\\_array\\_conversion\\_errors\\: "
+"bool \\= True\\, value\\_on\\_array\\_conversion\\_error\\=\\'\\{\\}\\'\\, "
+"jsonb\\_columns\\: Union\\[None\\, list\\] \\= None\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:23
+#: f5b0b3ee00764202afb59d398a80721e
+msgid ""
+"Run SQL query against the indicated database and return the result as a "
+"`pandas.DataFrame`."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:0
+#: 84faddcae92242d8a4a889e7796c5850
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:26
+#: 2f064821f6bd4b95b780b4ab7796a22a
+msgid ""
+"name of the databse to extract from : \"fmc\", \"ocan\", "
+"\"monitorfish_local\" or \"monitorfish_remote\""
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:29
+#: 10eff0530cda46ddbd0036c142e58564
+msgid ""
+"path to .sql file, starting from the saved queries folder. example : "
+"\"ocan/nav_fr_peche.sql\""
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:32
+#: b803e1c0e06e4fdda48b89358211bceb
+msgid ""
+"If specified, use {col: dtype, …}, where col is a column label and dtype is "
+"a numpy.dtype or Python type to cast one or more of the DataFrame’s columns "
+"to column-specific types. Defaults to None."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:37
+#: b1d849e41af04d158eafcb49b1bd978c
+msgid ""
+"- List of column names to parse as dates. - Dict of ``{column_name: format "
+"string}`` where format string is strftime compatible in case of parsing "
+"string times or is one of (D, s, ns, ms, us) in case of parsing integer "
+"timestamps. - Dict of ``{column_name: arg dict}``, where the arg dict "
+"corresponds to the keyword arguments of :func:`pandas.to_datetime`  Defaults"
+" to None."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:38
+#: 5587ecf4d26e43cd8170f2f4efdb9b5f
+msgid "List of column names to parse as dates."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:39
+#: f800913bc4ad49878fb3e02f5d4b0edd
+msgid "Dict of ``{column_name: format string}`` where format string is"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:40
+#: af89ee6a7360446ba223f2c227083935
+msgid ""
+"strftime compatible in case of parsing string times or is one of (D, s, ns, "
+"ms, us) in case of parsing integer timestamps. - Dict of ``{column_name: arg"
+" dict}``, where the arg dict corresponds to the keyword arguments of "
+":func:`pandas.to_datetime`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:45
+#: 23e3444600d748e7950a05efff0bda79
+msgid "Defaults to None."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:0
+#: d6c5e1caac604b87aa5a89868775f81a
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:48
+#: 08f0daa6fcff41e793677c058ab6926e
+msgid "[description]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/generic_tasks/index.rst:0
+#: d49871a1744640e5baf3dd3cd3c8e80c
+msgid "Return type"
+msgstr ""

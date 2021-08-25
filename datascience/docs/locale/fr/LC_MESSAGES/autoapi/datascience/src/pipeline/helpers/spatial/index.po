@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:2
+#: 3f1ec8298a5d40d19ac26d42cb23ba5d
+msgid ":py:mod:`datascience.src.pipeline.helpers.spatial`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:8
+#: 86d480abf1f74920b5dce0dd29d54d8e
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:12
+#: 95afe1a92044428eb6c452e8665a1dcd
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:19:<autosummary>:1
+#: a0a0ef71a7c145ea94b9a596d6f189a6
+msgid ""
+":obj:`estimate_current_position "
+"<datascience.src.pipeline.helpers.spatial.estimate_current_position>`\\ "
+"\\(last\\_latitude\\: float\\, last\\_longitude\\: float\\, course\\: "
+"float\\, speed\\: float\\, time\\_since\\_last\\_position\\: float\\, "
+"max\\_time\\_since\\_last\\_position\\: float \\= 2\\, on\\_error\\: str \\="
+" \\'ignore\\'\\) → Tuple\\[float\\, float\\]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:19:<autosummary>:1
+#: 7fd3236dbb714cfc84a68a2fb52e8514
+msgid ""
+"Estimate the current position of a vessel based on its last position, course"
+" and"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:22
+#: f38eb3a1da6f43e2a7c50d4854152446
+msgid ""
+"Estimate the current position of a vessel based on its last position, course"
+" and speed. If the last position is older than max_time_since_last_position,"
+" returns None."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
+#: c6026da8527248349b60cc05ed89a060
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:26
+#: 9ba0f7a5124749cebcb7a42ae915146a
+msgid "last known latitude of vessel"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:28
+#: 9bf854128bfb4e5c87a400a390a2b4b9
+msgid "last known longitude of vessel"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:30
+#: fc3dd12071044ac0b337a6760df32849
+msgid "last known route of vessel in degrees"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:32
+#: d3e277c79de74f30a1db3aa39c05e83c
+msgid "last known speed of vessel in nots"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:34
+#: 9a9f98d939c1495f9afad7d2f1565a76
+msgid "time since last known position of vessel, in hours"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:36
+#: 7e41ce336b3742fdad571faf7e9fb745
+msgid ""
+"maximum time in hours since last position, after which the estimation is not"
+" performed (returns None instead). Defaults to 2."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:40
+#: 0f5187fe82e9485a84c2b2ba72aec8a6
+msgid "'ignore' or 'raise'."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
+#: 5fa7c6b174454ae2a38160c59f484dcb
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:43
+#: 93609f029de74239bd014b1ddab5940f
+msgid "estimated current latitude float: estimated current longitude"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/helpers/spatial/index.rst:0
+#: 5078d8fc4e454bec9a21c398f12ef26b
+msgid "Return type"
+msgstr ""

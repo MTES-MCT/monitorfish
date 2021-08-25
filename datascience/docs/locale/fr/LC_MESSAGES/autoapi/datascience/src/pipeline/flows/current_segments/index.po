@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:2
+#: 18e98f09f15244b5a411fa3dc3a058de
+msgid ":py:mod:`datascience.src.pipeline.flows.current_segments`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:8
+#: bfe854421c0e49bc97d213b9f6a6bb1e
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:12
+#: c690078eb785434c9ae3938954afe19d
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 078fcd1df09746a19c46a59a316089da
+msgid ""
+":obj:`catch_zone_isin_fao_area "
+"<datascience.src.pipeline.flows.current_segments.catch_zone_isin_fao_area>`\\"
+" \\(catch\\_zone\\: Union\\[None\\, str\\]\\, fao\\_area\\: Union\\[None\\, "
+"str\\]\\) → bool"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 68faad8d9ddb49c9befec5231c18f513
+msgid "Return"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 5f9861ad71b54e1d8dd4693ed48ccb76
+msgid ""
+":obj:`extract_catches "
+"<datascience.src.pipeline.flows.current_segments.extract_catches>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 92a652972bfe4a19aa1ae23cb8c9c018
+msgid ""
+":obj:`extract_segments "
+"<datascience.src.pipeline.flows.current_segments.extract_segments>`\\ \\(\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: abb76099048b406d96325d5b3ea32e5d
+msgid ""
+":obj:`unnest <datascience.src.pipeline.flows.current_segments.unnest>`\\ "
+"\\(segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 73e8329f43b74996bf95e9b2fca33098
+msgid ""
+":obj:`compute_current_segments "
+"<datascience.src.pipeline.flows.current_segments.compute_current_segments>`\\"
+" \\(catches\\, segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: f7c9c5ebd7aa4cbaa155b293601b19c2
+msgid ""
+":obj:`merge_segments_catches "
+"<datascience.src.pipeline.flows.current_segments.merge_segments_catches>`\\ "
+"\\(catches\\, current\\_segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:25:<autosummary>:1
+#: 447520926e794159bbacd08ece8a6e6b
+msgid ""
+":obj:`load_current_segments "
+"<datascience.src.pipeline.flows.current_segments.load_current_segments>`\\ "
+"\\(vessels\\_segments\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:27
+#: 12b752345f0449ad8ac03e3ea61493d3
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:33:<autosummary>:1
+#: 080d670f84734c1589881ef56c714c98
+msgid ""
+":obj:`catches <datascience.src.pipeline.flows.current_segments.catches>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/current_segments/index.rst:36
+#: 6224c5e197004afd962015a9a6eaef54
+msgid ""
+"Return - True if a catch zone (e.g. '27.7.b') is in a given fao_area (e.g. "
+"'27.7.b' or '27') - False if a catch zone (e.g. '27.7.b') is NOT in a given "
+"fao_area (e.g. '28.6' or '27.7.b.4') - True if the fao_area if None "
+"(whatever the value of the catch_zone) - False if the fao_area is not None "
+"and the catch_zone is None"
+msgstr ""

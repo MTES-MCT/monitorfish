@@ -49,6 +49,6 @@ export const Delimiter = styled.div`
 export const Link = styled.a`
 color: #0A18DF;
 font-size: 13px;
-padding: 2.5px;
+padding: 0px 8px;
 cursor: pointer;
 `

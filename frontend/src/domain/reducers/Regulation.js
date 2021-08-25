@@ -4,9 +4,9 @@ const regulationSlice = createSlice({
   name: 'regulation',
   initialState: {
     /** @type {RegulatoryText} selectedRegulation */
-    selectedRegulation: null,
+    selectedRegulation: undefined,
     /** @type {UpcomingRegulation} selectedUpcomingRegulation */
-    selectedUpcomingRegulation: null,
+    upcomingRegulation: undefined,
     /** @type {boolean} isModalOpen */
     isModalOpen: false
   },
@@ -17,18 +17,14 @@ const regulationSlice = createSlice({
     setIsModalOpen (state, action) {
       state.isModalOpen = action.payload
     },
-    setSelectedUpcomingRegulation (state, action) {
-      state.selectedUpcomingRegulation = action.payload
+    setUpcomingRegulation (state, action) {
+      state.upcomingRegulation = action.payload
     },
     resetModal (state) {
       state.isModalOpen = false
-      state.selectedUpcomingRegulation = null
     },
     openModal (state, action) {
-      console.log('action.payload')
-      console.log(action.payload)
       state.isModalOpen = true
-      state.selectedUpcomingRegulation = action.payload
     }
   }
 })
@@ -36,7 +32,7 @@ const regulationSlice = createSlice({
 export const {
   setSelectedRegulation,
   setIsModalOpen,
-  setSelectedUpcomingRegulation,
+  setUpcomingRegulation,
   resetModal,
   openModal
 } = regulationSlice.actions

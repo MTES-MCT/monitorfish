@@ -2,26 +2,29 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../components/icons/Chevron_simple_gris.svg'
-import getAllRegulatoryZonesByRegTerritory from '../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
-import RegulationBlocLine from '../components/backoffice/create_regulation/RegulationBlocLine'
-import RegulationZoneThemeLine from '../components/backoffice/create_regulation/RegulationZoneThemeLine'
-import RegulationRegionLine from '../components/backoffice/create_regulation/RegulationRegionLine'
-import RegulationZoneNameLine from '../components/backoffice/create_regulation/RegulationZoneNameLine'
-import RegulationSeaFrontLine from '../components/backoffice/create_regulation/RegulationSeaFrontLine'
-import RegulatoryTextSection from '../components/backoffice/create_regulation/RegulatoryTextSection'
-import UpcomingRegulationModal from '../components/backoffice/create_regulation/UpcomingRegulationModal'
-import { formatDataForSelectPicker } from '../utils'
-import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
-import { Section, SectionTitle, Footer, FooterButton } from '../components/commonStyles/Backoffice.style'
-import { setSelectedRegulation } from '../domain/reducers/Regulation'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
+import {
+  RegulationBlocLine,
+  RegulationZoneThemeLine,
+  RegulationRegionLine,
+  RegulationZoneNameLine,
+  RegulationSeaFrontLine,
+  RegulatoryTextSection,
+  UpcomingRegulationModal
+} from './'
+
+import { formatDataForSelectPicker } from '../../../utils'
+import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
+import { Section, SectionTitle, Footer, FooterButton } from '../../commonStyles/Backoffice.style'
+import { setSelectedRegulation } from '../../../domain/shared_slices/Regulation'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
   const {
-    regulationBlocArray,
-    zoneThemeArray,
-    seaFrontArray
+    regulatoryTopics,
+    regulatoryLawTypes,
+    seaFronts
   } = useSelector(state => state.regulatory)
 
   const { isModalOpen } = useSelector(state => state.regulation)
@@ -42,8 +45,8 @@ const CreateRegulation = () => {
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
 
   useEffect(() => {
-    if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
-      dispatch(getAllRegulatoryZonesByRegTerritory())
+    if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
+      dispatch(getAllRegulatoryLayersByRegTerritory())
     }
     const newRegulation = {
       regulatoryText: [{}],
@@ -77,14 +80,14 @@ const CreateRegulation = () => {
             <RegulationBlocLine
               setSelectedValue={setSelectedReglementationBloc}
               selectedValue={selectedReglementationBloc}
-              selectData={formatDataForSelectPicker(regulationBlocArray)}
+              selectData={formatDataForSelectPicker(regulatoryTopics)}
               reglementationBlocName={reglementationBlocName}
               setReglementationBlocName={setReglementationBlocName}
             />
             <RegulationZoneThemeLine
               selectedReglementationTheme={selectedReglementationTheme}
               setSelectedReglementationTheme={setSelectedReglementationTheme}
-              zoneThemeList={formatDataForSelectPicker(zoneThemeArray)}
+              zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
             />
             <RegulationZoneNameLine
               nameZone={nameZone}
@@ -93,7 +96,7 @@ const CreateRegulation = () => {
             <RegulationSeaFrontLine
               selectedSeaFront={selectedSeaFront}
               setSelectedSeaFront={setSelectedSeaFront}
-              seaFrontList={formatDataForSelectPicker(seaFrontArray)}
+              seaFrontList={formatDataForSelectPicker(seaFronts)}
             />
             <RegulationRegionLine
               setSelectedRegionList={setSelectedRegionList}

@@ -16,7 +16,7 @@ import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader
 import RightMenuOnHoverArea from './features/vessel_sidebar/RightMenuOnHoverArea'
 import Measurement from './features/measurements/Measurement'
 import VesselFilters from './features/vessel_filters/VesselFilters'
-import CreateRegulation from './features/backoffice/create_regulation/CreateRegulation'
+import NewRegulation from './features/backoffice/create_regulation/NewRegulation'
 import { ReactComponent as AlertSVG } from './features/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
 import { backofficeStore, homeStore } from './Store'
@@ -96,7 +96,7 @@ function BackofficePage () {
         </BackofficeWrapper>
         </Route>
         <Route path={`${match.path}/newRegulation`}>
-          <CreateRegulation />
+          <NewRegulation />
         </Route>
       </Switch>
     </NamespaceContext.Provider>

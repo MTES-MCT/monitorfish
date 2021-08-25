@@ -1,259 +1,183 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import BaseMap from './../../map/BaseMap'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
+import { COLORS } from '../../../constants/constants'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import getAllRegulatoryZonesByRegTerritory from '../../domain/use_cases/getAllRegulatoryZonesByRegTerritory'
 import {
   RegulationBlocLine,
   RegulationZoneThemeLine,
   RegulationRegionLine,
   RegulationZoneNameLine,
   RegulationSeaFrontLine,
-  RegulationGeometryLine
-} from './index'
-import { COLORS } from '../../../constants/constants'
-import { formatDataForSelectPicker } from '../../../utils'
-import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
-import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
-import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label, CustomInput } from '../../commonStyles/Input.style'
-import { ValidateButton, CancelButton } from '../..//commonStyles/Buttons.style'
+  RegulatoryTextSection,
+  UpcomingRegulationModal
+} from './'
 
-import { Checkbox } from 'rsuite'
+import { formatDataForSelectPicker } from '../../../utils'
+import { ValidateButton, CancelButton } from '../commonStyles/Buttons.style'
+import { Section, SectionTitle, Footer, FooterButton } from '../commonStyles/Backoffice.style'
+import { setSelectedRegulation } from '../../../domain/shared_slices/Regulation'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
   const {
-    regulatoryLawTypes,
     regulatoryTopics,
+    regulatoryLawTypes,
     seaFronts
   } = useSelector(state => state.regulatory)
 
-  const [geometryObjectList, setGeometryObjectList] = useState()
-  const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
-  const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
-  const [nameZone, setNameZone] = useState()
-  const [selectedSeaFront, setSelectedSeaFront] = useState()
-  const [selectedRegionList, setSelectedRegionList] = useState([])
-  const [reglementationBlocName, setReglementationBlocName] = useState('')
-  const [selectedGeometry, setSelectedGeometry] = useState()
-  const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
-  const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
+  const { isModalOpen } = useSelector(state => state.regulation)
 
-  const [regulationText, setRegulatonText] = useState('')
-  const [regulationTextURL, setRegulationTextURL] = useState('')
+  /** @type {String} */
+  const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
+  /** @type {String} */
+  const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
+  /** @type {String} */
+  const [nameZone, setNameZone] = useState()
+  /** @type {String} */
+  const [selectedSeaFront, setSelectedSeaFront] = useState()
+  /** @type {[String]} */
+  const [selectedRegionList, setSelectedRegionList] = useState([])
+  /** @type {String} */
+  const [reglementationBlocName, setReglementationBlocName] = useState('')
+  /** @type {[regulatoryText]} */
+  const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
 
   useEffect(() => {
-    if (regulatoryLawTypes && regulatoryTopics && seaFronts) {
-      dispatch(getAllRegulatoryLayersByRegTerritory())
+    if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
+      dispatch(getAllRegulatoryZonesByRegTerritory())
     }
-    getGeometryObjectList()
+    const newRegulation = {
+      regulatoryText: [{}],
+      upcomingRegulation: [{}]
+    }
+    dispatch(setSelectedRegulation(newRegulation))
   }, [])
 
-  useEffect(() => {
-    if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
-      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry]))
-    }
-  }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
-
-  const getGeometryObjectList = () => {
-    dispatch(getGeometryWithoutRegulationReference())
-      .then(geometryListAsObject => {
-        if (geometryListAsObject !== undefined) {
-          setGeometryObjectList(geometryListAsObject)
-        }
-      })
+  const createRegulation = () => {
+    console.log('createRegulation')
   }
 
-  const addNewRegulationText = () => {
-    console.log('que faire quand on valide ?')
-  }
-
-  const cancelAddNewRegulationText = () => {
-    console.log('que faire quand on annule ?')
-  }
-
-  const addRegRefEnVigueur = () => {
-    console.log('ajout en vigueur')
-  }
-
-  const addRegRefAVenir = () => {
-    console.log('addRegRefAVenir')
+  const saveAsDraft = () => {
+    console.log('saveAsDraft')
   }
 
   return (
-    <Wrapper>
+    <>
     <CreateRegulationWrapper>
-      <Header>
-        <Title>Saisir une nouvelle réglementation</Title>
-        <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
-      </Header>
-      <Content>
-        <Section>
-          <SectionTitle>
-            identification de la zone réglementaire
-          </SectionTitle>
-          <RegulationBlocLine
-            setSelectedValue={setSelectedReglementationBloc}
-            selectedValue={selectedReglementationBloc}
-            selectData={formatDataForSelectPicker(regulatoryLawTypes)}
-            reglementationBlocName={reglementationBlocName}
-            setReglementationBlocName={setReglementationBlocName}
+      <Body>
+        <Header>
+          <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
+          <Title>Saisir une nouvelle réglementation</Title>
+          <Span />
+        </Header>
+        <Content>
+          <Section>
+            <SectionTitle>
+              identification de la zone réglementaire
+            </SectionTitle>
+            <RegulationBlocLine
+              setSelectedValue={setSelectedReglementationBloc}
+              selectedValue={selectedReglementationBloc}
+              selectData={formatDataForSelectPicker(regulatoryTopics)}
+              reglementationBlocName={reglementationBlocName}
+              setReglementationBlocName={setReglementationBlocName}
+            />
+            <RegulationZoneThemeLine
+              selectedReglementationTheme={selectedReglementationTheme}
+              setSelectedReglementationTheme={setSelectedReglementationTheme}
+              zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
+            />
+            <RegulationZoneNameLine
+              nameZone={nameZone}
+              setNameZone={setNameZone}
+            />
+            <RegulationSeaFrontLine
+              selectedSeaFront={selectedSeaFront}
+              setSelectedSeaFront={setSelectedSeaFront}
+              seaFrontList={formatDataForSelectPicker(seaFronts)}
+            />
+            <RegulationRegionLine
+              setSelectedRegionList={setSelectedRegionList}
+              selectedRegionList={selectedRegionList}
+            />
+          </Section>
+        </Content>
+        <Content>
+          <RegulatoryTextSection
+            regulatoryTextList={regulatoryTextList}
+            setRegulatoryTextList={setRegulatoryTextList}
+            source={'regulation'}
           />
-          <RegulationZoneThemeLine
-            selectedReglementationTheme={selectedReglementationTheme}
-            setSelectedReglementationTheme={setSelectedReglementationTheme}
-            zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
-          />
-          <RegulationZoneNameLine
-            nameZone={nameZone}
-            setNameZone={setNameZone}
-          />
-          <RegulationSeaFrontLine
-            selectedSeaFront={selectedSeaFront}
-            setSelectedSeaFront={setSelectedSeaFront}
-            seaFrontList={formatDataForSelectPicker(seaFronts)}
-          />
-          <RegulationRegionLine
-            setSelectedRegionList={setSelectedRegionList}
-            selectedRegionList={selectedRegionList}
-          />
-          <RegulationGeometryLine
-            setSelectedGeometry={setSelectedGeometry}
-            geometryIdList={geometryIdList}
-            selectedGeometry={selectedGeometry}
-            setShowRegulatoryPreview={setShowRegulatoryPreview}
-            showRegulatoryPreview={showRegulatoryPreview}
-          />
-        </Section>
-      </Content>
-      <Content>
-        <Section>
-          <SectionTitle>
-            référenceS réglementaireS en vigueur
-          </SectionTitle>
-        </Section>
-        <ContentLine>
-          <Label>Texte réglementaire 1</Label>
-          <CustomInput
-            placeholder='Nom'
-            value={regulationText}
-            onChange={setRegulatonText}
-          />
-          <CustomInput
-            placeholder='URL'
-            value={regulationTextURL}
-            onChange={setRegulationTextURL}
-          />
+        </Content>
+      </Body>
+      <Footer>
+        <FooterButton>
           <ValidateButton
             disabled={false}
             isLast={false}
-            onClick={addNewRegulationText}>
-            Enregistrer
+            onClick={createRegulation}
+          >
+            Créer la réglementation
           </ValidateButton>
           <CancelButton
             disabled={false}
             isLast={false}
-            onClick={cancelAddNewRegulationText}>
-            Annuler
+            onClick={saveAsDraft}
+          >
+            Enregistrer un brouillon
           </CancelButton>
-        </ContentLine>
-        <ContentLine>
-          <Label>Type de texte</Label>
-          <Checkbox>création de la zone</Checkbox>
-          <Checkbox>réglementation de la zone</Checkbox>
-        </ContentLine>
-        <ContentLine>
-          <Label>Début de validité</Label>
-        </ContentLine>
-        <ContentLine>
-          <Label>Fin de validité</Label>
-        </ContentLine>
-        <BottomLine>
-          <ValidyDateLine>
-            <ValidityDate>{'Valide du 01/03/2021 au 31/06/2021.'}</ValidityDate>
-          </ValidyDateLine>
-          <ButtonLine>
-            <ValidateButton
-              disabled={false}
-              isLast={false}
-              onClick={addRegRefEnVigueur}>
-              Ajouter une référence reg. en vigueur
-            </ValidateButton>
-            <CancelButton
-              disabled={false}
-              isLast={false}
-              onClick={addRegRefAVenir}>
-              Ajouter une référence reg. à venir
-            </CancelButton>
-          </ButtonLine>
-        </BottomLine>
-      </Content>
+        </FooterButton>
+      </Footer>
     </CreateRegulationWrapper>
-    { showRegulatoryPreview && <BaseMap />}
-    </Wrapper>
+    {isModalOpen && <UpcomingRegulationModal />}
+    </>
   )
 }
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`
-const BottomLine = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const ValidityDate = styled.span`
-  font-size: 13px;
-`
-
-const ButtonLine = styled.div`
-  display: flex;
-  flex-direction: row;
-`
-
-const ValidyDateLine = styled.div`
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 483px;
-  background-color: ${COLORS.grayBackground};
+const Body = styled.div`
+  height: calc(100vh - 75px);
+  overflow-y: scroll;
 `
 
 const Header = styled.div`
+  display: flex;
   margin-bottom: 40px;
   margin-top: 20px;
 `
 
 const CreateRegulationWrapper = styled.div`
   display: flex;
-  flex: 2;
   flex-direction: column;
-  height: 100vh;
-  margin: 11px 27px 0px 27px;
+  padding: 11px 27px 11px 27px;
+  background-color: ${COLORS.background};
 `
 
 const LinkSpan = styled.span`
   display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-start;
   cursor: pointer;
+`
+
+const Span = styled.span`
+  flex: 1;
 `
 
 const Link = styled.a`
   text-decoration: underline;
   font: normal normal normal 13px;
   letter-spacing: 0px;
-  color: ${COLORS.gunMetal};
+  color: ${COLORS.textGray};
 `
 const Title = styled.span`
-  text-align: left;
+  text-align: center;
   font-weight: bold;
   font-size: 16px;
-  color: ${COLORS.gunMetal};
+  color: ${COLORS.textGray};
   text-transform: uppercase;
-  left: 50%;
-  position: relative;
-  margin-left: -168px;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
@@ -266,20 +190,6 @@ const ChevronIcon = styled(ChevronIconSVG)`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-`
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-const SectionTitle = styled.span`
-  text-align: left;
-  font-weight: bold;
-  font-size: 16px;
-  color: ${COLORS.gunMetal};
-  text-transform: uppercase;
-  width: 100%;
-  border-bottom: 1px solid ${COLORS.lightGray};
-  margin-bottom: 20px;
 `
 
 export default CreateRegulation

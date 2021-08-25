@@ -23,11 +23,12 @@ const Tag = props => {
   </TagWrapper>
 }
 
+// TODO Revoir la couleur
 const TagWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${COLORS.grayBackground};
+  background-color: ${COLORS.gainsboro};
   border-radius: 2px;
   margin-right: 8px;
 `

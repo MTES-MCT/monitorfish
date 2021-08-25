@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../constants/constants'
 import { Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
-import RegulatoryText from '../RegulatoryText'
+import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { addTextToRegulatoryTextList } from '../../../utils'
-import { openModal } from '../../../domain/reducers/Regulation'
+import { openModal } from '../../../domain/shared_slices/Regulation'
 
 /**
  * @typedef {object} Props

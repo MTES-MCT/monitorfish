@@ -4,7 +4,9 @@ import RegulationRegionLine from './RegulationRegionLine'
 import RegulationZoneNameLine from './RegulationZoneNameLine'
 import RegulationSeaFrontLine from './RegulationSeaFrontLine'
 import RegulationGeometryLine from './RegulationGeometryLine'
-import RegulationText from './RegulationText'
+import RegulatoryText from './RegulatoryText'
+import RegulatoryTextSection from './RegulatoryTextSection'
+import UpcomingRegulationModal from './UpcomingRegulationModal'
 
 export {
   RegulationBlocLine,
@@ -13,5 +15,7 @@ export {
   RegulationZoneNameLine,
   RegulationSeaFrontLine,
   RegulationGeometryLine,
-  RegulationText
+  RegulatoryText,
+  RegulatoryTextSection,
+  UpcomingRegulationModal
 }

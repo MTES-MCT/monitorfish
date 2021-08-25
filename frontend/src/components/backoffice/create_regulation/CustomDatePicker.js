@@ -12,7 +12,7 @@ const CustomDatePicker = props => {
     format
   } = props
   return <DatePickerStyled
-    isRequired={isRequired}
+    $isrequired={isRequired}
     value={value}
     onChange={onChange}
     onOk={onOk}
@@ -44,7 +44,7 @@ const DatePickerStyled = styled(DatePicker)`
     display: none;
   }
   .rs-picker-toggle {
-    border: 1px solid ${props => props.isRequired ? COLORS.red : COLORS.grayDarker}  !important;
+    border: 1px solid ${props => props.isrequired ? COLORS.red : COLORS.grayDarker}  !important;
     box-sizing: border-box;
   }
   .rs-picker-toggle.rs-btn {

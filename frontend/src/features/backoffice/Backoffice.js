@@ -8,10 +8,10 @@ import RegulatoryLayerZoneMetadata from '../layers/regulatory/RegulatoryLayerZon
 import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import getAllGearCodes from '../../domain/use_cases/getAllGearCodes'
 import { COLORS } from '../../constants/constants'
-import { WhiteButton } from '../commonStyles/Buttons.style'
 import { EmptyResult } from '../commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../../domain/entities/regulatory'
+import { SecondaryButton } from '../components/commonStyles/Buttons.style'
 
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
@@ -84,9 +84,9 @@ const Backoffice = () => {
             regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
           />
           <ButtonList>
-            <WhiteButton>Brouillon (X)</WhiteButton>
-            <WhiteButton>Tracé en attente (X)</WhiteButton>
-            <WhiteButton disabled>Dernière publications (X)</WhiteButton>
+            <SecondaryButton>Brouillon (X)</SecondaryButton>
+            <SecondaryButton>Tracé en attente (X)</SecondaryButton>
+            <SecondaryButton disabled>Dernière publications (X)</SecondaryButton>
           </ButtonList>
           {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
             ? displaySearchResultList()

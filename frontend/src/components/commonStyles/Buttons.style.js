@@ -2,11 +2,11 @@ import { COLORS } from '../../constants/constants'
 import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
-const baseBlackButton = css`
-  background: ${COLORS.grayDarkerThree};
-  color: ${COLORS.grayBackground};
+const basePrimaryButton = css`
+  background: #3B4559;
+  color: #E5E5EB;
   :hover, :focus {
-    background: ${COLORS.grayDarkerThree};
+    background: #3B4559;
   }
   :disabled {
     border: 1px solid ${COLORS.grayDarker};
@@ -15,13 +15,12 @@ const baseBlackButton = css`
   }
 `
 
-const baseWhiteButton = css`
-// 1 px en #D6D6D6
-  border: 1px solid ${COLORS.grayDarkerThree};
-  color: ${COLORS.grayDarkerThree};
+const baseSecondaryButton = css`
+  border: 1px solid #3B4559;
+  color: #3B4559;
   :disabled {
-    border: 1px solid ${COLORS.grayDarker};
-    color: ${COLORS.textGray};
+    border: 1px solid #CCCFD6;
+    color: #CCCFD6;
   }
 `
 
@@ -37,23 +36,23 @@ const BackofficeButton = styled.button`
   margin: 15px ${props => props.isLast ? '20px' : '0'} 15px 10px;
 `
 
-export const BlackButton = styled(Button)`
-  ${baseBlackButton}
+export const PrimaryButton = styled(Button)`
+  ${basePrimaryButton}
 `
 
-export const WhiteButton = styled(Button)`
-  ${baseWhiteButton}
+export const SecondaryButton = styled(Button)`
+  ${baseSecondaryButton}
 `
 
-export const BackofficeWhiteButton = styled(BackofficeButton)`
-  ${baseWhiteButton}
+export const BackofficeSecondaryButton = styled(BackofficeButton)`
+  ${baseSecondaryButton}
 `
 
 const baseAddButton = css`
   position: relative;
-  border: 1px solid ${COLORS.grayDarker};
+  border: 1px solid #3B4559;
   border-radius: 2px;
-  color: ${COLORS.grayDarker};
+  color: #E5E5EB;
   &:after {
     content: "";  
     display: block;
@@ -81,7 +80,7 @@ export const AddRegulationButton = styled(Link)`
   min-width: 40px;
   min-height: 40px;
   && {
-    background-color: ${COLORS.grayDarkerThree};
+    background-color: #3B4559;
   }
   &:after {
     background-color: ${COLORS.white};
@@ -91,11 +90,11 @@ export const AddRegulationButton = styled(Link)`
   }
 `
 
-export const ValidateButton = styled(BlackButton)`
+export const ValidateButton = styled(PrimaryButton)`
   margin: 0px 10px 0px 0px;
 `
 
-export const CancelButton = styled(WhiteButton)`
+export const CancelButton = styled(SecondaryButton)`
   margin: 0px 10px 0px 0px;
 `
 

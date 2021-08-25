@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/controls.rst:3
+#: 21ea3280d04641c6b8287985905ded0b
+msgid "Controls"
+msgstr ""
+
+#: ../source/flows/controls.rst:5
+#: 66981795e5c04f478142bbd27b73ac24
+msgid "The ``controls`` flow extracts all controls data from the FMC2 database and inserts the data into the ``controls`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/controls.rst:8
+#: dc311a49540c4482b9c5150f0cc94e7d
+msgid "It is scheduled to run 10 minutes."
+msgstr ""

@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/deployment.rst:3
+#: a469ee8bd44b430d964d687568903d48
+msgid "Deployment"
+msgstr ""
+
+#: ../source/deployment.rst:6
+#: 41c832a7029b4eb8a1fcc3c0cc969807
+msgid "Prerequisites"
+msgstr ""
+
+#: ../source/deployment.rst:9
+#: 5b2cb8bd00334d3c84adad01d9a84912
+msgid "Dependencies"
+msgstr ""
+
+#: ../source/deployment.rst:11
+#: bd3c0f6601f246428a203541ec87613d
+msgid "The following dependencies must be installed on the production machine :"
+msgstr ""
+
+#: ../source/deployment.rst:13
+#: 8f2e4d7928f345d6a846c34eb0674d32
+msgid "`git <https://git-scm.com/>`__"
+msgstr ""
+
+#: ../source/deployment.rst:14
+#: a6dec34cfe8e494986fb622085c3e84b
+msgid "`docker <https://docs.docker.com/get-docker/>`__"
+msgstr ""
+
+#: ../source/deployment.rst:15
+#: 364ecde2fc934fb5876bf90074338a0a
+msgid "`make <https://www.gnu.org/software/make/>`__"
+msgstr ""
+
+#: ../source/deployment.rst:18
+#: bced2dbb027e4568bbfce515a0e81ea8
+msgid "Configuration"
+msgstr ""
+
+#: ../source/deployment.rst:21
+#: 7f33e7db223b46c89fa67fa7a39c7955
+msgid "Cloning the repository"
+msgstr ""
+
+#: ../source/deployment.rst:23
+#: 0b370f92fbad4ea9b0f859a828efeae0
+msgid "Clone the repo with :"
+msgstr ""
+
+#: ../source/deployment.rst:32
+#: a861d84c16f44946b0a774cf863ef6c3
+msgid "Environment variables"
+msgstr ""
+
+#: ../source/deployment.rst:34
+#: 5430e26a5386428d83a83d6c8f38aaba
+msgid "A ``.env`` file must be created in the ``datascience`` folder, with all the variables listed in ``.env.template`` filled in."
+msgstr ""
+
+#: ../source/deployment.rst:35
+#: 0029cdb020184b84995479bc4fb75ec1
+msgid "Set the ``MONITORFISH_VERSION`` environment variable. This will determine which docker images to pull when running ```make`` commands."
+msgstr ""
+
+#: ../source/deployment.rst:38
+#: 95aa81e03b7d48cea6c8a329d764b287
+msgid "ERS files"
+msgstr ""
+
+#: ../source/deployment.rst:40
+#: f8448faf88f4443f8cde74701a514b8c
+msgid "ERS raw xml files are ingested by the ERS flow from the configured ``ERS_FILES_LOCATION`` in ``datascience/config.py``. In order to make ERS data available to Monitorfish, ERS files should therefore be deposited in this directory."
+msgstr ""
+
+#: ../source/deployment.rst:44
+#: 48ca5b6874074d668273b897c98f00d9
+msgid "Running the database service"
+msgstr ""
+
+#: ../source/deployment.rst:46
+#: 16399d29543f49e485a12ffbe2202c99
+msgid "The Monitorfish database must be running for data processing operations to be carried out. For this, run the backend service first."
+msgstr ""
+
+#: ../source/deployment.rst:49
+#: 9efa4a35fa004fcaaadc5ebea28381d3
+msgid "Running the orchestration service"
+msgstr ""
+
+#: ../source/deployment.rst:51
+#: d869a54a95f942e8babd551d9a82167f
+msgid "The orchestration service can be started with :"
+msgstr ""
+
+#: ../source/deployment.rst:59
+#: eebc600719524e148610174ead696bea
+msgid "Running the execution service"
+msgstr ""
+
+#: ../source/deployment.rst:61
+#: 7c58a51c30f24c1bb222694dc6addc86
+msgid "The execution service can be started with :"
+msgstr ""

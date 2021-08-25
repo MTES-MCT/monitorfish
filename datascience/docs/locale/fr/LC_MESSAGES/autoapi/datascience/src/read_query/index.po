@@ -1,0 +1,212 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:2
+#: 9776bfbbacbf485a9f2bd4521c7196ac
+msgid ":py:mod:`datascience.src.read_query`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:8
+#: c541be075f594daab05ddd7d945e6cbf
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:12
+#: 3d1a4dad89b943c6a0dd456271c2ef35
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
+#: 4568b1d203a04501b25c085024d4f073
+msgid ""
+":obj:`read_saved_query <datascience.src.read_query.read_saved_query>`\\ "
+"\\(db\\: str\\, sql\\_filepath\\: Union\\[str\\, pathlib.Path\\]\\, "
+"parse\\_dates\\: Union\\[list\\, dict\\, None\\] \\= None\\, "
+"params\\=None\\, \\*\\*kwargs\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
+#: 863e8d63f1b148499b1e1886b940f61b
+msgid "Run saved SQLquery on a database. Supported databases :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
+#: eccd99845d774e71ac8e5622b0433f68
+msgid ""
+":obj:`read_query <datascience.src.read_query.read_query>`\\ \\(db\\: str\\, "
+"query\\, chunksize\\: Union\\[None\\, str\\] \\= None\\, params\\=None\\, "
+"\\*\\*kwargs\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
+#: d24b36f4312c47a1bf1694cd4f8ec75e
+msgid "Run SQLquery on a database. Supported databases :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
+#: cd4903d2dc8142f6a434aad3ff572f11
+msgid ""
+":obj:`read_table <datascience.src.read_query.read_table>`\\ \\(db\\: str\\, "
+"schema\\: str\\, table\\_name\\: str\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:21:<autosummary>:1
+#: ef914f99c2f94699acb21eccddad27c2
+msgid "Loads database table into pandas Dataframe. Supported databases :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:24
+#: 9f79ddf8ca4a40ed8566223ee8578c81
+msgid ""
+"Run saved SQLquery on a database. Supported databases : - 'ocan' : OCAN "
+"database - 'fmc': FMC database - 'monitorfish_remote': Monitorfish database "
+"- 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP - "
+"'cacem_local' : CACEM PostGIS database hosted in CNSP"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:31
+#: ../source/autoapi/datascience/src/read_query/index.rst:63
+#: 17ff7546e1824d0cb5131ae9941731d1 2003ae6d241848c0ac46f52584edbdc5
+msgid "Database credentials must be present in the environement."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: 3c5139443df544638a9c40f17dd55e9e 9c06664eb28d4882b7039737da84b102
+#: a78fc822f2bb46ed9804f3df3ffb572a
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:33
+#: ../source/autoapi/datascience/src/read_query/index.rst:65
+#: ../source/autoapi/datascience/src/read_query/index.rst:85
+#: a37ec211ea824f21b343cb25dadbb177 3e9f64e2ef904734a97d80649eaa1ece
+#: 679189ce2970435692086186bde816c7
+msgid ""
+"Database name. Possible values : 'ocan', 'fmc', 'monitorfish_remote', "
+"'monitorfish_local'"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:36
+#: 186d6bb864de4dbdaa997b88acb82f7f
+msgid ""
+"path to .sql file, starting from the saved queries folder. example : "
+"\"ocan/nav_fr_peche.sql\""
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:39
+#: 163209b283224aa28356d817fd772847
+msgid ""
+"- List of column names to parse as dates. - Dict of ``{column_name: format "
+"string}`` where format string is strftime compatible in case of parsing "
+"string times or is one of (D, s, ns, ms, us) in case of parsing integer "
+"timestamps. - Dict of ``{column_name: arg dict}``, where the arg dict "
+"corresponds to the keyword arguments of :func:`pandas.to_datetime`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:40
+#: c803c5cac9744834885d70e8e7a55aa8
+msgid "List of column names to parse as dates."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:41
+#: 303c438068c64b7e8cb93e96faaaf989
+msgid "Dict of ``{column_name: format string}`` where format string is"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:42
+#: 4d6d020016d4425f9f9f9ada6635708a
+msgid ""
+"strftime compatible in case of parsing string times or is one of (D, s, ns, "
+"ms, us) in case of parsing integer timestamps. - Dict of ``{column_name: arg"
+" dict}``, where the arg dict corresponds to the keyword arguments of "
+":func:`pandas.to_datetime`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:47
+#: f97ace4584f04c2ba0ae33946bba7ab4
+msgid "dict of query parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:48
+#: ../source/autoapi/datascience/src/read_query/index.rst:70
+#: 2734738d55ce4bd2889a5e9e9e25c89e 004cab0722184b18a5ef0b2de29246e1
+msgid "passed to pd.read_sql"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: d4b6a46c17104cd58315d50326651874 50aa92b7a56944589fc19d9060240c23
+#: 3533cb301c224430a74159cdded8fe16
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:50
+#: ../source/autoapi/datascience/src/read_query/index.rst:72
+#: 9e98e69a96cb4037acd749bb60299d0e 783a9f533af34e1d9fe6be7b28c695ff
+msgid "Query results"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: ../source/autoapi/datascience/src/read_query/index.rst:0
+#: b801977ee79f4f0e91e610ffefdd138f 53880a242607463798d773f34bce6782
+#: 0caf6761934449139cd02d1038f0cfb8
+msgid "Return type"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:56
+#: 012c77a7a2a344fb976d178314610831
+msgid ""
+"Run SQLquery on a database. Supported databases : - 'ocan' : OCAN database -"
+" 'fmc': FMC database - 'monitorfish_remote': Monitorfish database - "
+"'monitorfish_local': Monitorfish PostGIS database hosted in CNSP - "
+"'cacem_local' : CACEM PostGIS database hosted in CNSP"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:68
+#: fd8c620d7b674c169156466db59bf99a
+msgid "Query string or SQLAlchemy Selectable"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:78
+#: 2d08d0de4a70405ea5f2d0f2b0be31b2
+msgid ""
+"Loads database table into pandas Dataframe. Supported databases : - 'ocan' :"
+" OCAN database - 'fmc': FMC database - 'monitorfish_remote': Monitorfish "
+"database - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP "
+"- 'cacem_local' : CACEM PostGIS database hosted in CNSP"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:88
+#: 45d063049d204be9b529a27a3be23f06
+msgid "Schema name"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:90
+#: 85dd9d513ca848228bdd845092651412
+msgid "Table name"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/read_query/index.rst:93
+#: c5665af8cd2b47438e651e003bafd4db
+msgid "Dataframe containing the entire table"
+msgstr ""

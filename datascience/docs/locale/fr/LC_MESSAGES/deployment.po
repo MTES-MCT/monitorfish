@@ -1,0 +1,132 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/deployment.rst:3 4bcf6d2f42d840338fd7f8b2f282b362
+msgid "Deployment"
+msgstr "Déploiement"
+
+#: ../source/deployment.rst:6 a618a2bd872640ea95152118848c2bb2
+msgid "Prerequisites"
+msgstr "Prérequis"
+
+#: ../source/deployment.rst:9 9c5076072e734c43ba4acd8f4f836184
+msgid "Dependencies"
+msgstr "Dépendances"
+
+#: ../source/deployment.rst:11 33188e74a2754c4b8f44ffad99475b31
+msgid ""
+"The following dependencies must be installed on the production machine :"
+msgstr ""
+"Les dépendances suivantes doivent être installées sur la machine de "
+"production "
+
+#: ../source/deployment.rst:13 4f4bed42c6264ed78f3bc3333a8ed849
+msgid "`git <https://git-scm.com/>`__"
+msgstr "`git <https://git-scm.com/>`__"
+
+#: ../source/deployment.rst:14 d104bc4ce5ad4c3e9c4f6c50273cc682
+msgid "`docker <https://docs.docker.com/get-docker/>`__"
+msgstr "`docker <https://docs.docker.com/get-docker/>`__"
+
+#: ../source/deployment.rst:15 cfb4f2162fb6478fa07eeb61151681c9
+msgid "`make <https://www.gnu.org/software/make/>`__"
+msgstr "`make <https://www.gnu.org/software/make/>`__"
+
+#: ../source/deployment.rst:18 f56cffaadb0b4c9eb348ca50682875df
+msgid "Configuration"
+msgstr "Configuration"
+
+#: ../source/deployment.rst:21 cf65682aac114a358e94fdf98cfd6611
+msgid "Cloning the repository"
+msgstr "Cloner le dépôt"
+
+#: ../source/deployment.rst:23 a5f2c4cb263b4990ac6129a665a0fc2b
+msgid "Clone the repo with :"
+msgstr "Clonez le dépôt avec :"
+
+#: ../source/deployment.rst:32 22d273a693044a8aa0e53837c1a0e96b
+msgid "Environment variables"
+msgstr "Variables d'environnement"
+
+#: ../source/deployment.rst:34 2ba32e0e48744e658696393dbc42ad3e
+msgid ""
+"A ``.env`` file must be created in the ``datascience`` folder, with all the "
+"variables listed in ``.env.template`` filled in."
+msgstr ""
+"Un fichier ``.env`` doit être créé dans le dossier ``datascience``, avec "
+"toutes les variables listées dans ``.env.template`` remplies."
+
+#: ../source/deployment.rst:35 1472e0898bb14618b31ef412425eae69
+msgid ""
+"Set the ``MONITORFISH_VERSION`` environment variable. This will determine "
+"which docker images to pull when running ```make`` commands."
+msgstr ""
+"Définissez la variable d'environnement ``MONITORFISH_VERSION``. Cela "
+"déterminera les images docker à extraire lors de l'exécution des commandes "
+"``make``"
+
+#: ../source/deployment.rst:38 4a86844d1af44836a0c337ed01dedd75
+msgid "ERS files"
+msgstr "Fichiers ERS"
+
+#: ../source/deployment.rst:40 8c2779072454476c90efe0af6eb77f7e
+msgid ""
+"ERS raw xml files are ingested by the ERS flow from the configured "
+"``ERS_FILES_LOCATION`` in ``datascience/config.py``. In order to make ERS "
+"data available to Monitorfish, ERS files should therefore be deposited in "
+"this directory."
+msgstr ""
+"Les fichiers xml bruts ERS sont ingérés par le flow ERS à partir du "
+"répertoire configuré ``ERS_FILES_LOCATION`` dans ``datascience/config.py``. "
+"Afin de rendre les données ERS disponibles pour Monitorfish, les fichiers "
+"ERS doivent donc être déposés dans ce répertoire."
+
+#: ../source/deployment.rst:44 9abf13be15db429ba54181c1687e93ea
+msgid "Running the database service"
+msgstr "Exécution de la base de données"
+
+#: ../source/deployment.rst:46 813c075b34de4e439a70e97996348465
+msgid ""
+"The Monitorfish database must be running for data processing operations to "
+"be carried out. For this, run the backend service first."
+msgstr ""
+"La base de données Monitorfish doit être en cours d'exécution pour que les "
+"opérations de traitement des données puissent être effectuées. Pour cela, "
+"lancez d'abord le service backend."
+
+#: ../source/deployment.rst:49 1ff43459553a4e17a4182bdbcd2bcd03
+msgid "Running the orchestration service"
+msgstr "Exécution de l'orchestrateur"
+
+#: ../source/deployment.rst:51 eee96df5244a4816a152fd46a40813a5
+msgid "The orchestration service can be started with :"
+msgstr "L'orchestrateur est lancé par la commande suivante :"
+
+#: ../source/deployment.rst:59 b294f3aaaf97403aa643eed7df5db235
+msgid "Running the execution service"
+msgstr "Exécution du service de traitement de données"
+
+#: ../source/deployment.rst:61 3cffd7470b9d49a5a52941622d9d74ef
+msgid "The execution service can be started with :"
+msgstr ""
+"Le service de traitement de données est lancé par la commande suivante :"

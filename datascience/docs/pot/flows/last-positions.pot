@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/last-positions.rst:3
+#: 1346e25c244840f8a8d92323a43c1a74
+msgid "Last Positions"
+msgstr ""
+
+#: ../source/flows/last-positions.rst:5
+#: 16030a81fe7e4469a67c29c0b01af8ad
+msgid "The ``last_positions`` flow extracts"
+msgstr ""
+
+#: ../source/flows/last-positions.rst:7
+#: 733f57791098419e9e0c7f2c910db315
+msgid "the most recent **position** of each vessels from the ``positions`` table"
+msgstr ""
+
+#: ../source/flows/last-positions.rst:8
+#: e5fbc10ce7cb43bfac921cad7fd44506
+msgid "the most recent **control** of each vessels from the ``controls`` table"
+msgstr ""
+
+#: ../source/flows/last-positions.rst:9
+#: 0a753a570d8049d79e1cb6e35ab15e54
+msgid "the current **fleet segments** of each vessel from the ``current_segments`` table"
+msgstr ""
+
+#: ../source/flows/last-positions.rst:11
+#: c461a12854b34727b1eb3d97f2e4a956
+msgid "then joins the results and dumps them in the ``last_positions`` table, which is used by the backend to to display vessels on the map."
+msgstr ""
+
+#: ../source/flows/last-positions.rst:14
+#: beb2d4d1d0d64c8d8f25db478a1db35b
+msgid "It is scheduled to run every minute."
+msgstr ""

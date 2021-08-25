@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/risk-factor.rst:3
+#: d3635aa9f56b4e6f914cc66b6a63a3c2
+msgid "Risk factor"
+msgstr ""
+
+#: ../source/flows/risk-factor.rst:5
+#: f9d819c45a9444aeba85af5347e55b29
+msgid "The ``risk factor`` flow computes the :doc:`risk factor <../risk-factor>` of each fishing vessel."
+msgstr ""
+
+#: ../source/flows/risk-factor.rst:7
+#: 50ee734007eb48479c0eab01b68cf36e
+msgid "It runs every 10 minutes."
+msgstr ""

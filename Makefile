@@ -81,10 +81,15 @@ update-python-dependencies:
 	cd datascience && poetry export --without-hashes -o requirements.txt && poetry export --without-hashes --dev -o requirements-dev.txt
 
 # DOC commands
-update-sphinx-docs:
-	cd docs && \
-	ls --almost-all | grep -v .nojekyll | xargs rm -r && \
-	cd ../datascience/docs && \
-	make html && \
-	mv build/html/* ../../docs && \
-	rm -r build
+push-docs-to-transifex:
+	cd datascience/docs && \
+	poetry run sphinx-build -b gettext source pot && \
+	poetry run tx config mapping-bulk --project monitorfish --file-extension '.pot' --source-file-dir pot --source-lang en --type PO --expression 'locale/<lang>/LC_MESSAGES/{filepath}/{filename}.po' --execute && \
+	poetry run tx push --source
+pull-translated-docs-from-transifex:
+	cd datascience/docs && \
+	poetry run tx pull --all
+build-docs-locally:
+	cd datascience/docs && \
+	poetry run sphinx-build -b html source build/html/en && \
+	poetry run sphinx-build -b html -D language=fr source build/html/fr

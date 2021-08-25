@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/species.rst:3
+#: a7ce560a251f481483d5050b93dbfc69
+msgid "Species"
+msgstr ""
+
+#: ../source/flows/species.rst:5
+#: 3fc398f5c46c407cb22b47c09bd892af
+msgid "The ``species`` flow extracts the list of species from `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-especes-a-but-detudes-statistiques-sur-la-peche/>`__. and loads it to the ``species`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/species.rst:9
+#: 310e3307c6134fe7baa0c63c434c40f0
+msgid "It is not scheduled to run and it only required to run when the list of species has been manually updated on data.gouv.fr by the development team."
+msgstr ""

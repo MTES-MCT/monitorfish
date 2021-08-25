@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows.rst:5
+#: 5f29758e07954bd58e67ed78825b0c05
+msgid "Flows"
+msgstr ""
+
+#: ../source/flows.rst:9
+#: de859b46d0b14429bd58faedf75597cf
+msgid "What are flows?"
+msgstr ""
+
+#: ../source/flows.rst:11
+#: 794d0cd906ed4fd2b69308b60028cf1f
+msgid "*Flows* are batch jobs that move and transform data. Collectively, they constitute the :ref:`data pipeline` part of the Monitorfish architecture."
+msgstr ""
+
+#: ../source/flows.rst:14
+#: e1670a7236de443e8bbedc351b33d48b
+msgid "Each batch job is written as a `Prefect flow <https://docs.prefect.io/core/concepts/flows.html#overview>`__ which typically extracts data  (from external sources and / or from tables in the Monitorfish database), processes the data and loads it back into a table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows.rst:18
+#: d5ef6c058f86431dadd3cbcdc42553bb
+msgid "Flows are composed of `tasks <https://docs.prefect.io/core/concepts/tasks.html#overview>`__ typically written as python pure functions. `The UI <http://prefect.csam.e2.rie.gouv.fr/>`__ (restricted access) enables administrators to view each flow as a diagram of its constituent tasks, to monitor their execution, see the logs and debug in case any flow run fails..."
+msgstr ""
+
+#: ../source/flows.rst:23
+#: 1746550ec6d0467f9ae1c5d4bd07a5e5
+msgid "Overall view of data flows in Monitorfish :"
+msgstr ""
+
+#: ../source/flows.rst:None
+#: b72a3d3af8b340d582985db7b67bd35a
+msgid "Schematic of data flows in Monitorfish"
+msgstr ""
+
+#: ../source/flows.rst:33
+#: ec91d154d38946d690335e716ff04176
+msgid "List of flows"
+msgstr ""

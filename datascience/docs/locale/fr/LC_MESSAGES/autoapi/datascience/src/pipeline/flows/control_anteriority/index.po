@@ -1,0 +1,505 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:2
+#: e741336c11ba48d880f730e48e60941b
+msgid ":py:mod:`datascience.src.pipeline.flows.control_anteriority`"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:8
+#: 8c604c82dd8d44fb91037a845bec7975
+msgid "Module Contents"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:12
+#: 3a6708a962044706b8f8d639ee5dbf38
+msgid "Functions"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 0084253358af4c51ae17a61a2ee72117
+msgid ""
+":obj:`compute_control_dates_coefficients "
+"<datascience.src.pipeline.flows.control_anteriority.compute_control_dates_coefficients>`\\"
+" \\(control\\_dates\\: pandas.Series\\, from\\_date\\: datetime.datetime\\, "
+"to\\_date\\: datetime.datetime\\) → pandas.Series"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 56ce20ce8d4247368625080b6d3429b4
+msgid ""
+"For each date in ``control_dates``, computes a coefficient determined by its"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: a5556dcb8a08436ab5bb51e5e7ec58c6
+msgid ""
+":obj:`compute_control_ranks_coefficients "
+"<datascience.src.pipeline.flows.control_anteriority.compute_control_ranks_coefficients>`\\"
+" \\(control\\_ranks\\: numpy.array\\) → numpy.array"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 4c47a35a99a34c57a5837c3801280e9e
+msgid ""
+"Given a ``numpy.array`` of integers representing the rank of vessels "
+"controls"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: f9b3c5ddfffd4d18953adaaf28bcc19b
+msgid ""
+":obj:`extract_last_years_controls "
+"<datascience.src.pipeline.flows.control_anteriority.extract_last_years_controls>`\\"
+" \\(years\\: float \\= 5\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:127
+#: 3e23d8e91e574232afed001671eaadda 0712046fd2794411b7ce5decf26ebc74
+msgid "Extracts controls data of the last ``years`` years for all vessels."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 0be367bc18bc4253a2d3536da1d2f08c
+msgid ""
+":obj:`extract_fishing_infraction_ids "
+"<datascience.src.pipeline.flows.control_anteriority.extract_fishing_infraction_ids>`\\"
+" \\(\\) → set"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 2b49f3b2ffb94ee0ba7616e0703c7219
+msgid ""
+"Extracts all ``ids`` of ``infractions`` related to fishing non-compliance"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 9c3a8cbce5c94ebf8a59c41f7accaa43
+msgid ""
+":obj:`get_last_controls "
+"<datascience.src.pipeline.flows.control_anteriority.get_last_controls>`\\ "
+"\\(controls\\: pandas.DataFrame\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:147
+#: c5f9b18699a9416192eb4e5e688722bd 72d3138ff4f2435b99cde3a0fbb5661f
+msgid "Filters the input ``pd.DataFrame`` of controls data to keep only"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: fd67dc4238584ae3867801ca5696910e
+msgid ""
+":obj:`compute_control_rate_risk_factors "
+"<datascience.src.pipeline.flows.control_anteriority.compute_control_rate_risk_factors>`\\"
+" \\(controls\\: pandas.DataFrame\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 8064904ae43d4d2191e0b488cb45ad1f
+msgid ""
+"Given controls data on 3+ years, computes the control rate risk factor of "
+"each"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: 3e88230250fe47e2a5309de9c975339b
+msgid ""
+":obj:`compute_infraction_rate_risk_factors "
+"<datascience.src.pipeline.flows.control_anteriority.compute_infraction_rate_risk_factors>`\\"
+" \\(controls\\: pandas.DataFrame\\, fishing\\_infraction\\_ids\\: set\\) → "
+"pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: c565369201a44f5ab786f84c73e146cc
+msgid ""
+"Given control results data of vessels over the past 3+ years, computes the"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: bbbe91b245b04e398f270e4095d12df9
+msgid ""
+":obj:`merge <datascience.src.pipeline.flows.control_anteriority.merge>`\\ "
+"\\(control\\_rate\\_risk\\_factors\\: pandas.DataFrame\\, "
+"infraction\\_rate\\_risk\\_factor\\: pandas.DataFrame\\, last\\_controls\\: "
+"pandas.DataFrame\\) → pandas.DataFrame"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: b853460a9c8345b3866316a645238c6c
+msgid ""
+"Merge of ``pd.DataFrame``s to produce output of the flow. The join is "
+"performed"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: f133a23c04684528aafb6c01f180f13d
+msgid ""
+":obj:`load_control_anteriority "
+"<datascience.src.pipeline.flows.control_anteriority.load_control_anteriority>`\\"
+" \\(control\\_anteriority\\: pandas.DataFrame\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:27:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:228
+#: 621d6fcf9197482eae6a00494d9b3d8e 1d74aacc324e485aae2af8a9ba045054
+msgid "Load the output of ``merge`` task into ``control_anteriority`` table."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:29
+#: cf49697ff27447a8b2e082b88547c2b9
+msgid "Attributes"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:38:<autosummary>:1
+#: bb72555c0200490c8ec5a43e7ed44972
+msgid ""
+":obj:`control_rate_bins "
+"<datascience.src.pipeline.flows.control_anteriority.control_rate_bins>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:38:<autosummary>:1
+#: cd6ac34bd33842ca86eecdc5e637f3fa
+msgid ""
+":obj:`control_rate_bins_risk_factors "
+"<datascience.src.pipeline.flows.control_anteriority.control_rate_bins_risk_factors>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:38:<autosummary>:1
+#: 1cbeb06cf1584d65ba451ea0812043fd
+msgid ""
+":obj:`infraction_rate_bins "
+"<datascience.src.pipeline.flows.control_anteriority.infraction_rate_bins>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:38:<autosummary>:1
+#: 0aeb6c26bc8d4400a6759c6249d34fd3
+msgid ""
+":obj:`controls "
+"<datascience.src.pipeline.flows.control_anteriority.controls>`\\"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:56
+#: 2854bbf4afce41c5830bdd40f7324f44
+msgid ""
+"For each date in ``control_dates``, computes a coefficient determined by its"
+" distance from ``from_date`` relative to the distance between ``from_date`` "
+"and ``to_date``."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: 45f34b738b484f97b8804547b85cc863 53c6e39fddf14c7ba8b6bb71a090138e
+#: d128e0a7c6a44e9d87f25397292fd084 c08d4f903d3543b8b5d5efb6a0f6b148
+#: ceb3cc57eee442d683ae64a1fa863e71 745a3e58ab6a43faa1bfb08c3145637a
+#: ed0b560cf1034dab84a5bd865b849ba5 1898301bb2294fd8a21586832eac96d8
+msgid "Parameters"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:60
+#: f33835dda32f41748e8f79a83ee2bc0f
+msgid "Series of ``datetime.datetime``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:62
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:64
+#: a981bd09cf31462d8a5c263aff35f795 7a2c9b51a7fc4cb58c3a89092eda595b
+msgid "Start of time interval considered"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: 7e4642a4d96d4cff91024eb48a47304c d8c0c7e078d04c889b0793d227f0d48d
+#: 0905994a79774c8d8a21181ab7516fad cc9ec3c19e7042aeb9b11197d8ebad2d
+#: 9a29b20800824225a9517851d1555723 6fc42b5c081441edb9d4f8d6b08dd878
+#: a8aac8d714b44d7abd3a71a071e34775 48593c86426d4bb9bb59512945d4a51d
+msgid "Returns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:67
+#: 520c185d15104f58a1759e937db29157
+msgid "[description]"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:0
+#: e308fb35984f4191b3d83a8665ce0ad9 442c7b6a2bde4e76afa0e2978706feea
+#: 3fa0803961954a35ace700c71cfba58c ae53575f597545fca74946665ec2f896
+#: e27b457e774b4c8bbd2f6f3d14fc5cb1 bc52444a78c549a692d376df8898b15a
+#: 7f9824d84e4f4c99a6f90e9d38ad19d1 9318271f4f2d4866aa78711554fca669
+msgid "Return type"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:71
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:119
+#: 581df5efe93c41fa9dd2ff8a883cb09d 51d4815bef64436db0732f381520a3a6
+msgid "Examples"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:96
+#: 2690c5a19db941bc88cf37df5b7dfbba
+msgid ""
+"Given a ``numpy.array`` of integers representing the rank of vessels "
+"controls over time, returns the corresponding coefficients with which they "
+"must be taken into account in the risk factor."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:100
+#: f973cd9d838647b386a48dbd0916f3c9
+msgid ""
+"The input array represents the controls of several vessels. For each vessel,"
+" controls are sorted from most to least recent and ranked (1, 2, 3...)."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:103
+#: 45934eaf16d845bf8b78ef970fe64653
+msgid ""
+"The output is an array with the same shape which contains coefficients "
+"defined as:"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:105
+#: 239dff7d849c49f9b2bbde451475e367
+msgid "1.0 for controls of rank 1"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:106
+#: 1b0b72d850ad4432879e771655e48adf
+msgid "0.9 for controls of rank 2"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:107
+#: b836556b63434097a8b05e305389ae1d
+msgid "..."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:108
+#: 283580563f6a4bd48599e72fb301797e
+msgid "0.1 for controls of rank 10"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:109
+#: 7ac169476177438a8ee978cd76e5d482
+msgid "0.0 for controls of rank 11+"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:111
+#: 2101ba390edc4c45894e3922616b81db
+msgid "1D-array of integers >= 1"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:114
+#: 64e7dd0193bc46d5913fe717df22e8f0
+msgid ""
+"array with the same shape and with coefficients between 1 (for controls of "
+"rank 1) and 0 (for controls of rank >= 10)."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:129
+#: 7479fb74bbea453290f7f8ea5e2c3bfd
+msgid "Number of years to extract. Defaults to 5."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:132
+#: d6b7d52f01f7471592c5afa90ff5436e
+msgid "all vessels' controls data for the last years"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:138
+#: 28da9054cebf48ba9aad6aedb2a11a40
+msgid ""
+"Extracts all ``ids`` of ``infractions`` related to fishing non-compliance "
+"(safety non compliance events are excluded)."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:141
+#: 21684633c65744b7b153b110bb80d8d5
+msgid "Set of infractions ids related to fishing"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:149
+#: 200d017064024642bb264b359b25a13f
+msgid "the most recent control of each vessel"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:150
+#: 6d46b1c439bb4b7abf3f41870d8c3760
+msgid "the following columns:"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:152
+#: 1a41c3ff70ad4855812d764354dde822
+msgid "``vessel_id``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:153
+#: 8efbb7b0684045fb9deb9f81f23ee27d
+msgid "``cfr``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:154
+#: 9cfe544c7f0b4e3f81e6e3b9fea2dec9
+msgid "``ircs``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:155
+#: 0c63221f78c8440abcbfdd0b870dcc60
+msgid "``external_immatriculation``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:156
+#: 96a58212125c414aa37659807e372691
+msgid "``control_datetime_utc``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:157
+#: fcff159061314ebe917105d1417b8459
+msgid "``infraction``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:158
+#: c9f2e83d148b4552a25459e5f5519a5f
+msgid "``post_control_comments``"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:160
+#: fae7d3e98f7a4a3fba141a737418f6c5
+msgid "``pd.DataFrame`` with controls data"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:163
+#: 843b3904a9e34ad9aeeb599a623abb91
+msgid ""
+"filtered input with only the most recent control of each vessel and a subset"
+" of columns"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:170
+#: f87cd988afeb43e59cf810d5351771d3
+msgid ""
+"Given controls data on 3+ years, computes the control rate risk factor of "
+"each vessel."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:173
+#: 7d5a2afa417147688c74010db708d163
+msgid ""
+"The idea is that vessels that have been controlled less over the past 3 "
+"years and that have not been controlled for a certain time have a higher "
+"priority of control than vessels that were controlled many times over the "
+"past 3 years and that were controlled recently."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:178
+#: bcf189363d1a4e9b8ee63ae7c2042fda
+msgid "``pd.DataFrame`` of controls data on the last 3+ years"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:181
+#: a795da1ef9ce4d94ab0c36adc64ec1b9
+msgid ""
+"for each vessel, the component of the risk factor related to the control "
+"rate of each vessel."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:188
+#: e652e521e9754d2db9d309e9ffa92dc5
+msgid ""
+"Given control results data of vessels over the past 3+ years, computes the "
+"infraction rate risk factor of each vessel."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:191
+#: fc012480587049abaf46824605cb242a
+msgid ""
+"The idea is that vessels which committed infractions in the past have a "
+"higher priority of control than vessels that were in order."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:194
+#: 10ed941a0e02425e8d6f0659e1bd5ea9
+msgid ""
+"Only violations related to fishing non-compliance are taken into account. "
+"Safety non-compliance evens are not taken into account."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:197
+#: 6f1af62d31f84c4a853d723650563d01
+msgid "control results data"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:199
+#: 32ca2b8230af4eefba6ba65da4b8a1c2
+msgid "set of infractions ids related to fishing non-compliance."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:203
+#: b7f4d639e2e34998b1cf460d43071afc
+msgid ""
+"for each vessel, the component of the risk factor related to the infraction "
+"rate of each vessel."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:210
+#: 93a38528528a46808885ed5fbde3a230
+msgid ""
+"Merge of ``pd.DataFrame``s to produce output of the flow. The join is "
+"performed on ``vessel_id``."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:213
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:216
+#: f5f21847c4c147c6b9c69886a58a1949 9dd6bc2a91c3477d920e7651e9fe11de
+msgid "output of"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:219
+#: ddb5fc0bb80942cabf0bc9f8f4e46488
+msgid "output of ``get_last_controls`` task"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:222
+#: 5064615dd5444be3adc3ca0709d84a4b
+msgid "join of the 3 input ``pd.DataFrame``s"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/flows/control_anteriority/index.rst:230
+#: 4830f41f2d254ae2a13d7b2dff221b97
+msgid "output of ``merge`` task."
+msgstr ""

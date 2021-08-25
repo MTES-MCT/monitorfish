@@ -1,0 +1,225 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/architecture.rst:3 bc51019949f74cd9b033bc38b2fae927
+msgid "Architecture"
+msgstr "Architecture"
+
+#: ../source/architecture.rst:5 29b8b54b6f7c4a788d65e3de6ec4258e
+msgid "Monitorfish is built around 3 main components :"
+msgstr "Monitorfish comporte 3 composants principaux :"
+
+#: ../source/architecture.rst:15 0a730e3d897b46fd81299583ce48de96
+msgid "Data pipeline"
+msgstr "Pipeline de données"
+
+#: ../source/architecture.rst:17 f388417fd63b409d83b05819b18c0395
+msgid "The data processing service executes python batch jobs to :"
+msgstr "Le pipeline de données exécute des tâches en python pour :"
+
+#: ../source/architecture.rst:19 4f62631417334a798774ccba9aa8bf9c
+msgid "pull data from external sources into the Monitorfish database (ETL)"
+msgstr ""
+"extraire des données de sources externes vers la base de données Monitorfish"
+" (ETL)"
+
+#: ../source/architecture.rst:20 caee0e036593429b89db6e9dc696d909
+msgid ""
+"process data in the Monitorfish database to enrich and update tables that "
+"the backend makes available to the frontend through an API"
+msgstr ""
+"traiter les données de la base de données Monitorfish pour enrichir et "
+"mettre à jour les tables que le backend met à la disposition du frontend par"
+" le biais d'une API"
+
+#: ../source/architecture.rst:23 0ce14ec6e93b48ae9e072fdb7a3c879e
+msgid "Database schema"
+msgstr "Schéma de base de données"
+
+#: ../source/architecture.rst:25 5cd5e7cc5977495c9c0fde5bf81a0902
+msgid ""
+"Database tables are created by the :ref:`back-end`. Jobs of the data "
+"pipeline require tables to already exist and to have the right columns and "
+"data types. It is therefore necessary to keep the back end and the data "
+"pipeline applications \"in sync\". For this reason, the back end and the "
+"data pipeline should always be deployed with the **same version number** "
+"(see :ref:`environment_variables`)."
+msgstr ""
+"Les tables de base de données sont créées par le :ref:`back-end`. Les tâches"
+" du pipeline de données exigent que les tables existent déjà et qu'elles "
+"aient les bonnes colonnes et les bons types de données. Il est donc "
+"nécessaire que les applications du back-end et du pipeline de données "
+"restent \"synchronisées\". Pour cette raison, le back-end et le pipeline de "
+"données doivent toujours être déployés avec le **même numéro de version** "
+"(voir :ref:`environment_variables`)."
+
+#: ../source/architecture.rst:30 cc0c3668e5064b4c855a35b4645ec2ac
+msgid "Orchestration"
+msgstr "Orchestration"
+
+#: ../source/architecture.rst:32 b564feda53c4457d93e2c8bd397caf89
+msgid ""
+"Batch jobs are orchestrated by `Prefect <https://prefect.io>`__. For more "
+"information see `Prefect documentation "
+"<https://docs.prefect.io/orchestration/>`__."
+msgstr ""
+"L'exécution des tâches de traitement de données est orchestrée par `Prefect "
+"<https://prefect.io>`__. Pour plus d'informations, voir la documentation de "
+"`Prefect <https://docs.prefect.io/orchestration/>`__."
+
+#: ../source/architecture.rst:35 12bc4513a6d6483b881a6ed816f8af7f
+msgid ""
+"The prefect UI  enables administrators to view each flow as a diagram of its"
+" constituent tasks, to monitor their execution, see the logs and debug in "
+"case any flow run fails..."
+msgstr ""
+"L'interface utilisateur de Prefect permet aux administrateurs de visualiser "
+"chaque flow sous la forme d'un diagramme des tâches qui le composent, de "
+"surveiller leur exécution, de voir les journaux et de déboguer en cas "
+"d'échec d'exécution de l'un des flows..."
+
+#: ../source/architecture.rst:38 b1e224031bd24caf9cb3c35693129b8e
+msgid "Execution"
+msgstr "Exécution"
+
+#: ../source/architecture.rst:41 2b7c7504d32d4880a6527fec5db6fa4e
+msgid "Stack"
+msgstr "Stack"
+
+#: ../source/architecture.rst:43 e3178f443434477dbc24ca66e5102494
+msgid ""
+"The main tools used to extract data, process it in python and load it to the"
+" PostgreSQL database of Monitorfish are :"
+msgstr ""
+"Les principaux outils utilisés pour extraire les données, les traiter en "
+"python et les charger dans la base de données PostgreSQL de Monitorfish sont"
+" :"
+
+#: ../source/architecture.rst:45 699b06e8d6584db7a1418e8f77a78508
+msgid "python 3.8.7"
+msgstr "python 3.8.7"
+
+#: ../source/architecture.rst:46 fd8b0055b1d74e67816a09ff7c1045d7
+msgid ""
+"`SQLAlchemy <https://www.sqlalchemy.org/>`__ as a python SQL toolkit to "
+"interact with SQL databases"
+msgstr ""
+"`SQLAlchemy <https://www.sqlalchemy.org/>`__ comme une boîte à outils SQL en"
+" python pour interagir avec les bases de données SQL."
+
+#: ../source/architecture.rst:47 6bd0800e79834da4a95eb6564b181f78
+msgid ""
+"Database adapters `cx_Oracle <https://oracle.github.io/python-cx_Oracle/>`__"
+" and  `psycopg2 <https://github.com/psycopg/psycopg2/>`__ for connectivity "
+"to Oracle and PostgreSQL databases respectively"
+msgstr ""
+"les adaptateurs de base de données `cx_Oracle <https://oracle.github.io"
+"/python-cx_Oracle/>`__ et `psycopg2 "
+"<https://github.com/psycopg/psycopg2/>`__ pour la connectivité aux bases de "
+"données Oracle et PostgreSQL respectivement."
+
+#: ../source/architecture.rst:49 5ff3776d9f40465cacb4f9af0a74edfc
+msgid ""
+"`pandas <https://pandas.pydata.org/>`__ for data manipulation in python"
+msgstr ""
+"`pandas <https://pandas.pydata.org/>`__ pour la manipulation de données en "
+"python"
+
+#: ../source/architecture.rst:50 9db4b0227eae40169263448424782814
+msgid ""
+"the `prefect python library <https://github.com/prefecthq/prefect>`__ to "
+"write batch jobs as flows of tasks"
+msgstr ""
+"la `librairie python prefect <https://github.com/prefecthq/prefect>`__ pour "
+"écrire les tâches de traitement de données en tant que flows"
+
+#: ../source/architecture.rst:53 9331dea48baf4c03bfacbdfbd12d4c94
+msgid "Flows : one for each job"
+msgstr "Flows : un pour chaque traitement de données"
+
+#: ../source/architecture.rst:55 9acb42fcc03a4517b840bd0108bbf9f2
+msgid ""
+"Batch jobs are written in python as prefect :ref:`flows <flows>` : each flow"
+" is responsible for one particular task, such as updating the ``vessels`` "
+"referencial or refreshing the table of ``last_positions``."
+msgstr ""
+"Les traitements de données sont écrits en python sous forme de :ref:`flows` "
+"prefect : chaque flow est responsable d'une tâche particulière, comme la "
+"mise à jour du référentiel ``vessels`` ou le rafraîchissement de la table "
+"des ``last_positions``."
+
+#: ../source/architecture.rst:59 182f9f88bd6f45958b7c3196e903d4f3
+msgid "Execution in a dockerized service"
+msgstr "Exécution dans un service dockerisé"
+
+#: ../source/architecture.rst:61 f760b3b1136c48ceae6621615f4871ef
+msgid ""
+"A dockerized python service runs a `prefect agent "
+"<https://docs.prefect.io/orchestration/agents/overview.html>`__, a small "
+"process which queries the API of the  prefect server orchestrator every "
+"second in order to know if any flow must be executed. When a flow must be "
+"executed, perfect server tells the agent, which spawns a local python "
+"process that runs the flow."
+msgstr ""
+"Un service python dockerisé exécute un `prefect agent "
+"<https://docs.prefect.io/orchestration/agents/overview.html>`__, un "
+"processus qui interroge l'API de l'orchestrateur prefect server toutes les "
+"secondes afin de savoir si un flow doit être exécuté. Lorsqu'un flow doit "
+"être exécuté, le serveur prefect le dit à l'agent, qui lance une processus "
+"local python qui exécute le flow."
+
+#: ../source/architecture.rst:68 5191842c2fc34b5ab6f06904683a7a8e
+msgid "Back end"
+msgstr "Back end"
+
+#: ../source/architecture.rst:70 3080e49e86be49589f8601f378db66da
+msgid "Kotlin"
+msgstr "Kotlin"
+
+#: ../source/architecture.rst:71 d05a8bd5b08c465c99047ceb753efd47
+msgid "Spring Boot"
+msgstr "Spring Boot"
+
+#: ../source/architecture.rst:72 334070fb0a2a40d79ac63a6b85ca9e64
+msgid "Flyway (database migration)"
+msgstr "Flyway (migrations de base de données)"
+
+#: ../source/architecture.rst:73 6ff21912cc0542919e8679fdd575fe9b
+msgid "PostgreSQL with PostGIS/TimescaleDB"
+msgstr "PostgreSQL avec extensions PostGIS et TimescaleDB"
+
+#: ../source/architecture.rst:74 3325b9f9d1f64d0b974039b1f3e94bdc
+msgid "Tomcat (version 9.0.37)"
+msgstr "Tomcat (version 9.0.37)"
+
+#: ../source/architecture.rst:77 3911825e47364006a90085ac28baeb66
+msgid "Front end"
+msgstr "Front end"
+
+#: ../source/architecture.rst:79 9ae18c2671ae456cbecafd1df0ac2c18
+msgid "Openlayers"
+msgstr "Openlayers"
+
+#: ../source/architecture.rst:80 c761b3254bb6445396b84ffb5d7c650a
+msgid "React"
+msgstr "React"

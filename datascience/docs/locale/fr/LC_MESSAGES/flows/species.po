@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:50+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/flows/species.rst:3 a9cc81c1b21d4fb181074d820e88595a
+msgid "Species"
+msgstr ""
+
+#: ../source/flows/species.rst:5 22365f51f8f44590b014babe65d1ab8c
+msgid ""
+"The ``species`` flow extracts the list of species from `data.gouv.fr "
+"<https://www.data.gouv.fr/fr/datasets/liste-des-especes-a-but-detudes-"
+"statistiques-sur-la-peche/>`__. and loads it to the ``species`` table of the"
+" Monitorfish database."
+msgstr ""
+
+#: ../source/flows/species.rst:9 1cbade543413477cb6a2a41206688698
+msgid ""
+"It is not scheduled to run and it only required to run when the list of "
+"species has been manually updated on data.gouv.fr by the development team."
+msgstr ""

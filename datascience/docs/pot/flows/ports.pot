@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/ports.rst:3
+#: c963b2e25dbb4ca090c30127aabfac94
+msgid "Ports"
+msgstr ""
+
+#: ../source/flows/ports.rst:5
+#: a619af8f5b194251bf66017a9aa710b2
+msgid "The ``ports`` flow extracts the list of ports from `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-ports-du-systeme-ers-avec-donnees-de-position/>`__. and loads it to the ``ports`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/ports.rst:9
+#: 02b81b40dd574e27bb72c36162d31495
+msgid "It is not scheduled to run and it only required to run when the list of ports has been manually updated on data.gouv.fr by the development team."
+msgstr ""

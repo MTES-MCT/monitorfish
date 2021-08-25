@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:50+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/flows/risk-factor.rst:3 c723d184aecb40aa91afd6e4e14be8b1
+msgid "Risk factor"
+msgstr ""
+
+#: ../source/flows/risk-factor.rst:5 1a8fad9b127847ee8e23690bf21b5077
+msgid ""
+"The ``risk factor`` flow computes the :doc:`risk factor <../risk-factor>` of"
+" each fishing vessel."
+msgstr ""
+
+#: ../source/flows/risk-factor.rst:7 cc08a799dd1c483aa2028d6c6bac3c96
+msgid "It runs every 10 minutes."
+msgstr ""

@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/current-segments.rst:3
+#: 774e8306ee53458487cc592ed2701e7a
+msgid "Current segments"
+msgstr ""
+
+#: ../source/flows/current-segments.rst:5
+#: 6a15f25aad864fa3a4607639de49c353
+msgid "The ``current_segments`` flow extracts all catches of each vessel since its last DEP message and crosses its catch (species, area and fishing gear) with the definition of fleet segments in order to determine the :doc:`fleet segment(s) <../fleet-segments>` to which each vessel belongs in real time."
+msgstr ""
+
+#: ../source/flows/current-segments.rst:10
+#: d639bb482008464f97aa8a1569e7cd3f
+msgid "It is scheduled to run every 10 minutes.prefect"
+msgstr ""

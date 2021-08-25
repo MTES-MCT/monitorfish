@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../source/index.rst:8 0fddaee0b5d84d4088cc4da437df9fa6
+msgid "Monitorfish"
+msgstr "Monitorfish"
+
+#: ../source/overview.rst:3 f79693f0dd2e4cba930b10252a8daf9d
+msgid "Overview"
+msgstr "En bref"
+
+#: ../source/overview.rst:5 369d7b2a36ff4d029fca90c66433d754
+msgid ""
+"**Monitorfish** is a **fishing vessels monitoring software** developped by "
+"the French adminitration for the french **Fishing Monitoring Center (FMC)** "
+"- the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr"
+"/la-police-des-peches>`_ - and its partners."
+msgstr ""
+"**Monitorfish** est un **logiciel de surveillance des navires de pêche** "
+"développé par l'administration française pour le **Fishing Monitoring Center"
+" (FMC)** français - le `Centre National de Surveillance des Pêches "
+"<https://www.mer.gouv.fr/la-police-des-peches>`_ - et ses partenaires."
+
+#: ../source/overview.rst:8 df844f3e9f7a4d28bcc21d727284f2d7
+msgid "Features"
+msgstr "Fonctionnalités"
+
+#: ../source/overview.rst:10 0899c35d7b13422fb963b617b4783da9
+msgid "Visualization of fishing vessels' real time **positions** (VMS)"
+msgstr ""
+"Visualisation des **positions** des navires de pêche en temps réel (VMS)"
+
+#: ../source/overview.rst:11 49c9060dd0c740128c7310539fe111d1
+msgid ""
+"Visualization of fishing vessels' declarative **fishing activity** data "
+"(ERS)"
+msgstr ""
+"Visualisation des données déclaratives de **l'activité de pêche** des "
+"navires de pêche (ERS)"
+
+#: ../source/overview.rst:12 d2c215951ebf49aa969bc8488d07af7a
+msgid ""
+"Visualization of fishing vessels' historical **controls** and **violations**"
+msgstr ""
+"Visualisation de l'historique des **contrôles** et des **infractions** des "
+"navires de pêche"
+
+#: ../source/overview.rst:13 ca92358758aa46959790733485e443fe
+msgid ""
+"Visualization of :doc:`regulated fishing areas <regulation>` of the french "
+"and european regulations"
+msgstr ""
+"Visualisation des :doc:`zones de pêche réglementées <regulation>` de la "
+"réglementation française et européenn"
+
+#: ../source/overview.rst:14 59a2aa761d3642eda08d2fe53e826bd9
+msgid ""
+"Computation of fishing vessels' real time belonging to :doc:`fleet segments "
+"<fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) "
+"<https://www.efca.europa.eu/en>`_ in its `risk assessment methodology "
+"<https://www.efca.europa.eu/en/content/guidelines-risk-assessment-"
+"methodology-fisheries-compliance>`_"
+msgstr ""
+"Calcul en temps réel de l'appartenance des navires de pêche aux "
+":doc:`segments de flotte <fleet-segments>` tels que définis par `l'Agence "
+"européenne de contrôle des pêches (EFCA) <https://www.efca.europa.eu/en>`_ "
+"dans sa `méthodologie d'évaluation des risques "
+"<https://www.efca.europa.eu/en/content/guidelines-risk-assessment-"
+"methodology-fisheries-compliance>`_."
+
+#: ../source/overview.rst:15 41d34d2d09f749a5a3bd52d27a3bad2d
+msgid ""
+"Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, "
+"a metric developed in the context of the Monitorfish project that aims to "
+"help FMC agents **prioritize vessels to control** based on all the above "
+"elements"
+msgstr ""
+"Calcul du :doc:`facteur de risque <risk-factor>` des navires de pêche en "
+"temps réel, une métrique développée dans le cadre du projet Monitorfish qui "
+"vise à aider les agents du FMC à **prioriser les navires à contrôler** sur "
+"la base des éléments ci-dessus."
+
+#: ../source/overview.rst:16 572d70b294c04cd19a2e5d1b05f4da5e
+msgid "Administration panel that allows admins to"
+msgstr "Interface d'administration qui permet aux administrateurs de"
+
+#: ../source/overview.rst:18 cb847c73ea4d45f3bad910734c65a2d7
+msgid ""
+"Update regulation data : update authorized fishing areas / periods / "
+"gears..."
+msgstr ""
+"Mettre à jour les données réglementaires : mise à jour des zones / périodes "
+"/ engins de pêche autorisés..."
+
+#: ../source/overview.rst:19 5a6921f8575a4003b04b2d9c182d3e55
+msgid ""
+":doc:`Stear control priorities <control-priority-steering>` by dynamically "
+"adjuting the control priority level of each fleet segment"
+msgstr ""
+":doc:`Piloter les priorités de contrôle <control-priority-steering>` en "
+"ajustant dynamiquement le niveau de priorité de contrôle de chaque segment "
+"de flotte"
+
+#: ../source/overview.rst:23 53c67d281b504f92be713e7d8ed42aca
+msgid "Demo"
+msgstr "Démo"
+
+#: ../source/index.rst:16 7c9510992691480b973b4e769febe867
+msgid "Table of contents"
+msgstr "Sommaire"

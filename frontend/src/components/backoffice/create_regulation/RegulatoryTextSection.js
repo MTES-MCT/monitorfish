@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../constants/constants'
 import { Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -12,7 +12,6 @@ import { openModal } from '../../../domain/reducers/Regulation'
 /**
  * @typedef {object} Props
  * @prop {[RegulatoryText]} regulatoryTextList
- * @prop {[UpcomingRegulation]} upcomingRegulationList
  * @prop {Function} setRegulatoryTextList
  * @prop {'regulation' | 'upcomingRegulation'} source
  */
@@ -20,10 +19,11 @@ const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
     setRegulatoryTextList,
-    upcomingRegulation,
-    setUpcomingRegulation,
     source
   } = props
+
+  const { upcomingRegulation } = useSelector(state => state.regulation)
+
   const dispatch = useDispatch()
 
   const addRegRefInEffect = () => {
@@ -34,7 +34,7 @@ const RegulatoryTextSection = props => {
     if (source === 'upcomingRegulation') {
       updateRegulatoryTextList()
     } else {
-      dispatch(openModal({}))
+      dispatch(openModal())
     }
   }
 
@@ -82,10 +82,7 @@ const RegulatoryTextSection = props => {
     </ButtonLine>
     {source === 'regulation' &&
       upcomingRegulation &&
-        <UpcommingRegulationSection
-          upcomingRegulation={upcomingRegulation}
-          setUpcomingRegulation={setUpcomingRegulation}
-        />
+        <UpcommingRegulationSection />
     }
   </Section>)
 }

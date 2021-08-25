@@ -74,7 +74,6 @@ const RegulatoryText = props => {
    * And call updateRegulatoryText() function
    */
   const updateOrAddRegulatoryText = () => {
-    console.log('updateOrAddRegulatoryText')
     const updatedRegulatoryText = {
       name: currentRegulatoryTextName,
       URL: currentRegulatoryTextURL,

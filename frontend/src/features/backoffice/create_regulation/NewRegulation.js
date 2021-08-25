@@ -14,7 +14,7 @@ import UpcomingRegulationModal from '../components/backoffice/create_regulation/
 import { formatDataForSelectPicker } from '../utils'
 import { ValidateButton, CancelButton } from '../components/commonStyles/Buttons.style'
 import { Section, SectionTitle, Footer, FooterButton } from '../components/commonStyles/Backoffice.style'
-import { setSelectedRegulation, resetModal } from '../domain/reducers/Regulation'
+import { setSelectedRegulation } from '../domain/reducers/Regulation'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()
@@ -24,21 +24,22 @@ const CreateRegulation = () => {
     seaFrontArray
   } = useSelector(state => state.regulatory)
 
-  const {
-    isModalOpen,
-    selectedUpcomingRegulation
-  } = useSelector(state => state.regulation)
+  const { isModalOpen } = useSelector(state => state.regulation)
 
+  /** @type {String} */
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
+  /** @type {String} */
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
+  /** @type {String} */
   const [nameZone, setNameZone] = useState()
+  /** @type {String} */
   const [selectedSeaFront, setSelectedSeaFront] = useState()
+  /** @type {[String]} */
   const [selectedRegionList, setSelectedRegionList] = useState([])
+  /** @type {String} */
   const [reglementationBlocName, setReglementationBlocName] = useState('')
-
-  // TODO a type
+  /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
-  const [upcomingRegulation, setUpcomingRegulation] = useState(undefined)
 
   useEffect(() => {
     if (regulationBlocArray && zoneThemeArray && seaFrontArray) {
@@ -50,13 +51,6 @@ const CreateRegulation = () => {
     }
     dispatch(setSelectedRegulation(newRegulation))
   }, [])
-
-  useEffect(() => {
-    if (!isModalOpen && selectedUpcomingRegulation) {
-      setUpcomingRegulation(selectedUpcomingRegulation)
-      resetModal()
-    }
-  }, [isModalOpen, selectedUpcomingRegulation])
 
   const createRegulation = () => {
     console.log('createRegulation')
@@ -111,8 +105,6 @@ const CreateRegulation = () => {
           <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
-            setUpcomingRegulation={setUpcomingRegulation}
-            upcomingRegulation={upcomingRegulation}
             source={'regulation'}
           />
         </Content>

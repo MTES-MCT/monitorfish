@@ -28,7 +28,6 @@ def extract_risk_factors():
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/risk_factors.sql",
-        dtypes={"emission_period": str},
     )
 
 

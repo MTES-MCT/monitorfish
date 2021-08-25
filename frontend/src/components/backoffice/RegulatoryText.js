@@ -27,8 +27,6 @@ const RegulatoryText = props => {
     updateRegulatoryText
   } = props
 
-  const TEXT_NAME_DEFAULT_VALUE = 'Nom'
-  const TEXT_URL_DEFAULT_VALUE = 'URL'
   /**
   * @enum {RegulatoryTextType}
   */
@@ -37,8 +35,8 @@ const RegulatoryText = props => {
     REGULATION: 'regulation'
   }
 
-  const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState(TEXT_NAME_DEFAULT_VALUE)
-  const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState(TEXT_URL_DEFAULT_VALUE)
+  const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState('')
+  const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState('')
   const [currentStartDate, setCurrentStartDate] = useState()
   const [currentEndDate, setCurrentEndDate] = useState()
   const [currentTextType, setCurrentTextType] = useState([])
@@ -58,12 +56,12 @@ const RegulatoryText = props => {
       endDate,
       textType
     } = regulatoryText
-    setCurrentRegulatoryTextName(name || TEXT_NAME_DEFAULT_VALUE)
-    setCurrentRegulatoryTextURL(URL || TEXT_URL_DEFAULT_VALUE)
+    setCurrentRegulatoryTextName(name || '')
+    setCurrentRegulatoryTextURL(URL || '')
     setCurrentStartDate(startDate || undefined)
     setCurrentEndDate(endDate || undefined)
     setCurrentTextType(textType || [])
-    setIsEditing(name === undefined || name === TEXT_NAME_DEFAULT_VALUE || URL === undefined || URL === TEXT_URL_DEFAULT_VALUE)
+    setIsEditing(name === undefined || name === '' || URL === undefined || URL === '')
   }
 
   useEffect(() => {
@@ -174,14 +172,14 @@ const RegulatoryText = props => {
       {isEditing
         ? <>
           <CustomInput
-            placeholder={TEXT_NAME_DEFAULT_VALUE}
+            placeholder={'Nom'}
             $isred={nameIsRequired}
             width={'250px'}
             value={currentRegulatoryTextName}
             onChange={onNameValueChange}
           />
           <CustomInput
-            placeholder={TEXT_URL_DEFAULT_VALUE}
+            placeholder={'URL'}
             $isred={URLIsrequired}
             width={'250px'}
             value={currentRegulatoryTextURL}

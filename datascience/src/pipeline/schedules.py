@@ -19,8 +19,8 @@ from src.pipeline.flows import (
 
 ################################ Define flow schedules ################################
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
-controllers.flow = CronSchedule("0 8 * * *")
-controls.flow = CronSchedule("4 * * * *")
+controllers.flow.schedule = CronSchedule("0 8 * * *")
+controls.flow.schedule = CronSchedule("4 * * * *")
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
 ers.flow.schedule = CronSchedule("* * * * *")
 fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")

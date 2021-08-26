@@ -20,8 +20,7 @@ export const COLORS = {
   red: '#E1000F',
   blue: '#0A18DF',
   vesselLightColor: '#cacce0',
-  vesselColor: 'rgb(5, 5, 94)',
-  newGray: '#CCCFD6'
+  vesselColor: 'rgb(5, 5, 94)'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

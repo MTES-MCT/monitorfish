@@ -184,7 +184,7 @@ const Title = styled.span`
   text-align: center;
   font-weight: bold;
   font-size: 16px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   text-transform: uppercase;
 `
 

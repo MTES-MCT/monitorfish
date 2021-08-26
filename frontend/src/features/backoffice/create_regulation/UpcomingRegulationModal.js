@@ -77,7 +77,7 @@ const Body = styled.div`
 
 const Footer = styled.div`
   background-color: ${COLORS.background};
-  border-top: 1px solid ${COLORS.newGray};
+  border-top: 1px solid ${COLORS.lightGray};
 `
 
 const CloseIcon = styled(CloseIconSVG)`

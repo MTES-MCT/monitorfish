@@ -27,7 +27,10 @@ const InfoBox = props => {
           </InfoText>
         </InfoTextWrapper>
         : <InfoPoint
-          onMouseEnter={() => setIsInfoTextShown && setIsInfoTextShown(true)}
+          onMouseEnter={() => {
+            console.log('onMouseEnter')
+            setIsInfoTextShown && setIsInfoTextShown(true)
+          }}
           onMouseOut={() => setIsInfoTextShown && setIsInfoTextShown(false)}
         >!</InfoPoint>}
     </InfoTextParent>)
@@ -40,6 +43,7 @@ const InfoTextParent = styled.div`
   position: relative;
   ${props => props.pointer ? 'cursor: pointer' : ''};
   ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
+  ${props => props.isFormOpened && props.isInfoTextShown ? 'margin-top: 8px' : ''};
 `
 
 const InfoTextWrapper = styled.div`
@@ -74,19 +78,19 @@ const InfoPoint = styled.a`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
-  color: ${COLORS.gunMetal};
+  background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
+  color: ${COLORS.white};
   text-align: center;
   font: normal normal bold 13px Arial;
   text-align: center;
   line-height: 20px;
   &:hover {
     text-decoration: none;
-    color: ${COLORS.gunMetal};
+    color: ${COLORS.white};
   }
   &:focus {
     text-decoration: none;
-    color: ${COLORS.gunMetal};
+    color: ${COLORS.white};
   }
 `
 

@@ -9,15 +9,18 @@ const CustomDatePicker = props => {
     onChange,
     onOk,
     isRequired,
-    format
+    format,
+    placement
   } = props
   return <DatePickerStyled
     $isrequired={isRequired}
+    oneTap
+    ranges={[]}
     value={value}
     onChange={onChange}
     onOk={onOk}
     cleanable={false}
-    placement='topStart'
+    placement={placement}
     placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     format={format}
     locale={{

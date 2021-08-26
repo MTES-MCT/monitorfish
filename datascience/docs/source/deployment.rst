@@ -48,12 +48,31 @@ The Monitorfish database must be running for data processing operations to be ca
 Running the orchestration service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Starting the Prefect server orchestrator
+----------------------------------------
+
 The orchestration service can be started with :
 
 .. code-block:: bash
 
     make run-pipeline-server-prod
  
+
+Automating log cleaning
+-----------------------
+
+Logs of past flow runs are stored in a Postgres database that is part of the prefect server architecture.
+In order to keep the size of this database low, it is necessary to set up a cron job to delete old flow runs.
+
+The Prefect server database runs in a Docker container. The script ``infra/remote/data-pipeline/truncate-old-prefect-logs.sh`` goes into that container with ``docker exec`` and runs a ``DELETE`` query to delete old flow_runs.
+
+This query can be run daily by setting up a cron job, for instance by adding a line to the crontab file :
+
+.. code-block:: bash
+
+    crontab -e
+
+then add the line in ``infra/remote/data-pipeline/crontab.txt`` (after updating the scripts and logs locations as needed) in the crontab file.
 
 Running the execution service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

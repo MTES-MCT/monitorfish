@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
@@ -68,7 +69,9 @@ const CreateRegulation = () => {
     <CreateRegulationWrapper>
       <Body>
         <Header>
-          <LinkSpan><ChevronIcon/><Link>Revenir à la liste complète des zones</Link></LinkSpan>
+          <LinkSpan><ChevronIcon/>
+            <BackLink to={'/backoffice'}>Revenir à la liste complète des zones</BackLink>
+          </LinkSpan>
           <Title>Saisir une nouvelle réglementation</Title>
           <Span />
         </Header>
@@ -166,12 +169,17 @@ const Span = styled.span`
   flex: 1;
 `
 
-const Link = styled.a`
+const BackLink = styled(Link)`
   text-decoration: underline;
   font: normal normal normal 13px;
   letter-spacing: 0px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray}!important;
+  align-self: center;
+  &:visited {
+    color: ${COLORS.slateGray}!important;
+  }
 `
+
 const Title = styled.span`
   text-align: center;
   font-weight: bold;

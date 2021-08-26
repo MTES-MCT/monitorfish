@@ -19,7 +19,9 @@ const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
     setRegulatoryTextList,
-    source
+    source,
+    saveForm,
+    setRegulatoryTextHasValueMissing
   } = props
 
   const { upcomingRegulation } = useSelector(state => state.regulation)
@@ -55,7 +57,9 @@ const RegulatoryTextSection = props => {
               id={id}
               regulatoryText={regulatoryText}
               setRegulatoryTextList={setRegulatoryTextList}
+              setRegulatoryTextHasValueMissing={setRegulatoryTextHasValueMissing}
               updateRegulatoryText={updateRegulatoryTextList}
+              saveForm={saveForm}
             />
         })
     }

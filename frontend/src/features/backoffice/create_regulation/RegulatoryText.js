@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { ContentLine, Delimiter } from '../../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../../commonStyles/Input.style'
@@ -6,6 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './CustomDatePicker'
 import { COLORS, INFINITE } from '../../../constants/constants'
+import { setRegulatoryTextHasValueMissing } from '../../../domain/shared_slices/Regulation'
 import Tag from './Tag'
 
 /**
@@ -24,7 +26,8 @@ const RegulatoryText = props => {
      * @param {number} regulatoryTextId
      * @parem {RegulatoryText} newRegulatoryText
      */
-    updateRegulatoryText
+    updateRegulatoryText,
+    saveForm
   } = props
 
   /**
@@ -35,6 +38,8 @@ const RegulatoryText = props => {
     REGULATION: 'regulation'
   }
 
+  const dispatch = useDispatch()
+
   const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState('')
   const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState('')
   const [currentStartDate, setCurrentStartDate] = useState()
@@ -44,9 +49,9 @@ const RegulatoryText = props => {
   const [isEditing, setIsEditing] = useState(false)
   const [nameIsRequired, setNameIsRequired] = useState(false)
   const [URLIsrequired, setURLIsrequired] = useState(false)
-  /* const [startDateIsRequired, setStartDateIsRequired] = useState(false)
+  const [startDateIsRequired, setStartDateIsRequired] = useState(false)
   const [endDateIsRequired, setEndDateIsRequired] = useState(false)
-  const [textTypeIsRequired, setTextTypeIsRequired] = useState(false) */
+  const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
 
   const initFormValues = () => {
     const {
@@ -93,7 +98,8 @@ const RegulatoryText = props => {
     updateRegulatoryText(regulatoryText ? id : undefined, updatedRegulatoryText)
   }
 
-  /* const checkRequiredValueOnSubmit = () => {
+  const checkRequiredValueOnSubmit = () => {
+    console.log('checkRequiredValueOnSubmit')
     let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
@@ -110,8 +116,18 @@ const RegulatoryText = props => {
     required = currentTextType.length === 0
     oneValueIsMissing = oneValueIsMissing || required
     setTextTypeIsRequired(required)
+    dispatch(setRegulatoryTextHasValueMissing(oneValueIsMissing))
+    console.log('oneValueIsMissing ?')
+    console.log(oneValueIsMissing)
     return oneValueIsMissing
-  } */
+  }
+
+  useEffect(() => {
+    if (saveForm) {
+      console.log('useEffect')
+      checkRequiredValueOnSubmit()
+    }
+  }, [saveForm])
 
   const cancelAddNewRegulatoryText = () => {
     setIsEditing(true)
@@ -215,11 +231,11 @@ const RegulatoryText = props => {
         onChange={setCurrentTextType}
       >
         <CustomCheckbox
-          // $isrequired={textTypeIsRequired}
+          $isrequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.CREATION}
         >création de la zone</CustomCheckbox>
         <CustomCheckbox
-          // $isrequired={textTypeIsRequired}
+          $isrequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.REGULATION}
         >réglementation de la zone</CustomCheckbox>
       </CheckboxGroup>
@@ -227,7 +243,7 @@ const RegulatoryText = props => {
     <ContentLine>
       <Label>Début de validité</Label>
       <CustomDatePicker
-        // $isrequired={startDateIsRequired}
+        $isrequired={startDateIsRequired}
         value={currentStartDate}
         onChange={(date) => onCurrentStartDateChange(date)}
         onOk={(date, _) => onCurrentStartDateChange(date)}
@@ -238,7 +254,7 @@ const RegulatoryText = props => {
     <ContentLine>
       <Label>Fin de validité</Label>
       <CustomDatePicker
-        // $isrequired={endDateIsRequired}
+        $isrequired={endDateIsRequired}
         value={currentEndDate === INFINITE ? '' : currentEndDate}
         onChange={(date) => onCurrentEndDateChange(date)}
         onOk={(date, _) => onCurrentEndDateChange(date)}
@@ -247,7 +263,7 @@ const RegulatoryText = props => {
       />
       <Or>&nbsp;ou</Or>
       <CustomCheckbox
-        // $isrequired={endDateIsRequired}
+        $isrequired={endDateIsRequired}
         checked={currentEndDate === INFINITE}
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
@@ -274,7 +290,7 @@ const CustomCheckbox = styled(Checkbox)`
   }
   .rs-checkbox-inner {
     &:before {
-      border: 2px solid ${props => props.isrequired ? COLORS.red : COLORS.lightGray} !important;
+      border: 2px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
     }
   }
   .rs-checkbox-checker {

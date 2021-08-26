@@ -232,6 +232,7 @@ const RegulatoryText = props => {
         onChange={(date) => onCurrentStartDateChange(date)}
         onOk={(date, _) => onCurrentStartDateChange(date)}
         format='DD/MM/YYYY'
+        placement={'rightStart'}
       />
     </ContentLine>
     <ContentLine>
@@ -242,6 +243,7 @@ const RegulatoryText = props => {
         onChange={(date) => onCurrentEndDateChange(date)}
         onOk={(date, _) => onCurrentEndDateChange(date)}
         format='DD/MM/YYYY'
+        placement={'rightEnd'}
       />
       <Or>&nbsp;ou</Or>
       <CustomCheckbox

@@ -49,7 +49,7 @@ const DatePickerStyled = styled(DatePicker)`
     display: none;
   }
   .rs-picker-toggle {
-    border: 1px solid ${props => props.isrequired ? COLORS.red : COLORS.lightGray}  !important;
+    border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray}  !important;
     box-sizing: border-box;
   }
   .rs-picker-toggle.rs-btn {

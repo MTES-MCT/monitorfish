@@ -8,7 +8,9 @@ const regulationSlice = createSlice({
     /** @type {UpcomingRegulation} selectedUpcomingRegulation */
     upcomingRegulation: undefined,
     /** @type {boolean} isModalOpen */
-    isModalOpen: false
+    isModalOpen: false,
+    /** @type {boolean} regulatoryTextHasValueMissing */
+    regulatoryTextHasValueMissing: false
   },
   reducers: {
     setSelectedRegulation (state, action) {
@@ -23,8 +25,11 @@ const regulationSlice = createSlice({
     resetModal (state) {
       state.isModalOpen = false
     },
-    openModal (state, action) {
+    openModal (state) {
       state.isModalOpen = true
+    },
+    setRegulatoryTextHasValueMissing (state, action) {
+      state.regulatoryTextHasValueMissing = action.payload
     }
   }
 })
@@ -34,7 +39,8 @@ export const {
   setIsModalOpen,
   setUpcomingRegulation,
   resetModal,
-  openModal
+  openModal,
+  setRegulatoryTextHasValueMissing
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

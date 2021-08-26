@@ -40,11 +40,13 @@ const CustomDatePicker = props => {
 const DatePickerStyled = styled(DatePicker)`
   width: 87px;
   box-sizing: border-box;
+  color: ${COLORS.gunMetal}
+  border-radius: 2px;
   .rs-picker-toggle-caret {
     display: none;
   }
   .rs-picker-toggle {
-    border: 1px solid ${props => props.isrequired ? COLORS.red : COLORS.grayDarker}  !important;
+    border: 1px solid ${props => props.isrequired ? COLORS.red : COLORS.lightGray}  !important;
     box-sizing: border-box;
   }
   .rs-picker-toggle.rs-btn {

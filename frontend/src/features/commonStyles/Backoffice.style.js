@@ -17,10 +17,10 @@ export const SectionTitle = styled.span`
   text-align: left;
   font-weight: bold;
   font-size: 16px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   text-transform: uppercase;
   width: 100%;
-  border-bottom: 1px solid ${COLORS.grayDarker};
+  border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 20px;
 `
 
@@ -42,7 +42,7 @@ padding: 15px 0;
 
 export const Delimiter = styled.div`
   width: 700px;
-  border-bottom: 1px solid ${COLORS.grayDarker};
+  border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 15px;
 `
 

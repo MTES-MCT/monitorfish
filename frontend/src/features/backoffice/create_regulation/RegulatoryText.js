@@ -265,14 +265,14 @@ const RegulatoryText = props => {
 const CustomCheckbox = styled(Checkbox)`
   padding-right: 15px;
   font-size: 13px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.gunMetal};
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
   }
   .rs-checkbox-inner {
     &:before {
-      border: 2px solid ${props => props.isrequired ? COLORS.red : COLORS.grayDarker} !important;
+      border: 2px solid ${props => props.isrequired ? COLORS.red : COLORS.lightGray} !important;
     }
   }
   .rs-checkbox-checker {
@@ -282,7 +282,7 @@ const CustomCheckbox = styled(Checkbox)`
 `
 const Or = styled.span`
   padding: 0 10px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.slateGray};
   font-size: 13px;
 `
 

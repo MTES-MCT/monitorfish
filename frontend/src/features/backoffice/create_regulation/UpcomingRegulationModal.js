@@ -25,7 +25,6 @@ const UpcomingRegulationModal = () => {
   const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
     ? [...upcomingRegulation.regulatoryTextList]
     : [{}])
-  // const [regulatoryTextHasValueMissing, setRegulatoryTextHasValueMissing] = useState(false)
   const [saveForm, setSaveForm] = useState(false)
 
   const addUpcomingRegulation = () => {

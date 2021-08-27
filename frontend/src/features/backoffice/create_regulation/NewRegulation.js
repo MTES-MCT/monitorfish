@@ -52,7 +52,7 @@ const CreateRegulation = () => {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
     const newRegulation = {
-      regulatoryText: [{}],
+      regulatoryText: [],
       upcomingRegulation: [{}]
     }
     dispatch(setSelectedRegulation(newRegulation))

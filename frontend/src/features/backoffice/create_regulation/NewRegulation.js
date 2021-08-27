@@ -18,7 +18,7 @@ import {
 import { formatDataForSelectPicker } from '../../../utils'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { Section, SectionTitle, Footer, FooterButton } from '../../commonStyles/Backoffice.style'
-import { setSelectedRegulation } from '../../../domain/shared_slices/Regulation'
+import { setSelectedRegulation } from '../Regulation.slice'
 
 const CreateRegulation = () => {
   const dispatch = useDispatch()

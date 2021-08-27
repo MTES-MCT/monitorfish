@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { addTextToRegulatoryTextList } from '../../../utils'
-import { openModal } from '../../../domain/shared_slices/Regulation'
+import { openModal } from '../Regulation.slice'
 
 /**
  * @typedef {object} Props

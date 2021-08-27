@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import InfoBox from './InfoBox'
 import { CancelButton } from '../../commonStyles/Buttons.style'
 import { Link } from '../../commonStyles/Backoffice.style'
-import { openModal, setUpcomingRegulation } from '../../../domain/shared_slices/Regulation'
+import { openModal, setUpcomingRegulation } from '../Regulation.slice'
 
 /**
  * @type {[RegulatoryText]} upcomingRegulationText

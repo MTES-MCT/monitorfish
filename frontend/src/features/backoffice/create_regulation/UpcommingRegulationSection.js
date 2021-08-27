@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import InfoBox from './InfoBox'
 import { CancelButton } from '../../commonStyles/Buttons.style'
 import { Link } from '../../commonStyles/Backoffice.style'
-import { openModal, setUpcomingRegulation } from '../Regulation.slice'
+import { setIsModalOpen, setUpcomingRegulation } from '../Regulation.slice'
 
 /**
  * @type {[RegulatoryText]} upcomingRegulationText
@@ -38,7 +38,7 @@ const UpcommingRegulationSection = () => {
           <Row><CancelButton
             disabled={false}
             isLast={false}
-            onClick={() => dispatch(openModal(upcomingRegulation))}
+            onClick={() => dispatch(setIsModalOpen(true))}
           >
             Éditer la réglementation
           </CancelButton>

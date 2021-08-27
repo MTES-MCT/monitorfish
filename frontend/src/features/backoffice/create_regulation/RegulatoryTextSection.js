@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { addTextToRegulatoryTextList } from '../../../utils'
-import { openModal } from '../Regulation.slice'
+import { setIsModalOpen } from '../Regulation.slice'
 
 /**
  * @typedef {object} Props
@@ -36,7 +36,7 @@ const RegulatoryTextSection = props => {
     if (source === 'upcomingRegulation') {
       updateRegulatoryTextList()
     } else {
-      dispatch(openModal())
+      dispatch(setIsModalOpen(true))
     }
   }
 

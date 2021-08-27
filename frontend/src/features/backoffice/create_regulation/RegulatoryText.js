@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './CustomDatePicker'
 import { COLORS, INFINITE } from '../../../constants/constants'
-import { setRegulatoryTextHasValueMissing } from '../../../domain/shared_slices/Regulation'
+import { setRegulatoryTextHasValueMissing } from '../Regulation.slice'
 import Tag from './Tag'
 
 /**

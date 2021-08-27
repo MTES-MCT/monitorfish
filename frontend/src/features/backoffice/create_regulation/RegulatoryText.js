@@ -224,7 +224,7 @@ const RegulatoryText = props => {
     </ContentLine>
     <ContentLine>
       <Label>Type de texte</Label>
-      <CheckboxGroup
+      <CustomCheckboxGroup
         inline
         name="checkboxList"
         value={currentTextType}
@@ -238,7 +238,7 @@ const RegulatoryText = props => {
           $isrequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.REGULATION}
         >réglementation de la zone</CustomCheckbox>
-      </CheckboxGroup>
+      </CustomCheckboxGroup>
     </ContentLine>
     <ContentLine>
       <Label>Début de validité</Label>
@@ -280,10 +280,18 @@ const RegulatoryText = props => {
   </>
 }
 
+const CustomCheckboxGroup = styled(CheckboxGroup)`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+`
+
 const CustomCheckbox = styled(Checkbox)`
   padding-right: 15px;
   font-size: 13px;
   color: ${COLORS.gunMetal};
+  display: flex;
+  vertical-align: baseline;
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
@@ -291,6 +299,7 @@ const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-inner {
     &:before {
       border: 2px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
+      box-sizing: border-box;
     }
   }
   .rs-checkbox-checker {

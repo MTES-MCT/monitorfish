@@ -372,7 +372,7 @@ export const addTextToRegulatoryTextList = (regulatoryTextList, id, regulatoryTe
       newRegulatoryTextList[id] = regulatoryText
     } else {
       if (newRegulatoryTextList.length === 1) {
-        newRegulatoryTextList = [{}]
+        newRegulatoryTextList = []
       } else {
         newRegulatoryTextList.splice(id, 1)
       }

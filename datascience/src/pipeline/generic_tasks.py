@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import Union
 
+import geopandas as gpd
 import pandas as pd
 import prefect
 from prefect import task
@@ -60,7 +61,7 @@ def extract(
 
 
 def load(
-    df: pd.DataFrame,
+    df: Union[pd.DataFrame, gpd.GeoDataFrame],
     table_name: str,
     schema: str,
     db_name: str,
@@ -92,11 +93,26 @@ def load(
 
         # Insert data into table
         logger.info(f"Loading into {schema}.{table_name}")
-        df_.to_sql(
-            name=table_name,
-            con=connection,
-            schema=schema,
-            index=False,
-            method=psql_insert_copy,
-            if_exists="append",
-        )
+
+        if isinstance(df_, gpd.GeoDataFrame):
+            logger.info("GeodateFrame detected, using to_postgis")
+            df_.to_postgis(
+                name=table_name,
+                con=connection,
+                schema=schema,
+                index=False,
+                if_exists="append",
+            )
+
+        elif isinstance(df_, pd.DataFrame):
+            df_.to_sql(
+                name=table_name,
+                con=connection,
+                schema=schema,
+                index=False,
+                method=psql_insert_copy,
+                if_exists="append",
+            )
+
+        else:
+            raise ValueError("df must be DataFrame or GeoDataFrame.")

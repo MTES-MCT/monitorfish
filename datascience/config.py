@@ -36,3 +36,9 @@ FAO_SPECIES_URL = "http://www.fao.org/fishery/static/ASFIS/ASFIS_sp.zip"
 DATA_GOUV_SPECIES_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/32616122-6931-4875-8e26-a57832012419"
 )
+
+FAO_AREAS_URL = (
+    "http://www.fao.org/fishery/geoserver/fifao/ows?"
+    "service=WFS&request=GetFeature&version=1.0.0&"
+    "typeName=fifao:FAO_AREAS_CWP&outputFormat=SHAPE-ZIP"
+)

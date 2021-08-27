@@ -9,8 +9,8 @@ const regulationSlice = createSlice({
     upcomingRegulation: undefined,
     /** @type {boolean} isModalOpen */
     isModalOpen: false,
-    /** @type {boolean} regulatoryTextHasValueMissing */
-    regulatoryTextHasValueMissing: false
+    /** @type {boolean} regulatoryTextHasMissingValue */
+    regulatoryTextHasMissingValue: false
   },
   reducers: {
     setSelectedRegulation (state, action) {
@@ -29,7 +29,7 @@ const regulationSlice = createSlice({
       state.isModalOpen = true
     },
     setRegulatoryTextHasValueMissing (state, action) {
-      state.regulatoryTextHasValueMissing = action.payload
+      state.regulatoryTextHasMissingValue = action.payload
     }
   }
 })

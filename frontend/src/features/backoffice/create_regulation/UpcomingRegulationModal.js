@@ -19,7 +19,7 @@ const UpcomingRegulationModal = () => {
   const {
     isModalOpen,
     upcomingRegulation,
-    regulatoryTextHasValueMissing
+    regulatoryTextHasMissingValue
   } = useSelector(state => state.regulation)
 
   const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
@@ -34,15 +34,15 @@ const UpcomingRegulationModal = () => {
   }
 
   useEffect(() => {
-    console.log('modal useEffect regulatoryTextHasValueMissing')
-    console.log(regulatoryTextHasValueMissing)
-    if (saveForm && !regulatoryTextHasValueMissing) {
+    console.log('modal useEffect regulatoryTextHasMissingValue')
+    console.log(regulatoryTextHasMissingValue)
+    if (saveForm && !regulatoryTextHasMissingValue) {
       addUpcomingRegulation()
       setSaveForm(false)
       dispatch(resetModal())
       dispatch(setRegulatoryTextHasValueMissing(false))
     }
-  }, [saveForm, regulatoryTextHasValueMissing])
+  }, [saveForm, regulatoryTextHasMissingValue])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>

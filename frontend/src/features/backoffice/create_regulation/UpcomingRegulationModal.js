@@ -4,10 +4,10 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import {
-  resetModal,
+  setIsModalOpen,
   setUpcomingRegulation,
   setRegulatoryTextHasValueMissing
-} from '../../../domain/shared_slices/Regulation'
+} from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
@@ -39,7 +39,7 @@ const UpcomingRegulationModal = () => {
     if (saveForm && !regulatoryTextHasMissingValue) {
       addUpcomingRegulation()
       setSaveForm(false)
-      dispatch(resetModal())
+      dispatch(setIsModalOpen(false))
       dispatch(setRegulatoryTextHasValueMissing(false))
     }
   }, [saveForm, regulatoryTextHasMissingValue])
@@ -49,7 +49,7 @@ const UpcomingRegulationModal = () => {
       <Body>
         <ModalTitle>
           BACKOFFISH - Ajouter une réglementation à venir
-          <CloseIcon onClick={() => dispatch(resetModal())}/>
+          <CloseIcon onClick={() => dispatch(setIsModalOpen(false))}/>
         </ModalTitle>
         <Section>
           <RegulatoryTextSection
@@ -76,7 +76,7 @@ const UpcomingRegulationModal = () => {
         <CancelButton
           disabled={false}
           isLast={false}
-          onClick={() => dispatch(resetModal())}
+          onClick={() => dispatch(setIsModalOpen(false))}
         >
           Annuler
         </CancelButton>

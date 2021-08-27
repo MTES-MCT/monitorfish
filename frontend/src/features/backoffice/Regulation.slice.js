@@ -22,12 +22,6 @@ const regulationSlice = createSlice({
     setUpcomingRegulation (state, action) {
       state.upcomingRegulation = action.payload
     },
-    resetModal (state) {
-      state.isModalOpen = false
-    },
-    openModal (state) {
-      state.isModalOpen = true
-    },
     setRegulatoryTextHasValueMissing (state, action) {
       state.regulatoryTextHasMissingValue = action.payload
     }
@@ -38,8 +32,6 @@ export const {
   setSelectedRegulation,
   setIsModalOpen,
   setUpcomingRegulation,
-  resetModal,
-  openModal,
   setRegulatoryTextHasValueMissing
 } = regulationSlice.actions
 

@@ -14,7 +14,7 @@ const InfoBox = props => {
       isInfoTextShown={isInfoTextShown}
       isFormOpened={isFormOpened}
       onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
-      pointer={setIsInfoTextShown}
+      pointer={message}
     >
       {isInfoTextShown
         ? <InfoTextWrapper
@@ -41,7 +41,7 @@ const InfoTextParent = styled.div`
   min-height: 20px;
   min-width: 20px;
   position: relative;
-  ${props => props.pointer ? 'cursor: pointer' : ''};
+  cursor: ${props => props.pointer ? 'pointer' : 'default'};
   ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
   ${props => props.isFormOpened && props.isInfoTextShown ? 'margin-top: 8px' : ''};
 `

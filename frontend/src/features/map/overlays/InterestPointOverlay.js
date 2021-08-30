@@ -136,7 +136,7 @@ const InterestPointOverlay = props => {
           showed && !hiddenByZoom
             ? <InterestPointOverlayElement>
               <Header>
-                <Name data-cy={'interest-point-name'}>
+                <Name data-cy={'interest-point-name'} title={name || 'Aucun Libellé'}>
                   {
                     name || 'Aucun Libellé'
                   }

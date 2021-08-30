@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="15.811" height="15.811" viewBox="0 0 15.811 15.811">
   <g id="Bouton_édition" data-name="Bouton édition" transform="translate(0.75 1.061)">
-    <path id="Rectangle_787" data-name="Rectangle 787" d="M133.489,370.065v7.713h-13v-13H128.2" transform="translate(-120.489 -363.778)" fill="none" stroke="#969696" stroke-width="1.5"/>
-    <path id="Tracé_353" data-name="Tracé 353" d="M126.572,370.606l7.828-7.828,2.09,2.09-7.828,7.828-2.172.082Z" transform="translate(-122.489 -362.778)" fill="none" stroke="#969696" stroke-miterlimit="10" stroke-width="1.5"/>
+    <path id="Rectangle_787" data-name="Rectangle 787" d="M133.489,370.065v7.713h-13v-13H128.2" transform="translate(-120.489 -363.778)" fill="none" stroke="#707785" stroke-width="1.5"/>
+    <path id="Tracé_353" data-name="Tracé 353" d="M126.572,370.606l7.828-7.828,2.09,2.09-7.828,7.828-2.172.082Z" transform="translate(-122.489 -362.778)" fill="none" stroke="#707785" stroke-miterlimit="10" stroke-width="1.5"/>
   </g>
 </svg>

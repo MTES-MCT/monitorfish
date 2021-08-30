@@ -114,6 +114,7 @@ const SaveInterestPoint = (
   const updateCoordinates = (nextCoordinates, coordinates) => {
     if (nextCoordinates && nextCoordinates.length) {
       if (!coordinates || !coordinates.length || areDistinct(nextCoordinates, coordinates)) {
+        console.log('next', nextCoordinates, coordinates)
         const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
         dispatch(updateInterestPointKeyBeingDrawed({
           key: 'coordinates',

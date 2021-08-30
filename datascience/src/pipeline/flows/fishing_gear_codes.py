@@ -32,6 +32,15 @@ def clean_fishing_gear_codes(fishing_gear_codes):
         "FG": "Engins divers",
         "HAR": "Engins divers",
         "FCN": "Engins divers",
+        "SSC": "Sennes traînantes",
+        "SDN": "Sennes traînantes",
+        "SX": "Sennes traînantes",
+        "PS": "Sennes tournantes coulissantes",
+        "PS2": "Sennes tournantes coulissantes",
+        "PS1": "Sennes tournantes coulissantes",
+        "SV": "Sennes tournantes coulissantes",
+        "SPR": "Sennes tournantes coulissantes",
+        "SB": "Sennes tournantes coulissantes",
     }
 
     for (gear_code, category) in category_changes.items():

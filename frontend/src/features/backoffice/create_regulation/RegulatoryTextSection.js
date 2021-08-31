@@ -14,6 +14,8 @@ import { setIsModalOpen } from '../Regulation.slice'
  * @prop {[RegulatoryText]} regulatoryTextList
  * @prop {Function} setRegulatoryTextList
  * @prop {'regulation' | 'upcomingRegulation'} source
+ * @prop {Boolean} saveForm
+ * @prop {Boolean} setRegulatoryTextHasValueMissing
  */
 const RegulatoryTextSection = props => {
   const {

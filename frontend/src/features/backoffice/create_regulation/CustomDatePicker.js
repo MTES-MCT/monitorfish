@@ -32,8 +32,6 @@ const CustomDatePicker = props => {
       friday: 'Vend',
       saturday: 'Sam',
       ok: 'OK',
-      today: 'Aujourd\'hui',
-      yesterday: 'Hier',
       hours: 'Heures',
       minutes: 'Minutes',
       seconds: 'Seconds'

@@ -20,12 +20,6 @@ const RegulatoryText = props => {
   const {
     id,
     regulatoryText,
-    /**
-     * @function updateRegulatoryText
-     * update the value of an object at a given list index
-     * @param {number} regulatoryTextId
-     * @parem {RegulatoryText} newRegulatoryText
-     */
     updateRegulatoryText,
     saveForm
   } = props
@@ -103,8 +97,9 @@ const RegulatoryText = props => {
     let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
-    required = !currentRegulatoryTextURL || currentRegulatoryTextURL === ''
-    // add check that it is an url with a regex
+    required = !currentRegulatoryTextURL ||
+      currentRegulatoryTextURL ||
+      !checkURL(currentRegulatoryTextURL)
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
     required = !currentStartDate
@@ -117,17 +112,20 @@ const RegulatoryText = props => {
     oneValueIsMissing = oneValueIsMissing || required
     setTextTypeIsRequired(required)
     dispatch(setRegulatoryTextHasValueMissing(oneValueIsMissing))
-    console.log('oneValueIsMissing ?')
-    console.log(oneValueIsMissing)
     return oneValueIsMissing
   }
 
   useEffect(() => {
     if (saveForm) {
-      console.log('useEffect')
       checkRequiredValueOnSubmit()
     }
   }, [saveForm])
+
+  const checkURL = (url) => {
+    console.log(url)
+    const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
+    return regex.test(url)
+  }
 
   const cancelAddNewRegulatoryText = () => {
     setIsEditing(true)
@@ -163,7 +161,9 @@ const RegulatoryText = props => {
     let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
-    required = !currentRegulatoryTextURL || currentRegulatoryTextURL === ''
+    required = !currentRegulatoryTextURL ||
+      currentRegulatoryTextURL === '' ||
+      !checkURL(currentRegulatoryTextURL)
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
     if (!oneValueIsMissing) {

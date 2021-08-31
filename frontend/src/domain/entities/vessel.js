@@ -183,7 +183,8 @@ export const getVesselIdentityFromVessel = vessel => {
     flagState: vessel.flagState,
     mmsi: vessel.mmsi,
     ircs: vessel.ircs,
-    vesselIdentifier: vessel.vesselIdentifier
+    vesselIdentifier: vessel.vesselIdentifier,
+    beaconNumber: vessel.beaconNumber
   }
 }
 

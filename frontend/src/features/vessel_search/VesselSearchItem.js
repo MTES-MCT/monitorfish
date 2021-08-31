@@ -5,6 +5,62 @@ import countries from 'i18n-iso-countries'
 import Highlighter from 'react-highlight-words'
 
 const VesselSearchItem = ({ id, vessel, selectVessel, searchText }) => {
+  const showVesselIdentityData = () => {
+    const arrayOfInformation = [
+      {
+        value: vessel.internalReferenceNumber,
+        name: 'CFR'
+      },
+      {
+        value: vessel.externalReferenceNumber,
+        name: 'Marq. Ext.'
+      },
+      {
+        value: vessel.mmsi,
+        name: 'MMSI'
+      },
+      {
+        value: vessel.ircs,
+        name: 'Call Sign'
+      },
+      {
+        value: vessel.beaconNumber,
+        name: 'Balise n°'
+      }
+    ]
+
+    return arrayOfInformation
+      .filter(information => information.value)
+      .map((information, index) => {
+        const informationToShow = <>
+          <Highlighter
+            highlightClassName="highlight"
+            searchWords={[searchText]}
+            autoEscape={true}
+            textToHighlight={information.value || ''}
+          />
+          {' '}<Light>({information.name})</Light>
+        </>
+
+        const fifthElement = 5
+        if (index + 1 === fifthElement) {
+          return <LongIdentityData
+            key={information.value}
+            style={{ flex: index % 2 }}
+          >
+            {informationToShow}
+          </LongIdentityData>
+        }
+
+        return <IdentityData
+          key={information.value}
+          style={{ flex: index % 2 }}
+        >
+          {informationToShow}
+        </IdentityData>
+      })
+  }
+
   return <ListItem
     onClick={selectVessel}
     key={id}>
@@ -23,50 +79,9 @@ const VesselSearchItem = ({ id, vessel, selectVessel, searchText }) => {
         />
       </Name>
     </div>
-    <Information>
-      <CFR>
-        <Highlighter
-          highlightClassName="highlight"
-          searchWords={[searchText]}
-          autoEscape={true}
-          textToHighlight={vessel.internalReferenceNumber || ''}
-        />
-        {vessel.internalReferenceNumber ? null : <Light>Inconnu</Light>}
-        {' '}<Light>(CFR)</Light>
-      </CFR>
-      <ExtNum>
-        <Highlighter
-          highlightClassName="highlight"
-          searchWords={[searchText]}
-          autoEscape={true}
-          textToHighlight={vessel.externalReferenceNumber || ''}
-        />
-        {vessel.externalReferenceNumber ? null : <Light>Inconnu</Light>}
-        {' '}<Light>(Marq. Ext.)</Light>
-      </ExtNum>
-    </Information>
-    <Information>
-      <MMSI>
-        <Highlighter
-          highlightClassName="highlight"
-          searchWords={[searchText]}
-          autoEscape={true}
-          textToHighlight={vessel.mmsi || ''}
-        />
-        {vessel.mmsi ? null : <Light>Inconnu</Light>}
-        {' '}<Light>(MMSI)</Light>
-      </MMSI>
-      <CallSign>
-        <Highlighter
-          highlightClassName="highlight"
-          searchWords={[searchText]}
-          autoEscape={true}
-          textToHighlight={vessel.ircs || ''}
-        />
-        {vessel.ircs ? null : <Light>Inconnu</Light>}
-        {' '}<Light>(Call Sign)</Light>
-      </CallSign>
-    </Information>
+    <IdentityDataWrapper>
+      {showVesselIdentityData()}
+    </IdentityDataWrapper>
   </ListItem>
 }
 
@@ -97,35 +112,23 @@ const Name = styled.span`
   font-size: 13px;
 `
 
-const Information = styled.div`
+const IdentityDataWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
   font-size: 13px;
   margin-left: 5px;
   color: ${COLORS.slateGray};
+  width: 350px;
 `
 
-const CallSign = styled.div`
+const IdentityData = styled.div`
   font-size: 13px;
-  flex: 2;
-  min-width: 130px;
-`
-
-const MMSI = styled.div`
-  font-size: 13px;
-  flex: 1;
   min-width: 140px;
 `
 
-const ExtNum = styled.div`
+const LongIdentityData = styled.div`
   font-size: 13px;
-  flex: 2;
-  min-width: 130px;
-`
-
-const CFR = styled.div`
-  font-size: 13px;
-  flex: 1;
-  min-width: 140px;
+  min-width: 100%;
 `
 
 const Flag = styled.img`

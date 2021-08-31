@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2021-08-26 11:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,17 +106,47 @@ msgstr ""
 msgid "Running the orchestration service"
 msgstr ""
 
-#: ../source/deployment.rst:51
+#: ../source/deployment.rst:52
+#: 8175acad2ca24104a4f91b48ac8e0cda
+msgid "Starting the Prefect server orchestrator"
+msgstr ""
+
+#: ../source/deployment.rst:54
 #: d869a54a95f942e8babd551d9a82167f
 msgid "The orchestration service can be started with :"
 msgstr ""
 
-#: ../source/deployment.rst:59
+#: ../source/deployment.rst:62
+#: da2b91c4c70e4a0da59ca78e96e2f8e3
+msgid "Automating log cleaning"
+msgstr ""
+
+#: ../source/deployment.rst:64
+#: 9913e1374caf4d55a94d65f94afd7fd7
+msgid "Logs of past flow runs are stored in a Postgres database that is part of the prefect server architecture. In order to keep the size of this database low, it is necessary to set up a cron job to delete old flow runs."
+msgstr ""
+
+#: ../source/deployment.rst:67
+#: 4bc17c3b5ede41e2b145ad0922244c80
+msgid "The Prefect server database runs in a Docker container. The script ``infra/remote/data-pipeline/truncate-old-prefect-logs.sh`` goes into that container with ``docker exec`` and runs a ``DELETE`` query to delete old flow_runs."
+msgstr ""
+
+#: ../source/deployment.rst:69
+#: 0d50aaed78db4a8bbf534be32c1bab43
+msgid "This query can be run daily by setting up a cron job, for instance by adding a line to the crontab file :"
+msgstr ""
+
+#: ../source/deployment.rst:75
+#: df899e07c8694ecc903cd2393d79b184
+msgid "then add the line in ``infra/remote/data-pipeline/crontab.txt`` (after updating the scripts and logs locations as needed) in the crontab file."
+msgstr ""
+
+#: ../source/deployment.rst:78
 #: eebc600719524e148610174ead696bea
 msgid "Running the execution service"
 msgstr ""
 
-#: ../source/deployment.rst:61
+#: ../source/deployment.rst:80
 #: 7c58a51c30f24c1bb222694dc6addc86
 msgid "The execution service can be started with :"
 msgstr ""

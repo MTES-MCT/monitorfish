@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"POT-Creation-Date: 2021-08-26 11:42+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
@@ -21,54 +21,54 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/deployment.rst:3 4bcf6d2f42d840338fd7f8b2f282b362
+#: ../source/deployment.rst:3 a469ee8bd44b430d964d687568903d48
 msgid "Deployment"
 msgstr "Déploiement"
 
-#: ../source/deployment.rst:6 a618a2bd872640ea95152118848c2bb2
+#: ../source/deployment.rst:6 41c832a7029b4eb8a1fcc3c0cc969807
 msgid "Prerequisites"
 msgstr "Prérequis"
 
-#: ../source/deployment.rst:9 9c5076072e734c43ba4acd8f4f836184
+#: ../source/deployment.rst:9 5b2cb8bd00334d3c84adad01d9a84912
 msgid "Dependencies"
 msgstr "Dépendances"
 
-#: ../source/deployment.rst:11 33188e74a2754c4b8f44ffad99475b31
+#: ../source/deployment.rst:11 bd3c0f6601f246428a203541ec87613d
 msgid ""
 "The following dependencies must be installed on the production machine :"
 msgstr ""
 "Les dépendances suivantes doivent être installées sur la machine de "
 "production "
 
-#: ../source/deployment.rst:13 4f4bed42c6264ed78f3bc3333a8ed849
+#: ../source/deployment.rst:13 8f2e4d7928f345d6a846c34eb0674d32
 msgid "`git <https://git-scm.com/>`__"
 msgstr "`git <https://git-scm.com/>`__"
 
-#: ../source/deployment.rst:14 d104bc4ce5ad4c3e9c4f6c50273cc682
+#: ../source/deployment.rst:14 a6dec34cfe8e494986fb622085c3e84b
 msgid "`docker <https://docs.docker.com/get-docker/>`__"
 msgstr "`docker <https://docs.docker.com/get-docker/>`__"
 
-#: ../source/deployment.rst:15 cfb4f2162fb6478fa07eeb61151681c9
+#: ../source/deployment.rst:15 364ecde2fc934fb5876bf90074338a0a
 msgid "`make <https://www.gnu.org/software/make/>`__"
 msgstr "`make <https://www.gnu.org/software/make/>`__"
 
-#: ../source/deployment.rst:18 f56cffaadb0b4c9eb348ca50682875df
+#: ../source/deployment.rst:18 bced2dbb027e4568bbfce515a0e81ea8
 msgid "Configuration"
 msgstr "Configuration"
 
-#: ../source/deployment.rst:21 cf65682aac114a358e94fdf98cfd6611
+#: ../source/deployment.rst:21 7f33e7db223b46c89fa67fa7a39c7955
 msgid "Cloning the repository"
 msgstr "Cloner le dépôt"
 
-#: ../source/deployment.rst:23 a5f2c4cb263b4990ac6129a665a0fc2b
+#: ../source/deployment.rst:23 0b370f92fbad4ea9b0f859a828efeae0
 msgid "Clone the repo with :"
 msgstr "Clonez le dépôt avec :"
 
-#: ../source/deployment.rst:32 22d273a693044a8aa0e53837c1a0e96b
+#: ../source/deployment.rst:32 a861d84c16f44946b0a774cf863ef6c3
 msgid "Environment variables"
 msgstr "Variables d'environnement"
 
-#: ../source/deployment.rst:34 2ba32e0e48744e658696393dbc42ad3e
+#: ../source/deployment.rst:34 5430e26a5386428d83a83d6c8f38aaba
 msgid ""
 "A ``.env`` file must be created in the ``datascience`` folder, with all the "
 "variables listed in ``.env.template`` filled in."
@@ -76,7 +76,7 @@ msgstr ""
 "Un fichier ``.env`` doit être créé dans le dossier ``datascience``, avec "
 "toutes les variables listées dans ``.env.template`` remplies."
 
-#: ../source/deployment.rst:35 1472e0898bb14618b31ef412425eae69
+#: ../source/deployment.rst:35 0029cdb020184b84995479bc4fb75ec1
 msgid ""
 "Set the ``MONITORFISH_VERSION`` environment variable. This will determine "
 "which docker images to pull when running ```make`` commands."
@@ -85,11 +85,11 @@ msgstr ""
 "déterminera les images docker à extraire lors de l'exécution des commandes "
 "``make``"
 
-#: ../source/deployment.rst:38 4a86844d1af44836a0c337ed01dedd75
+#: ../source/deployment.rst:38 95aa81e03b7d48cea6c8a329d764b287
 msgid "ERS files"
 msgstr "Fichiers ERS"
 
-#: ../source/deployment.rst:40 8c2779072454476c90efe0af6eb77f7e
+#: ../source/deployment.rst:40 f8448faf88f4443f8cde74701a514b8c
 msgid ""
 "ERS raw xml files are ingested by the ERS flow from the configured "
 "``ERS_FILES_LOCATION`` in ``datascience/config.py``. In order to make ERS "
@@ -101,11 +101,11 @@ msgstr ""
 "Afin de rendre les données ERS disponibles pour Monitorfish, les fichiers "
 "ERS doivent donc être déposés dans ce répertoire."
 
-#: ../source/deployment.rst:44 9abf13be15db429ba54181c1687e93ea
+#: ../source/deployment.rst:44 48ca5b6874074d668273b897c98f00d9
 msgid "Running the database service"
 msgstr "Exécution de la base de données"
 
-#: ../source/deployment.rst:46 813c075b34de4e439a70e97996348465
+#: ../source/deployment.rst:46 16399d29543f49e485a12ffbe2202c99
 msgid ""
 "The Monitorfish database must be running for data processing operations to "
 "be carried out. For this, run the backend service first."
@@ -114,19 +114,68 @@ msgstr ""
 "opérations de traitement des données puissent être effectuées. Pour cela, "
 "lancez d'abord le service backend."
 
-#: ../source/deployment.rst:49 1ff43459553a4e17a4182bdbcd2bcd03
+#: ../source/deployment.rst:49 9efa4a35fa004fcaaadc5ebea28381d3
 msgid "Running the orchestration service"
 msgstr "Exécution de l'orchestrateur"
 
-#: ../source/deployment.rst:51 eee96df5244a4816a152fd46a40813a5
+#: ../source/deployment.rst:52 8175acad2ca24104a4f91b48ac8e0cda
+msgid "Starting the Prefect server orchestrator"
+msgstr "Démarrer l'orchestrateur Prefect server"
+
+#: ../source/deployment.rst:54 d869a54a95f942e8babd551d9a82167f
 msgid "The orchestration service can be started with :"
 msgstr "L'orchestrateur est lancé par la commande suivante :"
 
-#: ../source/deployment.rst:59 b294f3aaaf97403aa643eed7df5db235
+#: ../source/deployment.rst:62 da2b91c4c70e4a0da59ca78e96e2f8e3
+msgid "Automating log cleaning"
+msgstr "Automatiser le nettoyage des logs"
+
+#: ../source/deployment.rst:64 9913e1374caf4d55a94d65f94afd7fd7
+msgid ""
+"Logs of past flow runs are stored in a Postgres database that is part of the"
+" prefect server architecture. In order to keep the size of this database "
+"low, it is necessary to set up a cron job to delete old flow runs."
+msgstr ""
+"Les logs des exécutions de flows passées sont stockés dans une base de "
+"données Postgres qui fait partie de l'architecture de l'orchestrateur "
+"Prefect server. Afin de limiter la taille de cette base de données, il est "
+"nécessaire de mettre en place une tâche cron pour supprimer les anciens "
+"logs."
+
+#: ../source/deployment.rst:67 4bc17c3b5ede41e2b145ad0922244c80
+msgid ""
+"The Prefect server database runs in a Docker container. The script "
+"``infra/remote/data-pipeline/truncate-old-prefect-logs.sh`` goes into that "
+"container with ``docker exec`` and runs a ``DELETE`` query to delete old "
+"flow_runs."
+msgstr ""
+"La base de données du serveur Prefect est exécutée dans un conteneur Docker."
+" Le script ``infra/remote/data-pipeline/truncate-old-prefect-logs.sh`` entre"
+" dans ce conteneur avec ``docker exec`` et exécute une requête ``DELETE`` "
+"pour supprimer les anciens flow_runs."
+
+#: ../source/deployment.rst:69 0d50aaed78db4a8bbf534be32c1bab43
+msgid ""
+"This query can be run daily by setting up a cron job, for instance by adding"
+" a line to the crontab file :"
+msgstr ""
+"Cette requête peut être exécutée quotidiennement en configurant une tâche "
+"cron, par exemple en ajoutant une ligne au fichier crontab :"
+
+#: ../source/deployment.rst:75 df899e07c8694ecc903cd2393d79b184
+msgid ""
+"then add the line in ``infra/remote/data-pipeline/crontab.txt`` (after "
+"updating the scripts and logs locations as needed) in the crontab file."
+msgstr ""
+"puis ajouter la ligne dans ``infra/remote/data-pipeline/crontab.txt`` (après"
+" avoir mis à jour les emplacements des scripts et des logs si nécessaire) "
+"dans le fichier crontab."
+
+#: ../source/deployment.rst:78 eebc600719524e148610174ead696bea
 msgid "Running the execution service"
 msgstr "Exécution du service de traitement de données"
 
-#: ../source/deployment.rst:61 3cffd7470b9d49a5a52941622d9d74ef
+#: ../source/deployment.rst:80 7c58a51c30f24c1bb222694dc6addc86
 msgid "The execution service can be started with :"
 msgstr ""
 "Le service de traitement de données est lancé par la commande suivante :"

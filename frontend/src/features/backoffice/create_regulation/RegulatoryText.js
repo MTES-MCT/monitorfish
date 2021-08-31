@@ -11,11 +11,11 @@ import { setRegulatoryTextHasValueMissing } from '../Regulation.slice'
 import Tag from './Tag'
 
 /**
- * RegulatoryText props
- * @type {Number} id
- * @type {RegulatoryText} regulatoryText
- * @type {Function} updateRegulatoryText
- * @type {Boolean} saveForm
+ * @typedef {object} Props
+ * @prop {Number} id
+ * @prop {RegulatoryText} regulatoryText
+ * @prop {Function} updateRegulatoryText
+ * @prop {Boolean} saveForm
  */
 const RegulatoryText = props => {
   const {
@@ -58,7 +58,7 @@ const RegulatoryText = props => {
   const [endDateIsRequired, setEndDateIsRequired] = useState(false)
   /** @type {Boolean} textTypeIsRequired */
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
-  
+
   const initFormValues = () => {
     const {
       name,
@@ -225,8 +225,8 @@ const RegulatoryText = props => {
             </CancelButton></>}
           </>
         : <Tag
-            selectedValue={currentRegulatoryTextName}
-            selectedURL={currentRegulatoryTextURL}
+            tagValue={currentRegulatoryTextName}
+            tagURL={currentRegulatoryTextURL}
             onCloseIconClicked={onCloseIconClicked}
           />
     }

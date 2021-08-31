@@ -62,7 +62,7 @@ const RegulatoryLayerSearchResultTopic = props => {
   const displayNumberOfZones = () => {
     const zoneNumber = getRegulatoryZonesLength()
     return (
-      <ZonesNumber onClick={() => setZonesAreOpen(!zonesAreOpen)}>
+      <ZonesNumber>
         {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
       </ZonesNumber>
     )
@@ -86,16 +86,16 @@ const RegulatoryLayerSearchResultTopic = props => {
 
   return (
     <>
-      <LayerTopic>
+      <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)}>
         <TopicName
           data-cy={'regulatory-layer-topic'}
-          onClick={() => setZonesAreOpen(!zonesAreOpen)}
           title={regulatoryLayerTopic.replace(/[_]/g, ' ')}
         >
           {regulatoryLayerTopic.replace(/[_]/g, ' ')}
         </TopicName>
         {displayNumberOfZones()}
         <CheckboxGroup
+          onClick={e => e.stopPropagation()}
           inline
           name="checkboxList"
           value={topicSelection}
@@ -146,6 +146,10 @@ const LayerTopic = styled.div`
   font-weight: 700;
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
+ 
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
+  }
   
   .rs-checkbox-checker {
     padding-top: 24px;

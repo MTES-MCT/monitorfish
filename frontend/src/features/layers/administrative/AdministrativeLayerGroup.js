@@ -21,7 +21,10 @@ const AdministrativeLayerGroup = props => {
             >
               {props.layers[0].group.name.replace(/[_]/g, ' ')}
             </Text>
-            <ChevronIcon isOpen={isOpen}/>
+            <Chevron
+              isOpen={isOpen}
+              onClick={() => setIsOpen(!isOpen)}
+            />
           </Zone>
           <List
             isOpen={isOpen}
@@ -77,14 +80,22 @@ const Zone = styled.span`
   width: stretch;
   display: flex;
   user-select: none;
-  padding-bottom: ${props => props.isOpen ? 2 : 3}px;
+  padding-bottom: 2px;
   ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
+  
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
+  }
 `
 
 const List = styled.div`
-  height: ${props => props.isOpen && props.length ? props.length * 30 + 10 : 0}px;
+  height: ${props => props.isOpen && props.length ? props.length * 34 + 10 : 0}px;
   overflow: hidden;
   transition: 0.2s all;
+`
+
+const Chevron = styled(ChevronIcon)`
+  margin-top: 5px;
 `
 
 export default AdministrativeLayerGroup

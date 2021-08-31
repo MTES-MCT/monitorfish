@@ -85,9 +85,13 @@ const LayersSidebar = () => {
 
 const RegulatoryZoneMetadataShifter = styled.div`
   position: absolute;
-  margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 355 : -30}px;
+  margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 355 : -455}px;
   margin-top: 45px;
   top: 0px;
+  opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
+  background: ${COLORS.gainsboro};
+  z-index: -1;
+  transition: 0.5s all;
 `
 
 const Sidebar = styled(MapComponentStyle)`

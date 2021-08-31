@@ -14,8 +14,19 @@ const DMSCoordinatesInput = props => {
   const [update, setUpdate] = useState([])
 
   useEffect(() => {
-    updateCoordinates(update, coordinates)
+    if (coordinatesAreModifiedAndNotRoundedByInput()) {
+      updateCoordinates(update, coordinates)
+    }
   }, [update, coordinates, updateCoordinates])
+
+  function coordinatesAreModifiedAndNotRoundedByInput () {
+    return update && update.length &&
+      coordinates && coordinates.length &&
+      (
+        update[0].toFixed(3) !== coordinates[0].toFixed(3) ||
+        update[1].toFixed(3) !== coordinates[1].toFixed(3)
+      )
+  }
 
   return <Body>
     <CoordinateInput

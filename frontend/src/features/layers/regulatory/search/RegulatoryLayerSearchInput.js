@@ -108,6 +108,7 @@ const RegulatoryLayerSearchInput = props => {
         <AdvancedSearch
           data-cy={'regulatory-layers-advanced-search'}
           onClick={() => dispatch(setAdvancedSearchIsOpen(!advancedSearchIsOpen))}
+          advancedSearchIsOpen={advancedSearchIsOpen}
         >
           {
             advancedSearchIsOpen
@@ -195,6 +196,7 @@ const AdvancedSearchInput = styled.input`
   width: 265px;
   margin: 5px 0 15px 0 !important;
   font-size: 13px;
+  color: ${COLORS.gunMetal};
 
   :hover, :focus {
     border-bottom: 1px ${COLORS.lightGray} solid;
@@ -205,11 +207,13 @@ const AdvancedSearch = styled.div`
   width: 40px;
   height: 40px;
   float: right;
-  background: ${COLORS.charcoal};
+  background: ${props => props.advancedSearchIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   cursor: pointer;
   font-size: 32px;
   line-height: 29px;
   color: ${COLORS.gainsboro};
+  font-weight: 300;
+  transition: 0.5s all;
 `
 
 export default RegulatoryLayerSearchInput

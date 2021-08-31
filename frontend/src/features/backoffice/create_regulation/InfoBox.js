@@ -27,10 +27,7 @@ const InfoBox = props => {
           </InfoText>
         </InfoTextWrapper>
         : <InfoPoint
-          onMouseEnter={() => {
-            console.log('onMouseEnter')
-            setIsInfoTextShown && setIsInfoTextShown(true)
-          }}
+          onMouseEnter={() => setIsInfoTextShown && setIsInfoTextShown(true)}
           onMouseOut={() => setIsInfoTextShown && setIsInfoTextShown(false)}
         >!</InfoPoint>}
     </InfoTextParent>)

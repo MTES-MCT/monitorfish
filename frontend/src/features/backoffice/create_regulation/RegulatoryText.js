@@ -12,9 +12,10 @@ import Tag from './Tag'
 
 /**
  * RegulatoryText props
- * @type {number} id
+ * @type {Number} id
  * @type {RegulatoryText} regulatoryText
  * @type {Function} updateRegulatoryText
+ * @type {Boolean} saveForm
  */
 const RegulatoryText = props => {
   const {
@@ -34,19 +35,30 @@ const RegulatoryText = props => {
 
   const dispatch = useDispatch()
 
+  /** @type {String} currentRegulatoryTextName */
   const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState('')
+  /** @type {String} currentRegulatoryTextURL */
   const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState('')
+  /** @type {String} currentStartDate */
   const [currentStartDate, setCurrentStartDate] = useState()
+  /** @type {String} currentEndDate */
   const [currentEndDate, setCurrentEndDate] = useState()
+  /** @type {[RegulatoryTextType]} currentTextType */
   const [currentTextType, setCurrentTextType] = useState([])
 
+  /** @type {Boolean} isEditing */
   const [isEditing, setIsEditing] = useState(false)
+  /** @type {Boolean} nameIsRequired */
   const [nameIsRequired, setNameIsRequired] = useState(false)
+  /** @type {Boolean} URLIsrequired */
   const [URLIsrequired, setURLIsrequired] = useState(false)
+  /** @type {Boolean} startDateIsRequired */
   const [startDateIsRequired, setStartDateIsRequired] = useState(false)
+  /** @type {Boolean} endDateIsRequired */
   const [endDateIsRequired, setEndDateIsRequired] = useState(false)
+  /** @type {Boolean} textTypeIsRequired */
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
-
+  
   const initFormValues = () => {
     const {
       name,
@@ -92,8 +104,11 @@ const RegulatoryText = props => {
     updateRegulatoryText(regulatoryText ? id : undefined, updatedRegulatoryText)
   }
 
+  /**
+   * @function checkRequiredValueOnSubmit
+   * @returns true if a regulatory text form value is missing or incorrect, else false
+   */
   const checkRequiredValueOnSubmit = () => {
-    console.log('checkRequiredValueOnSubmit')
     let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
@@ -121,8 +136,12 @@ const RegulatoryText = props => {
     }
   }, [saveForm])
 
+  /**
+   * @function checkUrl
+   * @param {String} url
+   * @returns true if the url parameter is a correct url, else false
+   */
   const checkURL = (url) => {
-    console.log(url)
     const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
     return regex.test(url)
   }
@@ -170,16 +189,6 @@ const RegulatoryText = props => {
       setIsEditing(false)
       updateOrAddRegulatoryText()
     }
-  }
-
-  const onCurrentStartDateChange = (date) => {
-    setCurrentStartDate(date)
-    // updateOrAddRegulatoryText()
-  }
-
-  const onCurrentEndDateChange = (date) => {
-    setCurrentEndDate(date)
-    // updateOrAddRegulatoryText()
   }
 
   return <>
@@ -245,8 +254,8 @@ const RegulatoryText = props => {
       <CustomDatePicker
         $isrequired={startDateIsRequired}
         value={currentStartDate}
-        onChange={(date) => onCurrentStartDateChange(date)}
-        onOk={(date, _) => onCurrentStartDateChange(date)}
+        onChange={(date) => setCurrentStartDate(date)(date)}
+        onOk={(date, _) => setCurrentEndDate(date)}
         format='DD/MM/YYYY'
         placement={'rightStart'}
       />
@@ -256,8 +265,8 @@ const RegulatoryText = props => {
       <CustomDatePicker
         $isrequired={endDateIsRequired}
         value={currentEndDate === INFINITE ? '' : currentEndDate}
-        onChange={(date) => onCurrentEndDateChange(date)}
-        onOk={(date, _) => onCurrentEndDateChange(date)}
+        onChange={(date) => setCurrentStartDate(date)}
+        onOk={(date, _) => setCurrentEndDate(date)}
         format='DD/MM/YYYY'
         placement={'rightEnd'}
       />

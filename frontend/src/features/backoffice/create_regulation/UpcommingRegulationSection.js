@@ -1,14 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
 import InfoBox from './InfoBox'
 import { CancelButton } from '../../commonStyles/Buttons.style'
 import { Link } from '../../commonStyles/Backoffice.style'
 import { setIsModalOpen, setUpcomingRegulation } from '../Regulation.slice'
 
-/**
- * @type {[RegulatoryText]} upcomingRegulationText
- */
 const UpcommingRegulationSection = () => {
   const dispatch = useDispatch()
   const { upcomingRegulation } = useSelector(state => state.regulation)
@@ -56,7 +54,7 @@ const UpcommingRegulationSection = () => {
 }
 
 const LinkWithGrayBg = styled(Link)` 
-  background-color: #E5E5EB;
+  background-color: ${COLORS.gainsboro};
   padding: 5px 10px;
   font-size: 13px;
   margin-bottom: 5px;
@@ -77,7 +75,7 @@ const Row = styled.span`
 `
 
 const TextWithGrayBg = styled.p`
-  background-color: #E5E5EB;
+  background-color: ${COLORS.gainsboro};
   color: ${props => props.color};
   box-sizing: border-box;
   margin: 0 0 5px 0;
@@ -88,21 +86,21 @@ const TextWithGrayBg = styled.p`
 
 const GrayText = styled.p`
   margin: 0 0 0 5px;
-  color: #707785;
+  color: ${COLORS.slateGray};
 `
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  border: 1px solid #707785;
+  border: 1px solid ${COLORS.slateGray};
   margin: 15px 0px;
   width: max-content;
 `
 
 const YellowRectangle = styled.div`
   width: 10px;
-  background-color: #F6D012;
+  background-color: ${COLORS.orange};
 `
 
 const UpcomingRegulation = styled.div`

@@ -31,7 +31,7 @@ const RegulationRegionLine = props => {
     return selectedRegionList.map(selectedRegion => {
       return <Tag
         key={selectedRegion}
-        selectedValue={selectedRegion}
+        tagValue={selectedRegion}
         onCloseIconClicked={removeRegionToSelectedRegionList}
       />
     })

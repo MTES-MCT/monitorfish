@@ -37,7 +37,7 @@ const RegulationGeometryLine = props => {
       />
     {selectedGeometry &&
       <><Tag
-        selectedValue={selectedGeometry}
+        tagValue={selectedGeometry}
         onCloseIconClicked={onCloseIconClicked}
       />
       <EyeWrapper>

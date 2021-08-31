@@ -41,7 +41,6 @@ def transform_fao_areas(fao_areas: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
     fao_areas = fao_areas.copy(deep=True)
     fao_areas.columns = fao_areas.columns.map(str.lower)
-    fao_areas["fid"] = fao_areas["id"]
 
     fao_areas = gpd.GeoDataFrame(
         fao_areas.astype(
@@ -61,14 +60,12 @@ def transform_fao_areas(fao_areas: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
                 "name_fr": str,
                 "name_es": str,
                 "surface": float,
-                "fid": int,
             }
         )
     )
 
     fao_areas = fao_areas.rename(columns={"geometry": "wkb_geometry"})
     fao_areas = fao_areas.set_geometry("wkb_geometry")
-    fao_areas = fao_areas.to_crs(32631)
     fao_areas["wkb_geometry"] = fao_areas.wkb_geometry.map(to_multipolygon)
 
     return fao_areas

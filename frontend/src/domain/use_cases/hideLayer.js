@@ -17,11 +17,6 @@ const hideLayer = layerToHide => (dispatch, getState) => {
     removeLayer, removeLayerAndArea, removeLayers, removeShowedLayer
   } = layer[namespace].actions
 
-  console.log(type,
-    topic,
-    zone,
-    namespace)
-
   if (type) {
     let layerToRemove, layersToRemove
 

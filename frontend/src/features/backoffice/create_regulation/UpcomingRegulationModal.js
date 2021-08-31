@@ -34,8 +34,6 @@ const UpcomingRegulationModal = () => {
   }
 
   useEffect(() => {
-    console.log('modal useEffect regulatoryTextHasMissingValue')
-    console.log(regulatoryTextHasMissingValue)
     if (saveForm && !regulatoryTextHasMissingValue) {
       addUpcomingRegulation()
       setSaveForm(false)

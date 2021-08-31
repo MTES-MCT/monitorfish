@@ -21,7 +21,7 @@ export const CustomInput = styled(Input)`
   margin: 0px 10px 0px 0px;
   padding: 8px;
   &:focus {
-    border-color: red;
+    border-color: ${COLORS.red};
     transition: border-color 0.3s ease-in-out;
     outline: 0;
   }

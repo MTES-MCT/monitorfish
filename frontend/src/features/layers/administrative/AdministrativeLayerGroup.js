@@ -80,7 +80,7 @@ const Zone = styled.span`
   width: stretch;
   display: flex;
   user-select: none;
-  padding-bottom: ${props => props.isOpen ? 2 : 2}px;
+  padding-bottom: 2px;
   ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
   
   :hover {

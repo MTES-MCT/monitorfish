@@ -62,7 +62,6 @@ const AdministrativeLayers = props => {
   }
 
   const callHideAdministrativeZone = namespace => (type, zone) => {
-    console.log(type, zone)
     dispatch(hideLayer({
       type: type,
       zone: zone,

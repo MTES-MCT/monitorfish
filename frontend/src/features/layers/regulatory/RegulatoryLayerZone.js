@@ -13,6 +13,20 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 
+export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
+  if (regulatoryZoneMetadata && regulatoryZone &&
+    (regulatoryZone.topic !== regulatoryZoneMetadata.topic ||
+      regulatoryZone.zone !== regulatoryZoneMetadata.zone)) {
+    setMetadataIsShown(false)
+  } else if (regulatoryZoneMetadata && regulatoryZone &&
+    (regulatoryZone.topic === regulatoryZoneMetadata.topic &&
+      regulatoryZone.zone === regulatoryZoneMetadata.zone)) {
+    setMetadataIsShown(true)
+  } else if (!regulatoryZoneMetadata && regulatoryZone) {
+    setMetadataIsShown(false)
+  }
+}
+
 const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
   const {
@@ -45,17 +59,7 @@ const RegulatoryLayerZone = props => {
   }
 
   useEffect(() => {
-    if (regulatoryZoneMetadata && regulatoryZone &&
-      (regulatoryZone.topic !== regulatoryZoneMetadata.topic ||
-        regulatoryZone.zone !== regulatoryZoneMetadata.zone)) {
-      setMetadataIsShown(false)
-    } else if (regulatoryZoneMetadata && regulatoryZone &&
-      (regulatoryZone.topic === regulatoryZoneMetadata.topic &&
-        regulatoryZone.zone === regulatoryZoneMetadata.zone)) {
-      setMetadataIsShown(true)
-    } else if (!regulatoryZoneMetadata && regulatoryZone) {
-      setMetadataIsShown(false)
-    }
+    showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
   }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {

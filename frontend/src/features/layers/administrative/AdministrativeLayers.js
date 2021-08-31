@@ -53,18 +53,18 @@ const AdministrativeLayers = props => {
     }
   }, [hideLayersListWhenSearching])
 
-  const callShowAdministrativeZone = namespace => (administrativeZone, administrativeSubZone) => {
+  const callShowAdministrativeZone = namespace => (type, zone) => {
     dispatch(showAdministrativeLayer({
-      type: administrativeZone,
-      zone: administrativeSubZone,
+      type: type,
+      zone: zone,
       namespace
     }))
   }
 
-  const callHideAdministrativeZone = namespace => (administrativeZone, administrativeSubZone) => {
+  const callHideAdministrativeZone = namespace => (type, zone) => {
     dispatch(hideLayer({
-      type: administrativeZone,
-      ...administrativeSubZone,
+      type: type,
+      zone: zone,
       namespace
     }))
   }
@@ -142,7 +142,7 @@ const ZonesList = styled.ul`
   padding: 0;
   overflow-x: hidden;
   max-height: 70vh;
-  height: ${props => props.showZones && props.zonesLength ? 37 * props.zonesLength : 0}px;
+  height: ${props => props.showZones && props.zonesLength ? 36 * props.zonesLength : 0}px;
   background: ${COLORS.background};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;

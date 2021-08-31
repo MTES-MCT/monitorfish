@@ -133,19 +133,19 @@ const RegulatoryLayersTitle = styled.div`
         background: ${COLORS.lightGray};
     }
     20%   {
-        background: ${COLORS.grayDarkerTwo};
+        background: ${COLORS.charcoal};
     }
     40% {
-        background: ${COLORS.lightGray};
+        background: ${COLORS.charcoal};
     }
     60%   {
         background: ${COLORS.lightGray};
     }
     80%   {
-        background: ${COLORS.grayDarkerTwo};
+        background: ${COLORS.lightGray};
     }
     100% {
-        background: ${COLORS.lightGray};
+        background: ${COLORS.charcoal};
     }
   }
   
@@ -169,7 +169,7 @@ const RegulatoryLayersList = styled.ul`
   color: ${COLORS.gunMetal};
   height: ${props => props.showRegulatoryLayers
   ? props.topicLength || props.zoneLength
-      ? 37 * props.topicLength + props.zoneLength * 39
+      ? 36 * props.topicLength + props.zoneLength * 39
       : 40
   : 0}px;
   transition: 0.5s all;

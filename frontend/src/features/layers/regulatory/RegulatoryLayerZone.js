@@ -13,6 +13,20 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 
+export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
+  if (regulatoryZoneMetadata && regulatoryZone &&
+    (regulatoryZone.topic !== regulatoryZoneMetadata.topic ||
+      regulatoryZone.zone !== regulatoryZoneMetadata.zone)) {
+    setMetadataIsShown(false)
+  } else if (regulatoryZoneMetadata && regulatoryZone &&
+    (regulatoryZone.topic === regulatoryZoneMetadata.topic &&
+      regulatoryZone.zone === regulatoryZoneMetadata.zone)) {
+    setMetadataIsShown(true)
+  } else if (!regulatoryZoneMetadata && regulatoryZone) {
+    setMetadataIsShown(false)
+  }
+}
+
 const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
   const {
@@ -22,7 +36,8 @@ const RegulatoryLayerZone = props => {
     zoneIsShown,
     allowRemoveZone,
     namespace,
-    vectorLayerStyle
+    vectorLayerStyle,
+    isLast
   } = props
 
   const {
@@ -44,17 +59,7 @@ const RegulatoryLayerZone = props => {
   }
 
   useEffect(() => {
-    if (regulatoryZoneMetadata && regulatoryZone &&
-      (regulatoryZone.topic !== regulatoryZoneMetadata.topic ||
-        regulatoryZone.zone !== regulatoryZoneMetadata.zone)) {
-      setMetadataIsShown(false)
-    } else if (regulatoryZoneMetadata && regulatoryZone &&
-      (regulatoryZone.topic === regulatoryZoneMetadata.topic &&
-        regulatoryZone.zone === regulatoryZoneMetadata.zone)) {
-      setMetadataIsShown(true)
-    } else if (!regulatoryZoneMetadata && regulatoryZone) {
-      setMetadataIsShown(false)
-    }
+    showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
   }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {
@@ -86,7 +91,7 @@ const RegulatoryLayerZone = props => {
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
   return (
-    <Zone>
+    <Zone isLast={isLast}>
       <Rectangle onClick={() => dispatch(zoomInLayer({ subZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
         data-cy={'regulatory-layers-my-zones-zone'}
@@ -134,7 +139,7 @@ const Rectangle = styled.div`
   display: inline-block;
   margin-right: 10px;
   margin-left: 2px;
-  margin-top: 9px;
+  margin-top: 7px;
 `
 
 const Icons = styled.span`
@@ -154,6 +159,13 @@ const Zone = styled.span`
   user-select: none;
   font-size: 13px;
   font-weight: 300;
+  ${props => props.isLast
+  ? `border-bottom: 1px solid ${COLORS.lightGray}; height: 27px;`
+  : null}
+
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
+  }
 `
 
 const ZoneText = styled.span`
@@ -164,7 +176,7 @@ const ZoneText = styled.span`
   vertical-align: bottom;
   padding-bottom: 3px;
   padding-left: 0;
-  margin-top: 8px;
+  margin-top: 5px;
 `
 
 export default RegulatoryLayerZone

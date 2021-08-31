@@ -11,6 +11,7 @@ import showRegulatoryZoneMetadata from '../../../../domain/use_cases/showRegulat
 import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
+import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
 
 const RegulatoryLayerSearchResultZone = props => {
   const {
@@ -21,7 +22,12 @@ const RegulatoryLayerSearchResultZone = props => {
   } = props
   const dispatch = useDispatch()
 
-  const gears = useSelector(state => state.gear.gears)
+  const {
+    gears
+  } = useSelector(state => state.gear)
+  const {
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
   const {
     regulatoryZonesChecked
   } = useSelector(state => state.regulatoryLayerSearch)
@@ -39,6 +45,10 @@ const RegulatoryLayerSearchResultZone = props => {
       setMetadataIsShown(false)
     }
   }
+
+  useEffect(() => {
+    showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
+  }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {
     if (zoneSelection && zoneSelection.length) {
@@ -157,6 +167,10 @@ const Zone = styled.span`
   .rs-checkbox-inline {
     width: 36px;
     margin-left: 0px;
+  }
+  
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
   }
 `
 

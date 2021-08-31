@@ -40,6 +40,12 @@ const RegulatoryTextSection = props => {
     }
   }
 
+  /**
+   * @function updateRegulatoryText
+   * update the value of an object at a given list index
+   * @param {number} regulatoryTextId
+   * @parem {RegulatoryText} newRegulatoryText
+   */
   const updateRegulatoryTextList = (id, regulatoryText) => {
     const newRegulatoryTextList = addTextToRegulatoryTextList(regulatoryTextList, id, regulatoryText)
     setRegulatoryTextList(newRegulatoryTextList)

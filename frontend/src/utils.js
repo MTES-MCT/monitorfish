@@ -352,6 +352,17 @@ export function createGenericSlice (initialState, reducers, topic) {
   return createSlice(sliceObject)
 }
 
+/**
+ * @typedef SelectPickerObject
+ * @prop {string} label
+ * @prop {string} value
+ */
+/**
+ * @function convert a list of elements to a list of object :
+ * [{label: element, value: element}]
+ * @param {[SelectPickerObject]} list
+ * @returns a new array
+ */
 export const formatDataForSelectPicker = list => {
   const array = list.map(e => {
     const obj = {
@@ -363,6 +374,18 @@ export const formatDataForSelectPicker = list => {
   return array
 }
 
+/**
+ * @function addTextToRegulatoryTextList
+ * update an object list (add, update or remove an object)
+ * the list is copied and not modified
+ * if id is undefined or -1: add a new object at the given id
+ * else, if the given object is not empty or undefined : update object at the given id
+ * else, remove the object from the list
+ * @param {[RegulatoryText]} regulatoryTextList
+ * @param {number} id
+ * @param {string} regulatoryText
+ * @returns a new list
+ */
 export const addTextToRegulatoryTextList = (regulatoryTextList, id, regulatoryText) => {
   let newRegulatoryTextList = [...regulatoryTextList]
   if (id === undefined || id === -1) {

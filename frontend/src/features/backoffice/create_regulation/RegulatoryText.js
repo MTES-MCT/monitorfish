@@ -35,28 +35,28 @@ const RegulatoryText = props => {
 
   const dispatch = useDispatch()
 
-  /** @type {String} currentRegulatoryTextName */
+  /** @type {string} currentRegulatoryTextName */
   const [currentRegulatoryTextName, setCurrentRegulatoryTextName] = useState('')
-  /** @type {String} currentRegulatoryTextURL */
+  /** @type {string} currentRegulatoryTextURL */
   const [currentRegulatoryTextURL, setCurrentRegulatoryTextURL] = useState('')
-  /** @type {String} currentStartDate */
+  /** @type {string} currentStartDate */
   const [currentStartDate, setCurrentStartDate] = useState()
-  /** @type {String} currentEndDate */
+  /** @type {string} currentEndDate */
   const [currentEndDate, setCurrentEndDate] = useState()
   /** @type {[RegulatoryTextType]} currentTextType */
   const [currentTextType, setCurrentTextType] = useState([])
 
-  /** @type {Boolean} isEditing */
+  /** @type {boolean} isEditing */
   const [isEditing, setIsEditing] = useState(false)
-  /** @type {Boolean} nameIsRequired */
+  /** @type {boolean} nameIsRequired */
   const [nameIsRequired, setNameIsRequired] = useState(false)
-  /** @type {Boolean} URLIsrequired */
+  /** @type {boolean} URLIsrequired */
   const [URLIsrequired, setURLIsrequired] = useState(false)
-  /** @type {Boolean} startDateIsRequired */
+  /** @type {boolean} startDateIsRequired */
   const [startDateIsRequired, setStartDateIsRequired] = useState(false)
-  /** @type {Boolean} endDateIsRequired */
+  /** @type {boolean} endDateIsRequired */
   const [endDateIsRequired, setEndDateIsRequired] = useState(false)
-  /** @type {Boolean} textTypeIsRequired */
+  /** @type {boolean} textTypeIsRequired */
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
 
   const initFormValues = () => {

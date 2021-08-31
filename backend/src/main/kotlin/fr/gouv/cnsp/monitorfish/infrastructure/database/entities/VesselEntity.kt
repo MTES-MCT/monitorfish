@@ -84,7 +84,9 @@ data class VesselEntity(
         val vesselPhones: List<String>? = null,
         @Column(name = "vessel_emails", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val vesselEmails: List<String>? = null) {
+        val vesselEmails: List<String>? = null,
+        @Column(name = "beacon_number")
+        val beaconNumber: String? = null) {
 
         fun toVessel() = Vessel(
             id = id,
@@ -120,7 +122,8 @@ data class VesselEntity(
             proprietorPhones = proprietorPhones,
             proprietorEmails = proprietorEmails,
             vesselPhones = vesselPhones,
-            vesselEmails = vesselEmails)
+            vesselEmails = vesselEmails,
+            beaconNumber = beaconNumber)
 
         companion object {
                 private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)
@@ -153,7 +156,8 @@ data class VesselEntity(
                                 proprietorPhones = vessel.proprietorPhones,
                                 proprietorEmails = vessel.proprietorEmails,
                                 vesselPhones = vessel.vesselPhones,
-                                vesselEmails = vessel.vesselEmails
+                                vesselEmails = vessel.vesselEmails,
+                                beaconNumber = vessel.beaconNumber
                         )
                 }
         }

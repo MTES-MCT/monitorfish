@@ -104,7 +104,17 @@ def extract_nav_licences():
 
 
 @task(checkpoint=False)
-def merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences):
+def extract_beacon_numbers() -> pd.DataFrame:
+    """
+    Extract beacon numbers of all vessels from Poseidon.
+    """
+    return extract("fmc", "fmc/beacon_numbers.sql")
+
+
+@task(checkpoint=False)
+def merge_vessels(
+    floats, fr_vessels, cee_vessels, non_cee_vessels, licences, beacon_numbers
+):
     res = pd.merge(
         floats,
         fr_vessels,
@@ -135,6 +145,14 @@ def merge_vessels(floats, fr_vessels, cee_vessels, non_cee_vessels, licences):
         how="left",
         left_on="id_nav_flotteur_f",
         right_on="id_nav_flotteur_gin",
+    )
+
+    res = pd.merge(
+        res,
+        beacon_numbers,
+        how="left",
+        left_on="id_nav_flotteur_f",
+        right_on="id_nav_flotteur_bn",
     )
     return res
 
@@ -247,6 +265,7 @@ def clean_vessels(all_vessels):
         "operator_emails",
         "vessel_phones",
         "vessel_emails",
+        "beacon_number",
     ]
     res = res[columns]
     logger.info("Columns sorted.")
@@ -308,10 +327,11 @@ with Flow("Vessels") as flow:
     non_cee_vessels = extract_non_cee_vessels()
     floats = extract_floats()
     licences = extract_nav_licences()
+    beacon_numbers = extract_beacon_numbers()
 
     # Transform
     all_vessels = merge_vessels(
-        floats, fr_vessels, cee_vessels, non_cee_vessels, licences
+        floats, fr_vessels, cee_vessels, non_cee_vessels, licences, beacon_numbers
     )
     all_vessels = clean_vessels(all_vessels)
 

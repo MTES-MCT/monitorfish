@@ -83,6 +83,14 @@ const VesselIdentity = () => {
                   getVesselOrLastPositionProperty('mmsi')
                 }</Value>
               </Field>
+              <Field>
+                <Key>Balise n°</Key>
+                <Value>
+                  {
+                    getVesselOrLastPositionProperty('beaconNumber')
+                  }
+                </Value>
+              </Field>
             </TableBody>
           </Fields>
           <Fields>
@@ -102,6 +110,10 @@ const VesselIdentity = () => {
                     getVesselOrLastPositionProperty('ircs')
                   }
                 </Value>
+              </Field>
+              <Field>
+                <Key/>
+                <Value/>
               </Field>
             </TableBody>
           </Fields>
@@ -167,10 +179,6 @@ const VesselIdentity = () => {
                 <Key/>
               </Field>
               <Field>
-                <Key>Engins de pêche utilisés (JPE)</Key>
-                <Value><NoValue>-</NoValue></Value>
-              </Field>
-              <Field>
                 <Key>Engins de pêche déclarés (PME)</Key>
                 <Value data-cy={'vessel-identity-gears'}>
                   {
@@ -187,11 +195,6 @@ const VesselIdentity = () => {
               <Field>
                 <Key/>
               </Field>
-              <Field>
-                <Key>Appartenance à une liste</Key>
-                <Value><NoValue>-</NoValue></Value>
-              </Field>
-
             </TableBody>
           </Fields>
         </Zone>

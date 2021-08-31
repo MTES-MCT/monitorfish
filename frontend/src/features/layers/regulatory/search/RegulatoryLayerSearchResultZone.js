@@ -11,6 +11,7 @@ import showRegulatoryZoneMetadata from '../../../../domain/use_cases/showRegulat
 import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
+import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
 
 const RegulatoryLayerSearchResultZone = props => {
   const {
@@ -46,15 +47,8 @@ const RegulatoryLayerSearchResultZone = props => {
   }
 
   useEffect(() => {
-    if (regulatoryZoneMetadata &&
-      regulatoryZone &&
-      regulatoryZoneMetadata.zone === regulatoryZone.zone) {
-      setMetadataIsShown(true)
-      return
-    }
-
-    setMetadataIsShown(false)
-  }, [regulatoryZoneMetadata])
+    showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
+  }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {
     if (zoneSelection && zoneSelection.length) {

@@ -77,16 +77,17 @@ const BaseLayersList = styled.ul`
   height: 0;
   overflow-y: hidden;
   overflow-x: hidden;
+  background: ${COLORS.background};
   
   animation: ${props => props.showBaseLayers ? 'zones-opening' : 'zones-closing'} 0.5s ease forwards;
 
   @keyframes zones-opening {
     0%   { height: 0;   }
-    100% { height: ${props => props.baseLayersLength ? `${36 * props.baseLayersLength}px` : '175px'}; }
+    100% { height: ${props => props.baseLayersLength ? `${34 * props.baseLayersLength}px` : '175px'}; }
   }
 
   @keyframes zones-closing {
-    0%   { height: ${props => props.baseLayersLength ? `${36 * props.baseLayersLength}px` : '175px'}; }
+    0%   { height: ${props => props.baseLayersLength ? `${34 * props.baseLayersLength}px` : '175px'}; }
     100% { height: 0;   }
   }
   
@@ -108,6 +109,10 @@ const ListItem = styled.li`
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
   line-height: 1.9em;
+  
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
+  }
 `
 
 export default BaseLayers

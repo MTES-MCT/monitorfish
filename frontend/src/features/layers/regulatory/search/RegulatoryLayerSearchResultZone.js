@@ -21,7 +21,12 @@ const RegulatoryLayerSearchResultZone = props => {
   } = props
   const dispatch = useDispatch()
 
-  const gears = useSelector(state => state.gear.gears)
+  const {
+    gears
+  } = useSelector(state => state.gear)
+  const {
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
   const {
     regulatoryZonesChecked
   } = useSelector(state => state.regulatoryLayerSearch)
@@ -39,6 +44,17 @@ const RegulatoryLayerSearchResultZone = props => {
       setMetadataIsShown(false)
     }
   }
+
+  useEffect(() => {
+    if (regulatoryZoneMetadata &&
+      regulatoryZone &&
+      regulatoryZoneMetadata.zone === regulatoryZone.zone) {
+      setMetadataIsShown(true)
+      return
+    }
+
+    setMetadataIsShown(false)
+  }, [regulatoryZoneMetadata])
 
   useEffect(() => {
     if (zoneSelection && zoneSelection.length) {
@@ -157,6 +173,10 @@ const Zone = styled.span`
   .rs-checkbox-inline {
     width: 36px;
     margin-left: 0px;
+  }
+  
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
   }
 `
 

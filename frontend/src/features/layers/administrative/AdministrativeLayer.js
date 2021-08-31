@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
+import { COLORS } from '../../../constants/constants'
 
 const AdministrativeLayer = props => {
   const {
@@ -24,13 +25,13 @@ const AdministrativeLayer = props => {
   useEffect(() => {
     if (showLayer_) {
       if (layer.showMultipleZonesInAdministrativeZones) {
-        callShowAdministrativeZone(layer.groupCode, props.layer.code)
+        callShowAdministrativeZone(layer.groupCode, layer.code)
       } else {
         callShowAdministrativeZone(layer.code)
       }
     } else {
       if (layer.showMultipleZonesInAdministrativeZones) {
-        callHideAdministrativeZone(layer.groupCode, props.layer.code)
+        callHideAdministrativeZone(layer.groupCode, layer.code)
       } else {
         callHideAdministrativeZone(layer.code)
       }
@@ -70,8 +71,8 @@ const LayerName = styled.span`
 
 const Row = styled.span`
   margin-top: ${props => props.isFirst ? 5 : 0}px;
-  margin-left: ${props => props.isGrouped ? '18px' : '0'};
   padding: ${props => props.isGrouped ? '4px 0 3px 20px' : '4px 0 4px 20px'};
+  padding-left: ${props => props.isGrouped ? '38px' : '20px'};
   line-height: 18px;
   display: block;
   user-select: none;
@@ -81,6 +82,10 @@ const Row = styled.span`
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
+  
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
+  }
 `
 
 export default AdministrativeLayer

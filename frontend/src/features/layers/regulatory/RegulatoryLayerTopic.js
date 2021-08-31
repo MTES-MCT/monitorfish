@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import { getHash } from '../../../utils'
 import { getVectorLayerStyle } from '../../../layers/styles/vectorLayer.style'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
@@ -75,7 +74,7 @@ const RegulatoryLayerTopic = props => {
   }
 
   const showRegulatoryZones = namespace => {
-    return regulatoryZones.map(regulatoryZone => {
+    return regulatoryZones.map((regulatoryZone, index) => {
       let vectorLayerStyle
       if (regulatoryZone.zone && regulatoryZone.topic && regulatoryZone.gears && gears) {
         const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
@@ -85,6 +84,7 @@ const RegulatoryLayerTopic = props => {
 
       return (
         <RegulatoryLayerZone
+          isLast={regulatoryZones.length === index + 1}
           regulatoryZone={regulatoryZone}
           vectorLayerStyle={vectorLayerStyle}
           key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
@@ -114,7 +114,6 @@ const RegulatoryLayerTopic = props => {
               title={regulatoryTopic.replace(/[_]/g, ' ')}
               onClick={() => setIsOpen(!isOpen)}
             >
-              <ChevronIcon isOpen={isOpen}/>
               <Text>
                 {regulatoryTopic.replace(/[_]/g, ' ')}
               </Text>
@@ -168,13 +167,17 @@ const Zone = styled.span`
   user-select: none;
   font-weight: 500;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
+  
+  :hover {
+    background: ${COLORS.shadowBlueLittleOpacity};
+  }
 `
 
 const List = styled.div`
   height: inherit;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${props => props.isOpen ? props.zonesLength * 38.5 : 0}px;
+  height: ${props => props.isOpen ? props.zonesLength * 37.5 : 0}px;
 `
 
 const Row = styled.li`
@@ -189,17 +192,8 @@ const Row = styled.li`
   overflow: hidden !important;
   cursor: pointer;
   margin: 0;
-  border-bottom: rgba(255, 255, 255, 0.2) 1px solid;
   line-height: 1.9em;
   display: block;
-`
-
-const ChevronIcon = styled(ChevronIconSVG)`
-  transform: ${props => props.isOpen ? 'rotate(0deg)' : 'rotate(180deg)'};
-  width: 16px;
-  margin-right: 5px;
-  margin-top: 5px;
-  transition: all 0.5s;
 `
 
 export default RegulatoryLayerTopic

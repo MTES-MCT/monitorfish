@@ -30,21 +30,21 @@ const CreateRegulation = () => {
 
   const { isModalOpen } = useSelector(state => state.regulation)
 
-  /** @type {String} */
+  /** @type {string} */
   const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
-  /** @type {String} */
+  /** @type {string} */
   const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
-  /** @type {String} */
+  /** @type {string} */
   const [nameZone, setNameZone] = useState()
-  /** @type {String} */
+  /** @type {string} */
   const [selectedSeaFront, setSelectedSeaFront] = useState()
   /** @type {[String]} */
   const [selectedRegionList, setSelectedRegionList] = useState([])
-  /** @type {String} */
+  /** @type {string} */
   const [reglementationBlocName, setReglementationBlocName] = useState('')
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
-  /** @type {Boolean} regulatoryTextHasMissingValue */
+  /** @type {boolean} regulatoryTextHasMissingValue */
   const [regulatoryTextHasMissingValue, setRegulatoryTextHasValueMissing] = useState(false)
 
   useEffect(() => {

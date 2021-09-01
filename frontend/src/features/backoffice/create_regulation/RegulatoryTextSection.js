@@ -7,7 +7,6 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { setIsModalOpen } from '../Regulation.slice'
-import { addTextToRegulatoryTextList } from '../../../utils'
 
 /**
  * @typedef {object} Props
@@ -28,24 +27,25 @@ const RegulatoryTextSection = props => {
 
   const dispatch = useDispatch()
 
-  /**
-   * @function updateRegulatoryText
-   * update the value of an object at a given list index
-   * @param {number} regulatoryTextId
-   * @parem {RegulatoryText} newRegulatoryText
-   */
-  const updateRegulatoryTextList = (id, regulatoryText) => {
-    const newRegulatoryTextList = addTextToRegulatoryTextList(regulatoryTextList, id, regulatoryText)
+  const addNewRegulatoryTextInList = () => {
+    const newRegulatoryTextList = [...regulatoryTextList]
+    newRegulatoryTextList.push({})
+    setRegulatoryTextList(newRegulatoryTextList)
+  }
+
+  const removeRegulatoryTextFromList = (id) => {
+    const newRegulatoryTextList = [...regulatoryTextList]
+    newRegulatoryTextList.splice(id, 1)
     setRegulatoryTextList(newRegulatoryTextList)
   }
 
   const addRegRefInEffect = () => {
-    updateRegulatoryTextList()
+    addNewRegulatoryTextInList()
   }
 
   const addUpcomingText = () => {
     if (source === 'upcomingRegulation') {
-      updateRegulatoryTextList()
+      addNewRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
     }
@@ -62,7 +62,7 @@ const RegulatoryTextSection = props => {
               key={id}
               id={id}
               regulatoryText={regulatoryText}
-              updateRegulatoryText={updateRegulatoryTextList}
+              removeRegulatoryTextFromList={removeRegulatoryTextFromList}
               saveForm={saveForm}
             />
         })
@@ -70,7 +70,7 @@ const RegulatoryTextSection = props => {
             key={0}
             id={0}
             regulatoryText={{}}
-            updateRegulatoryText={updateRegulatoryTextList}
+            removeRegulatoryTextFromList={removeRegulatoryTextFromList}
             saveForm={saveForm}
         />
     }

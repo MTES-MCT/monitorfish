@@ -15,7 +15,7 @@ export const CustomInput = styled(Input)`
   height: 35px;
   ${props => props.width ? '' : 'min-width: 100px;'}
   ${props => props.width ? `width: ${props.width};` : ''}
-  border-color: ${props => props.$isred ? `${COLORS.red}` : `${COLORS.lightGray}`};
+  border: 1px solid ${props => props.$isred ? `${COLORS.red}` : `${COLORS.lightGray}`};
   border-radius: 2px;
   color: ${COLORS.slateGray};
   margin: 0px 10px 0px 0px;

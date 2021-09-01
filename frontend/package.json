@@ -18,7 +18,7 @@
     "immer": "^8.0.0",
     "mini.css": "^3.0.1",
     "nouislider-react": "^3.4.0",
-    "ol": "^6.5.0",
+    "ol": "^6.6.1",
     "ol-mapbox-style": "^6.1.4",
     "react": "^17.0.1",
     "react-color": "^2.19.3",

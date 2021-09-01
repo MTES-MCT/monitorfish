@@ -91,7 +91,7 @@ const VesselList = ({ namespace }) => {
     }
   }, [vesselListModalIsOpen])
 
-  const updateVesselsList = useCallback(features => {
+  const updateVesselsList = features => {
     const vessels = features.map(vessel => {
       const coordinates = [...vessel.getGeometry().getCoordinates()]
 
@@ -100,7 +100,7 @@ const VesselList = ({ namespace }) => {
 
     setVessels(vessels)
     setVesselsCountTotal(vessels.length)
-  }, [])
+  }
 
   useEffect(() => {
     if (vessels && vessels.length) {

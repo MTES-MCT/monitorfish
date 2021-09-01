@@ -53,7 +53,7 @@ const VesselTrackLayer = ({ map }) => {
   function updateTrackCircleStyle (vesselTrackCircle, radius) {
     if (vesselTrackCircle) {
       const feature = vectorSource.getFeatures()
-        .find(feature => feature.getProperties().dateTime === vesselTrackCircle.dateTime)
+        .find(feature => feature.dateTime === vesselTrackCircle.dateTime)
 
       if (feature) {
         const featureColor = feature.getStyle().getImage().getFill().getColor()

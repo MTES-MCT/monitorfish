@@ -74,7 +74,7 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
     <VesselTrackCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
       {
         vesselFeatureToShowOnCard
-          ? <VesselTrackCard vessel={vesselFeatureToShowOnCard}
+          ? <VesselTrackCard feature={vesselFeatureToShowOnCard}
                              overlayPosition={overlayPosition}/>
           : null
       }

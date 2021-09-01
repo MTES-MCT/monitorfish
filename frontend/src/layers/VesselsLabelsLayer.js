@@ -59,8 +59,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   useEffect(() => {
     if (previousFeaturesAndLabels && featuresAndLabels) {
-      const previousFeatureIdsList = previousFeaturesAndLabels.map(({ feature }) => VesselLabelLine.getFeatureId(getVesselIdentityFromFeature(feature)))
-      const featureIdsList = featuresAndLabels.map(({ feature }) => VesselLabelLine.getFeatureId(getVesselIdentityFromFeature(feature)))
+      const previousFeatureIdsList = previousFeaturesAndLabels.map(({ identity }) => VesselLabelLine.getFeatureId(identity))
+      const featureIdsList = featuresAndLabels.map(({ identity }) => VesselLabelLine.getFeatureId(identity))
 
       previousFeatureIdsList.forEach(id => {
         if (featureIdsList.indexOf(id) === NOT_FOUND) {
@@ -171,7 +171,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
       const existingLabelLineFeature = vectorSource.getFeatureById(labelLineFeatureId)
       if (existingLabelLineFeature) {
-        existingLabelLineFeature.setGeometry(new LineString([feature.getGeometry().getCoordinates(), coordinatesAndOffset.coordinates]))
+        existingLabelLineFeature.getGeometry().setCoordinates([feature.getGeometry().getCoordinates(), coordinatesAndOffset.coordinates])
       } else {
         const labelLineFeature = VesselLabelLine.getFeature(
           feature.getGeometry().getCoordinates(),
@@ -193,7 +193,14 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
 
       return {
-        feature,
+        identity: {
+          key: feature.ol_uid,
+          flagState: feature.vessel.flagState,
+          coordinates: feature.getGeometry().getCoordinates(),
+          internalReferenceNumber: feature.vessel.internalReferenceNumber,
+          ircs: feature.vessel.ircs,
+          externalReferenceNumber: feature.vessel.externalReferenceNumber
+        },
         label,
         offset,
         featureId: labelLineFeatureId
@@ -205,16 +212,16 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   return (<>
     {
-      featuresAndLabels.map(({ feature, label, offset, featureId }) => {
+      featuresAndLabels.map(({ identity, label, offset, featureId }) => {
         return <VesselLabelOverlay
           map={map}
-          key={feature.ol_uid}
+          key={identity.key}
           featureId={featureId}
           moveLine={moveVesselLabelLine}
           text={label}
-          flagState={feature.getProperties().flagState}
+          flagState={identity.flagState}
           offset={offset}
-          coordinates={feature.getGeometry().getCoordinates()}
+          coordinates={identity.coordinates}
           zoomHasChanged={previousMapZoom.current}
         />
       })

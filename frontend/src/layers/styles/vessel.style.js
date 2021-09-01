@@ -62,15 +62,14 @@ export const getCircleStyle = vesselObject => {
 }
 
 export const getVesselStyle = feature => {
-  const {
-    filterColor,
-    opacity,
-    isLight,
-    course,
-    speed,
-    nonFilteredVesselsAreHidden,
-    isShowedInFilter
-  } = feature.getProperties()
+  const filterColor = feature.get('filterColor')
+  const opacity = feature.get('opacity')
+  const isLight = feature.get('isLight')
+  const nonFilteredVesselsAreHidden = feature.get('nonFilteredVesselsAreHidden')
+  const isShowedInFilter = feature.get('isShowedInFilter')
+
+  const course = feature.vessel.course
+  const speed = feature.vessel.speed
 
   if (nonFilteredVesselsAreHidden && filterColor && !isShowedInFilter) {
     return []
@@ -83,7 +82,7 @@ export const getVesselStyle = feature => {
     ? [getIconStyle({ vesselFileName, course, opacity })]
     : [getCircleStyle({ vesselColor, opacity })]
 
-  if (feature.getProperties().isSelected) {
+  if (feature.get('isSelected')) {
     styles.push(selectedVesselStyle)
   }
 

@@ -29,40 +29,12 @@ export class Vessel {
     const coordinates = transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
     const feature = new Feature({
-      geometry: new Point(coordinates),
-      internalReferenceNumber: vessel.internalReferenceNumber,
-      externalReferenceNumber: vessel.externalReferenceNumber,
-      mmsi: vessel.mmsi,
-      flagState: vessel.flagState,
-      vesselName: vessel.vesselName,
-      coordinates: toStringHDMS(coordinates),
-      latitude: vessel.latitude,
-      longitude: vessel.longitude,
-      estimatedCurrentLatitude: vessel.estimatedCurrentLatitude,
-      estimatedCurrentLongitude: vessel.estimatedCurrentLongitude,
-      course: vessel.course,
-      positionType: vessel.positionType,
-      speed: vessel.speed,
-      dateTime: vessel.dateTime,
-      ircs: vessel.ircs,
-      emissionPeriod: vessel.emissionPeriod,
-      lastErsDateTime: vessel.lastErsDateTime,
-      departureDateTime: vessel.departureDateTime,
-      width: vessel.width,
-      length: vessel.length,
-      registryPortLocode: vessel.registryPortLocode,
-      registryPortName: vessel.registryPortName,
-      district: vessel.district,
-      districtCode: vessel.districtCode,
-      gearOnboard: vessel.gearOnboard,
-      segments: vessel.segments,
-      speciesOnboard: vessel.speciesOnboard,
-      totalWeightOnboard: vessel.totalWeightOnboard,
-      lastControlDateTime: vessel.lastControlDateTime,
-      lastControlInfraction: vessel.lastControlInfraction,
-      postControlComment: vessel.postControlComment,
-      vesselIdentifier: vessel.vesselIdentifier
+      geometry: new Point(coordinates)
     })
+    feature.vessel = {
+      ...vessel,
+      coordinates: toStringHDMS(coordinates)
+    }
 
     feature.setId(Vessel.getVesselId(vessel))
 
@@ -73,15 +45,15 @@ export class Vessel {
 
   static getObjectForFilteringFromFeature (feature) {
     return {
-      length: feature.getProperties().length,
-      flagState: feature.getProperties().flagState.toLowerCase(),
-      dateTimeTimestamp: new Date(feature.getProperties().dateTime).getTime(),
-      gearsArray: feature.getProperties().gearOnboard ? [...new Set(feature.getProperties().gearOnboard.map(gear => gear.gear))] : [],
-      fleetSegmentsArray: feature.getProperties().segments ? feature.getProperties().segments.map(segment => segment.replace(' ', '')) : [],
-      speciesArray: feature.getProperties().speciesOnboard ? [...new Set(feature.getProperties().speciesOnboard.map(species => species.species))] : [],
-      district: feature.getProperties().district,
-      districtCode: feature.getProperties().districtCode,
-      lastControlDateTimeTimestamp: feature.getProperties().lastControlDateTime ? new Date(feature.getProperties().lastControlDateTime).getTime() : ''
+      length: feature.vessel.length,
+      flagState: feature.vessel.flagState.toLowerCase(),
+      dateTimeTimestamp: new Date(feature.vessel.dateTime).getTime(),
+      gearsArray: feature.vessel.gearOnboard ? [...new Set(feature.vessel.gearOnboard.map(gear => gear.gear))] : [],
+      fleetSegmentsArray: feature.vessel.segments ? feature.vessel.segments.map(segment => segment.replace(' ', '')) : [],
+      speciesArray: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))] : [],
+      district: feature.vessel.district,
+      districtCode: feature.vessel.districtCode,
+      lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : ''
     }
   }
 
@@ -100,6 +72,7 @@ export class Vessel {
     return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
   }
 
+  // TODO Cette function est longue !!! à refacto ?
   static getVesselOpacity (vesselsLastPositionVisibility, dateTime) {
     const vesselDate = new Date(dateTime)
 
@@ -109,9 +82,9 @@ export class Vessel {
     vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
 
     let opacity = 1
-    if (vesselDate < vesselIsHidden) {
+    if (vesselDate.getTime() < vesselIsHidden.getTime()) {
       opacity = 0
-    } else if (vesselDate < vesselIsOpacityReduced) {
+    } else if (vesselDate.getTime() < vesselIsOpacityReduced.getTime()) {
       opacity = 0.2
     }
 
@@ -125,23 +98,23 @@ export class Vessel {
    * @param {Object} vesselsLastPositionVisibility
    */
   static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility) {
-    const vesselDate = new Date(feature.getProperties().dateTime)
+    const vesselDate = new Date(feature.vessel.dateTime)
     const vesselIsHidden = new Date()
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
-    if (vesselDate > vesselIsHidden) {
+    if (vesselDate.getTime() > vesselIsHidden.getTime()) {
       switch (vesselLabelTypeEnum) {
         case vesselLabelEnum.VESSEL_NAME: {
-          return feature.getProperties().vesselName
+          return feature.vessel.vesselName
         }
         case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
-          return feature.getProperties().internalReferenceNumber
+          return feature.vessel.internalReferenceNumber
         }
         case vesselLabelEnum.VESSEL_NATIONALITY: {
-          return countries.getName(feature.getProperties().flagState, 'fr')
+          return countries.getName(feature.vessel.flagState, 'fr')
         }
         case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
-          return feature.getProperties().segments.join(', ')
+          return feature.vessel.segments.join(', ')
         }
         default: return null
       }
@@ -160,32 +133,32 @@ export class Vessel {
 
 export const getVesselIdentityFromFeature = feature => {
   return {
-    internalReferenceNumber: feature.getProperties().internalReferenceNumber,
-    externalReferenceNumber: feature.getProperties().externalReferenceNumber,
-    latitude: feature.getProperties().latitude,
-    longitude: feature.getProperties().longitude,
-    vesselName: feature.getProperties().vesselName,
-    flagState: feature.getProperties().flagState,
-    mmsi: feature.getProperties().mmsi,
-    ircs: feature.getProperties().ircs,
-    course: feature.getProperties().course,
-    speed: feature.getProperties().speed,
-    width: feature.getProperties().width,
-    length: feature.getProperties().length,
-    dateTime: feature.getProperties().dateTime,
-    gearOnboard: feature.getProperties().gearOnboard,
-    segments: feature.getProperties().segments,
-    speciesOnboard: feature.getProperties().speciesOnboard,
-    district: feature.getProperties().district,
-    districtCode: feature.getProperties().districtCode,
-    lastControlDateTime: feature.getProperties().lastControlDateTime,
-    lastControlInfraction: feature.getProperties().lastControlInfraction,
-    totalWeightOnboard: feature.getProperties().totalWeightOnboard,
-    registryPortLocode: feature.getProperties().registryPortLocode,
-    registryPortName: feature.getProperties().registryPortName,
-    lastErsDateTime: feature.getProperties().lastErsDateTime,
-    emissionPeriod: feature.getProperties().emissionPeriod,
-    departureDateTime: feature.getProperties().departureDateTime
+    internalReferenceNumber: feature.vessel.internalReferenceNumber,
+    externalReferenceNumber: feature.vessel.externalReferenceNumber,
+    latitude: feature.vessel.latitude,
+    longitude: feature.vessel.longitude,
+    vesselName: feature.vessel.vesselName,
+    flagState: feature.vessel.flagState,
+    mmsi: feature.vessel.mmsi,
+    ircs: feature.vessel.ircs,
+    course: feature.vessel.course,
+    speed: feature.vessel.speed,
+    width: feature.vessel.width,
+    length: feature.vessel.length,
+    dateTime: feature.vessel.dateTime,
+    gearOnboard: feature.vessel.gearOnboard,
+    segments: feature.vessel.segments,
+    speciesOnboard: feature.vessel.speciesOnboard,
+    district: feature.vessel.district,
+    districtCode: feature.vessel.districtCode,
+    lastControlDateTime: feature.vessel.lastControlDateTime,
+    lastControlInfraction: feature.vessel.lastControlInfraction,
+    totalWeightOnboard: feature.vessel.totalWeightOnboard,
+    registryPortLocode: feature.vessel.registryPortLocode,
+    registryPortName: feature.vessel.registryPortName,
+    lastErsDateTime: feature.vessel.lastErsDateTime,
+    emissionPeriod: feature.vessel.emissionPeriod,
+    departureDateTime: feature.vessel.departureDateTime
   }
 }
 
@@ -207,14 +180,14 @@ export const getVesselFeatureIdFromVessel = vessel => {
 }
 
 export function vesselAndVesselFeatureAreEquals (vessel, feature) {
-  return (feature.getProperties().internalReferenceNumber
-    ? feature.getProperties().internalReferenceNumber === vessel.internalReferenceNumber
+  return (feature.vessel.internalReferenceNumber
+    ? feature.vessel.internalReferenceNumber === vessel.internalReferenceNumber
     : false) ||
-    (feature.getProperties().ircs
-      ? feature.getProperties().ircs === vessel.ircs
+    (feature.vessel.ircs
+      ? feature.vessel.ircs === vessel.ircs
       : false) ||
-    (feature.getProperties().externalReferenceNumber
-      ? feature.getProperties().externalReferenceNumber === vessel.externalReferenceNumber
+    (feature.vessel.externalReferenceNumber
+      ? feature.vessel.externalReferenceNumber === vessel.externalReferenceNumber
       : false)
 }
 

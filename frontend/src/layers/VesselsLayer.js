@@ -81,12 +81,13 @@ const VesselsLayer = ({ map }) => {
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
       features.forEach(feature => {
-        const opacity = Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
-        feature.set(IS_LIGHT_PROPERTY, isLight)
-        feature.set(OPACITY_PROPERTY, opacity)
-        feature.set(NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY, nonFilteredVesselsAreHidden)
-        feature.set(FILTER_COLOR_PROPERTY, filterColor)
+        const opacity = Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.vessel.dateTime)
+        feature.set(IS_LIGHT_PROPERTY, isLight, true)
+        feature.set(OPACITY_PROPERTY, opacity, true)
+        feature.set(NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY, nonFilteredVesselsAreHidden, true)
+        feature.set(FILTER_COLOR_PROPERTY, filterColor, true)
       })
+      vectorSource.changed()
     }
   }
 
@@ -115,7 +116,7 @@ const VesselsLayer = ({ map }) => {
 
   useEffect(() => {
     vectorSource.getFeatures().forEach(feature => {
-      const opacity = Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+      const opacity = Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.vessel.dateTime)
       feature.set(OPACITY_PROPERTY, opacity)
     })
   }, [vesselsLastPositionVisibility])

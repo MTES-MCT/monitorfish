@@ -5,6 +5,7 @@ import Fill from 'ol/style/Fill'
 import Layers from '../../domain/entities/layers'
 import { getColorWithAlpha } from '../../utils'
 import { COLORS } from '../../constants/constants'
+import { metadataIsShowedPropertyName } from '../RegulatoryLayers'
 
 export const getVectorLayerStyle = type => {
   switch (type) {
@@ -127,7 +128,7 @@ export const getVectorLayerStyle = type => {
 
         let metadataIsShowed = null
         if (feature) {
-          metadataIsShowed = feature.getProperties().metadataIsShowed
+          metadataIsShowed = feature.get(metadataIsShowedPropertyName)
         }
 
         switch (gearCategory) {

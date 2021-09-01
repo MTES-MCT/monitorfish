@@ -6,11 +6,9 @@ import CircleStyle from 'ol/style/Circle'
 const estimatedPositionStyleCache = new Map()
 
 export const getEstimatedPositionStyle = feature => {
-  const {
-    color,
-    isShowed,
-    isCircle
-  } = feature.getProperties()
+  const color = feature.get('color')
+  const isShowed = feature.get('isShowed')
+  const isCircle = feature.get('isCircle')
 
   if (!isShowed) {
     return []

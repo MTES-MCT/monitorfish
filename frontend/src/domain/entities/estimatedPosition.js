@@ -22,6 +22,12 @@ class EstimatedPosition {
     const currentCoordinates = transform([currentPosition[0], currentPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     const estimatedCoordinates = transform([estimatedPosition[0], estimatedPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
+    const estimatedPositionObject = {
+      latitude: estimatedPosition[1],
+      longitude: estimatedPosition[0],
+      dateTime: options.dateTime
+    }
+
     const features = []
     let lineColor = 'rgb(5, 5, 94, 0.2)'
     if (options.isLight) {
@@ -39,23 +45,19 @@ class EstimatedPosition {
 
     const lineFeature = new Feature({
       geometry: new LineString([currentCoordinates, estimatedCoordinates]),
-      latitude: estimatedPosition[1],
-      longitude: estimatedPosition[0],
       color: lineColor,
-      isShowed,
-      dateTime: options.dateTime
+      isShowed
     })
+    lineFeature.estimatedPosition = estimatedPositionObject
     lineFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
 
     const circleFeature = new Feature({
       geometry: new Point(estimatedCoordinates),
       isCircle: true,
-      latitude: estimatedPosition[1],
-      longitude: estimatedPosition[0],
       color: vesselColor,
-      isShowed,
-      dateTime: options.dateTime
+      isShowed
     })
+    circleFeature.estimatedPosition = estimatedPositionObject
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)
 
     features.push(lineFeature, circleFeature)

@@ -65,7 +65,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
   useEffect(() => {
     vectorSource.getFeatures().forEach(feature => {
-      const isShowed = !!Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.getProperties().dateTime)
+      const isShowed = !!Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.estimatedPosition.dateTime)
       feature.set(IS_SHOWED_PROPERTY, isShowed)
     })
   }, [vesselsLastPositionVisibility])
@@ -82,21 +82,22 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     }
   }
 
+  // TODO Migrate hard calculus (GIS transform ?) to a worker
   function showVesselEstimatedTrack () {
     vectorSource.clear(true)
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
     const estimatedCurrentPositionsFeatures = vesselsLayerSource.getFeatures()
       .map((vesselFeature, index) => {
-        const {
-          estimatedCurrentLatitude,
-          estimatedCurrentLongitude,
-          latitude,
-          longitude,
-          dateTime
-        } = vesselFeature.getProperties()
+        const estimatedCurrentLatitude = vesselFeature.vessel.estimatedCurrentLatitude
+        const estimatedCurrentLongitude = vesselFeature.vessel.estimatedCurrentLongitude
+        const latitude = vesselFeature.vessel.latitude
+        const longitude = vesselFeature.vessel.longitude
+        const dateTime = vesselFeature.vessel.dateTime
 
-        if (nonFilteredVesselsAreHidden && Array.isArray(filteredVesselsFeaturesUids) && filteredVesselsFeaturesUids.length > 0) {
+        if (nonFilteredVesselsAreHidden &&
+          Array.isArray(filteredVesselsFeaturesUids) &&
+          filteredVesselsFeaturesUids.length > 0) {
           const featureIndex = filteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
 
           if (featureIndex === NOT_FOUND) {

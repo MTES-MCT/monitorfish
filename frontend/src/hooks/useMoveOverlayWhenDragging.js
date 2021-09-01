@@ -5,7 +5,7 @@ import { unByKey } from 'ol/Observable'
 const X = 0
 const Y = 1
 
-export const useMoveOverlayWhenDragging = (ref, overlay, map, currentOffset, moveLineWithThrottle, showed) => {
+export const useMoveOverlayWhenDragging = (overlay, map, currentOffset, moveLineWithThrottle, showed) => {
   useEffect(() => {
     let eventKey
 

@@ -9,32 +9,32 @@ import { useSelector } from 'react-redux'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselCard = props => {
+const VesselCard = ({ feature, overlayPosition }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
 
   return (
     <>
       <VesselCardHeader>
         {
-          props.vessel.getProperties().flagState
+          feature.vessel.flagState
             ? <>
-              <Flag rel="preload" src={`flags/${props.vessel.getProperties().flagState.toLowerCase()}.svg`}/>{' '}</>
+              <Flag rel="preload" src={`flags/${feature.vessel.flagState.toLowerCase()}.svg`}/>{' '}</>
             : null
         }
         <VesselCardTitle>
           {
-            props.vessel.getProperties().vesselName
-              ? props.vessel.getProperties().vesselName
+            feature.vessel.vesselName
+              ? feature.vessel.vesselName
               : 'NOM INCONNU'
           }{' '}
           {
-            props.vessel.getProperties().flagState
-              ? <>({props.vessel.getProperties().flagState})</>
+            feature.vessel.flagState
+              ? <>({feature.vessel.flagState})</>
               : ''
           }
         </VesselCardTitle>
         {
-          props.vessel.getProperties().lastErsDateTime
+          feature.vessel.lastErsDateTime
             ? <ERS>
               <ERSOK/>
               <MessageText>JPE</MessageText>
@@ -48,34 +48,34 @@ const VesselCard = props => {
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
+          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
+          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
-          <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course
-            ? <>{props.vessel.getProperties().course}°</>
+          <FieldValue>{feature.vessel.course === 0 || feature.vessel.course
+            ? <>{feature.vessel.course}°</>
             : <NoValue>-</NoValue>}</FieldValue>
           <FieldName>Vitesse</FieldName>
-          <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed
-            ? <>{props.vessel.getProperties().speed} Nds</>
+          <FieldValue>{feature.vessel.speed === 0 || feature.vessel.speed
+            ? <>{feature.vessel.speed} Nds</>
             : <NoValue>-</NoValue>}</FieldValue>
         </Course>
         <Position>
           <FieldName>Dernier signal VMS</FieldName>
           <FieldValue>
             {
-              props.vessel.getProperties().dateTime
-                ? <>{timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+              feature.vessel.dateTime
+                ? <>{timeago.format(feature.vessel.dateTime, 'fr')}</>
                 : <NoValue>-</NoValue>
             }
           </FieldValue>
           <FieldName>Cadencement</FieldName>
           <FieldValue>
             {
-              props.vessel.getProperties().emissionPeriod
-                ? <>1 signal toutes les {props.vessel.getProperties().emissionPeriod / 60} min</>
+              feature.vessel.emissionPeriod
+                ? <>1 signal toutes les {feature.vessel.emissionPeriod / 60} min</>
                 : <NoValue>-</NoValue>
             }
           </FieldValue>
@@ -87,14 +87,14 @@ const VesselCard = props => {
             <Body>
               <Field>
                 <Key>CFR</Key>
-                <Value>{props.vessel.getProperties().internalReferenceNumber
-                  ? props.vessel.getProperties().internalReferenceNumber
+                <Value>{feature.vessel.internalReferenceNumber
+                  ? feature.vessel.internalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>MMSI</Key>
-                <Value>{props.vessel.getProperties().mmsi
-                  ? props.vessel.getProperties().mmsi
+                <Value>{feature.vessel.mmsi
+                  ? feature.vessel.mmsi
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </Body>
@@ -105,14 +105,14 @@ const VesselCard = props => {
             <Body>
               <Field>
                 <Key>Marquage ext.</Key>
-                <Value>{props.vessel.getProperties().externalReferenceNumber
-                  ? props.vessel.getProperties().externalReferenceNumber
+                <Value>{feature.vessel.externalReferenceNumber
+                  ? feature.vessel.externalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>Call Sign (IRCS)</Key>
-                <Value>{props.vessel.getProperties().ircs
-                  ? props.vessel.getProperties().ircs
+                <Value>{feature.vessel.ircs
+                  ? feature.vessel.ircs
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </Body>
@@ -127,11 +127,11 @@ const VesselCard = props => {
                 <Key>Taille du navire</Key>
                 <Value>
                   {
-                    props.vessel.getProperties().length ? props.vessel.getProperties().length : <NoValue>-</NoValue>
+                    feature.vessel.length ? feature.vessel.length : <NoValue>-</NoValue>
                   }
                   {' '}x{' '}
                   {
-                    props.vessel.getProperties().width ? props.vessel.getProperties().width : <NoValue>-</NoValue>
+                    feature.vessel.width ? feature.vessel.width : <NoValue>-</NoValue>
                   }
                   {' '}m
                 </Value>
@@ -143,16 +143,16 @@ const VesselCard = props => {
       </VesselCardBottom>
       <TrianglePointer>
         {
-          props.overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
+          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
         }
         {
-          props.overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
+          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
         }
         {
-          props.overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
+          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
         }
         {
-          props.overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
+          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
         }
       </TrianglePointer>
     </>

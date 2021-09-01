@@ -5,10 +5,8 @@ import { labelLineStyle } from './vesselLabelLine.style'
 const interestPointStylesCache = new Map()
 
 export const getInterestPointStyle = (feature, resolution) => {
-  const {
-    type,
-    isHiddenByZoom
-  } = feature.getProperties()
+  const type = feature.get('type')
+  const isHiddenByZoom = feature.get('isHiddenByZoom')
 
   if (feature.getId().includes('line')) {
     if (isHiddenByZoom) {

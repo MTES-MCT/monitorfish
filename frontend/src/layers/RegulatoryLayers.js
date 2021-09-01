@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import LayersEnum from '../domain/entities/layers'
 
+export const metadataIsShowedPropertyName = 'metadataIsShowed'
+
 const RegulatoryLayers = ({ map }) => {
   const layer = useSelector(state => state.layer)
   const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
@@ -27,7 +29,6 @@ const RegulatoryLayers = ({ map }) => {
 
   function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
     if (map) {
-      const metadataIsShowedPropertyName = 'metadataIsShowed'
       const regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
       if (regulatoryZoneMetadata) {
         const layerToAddProperty = regulatoryLayers.find(layer => {
@@ -35,15 +36,15 @@ const RegulatoryLayers = ({ map }) => {
         })
 
         if (layerToAddProperty) {
-          addMetadataIsShowedProperty(layerToAddProperty, metadataIsShowedPropertyName)
+          addMetadataIsShowedProperty(layerToAddProperty)
         }
       } else {
-        removeMetadataIsShowedProperty(regulatoryLayers, metadataIsShowedPropertyName)
+        removeMetadataIsShowedProperty(regulatoryLayers)
       }
     }
   }
 
-  function addMetadataIsShowedProperty (layerToAddProperty, metadataIsShowedPropertyName) {
+  function addMetadataIsShowedProperty (layerToAddProperty) {
     const features = layerToAddProperty.getSource().getFeatures()
     if (features.length) {
       features.forEach(feature => feature.set(metadataIsShowedPropertyName, true))
@@ -53,10 +54,10 @@ const RegulatoryLayers = ({ map }) => {
     }
   }
 
-  function removeMetadataIsShowedProperty (regulatoryLayers, metadataIsShowedPropertyName) {
+  function removeMetadataIsShowedProperty (regulatoryLayers) {
     regulatoryLayers.forEach(layer => {
       layer.getSource().getFeatures()
-        .filter(feature => feature.getProperties().metadataIsShowed)
+        .filter(feature => feature.get(metadataIsShowedPropertyName))
         .forEach(feature => feature.set(metadataIsShowedPropertyName, false))
     })
   }

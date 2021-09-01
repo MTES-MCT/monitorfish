@@ -1,5 +1,4 @@
 import Layers, { getGearCategory } from '../entities/layers'
-import VectorLayer from 'ol/layer/Vector'
 import layer from '../shared_slices/Layer'
 import { getVectorLayerStyle } from '../../layers/styles/vectorLayer.style'
 import VectorSource from 'ol/source/Vector'
@@ -11,6 +10,7 @@ import { getRegulatoryZoneFromAPI } from '../../api/fetch'
 import { getArea, getCenter } from 'ol/extent'
 import { animateToRegulatoryLayer } from '../shared_slices/Map'
 import { batch } from 'react-redux'
+import VectorImageLayer from 'ol/layer/VectorImage'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -53,9 +53,8 @@ const showRegulatoryLayer = layerToShow => (dispatch, getState) => {
 const getVectorLayer = dispatch => (layerToShow, hash, gearCategory) => {
   const className = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
-  return new VectorLayer({
+  return new VectorImageLayer({
     source: getRegulatoryVectorSource(dispatch)(layerToShow),
-    renderMode: 'image',
     className: className,
     updateWhileAnimating: true,
     updateWhileInteracting: true,

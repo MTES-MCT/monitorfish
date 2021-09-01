@@ -373,33 +373,3 @@ export const formatDataForSelectPicker = list => {
   })
   return array
 }
-
-/**
- * @function addTextToRegulatoryTextList
- * update an object list (add, update or remove an object)
- * the list is copied and not modified
- * if id is undefined or -1: add a new object at the given id
- * else, if the given object is not empty or undefined : update object at the given id
- * else, remove the object from the list
- * @param {[RegulatoryText]} regulatoryTextList
- * @param {number} id
- * @param {string} regulatoryText
- * @returns a new list
- */
-export const addTextToRegulatoryTextList = (regulatoryTextList, id, regulatoryText) => {
-  let newRegulatoryTextList = [...regulatoryTextList]
-  if (id === undefined || id === -1) {
-    newRegulatoryTextList.push(regulatoryText || {})
-  } else {
-    if (regulatoryText && regulatoryText !== {}) {
-      newRegulatoryTextList[id] = regulatoryText
-    } else {
-      if (newRegulatoryTextList.length === 1) {
-        newRegulatoryTextList = []
-      } else {
-        newRegulatoryTextList.splice(id, 1)
-      }
-    }
-  }
-  return newRegulatoryTextList
-}

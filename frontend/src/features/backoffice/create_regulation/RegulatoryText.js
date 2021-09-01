@@ -21,7 +21,7 @@ const RegulatoryText = props => {
   const {
     id,
     regulatoryText,
-    updateRegulatoryText,
+    removeRegulatoryTextFromList,
     saveForm
   } = props
 
@@ -262,7 +262,7 @@ const RegulatoryText = props => {
       <CancelButton
         disabled={false}
         isLast={false}
-        onClick={_ => updateRegulatoryText(id)}>
+        onClick={_ => removeRegulatoryTextFromList(id)}>
         Supprimer le texte
       </CancelButton>
     </ContentLine>

@@ -90,10 +90,8 @@ const RegulatoryText = props => {
   }
 
   /**
-   * @function onValidateButtonClicked
-   * check the required values
-   * if no value are missing
-   * update the regulatory text object
+   * @function checkNameAndUrl
+   * @return true if a value is missing, else false
    */
   const checkNameAndUrl = () => {
     let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
@@ -112,7 +110,7 @@ const RegulatoryText = props => {
   }
 
   /**
-   * @function checkRequiredValueOnSubmit
+   * @function checkOtherRequiredValues
    * @returns true if a regulatory text form value is missing or incorrect, else false
    */
   const checkOtherRequiredValues = () => {
@@ -131,6 +129,7 @@ const RegulatoryText = props => {
 
   useEffect(() => {
     if (saveForm) {
+      const payload = { id: id }
       let allValuesAreFilled = !checkNameAndUrl()
       allValuesAreFilled = !checkOtherRequiredValues() && allValuesAreFilled
       if (allValuesAreFilled) {
@@ -141,10 +140,11 @@ const RegulatoryText = props => {
           endDate: currentEndDate,
           textType: currentTextType
         }
-        dispatch(addObjectToRegulatoryTextListValidityMap({ id: id, validity: updatedRegulatoryText }))
+        payload.validity = updatedRegulatoryText
       } else {
-        dispatch(addObjectToRegulatoryTextListValidityMap({ id: id, validity: false }))
+        payload.validity = false
       }
+      dispatch(addObjectToRegulatoryTextListValidityMap(payload))
     }
   }, [saveForm])
 
@@ -288,7 +288,7 @@ const CustomCheckbox = styled(Checkbox)`
   }
   .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {
-      border: 2px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
+      border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
       box-sizing: border-box;
     }
     &:after {

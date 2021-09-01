@@ -22,22 +22,20 @@ const NOT_FOUND = -1
 
 export class Vessel {
   /**
-   * Vessel object for building OpenLayers vessel feature
+   * Get Vessel OpenLayers feature object
    * @param {VesselLastPosition} vessel
    */
-  constructor (vessel) {
-    this.vessel = vessel
-    this.id = Vessel.getVesselId(vessel)
-    this.coordinates = transform([this.vessel.longitude, this.vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+  static getFeature (vessel) {
+    const coordinates = transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-    this.feature = new Feature({
-      geometry: new Point(this.coordinates),
+    const feature = new Feature({
+      geometry: new Point(coordinates),
       internalReferenceNumber: vessel.internalReferenceNumber,
       externalReferenceNumber: vessel.externalReferenceNumber,
       mmsi: vessel.mmsi,
       flagState: vessel.flagState,
       vesselName: vessel.vesselName,
-      coordinates: toStringHDMS(this.coordinates),
+      coordinates: toStringHDMS(coordinates),
       latitude: vessel.latitude,
       longitude: vessel.longitude,
       estimatedCurrentLatitude: vessel.estimatedCurrentLatitude,
@@ -66,10 +64,26 @@ export class Vessel {
       vesselIdentifier: vessel.vesselIdentifier
     })
 
-    this.feature.setId(this.id)
+    feature.setId(Vessel.getVesselId(vessel))
+
+    return feature
   }
 
   static vesselIsMovingSpeed = 0.1
+
+  static getObjectForFilteringFromFeature (feature) {
+    return {
+      length: feature.getProperties().length,
+      flagState: feature.getProperties().flagState.toLowerCase(),
+      dateTimeTimestamp: new Date(feature.getProperties().dateTime).getTime(),
+      gearsArray: feature.getProperties().gearOnboard ? [...new Set(feature.getProperties().gearOnboard.map(gear => gear.gear))] : [],
+      fleetSegmentsArray: feature.getProperties().segments ? feature.getProperties().segments.map(segment => segment.replace(' ', '')) : [],
+      speciesArray: feature.getProperties().speciesOnboard ? [...new Set(feature.getProperties().speciesOnboard.map(species => species.species))] : [],
+      district: feature.getProperties().district,
+      districtCode: feature.getProperties().districtCode,
+      lastControlDateTimeTimestamp: feature.getProperties().lastControlDateTime ? new Date(feature.getProperties().lastControlDateTime).getTime() : ''
+    }
+  }
 
   /**
    * Apply filter property to vessel feature

@@ -12,7 +12,6 @@ import {
   Vessel,
   vesselAndVesselFeatureAreEquals
 } from '../domain/entities/vessel'
-import { getVesselObjectFromFeature } from '../features/vessel_list/dataFormatting'
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import { Vector } from 'ol/layer'
 import { getVesselStyle } from './styles/vessel.style'
@@ -70,8 +69,8 @@ const VesselsLayer = ({ map }) => {
     })
   }, [filters])
 
-  useEffect(() => {
-    vectorSource.on(VESSELS_UPDATE_EVENT, ({
+  function setProperties () {
+    return ({
       features,
       selectedBaseLayer,
       filterColor,
@@ -87,7 +86,15 @@ const VesselsLayer = ({ map }) => {
         feature.set(NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY, nonFilteredVesselsAreHidden)
         feature.set(FILTER_COLOR_PROPERTY, filterColor)
       })
-    })
+    }
+  }
+
+  useEffect(() => {
+    vectorSource.on(VESSELS_UPDATE_EVENT, setProperties())
+
+    return () => {
+      vectorSource.un(VESSELS_UPDATE_EVENT, setProperties())
+    }
   }, [vectorSource])
 
   useEffect(() => {
@@ -127,6 +134,12 @@ const VesselsLayer = ({ map }) => {
       dispatch(setVesselsLayerSource(vectorSource))
       map.getLayers().push(layer)
     }
+
+    return () => {
+      if (map) {
+        map.removeLayer(layer)
+      }
+    }
   }
 
   const showSelectedVesselSelector = vesselsFeatures => {
@@ -143,7 +156,7 @@ const VesselsLayer = ({ map }) => {
       const vesselsFeatures = vessels
         .filter(vessel => vessel)
         .filter(vessel => vessel.latitude && vessel.longitude)
-        .map(currentVessel => buildLastPositionFeature(currentVessel))
+        .map(currentVessel => Vessel.getFeature(currentVessel))
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(features => {
@@ -177,9 +190,7 @@ const VesselsLayer = ({ map }) => {
     }
 
     const vesselsObjects = vesselsFeatures.map(feature => {
-      const coordinates = [...feature.getGeometry().getCoordinates()]
-
-      return getVesselObjectFromFeature(feature, coordinates)
+      return Vessel.getObjectForFilteringFromFeature(feature)
     })
 
     dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
@@ -194,12 +205,6 @@ const VesselsLayer = ({ map }) => {
         return resolve(vesselsFeatures)
       })
   })
-
-  const buildLastPositionFeature = (vesselFromAPI) => {
-    const vessel = new Vessel(vesselFromAPI)
-
-    return vessel.feature
-  }
 
   return null
 }

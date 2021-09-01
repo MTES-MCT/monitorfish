@@ -10,9 +10,9 @@ const dispatchAnimateToRegulatoryLayer = (center, dispatch, className) => {
     }))
   }
 }
-const zoomInLayer = ({ subZone, feature }) => (dispatch, getState) => {
-  if (subZone) {
-    const className = `${Layers.REGULATORY.code}:${subZone.topic}:${subZone.zone}`
+const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
+  if (topicAndZone) {
+    const className = `${Layers.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
     const layerToZoomIn = getState().layer.layers.find(layer => layer.className_ === className)
     if (layerToZoomIn) {
       const center = getCenter(layerToZoomIn.getSource().getExtent())

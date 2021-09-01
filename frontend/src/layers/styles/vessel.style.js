@@ -2,7 +2,7 @@ import { Icon, Style } from 'ol/style'
 import { asArray } from 'ol/color'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
-import { VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE, Vessel } from '../../domain/entities/vessel'
+import { Vessel, VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
 

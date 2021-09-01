@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
@@ -6,12 +7,11 @@ import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
   setUpcomingRegulation,
-  setRegulatoryTextHasValueMissing
+  setRegulatoryTextListValidityMap
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
-
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
 
 const UpcomingRegulationModal = () => {
@@ -19,28 +19,31 @@ const UpcomingRegulationModal = () => {
   const {
     isModalOpen,
     upcomingRegulation,
-    regulatoryTextHasMissingValue
+    regulatoryTextListValidityMap
   } = useSelector(state => state.regulation)
 
   const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
     ? [...upcomingRegulation.regulatoryTextList]
     : [{}])
+
   const [saveForm, setSaveForm] = useState(false)
 
-  const addUpcomingRegulation = () => {
-    const newUpcomingRegulation = { ...upcomingRegulation }
-    newUpcomingRegulation.regulatoryTextList = regulatoryTextList
-    dispatch(setUpcomingRegulation(newUpcomingRegulation))
+  const onAddUpcomingRegulation = () => {
+    setSaveForm(true)
   }
 
   useEffect(() => {
-    if (saveForm && !regulatoryTextHasMissingValue) {
-      addUpcomingRegulation()
-      setSaveForm(false)
-      dispatch(setIsModalOpen(false))
-      dispatch(setRegulatoryTextHasValueMissing(false))
+    if (regulatoryTextListValidityMap) {
+      const values = Object.values(regulatoryTextListValidityMap)
+      if (saveForm && values.length > 0 && values.length === regulatoryTextList.length) {
+        if (!values.includes(false)) {
+          dispatch(setIsModalOpen(false))
+        }
+        dispatch(setRegulatoryTextListValidityMap({}))
+        setSaveForm(false)
+      }
     }
-  }, [saveForm, regulatoryTextHasMissingValue])
+  }, [saveForm, regulatoryTextListValidityMap, regulatoryTextList])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
@@ -54,7 +57,6 @@ const UpcomingRegulationModal = () => {
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
             source={'upcomingRegulation'}
-            setRegulatoryTextHasValueMissing={setRegulatoryTextHasValueMissing}
             saveForm={saveForm}
           />
         </Section>
@@ -64,10 +66,7 @@ const UpcomingRegulationModal = () => {
         <ValidateButton
           disabled={false}
           isLast={false}
-          onClick={() => {
-            dispatch(setRegulatoryTextHasValueMissing(true))
-            setSaveForm(true)
-          }}
+          onClick={() => onAddUpcomingRegulation()}
         >
           Ajouter la réglementation à venir
         </ValidateButton>

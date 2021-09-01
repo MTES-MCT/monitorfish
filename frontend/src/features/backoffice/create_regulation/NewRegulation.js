@@ -44,8 +44,6 @@ const CreateRegulation = () => {
   const [reglementationBlocName, setReglementationBlocName] = useState('')
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
-  /** @type {boolean} regulatoryTextHasMissingValue */
-  const [regulatoryTextHasMissingValue, setRegulatoryTextHasValueMissing] = useState(false)
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
@@ -59,9 +57,10 @@ const CreateRegulation = () => {
   }, [])
 
   const createRegulation = () => {
-    if (regulatoryTextHasMissingValue) {
+    // TODO : Check form values
+    /** if (regulatoryTextHasMissingValue) {
       console.log('one value is missing somewhere ! ')
-    }
+    } */
     console.log('createRegulation')
   }
 
@@ -116,7 +115,6 @@ const CreateRegulation = () => {
           <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
-            setRegulatoryTextHasValueMissing={setRegulatoryTextHasValueMissing}
             source={'regulation'}
           />
         </Content>

@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './CustomDatePicker'
 import { COLORS, INFINITE } from '../../../constants/constants'
-import { setRegulatoryTextHasValueMissing } from '../Regulation.slice'
+import { addObjectToRegulatoryTextListValidityMap } from '../Regulation.slice'
 import Tag from './Tag'
 
 /**
@@ -79,63 +79,6 @@ const RegulatoryText = props => {
     initFormValues()
   }, [])
 
-  useEffect(() => {
-    if ((currentStartDate && currentStartDate !== '') ||
-    (currentEndDate && currentEndDate !== '') ||
-    (currentTextType && currentTextType !== '')) {
-      updateOrAddRegulatoryText()
-    }
-  }, [currentStartDate, currentEndDate, currentTextType])
-
-  /**
-   * @funtion updateOrAddRegulatoryText
-   * Create a new regulatory text object
-   * with the current values.
-   * And call updateRegulatoryText() function
-   */
-  const updateOrAddRegulatoryText = () => {
-    const updatedRegulatoryText = {
-      name: currentRegulatoryTextName,
-      URL: currentRegulatoryTextURL,
-      startDate: currentStartDate,
-      endDate: currentEndDate,
-      textType: currentTextType
-    }
-    updateRegulatoryText(regulatoryText ? id : undefined, updatedRegulatoryText)
-  }
-
-  /**
-   * @function checkRequiredValueOnSubmit
-   * @returns true if a regulatory text form value is missing or incorrect, else false
-   */
-  const checkRequiredValueOnSubmit = () => {
-    let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
-    let oneValueIsMissing = required
-    setNameIsRequired(required)
-    required = !currentRegulatoryTextURL ||
-      currentRegulatoryTextURL ||
-      !checkURL(currentRegulatoryTextURL)
-    oneValueIsMissing = oneValueIsMissing || required
-    setURLIsrequired(required)
-    required = !currentStartDate
-    oneValueIsMissing = oneValueIsMissing || required
-    setStartDateIsRequired(required)
-    required = !currentEndDate
-    oneValueIsMissing = oneValueIsMissing || required
-    setEndDateIsRequired(required)
-    required = currentTextType.length === 0
-    oneValueIsMissing = oneValueIsMissing || required
-    setTextTypeIsRequired(required)
-    dispatch(setRegulatoryTextHasValueMissing(oneValueIsMissing))
-    return oneValueIsMissing
-  }
-
-  useEffect(() => {
-    if (saveForm) {
-      checkRequiredValueOnSubmit()
-    }
-  }, [saveForm])
-
   /**
    * @function checkUrl
    * @param {String} url
@@ -145,6 +88,65 @@ const RegulatoryText = props => {
     const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
     return regex.test(url)
   }
+
+  /**
+   * @function onValidateButtonClicked
+   * check the required values
+   * if no value are missing
+   * update the regulatory text object
+   */
+  const checkNameAndUrl = () => {
+    let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
+    let oneValueIsMissing = required
+    setNameIsRequired(required)
+    required = !currentRegulatoryTextURL ||
+        currentRegulatoryTextURL === '' ||
+        !checkURL(currentRegulatoryTextURL)
+    oneValueIsMissing = oneValueIsMissing || required
+    setURLIsrequired(required)
+    if (!oneValueIsMissing) {
+      setIsEditing(false)
+      return false
+    }
+    return true
+  }
+
+  /**
+   * @function checkRequiredValueOnSubmit
+   * @returns true if a regulatory text form value is missing or incorrect, else false
+   */
+  const checkOtherRequiredValues = () => {
+    let required = !currentStartDate
+    let oneValueIsMissing = false
+    oneValueIsMissing = oneValueIsMissing || required
+    setStartDateIsRequired(required)
+    required = !currentEndDate
+    oneValueIsMissing = oneValueIsMissing || required
+    setEndDateIsRequired(required)
+    required = currentTextType.length === 0
+    oneValueIsMissing = oneValueIsMissing || required
+    setTextTypeIsRequired(required)
+    return oneValueIsMissing
+  }
+
+  useEffect(() => {
+    if (saveForm) {
+      let allValuesAreFilled = !checkNameAndUrl()
+      allValuesAreFilled = !checkOtherRequiredValues() && allValuesAreFilled
+      if (allValuesAreFilled) {
+        const updatedRegulatoryText = {
+          name: currentRegulatoryTextName,
+          URL: currentRegulatoryTextURL,
+          startDate: currentStartDate,
+          endDate: currentEndDate,
+          textType: currentTextType
+        }
+        dispatch(addObjectToRegulatoryTextListValidityMap({ id: id, validity: updatedRegulatoryText }))
+      } else {
+        dispatch(addObjectToRegulatoryTextListValidityMap({ id: id, validity: false }))
+      }
+    }
+  }, [saveForm])
 
   const cancelAddNewRegulatoryText = () => {
     setIsEditing(true)
@@ -170,27 +172,6 @@ const RegulatoryText = props => {
     setIsEditing(true)
   }
 
-  /**
-   * @function onValidateButtonClicked
-   * check the required values
-   * if no value are missing
-   * update the regulatory text object
-   */
-  const onSaveButtonClicked = () => {
-    let required = !currentRegulatoryTextName || currentRegulatoryTextName === ''
-    let oneValueIsMissing = required
-    setNameIsRequired(required)
-    required = !currentRegulatoryTextURL ||
-      currentRegulatoryTextURL === '' ||
-      !checkURL(currentRegulatoryTextURL)
-    oneValueIsMissing = oneValueIsMissing || required
-    setURLIsrequired(required)
-    if (!oneValueIsMissing) {
-      setIsEditing(false)
-      updateOrAddRegulatoryText()
-    }
-  }
-
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
@@ -214,7 +195,7 @@ const RegulatoryText = props => {
             <><ValidateButton
               disabled={false}
               isLast={false}
-              onClick={onSaveButtonClicked}>
+              onClick={checkNameAndUrl}>
               Enregistrer
             </ValidateButton>
             <CancelButton
@@ -226,7 +207,7 @@ const RegulatoryText = props => {
           </>
         : <Tag
             tagValue={currentRegulatoryTextName}
-            tagURL={currentRegulatoryTextURL}
+            tagUrl={currentRegulatoryTextURL}
             onCloseIconClicked={onCloseIconClicked}
           />
     }
@@ -254,8 +235,8 @@ const RegulatoryText = props => {
       <CustomDatePicker
         $isrequired={startDateIsRequired}
         value={currentStartDate}
-        onChange={(date) => setCurrentStartDate(date)(date)}
-        onOk={(date, _) => setCurrentEndDate(date)}
+        onChange={(date) => setCurrentStartDate(date)}
+        onOk={(date, _) => setCurrentStartDate(date)}
         format='DD/MM/YYYY'
         placement={'rightStart'}
       />
@@ -265,7 +246,7 @@ const RegulatoryText = props => {
       <CustomDatePicker
         $isrequired={endDateIsRequired}
         value={currentEndDate === INFINITE ? '' : currentEndDate}
-        onChange={(date) => setCurrentStartDate(date)}
+        onChange={(date) => setCurrentEndDate(date)}
         onOk={(date, _) => setCurrentEndDate(date)}
         format='DD/MM/YYYY'
         placement={'rightEnd'}
@@ -305,10 +286,14 @@ const CustomCheckbox = styled(Checkbox)`
     top: 0px !important;
     left: 0px !important;
   }
-  .rs-checkbox-inner {
+  .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {
       border: 2px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
       box-sizing: border-box;
+    }
+    &:after {
+      margin-top: 0px !important;
+      margin-left: 4px !important;
     }
   }
   .rs-checkbox-checker {

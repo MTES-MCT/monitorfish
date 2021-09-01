@@ -30,3 +30,9 @@
  * @typedef UpcomingRegulationList
  * @property {[RegulatoryText]} regulatoryTextList
  */
+
+/**
+ * @typedef RegulatoryTexValidity
+ * @property {number} id
+ * @property {RegulatoryText | false} validity
+ */

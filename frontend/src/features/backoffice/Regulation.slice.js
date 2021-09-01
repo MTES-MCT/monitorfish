@@ -9,8 +9,7 @@ const regulationSlice = createSlice({
     upcomingRegulation: undefined,
     /** @type {boolean} isModalOpen */
     isModalOpen: false,
-    /** @type {boolean} regulatoryTextHasMissingValue */
-    regulatoryTextSectionHasMissingValue: undefined,
+    /** @type {RegulatoryTexValidity} regulatoryTextListValidityMap */
     regulatoryTextListValidityMap: {}
   },
   reducers: {
@@ -27,8 +26,6 @@ const regulationSlice = createSlice({
       state.regulatoryTextSectionHasMissingValue = action.payload
     },
     addObjectToRegulatoryTextListValidityMap (state, action) {
-      console.log('addObjectToRegulatoryTextListValidityMap')
-      console.log(action.payload)
       let mapUpdated = {}
       if (state.regulatoryTextListValidityMap) {
         mapUpdated = { ...state.regulatoryTextListValidityMap }
@@ -47,10 +44,8 @@ const regulationSlice = createSlice({
         mapUpdated[action.payload.id] = false
       }
       state.regulatoryTextListValidityMap = mapUpdated
-      console.log(mapUpdated)
     },
     setRegulatoryTextListValidityMap (state, action) {
-      console.log('setRegulatoryTextListValidityMap')
       state.regulatoryTextListValidityMap = action.payload
     }
   }

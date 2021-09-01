@@ -6,8 +6,8 @@ import { Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
-import { addTextToRegulatoryTextList } from '../../../utils'
 import { setIsModalOpen } from '../Regulation.slice'
+import { addTextToRegulatoryTextList } from '../../../utils'
 
 /**
  * @typedef {object} Props
@@ -15,20 +15,29 @@ import { setIsModalOpen } from '../Regulation.slice'
  * @prop {Function} setRegulatoryTextList
  * @prop {'regulation' | 'upcomingRegulation'} source
  * @prop {Boolean} saveForm
- * @prop {Boolean} setRegulatoryTextHasValueMissing
  */
 const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
-    setRegulatoryTextList,
     source,
     saveForm,
-    setRegulatoryTextHasValueMissing
+    setRegulatoryTextList
   } = props
 
   const { upcomingRegulation } = useSelector(state => state.regulation)
 
   const dispatch = useDispatch()
+
+  /**
+   * @function updateRegulatoryText
+   * update the value of an object at a given list index
+   * @param {number} regulatoryTextId
+   * @parem {RegulatoryText} newRegulatoryText
+   */
+  const updateRegulatoryTextList = (id, regulatoryText) => {
+    const newRegulatoryTextList = addTextToRegulatoryTextList(regulatoryTextList, id, regulatoryText)
+    setRegulatoryTextList(newRegulatoryTextList)
+  }
 
   const addRegRefInEffect = () => {
     updateRegulatoryTextList()
@@ -42,17 +51,6 @@ const RegulatoryTextSection = props => {
     }
   }
 
-  /**
-   * @function updateRegulatoryText
-   * update the value of an object at a given list index
-   * @param {number} regulatoryTextId
-   * @parem {RegulatoryText} newRegulatoryText
-   */
-  const updateRegulatoryTextList = (id, regulatoryText) => {
-    const newRegulatoryTextList = addTextToRegulatoryTextList(regulatoryTextList, id, regulatoryText)
-    setRegulatoryTextList(newRegulatoryTextList)
-  }
-
   return (<Section>
     <SectionTitle>
       {source === 'upcomingRegulation' ? 'références réglementaires À VENIR' : 'références réglementaires en vigueur'}
@@ -64,20 +62,16 @@ const RegulatoryTextSection = props => {
               key={id}
               id={id}
               regulatoryText={regulatoryText}
-              setRegulatoryTextList={setRegulatoryTextList}
-              setRegulatoryTextHasValueMissing={setRegulatoryTextHasValueMissing}
               updateRegulatoryText={updateRegulatoryTextList}
               saveForm={saveForm}
             />
         })
         : <RegulatoryText
-          key={0}
-          id={0}
-          regulatoryText={{}}
-          setRegulatoryTextList={setRegulatoryTextList}
-          setRegulatoryTextHasValueMissing={setRegulatoryTextHasValueMissing}
-          updateRegulatoryText={updateRegulatoryTextList}
-          saveForm={saveForm}
+            key={0}
+            id={0}
+            regulatoryText={{}}
+            updateRegulatoryText={updateRegulatoryTextList}
+            saveForm={saveForm}
         />
     }
     <ButtonLine>

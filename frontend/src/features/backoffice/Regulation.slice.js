@@ -10,7 +10,8 @@ const regulationSlice = createSlice({
     /** @type {boolean} isModalOpen */
     isModalOpen: false,
     /** @type {boolean} regulatoryTextHasMissingValue */
-    regulatoryTextHasMissingValue: false
+    regulatoryTextSectionHasMissingValue: undefined,
+    regulatoryTextListValidityMap: {}
   },
   reducers: {
     setSelectedRegulation (state, action) {
@@ -22,8 +23,35 @@ const regulationSlice = createSlice({
     setUpcomingRegulation (state, action) {
       state.upcomingRegulation = action.payload
     },
-    setRegulatoryTextHasValueMissing (state, action) {
-      state.regulatoryTextHasMissingValue = action.payload
+    setRegulatoryTextSectionHasMissingValue (state, action) {
+      state.regulatoryTextSectionHasMissingValue = action.payload
+    },
+    addObjectToRegulatoryTextListValidityMap (state, action) {
+      console.log('addObjectToRegulatoryTextListValidityMap')
+      console.log(action.payload)
+      let mapUpdated = {}
+      if (state.regulatoryTextListValidityMap) {
+        mapUpdated = { ...state.regulatoryTextListValidityMap }
+      }
+      if (action.payload.validity !== false) {
+        mapUpdated[action.payload.id] = true
+        const newUpcomingRegulation = { ...state.upcomingRegulation }
+        const newRegulationTextList = (newUpcomingRegulation?.regulatoryTextList
+          ? [...newUpcomingRegulation.regulatoryTextList]
+          : [{}])
+        newRegulationTextList[action.payload.id] = action.payload.validity
+        state.upcomingRegulation = newUpcomingRegulation
+        newUpcomingRegulation.regulatoryTextList = newRegulationTextList
+        state.upcomingRegulation.regulationText = action.payload.validity
+      } else {
+        mapUpdated[action.payload.id] = false
+      }
+      state.regulatoryTextListValidityMap = mapUpdated
+      console.log(mapUpdated)
+    },
+    setRegulatoryTextListValidityMap (state, action) {
+      console.log('setRegulatoryTextListValidityMap')
+      state.regulatoryTextListValidityMap = action.payload
     }
   }
 })
@@ -32,7 +60,9 @@ export const {
   setSelectedRegulation,
   setIsModalOpen,
   setUpcomingRegulation,
-  setRegulatoryTextHasValueMissing
+  setRegulatoryTextSectionHasMissingValue,
+  addObjectToRegulatoryTextListValidityMap,
+  setRegulatoryTextListValidityMap
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

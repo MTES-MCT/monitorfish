@@ -15,6 +15,7 @@ import {
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import { Vector } from 'ol/layer'
 import { getVesselStyle } from './styles/vessel.style'
+import { unByKey } from 'ol/Observable'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
@@ -90,10 +91,12 @@ const VesselsLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    vectorSource.on(VESSELS_UPDATE_EVENT, setProperties())
+    const eventKey = vectorSource.on(VESSELS_UPDATE_EVENT, setProperties())
 
     return () => {
-      vectorSource.un(VESSELS_UPDATE_EVENT, setProperties())
+      if (eventKey) {
+        unByKey(eventKey)
+      }
     }
   }, [vectorSource])
 

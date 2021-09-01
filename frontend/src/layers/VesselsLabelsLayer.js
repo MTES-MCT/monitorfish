@@ -77,6 +77,12 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     if (map) {
       map.getLayers().push(layer)
     }
+
+    return () => {
+      if (map) {
+        map.removeLayer(layer)
+      }
+    }
   }
 
   useEffect(() => {
@@ -109,7 +115,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         existingLabelLineFeature.setGeometry(new LineString([coordinates, nextCoordinates]))
       }
     } else {
-      const labelLineFeature = new VesselLabelLine(
+      const labelLineFeature = VesselLabelLine.getFeature(
         coordinates,
         nextCoordinates,
         featureId)
@@ -167,7 +173,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       if (existingLabelLineFeature) {
         existingLabelLineFeature.setGeometry(new LineString([feature.getGeometry().getCoordinates(), coordinatesAndOffset.coordinates]))
       } else {
-        const labelLineFeature = new VesselLabelLine(
+        const labelLineFeature = VesselLabelLine.getFeature(
           feature.getGeometry().getCoordinates(),
           coordinatesAndOffset.coordinates,
           labelLineFeatureId)

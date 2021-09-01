@@ -74,45 +74,51 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     if (map) {
       map.getLayers().push(layer)
     }
+
+    return () => {
+      if (map) {
+        map.removeLayer(layer)
+      }
+    }
   }
 
   function showVesselEstimatedTrack () {
     vectorSource.clear(true)
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
-    const estimatedCurrentPositionsFeatures = vesselsLayerSource.getFeatures().map((vesselFeature, index) => {
-      const {
-        estimatedCurrentLatitude,
-        estimatedCurrentLongitude,
-        latitude,
-        longitude,
-        dateTime
-      } = vesselFeature.getProperties()
+    const estimatedCurrentPositionsFeatures = vesselsLayerSource.getFeatures()
+      .map((vesselFeature, index) => {
+        const {
+          estimatedCurrentLatitude,
+          estimatedCurrentLongitude,
+          latitude,
+          longitude,
+          dateTime
+        } = vesselFeature.getProperties()
 
-      if (nonFilteredVesselsAreHidden && Array.isArray(filteredVesselsFeaturesUids) && filteredVesselsFeaturesUids.length > 0) {
-        const featureIndex = filteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
+        if (nonFilteredVesselsAreHidden && Array.isArray(filteredVesselsFeaturesUids) && filteredVesselsFeaturesUids.length > 0) {
+          const featureIndex = filteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
 
-        if (featureIndex === NOT_FOUND) {
-          return null
+          if (featureIndex === NOT_FOUND) {
+            return null
+          }
         }
-      }
 
-      if (estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
-        const estimatedCurrentPosition = new EstimatedPosition(
-          [longitude, latitude],
-          [estimatedCurrentLongitude, estimatedCurrentLatitude],
-          {
-            id: index,
-            isLight,
-            dateTime,
-            vesselsLastPositionVisibility
-          })
+        if (estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
+          return EstimatedPosition.getFeatures(
+            [longitude, latitude],
+            [estimatedCurrentLongitude, estimatedCurrentLatitude],
+            {
+              id: index,
+              isLight,
+              dateTime,
+              vesselsLastPositionVisibility
+            })
+        }
 
-        return estimatedCurrentPosition.features
-      }
-
-      return null
-    }).filter(vessel => vessel)
+        return null
+      })
+      .filter(vessel => vessel)
       .flat()
 
     vectorSource.addFeatures(estimatedCurrentPositionsFeatures)

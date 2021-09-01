@@ -67,6 +67,12 @@ const VesselTrackLayer = ({ map }) => {
     if (map) {
       map.getLayers().push(layer)
     }
+
+    return () => {
+      if (map) {
+        map.removeLayer(layer)
+      }
+    }
   }
 
   function showVesselTrack () {

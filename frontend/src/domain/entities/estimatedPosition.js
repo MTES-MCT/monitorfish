@@ -8,7 +8,7 @@ import { Vessel } from './vessel'
 
 class EstimatedPosition {
   /**
-   * EstimatedPosition object for building OpenLayers estimated position feature
+   * For building OpenLayers estimated position feature
    * @param {string[]} currentPosition - The [longitude, latitude] of the current position
    * @param {string[]} estimatedPosition - The [longitude, latitude] of the estimated position
    * @param {{
@@ -18,11 +18,11 @@ class EstimatedPosition {
       dateTime: Date
    * }} options
    */
-  constructor (currentPosition, estimatedPosition, options) {
-    this.currentCoordinates = transform([currentPosition[0], currentPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-    this.estimatedCoordinates = transform([estimatedPosition[0], estimatedPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+  static getFeatures (currentPosition, estimatedPosition, options) {
+    const currentCoordinates = transform([currentPosition[0], currentPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    const estimatedCoordinates = transform([estimatedPosition[0], estimatedPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-    this.features = []
+    const features = []
     let lineColor = 'rgb(5, 5, 94, 0.2)'
     if (options.isLight) {
       lineColor = 'rgb(202, 204, 224, 0.2)'
@@ -38,7 +38,7 @@ class EstimatedPosition {
       : true
 
     const lineFeature = new Feature({
-      geometry: new LineString([this.currentCoordinates, this.estimatedCoordinates]),
+      geometry: new LineString([currentCoordinates, estimatedCoordinates]),
       latitude: estimatedPosition[1],
       longitude: estimatedPosition[0],
       color: lineColor,
@@ -48,7 +48,7 @@ class EstimatedPosition {
     lineFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
 
     const circleFeature = new Feature({
-      geometry: new Point(this.estimatedCoordinates),
+      geometry: new Point(estimatedCoordinates),
       isCircle: true,
       latitude: estimatedPosition[1],
       longitude: estimatedPosition[0],
@@ -58,7 +58,9 @@ class EstimatedPosition {
     })
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)
 
-    this.features.push(lineFeature, circleFeature)
+    features.push(lineFeature, circleFeature)
+
+    return features
   }
 }
 

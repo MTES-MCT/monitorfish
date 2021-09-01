@@ -79,6 +79,12 @@ const MeasurementLayer = ({ map }) => {
     if (map && vectorLayer) {
       map.getLayers().push(vectorLayer)
     }
+
+    return () => {
+      if (map) {
+        map.removeLayer(vectorLayer)
+      }
+    }
   }
 
   function handleDrawEvents () {

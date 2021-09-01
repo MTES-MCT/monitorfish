@@ -156,7 +156,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
         }
       }
     } else {
-      const interestPointLineFeature = new InterestPointLine(
+      const interestPointLineFeature = InterestPointLine.getFeature(
         coordinates,
         nextCoordinates,
         featureId)
@@ -172,6 +172,12 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   function addLayerToMap () {
     if (map && vectorLayer) {
       map.getLayers().push(vectorLayer)
+    }
+
+    return () => {
+      if (map) {
+        map.removeLayer(vectorLayer)
+      }
     }
   }
 

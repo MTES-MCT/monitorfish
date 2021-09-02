@@ -8,7 +8,6 @@ import VesselLabelOverlay from '../features/map/overlays/VesselLabelOverlay'
 import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
 import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
-import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
 import { labelLineStyle } from './styles/vesselLabelLine.style'
 
 const MAX_LABELS_DISPLAYED = 150
@@ -39,7 +38,6 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
   const [vesselToCoordinates, setVesselToCoordinates] = useState(new Map())
   const isThrottled = useRef(false)
-  const vesselUpdateEventKey = useRef()
 
   const [vectorSource] = useState(new VectorSource({
     features: []
@@ -91,18 +89,12 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       return
     }
 
-    if (!vesselUpdateEventKey.current) {
-      vesselUpdateEventKey.current = vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
-        addVesselLabelToAllFeaturesInExtent()
-      })
-    }
-
     isThrottled.current = true
     setTimeout(() => {
       addVesselLabelToAllFeaturesInExtent()
       isThrottled.current = false
     }, throttleDuration)
-  }, [vesselsLayerSource, mapMovingAndZoomEvent, filters, nonFilteredVesselsAreHidden, vesselLabelsShowedOnMap, vesselLabel])
+  }, [vesselsLayerSource, mapMovingAndZoomEvent, filters, nonFilteredVesselsAreHidden, vesselLabelsShowedOnMap, vesselLabel, filteredVesselsFeaturesUids])
 
   useEffect(() => {
     const currentZoom = map.getView().getZoom().toFixed(2)

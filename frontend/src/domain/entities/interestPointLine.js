@@ -2,6 +2,8 @@ import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
 
 export class InterestPointLine {
+  static typeProperty = 'type'
+  static isHiddenByZoomProperty = 'isHiddenByZoom'
   /**
    * InterestPointLine object for building OpenLayers interest point line to draggable overlay
    * @param {string[]} fromCoordinates - The [longitude, latitude] of the start of the line (the interest point position)

@@ -7,6 +7,10 @@ import Point from 'ol/geom/Point'
 import { Vessel } from './vessel'
 
 class EstimatedPosition {
+  static colorProperty = 'color'
+  static isShowedProperty = 'isShowed'
+  static isCircleProperty = 'isCircle'
+
   /**
    * For building OpenLayers estimated position feature
    * @param {string[]} currentPosition - The [longitude, latitude] of the current position
@@ -16,6 +20,8 @@ class EstimatedPosition {
       isLight: boolean,
       vesselsLastPositionVisibility: Object,
       dateTime: Date
+      vesselIsHidden: Date
+      vesselIsOpacityReduced: Date
    * }} options
    */
   static getFeatures (currentPosition, estimatedPosition, options) {
@@ -40,7 +46,7 @@ class EstimatedPosition {
     }
 
     const isShowed = options.vesselsLastPositionVisibility
-      ? !!Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime)
+      ? !!Vessel.getVesselOpacity(options.dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
       : true
 
     const lineFeature = new Feature({

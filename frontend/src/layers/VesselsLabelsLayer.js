@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
-import { getVesselIdentityFromFeature, Vessel } from '../domain/entities/vessel'
+import { Vessel } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'
 import VesselLabelOverlay from '../features/map/overlays/VesselLabelOverlay'
 import LineString from 'ol/geom/LineString'
@@ -39,6 +39,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
   const [vesselToCoordinates, setVesselToCoordinates] = useState(new Map())
   const isThrottled = useRef(false)
+  const vesselUpdateEventKey = useRef()
 
   const [vectorSource] = useState(new VectorSource({
     features: []
@@ -90,9 +91,11 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       return
     }
 
-    vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
-      addVesselLabelToAllFeaturesInExtent()
-    })
+    if (!vesselUpdateEventKey.current) {
+      vesselUpdateEventKey.current = vesselsLayerSource.on(VESSELS_UPDATE_EVENT, () => {
+        addVesselLabelToAllFeaturesInExtent()
+      })
+    }
 
     isThrottled.current = true
     setTimeout(() => {
@@ -188,7 +191,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   function addLabelToFeatures (features) {
     const nextFeaturesAndLabels = features.map(feature => {
       const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility)
-      const identity = getVesselIdentityFromFeature(feature)
+      const identity = feature.vessel
       const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
       const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
 

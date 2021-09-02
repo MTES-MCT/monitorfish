@@ -11,16 +11,16 @@ export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
-export const IS_LIGHT_PROPERTY = 'isLight'
-export const NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY = 'nonFilteredVesselsAreHidden'
-export const OPACITY_PROPERTY = 'opacity'
-export const FILTER_COLOR_PROPERTY = 'filterColor'
-export const IS_SELECTED_PROPERTY = 'isSelected'
-export const IS_SHOWED_IN_FILTER_PROPERTY = 'isShowedInFilter'
-
 const NOT_FOUND = -1
 
 export class Vessel {
+  static filterColorProperty = 'filterColor'
+  static opacityProperty = 'opacity'
+  static isLightProperty = 'isLight'
+  static nonFilteredVesselsAreHiddenProperty = 'nonFilteredVesselsAreHidden'
+  static isShowedInFilterProperty = 'isShowedInFilter'
+  static isSelectedProperty = 'isSelected'
+
   /**
    * Get Vessel OpenLayers feature object
    * @param {VesselLastPosition} vessel
@@ -65,21 +65,15 @@ export class Vessel {
   static applyIsShowedPropertyToVessels (feature, filteredVesselsUids) {
     const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
 
-    feature.set(IS_SHOWED_IN_FILTER_PROPERTY, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
+    feature.set(Vessel.isShowedInFilterProperty, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
   }
 
   static getVesselId (vessel) {
     return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
   }
 
-  // TODO Cette function est longue !!! à refacto ?
-  static getVesselOpacity (vesselsLastPositionVisibility, dateTime) {
+  static getVesselOpacity (dateTime, vesselIsHidden, vesselIsOpacityReduced) {
     const vesselDate = new Date(dateTime)
-
-    const vesselIsHidden = new Date()
-    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
-    const vesselIsOpacityReduced = new Date()
-    vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
 
     let opacity = 1
     if (vesselDate.getTime() < vesselIsHidden.getTime()) {
@@ -131,37 +125,6 @@ export class Vessel {
     selectedBaseLayer === baseLayers.SATELLITE.code
 }
 
-export const getVesselIdentityFromFeature = feature => {
-  return {
-    internalReferenceNumber: feature.vessel.internalReferenceNumber,
-    externalReferenceNumber: feature.vessel.externalReferenceNumber,
-    latitude: feature.vessel.latitude,
-    longitude: feature.vessel.longitude,
-    vesselName: feature.vessel.vesselName,
-    flagState: feature.vessel.flagState,
-    mmsi: feature.vessel.mmsi,
-    ircs: feature.vessel.ircs,
-    course: feature.vessel.course,
-    speed: feature.vessel.speed,
-    width: feature.vessel.width,
-    length: feature.vessel.length,
-    dateTime: feature.vessel.dateTime,
-    gearOnboard: feature.vessel.gearOnboard,
-    segments: feature.vessel.segments,
-    speciesOnboard: feature.vessel.speciesOnboard,
-    district: feature.vessel.district,
-    districtCode: feature.vessel.districtCode,
-    lastControlDateTime: feature.vessel.lastControlDateTime,
-    lastControlInfraction: feature.vessel.lastControlInfraction,
-    totalWeightOnboard: feature.vessel.totalWeightOnboard,
-    registryPortLocode: feature.vessel.registryPortLocode,
-    registryPortName: feature.vessel.registryPortName,
-    lastErsDateTime: feature.vessel.lastErsDateTime,
-    emissionPeriod: feature.vessel.emissionPeriod,
-    departureDateTime: feature.vessel.departureDateTime
-  }
-}
-
 export const getVesselIdentityFromVessel = vessel => {
   return {
     internalReferenceNumber: vessel.internalReferenceNumber,
@@ -177,6 +140,16 @@ export const getVesselIdentityFromVessel = vessel => {
 
 export const getVesselFeatureIdFromVessel = vessel => {
   return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.mmsi}/${vessel.ircs}`
+}
+
+export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibility => {
+  const vesselIsHidden = new Date()
+  vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
+
+  const vesselIsOpacityReduced = new Date()
+  vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
+
+  return { vesselIsHidden, vesselIsOpacityReduced }
 }
 
 export function vesselAndVesselFeatureAreEquals (vessel, feature) {

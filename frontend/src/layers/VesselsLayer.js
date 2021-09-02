@@ -4,11 +4,7 @@ import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { resetVessels, setFilteredVesselsFeaturesUids, setVesselsLayerSource } from '../domain/shared_slices/Vessel'
 import {
-  FILTER_COLOR_PROPERTY,
-  IS_LIGHT_PROPERTY,
-  IS_SELECTED_PROPERTY,
-  NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY,
-  OPACITY_PROPERTY,
+  getVesselLastPositionVisibilityDates,
   Vessel,
   vesselAndVesselFeatureAreEquals
 } from '../domain/entities/vessel'
@@ -80,12 +76,14 @@ const VesselsLayer = ({ map }) => {
     }) => {
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
+      const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+
       features.forEach(feature => {
-        const opacity = Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.vessel.dateTime)
-        feature.set(IS_LIGHT_PROPERTY, isLight, true)
-        feature.set(OPACITY_PROPERTY, opacity, true)
-        feature.set(NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY, nonFilteredVesselsAreHidden, true)
-        feature.set(FILTER_COLOR_PROPERTY, filterColor, true)
+        const opacity = Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+        feature.set(Vessel.isLightProperty, isLight, true)
+        feature.set(Vessel.opacityProperty, opacity, true)
+        feature.set(Vessel.nonFilteredVesselsAreHiddenProperty, nonFilteredVesselsAreHidden, true)
+        feature.set(Vessel.filterColorProperty, filterColor, true)
       })
       vectorSource.changed()
     }
@@ -103,28 +101,30 @@ const VesselsLayer = ({ map }) => {
 
   useEffect(() => {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
-    vectorSource.getFeatures().forEach(feature => {
-      feature.set(IS_LIGHT_PROPERTY, isLight)
+    vectorSource.forEachFeature(feature => {
+      feature.set(Vessel.isLightProperty, isLight)
     })
   }, [selectedBaseLayer])
 
   useEffect(() => {
-    vectorSource.getFeatures().forEach(feature => {
-      feature.set(NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY, nonFilteredVesselsAreHidden)
+    vectorSource.forEachFeature(feature => {
+      feature.set(Vessel.nonFilteredVesselsAreHiddenProperty, nonFilteredVesselsAreHidden)
     })
   }, [nonFilteredVesselsAreHidden])
 
   useEffect(() => {
-    vectorSource.getFeatures().forEach(feature => {
-      const opacity = Vessel.getVesselOpacity(vesselsLastPositionVisibility, feature.vessel.dateTime)
-      feature.set(OPACITY_PROPERTY, opacity)
+    const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+
+    vectorSource.forEachFeature(feature => {
+      const opacity = Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+      feature.set(Vessel.opacityProperty, opacity)
     })
   }, [vesselsLastPositionVisibility])
 
   useEffect(() => {
     const vesselsColor = getFilterColor()
-    vectorSource.getFeatures().forEach(feature => {
-      feature.set(FILTER_COLOR_PROPERTY, vesselsColor)
+    vectorSource.forEachFeature(feature => {
+      feature.set(Vessel.filterColorProperty, vesselsColor)
     })
   }, [filters])
 
@@ -151,7 +151,7 @@ const VesselsLayer = ({ map }) => {
       selectedVesselIdentity && vesselAndVesselFeatureAreEquals(selectedVesselIdentity, feature))
 
     if (feature) {
-      feature.set(IS_SELECTED_PROPERTY, true)
+      feature.set(Vessel.isSelectedProperty, true)
     }
   }
 

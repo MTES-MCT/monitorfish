@@ -87,15 +87,16 @@ const VesselList = ({ namespace }) => {
       dispatch(unselectVessel())
       firstUpdate.current = false
 
-      updateVesselsList(vesselsLayerSource.getFeatures())
+      updateVesselsList()
     }
   }, [vesselListModalIsOpen])
 
-  const updateVesselsList = features => {
-    const vessels = features.map(vessel => {
-      const coordinates = [...vessel.getGeometry().getCoordinates()]
+  const updateVesselsList = () => {
+    const vessels = []
+    vesselsLayerSource.forEachFeature(feature => {
+      const coordinates = [...feature.getGeometry().getCoordinates()]
 
-      return getVesselObjectFromFeature(vessel, coordinates)
+      vessels.push(getVesselObjectFromFeature(feature, coordinates))
     })
 
     setVessels(vessels)

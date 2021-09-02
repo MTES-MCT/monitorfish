@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
@@ -6,7 +5,6 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
-  setUpcomingRegulation,
   setRegulatoryTextListValidityMap
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'

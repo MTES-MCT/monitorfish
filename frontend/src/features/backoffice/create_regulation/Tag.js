@@ -7,7 +7,7 @@ import { Link } from '../../commonStyles/Backoffice.style'
 /**
  * @typedef Props
  * @prop {String} tagValue
- * @prop {Function} onCliseIconClicked
+ * @prop {Function} onCloseIconClicked
  * @prop {URL} tagUrl
  */
 const Tag = props => {

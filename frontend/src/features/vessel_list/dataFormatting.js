@@ -7,6 +7,18 @@ export const CSVOptions = {
     code: 'targetNumber',
     name: 'Priorite'
   },
+  district: {
+    code: 'district',
+    name: 'Quartier'
+  },
+  internalReferenceNumber: {
+    code: 'internalReferenceNumber',
+    name: 'CFR'
+  },
+  ircs: {
+    code: 'ircs',
+    name: 'C/S'
+  },
   vesselName: {
     code: 'vesselName',
     name: 'Nom'
@@ -15,17 +27,13 @@ export const CSVOptions = {
     code: 'externalReferenceNumber',
     name: 'Marq. Ext.'
   },
-  ircs: {
-    code: 'ircs',
-    name: 'C/S'
+  dateTime: {
+    code: 'dateTime',
+    name: 'GDH (UTC)'
   },
   mmsi: {
     code: 'mmsi',
     name: 'MMSI'
-  },
-  internalReferenceNumber: {
-    code: 'internalReferenceNumber',
-    name: 'CFR'
   },
   fleetSegments: {
     code: 'fleetSegments',
@@ -46,14 +54,6 @@ export const CSVOptions = {
   flagState: {
     code: 'flagState',
     name: 'Pavillon'
-  },
-  district: {
-    code: 'district',
-    name: 'Quartier'
-  },
-  dateTime: {
-    code: 'dateTime',
-    name: 'GDH (UTC)'
   },
   latitude: {
     code: 'latitude',

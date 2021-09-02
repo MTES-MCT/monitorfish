@@ -86,7 +86,6 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     }
   }
 
-  // TODO Migrate hard calculus (GIS transform ?) to a worker
   function showVesselEstimatedTrack () {
     vectorSource.clear(true)
     const isLight = Vessel.iconIsLight(selectedBaseLayer)

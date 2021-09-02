@@ -9,7 +9,7 @@ const X = 0
 const Y = 1
 const initialOffsetValue = [5, -30]
 
-const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, featureId, moveLine, zoomHasChanged }) => {
+const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, featureId, moveLine, zoomHasChanged, opacity }) => {
   const ref = createRef()
 
   const currentOffset = useRef(initialOffsetValue)
@@ -74,7 +74,7 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, feature
     <WrapperToBeKeptForDOMManagement>
       <div ref={ref}>
         {
-          showed
+          showed && text && opacity
             ? <VesselLabelOverlayElement>
               {
                 flagState

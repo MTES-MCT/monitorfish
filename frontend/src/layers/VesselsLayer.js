@@ -158,8 +158,7 @@ const VesselsLayer = ({ map }) => {
   function addVesselsFeaturesToMap () {
     if (map && vessels && vessels.length) {
       const vesselsFeatures = vessels
-        .filter(vessel => vessel)
-        .filter(vessel => vessel.latitude && vessel.longitude)
+        .filter(vessel => vessel?.latitude && vessel?.longitude)
         .map(currentVessel => Vessel.getFeature(currentVessel))
         .filter(vessel => vessel)
 
@@ -172,7 +171,8 @@ const VesselsLayer = ({ map }) => {
           showingVesselsEstimatedPositions,
           filterColor: getFilterColor(),
           vesselsLastPositionVisibility,
-          selectedBaseLayer
+          selectedBaseLayer,
+          nonFilteredVesselsAreHidden
         })
         dispatch(resetVessels())
       })

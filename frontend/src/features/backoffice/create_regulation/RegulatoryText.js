@@ -14,14 +14,14 @@ import Tag from './Tag'
  * @typedef {object} Props
  * @prop {Number} id
  * @prop {RegulatoryText} regulatoryText
- * @prop {Function} updateRegulatoryText
+ * @prop {Function} addOrRemoveRegulatoryTextInList
  * @prop {Boolean} saveForm
  */
 const RegulatoryText = props => {
   const {
     id,
     regulatoryText,
-    removeRegulatoryTextFromList,
+    addOrRemoveRegulatoryTextInList,
     saveForm
   } = props
 
@@ -262,7 +262,7 @@ const RegulatoryText = props => {
       <CancelButton
         disabled={false}
         isLast={false}
-        onClick={_ => removeRegulatoryTextFromList(id)}>
+        onClick={_ => addOrRemoveRegulatoryTextInList(id)}>
         Supprimer le texte
       </CancelButton>
     </ContentLine>

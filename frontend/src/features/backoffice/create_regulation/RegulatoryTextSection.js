@@ -27,25 +27,23 @@ const RegulatoryTextSection = props => {
 
   const dispatch = useDispatch()
 
-  const addNewRegulatoryTextInList = () => {
+  const addOrRemoveRegulatoryTextInList = (id) => {
     const newRegulatoryTextList = [...regulatoryTextList]
-    newRegulatoryTextList.push({})
-    setRegulatoryTextList(newRegulatoryTextList)
-  }
-
-  const removeRegulatoryTextFromList = (id) => {
-    const newRegulatoryTextList = [...regulatoryTextList]
-    newRegulatoryTextList.splice(id, 1)
+    if (id) {
+      newRegulatoryTextList.splice(id, 1)
+    } else {
+      newRegulatoryTextList.push({})
+    }
     setRegulatoryTextList(newRegulatoryTextList)
   }
 
   const addRegRefInEffect = () => {
-    addNewRegulatoryTextInList()
+    addOrRemoveRegulatoryTextInList()
   }
 
   const addUpcomingText = () => {
     if (source === 'upcomingRegulation') {
-      addNewRegulatoryTextInList()
+      addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
     }
@@ -62,7 +60,7 @@ const RegulatoryTextSection = props => {
               key={id}
               id={id}
               regulatoryText={regulatoryText}
-              removeRegulatoryTextFromList={removeRegulatoryTextFromList}
+              addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
               saveForm={saveForm}
             />
         })
@@ -70,7 +68,7 @@ const RegulatoryTextSection = props => {
             key={0}
             id={0}
             regulatoryText={{}}
-            removeRegulatoryTextFromList={removeRegulatoryTextFromList}
+            addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
             saveForm={saveForm}
         />
     }

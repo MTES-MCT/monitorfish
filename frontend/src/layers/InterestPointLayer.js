@@ -35,7 +35,6 @@ const DRAW_ABORT_EVENT = 'drawabort'
 const DRAW_END_EVENT = 'drawend'
 
 export const MIN_ZOOM = 7
-const isHiddenByZoom = 'isHiddenByZoom'
 
 const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   const dispatch = useDispatch()
@@ -156,7 +155,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
         }
       }
     } else {
-      const interestPointLineFeature = new InterestPointLine(
+      const interestPointLineFeature = InterestPointLine.getFeature(
         coordinates,
         nextCoordinates,
         featureId)
@@ -173,6 +172,12 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     if (map && vectorLayer) {
       map.getLayers().push(vectorLayer)
     }
+
+    return () => {
+      if (map) {
+        map.removeLayer(vectorLayer)
+      }
+    }
   }
 
   function showOrHideInterestPointsOverlays () {
@@ -180,12 +185,12 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     if (currentZoom !== previousMapZoom.current) {
       previousMapZoom.current = currentZoom
       if (currentZoom < MIN_ZOOM) {
-        vectorSource.getFeatures().forEach(feature => {
-          feature.set(isHiddenByZoom, true)
+        vectorSource.forEachFeature(feature => {
+          feature.set(InterestPointLine.isHiddenByZoomProperty, true)
         })
       } else {
-        vectorSource.getFeatures().forEach(feature => {
-          feature.set(isHiddenByZoom, false)
+        vectorSource.forEachFeature(feature => {
+          feature.set(InterestPointLine.isHiddenByZoomProperty, false)
         })
       }
     }

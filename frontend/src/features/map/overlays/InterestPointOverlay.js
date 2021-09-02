@@ -74,7 +74,7 @@ const InterestPointOverlay = props => {
     }, delay)
   }, [interestPointCoordinates.current])
 
-  useMoveOverlayWhenDragging(ref, overlay, map, currentOffset, moveInterestPointWithThrottle, showed)
+  useMoveOverlayWhenDragging(overlay, map, currentOffset, moveInterestPointWithThrottle, showed)
   useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveInterestPointWithThrottle)
   const previousCoordinates = usePrevious(coordinates)
 

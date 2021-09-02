@@ -2,9 +2,10 @@ import { Icon, Style } from 'ol/style'
 import { asArray } from 'ol/color'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
-import { VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE, Vessel } from '../../domain/entities/vessel'
+import { Vessel, VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
+import { EstimatedPosition } from '../../domain/entities/estimatedPosition'
 
 const iconStyleCache = new Map()
 const circleStyleCache = new Map()
@@ -62,15 +63,14 @@ export const getCircleStyle = vesselObject => {
 }
 
 export const getVesselStyle = feature => {
-  const {
-    filterColor,
-    opacity,
-    isLight,
-    course,
-    speed,
-    nonFilteredVesselsAreHidden,
-    isShowedInFilter
-  } = feature.getProperties()
+  const filterColor = feature.get(EstimatedPosition.filterColorProperty)
+  const opacity = feature.get(EstimatedPosition.opacityProperty)
+  const isLight = feature.get(EstimatedPosition.isLightProperty)
+  const nonFilteredVesselsAreHidden = feature.get(EstimatedPosition.nonFilteredVesselsAreHiddenProperty)
+  const isShowedInFilter = feature.get(EstimatedPosition.isShowedInFilterProperty)
+
+  const course = feature.vessel.course
+  const speed = feature.vessel.speed
 
   if (nonFilteredVesselsAreHidden && filterColor && !isShowedInFilter) {
     return []
@@ -83,7 +83,7 @@ export const getVesselStyle = feature => {
     ? [getIconStyle({ vesselFileName, course, opacity })]
     : [getCircleStyle({ vesselColor, opacity })]
 
-  if (feature.getProperties().isSelected) {
+  if (feature.get(EstimatedPosition.isSelectedProperty)) {
     styles.push(selectedVesselStyle)
   }
 

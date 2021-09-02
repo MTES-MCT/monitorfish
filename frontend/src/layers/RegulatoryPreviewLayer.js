@@ -40,6 +40,12 @@ const RegulatoryPreviewLayer = ({ map }) => {
     if (map) {
       map.getLayers().push(layer)
     }
+
+    return () => {
+      if (map) {
+        map.removeLayer(layer)
+      }
+    }
   }
 
   return null

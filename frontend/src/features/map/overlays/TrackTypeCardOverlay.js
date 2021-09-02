@@ -38,7 +38,7 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
       if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:line`)) {
-        setTrackTypeToShowOnCard(feature.getProperties().trackType)
+        setTrackTypeToShowOnCard(feature.trackType)
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(map.getCoordinateFromPixel(pointerMoveEventPixel))
       } else {

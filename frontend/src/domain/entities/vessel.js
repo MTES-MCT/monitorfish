@@ -11,65 +11,51 @@ export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
-export const IS_LIGHT_PROPERTY = 'isLight'
-export const NON_FILTERED_VESSELS_ARE_HIDDEN_PROPERTY = 'nonFilteredVesselsAreHidden'
-export const OPACITY_PROPERTY = 'opacity'
-export const FILTER_COLOR_PROPERTY = 'filterColor'
-export const IS_SELECTED_PROPERTY = 'isSelected'
-export const IS_SHOWED_IN_FILTER_PROPERTY = 'isShowedInFilter'
-
 const NOT_FOUND = -1
 
 export class Vessel {
+  static filterColorProperty = 'filterColor'
+  static opacityProperty = 'opacity'
+  static isLightProperty = 'isLight'
+  static nonFilteredVesselsAreHiddenProperty = 'nonFilteredVesselsAreHidden'
+  static isShowedInFilterProperty = 'isShowedInFilter'
+  static isSelectedProperty = 'isSelected'
+
   /**
-   * Vessel object for building OpenLayers vessel feature
+   * Get Vessel OpenLayers feature object
    * @param {VesselLastPosition} vessel
    */
-  constructor (vessel) {
-    this.vessel = vessel
-    this.id = Vessel.getVesselId(vessel)
-    this.coordinates = transform([this.vessel.longitude, this.vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+  static getFeature (vessel) {
+    const coordinates = transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-    this.feature = new Feature({
-      geometry: new Point(this.coordinates),
-      internalReferenceNumber: vessel.internalReferenceNumber,
-      externalReferenceNumber: vessel.externalReferenceNumber,
-      mmsi: vessel.mmsi,
-      flagState: vessel.flagState,
-      vesselName: vessel.vesselName,
-      coordinates: toStringHDMS(this.coordinates),
-      latitude: vessel.latitude,
-      longitude: vessel.longitude,
-      estimatedCurrentLatitude: vessel.estimatedCurrentLatitude,
-      estimatedCurrentLongitude: vessel.estimatedCurrentLongitude,
-      course: vessel.course,
-      positionType: vessel.positionType,
-      speed: vessel.speed,
-      dateTime: vessel.dateTime,
-      ircs: vessel.ircs,
-      emissionPeriod: vessel.emissionPeriod,
-      lastErsDateTime: vessel.lastErsDateTime,
-      departureDateTime: vessel.departureDateTime,
-      width: vessel.width,
-      length: vessel.length,
-      registryPortLocode: vessel.registryPortLocode,
-      registryPortName: vessel.registryPortName,
-      district: vessel.district,
-      districtCode: vessel.districtCode,
-      gearOnboard: vessel.gearOnboard,
-      segments: vessel.segments,
-      speciesOnboard: vessel.speciesOnboard,
-      totalWeightOnboard: vessel.totalWeightOnboard,
-      lastControlDateTime: vessel.lastControlDateTime,
-      lastControlInfraction: vessel.lastControlInfraction,
-      postControlComment: vessel.postControlComment,
-      vesselIdentifier: vessel.vesselIdentifier
+    const feature = new Feature({
+      geometry: new Point(coordinates)
     })
+    feature.vessel = {
+      ...vessel,
+      coordinates: toStringHDMS(coordinates)
+    }
 
-    this.feature.setId(this.id)
+    feature.setId(Vessel.getVesselId(vessel))
+
+    return feature
   }
 
   static vesselIsMovingSpeed = 0.1
+
+  static getObjectForFilteringFromFeature (feature) {
+    return {
+      length: feature.vessel.length,
+      flagState: feature.vessel.flagState.toLowerCase(),
+      dateTimeTimestamp: new Date(feature.vessel.dateTime).getTime(),
+      gearsArray: feature.vessel.gearOnboard ? [...new Set(feature.vessel.gearOnboard.map(gear => gear.gear))] : [],
+      fleetSegmentsArray: feature.vessel.segments ? feature.vessel.segments.map(segment => segment.replace(' ', '')) : [],
+      speciesArray: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))] : [],
+      district: feature.vessel.district,
+      districtCode: feature.vessel.districtCode,
+      lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : ''
+    }
+  }
 
   /**
    * Apply filter property to vessel feature
@@ -79,25 +65,20 @@ export class Vessel {
   static applyIsShowedPropertyToVessels (feature, filteredVesselsUids) {
     const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
 
-    feature.set(IS_SHOWED_IN_FILTER_PROPERTY, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
+    feature.set(Vessel.isShowedInFilterProperty, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
   }
 
   static getVesselId (vessel) {
     return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
   }
 
-  static getVesselOpacity (vesselsLastPositionVisibility, dateTime) {
+  static getVesselOpacity (dateTime, vesselIsHidden, vesselIsOpacityReduced) {
     const vesselDate = new Date(dateTime)
 
-    const vesselIsHidden = new Date()
-    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
-    const vesselIsOpacityReduced = new Date()
-    vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
-
     let opacity = 1
-    if (vesselDate < vesselIsHidden) {
+    if (vesselDate.getTime() < vesselIsHidden.getTime()) {
       opacity = 0
-    } else if (vesselDate < vesselIsOpacityReduced) {
+    } else if (vesselDate.getTime() < vesselIsOpacityReduced.getTime()) {
       opacity = 0.2
     }
 
@@ -111,23 +92,23 @@ export class Vessel {
    * @param {Object} vesselsLastPositionVisibility
    */
   static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility) {
-    const vesselDate = new Date(feature.getProperties().dateTime)
+    const vesselDate = new Date(feature.vessel.dateTime)
     const vesselIsHidden = new Date()
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
-    if (vesselDate > vesselIsHidden) {
+    if (vesselDate.getTime() > vesselIsHidden.getTime()) {
       switch (vesselLabelTypeEnum) {
         case vesselLabelEnum.VESSEL_NAME: {
-          return feature.getProperties().vesselName
+          return feature.vessel.vesselName
         }
         case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
-          return feature.getProperties().internalReferenceNumber
+          return feature.vessel.internalReferenceNumber
         }
         case vesselLabelEnum.VESSEL_NATIONALITY: {
-          return countries.getName(feature.getProperties().flagState, 'fr')
+          return countries.getName(feature.vessel.flagState, 'fr')
         }
         case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
-          return feature.getProperties().segments.join(', ')
+          return feature.vessel.segments.join(', ')
         }
         default: return null
       }
@@ -142,37 +123,6 @@ export class Vessel {
    */
   static iconIsLight = selectedBaseLayer => selectedBaseLayer === baseLayers.DARK.code ||
     selectedBaseLayer === baseLayers.SATELLITE.code
-}
-
-export const getVesselIdentityFromFeature = feature => {
-  return {
-    internalReferenceNumber: feature.getProperties().internalReferenceNumber,
-    externalReferenceNumber: feature.getProperties().externalReferenceNumber,
-    latitude: feature.getProperties().latitude,
-    longitude: feature.getProperties().longitude,
-    vesselName: feature.getProperties().vesselName,
-    flagState: feature.getProperties().flagState,
-    mmsi: feature.getProperties().mmsi,
-    ircs: feature.getProperties().ircs,
-    course: feature.getProperties().course,
-    speed: feature.getProperties().speed,
-    width: feature.getProperties().width,
-    length: feature.getProperties().length,
-    dateTime: feature.getProperties().dateTime,
-    gearOnboard: feature.getProperties().gearOnboard,
-    segments: feature.getProperties().segments,
-    speciesOnboard: feature.getProperties().speciesOnboard,
-    district: feature.getProperties().district,
-    districtCode: feature.getProperties().districtCode,
-    lastControlDateTime: feature.getProperties().lastControlDateTime,
-    lastControlInfraction: feature.getProperties().lastControlInfraction,
-    totalWeightOnboard: feature.getProperties().totalWeightOnboard,
-    registryPortLocode: feature.getProperties().registryPortLocode,
-    registryPortName: feature.getProperties().registryPortName,
-    lastErsDateTime: feature.getProperties().lastErsDateTime,
-    emissionPeriod: feature.getProperties().emissionPeriod,
-    departureDateTime: feature.getProperties().departureDateTime
-  }
 }
 
 export const getVesselIdentityFromVessel = vessel => {
@@ -192,15 +142,25 @@ export const getVesselFeatureIdFromVessel = vessel => {
   return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.mmsi}/${vessel.ircs}`
 }
 
+export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibility => {
+  const vesselIsHidden = new Date()
+  vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
+
+  const vesselIsOpacityReduced = new Date()
+  vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
+
+  return { vesselIsHidden, vesselIsOpacityReduced }
+}
+
 export function vesselAndVesselFeatureAreEquals (vessel, feature) {
-  return (feature.getProperties().internalReferenceNumber
-    ? feature.getProperties().internalReferenceNumber === vessel.internalReferenceNumber
+  return (feature.vessel.internalReferenceNumber
+    ? feature.vessel.internalReferenceNumber === vessel.internalReferenceNumber
     : false) ||
-    (feature.getProperties().ircs
-      ? feature.getProperties().ircs === vessel.ircs
+    (feature.vessel.ircs
+      ? feature.vessel.ircs === vessel.ircs
       : false) ||
-    (feature.getProperties().externalReferenceNumber
-      ? feature.getProperties().externalReferenceNumber === vessel.externalReferenceNumber
+    (feature.vessel.externalReferenceNumber
+      ? feature.vessel.externalReferenceNumber === vessel.externalReferenceNumber
       : false)
 }
 

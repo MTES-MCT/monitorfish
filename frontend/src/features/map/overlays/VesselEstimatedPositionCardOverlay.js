@@ -44,8 +44,8 @@ const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, featur
       if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
         overlayRef.current.style.display = 'block'
 
-        const latitude = feature.getProperties().latitude
-        const longitude = feature.getProperties().longitude
+        const latitude = feature.estimatedPosition.latitude
+        const longitude = feature.estimatedPosition.longitude
         const coordinates = getCoordinates([longitude, latitude], WSG84_PROJECTION, coordinatesFormat)
         setCoordinates(coordinates)
         if (pointerMoveEventPixel) {

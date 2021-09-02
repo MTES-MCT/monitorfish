@@ -65,19 +65,19 @@ export class VesselTrack {
         firstPositionOnLine = null
       }
 
-      return this.buildCircleFeature(pointCoordinatesOfLine, index, firstPositionOnLine, feature.getProperties().speed)
+      return this.buildCircleFeature(pointCoordinatesOfLine, index, firstPositionOnLine, feature.speed)
     }).filter(circlePoint => circlePoint)
   }
 
   buildCircleFeature (coordinates, index, position, speed) {
     const circleFeature = new Feature({
-      geometry: new Point(coordinates),
-      name: Layers.VESSEL_TRACK.code + ':position:' + index,
-      course: position ? position.course : null,
-      positionType: position ? position.positionType : null,
-      speed: position ? position.speed : null,
-      dateTime: position ? position.dateTime : null
+      geometry: new Point(coordinates)
     })
+    circleFeature.name = Layers.VESSEL_TRACK.code + ':position:' + index
+    circleFeature.course = position.course
+    circleFeature.positionType = position.positionType
+    circleFeature.speed = position.speed
+    circleFeature.dateTime = position.dateTime
 
     circleFeature.setId(Layers.VESSEL_TRACK.code + ':position:' + index)
     const trackColor = getTrackTypeFromSpeed(speed).color
@@ -102,12 +102,12 @@ export class VesselTrack {
 
       const arrowFeature = new Feature({
         geometry: new Point(newPoint),
-        name: Layers.VESSEL_TRACK.code + ':arrow:' + index,
-        course: feature.getProperties().course
+        name: Layers.VESSEL_TRACK.code + ':arrow:' + index
       })
+      arrowFeature.course = feature.course
 
       arrowFeature.setId(Layers.VESSEL_TRACK.code + ':arrow:' + index)
-      const trackArrow = getTrackTypeFromSpeed(feature.getProperties().speed).arrow
+      const trackArrow = getTrackTypeFromSpeed(feature.speed).arrow
       setArrowStyle(trackArrow, arrowFeature)
 
       return arrowFeature
@@ -133,11 +133,11 @@ export class VesselTrack {
         const trackType = getTrackTypeFromSpeed(position.speed)
 
         const feature = new Feature({
-          geometry: new LineString([firstPoint, secondPoint]),
-          trackType: trackType,
-          course: -rotation,
-          speed: position.speed
+          geometry: new LineString([firstPoint, secondPoint])
         })
+        feature.trackType = trackType
+        feature.course = -rotation
+        feature.speed = position.speed
 
         feature.setId(`${Layers.VESSEL_TRACK.code}:line:${index}`)
         feature.setStyle(new Style({

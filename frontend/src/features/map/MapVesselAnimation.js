@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetAnimateTo } from '../../domain/shared_slices/Map'
-import { getVesselIdentityFromFeature } from '../../domain/entities/vessel'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
 
@@ -53,8 +52,7 @@ const MapVesselAnimation = ({ map, mapClickEvent }) => {
 
   function showVesselTrackAndSidebarOnMapClick (feature) {
     if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
-      const vessel = getVesselIdentityFromFeature(feature)
-      dispatch(showVesselTrackAndSidebar(vessel, false, false))
+      dispatch(showVesselTrackAndSidebar(feature.vessel, false, false))
     }
   }
 

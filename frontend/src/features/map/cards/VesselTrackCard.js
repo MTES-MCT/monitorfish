@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselTrackCard = props => {
+const VesselTrackCard = ({ feature, overlayPosition }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
 
   return (
@@ -18,9 +18,9 @@ const VesselTrackCard = props => {
         <VesselCardTitle>POSITION</VesselCardTitle>
         <TimeAgo>
           {
-            props.vessel.getProperties().dateTime
+            feature.dateTime
               ? <>
-                {timeago.format(props.vessel.getProperties().dateTime, 'fr')}</>
+                {timeago.format(feature.dateTime, 'fr')}</>
               : <NoValue>-</NoValue>
           }
         </TimeAgo>
@@ -28,31 +28,31 @@ const VesselTrackCard = props => {
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
+          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue>{getCoordinates(props.vessel.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
+          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
-          <FieldValue>{props.vessel.getProperties().course === 0 || props.vessel.getProperties().course
-            ? <>{props.vessel.getProperties().course}°</>
+          <FieldValue>{feature.course === 0 || feature.course
+            ? <>{feature.course}°</>
             : <NoValue>-</NoValue>}</FieldValue>
           <FieldName>Vitesse</FieldName>
-          <FieldValue>{props.vessel.getProperties().speed === 0 || props.vessel.getProperties().speed
-            ? <>{props.vessel.getProperties().speed} Nds</>
+          <FieldValue>{feature.speed === 0 || feature.speed
+            ? <>{feature.speed} Nds</>
             : <NoValue>-</NoValue>}</FieldValue>
         </Course>
         <Position>
           <FieldName>Type de signal</FieldName>
-          <FieldValue>{props.vessel.getProperties().positionType
-            ? props.vessel.getProperties().positionType
+          <FieldValue>{feature.positionType
+            ? feature.positionType
             : <NoValue>-</NoValue>}</FieldValue>
           <FieldName>Signal</FieldName>
           <FieldValue>
             {
-              props.vessel.getProperties().dateTime
+              feature.dateTime
                 ? <>
-                  {getDateTime(props.vessel.getProperties().dateTime, true)}{' '}
+                  {getDateTime(feature.dateTime, true)}{' '}
                   <Gray>(UTC)</Gray></>
                 : <NoValue>-</NoValue>
             }
@@ -61,16 +61,16 @@ const VesselTrackCard = props => {
       </VesselCardBody>
       <TrianglePointer>
         {
-          props.overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
+          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
         }
         {
-          props.overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
+          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
         }
         {
-          props.overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
+          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
         }
         {
-          props.overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
+          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
         }
       </TrianglePointer>
     </>

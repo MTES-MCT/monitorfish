@@ -24,7 +24,7 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, feature
     positioning: 'left-center'
   }))
 
-  useMoveOverlayWhenDragging(ref, overlay, map, currentOffset, moveVesselLabelWithThrottle, showed)
+  useMoveOverlayWhenDragging(overlay, map, currentOffset, moveVesselLabelWithThrottle, showed)
   useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveVesselLabelWithThrottle)
 
   useEffect(() => {

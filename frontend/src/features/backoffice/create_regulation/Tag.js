@@ -41,7 +41,7 @@ const TagWrapper = styled.div`
 const SelectedValue = styled.span`
   font-size: 13px;
   padding: 2.5px;
-  color: ${COLORS.grayDarkerThree};
+  color: ${COLORS.gunMetal};
 `
 
 const CloseIcon = styled(CloseIconSVG)`

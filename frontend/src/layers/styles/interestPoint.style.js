@@ -1,14 +1,13 @@
 import { Icon, Style } from 'ol/style'
 import { INTEREST_POINT_STYLE, interestPointType } from '../../domain/entities/interestPoints'
 import { labelLineStyle } from './vesselLabelLine.style'
+import { InterestPointLine } from '../../domain/entities/interestPointLine'
 
 const interestPointStylesCache = new Map()
 
 export const getInterestPointStyle = (feature, resolution) => {
-  const {
-    type,
-    isHiddenByZoom
-  } = feature.getProperties()
+  const type = feature.get(InterestPointLine.typeProperty)
+  const isHiddenByZoom = feature.get(InterestPointLine.isHiddenByZoomProperty)
 
   if (feature.getId().includes('line')) {
     if (isHiddenByZoom) {

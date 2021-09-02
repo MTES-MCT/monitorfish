@@ -1,4 +1,3 @@
-import { getVesselIdentityFromFeature, getVesselIdentityFromVessel } from '../../domain/entities/vessel'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
@@ -23,7 +22,7 @@ const VesselSearchList = ({ searchText, foundVesselsOnMap, foundVesselsFromAPI, 
           <List>
             {
               foundVesselsOnMap.map(feature => {
-                const vessel = getVesselIdentityFromFeature(feature)
+                const vessel = feature.vessel
 
                 return <VesselSearchItem
                   key={feature.id_}
@@ -36,13 +35,11 @@ const VesselSearchList = ({ searchText, foundVesselsOnMap, foundVesselsFromAPI, 
             }
             {
               foundVesselsFromAPI.map((vessel, index) => {
-                const vesselIdentity = getVesselIdentityFromVessel(vessel)
-
                 return <VesselSearchItem
                   key={index}
                   id={index}
-                  vessel={vesselIdentity}
-                  selectVessel={() => selectVessel(vesselIdentity)}
+                  vessel={vessel}
+                  selectVessel={() => selectVessel(vessel)}
                   searchText={searchText}
                 />
               })

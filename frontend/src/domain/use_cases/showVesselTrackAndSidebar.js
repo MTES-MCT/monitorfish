@@ -3,7 +3,7 @@ import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../shared_
 import { removeError, setError } from '../shared_slices/Global'
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
-import { IS_SELECTED_PROPERTY, Vessel, vesselsAreEquals } from '../entities/vessel'
+import { Vessel, vesselsAreEquals } from '../entities/vessel'
 import { setUpdatedFromCron } from '../shared_slices/Map'
 import unselectVessel from './unselectVessel'
 import { batch } from 'react-redux'
@@ -21,7 +21,7 @@ const showVesselTrackAndSidebar = (
 
   const feature = vesselsLayerSource.getFeatureById(Vessel.getVesselId(vesselIdentity))
   if (feature) {
-    feature.set(IS_SELECTED_PROPERTY, true)
+    feature.set(Vessel.isSelectedProperty, true)
   }
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 

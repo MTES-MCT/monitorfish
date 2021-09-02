@@ -44,8 +44,11 @@
  * @property {string} vesselName
  * @property {number} width
  * @property {string} lastControlDateTime
+ * @property {string} vesselIdentifier
  * @property {boolean} lastControlInfraction
  * @property {number} postControlComment
+ * @property {number} estimatedCurrentLatitude
+ * @property {number} estimatedCurrentLongitude
  */
 
 /**

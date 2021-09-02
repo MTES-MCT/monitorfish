@@ -1,4 +1,3 @@
-import VectorLayer from 'ol/layer/Vector'
 import layer from '../shared_slices/Layer'
 import { getVectorLayerStyle } from '../../layers/styles/vectorLayer.style'
 import VectorSource from 'ol/source/Vector'
@@ -7,6 +6,7 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
 import { getAdministrativeZoneFromAPI } from '../../api/fetch'
 import { batch } from 'react-redux'
+import VectorImageLayer from 'ol/layer/VectorImage'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -40,9 +40,8 @@ const getVectorLayer = (type, zone) => {
     className = type
   }
 
-  return new VectorLayer({
+  return new VectorImageLayer({
     source: getAdministrativeVectorSource(type, zone),
-    renderMode: 'image',
     className: className,
     updateWhileAnimating: true,
     updateWhileInteracting: true,

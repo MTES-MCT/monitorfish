@@ -22,7 +22,7 @@ export const setArrowStyle = (trackArrow, arrowFeature) => {
       offset: [0, 0],
       imgSize: [20, 34],
       scale: 0.7,
-      rotation: arrowFeature.getProperties().course
+      rotation: arrowFeature.course
     })
   })
 

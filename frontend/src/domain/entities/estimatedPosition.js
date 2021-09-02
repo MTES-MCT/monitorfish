@@ -7,8 +7,12 @@ import Point from 'ol/geom/Point'
 import { Vessel } from './vessel'
 
 class EstimatedPosition {
+  static colorProperty = 'color'
+  static isShowedProperty = 'isShowed'
+  static isCircleProperty = 'isCircle'
+
   /**
-   * EstimatedPosition object for building OpenLayers estimated position feature
+   * For building OpenLayers estimated position feature
    * @param {string[]} currentPosition - The [longitude, latitude] of the current position
    * @param {string[]} estimatedPosition - The [longitude, latitude] of the estimated position
    * @param {{
@@ -16,13 +20,21 @@ class EstimatedPosition {
       isLight: boolean,
       vesselsLastPositionVisibility: Object,
       dateTime: Date
+      vesselIsHidden: Date
+      vesselIsOpacityReduced: Date
    * }} options
    */
-  constructor (currentPosition, estimatedPosition, options) {
-    this.currentCoordinates = transform([currentPosition[0], currentPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-    this.estimatedCoordinates = transform([estimatedPosition[0], estimatedPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+  static getFeatures (currentPosition, estimatedPosition, options) {
+    const currentCoordinates = transform([currentPosition[0], currentPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    const estimatedCoordinates = transform([estimatedPosition[0], estimatedPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-    this.features = []
+    const estimatedPositionObject = {
+      latitude: estimatedPosition[1],
+      longitude: estimatedPosition[0],
+      dateTime: options.dateTime
+    }
+
+    const features = []
     let lineColor = 'rgb(5, 5, 94, 0.2)'
     if (options.isLight) {
       lineColor = 'rgb(202, 204, 224, 0.2)'
@@ -34,31 +46,29 @@ class EstimatedPosition {
     }
 
     const isShowed = options.vesselsLastPositionVisibility
-      ? !!Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime)
+      ? !!Vessel.getVesselOpacity(options.dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
       : true
 
     const lineFeature = new Feature({
-      geometry: new LineString([this.currentCoordinates, this.estimatedCoordinates]),
-      latitude: estimatedPosition[1],
-      longitude: estimatedPosition[0],
+      geometry: new LineString([currentCoordinates, estimatedCoordinates]),
       color: lineColor,
-      isShowed,
-      dateTime: options.dateTime
+      isShowed
     })
+    lineFeature.estimatedPosition = estimatedPositionObject
     lineFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
 
     const circleFeature = new Feature({
-      geometry: new Point(this.estimatedCoordinates),
+      geometry: new Point(estimatedCoordinates),
       isCircle: true,
-      latitude: estimatedPosition[1],
-      longitude: estimatedPosition[0],
       color: vesselColor,
-      isShowed,
-      dateTime: options.dateTime
+      isShowed
     })
+    circleFeature.estimatedPosition = estimatedPositionObject
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)
 
-    this.features.push(lineFeature, circleFeature)
+    features.push(lineFeature, circleFeature)
+
+    return features
   }
 }
 

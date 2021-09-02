@@ -92,7 +92,7 @@ const RegulatoryLayerZone = props => {
 
   return (
     <Zone isLast={isLast}>
-      <Rectangle onClick={() => dispatch(zoomInLayer({ subZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
+      <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
         data-cy={'regulatory-layers-my-zones-zone'}
         title={regulatoryZone.zone

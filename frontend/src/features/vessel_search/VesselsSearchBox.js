@@ -69,15 +69,14 @@ const VesselsSearchBox = () => {
   }, [vesselIdentity])
 
   function getFoundVesselsOnMap () {
-    const vessels = vesselsLayerSource.getFeatures().map(feature => {
+    const foundFeatures = []
+    vesselsLayerSource.forEachFeature(feature => {
       if (findMatchingFeature(feature, searchText)) {
-        return feature
+        foundFeatures.push(feature)
       }
+    })
 
-      return null
-    }).filter(vessel => vessel)
-
-    const firstThirtyVessels = vessels.slice(0, 30)
+    const firstThirtyVessels = foundFeatures.slice(0, 30)
 
     return firstThirtyVessels
   }

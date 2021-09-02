@@ -9,7 +9,7 @@ import { Vector } from 'ol/layer'
 import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
 
 const NOT_FOUND = -1
-export const IS_SHOWED_PROPERTY = 'isShowed'
+export const OPACITY = 'opacity'
 
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
@@ -69,8 +69,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
     vectorSource.forEachFeature(feature => {
-      const isShowed = !!Vessel.getVesselOpacity(feature.estimatedPosition.dateTime, vesselIsHidden, vesselIsOpacityReduced)
-      feature.set(EstimatedPosition.isShowedProperty, isShowed)
+      const opacity = Vessel.getVesselOpacity(feature.estimatedPosition.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+      feature.set(EstimatedPosition.opacityProperty, opacity)
     })
   }, [vesselsLastPositionVisibility])
 

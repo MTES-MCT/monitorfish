@@ -22,7 +22,6 @@ const Measurement = () => {
   const measurementTypeToAdd = useSelector(state => state.map.measurementTypeToAdd)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
-  const firstUpdate = useRef(true)
   const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
@@ -43,13 +42,13 @@ const Measurement = () => {
     }
   }, [escapeFromKeyboard])
 
-  const makeMeasurement = measurementType => {
-    dispatch(setMeasurementTypeToAdd(measurementType))
+  const makeMeasurement = measurementTypeToAdd => {
+    dispatch(setMeasurementTypeToAdd(measurementTypeToAdd))
     setMeasurementIsOpen(false)
   }
 
-  const getMeasurementIcon = measurementType => {
-    switch (measurementType) {
+  const getMeasurementIcon = measurementTypeToAdd => {
+    switch (measurementTypeToAdd) {
       case MeasurementTypes.MULTILINE:
         return <MultiLineIcon/>
       case MeasurementTypes.CIRCLE_RANGE:
@@ -100,8 +99,7 @@ const Measurement = () => {
       </MeasurementWrapper>
       <MeasurementOptions
         healthcheckTextWarning={healthcheckTextWarning}
-        measurementBoxIsOpen={measurementIsOpen}
-        firstUpdate={firstUpdate.current}>
+        measurementBoxIsOpen={measurementIsOpen}>
         <MeasurementItem
           title={'Mesure d\'une distance avec lignes brisées'}
           onClick={() => makeMeasurement(MeasurementTypes.MULTILINE)}>
@@ -115,7 +113,6 @@ const Measurement = () => {
       </MeasurementOptions>
       <CustomCircleRange
         healthcheckTextWarning={healthcheckTextWarning}
-        firstUpdate={firstUpdate.current}
         measurementTypeToAdd={measurementTypeToAdd}
         circleCoordinatesToAdd={circleCoordinatesToAdd}
         circleRadiusToAdd={circleRadiusToAdd}

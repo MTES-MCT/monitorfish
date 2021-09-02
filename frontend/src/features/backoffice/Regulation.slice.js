@@ -5,11 +5,11 @@ const regulationSlice = createSlice({
   initialState: {
     /** @type {RegulatoryText} selectedRegulation */
     selectedRegulation: undefined,
-    /** @type {UpcomingRegulation} selectedUpcomingRegulation */
+    /** @type {UpcomingRegulation} upcomingRegulation */
     upcomingRegulation: undefined,
     /** @type {boolean} isModalOpen */
     isModalOpen: false,
-    /** @type {RegulatoryTexValidity} regulatoryTextListValidityMap */
+    /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
     regulatoryTextListValidityMap: {}
   },
   reducers: {

@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
-import { Vessel } from '../domain/entities/vessel'
+import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'
 import VesselLabelOverlay from '../features/map/overlays/VesselLabelOverlay'
 import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
 import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
-import { labelLineStyle } from './styles/vesselLabelLine.style'
+import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
 const MAX_LABELS_DISPLAYED = 150
 const NOT_FOUND = -1
@@ -49,7 +49,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     zIndex: Layers.VESSELS_LABEL.zIndex,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
-    style: labelLineStyle
+    style: feature => getLabelLineStyle(feature)
   }))
 
   useEffect(() => {
@@ -94,7 +94,31 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       addVesselLabelToAllFeaturesInExtent()
       isThrottled.current = false
     }, throttleDuration)
-  }, [vesselsLayerSource, mapMovingAndZoomEvent, filters, nonFilteredVesselsAreHidden, vesselLabelsShowedOnMap, vesselLabel, filteredVesselsFeaturesUids])
+  }, [
+    vesselsLayerSource,
+    mapMovingAndZoomEvent,
+    filters,
+    nonFilteredVesselsAreHidden,
+    vesselLabelsShowedOnMap,
+    vesselLabel,
+    filteredVesselsFeaturesUids
+  ])
+
+  useEffect(() => {
+    if (vesselsLayerSource) {
+      const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+
+      vesselsLayerSource.forEachFeatureInExtent(map.getView().calculateExtent(), vesselFeature => {
+        const opacity = Vessel.getVesselOpacity(vesselFeature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+        const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselFeature.vessel)
+
+        const feature = vectorSource.getFeatureById(labelLineFeatureId)
+        if (feature) {
+          feature.set(VesselLabelLine.opacityProperty, opacity)
+        }
+      })
+    }
+  }, [vesselsLayerSource, vesselsLastPositionVisibility])
 
   useEffect(() => {
     const currentZoom = map.getView().getZoom().toFixed(2)
@@ -181,6 +205,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   function addLabelToFeatures (features) {
+    const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+
     const nextFeaturesAndLabels = features.map(feature => {
       const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility)
       const identity = feature.vessel
@@ -196,6 +222,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           ircs: feature.vessel.ircs,
           externalReferenceNumber: feature.vessel.externalReferenceNumber
         },
+        opacity: Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced),
         label,
         offset,
         featureId: labelLineFeatureId
@@ -207,7 +234,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   return (<>
     {
-      featuresAndLabels.map(({ identity, label, offset, featureId }) => {
+      featuresAndLabels.map(({ identity, label, offset, featureId, opacity }) => {
         return <VesselLabelOverlay
           map={map}
           key={identity.key}
@@ -218,6 +245,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           offset={offset}
           coordinates={identity.coordinates}
           zoomHasChanged={previousMapZoom.current}
+          opacity={opacity}
         />
       })
     }

@@ -22,26 +22,23 @@ const regulationSlice = createSlice({
     setUpcomingRegulation (state, action) {
       state.upcomingRegulation = action.payload
     },
-    setRegulatoryTextSectionHasMissingValue (state, action) {
-      state.regulatoryTextSectionHasMissingValue = action.payload
-    },
     addObjectToRegulatoryTextListValidityMap (state, action) {
+      const { validity, id } = action.payload
       let mapUpdated = {}
       if (state.regulatoryTextListValidityMap) {
         mapUpdated = { ...state.regulatoryTextListValidityMap }
       }
-      if (action.payload.validity !== false) {
-        mapUpdated[action.payload.id] = true
+      if (validity !== false) {
+        mapUpdated[id] = true
         const newUpcomingRegulation = { ...state.upcomingRegulation }
         const newRegulationTextList = (newUpcomingRegulation?.regulatoryTextList
           ? [...newUpcomingRegulation.regulatoryTextList]
           : [{}])
-        newRegulationTextList[action.payload.id] = action.payload.validity
+        newRegulationTextList[id] = validity
         state.upcomingRegulation = newUpcomingRegulation
         newUpcomingRegulation.regulatoryTextList = newRegulationTextList
-        state.upcomingRegulation.regulationText = action.payload.validity
       } else {
-        mapUpdated[action.payload.id] = false
+        mapUpdated[id] = false
       }
       state.regulatoryTextListValidityMap = mapUpdated
     },
@@ -55,7 +52,6 @@ export const {
   setSelectedRegulation,
   setIsModalOpen,
   setUpcomingRegulation,
-  setRegulatoryTextSectionHasMissingValue,
   addObjectToRegulatoryTextListValidityMap,
   setRegulatoryTextListValidityMap
 } = regulationSlice.actions

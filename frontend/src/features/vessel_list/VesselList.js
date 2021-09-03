@@ -350,7 +350,6 @@ const VesselList = ({ namespace }) => {
               Voir sur la carte
             </ShowOnMapButton> */}
             <BlackButton
-              disabled={!(filteredVessels && filteredVessels.length)}
               isLast={false}
               onClick={() => saveFilter()}>
               Enregistrer le filtre

@@ -42,6 +42,7 @@ const SelectedValue = styled.span`
   font-size: 13px;
   padding: 2.5px;
   color: ${COLORS.gunMetal};
+  font-weight: 500;
 `
 
 const CloseIcon = styled(CloseIconSVG)`

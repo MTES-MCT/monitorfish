@@ -205,7 +205,7 @@ const TimeAgo = styled.span`
   margin-right: 5px;
   display: inline-block;
   vertical-align: middle;
-  margin-top: 4px;
+  margin-top: 0;
   font-size: 13px;
 `
 

@@ -389,3 +389,7 @@ a:hover, a:focus {
     -webkit-transition: background-color .1s linear !important;
     transition: background-color .1s linear  !important;;
 }
+
+.new-regulation-select-picker a {
+    padding: 8px 0px;
+}

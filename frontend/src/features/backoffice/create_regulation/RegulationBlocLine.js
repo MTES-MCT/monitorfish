@@ -34,7 +34,7 @@ const RegulationBlocLine = props => {
       <Label>Ensemble règlementaire</Label>
       <CustomSelectComponent
         searchable={false}
-        menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
+        menuStyle={{ width: 300, overflowY: 'hidden', textOverflow: 'ellipsis' }}
         placeholder='Choisir un ensemble'
         value={'Choisir un ensemble'}
         onChange={setSelectedValue}

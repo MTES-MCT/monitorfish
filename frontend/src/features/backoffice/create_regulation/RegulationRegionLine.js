@@ -40,7 +40,7 @@ const RegulationRegionLine = props => {
   return (<CustomContentLine>
     <Label>Région</Label>
     <CustomSelectComponent
-      menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
+      menuStyle={{ width: 200, overflowY: 'hidden', textOverflow: 'ellipsis' }}
       searchable={false}
       placeholder={'Choisir une région'}
       onChange={addRegionToSelectedRegionList}

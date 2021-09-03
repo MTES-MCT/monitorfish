@@ -22,6 +22,7 @@ export const SectionTitle = styled.span`
   width: 100%;
   border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 20px;
+  padding-bottom: 8px;
 `
 
 export const Footer = styled.div`

@@ -352,6 +352,17 @@ export function createGenericSlice (initialState, reducers, topic) {
   return createSlice(sliceObject)
 }
 
+/**
+ * @typedef SelectPickerObject
+ * @prop {string} label
+ * @prop {string} value
+ */
+/**
+ * @function convert a list of elements to a list of object :
+ * [{label: element, value: element}]
+ * @param {[SelectPickerObject]} list
+ * @returns a new array
+ */
 export const formatDataForSelectPicker = list => {
   const array = list.map(e => {
     const obj = {

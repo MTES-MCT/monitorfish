@@ -16,8 +16,8 @@ const RegulationZoneThemeLine = props => {
     zoneThemeList
   } = props
 
-  const [isAddThemeClicked, setIsAddThemeClicked] = useState()
-  const [isInfoTextShown, setIsInfoTextShown] = useState()
+  const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
+  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
   return <ContentLine
     isFormOpened={isAddThemeClicked}
@@ -36,7 +36,7 @@ const RegulationZoneThemeLine = props => {
         />
         {selectedReglementationTheme &&
           <Tag
-            selectedValue={selectedReglementationTheme}
+            tagValue={selectedReglementationTheme}
             onCloseIconClicked={_ => setSelectedReglementationTheme()}
           />}
         {

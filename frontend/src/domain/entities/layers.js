@@ -72,7 +72,7 @@ const Layers = {
     zIndex: 999
   },
   VESSEL_ESTIMATED_POSITION: {
-    code: 'vessel_estimated_position',
+    code: 'estimated_position',
     name: '',
     group: null,
     type: layersType.VESSEL,

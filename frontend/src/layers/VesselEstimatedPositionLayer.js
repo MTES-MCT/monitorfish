@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { EstimatedPosition } from '../domain/entities/estimatedPosition'
-import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
 import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'
 import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
+import { VESSELS_UPDATE_EVENT } from './VesselsLayer'
+import { unByKey } from 'ol/Observable'
 
 const NOT_FOUND = -1
 export const OPACITY = 'opacity'
@@ -41,13 +42,12 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     style: feature => getEstimatedPositionStyle(feature)
   }))
 
-  const vesselUpdateEventKey = useRef()
-
   useEffect(() => {
     addLayerToMap()
   }, [map])
 
   useEffect(() => {
+    let eventKey
     if (vesselsLayerSource && !showingVesselsEstimatedPositions) {
       vectorSource.clear(true)
     }
@@ -56,14 +56,26 @@ const VesselEstimatedPositionLayer = ({ map }) => {
       showVesselEstimatedTrack()
     }
 
-    if (vesselsLayerSource && !vesselUpdateEventKey.current) {
-      vesselUpdateEventKey.current = vesselsLayerSource.on(VESSELS_UPDATE_EVENT, ({ showingVesselsEstimatedPositions }) => {
+    if (vesselsLayerSource) {
+      eventKey = vesselsLayerSource.once(VESSELS_UPDATE_EVENT, ({ showingVesselsEstimatedPositions }) => {
         if (showingVesselsEstimatedPositions) {
           showVesselEstimatedTrack()
         }
       })
     }
-  }, [vesselsLayerSource, selectedBaseLayer, showingVesselsEstimatedPositions, filteredVesselsFeaturesUids, nonFilteredVesselsAreHidden])
+
+    return () => {
+      if (eventKey) {
+        unByKey(eventKey)
+      }
+    }
+  }, [
+    vesselsLayerSource,
+    selectedBaseLayer,
+    showingVesselsEstimatedPositions,
+    filteredVesselsFeaturesUids,
+    nonFilteredVesselsAreHidden
+  ])
 
   useEffect(() => {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
@@ -116,10 +128,9 @@ const VesselEstimatedPositionLayer = ({ map }) => {
           [longitude, latitude],
           [estimatedCurrentLongitude, estimatedCurrentLatitude],
           {
-            id: vesselFeature.getId(),
+            id: vesselFeature.getId().replace(`${Layers.VESSELS.code}:`, ''),
             isLight,
             dateTime,
-            vesselsLastPositionVisibility,
             vesselIsHidden,
             vesselIsOpacityReduced
           }))

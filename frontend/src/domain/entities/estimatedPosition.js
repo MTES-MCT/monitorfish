@@ -19,7 +19,6 @@ class EstimatedPosition {
    * @param {{
       id: string,
       isLight: boolean,
-      vesselsLastPositionVisibility: Object,
       dateTime: Date
       vesselIsHidden: Date
       vesselIsOpacityReduced: Date
@@ -46,7 +45,7 @@ class EstimatedPosition {
       vesselColor = 'rgb(202, 204, 224)'
     }
 
-    const opacity = Vessel.getVesselOpacity(options.vesselsLastPositionVisibility, options.dateTime)
+    const opacity = Vessel.getVesselOpacity(options.dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
 
     const lineFeature = new Feature({
       geometry: new LineString([currentCoordinates, estimatedCoordinates]),

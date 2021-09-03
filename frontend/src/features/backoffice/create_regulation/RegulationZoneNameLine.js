@@ -15,7 +15,7 @@ const RegulationZoneNameLine = props => {
       placeholder=''
       value={nameZone}
       onChange={setNameZone}
-      width={'180px'}
+      width={'200px'}
       onMouseLeave={() => setIsInputFilled(nameZone && nameZone !== '')}
       $isgray={isInputFilled}
     />

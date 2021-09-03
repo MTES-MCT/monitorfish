@@ -13,12 +13,13 @@ const InfoBox = props => {
     <InfoTextParent
       isInfoTextShown={isInfoTextShown}
       isFormOpened={isFormOpened}
-      onMouseLeave={() => !isFormOpened && setIsInfoTextShown(false)}
+      onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
+      pointer={message}
     >
       {isInfoTextShown
         ? <InfoTextWrapper
           isFormOpened={isFormOpened}
-          onMouseLeave={() => !isFormOpened && setIsInfoTextShown(false)}
+          onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
           >
           <InfoPoint>!</InfoPoint>
           <InfoText>
@@ -26,8 +27,8 @@ const InfoBox = props => {
           </InfoText>
         </InfoTextWrapper>
         : <InfoPoint
-          onMouseEnter={() => setIsInfoTextShown(true)}
-          onMouseOut={() => setIsInfoTextShown(false)}
+          onMouseEnter={() => setIsInfoTextShown && setIsInfoTextShown(true)}
+          onMouseOut={() => setIsInfoTextShown && setIsInfoTextShown(false)}
         >!</InfoPoint>}
     </InfoTextParent>)
 }
@@ -37,8 +38,9 @@ const InfoTextParent = styled.div`
   min-height: 20px;
   min-width: 20px;
   position: relative;
-  cursor: pointer;
+  cursor: ${props => props.pointer ? 'pointer' : 'default'};
   ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
+  ${props => props.isFormOpened && props.isInfoTextShown ? 'margin-top: 8px' : ''};
 `
 
 const InfoTextWrapper = styled.div`
@@ -73,19 +75,19 @@ const InfoPoint = styled.a`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
-  color: ${COLORS.gunMetal};
+  background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
+  color: ${COLORS.white};
   text-align: center;
   font: normal normal bold 13px Arial;
   text-align: center;
   line-height: 20px;
   &:hover {
     text-decoration: none;
-    color: ${COLORS.gunMetal};
+    color: ${COLORS.white};
   }
   &:focus {
     text-decoration: none;
-    color: ${COLORS.gunMetal};
+    color: ${COLORS.white};
   }
 `
 

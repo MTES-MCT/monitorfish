@@ -42,7 +42,7 @@ const RegulationBlocLine = props => {
       />
       {selectedValue &&
         <Tag
-          selectedValue={selectedValue}
+          tagValue={selectedValue}
           onCloseIconClicked={_ => setSelectedValue()}
         />
       }

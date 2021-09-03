@@ -27,7 +27,7 @@ const RegulationSeaFrontLine = props => {
       />
     {selectedSeaFront &&
       <Tag
-        selectedValue={selectedSeaFront}
+        tagValue={selectedSeaFront}
         onCloseIconClicked={_ => setSelectedSeaFront()}
       />}
   </CustomContentLine>

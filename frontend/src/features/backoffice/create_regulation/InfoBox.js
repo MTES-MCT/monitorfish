@@ -83,11 +83,12 @@ const InfoPoint = styled.a`
   line-height: 20px;
   &:hover {
     text-decoration: none;
+    background-color: ${COLORS.charcoal};
     color: ${COLORS.white};
   }
   &:focus {
     text-decoration: none;
-    color: ${COLORS.white};
+    background-color: ${COLORS.charcoal};
   }
 `
 

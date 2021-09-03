@@ -4,6 +4,7 @@ import { Label, CustomInput } from '../../commonStyles/Input.style'
 import InfoBox from './InfoBox'
 const RegulationZoneNameLine = props => {
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+  const [isInputFilled, setIsInputFilled] = useState(false)
   const {
     nameZone,
     setNameZone
@@ -15,6 +16,8 @@ const RegulationZoneNameLine = props => {
       value={nameZone}
       onChange={setNameZone}
       width={'180px'}
+      onMouseLeave={() => setIsInputFilled(nameZone && nameZone !== '')}
+      $isgray={isInputFilled}
     />
     <InfoBox
       isInfoTextShown={isInfoTextShown}

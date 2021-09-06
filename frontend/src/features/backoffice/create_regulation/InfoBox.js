@@ -18,6 +18,7 @@ const InfoBox = props => {
     >
       {isInfoTextShown
         ? <InfoTextWrapper
+          isInfoTextShown={isInfoTextShown}
           isFormOpened={isFormOpened}
           onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
           >
@@ -41,7 +42,7 @@ const InfoTextParent = styled.div`
   min-width: 14px;
   position: relative;
   cursor: ${props => props.pointer ? 'pointer' : 'default'};
-  ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
+  ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 384px' : ''};
   ${props => props.isFormOpened && props.isInfoTextShown ? 'margin-top: 8px' : ''};
 `
 
@@ -54,10 +55,9 @@ const InfoTextWrapper = styled.div`
   min-width: 560px;
   max-width: 600px;
   padding: 8px 20px 20px 8px;
+  ${props => props.isInfoTextShown && !props.isFormOpened ? 'margin-top: -10px;' : ''}
   box-sizing: border-box;
   z-index: 30;
-  top: '-6px';
-  left: '0';
 `
 
 const InfoText = styled.span`

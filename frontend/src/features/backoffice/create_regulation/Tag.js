@@ -40,7 +40,7 @@ const TagWrapper = styled.div`
 
 const SelectedValue = styled.span`
   font-size: 13px;
-  padding: 2.5px;
+  padding: 3px 8px;
   color: ${COLORS.gunMetal};
   font-weight: 500;
 `
@@ -50,9 +50,7 @@ const CloseIcon = styled(CloseIconSVG)`
   vertical-align: text-bottom;
   cursor: pointer;
   border-left: 1px solid white;
-  height: 30px;
-  margin: 0 6px 0 7px;
-  padding: 2.5px 2.5px 2.5px 7px;
+  padding: 6px 6px 6px 5px;
 `
 
 export default Tag

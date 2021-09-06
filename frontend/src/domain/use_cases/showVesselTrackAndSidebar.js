@@ -15,7 +15,8 @@ const showVesselTrackAndSidebar = (
   vesselTrackDepthObject) => (dispatch, getState) => {
   const {
     selectedVessel: alreadySelectedVessel,
-    vesselsLayerSource
+    vesselsLayerSource,
+    temporaryTrackDepth
   } = getState().vessel
   unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)
 
@@ -28,7 +29,7 @@ const showVesselTrackAndSidebar = (
   const nextVesselTrackDepthObject = getVesselTrackDepth(
     calledFromCron,
     vesselTrackDepthObject,
-    getState().vessel.temporaryTrackDepth,
+    temporaryTrackDepth,
     getState().map.vesselTrackDepth)
 
   getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
@@ -57,7 +58,8 @@ function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
 
 function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch) {
   if (!calledFromCron &&
-    alreadySelectedVessel &&
+    alreadySelectedVessel?.identity &&
+    vesselIdentity &&
     !vesselsAreEquals(vesselIdentity, alreadySelectedVessel.identity)) {
     dispatch(unselectVessel())
   }

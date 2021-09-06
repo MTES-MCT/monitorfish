@@ -7,7 +7,7 @@ export const Label = styled.span`
   color: ${COLORS.slateGray};
   min-width: 154px;
   font-size: 13px;
-  margin-right: 8px;
+  margin-right: 20px;
 `
 
 export const CustomInput = styled(Input)`

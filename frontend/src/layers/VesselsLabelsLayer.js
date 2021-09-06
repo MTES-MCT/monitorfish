@@ -157,7 +157,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     const features = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
     const filterShowed = filters.find(filter => filter.showed)
 
-    if (filterShowed && nonFilteredVesselsAreHidden) {
+    if (filterShowed && nonFilteredVesselsAreHidden && filteredVesselsFeaturesUids?.length) {
       addLabelToFilteredFeatures(features)
     } else if (features.length < MAX_LABELS_DISPLAYED) {
       addLabelToFeatures(features)
@@ -174,6 +174,9 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
     if (filteredFeatures.length < MAX_LABELS_DISPLAYED) {
       addLabelToFeatures(filteredFeatures)
+    } else {
+      setFeaturesAndLabels([])
+      vectorSource.clear()
     }
   }
 

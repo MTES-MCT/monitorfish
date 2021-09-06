@@ -8,7 +8,6 @@ import { Vessel } from './vessel'
 
 class EstimatedPosition {
   static colorProperty = 'color'
-  static isShowedProperty = 'isShowed'
   static opacityProperty = 'opacity'
   static isCircleProperty = 'isCircle'
 

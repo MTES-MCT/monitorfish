@@ -27,7 +27,7 @@ const MeasurementLayer = ({ map }) => {
   const dispatch = useDispatch()
 
   const {
-    measurementType,
+    measurementTypeToAdd,
     measurementsDrawed,
     circleMeasurementToAdd
   } = useSelector(state => state.map)
@@ -57,15 +57,15 @@ const MeasurementLayer = ({ map }) => {
   }, [measurementsDrawed, map])
 
   useEffect(() => {
-    if (map && measurementType) {
+    if (map && measurementTypeToAdd) {
       addEmptyNextMeasurement()
       drawNewFeatureOnMap()
     }
-  }, [map, measurementType])
+  }, [map, measurementTypeToAdd])
 
   useEffect(() => {
     removeInteraction()
-  }, [measurementType])
+  }, [measurementTypeToAdd])
 
   useEffect(() => {
     addCustomCircleMeasurement()
@@ -124,7 +124,7 @@ const MeasurementLayer = ({ map }) => {
   }
 
   function removeInteraction () {
-    if (!measurementType && drawObject) {
+    if (!measurementTypeToAdd && drawObject) {
       setDrawObject(null)
       setMeasurementInProgress(null)
 
@@ -180,7 +180,7 @@ const MeasurementLayer = ({ map }) => {
   function drawNewFeatureOnMap () {
     const draw = new Draw({
       source: vectorSource,
-      type: measurementType,
+      type: measurementTypeToAdd,
       style: measurementStyle
     })
 

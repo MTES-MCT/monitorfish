@@ -108,10 +108,10 @@ const ERSMessage = ({ message, isFirst }) => {
               {!message.acknowledge || message.acknowledge.isSuccess === null
                 ? <Gray>-</Gray>
                 : null}
-              {message.acknowledge && message.acknowledge.isSuccess === true
+              {message.acknowledge?.isSuccess === true
                 ? <AckOk/>
                 : null}
-              {message.acknowledge && message.acknowledge.isSuccess === false
+              {message.acknowledge?.isSuccess === false
                 ? <AckNOk title={message.acknowledge.rejectionCause}/>
                 : null}
             </Acknowledge>

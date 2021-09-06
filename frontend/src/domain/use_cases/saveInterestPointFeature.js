@@ -9,7 +9,7 @@ const saveInterestPointFeature = feature => (dispatch, getState) => {
     interestPointBeingDrawed
   } = getState().interestPoint
 
-  if (interestPointBeingDrawed && interestPointBeingDrawed.feature) {
+  if (interestPointBeingDrawed?.feature) {
     return
   }
 

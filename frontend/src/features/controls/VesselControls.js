@@ -31,7 +31,7 @@ const VesselControls = () => {
   /** @type {Object.<string, VesselControl[]>} yearsToControls */
   const yearsToControls = useMemo(() => {
     let nextYearsToControls
-    if (controlResumeAndControls && controlResumeAndControls.controls) {
+    if (controlResumeAndControls?.controls) {
       nextYearsToControls = getYearsToControl(controlsFromDate, controlResumeAndControls.controls)
     }
     return nextYearsToControls
@@ -40,7 +40,7 @@ const VesselControls = () => {
   /** @type {LastControls} lastControlList */
   const lastControlList = useMemo(() => {
     let lastControlListByType
-    if (controlResumeAndControls && controlResumeAndControls.controls) {
+    if (controlResumeAndControls?.controls) {
       lastControlListByType = lastControlByType(yearsToControls)
     }
     return lastControlListByType

@@ -8,7 +8,7 @@ import { Vessel } from './vessel'
 
 class EstimatedPosition {
   static colorProperty = 'color'
-  static isShowedProperty = 'isShowed'
+  static opacityProperty = 'opacity'
   static isCircleProperty = 'isCircle'
 
   /**
@@ -18,7 +18,6 @@ class EstimatedPosition {
    * @param {{
       id: string,
       isLight: boolean,
-      vesselsLastPositionVisibility: Object,
       dateTime: Date
       vesselIsHidden: Date
       vesselIsOpacityReduced: Date
@@ -45,14 +44,12 @@ class EstimatedPosition {
       vesselColor = 'rgb(202, 204, 224)'
     }
 
-    const isShowed = options.vesselsLastPositionVisibility
-      ? !!Vessel.getVesselOpacity(options.dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
-      : true
+    const opacity = Vessel.getVesselOpacity(options.dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
 
     const lineFeature = new Feature({
       geometry: new LineString([currentCoordinates, estimatedCoordinates]),
       color: lineColor,
-      isShowed
+      opacity
     })
     lineFeature.estimatedPosition = estimatedPositionObject
     lineFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
@@ -61,7 +58,7 @@ class EstimatedPosition {
       geometry: new Point(estimatedCoordinates),
       isCircle: true,
       color: vesselColor,
-      isShowed
+      opacity
     })
     circleFeature.estimatedPosition = estimatedPositionObject
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)

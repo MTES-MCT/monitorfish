@@ -10,6 +10,8 @@ export const vesselLabel = {
 }
 
 export class VesselLabelLine {
+  static opacityProperty = 'opacity'
+
   /**
    * VesselLabelLine object for building OpenLayers vessel line to label feature
    * @param {string[]} fromCoordinates - The [longitude, latitude] of the start of the line (the vessel position)

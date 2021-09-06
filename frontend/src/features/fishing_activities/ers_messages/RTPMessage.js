@@ -42,7 +42,7 @@ const RTPMessage = props => {
           </Fields>
         </Zone>
         <Zone>
-          {props.message.gearOnboard && props.message.gearOnboard.length
+          {props.message.gearOnboard?.length
             ? props.message.gearOnboard.map((gear, index) => {
               return <Gear key={index}>
                 <SubKey>Engin à bord {index + 1}</SubKey>{' '}

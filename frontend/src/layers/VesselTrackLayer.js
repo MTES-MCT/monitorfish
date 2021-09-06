@@ -5,7 +5,7 @@ import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
 import { animateTo } from '../domain/shared_slices/Map'
-import { setCircleStyle } from './styles/vesselTrack.style'
+import { getCircleStyle } from './styles/vesselTrack.style'
 import { usePrevious } from '../hooks/usePrevious'
 
 const VesselTrackLayer = ({ map }) => {
@@ -58,7 +58,7 @@ const VesselTrackLayer = ({ map }) => {
       if (feature) {
         const featureColor = feature.getStyle().getImage().getFill().getColor()
 
-        setCircleStyle(featureColor, feature, radius)
+        feature.setStyle(getCircleStyle(featureColor, radius))
       }
     }
   }

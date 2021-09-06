@@ -4,11 +4,9 @@ import Layers from './layers'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
 import { arraysEqual, calculatePointsDistance, calculateSplitPointCoords } from '../../utils'
-import { setArrowStyle, setCircleStyle } from '../../layers/styles/vesselTrack.style'
+import { getLineStyle, getArrowStyle, getCircleStyle } from '../../layers/styles/vesselTrack.style'
 import LineString from 'ol/geom/LineString'
-import { Style } from 'ol/style'
-import Fill from 'ol/style/Fill'
-import Stroke from 'ol/style/Stroke'
+import { COLORS } from '../../constants/constants'
 
 export class VesselTrack {
   /**
@@ -19,6 +17,8 @@ export class VesselTrack {
     let vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(vessel)
 
     const hasMoreThanOnePoint = vesselTrackLineFeatures && vesselTrackLineFeatures.length
+    const hasOnlyOnePoint = vessel.positions && vessel.positions.length
+
     if (hasMoreThanOnePoint) {
       const lastTrackLineFeature = vesselTrackLineFeatures[vesselTrackLineFeatures.length - 1]
       if (lastTrackLineFeature) {
@@ -36,7 +36,7 @@ export class VesselTrack {
       })
 
       this.lastPositionCoordinates = circlePointFeatures[circlePointFeatures.length - 1].getGeometry().getCoordinates()
-    } else if (vessel.positions && vessel.positions.length) {
+    } else if (hasOnlyOnePoint) {
       const position = vessel.positions[0]
       const point = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
@@ -65,11 +65,11 @@ export class VesselTrack {
         firstPositionOnLine = null
       }
 
-      return this.buildCircleFeature(pointCoordinatesOfLine, index, firstPositionOnLine, feature.speed)
+      return this.buildCircleFeature(pointCoordinatesOfLine, index, firstPositionOnLine, feature.speed, feature.isTimeEllipsis)
     }).filter(circlePoint => circlePoint)
   }
 
-  buildCircleFeature (coordinates, index, position, speed) {
+  buildCircleFeature (coordinates, index, position, speed, isTimeEllipsis) {
     const circleFeature = new Feature({
       geometry: new Point(coordinates)
     })
@@ -80,8 +80,9 @@ export class VesselTrack {
     circleFeature.dateTime = position.dateTime
 
     circleFeature.setId(Layers.VESSEL_TRACK.code + ':position:' + index)
-    const trackColor = getTrackTypeFromSpeed(speed).color
-    setCircleStyle(trackColor, circleFeature)
+    const trackColor = getTrackTypeFromSpeedAndEllipsis(speed, isTimeEllipsis).color
+    circleFeature.setStyle(getCircleStyle(trackColor))
+
     return circleFeature
   }
 
@@ -107,8 +108,14 @@ export class VesselTrack {
       arrowFeature.course = feature.course
 
       arrowFeature.setId(Layers.VESSEL_TRACK.code + ':arrow:' + index)
-      const trackArrow = getTrackTypeFromSpeed(feature.speed).arrow
-      setArrowStyle(trackArrow, arrowFeature)
+      const trackArrow = getTrackTypeFromSpeedAndEllipsis(feature.speed, feature.isTimeEllipsis).arrow
+      const arrowStyle = getArrowStyle(trackArrow, arrowFeature.course)
+
+      arrowFeature.setStyle((feature, resolution) => {
+        arrowStyle[0].getImage().setScale(1 / Math.pow(resolution, 1 / 5))
+
+        return arrowStyle
+      })
 
       return arrowFeature
     }).filter(arrowPoint => arrowPoint)
@@ -123,27 +130,28 @@ export class VesselTrack {
           return null
         }
 
+        const secondPosition = vessel.positions[index + 1]
         const firstPoint = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-        const secondPoint = transform([vessel.positions[index + 1].longitude, vessel.positions[index + 1].latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+        const secondPoint = transform([secondPosition.longitude, secondPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
         const dx = secondPoint[0] - firstPoint[0]
         const dy = secondPoint[1] - firstPoint[1]
         const rotation = Math.atan2(dy, dx)
 
-        const trackType = getTrackTypeFromSpeed(position.speed)
+        const firstPositionDate = new Date(position.dateTime)
+        firstPositionDate.setHours(firstPositionDate.getHours() + 4)
+        const secondPositionDate = new Date(secondPosition.dateTime)
 
         const feature = new Feature({
           geometry: new LineString([firstPoint, secondPoint])
         })
-        feature.trackType = trackType
+        feature.isTimeEllipsis = firstPositionDate.getTime() < secondPositionDate.getTime()
+        feature.trackType = getTrackTypeFromSpeedAndEllipsis(position.speed, feature.isTimeEllipsis)
         feature.course = -rotation
         feature.speed = position.speed
 
         feature.setId(`${Layers.VESSEL_TRACK.code}:line:${index}`)
-        feature.setStyle(new Style({
-          fill: new Fill({ color: trackType.color, weight: 4 }),
-          stroke: new Stroke({ color: trackType.color, width: 3 })
-        }))
+        feature.setStyle(getLineStyle(feature.isTimeEllipsis, feature.trackType))
 
         return feature
       }).filter(lineString => lineString)
@@ -162,11 +170,19 @@ export const trackTypes = {
     color: '#05055E',
     arrow: 'arrow_blue.png',
     description: 'En pêche (vitesse <= 4.5 Nds)'
+  },
+  ELLIPSIS: {
+    code: 'ELLIPSIS',
+    color: COLORS.slateGrayLittleOpacity,
+    arrow: 'arrow_gray.png',
+    description: '🕐 entre deux positions > 4h'
   }
 }
 
-export function getTrackTypeFromSpeed (speed) {
-  if (speed >= 0 && speed <= 4.5) {
+export function getTrackTypeFromSpeedAndEllipsis (speed, isTimeEllipsis) {
+  if (isTimeEllipsis) {
+    return trackTypes.ELLIPSIS
+  } else if (speed >= 0 && speed <= 4.5) {
     return trackTypes.FISHING
   } else {
     return trackTypes.TRANSIT

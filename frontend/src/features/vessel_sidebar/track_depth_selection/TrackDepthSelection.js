@@ -25,6 +25,11 @@ const TrackDepthSelection = props => {
   useEffect(() => {
     setDateSelection([])
     setTrackDepthRadioSelection(vesselTrackDepth)
+  }, [selectedVesselIdentity])
+
+  useEffect(() => {
+    setDateSelection([])
+    setTrackDepthRadioSelection(vesselTrackDepth)
   }, [props.init])
 
   useEffect(() => {

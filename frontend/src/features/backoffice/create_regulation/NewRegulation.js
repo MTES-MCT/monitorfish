@@ -9,7 +9,7 @@ import {
   RegulationBlocLine,
   RegulationZoneThemeLine,
   RegulationRegionLine,
-  RegulationZoneNameLine,
+  RegulationLayerZoneLine,
   RegulationSeaFrontLine,
   RegulatoryTextSection,
   UpcomingRegulationModal
@@ -97,7 +97,7 @@ const CreateRegulation = () => {
                 setSelectedReglementationTheme={setSelectedReglementationTheme}
                 zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
               />
-              <RegulationZoneNameLine
+              <RegulationLayerZoneLine
                 nameZone={nameZone}
                 setNameZone={setNameZone}
               />

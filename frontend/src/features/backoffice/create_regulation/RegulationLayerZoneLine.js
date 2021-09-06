@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../commonStyles/Input.style'
 import InfoBox from './InfoBox'
-const RegulationZoneNameLine = props => {
+const RegulationLayerZoneLine = props => {
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
   const [isInputFilled, setIsInputFilled] = useState(false)
   const {
@@ -28,4 +28,4 @@ const RegulationZoneNameLine = props => {
   </ContentLine>
 }
 
-export default RegulationZoneNameLine
+export default RegulationLayerZoneLine

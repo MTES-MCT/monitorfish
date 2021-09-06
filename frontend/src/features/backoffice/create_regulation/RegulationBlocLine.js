@@ -31,7 +31,7 @@ const RegulationBlocLine = props => {
 
   return (
     <ContentLine>
-      <Label>Ensemble règlementaire</Label>
+      <Label>Ensemble réglementaire</Label>
       <CustomSelectComponent
         searchable={false}
         menuStyle={{ width: 300, overflowY: 'hidden', textOverflow: 'ellipsis' }}

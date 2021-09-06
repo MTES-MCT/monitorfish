@@ -61,6 +61,15 @@ const VesselList = ({ namespace }) => {
   const zonesSelected = useSelector(state => state.map.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
 
+  const hasNoFilter = () => !lastControlMonthsAgo &&
+    !zonesSelected?.length &&
+    !countriesFiltered?.length &&
+    !fleetSegmentsFiltered?.length &&
+    !gearsFiltered?.length &&
+    !speciesFiltered?.length &&
+    !districtsFiltered?.length &&
+    !vesselsSizeValuesChecked?.length
+
   useEffect(() => {
     const nextZonesPromises = getZonesAndSubZonesPromises()
 
@@ -350,6 +359,7 @@ const VesselList = ({ namespace }) => {
               Voir sur la carte
             </ShowOnMapButton> */}
             <BlackButton
+              disabled={hasNoFilter()}
               isLast={false}
               onClick={() => saveFilter()}>
               Enregistrer le filtre

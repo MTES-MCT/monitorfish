@@ -8,7 +8,6 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 
 const CustomCircleRange = (
   {
-    firstUpdate,
     measurementTypeToAdd,
     setCircleCoordinatesToAdd,
     circleCoordinatesToAdd,
@@ -21,7 +20,6 @@ const CustomCircleRange = (
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}
-      firstUpdate={firstUpdate}
       isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}>
       <Header>
         Définir une valeur

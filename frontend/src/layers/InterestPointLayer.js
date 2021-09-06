@@ -123,7 +123,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   function modifyFeatureWhenCoordinatesOrTypeModified () {
-    if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates && interestPointBeingDrawed.uuid) {
+    if (interestPointBeingDrawed?.coordinates && interestPointBeingDrawed?.uuid) {
       const drawingFeatureToUpdate = vectorSource.getFeatureById(interestPointBeingDrawed.uuid)
 
       if (drawingFeatureToUpdate && coordinatesOrTypeAreModified(drawingFeatureToUpdate, interestPointBeingDrawed)) {

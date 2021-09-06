@@ -16,7 +16,7 @@ const getControls = userRequest => (dispatch, getState) => {
     selectedVessel
   } = getState().vessel
 
-  if (selectedVessel && selectedVessel.id) {
+  if (selectedVessel?.id) {
     const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.id, currentControlResumeAndControls)
 
     if (!isSameVesselAsCurrentlyShowed) {
@@ -25,8 +25,7 @@ const getControls = userRequest => (dispatch, getState) => {
 
     getVesselControlsFromAPI(selectedVessel.id, controlsFromDate).then(controlResumeAndControls => {
       if (isSameVesselAsCurrentlyShowed && !userRequest) {
-        if (currentControlResumeAndControls.controls && controlResumeAndControls.controls &&
-          controlResumeAndControls.controls.length > currentControlResumeAndControls.controls.length) {
+        if (controlResumeAndControls.controls?.length > currentControlResumeAndControls.controls?.length) {
           dispatch(setNextControlResumeAndControls(controlResumeAndControls))
         }
       } else {
@@ -51,7 +50,7 @@ const getControls = userRequest => (dispatch, getState) => {
 }
 
 const getIsSameVesselAsCurrentlyShowed = (vesselId, controlResumeAndControls) => {
-  if (controlResumeAndControls && controlResumeAndControls.vesselId) {
+  if (controlResumeAndControls?.vesselId) {
     return vesselId === controlResumeAndControls.vesselId
   }
 

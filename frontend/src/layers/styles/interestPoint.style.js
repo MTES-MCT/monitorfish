@@ -1,9 +1,18 @@
 import { Icon, Style } from 'ol/style'
 import { INTEREST_POINT_STYLE, interestPointType } from '../../domain/entities/interestPoints'
-import { labelLineStyle } from './vesselLabelLine.style'
 import { InterestPointLine } from '../../domain/entities/interestPointLine'
+import Stroke from 'ol/style/Stroke'
+import { COLORS } from '../../constants/constants'
 
 const interestPointStylesCache = new Map()
+
+const lineStyle = new Style({
+  stroke: new Stroke({
+    color: COLORS.slateGray,
+    lineDash: [4, 4],
+    width: 2
+  })
+})
 
 export const getInterestPointStyle = (feature, resolution) => {
   const type = feature.get(InterestPointLine.typeProperty)
@@ -14,7 +23,7 @@ export const getInterestPointStyle = (feature, resolution) => {
       return []
     }
 
-    return [labelLineStyle]
+    return [lineStyle]
   }
 
   if (!interestPointStylesCache.has(type)) {

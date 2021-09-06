@@ -156,23 +156,24 @@ const VesselsLayer = ({ map }) => {
   }
 
   function addVesselsFeaturesToMap () {
-    if (map && vessels && vessels.length) {
+    if (map && vessels?.length) {
       const vesselsFeatures = vessels
-        .filter(vessel => vessel)
-        .filter(vessel => vessel.latitude && vessel.longitude)
+        .filter(vessel => vessel?.latitude && vessel?.longitude)
         .map(currentVessel => Vessel.getFeature(currentVessel))
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(features => {
         vectorSource.clear(true)
         vectorSource.addFeatures(features)
+        showSelectedVesselSelector(features)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
           features,
           showingVesselsEstimatedPositions,
           filterColor: getFilterColor(),
           vesselsLastPositionVisibility,
-          selectedBaseLayer
+          selectedBaseLayer,
+          nonFilteredVesselsAreHidden
         })
         dispatch(resetVessels())
       })

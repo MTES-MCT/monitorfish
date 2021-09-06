@@ -78,7 +78,7 @@ const VesselTrackLayer = ({ map }) => {
   function showVesselTrack () {
     vectorSource.clear(true)
 
-    if (map && selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
+    if (map && selectedVessel?.positions?.length) {
       const vesselTrack = new VesselTrack(selectedVessel)
 
       vectorSource.addFeatures(vesselTrack.features)

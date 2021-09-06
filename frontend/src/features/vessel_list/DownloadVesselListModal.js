@@ -44,9 +44,17 @@ const DownloadVesselListModal = props => {
 
   useEffect(() => {
     const columnsNotCheckedByDefault = [
+      CSVOptions.targetNumber.code,
       CSVOptions.species.code,
       CSVOptions.length.code,
-      CSVOptions.district.code
+      CSVOptions.externalReferenceNumber.code,
+      CSVOptions.mmsi.code,
+      CSVOptions.flagState.code,
+      CSVOptions.fleetSegments.code,
+      CSVOptions.gears.code,
+      CSVOptions.lastControlDateTime.code,
+      CSVOptions.lastControlInfraction.code,
+      CSVOptions.postControlComment.code
     ]
 
     const values = Object.keys(CSVOptions)

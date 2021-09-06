@@ -132,7 +132,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
           title={'Marée précédente'}
         />
         {
-          depMessage && depMessage.tripNumber
+          depMessage?.tripNumber
             ? `Marée n°${depMessage.tripNumber}`
             : '-'
         }
@@ -149,10 +149,10 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
       </Navigation>
       <InverseDate ascendingSort={ascendingSort} onClick={() => inverseSort()}/>
     </Filters>
-    {ersMessages && ersMessages.length
+    {ersMessages?.length
       ? ersMessages
         .filter(ersMessage => {
-          if (selectedOptions && selectedOptions.length) {
+          if (selectedOptions?.length) {
             return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
           } else {
             return true

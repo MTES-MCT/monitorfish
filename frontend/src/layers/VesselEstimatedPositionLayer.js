@@ -103,6 +103,10 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
+    if (nonFilteredVesselsAreHidden && !filteredVesselsFeaturesUids?.length) {
+      return
+    }
+
     const estimatedCurrentPositionsFeatures = []
     vesselsLayerSource.forEachFeature(vesselFeature => {
       const {
@@ -114,12 +118,11 @@ const VesselEstimatedPositionLayer = ({ map }) => {
       } = vesselFeature.vessel
 
       if (nonFilteredVesselsAreHidden &&
-        Array.isArray(filteredVesselsFeaturesUids) &&
-        filteredVesselsFeaturesUids.length > 0) {
+        filteredVesselsFeaturesUids?.length > 0) {
         const featureIndex = filteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
 
         if (featureIndex === NOT_FOUND) {
-          return null
+          return
         }
       }
 

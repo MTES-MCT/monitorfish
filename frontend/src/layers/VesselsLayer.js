@@ -165,6 +165,7 @@ const VesselsLayer = ({ map }) => {
       applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(features => {
         vectorSource.clear(true)
         vectorSource.addFeatures(features)
+        showSelectedVesselSelector(features)
         vectorSource.dispatchEvent({
           type: VESSELS_UPDATE_EVENT,
           features,

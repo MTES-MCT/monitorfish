@@ -42,13 +42,13 @@ const DEPMessageResume = props => {
           ? null
           : <ERSMessageContent
             id={props.id}
-            speciesOnboard={(props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length > 0) ? props.depMessage.speciesOnboard.length : 1}
+            speciesOnboard={(props.depMessage.speciesOnboard?.length > 0) ? props.depMessage.speciesOnboard.length : 1}
             gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
             firstUpdate={firstUpdate}
             isOpen={isOpen}
             name={ERSMessageTypeEnum.DEP.code.toString()}>
             <Zone>
-              {props.depMessage.gearOnboard && props.depMessage.gearOnboard.length
+              {props.depMessage.gearOnboard?.length
                 ? props.depMessage.gearOnboard.map((gear, index) => {
                   return <Gear key={gear.gear + index} isFirst={index === '0'}>
                     <SubKey>Engin à bord {index + 1}</SubKey>{' '}
@@ -71,7 +71,7 @@ const DEPMessageResume = props => {
                 <TableBody>
                   <Field>
                     <Key>Captures à bord</Key>
-                    <Value>{props.depMessage.speciesOnboard && props.depMessage.speciesOnboard.length
+                    <Value>{props.depMessage.speciesOnboard?.length
                       ? props.depMessage.speciesOnboard.map(speciesCatch => {
                         return <span key={speciesCatch.species}>
                                         {

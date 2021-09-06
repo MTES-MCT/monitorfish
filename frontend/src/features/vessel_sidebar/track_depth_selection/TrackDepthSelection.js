@@ -59,7 +59,7 @@ const TrackDepthSelection = props => {
   }
 
   useEffect(() => {
-    if (datesSelection && datesSelection.length > 1) {
+    if (datesSelection?.length > 1) {
       if (firstUpdate.current) {
         firstUpdate.current = false
         return

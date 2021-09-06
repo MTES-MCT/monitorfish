@@ -156,7 +156,7 @@ const VesselsLayer = ({ map }) => {
   }
 
   function addVesselsFeaturesToMap () {
-    if (map && vessels && vessels.length) {
+    if (map && vessels?.length) {
       const vesselsFeatures = vessels
         .filter(vessel => vessel?.latitude && vessel?.longitude)
         .map(currentVessel => Vessel.getFeature(currentVessel))

@@ -139,7 +139,7 @@ const VesselListTable = props => {
           <CellWithTitle dataKey="postControlComment"/>
         </Column>
         {
-          props.filters.districtsFiltered && props.filters.districtsFiltered.length
+          props.filters.districtsFiltered?.length
             ? <Column resizable sortable width={100}>
               <HeaderCell>Quartier</HeaderCell>
               <Cell dataKey="district"/>
@@ -147,7 +147,7 @@ const VesselListTable = props => {
             : null
         }
         {
-          props.filters.vesselsSizeValuesChecked && props.filters.vesselsSizeValuesChecked.length
+          props.filters.vesselsSizeValuesChecked?.length
             ? <Column resizable sortable width={100}>
               <HeaderCell>Longueur</HeaderCell>
               <Cell dataKey="length"/>

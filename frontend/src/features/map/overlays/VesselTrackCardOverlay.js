@@ -47,7 +47,7 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
+      if (feature?.getId().toString().includes(`${LayersEnum.VESSEL_TRACK.code}:position`)) {
         setVesselFeatureToShowOnCard(feature)
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())

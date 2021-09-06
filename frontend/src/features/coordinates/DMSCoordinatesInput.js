@@ -20,8 +20,7 @@ const DMSCoordinatesInput = props => {
   }, [update, coordinates, updateCoordinates])
 
   function coordinatesAreModifiedAndNotRoundedByInput () {
-    return update && update.length &&
-      coordinates && coordinates.length &&
+    return update?.length && coordinates?.length &&
       (
         update[0].toFixed(3) !== coordinates[0].toFixed(3) ||
         update[1].toFixed(3) !== coordinates[1].toFixed(3)

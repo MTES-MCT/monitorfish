@@ -180,12 +180,12 @@ const RegulatoryLayerZoneMetadata = () => {
                   : null
               }
               {
-                (formattedGears && formattedGears.length) ||
-                (prohibitedGears && prohibitedGears.length) ||
+                (formattedGears?.length) ||
+                (prohibitedGears?.length) ||
                 regulatoryZoneMetadata.technicalMeasurements
                   ? <ZoneWithLineBreak>
                     {
-                      formattedGears && formattedGears.length
+                      formattedGears?.length
                         ? <>
                           <KeyWithLineBreak>Engin(s)</KeyWithLineBreak>
                           {
@@ -199,7 +199,7 @@ const RegulatoryLayerZoneMetadata = () => {
                         : null
                     }
                     {
-                      prohibitedGears && prohibitedGears.length
+                      prohibitedGears?.length
                         ? <>
                           <KeyWithLineBreak>Engin(s) interdit(s)</KeyWithLineBreak>
                           {
@@ -295,7 +295,7 @@ const RegulatoryLayerZoneMetadata = () => {
                 regulatoryZoneMetadata.obligations ||
                 regulatoryZoneMetadata.prohibitions ||
                 regulatoryZoneMetadata.permissions ||
-                (regulatoryReferences && regulatoryReferences.length)
+                (regulatoryReferences?.length)
                   ? <ZoneWithLineBreak isLast>
                     {
                       regulatoryZoneMetadata.mandatoryDocuments
@@ -330,7 +330,7 @@ const RegulatoryLayerZoneMetadata = () => {
                         : null
                     }
                     {
-                      regulatoryReferences && regulatoryReferences.length
+                      regulatoryReferences?.length
                         ? <>
                           <KeyWithLineBreak>Références réglementaires</KeyWithLineBreak>
                           <ValueWithLineBreak>

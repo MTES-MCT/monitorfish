@@ -117,6 +117,8 @@ const VesselList = ({ namespace }) => {
         lastControlMonthsAgo
       }
 
+      console.log(lastPositionTimeAgoFilter)
+
       dispatch(getFilteredVessels(vessels, filters))
         .then(filteredVessels => {
           setFilteredVessels(filteredVessels)
@@ -157,7 +159,7 @@ const VesselList = ({ namespace }) => {
     setVesselListModalIsOpen(false)
     setCountriesFiltered([])
     setAdministrativeZonesFiltered([])
-    setLastPositionTimeAgoFilter(2)
+    setLastPositionTimeAgoFilter(3)
     setFleetSegmentsFiltered([])
     setGearsFiltered([])
     setSpeciesFiltered([])

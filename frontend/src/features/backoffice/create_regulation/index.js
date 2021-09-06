@@ -1,4 +1,4 @@
-import RegulationBlocLine from './RegulationBlocLine'
+import RegulationLawTypeLine from './RegulationLawTypeLine'
 import RegulationTopicLine from './RegulationTopicLine'
 import RegulationRegionLine from './RegulationRegionLine'
 import RegulationLayerZoneLine from './RegulationLayerZoneLine'
@@ -9,7 +9,7 @@ import RegulatoryTextSection from './RegulatoryTextSection'
 import UpcomingRegulationModal from './UpcomingRegulationModal'
 
 export {
-  RegulationBlocLine,
+  RegulationLawTypeLine,
   RegulationTopicLine,
   RegulationRegionLine,
   RegulationLayerZoneLine,

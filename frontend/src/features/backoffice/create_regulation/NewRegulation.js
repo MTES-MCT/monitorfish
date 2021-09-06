@@ -6,7 +6,7 @@ import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
-  RegulationBlocLine,
+  RegulationLawTypeLine,
   RegulationTopicLine,
   RegulationRegionLine,
   RegulationLayerZoneLine,
@@ -85,7 +85,7 @@ const CreateRegulation = () => {
               <SectionTitle>
                 identification de la zone réglementaire
               </SectionTitle>
-              <RegulationBlocLine
+              <RegulationLawTypeLine
                 setSelectedValue={setSelectedReglementationBloc}
                 selectedValue={selectedReglementationBloc}
                 selectData={formatDataForSelectPicker(regulatoryTopics)}

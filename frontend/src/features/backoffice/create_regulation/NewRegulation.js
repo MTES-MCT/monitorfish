@@ -7,7 +7,7 @@ import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gri
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
   RegulationBlocLine,
-  RegulationZoneThemeLine,
+  RegulationTopicLine,
   RegulationRegionLine,
   RegulationLayerZoneLine,
   RegulationSeaFrontLine,
@@ -92,7 +92,7 @@ const CreateRegulation = () => {
                 reglementationBlocName={reglementationBlocName}
                 setReglementationBlocName={setReglementationBlocName}
               />
-              <RegulationZoneThemeLine
+              <RegulationTopicLine
                 selectedReglementationTheme={selectedReglementationTheme}
                 setSelectedReglementationTheme={setSelectedReglementationTheme}
                 zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}

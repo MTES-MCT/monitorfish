@@ -1,5 +1,5 @@
 import RegulationBlocLine from './RegulationBlocLine'
-import RegulationZoneThemeLine from './RegulationZoneThemeLine'
+import RegulationTopicLine from './RegulationTopicLine'
 import RegulationRegionLine from './RegulationRegionLine'
 import RegulationLayerZoneLine from './RegulationLayerZoneLine'
 import RegulationSeaFrontLine from './RegulationSeaFrontLine'
@@ -10,7 +10,7 @@ import UpcomingRegulationModal from './UpcomingRegulationModal'
 
 export {
   RegulationBlocLine,
-  RegulationZoneThemeLine,
+  RegulationTopicLine,
   RegulationRegionLine,
   RegulationLayerZoneLine,
   RegulationSeaFrontLine,

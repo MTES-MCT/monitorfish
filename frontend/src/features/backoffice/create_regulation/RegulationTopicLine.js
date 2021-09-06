@@ -9,7 +9,7 @@ import MenuItem from './MenuItem'
 import CreateRegulationBlocForm from './CreateRegulationBlocForm'
 import InfoBox from './InfoBox'
 
-const RegulationZoneThemeLine = props => {
+const RegulationTopicLine = props => {
   const {
     selectedReglementationTheme,
     setSelectedReglementationTheme,
@@ -69,4 +69,4 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-export default RegulationZoneThemeLine
+export default RegulationTopicLine

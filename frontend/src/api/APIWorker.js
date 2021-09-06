@@ -17,7 +17,7 @@ import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegu
 import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
 import { unByKey } from 'ol/Observable'
 
-export const TWO_MINUTES = 120000
+export const TEN_MINUTES = 600000
 
 const APIWorker = () => {
   const dispatch = useDispatch()
@@ -53,7 +53,7 @@ const APIWorker = () => {
       })
 
       setUpdateVesselSidebarTab(true)
-    }, TWO_MINUTES)
+    }, TEN_MINUTES)
 
     return () => {
       clearInterval(interval)

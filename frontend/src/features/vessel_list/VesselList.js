@@ -117,8 +117,6 @@ const VesselList = ({ namespace }) => {
         lastControlMonthsAgo
       }
 
-      console.log(lastPositionTimeAgoFilter)
-
       dispatch(getFilteredVessels(vessels, filters))
         .then(filteredVessels => {
           setFilteredVessels(filteredVessels)

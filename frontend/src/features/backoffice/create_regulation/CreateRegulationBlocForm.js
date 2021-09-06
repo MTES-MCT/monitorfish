@@ -38,7 +38,7 @@ const CreateRegulationBlocForm = props => {
   return (
     <CreateReglementationBloc>
       <CustomInput
-        placeholder='Lieu*'
+        placeholder='Lieu *'
         value={themePlace}
         onChange={setThemePlace}
         isRed={themePlaceIsRed}

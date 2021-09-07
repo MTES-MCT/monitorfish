@@ -11,6 +11,12 @@ const BaseLayer = ({ map }) => {
   let selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
 
   const [baseLayersObjects] = useState({
+    LIGHT: () => new MapboxVector({
+      styleUrl: 'mapbox://styles/monitorfish/ckrbusml50wgv17nrzy3q374b',
+      accessToken: process.env.REACT_APP_MAPBOX_KEY,
+      className: Layers.BASE_LAYER.code,
+      zIndex: 0
+    }),
     OSM: () => new TileLayer({
       source: new OSM({
         attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
@@ -26,18 +32,14 @@ const BaseLayer = ({ map }) => {
       className: Layers.BASE_LAYER.code,
       zIndex: 0
     }),
-    LIGHT: () => new MapboxVector({
-      styleUrl: 'mapbox://styles/mapbox/light-v10',
-      accessToken: process.env.REACT_APP_MAPBOX_KEY,
-      className: Layers.BASE_LAYER.code,
-      zIndex: 0
-    }),
+    /*
     DARK: () => new MapboxVector({
       styleUrl: 'mapbox://styles/monitorfish/cklv7vc0f1ej817o5ivmkjmrs',
       accessToken: process.env.REACT_APP_MAPBOX_KEY,
       className: Layers.BASE_LAYER.code,
       zIndex: 0
     }),
+    */
     SHOM: () => new TileLayer({
       source: new TileWMS({
         url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,

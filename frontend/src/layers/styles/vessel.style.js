@@ -12,8 +12,8 @@ const circleStyleCache = new Map()
 export const selectedVesselStyle = new Style({
   image: new Icon({
     opacity: 1,
-    src: 'select.png',
-    scale: 0.4
+    src: 'Selecteur_navire.png',
+    scale: 0.5
   }),
   zIndex: VESSEL_SELECTOR_STYLE
 })
@@ -61,7 +61,7 @@ export const getCircleStyle = vesselObject => {
   return circleStyleCache.get(key)
 }
 
-export const getVesselStyle = feature => {
+export const getVesselStyle = (feature, resolution) => {
   const filterColor = feature.get(Vessel.filterColorProperty)
   const opacity = feature.get(Vessel.opacityProperty)
   const isLight = feature.get(Vessel.isLightProperty)
@@ -84,13 +84,14 @@ export const getVesselStyle = feature => {
 
   if (feature.get(Vessel.isSelectedProperty)) {
     styles.push(selectedVesselStyle)
+    styles[styles.length - 1].getImage().setScale(1 / Math.pow(resolution, 1 / 6))
   }
 
   return styles
 }
 
 function getVesselFilename (filterColor, isShowedInFilter, isLight) {
-  let vesselFileName = 'Couleur_navires_fond_clair_05065f_png24.png'
+  let vesselFileName = 'icone_navire_313949.png'
 
   if (filterColor && isShowedInFilter) {
     vesselFileName = `Couleurs_filtres_navires_${filterColor.replace('#', '')}_png24.png`

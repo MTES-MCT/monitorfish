@@ -58,9 +58,8 @@ function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
 
 function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch) {
   if (!calledFromCron &&
-    alreadySelectedVessel?.identity &&
     vesselIdentity &&
-    !vesselsAreEquals(vesselIdentity, alreadySelectedVessel.identity)) {
+    !vesselsAreEquals(vesselIdentity, alreadySelectedVessel)) {
     dispatch(unselectVessel())
   }
 }

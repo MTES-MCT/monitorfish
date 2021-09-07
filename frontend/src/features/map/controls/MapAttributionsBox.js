@@ -36,7 +36,7 @@ const Button = styled.button`
 `
 
 const ButtonText = styled.span`
-  font-size: 13px;
+  font-size: 16px;
 `
 
 const List = styled.ul`

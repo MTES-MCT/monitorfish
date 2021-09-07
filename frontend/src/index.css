@@ -64,11 +64,11 @@ code {
 }
 
 .noUi-connect:nth-child(1) {
-    background: #E0E0E0;
+    background: #CCCFD6;
 }
 
 .noUi-connect:nth-child(2) {
-    background: #B2B2B2;
+    background: #9095A2;
 }
 
 .noUi-connect:nth-child(3) {
@@ -86,7 +86,7 @@ code {
 }
 
 .rs-slider-handle::before {
-    background: #B2B2B2;
+    background: #CCCFD6;
     border: unset;
     top: -6px;
     margin-left: -5px;
@@ -100,7 +100,7 @@ code {
 }
 
 .rs-slider-graduated > div:nth-child(2)::before {
-    background: #B2B2B2;
+    background: #9095A2;
     z-index: 99;
 }
 

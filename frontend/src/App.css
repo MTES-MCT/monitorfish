@@ -210,7 +210,7 @@ a:hover, a:focus {
 
 .rs-modal-header .rs-modal-title {
     color: #F0F0F0;
-    font-size: 23px;
+    font-size: 22px;
     font-weight: normal;
 }
 
@@ -382,7 +382,7 @@ a:hover, a:focus {
 }
 
 .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover, .rs-table-hover .rs-table-row:hover .rs-table-cell-group, .rs-table-hover .rs-table-row:hover .rs-table-cell {
-  background: #CCCFD6 !important;
+  background: rgba(107, 131, 158, 0.15) !important;
 }
 
 .rs-table-cell, .rs-table-cell-group, .rs-table-row {

@@ -17,11 +17,7 @@ import {
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
 } from '../domain/shared_slices/InterestPoint'
-import {
-  coordinatesAreModified,
-  coordinatesOrTypeAreModified,
-  interestPointType
-} from '../domain/entities/interestPoints'
+import { coordinatesAreModified, coordinatesOrTypeAreModified } from '../domain/entities/interestPoints'
 import saveInterestPointFeature from '../domain/use_cases/saveInterestPointFeature'
 import { getInterestPointStyle } from './styles/interestPoint.style'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -83,7 +79,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   useEffect(() => {
     handleDrawEvents()
-  }, [drawObject])
+  }, [drawObject, interestPointBeingDrawed])
 
   useEffect(() => {
     showOrHideInterestPointsOverlays()
@@ -219,16 +215,17 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   function handleDrawEvents () {
     if (drawObject) {
-      drawObject.on(DRAW_START_EVENT, event => {
-        startDrawing(event)
+      drawObject.once(DRAW_START_EVENT, event => {
+        console.log(interestPointBeingDrawed)
+        startDrawing(event, interestPointBeingDrawed.type)
       })
 
-      drawObject.on(DRAW_ABORT_EVENT, () => {
+      drawObject.once(DRAW_ABORT_EVENT, () => {
         dispatch(endInterestPointDraw())
         dispatch(deleteInterestPointBeingDrawed())
       })
 
-      drawObject.on(DRAW_END_EVENT, event => {
+      drawObject.once(DRAW_END_EVENT, event => {
         dispatch(saveInterestPointFeature(event.feature))
         dispatch(endInterestPointDraw())
       })
@@ -290,11 +287,11 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     setDrawObject(draw)
   }
 
-  function startDrawing (event) {
+  function startDrawing (event, type) {
     dispatch(updateInterestPointBeingDrawed({
       uuid: interestPointBeingDrawed.uuid,
       name: null,
-      type: interestPointType.FISHING_VESSEL,
+      type: type,
       coordinates: event.feature.getGeometry().getLastCoordinate(),
       observations: null
     }))

@@ -96,7 +96,7 @@ const ResumeBoxStrongText = styled.span`
 `
 
 const ResumeBox = styled.span`
-    background: ${COLORS.grayLighter};
+    background: ${COLORS.gainsboro};
     border-radius: 11px;
     font-size: 13px;
     height: 22px;

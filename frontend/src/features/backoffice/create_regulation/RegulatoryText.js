@@ -174,7 +174,7 @@ const RegulatoryText = props => {
   }
 
   const removeTextIsDisabled = () => {
-    return listLength === 0 &&
+    return listLength === 1 &&
       currentTextType.length === 0 &&
       !currentStartDate && !currentEndDate &&
       (!currentRegulatoryTextName || currentRegulatoryTextName === '') &&

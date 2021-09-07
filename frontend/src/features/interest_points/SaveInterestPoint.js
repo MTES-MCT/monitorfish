@@ -99,6 +99,7 @@ const SaveInterestPoint = (
 
   useEffect(() => {
     if (interestPointBeingDrawed && type && interestPointBeingDrawed.type !== type) {
+      console.log(interestPointBeingDrawed)
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'type',
         value: type
@@ -277,7 +278,7 @@ const Body = styled.div`
   input {
     margin-top: 7px;
     color: ${COLORS.gunMetal};
-    background: ${COLORS.grayLighter};
+    background: ${COLORS.gainsboro};
     border: none;
     height: 27px;
     padding-left: 8px;
@@ -286,7 +287,7 @@ const Body = styled.div`
   textarea {
     color: ${COLORS.gunMetal};
     margin-top: 7px;
-    background: ${COLORS.grayLighter};
+    background: ${COLORS.gainsboro};
     border: none;
     min-height: 50px;
     padding-left: 8px;

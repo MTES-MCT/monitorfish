@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'rsuite/lib/Modal'
 
-import { ReactComponent as VesselListSVG } from '../icons/Icone_liste_navires.svg'
 import { COLORS } from '../../constants/constants'
 import { getZonesAndSubZonesPromises, layersType } from '../../domain/entities/layers'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../../domain/shared_slices/Map'
@@ -20,6 +19,7 @@ import SaveVesselFiltersModal from '../vessel_filters/SaveVesselFiltersModal'
 import { addFilter } from '../../domain/shared_slices/Filter'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import { VesselListSVG } from '../commonStyles/icons/VesselListSVG'
 
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
@@ -264,6 +264,7 @@ const VesselList = ({ namespace }) => {
           title={'Liste des navires avec VMS'}
           onClick={() => setVesselListModalIsOpen(true)}>
           <Vessel
+            background={vesselListModalIsOpen ? COLORS.shadowBlue : COLORS.charcoal}
             selectedVessel={selectedVessel}
             rightMenuIsOpen={rightMenuIsOpen}
           />

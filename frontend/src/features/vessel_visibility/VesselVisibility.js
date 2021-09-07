@@ -144,7 +144,7 @@ const LastPositionLegend = styled.div`
 `
 
 const VesselHidden = styled.span`
-  background: #E0E0E0;
+  background: #CCCFD6;
   border: unset;
   margin-right: 5px;
   width: 8px;
@@ -154,7 +154,7 @@ const VesselHidden = styled.span`
 `
 
 const VesselAlmostHidden = styled.span`
-  background: ${COLORS.grayVesselHidden};
+  background: #9095A2;
   border: unset;
   margin-right: 5px;
   margin-left: 25px;

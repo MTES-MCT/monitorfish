@@ -5,6 +5,7 @@ import Layers from './layers'
 import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
 import { Vessel } from './vessel'
+import { COLORS } from '../../constants/constants'
 
 class EstimatedPosition {
   static colorProperty = 'color'
@@ -34,12 +35,12 @@ class EstimatedPosition {
     }
 
     const features = []
-    let lineColor = 'rgb(5, 5, 94, 0.2)'
+    let lineColor = COLORS.slateGrayLittleOpacity
     if (options.isLight) {
       lineColor = 'rgb(202, 204, 224, 0.2)'
     }
 
-    let vesselColor = 'rgb(5, 5, 94)'
+    let vesselColor = COLORS.vesselColor
     if (options.isLight) {
       vesselColor = 'rgb(202, 204, 224)'
     }

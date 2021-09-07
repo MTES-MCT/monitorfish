@@ -34,7 +34,7 @@ const mapSlice = createSlice({
     circleMeasurementToAdd: null,
     measurementsDrawed: getLocalStorageState([], measurementsLocalStorageKey),
     zonesSelected: [],
-    selectedBaseLayer: getLocalStorageState(baseLayers.OSM.code, baseLayerLocalStorageKey),
+    selectedBaseLayer: getLocalStorageState(baseLayers.LIGHT.code, baseLayerLocalStorageKey),
     view: getLocalStorageState({
       zoom: null,
       center: null

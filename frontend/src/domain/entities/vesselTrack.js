@@ -112,7 +112,7 @@ export class VesselTrack {
       const arrowStyle = getArrowStyle(trackArrow, arrowFeature.course)
 
       arrowFeature.setStyle((feature, resolution) => {
-        arrowStyle[0].getImage().setScale(1 / Math.pow(resolution, 1 / 5))
+        arrowStyle[0].getImage().setScale(0.1 + 1 / Math.pow(resolution, 1 / 6))
 
         return arrowStyle
       })
@@ -161,13 +161,13 @@ export class VesselTrack {
 export const trackTypes = {
   TRANSIT: {
     code: 'TRANSIT',
-    color: '#3A9885',
+    color: COLORS.trackTransit,
     arrow: 'arrow_green.png',
     description: 'En transit (vitesse > 4.5 Nds)'
   },
   FISHING: {
     code: 'FISHING',
-    color: '#05055E',
+    color: COLORS.trackFishing,
     arrow: 'arrow_blue.png',
     description: 'En pêche (vitesse <= 4.5 Nds)'
   },

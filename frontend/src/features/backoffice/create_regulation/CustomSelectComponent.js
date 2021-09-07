@@ -47,6 +47,13 @@ const SelectWrapper = styled.div`
 const CustomSelectPicker = styled(SelectPicker)`
   a {
     box-sizing: border-box;
+    border-color: ${COLORS.lightGray}!important;
+  }
+  .rs-btn-default.rs-picker-toggle:hover {
+    border-color: ${COLORS.lightGray}!important;
+  }
+  .rs-btn-default.rs-picker-toggle:focus {
+    border-color: ${COLORS.lightGray}!important;
   }
 `
 

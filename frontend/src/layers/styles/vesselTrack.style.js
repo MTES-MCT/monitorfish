@@ -7,7 +7,9 @@ import { COLORS } from '../../constants/constants'
 const trackLineStyleCache = new Map()
 
 export const getLineStyle = (isTimeEllipsis, trackType) => {
-  if (!trackLineStyleCache.has(isTimeEllipsis)) {
+  const key = JSON.stringify({ isTimeEllipsis, color: trackType.color })
+
+  if (!trackLineStyleCache.has(key)) {
     const style = new Style({
       fill: new Fill({
         color: trackType.color,
@@ -20,10 +22,10 @@ export const getLineStyle = (isTimeEllipsis, trackType) => {
       })
     })
 
-    trackLineStyleCache.set(isTimeEllipsis, [style])
+    trackLineStyleCache.set(key, [style])
   }
 
-  return trackLineStyleCache.get(isTimeEllipsis)
+  return trackLineStyleCache.get(key)
 }
 
 export const getCircleStyle = (color, radius) => {
@@ -53,8 +55,8 @@ export const getArrowStyle = (trackArrow, course) => {
       image: new Icon({
         src: trackArrow,
         offset: [0, 0],
-        imgSize: [20, 34],
-        scale: 0.7,
+        imgSize: [15, 20],
+        scale: 1,
         rotation: course
       })
     })

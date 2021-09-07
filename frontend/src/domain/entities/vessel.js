@@ -45,6 +45,7 @@ export class Vessel {
 
   static getObjectForFilteringFromFeature (feature) {
     return {
+      olCoordinates: feature.getGeometry().getCoordinates(),
       uid: feature.ol_uid,
       length: feature.vessel.length,
       flagState: feature.vessel.flagState.toLowerCase(),

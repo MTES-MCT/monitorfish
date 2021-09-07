@@ -21,7 +21,9 @@ export const COLORS = {
   red: '#E1000F',
   blue: '#0A18DF',
   vesselLightColor: '#cacce0',
-  vesselColor: 'rgb(5, 5, 94)'
+  vesselColor: '#313949',
+  trackFishing: '#2A4670',
+  trackTransit: '#1C9B7B'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

@@ -4,16 +4,40 @@ import { COLORS } from '../../../constants/constants'
 import { Radio, Checkbox } from 'rsuite'
 
 const MenuItem = ({ checked, item, tag }) => {
+  const { label } = item
+  const labelToDisplay = label.replace(/[_]/g, ' ')
   return <>{
     tag === 'Radio'
-      ? <CustomRadio checked={checked}>{item.label}</CustomRadio>
+      ? <CustomRadio
+          checked={checked}
+          title={labelToDisplay}
+        >{labelToDisplay}
+        </CustomRadio>
       : tag === 'Checkbox'
-        ? <CustomCheckbox checked={checked}>{item.label}</CustomCheckbox>
+        ? <CustomCheckbox
+            checked={checked}
+            title={labelToDisplay}
+          >{labelToDisplay}
+          </CustomCheckbox>
         : null
     }</>
 }
 
 const CustomRadio = styled(Radio)`
+  .rs-radio-checker {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 8px;
+    padding-left: 36px;
+    padding-top: 4px;
+    &:before {
+      box-sizing: border-box;
+    }
+    &:after {
+      box-sizing: border-box;
+    }
+  }
+  
   .rs-radio-checker > label {
     font-size: 11px;
     color: ${COLORS.slateGray};
@@ -21,6 +45,20 @@ const CustomRadio = styled(Radio)`
 `
 
 const CustomCheckbox = styled(Checkbox)`
+  .rs-checkbox-checker {
+    overflow: hidden;
+    text-overflow: text-ellipsis;
+    padding-bottom: 4px;
+    padding-left: 36px;
+    padding-top: 8px;
+    &:before {
+      box-sizing: border-box;
+    }
+    &:after {
+      box-sizing: border-box;
+    }
+  }
+
   .rs-checkbox-checker > label {
     font-size: 11px;
     color: ${COLORS.slateGray};

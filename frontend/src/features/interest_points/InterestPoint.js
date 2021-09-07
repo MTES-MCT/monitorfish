@@ -16,7 +16,10 @@ import {
 const InterestPoint = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
-  const { isEditing } = useSelector(state => state.interestPoint)
+  const {
+    isEditing,
+    interestPointBeingDrawed
+  } = useSelector(state => state.interestPoint)
   const {
     healthcheckTextWarning,
     rightMenuIsOpen
@@ -45,6 +48,12 @@ const InterestPoint = () => {
   useEffect(() => {
     setInterestPointIsOpen(isEditing)
   }, [isEditing])
+
+  useEffect(() => {
+    if (!interestPointBeingDrawed) {
+      setInterestPointIsOpen(false)
+    }
+  }, [interestPointBeingDrawed])
 
   const escapeFromKeyboard = event => {
     const escapeKeyCode = 27

@@ -82,12 +82,10 @@ const Error = styled.span`
 const Body = styled.div`
   text-align: left;
   font-size: 13px;
-  color: ${COLORS.textGray};
   
   input {
     margin-top: 7px;
-    color: ${COLORS.grayDarkerThree};
-    background: ${COLORS.grayLighter};
+    background: ${COLORS.gainsboro};
     border: none;
     height: 27px;
     padding-left: 8px;

@@ -18,12 +18,15 @@ export const CustomInput = styled(Input)`
   border: 1px solid ${props => props.$isred ? `${COLORS.red}` : `${COLORS.lightGray}`};
   border-radius: 2px;
   color: ${COLORS.slateGray};
-  ${props => props.$isgray ? `background-color: ${COLORS.gainsboro};` : ''}
+  background-color: ${props => props.$isgray ? COLORS.gainsboro : COLORS.white};
   margin: 0px 10px 0px 0px;
   padding: 8px;
   &:focus {
-    border-color: ${COLORS.red};
-    transition: border-color 0.3s ease-in-out;
-    outline: 0;
+    border-color: ${COLORS.lightGray}!important;
+    cursor: pointer;
+  }
+  &:hover {
+    border-color: ${COLORS.lightGray}!important;
+    cursor: pointer;
   }
 `

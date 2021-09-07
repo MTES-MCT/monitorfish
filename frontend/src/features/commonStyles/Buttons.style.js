@@ -100,8 +100,9 @@ export const CancelButton = styled(SecondaryButton)`
 
 export const SquareButton = styled.a`
 position: relative;
+box-sizing: border-box;
 cursor: pointer;
-width: 35px;
+width: 38px;
 height: 35px;
 border: 1px solid ${COLORS.lightGray};
 border-radius: 2px;

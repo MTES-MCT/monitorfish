@@ -41,7 +41,7 @@ const CustomDatePicker = props => {
 const DatePickerStyled = styled(DatePicker)`
   width: 87px;
   box-sizing: border-box;
-  color: ${COLORS.gunMetal}
+  color: ${COLORS.lightGray}
   border-radius: 2px;
   .rs-picker-toggle-caret {
     display: none;
@@ -49,10 +49,20 @@ const DatePickerStyled = styled(DatePicker)`
   .rs-picker-toggle {
     border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray}  !important;
     box-sizing: border-box;
+    color: ${COLORS.lightGray};
+  }
+  .rs-picker-toggle .rs-picker-toggle-placeholder {
+    color: ${COLORS.lightGray}!important;
   }
   .rs-picker-toggle.rs-btn {
     box-sizing: border-box;
     padding: 6px;
+  }
+  .rs-picker-toggle.rs-btn:focus {
+    border: 1px solid ${COLORS.lightGray}!important;
+  }
+  .rs-picker-toggle.rs-btn:hover {
+    border: 1px solid ${COLORS.lightGray}!important;
   }
 `
 

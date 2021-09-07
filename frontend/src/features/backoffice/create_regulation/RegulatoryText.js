@@ -180,14 +180,14 @@ const RegulatoryText = props => {
           <CustomInput
             placeholder={'Nom'}
             $isred={nameIsRequired}
-            width={'250px'}
+            width={'87px'}
             value={currentRegulatoryTextName}
             onChange={onNameValueChange}
           />
           <CustomInput
             placeholder={'URL'}
             $isred={URLIsrequired}
-            width={'250px'}
+            width={'87px'}
             value={currentRegulatoryTextURL}
             onChange={onURLValueChange}
           />

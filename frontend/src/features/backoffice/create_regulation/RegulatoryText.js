@@ -22,7 +22,8 @@ const RegulatoryText = props => {
     id,
     regulatoryText,
     addOrRemoveRegulatoryTextInList,
-    saveForm
+    saveForm,
+    listLength
   } = props
 
   /**
@@ -172,6 +173,14 @@ const RegulatoryText = props => {
     setIsEditing(true)
   }
 
+  const removeTextIsDisabled = () => {
+    return listLength === 0 &&
+      currentTextType.length === 0 &&
+      !currentStartDate && !currentEndDate &&
+      (!currentRegulatoryTextName || currentRegulatoryTextName === '') &&
+      (!currentRegulatoryTextURL || currentRegulatoryTextURL === '')
+  }
+
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
@@ -260,7 +269,7 @@ const RegulatoryText = props => {
     </ContentLine>
     <ContentLine>
       <CancelButton
-        disabled={false}
+        disabled={removeTextIsDisabled()}
         isLast={false}
         onClick={_ => addOrRemoveRegulatoryTextInList(id)}>
         Supprimer le texte

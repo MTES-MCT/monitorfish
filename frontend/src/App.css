@@ -387,7 +387,7 @@ a:hover, a:focus {
 
 .rs-table-cell, .rs-table-cell-group, .rs-table-row {
     -webkit-transition: background-color .1s linear !important;
-    transition: background-color .1s linear  !important;;
+    transition: background-color .1s linear  !important;
 }
 
 .new-regulation-select-picker a {

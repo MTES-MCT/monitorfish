@@ -13,7 +13,8 @@ import {
   RegulationTopicLine,
   RegulatoryTextSection,
   UpcomingRegulationModal,
-  RemoveRegulationModal
+  RemoveRegulationModal,
+  FishingPeriodSection
 } from './'
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
@@ -93,6 +94,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     isRemoveModalOpen,
     regulationDeleted
   } = useSelector(state => state.regulation)
+
+  /** @type {FishingPeriod} */ // TODO
+  const [fishingPeriod, setFishingPeriod] = useState({})
 
   useEffect(() => {
     if (!regulatoryTopics || regulatoryTopics.length === 0) {
@@ -302,6 +306,12 @@ const CreateRegulation = ({ title, isEdition }) => {
                 setRegulatoryTextList={setRegulatoryTextList}
                 source={REGULATORY_TEXT_SOURCE.REGULATION}
                 saveForm={saveOrUpdateRegulation}
+              />
+            </Content>
+            <Content>
+              <FishingPeriodSection
+                fishingPeriod={fishingPeriod}
+                setFishingPeriod={setFishingPeriod}
               />
             </Content>
           </ContentWrapper>

@@ -13,7 +13,8 @@ import {
   RegulationSeaFrontLine,
   RegulationTopicLine,
   RegulatoryTextSection,
-  UpcomingRegulationModal
+  UpcomingRegulationModal,
+  FishingPeriodSection
 } from './'
 import BaseMap from '../../map/BaseMap'
 import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
@@ -91,6 +92,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   } = useSelector(state => state.regulation)
 
   let originalGeometryId = null
+  /** @type {FishingPeriod} */ // TODO
+  const [fishingPeriod, setFishingPeriod] = useState({})
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
@@ -301,6 +304,12 @@ const CreateRegulation = ({ title, isEdition }) => {
                 setRegulatoryTextList={setRegulatoryTextList}
                 source={REGULATORY_TEXT_SOURCE.REGULATION}
                 saveForm={saveOrUpdateRegulation}
+              />
+            </Content>
+            <Content>
+              <FishingPeriodSection
+                fishingPeriod={fishingPeriod}
+                setFishingPeriod={setFishingPeriod}
               />
             </Content>
           </ContentWrapper>

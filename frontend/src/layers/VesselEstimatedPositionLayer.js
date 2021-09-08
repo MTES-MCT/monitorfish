@@ -19,7 +19,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   } = useSelector(state => state.vessel)
 
   const {
-    nonFilteredVesselsAreHidden
+    nonFilteredVesselsAreHidden,
+    filters
   } = useSelector(state => state.filter)
 
   const {
@@ -102,8 +103,9 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     vectorSource.clear(true)
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+    const showedFilter = filters?.find(filter => filter.showed)
 
-    if (nonFilteredVesselsAreHidden && !filteredVesselsFeaturesUids?.length) {
+    if (showedFilter && nonFilteredVesselsAreHidden && !filteredVesselsFeaturesUids?.length) {
       return
     }
 

@@ -12,6 +12,8 @@ import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import { Vector } from 'ol/layer'
 import { getVesselStyle } from './styles/vessel.style'
 import { unByKey } from 'ol/Observable'
+import { setError } from '../domain/shared_slices/Global'
+import NoVesselsInFilterError from '../errors/NoVesselsInFilterError'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
@@ -200,6 +202,9 @@ const VesselsLayer = ({ map }) => {
 
     dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
       .then(filteredVessels => {
+        if (!filteredVessels?.length) {
+          dispatch(setError(new NoVesselsInFilterError('Il n\'y a pas de navire dans ce filtre')))
+        }
         const filteredVesselsUids = filteredVessels.map(vessel => vessel.uid)
         dispatch(setFilteredVesselsFeaturesUids(filteredVesselsUids))
 

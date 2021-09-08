@@ -107,10 +107,9 @@ const SpeciesAndWeightChart = ({
                   ? speciesPresentationAndWeightArray[index]
                     .map((speciesAndPresentation, presentationIndex) => {
                       return <SpeciesAndPresentation key={speciesAndPresentation.presentation}>
-                        <PresentationWeight isLast={
-                          index === speciesPresentationAndWeightArray.length - 1 &&
-                          presentationIndex === speciesPresentationAndWeightArray[index].length - 1}>
-                          {speciesAndPresentation.weight} kg ({getPercentOfPresentationToSpeciesWeight(speciesAndPresentation.weight, speciesAndWeight.weight)} %)
+                        <PresentationWeight isLast={presentationIndex === speciesPresentationAndWeightArray[index].length - 1}>
+                          {speciesAndPresentation.weight} kg
+                          <Percents>({getPercentOfPresentationToSpeciesWeight(speciesAndPresentation.weight, speciesAndWeight.weight)} %)</Percents>
                         </PresentationWeight>
                         <Presentation>
                           {speciesAndPresentation.presentation
@@ -134,7 +133,7 @@ const Presentation = styled.div`
   display: flex;
   height: 20px;
   margin: 2px 0 0 10px;
-  font-size: 12px;
+  font-size: 13px;
   color: ${COLORS.gunMetal};
   font-weight: 300;
 `
@@ -169,10 +168,13 @@ const Species = styled.div`
   max-height: 90px;
   align-items: center;
   color: ${COLORS.gunMetal};
-  font-size: 12px;
+  font-size: 13px;
   margin: 2px 0 0 10px;
   ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
   font-weight: 500;
+  max-width: 260px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `
 
 const WeightText = styled.span``
@@ -200,18 +202,23 @@ const Weight = styled.div`
 const PresentationWeight = styled.div`
   width: 130px;
   font-weight: normal;
-  border-left: 2px solid ${COLORS.lightGray};
-  border-right: 2px solid ${COLORS.lightGray};
-  border-top: 2px solid ${COLORS.lightGray};
-  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.lightGray};` : ''}
+  border-left: 2px solid ${COLORS.slateGray};
+  border-right: 2px solid ${COLORS.slateGray};
+  border-top: 2px solid ${COLORS.slateGray};
+  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.slateGray};` : ''}
+  ${props => props.isLast ? 'margin-bottom: 4px;' : ''}
   height: 20px;
-  color: ${COLORS.slateGray};
   font-size: 11px;
   display: flex;
   align-items: center;
   padding-left: 10px;
   color: ${COLORS.gunMetal};
-  font-weight: 300;table-cell-
+  font-weight: 300;
+`
+
+const Percents = styled.span`
+  color: ${COLORS.slateGray};
+  margin-left: 3px;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

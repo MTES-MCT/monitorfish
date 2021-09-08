@@ -23,7 +23,7 @@ const getFilteredVessels = (vessels, filters) => async () => {
   const workerFilters = getFiltersWithoutZonesSelected(filters)
 
   return worker.getFilteredVessels(vessels, workerFilters).then(filteredVessels => {
-    if (filters.zonesSelected && filters.zonesSelected.length) {
+    if (filters.zonesSelected?.length) {
       filteredVessels = filterByZones(filteredVessels, filters.zonesSelected)
     }
 
@@ -35,6 +35,10 @@ function getFiltersWithoutZonesSelected (filters) {
   const workerFilters = { ...filters }
   workerFilters.zonesSelected = null
   return workerFilters
+}
+
+function removeDuplicates (acc, zone, index) {
+  return acc.findIndex(existingZone => (existingZone.uid === zone.uid)) === index
 }
 
 function filterByZones (filteredVessels, zonesSelected) {
@@ -51,9 +55,7 @@ function filterByZones (filteredVessels, zonesSelected) {
       .filter(vessel => {
         return flattenFeaturesGeometries.some(featureGeometry => featureGeometry.intersectsCoordinate(vessel.olCoordinates))
       })
-      .filter((zone, index, acc) => {
-        return acc.findIndex(existingZone => (existingZone.id === zone.id)) === index
-      })
+      .filter((zone, index, acc) => removeDuplicates(acc, zone, index))
   }
 
   return filteredVessels

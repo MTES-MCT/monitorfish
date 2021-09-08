@@ -20,7 +20,8 @@ data class PositionDataOutput(
         val from: CountryCode? = null,
         val destination: CountryCode? = null,
         val tripNumber: Int? = null,
-        val positionType: PositionType) {
+        val positionType: PositionType,
+        val isManual: Boolean? = null) {
     companion object {
         fun fromPosition(position: Position): PositionDataOutput {
             return PositionDataOutput(
@@ -38,7 +39,8 @@ data class PositionDataOutput(
                     destination = position.destination,
                     from = position.from,
                     tripNumber = position.tripNumber,
-                    positionType = position.positionType
+                    positionType = position.positionType,
+                    isManual = position.isManual
             )
         }
     }

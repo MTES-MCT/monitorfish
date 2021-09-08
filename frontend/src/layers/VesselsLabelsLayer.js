@@ -151,6 +151,12 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     setVesselToCoordinates(nextVesselToCoordinates)
   }
 
+  function showOnlySelectedVesselLabel () {
+    const feature = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
+      .find(feature => feature.getId() === Vessel.getVesselId(selectedVessel))
+    addLabelToFeatures([feature])
+  }
+
   function addVesselLabelToAllFeaturesInExtent () {
     if (!vesselLabelsShowedOnMap) {
       setFeaturesAndLabels([])
@@ -159,9 +165,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
 
     if (hideOtherVessels) {
-      const feature = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
-        .find(feature => feature.getId() === Vessel.getVesselId(selectedVessel))
-      addLabelToFeatures([feature])
+      showOnlySelectedVesselLabel()
       return
     }
 

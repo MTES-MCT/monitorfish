@@ -144,7 +144,7 @@ const VesselSidebar = () => {
             </TabList>
             {
               !showedError
-                ? <Panel>
+                ? <Panel healthcheckTextWarning={healthcheckTextWarning}>
                   {
                     vesselSidebarTab === VesselSidebarTab.SUMMARY
                       ? <VesselSummary/>
@@ -217,7 +217,7 @@ const Panel = styled.div`
   padding: 0;
   overflow-y: auto;
   background: ${COLORS.gainsboro};
-  max-height: 86vh;
+  max-height: ${props => props.healthcheckTextWarning ? 81 : 86}vh;
 `
 
 const Tab = styled.button`

@@ -21,7 +21,7 @@ export const COLORS = {
   red: '#E1000F',
   blue: '#0A18DF',
   vesselLightColor: '#cacce0',
-  vesselColor: '#313949',
+  vesselColor: '#3B4559',
   trackFishing: '#2A4670',
   trackTransit: '#1C9B7B'
 }

@@ -19,6 +19,7 @@ data class Position(
         val vesselName: String? = null,
         val flagState: CountryCode? = null,
         val positionType: PositionType,
+        val isManual: Boolean? = null,
 
         val latitude: Double,
         val longitude: Double,

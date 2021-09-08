@@ -212,9 +212,9 @@ const VesselVisibilityIcon = styled(MapButtonStyle)`
   top: 152px;
   z-index: 99;
   height: 40px;
-  width: ${props => props.isOpen && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.isOpen && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.isOpen && !props.rightMenuIsOpen ? '0' : '10px'};
+  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
+  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
+  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
   

@@ -129,7 +129,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         val lanMessage = messages[0].message as LAN
         assertThat(lanMessage.port).isEqualTo("AEAJM")
         assertThat(lanMessage.sender).isEqualTo("MAS")
-        assertThat(lanMessage.catchLanded).hasSize(5)
+        assertThat(lanMessage.catchLanded).hasSize(6)
         assertThat(lanMessage.landingDateTime.toString()).isEqualTo("2019-10-22T11:06Z[UTC]")
 
         // RTP

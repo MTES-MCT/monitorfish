@@ -104,6 +104,10 @@ code {
     z-index: 99;
 }
 
+.rs-slider-graduated > div:nth-child(2) {
+    z-index: 9999;
+}
+
 .rs-slider-graduated > div:nth-child(3)::before {
     background: #3B4559;
     z-index: 99;

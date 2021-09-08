@@ -15,7 +15,8 @@ export const OPACITY = 'opacity'
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
     vesselsLayerSource,
-    filteredVesselsFeaturesUids
+    filteredVesselsFeaturesUids,
+    hideOtherVessels
   } = useSelector(state => state.vessel)
 
   const {
@@ -87,6 +88,12 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     })
   }, [vesselsLastPositionVisibility])
 
+  useEffect(() => {
+    vectorSource.forEachFeature(feature => {
+      feature.set(EstimatedPosition.isHiddenProperty, hideOtherVessels)
+    })
+  }, [hideOtherVessels])
+
   function addLayerToMap () {
     if (map) {
       map.getLayers().push(layer)
@@ -137,7 +144,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
             isLight,
             dateTime,
             vesselIsHidden,
-            vesselIsOpacityReduced
+            vesselIsOpacityReduced,
+            hideOtherVessels
           }))
       }
     })

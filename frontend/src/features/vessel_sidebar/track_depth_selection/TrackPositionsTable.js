@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
 import Table from 'rsuite/lib/Table'
 import { transform } from 'ol/proj'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +10,7 @@ import { CSVOptions } from '../../vessel_list/dataFormatting'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map'
 import { animateTo } from '../../../domain/shared_slices/Map'
 import { useClickOutsideComponent } from '../../../hooks/useClickOutside'
+import { ReactComponent as ManualPositionSVG } from '../../icons/Pastille_position_manuelle.svg'
 
 const { Column, HeaderCell, Cell } = Table
 
@@ -64,7 +66,7 @@ const TrackPositionsTable = () => {
         onSortColumn={handleSortColumn}
         shouldUpdateScroll={false}
       >
-        <Column width={150} fixed sortable>
+        <Column width={175} fixed sortable>
           <HeaderCell>GDH</HeaderCell>
           <DateTimeCell dispatch={dispatch} dataKey="dateTime" coordinatesFormat={coordinatesFormat}/>
         </Column>
@@ -132,9 +134,14 @@ export const DateTimeCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ..
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateTo(olCoordinates))}
     >
-      { dateTimeStringWithoutMilliSeconds }
+      { dateTimeStringWithoutMilliSeconds } { rowData.isManual ? <ManualPosition title={'Position manuelle (4h-report)'}/> : '' }
     </Cell>
   )
 }
+
+const ManualPosition = styled(ManualPositionSVG)`
+  vertical-align: sub;
+  margin-left: 3px;
+`
 
 export default TrackPositionsTable

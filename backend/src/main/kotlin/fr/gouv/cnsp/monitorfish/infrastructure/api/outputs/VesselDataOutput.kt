@@ -71,23 +71,7 @@ data class VesselDataOutput(
                     vesselEmails = vessel.vesselEmails,
                     beaconNumber = vessel.beaconNumber,
                     positions = positions.map {
-                        PositionDataOutput(
-                                internalReferenceNumber = it.internalReferenceNumber,
-                                ircs = it.ircs,
-                                mmsi = it.mmsi,
-                                externalReferenceNumber = it.externalReferenceNumber,
-                                dateTime = it.dateTime,
-                                latitude = it.latitude,
-                                longitude = it.longitude,
-                                vesselName = it.vesselName,
-                                speed = it.speed,
-                                course = it.course,
-                                flagState = it.flagState,
-                                destination = it.destination,
-                                from = it.from,
-                                tripNumber = it.tripNumber,
-                                positionType = it.positionType
-                        )
+                        PositionDataOutput.fromPosition(it)
                     }
             )
         }

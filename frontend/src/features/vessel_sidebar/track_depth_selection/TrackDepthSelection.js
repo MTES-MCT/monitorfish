@@ -170,7 +170,7 @@ const TrackDepthSelectionButton = styled(MapComponentStyle)`
 
 const TrackDepthSelectionContent = styled(MapComponentStyle)`
   top: 118px;
-  width: 282px;
+  width: 306px;
   background: ${COLORS.background};
   position: absolute;
   right: 10px;

@@ -32,7 +32,7 @@ const RegulatoryTextSection = props => {
     if (id) {
       newRegulatoryTextList.splice(id, 1)
     } else if (id === 0) {
-      newRegulatoryTextList = []
+      newRegulatoryTextList = [{}]
     } else {
       newRegulatoryTextList.push({})
     }

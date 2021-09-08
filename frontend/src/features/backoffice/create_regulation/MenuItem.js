@@ -27,9 +27,7 @@ const CustomRadio = styled(Radio)`
   .rs-radio-checker {
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-bottom: 8px;
-    padding-left: 36px;
-    padding-top: 4px;
+    padding: 4px 0px 8px 36px;
     &:before {
       box-sizing: border-box;
     }
@@ -48,9 +46,7 @@ const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-checker {
     overflow: hidden;
     text-overflow: text-ellipsis;
-    padding-bottom: 4px;
-    padding-left: 36px;
-    padding-top: 8px;
+    padding: 8px 0px 4px 36px;
     &:before {
       box-sizing: border-box;
     }
@@ -66,9 +62,10 @@ const CustomCheckbox = styled(Checkbox)`
 
   .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {
-      border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
+      border: 1px solid ${COLORS.lightGray} !important;
       box-sizing: border-box;
     }
+    
     &:after {
       margin-top: 0px !important;
       margin-left: 4px !important;

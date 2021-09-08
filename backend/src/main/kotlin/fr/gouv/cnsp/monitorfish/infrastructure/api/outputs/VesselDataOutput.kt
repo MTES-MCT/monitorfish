@@ -35,6 +35,7 @@ data class VesselDataOutput(
         val proprietorEmails: List<String>? = null,
         val vesselPhones: List<String>? = null,
         val vesselEmails: List<String>? = null,
+        val beaconNumber: String? = null,
         val positions: List<PositionDataOutput>) {
     companion object {
         fun fromVessel(vessel: Vessel, positions: List<Position>): VesselDataOutput {
@@ -68,6 +69,7 @@ data class VesselDataOutput(
                     proprietorEmails = vessel.proprietorEmails,
                     vesselPhones = vessel.vesselPhones,
                     vesselEmails = vessel.vesselEmails,
+                    beaconNumber = vessel.beaconNumber,
                     positions = positions.map {
                         PositionDataOutput(
                                 internalReferenceNumber = it.internalReferenceNumber,

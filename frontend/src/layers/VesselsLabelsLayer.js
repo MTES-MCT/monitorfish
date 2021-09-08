@@ -101,7 +101,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     nonFilteredVesselsAreHidden,
     vesselLabelsShowedOnMap,
     vesselLabel,
-    filteredVesselsFeaturesUids
+    filteredVesselsFeaturesUids,
+    vesselsLastPositionVisibility
   ])
 
   useEffect(() => {

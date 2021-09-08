@@ -11,6 +11,7 @@ class EstimatedPosition {
   static colorProperty = 'color'
   static opacityProperty = 'opacity'
   static isCircleProperty = 'isCircle'
+  static isHiddenProperty = 'isHidden'
 
   /**
    * For building OpenLayers estimated position feature
@@ -22,6 +23,7 @@ class EstimatedPosition {
       dateTime: Date
       vesselIsHidden: Date
       vesselIsOpacityReduced: Date
+      hideOtherVessels: boolean
    * }} options
    */
   static getFeatures (currentPosition, estimatedPosition, options) {
@@ -50,7 +52,8 @@ class EstimatedPosition {
     const lineFeature = new Feature({
       geometry: new LineString([currentCoordinates, estimatedCoordinates]),
       color: lineColor,
-      opacity
+      opacity,
+      isHidden: options.hideOtherVessels
     })
     lineFeature.estimatedPosition = estimatedPositionObject
     lineFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
@@ -59,7 +62,8 @@ class EstimatedPosition {
       geometry: new Point(estimatedCoordinates),
       isCircle: true,
       color: vesselColor,
-      opacity
+      opacity,
+      isHidden: options.hideOtherVessels
     })
     circleFeature.estimatedPosition = estimatedPositionObject
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)

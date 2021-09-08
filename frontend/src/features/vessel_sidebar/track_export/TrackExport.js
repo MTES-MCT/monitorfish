@@ -130,7 +130,6 @@ const TrackExport = props => {
       healthcheckTextWarning={healthcheckTextWarning}
       isClickable={selectedVessel && selectedVessel.positions && selectedVessel.positions.length}
       openBox={props.openBox}
-      firstUpdate={props.firstUpdate.current}
       rightMenuIsOpen={props.rightMenuIsOpen}
       onClick={() => selectedVessel && selectedVessel.positions && selectedVessel.positions.length ? download() : undefined}
     >
@@ -146,25 +145,17 @@ const TrackExportButton = styled(MapButtonStyle)`
   background: ${COLORS.charcoal};
   position: absolute;
   right: 10px;
-  margin-right: -45px;
-  opacity: 0;
+  margin-right: ${props => props.openBox ? 505 : -45}px;
+  opacity: ${props => props.openBox ? 1 : 0};
   ${props => props.isClickable ? 'cursor: pointer;' : null}
   border-radius: 1px;
   z-index: 999;
+  transition: 0.5s all;
   
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-track-depth-selection-button-opening' : 'vessel-track-depth-selection-button-closing'} 0.5s ease forwards,
-  ${props => props.rightMenuIsOpen && props.openBox ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
+  animation: ${props => props.rightMenuIsOpen && props.openBox
+  ? 'vessel-box-opening-with-right-menu-hover'
+  : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 
-  @keyframes vessel-track-depth-selection-button-opening {
-    0%   { margin-right: -45px; opacity: 0;   }
-    100% { margin-right: 505px; opacity: 1; }
-  }
-
-  @keyframes vessel-track-depth-selection-button-closing {
-    0% { margin-right: 505px; opacity: 1; }
-    100%   { margin-right: -45px; opacity: 0;   }
-  }
-  
   :hover, :focus {
       background: ${COLORS.charcoal};
   }

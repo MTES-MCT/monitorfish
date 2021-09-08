@@ -100,7 +100,6 @@ const TrackDepthSelection = props => {
       <TrackDepthSelectionButton
         healthcheckTextWarning={healthcheckTextWarning}
         openBox={props.openBox}
-        firstUpdate={firstUpdate.current}
         rightMenuIsOpen={props.rightMenuIsOpen}
         trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
         onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
@@ -111,7 +110,6 @@ const TrackDepthSelection = props => {
       <TrackDepthSelectionContent
         healthcheckTextWarning={healthcheckTextWarning}
         openBox={props.openBox}
-        firstUpdate={firstUpdate.current}
         rightMenuIsOpen={props.rightMenuIsOpen}
         trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
       >
@@ -148,24 +146,16 @@ const TrackDepthSelectionButton = styled(MapComponentStyle)`
   background: ${props => props.trackDepthSelectionIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   position: absolute;
   right: 10px;
-  margin-right: -45px;
-  opacity: 0;
+  margin-right: ${props => props.openBox ? 505 : -45}px;
+  opacity: ${props => props.openBox ? 1 : 0};
   cursor: pointer;
   border-radius: 1px;
   z-index: 999;
+  transition: 0.5s all;
   
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-track-depth-selection-button-opening' : 'vessel-track-depth-selection-button-closing'} 0.5s ease forwards,
-  ${props => props.rightMenuIsOpen && props.openBox ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
-
-  @keyframes vessel-track-depth-selection-button-opening {
-    0%   { margin-right: -45px; opacity: 0;   }
-    100% { margin-right: 505px; opacity: 1; }
-  }
-
-  @keyframes vessel-track-depth-selection-button-closing {
-    0% { margin-right: 505px; opacity: 1; }
-    100%   { margin-right: -45px; opacity: 0;   }
-  }
+  animation: ${props => props.rightMenuIsOpen && props.openBox
+  ? 'vessel-box-opening-with-right-menu-hover'
+  : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 `
 
 const TrackDepthSelectionContent = styled(MapComponentStyle)`
@@ -174,25 +164,17 @@ const TrackDepthSelectionContent = styled(MapComponentStyle)`
   background: ${COLORS.background};
   position: absolute;
   right: 10px;
-  margin-right: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '540px' : '217px'};
-  opacity: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
-  visibility: ${props => !props.firstUpdate && props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
+  margin-right: ${props => props.openBox && props.trackDepthSelectionIsOpen ? '540px' : '217px'};
+  opacity: ${props => props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
+  visibility: ${props => props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
   font-size: 13px;
   color: ${COLORS.slateGray};
   transition: all 0.3s;
 
-  animation: ${props => props.rightMenuIsOpen && props.openBox && props.trackDepthSelectionIsOpen ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
-
-  @keyframes vessel-track-depth-selection-opening {
-    0%   { margin-right: 217px; opacity: 0; visibility: hidden; }
-    100% { margin-right: 540px; opacity: 1; visibility: visible; }
-  }
-
-  @keyframes vessel-track-depth-selection-closing {
-    0% { margin-right: 540px; opacity: 1; visibility: visible; }
-    100%   { margin-right: 217px; opacity: 0; visibility: hidden;   }
-  }
+  animation: ${props => props.rightMenuIsOpen && props.openBox && props.trackDepthSelectionIsOpen
+  ? 'vessel-box-opening-with-right-menu-hover'
+  : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 `
 
 const ClockIcon = styled(VesselSVG)`

@@ -17,6 +17,7 @@ import TrackDepthSelection from './track_depth_selection/TrackDepthSelection'
 import TrackExport from './track_export/TrackExport'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { VesselSidebarTab } from '../../domain/entities/vessel'
+import HideOtherVessels from './hide_other_vessels/HideOtherVessels'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -79,14 +80,16 @@ const VesselSidebar = () => {
       <TrackDepthSelection
         openBox={openSidebar}
         init={!vesselSidebarIsOpen ? {} : null}
-        firstUpdate={firstUpdate.current}
         rightMenuIsOpen={rightMenuIsOpen}
         trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
         setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
       />
       <TrackExport
         openBox={openSidebar}
-        firstUpdate={firstUpdate.current}
+        rightMenuIsOpen={rightMenuIsOpen}
+      />
+      <HideOtherVessels
+        openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <Wrapper

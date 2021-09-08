@@ -11,6 +11,11 @@ export const getEstimatedPositionStyle = feature => {
   const color = feature.get(EstimatedPosition.colorProperty)
   const opacity = feature.get(EstimatedPosition.opacityProperty)
   const isCircle = feature.get(EstimatedPosition.isCircleProperty)
+  const isHidden = feature.get(EstimatedPosition.isHiddenProperty)
+
+  if (isHidden) {
+    return []
+  }
 
   const key = JSON.stringify({ color, isCircle, opacity })
 

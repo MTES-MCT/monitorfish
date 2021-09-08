@@ -18,6 +18,7 @@ const vesselSlice = createSlice({
     vesselsLayerSource: null,
     /** @type {SelectedVessel | null} selectedVessel */
     selectedVessel: null,
+    hideOtherVessels: false,
     /** @type {VesselPosition | null} highlightedVesselTrackPosition */
     highlightedVesselTrackPosition: null,
     loadingVessel: null,
@@ -222,6 +223,16 @@ const vesselSlice = createSlice({
       state.uniqueVesselsSpecies = action.payload.species
       state.uniqueVesselsDistricts = action.payload.districts
     },
+    /**
+     * Show or hide other vessels (than the selected vessel)
+     * @function setHideOtherVessels
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: boolean}} action - hide (true) or show (false)
+     */
+    setHideOtherVessels (state, action) {
+      state.hideOtherVessels = action.payload
+    },
   }
 })
 
@@ -257,7 +268,8 @@ export const {
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,
   setControlFromDate,
-  setVesselsSpeciesAndDistricts
+  setVesselsSpeciesAndDistricts,
+  setHideOtherVessels
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

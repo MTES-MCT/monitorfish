@@ -61,6 +61,8 @@ const RegulatoryText = props => {
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
 
   const initFormValues = () => {
+    console.log('initFormValues')
+    console.log(regulatoryText)
     const {
       name,
       URL,
@@ -70,15 +72,15 @@ const RegulatoryText = props => {
     } = regulatoryText
     setCurrentRegulatoryTextName(name || '')
     setCurrentRegulatoryTextURL(URL || '')
-    setCurrentStartDate(startDate || undefined)
-    setCurrentEndDate(endDate || undefined)
+    setCurrentStartDate(startDate || '')
+    setCurrentEndDate(endDate || '')
     setCurrentTextType(textType || [])
     setIsEditing(name === undefined || name === '' || URL === undefined || URL === '')
   }
 
   useEffect(() => {
     initFormValues()
-  }, [])
+  }, [regulatoryText])
 
   /**
    * @function checkUrl
@@ -174,8 +176,7 @@ const RegulatoryText = props => {
   }
 
   const removeTextIsDisabled = () => {
-    console.log(listLength)
-    return listLength === 1 &&
+    return listLength <= 1 &&
       currentTextType.length === 0 &&
       !currentStartDate && !currentEndDate &&
       (!currentRegulatoryTextName || currentRegulatoryTextName === '') &&

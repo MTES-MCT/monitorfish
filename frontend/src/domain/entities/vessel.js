@@ -20,6 +20,7 @@ export class Vessel {
   static nonFilteredVesselsAreHiddenProperty = 'nonFilteredVesselsAreHidden'
   static isShowedInFilterProperty = 'isShowedInFilter'
   static isSelectedProperty = 'isSelected'
+  static isHiddenProperty = 'isHidden'
 
   /**
    * Get Vessel OpenLayers feature object

@@ -57,7 +57,7 @@ export const getTotalPNOWeightFromMessages = ersMessage => {
   }, 0).toFixed(1))
 }
 
-function getSpeciesToWeightObject (speciesToWeightObject, speciesCatch, totalWeight) {
+function setSpeciesToWeightObject (speciesToWeightObject, speciesCatch, totalWeight) {
   if (speciesToWeightObject[speciesCatch.species]) {
     speciesToWeightObject[speciesCatch.species].weight = parseFloat((
       speciesToWeightObject[speciesCatch.species].weight +
@@ -107,7 +107,7 @@ export const getSpeciesToWeightFARObject = (farMessages, totalFARWeight) => {
   farMessages.forEach(message => {
     if (message.acknowledge && message.acknowledge.isSuccess) {
       message.message.catches.forEach(speciesCatch => {
-        getSpeciesToWeightObject(speciesToWeightFARObject, speciesCatch, totalFARWeight)
+        setSpeciesToWeightObject(speciesToWeightFARObject, speciesCatch, totalFARWeight)
       })
     }
   })
@@ -135,7 +135,7 @@ export const getSpeciesToWeightDISObject = (disMessages, totalDISWeight) => {
   disMessages.forEach(message => {
     if (message.acknowledge && message.acknowledge.isSuccess) {
       message.message.catches.forEach(speciesCatch => {
-        getSpeciesToWeightObject(speciesToWeightDISObject, speciesCatch, totalDISWeight)
+        setSpeciesToWeightObject(speciesToWeightDISObject, speciesCatch, totalDISWeight)
       })
     }
   })
@@ -148,7 +148,7 @@ export const getSpeciesToWeightLANObject = lanMessage => {
 
   lanMessage.message.catchLanded.forEach(speciesCatch => {
     // TODO Regarder le calcul de la somme du LAN pour chaue espèce, ça semble trop élevé en env de DEV
-    getSpeciesToWeightObject(speciesToWeightLANObject, speciesCatch, null)
+    setSpeciesToWeightObject(speciesToWeightLANObject, speciesCatch, null)
   })
 
   return speciesToWeightLANObject
@@ -158,7 +158,7 @@ export const getSpeciesToWeightPNOObject = (pnoMessage, totalFARAndDEPWeight) =>
   const speciesToWeightPNOObject = {}
 
   pnoMessage.message.catchOnboard.forEach(speciesCatch => {
-    getSpeciesToWeightObject(speciesToWeightPNOObject, speciesCatch, totalFARAndDEPWeight)
+    setSpeciesToWeightObject(speciesToWeightPNOObject, speciesCatch, totalFARAndDEPWeight)
   })
 
   return speciesToWeightPNOObject

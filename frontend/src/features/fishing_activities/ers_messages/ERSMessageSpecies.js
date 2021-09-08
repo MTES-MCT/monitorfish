@@ -50,6 +50,17 @@ const ERSMessageSpecies = props => {
                   <Fields>
                     <TableBody>
                       <Field>
+                        <Key>Poids</Key>
+                        <TrimmedValue
+                          title={`${species.weight} kg`}>
+                          {
+                            species.weight
+                              ? `${species.weight} kg`
+                              : <NoValue>-</NoValue>
+                          }
+                        </TrimmedValue>
+                      </Field>
+                      <Field>
                         <Key>Présentation</Key>
                         <TrimmedValue
                           title={`${ERSSpeciesPresentation[species.presentation]} (${species.presentation})`}>
@@ -85,6 +96,10 @@ const ERSMessageSpecies = props => {
                   </Fields>
                   <Fields>
                     <TableBody>
+                      <Field>
+                        <Key/>
+                        <Value/>
+                      </Field>
                       <Field>
                         <Key>ZEE</Key>
                         <Value>
@@ -200,17 +215,12 @@ const Content = styled.div`
   overflow: hidden;
   padding: 0;
   border-bottom: 1px solid ${COLORS.gray};
-  animation: ${props => props.isOpen ? `list-zones-${props.name}-opening` : `list-zones-${props.name}-closing`} 0.2s ease forwards;
-
-  @keyframes ${props => props.name ? `list-zones-${props.name}-opening` : null} {
-    0%   { height: 0; }
-    100% { height: ${props => props.length > 1 ? props.length * 90 + 30 : 90}px; }
-  }
-
-  @keyframes ${props => props.name ? `list-zones-${props.name}-closing` : null} {
-    0%   { height: ${props => props.length > 1 ? props.length * 90 + 30 : 90}px; }
-    100% { height: 0; }
-  }
+  height: ${props => props.isOpen
+    ? props.length > 0
+      ? props.length * 110 + (props.length > 1 ? 30 : 0)
+      : 110
+    : 0}px;
+  transition: 0.2s all;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

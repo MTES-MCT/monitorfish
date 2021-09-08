@@ -135,6 +135,7 @@ export const ERSSpeciesPresentation = {
 
 function getPropertiesObject (ersCatch) {
   return {
+    weight: ersCatch.weight,
     faoZone: ersCatch.faoZone,
     conversionFactor: ersCatch.conversionFactor,
     packaging: ersCatch.packaging,
@@ -164,21 +165,8 @@ export const buildCatchArray = catches => {
         ]
       })
     } else {
-      const foundPropertyIndex = accumulator[sameSpeciesIndex].properties.findIndex(property => {
-        return property.faoZone === ersCatch.faoZone &&
-          property.conversionFactor === ersCatch.conversionFactor &&
-          property.effortZone === ersCatch.effortZone &&
-          property.economicZone === ersCatch.economicZone &&
-          property.preservationState === ersCatch.preservationState &&
-          property.statisticalRectangle === ersCatch.statisticalRectangle &&
-          property.presentation === ersCatch.presentation
-      })
-
-      if (foundPropertyIndex === notFound) {
-        accumulator[sameSpeciesIndex].properties.push(getPropertiesObject(ersCatch))
-      } else {
-        accumulator[sameSpeciesIndex].weight += ersCatch.weight ? parseFloat(ersCatch.weight) : 0
-      }
+      accumulator[sameSpeciesIndex].properties.push(getPropertiesObject(ersCatch))
+      accumulator[sameSpeciesIndex].weight += ersCatch.weight ? parseFloat(ersCatch.weight) : 0
     }
     return accumulator.sort((catchA, catchB) => catchB.weight - catchA.weight)
   }, [])

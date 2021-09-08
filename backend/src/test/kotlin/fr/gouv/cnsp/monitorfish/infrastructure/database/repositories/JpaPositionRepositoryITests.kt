@@ -34,7 +34,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
     fun `save Should save the position`() {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(LocalDate.EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"));
-        val expectedPosition = Position(null, "REF_NUMBER", "224136470", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
+        val expectedPosition = Position(null, "REF_NUMBER", "224136470", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
 
         // When
         jpaPositionRepository.save(expectedPosition)
@@ -55,10 +55,10 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
     fun `findVesselLastPositions Should filter the list of positions based on the from and to parameter`() {
         // Given
         val now = ZonedDateTime.now()
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
+        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
 
         // When
         jpaPositionRepository.save(firstPosition)
@@ -82,10 +82,10 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
     fun `findVesselLastPositions Should return the list of last positions for a given vessel When the CFR is not empty`() {
         // Given
         val now = ZonedDateTime.now()
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
+        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
 
         // When
         jpaPositionRepository.save(firstPosition)
@@ -109,10 +109,10 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
     fun `findVesselLastPositions Should return the list of last positions for a given vessel When the external marking is not empty`() {
         // Given
         val now = ZonedDateTime.now()
-        val firstPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        val fourthPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
+        val firstPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val fourthPosition = Position(null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
 
         // When
         jpaPositionRepository.save(firstPosition)
@@ -135,10 +135,10 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
     fun `findVesselLastPositions Should return the list of last positions for a given vessel When the IRCS is not empty`() {
         // Given
         val now = ZonedDateTime.now()
-        val firstPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        val fourthPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
+        val firstPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
+        val secondPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
+        val thirdPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val fourthPosition = Position(null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
 
         // When
         jpaPositionRepository.save(firstPosition)

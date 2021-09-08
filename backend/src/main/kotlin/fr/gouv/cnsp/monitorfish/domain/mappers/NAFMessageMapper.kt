@@ -32,6 +32,7 @@ class NAFMessageMapper(private val naf: String) {
     private var course: Double? = null
     private var speed: Double = 0.0
     private var tripNumber: Int? = null
+    private var isManual: Boolean = false
 
     private val positionMessageType = "POS"
     private val manualMessageType = "MAN"
@@ -50,8 +51,11 @@ class NAFMessageMapper(private val naf: String) {
                     try {
                         when (it) {
                             NAFCode.TYPE_OF_MESSAGE -> when (value) {
-                                positionMessageType -> logger.info("Receiving new position")
-                                manualMessageType -> logger.info("Receiving new manual position")
+                                positionMessageType -> this.isManual = false
+                                manualMessageType -> {
+                                    this.isManual = true
+                                    logger.info("Receiving new manual position")
+                                }
                                 else -> throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
                             }
                             NAFCode.INTERNAL_REFERENCE_NUMBER -> this.internalReferenceNumber = value
@@ -146,7 +150,8 @@ class NAFMessageMapper(private val naf: String) {
                 destination = destination,
                 from = from,
                 tripNumber = tripNumber,
-                positionType = PositionType.VMS
+                positionType = PositionType.VMS,
+                isManual = isManual
         )
     }
 }

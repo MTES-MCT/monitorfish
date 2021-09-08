@@ -37,6 +37,8 @@ data class PositionEntity(
         val destination: CountryCode? = null,
         @Column(name = "trip_number")
         val tripNumber: Int? = null,
+        @Column(name = "is_manual")
+        val isManual: Boolean? = false,
 
         // Mandatory fields
         @Enumerated(EnumType.STRING)
@@ -69,27 +71,29 @@ data class PositionEntity(
             destination = destination,
             from = from,
             tripNumber = tripNumber,
-            positionType = positionType)
+            positionType = positionType,
+            isManual = isManual)
 
-        companion object {
-                fun fromPosition(position: Position): PositionEntity {
-                        return PositionEntity(
-                                internalReferenceNumber = position.internalReferenceNumber,
-                                ircs = position.ircs,
-                                mmsi = position.mmsi,
-                                externalReferenceNumber = position.externalReferenceNumber,
-                                dateTime = position.dateTime,
-                                latitude = position.latitude,
-                                longitude = position.longitude,
-                                vesselName = position.vesselName,
-                                speed = position.speed,
-                                course = position.course,
-                                flagState = position.flagState,
-                                destination = position.destination,
-                                from = position.from,
-                                tripNumber = position.tripNumber,
-                                positionType = position.positionType
-                        )
-                }
+    companion object {
+        fun fromPosition(position: Position): PositionEntity {
+            return PositionEntity(
+                    internalReferenceNumber = position.internalReferenceNumber,
+                    ircs = position.ircs,
+                    mmsi = position.mmsi,
+                    externalReferenceNumber = position.externalReferenceNumber,
+                    dateTime = position.dateTime,
+                    latitude = position.latitude,
+                    longitude = position.longitude,
+                    vesselName = position.vesselName,
+                    speed = position.speed,
+                    course = position.course,
+                    flagState = position.flagState,
+                    destination = position.destination,
+                    from = position.from,
+                    tripNumber = position.tripNumber,
+                    positionType = position.positionType,
+                    isManual = position.isManual
+            )
         }
+    }
 }

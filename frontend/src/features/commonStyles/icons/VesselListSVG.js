@@ -1,8 +1,9 @@
 import React from 'react'
 
-export const VesselListSVG = ({ background }) => {
+export const VesselListSVG = ({ background, isTitle }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24.707" height="23.707" viewBox="0 0 24.707 23.707">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24.707" height="23.707" viewBox="0 0 24.707 23.707"
+         style={ isTitle ? { verticalAlign: 'text-bottom' } : null }>
       <g id="Groupe_223" data-name="Groupe 223" transform="translate(-1876 -76)">
         <line id="Ligne_854" data-name="Ligne 854" x2="24" transform="translate(1876 82)" fill="none" stroke="#E5E5EB"
               strokeWidth="2"/>

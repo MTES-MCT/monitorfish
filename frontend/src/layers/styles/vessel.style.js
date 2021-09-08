@@ -84,14 +84,14 @@ export const getVesselStyle = (feature, resolution) => {
 
   if (feature.get(Vessel.isSelectedProperty)) {
     styles.push(selectedVesselStyle)
-    styles[styles.length - 1].getImage().setScale(1 / Math.pow(resolution, 1 / 6))
+    styles[styles.length - 1].getImage().setScale(1 / Math.pow(resolution, 1 / 7))
   }
 
   return styles
 }
 
 function getVesselFilename (filterColor, isShowedInFilter, isLight) {
-  let vesselFileName = 'icone_navire_313949.png'
+  let vesselFileName = 'icone_navire_3B4559.png'
 
   if (filterColor && isShowedInFilter) {
     vesselFileName = `Couleurs_filtres_navires_${filterColor.replace('#', '')}_png24.png`

@@ -277,7 +277,10 @@ const VesselList = ({ namespace }) => {
         >
           <Modal.Header>
             <Modal.Title>
-              <Vessel isTitle={true}/> Liste des navires avec VMS
+              <Vessel
+                isTitle={true}
+                background={COLORS.charcoal}
+              /> Liste des navires avec VMS
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -445,7 +448,6 @@ const Vessel = styled(VesselListSVG)`
   width: 25px;
   height: 25px;
   animation: ${props => !props.isTitle ? props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-icon-hidden' : 'vessel-icon-visible' : null} 0.2s ease forwards;
-  ${props => props.isTitle ? 'vertical-align: text-bottom;' : null}
   
   @keyframes vessel-icon-visible {
     0%   {

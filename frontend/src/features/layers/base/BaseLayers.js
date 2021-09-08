@@ -13,7 +13,7 @@ const BaseLayers = ({ namespace }) => {
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
   const { layersSidebarOpenedLayer } = useSelector(state => state.layer)
 
-  const baseLayersKeys = Object.keys(baseLayers)
+  const baseLayersKeys = Object.keys(baseLayers).filter(key => key !== baseLayers.DARK.code)
   const [showBaseLayers, setShowBaseLayers] = useState(false)
 
   const {

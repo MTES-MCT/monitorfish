@@ -349,6 +349,10 @@ const Layers = {
 }
 
 export const baseLayers = {
+  LIGHT: {
+    code: 'LIGHT',
+    text: 'Fond de carte clair'
+  },
   OSM: {
     code: 'OSM',
     text: 'Open Street Map'
@@ -360,10 +364,6 @@ export const baseLayers = {
   SATELLITE: {
     code: 'SATELLITE',
     text: 'Satellite'
-  },
-  LIGHT: {
-    code: 'LIGHT',
-    text: 'Fond de carte clair'
   },
   DARK: {
     code: 'DARK',

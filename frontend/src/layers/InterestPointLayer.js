@@ -216,7 +216,6 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   function handleDrawEvents () {
     if (drawObject) {
       drawObject.once(DRAW_START_EVENT, event => {
-        console.log(interestPointBeingDrawed)
         startDrawing(event, interestPointBeingDrawed.type)
       })
 

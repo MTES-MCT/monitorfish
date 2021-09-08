@@ -18,7 +18,9 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   const {
     filteredVesselsFeaturesUids,
-    vesselsLayerSource
+    vesselsLayerSource,
+    hideOtherVessels,
+    selectedVessel
   } = useSelector(state => state.vessel)
 
   const {
@@ -102,7 +104,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     vesselLabelsShowedOnMap,
     vesselLabel,
     filteredVesselsFeaturesUids,
-    vesselsLastPositionVisibility
+    vesselsLastPositionVisibility,
+    hideOtherVessels
   ])
 
   useEffect(() => {
@@ -152,6 +155,13 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     if (!vesselLabelsShowedOnMap) {
       setFeaturesAndLabels([])
       vectorSource.clear()
+      return
+    }
+
+    if (hideOtherVessels) {
+      const feature = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
+        .find(feature => feature.getId() === Vessel.getVesselId(selectedVessel))
+      addLabelToFeatures([feature])
       return
     }
 

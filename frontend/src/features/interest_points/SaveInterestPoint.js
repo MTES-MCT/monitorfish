@@ -99,7 +99,6 @@ const SaveInterestPoint = (
 
   useEffect(() => {
     if (interestPointBeingDrawed && type && interestPointBeingDrawed.type !== type) {
-      console.log(interestPointBeingDrawed)
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'type',
         value: type

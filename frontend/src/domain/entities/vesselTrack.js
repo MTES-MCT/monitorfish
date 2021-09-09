@@ -112,7 +112,7 @@ export class VesselTrack {
       const arrowStyle = getArrowStyle(trackArrow, arrowFeature.course)
 
       arrowFeature.setStyle((feature, resolution) => {
-        arrowStyle[0].getImage().setScale(0.1 + 1 / Math.pow(resolution, 1 / 6))
+        arrowStyle[0].getImage().setScale(0.3 + 1 / Math.pow(resolution, 1 / 6))
 
         return arrowStyle
       })

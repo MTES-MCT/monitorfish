@@ -45,7 +45,10 @@ class GetVessel(private val vesselRepository: VesselRepository,
             VesselTrackDepth.TWELVE_HOURS -> ZonedDateTime.now().minusHours(12)
             VesselTrackDepth.LAST_DEPARTURE -> {
                 try {
-                    ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, ZonedDateTime.now()).lastDepartureDate
+                    // We substract 4h to this date to ensure the track starts at the port
+                    // (the departure message may be sent after the departure)
+                    ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, ZonedDateTime.now())
+                            .lastDepartureDate.minusHours(4)
                 } catch (e: NoERSLastDepartureDateFound) {
                     logger.warn(e.message)
                     vesselTrackDepthHasBeenModified = true

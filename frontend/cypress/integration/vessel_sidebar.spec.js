@@ -121,7 +121,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains("Pas d'infraction", { timeout: 20000 })
   })
 
-  it('Vessel track depth Should be changed', () => {
+  it.only('Vessel track depth Should be changed', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -132,5 +132,9 @@ context('VesselSidebar', () => {
 
     // Then
     cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("14 nds", { timeout: 20000 })
+
+    // And click on a position to zoom in
+    cy.get('[aria-rowindex="4"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').trigger('pointermove',  { pointerId: 1, force: true })
+    cy.get('[aria-rowindex="4"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').click({ force: true })
   })
 })

@@ -21,7 +21,7 @@ const VesselCard = ({ feature, overlayPosition }) => {
               <Flag rel="preload" src={`flags/${feature.vessel.flagState.toLowerCase()}.svg`}/>{' '}</>
             : null
         }
-        <VesselCardTitle>
+        <VesselCardTitle data-cy={'vessel-card-name'}>
           {
             feature.vessel.vesselName
               ? feature.vessel.vesselName
@@ -48,9 +48,9 @@ const VesselCard = ({ feature, overlayPosition }) => {
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
+          <FieldValue data-cy={'vessel-card-latitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
+          <FieldValue data-cy={'vessel-card-longitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
@@ -87,13 +87,13 @@ const VesselCard = ({ feature, overlayPosition }) => {
             <Body>
               <Field>
                 <Key>CFR</Key>
-                <Value>{feature.vessel.internalReferenceNumber
+                <Value data-cy={'vessel-card-internal-reference-number'}>{feature.vessel.internalReferenceNumber
                   ? feature.vessel.internalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>MMSI</Key>
-                <Value>{feature.vessel.mmsi
+                <Value data-cy={'vessel-card-mmsi'}>{feature.vessel.mmsi
                   ? feature.vessel.mmsi
                   : <NoValue>-</NoValue>}</Value>
               </Field>
@@ -105,13 +105,13 @@ const VesselCard = ({ feature, overlayPosition }) => {
             <Body>
               <Field>
                 <Key>Marquage ext.</Key>
-                <Value>{feature.vessel.externalReferenceNumber
+                <Value data-cy={'vessel-card-external-reference-number'}>{feature.vessel.externalReferenceNumber
                   ? feature.vessel.externalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>Call Sign (IRCS)</Key>
-                <Value>{feature.vessel.ircs
+                <Value data-cy={'vessel-card-ircs'}>{feature.vessel.ircs
                   ? feature.vessel.ircs
                   : <NoValue>-</NoValue>}</Value>
               </Field>

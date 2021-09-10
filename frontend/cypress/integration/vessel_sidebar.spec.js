@@ -121,7 +121,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains("Pas d'infraction", { timeout: 20000 })
   })
 
-  it.only('Vessel track depth Should be changed', () => {
+  it('Vessel track depth Should be changed', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')

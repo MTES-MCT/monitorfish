@@ -7,7 +7,8 @@ const InfoBox = props => {
     isInfoTextShown,
     setIsInfoTextShown,
     isFormOpened,
-    message
+    message,
+    className
   } = props
   return (
     <InfoTextParent
@@ -15,6 +16,7 @@ const InfoBox = props => {
       isFormOpened={isFormOpened}
       onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
       pointer={message}
+      className={className}
     >
       {isInfoTextShown
         ? <InfoTextWrapper

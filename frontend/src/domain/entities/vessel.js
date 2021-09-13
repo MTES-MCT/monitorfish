@@ -93,31 +93,54 @@ export class Vessel {
    * @param {Object} feature - The OpenLayers feature object
    * @param {string} vesselLabelTypeEnum
    * @param {Object} vesselsLastPositionVisibility
+   * @param {boolean} riskFactorShowedOnMap
+   * @param {boolean} vesselLabelsShowedOnMap
+   * @return {{
+        labelText: string | null,
+        riskFactor: int | null
+      }} - The label object
    */
-  static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility) {
+  static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap) {
     const vesselDate = new Date(feature.vessel.dateTime)
     const vesselIsHidden = new Date()
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
-    if (vesselDate.getTime() > vesselIsHidden.getTime()) {
-      switch (vesselLabelTypeEnum) {
-        case vesselLabelEnum.VESSEL_NAME: {
-          return feature.vessel.vesselName
-        }
-        case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
-          return feature.vessel.internalReferenceNumber
-        }
-        case vesselLabelEnum.VESSEL_NATIONALITY: {
-          return countries.getName(feature.vessel.flagState, 'fr')
-        }
-        case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
-          return feature.vessel.segments.join(', ')
-        }
-        default: return null
-      }
+    const label = {
+      labelText: null,
+      riskFactor: null
     }
 
-    return null
+    if (vesselDate.getTime() > vesselIsHidden.getTime()) {
+      if (vesselLabelsShowedOnMap) {
+        switch (vesselLabelTypeEnum) {
+          case vesselLabelEnum.VESSEL_NAME: {
+            label.labelText = feature.vessel.vesselName
+            break
+          }
+          case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
+            label.labelText = feature.vessel.internalReferenceNumber
+            break
+          }
+          case vesselLabelEnum.VESSEL_NATIONALITY: {
+            label.labelText = countries.getName(feature.vessel.flagState, 'fr')
+            break
+          }
+          case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
+            label.labelText = feature.vessel.segments.join(', ')
+            break
+          }
+          default: label.labelText = null
+        }
+      }
+
+      if (riskFactorShowedOnMap) {
+        label.riskFactor = feature.vessel.riskFactor
+      }
+
+      return label
+    }
+
+    return label
   }
 
   /**

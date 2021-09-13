@@ -311,7 +311,7 @@ const Wrapper = styled(MapComponentStyle)`
   background: ${COLORS.background};
   margin-right: ${props => props.isOpen ? '45px' : '-320px'};
   opacity:  ${props => props.isOpen ? '1' : '0'};
-  top: 249px;
+  top: 291px;
   right: 10px;
   border-radius: 2px;
   position: absolute;

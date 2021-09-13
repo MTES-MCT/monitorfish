@@ -61,8 +61,6 @@ const RegulatoryText = props => {
   const [textTypeIsRequired, setTextTypeIsRequired] = useState(false)
 
   const initFormValues = () => {
-    console.log('initFormValues')
-    console.log(regulatoryText)
     const {
       name,
       URL,

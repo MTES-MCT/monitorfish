@@ -65,7 +65,7 @@ const RegulationTopicLine = props => {
 }
 
 const CustomInfoBox = styled(InfoBox)`
-  margin: 5px 0px 0px 10px;
+  ${props => props.isFormOpened ? '' : 'margin: 5px 0px 0px 10px'};
 `
 
 const Wrapper = styled.div`

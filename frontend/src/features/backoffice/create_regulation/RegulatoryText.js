@@ -269,17 +269,21 @@ const RegulatoryText = props => {
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
-    <ContentLine>
+    <CancelContentLine>
       <CancelButton
         disabled={removeTextIsDisabled()}
         isLast={false}
         onClick={_ => addOrRemoveRegulatoryTextInList(id)}>
         Supprimer le texte
       </CancelButton>
-    </ContentLine>
+    </CancelContentLine>
     <Delimiter />
   </>
 }
+
+const CancelContentLine = styled(ContentLine)`
+  margin: 16px 0px 15px 0px; 
+`
 
 const CustomCheckboxGroup = styled(CheckboxGroup)`
   box-sizing: border-box;

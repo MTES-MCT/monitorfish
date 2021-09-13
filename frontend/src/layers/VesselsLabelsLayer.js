@@ -10,7 +10,7 @@ import { usePrevious } from '../hooks/usePrevious'
 import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
-const MAX_LABELS_DISPLAYED = 150
+const MAX_LABELS_DISPLAYED = 200
 const NOT_FOUND = -1
 
 const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
@@ -25,6 +25,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   const {
     vesselLabelsShowedOnMap,
+    riskFactorShowedOnMap,
     vesselsLastPositionVisibility,
     vesselLabel
   } = useSelector(state => state.map)
@@ -102,6 +103,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     filters,
     nonFilteredVesselsAreHidden,
     vesselLabelsShowedOnMap,
+    riskFactorShowedOnMap,
     vesselLabel,
     filteredVesselsFeaturesUids,
     vesselsLastPositionVisibility,
@@ -158,7 +160,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   function addVesselLabelToAllFeaturesInExtent () {
-    if (!vesselLabelsShowedOnMap) {
+    if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
       setFeaturesAndLabels([])
       vectorSource.clear()
       return
@@ -226,7 +228,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
     const nextFeaturesAndLabels = features.map(feature => {
-      const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility)
+      const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap)
       const identity = feature.vessel
       const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
       const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
@@ -258,7 +260,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           key={identity.key}
           featureId={featureId}
           moveLine={moveVesselLabelLine}
-          text={label}
+          text={label?.labelText}
+          riskFactor={label?.riskFactor}
           flagState={identity.flagState}
           offset={offset}
           coordinates={identity.coordinates}

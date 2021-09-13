@@ -2,33 +2,36 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
+import { ReactComponent as LabelSVG } from '../icons/Menu_etiquettes_navires.svg'
+import { ReactComponent as RiskFactorSVG } from '../icons/Bouton_afficher_note_de_risque.svg'
 import { COLORS } from '../../constants/constants'
-import LastPositionsSlider from './LastPositionsSlider'
-import { setVesselsLastPositionVisibility, setVesselTrackDepth } from '../../domain/shared_slices/Map'
-import TrackDepthRadio from '../vessel_labels/TrackDepthRadio'
+import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../domain/shared_slices/Map'
+import VesselLabelSelection from './VesselLabelSelection'
+import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
-import ShowVesselEstimatedPositions from './ShowVesselEstimatedPositions'
 
-const VesselVisibility = () => {
+const VesselLabels = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
-  const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
+  const vesselLabel = useSelector(state => state.map.vesselLabel)
+  const {
+    vesselLabelsShowedOnMap,
+    riskFactorShowedOnMap
+  } = useSelector(state => state.map)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
-  const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
+  const [vesselVisibilityBoxIsOpen, setVesselLabelsBoxIsOpen] = useState(false)
   const wrapperRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
 
   useEffect(() => {
     if (clickedOutsideComponent) {
-      setVesselVisibilityBoxIsOpen(false)
+      setVesselLabelsBoxIsOpen(false)
     }
   }, [clickedOutsideComponent])
 
@@ -38,57 +41,47 @@ const VesselVisibility = () => {
     }
   }, [vesselVisibilityBoxIsOpen])
 
-  const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
-    dispatch(setVesselsLastPositionVisibility({
-      opacityReduced: opacityReduced,
-      hidden: hidden
-    }))
-  }
-
-  const updateVesselTrackDepth = depth => {
-    dispatch(setVesselTrackDepth(depth))
-  }
-
   return (
     <Wrapper ref={wrapperRef}>
-      <VesselVisibilityIcon
+      <VesselLabelsIcon
+        data-cy={'vessel-labels'}
         healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}
         isOpen={vesselVisibilityBoxIsOpen}
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Affichage des dernières positions'}
-        onClick={() => setVesselVisibilityBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
-        <Vessel
+        onClick={() => setVesselLabelsBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
+        <LabelIcon
           rightMenuIsOpen={rightMenuIsOpen}
           selectedVessel={selectedVessel}/>
-      </VesselVisibilityIcon>
-      <VesselVisibilityBox
+      </VesselLabelsIcon>
+      <VesselLabelsBox
         healthcheckTextWarning={healthcheckTextWarning}
         vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}>
-        <Header isFirst={true}>
-          Gérer l&apos;affichage des dernières positions
-        </Header>
-        <LastPositionInfo>
-          <VesselHidden/> navires masqués <VesselAlmostHidden/> navires estompés <VesselShowed/> navires normaux
-        </LastPositionInfo>
-        <LastPositionsSlider
-          updateVesselsLastPositionVisibility={updateVesselsLastPositionVisibility}
-          vesselsLastPositionVisibility={vesselsLastPositionVisibility}
-        />
-        <LastPositionLegend>
-          Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des
-          navires.
-        </LastPositionLegend>
         <Header isFirst={false}>
-          Paramétrer la longueur par défaut des pistes
+          Affichage des étiquettes et notes des navires
         </Header>
-        <TrackDepthRadio
-          updateVesselTrackDepth={updateVesselTrackDepth}
-          vesselTrackDepth={vesselTrackDepth}
+        <VesselLabel>
+          Choisir le libellé des étiquettes des navires
+        </VesselLabel>
+        <VesselLabelSelection
+          updateVesselLabel={label => dispatch(setVesselLabel(label))}
+          vesselLabel={vesselLabel}
         />
-        <ShowVesselEstimatedPositions/>
-      </VesselVisibilityBox>
+        <MapPropertyTrigger
+          booleanProperty={vesselLabelsShowedOnMap}
+          updateBooleanProperty={isShowed => dispatch(setVesselLabelsShowedOnMap(isShowed))}
+          text={'les étiquettes des navires'}
+          Icon={LabelSVG}
+        />
+        <MapPropertyTrigger
+          booleanProperty={riskFactorShowedOnMap}
+          updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}
+          text={'la note de risque des navires'}
+          Icon={RiskFactorSVG}
+        />
+      </VesselLabelsBox>
     </Wrapper>
   )
 }
@@ -98,49 +91,11 @@ const Wrapper = styled.div`
   z-index: 1000;
 `
 
-const LastPositionLegend = styled.div`
-  margin: 5px 5px 15px 25px;
+const VesselLabel = styled.div`
+  margin: 15px 5px 3px 20px;
   font-size: 13px;
   color: ${COLORS.slateGray};
   text-align: left;
-`
-
-const VesselHidden = styled.span`
-  background: #CCCFD6;
-  border: unset;
-  margin-right: 5px;
-  width: 8px;
-  height: 3px;
-  display: inline-block;
-  margin-bottom: 1px;
-`
-
-const VesselAlmostHidden = styled.span`
-  background: #9095A2;
-  border: unset;
-  margin-right: 5px;
-  margin-left: 25px;
-  width: 8px;
-  height: 3px;
-  display: inline-block;
-  margin-bottom: 1px;
-`
-
-const VesselShowed = styled.span`
-  background: ${COLORS.charcoal};
-  border: unset;
-  margin-right: 5px;
-  margin-left: 25px;
-  width: 8px;
-  height: 3px;
-  display: inline-block;
-  margin-bottom: 1px;
-`
-
-const LastPositionInfo = styled.div`
-  font-size: 10px;
-  margin: 15px;
-  color: ${COLORS.gunMetal};
 `
 
 const Header = styled.div`
@@ -153,12 +108,12 @@ const Header = styled.div`
   border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
 `
 
-const VesselVisibilityBox = styled(MapComponentStyle)`
+const VesselLabelsBox = styled(MapComponentStyle)`
   width: 406px;
   background: ${COLORS.background};
   margin-right: ${props => props.vesselVisibilityBoxIsOpen ? '45px' : '-420px'};
   opacity: ${props => props.vesselVisibilityBoxIsOpen ? '1' : '0'};
-  top: 152px;
+  top: 194px;
   right: 10px;
   border-radius: 2px;
   position: absolute;
@@ -166,12 +121,12 @@ const VesselVisibilityBox = styled(MapComponentStyle)`
   transition: all 0.5s;
 `
 
-const VesselVisibilityIcon = styled(MapButtonStyle)`
+const VesselLabelsIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  padding: 3px 0px 0 3px;
-  top: 152px;
+  padding: 0 0px 0 0;
+  top: 194px;
   z-index: 99;
   height: 40px;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
@@ -185,11 +140,10 @@ const VesselVisibilityIcon = styled(MapButtonStyle)`
   }
 `
 
-const Vessel = styled(VesselSVG)`
-  width: 25px;
-  height: 25px;
+const LabelIcon = styled(LabelSVG)`
+  width: 40px;
   opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `
 
-export default VesselVisibility
+export default VesselLabels

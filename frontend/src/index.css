@@ -159,7 +159,9 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 .rs-radio-checker > label {
     font-size: 13px;
     color: #3B4559;
-    padding: unset unset unset 7px;
+    padding: 0 0 0 2px;
+    font-weight: 500;
+    line-height: 17px;
 }
 
 .rs-radio-checker {

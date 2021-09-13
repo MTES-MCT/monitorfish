@@ -57,13 +57,13 @@ const ColumnTwo = styled.div``
 const ColumnThree = styled.div``
 
 const Columns = styled.div`
-  margin-left: 10px;
+  margin-left: 3px;
   display: flex;
   flex: 1 1 1;
 `
 
 const RadioWrapper = styled.div`
-  padding: 5px 0 20px 0;
+  padding: 10px 0 20px 0;
   font-size: 13px;
 `
 

@@ -4,12 +4,13 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
+import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 
 const X = 0
 const Y = 1
 const initialOffsetValue = [5, -30]
 
-const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, featureId, moveLine, zoomHasChanged, opacity }) => {
+const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, riskFactor, featureId, moveLine, zoomHasChanged, opacity }) => {
   const ref = createRef()
 
   const currentOffset = useRef(initialOffsetValue)
@@ -72,18 +73,34 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, feature
 
   return (
     <WrapperToBeKeptForDOMManagement>
-      <div ref={ref}>
+      <div ref={ref} data-cy={'vessel-label-draggable'}>
         {
-          showed && text && opacity
+          showed && (text || riskFactor) && opacity
             ? <VesselLabelOverlayElement>
               {
-                flagState
-                  ? <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`}/>
+                text
+                  ? <>
+                    {
+                      flagState
+                        ? <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`}/>
+                        : null
+                    }
+                    <ZoneText data-cy={'vessel-label-text'}>
+                      {text}
+                    </ZoneText>
+                  </>
                   : null
               }
-              <ZoneText>
-                {text}
-              </ZoneText>
+              {
+                riskFactor
+                  ? <RiskFactor
+                    data-cy={'vessel-label-risk-factor'}
+                    color={getRiskFactorColor(riskFactor)}
+                  >
+                    {parseFloat(riskFactor).toFixed(1)}
+                  </RiskFactor>
+                  : null
+              }
             </VesselLabelOverlayElement>
             : null
         }
@@ -97,31 +114,47 @@ const WrapperToBeKeptForDOMManagement = styled.div`
 `
 
 const VesselLabelOverlayElement = styled.div`
-  padding: 0 6px 2px 4px;
   box-shadow: 0px 2px 3px #969696BF;
   background: ${COLORS.background};
   line-height: 18px;
   cursor: grabbing;
+  height: 22px;
 `
 
 const Flag = styled.img`
   vertical-align: middle;
   height: 12px;
-  margin-top: -2px;
-  margin-right: 2px;
+  margin: 0 2px 1px 4px;
   user-select: none;
   cursor: grabbing;
+  line-height: 16px;
 `
 
 const ZoneText = styled.span`
+  margin-bottom: 3px;
+  margin-right: 6px;
   font-size: 13px;
   font-weight: 500;
   display: inline-block;
   user-select: none;
   color: ${COLORS.gunMetal};
-  line-height: 18.5px;
+  line-height: 16px;
   cursor: grabbing;
   margin-left: 2px;
+  vertical-align: middle;
+`
+
+const RiskFactor = styled.span`
+  width: 28px;
+  height: 21px;
+  padding-top: 1px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-block;
+  user-select: none;
+  color: ${COLORS.background};
+  background: ${props => props.color};
+  line-height: 16px;
 `
 
 export default VesselLabelOverlay

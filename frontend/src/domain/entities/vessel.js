@@ -97,7 +97,12 @@ export class Vessel {
    * @param {boolean} vesselLabelsShowedOnMap
    * @return {{
         labelText: string | null,
-        riskFactor: int | null
+        riskFactor: {
+          globalRisk: int,
+          impactRiskFactor: int,
+          probabilityRiskFactor: int,
+          detectabilityRiskFactor: int,
+        } | null
       }} - The label object
    */
   static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap) {
@@ -134,7 +139,12 @@ export class Vessel {
       }
 
       if (riskFactorShowedOnMap) {
-        label.riskFactor = feature.vessel.riskFactor
+        label.riskFactor = {
+          globalRisk: feature.vessel.riskFactor,
+          impactRiskFactor: feature.vessel.impactRiskFactor,
+          probabilityRiskFactor: feature.vessel.probabilityRiskFactor,
+          detectabilityRiskFactor: feature.vessel.detectabilityRiskFactor
+        }
       }
 
       return label

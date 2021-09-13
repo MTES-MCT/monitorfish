@@ -9,12 +9,17 @@ const RegulationLayerZoneLine = props => {
     nameZone,
     setNameZone
   } = props
+
+  const onChange = value => {
+    setNameZone(value)
+    setIsInputFilled(value && value !== '')
+  }
   return <ContentLine>
     <Label>Nom de la zone</Label>
     <CustomInput
       placeholder=''
       value={nameZone}
-      onChange={setNameZone}
+      onChange={value => onChange(value)}
       width={'200px'}
       onMouseLeave={() => setIsInputFilled(nameZone && nameZone !== '')}
       $isgray={isInputFilled}

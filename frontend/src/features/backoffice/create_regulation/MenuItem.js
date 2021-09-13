@@ -37,7 +37,7 @@ const CustomRadio = styled(Radio)`
   }
   
   .rs-radio-checker > label {
-    font-size: 11px;
+    font-size: 13px;
     color: ${COLORS.slateGray};
   }
 `
@@ -56,7 +56,7 @@ const CustomCheckbox = styled(Checkbox)`
   }
 
   .rs-checkbox-checker > label {
-    font-size: 11px;
+    font-size: 13px;
     color: ${COLORS.slateGray};
   }
 

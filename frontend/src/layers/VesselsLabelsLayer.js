@@ -40,6 +40,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   const previousMapZoom = useRef('')
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
   const [vesselToCoordinates, setVesselToCoordinates] = useState(new Map())
+  const [vesselToRiskFactorDetailsShowed, setVesselToRiskFactorDetailsShowed] = useState(new Map())
   const isThrottled = useRef(false)
 
   const [vectorSource] = useState(new VectorSource({
@@ -252,6 +253,15 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     setFeaturesAndLabels(nextFeaturesAndLabels)
   }
 
+  function triggerShowRiskDetails (featureId) {
+    const previousValue = vesselToRiskFactorDetailsShowed.get(featureId)
+
+    const nextVesselToRiskFactorDetailsShowed = vesselToRiskFactorDetailsShowed
+    nextVesselToRiskFactorDetailsShowed.set(featureId, !previousValue)
+
+    setVesselToRiskFactorDetailsShowed(nextVesselToRiskFactorDetailsShowed)
+  }
+
   return (<>
     {
       featuresAndLabels.map(({ identity, label, offset, featureId, opacity }) => {
@@ -259,9 +269,11 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           map={map}
           key={identity.key}
           featureId={featureId}
+          triggerShowRiskDetails={triggerShowRiskDetails}
           moveLine={moveVesselLabelLine}
           text={label?.labelText}
           riskFactor={label?.riskFactor}
+          riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
           flagState={identity.flagState}
           offset={offset}
           coordinates={identity.coordinates}

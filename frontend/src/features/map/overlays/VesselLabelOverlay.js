@@ -15,14 +15,27 @@ const X = 0
 const Y = 1
 const initialOffsetValue = [5, -30]
 
-const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, riskFactor, featureId, moveLine, zoomHasChanged, opacity }) => {
+const VesselLabelOverlay = ({
+  map,
+  coordinates,
+  offset,
+  flagState,
+  text,
+  riskFactor,
+  featureId,
+  moveLine,
+  zoomHasChanged,
+  opacity,
+  riskFactorDetailsShowed,
+  triggerShowRiskDetails
+}) => {
   const ref = createRef()
 
   const currentOffset = useRef(initialOffsetValue)
   const currentCoordinates = useRef([])
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
-  const [showRiskFactorDetails, setShowRiskFactorDetails] = useState(false)
+  const [showRiskFactorDetails, setShowRiskFactorDetails] = useState(riskFactorDetailsShowed)
   const [overlay] = useState(new Overlay({
     element: ref.current,
     position: coordinates,
@@ -101,7 +114,10 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, riskFac
                 {
                   riskFactor?.globalRisk
                     ? <RiskFactor
-                      onClick={() => setShowRiskFactorDetails(!showRiskFactorDetails)}
+                      onClick={() => {
+                        setShowRiskFactorDetails(!showRiskFactorDetails)
+                        triggerShowRiskDetails(featureId)
+                      }}
                       data-cy={'vessel-label-risk-factor'}
                       color={getRiskFactorColor(riskFactor?.globalRisk)}
                     >
@@ -112,9 +128,7 @@ const VesselLabelOverlay = ({ map, coordinates, offset, flagState, text, riskFac
               </VesselLabelOverlayElement>
               {
                 riskFactor && showRiskFactorDetails
-                  ? <RiskFactorDetails
-                    onClick={() => setShowRiskFactorDetails(!showRiskFactorDetails)}
-                  >
+                  ? <RiskFactorDetails>
                     <RiskFactorDetail>
                       <RiskFactorBox color={getRiskFactorColor(riskFactor?.impactRiskFactor)}>
                         {parseFloat(riskFactor?.impactRiskFactor).toFixed(1)}
@@ -156,11 +170,11 @@ const RiskFactorDetails = styled.div`
   box-shadow: 0px 2px 3px #969696BF;
   background: ${COLORS.background};
   line-height: 18px;
-  cursor: grabbing;
   height: 72px;
   margin-left: 2px;
   padding-right: 3px;
   transition: 0.2s all;
+  cursor: grabbing;
 `
 
 const RiskFactorDetail = styled.div`
@@ -228,6 +242,7 @@ const RiskFactor = styled.span`
   color: ${COLORS.background};
   background: ${props => props.color};
   line-height: 16px;
+  cursor: pointer;
 `
 
 export default VesselLabelOverlay

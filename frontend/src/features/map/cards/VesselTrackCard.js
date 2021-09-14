@@ -28,17 +28,17 @@ const VesselTrackCard = ({ feature, overlayPosition }) => {
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
+          <FieldValue data-cy={'vessel-track-card-latitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
+          <FieldValue data-cy={'vessel-track-card-longitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
-          <FieldValue>{feature.course === 0 || feature.course
+          <FieldValue data-cy={'vessel-track-card-course'}>{feature.course === 0 || feature.course
             ? <>{feature.course}°</>
             : <NoValue>-</NoValue>}</FieldValue>
           <FieldName>Vitesse</FieldName>
-          <FieldValue>{feature.speed === 0 || feature.speed
+          <FieldValue data-cy={'vessel-track-card-speed'}>{feature.speed === 0 || feature.speed
             ? <>{feature.speed} Nds</>
             : <NoValue>-</NoValue>}</FieldValue>
         </Course>

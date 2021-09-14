@@ -13,7 +13,7 @@ context('InterestPoint', () => {
   it('An interest Should be created When clicking on the map', () => {
     // When
     cy.get('*[data-cy="interest-point"]').click({ timeout: 20000 })
-    cy.get('#root').click(490, 510, { timeout: 20000 })
+    cy.get('#root').click(490, 580, { timeout: 20000 })
 
     // Then
     cy.get('*[data-cy^="interest-point-name-input"]').type('Phénomène')
@@ -21,7 +21,7 @@ context('InterestPoint', () => {
 
     cy.get('*[data-cy^="interest-point-name"]').first().contains("Phénomène", { timeout: 20000 })
     cy.get('*[data-cy^="interest-point-observations"]').first().contains("Est dans la bergerie", { timeout: 20000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 5", { timeout: 20000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 4", { timeout: 20000 })
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("N", { timeout: 20000 })
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("007° 5", { timeout: 20000 })
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("W", { timeout: 20000 })
@@ -54,19 +54,19 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="coordinates-selection-dmd"]').click({ timeout: 20000 })
 
     cy.get('*[data-cy="interest-point"]').click({ timeout: 20000 })
-    cy.get('#root').click(490, 510, { timeout: 20000 })
+    cy.get('#root').click(490, 580, { timeout: 20000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })
     cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 20000 })
     cy.get('*[data-cy="test"]').type('{backspace}{backspace}{backspace}{backspace}{backspace}500W')
 
     // Then
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 58.483′ N 007° 54.500′ W", { timeout: 20000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 48.933′ N 007° 54.500′ W", { timeout: 20000 })
   })
 
   it('An interest Should be deleted When it is in edit mode', () => {
     // When
     cy.get('*[data-cy="interest-point"]').click({ timeout: 20000 })
-    cy.get('#root').click(490, 510, { timeout: 20000 })
+    cy.get('#root').click(490, 580, { timeout: 20000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })
     cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="interest-point-observations-input"]').type('Est dans la bergerie')

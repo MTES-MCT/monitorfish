@@ -7,6 +7,7 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![License](https://img.shields.io/github/license/MTES-MCT/monitorfish)](https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE)
 [![Documentation Status](https://readthedocs.org/projects/monitorfish/badge/?version=latest)](https://monitorfish.readthedocs.io/en/latest/?badge=latest)
+[![MonitorFish](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/9b7q8z/master&style=flat&logo=cypress)](https://dashboard.cypress.io/projects/9b7q8z/runs)
 
 > Improve monitoring and controlling of the activities of fishing vessels
 

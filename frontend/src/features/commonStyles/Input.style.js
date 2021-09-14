@@ -18,7 +18,7 @@ export const CustomInput = styled(Input)`
   border: 1px solid ${props => props.$isred ? `${COLORS.red}` : `${COLORS.lightGray}`};
   border-radius: 2px;
   color: ${COLORS.gunMetal}!important;
-  background-color: ${props => props.$isgray ? COLORS.gainsboro : COLORS.white};
+  background-color: ${props => props.isGray ? COLORS.gainsboro : COLORS.white};
   margin: 0px 10px 0px 0px;
   padding: 8px;
   &:focus {

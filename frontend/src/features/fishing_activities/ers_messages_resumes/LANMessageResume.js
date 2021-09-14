@@ -148,7 +148,8 @@ const LANMessageResume = props => {
                       </Weight>
                       <Weight>
                         <SubKey>Poids PNO</SubKey>
-                        <SubValueWeight>
+                        <SubValueWeight
+                          withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>
                           {
                             props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]
                               ? <span
@@ -323,7 +324,7 @@ const ERSMessageContent = styled.div`
   padding: 0 0 0 20px;
   border-bottom: 1px solid ${COLORS.gray};
   height: ${props => props.isOpen
-    ? props.chartHeight + 70
+    ? props.chartHeight + 80
     : 0
   }px;
   transition: 0.2s all;

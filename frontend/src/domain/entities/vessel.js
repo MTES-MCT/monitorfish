@@ -101,8 +101,8 @@ export class Vessel {
           globalRisk: int,
           impactRiskFactor: int,
           probabilityRiskFactor: int,
-          detectabilityRiskFactor: int,
-        } | null
+          detectabilityRiskFactor: int
+        } | null,
       }} - The label object
    */
   static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap) {

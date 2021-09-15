@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../constants/constants'
-import { Section, SectionTitle } from '../../commonStyles/Backoffice.style'
+import { Section, Title } from '../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
@@ -53,11 +53,11 @@ const RegulatoryTextSection = props => {
   }
 
   return (<Section>
-    <SectionTitle>
+    <Title>
       {source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION
         ? 'références réglementaires À VENIR'
         : 'références réglementaires en vigueur'}
-    </SectionTitle>
+    </Title>
     {
       (regulatoryTextList && regulatoryTextList.length > 0)
         ? regulatoryTextList.map((regulatoryText, id) => {

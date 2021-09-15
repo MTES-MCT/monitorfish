@@ -13,8 +13,7 @@ import {
   RegulationSeaFrontLine,
   RegulationTopicLine,
   RegulatoryTextSection,
-  UpcomingRegulationModal,
-  FishingPeriodSection
+  UpcomingRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
 import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
@@ -23,12 +22,19 @@ import Layers from '../../../domain/entities/layers'
 import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
+import FishingPeriodSection from '../create_regulation/FishingPeriodSection'
+
 import { formatDataForSelectPicker } from '../../../utils'
+<<<<<<< HEAD
+
+import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
+=======
 import {
   /* CancelButton */
   ValidateButton
 } from '../../commonStyles/Buttons.style'
-import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
+import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
+>>>>>>> Add fishingPeriod section title with chevron icon
 import {
   resetState,
   setSelectedRegulation,
@@ -256,9 +262,9 @@ const CreateRegulation = ({ title, isEdition }) => {
           <ContentWrapper>
             <Content>
               <Section>
-                <SectionTitle>
+                <Title>
                   identification de la zone réglementaire
-                </SectionTitle>
+                </Title>
                 <RegulationLawTypeLine
                   setSelectedValue={setSelectedRegulationLawType}
                   selectedValue={selectedRegulationLawType}

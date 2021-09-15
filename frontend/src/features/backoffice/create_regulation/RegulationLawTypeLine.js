@@ -12,18 +12,18 @@ const RegulationLawTypeLine = props => {
     setSelectedValue,
     selectedValue,
     selectData,
-    reglementationBlocName,
-    setReglementationBlocName
+    regulationLawType,
+    setReglementationLawType
   } = props
   const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
   const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
 
   const addNewReglementationBloc = () => {
-    if (reglementationBlocName === '') {
+    if (regulationLawType === '') {
       setReglementationBlocNameIsRed(true)
     } else {
-      setSelectedValue(reglementationBlocName)
-      setReglementationBlocName('')
+      setSelectedValue(regulationLawType)
+      setReglementationLawType('')
       setIsAddReglementationBlocClicked(false)
       setReglementationBlocNameIsRed(false)
     }
@@ -52,8 +52,8 @@ const RegulationLawTypeLine = props => {
           ? <CreateReglementationBloc>
               <CustomInput
                 placeholder='Nommez le nouvel ensemble règlementaire'
-                value={reglementationBlocName}
-                onChange={setReglementationBlocName}
+                value={regulationLawType}
+                onChange={setReglementationLawType}
                 width={'250px'}
                 isRed={reglementationBlocNameIsRed}
               />

@@ -92,7 +92,11 @@ const RegulatoryLayerZone = props => {
     }
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
-  const match = useRouteMatch()
+  const onEditRegulationClick = () => {
+    const match = useRouteMatch()
+    dispatch(showRegulatoryZoneMetadata(regulatoryZone))
+    return `${match.url} + /editRegulation`
+  }
 
   return (
     <Zone isLast={isLast}>
@@ -113,7 +117,7 @@ const RegulatoryLayerZone = props => {
       <Icons>
 
         { isEditable &&
-          <Link to={match.url + '/editRegulation'}>
+          <Link to={_ => onEditRegulationClick()}>
             <ShowIcon title="Editer la réglementation"/>
           </Link>
         }

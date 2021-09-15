@@ -96,7 +96,10 @@ function BackofficePage () {
         </BackofficeWrapper>
         </Route>
         <Route path={`${match.path}/newRegulation`}>
-          <NewRegulation />
+          <NewRegulation title='Saisir une nouvelle réglementation'/>
+        </Route>
+        <Route path={`${match.path}/editRegulation`}>
+          <NewRegulation title='Modifier la réglementation de la zone'/>
         </Route>
       </Switch>
     </NamespaceContext.Provider>

@@ -46,6 +46,7 @@ const LawType = props => {
             regulatoryZones={regulatoryTopics[regulatoryTopic]}
             isLastItem={Object.keys(regulatoryTopics).length === index + 1}
             allowRemoveZone={false}
+            isEditable={true}
           />
         })
         : <EmptyResult>Aucun résultat</EmptyResult>

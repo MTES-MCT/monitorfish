@@ -15,7 +15,7 @@ const CustomSelectComponent = props => {
   } = props
 
   const selectPickerStyle = {
-    width: 180,
+    width: 200,
     margin: '0',
     borderColor: COLORS.lightGray,
     boxSizing: 'border-box',
@@ -32,6 +32,7 @@ const CustomSelectComponent = props => {
         data={data}
         renderMenuItem={renderMenuItem}
         menuStyle={menuStyle}
+        menuClassName={'new-regulation-select-picker'}
       />
     </SelectWrapper>
   )
@@ -46,6 +47,15 @@ const SelectWrapper = styled.div`
 const CustomSelectPicker = styled(SelectPicker)`
   a {
     box-sizing: border-box;
+    border-color: ${COLORS.lightGray}!important;
+  }
+
+  .rs-btn-default.rs-picker-toggle:hover {
+    border-color: ${COLORS.lightGray}!important;
+  }
+
+  .rs-btn-default.rs-picker-toggle:focus {
+    border-color: ${COLORS.lightGray}!important;
   }
 `
 

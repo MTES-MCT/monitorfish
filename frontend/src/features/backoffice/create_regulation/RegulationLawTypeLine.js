@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton, SquareButton } from '../../commonStyles/B
 import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from './MenuItem'
 
-const RegulationBlocLine = props => {
+const RegulationLawTypeLine = props => {
   const {
     setSelectedValue,
     selectedValue,
@@ -31,9 +31,10 @@ const RegulationBlocLine = props => {
 
   return (
     <ContentLine>
-      <Label>Ensemble règlementaire</Label>
+      <Label>Ensemble réglementaire</Label>
       <CustomSelectComponent
         searchable={false}
+        menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
         placeholder='Choisir un ensemble'
         value={'Choisir un ensemble'}
         onChange={setSelectedValue}
@@ -82,4 +83,4 @@ const CreateReglementationBloc = styled.div`
   display: flex;
 `
 
-export default RegulationBlocLine
+export default RegulationLawTypeLine

@@ -7,7 +7,8 @@ const InfoBox = props => {
     isInfoTextShown,
     setIsInfoTextShown,
     isFormOpened,
-    message
+    message,
+    className
   } = props
   return (
     <InfoTextParent
@@ -15,13 +16,17 @@ const InfoBox = props => {
       isFormOpened={isFormOpened}
       onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
       pointer={message}
+      className={className}
     >
       {isInfoTextShown
         ? <InfoTextWrapper
+          isInfoTextShown={isInfoTextShown}
           isFormOpened={isFormOpened}
           onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
           >
-          <InfoPoint>!</InfoPoint>
+          <InfoPoint
+            isInfoTextShown={isInfoTextShown}
+          >!</InfoPoint>
           <InfoText>
             {INFO_TEXT[message]}
           </InfoText>
@@ -35,11 +40,11 @@ const InfoBox = props => {
 
 const InfoTextParent = styled.div`
   display: flex;
-  min-height: 20px;
-  min-width: 20px;
+  min-height: 14px;
+  min-width: 14px;
   position: relative;
   cursor: ${props => props.pointer ? 'pointer' : 'default'};
-  ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 352px' : ''};
+  ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 384px' : ''};
   ${props => props.isFormOpened && props.isInfoTextShown ? 'margin-top: 8px' : ''};
 `
 
@@ -51,11 +56,10 @@ const InfoTextWrapper = styled.div`
   border-radius: 2px;
   min-width: 560px;
   max-width: 600px;
-  padding: 8px;
+  padding: 8px 20px 20px 8px;
+  ${props => props.isInfoTextShown && !props.isFormOpened ? 'margin-top: -10px;' : ''}
   box-sizing: border-box;
   z-index: 30;
-  top: '-6px';
-  left: '0';
 `
 
 const InfoText = styled.span`
@@ -70,24 +74,25 @@ const InfoText = styled.span`
 const InfoPoint = styled.a`
   display: inline-block;
   align-self: start;
-  min-height: 20px;
-  min-width: 20px;
-  height: 20px;
-  width: 20px;
+  min-height: 14px;
+  min-width: 14px;
+  height: 14px;
+  width: 14px;
   border-radius: 50%;
-  background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
+  background: ${props => props.isInfoTextShown ? COLORS.charcoal : COLORS.slateGray} 0% 0% no-repeat padding-box;
   color: ${COLORS.white};
   text-align: center;
-  font: normal normal bold 13px Arial;
+  font-size: 11px;
+  font-weight: bold;
   text-align: center;
-  line-height: 20px;
+  line-height: 12px;
   &:hover {
     text-decoration: none;
     color: ${COLORS.white};
   }
   &:focus {
     text-decoration: none;
-    color: ${COLORS.white};
+    background-color: ${COLORS.charcoal};
   }
 `
 

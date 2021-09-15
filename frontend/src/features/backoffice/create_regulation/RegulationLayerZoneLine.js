@@ -2,19 +2,27 @@ import React, { useState } from 'react'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../commonStyles/Input.style'
 import InfoBox from './InfoBox'
-const RegulationZoneNameLine = props => {
+const RegulationLayerZoneLine = props => {
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+  const [isInputFilled, setIsInputFilled] = useState(false)
   const {
     nameZone,
     setNameZone
   } = props
+
+  const onChange = value => {
+    setNameZone(value)
+    setIsInputFilled(value && value !== '')
+  }
   return <ContentLine>
     <Label>Nom de la zone</Label>
     <CustomInput
       placeholder=''
       value={nameZone}
-      onChange={setNameZone}
-      width={'180px'}
+      onChange={value => onChange(value)}
+      width={'200px'}
+      onMouseLeave={() => setIsInputFilled(nameZone && nameZone !== '')}
+      isGray={isInputFilled}
     />
     <InfoBox
       isInfoTextShown={isInfoTextShown}
@@ -25,4 +33,4 @@ const RegulationZoneNameLine = props => {
   </ContentLine>
 }
 
-export default RegulationZoneNameLine
+export default RegulationLayerZoneLine

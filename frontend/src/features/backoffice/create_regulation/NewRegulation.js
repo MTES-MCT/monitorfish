@@ -6,10 +6,10 @@ import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
-  RegulationBlocLine,
-  RegulationZoneThemeLine,
+  RegulationLawTypeLine,
+  RegulationTopicLine,
   RegulationRegionLine,
-  RegulationZoneNameLine,
+  RegulationLayerZoneLine,
   RegulationSeaFrontLine,
   RegulatoryTextSection,
   UpcomingRegulationModal
@@ -79,45 +79,47 @@ const CreateRegulation = () => {
           <Title>Saisir une nouvelle réglementation</Title>
           <Span />
         </Header>
-        <Content>
-          <Section>
-            <SectionTitle>
-              identification de la zone réglementaire
-            </SectionTitle>
-            <RegulationBlocLine
-              setSelectedValue={setSelectedReglementationBloc}
-              selectedValue={selectedReglementationBloc}
-              selectData={formatDataForSelectPicker(regulatoryTopics)}
-              reglementationBlocName={reglementationBlocName}
-              setReglementationBlocName={setReglementationBlocName}
+        <ContentWrapper>
+          <Content>
+            <Section>
+              <SectionTitle>
+                identification de la zone réglementaire
+              </SectionTitle>
+              <RegulationLawTypeLine
+                setSelectedValue={setSelectedReglementationBloc}
+                selectedValue={selectedReglementationBloc}
+                selectData={formatDataForSelectPicker(regulatoryTopics)}
+                reglementationBlocName={reglementationBlocName}
+                setReglementationBlocName={setReglementationBlocName}
+              />
+              <RegulationTopicLine
+                selectedReglementationTheme={selectedReglementationTheme}
+                setSelectedReglementationTheme={setSelectedReglementationTheme}
+                zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
+              />
+              <RegulationLayerZoneLine
+                nameZone={nameZone}
+                setNameZone={setNameZone}
+              />
+              <RegulationSeaFrontLine
+                selectedSeaFront={selectedSeaFront}
+                setSelectedSeaFront={setSelectedSeaFront}
+                seaFrontList={formatDataForSelectPicker(seaFronts)}
+              />
+              <RegulationRegionLine
+                setSelectedRegionList={setSelectedRegionList}
+                selectedRegionList={selectedRegionList}
+              />
+            </Section>
+          </Content>
+          <Content>
+            <RegulatoryTextSection
+              regulatoryTextList={regulatoryTextList}
+              setRegulatoryTextList={setRegulatoryTextList}
+              source={'regulation'}
             />
-            <RegulationZoneThemeLine
-              selectedReglementationTheme={selectedReglementationTheme}
-              setSelectedReglementationTheme={setSelectedReglementationTheme}
-              zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
-            />
-            <RegulationZoneNameLine
-              nameZone={nameZone}
-              setNameZone={setNameZone}
-            />
-            <RegulationSeaFrontLine
-              selectedSeaFront={selectedSeaFront}
-              setSelectedSeaFront={setSelectedSeaFront}
-              seaFrontList={formatDataForSelectPicker(seaFronts)}
-            />
-            <RegulationRegionLine
-              setSelectedRegionList={setSelectedRegionList}
-              selectedRegionList={selectedRegionList}
-            />
-          </Section>
-        </Content>
-        <Content>
-          <RegulatoryTextSection
-            regulatoryTextList={regulatoryTextList}
-            setRegulatoryTextList={setRegulatoryTextList}
-            source={'regulation'}
-          />
-        </Content>
+          </Content>
+        </ContentWrapper>
       </Body>
       <Footer>
         <FooterButton>
@@ -150,15 +152,14 @@ const Body = styled.div`
 
 const Header = styled.div`
   display: flex;
-  margin-bottom: 40px;
-  margin-top: 20px;
+  margin: 15px 27px;
 `
 
 const CreateRegulationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 11px 27px 11px 27px;
   background-color: ${COLORS.background};
+  height: 100vh;
 `
 
 const LinkSpan = styled.span`
@@ -199,9 +200,14 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-top: 5px;
 `
 
+const ContentWrapper = styled.div`
+  padding: 40px;
+`
+
 const Content = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 60px;
 `
 
 export default CreateRegulation

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Link, useRouteMatch } from 'react-router-dom'
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
@@ -37,7 +38,8 @@ const RegulatoryLayerZone = props => {
     allowRemoveZone,
     namespace,
     vectorLayerStyle,
-    isLast
+    isLast,
+    isEditable
   } = props
 
   const {
@@ -90,6 +92,8 @@ const RegulatoryLayerZone = props => {
     }
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
+  const match = useRouteMatch()
+
   return (
     <Zone isLast={isLast}>
       <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
@@ -107,6 +111,12 @@ const RegulatoryLayerZone = props => {
         }
       </ZoneText>
       <Icons>
+
+        { isEditable &&
+          <Link to={match.url + '/editRegulation'}>
+            <ShowIcon title="Editer la réglementation"/>
+          </Link>
+        }
         {
           metadataIsShown
             ? <REGPaperDarkIcon

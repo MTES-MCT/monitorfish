@@ -26,7 +26,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { Section, SectionTitle, Footer, FooterButton } from '../../commonStyles/Backoffice.style'
 import { setSelectedRegulation } from '../Regulation.slice'
 
-const CreateRegulation = () => {
+const CreateRegulation = ({ title }) => {
   const dispatch = useDispatch()
   const {
     regulatoryTopics,
@@ -106,7 +106,7 @@ const CreateRegulation = () => {
             <LinkSpan><ChevronIcon/>
               <BackLink to={'/backoffice'}>Revenir à la liste complète des zones</BackLink>
             </LinkSpan>
-            <HeaderTitle>Saisir une nouvelle réglementation</HeaderTitle>
+            <HeaderTitle>{title}</HeaderTitle>
             <Span />
           </Header>
           <ContentWrapper>

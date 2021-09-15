@@ -19,7 +19,8 @@ const RegulatoryLayerTopic = props => {
     increaseNumberOfZonesOpened,
     decreaseNumberOfZonesOpened,
     regulatoryZones,
-    isLastItem
+    isLastItem,
+    isEditable
   } = props
 
   const gears = useSelector(state => state.gear.gears)
@@ -93,6 +94,7 @@ const RegulatoryLayerTopic = props => {
           namespace={namespace}
           zoneIsShown={getZoneIsShown(regulatoryZone)}
           allowRemoveZone={allowRemoveZone}
+          isEditable={isEditable}
         />
       )
     })

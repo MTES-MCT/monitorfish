@@ -7,11 +7,10 @@ const FishingPeriodSection = (props) => {
     setFishingPeriod
   } = props
 
-  return (
-    <FishingPeriod
-      fishingPeriod={fishingPeriod}
-      setFishingPeriod={setFishingPeriod}
-    />)
+  return <FishingPeriod
+  fishingPeriod={fishingPeriod}
+  setFishingPeriod={setFishingPeriod}
+  />
 }
 
 export default FishingPeriodSection

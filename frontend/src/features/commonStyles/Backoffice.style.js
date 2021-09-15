@@ -13,7 +13,7 @@ export const Section = styled.div`
   flex-direction: column;
 `
 
-export const SectionTitle = styled.span`
+export const Title = styled.span`
   text-align: left;
   font-weight: bold;
   font-size: 16px;

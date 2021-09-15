@@ -27,7 +27,7 @@ import {
   CancelButton,
   ValidateButton
 } from '../../commonStyles/Buttons.style'
-import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
+import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
 import {
   resetState,
   setSelectedRegulation,
@@ -266,9 +266,9 @@ const CreateRegulation = ({ title, isEdition }) => {
           <ContentWrapper>
             <Content>
               <Section>
-                <SectionTitle>
+                <Title>
                   identification de la zone réglementaire
-                </SectionTitle>
+                </Title>
                 <RegulationLawTypeLine
                   setSelectedValue={onLawTypeChange}
                   selectedValue={selectedRegulationLawType}

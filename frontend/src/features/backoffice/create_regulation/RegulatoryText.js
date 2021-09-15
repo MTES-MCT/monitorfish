@@ -62,18 +62,18 @@ const RegulatoryText = props => {
 
   const initFormValues = () => {
     const {
-      name,
-      URL,
+      reference,
+      url,
       startDate,
       endDate,
       textType
     } = regulatoryText
-    setCurrentRegulatoryTextName(name || '')
-    setCurrentRegulatoryTextURL(URL || '')
+    setCurrentRegulatoryTextName(reference || '')
+    setCurrentRegulatoryTextURL(url || '')
     setCurrentStartDate(startDate || '')
     setCurrentEndDate(endDate || '')
     setCurrentTextType(textType || [])
-    setIsEditing(name === undefined || name === '' || URL === undefined || URL === '')
+    setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
   }
 
   useEffect(() => {

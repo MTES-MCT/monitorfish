@@ -27,19 +27,21 @@ import { Section, SectionTitle, Footer, FooterButton } from '../../commonStyles/
 import { setSelectedRegulation } from '../Regulation.slice'
 
 const CreateRegulation = ({ title }) => {
+  const isEdition = true
   const dispatch = useDispatch()
   const {
     regulatoryTopics,
     regulatoryLawTypes,
-    seaFronts
+    seaFronts,
+    regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
   const { isModalOpen } = useSelector(state => state.regulation)
 
   /** @type {string} */
-  const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
+  const [selectedRegulationLawType, setSelectedRegulationLawType] = useState()
   /** @type {string} */
-  const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
+  const [selectedRegulationTopic, setSelectedRegulationTopic] = useState()
   /** @type {string} */
   const [nameZone, setNameZone] = useState()
   /** @type {string} */
@@ -47,7 +49,7 @@ const CreateRegulation = ({ title }) => {
   /** @type {[String]} */
   const [selectedRegionList, setSelectedRegionList] = useState([])
   /** @type {string} */
-  const [reglementationBlocName, setReglementationBlocName] = useState('')
+  const [regulationLawType, setRegulationLawType] = useState('')
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
   /** @type {[GeoJSONGeometry]} geometryObjectList */
@@ -69,6 +71,21 @@ const CreateRegulation = ({ title }) => {
     getGeometryObjectList()
     dispatch(setSelectedRegulation(newRegulation))
   }, [])
+
+  useEffect(() => {
+    if (isEdition && regulatoryZoneMetadata) {
+      initForm()
+    }
+  }, [isEdition, regulatoryZoneMetadata])
+
+  const initForm = () => {
+    setSelectedRegulationLawType(`${regulatoryZoneMetadata.lawType} / ${regulatoryZoneMetadata.seafront}`)
+    setSelectedRegulationTopic(regulatoryZoneMetadata.topic)
+    setNameZone(regulatoryZoneMetadata.zone)
+    setSelectedRegionList(regulatoryZoneMetadata.region.split(', '))
+    setSelectedSeaFront(regulatoryZoneMetadata.seafront)
+    setRegulatoryTextList(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
+  }
 
   useEffect(() => {
     if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
@@ -116,16 +133,16 @@ const CreateRegulation = ({ title }) => {
                   identification de la zone réglementaire
                 </SectionTitle>
                 <RegulationLawTypeLine
-                  setSelectedValue={setSelectedReglementationBloc}
-                  selectedValue={selectedReglementationBloc}
-                  selectData={formatDataForSelectPicker(regulatoryTopics)}
-                  reglementationBlocName={reglementationBlocName}
-                  setReglementationBlocName={setReglementationBlocName}
+                  setSelectedValue={setSelectedRegulationLawType}
+                  selectedValue={selectedRegulationLawType}
+                  selectData={formatDataForSelectPicker(regulatoryLawTypes)}
+                  reglementationBlocName={regulationLawType}
+                  setReglementationBlocName={setRegulationLawType}
                 />
                 <RegulationTopicLine
-                  selectedReglementationTheme={selectedReglementationTheme}
-                  setSelectedReglementationTheme={setSelectedReglementationTheme}
-                  zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
+                  selectedRegulationTopic={selectedRegulationTopic}
+                  setSelectedRegulationTopic={setSelectedRegulationTopic}
+                  zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
                 />
                 <RegulationLayerZoneLine
                   nameZone={nameZone}

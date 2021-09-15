@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
@@ -12,8 +12,14 @@ import {
   RegulationLayerZoneLine,
   RegulationSeaFrontLine,
   RegulatoryTextSection,
-  UpcomingRegulationModal
+  UpcomingRegulationModal,
+  RegulationGeometryLine
 } from './'
+import BaseMap from '../../map/BaseMap'
+
+// A déplacer ?
+import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
+import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -44,6 +50,13 @@ const CreateRegulation = () => {
   const [reglementationBlocName, setReglementationBlocName] = useState('')
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
+  /** @type {[GeoJSONGeometry]} geometryObjectList */
+  const [geometryObjectList, setGeometryObjectList] = useState()
+  /** @type {GeoJSONGeometry} selectedGeometry */
+  const [selectedGeometry, setSelectedGeometry] = useState()
+  const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
+  /** @type {[Number]} geometryIdList */
+  const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
@@ -53,8 +66,24 @@ const CreateRegulation = () => {
       regulatoryText: [],
       upcomingRegulation: [{}]
     }
+    getGeometryObjectList()
     dispatch(setSelectedRegulation(newRegulation))
   }, [])
+
+  useEffect(() => {
+    if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
+      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry]))
+    }
+  }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
+
+  const getGeometryObjectList = () => {
+    dispatch(getGeometryWithoutRegulationReference())
+      .then(geometryListAsObject => {
+        if (geometryListAsObject !== undefined) {
+          setGeometryObjectList(geometryListAsObject)
+        }
+      })
+  }
 
   const createRegulation = () => {
     // TODO : Check form values
@@ -70,80 +99,95 @@ const CreateRegulation = () => {
 
   return (
     <>
-    <CreateRegulationWrapper>
-      <Body>
-        <Header>
-          <LinkSpan><ChevronIcon/>
-            <BackLink to={'/backoffice'}>Revenir à la liste complète des zones</BackLink>
-          </LinkSpan>
-          <Title>Saisir une nouvelle réglementation</Title>
-          <Span />
-        </Header>
-        <ContentWrapper>
-          <Content>
-            <Section>
-              <SectionTitle>
-                identification de la zone réglementaire
-              </SectionTitle>
-              <RegulationLawTypeLine
-                setSelectedValue={setSelectedReglementationBloc}
-                selectedValue={selectedReglementationBloc}
-                selectData={formatDataForSelectPicker(regulatoryTopics)}
-                reglementationBlocName={reglementationBlocName}
-                setReglementationBlocName={setReglementationBlocName}
+    <Wrapper>
+      <CreateRegulationWrapper>
+        <Body>
+          <Header>
+            <LinkSpan><ChevronIcon/>
+              <BackLink to={'/backoffice'}>Revenir à la liste complète des zones</BackLink>
+            </LinkSpan>
+            <HeaderTitle>Saisir une nouvelle réglementation</HeaderTitle>
+            <Span />
+          </Header>
+          <ContentWrapper>
+            <Content>
+              <Section>
+                <SectionTitle>
+                  identification de la zone réglementaire
+                </SectionTitle>
+                <RegulationLawTypeLine
+                  setSelectedValue={setSelectedReglementationBloc}
+                  selectedValue={selectedReglementationBloc}
+                  selectData={formatDataForSelectPicker(regulatoryTopics)}
+                  reglementationBlocName={reglementationBlocName}
+                  setReglementationBlocName={setReglementationBlocName}
+                />
+                <RegulationTopicLine
+                  selectedReglementationTheme={selectedReglementationTheme}
+                  setSelectedReglementationTheme={setSelectedReglementationTheme}
+                  zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
+                />
+                <RegulationLayerZoneLine
+                  nameZone={nameZone}
+                  setNameZone={setNameZone}
+                />
+                <RegulationSeaFrontLine
+                  selectedSeaFront={selectedSeaFront}
+                  setSelectedSeaFront={setSelectedSeaFront}
+                  seaFrontList={formatDataForSelectPicker(seaFronts)}
+                />
+                <RegulationRegionLine
+                  setSelectedRegionList={setSelectedRegionList}
+                  selectedRegionList={selectedRegionList}
+                />
+                <RegulationGeometryLine
+                  setSelectedGeometry={setSelectedGeometry}
+                  geometryIdList={geometryIdList}
+                  selectedGeometry={selectedGeometry}
+                  setShowRegulatoryPreview={setShowRegulatoryPreview}
+                  showRegulatoryPreview={showRegulatoryPreview}
+                />
+              </Section>
+            </Content>
+            <Content>
+              <RegulatoryTextSection
+                regulatoryTextList={regulatoryTextList}
+                setRegulatoryTextList={setRegulatoryTextList}
+                source={'regulation'}
               />
-              <RegulationTopicLine
-                selectedReglementationTheme={selectedReglementationTheme}
-                setSelectedReglementationTheme={setSelectedReglementationTheme}
-                zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
-              />
-              <RegulationLayerZoneLine
-                nameZone={nameZone}
-                setNameZone={setNameZone}
-              />
-              <RegulationSeaFrontLine
-                selectedSeaFront={selectedSeaFront}
-                setSelectedSeaFront={setSelectedSeaFront}
-                seaFrontList={formatDataForSelectPicker(seaFronts)}
-              />
-              <RegulationRegionLine
-                setSelectedRegionList={setSelectedRegionList}
-                selectedRegionList={selectedRegionList}
-              />
-            </Section>
-          </Content>
-          <Content>
-            <RegulatoryTextSection
-              regulatoryTextList={regulatoryTextList}
-              setRegulatoryTextList={setRegulatoryTextList}
-              source={'regulation'}
-            />
-          </Content>
-        </ContentWrapper>
-      </Body>
-      <Footer>
-        <FooterButton>
-          <ValidateButton
-            disabled={false}
-            isLast={false}
-            onClick={createRegulation}
-          >
-            Créer la réglementation
-          </ValidateButton>
-          <CancelButton
-            disabled={false}
-            isLast={false}
-            onClick={saveAsDraft}
-          >
-            Enregistrer un brouillon
-          </CancelButton>
-        </FooterButton>
-      </Footer>
-    </CreateRegulationWrapper>
+            </Content>
+          </ContentWrapper>
+        </Body>
+        <Footer>
+          <FooterButton>
+            <ValidateButton
+              disabled={false}
+              isLast={false}
+              onClick={createRegulation}
+            >
+              Créer la réglementation
+            </ValidateButton>
+            <CancelButton
+              disabled={false}
+              isLast={false}
+              onClick={saveAsDraft}
+            >
+              Enregistrer un brouillon
+            </CancelButton>
+          </FooterButton>
+        </Footer>
+      </CreateRegulationWrapper>
+    { showRegulatoryPreview && <BaseMap />}
+    </Wrapper>
     {isModalOpen && <UpcomingRegulationModal />}
     </>
   )
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
 
 const Body = styled.div`
   height: calc(100vh - 75px);
@@ -157,7 +201,9 @@ const Header = styled.div`
 
 const CreateRegulationWrapper = styled.div`
   display: flex;
+  flex: 2;
   flex-direction: column;
+  padding: 11px 27px 11px 27px;
   background-color: ${COLORS.background};
   height: 100vh;
 `
@@ -185,7 +231,7 @@ const BackLink = styled(Link)`
   }
 `
 
-const Title = styled.span`
+const HeaderTitle = styled.span`
   text-align: center;
   font-weight: bold;
   font-size: 16px;

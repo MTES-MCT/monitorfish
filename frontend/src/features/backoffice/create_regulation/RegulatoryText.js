@@ -22,7 +22,8 @@ const RegulatoryText = props => {
     id,
     regulatoryText,
     addOrRemoveRegulatoryTextInList,
-    saveForm
+    saveForm,
+    listLength
   } = props
 
   /**
@@ -69,15 +70,15 @@ const RegulatoryText = props => {
     } = regulatoryText
     setCurrentRegulatoryTextName(name || '')
     setCurrentRegulatoryTextURL(URL || '')
-    setCurrentStartDate(startDate || undefined)
-    setCurrentEndDate(endDate || undefined)
+    setCurrentStartDate(startDate || '')
+    setCurrentEndDate(endDate || '')
     setCurrentTextType(textType || [])
     setIsEditing(name === undefined || name === '' || URL === undefined || URL === '')
   }
 
   useEffect(() => {
     initFormValues()
-  }, [])
+  }, [regulatoryText])
 
   /**
    * @function checkUrl
@@ -172,6 +173,14 @@ const RegulatoryText = props => {
     setIsEditing(true)
   }
 
+  const removeTextIsDisabled = () => {
+    return listLength <= 1 &&
+      currentTextType.length === 0 &&
+      !currentStartDate && !currentEndDate &&
+      (!currentRegulatoryTextName || currentRegulatoryTextName === '') &&
+      (!currentRegulatoryTextURL || currentRegulatoryTextURL === '')
+  }
+
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
@@ -180,14 +189,14 @@ const RegulatoryText = props => {
           <CustomInput
             placeholder={'Nom'}
             $isred={nameIsRequired}
-            width={'250px'}
+            width={'87px'}
             value={currentRegulatoryTextName}
             onChange={onNameValueChange}
           />
           <CustomInput
             placeholder={'URL'}
             $isred={URLIsrequired}
-            width={'250px'}
+            width={'87px'}
             value={currentRegulatoryTextURL}
             onChange={onURLValueChange}
           />
@@ -258,17 +267,21 @@ const RegulatoryText = props => {
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
-    <ContentLine>
+    <CancelContentLine>
       <CancelButton
-        disabled={false}
+        disabled={removeTextIsDisabled()}
         isLast={false}
         onClick={_ => addOrRemoveRegulatoryTextInList(id)}>
         Supprimer le texte
       </CancelButton>
-    </ContentLine>
+    </CancelContentLine>
     <Delimiter />
   </>
 }
+
+const CancelContentLine = styled(ContentLine)`
+  margin: 16px 0px 15px 0px; 
+`
 
 const CustomCheckboxGroup = styled(CheckboxGroup)`
   box-sizing: border-box;

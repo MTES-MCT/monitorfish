@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { CustomInput } from '../../commonStyles/Input.style'
 
-const CreateRegulationBlocForm = props => {
+const CreateRegulationLawTypeForm = props => {
   const {
     setSelectedReglementationTheme,
     setIsAddThemeClicked,
@@ -38,7 +38,7 @@ const CreateRegulationBlocForm = props => {
   return (
     <CreateReglementationBloc>
       <CustomInput
-        placeholder='Lieu*'
+        placeholder='Lieu *'
         value={themePlace}
         onChange={setThemePlace}
         isRed={themePlaceIsRed}
@@ -83,4 +83,4 @@ const CreateReglementationBloc = styled.div`
   display: flex;
 `
 
-export default CreateRegulationBlocForm
+export default CreateRegulationLawTypeForm

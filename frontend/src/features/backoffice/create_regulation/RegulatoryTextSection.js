@@ -28,9 +28,11 @@ const RegulatoryTextSection = props => {
   const dispatch = useDispatch()
 
   const addOrRemoveRegulatoryTextInList = (id) => {
-    const newRegulatoryTextList = [...regulatoryTextList]
+    let newRegulatoryTextList = [...regulatoryTextList]
     if (id) {
       newRegulatoryTextList.splice(id, 1)
+    } else if (id === 0) {
+      newRegulatoryTextList = [{}]
     } else {
       newRegulatoryTextList.push({})
     }
@@ -62,6 +64,7 @@ const RegulatoryTextSection = props => {
               regulatoryText={regulatoryText}
               addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
               saveForm={saveForm}
+              listLength={regulatoryTextList.length}
             />
         })
         : <RegulatoryText
@@ -70,6 +73,7 @@ const RegulatoryTextSection = props => {
             regulatoryText={{}}
             addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
             saveForm={saveForm}
+            listLength={0}
         />
     }
     <ButtonLine>

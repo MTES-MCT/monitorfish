@@ -6,10 +6,10 @@ import { SquareButton } from '../../commonStyles/Buttons.style'
 import CustomSelectComponent from './CustomSelectComponent'
 import Tag from './Tag'
 import MenuItem from './MenuItem'
-import CreateRegulationBlocForm from './CreateRegulationBlocForm'
+import CreateRegulationLawTypeForm from './CreateRegulationLawTypeForm'
 import InfoBox from './InfoBox'
 
-const RegulationZoneThemeLine = props => {
+const RegulationTopicLine = props => {
   const {
     selectedReglementationTheme,
     setSelectedReglementationTheme,
@@ -27,7 +27,7 @@ const RegulationZoneThemeLine = props => {
         <Label>Thématique de la zone</Label>
         <CustomSelectComponent
           searchable={true}
-          menuStyle={{ width: 300, overflowY: 'hidden', textOverflow: 'ellipsis' }}
+          menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
           placeholder='Choisir une thématique'
           value={'Choisir une thématique'}
           onChange={setSelectedReglementationTheme}
@@ -41,7 +41,7 @@ const RegulationZoneThemeLine = props => {
           />}
         {
         isAddThemeClicked
-          ? <CreateRegulationBlocForm
+          ? <CreateRegulationLawTypeForm
               setSelectedReglementationTheme={setSelectedReglementationTheme}
               setIsAddThemeClicked={setIsAddThemeClicked}
               setIsInfoTextShown={setIsInfoTextShown}
@@ -52,10 +52,10 @@ const RegulationZoneThemeLine = props => {
             setIsInfoTextShown(true)
           }}
         />
-        <Label>Créer une nouvelle thématique</Label></>
+        <Label isLast={true}>Créer une nouvelle thématique</Label></>
         }
       </Wrapper>
-      <InfoBox
+      <CustomInfoBox
         isInfoTextShown={isInfoTextShown}
         setIsInfoTextShown={setIsInfoTextShown}
         isFormOpened={isAddThemeClicked}
@@ -64,9 +64,13 @@ const RegulationZoneThemeLine = props => {
       </ContentLine>
 }
 
+const CustomInfoBox = styled(InfoBox)`
+  ${props => props.isFormOpened ? '' : 'margin: 5px 0px 0px 10px'};
+`
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
 `
 
-export default RegulationZoneThemeLine
+export default RegulationTopicLine

@@ -1,7 +1,7 @@
-import RegulationBlocLine from './RegulationBlocLine'
-import RegulationZoneThemeLine from './RegulationZoneThemeLine'
+import RegulationLawTypeLine from './RegulationLawTypeLine'
+import RegulationTopicLine from './RegulationTopicLine'
 import RegulationRegionLine from './RegulationRegionLine'
-import RegulationZoneNameLine from './RegulationZoneNameLine'
+import RegulationLayerZoneLine from './RegulationLayerZoneLine'
 import RegulationSeaFrontLine from './RegulationSeaFrontLine'
 import RegulationGeometryLine from './RegulationGeometryLine'
 import RegulatoryText from './RegulatoryText'
@@ -9,10 +9,10 @@ import RegulatoryTextSection from './RegulatoryTextSection'
 import UpcomingRegulationModal from './UpcomingRegulationModal'
 
 export {
-  RegulationBlocLine,
-  RegulationZoneThemeLine,
+  RegulationLawTypeLine,
+  RegulationTopicLine,
   RegulationRegionLine,
-  RegulationZoneNameLine,
+  RegulationLayerZoneLine,
   RegulationSeaFrontLine,
   RegulationGeometryLine,
   RegulatoryText,

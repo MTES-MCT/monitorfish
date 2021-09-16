@@ -23,12 +23,15 @@ def extract(
     dtypes: Union[None, dict] = None,
     parse_dates: Union[list, dict, None] = None,
     params=None,
-) -> pd.DataFrame:
+    backend: str = "pandas",
+    geom_col: str = "geom",
+    crs: Union[int, None] = None,
+) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQL query against the indicated database and return the result as a
     `pandas.DataFrame`.
 
     Args:
-        db_name (str): name of the databse to extract from : "fmc", "ocan",
+        db_name (str): name of the database to extract from : "fmc", "ocan",
             "monitorfish_local" or "monitorfish_remote"
         query_filepath (Union[Path, str]): path to .sql file, starting from the saved
             queries folder. example : "ocan/nav_fr_peche.sql"
@@ -45,13 +48,31 @@ def extract(
             to the keyword arguments of :func:`pandas.to_datetime`
 
             Defaults to None.
+        params (Union[dict, None], optional): Parameters to pass to execute method.
+            Defaults to None.
+        backend (str, optional) : 'pandas' to run a SQL query and return a
+            `pandas.DataFrame` or 'geopandas' to run a PostGIS query and return a
+            `geopandas.GeoDataFrame`. Defaults to 'pandas'.
+        geom_col (str, optional): column name to convert to shapely geometries when
+            `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
+            'geom'.
+        crs (Union[None, str], optional) : CRS to use for the returned GeoDataFrame;
+            if not set, tries to determine CRS from the SRID associated with the first
+            geometry in the database, and assigns that to all geometries. Ignored when
+            `backend` is 'pandas'. Defaults to None.
 
     Returns:
-        pd.DataFrame: [description]
+        Union[pd.DataFrame, gpd.GeoDataFrame]: Query results
     """
 
     res = read_saved_query(
-        db_name, query_filepath, parse_dates=parse_dates, params=params
+        db_name,
+        query_filepath,
+        parse_dates=parse_dates,
+        params=params,
+        backend=backend,
+        geom_col=geom_col,
+        crs=crs,
     )
 
     if dtypes:

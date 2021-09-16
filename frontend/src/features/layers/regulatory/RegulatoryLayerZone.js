@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Link, useRouteMatch } from 'react-router-dom'
+import {
+  useRouteMatch,
+  useHistory
+} from 'react-router-dom'
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
+import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
 import { useDispatch, useSelector } from 'react-redux'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/zoomInLayer'
@@ -30,6 +34,8 @@ export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, 
 
 const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
+  const match = useRouteMatch()
+  const history = useHistory()
   const {
     callRemoveRegulatoryZoneFromMySelection,
     regulatoryZone,
@@ -93,9 +99,10 @@ const RegulatoryLayerZone = props => {
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
   const onEditRegulationClick = () => {
-    const match = useRouteMatch()
-    dispatch(showRegulatoryZoneMetadata(regulatoryZone))
-    return `${match.url} + /editRegulation`
+    console.log('onEditRegulationClick')
+    console.log(regulatoryZone)
+    dispatch(showRegulationToEdit(regulatoryZone))
+    history.push(`${match.url}/editRegulation`)
   }
 
   return (
@@ -117,9 +124,7 @@ const RegulatoryLayerZone = props => {
       <Icons>
 
         { isEditable &&
-          <Link to={_ => onEditRegulationClick()}>
-            <ShowIcon title="Editer la réglementation"/>
-          </Link>
+          <ShowIcon title="Editer la réglementation" onClick={() => onEditRegulationClick()}/>
         }
         {
           metadataIsShown

@@ -13,7 +13,8 @@ const LawType = props => {
   const lawTypeOpened = useSelector(state => state.regulatory.lawTypeOpened)
   const {
     lawType,
-    regZoneByLawType
+    regZoneByLawType,
+    isEditable
   } = props
   const [isOpen, setIsOpen] = useState(false)
 
@@ -46,7 +47,7 @@ const LawType = props => {
             regulatoryZones={regulatoryTopics[regulatoryTopic]}
             isLastItem={Object.keys(regulatoryTopics).length === index + 1}
             allowRemoveZone={false}
-            isEditable={true}
+            isEditable={isEditable}
           />
         })
         : <EmptyResult>Aucun résultat</EmptyResult>

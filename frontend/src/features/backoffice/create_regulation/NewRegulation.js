@@ -53,7 +53,7 @@ const CreateRegulation = ({ title }) => {
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
   /** @type {[GeoJSONGeometry]} geometryObjectList */
-  const [geometryObjectList, setGeometryObjectList] = useState()
+  const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
   const [selectedGeometry, setSelectedGeometry] = useState()
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
@@ -85,11 +85,12 @@ const CreateRegulation = ({ title }) => {
     setSelectedRegionList(regulatoryZoneMetadata.region.split(', '))
     setSelectedSeaFront(regulatoryZoneMetadata.seafront)
     setRegulatoryTextList(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
+    setSelectedGeometry(regulatoryZoneMetadata.id)
   }
 
   useEffect(() => {
     if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
-      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry]))
+      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry] ? geometryObjectList[selectedGeometry] : regulatoryZoneMetadata.geometry))
     }
   }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
 

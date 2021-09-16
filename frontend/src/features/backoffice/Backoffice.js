@@ -46,6 +46,7 @@ const Backoffice = () => {
             showedLayers={showedLayers}
             gears={gears}
             callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+            isEditable={true}
           />
         })
         : <EmptyResult>Aucun résultat</EmptyResult>)

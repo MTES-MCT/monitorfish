@@ -7,7 +7,7 @@ import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZoom
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
-  getProbabilityRiskFactor,
+  getProbabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../domain/entities/riskFactor'
 
@@ -139,13 +139,13 @@ const VesselLabelOverlay = ({
                       <RiskFactorBox color={getRiskFactorColor(riskFactor?.probabilityRiskFactor)}>
                         {parseFloat(riskFactor?.probabilityRiskFactor).toFixed(1)}
                       </RiskFactorBox>
-                      { getProbabilityRiskFactor(riskFactor?.probabilityRiskFactor) }
+                      { getProbabilityRiskFactorText(riskFactor?.probabilityRiskFactor, 1) }
                     </RiskFactorDetail>
                     <RiskFactorDetail>
                       <RiskFactorBox color={getRiskFactorColor(riskFactor?.detectabilityRiskFactor)}>
                         {parseFloat(riskFactor?.detectabilityRiskFactor).toFixed(1)}
                       </RiskFactorBox>
-                      { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor) }
+                      { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false) }
                     </RiskFactorDetail>
                   </RiskFactorDetails>
                   : null

@@ -12,9 +12,17 @@ import { ReactComponent as RiskFactorImpactSVG } from '../../icons/Note_impact_p
 import { ReactComponent as RiskFactorControlSVG } from '../../icons/Note_de_controle_gyrophare.svg'
 import { ReactComponent as RiskFactorInfractionsSVG } from '../../icons/Note_infraction_stop.svg'
 import RiskFactorExplanationModal from './RiskFactorExplanationModal'
+import { useSelector } from 'react-redux'
+import ImpactRiskFactorDetails from './ImpactRiskFactorDetails'
+import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 
-const RiskFactorResume = ({ selectedVessel }) => {
+const RiskFactorResume = () => {
+  const {
+    selectedVessel
+  } = useSelector(state => state.vessel)
+
   const [riskFactorExplanationIsOpen, setRiskFactorExplanationIsOpen] = useState(false)
+  const [impactRiskFactorIsOpen, setImpactRiskFactorIsOpen] = useState(false)
 
   return (
     <>
@@ -30,10 +38,16 @@ const RiskFactorResume = ({ selectedVessel }) => {
           <SeeMore onClick={() => setRiskFactorExplanationIsOpen(true)}>En savoir plus</SeeMore>
         </GlobalRisk>
         <Line/>
-        <SubRisk data-cy={'impact-risk-factor'}>
-          <SubRiskTitle>
-            Impact sur la ressource
-          </SubRiskTitle>
+        <SubRisk
+          data-cy={'impact-risk-factor'}
+          onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}
+        >
+          <SubRiskHeader>
+            <SubRiskTitle>
+              Impact sur la ressource
+            </SubRiskTitle>
+            <Chevron isOpen={impactRiskFactorIsOpen}/>
+          </SubRiskHeader>
           <RiskFactorImpact/>
           <RiskFactorCursor
             value={parseFloat(selectedVessel?.impactRiskFactor).toFixed(1)}
@@ -44,6 +58,7 @@ const RiskFactorResume = ({ selectedVessel }) => {
             { getImpactRiskFactorText(selectedVessel?.impactRiskFactor) }
           </SubRiskText>
         </SubRisk>
+        <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen}/>
         <Line/>
         <SubRisk data-cy={'probability-risk-factor'}>
           <SubRiskTitle>
@@ -83,8 +98,21 @@ const RiskFactorResume = ({ selectedVessel }) => {
   )
 }
 
+const Chevron = styled(ChevronIcon)`
+  margin-right: 25px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.2s all;
+`
+
+const SubRiskHeader = styled.div`
+  width: 100%;
+  display: flex;
+`
+
 const SubRisk = styled.div`
   display: contents;
+  cursor: pointer;
 `
 
 const GlobalRisk = styled.div`
@@ -155,7 +183,7 @@ const SubRiskTitle = styled.div`
 const SubRiskText = styled.span`
   margin: 8px;
   margin-bottom: 12px;
-  max-width: 155px;
+  max-width: 140px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;

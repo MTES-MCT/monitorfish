@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 
 from src.pipeline.flows.current_segments import (
-    catch_zone_isin_fao_area,
     compute_current_segments,
     merge_segments_catches,
     unnest,
@@ -13,15 +12,6 @@ from src.pipeline.flows.current_segments import (
 
 
 class TestCurrentSegmentsFlow(unittest.TestCase):
-    def test_catch_zone_isin_fao_area(self):
-        self.assertTrue(catch_zone_isin_fao_area("27", "27"))
-        self.assertTrue(catch_zone_isin_fao_area("27.7", "27"))
-        self.assertTrue(catch_zone_isin_fao_area("27.7", None))
-        self.assertFalse(catch_zone_isin_fao_area(None, "27.7"))
-        self.assertFalse(catch_zone_isin_fao_area("27", "27.7"))
-
-        self.assertTrue(catch_zone_isin_fao_area(None, None))
-
     def test_unnest(self):
         segments_definitions = [
             [

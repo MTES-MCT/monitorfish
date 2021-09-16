@@ -22,13 +22,12 @@ def extract_fao_areas(url: str, proxies: dict) -> gpd.GeoDataFrame:
         proxies (dict): http and https proxies to use for the download.
 
     Returns:
-        pd.DataFrame: DataFrame of FAO areas
+        gpd.GeoDataFrame: GeoDataFrame of FAO areas
     """
 
     shapefile = requests.get(url)
+    shapefile.raise_for_status()
     fao_areas = gpd.read_file(BytesIO(shapefile.content))
-    #     with open("extracted.pkl", "rb") as f:
-    #         fao_areas = pickle.load(f)
 
     return fao_areas
 

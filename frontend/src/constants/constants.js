@@ -13,6 +13,7 @@ export const COLORS = {
   shadowBlueLittleOpacity: 'rgba(107, 131, 158, 0.15)',
   grayLighter: '#F0F0F0',
   gray: '#EEEEEE',
+  grayBackground: '#D3D5DC',
   grayDarkerTwo: '#9A9A9A',
   textBueGray: '#848DAE',
   textWhite: '#EDEDF5',

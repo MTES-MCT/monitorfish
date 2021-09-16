@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
+  RegulationGeometryLine,
   RegulationLawTypeLine,
-  RegulationTopicLine,
-  RegulationRegionLine,
   RegulationLayerZoneLine,
+  RegulationRegionLine,
   RegulationSeaFrontLine,
+  RegulationTopicLine,
   RegulatoryTextSection,
-  UpcomingRegulationModal,
-  RegulationGeometryLine
+  UpcomingRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
 
@@ -22,9 +22,13 @@ import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Re
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
-import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
-import { Section, SectionTitle, Footer, FooterButton } from '../../commonStyles/Backoffice.style'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import { setSelectedRegulation } from '../Regulation.slice'
+import GML from 'ol/format/GML'
+import WFS from 'ol/format/WFS'
+import Feature from 'ol/Feature'
+import { GEOSERVER_URL } from '../../../api/fetch'
 
 const CreateRegulation = ({ title }) => {
   const isEdition = true
@@ -55,7 +59,7 @@ const CreateRegulation = ({ title }) => {
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
-  const [selectedGeometry, setSelectedGeometry] = useState()
+  const [selectedGeometryId, setSelectedGeometry] = useState()
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
@@ -89,10 +93,10 @@ const CreateRegulation = ({ title }) => {
   }
 
   useEffect(() => {
-    if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
-      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry] ? geometryObjectList[selectedGeometry] : regulatoryZoneMetadata.geometry))
+    if (geometryObjectList && selectedGeometryId && showRegulatoryPreview) {
+      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometryId] ? geometryObjectList[selectedGeometryId] : regulatoryZoneMetadata.geometry))
     }
-  }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
+  }, [selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
@@ -103,12 +107,35 @@ const CreateRegulation = ({ title }) => {
       })
   }
 
-  const createRegulation = () => {
+  const createOrUpdateRegulation = () => {
     // TODO : Check form values
     /** if (regulatoryTextHasMissingValue) {
       console.log('one value is missing somewhere ! ')
     } */
-    console.log('createRegulation')
+
+    // TODO Move to a use_case
+    const formatWFS = new WFS()
+    const formatGML = new GML({
+      featureType: 'monitorfish:regulatory_areas',
+      srsName: 'EPSG:4326'
+    })
+    const feature = new Feature({
+      layer_name: selectedRegulationTopic
+    })
+    feature.setId(`regulatory_areas.${selectedGeometryId}`)
+
+    const xs = new XMLSerializer()
+    const update = formatWFS.writeTransaction(null, [feature], null, formatGML)
+    const payload = xs.serializeToString(update)
+
+    fetch(`${GEOSERVER_URL}/geoserver/wfs`, {
+      method: 'POST',
+      mode: 'no-cors',
+      dataType: 'xml',
+      processData: false,
+      contentType: 'text/xml',
+      body: payload.replace('feature:', '')
+    }).then(r => console.log(r))
   }
 
   const saveAsDraft = () => {
@@ -161,7 +188,7 @@ const CreateRegulation = ({ title }) => {
                 <RegulationGeometryLine
                   setSelectedGeometry={setSelectedGeometry}
                   geometryIdList={geometryIdList}
-                  selectedGeometry={selectedGeometry}
+                  selectedGeometry={selectedGeometryId}
                   setShowRegulatoryPreview={setShowRegulatoryPreview}
                   showRegulatoryPreview={showRegulatoryPreview}
                 />
@@ -181,7 +208,7 @@ const CreateRegulation = ({ title }) => {
             <ValidateButton
               disabled={false}
               isLast={false}
-              onClick={createRegulation}
+              onClick={createOrUpdateRegulation}
             >
               Créer la réglementation
             </ValidateButton>

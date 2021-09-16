@@ -26,10 +26,10 @@ const CreateRegulationLawTypeForm = props => {
     if (themePlace === '') {
       setThemePlaceIsRed(true)
     } else {
-      const reglementationPlace = `${themePlace}
+      const regulationPlace = `${themePlace}
       ${themeSpecies ? ' - ' + themeSpecies : ''}
       ${themeGears ? ' - ' + themeGears : ''}`
-      setSelectedReglementationTheme(reglementationPlace)
+      setSelectedReglementationTheme(regulationPlace)
       resetThemeForm()
       setIsAddThemeClicked(false)
       setThemePlaceIsRed(false)

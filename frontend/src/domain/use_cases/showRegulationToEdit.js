@@ -11,7 +11,6 @@ const showRegulationToEdit = regulatoryZone => async (dispatch) => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature.properties)
       regulatoryZoneMetadata.geometry = feature.geometry
       regulatoryZoneMetadata.id = feature.id.split('.')[1]
-      console.log(regulatoryZoneMetadata)
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
     }).catch(error => {
       dispatch(setError(error))

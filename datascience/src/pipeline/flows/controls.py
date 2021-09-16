@@ -1,12 +1,18 @@
-from typing import Union
+from typing import Any, Hashable, Union
 
+import geopandas as gpd
 import pandas as pd
 import prefect
-from prefect import Flow, task
+from prefect import Flow, Parameter, task
 from sqlalchemy.exc import InvalidRequestError
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.helpers.segments import (
+    attribute_segments_to_catches,
+    extract_segments,
+    unnest_segments,
+)
 from src.pipeline.processing import (
     df_to_dict_series,
     df_values_to_psql_arrays,
@@ -15,11 +21,39 @@ from src.pipeline.processing import (
 )
 from src.pipeline.utils import delete, get_table, psql_insert_copy
 
+
+def try_get_factory(key: Hashable, error_value: Any = None):
+    def try_get(d: Any) -> Any:
+        """
+        Attempt to fetch an element from what is supposed to be dict (but may not be),
+        return error_value if it fails (for any reason).
+
+        This is useful to extract values from a series of dictionnaries which may not all
+        contain the searched key. It is faster than checking for the presence of the key
+        each time.
+        """
+
+        try:
+            return d[key]
+        except:
+            return error_value
+
+    return try_get
+
+
 # ********************************** Tasks and flow ***********************************
-
-
 @task(checkpoint=False)
-def extract_controls():
+def extract_controls(number_of_months: int) -> pd.DataFrame:
+    """
+    Extracts controls data from FMC database.
+
+    Args:
+        number_of_months (int): number of months of controls data to extract, going
+            backwards from the present.
+
+    Returns:
+        pd.DataFrame: DataFrame with controls data.
+    """
 
     parse_dates = [
         "control_datetime_utc",
@@ -48,11 +82,26 @@ def extract_controls():
         "gear_3_was_controlled": "category",
     }
 
+    try:
+        assert isinstance(number_of_months, int)
+    except AssertionError:
+        raise ValueError(
+            f"number_of_months must be of type int, got {type(number_of_months)}"
+        )
+
+    try:
+        assert 0 < number_of_months <= 240
+    except AssertionError:
+        raise ValueError(
+            f"number_of_months must be > 0 and <= 240, got {number_of_months}"
+        )
+
     return extract(
         db_name="fmc",
-        query_filepath="fmc/controles.sql",
+        query_filepath="fmc/controls.sql",
         parse_dates=parse_dates,
         dtypes=dtypes,
+        params={"number_of_months": number_of_months},
     )
 
 
@@ -65,12 +114,42 @@ def extract_catch_controls() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_fao_areas() -> gpd.GeoDataFrame:
+    """
+    Extracts FAO areas as a `GeoDataFrame`.
+
+    Returns:
+        gpd.GeoDataFrame : GeoDataFrame of FAO areas.
+    """
+
+    fao_level_type = pd.CategoricalDtype(
+        categories=["SUBUNIT", "SUBDIVISION", "DIVISION", "SUBAREA", "MAJOR"],
+        ordered=True,
+    )
+
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/fao_areas.sql",
+        dtypes={"f_level": fao_level_type},
+        backend="geopandas",
+        geom_col="geometry",
+        crs=4326,
+    )
+
+
+@task(checkpoint=False)
 def transform_catch_controls(catch_controls: pd.DataFrame) -> pd.DataFrame:
 
     catch_controls = catch_controls.copy(deep=True)
-    catch_controls_columns = ["species_code", "catch_weight", "number_fish"]
+    catch_controls_columns = {
+        "species_code": "speciesCode",
+        "catch_weight": "weight",
+        "number_fish": "nbFish",
+    }
+
+    catch_controls = catch_controls.rename(columns=catch_controls_columns)
     catch_controls["catch_controls"] = df_to_dict_series(
-        catch_controls[catch_controls_columns], remove_nulls=True
+        catch_controls[catch_controls_columns.values()], remove_nulls=True
     )
 
     catch_controls = (
@@ -172,13 +251,99 @@ def transform_controls(controls):
 
 
 @task(checkpoint=False)
-def merge(controls: pd.DataFrame, catch_controls: pd.DataFrame) -> pd.DataFrame:
+def compute_controls_fao_areas(
+    controls: pd.DataFrame, fao_areas: gpd.GeoDataFrame
+) -> pd.DataFrame:
 
-    return pd.merge(controls, catch_controls, how="left", on="id")
+    # For controls with a latitude and longitude (air and sea controls), assign the
+    # corresponding FAO area
+
+    localized_controls = controls.loc[
+        (controls.longitude.notnull()) & (controls.latitude.notnull()),
+        ["id", "latitude", "longitude"],
+    ]
+
+    localized_controls = gpd.GeoDataFrame(
+        localized_controls,
+        geometry=gpd.points_from_xy(
+            localized_controls.longitude, localized_controls.latitude
+        ),
+        crs=4326,
+    )
+
+    localized_controls = gpd.sjoin(localized_controls, fao_areas, how="left")[
+        ["id", "f_code", "f_level"]
+    ]
+
+    # For controls with a port (land controls), assign the corresponding FAO area
+
+    # TODO : assign controls at port to segments and concatenate in final result
+    #     controls_at_port = controls.loc[
+    #         ((controls.longitude.isna()) | (controls.latitude.isna()))
+    #         & (controls.port_locode.notnull()),
+    #         ["id", "port_locode"],
+    #     ]
+
+    # Concatenate controls
+
+    controls_fao_areas = localized_controls
+
+    # Take only the smallest FAO area for each control
+
+    controls_fao_areas = (
+        controls_fao_areas.sort_values("f_level")
+        .groupby("id")
+        .head(1)
+        .rename(columns={"f_code": "fao_area"})[["id", "fao_area"]]
+    )
+
+    return controls_fao_areas
 
 
 @task(checkpoint=False)
-def load_controls(controls):
+def compute_controls_segments(
+    controls: pd.DataFrame,
+    catch_controls: pd.DataFrame,
+    controls_fao_areas: pd.DataFrame,
+    segments: pd.DataFrame,
+) -> pd.DataFrame:
+
+    controls = pd.merge(
+        pd.merge(controls, catch_controls, how="left", on="id"),
+        controls_fao_areas,
+        how="left",
+        on="id",
+    )
+
+    controls_catches = (
+        controls[["id", "gear_controls", "catch_controls", "fao_area"]]
+        .explode("gear_controls")
+        .explode("catch_controls")
+        .assign(gear=lambda x: x.gear_controls.map(try_get_factory("gearCode")))
+        .assign(species=lambda x: x.catch_controls.map(try_get_factory("speciesCode")))
+        .reset_index()[["id", "fao_area", "species", "gear"]]
+    )
+
+    controls_catches = controls_catches.where(controls_catches.notnull(), None)
+
+    controls_segments = (
+        attribute_segments_to_catches(
+            controls_catches,
+            segments[["segment", "fao_area", "gear", "species"]],
+        )
+        .groupby("id")["segment"]
+        .unique()
+        .reset_index()
+        .rename(columns={"segment": "segments"})
+    )
+
+    controls = pd.merge(controls, controls_segments, how="left", on="id")
+
+    return controls
+
+
+@task(checkpoint=False)
+def load_controls(controls: pd.DataFrame, delete_existing: bool):
     load(
         controls,
         table_name="controls",
@@ -187,14 +352,31 @@ def load_controls(controls):
         logger=prefect.context.get("logger"),
         pg_array_columns=["infraction_ids"],
         jsonb_columns=["gear_controls", "catch_controls"],
-        delete_before_insert=True,
+        delete_before_insert=delete_existing,
+        # TODO add `table_id_column` and `df_id_column` to tell which rows to delete from the table before inserting
     )
 
 
 with Flow("Controls") as flow:
-    controls = extract_controls()
-    controls = transform_controls(controls)
+
+    # Parameters
+    delete_existing = Parameter("delete_existing", default=False)
+    number_of_months = Parameter("number_of_months", default=12)
+
+    # Extract
+    controls = extract_controls(number_of_months=number_of_months)
+    fao_areas = extract_fao_areas()
+    segments = extract_segments()
     catch_controls = extract_catch_controls()
+
+    # Transform
+    segments = unnest_segments(segments)
+    controls = transform_controls(controls)
     catch_controls = transform_catch_controls(catch_controls)
-    controls = merge(controls, catch_controls)
-    load_controls(controls)
+    controls_fao_areas = compute_controls_fao_areas(controls, fao_areas)
+    controls = compute_controls_segments(
+        controls, catch_controls, controls_fao_areas, segments
+    )
+
+    # Load
+    #     load_controls(controls, delete_existing)

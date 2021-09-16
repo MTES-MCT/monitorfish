@@ -15,20 +15,12 @@ timeago.register('fr', timeagoFrenchLocale)
 
 const VesselSummary = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
-  /*
-  const { gears } = useSelector(state => state.gear)
-  const { fleetSegments } = useSelector(state => state.fleetSegment)
-   */
   const {
     loadingVessel,
     selectedVessel
   } = useSelector(state => state.vessel)
   const [photoFallback, setPhotoFallback] = useState(false)
   const [lastPosition, setLastPosition] = useState(null)
-  /*
-  const [vesselGears, setVesselGears] = useState([])
-  const [faoZones, setFaoZones] = useState([])
-  */
 
   useEffect(() => {
     if (selectedVessel) {
@@ -63,69 +55,6 @@ const VesselSummary = props => {
       setLastPosition(null)
     }
   }, [selectedVessel])
-
-  /*
-  useEffect(() => {
-    if (selectedVessel && selectedVessel.speciesOnboard) {
-      const faoZones = selectedVessel.speciesOnboard.map(species => {
-        return species.faoZone
-      })
-
-      setFaoZones([...new Set(faoZones)])
-    } else {
-      setFaoZones([])
-    }
-  }, [selectedVessel])
-
-  useEffect(() => {
-    if (gears && selectedVessel && selectedVessel.gearOnboard) {
-      const nextVesselGears = selectedVessel.gearOnboard.map(gearERS => {
-        const foundGear = gears.find(gear => gear.code === gearERS.gear)
-        return {
-          name: foundGear ? foundGear.name : null,
-          code: gearERS.gear
-        }
-      })
-
-      setVesselGears(nextVesselGears)
-    } else {
-      setVesselGears([])
-    }
-  }, [gears, selectedVessel])
-
-  function getVesselOrLastPositionProperty (propertyName) {
-    if (selectedVessel && selectedVessel[propertyName]) {
-      return selectedVessel[propertyName]
-    } else if (lastPosition && lastPosition[propertyName]) {
-      return lastPosition[propertyName]
-    } else {
-      return <NoValue>-</NoValue>
-    }
-  }
-
-  function getGears () {
-    if (vesselGears && vesselGears.length) {
-      const uniqueGears = vesselGears.reduce((acc, current) => {
-        const found = acc.find(item =>
-          item.code === current.code &&
-          item.name === current.name)
-        if (!found) {
-          return acc.concat([current])
-        } else {
-          return acc
-        }
-      }, [])
-
-      return uniqueGears.map(gear => {
-        return gear.name
-          ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-          : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-      })
-    }
-
-    return <NoValue>-</NoValue>
-  }
-  */
 
   return selectedVessel && !loadingVessel
     ? (
@@ -188,7 +117,7 @@ const VesselSummary = props => {
             </FieldValue>
           </Position>
         </ZoneWithoutBackground>
-        <RiskFactorResume selectedVessel={selectedVessel}/>
+        <RiskFactorResume/>
       </Body>
       )
     : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
@@ -219,16 +148,6 @@ const FieldValue = styled.div`
   margin-top: 2px;
   font-weight: 500;
 `
-
-/*
-const ValueWithLineBreak = styled.div`
-  color: ${COLORS.gunMetal};
-  padding: 2px 5px 5px 0;
-  line-height: normal;
-  font-size: 13px;
-  font-weight: 500;
-`
-*/
 
 const PhotoZone = styled.div`
   margin: 5px 5px 10px 5px;

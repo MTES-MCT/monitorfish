@@ -7,24 +7,28 @@ import { WSG84_PROJECTION } from '../../domain/entities/map'
 import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
 import { ReactComponent as InfoSVG } from '../icons/Information.svg'
-import FleetSegments from '../fleet_segments/FleetSegments'
 import { useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
+import RiskFactorResume from './risk_factor/RiskFactorResume'
 
 timeago.register('fr', timeagoFrenchLocale)
 
 const VesselSummary = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
+  /*
   const { gears } = useSelector(state => state.gear)
   const { fleetSegments } = useSelector(state => state.fleetSegment)
+   */
   const {
     loadingVessel,
     selectedVessel
   } = useSelector(state => state.vessel)
   const [photoFallback, setPhotoFallback] = useState(false)
   const [lastPosition, setLastPosition] = useState(null)
+  /*
   const [vesselGears, setVesselGears] = useState([])
   const [faoZones, setFaoZones] = useState([])
+  */
 
   useEffect(() => {
     if (selectedVessel) {
@@ -60,6 +64,7 @@ const VesselSummary = props => {
     }
   }, [selectedVessel])
 
+  /*
   useEffect(() => {
     if (selectedVessel && selectedVessel.speciesOnboard) {
       const faoZones = selectedVessel.speciesOnboard.map(species => {
@@ -120,6 +125,7 @@ const VesselSummary = props => {
 
     return <NoValue>-</NoValue>
   }
+  */
 
   return selectedVessel && !loadingVessel
     ? (
@@ -182,92 +188,7 @@ const VesselSummary = props => {
             </FieldValue>
           </Position>
         </ZoneWithoutBackground>
-        <Zone>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>CFR</Key>
-                <Value data-cy={'vessel-cfr'}>
-                  {
-                    getVesselOrLastPositionProperty('internalReferenceNumber')
-                  }
-                </Value>
-              </Field>
-              <Field>
-                <Key>MMSI</Key>
-                <Value>
-                  {
-                    getVesselOrLastPositionProperty('mmsi')
-                  }
-                </Value>
-              </Field>
-            </TableBody>
-          </Fields>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Marquage ext.</Key>
-                <Value>
-                  {
-                    getVesselOrLastPositionProperty('externalReferenceNumber')
-                  }
-                </Value>
-              </Field>
-              <Field>
-                <Key>Call Sign (IRCS)</Key>
-                <Value>
-                  {
-                    getVesselOrLastPositionProperty('ircs')
-                  }
-                </Value>
-              </Field>
-            </TableBody>
-          </Fields>
-        </Zone>
-        <Zone>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Segments de flotte</Key>
-                <Value>
-                  <FleetSegments
-                    selectedVessel={selectedVessel}
-                    fleetSegmentsReferential={fleetSegments}
-                  />
-                </Value>
-              </Field>
-              <Field>
-                <Key>Engins à bord (JPE)</Key>
-                <Value>
-                  {
-                    getGears()
-                  }
-                </Value>
-              </Field>
-              <Field>
-                <Key>Zones de la marée (FAR)</Key>
-                <Value>
-                  {
-                    faoZones && faoZones.length
-                      ? faoZones.join(', ')
-                      : <NoValue>Aucune zone de pêche reçue</NoValue>
-                  }
-                </Value>
-              </Field>
-            </TableBody>
-          </Fields>
-        </Zone>
-        <Zone>
-          <Fields>
-            <BodyWithTopPadding>
-              <Field>
-                <Key>Dernier contrôle</Key>
-                <Value>{selectedVessel.lastControlDateTime ? timeago.format(selectedVessel.lastControlDateTime, 'fr') : <NoValue>-</NoValue>}</Value>
-              </Field>
-
-            </BodyWithTopPadding>
-          </Fields>
-        </Zone>
+        <RiskFactorResume selectedVessel={selectedVessel}/>
       </Body>
       )
     : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
@@ -299,6 +220,7 @@ const FieldValue = styled.div`
   font-weight: 500;
 `
 
+/*
 const ValueWithLineBreak = styled.div`
   color: ${COLORS.gunMetal};
   padding: 2px 5px 5px 0;
@@ -306,6 +228,7 @@ const ValueWithLineBreak = styled.div`
   font-size: 13px;
   font-weight: 500;
 `
+*/
 
 const PhotoZone = styled.div`
   margin: 5px 5px 10px 5px;
@@ -316,68 +239,11 @@ const Body = styled.div`
   padding: 5px 5px 1px 5px;
 `
 
-const BodyWithTopPadding = styled.tbody`
-  padding: 5px 5px 1px 5px;
-`
-
-const TableBody = styled.tbody``
-
 const Photo = styled.img`
   margin: 15px 0 10px 0;
   max-height: 190px;
   left: auto;
   right: auto;
-`
-
-const Zone = styled.div`
-  margin: 5px 5px 10px 5px;
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
-  background: ${COLORS.background};
-`
-
-const Fields = styled.table`
-  padding: 10px 5px 5px 20px; 
-  width: inherit;
-  display: table;
-  margin: 0;
-  min-width: 40%;
-  line-height: 0.2em;
-`
-
-const Field = styled.tr`
-  margin: 5px 5px 5px 0;
-  border: none;
-  background: none;
-  line-height: 0.5em;
-`
-
-const Key = styled.th`
-  color: ${COLORS.slateGray};
-  flex: initial;
-  display: inline-block;
-  margin: 0;
-  border: none;
-  padding: 5px 5px 5px 0;
-  background: none;
-  width: max-content;
-  line-height: 0.5em;
-  height: 0.5em;
-  font-size: 13px;
-  font-weight: normal;
-`
-
-const Value = styled.td`
-  font-size: 13px;
-  color: ${COLORS.gunMetal};
-  margin: 0;
-  text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
-  font-weight: 500;
 `
 
 const NoValue = styled.span`

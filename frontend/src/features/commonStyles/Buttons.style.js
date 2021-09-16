@@ -2,7 +2,7 @@ import { COLORS } from '../../constants/constants'
 import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
-const basePrimaryButton = css`
+export const basePrimaryButton = css`
   background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   :hover, :focus {

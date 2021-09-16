@@ -13,7 +13,7 @@ export const getRiskFactorColor = riskFactor => {
   }
 }
 
-export const getImpactRiskFactorText = riskFactor => {
+export const getImpactRiskFactorText = (riskFactor) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     return 'Impact faible'
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
@@ -25,11 +25,15 @@ export const getImpactRiskFactorText = riskFactor => {
   }
 }
 
-export const getProbabilityRiskFactor = riskFactor => {
+export const getProbabilityRiskFactorText = (riskFactor, numberOfControls) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     return 'Navire en règle'
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
-    return 'Infractions occasionnelles – ou absence d\'antériorité de contrôle'
+    if (!numberOfControls) {
+      return 'Absence d\'antériorité de contrôle'
+    }
+
+    return 'Infractions occasionnelles'
   } else if (riskFactor >= 2.5 && riskFactor < 3.25) {
     return 'Infractions répétées'
   } else if (riskFactor >= 3.25 && riskFactor <= 4) {
@@ -37,14 +41,14 @@ export const getProbabilityRiskFactor = riskFactor => {
   }
 }
 
-export const getDetectabilityRiskFactorText = riskFactor => {
+export const getDetectabilityRiskFactorText = (riskFactor, reducedText) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
-    return 'Priorité de contrôle faible'
+    return `Priorité ${reducedText ? '' : 'de contrôle '}faible`
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
-    return 'Priorité de contrôle moyenne'
+    return `Priorité ${reducedText ? '' : 'de contrôle '}moyenne`
   } else if (riskFactor >= 2.5 && riskFactor < 3.25) {
-    return 'Priorité de contrôle élevée'
+    return `Priorité ${reducedText ? '' : 'de contrôle '}élevée`
   } else if (riskFactor >= 3.25 && riskFactor <= 4) {
-    return 'Priorité de contrôle très élevée'
+    return `Priorité ${reducedText ? '' : 'de contrôle '}très élevée`
   }
 }

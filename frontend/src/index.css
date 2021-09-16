@@ -30,6 +30,10 @@ code {
     width: stretch;
 }
 
+.rs-modal-lg {
+    width: 1300px;
+}
+
 .rs-slider-mark {
     font-size: 13px;
     color: #707785;

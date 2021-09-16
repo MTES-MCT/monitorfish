@@ -1,25 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../commonStyles/Input.style'
 import InfoBox from './InfoBox'
 const RegulationLayerZoneLine = props => {
-  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
-  const [isInputFilled, setIsInputFilled] = useState(false)
   const {
     nameZone,
     setNameZone
   } = props
 
-  const onChange = value => {
-    setNameZone(value)
-    setIsInputFilled(value && value !== '')
-  }
+  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+  const [isInputFilled, setIsInputFilled] = useState(false)
+
+  useEffect(() => {
+    setIsInputFilled(nameZone && nameZone !== '')
+  }, [nameZone])
+
   return <ContentLine>
     <Label>Nom de la zone</Label>
     <CustomInput
       placeholder=''
       value={nameZone}
-      onChange={value => onChange(value)}
+      onChange={value => setNameZone(value)}
       width={'200px'}
       onMouseLeave={() => setIsInputFilled(nameZone && nameZone !== '')}
       isGray={isInputFilled}

@@ -10,7 +10,7 @@ LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 
-#
+# Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")
 
 # Proxies for pipeline flows requiring Internet access
@@ -42,3 +42,25 @@ FAO_AREAS_URL = (
     "service=WFS&request=GetFeature&version=1.0.0&"
     "typeName=fifao:FAO_AREAS_CWP&outputFormat=SHAPE-ZIP"
 )
+
+# Risk factor configuration
+risk_factor_coefficients = {
+    "probability": 0.3,
+    "impact": 0.2,
+    "detectability": 0.5,
+}
+
+default_risk_factors = {
+    "segment_risk_factor": 1,
+    "control_rate_risk_factor": 4,
+    "infraction_rate_risk_factor": 1,
+    "control_priority_level": 1,
+    "impact_risk_factor": 1,
+    "probability_risk_factor": 1,
+    "detectability_risk_factor": 2,
+    "risk_factor": (
+        (1.0 ** risk_factor_coefficients["probability"])
+        * (1.0 ** risk_factor_coefficients["impact"])
+        * (2 ** risk_factor_coefficients["detectability"])
+    ),
+}

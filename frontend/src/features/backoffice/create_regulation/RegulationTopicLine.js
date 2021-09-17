@@ -42,7 +42,7 @@ const RegulationTopicLine = props => {
         {
         isAddThemeClicked
           ? <CreateRegulationLawTypeForm
-              setSelectedReglementationTheme={setSelectedRegulationTopic}
+              setSelectedRegulationTheme={setSelectedRegulationTopic}
               setIsAddThemeClicked={setIsAddThemeClicked}
               setIsInfoTextShown={setIsInfoTextShown}
             />

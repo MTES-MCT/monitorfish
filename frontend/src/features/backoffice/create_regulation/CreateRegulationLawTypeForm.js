@@ -5,7 +5,7 @@ import { CustomInput } from '../../commonStyles/Input.style'
 
 const CreateRegulationLawTypeForm = props => {
   const {
-    setSelectedReglementationTheme,
+    setSelectedRegulationTheme,
     setIsAddThemeClicked,
     setIsInfoTextShown
   } = props
@@ -29,14 +29,14 @@ const CreateRegulationLawTypeForm = props => {
       const regulationPlace = `${themePlace}
       ${themeSpecies ? ' - ' + themeSpecies : ''}
       ${themeGears ? ' - ' + themeGears : ''}`
-      setSelectedReglementationTheme(regulationPlace)
+      setSelectedRegulationTheme(regulationPlace)
       resetThemeForm()
       setIsAddThemeClicked(false)
       setThemePlaceIsRed(false)
     }
   }
   return (
-    <CreateReglementationBloc>
+    <CreateRegulationBloc>
       <CustomInput
         placeholder='Lieu *'
         value={themePlace}
@@ -75,11 +75,11 @@ const CreateRegulationLawTypeForm = props => {
       >
         Annuler
       </CancelButton>
-    </CreateReglementationBloc>
+    </CreateRegulationBloc>
   )
 }
 
-const CreateReglementationBloc = styled.div`
+const CreateRegulationBloc = styled.div`
   display: flex;
 `
 

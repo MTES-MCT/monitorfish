@@ -13,19 +13,19 @@ const RegulationLawTypeLine = props => {
     selectedValue,
     selectData,
     regulationLawType,
-    setReglementationLawType
+    setRegulationLawType
   } = props
-  const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
-  const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
+  const [regulationBlocNameIsRed, setRegulationBlocNameIsRed] = useState(false)
+  const [isAddRegulationBlocClicked, setIsAddRegulationBlocClicked] = useState(false)
 
-  const addNewReglementationBloc = () => {
+  const addNewRegulationLawType = () => {
     if (regulationLawType === '') {
-      setReglementationBlocNameIsRed(true)
+      setRegulationBlocNameIsRed(true)
     } else {
       setSelectedValue(regulationLawType)
-      setReglementationLawType('')
-      setIsAddReglementationBlocClicked(false)
-      setReglementationBlocNameIsRed(false)
+      setRegulationLawType('')
+      setIsAddRegulationBlocClicked(false)
+      setRegulationBlocNameIsRed(false)
     }
   }
 
@@ -48,30 +48,30 @@ const RegulationLawTypeLine = props => {
         />
       }
       {
-        isAddReglementationBlocClicked
-          ? <CreateReglementationBloc>
+        isAddRegulationBlocClicked
+          ? <CreateRegulationBloc>
               <CustomInput
                 placeholder='Nommez le nouvel ensemble règlementaire'
                 value={regulationLawType}
-                onChange={setReglementationLawType}
+                onChange={setRegulationLawType}
                 width={'250px'}
-                isRed={reglementationBlocNameIsRed}
+                isRed={regulationBlocNameIsRed}
               />
               <ValidateButton
                 disabled={false}
                 isLast={false}
-                onClick={addNewReglementationBloc}>
+                onClick={addNewRegulationLawType}>
                 Enregistrer
               </ValidateButton>
               <CancelButton
                 disabled={false}
                 isLast={false}
-                onClick={() => setIsAddReglementationBlocClicked(false)}>
+                onClick={() => setIsAddRegulationBlocClicked(false)}>
                 Annuler
               </CancelButton>
-            </CreateReglementationBloc>
+            </CreateRegulationBloc>
           : !selectedValue && <><SquareButton
-              onClick={() => setIsAddReglementationBlocClicked(true)}
+              onClick={() => setIsAddRegulationBlocClicked(true)}
             />
             <Label>Ajouter un nouvel ensemble</Label></>
     }
@@ -79,7 +79,7 @@ const RegulationLawTypeLine = props => {
   )
 }
 
-const CreateReglementationBloc = styled.div`
+const CreateRegulationBloc = styled.div`
   display: flex;
 `
 

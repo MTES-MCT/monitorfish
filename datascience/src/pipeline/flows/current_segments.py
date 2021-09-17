@@ -138,7 +138,7 @@ def load_current_segments(vessels_segments):  # pragma: no cover
         schema="public",
         db_name="monitorfish_remote",
         logger=logger,
-        delete_before_insert=True,
+        how="replace",
         pg_array_columns=["segments"],
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",

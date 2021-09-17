@@ -10,7 +10,8 @@ const regulationSlice = createSlice({
     /** @type {boolean} isModalOpen */
     isModalOpen: false,
     /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
-    regulatoryTextListValidityMap: {}
+    regulatoryTextListValidityMap: {},
+    regulationSaved: false
   },
   reducers: {
     setSelectedRegulation (state, action) {
@@ -44,7 +45,11 @@ const regulationSlice = createSlice({
     },
     setRegulatoryTextListValidityMap (state, action) {
       state.regulatoryTextListValidityMap = action.payload
+    },
+    setRegulationSaved (state, action) {
+      state.regulationSaved = action.payload
     }
+
   }
 })
 
@@ -53,7 +58,8 @@ export const {
   setIsModalOpen,
   setUpcomingRegulation,
   addObjectToRegulatoryTextListValidityMap,
-  setRegulatoryTextListValidityMap
+  setRegulatoryTextListValidityMap,
+  setRegulationSaved
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

@@ -5,6 +5,8 @@ const API = null // eslint-disable-line
 
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import WFS from 'ol/format/WFS'
+import GML from 'ol/format/GML'
 
 const OK = 200
 const NOT_FOUND = 404
@@ -21,6 +23,7 @@ const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
 const GEOMETRY_ERROR_MEESAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
+const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -446,6 +449,32 @@ function getHealthcheckFromAPI () {
     })
 }
 
+function updateRegulation (feature) {
+  const formatWFS = new WFS()
+  const formatGML = new GML({
+    featureType: 'monitorfish:regulatory_areas',
+    srsName: 'EPSG:4326'
+  })
+
+  const xs = new XMLSerializer()
+  const update = formatWFS.writeTransaction(null, [feature], null, formatGML)
+  const payload = xs.serializeToString(update)
+
+  return fetch(`${GEOSERVER_URL}/geoserver/wfs`, {
+    method: 'POST',
+    mode: 'no-cors',
+    dataType: 'xml',
+    processData: false,
+    contentType: 'text/xml',
+    body: payload.replace('feature:', '')
+  })
+  .then(r => console.log(r))
+  .catch(error => {
+    console.error(error)
+    throw Error(UPDATE_REGULATION_MESSAGE)
+  })
+}
+
 export {
   getVesselsLastPositionsFromAPI,
   getVesselFromAPI,
@@ -462,5 +491,6 @@ export {
   getAdministrativeSubZonesFromAPI,
   getAllFleetSegmentFromAPI,
   getHealthcheckFromAPI,
-  getAllGeometryWithoutProperty
+  getAllGeometryWithoutProperty,
+  updateRegulation
 }

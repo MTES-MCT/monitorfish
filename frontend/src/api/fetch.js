@@ -473,7 +473,9 @@ function updateOrCreateRegulation (feature, actionType) {
     contentType: 'text/xml',
     body: payload.replace('feature:', '')
   })
-  .then(r => console.log(r))
+  .then(r => {
+    return r
+  })
   .catch(error => {
     console.error(error)
     throw Error(UPDATE_REGULATION_MESSAGE)

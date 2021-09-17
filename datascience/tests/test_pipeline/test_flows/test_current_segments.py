@@ -6,58 +6,18 @@ import pandas as pd
 
 from src.pipeline.flows.current_segments import (
     compute_current_segments,
+    extract_segments,
     merge_segments_catches,
-    unnest,
+    unnest_segments,
 )
 
 
 class TestCurrentSegmentsFlow(unittest.TestCase):
-    def test_unnest(self):
-        segments_definitions = [
-            [
-                "A",
-                [
-                    "OTB",
-                    "OTT",
-                ],
-                ["27.8.c", "27.8"],
-                ["HKE", "SOL"],
-            ],
-            ["B", ["SDN"], [], []],
-            ["C", [], ["27.8.c"], []],
-            ["D", [], [], ["HKE"]],
-            ["E", ["LL"], None, None],
-        ]
-
-        segments = pd.DataFrame(
-            data=segments_definitions,
-            columns=pd.Index(["segment", "gears", "fao_areas", "species"]),
-        )
-
-        res = unnest.run(segments)
-
-        expected_values = [
-            ["A", "OTB", "27.8.c", "HKE"],
-            ["A", "OTB", "27.8.c", "SOL"],
-            ["A", "OTB", "27.8", "HKE"],
-            ["A", "OTB", "27.8", "SOL"],
-            ["A", "OTT", "27.8.c", "HKE"],
-            ["A", "OTT", "27.8.c", "SOL"],
-            ["A", "OTT", "27.8", "HKE"],
-            ["A", "OTT", "27.8", "SOL"],
-            ["B", "SDN", np.nan, np.nan],
-            ["C", np.nan, "27.8.c", np.nan],
-            ["D", np.nan, np.nan, "HKE"],
-            ["E", "LL", None, None],
-        ]
-
-        self.assertEqual(expected_values, res.values.tolist())
-
     def test_compute_current_segments(self):
         segments_definitions = pd.DataFrame(
             data=[
-                ["A", "DRB", "27.7", "SCE", 1, 1],
-                ["A", None, "37", None, 1, 1],
+                ["A", "DRB", "27.7", "SCE", 1.1, 1],
+                ["A", None, "37", None, 1.1, 1],
                 ["B", "OTM", "27.7.b.4", "HKE", 1, 2],
                 ["B", "DRB", "27.7", "SCE", 1, 2],
                 ["C", "OTM", None, "BFT", 1, 1],
@@ -70,7 +30,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 "gear",
                 "fao_area",
                 "species",
-                "risk_factor",
+                "impact_risk_factor",
                 "control_priority_level",
             ],
         )
@@ -91,6 +51,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
         expected_segments = {
             "vessel_1": {"A", "B"},
             "vessel_2": {"A", "E", "F"},
+            "vessel_3": np.nan,
             "vessel_4": {"B", "D"},
         }
 
@@ -104,16 +65,46 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
             set(res.loc["vessel_2", "segments"]), set(expected_segments["vessel_2"])
         )
 
+        self.assertIs(res.loc["vessel_3", "segments"], expected_segments["vessel_3"])
+
         self.assertEqual(
             set(res.loc["vessel_4", "segments"]), set(expected_segments["vessel_4"])
+        )
+
+        self.assertTrue(
+            pd.isna(
+                res.loc[
+                    "vessel_3",
+                    [
+                        "control_priority_level",
+                        "impact_risk_factor",
+                        "segment_highest_impact",
+                        "segment_highest_priority",
+                    ],
+                ]
+            ).all()
         )
 
         self.assertEqual(res.loc["vessel_1", "control_priority_level"], 2)
         self.assertEqual(res.loc["vessel_2", "control_priority_level"], 3)
         self.assertEqual(res.loc["vessel_4", "control_priority_level"], 2)
-        self.assertEqual(res.loc["vessel_1", "risk_factor"], 1)
-        self.assertEqual(res.loc["vessel_2", "risk_factor"], 3)
-        self.assertEqual(res.loc["vessel_4", "risk_factor"], 1)
+
+        self.assertEqual(res.loc["vessel_1", "total_weight_onboard"], 123.56)
+        self.assertEqual(res.loc["vessel_2", "total_weight_onboard"], 1231.4)
+        self.assertEqual(res.loc["vessel_3", "total_weight_onboard"], 1203.4)
+        self.assertEqual(res.loc["vessel_4", "total_weight_onboard"], 1247.4)
+
+        self.assertEqual(res.loc["vessel_1", "impact_risk_factor"], 1.1)
+        self.assertEqual(res.loc["vessel_2", "impact_risk_factor"], 3)
+        self.assertEqual(res.loc["vessel_4", "impact_risk_factor"], 1)
+
+        self.assertEqual(res.loc["vessel_1", "segment_highest_priority"], "B")
+        self.assertEqual(res.loc["vessel_2", "segment_highest_priority"], "F")
+        self.assertEqual(res.loc["vessel_4", "segment_highest_priority"], "B")
+
+        self.assertEqual(res.loc["vessel_1", "segment_highest_impact"], "A")
+        self.assertEqual(res.loc["vessel_2", "segment_highest_impact"], "E")
+        self.assertEqual(res.loc["vessel_4", "segment_highest_impact"], "B")
 
     def test_merge_segments_catches(self):
         catches = pd.DataFrame(
@@ -173,7 +164,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                     "cfr",
                     "segments",
                     "total_weight_onboard",
-                    "risk_factor",
+                    "impact_risk_factor",
                     "control_priority_level",
                 ]
             ),
@@ -195,7 +186,7 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
                 "species_onboard",
                 "segments",
                 "total_weight_onboard",
-                "risk_factor",
+                "impact_risk_factor",
                 "control_priority_level",
             ],
         )

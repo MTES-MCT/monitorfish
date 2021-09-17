@@ -14,4 +14,6 @@ export const RiskFactorBox = styled.div`
   line-height: 14px;
   text-align: center;
   margin-right: 8px;
+  visibility: ${props => props.hide ? 'hidden' : 'visible'};
+  ${props => props.hide ? 'width: 13px;' : ''}
 `

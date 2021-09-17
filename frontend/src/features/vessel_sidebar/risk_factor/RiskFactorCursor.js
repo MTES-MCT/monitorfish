@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { RiskFactorBox } from './styles/RiskFactorBox.style'
 
-const RiskFactorCursor = ({ value, color, progress, isBig }) => {
+const RiskFactorCursor = ({ value, color, progress, isBig, withoutBox, height }) => {
   const [progressWithDelay, setProgressWithDelay] = useState(0)
 
   useEffect(() => {
@@ -15,35 +15,62 @@ const RiskFactorCursor = ({ value, color, progress, isBig }) => {
   }, progress)
 
   return (
-    <Wrapper isBig={isBig}>
+    <Wrapper
+      withoutBox={withoutBox}
+      isBig={isBig}
+    >
       <RiskFactorBox
+        height={height}
         isBig={isBig}
         color={color}
+        hide={withoutBox}
       >
         {value}
       </RiskFactorBox>
-      <Bar isBig={isBig}>
-        <VerticalBar isBig={isBig}/>
-        <VerticalBar isBig={isBig}/>
-        <VerticalBar isBig={isBig}/>
+      <Bar
+        isBig={isBig}
+        height={height}
+      >
+        <VerticalBar
+          height={height}
+          isBig={isBig}
+        />
+        <VerticalBar
+          height={height}
+          isBig={isBig}
+        />
+        <VerticalBar
+          height={height}
+          isBig={isBig}
+        />
         <Progress
+          height={height}
           isBig={isBig}
           color={color}
           progress={progressWithDelay}
         >
           {
             progressWithDelay >= 25
-              ? <VerticalBar isBig={isBig}/>
+              ? <VerticalBar
+                height={height}
+                isBig={isBig}
+              />
               : null
           }
           {
             progressWithDelay >= 50
-              ? <VerticalBar isBig={isBig}/>
+              ? <VerticalBar
+                height={height}
+                isBig={isBig}
+              />
               : null
           }
           {
             progressWithDelay === 100
-              ? <VerticalBar isBig={isBig}/>
+              ? <VerticalBar
+                height={height}
+                isBig={isBig}
+              />
               : null
           }
         </Progress>
@@ -53,24 +80,24 @@ const RiskFactorCursor = ({ value, color, progress, isBig }) => {
 }
 
 const Wrapper = styled.div`
-  margin: 9px 0;
+  margin: ${props => props.withoutBox ? 0 : 9}px 0;
   padding-bottom: 1px;
   display: flex;
   margin-left: ${props => props.isBig ? 35 : 0}px;
 `
 
 const Bar = styled.div`
-  height: ${props => props.isBig ? 24 : 8}px;
+  height: ${props => props.height ? props.height : 8}px;
   width: 208px;
   background: ${COLORS.grayBackground};
   margin-top: ${props => props.isBig ? 0 : 5}px;
 `
 
 const Progress = styled.div`
-  height: ${props => props.isBig ? 23 : 8}px;
+  height: ${props => props.height ? props.height - 1 : 8}px;
   width: ${props => props.progress ? props.progress : 0}%;
   background: ${props => props.color ? props.color : 'white'};
-  margin-top: calc(-${props => props.isBig ? 24 : 8}px - ${props => props.isBig ? 4 : 11}px);
+  margin-top: calc(-${props => props.height ? props.height : 8}px - ${props => props.isBig ? 4 : props.height === 8 ? 11 : 14}px);
   transition: 1.2s all;
 `
 
@@ -79,7 +106,7 @@ const VerticalBar = styled.div`
   width: 2px;
   background: ${COLORS.background};
   margin-left: 50.5px;
-  padding-top: ${props => props.isBig ? 0 : 7}px;
+  padding-top: ${props => props.isBig ? 0 : props.height === 8 ? 7 : 10}px;
   display: inline-block;
 `
 

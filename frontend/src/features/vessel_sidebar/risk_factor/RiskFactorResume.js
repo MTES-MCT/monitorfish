@@ -13,8 +13,10 @@ import { ReactComponent as RiskFactorControlSVG } from '../../icons/Note_de_cont
 import { ReactComponent as RiskFactorInfractionsSVG } from '../../icons/Note_infraction_stop.svg'
 import RiskFactorExplanationModal from './RiskFactorExplanationModal'
 import { useSelector } from 'react-redux'
-import ImpactRiskFactorDetails from './ImpactRiskFactorDetails'
+import ImpactRiskFactorDetails from './details/ImpactRiskFactorDetails'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import ProbabilityRiskFactorDetails from './details/ProbabilityRiskFactorDetails'
+import DetectabilityRiskFactorDetails from './details/DetectabilityRiskFactorDetails'
 
 const RiskFactorResume = () => {
   const {
@@ -23,6 +25,8 @@ const RiskFactorResume = () => {
 
   const [riskFactorExplanationIsOpen, setRiskFactorExplanationIsOpen] = useState(false)
   const [impactRiskFactorIsOpen, setImpactRiskFactorIsOpen] = useState(false)
+  const [probabilityRiskFactorIsOpen, setProbabilityRiskFactorIsOpen] = useState(false)
+  const [detectabilityRiskFactorIsOpen, setDetectabilityRiskFactorIsOpen] = useState(false)
 
   return (
     <>
@@ -30,6 +34,7 @@ const RiskFactorResume = () => {
         <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
         <GlobalRisk data-cy={'global-risk-factor'}>
           <RiskFactorCursor
+            height={24}
             isBig={true}
             value={parseFloat(selectedVessel?.riskFactor).toFixed(1)}
             color={getRiskFactorColor(selectedVessel?.riskFactor)}
@@ -50,6 +55,7 @@ const RiskFactorResume = () => {
           </SubRiskHeader>
           <RiskFactorImpact/>
           <RiskFactorCursor
+            height={8}
             value={parseFloat(selectedVessel?.impactRiskFactor).toFixed(1)}
             color={getRiskFactorColor(selectedVessel?.impactRiskFactor)}
             progress={100 * selectedVessel?.impactRiskFactor / 4}
@@ -60,12 +66,19 @@ const RiskFactorResume = () => {
         </SubRisk>
         <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen}/>
         <Line/>
-        <SubRisk data-cy={'probability-risk-factor'}>
-          <SubRiskTitle>
-            Probabilité d&apos;infraction
-          </SubRiskTitle>
+        <SubRisk
+          data-cy={'probability-risk-factor'}
+          onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
+        >
+          <SubRiskHeader>
+            <SubRiskTitle>
+              Probabilité d&apos;infraction
+            </SubRiskTitle>
+            <Chevron isOpen={probabilityRiskFactorIsOpen}/>
+          </SubRiskHeader>
           <RiskFactorInfractions/>
           <RiskFactorCursor
+            height={8}
             value={parseFloat(selectedVessel?.probabilityRiskFactor).toFixed(1)}
             color={getRiskFactorColor(selectedVessel?.probabilityRiskFactor)}
             progress={100 * selectedVessel?.probabilityRiskFactor / 4}
@@ -74,13 +87,21 @@ const RiskFactorResume = () => {
             { getProbabilityRiskFactorText(selectedVessel?.probabilityRiskFactor) }
           </SubRiskText>
         </SubRisk>
+        <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen}/>
         <Line/>
-        <SubRisk data-cy={'detectability-risk-factor'}>
-          <SubRiskTitle>
-            Priorité de contrôle
-          </SubRiskTitle>
+        <SubRisk
+          data-cy={'detectability-risk-factor'}
+          onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
+        >
+          <SubRiskHeader>
+            <SubRiskTitle>
+              Priorité de contrôle
+            </SubRiskTitle>
+            <Chevron isOpen={detectabilityRiskFactorIsOpen}/>
+          </SubRiskHeader>
           <RiskFactorControl/>
           <RiskFactorCursor
+            height={8}
             value={parseFloat(selectedVessel?.detectabilityRiskFactor).toFixed(1)}
             color={getRiskFactorColor(selectedVessel?.detectabilityRiskFactor)}
             progress={100 * selectedVessel?.detectabilityRiskFactor / 4}
@@ -89,6 +110,7 @@ const RiskFactorResume = () => {
             { getDetectabilityRiskFactorText(selectedVessel?.detectabilityRiskFactor, true) }
           </SubRiskText>
         </SubRisk>
+        <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen}/>
       </RiskFactorZone>
       <RiskFactorExplanationModal
         isOpen={riskFactorExplanationIsOpen}
@@ -100,7 +122,7 @@ const RiskFactorResume = () => {
 
 const Chevron = styled(ChevronIcon)`
   margin-right: 25px;
-  margin-top: 20px;
+  margin-top: 15px;
   cursor: pointer;
   transition: 0.2s all;
 `

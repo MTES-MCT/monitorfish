@@ -16,6 +16,7 @@ import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import showRegulatoryLayer from '../../../domain/use_cases/showRegulatoryLayer'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
+import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
@@ -124,7 +125,7 @@ const RegulatoryLayerZone = props => {
       <Icons>
 
         { isEditable &&
-          <ShowIcon title="Editer la réglementation" onClick={() => onEditRegulationClick()}/>
+          <EditIcon title="Editer la réglementation" onClick={() => onEditRegulationClick()}/>
         }
         {
           metadataIsShown
@@ -196,6 +197,13 @@ const ZoneText = styled.span`
   padding-bottom: 3px;
   padding-left: 0;
   margin-top: 5px;
+`
+
+const EditIcon = styled(EditSVG)`
+  width: 16px;
+  flex-shrink: 0;
+  align-self: center;
+  margin-right: 7px;
 `
 
 export default RegulatoryLayerZone

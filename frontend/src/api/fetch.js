@@ -449,7 +449,7 @@ function getHealthcheckFromAPI () {
     })
 }
 
-function updateRegulation (feature) {
+function updateOrCreateRegulation (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
     featureType: 'monitorfish:regulatory_areas',
@@ -457,8 +457,13 @@ function updateRegulation (feature) {
   })
 
   const xs = new XMLSerializer()
-  const update = formatWFS.writeTransaction(null, [feature], null, formatGML)
-  const payload = xs.serializeToString(update)
+  let transaction
+  if (actionType === 'update') {
+    transaction  = formatWFS.writeTransaction(null, [feature], null, formatGML)
+  } else if (actionType === 'insert') {
+    transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
+  }
+  const payload = xs.serializeToString(transaction)
 
   return fetch(`${GEOSERVER_URL}/geoserver/wfs`, {
     method: 'POST',
@@ -492,5 +497,5 @@ export {
   getAllFleetSegmentFromAPI,
   getHealthcheckFromAPI,
   getAllGeometryWithoutProperty,
-  updateRegulation
+  updateOrCreateRegulation
 }

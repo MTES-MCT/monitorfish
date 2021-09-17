@@ -123,21 +123,33 @@ const CreateRegulation = ({ title, isEdition }) => {
       })
   }
 
+  const formatRegionList = (list) => {
+    let regionListAsString = ''
+    list.map((region, id) => {
+      regionListAsString += region
+      if (id < selectedRegionList.length - 1) {
+        regionListAsString += ', '
+      }
+      return regionListAsString
+    })
+    return regionListAsString
+  }
   const createOrUpdateRegulation = () => {
-    const featureObject = {
+    let featureObject = {
       layer_name: selectedRegulationTopic,
       law_type: selectedRegulationLawType.split(' /')[0],
       zones: nameZone,
-      region: selectedRegionList,
+      region: formatRegionList(selectedRegionList),
       facade: selectedSeaFront,
       references_reglementaires: JSON.stringify(regulatoryTextList)
     }
     console.log(featureObject)
-    let feature = new Feature(featureObject)
+    const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
+
     dispatch(createOrUpdateRegulationInGeoserver(feature, isEdition ? 'update' : 'insert'))
     if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
-      feature = new Feature({
+      featureObject = new Feature({
         layer_name: null,
         law_type: null,
         zones: null,

@@ -59,7 +59,7 @@ def load_fishing_gear_codes(fishing_gear_codes):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True,
+        how="replace",
     )
 
 

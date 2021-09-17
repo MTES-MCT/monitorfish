@@ -78,7 +78,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
         logger=prefect.context.get("logger"),
         pg_array_columns=["segments"],
         jsonb_columns=["gear_onboard", "species_onboard"],
-        delete_before_insert=True,
+        how="replace",
     )
 
 

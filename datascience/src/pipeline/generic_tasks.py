@@ -13,7 +13,7 @@ from src.pipeline.processing import (
     prepare_df_for_loading,
     to_json,
 )
-from src.pipeline.utils import delete, get_table, psql_insert_copy
+from src.pipeline.utils import delete, delete_rows, get_table, psql_insert_copy
 from src.read_query import read_saved_query
 
 
@@ -87,12 +87,30 @@ def load(
     schema: str,
     db_name: str,
     logger: Union[None, logging.Logger],
-    delete_before_insert: bool = False,
+    how: str = "replace",
     pg_array_columns: Union[None, list] = None,
     handle_array_conversion_errors: bool = True,
     value_on_array_conversion_error="{}",
     jsonb_columns: Union[None, list] = None,
+    table_id_column: Union[None, str] = None,
+    df_id_column: Union[None, str] = None,
 ):
+    """
+    Load a DataFrame or GeoDataFrame to a database table using sqlalchemy. The table
+    must already exist in the database.
+
+    Args:
+        df (Union[pd.DataFrame, gpd.GeoDataFrame]): data to load
+        table_name (str): name of the table
+        schema (str): database schema of the table
+        db_name (str): name of the database. Currently only 'monitorfish_remote'.
+        logger (Union[None, logging.Logger]): logger instance,
+        how (str): one of
+          - 'replace' to delete all rows in the table before loading
+          - 'append' to append the data to rows already in the table
+          - 'upsert' to append the rows to the table, replacing the rows whose id is
+            already
+    """
 
     df_ = prepare_df_for_loading(
         df,
@@ -108,9 +126,38 @@ def load(
 
     with e.begin() as connection:
 
-        if delete_before_insert:
+        if how == "replace":
             # Delete all rows from table
             delete(table, connection, logger)
+
+        elif how == "upsert":
+            # Delete rows that are in the DataFrame from the table
+
+            try:
+                assert df_id_column is not None
+            except AssertionError:
+                raise ValueError("df_id_column cannot be null if how='upsert'")
+            try:
+                assert table_id_column is not None
+            except AssertionError:
+                raise ValueError("table_id_column cannot be null if how='upsert'")
+
+            ids_to_delete = set(df[df_id_column].unique())
+
+            delete_rows(
+                table=table,
+                id_column=table_id_column,
+                ids_to_delete=ids_to_delete,
+                connection=connection,
+                logger=logger,
+            )
+
+        elif how == "append":
+            # Nothing to do
+            pass
+
+        else:
+            raise ValueError(f"how must be 'replace', 'upsert' or 'append', got {how}")
 
         # Insert data into table
         logger.info(f"Loading into {schema}.{table_name}")

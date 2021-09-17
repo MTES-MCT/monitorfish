@@ -6,7 +6,6 @@ import tabula
 from prefect import Flow, Parameter, task
 
 from config import PROXIES
-from src.pipeline.generic_tasks import load
 
 
 def join_values_by_column(df: pd.DataFrame, join_string: str = " ") -> list:

@@ -489,7 +489,7 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True,
+        how="replace",
     )
 
 

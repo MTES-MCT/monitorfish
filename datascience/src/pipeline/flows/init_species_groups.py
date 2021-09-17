@@ -34,7 +34,7 @@ def load_species_groups(species_groups, species_codes_groups):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True,
+        how="replace",
     )
 
     load(
@@ -43,7 +43,7 @@ def load_species_groups(species_groups, species_codes_groups):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True,
+        how="replace",
     )
 
 

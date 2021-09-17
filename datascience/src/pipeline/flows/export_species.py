@@ -7,7 +7,6 @@ import requests
 from prefect import Flow, Parameter, task
 
 from config import FAO_SPECIES_URL, ISSCAAP_GROUPS_URL, PROXIES
-from src.pipeline.generic_tasks import load
 
 
 @task(checkpoint=False)

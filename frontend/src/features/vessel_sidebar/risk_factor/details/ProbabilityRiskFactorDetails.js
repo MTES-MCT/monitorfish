@@ -1,42 +1,32 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as InfoSVG } from '../../icons/Information.svg'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
+import InfractionsResume from '../../../controls/InfractionsResume'
 
-const ImpactRiskFactorDetails = ({ isOpen }) => {
+const ProbabilityRiskFactorDetails = ({ isOpen }) => {
   return (
     <SubRiskDetails isOpen={isOpen}>
       <Line/>
+      <InfractionsResumeZone>
+        <InfractionsResume
+          numberOfDiversions={0}
+          numberOfEscortsToQuay={0}
+          numberOfSeizures={1}
+        />
+      </InfractionsResumeZone>
       <Zone>
         <Fields>
           <TableBody>
             <Field>
-              <Key big>Segment de flotte actuel</Key>
+              <Key>Temporalité</Key>
               <Value>
-                MED06/ATL01 <Info title={'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
-              'façade dans son Plan de contrôle annuel.'}/>
-              </Value>
-            </Field>
-          </TableBody>
-        </Fields>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>Engins à bord</Key>
-              <Value>
-                LLD, LLS
+                8 contrôles sur 5 ans (2016-2021)
               </Value>
             </Field>
             <Field>
-              <Key>Espèces à bord</Key>
+              <Key>Infractions pêche</Key>
               <Value>
-                BFT, SWO, ALB
-              </Value>
-            </Field>
-            <Field>
-              <Key>Zones de la marée</Key>
-              <Value>
-                37. 1. 2
+                5 infractions pêche / 8 contrôles
               </Value>
             </Field>
           </TableBody>
@@ -51,24 +41,23 @@ const Line = styled.div`
   border-bottom: 1px solid ${COLORS.lightGray};
 `
 
-const Info = styled(InfoSVG)`
-  width: 14px;
-  vertical-align: text-bottom;
-  margin-bottom: 2px;
-  margin-left: ${props => props.isInfoSegment ? '5px' : '2px'};
-`
-
 const SubRiskDetails = styled.div`
   width: 100%;
-  height: ${props => props.isOpen ? '140' : '0'}px;
+  height: ${props => props.isOpen ? '105' : '0'}px;
   opacity: ${props => props.isOpen ? '1' : '0'};
+  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
+  overflow: hidden;
   transition: 0.2s all;
 `
 
 const TableBody = styled.tbody``
 
+const InfractionsResumeZone = styled.div`
+  margin: 5px 5px 0 25px;
+`
+
 const Zone = styled.div`
-  margin: 5px 5px 10px 45px;
+  margin: 0px 5px 10px 45px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
@@ -76,7 +65,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 20px; 
+  padding: 0 5px 5px 20px; 
   width: inherit;
   display: table;
   margin: 0;
@@ -118,4 +107,4 @@ const Value = styled.td`
   font-weight: 500;
 `
 
-export default ImpactRiskFactorDetails
+export default ProbabilityRiskFactorDetails

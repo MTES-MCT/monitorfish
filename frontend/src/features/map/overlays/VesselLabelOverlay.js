@@ -133,19 +133,25 @@ const VesselLabelOverlay = ({
                       <RiskFactorBox color={getRiskFactorColor(riskFactor?.impactRiskFactor)}>
                         {parseFloat(riskFactor?.impactRiskFactor).toFixed(1)}
                       </RiskFactorBox>
-                      { getImpactRiskFactorText(riskFactor?.impactRiskFactor) }
+                      <SubRiskText>
+                        { getImpactRiskFactorText(riskFactor?.impactRiskFactor) }
+                      </SubRiskText>
                     </RiskFactorDetail>
                     <RiskFactorDetail>
                       <RiskFactorBox color={getRiskFactorColor(riskFactor?.probabilityRiskFactor)}>
                         {parseFloat(riskFactor?.probabilityRiskFactor).toFixed(1)}
                       </RiskFactorBox>
-                      { getProbabilityRiskFactorText(riskFactor?.probabilityRiskFactor, 1) }
+                      <SubRiskText>
+                        { getProbabilityRiskFactorText(riskFactor?.probabilityRiskFactor, 1) }
+                      </SubRiskText>
                     </RiskFactorDetail>
                     <RiskFactorDetail>
                       <RiskFactorBox color={getRiskFactorColor(riskFactor?.detectabilityRiskFactor)}>
                         {parseFloat(riskFactor?.detectabilityRiskFactor).toFixed(1)}
                       </RiskFactorBox>
-                      { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false) }
+                      <SubRiskText>
+                        { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false) }
+                      </SubRiskText>
                     </RiskFactorDetail>
                   </RiskFactorDetails>
                   : null
@@ -157,6 +163,10 @@ const VesselLabelOverlay = ({
     </WrapperToBeKeptForDOMManagement>
   )
 }
+
+const SubRiskText = styled.span`
+  vertical-align: bottom;
+`
 
 const Wrapper = styled.div`
   display: flex;

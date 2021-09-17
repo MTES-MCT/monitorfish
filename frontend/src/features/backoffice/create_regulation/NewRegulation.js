@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { Link, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
@@ -16,6 +16,7 @@ import {
   UpcomingRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
+import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
 
 // A déplacer ?
 import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
@@ -24,11 +25,8 @@ import getGeometryWithoutRegulationReference from '../../../domain/use_cases/get
 import { formatDataForSelectPicker } from '../../../utils'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
-import { setSelectedRegulation } from '../Regulation.slice'
-import GML from 'ol/format/GML'
-import WFS from 'ol/format/WFS'
+import { setSelectedRegulation, setRegulationSaved } from '../Regulation.slice'
 import Feature from 'ol/Feature'
-import { GEOSERVER_URL } from '../../../api/fetch'
 
 const CreateRegulation = ({ title }) => {
   const isEdition = true
@@ -40,7 +38,10 @@ const CreateRegulation = ({ title }) => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
-  const { isModalOpen } = useSelector(state => state.regulation)
+  const {
+    isModalOpen,
+    regulationSaved
+  } = useSelector(state => state.regulation)
 
   /** @type {string} */
   const [selectedRegulationLawType, setSelectedRegulationLawType] = useState()
@@ -82,6 +83,18 @@ const CreateRegulation = ({ title }) => {
     }
   }, [isEdition, regulatoryZoneMetadata])
 
+  const history = useHistory()
+  useEffect(() => {
+    if (regulationSaved) {
+      history.push('/backoffice')
+    }
+
+    batch(() => {
+      dispatch(setRegulationSaved(false))
+      dispatch(setSelectedRegulation({}))
+    })
+  }, [regulationSaved])
+
   const initForm = () => {
     setSelectedRegulationLawType(`${regulatoryZoneMetadata.lawType} / ${regulatoryZoneMetadata.seafront}`)
     setSelectedRegulationTopic(regulatoryZoneMetadata.topic)
@@ -108,34 +121,13 @@ const CreateRegulation = ({ title }) => {
   }
 
   const createOrUpdateRegulation = () => {
-    // TODO : Check form values
-    /** if (regulatoryTextHasMissingValue) {
-      console.log('one value is missing somewhere ! ')
-    } */
-
-    // TODO Move to a use_case
-    const formatWFS = new WFS()
-    const formatGML = new GML({
-      featureType: 'monitorfish:regulatory_areas',
-      srsName: 'EPSG:4326'
-    })
+    // Todo create feature
     const feature = new Feature({
       layer_name: selectedRegulationTopic
     })
-    feature.setId(`regulatory_areas.${selectedGeometryId}`)
-
-    const xs = new XMLSerializer()
-    const update = formatWFS.writeTransaction(null, [feature], null, formatGML)
-    const payload = xs.serializeToString(update)
-
-    fetch(`${GEOSERVER_URL}/geoserver/wfs`, {
-      method: 'POST',
-      mode: 'no-cors',
-      dataType: 'xml',
-      processData: false,
-      contentType: 'text/xml',
-      body: payload.replace('feature:', '')
-    }).then(r => console.log(r))
+    // replace constant
+    feature.setId(`regulatory_areas.${feature.geometryId}`)
+    dispatch(createOrUpdateRegulationInGeoserver(feature, 'update'))
   }
 
   const saveAsDraft = () => {

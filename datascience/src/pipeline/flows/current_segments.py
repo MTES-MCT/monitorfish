@@ -4,6 +4,7 @@ import pandas as pd
 import prefect
 from prefect import Flow, task
 
+from config import default_risk_factors, risk_factor_coefficients
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.segments import (
     attribute_segments_to_catches,
@@ -32,29 +33,36 @@ def compute_current_segments(catches, segments):
                 "gear",
                 "fao_area",
                 "species",
-                "risk_factor",
+                "impact_risk_factor",
                 "control_priority_level",
             ]
         ],
     )
 
     # Aggregate by vessel
-    current_segments = (
-        current_segments.groupby("cfr")[
-            ["segment", "risk_factor", "control_priority_level"]
-        ]
-        .agg(
-            {
-                "segment": "unique",
-                "risk_factor": "max",
-                "control_priority_level": "max",
-            }
-        )
+
+    current_segments_impact = (
+        current_segments.sort_values("impact_risk_factor", ascending=False)
+        .groupby("cfr")[["cfr", "segment", "impact_risk_factor"]]
+        .head(1)
+        .set_index("cfr")
         .rename(
             columns={
-                "segment": "segments",
+                "segment": "segment_highest_impact",
             }
         )
+    )
+
+    current_segments_priority = (
+        current_segments.sort_values("control_priority_level", ascending=False)
+        .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
+        .head(1)
+        .set_index("cfr")
+        .rename(columns={"segment": "segment_highest_priority"})
+    )
+
+    current_segments = (
+        current_segments.groupby("cfr")["segment"].unique().rename("segments")
     )
 
     total_catch_weight = catches.groupby("cfr")["weight"].sum()
@@ -63,6 +71,21 @@ def compute_current_segments(catches, segments):
     current_segments = pd.merge(
         current_segments,
         total_catch_weight,
+        left_index=True,
+        right_index=True,
+        how="outer",
+    )
+
+    current_segments = pd.merge(
+        current_segments,
+        current_segments_impact,
+        left_index=True,
+        right_index=True,
+        how="outer",
+    )
+    current_segments = pd.merge(
+        current_segments,
+        current_segments_priority,
         left_index=True,
         right_index=True,
         how="outer",
@@ -101,9 +124,7 @@ def merge_segments_catches(catches, current_segments):
     # Join departure, catches and segments information into a single table with 1 line
     # by vessel
     res = last_ers.join(species_onboard).join(current_segments).reset_index()
-    res = res.fillna(
-        {"total_weight_onboard": 0, "risk_factor": 1, "control_priority_level": 1}
-    )
+    res = res.fillna({"total_weight_onboard": 0, **default_risk_factors})
 
     return res
 

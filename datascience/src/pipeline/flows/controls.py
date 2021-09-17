@@ -343,7 +343,7 @@ def compute_controls_segments(
 
 
 @task(checkpoint=False)
-def load_controls(controls: pd.DataFrame, delete_existing: bool):
+def load_controls(controls: pd.DataFrame, how: str):
     load(
         controls,
         table_name="controls",
@@ -352,16 +352,16 @@ def load_controls(controls: pd.DataFrame, delete_existing: bool):
         logger=prefect.context.get("logger"),
         pg_array_columns=["infraction_ids"],
         jsonb_columns=["gear_controls", "catch_controls"],
-        delete_before_insert=delete_existing,
-        # TODO add `table_id_column` and `df_id_column` to tell which rows to delete from the table before inserting
+        how=how,
+        table_id_column="id",
+        df_id_column="id",
     )
 
 
 with Flow("Controls") as flow:
-
     # Parameters
-    delete_existing = Parameter("delete_existing", default=False)
-    number_of_months = Parameter("number_of_months", default=12)
+    loading_mode = Parameter("loading_mode")
+    number_of_months = Parameter("number_of_months")
 
     # Extract
     controls = extract_controls(number_of_months=number_of_months)
@@ -379,4 +379,4 @@ with Flow("Controls") as flow:
     )
 
     # Load
-    #     load_controls(controls, delete_existing)
+    load_controls(controls, how=loading_mode)

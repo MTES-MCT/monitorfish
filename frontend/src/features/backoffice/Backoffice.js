@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from '../map/BaseMap'
 import LawType from './LawType'
@@ -26,10 +26,32 @@ const Backoffice = () => {
     layersTopicsByRegTerritory
   } = useSelector(state => state.regulatory)
 
+  const {
+    regulationSaved
+  } = useSelector(state => state.regulation)
+
+  const initBackoffice = () => {
+    batch(() => {
+      dispatch(getAllRegulatoryLayersByRegTerritory())
+      dispatch(getAllGearCodes())
+    })
+  }
+
+  /**
+   * Init component datas on first load
+   */
   useEffect(() => {
-    dispatch(getAllRegulatoryLayersByRegTerritory())
-    dispatch(getAllGearCodes())
+    initBackoffice()
   }, [])
+
+  /**
+   * Refresh components data when a regulations is updated
+   */
+  useEffect(() => {
+    if (regulationSaved) {
+      initBackoffice()
+    }
+  }, [regulationSaved])
 
   function callCloseRegulatoryZoneMetadata () {
     dispatch(closeRegulatoryZoneMetadata())

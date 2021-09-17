@@ -17,6 +17,7 @@ import {
 } from './'
 import BaseMap from '../../map/BaseMap'
 import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
+import Layers from '../../../domain/entities/layers'
 
 // A déplacer ?
 import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
@@ -28,8 +29,7 @@ import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/
 import { setSelectedRegulation, setRegulationSaved } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 
-const CreateRegulation = ({ title }) => {
-  const isEdition = true
+const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
   const {
     regulatoryTopics,
@@ -64,6 +64,8 @@ const CreateRegulation = ({ title }) => {
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
+
+  let originalGeometryId = null
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
@@ -103,6 +105,7 @@ const CreateRegulation = ({ title }) => {
     setSelectedSeaFront(regulatoryZoneMetadata.seafront)
     setRegulatoryTextList(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
     setSelectedGeometry(regulatoryZoneMetadata.id)
+    originalGeometryId = regulatoryZoneMetadata.id
   }
 
   useEffect(() => {
@@ -121,13 +124,30 @@ const CreateRegulation = ({ title }) => {
   }
 
   const createOrUpdateRegulation = () => {
-    // Todo create feature
-    const feature = new Feature({
-      layer_name: selectedRegulationTopic
-    })
-    // replace constant
-    feature.setId(`regulatory_areas.${feature.geometryId}`)
-    dispatch(createOrUpdateRegulationInGeoserver(feature, 'update'))
+    const featureObject = {
+      layer_name: selectedRegulationTopic,
+      law_type: selectedRegulationLawType.split(' /')[0],
+      zones: nameZone,
+      region: selectedRegionList,
+      facade: selectedSeaFront,
+      references_reglementaires: JSON.stringify(regulatoryTextList)
+    }
+    console.log(featureObject)
+    let feature = new Feature(featureObject)
+    feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
+    dispatch(createOrUpdateRegulationInGeoserver(feature, isEdition ? 'update' : 'insert'))
+    if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
+      feature = new Feature({
+        layer_name: null,
+        law_type: null,
+        zones: null,
+        region: null,
+        seafront: null,
+        regulatoryTextList: null
+      })
+      feature.setId(`${Layers.REGULATORY.code}.${originalGeometryId}`)
+      dispatch(createOrUpdateRegulationInGeoserver(feature, 'update'))
+    }
   }
 
   const saveAsDraft = () => {
@@ -156,8 +176,8 @@ const CreateRegulation = ({ title }) => {
                   setSelectedValue={setSelectedRegulationLawType}
                   selectedValue={selectedRegulationLawType}
                   selectData={formatDataForSelectPicker(regulatoryLawTypes)}
-                  reglementationBlocName={regulationLawType}
-                  setReglementationBlocName={setRegulationLawType}
+                  regulationLawType={regulationLawType}
+                  setRegulationLawType={setRegulationLawType}
                 />
                 <RegulationTopicLine
                   selectedRegulationTopic={selectedRegulationTopic}
@@ -202,7 +222,10 @@ const CreateRegulation = ({ title }) => {
               isLast={false}
               onClick={createOrUpdateRegulation}
             >
-              Créer la réglementation
+            { isEdition
+              ? 'Enregister les modifications'
+              : 'Créer la réglementation'
+            }
             </ValidateButton>
             <CancelButton
               disabled={false}

@@ -1,4 +1,4 @@
-from prefect.schedules import CronSchedule
+from prefect.schedules import CronSchedule, Schedule, clocks
 
 from src.pipeline.flows import (
     control_anteriority,
@@ -20,7 +20,16 @@ from src.pipeline.flows import (
 ################################ Define flow schedules ################################
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 controllers.flow.schedule = CronSchedule("0 8 * * *")
-controls.flow.schedule = CronSchedule("4 * * * *")
+
+controls.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "1 * * * *",
+            parameter_defaults={"number_of_months": 1, "loading_mode": "upsert"},
+        )
+    ]
+)
+
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
 ers.flow.schedule = CronSchedule("* * * * *")
 fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")

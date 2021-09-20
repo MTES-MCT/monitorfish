@@ -22,6 +22,7 @@ docker-compose = "^1.28.4"
 prefect = "^0.14.9"
 simplejson = "^3.17.2"
 geopandas = "^0.9.0"
+GeoAlchemy2 = "^0.9.4"
 
 [tool.poetry.dev-dependencies]
 plotly = "^4.14.3"

@@ -4,7 +4,10 @@ import os
 import pathlib
 import shutil
 from io import StringIO
+from typing import Sequence, Union
 
+import geopandas as gpd
+import pandas as pd
 import sqlalchemy
 from sqlalchemy import MetaData, Table, func, select
 from sqlalchemy.exc import InvalidRequestError
@@ -46,7 +49,7 @@ def delete(
     connection: sqlalchemy.engine.base.Connection,
     logger: logging.Logger,
 ):
-    """Deletes all row from a table.
+    """Deletes all rows from a table.
     Useful to wipe a table before re-inserting fresh data in ETL jobs."""
     count_statement = select([func.count()]).select_from(table)
     n = connection.execute(count_statement).fetchall()[0][0]
@@ -54,6 +57,42 @@ def delete(
         logger.info(f"Found existing table {table.name} with {n} rows.")
         logger.info(f"Deleting table {table.name}...")
     connection.execute(table.delete())
+    count_statement = select([func.count()]).select_from(table)
+    n = connection.execute(count_statement).fetchall()[0][0]
+    if logger:
+        logger.info(f"Rows after deletion: {n}.")
+
+
+def delete_rows(
+    table: sqlalchemy.Table,
+    id_column: str,
+    ids_to_delete: Sequence,
+    connection: sqlalchemy.engine.base.Connection,
+    logger: logging.Logger,
+):
+    """Deletes all rows of a table whose id is in ``ids_to_delete``.
+
+    Useful to update a table with new values from a DataFrame. This can be used to
+    delete rows in the table before reinserting an updated version, while keeping rows
+    of the table that are not present in the DataFrame and that do not require an
+    update.
+
+    Args:
+        table (sqlalchemy.Table): table to remove rows from
+        id_column (str): name of the column in the table that contains ids to delete
+        ids (Sequence): list-like sequence of ids to look for in the table and delete
+        connection (sqlalchemy.engine.base.Connection): database connection
+        logger (logging.Logger): logger
+
+    """
+    count_statement = select([func.count()]).select_from(table)
+    n = connection.execute(count_statement).fetchall()[0][0]
+    if logger:
+        logger.info(f"Found existing table {table.name} with {n} rows.")
+        logger.info(f"Deleting rows that will be updated from table {table.name}...")
+
+    connection.execute(table.delete().where(table.c[id_column].in_(ids_to_delete)))
+
     count_statement = select([func.count()]).select_from(table)
     n = connection.execute(count_statement).fetchall()[0][0]
     if logger:

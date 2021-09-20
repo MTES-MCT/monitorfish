@@ -18,7 +18,7 @@ def load_controllers(controllers):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True,
+        how="replace",
     )
 
 

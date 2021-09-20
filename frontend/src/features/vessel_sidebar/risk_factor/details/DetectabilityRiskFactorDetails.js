@@ -15,8 +15,6 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
     riskFactor
   } = selectedVessel
 
-  console.log(riskFactor)
-
   return (
     <SubRiskDetails isOpen={isOpen}>
       <Line/>

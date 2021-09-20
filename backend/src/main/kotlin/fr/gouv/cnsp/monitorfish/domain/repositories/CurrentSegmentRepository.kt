@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.CurrentSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselCurrentSegment
 
 interface CurrentSegmentRepository {
-    fun findCurrentSegment(internalReferenceNumber: String): CurrentSegment?
+    fun findVesselCurrentSegment(internalReferenceNumber: String): VesselCurrentSegment?
 }

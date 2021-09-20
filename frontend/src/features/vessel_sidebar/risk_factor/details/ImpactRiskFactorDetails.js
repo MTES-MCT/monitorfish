@@ -36,9 +36,9 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
               <Key big>Segment de flotte actuel</Key>
               <Value>
                 {
-                  riskFactor?.segments?.length
+                  riskFactor?.segmentHighestImpact
                     ? <>
-                      {riskFactor?.segments[0]}{' '}
+                      {riskFactor?.segmentHighestImpact}{' '}
                       <Info title={'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
                       'façade dans son Plan de contrôle annuel.'}/>
                     </>

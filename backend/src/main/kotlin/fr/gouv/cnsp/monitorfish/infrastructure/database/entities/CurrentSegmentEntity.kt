@@ -5,7 +5,7 @@ import com.vladmihalcea.hibernate.type.array.ListArrayType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.CurrentSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselCurrentSegment
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import org.hibernate.annotations.TypeDefs
@@ -47,13 +47,17 @@ data class CurrentSegmentEntity(
         @Type(type = "string-array")
         @Column(name = "probable_segments", columnDefinition = "varchar(50)[]")
         val probableSegments: List<String>,
-        @Column(name = "risk_factor")
-        val riskFactor: Double,
+        @Column(name = "segment_highest_impact")
+        val segmentHighestImpact: String,
+        @Column(name = "segment_highest_priority")
+        val segmentHighestPriority: String,
+        @Column(name = "impact_risk_factor")
+        val impactRiskFactor: Double,
         @Column(name = "control_priority_level")
         val controlPriorityLevel: Double) {
 
-        fun toCurrentSegment(mapper: ObjectMapper) : CurrentSegment {
-                return CurrentSegment(
+        fun toCurrentSegment(mapper: ObjectMapper) : VesselCurrentSegment {
+                return VesselCurrentSegment(
                         internalReferenceNumber = cfr,
                         lastErsDateTime = lastErsDatetime,
                         departureDateTime = departureDateTime,
@@ -65,8 +69,10 @@ data class CurrentSegmentEntity(
                         totalWeightOnboard = totalWeightOnboard,
                         segments = segments,
                         probableSegments = probableSegments,
-                        riskFactor = riskFactor,
-                        controlPriorityLevel = controlPriorityLevel
+                        impactRiskFactor = impactRiskFactor,
+                        controlPriorityLevel = controlPriorityLevel,
+                        segmentHighestImpact = segmentHighestImpact,
+                        segmentHighestPriority = segmentHighestPriority,
                 )
         }
 }

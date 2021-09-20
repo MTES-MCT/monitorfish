@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import java.time.ZonedDateTime
 
-data class CurrentSegment(
+data class VesselCurrentSegment(
         val internalReferenceNumber: String ? = null,
         val lastErsDateTime: ZonedDateTime? = null,
         val departureDateTime: ZonedDateTime? = null,
@@ -14,5 +14,7 @@ data class CurrentSegment(
         val totalWeightOnboard: Double? = null,
         val segments: List<String>? = listOf(),
         val probableSegments: List<String>? = listOf(),
-        val riskFactor: Double? = null,
-        val controlPriorityLevel: Double? = null)
+        val impactRiskFactor: Double? = null,
+        val controlPriorityLevel: Double? = null,
+        val segmentHighestImpact: String? = null,
+        val segmentHighestPriority: String? = null)

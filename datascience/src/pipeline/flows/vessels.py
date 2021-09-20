@@ -307,7 +307,7 @@ def load_vessels(all_vessels):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True,
+        how="replace",
         pg_array_columns=[
             "declared_fishing_gears",
             "operator_phones",

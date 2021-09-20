@@ -13,7 +13,7 @@ context('VesselSidebar', () => {
     cy.wait(400)
   })
 
-  it.only('Resume Should be opened When clicking on a vessel', () => {
+  it('Resume Should be opened When clicking on a vessel', () => {
     // When
     cy.get('.vessels').click(460, 480, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')

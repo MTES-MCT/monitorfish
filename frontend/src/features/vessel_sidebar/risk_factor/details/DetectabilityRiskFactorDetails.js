@@ -1,23 +1,41 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { getRiskFactorColor } from '../../../../domain/entities/riskFactor'
+import { getDetectabilityRiskFactorText, getRiskFactorColor } from '../../../../domain/entities/riskFactor'
 import RiskFactorCursor from '../RiskFactorCursor'
+import { useSelector } from 'react-redux'
 
 const DetectabilityRiskFactorDetails = ({ isOpen }) => {
+  const {
+    selectedVessel
+  } = useSelector(state => state.vessel)
+
+  const {
+    riskFactor
+  } = selectedVessel
+
+  console.log(riskFactor)
+
   return (
     <SubRiskDetails isOpen={isOpen}>
       <Line/>
       <Zone>
-        <InlineKey>Priorité du segment MED06/ATL02</InlineKey>
-        <InlineValue>3 – élevée</InlineValue>
+        <InlineKey>
+          Priorité du segment{' '}
+          {
+            riskFactor?.segments?.length
+              ? riskFactor?.segments[0]
+              : <NoValue>-</NoValue>
+          }
+        </InlineKey>
+        <InlineValue>{riskFactor?.controlPriorityLevel.toFixed(1)} – {getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}</InlineValue>
         <FullWidth>
           <RiskFactorCursor
             height={5}
             withoutBox
-            value={3}
-            color={getRiskFactorColor(3)}
-            progress={100 * 3 / 4}
+            value={riskFactor?.controlPriorityLevel}
+            color={getRiskFactorColor(riskFactor?.controlPriorityLevel)}
+            progress={100 * riskFactor?.controlPriorityLevel / 4}
           />
         </FullWidth>
         <InlineKey>Priorité du navire</InlineKey>
@@ -51,6 +69,12 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
     </SubRiskDetails>
   )
 }
+
+const NoValue = styled.span`
+  color: ${COLORS.slateGray};
+  font-weight: 300;
+  line-height: normal;
+`
 
 const FullWidth = styled.div`
   width: 100%;

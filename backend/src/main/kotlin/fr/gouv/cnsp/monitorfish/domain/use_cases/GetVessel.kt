@@ -2,10 +2,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.Position
-import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
+import fr.gouv.cnsp.monitorfish.domain.repositories.CurrentSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -20,7 +21,8 @@ import java.time.ZonedDateTime
 @UseCase
 class GetVessel(private val vesselRepository: VesselRepository,
                 private val positionRepository: PositionRepository,
-                private val ersRepository: ERSRepository) {
+                private val ersRepository: ERSRepository,
+                private val currentSegmentRepository: CurrentSegmentRepository) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
     suspend fun execute(internalReferenceNumber: String,
@@ -29,7 +31,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
                         trackDepth: VesselTrackDepth,
                         vesselIdentifier: VesselIdentifier,
                         fromDateTime: ZonedDateTime? = null,
-                        toDateTime: ZonedDateTime? = null): Pair<Boolean, Pair<Vessel, List<Position>>> {
+                        toDateTime: ZonedDateTime? = null): Pair<Boolean, VesselWithData> {
         var vesselTrackDepthHasBeenModified = false
 
         if(trackDepth == VesselTrackDepth.CUSTOM) {
@@ -75,7 +77,16 @@ class GetVessel(private val vesselRepository: VesselRepository,
 
             val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }
 
-            Pair(vesselTrackDepthHasBeenModified, Pair(vesselFuture.await(), positionsFuture.await()))
+            val currentSegmentFuture = async { currentSegmentRepository.findCurrentSegment(internalReferenceNumber) }
+
+            Pair(
+                    vesselTrackDepthHasBeenModified,
+                    VesselWithData(
+                            vesselFuture.await(),
+                            positionsFuture.await(),
+                            currentSegmentFuture.await()
+                    )
+            )
         }
     }
 

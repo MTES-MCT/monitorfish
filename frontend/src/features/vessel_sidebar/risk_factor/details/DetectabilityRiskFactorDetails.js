@@ -27,7 +27,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
               : <NoValue>-</NoValue>
           }
         </InlineKey>
-        <InlineValue>{riskFactor?.controlPriorityLevel.toFixed(1)} – {getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}</InlineValue>
+        <InlineValue data-cy={'risk-factor-priority-level'}>{riskFactor?.controlPriorityLevel.toFixed(1)} – {getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}</InlineValue>
         <FullWidth>
           <RiskFactorCursor
             height={5}

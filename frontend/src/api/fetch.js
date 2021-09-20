@@ -452,6 +452,7 @@ function getHealthcheckFromAPI () {
 function updateOrCreateRegulation (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
+    featureNS: 'monitorfish',
     featureType: 'monitorfish:regulatory_areas',
     srsName: 'EPSG:4326'
   })

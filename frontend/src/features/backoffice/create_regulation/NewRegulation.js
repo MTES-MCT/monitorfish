@@ -147,7 +147,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
 
-    dispatch(createOrUpdateRegulationInGeoserver(feature, isEdition ? 'update' : 'insert'))
+    const actionType = isEdition ? 'update' : 'insert'
+    dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
     if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
       featureObject = new Feature({
         layer_name: null,

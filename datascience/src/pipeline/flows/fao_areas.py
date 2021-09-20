@@ -40,6 +40,7 @@ def transform_fao_areas(fao_areas: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
     fao_areas = fao_areas.copy(deep=True)
     fao_areas.columns = fao_areas.columns.map(str.lower)
+    fao_areas = fao_areas.drop(columns=["id"])
 
     fao_areas = gpd.GeoDataFrame(
         fao_areas.astype(
@@ -54,7 +55,6 @@ def transform_fao_areas(fao_areas: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
                 "f_division": str,
                 "f_subdivis": str,
                 "f_subunit": str,
-                "id": int,
                 "name_en": str,
                 "name_fr": str,
                 "name_es": str,

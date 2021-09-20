@@ -25,7 +25,7 @@ context('Vessel Track', () => {
     cy.get('*[data-cy^="vessel-card-ircs"]').contains('AQIK')
   })
 
-  it('Position card Should be seen on the map on vessel track pointer move', () => {
+  it.only('Position card Should be seen on the map on vessel track pointer move', () => {
     // When we click on the vessel
     cy.get('.vessels').click(460, 480, { timeout: 20000 })
 
@@ -55,12 +55,6 @@ context('Vessel Track', () => {
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 647, pointerId: 1, force: true, pixel: [411, 635] })
     cy.wait(20)
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 648, pointerId: 1, force: true, pixel: [411, 635] })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 412, clientY: 646, pointerId: 1, force: true, pixel: [411, 635] })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 413, clientY: 649, pointerId: 1, force: true, pixel: [411, 635] })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 645, pointerId: 1, force: true, pixel: [411, 635] })
 
 
     cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 38′ 24″ N')

@@ -13,7 +13,7 @@ context('VesselSidebar', () => {
     cy.wait(400)
   })
 
-  it('Resume Should be opened When clicking on a vessel', () => {
+  it.only('Resume Should be opened When clicking on a vessel', () => {
     // When
     cy.get('.vessels').click(460, 480, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -24,6 +24,13 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="impact-risk-factor"]').contains("2.1", { timeout: 20000 })
     cy.get('*[data-cy^="probability-risk-factor"]').contains("2.0", { timeout: 20000 })
     cy.get('*[data-cy^="detectability-risk-factor"]').contains("3.0", { timeout: 20000 })
+
+    cy.get('*[data-cy^="impact-risk-factor"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="probability-risk-factor"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="detectability-risk-factor"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="risk-factor-priority-level"]').contains("2.6 – élevée", { timeout: 20000 })
+
+    cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ timeout: 20000, force: true })
   })
 
   it('Identity Should contain the vessel identity', () => {

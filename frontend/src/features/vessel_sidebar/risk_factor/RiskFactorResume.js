@@ -43,7 +43,12 @@ const RiskFactorResume = () => {
                   color={getRiskFactorColor(selectedVessel?.riskFactor?.riskFactor)}
                   progress={100 * selectedVessel?.riskFactor?.riskFactor / 4}
                 />
-                <SeeMore onClick={() => setRiskFactorExplanationIsOpen(true)}>En savoir plus</SeeMore>
+                <SeeMore
+                  data-cy={'show-risk-factor-explanation-modal'}
+                  onClick={() => setRiskFactorExplanationIsOpen(true)}
+                >
+                  En savoir plus
+                </SeeMore>
               </GlobalRisk>
               <Line/>
               <SubRisk

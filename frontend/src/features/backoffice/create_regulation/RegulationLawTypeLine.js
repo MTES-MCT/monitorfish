@@ -12,9 +12,9 @@ const RegulationLawTypeLine = props => {
     setSelectedValue,
     selectedValue,
     selectData,
-    regulationLawType,
-    setRegulationLawType
+    lawTypeIsMissing
   } = props
+  const [regulationLawType, setRegulationLawType] = useState()
   const [regulationBlocNameIsRed, setRegulationBlocNameIsRed] = useState(false)
   const [isAddRegulationBlocClicked, setIsAddRegulationBlocClicked] = useState(false)
 
@@ -40,6 +40,7 @@ const RegulationLawTypeLine = props => {
         onChange={setSelectedValue}
         data={selectData}
         renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedValue} item={item} tag={'Radio'} />}
+        valueIsMissing={lawTypeIsMissing}
       />
       {selectedValue &&
         <Tag
@@ -55,7 +56,7 @@ const RegulationLawTypeLine = props => {
                 value={regulationLawType}
                 onChange={setRegulationLawType}
                 width={'250px'}
-                isRed={regulationBlocNameIsRed}
+                $isRed={regulationBlocNameIsRed}
               />
               <ValidateButton
                 disabled={false}

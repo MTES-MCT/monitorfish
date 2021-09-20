@@ -47,7 +47,6 @@ const DatePickerStyled = styled(DatePicker)`
     display: none;
   }
   .rs-picker-toggle {
-    border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray}  !important;
     box-sizing: border-box;
     color: ${COLORS.lightGray};
   }
@@ -59,6 +58,7 @@ const DatePickerStyled = styled(DatePicker)`
   }
 
   .rs-picker-toggle.rs-btn {
+    border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray}  !important;
     box-sizing: border-box;
     padding: 6px;
   }

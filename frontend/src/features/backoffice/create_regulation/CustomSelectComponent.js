@@ -11,7 +11,8 @@ const CustomSelectComponent = props => {
     onChange,
     data,
     renderMenuItem,
-    menuStyle
+    menuStyle,
+    valueIsMissing
   } = props
 
   const selectPickerStyle = {
@@ -33,6 +34,7 @@ const CustomSelectComponent = props => {
         renderMenuItem={renderMenuItem}
         menuStyle={menuStyle}
         menuClassName={'new-regulation-select-picker'}
+        $valueIsMissing={valueIsMissing}
       />
     </SelectWrapper>
   )
@@ -47,15 +49,15 @@ const SelectWrapper = styled.div`
 const CustomSelectPicker = styled(SelectPicker)`
   a {
     box-sizing: border-box;
-    border-color: ${COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:hover {
-    border-color: ${COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:focus {
-    border-color: ${COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
   }
 `
 

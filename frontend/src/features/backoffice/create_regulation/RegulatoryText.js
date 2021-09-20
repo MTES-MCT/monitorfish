@@ -188,14 +188,14 @@ const RegulatoryText = props => {
         ? <>
           <CustomInput
             placeholder={'Nom'}
-            $isred={nameIsRequired}
+            $isRed={nameIsRequired}
             width={'87px'}
             value={currentRegulatoryTextName}
             onChange={onNameValueChange}
           />
           <CustomInput
             placeholder={'URL'}
-            $isred={URLIsrequired}
+            $isRed={URLIsrequired}
             width={'87px'}
             value={currentRegulatoryTextURL}
             onChange={onURLValueChange}
@@ -230,11 +230,11 @@ const RegulatoryText = props => {
         onChange={setCurrentTextType}
       >
         <CustomCheckbox
-          $isrequired={textTypeIsRequired}
+          $isRequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.CREATION}
         >création de la zone</CustomCheckbox>
         <CustomCheckbox
-          $isrequired={textTypeIsRequired}
+          $isRequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.REGULATION}
         >réglementation de la zone</CustomCheckbox>
       </CustomCheckboxGroup>
@@ -242,8 +242,8 @@ const RegulatoryText = props => {
     <ContentLine>
       <Label>Début de validité</Label>
       <CustomDatePicker
-        $isrequired={startDateIsRequired}
-        value={currentStartDate}
+        isRequired={startDateIsRequired}
+        value={currentStartDate === INFINITE ? undefined : currentStartDate}
         onChange={(date) => setCurrentStartDate(date)}
         onOk={(date, _) => setCurrentStartDate(date)}
         format='DD/MM/YYYY'
@@ -253,8 +253,8 @@ const RegulatoryText = props => {
     <ContentLine>
       <Label>Fin de validité</Label>
       <CustomDatePicker
-        $isrequired={endDateIsRequired}
-        value={currentEndDate === INFINITE ? '' : currentEndDate}
+        isRequired={endDateIsRequired}
+        value={currentEndDate === INFINITE ? undefined : currentEndDate}
         onChange={(date) => setCurrentEndDate(date)}
         onOk={(date, _) => setCurrentEndDate(date)}
         format='DD/MM/YYYY'
@@ -262,7 +262,7 @@ const RegulatoryText = props => {
       />
       <Or>&nbsp;ou</Or>
       <CustomCheckbox
-        $isrequired={endDateIsRequired}
+        $isRequired={endDateIsRequired}
         checked={currentEndDate === INFINITE}
         onChange={_ => setCurrentEndDate(INFINITE)}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
@@ -301,7 +301,7 @@ const CustomCheckbox = styled(Checkbox)`
   }
   .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {
-      border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
+      border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray} !important;
       box-sizing: border-box;
     }
     &:after {

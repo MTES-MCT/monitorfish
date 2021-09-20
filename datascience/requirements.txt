@@ -87,6 +87,7 @@ pyyaml==5.4.1; python_full_version >= "3.6.1" and python_version >= "3.4" and (p
 queuelib==1.5.0; python_version >= "3.6"
 regex==2020.11.13; python_version >= "3.6"
 requests==2.25.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
+rtree==0.9.7
 scrapy==2.4.1; python_version >= "3.6"
 service-identity==18.1.0; python_version >= "3.6"
 shapely==1.7.1; python_version >= "3.6"

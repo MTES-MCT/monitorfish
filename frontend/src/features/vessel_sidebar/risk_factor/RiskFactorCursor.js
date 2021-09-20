@@ -12,7 +12,7 @@ const RiskFactorCursor = ({ value, color, progress, isBig, withoutBox, height })
         setProgressWithDelay(progress)
       }, 100)
     }
-  }, progress)
+  }, [progress])
 
   return (
     <Wrapper

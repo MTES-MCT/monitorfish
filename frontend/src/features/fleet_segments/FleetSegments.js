@@ -79,7 +79,7 @@ Façade: ${dirm}`
 }
 
 const NoValue = styled.span`
-  color: ${COLORS.grayDarkerTwo};
+  color: ${COLORS.slateGray};
   font-weight: 300;
   line-height: normal;
 `

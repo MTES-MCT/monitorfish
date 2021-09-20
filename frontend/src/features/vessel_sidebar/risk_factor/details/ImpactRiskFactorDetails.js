@@ -1,9 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as InfoSVG } from '../../../icons/Information.svg'
 import { COLORS } from '../../../../constants/constants'
+import { useSelector } from 'react-redux'
 
 const ImpactRiskFactorDetails = ({ isOpen }) => {
+  const {
+    selectedVessel
+  } = useSelector(state => state.vessel)
+  const [faoZones, setFaoZones] = useState([])
+
+  const {
+    riskFactor
+  } = selectedVessel
+
+  useEffect(() => {
+    if (riskFactor && riskFactor.speciesOnboard) {
+      const faoZones = riskFactor.speciesOnboard.map(species => {
+        return species.faoZone
+      })
+
+      setFaoZones([...new Set(faoZones)])
+    } else {
+      setFaoZones([])
+    }
+  }, [riskFactor])
+
   return (
     <SubRiskDetails isOpen={isOpen}>
       <Line/>
@@ -13,8 +35,15 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key big>Segment de flotte actuel</Key>
               <Value>
-                MED06/ATL01 <Info title={'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
-              'façade dans son Plan de contrôle annuel.'}/>
+                {
+                  riskFactor?.segments?.length
+                    ? <>
+                      {riskFactor?.segments[0]}{' '}
+                      <Info title={'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
+                      'façade dans son Plan de contrôle annuel.'}/>
+                    </>
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
           </TableBody>
@@ -24,19 +53,31 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key>Engins à bord</Key>
               <Value>
-                LLD, LLS
+                {
+                  riskFactor?.gearOnboard?.length
+                    ? riskFactor?.gearOnboard?.map(gear => gear.gear).join(', ')
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
             <Field>
               <Key>Espèces à bord</Key>
               <Value>
-                BFT, SWO, ALB
+                {
+                  riskFactor?.speciesOnboard?.length
+                    ? riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
             <Field>
               <Key>Zones de la marée</Key>
               <Value>
-                37. 1. 2
+                {
+                  faoZones.length
+                    ? faoZones.join(', ')
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
           </TableBody>
@@ -45,6 +86,12 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
     </SubRiskDetails>
   )
 }
+
+const NoValue = styled.span`
+  color: ${COLORS.slateGray};
+  font-weight: 300;
+  line-height: normal;
+`
 
 const Line = styled.div`
   width: 100%;

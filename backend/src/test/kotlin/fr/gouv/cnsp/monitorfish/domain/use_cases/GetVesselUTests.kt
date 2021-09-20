@@ -3,7 +3,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.*
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.CurrentSegment
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
+import fr.gouv.cnsp.monitorfish.domain.repositories.CurrentSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -30,6 +32,9 @@ class GetVesselUTests {
     @MockBean
     private lateinit var ersRepository: ERSRepository
 
+    @MockBean
+    private lateinit var currentSegmentRepository: CurrentSegmentRepository
+
     @Test
     fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
         // Given
@@ -40,10 +45,11 @@ class GetVesselUTests {
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
         given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
         given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
+        given(currentSegmentRepository.findCurrentSegment(any())).willReturn(CurrentSegment(riskFactor = 4.0))
 
         // When
         val pair = runBlocking {
-             GetVessel(vesselRepository, positionRepository, ersRepository)
+             GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository)
                      .execute("FR224226850",
                              "",
                              "",
@@ -55,8 +61,9 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.second.first().dateTime).isEqualTo(now.minusHours(4))
-        assertThat(pair.second.second.last().dateTime).isEqualTo(now.minusHours(1))
+        assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
+        assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
+        assertThat(pair.second.currentSegment?.riskFactor).isEqualTo(4.0)
     }
 
     @Test
@@ -73,7 +80,7 @@ class GetVesselUTests {
 
         // When
         val pair = runBlocking {
-            GetVessel(vesselRepository, positionRepository, ersRepository)
+            GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository)
                     .execute("FR224226850",
                             "",
                             "",
@@ -85,19 +92,20 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isTrue
-        assertThat(pair.second.second.first().dateTime).isEqualTo(now.minusHours(4))
-        assertThat(pair.second.second.last().dateTime).isEqualTo(now.minusHours(1))
+        assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
+        assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
     }
 
     @Test
     fun `execute Should not throw an exception When a vessel's position is not found`() {
         // Given
         given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf())
+        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
 
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVessel(vesselRepository, positionRepository, ersRepository)
+                GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository)
                         .execute("FR224226850",
                                 "",
                                 "",
@@ -116,11 +124,12 @@ class GetVesselUTests {
     fun `execute Should not throw an exception When a vessel's last DEP is not found`() {
         // Given
         given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willThrow(NoERSLastDepartureDateFound("ERROR"))
+        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
 
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVessel(vesselRepository, positionRepository, ersRepository)
+                GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository)
                         .execute("FR224226850",
                                 "",
                                 "",
@@ -143,7 +152,7 @@ class GetVesselUTests {
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVessel(vesselRepository, positionRepository, ersRepository).execute(
+                GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository).execute(
                         "FR224226850",
                         "",
                         "",
@@ -163,12 +172,13 @@ class GetVesselUTests {
     fun `execute Should pass the from and to parameters to the repository When it is a CUSTOM track depth`() {
         // Given
         given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf())
+        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
 
         // When
         val fromDateTime = ZonedDateTime.now().minusMinutes(15)
         val toDateTime = ZonedDateTime.now()
         runBlocking {
-            GetVessel(vesselRepository, positionRepository, ersRepository).execute(
+            GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository).execute(
                     "FR224226850",
                     "",
                     "",
@@ -195,7 +205,7 @@ class GetVesselUTests {
 
         // When
         runBlocking {
-            GetVessel(vesselRepository, positionRepository, ersRepository)
+            GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository)
                     .execute("FR224226850",
                             "",
                             "",

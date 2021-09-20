@@ -36,9 +36,9 @@ const RiskFactorResume = () => {
           <RiskFactorCursor
             height={24}
             isBig={true}
-            value={parseFloat(selectedVessel?.riskFactor).toFixed(1)}
-            color={getRiskFactorColor(selectedVessel?.riskFactor)}
-            progress={100 * selectedVessel?.riskFactor / 4}
+            value={parseFloat(selectedVessel?.globalRiskFactor).toFixed(1)}
+            color={getRiskFactorColor(selectedVessel?.globalRiskFactor)}
+            progress={100 * selectedVessel?.globalRiskFactor / 4}
           />
           <SeeMore onClick={() => setRiskFactorExplanationIsOpen(true)}>En savoir plus</SeeMore>
         </GlobalRisk>

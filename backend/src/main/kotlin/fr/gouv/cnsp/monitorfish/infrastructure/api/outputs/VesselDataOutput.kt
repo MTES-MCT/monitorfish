@@ -73,7 +73,11 @@ data class VesselDataOutput(
                     positions = vesselWithData.positions.map {
                         PositionDataOutput.fromPosition(it)
                     },
-                    riskFactor = RiskFactorDataOutput.fromCurrentSegment(vesselWithData.currentSegment)
+                    riskFactor = RiskFactorDataOutput.fromVesselCurrentSegmentAndControlAnteriority(
+                            vesselWithData.vesselCurrentSegment,
+                            vesselWithData.vesselControlAnteriority,
+                            vesselWithData.vesselRiskFactor,
+                    )
             )
         }
     }

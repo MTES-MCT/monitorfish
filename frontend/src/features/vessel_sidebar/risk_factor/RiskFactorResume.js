@@ -30,95 +30,110 @@ const RiskFactorResume = () => {
 
   return (
     <>
-      <RiskFactorZone>
-        <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
-        <GlobalRisk data-cy={'global-risk-factor'}>
-          <RiskFactorCursor
-            height={24}
-            isBig={true}
-            value={parseFloat(selectedVessel?.globalRiskFactor).toFixed(1)}
-            color={getRiskFactorColor(selectedVessel?.globalRiskFactor)}
-            progress={100 * selectedVessel?.globalRiskFactor / 4}
-          />
-          <SeeMore onClick={() => setRiskFactorExplanationIsOpen(true)}>En savoir plus</SeeMore>
-        </GlobalRisk>
-        <Line/>
-        <SubRisk
-          data-cy={'impact-risk-factor'}
-          onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}
-        >
-          <SubRiskHeader>
-            <SubRiskTitle>
-              Impact sur la ressource
-            </SubRiskTitle>
-            <Chevron isOpen={impactRiskFactorIsOpen}/>
-          </SubRiskHeader>
-          <RiskFactorImpact/>
-          <RiskFactorCursor
-            height={8}
-            value={parseFloat(selectedVessel?.impactRiskFactor).toFixed(1)}
-            color={getRiskFactorColor(selectedVessel?.impactRiskFactor)}
-            progress={100 * selectedVessel?.impactRiskFactor / 4}
-          />
-          <SubRiskText title={getImpactRiskFactorText(selectedVessel?.impactRiskFactor)}>
-            { getImpactRiskFactorText(selectedVessel?.impactRiskFactor) }
-          </SubRiskText>
-        </SubRisk>
-        <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen}/>
-        <Line/>
-        <SubRisk
-          data-cy={'probability-risk-factor'}
-          onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
-        >
-          <SubRiskHeader>
-            <SubRiskTitle>
-              Probabilité d&apos;infraction
-            </SubRiskTitle>
-            <Chevron isOpen={probabilityRiskFactorIsOpen}/>
-          </SubRiskHeader>
-          <RiskFactorInfractions/>
-          <RiskFactorCursor
-            height={8}
-            value={parseFloat(selectedVessel?.probabilityRiskFactor).toFixed(1)}
-            color={getRiskFactorColor(selectedVessel?.probabilityRiskFactor)}
-            progress={100 * selectedVessel?.probabilityRiskFactor / 4}
-          />
-          <SubRiskText title={getProbabilityRiskFactorText(selectedVessel?.probabilityRiskFactor)}>
-            { getProbabilityRiskFactorText(selectedVessel?.probabilityRiskFactor) }
-          </SubRiskText>
-        </SubRisk>
-        <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen}/>
-        <Line/>
-        <SubRisk
-          data-cy={'detectability-risk-factor'}
-          onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
-        >
-          <SubRiskHeader>
-            <SubRiskTitle>
-              Priorité de contrôle
-            </SubRiskTitle>
-            <Chevron isOpen={detectabilityRiskFactorIsOpen}/>
-          </SubRiskHeader>
-          <RiskFactorControl/>
-          <RiskFactorCursor
-            height={8}
-            value={parseFloat(selectedVessel?.detectabilityRiskFactor).toFixed(1)}
-            color={getRiskFactorColor(selectedVessel?.detectabilityRiskFactor)}
-            progress={100 * selectedVessel?.detectabilityRiskFactor / 4}
-          />
-          <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.detectabilityRiskFactor, true)}>
-            { getDetectabilityRiskFactorText(selectedVessel?.detectabilityRiskFactor, true) }
-          </SubRiskText>
-        </SubRisk>
-        <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen}/>
-      </RiskFactorZone>
-      <RiskFactorExplanationModal
-        isOpen={riskFactorExplanationIsOpen}
-        setIsOpen={setRiskFactorExplanationIsOpen}
-      />
-      </>
+      {
+        selectedVessel?.riskFactor?.riskFactor
+          ? <>
+            <RiskFactorZone>
+              <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
+              <GlobalRisk data-cy={'global-risk-factor'}>
+                <RiskFactorCursor
+                  height={24}
+                  isBig={true}
+                  value={parseFloat(selectedVessel?.riskFactor?.riskFactor).toFixed(1)}
+                  color={getRiskFactorColor(selectedVessel?.riskFactor?.riskFactor)}
+                  progress={100 * selectedVessel?.riskFactor?.riskFactor / 4}
+                />
+                <SeeMore onClick={() => setRiskFactorExplanationIsOpen(true)}>En savoir plus</SeeMore>
+              </GlobalRisk>
+              <Line/>
+              <SubRisk
+                data-cy={'impact-risk-factor'}
+                onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}
+              >
+                <SubRiskHeader>
+                  <SubRiskTitle>
+                    Impact sur la ressource
+                  </SubRiskTitle>
+                  <Chevron isOpen={impactRiskFactorIsOpen}/>
+                </SubRiskHeader>
+                <RiskFactorImpact/>
+                <RiskFactorCursor
+                  height={8}
+                  value={parseFloat(selectedVessel?.riskFactor?.impactRiskFactor).toFixed(1)}
+                  color={getRiskFactorColor(selectedVessel?.riskFactor?.impactRiskFactor)}
+                  progress={100 * selectedVessel?.riskFactor?.impactRiskFactor / 4}
+                />
+                <SubRiskText title={getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor)}>
+                  {getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor)}
+                </SubRiskText>
+              </SubRisk>
+              <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen}/>
+              <Line/>
+              <SubRisk
+                data-cy={'probability-risk-factor'}
+                onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
+              >
+                <SubRiskHeader>
+                  <SubRiskTitle>
+                    Probabilité d&apos;infraction
+                  </SubRiskTitle>
+                  <Chevron isOpen={probabilityRiskFactorIsOpen}/>
+                </SubRiskHeader>
+                <RiskFactorInfractions/>
+                <RiskFactorCursor
+                  height={8}
+                  value={parseFloat(selectedVessel?.riskFactor?.probabilityRiskFactor).toFixed(1)}
+                  color={getRiskFactorColor(selectedVessel?.riskFactor?.probabilityRiskFactor)}
+                  progress={100 * selectedVessel?.riskFactor?.probabilityRiskFactor / 4}
+                />
+                <SubRiskText title={getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor)}>
+                  {getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor)}
+                </SubRiskText>
+              </SubRisk>
+              <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen}/>
+              <Line/>
+              <SubRisk
+                data-cy={'detectability-risk-factor'}
+                onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
+              >
+                <SubRiskHeader>
+                  <SubRiskTitle>
+                    Priorité de contrôle
+                  </SubRiskTitle>
+                  <Chevron isOpen={detectabilityRiskFactorIsOpen}/>
+                </SubRiskHeader>
+                <RiskFactorControl/>
+                <RiskFactorCursor
+                  height={8}
+                  value={parseFloat(selectedVessel?.detectabilityRiskFactor).toFixed(1)}
+                  color={getRiskFactorColor(selectedVessel?.detectabilityRiskFactor)}
+                  progress={100 * selectedVessel?.detectabilityRiskFactor / 4}
+                />
+                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.detectabilityRiskFactor, true)}>
+                  {getDetectabilityRiskFactorText(selectedVessel?.detectabilityRiskFactor, true)}
+                </SubRiskText>
+              </SubRisk>
+              <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen}/>
+            </RiskFactorZone>
+            <RiskFactorExplanationModal
+              isOpen={riskFactorExplanationIsOpen}
+              setIsOpen={setRiskFactorExplanationIsOpen}
+            />
+          </>
+          : <NoRiskFactor>Ce navire n&apos;a pas de note de risque</NoRiskFactor>
+      }
+    </>
   )
 }
+
+const NoRiskFactor = styled.div`
+  margin: 5px 5px 10px 5px;
+  padding: 10px 10px 10px 25px;
+  text-align: left;
+  background: ${COLORS.background};
+  font-size: 15px;
+  color: ${COLORS.slateGray};
+`
 
 const Chevron = styled(ChevronIcon)`
   margin-right: 25px;

@@ -28,6 +28,8 @@ class CaffeineConfiguration {
     val infractions = "infractions"
     val fleetSegments = "fleet_segments"
     val currentSegments = "current_segment"
+    val controlAnteriority = "control_anteriority"
+    val riskFactors = "risk_factors"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
@@ -47,6 +49,8 @@ class CaffeineConfiguration {
         val portCache = buildCache(port, ticker, oneWeek)
         val fleetSegmentsCache = buildCache(fleetSegments, ticker, oneWeek)
         val currentSegmentsCache = buildCache(currentSegments, ticker, 1)
+        val controlAnteriorityCache = buildCache(controlAnteriority, ticker, 1)
+        val riskFactorsCache = buildCache(riskFactors, ticker, 1)
 
         val infractionsCache = buildCache(infractions, ticker, oneWeek)
 
@@ -70,7 +74,9 @@ class CaffeineConfiguration {
                 ersRawMessageCache,
                 infractionsCache,
                 fleetSegmentsCache,
-                currentSegmentsCache))
+                currentSegmentsCache,
+                controlAnteriorityCache,
+                riskFactorsCache))
 
         return manager
     }

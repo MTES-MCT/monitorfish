@@ -6,10 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.CurrentSegmentRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -22,7 +19,9 @@ import java.time.ZonedDateTime
 class GetVessel(private val vesselRepository: VesselRepository,
                 private val positionRepository: PositionRepository,
                 private val ersRepository: ERSRepository,
-                private val currentSegmentRepository: CurrentSegmentRepository) {
+                private val currentSegmentRepository: CurrentSegmentRepository,
+                private val controlAnteriorityRepository: ControlAnteriorityRepository,
+                private val riskFactorsRepository: RiskFactorsRepository) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
     suspend fun execute(internalReferenceNumber: String,
@@ -77,14 +76,20 @@ class GetVessel(private val vesselRepository: VesselRepository,
 
             val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }
 
-            val currentSegmentFuture = async { currentSegmentRepository.findCurrentSegment(internalReferenceNumber) }
+            val vesselCurrentSegmentFuture = async { currentSegmentRepository.findVesselCurrentSegment(internalReferenceNumber) }
+
+            val vesselControlAnteriorityFuture = async { controlAnteriorityRepository.findVesselControlAnteriority(internalReferenceNumber) }
+
+            val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
 
             Pair(
                     vesselTrackDepthHasBeenModified,
                     VesselWithData(
                             vesselFuture.await(),
                             positionsFuture.await(),
-                            currentSegmentFuture.await()
+                            vesselCurrentSegmentFuture.await(),
+                            vesselControlAnteriorityFuture.await(),
+                            vesselRiskFactorsFuture.await()
                     )
             )
         }

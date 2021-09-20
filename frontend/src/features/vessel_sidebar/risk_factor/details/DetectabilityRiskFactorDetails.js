@@ -4,6 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import { getDetectabilityRiskFactorText, getRiskFactorColor } from '../../../../domain/entities/riskFactor'
 import RiskFactorCursor from '../RiskFactorCursor'
 import { useSelector } from 'react-redux'
+import { getDate } from '../../../../utils'
 
 const DetectabilityRiskFactorDetails = ({ isOpen }) => {
   const {
@@ -23,8 +24,8 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
         <InlineKey>
           Priorité du segment{' '}
           {
-            riskFactor?.segments?.length
-              ? riskFactor?.segments[0]
+            riskFactor?.segmentHighestPriority
+              ? riskFactor?.segmentHighestPriority
               : <NoValue>-</NoValue>
           }
         </InlineKey>
@@ -39,14 +40,14 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
           />
         </FullWidth>
         <InlineKey>Priorité du navire</InlineKey>
-        <InlineValue>3.8 – contrôles rares</InlineValue>
+        <InlineValue>{riskFactor?.controlRateRiskFactor.toFixed(1)} – contrôles rares</InlineValue>
         <FullWidth>
           <RiskFactorCursor
             height={5}
             withoutBox
-            value={3.8}
-            color={getRiskFactorColor(3.8)}
-            progress={100 * 3.8 / 4}
+            value={riskFactor?.controlRateRiskFactor}
+            color={getRiskFactorColor(riskFactor?.controlRateRiskFactor)}
+            progress={100 * riskFactor?.controlRateRiskFactor / 4}
           />
         </FullWidth>
         <Fields>
@@ -54,13 +55,13 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                1 contrôle sur les 3 dernières années
+                {riskFactor?.numberControlsLastThreeYears} contrôle sur les 3 dernières années
               </Value>
             </Field>
             <Field>
               <Key>Dernier contrôle</Key>
               <Value>
-                Le 22/11/2019 (1 infraction)
+                Le {getDate(riskFactor?.lastControlDatetime)}
               </Value>
             </Field>
           </TableBody>

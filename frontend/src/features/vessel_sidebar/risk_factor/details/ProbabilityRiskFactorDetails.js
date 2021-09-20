@@ -2,16 +2,25 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import InfractionsResume from '../../../controls/InfractionsResume'
+import { useSelector } from 'react-redux'
 
 const ProbabilityRiskFactorDetails = ({ isOpen }) => {
+  const {
+    selectedVessel
+  } = useSelector(state => state.vessel)
+
+  const {
+    riskFactor
+  } = selectedVessel
+
   return (
     <SubRiskDetails isOpen={isOpen}>
       <Line/>
       <InfractionsResumeZone>
         <InfractionsResume
-          numberOfDiversions={0}
-          numberOfEscortsToQuay={0}
-          numberOfSeizures={1}
+          numberOfDiversions={riskFactor?.numberDiversionsLastFiveYears}
+          numberOfEscortsToQuay={riskFactor?.numberEscortsToQuayLastFiveYears}
+          numberOfSeizures={riskFactor?.numberSeizuresLastFiveYears}
         />
       </InfractionsResumeZone>
       <Zone>
@@ -20,13 +29,16 @@ const ProbabilityRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                8 contrôles sur 5 ans (2016-2021)
+                {riskFactor?.numberControlsLastFiveYears} contrôles sur 5 ans
+                ({new Date(new Date().getUTCFullYear() - 5, 0, 1).getFullYear()}
+                -
+                {new Date().getFullYear()})
               </Value>
             </Field>
             <Field>
               <Key>Infractions pêche</Key>
               <Value>
-                5 infractions pêche / 8 contrôles
+                {riskFactor?.numberInfractionsLastFiveYears} infractions pêche / {riskFactor?.numberControlsLastFiveYears} contrôles
               </Value>
             </Field>
           </TableBody>

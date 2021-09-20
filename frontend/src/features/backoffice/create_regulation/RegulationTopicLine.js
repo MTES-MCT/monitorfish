@@ -13,7 +13,8 @@ const RegulationTopicLine = props => {
   const {
     selectedRegulationTopic,
     setSelectedRegulationTopic,
-    zoneThemeList
+    zoneThemeList,
+    regulationTopicIsMissing
   } = props
 
   const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
@@ -33,6 +34,7 @@ const RegulationTopicLine = props => {
           onChange={setSelectedRegulationTopic}
           data={zoneThemeList}
           renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedRegulationTopic} item={item} tag={'Radio'} />}
+          valueIsMissing={regulationTopicIsMissing}
         />
         {selectedRegulationTopic &&
           <Tag

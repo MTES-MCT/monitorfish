@@ -26,7 +26,7 @@ import getGeometryWithoutRegulationReference from '../../../domain/use_cases/get
 import { formatDataForSelectPicker } from '../../../utils'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
-import { setSelectedRegulation, setRegulationSaved } from '../Regulation.slice'
+import { setSelectedRegulation, setRegulationSaved, setRegulatoryTextListValidityMap } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -45,25 +45,33 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   /** @type {string} */
   const [selectedRegulationLawType, setSelectedRegulationLawType] = useState()
+  const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
   /** @type {string} */
   const [selectedRegulationTopic, setSelectedRegulationTopic] = useState()
+  const [regulationTopicIsMissing, setRegulationTopicIsMissing] = useState(false)
   /** @type {string} */
   const [nameZone, setNameZone] = useState()
+  const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
   /** @type {string} */
   const [selectedSeaFront, setSelectedSeaFront] = useState()
+  const [seaFrontIsMissing, setSeaFrontIsMissing] = useState(false)
   /** @type {[String]} */
   const [selectedRegionList, setSelectedRegionList] = useState([])
-  /** @type {string} */
-  const [regulationLawType, setRegulationLawType] = useState('')
+  const [regionIsMissing, setRegionIsMissing] = useState(false)
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
   const [selectedGeometryId, setSelectedGeometry] = useState()
+  const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
+
+  const [saveOrUpdateRegulation, setSaveOrUpdateRegulation] = useState(false)
+  const { regulatoryTextListValidityMap } = useSelector(state => state.regulation)
+  const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
 
   let originalGeometryId = null
 
@@ -90,12 +98,24 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (regulationSaved) {
       history.push('/backoffice')
     }
-
     batch(() => {
       dispatch(setRegulationSaved(false))
       dispatch(setSelectedRegulation({}))
     })
   }, [regulationSaved])
+
+  useEffect(() => {
+    if (regulatoryTextListValidityMap) {
+      const values = Object.values(regulatoryTextListValidityMap)
+      if (saveOrUpdateRegulation && values.length > 0 && values.length === regulatoryTextList.length) {
+        if (!values.includes(false) && atLeastOneValueIsMissing) {
+          createOrUpdateRegulation()
+        }
+        dispatch(setRegulatoryTextListValidityMap({}))
+        setSaveOrUpdateRegulation(false)
+      }
+    }
+  }, [saveOrUpdateRegulation, regulatoryTextListValidityMap, atLeastOneValueIsMissing])
 
   const initForm = () => {
     setSelectedRegulationLawType(`${regulatoryZoneMetadata.lawType} / ${regulatoryZoneMetadata.seafront}`)
@@ -106,6 +126,29 @@ const CreateRegulation = ({ title, isEdition }) => {
     setRegulatoryTextList(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
     setSelectedGeometry(regulatoryZoneMetadata.id)
     originalGeometryId = regulatoryZoneMetadata.id
+  }
+
+  const checkRequiredValues = () => {
+    let atLeastOneValueIsMissing = false
+    let valueIsMissing = !(selectedRegulationLawType && selectedRegulationLawType !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setLawTypeIsMissing(valueIsMissing)
+    valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setRegulationTopicIsMissing(valueIsMissing)
+    valueIsMissing = !(nameZone && nameZone !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setNameZoneIsMissing(valueIsMissing)
+    valueIsMissing = !(selectedSeaFront && selectedSeaFront !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
+    setSeaFrontIsMissing(valueIsMissing)
+    valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
+    setRegionIsMissing(valueIsMissing)
+    valueIsMissing = !(geometryIsMissing && geometryIsMissing !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
+    setGeometryIsMissing(valueIsMissing)
+    setAtLeastOneValueIsMissing(!atLeastOneValueIsMissing)
   }
 
   useEffect(() => {
@@ -143,7 +186,6 @@ const CreateRegulation = ({ title, isEdition }) => {
       facade: selectedSeaFront,
       references_reglementaires: JSON.stringify(regulatoryTextList)
     }
-    console.log(featureObject)
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
 
@@ -189,26 +231,29 @@ const CreateRegulation = ({ title, isEdition }) => {
                   setSelectedValue={setSelectedRegulationLawType}
                   selectedValue={selectedRegulationLawType}
                   selectData={formatDataForSelectPicker(regulatoryLawTypes)}
-                  regulationLawType={regulationLawType}
-                  setRegulationLawType={setRegulationLawType}
+                  lawTypeIsMissing={lawTypeIsMissing}
                 />
                 <RegulationTopicLine
                   selectedRegulationTopic={selectedRegulationTopic}
                   setSelectedRegulationTopic={setSelectedRegulationTopic}
                   zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
+                  regulationTopicIsMissing={regulationTopicIsMissing}
                 />
                 <RegulationLayerZoneLine
                   nameZone={nameZone}
                   setNameZone={setNameZone}
+                  nameZoneIsMissing={nameZoneIsMissing}
                 />
                 <RegulationSeaFrontLine
                   selectedSeaFront={selectedSeaFront}
                   setSelectedSeaFront={setSelectedSeaFront}
                   seaFrontList={formatDataForSelectPicker(seaFronts)}
+                  seaFrontIsMissing={seaFrontIsMissing}
                 />
                 <RegulationRegionLine
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
+                  regionIsMissing={regionIsMissing}
                 />
                 <RegulationGeometryLine
                   setSelectedGeometry={setSelectedGeometry}
@@ -216,6 +261,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   selectedGeometry={selectedGeometryId}
                   setShowRegulatoryPreview={setShowRegulatoryPreview}
                   showRegulatoryPreview={showRegulatoryPreview}
+                  geometryIsMissing={geometryIsMissing}
                 />
               </Section>
             </Content>
@@ -224,6 +270,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                 regulatoryTextList={regulatoryTextList}
                 setRegulatoryTextList={setRegulatoryTextList}
                 source={'regulation'}
+                saveForm={saveOrUpdateRegulation}
               />
             </Content>
           </ContentWrapper>
@@ -233,7 +280,10 @@ const CreateRegulation = ({ title, isEdition }) => {
             <ValidateButton
               disabled={false}
               isLast={false}
-              onClick={createOrUpdateRegulation}
+              onClick={() => {
+                checkRequiredValues()
+                setSaveOrUpdateRegulation(true)
+              }}
             >
             { isEdition
               ? 'Enregister les modifications'

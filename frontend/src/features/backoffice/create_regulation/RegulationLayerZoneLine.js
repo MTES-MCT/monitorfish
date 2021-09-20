@@ -5,7 +5,8 @@ import InfoBox from './InfoBox'
 const RegulationLayerZoneLine = props => {
   const {
     nameZone,
-    setNameZone
+    setNameZone,
+    nameZoneIsMissing
   } = props
 
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
@@ -23,7 +24,8 @@ const RegulationLayerZoneLine = props => {
       onChange={value => setNameZone(value)}
       width={'200px'}
       onMouseLeave={() => setIsInputFilled(nameZone && nameZone !== '')}
-      isGray={isInputFilled}
+      $isGray={isInputFilled}
+      $isRed={nameZoneIsMissing}
     />
     <InfoBox
       isInfoTextShown={isInfoTextShown}

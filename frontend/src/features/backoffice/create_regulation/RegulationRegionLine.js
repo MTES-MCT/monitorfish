@@ -10,7 +10,8 @@ import MenuItem from './MenuItem'
 const RegulationRegionLine = props => {
   const {
     selectedRegionList,
-    setSelectedRegionList
+    setSelectedRegionList,
+    regionIsMissing
   } = props
 
   const addRegionToSelectedRegionList = (region) => {
@@ -46,6 +47,7 @@ const RegulationRegionLine = props => {
       value={'Choisir une région'}
       data={formatDataForSelectPicker(FRENCH_REGION_LIST)}
       renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList.includes(item.value)} item={item} tag={'Checkbox'} />}
+      valueIsMissing={regionIsMissing}
     />
     <>
     {

@@ -55,12 +55,14 @@ const YearControls = props => {
         name={yearControls.length && yearControls[0] ? yearControls[0].controlDatetimeUtc : props.year}>
         {
           yearControls.length
-            ? yearControls.map((control, index) => {
-              return <Control
-                key={index}
-                isLastItem={yearControls.length === index + 1}
-                control={control}/>
-            })
+            ? yearControls
+              .sort((a, b) => new Date(b.controlDatetimeUtc) - new Date(a.controlDatetimeUtc))
+              .map((control, index) => {
+                return <Control
+                  key={index}
+                  isLastItem={yearControls.length === index + 1}
+                  control={control}/>
+              })
             : null
         }
       </List>

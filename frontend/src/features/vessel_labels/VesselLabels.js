@@ -46,15 +46,15 @@ const VesselLabels = () => {
       <VesselLabelsIcon
         data-cy={'vessel-labels'}
         healthcheckTextWarning={healthcheckTextWarning}
-        rightMenuIsOpen={rightMenuIsOpen}
-        isOpen={vesselVisibilityBoxIsOpen}
-        selectedVessel={selectedVessel}
+        $rightMenuIsOpen={rightMenuIsOpen}
+        $isOpen={vesselVisibilityBoxIsOpen}
+        $selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Affichage des dernières positions'}
         onClick={() => setVesselLabelsBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
         <LabelIcon
-          rightMenuIsOpen={rightMenuIsOpen}
-          selectedVessel={selectedVessel}/>
+          $rightMenuIsOpen={rightMenuIsOpen}
+          $selectedVessel={selectedVessel}/>
       </VesselLabelsIcon>
       <VesselLabelsBox
         healthcheckTextWarning={healthcheckTextWarning}
@@ -129,20 +129,20 @@ const VesselLabelsIcon = styled(MapButtonStyle)`
   top: 194px;
   z-index: 99;
   height: 40px;
-  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
-  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  width: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '5px' : '40px'};
+  border-radius: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '1px' : '2px'};
+  right: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '10px'};
+  background: ${props => props.$isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
   
   :hover, :focus {
-      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+      background: ${props => props.$isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 
 const LabelIcon = styled(LabelSVG)`
   width: 40px;
-  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `
 

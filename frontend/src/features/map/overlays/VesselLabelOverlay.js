@@ -177,7 +177,7 @@ const WrapperToBeKeptForDOMManagement = styled.div`
 `
 
 const RiskFactorDetails = styled.div`
-  box-shadow: 0px 2px 3px #969696BF;
+  box-shadow: 0px 2px 3px ${COLORS.grayShadow};
   background: ${COLORS.background};
   line-height: 18px;
   height: 72px;
@@ -211,7 +211,7 @@ const RiskFactorBox = styled.div`
 `
 
 const VesselLabelOverlayElement = styled.div`
-  box-shadow: 0px 2px 3px #969696BF;
+  box-shadow: 0px 2px 3px ${COLORS.grayShadow};
   background: ${COLORS.background};
   line-height: 18px;
   cursor: grabbing;

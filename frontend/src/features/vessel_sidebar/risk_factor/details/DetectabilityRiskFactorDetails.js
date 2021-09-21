@@ -27,7 +27,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
               : <NoValue>-</NoValue>
           }
         </InlineKey>
-        <InlineValue data-cy={'risk-factor-priority-level'}>{riskFactor?.controlPriorityLevel.toFixed(1)} – {getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}</InlineValue>
+        <InlineValue data-cy={'risk-factor-priority-level'}>{riskFactor?.controlPriorityLevel?.toFixed(1)} – {getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}</InlineValue>
         <FullWidth>
           <RiskFactorCursor
             height={5}
@@ -38,7 +38,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
           />
         </FullWidth>
         <InlineKey>Priorité du navire</InlineKey>
-        <InlineValue>{riskFactor?.controlRateRiskFactor.toFixed(1)} – contrôles rares</InlineValue>
+        <InlineValue>{riskFactor?.controlRateRiskFactor?.toFixed(1)} – contrôles rares</InlineValue>
         <FullWidth>
           <RiskFactorCursor
             height={5}

@@ -5,10 +5,19 @@ import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselControlAnteriority
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 object TestUtils {
+    val dummyVesselControlAnteriority = VesselControlAnteriority(
+            lastControlDatetime = ZonedDateTime.now(),
+            lastControlInfraction = false,
+            numberRecentControls = 2.0,
+            infractionScore = 2.56,
+            controlRateRiskFactor = 3.56
+    )
+
     fun getDummyERSMessage(): List<ERSMessage> {
         val gearOne = Gear()
         gearOne.gear = "OTB"

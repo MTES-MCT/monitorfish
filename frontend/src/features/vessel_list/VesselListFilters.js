@@ -68,6 +68,8 @@ const VesselListFilters = ({
     }
   }, [species.species])
 
+  console.log(species)
+
   const districtsField = useMemo(() => {
     if (districts.districts && districts.districts.length) {
       return districts.districts.map(district => {
@@ -128,6 +130,7 @@ const VesselListFilters = ({
         />
       </SelectWrapper>
       <TagPicker
+        data-cy={'vessel-list-country-filter'}
         value={countries.countriesFiltered}
         style={tagPickerStyle}
         data={countriesField}

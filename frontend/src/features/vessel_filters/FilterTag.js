@@ -17,8 +17,8 @@ const FilterTag = ({ key, text, value, uuid, type, iconElement, removeTagFromFil
           ? <TagIcon>{iconElement}</TagIcon>
           : null
       }
-      <TagName>{text}</TagName>
-      <CloseIcon onClick={callRemoveTagFromFilter}/>
+      <TagName data-cy={'vessel-filter-tag'}>{text}</TagName>
+      <CloseIcon data-cy={'vessel-filter-remove-tag'} onClick={callRemoveTagFromFilter}/>
     </TagWrapper>
   )
 }

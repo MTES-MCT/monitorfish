@@ -154,15 +154,16 @@ class MonitorFishWorker {
 
   getUniqueSpeciesAndDistricts (vessels) {
     const species = vessels
-      .map(vessel => vessel.speciesArray)
+      .map(vessel => vessel.speciesOnboard)
       .flat()
       .reduce((acc, species) => {
-        if (acc.indexOf(species) < 0) {
-          acc.push(species)
+        if (acc.indexOf(species?.species) < 0) {
+          acc.push(species?.species)
         }
 
         return acc
       }, [])
+      .filter(species => species)
 
     const districts = vessels
       .map(vessel => {

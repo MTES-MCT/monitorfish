@@ -23,7 +23,7 @@ const HideNonFilteredVessels = ({ nonFilteredVesselsAreHidden, setNonFilteredVes
               setValue(isChecked)
             }}
 
-          >{' '} <ShowLabelText>Masquer les autres navires</ShowLabelText></Checkbox>
+          >{' '} <ShowLabelText data-cy={'vessel-filters-hide-other-vessels'}>Masquer les autres navires</ShowLabelText></Checkbox>
         </RadioWrapper>
         : null
       }

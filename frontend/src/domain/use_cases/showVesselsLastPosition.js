@@ -7,6 +7,7 @@ const showVesselsLastPosition = () => dispatch => {
   getVesselsLastPositionsFromAPI().then(vessels => {
     dispatch(setVessels(vessels))
     dispatch(getUniqueSpeciesAndDistricts(vessels)).then(speciesAndDistricts => {
+      console.log(speciesAndDistricts, 'speciesAndDistricts')
       dispatch(setVesselsSpeciesAndDistricts({
         species: speciesAndDistricts.species,
         districts: speciesAndDistricts.districts

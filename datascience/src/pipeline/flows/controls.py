@@ -350,7 +350,7 @@ def load_controls(controls: pd.DataFrame, how: str):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        pg_array_columns=["infraction_ids"],
+        pg_array_columns=["infraction_ids", "segments"],
         jsonb_columns=["gear_controls", "catch_controls"],
         how=how,
         table_id_column="id",

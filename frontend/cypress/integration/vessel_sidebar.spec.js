@@ -20,7 +20,17 @@ context('VesselSidebar', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-name"]').contains("PHENOMENE (GB)", { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-cfr"]').contains("FAK000999999", { timeout: 20000 })
+    cy.get('*[data-cy^="global-risk-factor"]').contains("2.5", { timeout: 20000 })
+    cy.get('*[data-cy^="impact-risk-factor"]').contains("2.1", { timeout: 20000 })
+    cy.get('*[data-cy^="probability-risk-factor"]').contains("2.0", { timeout: 20000 })
+    cy.get('*[data-cy^="detectability-risk-factor"]').contains("3.0", { timeout: 20000 })
+
+    cy.get('*[data-cy^="impact-risk-factor"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="probability-risk-factor"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="detectability-risk-factor"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="risk-factor-priority-level"]').contains("2.6 – élevée", { timeout: 20000 })
+
+    cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ timeout: 20000, force: true })
   })
 
   it('Identity Should contain the vessel identity', () => {

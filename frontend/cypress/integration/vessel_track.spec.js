@@ -25,7 +25,7 @@ context('Vessel Track', () => {
     cy.get('*[data-cy^="vessel-card-ircs"]').contains('AQIK')
   })
 
-  it.only('Position card Should be seen on the map on vessel track pointer move', () => {
+  it('Position card Should be seen on the map on vessel track pointer move', () => {
     // When we click on the vessel
     cy.get('.vessels').click(460, 480, { timeout: 20000 })
 

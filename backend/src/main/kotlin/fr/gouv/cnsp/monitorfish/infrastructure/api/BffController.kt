@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.domain.entities.Health
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
@@ -80,7 +79,7 @@ class BffController(
         return runBlocking {
             val start = System.currentTimeMillis()
 
-            val (vesselTrackHasBeenModified, VesselAndPositions) = getVessel.execute(
+            val (vesselTrackHasBeenModified, vesselWithData) = getVessel.execute(
                     internalReferenceNumber,
                     externalReferenceNumber,
                     IRCS,
@@ -89,12 +88,11 @@ class BffController(
                     afterDateTime,
                     beforeDateTime)
 
-            val (vessel, positions) = VesselAndPositions
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
             vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS)
 
-            ResponseEntity.status(returnCode).body(VesselDataOutput.fromVessel(vessel, positions))
+            ResponseEntity.status(returnCode).body(VesselDataOutput.fromVesselWithData(vesselWithData))
         }
     }
 

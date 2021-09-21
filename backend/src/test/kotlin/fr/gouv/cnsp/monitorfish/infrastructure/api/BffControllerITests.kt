@@ -9,6 +9,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselCurrentSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
@@ -110,8 +112,12 @@ class BffControllerITests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
-            Pair(false, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                    listOf(firstPosition, secondPosition, thirdPosition)))
+            Pair(false, VesselWithData(
+                    Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    listOf(firstPosition, secondPosition, thirdPosition),
+                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8),
+                    TestUtils.dummyVesselControlAnteriority,
+                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 
         // When
@@ -122,15 +128,19 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should get vessels's last positions and data`() {
+    fun `Should get vessels with last positions and risk factor`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
-            Pair(false, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                    listOf(firstPosition, secondPosition, thirdPosition)))
+            Pair(false, VesselWithData(
+                    Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    listOf(firstPosition, secondPosition, thirdPosition),
+                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8, controlPriorityLevel = 3.0),
+                    TestUtils.dummyVesselControlAnteriority,
+                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 
         // When
@@ -143,6 +153,8 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
                 .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
+                .andExpect(jsonPath("$.riskFactor.controlPriorityLevel", equalTo(3.0)))
+                .andExpect(jsonPath("$.riskFactor.riskFactor", equalTo(3.2)))
 
         runBlocking {
             Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)
@@ -157,8 +169,12 @@ class BffControllerITests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
-            Pair(true, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                    listOf(firstPosition, secondPosition, thirdPosition)))
+            Pair(true, VesselWithData(
+                    Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    listOf(firstPosition, secondPosition, thirdPosition),
+                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8),
+                    TestUtils.dummyVesselControlAnteriority,
+                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 
         // When
@@ -185,8 +201,12 @@ class BffControllerITests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), any(), any()) } willReturn {
-            Pair(false, Pair(Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                    listOf(firstPosition, secondPosition, thirdPosition)))
+            Pair(false, VesselWithData(
+                    Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    listOf(firstPosition, secondPosition, thirdPosition),
+                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8),
+                    TestUtils.dummyVesselControlAnteriority,
+                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 
         // When

@@ -4,6 +4,7 @@ import { COLORS } from '../../constants/constants'
 import { ReactComponent as GyroSVG } from '../icons/Gyrophare_controles_gris.svg'
 import { ReactComponent as WarningSVG } from '../icons/Attention_controles.svg'
 import { NoValue, StrongText, Title, Zone } from './Controls.style'
+import InfractionsResume from './InfractionsResume'
 
 const ControlsResumeZone = props => {
   const {
@@ -24,8 +25,7 @@ const ControlsResumeZone = props => {
   } = resume
 
   const getText = value => {
-    const toReturn = !isNaN(value) ? value : <NoValue>-</NoValue>
-    return toReturn
+    return !isNaN(value) ? value : <NoValue>-</NoValue>
   }
 
   return <Zone>
@@ -50,59 +50,14 @@ const ControlsResumeZone = props => {
         <ControlResumeStrongTextElement>pêche <StrongText>{getText(numberOfFishingInfractions)}</StrongText></ControlResumeStrongTextElement>
         <ControlResumeStrongTextElement>sécurité <StrongText>{getText(numberOfSecurityInfractions)}</StrongText></ControlResumeStrongTextElement>
       </ControlResumeLine>
-      <ResumesBoxes>
-        <ResumeBox>
-          <ResumeBoxStrongText isRed={resume.numberOfDiversions}>{getText(numberOfDiversions)}</ResumeBoxStrongText>
-          <ResumeBoxText>Déroutement</ResumeBoxText>
-        </ResumeBox>
-        <ResumeBox>
-          <ResumeBoxStrongText
-            isRed={resume.numberOfEscortsToQuay}>{getText(numberOfEscortsToQuay)}</ResumeBoxStrongText>
-          <ResumeBoxText>Reconduite à quai</ResumeBoxText>
-        </ResumeBox>
-        <ResumeBox>
-          <ResumeBoxStrongText isRed={resume.numberOfSeizures}>{getText(numberOfSeizures)}</ResumeBoxStrongText>
-          <ResumeBoxText>Appréhension</ResumeBoxText>
-        </ResumeBox>
-      </ResumesBoxes>
+      <InfractionsResume
+        numberOfDiversions={numberOfDiversions}
+        numberOfEscortsToQuay={numberOfEscortsToQuay}
+        numberOfSeizures={numberOfSeizures}
+      />
     </Fields>
   </Zone>
 }
-
-const ResumesBoxes = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin-right: 15px;
-`
-
-const ResumeBoxText = styled.span`
-    color: ${COLORS.charcoal};
-    margin: 0 10px 0 5px;
-    font-weight: 500;
-`
-
-const ResumeBoxStrongText = styled.span`
-    background: ${props => props.isRed ? COLORS.red : COLORS.charcoal};
-    color: ${COLORS.gainsboro};
-    border-radius: 11px;
-    height: 16px;
-    display: inline-block;
-    line-height: 14px;
-    width: 16px;
-    text-align: center;
-    font-weight: bolder;
-    margin: 3px 0 0 4px;
-    font-weight: 500;
-`
-
-const ResumeBox = styled.span`
-    background: ${COLORS.gainsboro};
-    border-radius: 11px;
-    font-size: 13px;
-    height: 22px;
-    display: inline-block;
-    margin: 8px 5px 10px 0;
-`
 
 const Fields = styled.div`
     padding: 10px 5px 5px 20px; 

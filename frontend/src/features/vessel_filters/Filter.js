@@ -14,7 +14,10 @@ const Filter = ({ filter, index, isLastItem, removeFilter, showFilter, hideFilte
   return (
     <FilterWrapper>
       <FilterItem isLastItem={isLastItem} isOpen={isOpen}>
-        <Text title={filter.name.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
+        <Text
+          data-cy={'vessel-filter'}
+          title={filter.name.replace(/[_]/g, ' ')}
+          onClick={() => setIsOpen(!isOpen)}>
           <ChevronIcon isOpen={isOpen}/>
           <FilterIcon fill={filter.color}/>
           {filter.name

@@ -256,6 +256,7 @@ const VesselList = ({ namespace }) => {
     <>
       <Wrapper isFiltering={isFiltering}>
         <VesselListIcon
+          data-cy={'vessel-list'}
           healthcheckTextWarning={healthcheckTextWarning}
           isOpen={vesselListModalIsOpen}
           selectedVessel={selectedVessel}
@@ -363,6 +364,7 @@ const VesselList = ({ namespace }) => {
               Voir sur la carte
             </ShowOnMapButton> */}
             <BlackButton
+              data-cy={'save-filter-modal'}
               disabled={hasNoFilter()}
               isLast={false}
               onClick={() => saveFilter()}>

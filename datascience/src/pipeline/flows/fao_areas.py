@@ -25,7 +25,7 @@ def extract_fao_areas(url: str, proxies: dict) -> gpd.GeoDataFrame:
         gpd.GeoDataFrame: GeoDataFrame of FAO areas
     """
 
-    shapefile = requests.get(url)
+    shapefile = requests.get(url, proxies=proxies)
     shapefile.raise_for_status()
     fao_areas = gpd.read_file(BytesIO(shapefile.content))
 

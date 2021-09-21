@@ -42,6 +42,6 @@ context('Vessel filters', () => {
     cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click({ timeout: 20000 })
 
     // We should have ~ the same number of labels than in init
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 19)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length.to.be.greaterThan', 18)
   })
 })

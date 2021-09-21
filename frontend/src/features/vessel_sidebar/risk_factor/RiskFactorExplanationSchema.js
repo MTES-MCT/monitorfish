@@ -112,7 +112,7 @@ const GlobalBox = styled.div`
   color: ${COLORS.slateGray};
 `
 
-const Schema = styled.div`
+const Schema = styled.span`
   width: 100%;
   margin-top: 30px;
   margin-bottom: 30px;

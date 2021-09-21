@@ -89,6 +89,12 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   useEffect(() => {
+    if (!riskFactorShowedOnMap) {
+      setVesselToRiskFactorDetailsShowed(new Map())
+    }
+  }, [riskFactorShowedOnMap])
+
+  useEffect(() => {
     if (isThrottled.current || !vesselsLayerSource) {
       return
     }

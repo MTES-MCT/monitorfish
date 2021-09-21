@@ -441,6 +441,10 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
         how="outer",
     )
 
+    control_statistics["number_controls_last_3_years"] = (
+        control_statistics["number_controls_last_3_years"].fillna(0).astype(int)
+    )
+
     return control_statistics
 
 

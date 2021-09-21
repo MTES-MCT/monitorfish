@@ -8,6 +8,7 @@ const ProbabilityRiskFactorDetails = ({ isOpen }) => {
   const {
     selectedVessel
   } = useSelector(state => state.vessel)
+  const currentYear = new Date().getUTCFullYear()
 
   const {
     riskFactor
@@ -30,9 +31,9 @@ const ProbabilityRiskFactorDetails = ({ isOpen }) => {
               <Key>Temporalité</Key>
               <Value>
                 {riskFactor?.numberControlsLastFiveYears} contrôles sur 5 ans
-                ({new Date(new Date().getUTCFullYear() - 5, 0, 1).getFullYear()}
+                ({new Date(currentYear - 4, 0, 1).getUTCFullYear()}
                 -
-                {new Date().getFullYear()})
+                {currentYear})
               </Value>
             </Field>
             <Field>

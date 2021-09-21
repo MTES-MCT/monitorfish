@@ -26,7 +26,7 @@ context('Vessel labels', () => {
       .click({ timeout: 20000 })
 
     // Then
-    cy.wait(200)
+    cy.wait(400)
     cy.get('*[data-cy^="vessel-label-text"]').first().contains('FRAIS AVIS MODE')
   })
 

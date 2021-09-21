@@ -234,27 +234,29 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   function addLabelToFeatures (features) {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
-    const nextFeaturesAndLabels = features.map(feature => {
-      const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap)
-      const identity = feature.vessel
-      const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
-      const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
+    const nextFeaturesAndLabels = features
+      .filter(feature => feature.vessel)
+      .map(feature => {
+        const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap)
+        const identity = feature.vessel
+        const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
+        const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
 
-      return {
-        identity: {
-          key: feature.ol_uid,
-          flagState: feature.vessel.flagState,
-          coordinates: feature.getGeometry().getCoordinates(),
-          internalReferenceNumber: feature.vessel.internalReferenceNumber,
-          ircs: feature.vessel.ircs,
-          externalReferenceNumber: feature.vessel.externalReferenceNumber
-        },
-        opacity: Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced),
-        label,
-        offset,
-        featureId: labelLineFeatureId
-      }
-    }).filter(object => object)
+        return {
+          identity: {
+            key: feature.ol_uid,
+            flagState: feature.vessel.flagState,
+            coordinates: feature.getGeometry().getCoordinates(),
+            internalReferenceNumber: feature.vessel.internalReferenceNumber,
+            ircs: feature.vessel.ircs,
+            externalReferenceNumber: feature.vessel.externalReferenceNumber
+          },
+          opacity: Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced),
+          label,
+          offset,
+          featureId: labelLineFeatureId
+        }
+      }).filter(object => object)
 
     setFeaturesAndLabels(nextFeaturesAndLabels)
   }

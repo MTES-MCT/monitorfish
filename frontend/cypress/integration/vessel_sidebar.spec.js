@@ -13,6 +13,22 @@ context('VesselSidebar', () => {
     cy.wait(400)
   })
 
+  it('Vessel Should be searched from the search bar', () => {
+    // When
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).type('Pheno')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(0).click()
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+
+    // We should be able to search again when the vessel sidebar is already opened
+    cy.get('*[data-cy^="vessel-search-selected-vessel-title"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).type('détacher')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(0).click()
+
+    // Close the sidebar
+    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy^="vessel-search-selected-vessel-title"]', { timeout: 20000 }).should('not.exist')
+  })
+
   it('Resume Should be opened When clicking on a vessel', () => {
     // When
     cy.get('.vessels').click(460, 480, { timeout: 20000 })

@@ -14,6 +14,7 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
+import unselectVessel from '../../domain/use_cases/unselectVessel'
 
 const Measurement = () => {
   const dispatch = useDispatch()
@@ -64,6 +65,7 @@ const Measurement = () => {
       setMeasurementIsOpen(false)
     } else {
       setMeasurementIsOpen(!measurementIsOpen)
+      dispatch(unselectVessel())
     }
   }
 

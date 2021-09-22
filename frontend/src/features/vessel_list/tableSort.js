@@ -17,9 +17,9 @@ export function sortArrayByColumn (a, b, sortColumn, sortType) {
 
   if (sortColumn === CSVOptions.dateTime.code) {
     if (sortType === SortType.ASC) {
-      return x > y
+      return x.localeCompare(y)
     } else {
-      return x < y
+      return y.localeCompare(x)
     }
   }
 

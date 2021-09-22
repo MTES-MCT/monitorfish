@@ -18,7 +18,7 @@ context('NewRegulation', () => {
   it('Select law type Reg locale / MEMN', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.get('.rs-radio-checker > label > .rs-radio-wrapper').eq(0).click()
-    cy.get('[data-cy="tag-Reg locale / NAMO"]').should('exist')
+    cy.get('[data-cy="tag-Reg locale / MEMN"]').should('exist')
   })
   /* it('Remove a selected law type', () => {
     cy.get('.rs-radio-checker label .rs-radio-wrapper').eq(0).should('have.text', 'Reg locale / MEMN')

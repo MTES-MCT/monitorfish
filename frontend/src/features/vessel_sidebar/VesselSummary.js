@@ -56,7 +56,7 @@ const VesselSummary = props => {
     }
   }, [selectedVessel])
 
-  return selectedVessel && !loadingVessel
+  return !loadingVessel
     ? (
       <Body>
         <PhotoZone>
@@ -65,10 +65,10 @@ const VesselSummary = props => {
               ? <NoVessel/>
               : <>
                 {
-                  selectedVessel.mmsi
+                  selectedVessel?.mmsi
                     ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)}
-                             src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel.mmsi}&size=thumb300`}/>
-                    : null
+                             src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel?.mmsi}&size=thumb300`}/>
+                    : <NoVessel/>
                 }
               </>
           }
@@ -76,31 +76,31 @@ const VesselSummary = props => {
         <ZoneWithoutBackground>
           <LatLon>
             <FieldName>Latitude</FieldName>
-            <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude)
+            <FieldValue>{!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude)
               ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
               : <NoValue>-</NoValue>}</FieldValue>
             <FieldName>Longitude</FieldName>
-            <FieldValue>{lastPosition && !isNaN(lastPosition.latitude) && !isNaN(lastPosition.longitude)
+            <FieldValue>{!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude)
               ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
               : <NoValue>-</NoValue>}</FieldValue>
           </LatLon>
           <Course>
             <FieldName>Route</FieldName>
-            <FieldValue>{lastPosition && !isNaN(lastPosition.course)
-              ? <>{lastPosition.course}°</>
+            <FieldValue>{!isNaN(lastPosition?.course)
+              ? <>{lastPosition?.course}°</>
               : <NoValue>-</NoValue>}</FieldValue>
             <FieldName>Vitesse</FieldName>
-            <FieldValue>{lastPosition && !isNaN(lastPosition.speed)
-              ? <>{lastPosition.speed} Nds</>
+            <FieldValue>{!isNaN(lastPosition?.speed)
+              ? <>{lastPosition?.speed} Nds</>
               : <NoValue>-</NoValue>}</FieldValue>
           </Course>
           <Position>
             <FieldName>Dernier signal VMS</FieldName>
             <FieldValue>
               {
-                lastPosition && lastPosition.dateTime
+                lastPosition?.dateTime
                   ? <>
-                    {getDateTime(lastPosition.dateTime, true)}{' '}
+                    {getDateTime(lastPosition?.dateTime, true)}{' '}
                     <Gray>(UTC)</Gray></>
                   : <NoValue>-</NoValue>
               }
@@ -109,9 +109,9 @@ const VesselSummary = props => {
               title={'Cette valeur est calculée à partir des 2 dernières positions VMS reçues'}/></FieldName>
             <FieldValue>
               {
-                selectedVessel && selectedVessel.emissionPeriod
+                selectedVessel?.emissionPeriod
                   ? <>1 signal toutes
-                    les {selectedVessel.emissionPeriod / 60} minutes</>
+                    les {selectedVessel?.emissionPeriod / 60} minutes</>
                   : <NoValue>-</NoValue>
               }
             </FieldValue>

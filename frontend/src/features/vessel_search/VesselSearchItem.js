@@ -62,6 +62,7 @@ const VesselSearchItem = ({ id, vessel, selectVessel, searchText }) => {
   }
 
   return <ListItem
+    data-cy={'vessel-search-item'}
     onClick={selectVessel}
     key={id}>
     <div>

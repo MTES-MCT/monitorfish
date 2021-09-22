@@ -19,7 +19,7 @@ const Tag = props => {
 
   return <TagWrapper>
     {!tagUrl
-      ? <SelectedValue>{tagValue}</SelectedValue>
+      ? <SelectedValue data-cy={`tag-${tagValue}`}>{tagValue}</SelectedValue>
       : <Link
           href={tagUrl}
           target={'_blank'}

@@ -146,5 +146,10 @@ context('VesselSidebar', () => {
     // And click on a position to zoom in
     cy.get('[aria-rowindex="4"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').trigger('pointermove',  { pointerId: 1, force: true })
     cy.get('[aria-rowindex="4"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').click({ force: true })
+
+    // The table should be sorted in ascending datetime order
+    cy.get('.rs-table-cell-group > :nth-child(1) > .rs-table-cell > .rs-table-cell-content').click({ timeout: 20000 })
+    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("7.5 nds", { timeout: 20000 })
+
   })
 })

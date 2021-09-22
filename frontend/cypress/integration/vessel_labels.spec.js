@@ -27,7 +27,7 @@ context('Vessel labels', () => {
 
     // Then
     cy.wait(400)
-    cy.get('*[data-cy^="vessel-label-text"]').first().contains('FRAIS AVIS MODE')
+    cy.get('*[data-cy^="vessel-label-text"]', { timeout: 20000 }).first().contains('FRAIS AVIS MODE')
   })
 
   it('Vessels names Should be movable', () => {

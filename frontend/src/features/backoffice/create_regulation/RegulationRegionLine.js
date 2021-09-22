@@ -37,13 +37,21 @@ const RegulationRegionLine = props => {
     })
   }
 
+  const onChange = (value) => {
+    if (selectedRegionList.includes(value)) {
+      removeRegionToSelectedRegionList(value)
+    } else {
+      addRegionToSelectedRegionList(value)
+    }
+  }
+
   return (<ContentLine>
     <Label>Région</Label>
     <CustomSelectComponent
       menuStyle={{ width: 200, overflowY: 'hidden', textOverflow: 'ellipsis' }}
       searchable={false}
       placeholder={'Choisir une région'}
-      onChange={addRegionToSelectedRegionList}
+      onChange={onChange}
       value={'Choisir une région'}
       data={formatDataForSelectPicker(FRENCH_REGION_LIST)}
       renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList.includes(item.value)} item={item} tag={'Checkbox'} />}

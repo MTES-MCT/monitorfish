@@ -68,8 +68,6 @@ const VesselListFilters = ({
     }
   }, [species.species])
 
-  console.log(species)
-
   const districtsField = useMemo(() => {
     if (districts.districts && districts.districts.length) {
       return districts.districts.map(district => {

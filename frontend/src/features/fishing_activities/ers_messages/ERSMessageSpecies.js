@@ -88,7 +88,7 @@ const ERSMessageSpecies = props => {
                       </Field>
                       <Field>
                         <Key>Fact. conversion</Key>
-                        <TrimmedValue>{species.conversionFactor
+                        <TrimmedValue title={species.conversionFactor}>{species.conversionFactor
                           ? species.conversionFactor
                           : <NoValue>-</NoValue>}</TrimmedValue>
                       </Field>
@@ -102,11 +102,11 @@ const ERSMessageSpecies = props => {
                       </Field>
                       <Field>
                         <Key>ZEE</Key>
-                        <Value>
+                        <TrimmedValue title={`${countries.getName(species.economicZone, 'fr')} (${species.economicZone})`}>
                           {species.economicZone
                             ? <>{countries.getName(species.economicZone, 'fr')} ({species.economicZone})</>
                             : <NoValue>-</NoValue>}
-                        </Value>
+                        </TrimmedValue>
                       </Field>
                       <Field>
                         <Key>Zone FAO</Key>
@@ -217,7 +217,7 @@ const Content = styled.div`
   border-bottom: 1px solid ${COLORS.gray};
   height: ${props => props.isOpen
     ? props.length > 0
-      ? props.length * 110 + (props.length > 1 ? 30 : 0)
+      ? props.length * 115 + (props.length > 1 ? 30 : 0)
       : 110
     : 0}px;
   transition: 0.2s all;

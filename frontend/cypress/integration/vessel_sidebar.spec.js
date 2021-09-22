@@ -121,7 +121,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-controls"]', { timeout: 20000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-controls-year"]').first().contains("2 contrôles, 2 infractions", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-controls-year"]').first().contains("3 contrôles, 2 infractions", { timeout: 20000 })
 
     // When
     cy.get('*[data-cy^="vessel-controls-year"]').first().click({ timeout: 20000 })
@@ -144,7 +144,7 @@ context('VesselSidebar', () => {
     const date = getDate(new Date().toISOString())
     cy.get('*[data-cy^="vessel-controls-last-control-date"]').first().contains(`le ${date}`, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-controls-last-control-unit"]').first().contains("ULAM 56", { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains("Pas d'infraction", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains("2 infractions", { timeout: 20000 })
   })
 
   it('Vessel track depth Should be changed', () => {
@@ -166,6 +166,5 @@ context('VesselSidebar', () => {
     // The table should be sorted in ascending datetime order
     cy.get('.rs-table-cell-group > :nth-child(1) > .rs-table-cell > .rs-table-cell-content').click({ timeout: 20000 })
     cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("7.5 nds", { timeout: 20000 })
-
   })
 })

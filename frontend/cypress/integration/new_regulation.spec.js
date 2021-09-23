@@ -63,15 +63,15 @@ context('NewRegulation', () => {
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
     cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 13)
   })
-  it('Select "Grand Est" region and remove it', () => {
-    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
-    // Select "Grand Est" region
-    cy.get('[data-key="Grand Est"]').click()
-    cy.get('[data-cy="tag-Grand Est"]').should('exist')
+  it('Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it', () => {
     // Select "Auvergne-Rhône-Alpes" region
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
     cy.get('[data-key="Auvergne-Rhône-Alpes"]').click()
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
+    // Select "Grand Est" region
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
+    cy.get('[data-key="Grand Est"]').click()
+    cy.get('[data-cy="tag-Grand Est"]').should('exist')
     cy.get('[data-cy^="tag"]').should('have.length', 2)
     // Remove tag
     cy.get('[data-cy="close-tag-Auvergne-Rhône-Alpes"]').click()

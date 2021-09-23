@@ -23,6 +23,7 @@ const Tag = props => {
       : <Link
           href={tagUrl}
           target={'_blank'}
+          data-cy={`tag-${tagValue}`}
         >{tagValue}</Link>
     }
     <CloseIcon data-cy={`close-tag-${tagValue}`} onClick={_ => onCloseIconClicked(tagValue)}/>

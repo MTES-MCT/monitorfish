@@ -51,4 +51,66 @@ context('NewRegulation', () => {
     cy.get('[data-key="NAMO"]').should('exist')
     cy.get('[data-key="Outre-mer"]').should('exist')
   })
+  it('Adding a zone name change input background', () => {
+    cy.get('.rs-input').eq(0).type('new zone name')
+    cy.get('.rs-input').eq(0).should('have.css', 'background-color', 'rgb(229, 229, 235)')
+    cy.get('.rs-input').eq(0).clear()
+    cy.get('.rs-input').eq(0).should('have.css', 'background-color', 'rgb(255, 255, 255)')
+  })
+  it('Region list contains 13 elements', () => {
+    cy.get('.rs-picker-toggle-placeholder').eq(3).should('have.text', 'Choisir une région')
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
+    cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
+    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 13)
+  })
+  it('Select "Grand Est" region and remove it', () => {
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
+    // Select "Grand Est" region
+    cy.get('[data-key="Grand Est"]').click()
+    cy.get('[data-cy="tag-Grand Est"]').should('exist')
+    // Select "Auvergne-Rhône-Alpes" region
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
+    cy.get('[data-key="Auvergne-Rhône-Alpes"]').click()
+    cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
+    cy.get('[data-cy^="tag"]').should('have.length', 2)
+    // Remove tag
+    cy.get('[data-cy="close-tag-Auvergne-Rhône-Alpes"]').click()
+    cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('not.exist')
+    cy.get('[data-cy^="tag"]').should('have.length', 1)
+  })
+  it('Enter a reg text name with a valid url', () => {
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
+    // When button is clicked
+    cy.get('[data-cy="save-reg-text-name"]').click()
+    // Tag appeared
+    cy.get('[data-cy="tag-zone name"]').should('exist')
+    // When close icon is clicked
+    cy.get('[data-cy="close-tag-zone name"]').click()
+    // Tag disappeared
+    cy.get('[data-cy="tag-zone name"]').should('not.exist')
+  })
+  it('Enter and clear reg zone name form', () => {
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
+    // When button is clicked
+    cy.get('[data-cy="clear-reg-text-name"]').click()
+    cy.get('[data-cy="reg-text-name"]').invoke('val').should('equal', '')
+    cy.get('[data-cy="reg-text-url"]').invoke('val').should('equal', '')
+  })
+  it('Enter a reg text name with an invalid url', () => {
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('url.com')
+    // When save button is clicked
+    cy.get('[data-cy="save-reg-text-name"]').click()
+    // Red border are displayed
+    cy.get('[data-cy="reg-text-url"]').should('have.css', 'border-color', 'rgb(225, 0, 15)')
+  })
+  it('Enter a reg text name with missing name', () => {
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
+    // When save button is clicked
+    cy.get('[data-cy="save-reg-text-name"]').click()
+    // Red border are displayed
+    cy.get('[data-cy="reg-text-name"]').should('have.css', 'border-color', 'rgb(225, 0, 15)')
+  })
 })

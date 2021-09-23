@@ -67,7 +67,7 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
           >
             1
           </RiskFactorBox>
-          {getImpactRiskFactorText(1)}
+          {getImpactRiskFactorText(1)} - ou pas de segment
         </RiskFactorLegend>
         <RiskFactorLegend>
           <RiskFactorBox
@@ -94,7 +94,7 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
           {getImpactRiskFactorText(4)}
         </RiskFactorLegend>
         <SubTitle>
-          <RiskFactorControl/>
+          <RiskFactorInfractions/>
           Calcul du score de probabilité d&apos;infraction
         </SubTitle>
         <SmallLine/>
@@ -135,7 +135,7 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
           {getProbabilityRiskFactorText(4)} – ou absence d&apos;antériorité de contrôle
         </RiskFactorLegend>
         <SubTitle>
-          <RiskFactorInfractions/>
+          <RiskFactorControl/>
           Calcul du score de &quot;détectabilité&quot;
         </SubTitle>
         <SmallLine/>

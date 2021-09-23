@@ -68,8 +68,8 @@ const RiskFactorResume = () => {
                   color={getRiskFactorColor(selectedVessel?.riskFactor?.impactRiskFactor)}
                   progress={100 * selectedVessel?.riskFactor?.impactRiskFactor / 4}
                 />
-                <SubRiskText title={getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor)}>
-                  {getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor)}
+                <SubRiskText title={getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor, selectedVessel?.riskFactor?.segmentHighestImpact)}>
+                  {getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor, selectedVessel?.riskFactor?.segmentHighestImpact)}
                 </SubRiskText>
               </SubRisk>
               <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen}/>
@@ -91,8 +91,8 @@ const RiskFactorResume = () => {
                   color={getRiskFactorColor(selectedVessel?.riskFactor?.probabilityRiskFactor)}
                   progress={100 * selectedVessel?.riskFactor?.probabilityRiskFactor / 4}
                 />
-                <SubRiskText title={getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor)}>
-                  {getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor)}
+                <SubRiskText title={getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor, selectedVessel?.riskFactor?.numberControlsLastFiveYears)}>
+                  {getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor, selectedVessel?.riskFactor?.numberControlsLastFiveYears)}
                 </SubRiskText>
               </SubRisk>
               <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen}/>
@@ -114,8 +114,8 @@ const RiskFactorResume = () => {
                   color={getRiskFactorColor(selectedVessel?.detectabilityRiskFactor)}
                   progress={100 * selectedVessel?.detectabilityRiskFactor / 4}
                 />
-                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.detectabilityRiskFactor, true)}>
-                  {getDetectabilityRiskFactorText(selectedVessel?.detectabilityRiskFactor, true)}
+                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null, selectedVessel?.riskFactor?.segmentHighestImpact)}>
+                  {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null, selectedVessel?.riskFactor?.segmentHighestImpact)}
                 </SubRiskText>
               </SubRisk>
               <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen}/>
@@ -225,7 +225,7 @@ const SubRiskTitle = styled.div`
 const SubRiskText = styled.span`
   margin: 8px;
   margin-bottom: 12px;
-  max-width: 140px;
+  max-width: 130px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;

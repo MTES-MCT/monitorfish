@@ -1,7 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { getDetectabilityRiskFactorText, getRiskFactorColor } from '../../../../domain/entities/riskFactor'
+import {
+  getControlRateRiskFactorText,
+  getDetectabilityRiskFactorText,
+  getRiskFactorColor
+} from '../../../../domain/entities/riskFactor'
 import RiskFactorCursor from '../RiskFactorCursor'
 import { useSelector } from 'react-redux'
 import { getDate } from '../../../../utils'
@@ -32,7 +36,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
         >
           {
             riskFactor?.controlPriorityLevel
-              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}`
+              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true, riskFactor?.segmentHighestImpact)}`
               : <NoValue>-</NoValue>
           }
         </InlineValue>
@@ -48,8 +52,8 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
         <InlineKey>Priorité du navire</InlineKey>
         <InlineValue>
           {
-            riskFactor?.controlRateRiskFactor || riskFactor?.controlRateRiskFactor === 0
-              ? `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – contrôles rares`
+            riskFactor?.controlRateRiskFactor
+              ? `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(riskFactor?.controlRateRiskFactor)}`
               : <NoValue>-</NoValue>
           }
         </InlineValue>

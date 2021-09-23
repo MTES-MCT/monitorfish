@@ -27,61 +27,81 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
   }, [riskFactor])
 
   return (
-    <SubRiskDetails isOpen={isOpen}>
+    <SubRiskDetails
+      isOpen={isOpen}
+      hasSegment={riskFactor?.segmentHighestImpact}
+      hasManySpecies={riskFactor?.speciesOnboard?.length > 13}
+    >
       <Line/>
       <Zone>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key big>Segment de flotte actuel</Key>
-              <Value>
-                {
-                  riskFactor?.segmentHighestImpact
-                    ? <>
-                      {riskFactor?.segmentHighestImpact}{' '}
-                      <Info title={'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
-                      'façade dans son Plan de contrôle annuel.'}/>
-                    </>
-                    : <NoValue>-</NoValue>
-                }
-              </Value>
-            </Field>
-          </TableBody>
-        </Fields>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>Engins à bord</Key>
-              <Value>
-                {
-                  riskFactor?.gearOnboard?.length
-                    ? riskFactor?.gearOnboard?.map(gear => gear.gear).join(', ')
-                    : <NoValue>-</NoValue>
-                }
-              </Value>
-            </Field>
-            <Field>
-              <Key>Espèces à bord</Key>
-              <Value>
-                {
-                  riskFactor?.speciesOnboard?.length
-                    ? riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
-                    : <NoValue>-</NoValue>
-                }
-              </Value>
-            </Field>
-            <Field>
-              <Key>Zones de la marée</Key>
-              <Value>
-                {
-                  faoZones.length
-                    ? faoZones.join(', ')
-                    : <NoValue>-</NoValue>
-                }
-              </Value>
-            </Field>
-          </TableBody>
-        </Fields>
+        {
+          riskFactor?.segmentHighestImpact
+            ? <>
+              <Fields>
+                <TableBody>
+                  <Field>
+                    <Key big>Segment de flotte actuel</Key>
+                    <Value>
+                      {
+                        riskFactor?.segmentHighestImpact
+                          ? <>
+                            {riskFactor?.segmentHighestImpact}{' '}
+                            <Info title={'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
+                            'façade dans son Plan de contrôle annuel.'}/>
+                          </>
+                          : <NoValue>-</NoValue>
+                      }
+                    </Value>
+                  </Field>
+                </TableBody>
+              </Fields>
+              <Fields>
+                <TableBody>
+                  <Field>
+                    <Key>Engins à bord</Key>
+                    <Value>
+                      {
+                        riskFactor?.gearOnboard?.length
+                          ? riskFactor?.gearOnboard?.map(gear => gear.gear).join(', ')
+                          : <NoValue>-</NoValue>
+                      }
+                    </Value>
+                  </Field>
+                  <Field>
+                    <Key>Espèces à bord</Key>
+                    <Value title={
+                      riskFactor?.speciesOnboard?.length
+                        ? riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
+                        : undefined
+                    }>
+                      {
+                        riskFactor?.speciesOnboard?.length
+                          ? riskFactor?.speciesOnboard?.length > 13
+                            ? `${riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ').substring(0, 65)}...`
+                            : riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
+                          : <NoValue>-</NoValue>
+                      }
+                    </Value>
+                  </Field>
+                  <Field>
+                    <Key>Zones de la marée</Key>
+                    <Value>
+                      {
+                        faoZones.length
+                          ? faoZones.join(', ')
+                          : <NoValue>-</NoValue>
+                      }
+                    </Value>
+                  </Field>
+                </TableBody>
+              </Fields>
+            </>
+            : <Text>
+              Ce navire n&apos;appartient à aucun segment de flotte, soit parce qu&apos;il n&apos;a pas encore envoyé les
+              données de sa marée,
+              soit parce qu&apos;aucun segment ne correspond à son activité.
+            </Text>
+        }
       </Zone>
     </SubRiskDetails>
   )
@@ -107,7 +127,7 @@ const Info = styled(InfoSVG)`
 
 const SubRiskDetails = styled.div`
   width: 100%;
-  height: ${props => props.isOpen ? '140' : '0'}px;
+  height: ${props => props.isOpen ? (props.hasSegment ? 140 + (props.hasManySpecies ? 15 : 0) : 80) : 0}px;
   opacity: ${props => props.isOpen ? '1' : '0'};
   visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
   overflow: hidden;
@@ -165,6 +185,20 @@ const Value = styled.td`
   border: none;
   line-height: normal;
   font-weight: 500;
+`
+
+const Text = styled.div`
+  font-size: 13px;
+  color: ${COLORS.gunMetal};
+  margin: 0;
+  text-align: left;
+  padding: 1px 5px 5px 5px;
+  background: none;
+  border: none;
+  line-height: normal;
+  font-weight: 500;
+  margin-left: -15px;
+  margin-top: 5px;
 `
 
 export default ImpactRiskFactorDetails

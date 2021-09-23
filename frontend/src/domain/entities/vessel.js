@@ -108,6 +108,7 @@ export class Vessel {
   static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap) {
     const vesselDate = new Date(feature.vessel.dateTime)
     const vesselIsHidden = new Date()
+    const hasBeenControlledLastFiveYears = new Date(feature.vessel.lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
     const label = {
@@ -143,7 +144,9 @@ export class Vessel {
           globalRisk: feature.vessel.riskFactor,
           impactRiskFactor: feature.vessel.impactRiskFactor,
           probabilityRiskFactor: feature.vessel.probabilityRiskFactor,
-          detectabilityRiskFactor: feature.vessel.detectabilityRiskFactor
+          detectabilityRiskFactor: feature.vessel.detectabilityRiskFactor,
+          hasBeenControlledLastFiveYears,
+          hasSegments: feature.vessel.segments?.length
         }
       }
 

@@ -33,16 +33,18 @@ const RiskFactorExplanationSchema = () => {
       </Box>
       <SchemaText>x</SchemaText>
       <Box>
-        <RiskFactorInfractions/>
-        <RiskFactorExponent>
-          0.3
-        </RiskFactorExponent>
-        <RiskFactorBox
-          color={COLORS.slateGray}
-        >
-          3
-        </RiskFactorBox>
-        Score de probabilité d&apos;infraction
+        <MoreTopPadding>
+          <RiskFactorInfractions/>
+          <RiskFactorExponent>
+            0.3
+          </RiskFactorExponent>
+          <RiskFactorBox
+            color={COLORS.slateGray}
+          >
+            3
+          </RiskFactorBox>
+          Score de probabilité d&apos;infraction
+        </MoreTopPadding>
       </Box>
       <SchemaText>x</SchemaText>
       <Box>
@@ -60,6 +62,10 @@ const RiskFactorExplanationSchema = () => {
     </Schema>
   )
 }
+
+const MoreTopPadding = styled.div`
+  padding-top: 2px;
+`
 
 const RiskFactorExponent = styled.span`
   float: right;
@@ -90,8 +96,8 @@ const RiskFactorControl = styled(RiskFactorControlSVG)`
 const RiskFactorInfractions = styled(RiskFactorInfractionsSVG)`
   width: 22px;
   margin-right: 7px;
-  margin-top: 1px;
-  vertical-align: sub;
+  margin-top: 0px;
+  vertical-align: text-top;
 `
 
 const SchemaText = styled.span`

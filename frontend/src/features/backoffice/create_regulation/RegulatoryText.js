@@ -192,6 +192,7 @@ const RegulatoryText = props => {
             width={'87px'}
             value={currentRegulatoryTextName}
             onChange={onNameValueChange}
+            data-cy="reg-text-name"
           />
           <CustomInput
             placeholder={'URL'}
@@ -199,18 +200,23 @@ const RegulatoryText = props => {
             width={'87px'}
             value={currentRegulatoryTextURL}
             onChange={onURLValueChange}
+            data-cy="reg-text-url"
           />
           {(currentRegulatoryTextName || currentRegulatoryTextURL) &&
             <><ValidateButton
               disabled={false}
               isLast={false}
-              onClick={checkNameAndUrl}>
+              onClick={checkNameAndUrl}
+              data-cy="save-reg-text-name"
+            >
               Enregistrer
             </ValidateButton>
             <CancelButton
               disabled={false}
               isLast={false}
-              onClick={cancelAddNewRegulatoryText}>
+              onClick={cancelAddNewRegulatoryText}
+              data-cy="clear-reg-text-name"
+            >
               Effacer
             </CancelButton></>}
           </>

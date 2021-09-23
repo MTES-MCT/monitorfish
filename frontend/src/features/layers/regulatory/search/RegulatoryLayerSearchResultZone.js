@@ -33,7 +33,7 @@ const RegulatoryLayerSearchResultZone = props => {
   } = useSelector(state => state.regulatoryLayerSearch)
 
   const [zoneStyle, setZoneStyle] = useState(null)
-  const [zoneSelection, setZoneSelection] = useState([])
+  const [zoneSelectionList, setZoneSelectionList] = useState([])
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showOrHideRegulatoryZoneMetadata = regulatoryZone => {
@@ -51,12 +51,12 @@ const RegulatoryLayerSearchResultZone = props => {
   }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {
-    if (zoneSelection?.length) {
+    if (zoneSelectionList?.length) {
       dispatch(checkRegulatoryZones([regulatoryZone]))
     } else {
       dispatch(uncheckRegulatoryZones([regulatoryZone]))
     }
-  }, [zoneSelection])
+  }, [zoneSelectionList])
 
   useEffect(() => {
     if (!regulatoryZonesChecked || !regulatoryLayerTopic || !regulatoryLayerLawType) {
@@ -64,14 +64,14 @@ const RegulatoryLayerSearchResultZone = props => {
     }
 
     if (regulatoryZonesChecked.find(zone => zone.topic === regulatoryZone.topic && zone.zone === regulatoryZone.zone)) {
-      if (zoneSelection && !zoneSelection.length) {
+      if (zoneSelectionList && !zoneSelectionList.length) {
         dispatch(checkRegulatoryZones([regulatoryZone]))
-        setZoneSelection([regulatoryZone])
+        setZoneSelectionList([regulatoryZone])
       }
     } else {
-      if (zoneSelection && zoneSelection.length) {
+      if (zoneSelectionList && zoneSelectionList.length) {
         dispatch(uncheckRegulatoryZones([regulatoryZone]))
-        setZoneSelection([])
+        setZoneSelectionList([])
       }
     }
   }, [regulatoryZonesChecked, regulatoryLayerTopic, regulatoryLayerLawType])
@@ -92,9 +92,9 @@ const RegulatoryLayerSearchResultZone = props => {
   return (
     <Zone>
       <Rectangle vectorLayerStyle={zoneStyle}/>
-      <Name onClick={() => zoneSelection?.length
-        ? setZoneSelection([])
-        : setZoneSelection([regulatoryZone])}
+      <Name onClick={() => zoneSelectionList?.length
+        ? setZoneSelectionList([])
+        : setZoneSelectionList([regulatoryZone])}
       >
         {regulatoryZone?.zone ? regulatoryZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
       </Name>
@@ -110,10 +110,10 @@ const RegulatoryLayerSearchResultZone = props => {
           <CheckboxGroup
               inline
               name="checkboxList"
-              value={zoneSelection?.map(zoneSelection => zoneSelection?.zone)}
+              value={zoneSelectionList?.map(zoneSelection => zoneSelection?.zone)}
               onChange={value => value?.length
-                ? setZoneSelection([regulatoryZone])
-                : setZoneSelection([])
+                ? setZoneSelectionList([regulatoryZone])
+                : setZoneSelectionList([])
               }
               style={{ marginLeft: 'auto', height: 20 }}
           >

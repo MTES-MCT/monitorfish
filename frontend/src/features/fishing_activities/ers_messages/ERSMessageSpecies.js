@@ -81,7 +81,7 @@ const ERSMessageSpecies = props => {
                         <Key>Préservation</Key>
                         <TrimmedValue
                           title={
-                            species?.economicZone
+                            species?.preservationState
                               ? `${ERSSpeciesPreservationState[species.preservationState]} (${species.preservationState})`
                               : undefined
                           }>

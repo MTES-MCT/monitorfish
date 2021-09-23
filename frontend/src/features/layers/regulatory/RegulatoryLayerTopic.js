@@ -119,9 +119,18 @@ const RegulatoryLayerTopic = props => {
               </Text>
             </Name>
             {displayNumberOfZones()}
-            {atLeastOneLayerIsShowed
-              ? <ShowIcon title="Cacher la couche" onClick={() => setShowWholeLayer({ show: false })}/>
-              : <HideIcon title="Afficher la couche" onClick={() => setShowWholeLayer({ show: true })}/>}
+            {
+              atLeastOneLayerIsShowed
+                ? <ShowIcon
+                  title="Cacher la couche"
+                  onClick={() => setShowWholeLayer({ show: false })}
+                />
+                : <HideIcon
+                  data-cy={'regulatory-layers-my-zones-topic-show'}
+                  title="Afficher la couche"
+                  onClick={() => setShowWholeLayer({ show: true })}
+                />
+            }
             {allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection"
                                            onClick={() => callRemoveRegulatoryZoneFromMySelection(
                                              getRegulatoryLayerName(regulatoryZones), regulatoryZones.length)}/>}

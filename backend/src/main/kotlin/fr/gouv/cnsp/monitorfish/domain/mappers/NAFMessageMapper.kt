@@ -34,6 +34,7 @@ class NAFMessageMapper(private val naf: String) {
     private var tripNumber: Int? = null
     private var isManual: Boolean = false
 
+    private val noCountry = "X"
     private val positionMessageType = "POS"
     private val manualMessageType = "MAN"
     private val dateTimeFormat = "yyyyMMddHHmm"
@@ -101,7 +102,7 @@ class NAFMessageMapper(private val naf: String) {
     }
 
     private fun getCountryOrThrowIfCountryNotFound(value: String): CountryCode? {
-        return if (value.isNotEmpty()) {
+        return if (value.isNotEmpty() && value !== noCountry) {
             CountryCode.getByAlpha3Code(value) ?: throw NAFMessageParsingException("Country \"$value\" not found", naf)
         } else {
             null

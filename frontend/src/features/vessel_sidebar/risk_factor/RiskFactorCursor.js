@@ -94,10 +94,10 @@ const Bar = styled.div`
 `
 
 const Progress = styled.div`
-  height: ${props => props.height ? props.height - 1 : 8}px;
+  height: ${props => props.height ? props.height : 8}px;
   width: ${props => props.progress ? props.progress : 0}%;
   background: ${props => props.color ? props.color : 'white'};
-  margin-top: calc(-${props => props.height ? props.height : 8}px - ${props => props.isBig ? 4 : props.height === 8 ? 11 : 14}px);
+  margin-top: calc(-${props => props.height ? props => props.height : 8}px - ${props => props.isBig ? 5 : props.height === 8 ? 11 : 14}px);
   transition: 1.2s all;
 `
 

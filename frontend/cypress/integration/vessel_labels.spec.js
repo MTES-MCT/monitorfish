@@ -14,7 +14,7 @@ context('Vessel labels', () => {
     // Then
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 20)
     // And the ship "FRAIS AVIS MODE" contains a risk factor of 2.6
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').first().contains(2.6)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').eq(0).contains(2.6)
   })
 
   it('Vessels names Should be showed on the map', () => {
@@ -27,7 +27,7 @@ context('Vessel labels', () => {
 
     // Then
     cy.wait(400)
-    cy.get('*[data-cy^="vessel-label-text"]').first().contains('FRAIS AVIS MODE')
+    cy.get('*[data-cy^="vessel-label-text"]', { timeout: 20000 }).first().contains('FRAIS AVIS MODE')
   })
 
   it('Vessels names Should be movable', () => {

@@ -76,7 +76,10 @@ const RegulatoryLayerZoneMetadata = () => {
               <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
                 {getTitle(regulatoryZoneMetadata)}
               </RegulatoryZoneName>
-              <CloseIcon onClick={() => dispatch(closeRegulatoryZoneMetadata())}/>
+              <CloseIcon
+                data-cy={'regulatory-layers-metadata-close'}
+                onClick={() => dispatch(closeRegulatoryZoneMetadata())}
+              />
             </Header>
             <Warning>
               <WarningIcon/>

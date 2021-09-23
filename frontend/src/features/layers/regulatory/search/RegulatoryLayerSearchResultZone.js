@@ -51,10 +51,10 @@ const RegulatoryLayerSearchResultZone = props => {
   }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {
-    if (zoneSelection && zoneSelection.length) {
+    if (zoneSelection?.length) {
       dispatch(checkRegulatoryZones([regulatoryZone]))
     } else {
-      dispatch(uncheckRegulatoryZones([regulatoryZone.zone]))
+      dispatch(uncheckRegulatoryZones([regulatoryZone]))
     }
   }, [zoneSelection])
 
@@ -63,14 +63,14 @@ const RegulatoryLayerSearchResultZone = props => {
       return
     }
 
-    if (regulatoryZonesChecked.find(zone => zone.zone === regulatoryZone.zone)) {
+    if (regulatoryZonesChecked.find(zone => zone.topic === regulatoryZone.topic && zone.zone === regulatoryZone.zone)) {
       if (zoneSelection && !zoneSelection.length) {
         dispatch(checkRegulatoryZones([regulatoryZone]))
-        setZoneSelection([regulatoryZone.zone])
+        setZoneSelection([regulatoryZone])
       }
     } else {
       if (zoneSelection && zoneSelection.length) {
-        dispatch(uncheckRegulatoryZones([regulatoryZone.zone]))
+        dispatch(uncheckRegulatoryZones([regulatoryZone]))
         setZoneSelection([])
       }
     }
@@ -92,11 +92,11 @@ const RegulatoryLayerSearchResultZone = props => {
   return (
     <Zone>
       <Rectangle vectorLayerStyle={zoneStyle}/>
-      <Name onClick={() => zoneSelection && zoneSelection.length
+      <Name onClick={() => zoneSelection?.length
         ? setZoneSelection([])
-        : setZoneSelection([regulatoryZone.zone])}
+        : setZoneSelection([regulatoryZone])}
       >
-        {regulatoryZone.zone ? regulatoryZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+        {regulatoryZone?.zone ? regulatoryZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
       </Name>
 
       {
@@ -110,8 +110,11 @@ const RegulatoryLayerSearchResultZone = props => {
           <CheckboxGroup
               inline
               name="checkboxList"
-              value={zoneSelection}
-              onChange={setZoneSelection}
+              value={zoneSelection?.map(zoneSelection => zoneSelection?.zone)}
+              onChange={value => value?.length
+                ? setZoneSelection([regulatoryZone])
+                : setZoneSelection([])
+              }
               style={{ marginLeft: 'auto', height: 20 }}
           >
             <Checkbox

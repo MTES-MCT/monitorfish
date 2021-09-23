@@ -45,7 +45,7 @@ const Backoffice = () => {
   }, [])
 
   /**
-   * Refresh components data when a regulations is updated
+   * Refresh components data when a regulation is updated
    */
   useEffect(() => {
     if (regulationSaved) {

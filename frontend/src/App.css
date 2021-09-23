@@ -8,6 +8,10 @@ html {
     font-size: 13px;
 }
 
+.overlay-active {
+    z-index: 9999999999999;
+}
+
 .zoom {
     bottom: 38px;
     left: .5em;

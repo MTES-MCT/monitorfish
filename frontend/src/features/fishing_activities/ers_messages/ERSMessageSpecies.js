@@ -52,9 +52,9 @@ const ERSMessageSpecies = props => {
                       <Field>
                         <Key>Poids</Key>
                         <TrimmedValue
-                          title={`${species.weight} kg`}>
+                          title={`${species?.weight} kg`}>
                           {
-                            species.weight
+                            species?.weight
                               ? `${species.weight} kg`
                               : <NoValue>-</NoValue>
                           }
@@ -63,9 +63,13 @@ const ERSMessageSpecies = props => {
                       <Field>
                         <Key>Présentation</Key>
                         <TrimmedValue
-                          title={`${ERSSpeciesPresentation[species.presentation]} (${species.presentation})`}>
+                          title={
+                            species?.presentation
+                              ? `${ERSSpeciesPresentation[species.presentation]} (${species.presentation})`
+                              : undefined
+                          }>
                           {
-                            species.presentation && ERSSpeciesPresentation[species.presentation]
+                            species?.presentation && ERSSpeciesPresentation[species.presentation]
                               ? <>{ERSSpeciesPresentation[species.presentation]} ({species.presentation})</>
                               : species.presentation
                                 ? species.presentation
@@ -76,9 +80,13 @@ const ERSMessageSpecies = props => {
                       <Field>
                         <Key>Préservation</Key>
                         <TrimmedValue
-                          title={`${ERSSpeciesPreservationState[species.preservationState]} (${species.preservationState})`}>
+                          title={
+                            species?.preservationState
+                              ? `${ERSSpeciesPreservationState[species.preservationState]} (${species.preservationState})`
+                              : undefined
+                          }>
                           {
-                            species.preservationState && ERSSpeciesPreservationState[species.preservationState]
+                            species?.preservationState && ERSSpeciesPreservationState[species.preservationState]
                               ? <>{ERSSpeciesPreservationState[species.preservationState]} ({species.preservationState})</>
                               : species.preservationState
                                 ? species.preservationState
@@ -88,9 +96,11 @@ const ERSMessageSpecies = props => {
                       </Field>
                       <Field>
                         <Key>Fact. conversion</Key>
-                        <TrimmedValue>{species.conversionFactor
-                          ? species.conversionFactor
-                          : <NoValue>-</NoValue>}</TrimmedValue>
+                        <TrimmedValue title={species?.conversionFactor}>
+                          {species?.conversionFactor
+                            ? species.conversionFactor
+                            : <NoValue>-</NoValue>}
+                        </TrimmedValue>
                       </Field>
                     </TableBody>
                   </Fields>
@@ -102,21 +112,25 @@ const ERSMessageSpecies = props => {
                       </Field>
                       <Field>
                         <Key>ZEE</Key>
-                        <Value>
-                          {species.economicZone
+                        <TrimmedValue title={
+                          species?.economicZone
+                            ? `${countries.getName(species.economicZone, 'fr')} (${species.economicZone})`
+                            : undefined
+                        }>
+                          {species?.economicZone
                             ? <>{countries.getName(species.economicZone, 'fr')} ({species.economicZone})</>
                             : <NoValue>-</NoValue>}
-                        </Value>
+                        </TrimmedValue>
                       </Field>
                       <Field>
                         <Key>Zone FAO</Key>
-                        <Value>{species.faoZone
+                        <Value>{species?.faoZone
                           ? <>{species.faoZone}</>
                           : <NoValue>-</NoValue>}</Value>
                       </Field>
                       <Field>
                         <Key>Rect. stat.</Key>
-                        <Value>{species.statisticalRectangle
+                        <Value>{species?.statisticalRectangle
                           ? <>{species.statisticalRectangle}</>
                           : <NoValue>-</NoValue>}</Value>
                       </Field>
@@ -217,7 +231,7 @@ const Content = styled.div`
   border-bottom: 1px solid ${COLORS.gray};
   height: ${props => props.isOpen
     ? props.length > 0
-      ? props.length * 110 + (props.length > 1 ? 30 : 0)
+      ? props.length * 115 + (props.length > 1 ? 30 : 0)
       : 110
     : 0}px;
   transition: 0.2s all;

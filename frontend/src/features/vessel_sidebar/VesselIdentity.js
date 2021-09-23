@@ -64,7 +64,7 @@ const VesselIdentity = () => {
     }
   }
 
-  return (vessel && !loadingVessel
+  return (!loadingVessel
     ? <Body>
         <Zone>
           <Fields>
@@ -123,19 +123,19 @@ const VesselIdentity = () => {
             <TableBody>
               <Field>
                 <Key>Nationalité</Key>
-                <TrimmedValue>{vessel.flagState && countries.getName(vessel.flagState, 'fr')
-                  ? countries.getName(vessel.flagState, 'fr')
+                <TrimmedValue>{vessel?.flagState && countries.getName(vessel?.flagState, 'fr')
+                  ? countries.getName(vessel?.flagState, 'fr')
                   : <NoValue>-</NoValue>}</TrimmedValue>
               </Field>
               <Field>
                 <Key>Quartier</Key>
-                <TrimmedValue>{vessel.district
-                  ? <>{vessel.district} {vessel.districtCode ? <>({vessel.districtCode})</> : ''}</>
+                <TrimmedValue>{vessel?.district
+                  ? <>{vessel?.district} {vessel?.districtCode ? <>({vessel?.districtCode})</> : ''}</>
                   : <NoValue>-</NoValue>}</TrimmedValue>
               </Field>
               <Field>
                 <Key>Port d&apos;attache</Key>
-                <TrimmedValue>{vessel.registryPort ? vessel.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
+                <TrimmedValue>{vessel?.registryPort ? vessel?.registryPort : <NoValue>-</NoValue>}</TrimmedValue>
               </Field>
             </TableBody>
           </Fields>
@@ -144,18 +144,18 @@ const VesselIdentity = () => {
               <Field>
                 <Key>Taille</Key>
                 <Value>
-                  {vessel.length ? vessel.length : <NoValue>-</NoValue>} x {vessel.width
-                    ? vessel.width
+                  {vessel?.length ? vessel?.length : <NoValue>-</NoValue>} x {vessel?.width
+                    ? vessel?.width
                     : <NoValue>-</NoValue>}
                 </Value>
               </Field>
               <Field>
                 <Key>Jauge</Key>
-                <Value>{vessel.gauge ? <>{vessel.gauge} GT</> : <NoValue>-</NoValue>}</Value>
+                <Value>{vessel?.gauge ? <>{vessel?.gauge} GT</> : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>Moteur</Key>
-                <Value>{vessel.power ? <>{vessel.power} kW</> : <NoValue>-</NoValue>}</Value>
+                <Value>{vessel?.power ? <>{vessel?.power} kW</> : <NoValue>-</NoValue>}</Value>
               </Field>
             </TableBody>
           </Fields>
@@ -165,15 +165,15 @@ const VesselIdentity = () => {
             <TableBody>
               <Field>
                 <Key>Type de navire</Key>
-                <Value>{vessel.vesselType ? vessel.vesselType : <NoValue>-</NoValue>}</Value>
+                <Value>{vessel?.vesselType ? vessel?.vesselType : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>Catégorie de navigation</Key>
-                <Value>{vessel.sailingCategory ? vessel.sailingCategory : <NoValue>-</NoValue>}</Value>
+                <Value>{vessel?.sailingCategory ? vessel?.sailingCategory : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>Genre de navigation</Key>
-                <Value>{vessel.sailingType ? vessel.sailingType : <NoValue>-</NoValue>}</Value>
+                <Value>{vessel?.sailingType ? vessel?.sailingType : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key/>
@@ -205,10 +205,10 @@ const VesselIdentity = () => {
                 <Key>Permis de navigation</Key>
                 <Value>
                   {
-                    vessel.navigationLicenceExpirationDate
+                    vessel?.navigationLicenceExpirationDate
                       ? <>
-                        Exp le {showLicenceExpirationDate(vessel.navigationLicenceExpirationDate)}
-                        {new Date(vessel.navigationLicenceExpirationDate) >= Date.now()
+                        Exp le {showLicenceExpirationDate(vessel?.navigationLicenceExpirationDate)}
+                        {new Date(vessel?.navigationLicenceExpirationDate) >= Date.now()
                           ? <LicenceActive/>
                           : <LicenceExpired/>}
                       </>
@@ -221,11 +221,11 @@ const VesselIdentity = () => {
                 <Key>Coordonnées propriétaire</Key>
                 <Value>
                   <PersonalData>
-                    {vessel.proprietorName
+                    {vessel?.proprietorName
                       ? <>
-                        {vessel.proprietorName}
-                        <span>{vessel.proprietorPhones ? <><br/>{vessel.proprietorPhones.join(', ')}</> : ''}</span>
-                        {vessel.proprietorEmails ? <><br/>{vessel.proprietorEmails.join(', ')}</> : ''}
+                        {vessel?.proprietorName}
+                        <span>{vessel?.proprietorPhones ? <><br/>{vessel?.proprietorPhones.join(', ')}</> : ''}</span>
+                        {vessel?.proprietorEmails ? <><br/>{vessel?.proprietorEmails.join(', ')}</> : ''}
                       </>
                       : <NoPersonalData>-</NoPersonalData>
                     }
@@ -236,11 +236,11 @@ const VesselIdentity = () => {
                 <Key>Coordonnées armateur</Key>
                 <Value>
                   <PersonalData>
-                    {vessel.operatorName
+                    {vessel?.operatorName
                       ? <>
-                        {vessel.operatorName}
-                        <span>{vessel.operatorPhones ? <><br/>{vessel.operatorPhones.join(', ')}</> : ''}</span>
-                        {vessel.operatorEmails ? <><br/>{vessel.operatorEmails.join(', ')}</> : ''}
+                        {vessel?.operatorName}
+                        <span>{vessel?.operatorPhones ? <><br/>{vessel?.operatorPhones.join(', ')}</> : ''}</span>
+                        {vessel?.operatorEmails ? <><br/>{vessel?.operatorEmails.join(', ')}</> : ''}
                       </>
                       : <NoPersonalData>-</NoPersonalData>
                     }
@@ -251,10 +251,10 @@ const VesselIdentity = () => {
                 <Key>Contact navire</Key>
                 <Value>
                   <PersonalData>
-                    {vessel.vesselPhones || vessel.vesselEmails
+                    {vessel?.vesselPhones || vessel?.vesselEmails
                       ? <>
-                        {vessel.vesselPhones ? <>{vessel.vesselPhones.join(', ')}<br/></> : ''}
-                        {vessel.vesselEmails ? <>{vessel.vesselEmails.join(', ')}</> : ''}
+                        {vessel?.vesselPhones ? <>{vessel?.vesselPhones.join(', ')}<br/></> : ''}
+                        {vessel?.vesselEmails ? <>{vessel?.vesselEmails.join(', ')}</> : ''}
                       </>
                       : <NoPersonalData>-</NoPersonalData>
                     }

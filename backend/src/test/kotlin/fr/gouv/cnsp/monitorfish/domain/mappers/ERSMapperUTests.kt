@@ -20,6 +20,15 @@ class ERSMapperUTests {
     private lateinit var mapper: ObjectMapper
 
     @Test
+    fun `getERSMessageValueFromJSON Should not throw an exception When the message value is null`() {
+        // When
+        val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, "null", "INS", ERSOperationType.DAT)
+
+        // Then
+        assertThat(parsedFARMessage).isNull()
+    }
+
+    @Test
     fun `getERSMessageValueFromJSON Should deserialize FARMessage When it is first serialized`() {
         // Given
         val catch = Catch()

@@ -90,6 +90,7 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAn
             '#fc4c0d']}
         />
         <SaveButton
+          data-cy={'save-filter'}
           onClick={save}>
           Enregistrer
         </SaveButton>

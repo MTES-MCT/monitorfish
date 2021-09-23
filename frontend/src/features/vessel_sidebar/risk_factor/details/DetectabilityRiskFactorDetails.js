@@ -1,7 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { getDetectabilityRiskFactorText, getRiskFactorColor } from '../../../../domain/entities/riskFactor'
+import {
+  getControlRateRiskFactorText,
+  getDetectabilityRiskFactorText,
+  getRiskFactorColor
+} from '../../../../domain/entities/riskFactor'
 import RiskFactorCursor from '../RiskFactorCursor'
 import { useSelector } from 'react-redux'
 import { getDate } from '../../../../utils'
@@ -27,7 +31,15 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
               : <NoValue>-</NoValue>
           }
         </InlineKey>
-        <InlineValue data-cy={'risk-factor-priority-level'}>{riskFactor?.controlPriorityLevel.toFixed(1)} – {getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}</InlineValue>
+        <InlineValue
+          data-cy={'risk-factor-priority-level'}
+        >
+          {
+            riskFactor?.controlPriorityLevel
+              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true, riskFactor?.segmentHighestImpact)}`
+              : <NoValue>-</NoValue>
+          }
+        </InlineValue>
         <FullWidth>
           <RiskFactorCursor
             height={5}
@@ -38,7 +50,13 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
           />
         </FullWidth>
         <InlineKey>Priorité du navire</InlineKey>
-        <InlineValue>{riskFactor?.controlRateRiskFactor.toFixed(1)} – contrôles rares</InlineValue>
+        <InlineValue>
+          {
+            riskFactor?.controlRateRiskFactor
+              ? `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(riskFactor?.controlRateRiskFactor)}`
+              : <NoValue>-</NoValue>
+          }
+        </InlineValue>
         <FullWidth>
           <RiskFactorCursor
             height={5}
@@ -53,13 +71,21 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                {riskFactor?.numberControlsLastThreeYears} contrôle sur les 3 dernières années
+                {
+                  riskFactor?.numberControlsLastThreeYears || riskFactor?.numberControlsLastThreeYears === 0
+                    ? `${riskFactor?.numberControlsLastThreeYears} contrôle${riskFactor?.numberControlsLastThreeYears > 1 ? 's' : ''} sur les 3 dernières années`
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
             <Field>
               <Key>Dernier contrôle</Key>
               <Value>
-                Le {getDate(riskFactor?.lastControlDatetime)}
+                {
+                  riskFactor?.lastControlDatetime
+                    ? `Le ${getDate(riskFactor?.lastControlDatetime)}`
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
           </TableBody>

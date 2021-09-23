@@ -71,6 +71,7 @@ const VesselFilters = () => {
     <>
       <Wrapper ref={wrapperRef}>
         <VesselFilterIcon
+          data-cy={'vessel-filters'}
           healthcheckTextWarning={healthcheckTextWarning}
           rightMenuIsOpen={rightMenuIsOpen}
           isOpen={vesselFilterBoxIsOpen}

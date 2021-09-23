@@ -25,6 +25,7 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
 
   return (
     <Wrapper
+      data-cy={'vessel-search-selected-vessel-title'}
       onClick={() => {
         if (vesselSidebarIsOpen) {
           dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_TITLE))
@@ -42,7 +43,10 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
       <VesselName>
         {getVesselName()}
       </VesselName>
-      <CloseIcon onClick={() => setSelectedVesselIdentity(null)}/>
+      <CloseIcon
+        data-cy={'vessel-search-selected-vessel-close-title'}
+        onClick={() => setSelectedVesselIdentity(null)}
+      />
     </Wrapper>
   )
 }

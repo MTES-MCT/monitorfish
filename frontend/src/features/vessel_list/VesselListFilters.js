@@ -128,6 +128,7 @@ const VesselListFilters = ({
         />
       </SelectWrapper>
       <TagPicker
+        data-cy={'vessel-list-country-filter'}
         value={countries.countriesFiltered}
         style={tagPickerStyle}
         data={countriesField}

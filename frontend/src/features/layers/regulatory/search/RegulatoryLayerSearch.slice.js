@@ -18,16 +18,19 @@ const regulatoryLayerSearchSlice = createSlice({
     checkRegulatoryZones (state, action) {
       state.regulatoryZonesChecked = state.regulatoryZonesChecked.concat(action.payload)
         // remove duplicates
-        .filter((v, i, a) => a.findIndex(t => (t.zone === v.zone)) === i)
+        .filter((v, i, a) => a.findIndex(t => (t.zone === v.zone && t.topic === v.topic)) === i)
     },
     /**
      * Remove zones from regulatory zones selection in progress to add to "My Zones"
      * @param {Object=} state
-     * @param {string[]} action - The regulatory zones' names
+     * @param {{
+     *   topic: string,
+     *   zone: string
+     * }[]} action - The regulatory zones and topic
      */
     uncheckRegulatoryZones (state, action) {
       state.regulatoryZonesChecked = state.regulatoryZonesChecked
-        .filter(zone => !action.payload.some(zoneName => zoneName === zone.zone))
+        .filter(zone => !action.payload.some(layer => layer.zone === zone.zone && layer.topic === zone.topic))
     },
     /**
      * Reset regulatory zones selection

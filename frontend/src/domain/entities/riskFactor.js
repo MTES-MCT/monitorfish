@@ -13,8 +13,11 @@ export const getRiskFactorColor = riskFactor => {
   }
 }
 
-export const getImpactRiskFactorText = (riskFactor) => {
+export const getImpactRiskFactorText = (riskFactor, hasSegment) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
+    if (!hasSegment) {
+      return 'Pas de segment'
+    }
     return 'Impact faible'
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
     return 'Impact moyen'
@@ -25,11 +28,11 @@ export const getImpactRiskFactorText = (riskFactor) => {
   }
 }
 
-export const getProbabilityRiskFactorText = (riskFactor, numberOfControls) => {
+export const getProbabilityRiskFactorText = (riskFactor, hasBeenControlledLastFiveYears) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     return 'Navire en règle'
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
-    if (!numberOfControls) {
+    if (!hasBeenControlledLastFiveYears) {
       return 'Absence d\'antériorité de contrôle'
     }
 
@@ -37,12 +40,15 @@ export const getProbabilityRiskFactorText = (riskFactor, numberOfControls) => {
   } else if (riskFactor >= 2.5 && riskFactor < 3.25) {
     return 'Infractions répétées'
   } else if (riskFactor >= 3.25 && riskFactor <= 4) {
-    return 'Navire multirécidiviste'
+    return 'Multirécidiviste'
   }
 }
 
-export const getDetectabilityRiskFactorText = (riskFactor, reducedText, verySmallText) => {
+export const getDetectabilityRiskFactorText = (riskFactor, reducedText, verySmallText, hasSegment) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
+    if (!hasSegment) {
+      return 'Pas de segment'
+    }
     return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}faible`
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
     return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}moyenne`
@@ -50,5 +56,19 @@ export const getDetectabilityRiskFactorText = (riskFactor, reducedText, verySmal
     return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}élevée`
   } else if (riskFactor >= 3.25 && riskFactor <= 4) {
     return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}très élevée`
+  }
+}
+
+export const getControlRateRiskFactorText = (controlRate) => {
+  if (controlRate >= 1 && controlRate < 1.75) {
+    return 'Contrôles très réguliers'
+  } else if (controlRate >= 1.75 && controlRate < 2.5) {
+    return 'Contrôles réguliers'
+  } else if (controlRate >= 2.5 && controlRate < 3.25) {
+    return 'Contrôles occasionels'
+  } else if (controlRate >= 3.25 && controlRate < 4) {
+    return 'Contrôles rares'
+  } else if (controlRate === 4) {
+    return 'Contrôles très rares'
   }
 }

@@ -30,16 +30,21 @@ const ProbabilityRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                {riskFactor?.numberControlsLastFiveYears} contrôles sur 5 ans
-                ({new Date(currentYear - 4, 0, 1).getUTCFullYear()}
-                -
-                {currentYear})
+                {
+                  riskFactor?.numberControlsLastFiveYears || riskFactor?.numberControlsLastFiveYears === 0
+                    ? `${riskFactor?.numberControlsLastFiveYears} contrôle${riskFactor?.numberControlsLastFiveYears > 1 ? 's' : ''} sur 5 ans (${new Date(currentYear - 4, 0, 1).getUTCFullYear()} - ${currentYear})`
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
             <Field>
               <Key>Infractions pêche</Key>
               <Value>
-                {riskFactor?.numberInfractionsLastFiveYears} infractions pêche / {riskFactor?.numberControlsLastFiveYears} contrôles
+                {
+                  (riskFactor?.numberInfractionsLastFiveYears || riskFactor?.numberInfractionsLastFiveYears === 0) && (riskFactor?.numberControlsLastFiveYears || riskFactor?.numberControlsLastFiveYears === 0)
+                    ? `${riskFactor?.numberInfractionsLastFiveYears} infraction${riskFactor?.numberInfractionsLastFiveYears > 1 ? 's' : ''} pêche / ${riskFactor?.numberControlsLastFiveYears} contrôle${riskFactor?.numberControlsLastFiveYears > 1 ? 's' : ''}`
+                    : <NoValue>-</NoValue>
+                }
               </Value>
             </Field>
           </TableBody>
@@ -48,6 +53,12 @@ const ProbabilityRiskFactorDetails = ({ isOpen }) => {
     </SubRiskDetails>
   )
 }
+
+const NoValue = styled.span`
+  color: ${COLORS.slateGray};
+  font-weight: 300;
+  line-height: normal;
+`
 
 const Line = styled.div`
   width: 100%;

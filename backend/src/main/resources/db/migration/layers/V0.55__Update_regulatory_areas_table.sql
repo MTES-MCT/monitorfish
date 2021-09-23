@@ -22,7 +22,8 @@ CREATE TABLE public.reglementation_peche (
     documents_obligatoires text,
     autre_reglementation character varying,
     references_reglementaires jsonb,
-    geometry public.geometry(Geometry,4326)
+    geometry public.geometry(Geometry,4326),
+    row_hash character varying(100)
 );
 
 CREATE INDEX idx_reglementation_peche_geometry ON public.reglementation_peche USING gist (geometry);

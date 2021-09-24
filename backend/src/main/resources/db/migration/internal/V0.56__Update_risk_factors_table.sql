@@ -9,7 +9,7 @@ ALTER TABLE risk_factors
     ADD COLUMN control_priority_level DOUBLE PRECISION NOT NULL,
     ADD COLUMN control_rate_risk_factor DOUBLE PRECISION NOT NULL,
     ADD COLUMN infraction_rate_risk_factor DOUBLE PRECISION NOT NULL,
-    ADD COLUMN infraction_score DOUBLE PRECISION NOT NULL,
+    ADD COLUMN infraction_score DOUBLE PRECISION,
     ADD COLUMN number_controls_last_3_years SMALLINT NOT NULL,
     ADD COLUMN number_controls_last_5_years SMALLINT NOT NULL,
     ADD COLUMN number_diversions_last_5_years SMALLINT NOT NULL,

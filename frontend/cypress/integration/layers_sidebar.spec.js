@@ -48,7 +48,7 @@ context('LayersSidebar', () => {
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
 
     // Test 2. Show a zone with the topic button
     cy.log('Show a zone with the topic button')
@@ -61,14 +61,14 @@ context('LayersSidebar', () => {
 
     // Delete the zone
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-delete"]').click()
-    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').should('not.exist');
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 20000 }).should('not.exist');
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
 
     // Close the layers sidebar
-    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="layers-sidebar"]', { timeout: 20000 }).click({ timeout: 20000 })
   })
 
   it('A regulation metadata Should be opened', () => {

@@ -87,7 +87,7 @@ def load(
     table_name: str,
     schema: str,
     db_name: str,
-    logger: Union[None, logging.Logger],
+    logger: logging.Logger,
     how: str = "replace",
     pg_array_columns: Union[None, list] = None,
     handle_array_conversion_errors: bool = True,
@@ -105,7 +105,7 @@ def load(
         table_name (str): name of the table
         schema (str): database schema of the table
         db_name (str): name of the database. Currently only 'monitorfish_remote'.
-        logger (Union[None, logging.Logger]): logger instance,
+        logger (logging.Logger): logger instance,
         how (str): one of
           - 'replace' to delete all rows in the table before loading
           - 'append' to append the data to rows already in the table
@@ -194,7 +194,7 @@ def delete_rows(
     db_name: str,
     table_id_column: str,
     ids_to_delete: set,
-    logger: Union[None, logging.Logger],
+    logger: logging.Logger,
 ):
     """
     Delete rows from a database table.
@@ -207,7 +207,7 @@ def delete_rows(
           - 'monitorfish_local'
         table_id_column (str): name of the id column in the database.
         ids_to_delete (set): the ids of the rows to delete.
-        logger (Union[None, logging.Logger]): logger instance. Optionnal.
+        logger (logging.Logger): logger instance.
     """
 
     e = create_engine(db_name)

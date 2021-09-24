@@ -61,7 +61,7 @@ context('NewRegulation', () => {
     cy.get('.rs-picker-toggle-placeholder').eq(3).should('have.text', 'Choisir une région')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
-    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 13)
+    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 18)
   })
   it('Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it', () => {
     // Select "Auvergne-Rhône-Alpes" region

@@ -13,6 +13,7 @@ from src.pipeline.flows import (
     init_species_groups,
     last_positions,
     ports,
+    regulations,
     risk_factor,
     species,
     vessels,
@@ -36,6 +37,7 @@ ers.flow.schedule = CronSchedule("* * * * *")
 fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")
 infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = CronSchedule("* * * * *")
+regulations.flow.schedule = CronSchedule("* * * * *")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
 species.flow.schedule = CronSchedule("0 8 * * *")
 vessels.flow.schedule = CronSchedule("5 8 * * *")
@@ -54,6 +56,7 @@ flows_to_register = [
     init_species_groups.flow,
     last_positions.flow,
     ports.flow,
+    regulations.flow,
     risk_factor.flow,
     species.flow,
     vessels.flow,

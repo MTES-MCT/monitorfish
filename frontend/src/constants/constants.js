@@ -43,7 +43,12 @@ export const FRENCH_REGION_LIST = [
   'Nouvelle-Aquitaine',
   'Occitanie',
   'Pays de la Loire',
-  'Provence-Alpes-Côte d’Azur'
+  'Provence-Alpes-Côte d’Azur',
+  'Guadeloupe',
+  'Martinique',
+  'Guyanne',
+  'La Réunion',
+  'Mayotte'
 ]
 
 export const INFO_TEXT = {

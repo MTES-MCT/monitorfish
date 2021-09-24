@@ -20,16 +20,16 @@ data class RiskFactorDataOutput(
         val numberEscortsToQuayLastFiveYears: Short? = null,
         val controlRateRiskFactor: Double? = null,
         val lastControlDatetime: ZonedDateTime? = null,
-        val impactRiskFactor: Double? = null,
-        val probabilityRiskFactor: Double? = null,
-        val detectabilityRiskFactor: Double? = null,
-        val riskFactor: Double? = null
+        val impactRiskFactor: Double,
+        val probabilityRiskFactor: Double,
+        val detectabilityRiskFactor: Double,
+        val riskFactor: Double
 ) {
     companion object {
         fun fromVesselCurrentSegmentAndControlAnteriority(
                 vesselCurrentSegment: VesselCurrentSegment?,
                 vesselControlAnteriority: VesselControlAnteriority?,
-                vesselRiskFactor: VesselRiskFactor?) = RiskFactorDataOutput(
+                vesselRiskFactor: VesselRiskFactor) = RiskFactorDataOutput(
                 gearOnboard = vesselCurrentSegment?.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
                 segmentHighestImpact = vesselCurrentSegment?.segmentHighestImpact,
                 segmentHighestPriority = vesselCurrentSegment?.segmentHighestPriority,
@@ -43,10 +43,10 @@ data class RiskFactorDataOutput(
                 numberSeizuresLastFiveYears = vesselControlAnteriority?.numberSeizuresLastFiveYears,
                 numberEscortsToQuayLastFiveYears = vesselControlAnteriority?.numberEscortsToQuayLastFiveYears,
                 lastControlDatetime = vesselControlAnteriority?.lastControlDatetime,
-                impactRiskFactor = vesselRiskFactor?.impactRiskFactor,
-                probabilityRiskFactor = vesselRiskFactor?.probabilityRiskFactor,
-                detectabilityRiskFactor = vesselRiskFactor?.detectabilityRiskFactor,
-                riskFactor = vesselRiskFactor?.riskFactor,
+                impactRiskFactor = vesselRiskFactor.impactRiskFactor,
+                probabilityRiskFactor = vesselRiskFactor.probabilityRiskFactor,
+                detectabilityRiskFactor = vesselRiskFactor.detectabilityRiskFactor,
+                riskFactor = vesselRiskFactor.riskFactor
         )
     }
 }

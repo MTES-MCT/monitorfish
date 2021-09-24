@@ -76,7 +76,7 @@ data class VesselDataOutput(
                     riskFactor = RiskFactorDataOutput.fromVesselCurrentSegmentAndControlAnteriority(
                             vesselWithData.vesselCurrentSegment,
                             vesselWithData.vesselControlAnteriority,
-                            vesselWithData.vesselRiskFactor,
+                            vesselWithData.vesselRiskFactor
                     )
             )
         }

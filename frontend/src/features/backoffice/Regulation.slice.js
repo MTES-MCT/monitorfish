@@ -9,8 +9,10 @@ const regulationSlice = createSlice({
     upcomingRegulation: undefined,
     /** @type {boolean} isModalOpen */
     isModalOpen: false,
+    /** @type {RegulatoryTextValidity} upcomingRegulatoryTextListValidityMap */
+    upcomingRegulatoryTextListValidityMap: undefined,
     /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
-    regulatoryTextListValidityMap: {},
+    regulatoryTextListValidityMap: undefined,
     regulationSaved: false
   },
   reducers: {
@@ -30,18 +32,34 @@ const regulationSlice = createSlice({
         mapUpdated = { ...state.regulatoryTextListValidityMap }
       }
       if (validity !== false) {
+        mapUpdated[id] = validity
+      } else {
+        mapUpdated[id] = false
+      }
+      state.regulatoryTextListValidityMap = mapUpdated
+    },
+    addObjectToUpcomingRegulatoryTextListValidityMap (state, action) {
+      const { validity, id } = action.payload
+      let mapUpdated = {}
+      if (state.upcomingRegulatoryTextListValidityMap) {
+        mapUpdated = { ...state.upcomingRegulatoryTextListValidityMap }
+      }
+      if (validity !== false) {
         mapUpdated[id] = true
         const newUpcomingRegulation = { ...state.upcomingRegulation }
         const newRegulationTextList = (newUpcomingRegulation?.regulatoryTextList
           ? [...newUpcomingRegulation.regulatoryTextList]
           : [{}])
         newRegulationTextList[id] = validity
-        state.upcomingRegulation = newUpcomingRegulation
         newUpcomingRegulation.regulatoryTextList = newRegulationTextList
+        state.upcomingRegulation = newUpcomingRegulation
       } else {
         mapUpdated[id] = false
       }
-      state.regulatoryTextListValidityMap = mapUpdated
+      state.upcomingRegulatoryTextListValidityMap = mapUpdated
+    },
+    setUpcomingRegulatoryTextListValidityMap (state, action) {
+      state.upcomingRegulatoryTextListValidityMap = action.payload
     },
     setRegulatoryTextListValidityMap (state, action) {
       state.regulatoryTextListValidityMap = action.payload
@@ -57,9 +75,11 @@ export const {
   setSelectedRegulation,
   setIsModalOpen,
   setUpcomingRegulation,
-  addObjectToRegulatoryTextListValidityMap,
+  addObjectToUpcomingRegulatoryTextListValidityMap,
+  setUpcomingRegulatoryTextListValidityMap,
+  setRegulationSaved,
   setRegulatoryTextListValidityMap,
-  setRegulationSaved
+  addObjectToRegulatoryTextListValidityMap
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

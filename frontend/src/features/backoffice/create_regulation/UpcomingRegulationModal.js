@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
-  setRegulatoryTextListValidityMap
+  setUpcomingRegulatoryTextListValidityMap
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -37,7 +37,7 @@ const UpcomingRegulationModal = () => {
         if (!values.includes(false)) {
           dispatch(setIsModalOpen(false))
         }
-        dispatch(setRegulatoryTextListValidityMap({}))
+        dispatch(setUpcomingRegulatoryTextListValidityMap({}))
         setSaveForm(false)
       }
     }

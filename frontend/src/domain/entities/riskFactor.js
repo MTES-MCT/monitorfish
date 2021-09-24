@@ -44,11 +44,8 @@ export const getProbabilityRiskFactorText = (riskFactor, hasBeenControlledLastFi
   }
 }
 
-export const getDetectabilityRiskFactorText = (riskFactor, reducedText, verySmallText, hasSegment) => {
+export const getDetectabilityRiskFactorText = (riskFactor, reducedText, verySmallText) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
-    if (!hasSegment) {
-      return 'Pas de segment'
-    }
     return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}faible`
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
     return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}moyenne`

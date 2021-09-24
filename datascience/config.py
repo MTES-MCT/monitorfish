@@ -51,7 +51,6 @@ risk_factor_coefficients = {
 }
 
 default_risk_factors = {
-    "segment_risk_factor": 1,
     "control_rate_risk_factor": 4,
     "infraction_rate_risk_factor": 2,
     "control_priority_level": 1,

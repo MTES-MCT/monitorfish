@@ -19,14 +19,17 @@ import BaseMap from '../../map/BaseMap'
 import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
 import Layers from '../../../domain/entities/layers'
 
-// A déplacer ?
 import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
-import { setSelectedRegulation, setRegulationSaved, setRegulatoryTextListValidityMap } from '../Regulation.slice'
+import {
+  setSelectedRegulation,
+  setRegulationSaved,
+  setRegulatoryTextListValidityMap
+} from '../Regulation.slice'
 import Feature from 'ol/Feature'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -37,11 +40,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     seaFronts,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
-
-  const {
-    isModalOpen,
-    regulationSaved
-  } = useSelector(state => state.regulation)
 
   /** @type {string} */
   const [selectedRegulationLawType, setSelectedRegulationLawType] = useState()
@@ -64,13 +62,20 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
   const [selectedGeometryId, setSelectedGeometry] = useState()
+  // eslint-disable-next-line no-unused-vars
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
   const [saveOrUpdateRegulation, setSaveOrUpdateRegulation] = useState(false)
-  const { regulatoryTextListValidityMap } = useSelector(state => state.regulation)
+  const {
+    isModalOpen,
+    regulationSaved,
+    regulatoryTextListValidityMap
+    // upcomingRegulatoryTextListValidityMap,
+    // upcomingRegulation
+  } = useSelector(state => state.regulation)
   const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
 
   let originalGeometryId = null
@@ -106,22 +111,36 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   useEffect(() => {
     if (regulatoryTextListValidityMap) {
-      const values = Object.values(regulatoryTextListValidityMap)
-      if (saveOrUpdateRegulation && values.length > 0 && values.length === regulatoryTextList.length) {
-        if (!values.includes(false) && atLeastOneValueIsMissing) {
-          createOrUpdateRegulation()
+      const regulatoryTexts = Object.values(regulatoryTextListValidityMap)
+      if (saveOrUpdateRegulation) {
+        if (regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length) {
+          if (!regulatoryTexts.includes(false) && !atLeastOneValueIsMissing) {
+            // update regulatoryTextList
+            setRegulatoryTextList(regulatoryTexts)
+            const featureObject = {
+              layer_name: selectedRegulationTopic,
+              law_type: selectedRegulationLawType.split(' /')[0],
+              zones: nameZone,
+              region: formatRegionList(selectedRegionList),
+              facade: selectedSeaFront,
+              references_reglementaires: JSON.stringify(regulatoryTexts)
+            }
+            createOrUpdateRegulation(featureObject)
+          } else {
+            dispatch(setRegulatoryTextListValidityMap(undefined))
+            setSaveOrUpdateRegulation(false)
+            setAtLeastOneValueIsMissing(false)
+          }
         }
-        dispatch(setRegulatoryTextListValidityMap({}))
-        setSaveOrUpdateRegulation(false)
       }
     }
-  }, [saveOrUpdateRegulation, regulatoryTextListValidityMap, atLeastOneValueIsMissing])
+  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextListValidityMap])
 
   const initForm = () => {
     setSelectedRegulationLawType(`${regulatoryZoneMetadata.lawType} / ${regulatoryZoneMetadata.seafront}`)
     setSelectedRegulationTopic(regulatoryZoneMetadata.topic)
     setNameZone(regulatoryZoneMetadata.zone)
-    setSelectedRegionList(regulatoryZoneMetadata.region.split(', '))
+    setSelectedRegionList(regulatoryZoneMetadata.region?.split(', '))
     setSelectedSeaFront(regulatoryZoneMetadata.seafront)
     setRegulatoryTextList(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
     setSelectedGeometry(regulatoryZoneMetadata.id)
@@ -145,10 +164,10 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
     setRegionIsMissing(valueIsMissing)
-    valueIsMissing = !(geometryIsMissing && geometryIsMissing !== '')
+    /* valueIsMissing = !(geometryIsMissing && geometryIsMissing !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
-    setGeometryIsMissing(valueIsMissing)
-    setAtLeastOneValueIsMissing(!atLeastOneValueIsMissing)
+    setGeometryIsMissing(valueIsMissing) */
+    setAtLeastOneValueIsMissing(atLeastOneValueIsMissing)
   }
 
   useEffect(() => {
@@ -177,31 +196,23 @@ const CreateRegulation = ({ title, isEdition }) => {
     })
     return regionListAsString
   }
-  const createOrUpdateRegulation = () => {
-    let featureObject = {
-      layer_name: selectedRegulationTopic,
-      law_type: selectedRegulationLawType.split(' /')[0],
-      zones: nameZone,
-      region: formatRegionList(selectedRegionList),
-      facade: selectedSeaFront,
-      references_reglementaires: JSON.stringify(regulatoryTextList)
-    }
+  const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
 
     const actionType = isEdition ? 'update' : 'insert'
     dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
     if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
-      featureObject = new Feature({
+      const emptyFeature = new Feature({
         layer_name: null,
         law_type: null,
         zones: null,
         region: null,
-        seafront: null,
-        regulatoryTextList: null
+        facade: null,
+        references_reglementaires: null
       })
-      feature.setId(`${Layers.REGULATORY.code}.${originalGeometryId}`)
-      dispatch(createOrUpdateRegulationInGeoserver(feature, 'update'))
+      emptyFeature.setId(`${Layers.REGULATORY.code}.${originalGeometryId}`)
+      dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, 'update'))
     }
   }
 

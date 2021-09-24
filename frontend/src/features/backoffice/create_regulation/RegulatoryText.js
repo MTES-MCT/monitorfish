@@ -7,7 +7,10 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './CustomDatePicker'
 import { COLORS, INFINITE } from '../../../constants/constants'
-import { addObjectToRegulatoryTextListValidityMap } from '../Regulation.slice'
+import {
+  addObjectToUpcomingRegulatoryTextListValidityMap,
+  addObjectToRegulatoryTextListValidityMap
+} from '../Regulation.slice'
 import Tag from './Tag'
 
 /**
@@ -23,7 +26,8 @@ const RegulatoryText = props => {
     regulatoryText,
     addOrRemoveRegulatoryTextInList,
     saveForm,
-    listLength
+    listLength,
+    source
   } = props
 
   /**
@@ -130,13 +134,13 @@ const RegulatoryText = props => {
 
   useEffect(() => {
     if (saveForm) {
-      const payload = { id: id }
+      const payload = { id: id, source: source }
       let allValuesAreFilled = !checkNameAndUrl()
       allValuesAreFilled = !checkOtherRequiredValues() && allValuesAreFilled
       if (allValuesAreFilled) {
         const updatedRegulatoryText = {
-          name: currentRegulatoryTextName,
-          URL: currentRegulatoryTextURL,
+          reference: currentRegulatoryTextName,
+          url: currentRegulatoryTextURL,
           startDate: currentStartDate,
           endDate: currentEndDate,
           textType: currentTextType
@@ -145,9 +149,13 @@ const RegulatoryText = props => {
       } else {
         payload.validity = false
       }
-      dispatch(addObjectToRegulatoryTextListValidityMap(payload))
+      if (source === 'upcomingRegulation') {
+        dispatch(addObjectToUpcomingRegulatoryTextListValidityMap(payload))
+      } else {
+        dispatch(addObjectToRegulatoryTextListValidityMap(payload))
+      }
     }
-  }, [saveForm])
+  }, [saveForm, source])
 
   const cancelAddNewRegulatoryText = () => {
     setIsEditing(true)

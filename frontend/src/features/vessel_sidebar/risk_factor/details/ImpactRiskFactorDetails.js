@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as InfoSVG } from '../../../icons/Information.svg'
 import { COLORS } from '../../../../constants/constants'
@@ -9,6 +9,7 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
     selectedVessel
   } = useSelector(state => state.vessel)
   const [faoZones, setFaoZones] = useState([])
+  const speciesElement = useRef()
 
   const {
     riskFactor
@@ -30,7 +31,7 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
     <SubRiskDetails
       isOpen={isOpen}
       hasSegment={riskFactor?.segmentHighestImpact}
-      hasManySpecies={riskFactor?.speciesOnboard?.length > 13}
+      speciesHeight={speciesElement?.current?.clientHeight}
     >
       <Line/>
       <Zone>
@@ -69,15 +70,17 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
                   </Field>
                   <Field>
                     <Key>Espèces à bord</Key>
-                    <Value title={
-                      riskFactor?.speciesOnboard?.length
-                        ? riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
-                        : undefined
-                    }>
+                    <Value
+                      ref={speciesElement}
+                      title={
+                        riskFactor?.speciesOnboard?.length
+                          ? riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
+                          : undefined
+                      }>
                       {
                         riskFactor?.speciesOnboard?.length
-                          ? riskFactor?.speciesOnboard?.length > 13
-                            ? `${riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ').substring(0, 65)}...`
+                          ? riskFactor?.speciesOnboard?.length > 20
+                            ? `${riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ').substring(0, 104)}...`
                             : riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
                           : <NoValue>-</NoValue>
                       }
@@ -127,7 +130,8 @@ const Info = styled(InfoSVG)`
 
 const SubRiskDetails = styled.div`
   width: 100%;
-  height: ${props => props.isOpen ? (props.hasSegment ? 140 + (props.hasManySpecies ? 15 : 0) : 80) : 0}px;
+  z-index: ${props => props.speciesHeight};
+  height: ${props => props.isOpen ? (props.hasSegment ? 120 + (props.speciesHeight ? props.speciesHeight < 60 ? props.speciesHeight : 60 : 36) : 80) : 0}px;
   opacity: ${props => props.isOpen ? '1' : '0'};
   visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
   overflow: hidden;

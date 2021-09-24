@@ -17,7 +17,7 @@ context('LayersSidebar', () => {
     cy.url().should('include', '@-22')
   })
 
-  it('A regulation Should be searched, added to My Zones and showed on the map', () => {
+  it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
 
@@ -34,10 +34,10 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-zone"]').contains('Praires Ouest cotentin')
                                                                                                                         
-    // Test 1. Show a zone with the zone button
+    // Show a zone with the zone button
     cy.log('Show a zone with the zone button')
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 20000 })
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
@@ -48,12 +48,30 @@ context('LayersSidebar', () => {
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
+  })
 
-    // Test 2. Show a zone with the topic button
+  it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
+    // When
+    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+
+    // Add the layer to My Zones
+    cy.get('*[data-cy^="regulatory-search-input"]').type('Cotentin')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="regulatory-search-add-zones-button"]').contains('Ajouter 1 zone')
+    cy.get('*[data-cy^="regulatory-search-add-zones-button"]').click()
+
+    // Then it is in "My Zones"
+    cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones-zone"]').contains('Praires Ouest cotentin')
+
+    // Show a zone with the topic button
     cy.log('Show a zone with the topic button')
     cy.get('*[data-cy="regulatory-layers-my-zones-topic-show"]').eq(0).click({ timeout: 20000 })
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
@@ -61,14 +79,14 @@ context('LayersSidebar', () => {
 
     // Delete the zone
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-delete"]').click()
-    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').should('not.exist');
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 20000 }).should('not.exist');
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
 
     // Close the layers sidebar
-    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="layers-sidebar"]', { timeout: 20000 }).click({ timeout: 20000 })
   })
 
   it('A regulation metadata Should be opened', () => {

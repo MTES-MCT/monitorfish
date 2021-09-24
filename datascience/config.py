@@ -53,13 +53,13 @@ risk_factor_coefficients = {
 default_risk_factors = {
     "segment_risk_factor": 1,
     "control_rate_risk_factor": 4,
-    "infraction_rate_risk_factor": 1,
+    "infraction_rate_risk_factor": 2,
     "control_priority_level": 1,
     "impact_risk_factor": 1,
-    "probability_risk_factor": 1,
+    "probability_risk_factor": 2,
     "detectability_risk_factor": 2,
     "risk_factor": (
-        (1.0 ** risk_factor_coefficients["probability"])
+        (2.0 ** risk_factor_coefficients["probability"])
         * (1.0 ** risk_factor_coefficients["impact"])
         * (2 ** risk_factor_coefficients["detectability"])
     ),

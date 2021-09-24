@@ -8,12 +8,13 @@ import prefect
 from prefect import task
 
 from src.db_config import create_engine
+from src.pipeline import utils
 from src.pipeline.processing import (
     df_values_to_psql_arrays,
     prepare_df_for_loading,
     to_json,
 )
-from src.pipeline.utils import delete, delete_rows, get_table, psql_insert_copy
+from src.pipeline.utils import get_table, psql_insert_copy
 from src.read_query import read_saved_query
 
 
@@ -86,7 +87,7 @@ def load(
     table_name: str,
     schema: str,
     db_name: str,
-    logger: Union[None, logging.Logger],
+    logger: logging.Logger,
     how: str = "replace",
     pg_array_columns: Union[None, list] = None,
     handle_array_conversion_errors: bool = True,
@@ -104,7 +105,7 @@ def load(
         table_name (str): name of the table
         schema (str): database schema of the table
         db_name (str): name of the database. Currently only 'monitorfish_remote'.
-        logger (Union[None, logging.Logger]): logger instance,
+        logger (logging.Logger): logger instance,
         how (str): one of
           - 'replace' to delete all rows in the table before loading
           - 'append' to append the data to rows already in the table
@@ -128,7 +129,7 @@ def load(
 
         if how == "replace":
             # Delete all rows from table
-            delete(table, connection, logger)
+            utils.delete(table, connection, logger)
 
         elif how == "upsert":
             # Delete rows that are in the DataFrame from the table
@@ -144,7 +145,7 @@ def load(
 
             ids_to_delete = set(df[df_id_column].unique())
 
-            delete_rows(
+            utils.delete_rows(
                 table=table,
                 id_column=table_id_column,
                 ids_to_delete=ids_to_delete,
@@ -184,3 +185,44 @@ def load(
 
         else:
             raise ValueError("df must be DataFrame or GeoDataFrame.")
+
+
+def delete_rows(
+    *,
+    table_name: str,
+    schema: str,
+    db_name: str,
+    table_id_column: str,
+    ids_to_delete: set,
+    logger: logging.Logger,
+):
+    """
+    Delete rows from a database table.
+
+    Args:
+        table_name (str): name of the table
+        schema (str): database schema of the table
+        db_name (str): name of the database. One of
+          - 'monitorfish_remote'
+          - 'monitorfish_local'
+        table_id_column (str): name of the id column in the database.
+        ids_to_delete (set): the ids of the rows to delete.
+        logger (logging.Logger): logger instance.
+    """
+
+    e = create_engine(db_name)
+    table = get_table(table_name, schema, e, logger)
+
+    with e.begin() as connection:
+        n_rows = len(ids_to_delete)
+        if n_rows == 0:
+            logger.info("No rows to delete, skipping.")
+
+        else:
+            utils.delete_rows(
+                table=table,
+                id_column=table_id_column,
+                ids_to_delete=ids_to_delete,
+                connection=connection,
+                logger=logger,
+            )

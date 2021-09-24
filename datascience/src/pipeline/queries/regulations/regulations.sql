@@ -1,0 +1,25 @@
+SELECT
+    id,
+    law_type,
+    facade,
+    layer_name,
+    zones,
+    region,
+    date_fermeture,
+    date_ouverture,
+    periodes,
+    engins,
+    engins_interdits,
+    mesures_techniques,
+    especes,
+    quantites,
+    taille,
+    especes_interdites,
+    autre_reglementation_especes,
+    documents_obligatoires,
+    autre_reglementation,
+    references_reglementaires,
+    ST_CurveToLine(geometry) AS geometry,
+    row_hash
+FROM prod.reglementation_peche
+WHERE id IN :ids

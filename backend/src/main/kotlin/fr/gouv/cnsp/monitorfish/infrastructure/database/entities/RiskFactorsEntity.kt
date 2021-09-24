@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.*
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -24,8 +24,8 @@ data class RiskFactorsEntity(
         ) : Serializable {
 
     fun toVesselRiskFactor() = VesselRiskFactor(
-            impactRiskFactor = impactRiskFactor,
-            probabilityRiskFactor = probabilityRiskFactor,
-            detectabilityRiskFactor = detectabilityRiskFactor,
-            riskFactor = riskFactor)
+            impactRiskFactor = impactRiskFactor ?: defaultImpactRiskFactor,
+            probabilityRiskFactor = probabilityRiskFactor ?: defaultProbabilityRiskFactor,
+            detectabilityRiskFactor = detectabilityRiskFactor ?: defaultDetectabilityRiskFactor,
+            riskFactor = riskFactor ?: defaultRiskFactor)
 }

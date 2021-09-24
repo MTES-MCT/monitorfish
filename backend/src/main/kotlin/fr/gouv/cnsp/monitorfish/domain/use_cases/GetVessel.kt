@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +72,28 @@ class GetVessel(private val vesselRepository: VesselRepository,
             else -> ZonedDateTime.now()
         }
 
+        /*
+        TODO Si
+        gearOnboard
+        segments
+        speciesOnboard
+        controlPriorityLevel
+        segmentHighestImpact
+        segmentHighestPriority
+        numberControlsLastFiveYears
+        numberControlsLastThreeYears
+        numberInfractionsLastFiveYears
+        numberDiversionsLastFiveYears
+        numberSeizuresLastFiveYears
+        numberEscortsToQuayLastFiveYears
+        controlRateRiskFactor
+        lastControlDatetime
+        impactRiskFactor
+        probabilityRiskFactor
+        detectabilityRiskFactor
+        riskFactor
+         */
+
         return coroutineScope {
             val positionsFuture = findPositionsAsync(vesselIdentifier, internalReferenceNumber, from, to, ircs, externalReferenceNumber)
 
@@ -89,7 +112,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
                             positionsFuture.await(),
                             vesselCurrentSegmentFuture.await(),
                             vesselControlAnteriorityFuture.await(),
-                            vesselRiskFactorsFuture.await()
+                            vesselRiskFactorsFuture.await() ?: VesselRiskFactor()
                     )
             )
         }

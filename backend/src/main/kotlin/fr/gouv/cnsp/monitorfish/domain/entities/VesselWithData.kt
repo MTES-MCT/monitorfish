@@ -9,4 +9,4 @@ data class VesselWithData(
         val positions: List<Position>,
         val vesselCurrentSegment: VesselCurrentSegment?,
         val vesselControlAnteriority: VesselControlAnteriority?,
-        val vesselRiskFactor: VesselRiskFactor?)
+        val vesselRiskFactor: VesselRiskFactor)

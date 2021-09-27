@@ -400,13 +400,20 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
                 "escort_to_quay": False,
             }
         )
+        .assign(number_infractions_last_5_years=lambda x: x.infraction_ids.map(len))
         .groupby("vessel_id")[
-            ["id", "infraction", "diversion", "seizure", "escort_to_quay"]
+            [
+                "id",
+                "number_infractions_last_5_years",
+                "diversion",
+                "seizure",
+                "escort_to_quay",
+            ]
         ]
         .agg(
             {
                 "id": "count",
-                "infraction": "sum",
+                "number_infractions_last_5_years": "sum",
                 "diversion": "sum",
                 "seizure": "sum",
                 "escort_to_quay": "sum",
@@ -415,7 +422,6 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
         .rename(
             columns={
                 "id": "number_controls_last_5_years",
-                "infraction": "number_infractions_last_5_years",
                 "diversion": "number_diversions_last_5_years",
                 "seizure": "number_seizures_last_5_years",
                 "escort_to_quay": "number_escorts_to_quay_last_5_years",

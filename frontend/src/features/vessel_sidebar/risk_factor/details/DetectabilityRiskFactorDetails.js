@@ -28,7 +28,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
           {
             riskFactor?.segmentHighestPriority
               ? riskFactor?.segmentHighestPriority
-              : <NoValue>-</NoValue>
+              : null
           }
         </InlineKey>
         <InlineValue
@@ -36,7 +36,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
         >
           {
             riskFactor?.controlPriorityLevel
-              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true, riskFactor?.segmentHighestImpact)}`
+              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}`
               : <NoValue>-</NoValue>
           }
         </InlineValue>

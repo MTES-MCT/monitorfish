@@ -9,7 +9,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselCurrentSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import io.micrometer.core.instrument.MeterRegistry
@@ -115,8 +114,6 @@ class BffControllerITests {
             Pair(false, VesselWithData(
                     Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                     listOf(firstPosition, secondPosition, thirdPosition),
-                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8),
-                    TestUtils.dummyVesselControlAnteriority,
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 
@@ -138,8 +135,6 @@ class BffControllerITests {
             Pair(false, VesselWithData(
                     Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                     listOf(firstPosition, secondPosition, thirdPosition),
-                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8, controlPriorityLevel = 3.0),
-                    TestUtils.dummyVesselControlAnteriority,
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 
@@ -153,7 +148,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
                 .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
-                .andExpect(jsonPath("$.riskFactor.controlPriorityLevel", equalTo(3.0)))
+                .andExpect(jsonPath("$.riskFactor.controlPriorityLevel", equalTo(1.0)))
                 .andExpect(jsonPath("$.riskFactor.riskFactor", equalTo(3.2)))
 
         runBlocking {
@@ -172,8 +167,6 @@ class BffControllerITests {
             Pair(true, VesselWithData(
                     Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                     listOf(firstPosition, secondPosition, thirdPosition),
-                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8),
-                    TestUtils.dummyVesselControlAnteriority,
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 
@@ -204,8 +197,6 @@ class BffControllerITests {
             Pair(false, VesselWithData(
                     Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
                     listOf(firstPosition, secondPosition, thirdPosition),
-                    VesselCurrentSegment(internalReferenceNumber = "FR224226850", impactRiskFactor = 3.8),
-                    TestUtils.dummyVesselControlAnteriority,
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
 

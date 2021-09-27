@@ -3,10 +3,12 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.*
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselCurrentSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -31,12 +33,6 @@ class GetVesselUTests {
     private lateinit var ersRepository: ERSRepository
 
     @MockBean
-    private lateinit var currentSegmentRepository: CurrentSegmentRepository
-
-    @MockBean
-    private lateinit var controlAnteriorityRepository: ControlAnteriorityRepository
-
-    @MockBean
     private lateinit var riskFactorsRepository: RiskFactorsRepository
 
     @Test
@@ -49,13 +45,11 @@ class GetVesselUTests {
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
         given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
         given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
-        given(currentSegmentRepository.findVesselCurrentSegment(any())).willReturn(VesselCurrentSegment(impactRiskFactor = 4.0))
-        given(controlAnteriorityRepository.findVesselControlAnteriority(any())).willReturn(TestUtils.dummyVesselControlAnteriority)
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor(2.3, 2.0, 1.9, 3.2))
 
         // When
         val pair = runBlocking {
-             GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository, controlAnteriorityRepository, riskFactorsRepository)
+             GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository)
                      .execute("FR224226850",
                              "",
                              "",
@@ -69,8 +63,8 @@ class GetVesselUTests {
         assertThat(pair.first).isFalse
         assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
         assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
-        assertThat(pair.second.vesselCurrentSegment?.impactRiskFactor).isEqualTo(4.0)
-        assertThat(pair.second.vesselRiskFactor?.riskFactor).isEqualTo(3.2)
+        assertThat(pair.second.vesselRiskFactor.impactRiskFactor).isEqualTo(2.3)
+        assertThat(pair.second.vesselRiskFactor.riskFactor).isEqualTo(3.2)
     }
 
     @Test
@@ -87,7 +81,7 @@ class GetVesselUTests {
 
         // When
         val pair = runBlocking {
-            GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository, controlAnteriorityRepository, riskFactorsRepository)
+            GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository)
                     .execute("FR224226850",
                             "",
                             "",
@@ -112,7 +106,7 @@ class GetVesselUTests {
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository, controlAnteriorityRepository, riskFactorsRepository)
+                GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository)
                         .execute("FR224226850",
                                 "",
                                 "",
@@ -136,7 +130,7 @@ class GetVesselUTests {
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository, controlAnteriorityRepository, riskFactorsRepository)
+                GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository)
                         .execute("FR224226850",
                                 "",
                                 "",
@@ -159,7 +153,7 @@ class GetVesselUTests {
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository, controlAnteriorityRepository, riskFactorsRepository).execute(
+                GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository).execute(
                         "FR224226850",
                         "",
                         "",
@@ -185,7 +179,7 @@ class GetVesselUTests {
         val fromDateTime = ZonedDateTime.now().minusMinutes(15)
         val toDateTime = ZonedDateTime.now()
         runBlocking {
-            GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository, controlAnteriorityRepository, riskFactorsRepository).execute(
+            GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository).execute(
                     "FR224226850",
                     "",
                     "",
@@ -212,7 +206,7 @@ class GetVesselUTests {
 
         // When
         runBlocking {
-            GetVessel(vesselRepository, positionRepository, ersRepository, currentSegmentRepository, controlAnteriorityRepository, riskFactorsRepository)
+            GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository)
                     .execute("FR224226850",
                             "",
                             "",

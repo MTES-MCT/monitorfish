@@ -5,8 +5,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -19,8 +23,6 @@ import java.time.ZonedDateTime
 class GetVessel(private val vesselRepository: VesselRepository,
                 private val positionRepository: PositionRepository,
                 private val ersRepository: ERSRepository,
-                private val currentSegmentRepository: CurrentSegmentRepository,
-                private val controlAnteriorityRepository: ControlAnteriorityRepository,
                 private val riskFactorsRepository: RiskFactorsRepository) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
@@ -76,10 +78,6 @@ class GetVessel(private val vesselRepository: VesselRepository,
 
             val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }
 
-            val vesselCurrentSegmentFuture = async { currentSegmentRepository.findVesselCurrentSegment(internalReferenceNumber) }
-
-            val vesselControlAnteriorityFuture = async { controlAnteriorityRepository.findVesselControlAnteriority(internalReferenceNumber) }
-
             val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
 
             Pair(
@@ -87,9 +85,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
                     VesselWithData(
                             vesselFuture.await(),
                             positionsFuture.await(),
-                            vesselCurrentSegmentFuture.await(),
-                            vesselControlAnteriorityFuture.await(),
-                            vesselRiskFactorsFuture.await()
+                            vesselRiskFactorsFuture.await() ?: VesselRiskFactor()
                     )
             )
         }

@@ -62,7 +62,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
   const [selectedGeometryId, setSelectedGeometry] = useState()
-  // eslint-disable-next-line no-unused-vars
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
@@ -164,9 +163,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
     setRegionIsMissing(valueIsMissing)
-    /* valueIsMissing = !(geometryIsMissing && geometryIsMissing !== '')
+    valueIsMissing = !(geometryIsMissing && geometryIsMissing !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
-    setGeometryIsMissing(valueIsMissing) */
+    setGeometryIsMissing(valueIsMissing)
     setAtLeastOneValueIsMissing(atLeastOneValueIsMissing)
   }
 

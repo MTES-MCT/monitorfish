@@ -64,6 +64,26 @@ def compute_risk_factors(
         )
     )
 
+    risk_factors = risk_factors.astype(
+        {
+            "number_controls_last_3_years": int,
+            "number_controls_last_5_years": int,
+            "number_diversions_last_5_years": int,
+            "number_escorts_to_quay_last_5_years": int,
+            "number_infractions_last_5_years": int,
+            "number_recent_controls": int,
+            "number_seizures_last_5_years": int,
+        }
+    )
+
+    def float_or_na_to_str(float_or_na) -> str:
+        if pd.isna(float_or_na):
+            return ""
+        else:
+            return str(int(float_or_na))
+
+    risk_factors["vessel_id"] = risk_factors.vessel_id.map(float_or_na_to_str)
+
     return risk_factors
 
 

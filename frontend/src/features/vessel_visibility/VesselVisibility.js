@@ -5,21 +5,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
 import { COLORS } from '../../constants/constants'
 import LastPositionsSlider from './LastPositionsSlider'
-import {
-  setVesselLabel,
-  setVesselLabelsShowedOnMap,
-  setVesselsLastPositionVisibility,
-  setVesselTrackDepth
-} from '../../domain/shared_slices/Map'
-import TrackDepthRadio from './TrackDepthRadio'
-import VesselLabelSelection from './VesselLabelSelection'
-import ShowVesselLabel from './ShowVesselLabel'
+import { setVesselsLastPositionVisibility, setVesselTrackDepth } from '../../domain/shared_slices/Map'
+import TrackDepthRadio from '../vessel_labels/TrackDepthRadio'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
-import ShowVesselEstimatedPositions from './ShowVesselEstimatedPositions'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
+import ShowVesselEstimatedPositions from './ShowVesselEstimatedPositions'
 
 const VesselVisibility = () => {
   const dispatch = useDispatch()
@@ -27,8 +20,6 @@ const VesselVisibility = () => {
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
   const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
-  const vesselLabel = useSelector(state => state.map.vesselLabel)
-  const vesselLabelsShowedOnMap = useSelector(state => state.map.vesselLabelsShowedOnMap)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
@@ -56,14 +47,6 @@ const VesselVisibility = () => {
 
   const updateVesselTrackDepth = depth => {
     dispatch(setVesselTrackDepth(depth))
-  }
-
-  const updateVesselLabel = label => {
-    dispatch(setVesselLabel(label))
-  }
-
-  const updateVesselLabelsShowedOnMap = isShowed => {
-    dispatch(setVesselLabelsShowedOnMap(isShowed))
   }
 
   return (
@@ -104,20 +87,6 @@ const VesselVisibility = () => {
           updateVesselTrackDepth={updateVesselTrackDepth}
           vesselTrackDepth={vesselTrackDepth}
         />
-        <Header isFirst={false}>
-          Gérer l&apos;affichage des étiquettes des navires
-        </Header>
-        <VesselLabel>
-          Choisir le libellé des étiquettes des navires
-        </VesselLabel>
-        <VesselLabelSelection
-          updateVesselLabel={updateVesselLabel}
-          vesselLabel={vesselLabel}
-        />
-        <ShowVesselLabel
-          updateVesselLabelsShowedOnMap={updateVesselLabelsShowedOnMap}
-          vesselLabelsShowedOnMap={vesselLabelsShowedOnMap}
-        />
         <ShowVesselEstimatedPositions/>
       </VesselVisibilityBox>
     </Wrapper>
@@ -127,13 +96,6 @@ const VesselVisibility = () => {
 const Wrapper = styled.div`
   transition: all 0.2s;
   z-index: 1000;
-`
-
-const VesselLabel = styled.div`
-  margin: 15px 5px 0 20px;
-  font-size: 13px;
-  color: ${COLORS.slateGray};
-  text-align: left;
 `
 
 const LastPositionLegend = styled.div`

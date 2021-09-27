@@ -1,7 +1,7 @@
 import { getHealthcheckFromAPI } from '../../api/fetch'
 import { setError, setHealthcheckTextWarning } from '../shared_slices/Global'
 
-const FIVE_MINUTES = 5
+const TEN_MINUTES = 10
 
 const getHealthcheck = () => dispatch => {
   getHealthcheckFromAPI().then(healthCheck => {
@@ -19,7 +19,7 @@ const getHealthcheck = () => dispatch => {
 }
 
 function getWarningText (ersMessagesReceivedMinutesAgo, positionsReceivedMinutesAgo, lastPositionsMinutesAgo) {
-  if ((lastPositionsMinutesAgo > FIVE_MINUTES || positionsReceivedMinutesAgo > FIVE_MINUTES) && ersMessagesReceivedMinutesAgo > FIVE_MINUTES) {
+  if ((lastPositionsMinutesAgo > TEN_MINUTES || positionsReceivedMinutesAgo > TEN_MINUTES) && ersMessagesReceivedMinutesAgo > TEN_MINUTES) {
     let timeAgo = ersMessagesReceivedMinutesAgo
     if (lastPositionsMinutesAgo > timeAgo) {
       timeAgo = lastPositionsMinutesAgo
@@ -28,11 +28,11 @@ function getWarningText (ersMessagesReceivedMinutesAgo, positionsReceivedMinutes
     }
 
     return `Les données VMS et JPE ne sont plus à jour dans MonitorFish depuis ${timeAgo} minutes`
-  } else if (ersMessagesReceivedMinutesAgo > FIVE_MINUTES) {
+  } else if (ersMessagesReceivedMinutesAgo > TEN_MINUTES) {
     return `Nous ne recevons plus aucun message JPE depuis ${ersMessagesReceivedMinutesAgo} minutes.`
-  } else if (positionsReceivedMinutesAgo > FIVE_MINUTES) {
+  } else if (positionsReceivedMinutesAgo > TEN_MINUTES) {
     return `Nous ne recevons plus aucune position VMS depuis ${positionsReceivedMinutesAgo} minutes.`
-  } else if (lastPositionsMinutesAgo > FIVE_MINUTES) {
+  } else if (lastPositionsMinutesAgo > TEN_MINUTES) {
     return `Les dernières positions des navires ne sont plus actualisées depuis ${lastPositionsMinutesAgo} minutes (ni sur la carte, ni dans la liste des navires).`
   }
 

@@ -14,11 +14,13 @@ const savedMapExtentLocalStorageKey = 'mapExtent'
 const baseLayerLocalStorageKey = 'baseLayer'
 const measurementsLocalStorageKey = 'measurements'
 const estimatedPositionsLocalStorageKey = 'estimatedPositions'
+const riskFactorLocalStorageKey = 'riskFactor'
 const coordinatesFormatLocalStorageKey = 'coordinatesFormat'
 
 const mapSlice = createSlice({
   name: 'map',
   initialState: {
+    // Vessels map properties
     vesselsLastPositionVisibility: getLocalStorageState({
       opacityReduced: 6,
       hidden: 48
@@ -26,6 +28,9 @@ const mapSlice = createSlice({
     vesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
     vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
     vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
+    riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
+    showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
+    // End of vessels map properties
     animateTo: null,
     updatedFromCron: false,
     animateToRegulatoryLayer: null,
@@ -40,7 +45,6 @@ const mapSlice = createSlice({
       center: null
     }, savedMapViewLocalStorageKey),
     extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
-    showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
     coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey)
   },
   reducers: {
@@ -69,6 +73,10 @@ const mapSlice = createSlice({
     setVesselLabelsShowedOnMap (state, action) {
       window.localStorage.setItem(vesselLabelsShowedOnMapLocalStorageKey, JSON.stringify(action.payload))
       state.vesselLabelsShowedOnMap = action.payload
+    },
+    setRiskFactorShowedOnMap (state, action) {
+      window.localStorage.setItem(riskFactorLocalStorageKey, JSON.stringify(action.payload))
+      state.riskFactorShowedOnMap = action.payload
     },
     setView (state, action) {
       window.localStorage.setItem(savedMapViewLocalStorageKey, JSON.stringify(action.payload))
@@ -207,7 +215,8 @@ export const {
   resetZonesSelected,
   showVesselsEstimatedPositions,
   setUpdatedFromCron,
-  setCoordinatesFormat
+  setCoordinatesFormat,
+  setRiskFactorShowedOnMap
 } = mapSlice.actions
 
 export default mapSlice.reducer

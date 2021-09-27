@@ -41,7 +41,7 @@ const getControls = userRequest => (dispatch, getState) => {
     })
   } else {
     batch(() => {
-      dispatch(setError(new NoControlsFoundError('Ce navire n\'a aucun contrôle')))
+      dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
       dispatch(setControlResumeAndControls({
         controls: []
       }))

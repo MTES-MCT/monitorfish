@@ -37,7 +37,7 @@ const VesselLabelSelection = props => {
 }
 
 const RadioWrapper = styled.div`
-  padding: 0 0 15px 10px;
+  padding: 0 0 20px 10px;
   font-size: 13px;
   text-align: left;
 `

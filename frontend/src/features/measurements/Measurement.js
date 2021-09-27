@@ -14,6 +14,7 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
+import unselectVessel from '../../domain/use_cases/unselectVessel'
 
 const Measurement = () => {
   const dispatch = useDispatch()
@@ -64,6 +65,7 @@ const Measurement = () => {
       setMeasurementIsOpen(false)
     } else {
       setMeasurementIsOpen(!measurementIsOpen)
+      dispatch(unselectVessel())
     }
   }
 
@@ -159,7 +161,7 @@ const MeasurementOptions = styled(MapComponentStyle)`
   width: 175px;
   margin-right: ${props => props.measurementBoxIsOpen ? '45px' : '-200px'};
   opacity: ${props => props.measurementBoxIsOpen ? '1' : '0'};
-  top: 207px;
+  top: 249px;
   right: 10px;
   border-radius: 2px;
   position: absolute;
@@ -171,7 +173,7 @@ const MeasurementWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  top: 207px;
+  top: 249px;
   z-index: 99;
   height: 40px;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};

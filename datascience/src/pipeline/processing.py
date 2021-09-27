@@ -127,22 +127,54 @@ def get_first_non_null_column_name(
     return res
 
 
-def df_to_dict_series(df: pd.DataFrame, result_colname: str = "json_col"):
+def remove_nones_from_dict(d: dict) -> dict:
+    """
+    Takes a dictionary and removes ``None`` values from it.
+
+    Args:
+        d (dict): a dictionary
+
+    Returns:
+        dict: the input dictionary, with all ``None``s removed.
+
+    Examples:
+        >>> d = {
+            "a" : 1,
+            "b": [1, 2, None],
+            "c": {"key": "value", "key2": None},
+            "d": None
+            }
+        >>> remove_nones_from_dict(d)
+        {"a" : 1, "b": [1, 2, None], "c": {"key": "value", "key2": None}}
+    """
+    return {k: v for k, v in d.items() if v is not None}
+
+
+def df_to_dict_series(
+    df: pd.DataFrame, result_colname: str = "json_col", remove_nulls: bool = False
+):
     """Converts a pandas DataFrame into a Series with the same index as the input
-    DataFrame and whose values are dictionnaries like :
+    DataFrame and whose values are dictionaries like :
 
         {'column_1' : value, 'column_2': value}
 
     Args:
         df (pd.DataFrame): input DataFrame
         result_colname (Union[str, None]): optionnal, name of result Series
+        remove_nulls (bool): if set to ``True``, ``null`` values are recursively
+        removed from the dictionaries
 
     Returns:
         pd.Series: pandas Series
     """
     res = df.copy(deep=True)
-    res = pd.read_json(res.to_json(orient="index"), orient="index", typ="Series")
+    json_string = res.to_json(orient="index")
+
+    res = pd.read_json(json_string, orient="index", typ="Series")
     res.name = result_colname
+
+    if remove_nulls:
+        res = res.map(remove_nones_from_dict)
 
     return res
 

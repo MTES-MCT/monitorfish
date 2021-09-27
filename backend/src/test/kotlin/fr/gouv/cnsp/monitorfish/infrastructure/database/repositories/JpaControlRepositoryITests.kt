@@ -24,17 +24,17 @@ class JpaControlRepositoryITests : AbstractDBTests() {
         val controls = jpaControlRepository.findVesselControlsAfterDateTime(1, dateTime)
 
         // Then
-        assertThat(controls).hasSize(2)
-        assertThat(controls.last().control.cnspCalledUnit).isEqualTo(false)
-        assertThat(controls.last().control.controller.administration).isEqualTo("Affaires Maritimes")
-        assertThat(controls.last().control.controller.controller).isEqualTo("ULAM 56")
-        assertThat(controls.last().control.controller.controllerType).isEqualTo("Terrestre")
-        assertThat(controls.last().infractionIds).hasSize(2)
-        assertThat(controls.last().control.gearControls).hasSize(2)
-        assertThat(controls.last().control.gearControls.first().gearCode).isEqualTo("OTB")
-        assertThat(controls.last().control.gearControls.first().gearWasControlled).isFalse
-        assertThat(controls.last().control.gearControls.first().controlledMesh).isNull()
-        assertThat(controls.last().control.gearControls.first().declaredMesh).isEqualTo(60.0)
+        assertThat(controls).hasSize(3)
+        assertThat(controls.first().control.cnspCalledUnit).isEqualTo(false)
+        assertThat(controls.first().control.controller.administration).isEqualTo("Affaires Maritimes")
+        assertThat(controls.first().control.controller.controller).isEqualTo("ULAM 56")
+        assertThat(controls.first().control.controller.controllerType).isEqualTo("Terrestre")
+        assertThat(controls.first().infractionIds).hasSize(2)
+        assertThat(controls.first().control.gearControls).hasSize(2)
+        assertThat(controls.first().control.gearControls.first().gearCode).isEqualTo("OTB")
+        assertThat(controls.first().control.gearControls.first().gearWasControlled).isFalse
+        assertThat(controls.first().control.gearControls.first().controlledMesh).isNull()
+        assertThat(controls.first().control.gearControls.first().declaredMesh).isEqualTo(60.0)
     }
 
     @Test

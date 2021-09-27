@@ -7,5 +7,13 @@ SELECT
     last_control_infraction,
     post_control_comments,
     control_rate_risk_factor,
-    infraction_rate_risk_factor
+    infraction_rate_risk_factor,
+    infraction_score,
+    number_controls_last_3_years,
+    number_controls_last_5_years,
+    number_diversions_last_5_years,
+    number_escorts_to_quay_last_5_years,
+    number_infractions_last_5_years,
+    number_recent_controls,
+    number_seizures_last_5_years
 FROM control_anteriority

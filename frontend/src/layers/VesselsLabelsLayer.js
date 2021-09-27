@@ -10,7 +10,7 @@ import { usePrevious } from '../hooks/usePrevious'
 import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
-const MAX_LABELS_DISPLAYED = 150
+const MAX_LABELS_DISPLAYED = 250
 const NOT_FOUND = -1
 
 const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
@@ -25,6 +25,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   const {
     vesselLabelsShowedOnMap,
+    riskFactorShowedOnMap,
     vesselsLastPositionVisibility,
     vesselLabel
   } = useSelector(state => state.map)
@@ -39,6 +40,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   const previousMapZoom = useRef('')
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
   const [vesselToCoordinates, setVesselToCoordinates] = useState(new Map())
+  const [vesselToRiskFactorDetailsShowed, setVesselToRiskFactorDetailsShowed] = useState(new Map())
   const isThrottled = useRef(false)
 
   const [vectorSource] = useState(new VectorSource({
@@ -87,6 +89,12 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   useEffect(() => {
+    if (!riskFactorShowedOnMap) {
+      setVesselToRiskFactorDetailsShowed(new Map())
+    }
+  }, [riskFactorShowedOnMap])
+
+  useEffect(() => {
     if (isThrottled.current || !vesselsLayerSource) {
       return
     }
@@ -102,6 +110,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     filters,
     nonFilteredVesselsAreHidden,
     vesselLabelsShowedOnMap,
+    riskFactorShowedOnMap,
     vesselLabel,
     filteredVesselsFeaturesUids,
     vesselsLastPositionVisibility,
@@ -158,7 +167,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   function addVesselLabelToAllFeaturesInExtent () {
-    if (!vesselLabelsShowedOnMap) {
+    if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
       setFeaturesAndLabels([])
       vectorSource.clear()
       return
@@ -225,29 +234,40 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   function addLabelToFeatures (features) {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
-    const nextFeaturesAndLabels = features.map(feature => {
-      const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility)
-      const identity = feature.vessel
-      const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
-      const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
+    const nextFeaturesAndLabels = features
+      .filter(feature => feature.vessel)
+      .map(feature => {
+        const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap)
+        const identity = feature.vessel
+        const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
+        const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
 
-      return {
-        identity: {
-          key: feature.ol_uid,
-          flagState: feature.vessel.flagState,
-          coordinates: feature.getGeometry().getCoordinates(),
-          internalReferenceNumber: feature.vessel.internalReferenceNumber,
-          ircs: feature.vessel.ircs,
-          externalReferenceNumber: feature.vessel.externalReferenceNumber
-        },
-        opacity: Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced),
-        label,
-        offset,
-        featureId: labelLineFeatureId
-      }
-    }).filter(object => object)
+        return {
+          identity: {
+            key: feature.ol_uid,
+            flagState: feature.vessel.flagState,
+            coordinates: feature.getGeometry().getCoordinates(),
+            internalReferenceNumber: feature.vessel.internalReferenceNumber,
+            ircs: feature.vessel.ircs,
+            externalReferenceNumber: feature.vessel.externalReferenceNumber
+          },
+          opacity: Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced),
+          label,
+          offset,
+          featureId: labelLineFeatureId
+        }
+      }).filter(object => object)
 
     setFeaturesAndLabels(nextFeaturesAndLabels)
+  }
+
+  function triggerShowRiskDetails (featureId) {
+    const previousValue = vesselToRiskFactorDetailsShowed.get(featureId)
+
+    const nextVesselToRiskFactorDetailsShowed = vesselToRiskFactorDetailsShowed
+    nextVesselToRiskFactorDetailsShowed.set(featureId, !previousValue)
+
+    setVesselToRiskFactorDetailsShowed(nextVesselToRiskFactorDetailsShowed)
   }
 
   return (<>
@@ -257,8 +277,11 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           map={map}
           key={identity.key}
           featureId={featureId}
+          triggerShowRiskDetails={triggerShowRiskDetails}
           moveLine={moveVesselLabelLine}
-          text={label}
+          text={label?.labelText}
+          riskFactor={label?.riskFactor}
+          riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
           flagState={identity.flagState}
           offset={offset}
           coordinates={identity.coordinates}

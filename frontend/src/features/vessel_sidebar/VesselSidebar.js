@@ -22,7 +22,6 @@ import HideOtherVessels from './hide_other_vessels/HideOtherVessels'
 const VesselSidebar = () => {
   const dispatch = useDispatch()
   const { healthcheckTextWarning } = useSelector(state => state.global)
-  const error = useSelector(state => state.global.error)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const {
     vesselSidebarTab,
@@ -32,7 +31,6 @@ const VesselSidebar = () => {
 
   const [openSidebar, setOpenSidebar] = useState(false)
   const firstUpdate = useRef(true)
-  const [showedError, setShowedError] = useState(null)
   const [trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen] = useState(false)
 
   useEffect(() => {
@@ -42,29 +40,6 @@ const VesselSidebar = () => {
       setTrackDepthSelectionIsOpen(false)
     }
   }, [openSidebar])
-
-  useEffect(() => {
-    if (isSameShowedError(error, showedError)) {
-      return
-    }
-
-    if (isShowedError()) {
-      setShowedError(error)
-      return
-    }
-
-    setShowedError(null)
-  }, [error])
-
-  function isSameShowedError (error, showedError) {
-    return error &&
-      showedError &&
-      error.name === showedError.name
-  }
-
-  function isShowedError () {
-    return error && !error.showEmptyComponentFields
-  }
 
   useEffect(() => {
     if (vesselSidebarIsOpen) {
@@ -145,36 +120,28 @@ const VesselSidebar = () => {
                 <VMSIcon/> <br/> VMS/ERS
               </Tab>
             </TabList>
-            {
-              !showedError
-                ? <Panel healthcheckTextWarning={healthcheckTextWarning}>
-                  {
-                    vesselSidebarTab === VesselSidebarTab.SUMMARY
-                      ? <VesselSummary/>
-                      : null
-                  }
-                  {
-                    vesselSidebarTab === VesselSidebarTab.IDENTITY
-                      ? <VesselIdentity/>
-                      : null
-                  }
-                  {
-                    vesselSidebarTab === VesselSidebarTab.VOYAGES
-                      ? <VesselFishingActivities/>
-                      : null
-                  }
-                  {
-                    vesselSidebarTab === VesselSidebarTab.CONTROLS
-                      ? <VesselControls/>
-                      : null
-                  }
-                </Panel>
-                : <Error>
-                  <ErrorText>
-                    {showedError.message}
-                  </ErrorText>
-                </Error>
-            }
+            <Panel healthcheckTextWarning={healthcheckTextWarning}>
+              {
+                vesselSidebarTab === VesselSidebarTab.SUMMARY
+                  ? <VesselSummary/>
+                  : null
+              }
+              {
+                vesselSidebarTab === VesselSidebarTab.IDENTITY
+                  ? <VesselIdentity/>
+                  : null
+              }
+              {
+                vesselSidebarTab === VesselSidebarTab.VOYAGES
+                  ? <VesselFishingActivities/>
+                  : null
+              }
+              {
+                vesselSidebarTab === VesselSidebarTab.CONTROLS
+                  ? <VesselControls/>
+                  : null
+              }
+            </Panel>
           </div>
         </div>
       </Wrapper>
@@ -201,26 +168,11 @@ const GrayOverlay = styled.div`
   }
 `
 
-const Error = styled.div`
-  height: 50px;
-  padding: 5px 10px 10px 10px;
-  right: 0;
-`
-
-const ErrorText = styled.div`
-  padding: 5px 10px 5px 10px;
-  display: table-cell;
-  font-size: 15px;
-  vertical-align: middle;
-  height: inherit;
-  color: ${COLORS.slateGray};
-`
-
 const Panel = styled.div`
   padding: 0;
   overflow-y: auto;
   background: ${COLORS.gainsboro};
-  max-height: ${props => props.healthcheckTextWarning ? 81 : 86}vh;
+  max-height: ${props => props.healthcheckTextWarning ? 77 : 82}vh;
 `
 
 const Tab = styled.button`

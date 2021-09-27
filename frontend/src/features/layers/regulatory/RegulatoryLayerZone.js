@@ -137,10 +137,19 @@ const RegulatoryLayerZone = props => {
               onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
             />
         }
-        {showRegulatoryZone
-          ? <ShowIcon title="Cacher la zone" onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}/>
-          : <HideIcon
-            title="Afficher la zone" onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}/>}
+        {
+          showRegulatoryZone
+            ? <ShowIcon
+              data-cy={'regulatory-layers-my-zones-zone-hide'}
+              title="Cacher la zone"
+              onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}
+            />
+            : <HideIcon
+              data-cy={'regulatory-layers-my-zones-zone-show'}
+              title="Afficher la zone"
+              onClick={() => setShowRegulatoryZone(!showRegulatoryZone)}
+            />
+        }
         {allowRemoveZone && <CloseIcon title="Supprimer la zone de ma sélection"
                                        data-cy={'regulatory-layers-my-zones-zone-delete'}
                                        onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1)}/>}

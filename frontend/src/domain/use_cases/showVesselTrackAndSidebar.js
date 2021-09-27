@@ -36,7 +36,12 @@ const showVesselTrackAndSidebar = (
     .then(vesselAndTrackDepthModified => {
       dispatchErrors(dispatch, vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject)
 
-      const vessel = { ...vesselAndTrackDepthModified.vessel, ...vesselIdentity }
+      const vessel = {
+        ...vesselAndTrackDepthModified?.vessel,
+        ...vesselIdentity,
+        globalRiskFactor: vesselIdentity?.riskFactor,
+        riskFactor: vesselAndTrackDepthModified?.vessel?.riskFactor
+      }
       dispatch(setSelectedVessel(vessel))
     }).catch(error => {
       console.error(error)

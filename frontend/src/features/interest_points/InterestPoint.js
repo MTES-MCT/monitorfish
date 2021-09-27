@@ -97,7 +97,7 @@ const InterestPointWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
-  top: 249px;
+  top: 291px;
   z-index: 99;
   height: 40px;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};

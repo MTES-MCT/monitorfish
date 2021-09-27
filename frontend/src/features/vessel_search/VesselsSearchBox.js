@@ -76,9 +76,7 @@ const VesselsSearchBox = () => {
       }
     })
 
-    const firstThirtyVessels = foundFeatures.slice(0, 30)
-
-    return firstThirtyVessels
+    return foundFeatures.slice(0, 30)
   }
 
   useEffect(() => {
@@ -130,6 +128,7 @@ const VesselsSearchBox = () => {
                 setSelectedVesselIdentity={setSelectedVesselIdentity}
               />
               : <SearchBoxInput
+                data-cy={'vessel-search-input'}
                 ref={input => selectedVesselIdentity ? input && input.focus() : null}
                 type="text"
                 firstUpdate={firstUpdate}

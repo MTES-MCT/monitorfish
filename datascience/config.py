@@ -10,7 +10,7 @@ LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 
-#
+# Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")
 
 # Proxies for pipeline flows requiring Internet access
@@ -36,3 +36,30 @@ FAO_SPECIES_URL = "http://www.fao.org/fishery/static/ASFIS/ASFIS_sp.zip"
 DATA_GOUV_SPECIES_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/32616122-6931-4875-8e26-a57832012419"
 )
+
+FAO_AREAS_URL = (
+    "http://www.fao.org/fishery/geoserver/fifao/ows?"
+    "service=WFS&request=GetFeature&version=1.0.0&"
+    "typeName=fifao:FAO_AREAS_CWP&outputFormat=SHAPE-ZIP"
+)
+
+# Risk factor configuration
+risk_factor_coefficients = {
+    "probability": 0.3,
+    "impact": 0.2,
+    "detectability": 0.5,
+}
+
+default_risk_factors = {
+    "control_rate_risk_factor": 4,
+    "infraction_rate_risk_factor": 2,
+    "control_priority_level": 1,
+    "impact_risk_factor": 1,
+    "probability_risk_factor": 2,
+    "detectability_risk_factor": 2,
+    "risk_factor": (
+        (2.0 ** risk_factor_coefficients["probability"])
+        * (1.0 ** risk_factor_coefficients["impact"])
+        * (2 ** risk_factor_coefficients["detectability"])
+    ),
+}

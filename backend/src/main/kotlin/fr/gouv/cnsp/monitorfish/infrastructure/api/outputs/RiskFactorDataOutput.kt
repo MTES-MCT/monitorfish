@@ -1,7 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselControlAnteriority
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselCurrentSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import java.time.ZonedDateTime
 
@@ -26,23 +24,20 @@ data class RiskFactorDataOutput(
         val riskFactor: Double
 ) {
     companion object {
-        fun fromVesselCurrentSegmentAndControlAnteriority(
-                vesselCurrentSegment: VesselCurrentSegment?,
-                vesselControlAnteriority: VesselControlAnteriority?,
-                vesselRiskFactor: VesselRiskFactor) = RiskFactorDataOutput(
-                gearOnboard = vesselCurrentSegment?.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
-                segmentHighestImpact = vesselCurrentSegment?.segmentHighestImpact,
-                segmentHighestPriority = vesselCurrentSegment?.segmentHighestPriority,
-                speciesOnboard = vesselCurrentSegment?.speciesOnboard?.map { SpeciesLastPositionDataOutput.fromSpeciesLastPosition(it) },
-                controlPriorityLevel = vesselCurrentSegment?.controlPriorityLevel,
-                controlRateRiskFactor = vesselControlAnteriority?.controlRateRiskFactor,
-                numberControlsLastFiveYears = vesselControlAnteriority?.numberControlsLastFiveYears,
-                numberControlsLastThreeYears = vesselControlAnteriority?.numberControlsLastThreeYears,
-                numberInfractionsLastFiveYears = vesselControlAnteriority?.numberInfractionsLastFiveYears,
-                numberDiversionsLastFiveYears = vesselControlAnteriority?.numberDiversionsLastFiveYears,
-                numberSeizuresLastFiveYears = vesselControlAnteriority?.numberSeizuresLastFiveYears,
-                numberEscortsToQuayLastFiveYears = vesselControlAnteriority?.numberEscortsToQuayLastFiveYears,
-                lastControlDatetime = vesselControlAnteriority?.lastControlDatetime,
+        fun fromVesselRiskFactor(vesselRiskFactor: VesselRiskFactor) = RiskFactorDataOutput(
+                gearOnboard = vesselRiskFactor.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
+                segmentHighestImpact = vesselRiskFactor.segmentHighestImpact,
+                segmentHighestPriority = vesselRiskFactor.segmentHighestPriority,
+                speciesOnboard = vesselRiskFactor.speciesOnboard?.map { SpeciesLastPositionDataOutput.fromSpeciesLastPosition(it) },
+                controlPriorityLevel = vesselRiskFactor.controlPriorityLevel,
+                controlRateRiskFactor = vesselRiskFactor.controlRateRiskFactor,
+                numberControlsLastFiveYears = vesselRiskFactor.numberControlsLastFiveYears,
+                numberControlsLastThreeYears = vesselRiskFactor.numberControlsLastThreeYears,
+                numberInfractionsLastFiveYears = vesselRiskFactor.numberInfractionsLastFiveYears,
+                numberDiversionsLastFiveYears = vesselRiskFactor.numberDiversionsLastFiveYears,
+                numberSeizuresLastFiveYears = vesselRiskFactor.numberSeizuresLastFiveYears,
+                numberEscortsToQuayLastFiveYears = vesselRiskFactor.numberEscortsToQuayLastFiveYears,
+                lastControlDatetime = vesselRiskFactor.lastControlDatetime,
                 impactRiskFactor = vesselRiskFactor.impactRiskFactor,
                 probabilityRiskFactor = vesselRiskFactor.probabilityRiskFactor,
                 detectabilityRiskFactor = vesselRiskFactor.detectabilityRiskFactor,

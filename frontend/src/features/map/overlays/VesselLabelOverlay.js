@@ -161,7 +161,7 @@ const VesselLabelOverlay = ({
                         {parseFloat(riskFactor?.detectabilityRiskFactor).toFixed(1)}
                       </RiskFactorBox>
                       <SubRiskText>
-                        { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false, null, riskFactor?.hasSegments) }
+                        { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false, null) }
                       </SubRiskText>
                     </RiskFactorDetail>
                   </RiskFactorDetails>
@@ -177,6 +177,7 @@ const VesselLabelOverlay = ({
 
 const Text = styled.div`
   background: ${COLORS.background};
+  border-radius: 1px;
 `
 
 const SubRiskText = styled.span`
@@ -230,28 +231,29 @@ const VesselLabelOverlayElement = styled.div`
   box-shadow: 0px 2px 3px ${COLORS.grayShadow};
   line-height: 18px;
   cursor: grabbing;
-  height: 22px;
+  height: 20px;
   display: flex;
+  border-radius: 1px;
 `
 
 const Flag = styled.img`
-  vertical-align: middle;
-  height: 12px;
-  margin: 0 2px 1px 4px;
+  vertical-align: bottom;
+  height: 13px;
+  margin: 0 2px 5px 4px;
   user-select: none;
   cursor: grabbing;
-  line-height: 18px;
+  line-height: 17px;
 `
 
 const ZoneText = styled.span`
   margin-bottom: 3px;
   margin-right: 6px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   display: inline-block;
   user-select: none;
   color: ${COLORS.gunMetal};
-  line-height: 18px;
+  line-height: 17px;
   cursor: grabbing;
   margin-left: 2px;
   vertical-align: middle;
@@ -259,7 +261,7 @@ const ZoneText = styled.span`
 
 const RiskFactor = styled.span`
   width: 28px;
-  height: 21px;
+  height: 19px;
   padding-top: 1px;
   font-size: 13px;
   font-weight: 500;
@@ -267,7 +269,7 @@ const RiskFactor = styled.span`
   user-select: none;
   color: ${COLORS.background};
   background: ${props => props.color};
-  line-height: 18px;
+  line-height: 17px;
   cursor: pointer;
   border-radius: 1px;
   ${props => props.withText ? 'border-bottom-left-radius: 0;' : null}

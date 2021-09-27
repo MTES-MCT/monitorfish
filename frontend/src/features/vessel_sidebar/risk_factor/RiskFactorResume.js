@@ -110,12 +110,12 @@ const RiskFactorResume = () => {
                 <RiskFactorControl/>
                 <RiskFactorCursor
                   height={8}
-                  value={parseFloat(selectedVessel?.detectabilityRiskFactor).toFixed(1)}
-                  color={getRiskFactorColor(selectedVessel?.detectabilityRiskFactor)}
-                  progress={100 * selectedVessel?.detectabilityRiskFactor / 4}
+                  value={parseFloat(selectedVessel?.riskFactor?.detectabilityRiskFactor).toFixed(1)}
+                  color={getRiskFactorColor(selectedVessel?.riskFactor?.detectabilityRiskFactor)}
+                  progress={100 * selectedVessel?.riskFactor?.detectabilityRiskFactor / 4}
                 />
-                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null, selectedVessel?.riskFactor?.segmentHighestImpact)}>
-                  {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null, selectedVessel?.riskFactor?.segmentHighestImpact)}
+                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null)}>
+                  {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null)}
                 </SubRiskText>
               </SubRisk>
               <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen}/>

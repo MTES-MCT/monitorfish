@@ -21,12 +21,11 @@ context('Vessel labels', () => {
     // When
     cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
 
-    cy.get('*[data-cy^="map-property-trigger"]')
+    cy.get('*[data-cy^="map-property-trigger"]', { timeout: 20000 })
       .filter(':contains("étiquettes des navires")')
       .click({ timeout: 20000 })
 
     // Then
-    cy.wait(400)
     cy.get('*[data-cy^="vessel-label-text"]', { timeout: 20000 }).first().contains('FRAIS AVIS MODE')
   })
 

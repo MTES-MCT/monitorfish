@@ -30,13 +30,22 @@ def compute_risk_factors(
         current_segments, control_anteriority, on="cfr", how="outer"
     )
 
-    risk_factors = risk_factors.fillna(default_risk_factors)
-
-    risk_factors = risk_factors.rename(
-        columns={
-            "infraction_rate_risk_factor": "probability_risk_factor",
+    risk_factors = risk_factors.fillna(
+        {
+            "number_controls_last_3_years": 0,
+            "number_controls_last_5_years": 0,
+            "number_diversions_last_5_years": 0,
+            "number_escorts_to_quay_last_5_years": 0,
+            "number_infractions_last_5_years": 0,
+            "number_recent_controls": 0,
+            "number_seizures_last_5_years": 0,
+            **default_risk_factors,
         }
     )
+
+    risk_factors["probability_risk_factor"] = risk_factors[
+        "infraction_rate_risk_factor"
+    ]
 
     risk_factors["detectability_risk_factor"] = (
         risk_factors["control_rate_risk_factor"]
@@ -53,10 +62,6 @@ def compute_risk_factors(
             risk_factors["detectability_risk_factor"]
             ** risk_factor_coefficients["detectability"]
         )
-    )
-
-    risk_factors = risk_factors.drop(
-        columns=["vessel_id", "control_priority_level", "control_rate_risk_factor"]
     )
 
     return risk_factors

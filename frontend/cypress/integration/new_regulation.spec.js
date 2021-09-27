@@ -102,14 +102,14 @@ context('NewRegulation', () => {
     cy.get('[data-cy="reg-text-name"]').type('zone name')
     cy.get('[ data-cy="reg-text-url"]').type('url.com')
     // When save button is clicked
-    cy.get('[data-cy="save-reg-text-name"]').click({ timeout: 10000 })
+    cy.get('[data-cy="save-reg-text-name"]').click({ timeout: 50000 })
     // Red border are displayed
     cy.get('[data-cy="reg-text-url"]').should('have.css', 'border-color', 'rgb(225, 0, 15)')
   })
   it('Enter a reg text name with missing name', () => {
     cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     // When save button is clicked
-    cy.get('[data-cy="save-reg-text-name"]').click({ timeout: 10000 })
+    cy.get('[data-cy="save-reg-text-name"]').click({ timeout: 50000 })
     // Red border are displayed
     cy.get('[data-cy="reg-text-name"]').should('have.css', 'border-color', 'rgb(225, 0, 15)')
   })

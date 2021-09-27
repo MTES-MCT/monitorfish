@@ -8,5 +8,7 @@ SELECT
     segments,
     total_weight_onboard,
     impact_risk_factor,
-    control_priority_level
+    control_priority_level,
+    segment_highest_impact,
+    segment_highest_priority
 FROM public.current_segments

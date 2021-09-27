@@ -47,7 +47,7 @@ const VesselControls = () => {
   }, [yearsToControls])
 
   useEffect(() => {
-    if (selectedVessel && controlsFromDate) {
+    if (controlsFromDate) {
       dispatch(getControls(true))
     }
   }, [selectedVessel, controlsFromDate])
@@ -76,7 +76,7 @@ const VesselControls = () => {
     </>
     }
     {
-      controlResumeAndControls && lastControlList && yearsToControls && !loadingVessel
+      !loadingVessel
         ? <Body data-cy={'vessel-controls'}>
           <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls}/>
           <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate}/>

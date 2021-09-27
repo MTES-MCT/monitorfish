@@ -23,6 +23,7 @@ import { backofficeStore, homeStore } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
+import VesselLabels from './features/vessel_labels/VesselLabels'
 
 function App () {
   switch (browserName) {
@@ -79,6 +80,7 @@ function HomePage () {
         <UpdatingVesselLoader/>
         <Measurement/>
         <InterestPoint/>
+        <VesselLabels/>
         <APIWorker/>
       </Wrapper>
     </NamespaceContext.Provider>

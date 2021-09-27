@@ -12,9 +12,9 @@ const unselectVessel = () => (dispatch, getState) => {
     if (feature) {
       feature.set(Vessel.isSelectedProperty, false)
     }
-
-    dispatch(closeVesselSidebar())
   }
+
+  dispatch(closeVesselSidebar())
 }
 
 export default unselectVessel

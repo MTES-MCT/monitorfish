@@ -11,11 +11,18 @@ def mock_extract_side_effect(
     query_filepath: Union[Path, str],
     dtypes: Union[None, dict] = None,
     parse_dates: Union[list, dict, None] = None,
+    params: Union[dict, None] = None,
 ):
     @patch("src.read_query.pd")
     @patch("src.read_query.create_engine")
     def mock_extract_side_effect_(
-        db_name, query_filepath, dtypes, parse_dates, mock_create_engine, mock_pd
+        db_name,
+        query_filepath,
+        dtypes,
+        parse_dates,
+        params,
+        mock_create_engine,
+        mock_pd,
     ):
         def read_sql_mock(query, engine, **kwargs):
             return query
@@ -27,6 +34,9 @@ def mock_extract_side_effect(
             query_filepath=query_filepath,
             dtypes=None,
             parse_dates=parse_dates,
+            params=params,
         )
 
-    return mock_extract_side_effect_(db_name, query_filepath, dtypes, parse_dates)
+    return mock_extract_side_effect_(
+        db_name, query_filepath, dtypes, parse_dates, params
+    )

@@ -73,10 +73,8 @@ const RegulatoryLayerSearchResultTopic = props => {
       return
     }
 
-    if (topicSelection && topicSelection.length) {
-      const zonesNames = regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic]
-        .map(zone => zone.zone)
-      dispatch(uncheckRegulatoryZones(zonesNames))
+    if (topicSelection?.length) {
+      dispatch(uncheckRegulatoryZones(regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic]))
       setTopicSelection([])
     } else {
       dispatch(checkRegulatoryZones(regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic]))

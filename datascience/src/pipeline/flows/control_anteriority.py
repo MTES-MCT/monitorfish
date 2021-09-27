@@ -150,20 +150,17 @@ def compute_control_ranks_coefficients(control_ranks: np.array) -> np.array:
 
 
 @task(checkpoint=False)
-def extract_last_years_controls(years: float = 5) -> pd.DataFrame:
-    """Extracts controls data of the last ``years`` years for all vessels.
-
-    Args:
-        years (float, optional): Number of years to extract. Defaults to 5.
+def extract_last_5_years_controls() -> pd.DataFrame:
+    """Extracts controls data of the last 5 years for all vessels.
 
     Returns:
-        pd.DataFrame: all vessels' controls data for the last years
+        pd.DataFrame: all vessels' controls data for the last 5 years.
     """
 
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/last_years_controls.sql",
-        params={"years": years},
+        params={"years": 5},
     )
 
 
@@ -324,7 +321,7 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 def compute_infraction_rate_risk_factors(
     controls: pd.DataFrame, fishing_infraction_ids: set
 ) -> pd.DataFrame:
-    """Given control results data of vessels over the past 3+ years, computes the
+    """Given control results data of vessels, computes the
     infraction rate risk factor of each vessel.
 
     The idea is that vessels which committed infractions in the past have a higher
@@ -332,6 +329,9 @@ def compute_infraction_rate_risk_factors(
 
     Only violations related to fishing non-compliance are taken into account. Safety
     non-compliance evens are not taken into account.
+
+    If a vessel was controlled more than 10 times, only the 10 most recent contro
+    results are taken into account.
 
     Args:
         controls (pd.DataFrame): control results data
@@ -380,10 +380,86 @@ def compute_infraction_rate_risk_factors(
 
 
 @task(checkpoint=False)
+def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
+    """
+    Computes control statistics per vessel.
+
+    Args:
+        controls (pd.DataFrame): Controls data, output of extract_last_years_controls
+
+    Return
+        pd.DataFrame: control statistics per vessel
+    """
+
+    control_statistics_5_years = (
+        controls.fillna(
+            {
+                "infraction": False,
+                "diversion": False,
+                "seizure": False,
+                "escort_to_quay": False,
+            }
+        )
+        .assign(number_infractions_last_5_years=lambda x: x.infraction_ids.map(len))
+        .groupby("vessel_id")[
+            [
+                "id",
+                "number_infractions_last_5_years",
+                "diversion",
+                "seizure",
+                "escort_to_quay",
+            ]
+        ]
+        .agg(
+            {
+                "id": "count",
+                "number_infractions_last_5_years": "sum",
+                "diversion": "sum",
+                "seizure": "sum",
+                "escort_to_quay": "sum",
+            }
+        )
+        .rename(
+            columns={
+                "id": "number_controls_last_5_years",
+                "diversion": "number_diversions_last_5_years",
+                "seizure": "number_seizures_last_5_years",
+                "escort_to_quay": "number_escorts_to_quay_last_5_years",
+            }
+        )
+        .reset_index()
+    )
+
+    control_statistics_3_years = (
+        controls[
+            (controls.control_datetime_utc > datetime.utcnow() - relativedelta(years=3))
+        ]
+        .groupby("vessel_id")["id"]
+        .count()
+        .rename("number_controls_last_3_years")
+        .reset_index()
+    )
+
+    control_statistics = pd.merge(
+        control_statistics_5_years,
+        control_statistics_3_years,
+        on="vessel_id",
+        how="outer",
+    )
+
+    control_statistics["number_controls_last_3_years"] = (
+        control_statistics["number_controls_last_3_years"].fillna(0).astype(int)
+    )
+
+    return control_statistics
+
+
+@task(checkpoint=False)
 def merge(
     control_rate_risk_factors: pd.DataFrame,
     infraction_rate_risk_factor: pd.DataFrame,
     last_controls: pd.DataFrame,
+    control_statistics: pd.DataFrame,
 ) -> pd.DataFrame:
     """Merge of ``pd.DataFrame``s to produce output of the flow. The join is performed
     on ``vessel_id``.
@@ -400,12 +476,11 @@ def merge(
     """
 
     res = pd.merge(
-        last_controls,
-        pd.merge(
-            control_rate_risk_factors, infraction_rate_risk_factor, on="vessel_id"
-        ),
-        on="vessel_id",
+        control_rate_risk_factors, infraction_rate_risk_factor, on="vessel_id"
     )
+
+    res = pd.merge(last_controls, res, on="vessel_id")
+    res = pd.merge(control_statistics, res, on="vessel_id")
 
     return res
 
@@ -424,19 +499,23 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        delete_before_insert=True,
+        how="replace",
     )
 
 
 with Flow("Control anteriority") as flow:
-    controls = extract_last_years_controls(years=5)
+    controls = extract_last_5_years_controls()
     fishing_infraction_ids = extract_fishing_infraction_ids()
     last_controls = get_last_controls(controls)
+    control_statistics = compute_control_statistics(controls)
     control_rate_risk_factors = compute_control_rate_risk_factors(controls)
     infraction_rate_risk_factors = compute_infraction_rate_risk_factors(
         controls, fishing_infraction_ids
     )
     control_anteriority = merge(
-        control_rate_risk_factors, infraction_rate_risk_factors, last_controls
+        control_rate_risk_factors,
+        infraction_rate_risk_factors,
+        last_controls,
+        control_statistics,
     )
     load_control_anteriority(control_anteriority)

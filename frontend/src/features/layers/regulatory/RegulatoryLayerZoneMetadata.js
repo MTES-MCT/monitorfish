@@ -76,7 +76,10 @@ const RegulatoryLayerZoneMetadata = () => {
               <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
                 {getTitle(regulatoryZoneMetadata)}
               </RegulatoryZoneName>
-              <CloseIcon onClick={() => dispatch(closeRegulatoryZoneMetadata())}/>
+              <CloseIcon
+                data-cy={'regulatory-layers-metadata-close'}
+                onClick={() => dispatch(closeRegulatoryZoneMetadata())}
+              />
             </Header>
             <Warning>
               <WarningIcon/>
@@ -533,7 +536,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.grayDarkerTwo};
+  color: ${COLORS.slateGray};
   font-weight: 300;
   line-height: normal;
   font-size: 13px;

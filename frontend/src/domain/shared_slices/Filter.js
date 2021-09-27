@@ -97,6 +97,8 @@ const filterSlice = createSlice({
         if (filter.uuid === filterUUID) {
           if (tagType === 'lastControlMonthsAgo') {
             filter.filters.lastControlMonthsAgo = null
+          } else if (tagType === 'zonesSelected') {
+            filter.filters[tagType] = filter.filters[tagType].filter(zone => zone.name !== tagValue)
           } else {
             filter.filters[tagType] = filter.filters[tagType].filter(tag => tag !== tagValue)
           }

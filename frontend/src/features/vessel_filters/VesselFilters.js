@@ -71,6 +71,7 @@ const VesselFilters = () => {
     <>
       <Wrapper ref={wrapperRef}>
         <VesselFilterIcon
+          data-cy={'vessel-filters'}
           healthcheckTextWarning={healthcheckTextWarning}
           rightMenuIsOpen={rightMenuIsOpen}
           isOpen={vesselFilterBoxIsOpen}
@@ -216,7 +217,7 @@ const VesselFilterIcon = styled(MapButtonStyle)`
   color: ${COLORS.blue};
   z-index: 99;
   top: 110px;
-  padding: 3px 0px 0 3px;
+  padding: 3px 0px 0 2px;
   height: 40px;
   width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
   border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};

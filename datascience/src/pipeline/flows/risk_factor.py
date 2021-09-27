@@ -2,28 +2,8 @@ import pandas as pd
 import prefect
 from prefect import Flow, task
 
+from config import default_risk_factors, risk_factor_coefficients
 from src.pipeline.generic_tasks import extract, load
-
-risk_factor_coefficients = {
-    "probability": 0.3,
-    "impact": 0.2,
-    "detectability": 0.5,
-}
-
-default_risk_factors = {
-    "segment_risk_factor": 1,
-    "control_rate_risk_factor": 4,
-    "infraction_rate_risk_factor": 1,
-    "control_priority_level": 1,
-    "impact_risk_factor": 1,
-    "probability_risk_factor": 1,
-    "detectability_risk_factor": 2,
-    "risk_factor": (
-        (1.0 ** risk_factor_coefficients["probability"])
-        * (1.0 ** risk_factor_coefficients["impact"])
-        * (2 ** risk_factor_coefficients["detectability"])
-    ),
-}
 
 
 @task(checkpoint=False)
@@ -50,14 +30,22 @@ def compute_risk_factors(
         current_segments, control_anteriority, on="cfr", how="outer"
     )
 
-    risk_factors = risk_factors.fillna(default_risk_factors)
-
-    risk_factors = risk_factors.rename(
-        columns={
-            "segment_risk_factor": "impact_risk_factor",
-            "infraction_rate_risk_factor": "probability_risk_factor",
+    risk_factors = risk_factors.fillna(
+        {
+            "number_controls_last_3_years": 0,
+            "number_controls_last_5_years": 0,
+            "number_diversions_last_5_years": 0,
+            "number_escorts_to_quay_last_5_years": 0,
+            "number_infractions_last_5_years": 0,
+            "number_recent_controls": 0,
+            "number_seizures_last_5_years": 0,
+            **default_risk_factors,
         }
     )
+
+    risk_factors["probability_risk_factor"] = risk_factors[
+        "infraction_rate_risk_factor"
+    ]
 
     risk_factors["detectability_risk_factor"] = (
         risk_factors["control_rate_risk_factor"]
@@ -76,9 +64,25 @@ def compute_risk_factors(
         )
     )
 
-    risk_factors = risk_factors.drop(
-        columns=["vessel_id", "control_priority_level", "control_rate_risk_factor"]
+    risk_factors = risk_factors.astype(
+        {
+            "number_controls_last_3_years": int,
+            "number_controls_last_5_years": int,
+            "number_diversions_last_5_years": int,
+            "number_escorts_to_quay_last_5_years": int,
+            "number_infractions_last_5_years": int,
+            "number_recent_controls": int,
+            "number_seizures_last_5_years": int,
+        }
     )
+
+    def float_or_na_to_str(float_or_na) -> str:
+        if pd.isna(float_or_na):
+            return ""
+        else:
+            return str(int(float_or_na))
+
+    risk_factors["vessel_id"] = risk_factors.vessel_id.map(float_or_na_to_str)
 
     return risk_factors
 
@@ -99,7 +103,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
         logger=prefect.context.get("logger"),
         pg_array_columns=["segments"],
         jsonb_columns=["gear_onboard", "species_onboard"],
-        delete_before_insert=True,
+        how="replace",
     )
 
 

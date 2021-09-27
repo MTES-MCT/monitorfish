@@ -26,9 +26,7 @@ const Backoffice = () => {
     layersTopicsByRegTerritory
   } = useSelector(state => state.regulatory)
 
-  const {
-    regulationSaved
-  } = useSelector(state => state.regulation)
+  const { regulationSaved } = useSelector(state => state.regulation)
 
   const initBackoffice = () => {
     batch(() => {

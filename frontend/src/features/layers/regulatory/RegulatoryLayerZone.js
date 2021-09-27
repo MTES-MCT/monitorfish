@@ -100,8 +100,6 @@ const RegulatoryLayerZone = props => {
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
   const onEditRegulationClick = () => {
-    console.log('onEditRegulationClick')
-    console.log(regulatoryZone)
     dispatch(showRegulationToEdit(regulatoryZone))
     history.push(`${match.url}/editRegulation`)
   }

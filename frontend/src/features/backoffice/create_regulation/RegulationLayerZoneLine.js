@@ -25,7 +25,7 @@ const RegulationLayerZoneLine = props => {
       width={'200px'}
       onMouseLeave={() => setIsInputFilled(nameZone && nameZone !== '')}
       $isGray={isInputFilled}
-      isRed={nameZoneIsMissing}
+      $isRed={nameZoneIsMissing}
     />
     <InfoBox
       isInfoTextShown={isInfoTextShown}

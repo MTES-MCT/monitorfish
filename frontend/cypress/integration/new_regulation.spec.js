@@ -98,7 +98,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="reg-text-name"]').invoke('val').should('equal', '')
     cy.get('[data-cy="reg-text-url"]').invoke('val').should('equal', '')
   })
-  /* it('Enter a reg text name with an invalid url', () => {
+  it('Enter a reg text name with an invalid url', () => {
     cy.get('[data-cy="reg-text-name"]').type('zone name')
     cy.get('[data-cy="reg-text-url"]').type('url.com')
     // When save button is clicked
@@ -113,4 +113,4 @@ context('NewRegulation', () => {
     // Red border are displayed
     cy.get('[data-cy="reg-text-name"]').should('have.css', 'border-color', 'rgb(225, 0, 15)')
   })
-}) */
+})

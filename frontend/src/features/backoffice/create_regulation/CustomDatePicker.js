@@ -10,7 +10,8 @@ const CustomDatePicker = props => {
     onOk,
     isRequired,
     format,
-    placement
+    placement,
+    style
   } = props
   return <DatePickerStyled
     data-cy={`custom-date-picker-${value}`}
@@ -24,6 +25,7 @@ const CustomDatePicker = props => {
     placement={placement}
     placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     format={format}
+    style={style}
     locale={{
       sunday: 'Dim',
       monday: 'Lundi',

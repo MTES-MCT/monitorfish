@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
+import { Checkbox } from 'rsuite'
 
 export const ContentLine = styled.div`
   display: flex;
@@ -52,4 +53,31 @@ color: ${COLORS.blue};
 font-size: 13px;
 padding: 0px 8px;
 cursor: pointer;
+`
+
+export const CustomCheckbox = styled(Checkbox)`
+  padding-right: 15px;
+  font-size: 13px;
+  color: ${COLORS.gunMetal};
+  display: flex;
+  vertical-align: baseline;
+  .rs-checkbox-wrapper {
+    top: 0px !important;
+    left: 0px !important;
+  }
+  .rs-checkbox-wrapper .rs-checkbox-inner {
+    border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray} !important;
+    &:before {
+      border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray} !important;
+      box-sizing: border-box;
+    }
+    &:after {
+      margin-top: 0px !important;
+      margin-left: 4px !important;
+    }
+  }
+  .rs-checkbox-checker {
+    padding-top: 0px !important;
+    padding-left: 24px !important;
+} 
 `

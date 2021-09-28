@@ -6,6 +6,8 @@ import { Radio, RadioGroup } from 'rsuite'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 import TimeSlot from './TimeSlot'
 import CustomDatePicker from './CustomDatePicker'
+import DayPicker from './DayPicker'
+import { CustomCheckbox } from '../../commonStyles/Backoffice.style'
 
 const FishingPeriod = (props) => {
   /* const {
@@ -14,49 +16,91 @@ const FishingPeriod = (props) => {
   } = props */
 
   const [annual, setAnnual] = useState(true)
+  const [holidays, setHolidays] = useState(false)
+
   return <>
     <Title>
       <GreenCircle />
       Périodes autorisées
       <CustomRadio />
     </Title>
-    <Row>
-      <Label>Récurrence annuelle</Label>
-      <RadioGroup
-        inline={true}
-        onChange={value => setAnnual(value)}
-        value={annual}
-      >
-        <CustomRadio value={true}>oui</CustomRadio>
-        <CustomRadio value={false}>non</CustomRadio>
-      </RadioGroup>
-    </Row>
-    <Row>
-      <Label>Plages de dates</Label>
-      <TimeSlots>
-        <TimeSlot annual={annual} />
-      </TimeSlots>
-      <SquareButton />
-    </Row>
-    <Row>
-      <Label>Dates précises</Label>
-      <CustomDatePicker
+    <DateWrapper>
+      <Row>
+        <Label>Récurrence annuelle</Label>
+        <RadioGroup
+          inline={true}
+          onChange={value => setAnnual(value)}
+          value={annual}
+        >
+          <CustomRadio value={true}>oui</CustomRadio>
+          <CustomRadio value={false}>non</CustomRadio>
+        </RadioGroup>
+      </Row>
+      <Row>
+        <Label>Plages de dates</Label>
+        <TimeSlots>
+          <TimeSlot annual={annual} />
+        </TimeSlots>
+        <SquareButton />
+      </Row>
+      <Row>
+        <Label>Dates précises</Label>
+        <CustomDatePicker
+          /* $isrequired={startDateIsRequired}
+          value={currentStartDate}
+          onChange={(date) => setCurrentStartDate(date)}
+          onOk={(date, _) => setCurrentStartDate(date)} */
+          format='DD/MM/YYYY'
+          placement={'rightStart'}
+          style={{ marginRight: '10px' }}
+        />
+        <SquareButton />
+      </Row>
+      <Row>
+        <Label>Jours de la semaine</Label>
+        <DayPicker />
+      </Row>
+      <Row>
+        <Label>Jours fériés</Label>
+        <HolidaysCheckbox onChange={_ => setHolidays(!holidays)}/>
+      </Row>
+    </DateWrapper>
+    <Title>Horaires autorisées</Title>
+    <Row>De <CustomDatePicker
+        /* $isrequired={startDateIsRequired}
+        value={currentStartDate}
+        onChange={(date) => setCurrentStartDate(date)}
+        onOk={(date, _) => setCurrentStartDate(date)} */
+        format='MM/DD/YYYY'
+        placement={'rightStart'}
+        style={{ margin: '0px 5px' }}
+      />
+      à <CustomDatePicker
         /* $isrequired={startDateIsRequired}
         value={currentStartDate}
         onChange={(date) => setCurrentStartDate(date)}
         onOk={(date, _) => setCurrentStartDate(date)} */
         format='DD/MM/YYYY'
         placement={'rightStart'}
-        style={{ marginRight: '10px' }}
+        style={{ margin: '0px 5px' }}
       />
       <SquareButton />
     </Row>
-    <Label>Jours de la semaine</Label>
-    <Label>Jours fériés</Label>
-    <Title>Horaires autorisées</Title>
-    <Label>Plages de dates</Label>
+    <Row>
+      ou <DaytimeCheckbox onChange={_ => setHolidays(!holidays)}/> du lever au coucher du soleil
+    </Row>
   </>
 }
+
+const DaytimeCheckbox = styled(CustomCheckbox)`
+  margin: -15px 5px 0px 5px;
+`
+const HolidaysCheckbox = styled(CustomCheckbox)`
+  margin-top: -15px;
+`
+const DateWrapper = styled.div`
+  margin-bottom: 30px;
+`
 
 const TimeSlots = styled.div`
   display: flex;
@@ -70,6 +114,7 @@ const Row = styled.div`
   display: flex;
   margin-bottom: 8px;
   align-items: center;
+  color: ${COLORS.slateGray}
 `
 
 const Title = styled.div`

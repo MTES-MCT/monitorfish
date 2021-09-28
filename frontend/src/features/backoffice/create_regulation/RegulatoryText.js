@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { ContentLine, Delimiter } from '../../commonStyles/Backoffice.style'
+import { ContentLine, Delimiter, CustomCheckbox } from '../../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
-import { Checkbox, CheckboxGroup } from 'rsuite'
+import { CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './CustomDatePicker'
 import { COLORS, INFINITE } from '../../../constants/constants'
 import {
@@ -305,32 +305,6 @@ const CustomCheckboxGroup = styled(CheckboxGroup)`
   flex-direction: row;
 `
 
-const CustomCheckbox = styled(Checkbox)`
-  padding-right: 15px;
-  font-size: 13px;
-  color: ${COLORS.gunMetal};
-  display: flex;
-  vertical-align: baseline;
-  .rs-checkbox-wrapper {
-    top: 0px !important;
-    left: 0px !important;
-  }
-  .rs-checkbox-wrapper .rs-checkbox-inner {
-    border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray} !important;
-    &:before {
-      border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray} !important;
-      box-sizing: border-box;
-    }
-    &:after {
-      margin-top: 0px !important;
-      margin-left: 4px !important;
-    }
-  }
-  .rs-checkbox-checker {
-    padding-top: 0px !important;
-    padding-left: 24px !important;
-} 
-`
 const Or = styled.span`
   padding: 0 10px;
   color: ${COLORS.slateGray};

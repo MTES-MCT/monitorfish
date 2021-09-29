@@ -9,12 +9,13 @@ import CustomDatePicker from './CustomDatePicker'
 import DayPicker from './DayPicker'
 import { CustomCheckbox } from '../../commonStyles/Backoffice.style'
 
-const FishingPeriod = (props) => {
+const FishingPeriod = ({ show }) => {
   /* const {
     fishingPeriod,
     setFishingPeriod
   } = props */
 
+  const [disabled, setDisabled] = useState(true)
   const [annual, setAnnual] = useState(true)
   const [holidays, setHolidays] = useState(false)
   const [timeSlots, setTimeSlots] = useState([{}])
@@ -63,13 +64,13 @@ const FishingPeriod = (props) => {
     setTimeSlots(newTimeSlots)
   }
 
-  return <>
+  return <Wrapper show={show}>
     <Title>
       <GreenCircle />
       Périodes autorisées
-      <CustomRadio />
+      <CustomRadio onClick={() => setDisabled(!disabled)}/>
     </Title>
-    <DateWrapper>
+    <DateWrapper disabled={disabled}>
       <Row>
         <Label>Récurrence annuelle</Label>
         <RadioGroup
@@ -77,8 +78,8 @@ const FishingPeriod = (props) => {
           onChange={value => setAnnual(value)}
           value={annual}
         >
-          <CustomRadio value={true}>oui</CustomRadio>
-          <CustomRadio value={false}>non</CustomRadio>
+          <CustomRadio value={true} disabled={disabled}>oui</CustomRadio>
+          <CustomRadio value={false} disabled={disabled}>non</CustomRadio>
         </RadioGroup>
       </Row>
       <Row>
@@ -93,6 +94,7 @@ const FishingPeriod = (props) => {
                   timeSlot={timeSlot}
                   updateList={updateTimeSlots}
                   removeTimeSlot={removeTimeSlot}
+                  disabled={disabled}
                 />
             })
           }
@@ -104,12 +106,13 @@ const FishingPeriod = (props) => {
       </Row>
       <Row>
         <Label>Dates précises</Label>
-        <DateList>
+        <DateList >
           {
             dates.map((date, id) => {
               return <DateRow key={id}>
                 <CustomDatePicker
                   // $isrequired={startDateIsRequired}
+                  disabled={disabled}
                   value={date}
                   onChange={(date) => {
                     const newList = [...dates]
@@ -120,59 +123,82 @@ const FishingPeriod = (props) => {
                   placement={'rightStart'}
                   style={{ marginRight: '10px' }}
                 />
-                <SquareButton type='delete' onClick={() => {
-                  const newList = [...dates]
-                  newList.splice(id, 1)
-                  setDates(newList)
-                }} />
+                <SquareButton
+                  type='delete'
+                  disabled={disabled}
+                  onClick={() => {
+                    if (!disabled) {
+                      const newList = [...dates]
+                      newList.splice(id, 1)
+                      setDates(newList)
+                    }
+                  }} />
               </DateRow>
             })
           }
         </DateList>
-        <SquareButton onClick={() => {
-          const newList = [...dates]
-          newList.push(undefined)
-          setDates(newList)
-        }}/>
+        <SquareButton
+          disabled={disabled}
+          onClick={() => {
+            if (!disabled) {
+              const newList = [...dates]
+              newList.push(undefined)
+              setDates(newList)
+            }
+          }}/>
       </Row>
       <Row>
         <Label>Jours de la semaine</Label>
         <DayPicker
+          disabled={disabled}
           selectedList={weekdays}
           setSelectedList={setWeekdays}
         />
       </Row>
       <Row>
         <Label>Jours fériés</Label>
-        <HolidaysCheckbox onChange={_ => setHolidays(!holidays)}/>
+        <HolidaysCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/>
       </Row>
     </DateWrapper>
-    <Title>Horaires autorisées</Title>
-    <Row>De <CustomDatePicker
-        /* $isrequired={startDateIsRequired}
-        value={currentStartDate}
-        onChange={(date) => setCurrentStartDate(date)}
-        onOk={(date, _) => setCurrentStartDate(date)} */
-        format='MM/DD/YYYY'
-        placement={'rightStart'}
-        style={{ margin: '0px 5px' }}
-      />
-      à <CustomDatePicker
-        /* $isrequired={startDateIsRequired}
-        value={currentStartDate}
-        onChange={(date) => setCurrentStartDate(date)}
-        onOk={(date, _) => setCurrentStartDate(date)} */
-        format='DD/MM/YYYY'
-        placement={'rightStart'}
-        style={{ margin: '0px 5px' }}
-      />
-      <SquareButton />
-    </Row>
-    <Row>
-      ou <DaytimeCheckbox onChange={_ => setHolidays(!holidays)}/> du lever au coucher du soleil
-    </Row>
-  </>
+    <TimeWrapper disabled={disabled}>
+      <Title>Horaires autorisées</Title>
+      <Row>De <CustomDatePicker
+          /* $isrequired={startDateIsRequired}
+          value={currentStartDate}
+          onChange={(date) => setCurrentStartDate(date)}
+          onOk={(date, _) => setCurrentStartDate(date)} */
+          format='MM/DD/YYYY'
+          placement={'rightStart'}
+          style={{ margin: '0px 5px' }}
+          disabled={disabled}
+        />
+        à <CustomDatePicker
+          /* $isrequired={startDateIsRequired}
+          value={currentStartDate}
+          onChange={(date) => setCurrentStartDate(date)}
+          onOk={(date, _) => setCurrentStartDate(date)} */
+          format='DD/MM/YYYY'
+          placement={'rightStart'}
+          style={{ margin: '0px 5px' }}
+          disabled={disabled}
+        />
+        <SquareButton disabled={disabled}/>
+      </Row>
+      <Row>
+        ou <DaytimeCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/> du lever au coucher du soleil
+      </Row>
+    </TimeWrapper>
+  </Wrapper>
 }
+
+const TimeWrapper = styled.div`
+  opacity: ${props => props.disabled ? '0.4' : '1'};
+`
+
+const Wrapper = styled.div`
+  display: ${props => props.show ? 'flex' : 'none'};
+  ${props => props.show ? 'flex-direction: column;' : ''};
+`
 
 const DateRow = styled.div`
   display: flex;
@@ -190,6 +216,7 @@ const HolidaysCheckbox = styled(CustomCheckbox)`
 `
 const DateWrapper = styled.div`
   margin-bottom: 30px;
+  opacity: ${props => props.disabled ? '0.4' : '1'};
 `
 
 const TimeSlots = styled.div`

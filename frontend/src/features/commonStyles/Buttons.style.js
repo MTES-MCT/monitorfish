@@ -104,14 +104,14 @@ export const CancelButton = styled(SecondaryButton)`
 export const SquareButton = styled.a`
 position: relative;
 box-sizing: border-box;
-cursor: pointer;
+cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 width: 38px;
 height: 35px;
 border: 1px solid ${COLORS.lightGray};
 border-radius: 2px;
 color: ${COLORS.lightGray};
 margin-right: 8px;
-
+opacity: ${props => props.disabled ? '0.4' : '1'};
 &:after {
   content: "";  
   display: block;

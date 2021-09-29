@@ -319,7 +319,7 @@ const Layers = {
   cgpm_areas: {
     code: 'cgpm_areas',
     name: 'Zones CGPM',
-    group: null,
+    group: layersGroups.ORGP,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,

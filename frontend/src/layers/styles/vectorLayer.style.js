@@ -122,6 +122,19 @@ export const getVectorLayerStyle = type => {
           width: 2
         })
       })
+    case Layers.cgpm_areas.code:
+      return feature => new Style({
+        stroke: new Stroke({
+          color: '#767AB2',
+          width: 1
+        }),
+        text: new Text({
+          font: '12px Marianne',
+          text: `${feature.get(Layers.cgpm_areas.subZoneFieldKey) ? feature.get(Layers.cgpm_areas.subZoneFieldKey) : ''}`,
+          fill: new Fill({ color: COLORS.gunMetal }),
+          stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
+        })
+      })
     case Layers.REGULATORY.code:
       return (feature, hash, gearCategory) => {
         const lastNumber = hash.toString().slice(-1)

@@ -90,6 +90,7 @@ function showBboxIfBigZone (type, subZone) {
     }),
     loader: extent => {
       getAdministrativeZoneFromAPI(type, extent, subZone).then(administrativeZone => {
+        vectorSource.clear(true)
         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(administrativeZone))
       }).catch(e => {
         vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))

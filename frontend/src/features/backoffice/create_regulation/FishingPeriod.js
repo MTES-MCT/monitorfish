@@ -18,6 +18,7 @@ const FishingPeriod = (props) => {
   const [annual, setAnnual] = useState(true)
   const [holidays, setHolidays] = useState(false)
   const [timeSlots, setTimeSlots] = useState([{}])
+  const [dates, setDates] = useState([undefined])
 
   /**
    * Add a time slot object to the timeSlots list
@@ -102,16 +103,36 @@ const FishingPeriod = (props) => {
       </Row>
       <Row>
         <Label>Dates précises</Label>
-        <CustomDatePicker
-          /* $isrequired={startDateIsRequired}
-          value={currentStartDate}
-          onChange={(date) => setCurrentStartDate(date)}
-          onOk={(date, _) => setCurrentStartDate(date)} */
-          format='DD/MM/YYYY'
-          placement={'rightStart'}
-          style={{ marginRight: '10px' }}
-        />
-        <SquareButton />
+        <DateList>
+          {
+            dates.map((date, id) => {
+              return <DateRow key={id}>
+                <CustomDatePicker
+                  // $isrequired={startDateIsRequired}
+                  value={date}
+                  onChange={(date) => {
+                    const newList = [...dates]
+                    newList[id] = date
+                    setDates(newList)
+                  }}
+                  format='DD/MM/YYYY'
+                  placement={'rightStart'}
+                  style={{ marginRight: '10px' }}
+                />
+                <SquareButton type='delete' onClick={() => {
+                  const newList = [...dates]
+                  newList.splice(id, 1)
+                  setDates(newList)
+                }} />
+              </DateRow>
+            })
+          }
+        </DateList>
+        <SquareButton onClick={() => {
+          const newList = [...dates]
+          newList.push(undefined)
+          setDates(newList)
+        }}/>
       </Row>
       <Row>
         <Label>Jours de la semaine</Label>
@@ -149,6 +170,14 @@ const FishingPeriod = (props) => {
   </>
 }
 
+const DateRow = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+const DateList = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 const DaytimeCheckbox = styled(CustomCheckbox)`
   margin: -15px 5px 0px 5px;
 `

@@ -13,8 +13,6 @@ const hideLayer = layerToHide => (dispatch, getState) => {
     namespace
   } = layerToHide
 
-  console.log(layerToHide)
-
   const {
     removeLayer, removeLayerAndArea, removeLayers, removeShowedLayer
   } = layer[namespace].actions

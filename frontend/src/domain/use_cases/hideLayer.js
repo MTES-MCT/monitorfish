@@ -32,6 +32,8 @@ const hideLayer = layerToHide => (dispatch, getState) => {
       layersToRemove = getState().layer.layers.filter(layer => {
         return layer.className_.includes(`${type}:${zone}`)
       })
+    } else {
+      layerToRemove = getState().layer.layers.find(layer => layer.className_ === type)
     }
 
     if (layerToRemove) {

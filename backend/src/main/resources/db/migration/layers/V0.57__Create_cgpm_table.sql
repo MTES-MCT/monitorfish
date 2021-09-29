@@ -14,4 +14,4 @@ CREATE TABLE public.cgpm_areas (
     geometry public.geometry(Geometry,4326)
 );
 
-CREATE INDEX idx_cgpm_geometry ON public.cgpm USING gist (geometry);
+CREATE INDEX idx_cgpm_geometry ON public.cgpm_areas USING gist (geometry);

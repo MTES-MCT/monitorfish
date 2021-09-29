@@ -39,7 +39,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 20000 })
     cy.wait(1000)
 
-    cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas', { timeout: 20000 }).eq(2).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
 
     // Close the metadata modal and hide the zone
@@ -47,7 +47,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 20000 })
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas', { timeout: 20000 }).eq(2).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
   })
 
@@ -117,5 +117,22 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy^="regulatory-layers-advanced-search-gears"]').type('DRB')
     cy.get('*[data-cy^="regulatory-layers-advanced-search-species"]').type('VEV')
     cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
+  })
+
+  it('An administrative zone Should be showed and hidden', () => {
+    // Given
+    cy.get('.eez_areas', { timeout: 20000 }).should('not.exist')
+
+    // When
+    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="administrative-zones-open"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="administrative-layer-toggle"]').eq(0).click({ timeout: 20000 })
+    cy.wait(500)
+
+    // Then
+    cy.get('.eez_areas', { timeout: 20000 }).should('exist')
+
+    cy.get('*[data-cy^="administrative-layer-toggle"]').eq(0).click({ timeout: 20000 })
+    cy.get('.eez_areas', { timeout: 20000 }).should('not.exist')
   })
 })

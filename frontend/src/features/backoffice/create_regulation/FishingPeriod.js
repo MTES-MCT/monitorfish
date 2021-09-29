@@ -19,6 +19,7 @@ const FishingPeriod = (props) => {
   const [holidays, setHolidays] = useState(false)
   const [timeSlots, setTimeSlots] = useState([{}])
   const [dates, setDates] = useState([undefined])
+  const [weekdays, setWeekdays] = useState([])
 
   /**
    * Add a time slot object to the timeSlots list
@@ -136,7 +137,10 @@ const FishingPeriod = (props) => {
       </Row>
       <Row>
         <Label>Jours de la semaine</Label>
-        <DayPicker />
+        <DayPicker
+          selectedList={weekdays}
+          setSelectedList={setWeekdays}
+        />
       </Row>
       <Row>
         <Label>Jours fériés</Label>
@@ -172,7 +176,7 @@ const FishingPeriod = (props) => {
 
 const DateRow = styled.div`
   display: flex;
-  flex-direction: column;
+  margin-bottom: 5px;
 `
 const DateList = styled.div`
   display: flex;

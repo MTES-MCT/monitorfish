@@ -2,25 +2,35 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
-const WEEKDAY = {
-  LUNDI: 'lundi',
-  MARDI: 'mardi',
-  MERCREDI: 'mercredi',
-  JEUDI: 'jeudi',
-  VENDREDI: 'vendredi',
-  SAMEDI: 'samedi',
-  DIMANCHE: 'dimanche'
-}
-
-const DayPicker = ({ value, setValue }) => {
+const DayPicker = ({ selectedList, setSelectedList }) => {
+  const WEEKDAYS = {
+    lundi: 'L',
+    mardi: 'M',
+    mercredi: 'M',
+    jeudi: 'J',
+    vendredi: 'V',
+    samedi: 'S',
+    dimanche: 'D'
+  }
   return <>
-    <Circle $isGray={value === WEEKDAY.LUNDI} onClick={_ => setValue(WEEKDAY.LUNDI)} >L</Circle>
-    <Circle $isGray={value === WEEKDAY.MARDI} onClick={_ => setValue(WEEKDAY.MARDI)} >M</Circle>
-    <Circle $isGray={value === WEEKDAY.MERCREDI} onClick={_ => setValue(WEEKDAY.MERCREDI)} >M</Circle>
-    <Circle $isGray={value === WEEKDAY.JEUDI} onClick={_ => setValue(WEEKDAY.JEUDI)} >J</Circle>
-    <Circle $isGray={value === WEEKDAY.VENDREDI} onClick={_ => setValue(WEEKDAY.VENDREDI)} >V</Circle>
-    <Circle $isGray={value === WEEKDAY.SAMEDI} onClick={_ => setValue(WEEKDAY.SAMEDI)} >S</Circle>
-    <Circle $isGray={value === WEEKDAY.DIMANCHE} onClick={_ => setValue(WEEKDAY.DIMANCHE)} >D</Circle>
+    {
+      Object.keys(WEEKDAYS).map((weekday, id) => {
+        return <Circle
+          key={id}
+          $isGray={selectedList.includes(weekday)}
+          onClick={_ => {
+            const newSelectedList = [...selectedList]
+            if (selectedList.includes(weekday)) {
+              newSelectedList.splice(id, 1)
+            } else {
+              newSelectedList.push(weekday)
+            }
+            setSelectedList(newSelectedList)
+          }}>
+            {WEEKDAYS[weekday]}
+          </Circle>
+      })
+    }
   </>
 }
 
@@ -36,6 +46,12 @@ const Circle = styled.a`
   line-height: 2em;
   color: ${COLORS.slateGray};
   ${props => props.$isGray ? `background-color: ${COLORS.gainsboro}` : ''};
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
+    color: ${COLORS.slateGray};
+  }
 `
 
 export default DayPicker

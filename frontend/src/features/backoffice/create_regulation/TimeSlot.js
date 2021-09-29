@@ -72,6 +72,7 @@ const TimeSlot = ({ id, annual, timeSlot, updateList, removeTimeSlot, saveForm }
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 5px;
 `
 
 const TimeSlotRow = styled.div`

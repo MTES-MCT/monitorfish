@@ -132,8 +132,8 @@ margin-right: 8px;
   transform: translate(-50%, -50%);
 }
 &:before {
-  height: 15px;
-  width: 1.5px;
+  height: ${props => props.type === 'delete' ? '1.5px' : '15px'};
+  width: ${props => props.type === 'delete' ? '15px' : '1.5px'};
 }
 &:after {
   height: 1.5px;

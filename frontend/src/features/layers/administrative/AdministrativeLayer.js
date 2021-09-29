@@ -45,6 +45,7 @@ const AdministrativeLayer = props => {
           isFirst={isFirst}
           isGrouped={isGrouped}
           onClick={() => setShowLayer(!showLayer_)}
+          data-cy={'administrative-layer-toggle'}
         >
           <LayerName
             title={layer.name}

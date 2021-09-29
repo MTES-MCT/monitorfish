@@ -79,7 +79,11 @@ const AdministrativeLayers = props => {
 
   return (
     <>
-      <SectionTitle onClick={onSectionTitleClicked} showZones={showZones}>
+      <SectionTitle
+        onClick={onSectionTitleClicked}
+        showZones={showZones}
+        data-cy={'administrative-zones-open'}
+      >
         Zones administratives <ChevronIcon isOpen={showZones}/>
       </SectionTitle>
       <NamespaceContext.Consumer>

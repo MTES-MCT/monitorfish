@@ -11,11 +11,13 @@ const CustomDatePicker = props => {
     isRequired,
     format,
     placement,
-    style
+    style,
+    disabled
   } = props
   return <DatePickerStyled
     data-cy={`custom-date-picker-${value}`}
     $isrequired={isRequired}
+    disabled={disabled}
     oneTap
     ranges={[]}
     value={value}

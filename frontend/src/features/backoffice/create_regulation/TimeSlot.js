@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 
-const TimeSlot = ({ id, annual, timeSlot, updateList, removeTimeSlot, saveForm }) => {
+const TimeSlot = ({ id, annual, timeSlot, updateList, removeTimeSlot, saveForm, disabled }) => {
   const [startDate, setStartDate] = useState(timeSlot?.startDate || '')
   const [endDate, setEndDate] = useState(timeSlot?.endDate || '')
   const [startDateIsRequired, setStartDateIsRequired] = useState(false)
@@ -33,7 +33,7 @@ const TimeSlot = ({ id, annual, timeSlot, updateList, removeTimeSlot, saveForm }
     }
   }, [saveForm])
 
-  return <Wrapper>{annual
+  return <Wrapper disabled={disabled}>{annual
     ? <TimeSlotRow>
         Du <CustomDatePicker
           $isrequired={startDateIsRequired}
@@ -43,6 +43,7 @@ const TimeSlot = ({ id, annual, timeSlot, updateList, removeTimeSlot, saveForm }
           format='MM/DD/YYYY'
           placement={'rightStart'}
           style={{ margin: '0px 5px' }}
+          disabled={disabled}
         />
         au <CustomDatePicker
           $isrequired={endDateIsRequired}
@@ -52,6 +53,7 @@ const TimeSlot = ({ id, annual, timeSlot, updateList, removeTimeSlot, saveForm }
           format='DD/MM/YYYY'
           placement={'rightStart'}
           style={{ margin: '0px 5px' }}
+          disabled={disabled}
         />
       </ TimeSlotRow>
     : <TimeSlotRow>
@@ -73,6 +75,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 5px;
+  color: ${COLORS.slateGray};
+  opacity: ${props => props.disabled ? '0.4' : '1'};
 `
 
 const TimeSlotRow = styled.div`

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
-const DayPicker = ({ selectedList, setSelectedList }) => {
+const DayPicker = ({ selectedList, setSelectedList, disabled }) => {
   const WEEKDAYS = {
     lundi: 'L',
     mardi: 'M',
@@ -17,6 +17,7 @@ const DayPicker = ({ selectedList, setSelectedList }) => {
       Object.keys(WEEKDAYS).map((weekday, id) => {
         return <Circle
           key={id}
+          disabled={disabled}
           $isGray={selectedList.includes(weekday)}
           onClick={_ => {
             const newSelectedList = [...selectedList]
@@ -47,7 +48,8 @@ const Circle = styled.a`
   color: ${COLORS.slateGray};
   ${props => props.$isGray ? `background-color: ${COLORS.gainsboro}` : ''};
   text-decoration: none;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  opacity: ${props => props.disabled ? '0.4' : '1'};
   &:hover {
     text-decoration: none;
     color: ${COLORS.slateGray};

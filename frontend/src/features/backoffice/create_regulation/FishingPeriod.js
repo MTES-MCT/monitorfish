@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Label } from '../../commonStyles/Input.style'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
@@ -17,6 +17,49 @@ const FishingPeriod = (props) => {
 
   const [annual, setAnnual] = useState(true)
   const [holidays, setHolidays] = useState(false)
+  const [timeSlots, setTimeSlots] = useState([{}])
+
+  /**
+   * Add a time slot object to the timeSlots list
+   * @param {TimeSlot} timeSlot: object to add
+   */
+  const addTimeSlot = (timeSlot) => {
+    console.log(`addTimeSlot ${timeSlot}`)
+    // should we test the values here ?
+    const newTimeSlots = [...timeSlots]
+    newTimeSlots.push(timeSlot)
+    setTimeSlots(newTimeSlots)
+  }
+
+  useEffect(() => {
+    console.log('timeSlots has changed')
+  }, [timeSlots])
+
+  /**
+   * Remove a time slot object from the timeSlots list
+   * @param {number} id: object id in the list
+   */
+  const removeTimeSlot = (id) => {
+    let newTimeSlots = [...timeSlots]
+    if (newTimeSlots.length === 1) {
+      newTimeSlots = [{}]
+    } else {
+      newTimeSlots.splice(id, 1)
+    }
+    setTimeSlots(newTimeSlots)
+  }
+
+  /**
+   * update a given object in the timeSlots list
+   * @param {number} id: object id
+   * @param {number} timeSlot: new object to insert
+   */
+  const updateTimeSlots = (id, timeSlot) => {
+    // should we test the values here ?
+    const newTimeSlots = [...timeSlots]
+    newTimeSlots[id] = timeSlot
+    setTimeSlots(newTimeSlots)
+  }
 
   return <>
     <Title>
@@ -39,9 +82,23 @@ const FishingPeriod = (props) => {
       <Row>
         <Label>Plages de dates</Label>
         <TimeSlots>
-          <TimeSlot annual={annual} />
+          {
+            timeSlots.map((timeSlot, id) => {
+              return <TimeSlot
+                  key={id}
+                  id={id}
+                  annual={annual}
+                  timeSlot={timeSlot}
+                  updateList={updateTimeSlots}
+                  removeTimeSlot={removeTimeSlot}
+                />
+            })
+          }
         </TimeSlots>
-        <SquareButton />
+        <SquareButton onClick={() => {
+          console.log('on SquareButton click')
+          addTimeSlot({})
+        }} />
       </Row>
       <Row>
         <Label>Dates précises</Label>
@@ -104,6 +161,7 @@ const DateWrapper = styled.div`
 
 const TimeSlots = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   font-size: 13px;
   color: ${COLORS.slateGray};

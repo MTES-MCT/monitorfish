@@ -8,7 +8,7 @@ from xml.etree.ElementTree import ParseError
 
 import pandas as pd
 
-from src.pipeline.parsers.log_parsers import (
+from src.pipeline.parsers.ers.log_parsers import (
     default_log_parser,
     parse_coe,
     parse_cox,

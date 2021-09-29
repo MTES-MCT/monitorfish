@@ -1,6 +1,6 @@
 import xml
 
-from src.pipeline.parsers.childless_parsers import (
+from src.pipeline.parsers.ers.childless_parsers import (
     parse_gea,
     parse_pos,
     parse_ras,

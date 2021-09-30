@@ -54,7 +54,7 @@ insert into risk_factors (
     '',
     0,
     3.8,
-    2.56,
+    NULL,
     2.56,
     8,
     1,

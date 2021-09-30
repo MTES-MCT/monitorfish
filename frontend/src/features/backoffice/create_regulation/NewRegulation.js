@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
-import { useDispatch, useSelector, batch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
@@ -26,8 +26,8 @@ import { formatDataForSelectPicker } from '../../../utils'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import {
+  resetState,
   setSelectedRegulation,
-  setRegulationSaved,
   setRegulatoryTextListValidityMap
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
@@ -72,8 +72,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     isModalOpen,
     regulationSaved,
     regulatoryTextListValidityMap
-    // upcomingRegulatoryTextListValidityMap,
-    // upcomingRegulation
   } = useSelector(state => state.regulation)
   const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
 
@@ -102,11 +100,13 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (regulationSaved) {
       history.push('/backoffice')
     }
-    batch(() => {
-      dispatch(setRegulationSaved(false))
-      dispatch(setSelectedRegulation({}))
-    })
+    dispatch(resetState())
   }, [regulationSaved])
+
+  const onGoBack = () => {
+    dispatch(resetState())
+    history.push('/backoffice')
+  }
 
   useEffect(() => {
     if (regulatoryTextListValidityMap) {
@@ -163,7 +163,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
     setRegionIsMissing(valueIsMissing)
-    valueIsMissing = !(geometryIsMissing && geometryIsMissing !== '')
+    valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
     setGeometryIsMissing(valueIsMissing)
     setAtLeastOneValueIsMissing(atLeastOneValueIsMissing)
@@ -226,7 +226,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         <Body>
           <Header>
             <LinkSpan><ChevronIcon/>
-              <BackLink to={'/backoffice'}>Revenir à la liste complète des zones</BackLink>
+              <BackLink onClick={onGoBack} >Revenir à la liste complète des zones</BackLink>
             </LinkSpan>
             <HeaderTitle>{title}</HeaderTitle>
             <Span />
@@ -353,7 +353,7 @@ const Span = styled.span`
   flex: 1;
 `
 
-const BackLink = styled(Link)`
+const BackLink = styled.a`
   text-decoration: underline;
   font: normal normal normal 13px;
   letter-spacing: 0px;

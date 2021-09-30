@@ -64,7 +64,7 @@ const BaseMap = props => {
 
   function resetOverlayPointerStyle () {
     const elements = document.querySelectorAll('.ol-overlay-container')
-    if (elements[0].style.pointerEvents !== 'auto') {
+    if (elements?.length && elements[0].style.pointerEvents !== 'auto') {
       for (const s of document.querySelectorAll('.ol-overlay-container')) {
         s.style.pointerEvents = 'auto'
       }

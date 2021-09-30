@@ -19,17 +19,17 @@ const UpcommingRegulationSection = () => {
           <Row><InfoBox /> <GrayText >Réglementation à venir</ GrayText></Row>
           {upcomingRegulation?.regulatoryTextList?.length > 0 && upcomingRegulation.regulatoryTextList.map((upcomingRegulationText, id) => {
             const {
-              name,
-              URL,
+              reference,
+              url,
               startDate,
               endDate
             } = upcomingRegulationText
             return (
             <TextRow key={id}>
               <LinkWithGrayBg
-                href={URL}
+                href={url}
                 target={'_blank'}
-              >{name}</LinkWithGrayBg>
+              >{reference}</LinkWithGrayBg>
               {endDate !== 'infinite'
                 ? <TextWithGrayBg color={'#282F3E'}>Du {startDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)} au {endDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)}</TextWithGrayBg>
                 : <TextWithGrayBg color={'#282F3E'}>&Agrave; partir du {startDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)}</TextWithGrayBg>}

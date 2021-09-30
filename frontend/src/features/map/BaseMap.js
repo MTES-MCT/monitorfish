@@ -28,7 +28,8 @@ const BaseMap = props => {
     showCoordinates,
     setCurrentFeature,
     showAttributions,
-    container
+    container,
+    mapMovingAndZoomEvent
   } = props
 
   const {
@@ -64,7 +65,7 @@ const BaseMap = props => {
 
   function resetOverlayPointerStyle () {
     const elements = document.querySelectorAll('.ol-overlay-container')
-    if (elements[0].style.pointerEvents !== 'auto') {
+    if (elements?.length && elements[0].style.pointerEvents !== 'auto') {
       for (const s of document.querySelectorAll('.ol-overlay-container')) {
         s.style.pointerEvents = 'auto'
       }
@@ -208,7 +209,7 @@ const BaseMap = props => {
         healthcheckTextWarning={healthcheckTextWarning}
       />
       <BaseLayer map={map}/>
-      <RegulatoryLayers map={map}/>
+      <RegulatoryLayers map={map} mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <AdministrativeLayers map={map}/>
       <ShowRegulatoryMetadata mapClickEvent={mapClickEvent}/>
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}

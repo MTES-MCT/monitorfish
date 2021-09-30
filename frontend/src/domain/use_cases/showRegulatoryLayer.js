@@ -11,6 +11,8 @@ import { getArea, getCenter } from 'ol/extent'
 import { animateToRegulatoryLayer } from '../shared_slices/Map'
 import { batch } from 'react-redux'
 import VectorImageLayer from 'ol/layer/VectorImage'
+import { simplify } from '@turf/turf'
+import { simplifiedFeaturesPropertyName } from '../../layers/RegulatoryLayers'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -66,10 +68,14 @@ const getVectorLayer = dispatch => (layerToShow, hash, gearCategory) => {
 }
 
 const getRegulatoryVectorSource = dispatch => regulatoryZoneProperties => {
+  const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
+
   const {
     pushLayerAndArea,
-    setLastShowedFeatures
+    setLastShowedFeatures,
+    pushLayerToFeatures
   } = layer[currentNamespace].actions
+
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -77,11 +83,20 @@ const getRegulatoryVectorSource = dispatch => regulatoryZoneProperties => {
     }),
     loader: extent => {
       getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties).then(regulatoryZone => {
-        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
+        const simplifiedFeatures = simplify(regulatoryZone, { tolerance: 0.01, highQuality: false })
+
+        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(simplifiedFeatures))
+        vectorSource.getFeatures().forEach(feature => feature.set(simplifiedFeaturesPropertyName, true))
+
         batch(() => {
+          dispatch(pushLayerToFeatures({
+            name: zoneName,
+            simplifiedFeatures: simplifiedFeatures,
+            features: regulatoryZone
+          }))
           dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
           dispatch(pushLayerAndArea({
-            name: `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`,
+            name: zoneName,
             area: getArea(vectorSource.getExtent())
           }))
         })

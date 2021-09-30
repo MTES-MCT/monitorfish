@@ -46,7 +46,7 @@ data class RiskFactorsEntity(
         @Column(name = "control_rate_risk_factor")
         val controlRateRiskFactor: Double,
         @Column(name = "infraction_score")
-        val infractionScore: Double,
+        val infractionScore: Double? = null,
         @Column(name = "number_controls_last_5_years")
         val numberControlsLastFiveYears: Short,
         @Column(name = "number_controls_last_3_years")

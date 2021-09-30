@@ -49,7 +49,7 @@ export class Vessel {
       olCoordinates: feature.getGeometry().getCoordinates(),
       uid: feature.ol_uid,
       length: feature.vessel.length,
-      flagState: feature.vessel.flagState.toLowerCase(),
+      flagState: feature.vessel.flagState?.toLowerCase(),
       dateTimeTimestamp: new Date(feature.vessel.dateTime).getTime(),
       gearsArray: feature.vessel.gearOnboard ? [...new Set(feature.vessel.gearOnboard.map(gear => gear.gear))] : [],
       fleetSegmentsArray: feature.vessel.segments ? feature.vessel.segments.map(segment => segment.replace(' ', '')) : [],
@@ -128,7 +128,7 @@ export class Vessel {
             break
           }
           case vesselLabelEnum.VESSEL_NATIONALITY: {
-            label.labelText = countries.getName(feature.vessel.flagState, 'fr')
+            label.labelText = feature.vessel.flagState ? countries.getName(feature.vessel.flagState, 'fr') : null
             break
           }
           case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {

@@ -316,6 +316,16 @@ const Layers = {
     subZoneFieldKey: 'icesname',
     isIntersectable: true
   },
+  cgpm_areas: {
+    code: 'cgpm_areas',
+    name: 'Zones CGPM',
+    group: layersGroups.ORGP,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: true,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: 'SMU_CODE',
+    isIntersectable: true
+  },
   situations: {
     code: 'situs_areas',
     name: 'Zones pour situation VMS',

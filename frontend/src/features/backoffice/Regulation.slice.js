@@ -1,21 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const INITIAL_STATE = {
+  /** @type {RegulatoryText} selectedRegulation */
+  selectedRegulation: undefined,
+  /** @type {UpcomingRegulation} upcomingRegulation */
+  upcomingRegulation: undefined,
+  /** @type {boolean} isModalOpen */
+  isModalOpen: false,
+  /** @type {RegulatoryTextValidity} upcomingRegulatoryTextListValidityMap */
+  upcomingRegulatoryTextListValidityMap: undefined,
+  /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
+  regulatoryTextListValidityMap: undefined,
+  regulationSaved: false
+}
+
 const regulationSlice = createSlice({
   name: 'regulation',
-  initialState: {
-    /** @type {RegulatoryText} selectedRegulation */
-    selectedRegulation: undefined,
-    /** @type {UpcomingRegulation} upcomingRegulation */
-    upcomingRegulation: undefined,
-    /** @type {boolean} isModalOpen */
-    isModalOpen: false,
-    /** @type {RegulatoryTextValidity} upcomingRegulatoryTextListValidityMap */
-    upcomingRegulatoryTextListValidityMap: undefined,
-    /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
-    regulatoryTextListValidityMap: undefined,
-    regulationSaved: false
-  },
+  initialState: INITIAL_STATE,
   reducers: {
+    resetState (state) {
+      Object.assign(state, INITIAL_STATE)
+    },
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
     },
@@ -72,6 +77,7 @@ const regulationSlice = createSlice({
 })
 
 export const {
+  resetState,
   setSelectedRegulation,
   setIsModalOpen,
   setUpcomingRegulation,

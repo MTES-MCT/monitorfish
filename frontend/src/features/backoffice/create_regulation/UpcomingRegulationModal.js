@@ -17,7 +17,7 @@ const UpcomingRegulationModal = () => {
   const {
     isModalOpen,
     upcomingRegulation,
-    regulatoryTextListValidityMap
+    upcomingRegulatoryTextListValidityMap
   } = useSelector(state => state.regulation)
 
   const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
@@ -31,8 +31,8 @@ const UpcomingRegulationModal = () => {
   }
 
   useEffect(() => {
-    if (regulatoryTextListValidityMap) {
-      const values = Object.values(regulatoryTextListValidityMap)
+    if (upcomingRegulatoryTextListValidityMap) {
+      const values = Object.values(upcomingRegulatoryTextListValidityMap)
       if (saveForm && values.length > 0 && values.length === regulatoryTextList.length) {
         if (!values.includes(false)) {
           dispatch(setIsModalOpen(false))
@@ -41,7 +41,7 @@ const UpcomingRegulationModal = () => {
         setSaveForm(false)
       }
     }
-  }, [saveForm, regulatoryTextListValidityMap, regulatoryTextList])
+  }, [saveForm, upcomingRegulatoryTextListValidityMap, regulatoryTextList])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>

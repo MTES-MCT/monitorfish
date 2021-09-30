@@ -195,4 +195,15 @@ internal class NAFMessageMapperUTests {
 
         assertThat(position.internalReferenceNumber).isEqualTo("ESP000022941")
     }
+
+    @Test
+    internal fun `init Should not throw an exception When the country is not found`() {
+        // Given
+        val naf = "//SR//TM/POS//NA/LADY CHRIS 7//RC/FLBO//FS/X//DA/20210929//TI/1234//LT/-13.477//LG/-141.731//SP/020//CO/221//FR/FRA//RD/20210929//RT/1234//ER//"
+
+        // When
+        val position = NAFMessageMapper(naf).toPosition()
+
+        assertThat(position.vesselName).isEqualTo("LADY CHRIS 7")
+    }
 }

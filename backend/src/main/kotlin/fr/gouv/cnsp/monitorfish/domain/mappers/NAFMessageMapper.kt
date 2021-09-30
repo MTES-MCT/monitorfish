@@ -102,7 +102,7 @@ class NAFMessageMapper(private val naf: String) {
     }
 
     private fun getCountryOrThrowIfCountryNotFound(value: String): CountryCode? {
-        return if (value.isNotEmpty() && value !== noCountry) {
+        return if (value.isNotEmpty() && value != noCountry) {
             CountryCode.getByAlpha3Code(value) ?: throw NAFMessageParsingException("Country \"$value\" not found", naf)
         } else {
             null

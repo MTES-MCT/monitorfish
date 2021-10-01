@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@turf/turf": "^6.5.0",
     "comlink": "^4.3.0",
     "export-to-csv": "^0.2.1",
     "hammerjs": "^2.0.8",

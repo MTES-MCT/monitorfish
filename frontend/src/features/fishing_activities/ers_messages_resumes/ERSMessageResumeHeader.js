@@ -20,14 +20,14 @@ const ERSMessageResumeHeader = props => {
       ? <Wrapper>
         <ERSMessageTitle
           onClick={() => props.setIsOpen(!props.isOpen)}
-          hasNoMessage={props.hasNoMessage}
+          hasNoMessage={props.hasNoMessage || props.noContent}
           isLastItem={props.isLastItem}>
           {
-            props.hasNoMessage ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
+            props.hasNoMessage || props.noContent ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
           }
           <ERSMessageName
             isNotAcknowledged={props.isNotAcknowledged}
-            hasNoMessage={props.hasNoMessage}
+            hasNoMessage={props.hasNoMessage || props.noContent}
             title={
               props.rejectionCause
                 ? props.rejectionCause

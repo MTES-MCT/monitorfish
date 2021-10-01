@@ -78,7 +78,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("1 message - 2256 kg pêchés au total", { timeout: 20000 })
   })
 
-  it('Fishing trips Should be walkable', () => {
+  it.only('Fishing trips Should be walkable', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -91,6 +91,9 @@ context('VesselSidebar', () => {
 
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains("Marée n°9463714", { timeout: 20000 })
+
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("1 message - aucune capture", { timeout: 20000 })
 
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains("Marée n°9463715", { timeout: 20000 })

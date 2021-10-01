@@ -10,6 +10,7 @@ from prefect import Flow, Parameter, task
 
 from config import LIBRARY_LOCATION, PORTS_URL, PROXIES
 from src.db_config import create_engine
+from src.pipeline.generic_tasks import load
 from src.pipeline.processing import combine_overlapping_columns
 from src.pipeline.utils import delete, get_table, psql_insert_copy
 from src.read_query import read_table
@@ -294,6 +295,7 @@ with Flow(
 
 
 def geocode_row(row):
+    credit_exhausted = True  # max rate 1/s if no geolocationIQ credit is available
     country_code_iso2 = row["country_code_iso2"]
     region = row["region"]
     port_name = row["port_name"]
@@ -301,18 +303,26 @@ def geocode_row(row):
         lat, lon = None, None
     else:
         try:
-            sleep(1)
+            if credit_exhausted:
+                sleep(1)
             lat, lon = geocode(
                 city=port_name, country_code_iso2=country_code_iso2, county=region
             )
         except requests.HTTPError:
             try:
-                sleep(1)
+                if credit_exhausted:
+                    sleep(1)
                 print("Retring without county for port", port_name)
                 lat, lon = geocode(city=port_name, country_code_iso2=country_code_iso2)
             except:
-                print("Could not geocode", port_name)
-                lat, lon = None, None
+                try:
+                    if credit_exhausted:
+                        sleep(1)
+                    print("Retring with port name alone for port", port_name)
+                    lat, lon = geocode(city=port_name)
+                except:
+                    print("Could not geocode", port_name)
+                    lat, lon = None, None
     print(port_name, lat, lon)
     return pd.Series([lat, lon], index=["geocoded_latitude", "geocoded_longitude"])
 

@@ -388,6 +388,7 @@ def merge_lat_lon(geocoded_ports):
 @task(checkpoint=False)
 def add_manual_fixes(ports):
     fixes = pd.read_csv(LIBRARY_LOCATION / "pipeline/data/manually_added_ports.csv")
+    ports = ports[~ports.locode.isin(fixes.locode)]
     return pd.concat([fixes, ports])
 
 

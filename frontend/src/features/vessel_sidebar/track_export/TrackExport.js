@@ -111,7 +111,7 @@ const TrackExport = props => {
 
       setPositions(nextPositions)
     }
-  }, [selectedVessel])
+  }, [selectedVessel, coordinatesFormat])
 
   const download = () => {
     const objectsToExports = positions

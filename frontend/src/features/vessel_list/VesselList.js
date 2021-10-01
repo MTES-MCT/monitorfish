@@ -30,6 +30,9 @@ const VesselList = ({ namespace }) => {
     uniqueVesselsSpecies: species,
     uniqueVesselsDistricts: districts
   } = useSelector(state => state.vessel)
+  const {
+    coordinatesFormat
+  } = useSelector(state => state.map)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
   const { healthcheckTextWarning } = useSelector(state => state.global)
@@ -105,7 +108,7 @@ const VesselList = ({ namespace }) => {
     vesselsLayerSource.forEachFeature(feature => {
       const coordinates = [...feature.getGeometry().getCoordinates()]
 
-      vessels.push(getVesselObjectFromFeature(feature, coordinates))
+      vessels.push(getVesselObjectFromFeature(feature, coordinates, coordinatesFormat))
     })
 
     setVessels(vessels)

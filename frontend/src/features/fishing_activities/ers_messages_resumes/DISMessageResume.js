@@ -46,6 +46,7 @@ const DISMessageResume = props => {
       onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
       title={props.hasNoMessage ? null : getDISMessageResumeTitle()}
       hasNoMessage={props.hasNoMessage}
+      noContent={!props.hasNoMessage && !props.totalDISWeight}
       showERSMessages={props.showERSMessages}
       messageType={ERSMessageTypeEnum.DIS.code.toString()}
       setIsOpen={setIsOpen}

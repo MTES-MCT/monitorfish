@@ -11,7 +11,8 @@ const INITIAL_STATE = {
   upcomingRegulatoryTextListValidityMap: undefined,
   /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
   regulatoryTextListValidityMap: undefined,
-  regulationSaved: false
+  regulationSaved: false,
+  isEditPageOpen: false
 }
 
 const regulationSlice = createSlice({
@@ -71,6 +72,9 @@ const regulationSlice = createSlice({
     },
     setRegulationSaved (state, action) {
       state.regulationSaved = action.payload
+    },
+    setIsEditPageOpen (state, action) {
+      state.isEditPageOpen = action.payload
     }
 
   }
@@ -85,7 +89,8 @@ export const {
   setUpcomingRegulatoryTextListValidityMap,
   setRegulationSaved,
   setRegulatoryTextListValidityMap,
-  addObjectToRegulatoryTextListValidityMap
+  addObjectToRegulatoryTextListValidityMap,
+  setIsEditPageOpen
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

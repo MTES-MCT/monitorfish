@@ -174,20 +174,22 @@ const VesselsLayer = ({ map }) => {
         .filter(vessel => vessel)
 
       applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(features => {
-        vectorSource.clear(true)
-        vectorSource.addFeatures(features)
-        showSelectedVesselSelector(features)
-        vectorSource.dispatchEvent({
-          type: VESSELS_UPDATE_EVENT,
-          features,
-          showingVesselsEstimatedPositions,
-          filterColor: getFilterColor(),
-          vesselsLastPositionVisibility,
-          selectedBaseLayer,
-          nonFilteredVesselsAreHidden,
-          hideOtherVessels
-        })
-        dispatch(resetVessels())
+        if (features) {
+          vectorSource.clear(true)
+          vectorSource.addFeatures(features)
+          showSelectedVesselSelector(features)
+          vectorSource.dispatchEvent({
+            type: VESSELS_UPDATE_EVENT,
+            features,
+            showingVesselsEstimatedPositions,
+            filterColor: getFilterColor(),
+            vesselsLastPositionVisibility,
+            selectedBaseLayer,
+            nonFilteredVesselsAreHidden,
+            hideOtherVessels
+          })
+          dispatch(resetVessels())
+        }
       })
     }
   }
@@ -209,6 +211,10 @@ const VesselsLayer = ({ map }) => {
     const vesselsObjects = vesselsFeatures.map(feature => {
       return Vessel.getObjectForFilteringFromFeature(feature)
     })
+
+    if (!vesselsFeatures?.length) {
+      return []
+    }
 
     dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
       .then(filteredVessels => {

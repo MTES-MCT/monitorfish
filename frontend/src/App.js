@@ -10,6 +10,7 @@ import VesselsSearchBox from './features/vessel_search/VesselsSearchBox'
 import VesselSidebar from './features/vessel_sidebar/VesselSidebar'
 import LayersSidebar from './features/layers/LayersSidebar'
 import APIWorker from './api/APIWorker'
+import BackofficeAPIWorker from './api/BackofficeAPIWorker'
 import VesselVisibility from './features/vessel_visibility/VesselVisibility'
 import VesselList from './features/vessel_list/VesselList'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
@@ -91,11 +92,11 @@ function BackofficePage () {
   const match = useRouteMatch()
   return <Provider store={backofficeStore}>
     <NamespaceContext.Provider value={'backoffice'}>
-    <Switch>
+      <Switch>
         <Route exact path={`${match.path}`}>
           <BackofficeWrapper>
-          <Backoffice/>
-        </BackofficeWrapper>
+            <Backoffice/>
+          </BackofficeWrapper>
         </Route>
         <Route path={`${match.path}/newRegulation`}>
           <NewRegulation title='Saisir une nouvelle réglementation' />
@@ -104,6 +105,7 @@ function BackofficePage () {
           <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
         </Route>
       </Switch>
+      <BackofficeAPIWorker/>
     </NamespaceContext.Provider>
   </Provider>
 }

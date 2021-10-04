@@ -11,8 +11,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const initCypressMousePositionPlugin = require('cypress-mouse-position/plugin');
-
+const initCypressMousePositionPlugin = require('cypress-mouse-position/plugin')
 /**
  * @type {Cypress.PluginConfig}
  */

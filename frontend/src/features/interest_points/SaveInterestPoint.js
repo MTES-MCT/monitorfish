@@ -34,6 +34,7 @@ const SaveInterestPoint = (
     isEditing
   } = useSelector(state => state.interestPoint)
 
+  /** @type {number[]} coordinates - Coordinates formatted in DD [latitude, longitude] */
   const [coordinates, setCoordinates] = useState([])
   const [name, setName] = useState('')
   const [observations, setObservations] = useState('')
@@ -69,7 +70,7 @@ const SaveInterestPoint = (
 
   useEffect(() => {
     if (coordinatesFormat) {
-      if (interestPointBeingDrawed && interestPointBeingDrawed.coordinates && interestPointBeingDrawed.coordinates.length) {
+      if (interestPointBeingDrawed?.coordinates?.length) {
         const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
           .map(coordinate => {
             return parseFloat(coordinate.replace(/°/g, ''))
@@ -80,7 +81,7 @@ const SaveInterestPoint = (
   }, [interestPointBeingDrawed, isEditing])
 
   useEffect(() => {
-    if (interestPointBeingDrawed && name && interestPointBeingDrawed.name !== name) {
+    if (name && interestPointBeingDrawed?.name !== name) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'name',
         value: name
@@ -89,7 +90,7 @@ const SaveInterestPoint = (
   }, [name, interestPointBeingDrawed])
 
   useEffect(() => {
-    if (interestPointBeingDrawed && observations && interestPointBeingDrawed.observations !== observations) {
+    if (observations && interestPointBeingDrawed?.observations !== observations) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'observations',
         value: observations
@@ -98,7 +99,7 @@ const SaveInterestPoint = (
   }, [observations, interestPointBeingDrawed])
 
   useEffect(() => {
-    if (interestPointBeingDrawed && type && interestPointBeingDrawed.type !== type) {
+    if (type && interestPointBeingDrawed?.type !== type) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'type',
         value: type
@@ -114,6 +115,7 @@ const SaveInterestPoint = (
   const updateCoordinates = (nextCoordinates, coordinates) => {
     if (nextCoordinates && nextCoordinates.length) {
       if (!coordinates || !coordinates.length || areDistinct(nextCoordinates, coordinates)) {
+        // Convert to [longitude, latitude] and OpenLayers projection
         const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
         dispatch(updateInterestPointKeyBeingDrawed({
           key: 'coordinates',
@@ -145,6 +147,7 @@ const SaveInterestPoint = (
 
   return (
     <Wrapper
+      data-cy={'save-interest-point'}
       healthcheckTextWarning={healthcheckTextWarning}
       isOpen={isOpen}>
       <Header>

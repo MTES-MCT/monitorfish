@@ -140,8 +140,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextListValidityMap])
 
   const initForm = () => {
-    console.log('initForm')
-    console.log(regulatoryZoneMetadata)
     const {
       lawType,
       seafront,

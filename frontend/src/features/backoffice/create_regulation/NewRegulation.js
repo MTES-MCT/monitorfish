@@ -132,7 +132,7 @@ const CreateRegulation = ({ title, isEdition }) => {
           } else {
             dispatch(setRegulatoryTextListValidityMap(undefined))
             setSaveOrUpdateRegulation(false)
-            setAtLeastOneValueIsMissing(false)
+            setAtLeastOneValueIsMissing(undefined)
           }
         }
       }
@@ -174,14 +174,14 @@ const CreateRegulation = ({ title, isEdition }) => {
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setNameZoneIsMissing(valueIsMissing)
     valueIsMissing = !(selectedSeaFront && selectedSeaFront !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setSeaFrontIsMissing(valueIsMissing)
     valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
     valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing && valueIsMissing
     setGeometryIsMissing(valueIsMissing)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setAtLeastOneValueIsMissing(atLeastOneValueIsMissing)
   }
 
@@ -203,7 +203,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
-
     const actionType = isEdition ? 'update' : 'insert'
     dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
     if (originalGeometryId && originalGeometryId !== selectedGeometryId) {

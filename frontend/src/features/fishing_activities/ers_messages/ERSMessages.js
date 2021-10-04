@@ -19,6 +19,7 @@ const options = [
   { value: 'CRO', label: 'CRO' },
   { value: 'COX', label: 'COX' },
   { value: 'FAR', label: 'FAR' },
+  { value: 'INS', label: 'INS' },
   { value: 'DIS', label: 'DIS/DIM' },
   { value: 'EOF', label: 'EOF' },
   { value: 'PNO', label: 'PNO' },

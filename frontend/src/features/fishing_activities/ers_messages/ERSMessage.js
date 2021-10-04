@@ -33,7 +33,12 @@ const ERSMessage = ({ message, isFirst }) => {
 
   const getERSMessage = ersMessage => {
     const Component = ERSMessageTypeEnum[ersMessage.messageType].component
-    return <Component message={ersMessage.message}/>
+
+    if (Component) {
+      return <Component message={ersMessage.message}/>
+    } else {
+      return null
+    }
   }
 
   function getErsMessageType () {

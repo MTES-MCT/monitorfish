@@ -32,7 +32,7 @@ import {
   setUpcomingRegulation
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
-import { mapToFeatureObject } from '../../../domain/entities/regulatory'
+import { mapToRegulatoryFeatureObject, emptyRegulatoryFeatureObject } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -119,7 +119,7 @@ const CreateRegulation = ({ title, isEdition }) => {
           if (!regulatoryTexts.includes(false) && !atLeastOneValueIsMissing) {
             // update regulatoryTextList
             setRegulatoryTextList(regulatoryTexts)
-            const featureObject = mapToFeatureObject({
+            const featureObject = mapToRegulatoryFeatureObject({
               selectedRegulationTopic,
               selectedRegulationLawType,
               nameZone,
@@ -207,14 +207,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     const actionType = isEdition ? 'update' : 'insert'
     dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
     if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
-      const emptyFeature = new Feature({
-        layer_name: null,
-        law_type: null,
-        zones: null,
-        region: null,
-        facade: null,
-        references_reglementaires: null
-      })
+      const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
       emptyFeature.setId(`${Layers.REGULATORY.code}.${originalGeometryId}`)
       dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, 'update'))
     }

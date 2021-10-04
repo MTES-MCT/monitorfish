@@ -30,7 +30,7 @@ export const mapToRegulatoryZone = properties => {
   }
 }
 
-export const mapToFeatureObject = properties => {
+export const mapToRegulatoryFeatureObject = properties => {
   const {
     selectedRegulationTopic,
     selectedRegulationLawType,
@@ -49,6 +49,15 @@ export const mapToFeatureObject = properties => {
     references_reglementaires: JSON.stringify(regulatoryTexts),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulation)
   }
+}
+
+export const emptyRegulatoryFeatureObject = {
+  layer_name: null,
+  law_type: null,
+  zones: null,
+  region: null,
+  facade: null,
+  references_reglementaires: null
 }
 
 export const LawTypesToTerritory = {

@@ -52,15 +52,39 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="coordinates-selection"]').click({ timeout: 20000, force: true })
     cy.get('#root').click(159, 1000, { timeout: 20000 })
     cy.get('*[data-cy="coordinates-selection-dmd"]').click({ timeout: 20000 })
-
     cy.get('*[data-cy="interest-point"]').click({ timeout: 20000 })
     cy.get('#root').click(490, 580, { timeout: 20000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })
     cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 20000 })
-    cy.get('*[data-cy="test"]').type('{backspace}{backspace}{backspace}{backspace}{backspace}500W')
+    cy.get('*[data-cy="dmd-coordinates-input"]').type('{backspace}{backspace}{backspace}{backspace}{backspace}500W')
 
     // Then
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 48.933′ N 007° 54.500′ W", { timeout: 20000 })
+  })
+
+  it('An interest Should be edited with East value When DMS coordinates are selected', () => {
+    // When
+    cy.get('*[data-cy="coordinates-selection"]').click({ timeout: 20000, force: true })
+    cy.get('#root').click(159, 1000, { timeout: 20000 })
+    cy.get('*[data-cy="interest-point"]').click({ timeout: 20000 })
+    cy.get('#root').click(490, 580, { timeout: 20000 })
+    cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })
+    cy.get('#root').click(536, 600, { timeout: 20000 })
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 20000 }).type('{backspace}E')
+    cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })
+
+    // Then
+    cy.get('#root').click(536, 600, { timeout: 20000 })
+    cy.get('*[data-cy="save-interest-point"]').should('not.be.visible')
+
+    cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 20000 }).should('have.value', '47° 48′ 56″ N 007° 54′ 51″ E')
+    cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })
+
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 48′", { timeout: 20000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("N", { timeout: 20000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("007° 54′", { timeout: 20000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("E", { timeout: 20000 })
   })
 
   it('An interest Should be deleted When it is in edit mode', () => {

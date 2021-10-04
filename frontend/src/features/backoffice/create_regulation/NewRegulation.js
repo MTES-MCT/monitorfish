@@ -28,7 +28,8 @@ import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/
 import {
   resetState,
   setSelectedRegulation,
-  setRegulatoryTextListValidityMap
+  setRegulatoryTextListValidityMap,
+  setUpcomingRegulation
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 
@@ -71,7 +72,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const {
     isModalOpen,
     regulationSaved,
-    regulatoryTextListValidityMap
+    regulatoryTextListValidityMap,
+    upcomingRegulation
   } = useSelector(state => state.regulation)
   const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
 
@@ -122,7 +124,8 @@ const CreateRegulation = ({ title, isEdition }) => {
               zones: nameZone,
               region: formatRegionList(selectedRegionList),
               facade: selectedSeaFront,
-              references_reglementaires: JSON.stringify(regulatoryTexts)
+              references_reglementaires: JSON.stringify(regulatoryTexts),
+              references_reglementaires_a_venir: JSON.stringify(upcomingRegulation)
             }
             createOrUpdateRegulation(featureObject)
           } else {
@@ -136,13 +139,27 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextListValidityMap])
 
   const initForm = () => {
-    setSelectedRegulationLawType(`${regulatoryZoneMetadata.lawType} / ${regulatoryZoneMetadata.seafront}`)
-    setSelectedRegulationTopic(regulatoryZoneMetadata.topic)
-    setNameZone(regulatoryZoneMetadata.zone)
-    setSelectedRegionList(regulatoryZoneMetadata.region?.split(', '))
-    setSelectedSeaFront(regulatoryZoneMetadata.seafront)
-    setRegulatoryTextList(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
-    setSelectedGeometry(regulatoryZoneMetadata.id)
+    console.log('initForm')
+    console.log(regulatoryZoneMetadata)
+    const {
+      lawType,
+      seafront,
+      topic,
+      zone,
+      region,
+      regulatoryReferences,
+      id,
+      upcomingRegulatoryReferences
+    } = regulatoryZoneMetadata
+
+    setSelectedRegulationLawType(`${lawType} / ${seafront}`)
+    setSelectedRegulationTopic(topic)
+    setNameZone(zone)
+    setSelectedRegionList(region?.split(', '))
+    setSelectedSeaFront(seafront)
+    setRegulatoryTextList(JSON.parse(regulatoryReferences))
+    setSelectedGeometry(id)
+    dispatch(setUpcomingRegulation(upcomingRegulatoryReferences ? JSON.parse(upcomingRegulatoryReferences) : {}))
     originalGeometryId = regulatoryZoneMetadata.id
   }
 

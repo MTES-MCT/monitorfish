@@ -30,6 +30,27 @@ export const mapToRegulatoryZone = properties => {
   }
 }
 
+export const mapToFeatureObject = properties => {
+  const {
+    selectedRegulationTopic,
+    selectedRegulationLawType,
+    nameZone,
+    selectedSeaFront,
+    selectedRegionList,
+    regulatoryTexts,
+    upcomingRegulation
+  } = properties
+  return {
+    layer_name: selectedRegulationTopic,
+    law_type: selectedRegulationLawType.split(' /')[0],
+    zones: nameZone,
+    region: selectedRegionList.join(', '),
+    facade: selectedSeaFront,
+    references_reglementaires: JSON.stringify(regulatoryTexts),
+    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation)
+  }
+}
+
 export const LawTypesToTerritory = {
   'Reg locale': 'France',
   'Reg 494 - Merlu': 'UE',

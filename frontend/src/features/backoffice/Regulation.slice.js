@@ -11,7 +11,9 @@ const INITIAL_STATE = {
   upcomingRegulatoryTextListValidityMap: undefined,
   /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
   regulatoryTextListValidityMap: undefined,
+  /** @type {boolean} regulatorySaved */
   regulationSaved: false,
+  /** @type {boolean} isEditPageOpen */
   isEditPageOpen: false
 }
 

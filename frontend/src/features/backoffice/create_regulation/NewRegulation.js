@@ -32,6 +32,7 @@ import {
   setUpcomingRegulation
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
+import { mapToFeatureObject } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -118,15 +119,15 @@ const CreateRegulation = ({ title, isEdition }) => {
           if (!regulatoryTexts.includes(false) && !atLeastOneValueIsMissing) {
             // update regulatoryTextList
             setRegulatoryTextList(regulatoryTexts)
-            const featureObject = {
-              layer_name: selectedRegulationTopic,
-              law_type: selectedRegulationLawType.split(' /')[0],
-              zones: nameZone,
-              region: formatRegionList(selectedRegionList),
-              facade: selectedSeaFront,
-              references_reglementaires: JSON.stringify(regulatoryTexts),
-              references_reglementaires_a_venir: JSON.stringify(upcomingRegulation)
-            }
+            const featureObject = mapToFeatureObject({
+              selectedRegulationTopic,
+              selectedRegulationLawType,
+              nameZone,
+              selectedSeaFront,
+              selectedRegionList,
+              regulatoryTexts,
+              upcomingRegulation
+            })
             createOrUpdateRegulation(featureObject)
           } else {
             dispatch(setRegulatoryTextListValidityMap(undefined))
@@ -201,17 +202,6 @@ const CreateRegulation = ({ title, isEdition }) => {
       })
   }
 
-  const formatRegionList = (list) => {
-    let regionListAsString = ''
-    list.map((region, id) => {
-      regionListAsString += region
-      if (id < selectedRegionList.length - 1) {
-        regionListAsString += ', '
-      }
-      return regionListAsString
-    })
-    return regionListAsString
-  }
   const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)

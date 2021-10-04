@@ -138,6 +138,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
       setSpeciesToWeightOfPNO({})
       setSpeciesToWeightOfDIS({})
       setSpeciesToWeightOfLAN({})
+      setFAOZones([])
     }
   }, [fishingActivities])
 

@@ -77,6 +77,12 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     }).catch(error => {
       console.error(error)
       batch(() => {
+        dispatch(setVoyage({
+          ersMessagesAndAlerts: {
+            ersMessages: [],
+            alerts: []
+          }
+        }))
         dispatch(setError(error))
         dispatch(resetLoadingVessel())
       })

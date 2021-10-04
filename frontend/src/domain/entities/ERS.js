@@ -74,6 +74,31 @@ export const ERSMessageType = {
   DIM: {
     code: 'DIM',
     name: 'Rejets minimis'
+  },
+  RLC: {
+    code: 'RLC',
+    fullName: 'Déclaration de transfert',
+    name: 'Transfert'
+  },
+  TRA: {
+    code: 'TRA',
+    fullName: 'Déclaration de transbordement',
+    name: 'Transbordement'
+  },
+  TRZ: {
+    code: 'TRZ',
+    fullName: 'Pêche trans-zone',
+    name: 'Pêche trans-zone'
+  },
+  INS: {
+    code: 'INS',
+    fullName: 'Déclaration d\'inspection',
+    name: 'Inspection'
+  },
+  PNT: {
+    code: 'PNT',
+    fullName: 'Pré-notification de transfert',
+    name: 'Pré-notification de transfert'
   }
 }
 

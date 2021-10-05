@@ -14,11 +14,11 @@ object ERSMapper {
 
     fun getERSMessageValueFromJSON(mapper: ObjectMapper, message: String?, messageType: String?, operationType: ERSOperationType): ERSMessageValue? {
         return try {
-            if(operationType == ERSOperationType.RET && !message.isNullOrEmpty() && message !== jsonbNullString) {
+            if(operationType == ERSOperationType.RET && !message.isNullOrEmpty() && message != jsonbNullString) {
                 val classType = ERSOperationTypeMapping.getClassFromName(operationType.name)
 
                 mapper.readValue(message, classType)
-            } else if (!messageType.isNullOrEmpty() && !message.isNullOrEmpty() && message !== jsonbNullString) {
+            } else if (!messageType.isNullOrEmpty() && !message.isNullOrEmpty() && message != jsonbNullString) {
                 val classType = ERSMessageTypeMapping.getClassFromName(messageType)
 
                 mapper.readValue(message, classType)

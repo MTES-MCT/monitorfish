@@ -122,7 +122,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
                 .findAllMessagesBetweenDepartureDates(lastDepartureDate, now, "FAK000999999")
 
         // Then
-        assertThat(messages).hasSize(18)
+        assertThat(messages).hasSize(19)
 
         // LAN
         assertThat(messages[0].message).isInstanceOf(LAN::class.java)
@@ -166,11 +166,16 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(disMessage.catches.first().numberFish).isEqualTo(1.0)
         assertThat(disMessage.catches.first().species).isEqualTo("NEP")
 
-        // FAR
-        assertThat(messages[5].operationType).isEqualTo(ERSOperationType.COR)
+        // INS
+        assertThat(messages[5].operationType).isEqualTo(ERSOperationType.DAT)
         assertThat(messages[5].referencedErsId).isNotNull
-        assertThat(messages[5].message).isInstanceOf(FAR::class.java)
-        val farMessageOneCorrected = messages[5].message as FAR
+        assertThat(messages[5].message).isNull()
+
+        // FAR
+        assertThat(messages[6].operationType).isEqualTo(ERSOperationType.COR)
+        assertThat(messages[6].referencedErsId).isNotNull
+        assertThat(messages[6].message).isInstanceOf(FAR::class.java)
+        val farMessageOneCorrected = messages[6].message as FAR
         assertThat(farMessageOneCorrected.gear).isEqualTo("GTN")
         assertThat(farMessageOneCorrected.mesh).isEqualTo(150.0)
         assertThat(farMessageOneCorrected.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z[UTC]")
@@ -184,8 +189,8 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOneCorrected.catches.first().statisticalRectangle).isEqualTo("23E6")
 
         // FAR
-        assertThat(messages[6].message).isInstanceOf(FAR::class.java)
-        val farMessageOne = messages[6].message as FAR
+        assertThat(messages[7].message).isInstanceOf(FAR::class.java)
+        val farMessageOne = messages[7].message as FAR
         assertThat(farMessageOne.gear).isEqualTo("GTN")
         assertThat(farMessageOne.mesh).isEqualTo(100.0)
         assertThat(farMessageOne.mesh).isEqualTo(100.0)
@@ -200,16 +205,16 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOne.catches.first().statisticalRectangle).isEqualTo("23E6")
 
         // CRO
-        assertThat(messages[7].messageType).isEqualTo("CRO")
-        assertThat(messages[7].message).isInstanceOf(CRO::class.java)
+        assertThat(messages[8].messageType).isEqualTo("CRO")
+        assertThat(messages[8].message).isInstanceOf(CRO::class.java)
 
         // COE
-        assertThat(messages[8].messageType).isEqualTo("COE")
-        assertThat(messages[8].message).isInstanceOf(COE::class.java)
+        assertThat(messages[9].messageType).isEqualTo("COE")
+        assertThat(messages[9].message).isInstanceOf(COE::class.java)
 
         // FAR
-        assertThat(messages[9].message).isInstanceOf(FAR::class.java)
-        val farMessageTwo = messages[9].message as FAR
+        assertThat(messages[10].message).isInstanceOf(FAR::class.java)
+        val farMessageTwo = messages[10].message as FAR
         assertThat(farMessageTwo.gear).isEqualTo("GTN")
         assertThat(farMessageTwo.mesh).isEqualTo(100.0)
         assertThat(farMessageTwo.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
@@ -223,12 +228,12 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(farMessageTwo.catches.first().statisticalRectangle).isEqualTo("23E6")
 
         // COX
-        assertThat(messages[10].messageType).isEqualTo("COX")
-        assertThat(messages[10].message).isInstanceOf(COX::class.java)
+        assertThat(messages[11].messageType).isEqualTo("COX")
+        assertThat(messages[11].message).isInstanceOf(COX::class.java)
 
         // DEP
-        assertThat(messages[11].message).isInstanceOf(DEP::class.java)
-        val depMessage = messages[11].message as DEP
+        assertThat(messages[12].message).isInstanceOf(DEP::class.java)
+        val depMessage = messages[12].message as DEP
         assertThat(depMessage.gearOnboard).hasSize(2)
         assertThat(depMessage.gearOnboard.first().gear).isEqualTo("GTN")
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
@@ -237,38 +242,38 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
 
         // RET
-        assertThat(messages[12].message).isInstanceOf(Acknowledge::class.java)
-        assertThat(messages[12].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage1 = messages[12].message as Acknowledge
-        assertThat(ackMessage1.returnStatus).isEqualTo("000")
-
-        // RET
         assertThat(messages[13].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[13].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage2 = messages[13].message as Acknowledge
-        assertThat(ackMessage2.returnStatus).isEqualTo("002")
+        val ackMessage1 = messages[13].message as Acknowledge
+        assertThat(ackMessage1.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[14].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[14].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage3 = messages[14].message as Acknowledge
-        assertThat(ackMessage3.returnStatus).isEqualTo("000")
+        val ackMessage2 = messages[14].message as Acknowledge
+        assertThat(ackMessage2.returnStatus).isEqualTo("002")
 
         // RET
         assertThat(messages[15].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[15].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage4 = messages[15].message as Acknowledge
-        assertThat(ackMessage4.returnStatus).isEqualTo("000")
+        val ackMessage3 = messages[15].message as Acknowledge
+        assertThat(ackMessage3.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[16].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[16].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage5 = messages[16].message as Acknowledge
+        val ackMessage4 = messages[16].message as Acknowledge
+        assertThat(ackMessage4.returnStatus).isEqualTo("000")
+
+        // RET
+        assertThat(messages[17].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[17].operationType).isEqualTo(ERSOperationType.RET)
+        val ackMessage5 = messages[17].message as Acknowledge
         assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
         // DEL
-        assertThat(messages[17].operationType).isEqualTo(ERSOperationType.DEL)
-        assertThat(messages[17].referencedErsId).isEqualTo("OOF20190627059908")
+        assertThat(messages[18].operationType).isEqualTo(ERSOperationType.DEL)
+        assertThat(messages[18].referencedErsId).isEqualTo("OOF20190627059908")
     }
 
     @Test

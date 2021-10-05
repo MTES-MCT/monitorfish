@@ -24,7 +24,7 @@ const FishingPeriodSection = (props) => {
       fishingPeriod={fishingPeriod}
       setFishingPeriod={setFishingPeriod}
     />
-    <Other>
+    <Other show={show}>
       <Label>Autres points sur la période</Label>
       <TextInput value={fishingPeriod?.otherInfo || ''}/>
     </Other>
@@ -32,7 +32,7 @@ const FishingPeriodSection = (props) => {
 }
 
 const Other = styled.div`
-  display: flex;
+  display: ${props => props.show ? 'flex' : 'none'};
 `
 
 const TextInput = styled.input`

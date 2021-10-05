@@ -24,6 +24,7 @@ export const Title = styled.span`
   border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 20px;
   padding-bottom: 8px;
+  cursor: ${props => props.onClick !== undefined ? 'pointer' : 'auto'};
 `
 
 export const Footer = styled.div`

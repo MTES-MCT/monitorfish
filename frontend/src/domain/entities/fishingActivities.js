@@ -1,16 +1,16 @@
 import { ERSMessageType as ERSMessageTypeEnum } from './ERS'
 
-export const getDEPMessageFromMessages = ersMessages => ersMessages.find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
+export const getDEPMessageFromMessages = ersMessages => ersMessages
+  .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
 
 export const getDISMessagesFromMessages = ersMessages => ersMessages
   .filter(message => message.messageType === ERSMessageTypeEnum.DIS.code)
-  .filter(message => message.acknowledge && message.acknowledge.isSuccess)
 
-export const getPNOMessageFromMessages = ersMessages => ersMessages.find(message => message.messageType === ERSMessageTypeEnum.PNO.code)
+export const getPNOMessageFromMessages = ersMessages => ersMessages
+  .find(message => message.messageType === ERSMessageTypeEnum.PNO.code)
 
 export const getFARMessagesFromMessages = ersMessages => ersMessages
   .filter(message => message.messageType === ERSMessageTypeEnum.FAR.code)
-  .filter(message => message.acknowledge && message.acknowledge.isSuccess)
 
 export const getLANMessageFromMessages = (ersMessages, depMessage) => {
   return ersMessages

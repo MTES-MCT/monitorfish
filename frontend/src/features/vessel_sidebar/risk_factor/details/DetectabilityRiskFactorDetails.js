@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import {
+  getControlPriorityLevel,
   getControlRateRiskFactorText,
-  getDetectabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../../domain/entities/riskFactor'
 import RiskFactorCursor from '../RiskFactorCursor'
@@ -36,7 +36,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
         >
           {
             riskFactor?.controlPriorityLevel
-              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getDetectabilityRiskFactorText(riskFactor?.controlPriorityLevel, true, true)}`
+              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(riskFactor?.controlPriorityLevel)}`
               : <NoValue>-</NoValue>
           }
         </InlineValue>

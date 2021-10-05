@@ -114,8 +114,8 @@ const RiskFactorResume = () => {
                   color={getRiskFactorColor(selectedVessel?.riskFactor?.detectabilityRiskFactor)}
                   progress={100 * selectedVessel?.riskFactor?.detectabilityRiskFactor / 4}
                 />
-                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null)}>
-                  {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true, null)}
+                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}>
+                  {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}
                 </SubRiskText>
               </SubRisk>
               <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen}/>

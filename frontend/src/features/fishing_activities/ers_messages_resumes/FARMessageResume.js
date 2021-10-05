@@ -88,7 +88,8 @@ const FARMessageResume = props => {
     <ERSMessageResumeHeader
       onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
       title={props.hasNoMessage ? null : getFARMessageResumeTitle()}
-      hasNoMessage={props.hasNoMessage || !props.totalFARWeight}
+      hasNoMessage={props.hasNoMessage}
+      noContent={!props.hasNoMessage && !props.totalFARWeight}
       showERSMessages={props.showERSMessages}
       messageType={ERSMessageTypeEnum.FAR.code.toString()}
       setIsOpen={setIsOpen}

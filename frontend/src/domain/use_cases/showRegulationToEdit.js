@@ -3,7 +3,6 @@ import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from
 import { mapToRegulatoryZone } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
 import Layers from '../entities/layers'
-// si ne fonctionne pas alors on passe par le state
 
 const showRegulationToEdit = regulatoryZone => async (dispatch) => {
   return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone)

@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import CoordinateInput from 'react-coordinate-input'
 
 import { COLORS } from '../../constants/constants'
-import { MeasurementTypes } from '../../domain/entities/map'
+import { CoordinatesFormat, MeasurementTypes, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import { useSelector } from 'react-redux'
+import { getCoordinates } from '../../utils'
 
 const CustomCircleRange = (
   {
@@ -17,6 +19,23 @@ const CustomCircleRange = (
     addCustomCircleRange,
     healthcheckTextWarning
   }) => {
+  const {
+    circleMeasurementInDrawing
+  } = useSelector(state => state.measurement)
+
+  useEffect(() => {
+    if (circleMeasurementInDrawing?.coordinates?.length) {
+      const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES).map(coordinate => {
+        return parseFloat(coordinate.replace(/°/g, ''))
+      })
+      setCircleCoordinatesToAdd(ddCoordinates)
+    }
+
+    if (circleMeasurementInDrawing?.measurement) {
+      setCircleRadiusToAdd(circleMeasurementInDrawing?.measurement.replace('r = ', '').replace('nm', ''))
+    }
+  }, [circleMeasurementInDrawing])
+
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}

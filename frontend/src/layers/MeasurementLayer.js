@@ -7,7 +7,11 @@ import Draw from 'ol/interaction/Draw'
 import { unByKey } from 'ol/Observable'
 import LineString from 'ol/geom/LineString'
 import { getLength } from 'ol/sphere'
-import { removeMeasurementDrawed, resetMeasurementTypeToAdd } from '../domain/shared_slices/Map'
+import {
+  removeMeasurementDrawed,
+  resetMeasurementTypeToAdd,
+  setCircleMeasurementInDrawing
+} from '../domain/shared_slices/Measurement'
 import VectorLayer from 'ol/layer/Vector'
 import Circle from 'ol/geom/Circle'
 import { circular, fromCircle } from 'ol/geom/Polygon'
@@ -33,7 +37,7 @@ const MeasurementLayer = ({ map }) => {
     measurementTypeToAdd,
     measurementsDrawed,
     circleMeasurementToAdd
-  } = useSelector(state => state.map)
+  } = useSelector(state => state.measurement)
 
   const [measurementInProgress, _setMeasurementInProgress] = useState(null)
   const measurementInProgressRef = useRef(measurementInProgress)
@@ -218,7 +222,14 @@ const MeasurementLayer = ({ map }) => {
     })
   }
 
-  // TODO Test with Cypress !
+  useEffect(() => {
+    if (measurementInProgress?.center || measurementInProgress?.measurement) {
+      dispatch(setCircleMeasurementInDrawing({
+        measurement: measurementInProgress.measurement,
+        coordinates: measurementInProgress.center
+      }))
+    }
+  }, [measurementInProgress])
 
   function updateMeasurementOnNewPoint (event, tooltipCoordinates) {
     const geom = event.target

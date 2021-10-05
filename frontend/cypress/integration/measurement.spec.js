@@ -34,6 +34,7 @@ context('Measurement', () => {
     cy.get('*[data-cy="measurement"]').click({ timeout: 20000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 20000 })
     cy.get('#root').click(490, 580, { timeout: 20000 })
+    cy.get('*[data-cy="measurement-circle-coordinates-input"]').should('have.value', '47° 48′ 56″ N 007° 54′ 51″ W')
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 20000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 20000 })
 

@@ -6,7 +6,11 @@ import { ReactComponent as MeasurementSVG } from '../icons/Mesure.svg'
 import { ReactComponent as MultiLineSVG } from '../icons/Mesure_ligne_brisee.svg'
 import { ReactComponent as CircleRangeSVG } from '../icons/Mesure_rayon_action.svg'
 import { COLORS } from '../../constants/constants'
-import { setCircleMeasurementToAdd, setMeasurementTypeToAdd } from '../../domain/shared_slices/Map'
+import {
+  resetCircleMeasurementInDrawing,
+  setCircleMeasurementToAdd,
+  setMeasurementTypeToAdd
+} from '../../domain/shared_slices/Measurement'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
 import { MeasurementTypes } from '../../domain/entities/map'
 import CustomCircleRange from './CustomCircleRange'
@@ -22,7 +26,7 @@ const Measurement = () => {
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const {
     measurementTypeToAdd
-  } = useSelector(state => state.map)
+  } = useSelector(state => state.measurement)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
@@ -84,6 +88,7 @@ const Measurement = () => {
 
   function cancelAddCircleRange () {
     dispatch(setMeasurementTypeToAdd(null))
+    dispatch(resetCircleMeasurementInDrawing())
     setMeasurementIsOpen(false)
   }
 

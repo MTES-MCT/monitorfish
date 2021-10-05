@@ -54,10 +54,6 @@ const RegulatoryLayerZone = props => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
-  const {
-    isEditPageOpen
-  } = useSelector(state => state.global)
-
   const [showRegulatoryZone, setShowRegulatoryZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
@@ -104,14 +100,9 @@ const RegulatoryLayerZone = props => {
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
   const onEditRegulationClick = () => {
+    history.push(`${match.path}/editRegulation`)
     dispatch(showRegulationToEdit(regulatoryZone))
   }
-
-  useEffect(() => {
-    if (isEditPageOpen) {
-      history.push(`${match.url}/editRegulation`)
-    }
-  }, [isEditPageOpen])
 
   return (
     <Zone isLast={isLast}>

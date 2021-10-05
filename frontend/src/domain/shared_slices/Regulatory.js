@@ -37,7 +37,8 @@ const regulatorySlice = createSlice({
     regulatoryLawTypes: [],
     seaFronts: [],
     layersTopicsByRegTerritory: {},
-    regulatoryGeometryToPreview: null
+    regulatoryGeometryToPreview: null,
+    simplifiedGeometries: true
   },
   reducers: {
     setRegulatoryGeometryToPreview (state, action) {
@@ -179,6 +180,12 @@ const regulatorySlice = createSlice({
     },
     setLayersTopicsByRegTerritory (state, action) {
       state.layersTopicsByRegTerritory = action.payload
+    },
+    showSimplifiedGeometries (state) {
+      state.simplifiedGeometries = true
+    },
+    showWholeGeometries (state) {
+      state.simplifiedGeometries = false
     }
   }
 })
@@ -197,7 +204,9 @@ export const {
   setRegulatoryLawTypes,
   setSeaFronts,
   setLayersTopicsByRegTerritory,
-  setRegulatoryGeometryToPreview
+  setRegulatoryGeometryToPreview,
+  showSimplifiedGeometries,
+  showWholeGeometries
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

@@ -14,7 +14,11 @@ const hideLayer = layerToHide => (dispatch, getState) => {
   } = layerToHide
 
   const {
-    removeLayer, removeLayerAndArea, removeLayers, removeShowedLayer
+    removeLayer,
+    removeLayerAndArea,
+    removeLayers,
+    removeShowedLayer,
+    removeLayerToFeatures
   } = layer[namespace].actions
 
   if (type) {
@@ -40,12 +44,17 @@ const hideLayer = layerToHide => (dispatch, getState) => {
       batch(() => {
         dispatch(removeLayer(layerToRemove))
         dispatch(removeShowedLayer(layerToHide))
+        dispatch(removeLayerAndArea(layerToRemove.className_))
+        dispatch(removeLayerToFeatures(layerToRemove.className_))
       })
     } else if (layersToRemove) {
       batch(() => {
         dispatch(removeLayers(layersToRemove))
         dispatch(removeShowedLayer(layerToHide))
-        layersToRemove.forEach(layer => dispatch(removeLayerAndArea(layer.className_)))
+        layersToRemove.forEach(layer => {
+          dispatch(removeLayerAndArea(layer.className_))
+          dispatch(removeLayerToFeatures(layer.className_))
+        })
       })
     }
   }

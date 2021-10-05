@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@turf/turf": "^6.5.0",
     "comlink": "^4.3.0",
     "export-to-csv": "^0.2.1",
     "hammerjs": "^2.0.8",
@@ -71,12 +72,13 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
+    "cypress": "^7.1.0",
+    "cypress-mouse-position": "^1.0.0",
     "eslint": "^7.25.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-react": "^7.23.2",
-    "cypress": "^7.1.0"
+    "eslint-plugin-react": "^7.23.2"
   }
 }

@@ -13,6 +13,13 @@
  */
 
 /**
+ * @typedef LayerToFeatures
+ * @property {string} name
+ * @property {Object[]} features
+ * @property {Object[]} simplifiedFeatures
+ */
+
+/**
  * @typedef RegulatoryZone
  * @property {string} type
  * @property {string} topic

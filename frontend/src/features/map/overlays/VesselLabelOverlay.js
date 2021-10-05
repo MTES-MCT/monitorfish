@@ -161,7 +161,7 @@ const VesselLabelOverlay = ({
                         {parseFloat(riskFactor?.detectabilityRiskFactor).toFixed(1)}
                       </RiskFactorBox>
                       <SubRiskText>
-                        { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false, null) }
+                        { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false) }
                       </SubRiskText>
                     </RiskFactorDetail>
                   </RiskFactorDetails>

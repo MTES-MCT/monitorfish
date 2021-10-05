@@ -44,15 +44,27 @@ export const getProbabilityRiskFactorText = (riskFactor, hasBeenControlledLastFi
   }
 }
 
-export const getDetectabilityRiskFactorText = (riskFactor, reducedText, verySmallText) => {
+export const getDetectabilityRiskFactorText = (riskFactor, reducedText) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
-    return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}faible`
+    return `Priorité ${reducedText ? '' : 'de contrôle '}faible`
   } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
-    return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}moyenne`
+    return `Priorité ${reducedText ? '' : 'de contrôle '}moyenne`
   } else if (riskFactor >= 2.5 && riskFactor < 3.25) {
-    return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}élevée`
+    return `Priorité ${reducedText ? '' : 'de contrôle '}élevée`
   } else if (riskFactor >= 3.25 && riskFactor <= 4) {
-    return `${verySmallText ? '' : 'Priorité '} ${reducedText ? '' : 'de contrôle '}très élevée`
+    return `Priorité ${reducedText ? '' : 'de contrôle '}très élevée`
+  }
+}
+
+export const getControlPriorityLevel = riskFactor => {
+  if (riskFactor >= 1 && riskFactor < 1.75) {
+    return 'pas de segment'
+  } else if (riskFactor >= 1.75 && riskFactor < 2.5) {
+    return 'moyenne'
+  } else if (riskFactor >= 2.5 && riskFactor < 3.25) {
+    return 'élevée'
+  } else if (riskFactor >= 3.25 && riskFactor <= 4) {
+    return 'très élevée'
   }
 }
 

@@ -447,7 +447,7 @@ def add_buffer_and_index():
 def compute_ports_fao_areas():
     ports_fao_areas = extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/ports_fao_areas.sql",
+        query_filepath="monitorfish/compute_ports_fao_areas.sql",
     )
 
     ports_fao_areas["fao_areas"] = ports_fao_areas.fao_areas.map(
@@ -461,7 +461,7 @@ def compute_ports_fao_areas():
 def compute_ports_facade():
     ports_facade = extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/ports_facade.sql",
+        query_filepath="monitorfish/compute_ports_facade.sql",
     )
 
     manual_corrections = pd.DataFrame(

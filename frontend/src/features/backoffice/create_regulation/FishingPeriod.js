@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Label } from '../../commonStyles/Input.style'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { Radio, RadioGroup } from 'rsuite'
 import { SquareButton } from '../../commonStyles/Buttons.style'
@@ -17,7 +17,7 @@ const FishingPeriod = ({ show }) => {
 
   const [authorized, setAuthorized] = useState(undefined)
   const [displayForm, setDisplayForm] = useState(false)
-  const [disabled, setDisabled] = useState(undefined)
+  const [disabled, setDisabled] = useState(true)
   const [annual, setAnnual] = useState(undefined)
   const [holidays, setHolidays] = useState(false)
   const [timeSlots, setTimeSlots] = useState([{}])
@@ -68,7 +68,7 @@ const FishingPeriod = ({ show }) => {
 
   return <Wrapper show={show}>
     <Title>
-      <RadioGroup
+      <PeriodRadioGroup
         inline={true}
         onChange={value => {
           setAuthorized(value)
@@ -84,7 +84,7 @@ const FishingPeriod = ({ show }) => {
         <CustomRadio checked={authorized === false} value={false} />
         {' interdites'}
         <RedCircle />
-      </RadioGroup>
+      </PeriodRadioGroup>
     </Title>
     <DateWrapper>
       <Row display={displayForm}>
@@ -121,10 +121,12 @@ const FishingPeriod = ({ show }) => {
             })
           }
         </TimeSlots>
-        <SquareButton onClick={() => {
-          console.log('on SquareButton click')
-          addTimeSlot({})
-        }} />
+        <SquareButton
+          disabled={disabled}
+          onClick={() => {
+            console.log('on SquareButton click')
+            addTimeSlot({})
+          }} />
       </Row>
       <Row>
         <Label>Dates précises</Label>
@@ -275,26 +277,33 @@ const Title = styled.div`
   border-bottom: 1px solid ${COLORS.lightGray}
 `
 
-const GreenCircle = styled.span`
+const circle = css`
+  display: inline-block;
   height: 10px;
   width: 10px;
-  margin-right: 8px;
-  background-color: ${COLORS.mediumSeaGreen};
+  margin-left: 6px;
   border-radius: 50%;
+`
+const GreenCircle = styled.span`
+  ${circle}
+  background-color: ${COLORS.mediumSeaGreen};
 `
 
 const RedCircle = styled.span`
-  height: 10px;
-  width: 10px;
-  margin-right: 8px;
+  ${circle}
   background-color: ${COLORS.red};
-  border-radius: 50%;
+`
+
+const PeriodRadioGroup = styled(RadioGroup)` 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 const CustomRadio = styled(Radio)`
   .rs-radio-checker {
-    padding-top: 2px;
-    padding-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 4px;
     padding-left: 29px;
     min-height: 0px;
     line-height: 1;
@@ -305,6 +314,7 @@ const CustomRadio = styled(Radio)`
     &:after {
       box-sizing: border-box;
     }
+    margin-right: 0px;
   }
 
   .rs-radio-checker > label {

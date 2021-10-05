@@ -51,8 +51,10 @@ const hideLayer = layerToHide => (dispatch, getState) => {
       batch(() => {
         dispatch(removeLayers(layersToRemove))
         dispatch(removeShowedLayer(layerToHide))
-        layersToRemove.forEach(layer => dispatch(removeLayerAndArea(layer.className_)))
-        layersToRemove.forEach(layer => dispatch(removeLayerToFeatures(layer.className_)))
+        layersToRemove.forEach(layer => {
+          dispatch(removeLayerAndArea(layer.className_))
+          dispatch(removeLayerToFeatures(layer.className_))
+        })
       })
     }
   }

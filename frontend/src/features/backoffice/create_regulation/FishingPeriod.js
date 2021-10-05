@@ -86,108 +86,104 @@ const FishingPeriod = ({ show }) => {
         <RedCircle />
       </PeriodRadioGroup>
     </Title>
-    <DateWrapper>
-      <Row display={displayForm}>
-        <Label>Récurrence annuelle</Label>
-        <RadioGroup
-          inline={true}
-          onChange={value => {
-            setAnnual(value)
-            if (disabled) {
-              setDisabled(false)
-            }
-          }}
-          value={annual}
-        >
-          <CustomRadio value={true} >oui</CustomRadio>
-          <CustomRadio value={false} >non</CustomRadio>
-        </RadioGroup>
-      </Row>
+    <PeriodRow display={displayForm} authorized={authorized}>
+      <Label>Récurrence annuelle</Label>
+      <RadioGroup
+        inline={true}
+        onChange={value => {
+          setAnnual(value)
+          if (disabled) {
+            setDisabled(false)
+          }
+        }}
+        value={annual}
+      >
+        <CustomRadio value={true} >oui</CustomRadio>
+        <CustomRadio value={false} >non</CustomRadio>
+      </RadioGroup>
+    </PeriodRow>
+    <DateTimeWrapper display={displayForm} authorized={authorized}>
       <ConditionnalLines display={displayForm} disabled={disabled}>
-      <Row>
-        <Label>Plages de dates</Label>
-        <TimeSlots>
-          {
-            timeSlots.map((timeSlot, id) => {
-              return <TimeSlot
-                  key={id}
-                  id={id}
-                  annual={annual}
-                  timeSlot={timeSlot}
-                  updateList={updateTimeSlots}
-                  removeTimeSlot={removeTimeSlot}
-                  disabled={disabled}
-                />
-            })
-          }
-        </TimeSlots>
-        <SquareButton
-          disabled={disabled}
-          onClick={() => {
-            console.log('on SquareButton click')
-            addTimeSlot({})
-          }} />
-      </Row>
-      <Row>
-        <Label>Dates précises</Label>
-        <DateList >
-          {
-            dates.map((date, id) => {
-              return <DateRow key={id}>
-                <CustomDatePicker
-                  // $isrequired={startDateIsRequired}
-                  disabled={disabled}
-                  value={date}
-                  onChange={(date) => {
-                    const newList = [...dates]
-                    newList[id] = date
-                    setDates(newList)
-                  }}
-                  format='DD/MM/YYYY'
-                  placement={'rightStart'}
-                  style={{ marginRight: '10px' }}
-                />
-                <SquareButton
-                  type='delete'
-                  disabled={disabled}
-                  onClick={() => {
-                    if (!disabled) {
-                      const newList = [...dates]
-                      newList.splice(id, 1)
-                      setDates(newList)
-                    }
-                  }} />
-              </DateRow>
-            })
-          }
-        </DateList>
-        <SquareButton
-          disabled={disabled}
-          onClick={() => {
-            if (!disabled) {
-              const newList = [...dates]
-              newList.push(undefined)
-              setDates(newList)
+        <Row>
+          <Label>Plages de dates</Label>
+          <TimeSlots>
+            {
+              timeSlots.map((timeSlot, id) => {
+                return <TimeSlot
+                    key={id}
+                    id={id}
+                    annual={annual}
+                    timeSlot={timeSlot}
+                    updateList={updateTimeSlots}
+                    removeTimeSlot={removeTimeSlot}
+                    disabled={disabled}
+                  />
+              })
             }
-          }}/>
-      </Row>
-      <Row>
-        <Label>Jours de la semaine</Label>
-        <DayPicker
-          disabled={disabled}
-          selectedList={weekdays}
-          setSelectedList={setWeekdays}
-        />
-      </Row>
-      <Row>
-        <Label>Jours fériés</Label>
-        <HolidaysCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/>
-      </Row>
-      </ConditionnalLines>
-    </DateWrapper>
-    <ConditionnalLines display={displayForm}>
-      <TimeWrapper disabled={disabled}>
-        <Title>Horaires autorisées</Title>
+          </TimeSlots>
+          <SquareButton
+            disabled={disabled}
+            onClick={() => {
+              console.log('on SquareButton click')
+              addTimeSlot({})
+            }} />
+        </Row>
+        <Row>
+          <Label>Dates précises</Label>
+          <DateList >
+            {
+              dates.map((date, id) => {
+                return <DateRow key={id}>
+                  <CustomDatePicker
+                    // $isrequired={startDateIsRequired}
+                    disabled={disabled}
+                    value={date}
+                    onChange={(date) => {
+                      const newList = [...dates]
+                      newList[id] = date
+                      setDates(newList)
+                    }}
+                    format='DD/MM/YYYY'
+                    placement={'rightStart'}
+                    style={{ marginRight: '10px' }}
+                  />
+                  <SquareButton
+                    type='delete'
+                    disabled={disabled}
+                    onClick={() => {
+                      if (!disabled) {
+                        const newList = [...dates]
+                        newList.splice(id, 1)
+                        setDates(newList)
+                      }
+                    }} />
+                </DateRow>
+              })
+            }
+          </DateList>
+          <SquareButton
+            disabled={disabled}
+            onClick={() => {
+              if (!disabled) {
+                const newList = [...dates]
+                newList.push(undefined)
+                setDates(newList)
+              }
+            }}/>
+        </Row>
+        <Row>
+          <Label>Jours de la semaine</Label>
+          <DayPicker
+            disabled={disabled}
+            selectedList={weekdays}
+            setSelectedList={setWeekdays}
+          />
+        </Row>
+        <Row>
+          <Label>Jours fériés</Label>
+          <HolidaysCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/>
+        </Row>
+        <TimeTitle>Horaires autorisées</TimeTitle>
         <Row>De <CustomDatePicker
             /* $isrequired={startDateIsRequired}
             value={currentStartDate}
@@ -213,18 +209,25 @@ const FishingPeriod = ({ show }) => {
         <Row>
           ou <DaytimeCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/> du lever au coucher du soleil
         </Row>
-      </TimeWrapper>
-    </ConditionnalLines>
+      </ConditionnalLines>
+    </DateTimeWrapper>
   </Wrapper>
 }
 
-const ConditionnalLines = styled.div`
-  display: ${props => props.display ? 'flex' : 'none'};
-  flex-direction: column;
+const PeriodRow = styled.div`
+  ${props => !props.display ? 'display: none;' : ''}
+  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
+  padding-left: 15px;
+  padding-bottom: 15px;
+  .rs-radio-group {
+    margin-left: 13px;
+  }
 `
 
-const TimeWrapper = styled.div`
+const ConditionnalLines = styled.div`
+  display: ${props => props.display ? 'flex' : 'none'};
   opacity: ${props => props.disabled ? '0.4' : '1'};
+  flex-direction: column;
 `
 
 const Wrapper = styled.div`
@@ -246,9 +249,32 @@ const DaytimeCheckbox = styled(CustomCheckbox)`
 const HolidaysCheckbox = styled(CustomCheckbox)`
   margin-top: -15px;
 `
-const DateWrapper = styled.div`
+const DateTimeWrapper = styled.div`
+  display: ${props => props.display ? 'flex' : 'none'};
+  flex-direction: row;
   margin-bottom: 30px;
   opacity: ${props => props.disabled ? '0.4' : '1'};
+  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
+  padding-left: 15px;
+  padding-top: 15px;
+`
+
+const normalTitle = css`
+  display: flex;
+  padding: 0px 0px 10px 0px;
+  align-items: center;
+  font-size: 13px;
+  color: ${COLORS.slateGray};
+  border-bottom: 1px solid ${COLORS.lightGray};
+`
+const Title = styled.div`
+  ${normalTitle}
+  margin-bottom: 18px;
+`
+
+const TimeTitle = styled(Title)`
+  ${normalTitle}
+  margin-top: 30px;
 `
 
 const TimeSlots = styled.div`
@@ -265,16 +291,6 @@ const Row = styled.div`
   margin-bottom: 8px;
   align-items: center;
   color: ${COLORS.slateGray}
-`
-
-const Title = styled.div`
-  display: flex;
-  padding: 0px 0px 10px 0px;
-  align-items: center;
-  font-size: 13px;
-  margin-bottom: 18px;
-  color: ${COLORS.slateGray};
-  border-bottom: 1px solid ${COLORS.lightGray}
 `
 
 const circle = css`

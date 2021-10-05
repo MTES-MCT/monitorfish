@@ -27,6 +27,7 @@ const CustomCircleRange = (
       <Body>
         <p>Coordonnées</p>
         <CoordinateInput
+          data-cy={'measurement-circle-coordinates-input'}
           onChange={(_, { dd }) => setCircleCoordinatesToAdd(dd)}
           value={circleCoordinatesToAdd && Array.isArray(circleCoordinatesToAdd) && circleCoordinatesToAdd.length
             ? circleCoordinatesToAdd.join(',')
@@ -35,12 +36,14 @@ const CustomCircleRange = (
         <span>(DMS)</span>
         <p>Distance (rayon)</p>
         <input
+          data-cy={'measurement-circle-radius-input'}
           type='text'
           onChange={e => setCircleRadiusToAdd(e.target.value)}
           value={circleRadiusToAdd}
         />
         <span>(Nm)</span><br/>
         <OkButton
+          data-cy={'measurement-circle-add'}
           onClick={() => addCustomCircleRange()}
         >
           OK

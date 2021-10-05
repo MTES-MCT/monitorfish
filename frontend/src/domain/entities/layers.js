@@ -24,7 +24,8 @@ export const layersType = {
   ADMINISTRATIVE: 'ADMINISTRATIVE',
   REGULATORY: 'REGULATORY',
   BASE_LAYER: 'BASE_LAYER',
-  FREE_DRAW: 'FREE_DRAW'
+  FREE_DRAW: 'FREE_DRAW',
+  MEASUREMENT: 'MEASUREMENT'
 }
 
 const Layers = {
@@ -82,11 +83,11 @@ const Layers = {
     isIntersectable: false,
     zIndex: 99
   },
-  MEASURE: {
+  MEASUREMENT: {
     code: 'measurement',
     name: '',
     group: null,
-    type: layersType.FREE_DRAW,
+    type: layersType.MEASUREMENT,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,

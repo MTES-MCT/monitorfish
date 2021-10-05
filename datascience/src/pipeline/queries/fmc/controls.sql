@@ -14,7 +14,6 @@ SELECT
     c.date_controle as control_datetime_utc,
     c.date_saisie as input_start_datetime_utc,
     c.date_cloture as input_end_datetime_utc,
-    f.libelle as facade,
     c.longitude as longitude,
     c.latitude as latitude,
     port.locode as port_locode,
@@ -47,8 +46,6 @@ LEFT JOIN FMC2.FMC_CODE_TYPE_CONTROLE ctype
 ON c.idc_fmc_type_controle = ctype.idc_fmc_type_controle
 LEFT JOIN FMC2.FMC_BC_RESULTAT_CONTROLE rc
 ON c.id_fmc_bc_resultat_controle = rc.id_fmc_bc_resultat_controle
-LEFT JOIN COMMUNFMC.C_CODE_FACADE f
-ON f.idc_facade = c.idc_facade
 LEFT JOIN FMC2.FMC_CODE_MOYEN_CONTROLE ctrl
 ON ctrl.idc_fmc_moyen_controle = c.idc_fmc_moyen_controle
 LEFT JOIN COMMUNFMC.C_CODE_PORT port

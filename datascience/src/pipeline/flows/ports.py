@@ -1,5 +1,6 @@
 import io
 import os
+from ast import literal_eval
 from datetime import date
 from time import sleep
 
@@ -601,51 +602,29 @@ def extract_datagouv_ports(ports_url: str = PORTS_URL, proxies: dict = None):
         "country_code_iso2": str,
         "locode": str,
         "port_name": str,
-        "is_fiching_port": str,
-        "is_landing_place": str,
-        "is_commercial_port": str,
         "region": str,
         "latitude": float,
         "longitude": float,
+        "facade": str,
     }
 
-    use_cols = [
-        "country_code_iso2",
-        "region",
-        "locode",
-        "port_name",
-        "latitude",
-        "longitude",
-    ]
+    ports = pd.read_csv(f, dtype=dtype, converters={"fao_areas": literal_eval})
 
-    ports = pd.read_csv(f, dtype=dtype, usecols=use_cols)
     return ports
 
 
 @task(checkpoint=False)
 def load_ports_to_monitorfish(ports):
 
-    schema = "public"
-    table_name = "ports"
-    e = create_engine("monitorfish_remote")
-    logger = prefect.context.get("logger")
-
-    ports_table = get_table(table_name, schema, e, logger)
-
-    with e.begin() as connection:
-
-        # Delete all rows from table
-        delete(ports_table, connection, logger)
-
-        # Insert data into table
-        ports.to_sql(
-            name=table_name,
-            con=connection,
-            schema=schema,
-            index=False,
-            method=psql_insert_copy,
-            if_exists="append",
-        )
+    load(
+        ports,
+        table_name="ports",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+        pg_array_columns=["fao_areas"],
+    )
 
 
 with Flow("Ports") as flow:

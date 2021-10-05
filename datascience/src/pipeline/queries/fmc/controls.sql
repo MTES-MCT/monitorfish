@@ -61,4 +61,7 @@ LEFT JOIN COMMUNFMC.C_PCH_CODE_ENGIN_CE gears2
 ON gears2.idc_pch_engin_ce = rc.idc_pch_engin_ce2
 LEFT JOIN COMMUNFMC.C_PCH_CODE_ENGIN_CE gears3
 ON gears3.idc_pch_engin_ce = rc.idc_pch_engin_ce3
-WHERE c.date_controle > ADD_MONTHS(SYS_EXTRACT_UTC(SYSTIMESTAMP), -:number_of_months) 
+WHERE 
+    c.date_controle > ADD_MONTHS(SYS_EXTRACT_UTC(SYSTIMESTAMP), -:number_of_months) AND
+    -- Remove controls in the future!
+    c.date_controle < ADD_MONTHS(SYS_EXTRACT_UTC(SYSTIMESTAMP), 1) 

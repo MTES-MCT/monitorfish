@@ -26,7 +26,6 @@ const VesselTrackLayer = ({ map }) => {
   }))
   const [layer] = useState(new Vector({
     renderBuffer: 4,
-    className: Layers.VESSEL_TRACK.code,
     source: vectorSource,
     zIndex: Layers.VESSEL_TRACK.zIndex,
     updateWhileAnimating: true,
@@ -65,6 +64,7 @@ const VesselTrackLayer = ({ map }) => {
 
   function addLayerToMap () {
     if (map) {
+      layer.name = Layers.VESSEL_TRACK.code
       map.getLayers().push(layer)
     }
 

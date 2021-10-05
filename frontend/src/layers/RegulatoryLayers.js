@@ -76,12 +76,12 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
         return
       }
 
-      const regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
+      const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(LayersEnum.REGULATORY.code))
       regulatoryLayers.forEach(layer => {
         const vectorSource = layer.getSource()
 
         if (vectorSource) {
-          const layerToFeatures = layersToFeatures?.find(layerToFeatures => layerToFeatures.name === layer.className_)
+          const layerToFeatures = layersToFeatures?.find(layerToFeatures => layerToFeatures.name === layer?.name)
           if (layerToFeatures) {
             const features = showSimplifiedFeatures
               ? layerToFeatures.simplifiedFeatures
@@ -110,10 +110,10 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
 
   function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
     if (map) {
-      const regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
+      const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(LayersEnum.REGULATORY.code))
       if (regulatoryZoneMetadata) {
         const layerToAddProperty = regulatoryLayers.find(layer => {
-          return layer.className_ === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
+          return layer?.name === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
         })
 
         if (layerToAddProperty) {
@@ -149,7 +149,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
 
       sortedLayersToArea.forEach((layerAndArea, index) => {
         index = index + 1
-        const layer = map.getLayers().getArray().find(layer => layer.className_ === layerAndArea.name)
+        const layer = map.getLayers().getArray().find(layer => layer?.name === layerAndArea.name)
 
         if (layer) {
           layer.setZIndex(index)
@@ -164,7 +164,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
         .filter(layer => {
           return !map.getLayers().getArray().some(layer_ => layer === layer_)
         })
-        .filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
+        .filter(layer => layer?.name?.includes(LayersEnum.REGULATORY.code))
 
       layersToInsert.forEach(layerToInsert => {
         if (!layerToInsert) {
@@ -180,7 +180,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
     const layersOrEmptyArray = layers.length ? layers : []
     const layersToRemove = map.getLayers().getArray()
       .filter(showedLayer => !layersOrEmptyArray.some(layer_ => showedLayer === layer_))
-      .filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
+      .filter(layer => layer?.name?.includes(LayersEnum.REGULATORY.code))
 
     layersToRemove.forEach(layerToRemove => {
       map.getLayers().remove(layerToRemove)

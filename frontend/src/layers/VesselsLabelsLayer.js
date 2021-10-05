@@ -48,7 +48,6 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }))
   const [layer] = useState(new Vector({
     renderBuffer: 7,
-    className: Layers.VESSELS_LABEL.code,
     source: vectorSource,
     zIndex: Layers.VESSELS_LABEL.zIndex,
     updateWhileAnimating: true,
@@ -78,6 +77,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   function addLayerToMap () {
     if (map) {
+      layer.name = Layers.VESSELS_LABEL.code
       map.getLayers().push(layer)
     }
 

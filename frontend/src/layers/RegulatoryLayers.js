@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import LayersEnum from '../domain/entities/layers'
+import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
 
 export const metadataIsShowedPropertyName = 'metadataIsShowed'
-export const simplifiedFeaturesPropertyName = 'simplifiedFeatures'
 const simplifiedFeaturesZoom = 9.5
 
 const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   const throttleDuration = 500 // ms
+  const dispatch = useDispatch()
 
   const {
     layers,
@@ -15,7 +16,12 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
     lastShowedFeatures,
     layersToFeatures
   } = useSelector(state => state.layer)
-  const regulatoryZoneMetadata = useSelector(state => state.regulatory.regulatoryZoneMetadata)
+
+  const {
+    regulatoryZoneMetadata,
+    simplifiedGeometries
+  } = useSelector(state => state.regulatory)
+
   const previousMapZoom = useRef('')
   const isThrottled = useRef(false)
 
@@ -55,9 +61,8 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
     return showSimplifiedFeatures
   }
 
-  function featuresAreAlreadyDrawWithTheSameTolerance (showSimplifiedFeatures, vectorSource) {
-    return (!showSimplifiedFeatures && vectorSource.getFeatures().find(feature => !feature.get(simplifiedFeaturesPropertyName))) ||
-      (showSimplifiedFeatures && vectorSource.getFeatures().find(feature => feature.get(simplifiedFeaturesPropertyName)))
+  function featuresAreAlreadyDrawWithTheSameTolerance (showSimplifiedFeatures, simplifiedGeometries) {
+    return (!showSimplifiedFeatures && !simplifiedGeometries) || (showSimplifiedFeatures && simplifiedGeometries)
   }
 
   function showSimplifiedOrWholeFeatures () {
@@ -67,15 +72,15 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
       previousMapZoom.current = currentZoom
 
       const showSimplifiedFeatures = getShowSimplifiedFeatures(currentZoom)
+      if (featuresAreAlreadyDrawWithTheSameTolerance(showSimplifiedFeatures, simplifiedGeometries)) {
+        return
+      }
+
       const regulatoryLayers = map.getLayers().getArray().filter(layer => layer.className_.includes(LayersEnum.REGULATORY.code))
       regulatoryLayers.forEach(layer => {
         const vectorSource = layer.getSource()
 
         if (vectorSource) {
-          if (featuresAreAlreadyDrawWithTheSameTolerance(showSimplifiedFeatures, vectorSource)) {
-            return
-          }
-
           const layerToFeatures = layersToFeatures?.find(layerToFeatures => layerToFeatures.name === layer.className_)
           if (layerToFeatures) {
             const features = showSimplifiedFeatures
@@ -84,10 +89,15 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
 
             vectorSource.clear(true)
             vectorSource.addFeatures(vectorSource.getFormat().readFeatures(features))
-            vectorSource.getFeatures().forEach(feature => feature.set(simplifiedFeaturesPropertyName, showSimplifiedFeatures))
           }
         }
       })
+
+      if (showSimplifiedFeatures) {
+        dispatch(showSimplifiedGeometries())
+      } else {
+        dispatch(showWholeGeometries())
+      }
     }
   }
 

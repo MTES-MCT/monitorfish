@@ -10,7 +10,7 @@ import { usePrevious } from '../hooks/usePrevious'
 import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
-const MAX_LABELS_DISPLAYED = 250
+const MAX_LABELS_DISPLAYED = 200
 const NOT_FOUND = -1
 
 const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {

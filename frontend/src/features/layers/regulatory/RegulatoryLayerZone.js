@@ -56,7 +56,7 @@ const RegulatoryLayerZone = props => {
 
   const {
     isEditPageOpen
-  } = useSelector(state => state.regulation)
+  } = useSelector(state => state.global)
 
   const [showRegulatoryZone, setShowRegulatoryZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)

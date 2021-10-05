@@ -1,9 +1,8 @@
 import { batch } from 'react-redux'
 import { setRegulatoryZoneMetadata } from '../shared_slices/Regulatory'
-import { setIsEditPageOpen } from '../../features/backoffice/Regulation.slice'
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../api/fetch'
 import { mapToRegulatoryZone } from '../entities/regulatory'
-import { setError } from '../shared_slices/Global'
+import { setError, setIsEditPageOpen } from '../shared_slices/Global'
 import Layers from '../entities/layers'
 // si ne fonctionne pas alors on passe par le state
 

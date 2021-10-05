@@ -7,7 +7,9 @@ const globalSlice = createSlice({
     isUpdatingVessels: false,
     rightMenuIsOpen: false,
     /** @type {string | null} healthcheckTextWarning */
-    healthcheckTextWarning: null
+    healthcheckTextWarning: null,
+    /** @type {boolean} isEditPageOpen */
+    isEditPageOpen: false
   },
   reducers: {
     expandRightMenu (state) {
@@ -35,6 +37,9 @@ const globalSlice = createSlice({
      */
     setHealthcheckTextWarning (state, action) {
       state.healthcheckTextWarning = action.payload
+    },
+    setIsEditPageOpen (state, action) {
+      state.isEditPageOpen = action.payload
     }
   }
 })
@@ -46,7 +51,8 @@ export const {
   resetIsUpdatingVessels,
   expandRightMenu,
   contractRightMenu,
-  setHealthcheckTextWarning
+  setHealthcheckTextWarning,
+  setIsEditPageOpen
 } = globalSlice.actions
 
 export default globalSlice.reducer

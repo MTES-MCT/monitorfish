@@ -36,7 +36,6 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
   const [layer] = useState(new Vector({
     renderBuffer: 4,
-    className: Layers.VESSEL_ESTIMATED_POSITION.code,
     source: vectorSource,
     zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,
     updateWhileAnimating: true,
@@ -96,6 +95,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
   function addLayerToMap () {
     if (map) {
+      layer.name = Layers.VESSEL_ESTIMATED_POSITION.code
       map.getLayers().push(layer)
     }
 

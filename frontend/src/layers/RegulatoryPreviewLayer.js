@@ -15,7 +15,6 @@ const RegulatoryPreviewLayer = ({ map }) => {
   }))
   const [layer] = useState(new Vector({
     renderBuffer: 4,
-    className: Layers.REGULATORY_PREVIEW.code,
     source: vectorSource,
     updateWhileAnimating: true,
     updateWhileInteracting: true
@@ -38,6 +37,7 @@ const RegulatoryPreviewLayer = ({ map }) => {
 
   function addLayerToMap () {
     if (map) {
+      layer.name = Layers.REGULATORY_PREVIEW.code
       map.getLayers().push(layer)
     }
 

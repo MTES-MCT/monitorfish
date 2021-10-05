@@ -33,16 +33,15 @@ const showAdministrativeLayer = layerToShow => dispatch => {
 }
 
 const getVectorLayer = (type, zone) => {
-  let className
+  let name
   if (zone) {
-    className = `${type}:${zone}`
+    name = `${type}:${zone}`
   } else {
-    className = type
+    name = type
   }
 
-  return new VectorImageLayer({
+  const layer = new VectorImageLayer({
     source: getAdministrativeVectorSource(type, zone),
-    className: className,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     style: feature => {
@@ -50,6 +49,9 @@ const getVectorLayer = (type, zone) => {
     },
     declutter: true
   })
+  layer.name = name
+
+  return layer
 }
 
 const getAdministrativeVectorSource = (type, subZone) => {

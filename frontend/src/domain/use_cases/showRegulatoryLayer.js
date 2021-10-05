@@ -52,15 +52,17 @@ const showRegulatoryLayer = layerToShow => (dispatch, getState) => {
 }
 
 const getVectorLayer = (dispatch, getState) => (layerToShow, hash, gearCategory) => {
-  const className = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
+  const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
-  return new VectorImageLayer({
+  const layer = new VectorImageLayer({
     source: getRegulatoryVectorSource(dispatch, getState)(layerToShow),
-    className: className,
     style: feature => {
       return [getVectorLayerStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
     }
   })
+  layer.name = name
+
+  return layer
 }
 
 const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {

@@ -20,7 +20,9 @@ const Measurement = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const measurementTypeToAdd = useSelector(state => state.map.measurementTypeToAdd)
+  const {
+    measurementTypeToAdd
+  } = useSelector(state => state.map)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
@@ -88,6 +90,7 @@ const Measurement = () => {
   return (
     <Wrapper ref={wrapperRef}>
       <MeasurementWrapper
+        data-cy={'measurement'}
         healthcheckTextWarning={healthcheckTextWarning}
         isOpen={measurementIsOpen || measurementTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}
@@ -103,11 +106,13 @@ const Measurement = () => {
         healthcheckTextWarning={healthcheckTextWarning}
         measurementBoxIsOpen={measurementIsOpen}>
         <MeasurementItem
+          data-cy={'measurement-multiline'}
           title={'Mesure d\'une distance avec lignes brisées'}
           onClick={() => makeMeasurement(MeasurementTypes.MULTILINE)}>
           <MultiLineIcon/>
         </MeasurementItem>
         <MeasurementItem
+          data-cy={'measurement-circle-range'}
           title={'Rayon d\'action'}
           onClick={() => makeMeasurement(MeasurementTypes.CIRCLE_RANGE)}>
           <CircleRangeIcon/>

@@ -15,8 +15,10 @@ const FishingPeriod = ({ show }) => {
     setFishingPeriod
   } = props */
 
-  const [disabled, setDisabled] = useState(true)
-  const [annual, setAnnual] = useState(true)
+  const [authorized, setAuthorized] = useState(undefined)
+  const [displayForm, setDisplayForm] = useState(false)
+  const [disabled, setDisabled] = useState(undefined)
+  const [annual, setAnnual] = useState(undefined)
   const [holidays, setHolidays] = useState(false)
   const [timeSlots, setTimeSlots] = useState([{}])
   const [dates, setDates] = useState([undefined])
@@ -66,22 +68,42 @@ const FishingPeriod = ({ show }) => {
 
   return <Wrapper show={show}>
     <Title>
-      <GreenCircle />
-      Périodes autorisées
-      <CustomRadio onClick={() => setDisabled(!disabled)}/>
+      <RadioGroup
+        inline={true}
+        onChange={value => {
+          setAuthorized(value)
+          if (!displayForm) {
+            setDisplayForm(true)
+          }
+        }}
+      >
+        Périodes
+        <CustomRadio checked={authorized} value={true} />
+        {' autorisées'}
+        <GreenCircle />
+        <CustomRadio checked={authorized === false} value={false} />
+        {' interdites'}
+        <RedCircle />
+      </RadioGroup>
     </Title>
-    <DateWrapper disabled={disabled}>
-      <Row>
+    <DateWrapper>
+      <Row display={displayForm}>
         <Label>Récurrence annuelle</Label>
         <RadioGroup
           inline={true}
-          onChange={value => setAnnual(value)}
+          onChange={value => {
+            setAnnual(value)
+            if (disabled) {
+              setDisabled(false)
+            }
+          }}
           value={annual}
         >
-          <CustomRadio value={true} disabled={disabled}>oui</CustomRadio>
-          <CustomRadio value={false} disabled={disabled}>non</CustomRadio>
+          <CustomRadio value={true} >oui</CustomRadio>
+          <CustomRadio value={false} >non</CustomRadio>
         </RadioGroup>
       </Row>
+      <ConditionnalLines display={displayForm} disabled={disabled}>
       <Row>
         <Label>Plages de dates</Label>
         <TimeSlots>
@@ -159,37 +181,45 @@ const FishingPeriod = ({ show }) => {
         <Label>Jours fériés</Label>
         <HolidaysCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/>
       </Row>
+      </ConditionnalLines>
     </DateWrapper>
-    <TimeWrapper disabled={disabled}>
-      <Title>Horaires autorisées</Title>
-      <Row>De <CustomDatePicker
-          /* $isrequired={startDateIsRequired}
-          value={currentStartDate}
-          onChange={(date) => setCurrentStartDate(date)}
-          onOk={(date, _) => setCurrentStartDate(date)} */
-          format='MM/DD/YYYY'
-          placement={'rightStart'}
-          style={{ margin: '0px 5px' }}
-          disabled={disabled}
-        />
-        à <CustomDatePicker
-          /* $isrequired={startDateIsRequired}
-          value={currentStartDate}
-          onChange={(date) => setCurrentStartDate(date)}
-          onOk={(date, _) => setCurrentStartDate(date)} */
-          format='DD/MM/YYYY'
-          placement={'rightStart'}
-          style={{ margin: '0px 5px' }}
-          disabled={disabled}
-        />
-        <SquareButton disabled={disabled}/>
-      </Row>
-      <Row>
-        ou <DaytimeCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/> du lever au coucher du soleil
-      </Row>
-    </TimeWrapper>
+    <ConditionnalLines display={displayForm}>
+      <TimeWrapper disabled={disabled}>
+        <Title>Horaires autorisées</Title>
+        <Row>De <CustomDatePicker
+            /* $isrequired={startDateIsRequired}
+            value={currentStartDate}
+            onChange={(date) => setCurrentStartDate(date)}
+            onOk={(date, _) => setCurrentStartDate(date)} */
+            format='MM/DD/YYYY'
+            placement={'rightStart'}
+            style={{ margin: '0px 5px' }}
+            disabled={disabled}
+          />
+          à <CustomDatePicker
+            /* $isrequired={startDateIsRequired}
+            value={currentStartDate}
+            onChange={(date) => setCurrentStartDate(date)}
+            onOk={(date, _) => setCurrentStartDate(date)} */
+            format='DD/MM/YYYY'
+            placement={'rightStart'}
+            style={{ margin: '0px 5px' }}
+            disabled={disabled === 2}
+          />
+          <SquareButton disabled={disabled}/>
+        </Row>
+        <Row>
+          ou <DaytimeCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/> du lever au coucher du soleil
+        </Row>
+      </TimeWrapper>
+    </ConditionnalLines>
   </Wrapper>
 }
+
+const ConditionnalLines = styled.div`
+  display: ${props => props.display ? 'flex' : 'none'};
+  flex-direction: column;
+`
 
 const TimeWrapper = styled.div`
   opacity: ${props => props.disabled ? '0.4' : '1'};
@@ -229,7 +259,7 @@ const TimeSlots = styled.div`
 `
 
 const Row = styled.div`
-  display: flex;
+  display: ${props => props.display === false ? 'none' : 'flex'};
   margin-bottom: 8px;
   align-items: center;
   color: ${COLORS.slateGray}
@@ -250,6 +280,14 @@ const GreenCircle = styled.span`
   width: 10px;
   margin-right: 8px;
   background-color: ${COLORS.mediumSeaGreen};
+  border-radius: 50%;
+`
+
+const RedCircle = styled.span`
+  height: 10px;
+  width: 10px;
+  margin-right: 8px;
+  background-color: ${COLORS.red};
   border-radius: 50%;
 `
 

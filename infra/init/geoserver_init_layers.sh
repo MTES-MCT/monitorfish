@@ -118,7 +118,7 @@ curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspac
 {
   "featureType": {
     "name": "regulatory_areas",
-    "nativeName": "reglementation_peche",
+    "nativeName": "reglementation_peche_view",
     "title": "Regulatory Areas",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",

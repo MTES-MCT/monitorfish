@@ -102,21 +102,21 @@ export const getVectorLayerStyle = type => {
         })
       })
     case Layers.THREE_MILES.code:
-      return feature => new Style({
+      return new Style({
         stroke: new Stroke({
           color: 'rgba(5, 5, 94, 0.5)',
           width: 2
         })
       })
     case Layers.SIX_MILES.code:
-      return feature => new Style({
+      return new Style({
         stroke: new Stroke({
           color: 'rgba(5, 5, 94, 0.5)',
           width: 2
         })
       })
     case Layers.TWELVE_MILES.code:
-      return feature => new Style({
+      return new Style({
         stroke: new Stroke({
           color: 'rgba(5, 5, 94, 0.5)',
           width: 2

@@ -45,6 +45,7 @@ const Map = () => {
       handleMovingAndZoom={handleMovingAndZoom}
       handlePointerMove={handlePointerMove}
       setCurrentFeature={setCurrentFeature}
+      mapMovingAndZoomEvent={mapMovingAndZoomEvent}
       showCoordinates={true}
       showAttributions={true}
       container={'map'}
@@ -55,7 +56,8 @@ const Map = () => {
       <MapHistory
         shouldUpdateView={shouldUpdateView}
         setShouldUpdateView={setShouldUpdateView}
-        historyMoveTrigger={historyMoveTrigger}/>
+        historyMoveTrigger={historyMoveTrigger}
+      />
       <MeasurementLayer/>
       <VesselTrackLayer/>
       <VesselsLayer/>

@@ -10,6 +10,7 @@ import { getRegulatoryZoneFromAPI } from '../../api/fetch'
 import { getArea, getCenter } from 'ol/extent'
 import { animateToRegulatoryLayer } from '../shared_slices/Map'
 import { batch } from 'react-redux'
+import { simplify } from '@turf/turf'
 import VectorImageLayer from 'ol/layer/VectorImage'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
@@ -34,7 +35,7 @@ const showRegulatoryLayer = layerToShow => (dispatch, getState) => {
     addShowedLayer
   } = layer[currentNamespace].actions
 
-  const getVectorLayerClosure = getVectorLayer(dispatch)
+  const getVectorLayerClosure = getVectorLayer(dispatch, getState)
 
   if (!layerToShow.zone) {
     console.error('No regulatory layer to show.')
@@ -50,26 +51,27 @@ const showRegulatoryLayer = layerToShow => (dispatch, getState) => {
   })
 }
 
-const getVectorLayer = dispatch => (layerToShow, hash, gearCategory) => {
+const getVectorLayer = (dispatch, getState) => (layerToShow, hash, gearCategory) => {
   const className = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
   return new VectorImageLayer({
-    source: getRegulatoryVectorSource(dispatch)(layerToShow),
+    source: getRegulatoryVectorSource(dispatch, getState)(layerToShow),
     className: className,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
     style: feature => {
       return [getVectorLayerStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
-    },
-    declutter: true
+    }
   })
 }
 
-const getRegulatoryVectorSource = dispatch => regulatoryZoneProperties => {
+const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {
+  const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
+
   const {
     pushLayerAndArea,
-    setLastShowedFeatures
+    setLastShowedFeatures,
+    pushLayerToFeatures
   } = layer[currentNamespace].actions
+
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -77,11 +79,20 @@ const getRegulatoryVectorSource = dispatch => regulatoryZoneProperties => {
     }),
     loader: extent => {
       getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties).then(regulatoryZone => {
-        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(regulatoryZone))
+        const simplifiedRegulatoryZone = simplify(regulatoryZone, { tolerance: 0.01, highQuality: false })
+
+        const features = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone : regulatoryZone
+        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(features))
+
         batch(() => {
+          dispatch(pushLayerToFeatures({
+            name: zoneName,
+            simplifiedFeatures: simplifiedRegulatoryZone,
+            features: regulatoryZone
+          }))
           dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
           dispatch(pushLayerAndArea({
-            name: `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`,
+            name: zoneName,
             area: getArea(vectorSource.getExtent())
           }))
         })

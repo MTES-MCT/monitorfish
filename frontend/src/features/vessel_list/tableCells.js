@@ -11,6 +11,7 @@ export const TargetCell = ({ rowData, dataKey, onChange, ...props }) => {
   return (
     <Cell key={rowData.id} {...props} className={'table-content-editing'}>
       <input
+        style={{ fontSize: 13, marginLeft: -5, marginTop: -8, fontWeight: 500 }}
         type="text"
         maxLength={3}
         className="rs-input"

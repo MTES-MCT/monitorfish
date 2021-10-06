@@ -3,9 +3,9 @@ import { getCoordinates } from '../../utils'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 
 export const CSVOptions = {
-  targetNumber: {
-    code: 'targetNumber',
-    name: 'Priorite'
+  riskFactor: {
+    code: 'riskFactor',
+    name: 'Note de risque'
   },
   district: {
     code: 'district',
@@ -157,7 +157,6 @@ export const lastControlAfterLabels = [
 
 export function getVesselObjectFromFeature (feature, coordinates, coordinatesFormat) {
   return {
-    targetNumber: '',
     uid: feature.ol_uid,
     id: feature.id_,
     checked: true,
@@ -186,6 +185,7 @@ export function getVesselObjectFromFeature (feature, coordinates, coordinatesFor
     lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : '',
     lastControlDateTime: feature.vessel.lastControlDateTime,
     lastControlInfraction: feature.vessel.lastControlInfraction ? 'Oui' : 'Non',
-    postControlComment: feature.vessel.postControlComment
+    postControlComment: feature.vessel.postControlComment,
+    riskFactor: parseFloat(feature.vessel.riskFactor).toFixed(1)
   }
 }

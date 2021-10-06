@@ -1,5 +1,9 @@
 {
   "viewportWidth": 1280,
   "viewportHeight": 1024,
-  "projectId": "9b7q8z"
+  "projectId": "9b7q8z",
+  "ignoreTestFiles": [
+    "**/__snapshots__/*",
+    "**/__image_snapshots__/*"
+  ]
 }

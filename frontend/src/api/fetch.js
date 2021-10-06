@@ -7,6 +7,7 @@ import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
+import { REGULATION_ACTION_TYPE } from '../constants/constants'
 
 const OK = 200
 const NOT_FOUND = 404
@@ -459,9 +460,9 @@ function updateOrCreateRegulation (feature, actionType) {
 
   const xs = new XMLSerializer()
   let transaction
-  if (actionType === 'update') {
+  if (actionType === REGULATION_ACTION_TYPE.UPDATE) {
     transaction  = formatWFS.writeTransaction(null, [feature], null, formatGML)
-  } else if (actionType === 'insert') {
+  } else if (actionType === REGULATION_ACTION_TYPE.INSERT) {
     transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
   }
   const payload = xs.serializeToString(transaction)

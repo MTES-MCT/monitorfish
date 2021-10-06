@@ -28,7 +28,7 @@ import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/
 import {
   resetState,
   setSelectedRegulation,
-  setRegulatoryTextListValidityMap,
+  setRegulatoryTextCheckedMap,
   setUpcomingRegulation
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
@@ -77,7 +77,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   const {
     isModalOpen,
     regulationSaved,
-    regulatoryTextListValidityMap,
+    regulatoryTextCheckedMap,
     upcomingRegulation
   } = useSelector(state => state.regulation)
   const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
@@ -116,11 +116,11 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   useEffect(() => {
-    if (regulatoryTextListValidityMap) {
-      const regulatoryTexts = Object.values(regulatoryTextListValidityMap)
+    if (regulatoryTextCheckedMap) {
+      const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
       if (saveOrUpdateRegulation) {
         if (regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length) {
-          if (!regulatoryTexts.includes(false) && !atLeastOneValueIsMissing) {
+          if (!regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
             // update regulatoryTextList
             setRegulatoryTextList(regulatoryTexts)
             const featureObject = mapToRegulatoryFeatureObject({
@@ -134,14 +134,14 @@ const CreateRegulation = ({ title, isEdition }) => {
             })
             createOrUpdateRegulation(featureObject)
           } else {
-            dispatch(setRegulatoryTextListValidityMap(undefined))
+            dispatch(setRegulatoryTextCheckedMap(undefined))
             setSaveOrUpdateRegulation(false)
             setAtLeastOneValueIsMissing(undefined)
           }
         }
       }
     }
-  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextListValidityMap])
+  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap])
 
   const initForm = () => {
     const {
@@ -162,7 +162,10 @@ const CreateRegulation = ({ title, isEdition }) => {
     setSelectedSeaFront(seafront)
     setRegulatoryTextList(JSON.parse(regulatoryReferences))
     setSelectedGeometry(id)
-    dispatch(setUpcomingRegulation(upcomingRegulatoryReferences ? JSON.parse(upcomingRegulatoryReferences) : {}))
+    const upcomingRegulation = upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
+      ? JSON.parse(upcomingRegulatoryReferences)
+      : undefined
+    dispatch(setUpcomingRegulation(upcomingRegulation))
     originalGeometryId = regulatoryZoneMetadata.id
   }
 

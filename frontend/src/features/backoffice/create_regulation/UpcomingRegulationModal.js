@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
-  setUpcomingRegulatoryTextListValidityMap
+  setUpcomingRegulatoryTextListCheckedMap
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -17,7 +17,7 @@ const UpcomingRegulationModal = () => {
   const {
     isModalOpen,
     upcomingRegulation,
-    upcomingRegulatoryTextListValidityMap
+    upcomingRegulatoryTextCheckedMap
   } = useSelector(state => state.regulation)
 
   const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
@@ -31,17 +31,17 @@ const UpcomingRegulationModal = () => {
   }
 
   useEffect(() => {
-    if (upcomingRegulatoryTextListValidityMap) {
-      const values = Object.values(upcomingRegulatoryTextListValidityMap)
+    if (upcomingRegulatoryTextCheckedMap) {
+      const values = Object.values(upcomingRegulatoryTextCheckedMap)
       if (saveForm && values.length > 0 && values.length === regulatoryTextList.length) {
-        if (!values.includes(false)) {
+        if (!values.includes(null)) {
           dispatch(setIsModalOpen(false))
         }
-        dispatch(setUpcomingRegulatoryTextListValidityMap({}))
+        dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
         setSaveForm(false)
       }
     }
-  }, [saveForm, upcomingRegulatoryTextListValidityMap, regulatoryTextList])
+  }, [saveForm, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>

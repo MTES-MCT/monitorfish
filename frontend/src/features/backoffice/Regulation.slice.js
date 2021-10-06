@@ -7,10 +7,10 @@ const INITIAL_STATE = {
   upcomingRegulation: undefined,
   /** @type {boolean} isModalOpen */
   isModalOpen: false,
-  /** @type {RegulatoryTextValidity} upcomingRegulatoryTextListValidityMap */
-  upcomingRegulatoryTextListValidityMap: undefined,
-  /** @type {RegulatoryTextValidity} regulatoryTextListValidityMap */
-  regulatoryTextListValidityMap: undefined,
+  /** @type {Map<number, RegulatoryText | null>} upcomingRegulatoryTextCheckedMap */
+  upcomingRegulatoryTextCheckedMap: undefined,
+  /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
+  regulatoryTextCheckedMap: undefined,
   /** @type {boolean} regulatorySaved */
   regulationSaved: false
 }
@@ -31,44 +31,50 @@ const regulationSlice = createSlice({
     setUpcomingRegulation (state, action) {
       state.upcomingRegulation = action.payload
     },
-    addObjectToRegulatoryTextListValidityMap (state, action) {
-      const { validity, id } = action.payload
+    addObjectToRegulatoryTextCheckedMap (state, action) {
+      const {
+        /** @type {RegulatoryText | null} */
+        regulatoryText,
+        /** @type {number} */
+        id
+      } = action.payload
       let mapUpdated = {}
-      if (state.regulatoryTextListValidityMap) {
-        mapUpdated = { ...state.regulatoryTextListValidityMap }
+      if (state.regulatoryTextCheckedMap) {
+        mapUpdated = JSON.parse(JSON.stringify(state.regulatoryTextCheckedMap))
       }
-      if (validity !== false) {
-        mapUpdated[id] = validity
-      } else {
-        mapUpdated[id] = false
-      }
-      state.regulatoryTextListValidityMap = mapUpdated
+      mapUpdated[id] = regulatoryText
+      state.regulatoryTextCheckedMap = mapUpdated
     },
-    addObjectToUpcomingRegulatoryTextListValidityMap (state, action) {
-      const { validity, id } = action.payload
+    addObjectToUpcomingRegulatoryTextCheckedMap (state, action) {
+      const {
+        /** @type {RegulatoryText | null} */
+        regulatoryText,
+        /** @type {number} */
+        id
+      } = action.payload
       let mapUpdated = {}
-      if (state.upcomingRegulatoryTextListValidityMap) {
-        mapUpdated = { ...state.upcomingRegulatoryTextListValidityMap }
+      if (state.upcomingRegulatoryTextCheckedMap) {
+        mapUpdated = JSON.parse(JSON.stringify(state.upcomingRegulatoryTextCheckedMap))
       }
-      if (validity !== false) {
+      if (regulatoryText !== false) {
         mapUpdated[id] = true
-        const newUpcomingRegulation = { ...state.upcomingRegulation }
-        const newRegulationTextList = (newUpcomingRegulation?.regulatoryTextList
-          ? [...newUpcomingRegulation.regulatoryTextList]
-          : [{}])
-        newRegulationTextList[id] = validity
-        newUpcomingRegulation.regulatoryTextList = newRegulationTextList
+        const newUpcomingRegulation = state.upcomingRegulation
+          ? JSON.parse(JSON.stringify(state.upcomingRegulation))
+          : { regulatoryTextList: [{}] }
+        const newRegulatoryTextList = [...newUpcomingRegulation.regulatoryTextList]
+        newRegulatoryTextList[id] = regulatoryText
+        newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
         state.upcomingRegulation = newUpcomingRegulation
       } else {
         mapUpdated[id] = false
       }
-      state.upcomingRegulatoryTextListValidityMap = mapUpdated
+      state.upcomingRegulatoryTextCheckedMap = mapUpdated
     },
-    setUpcomingRegulatoryTextListValidityMap (state, action) {
-      state.upcomingRegulatoryTextListValidityMap = action.payload
+    setUpcomingRegulatoryTextListCheckedMap (state, action) {
+      state.upcomingRegulatoryTextCheckedMap = action.payload
     },
-    setRegulatoryTextListValidityMap (state, action) {
-      state.regulatoryTextListValidityMap = action.payload
+    setRegulatoryTextCheckedMap (state, action) {
+      state.regulatoryTextCheckedListMap = action.payload
     },
     setRegulationSaved (state, action) {
       state.regulationSaved = action.payload
@@ -81,11 +87,11 @@ export const {
   setSelectedRegulation,
   setIsModalOpen,
   setUpcomingRegulation,
-  addObjectToUpcomingRegulatoryTextListValidityMap,
-  setUpcomingRegulatoryTextListValidityMap,
+  addObjectToUpcomingRegulatoryTextCheckedMap,
+  setUpcomingRegulatoryTextListCheckedMap,
   setRegulationSaved,
-  setRegulatoryTextListValidityMap,
-  addObjectToRegulatoryTextListValidityMap
+  setRegulatoryTextCheckedMap,
+  addObjectToRegulatoryTextCheckedMap
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

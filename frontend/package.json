@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^7.1.2",
     "@turf/turf": "^6.5.0",
     "comlink": "^4.3.0",
+    "cypress-plugin-snapshots": "^1.4.4",
     "cypress-mouse-position": "^1.0.0",
     "export-to-csv": "^0.2.1",
     "hammerjs": "^2.0.8",

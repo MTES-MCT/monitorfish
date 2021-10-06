@@ -12,6 +12,12 @@ import DDCoordinatesInput from './DDCoordinatesInput'
 const SetCoordinates = ({ coordinates, updateCoordinates }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
 
+  /**
+   * Get coordinates for the input components in the specified format
+   * @param {number[]} coordinates - Coordinates ([latitude, longitude]) in decimal format.
+   * @param {string} coordinatesFormat - The wanted format of the returned coordinates (DMS, DMD or DD)
+   * @returns {string | number[]} coordinates - The [latitude, longitude] coordinates as string for DMS and DMD and as array of number for DD.
+   */
   const getCoordinatesFromFormat = (coordinates, coordinatesFormat) => {
     switch (coordinatesFormat) {
       case CoordinatesFormat.DEGREES_MINUTES_SECONDS:
@@ -32,27 +38,27 @@ const SetCoordinates = ({ coordinates, updateCoordinates }) => {
     }
   }
 
-  const getCoordinatesInput = coordinatesFormat => {
+  const getCoordinatesInput = (coordinates, updateCoordinates, coordinatesFormat) => {
     switch (coordinatesFormat) {
       case CoordinatesFormat.DEGREES_MINUTES_SECONDS:
         return <DMSCoordinatesInput
           getCoordinatesFromFormat={getCoordinatesFromFormat}
           coordinates={coordinates}
-          coordinatesFormat={coordinatesFormat}
+          coordinatesFormat={CoordinatesFormat.DEGREES_MINUTES_SECONDS}
           updateCoordinates={updateCoordinates}
         />
       case CoordinatesFormat.DEGREES_MINUTES_DECIMALS:
         return <DMDCoordinatesInput
           getCoordinatesFromFormat={getCoordinatesFromFormat}
           coordinates={coordinates}
-          coordinatesFormat={coordinatesFormat}
+          coordinatesFormat={CoordinatesFormat.DEGREES_MINUTES_DECIMALS}
           updateCoordinates={updateCoordinates}
         />
       case CoordinatesFormat.DECIMAL_DEGREES:
         return <DDCoordinatesInput
           getCoordinatesFromFormat={getCoordinatesFromFormat}
           coordinates={coordinates}
-          coordinatesFormat={coordinatesFormat}
+          coordinatesFormat={CoordinatesFormat.DECIMAL_DEGREES}
           updateCoordinates={updateCoordinates}
         />
     }
@@ -61,7 +67,7 @@ const SetCoordinates = ({ coordinates, updateCoordinates }) => {
   return (
     <Body>
       {
-        getCoordinatesInput(coordinatesFormat)
+        getCoordinatesInput(coordinates, updateCoordinates, coordinatesFormat)
       }
     </Body>
   )
@@ -70,11 +76,11 @@ const SetCoordinates = ({ coordinates, updateCoordinates }) => {
 const Body = styled.div`
   text-align: left;
   font-size: 13px;
-  color: ${COLORS.textGray};
+  color: ${COLORS.lightGray};
   
   input {
     margin-top: 7px;
-    color: ${COLORS.grayDarkerThree};
+    color: ${COLORS.gunMetal};
     background: ${COLORS.grayLighter};
     border: none;
     height: 27px;

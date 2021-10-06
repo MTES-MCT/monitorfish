@@ -15,7 +15,7 @@ export function sortArrayByColumn (a, b, sortColumn, sortType) {
     y = countries.getName(b[sortColumn], 'fr')
   }
 
-  if (sortColumn === CSVOptions.dateTime.code) {
+  if (sortColumn === CSVOptions.dateTime.code || sortColumn === CSVOptions.riskFactor.code) {
     if (sortType === SortType.ASC) {
       return x.localeCompare(y)
     } else {

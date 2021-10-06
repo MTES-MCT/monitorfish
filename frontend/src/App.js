@@ -10,7 +10,6 @@ import VesselsSearchBox from './features/vessel_search/VesselsSearchBox'
 import VesselSidebar from './features/vessel_sidebar/VesselSidebar'
 import LayersSidebar from './features/layers/LayersSidebar'
 import APIWorker from './api/APIWorker'
-import BackofficeAPIWorker from './api/BackofficeAPIWorker'
 import VesselVisibility from './features/vessel_visibility/VesselVisibility'
 import VesselList from './features/vessel_list/VesselList'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
@@ -25,6 +24,7 @@ import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
 import VesselLabels from './features/vessel_labels/VesselLabels'
+import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
 
 function App () {
   switch (browserName) {
@@ -83,6 +83,7 @@ function HomePage () {
         <InterestPoint/>
         <VesselLabels/>
         <APIWorker/>
+        <ErrorToastNotification/>
       </Wrapper>
     </NamespaceContext.Provider>
   </Provider>
@@ -105,7 +106,7 @@ function BackofficePage () {
           <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
         </Route>
       </Switch>
-      <BackofficeAPIWorker/>
+      <ErrorToastNotification/>
     </NamespaceContext.Provider>
   </Provider>
 }

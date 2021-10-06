@@ -2,11 +2,9 @@ import { useEffect } from 'react'
 import { useToasts } from 'react-toast-notifications'
 
 import { useSelector } from 'react-redux'
-import { errorType } from '../domain/entities/errors'
+import { errorType } from '../../domain/entities/errors'
 
-export const TEN_MINUTES = 600000
-
-const BackofficeAPIWorker = () => {
+const ErrorToastNotification = () => {
   const error = useSelector(state => state.global.error)
   const { addToast } = useToasts()
 
@@ -35,4 +33,4 @@ const BackofficeAPIWorker = () => {
   return null
 }
 
-export default BackofficeAPIWorker
+export default ErrorToastNotification

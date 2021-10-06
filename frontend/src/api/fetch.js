@@ -5,9 +5,9 @@ const API = null // eslint-disable-line
 
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import { REGULATION_ACTION_TYPE } from '../domain/entities/regulatory'
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
-import { REGULATION_ACTION_TYPE } from '../constants/constants'
 
 const OK = 200
 const NOT_FOUND = 404

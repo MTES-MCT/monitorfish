@@ -69,12 +69,3 @@ export const INFO_TEXT = {
 }
 
 export const INFINITE = 'infinite'
-
-/**
-  * @readonly
-  * @enum {string}
-*/
-export const REGULATION_ACTION_TYPE = {
-  UPDATE: 'update',
-  INSERT: 'insert'
-}

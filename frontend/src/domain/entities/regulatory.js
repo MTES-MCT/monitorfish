@@ -82,6 +82,15 @@ export const REGULATORY_SEARCH_PROPERTIES = {
   REGULATORY_REFERENCES: 'regulatoryReferences'
 }
 
+/**
+  * @readonly
+  * @enum {string}
+*/
+export const REGULATION_ACTION_TYPE = {
+  UPDATE: 'update',
+  INSERT: 'insert'
+}
+
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText
     ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))

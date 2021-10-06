@@ -127,7 +127,7 @@ context('LayersSidebar', () => {
     cy.wait(500)
 
     // Then
-    cy.get('.ol-layer').toMatchImageSnapshot({
+    cy.get('.ol-layer').eq(0).toMatchImageSnapshot({
       clip: { x: 400, y: 0, width: 200, height: 200 }
     })
 

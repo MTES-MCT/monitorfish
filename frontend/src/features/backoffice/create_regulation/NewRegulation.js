@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { COLORS, REGULATION_ACTION_TYPE } from '../../../constants/constants'
+import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
@@ -32,7 +32,11 @@ import {
   setUpcomingRegulation
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
-import { mapToRegulatoryFeatureObject, emptyRegulatoryFeatureObject } from '../../../domain/entities/regulatory'
+import {
+  mapToRegulatoryFeatureObject,
+  emptyRegulatoryFeatureObject,
+  REGULATION_ACTION_TYPE
+} from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()

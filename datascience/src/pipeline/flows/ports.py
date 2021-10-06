@@ -1,5 +1,6 @@
 import io
 import os
+from ast import literal_eval
 from datetime import date
 from time import sleep
 
@@ -10,9 +11,11 @@ from prefect import Flow, Parameter, task
 
 from config import LIBRARY_LOCATION, PORTS_URL, PROXIES
 from src.db_config import create_engine
+from src.pipeline.generic_tasks import extract, load
+from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.pipeline.processing import combine_overlapping_columns
 from src.pipeline.utils import delete, get_table, psql_insert_copy
-from src.read_query import read_table
+from src.read_query import read_query, read_table
 from src.utils.geocode import geocode
 
 
@@ -294,6 +297,7 @@ with Flow(
 
 
 def geocode_row(row):
+    credit_exhausted = True  # max rate 1/s if no geolocationIQ credit is available
     country_code_iso2 = row["country_code_iso2"]
     region = row["region"]
     port_name = row["port_name"]
@@ -301,18 +305,26 @@ def geocode_row(row):
         lat, lon = None, None
     else:
         try:
-            sleep(1)
+            if credit_exhausted:
+                sleep(1)
             lat, lon = geocode(
                 city=port_name, country_code_iso2=country_code_iso2, county=region
             )
         except requests.HTTPError:
             try:
-                sleep(1)
+                if credit_exhausted:
+                    sleep(1)
                 print("Retring without county for port", port_name)
                 lat, lon = geocode(city=port_name, country_code_iso2=country_code_iso2)
             except:
-                print("Could not geocode", port_name)
-                lat, lon = None, None
+                try:
+                    if credit_exhausted:
+                        sleep(1)
+                    print("Retring with port name alone for port", port_name)
+                    lat, lon = geocode(city=port_name)
+                except:
+                    print("Could not geocode", port_name)
+                    lat, lon = None, None
     print(port_name, lat, lon)
     return pd.Series([lat, lon], index=["geocoded_latitude", "geocoded_longitude"])
 
@@ -378,11 +390,12 @@ def merge_lat_lon(geocoded_ports):
 @task(checkpoint=False)
 def add_manual_fixes(ports):
     fixes = pd.read_csv(LIBRARY_LOCATION / "pipeline/data/manually_added_ports.csv")
+    ports = ports[~ports.locode.isin(fixes.locode)]
     return pd.concat([fixes, ports])
 
 
 @task(checkpoint=False)
-def load_ports(ports):
+def load_processed_ports_1(ports):
     engine = create_engine("monitorfish_remote")
     ports.to_sql(
         "ports",
@@ -394,13 +407,186 @@ def load_ports(ports):
     )
 
 
+@task(checkpoint=False)
+def add_buffer_and_index():
+    query = """
+    ALTER TABLE processed.ports
+        ADD COLUMN location geometry(Point, 4326),
+        ADD COLUMN buffer_location_0_2_degrees geometry(Polygon, 4326),
+        ADD COLUMN buffer_location_0_5_degrees geometry(Polygon, 4326);
+
+    CREATE INDEX idx_processed_ports_location
+        ON processed.ports
+        USING gist (location);
+
+    CREATE INDEX idx_processed_ports_buffer_location_0_2_degrees
+        ON processed.ports
+        USING gist (buffer_location_0_2_degrees);
+
+    CREATE INDEX idx_processed_ports_buffer_location_0_5_degrees
+        ON processed.ports
+        USING gist (buffer_location_0_5_degrees);
+
+    UPDATE processed.ports
+        SET location = St_SetSRId(St_MakePoint(longitude, latitude), 4326)
+        WHERE longitude IS NOT NULL AND latitude IS NOT NULL;
+
+    UPDATE processed.ports
+        SET buffer_location_0_5_degrees = St_Buffer(location, 0.5)
+        WHERE location IS NOT NULL;
+
+    UPDATE processed.ports
+        SET buffer_location_0_2_degrees = St_Buffer(location, 0.2)
+        WHERE location IS NOT NULL;
+    """
+    e = create_engine("monitorfish_remote")
+    e.execute(query)
+
+
+@task(checkpoint=False)
+def compute_ports_fao_areas():
+    ports_fao_areas = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/compute_ports_fao_areas.sql",
+    )
+
+    ports_fao_areas["fao_areas"] = ports_fao_areas.fao_areas.map(
+        remove_redundant_fao_area_codes
+    )
+
+    return ports_fao_areas
+
+
+@task(checkpoint=False)
+def compute_ports_facade():
+    ports_facade = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/compute_ports_facade.sql",
+    )
+
+    manual_corrections = pd.DataFrame(
+        [
+            ["FRAER", "SA"],
+            ["FRS2R", "SA"],
+            ["FRLFK", "SA"],
+            ["FRIDX", "SA"],
+            ["FRFUA", "SA"],
+            ["FRHTP", "SA"],
+            ["FRAJJ", "SA"],
+            ["FRLRH", "SA"],
+            ["FRPT4", "SA"],
+            ["FRLPE", "SA"],
+            ["FRPR2", "SA"],
+            ["FRMRN", "SA"],
+            ["FRCJH", "SA"],
+            ["FRJLR", "SA"],
+            ["FRAS3", "NAMO"],
+            ["FRLT3", "NAMO"],
+            ["FRLSO", "NAMO"],
+            ["FRSML", "NAMO"],
+            ["FRV35", "NAMO"],
+            ["FRASM", "NAMO"],
+            ["FRVM6", "NAMO"],
+            ["FRGTN", "MEMN"],
+            ["FRGFR", "MEMN"],
+            ["FRDBI", "MEMN"],
+            ["FRC2H", "MEMN"],
+        ],
+        columns=pd.Index(["locode", "facade"]),
+    )
+
+    # Drop rows that are either incorrect or duplicated first
+    ports_facade = ports_facade[~ports_facade.locode.isin(manual_corrections.locode)]
+
+    # Then add the correct façade for each port
+    ports_facade = pd.concat([ports_facade, manual_corrections])
+
+    try:
+        assert not ports_facade.locode.duplicated().any()
+    except AssertionError:
+        print(ports_facade[ports_facade.locode.duplicated(keep=False)])
+        print(len(ports_facade.locode.duplicated(keep=False)))
+        print(ports_facade.locode.duplicated(keep=False))
+        raise AssertionError(
+            (
+                "Some ports belong to several facades. Check facade "
+                "area definitions and consider adding manual corrections."
+            )
+        )
+
+    return ports_facade
+
+
+@task(checkpoint=False)
+def extract_processed_ports_tmp():
+    return read_query(
+        "monitorfish_remote",
+        """SELECT
+            country_code_iso2,
+            locode,
+            port_name,
+            is_fiching_port,
+            is_landing_place,
+            is_commercial_port,
+            region,
+            latitude,
+            longitude,
+            location,
+            buffer_location_0_2_degrees,
+            buffer_location_0_5_degrees
+        FROM processed.ports""",
+    )
+
+
+@task(checkpoint=False)
+def merge_ports_facade_fao_areas(ports, ports_facade, ports_fao_areas):
+    return pd.merge(
+        pd.merge(ports, ports_facade, on="locode", how="left"),
+        ports_fao_areas,
+        on="locode",
+        how="left",
+    )
+
+
+@task(checkpoint=False)
+def load_processed_ports_2(ports):
+    query = """
+    ALTER TABLE processed.ports
+        ADD COLUMN facade VARCHAR(100),
+        ADD COLUMN fao_areas VARCHAR(100)[];
+
+    """
+    e = create_engine("monitorfish_remote")
+    e.execute(query)
+
+    load(
+        ports,
+        table_name="ports",
+        schema="processed",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+        pg_array_columns=["fao_areas"],
+    )
+
+
 with Flow(
     "Load ports from interim.geocoded_ports to processed.ports"
 ) as flow_load_ports:
+
     geocoded_ports = extract_geocoded_ports()
     ports = merge_lat_lon(geocoded_ports)
     ports = add_manual_fixes(ports)
-    load_ports(ports)
+
+    processed_ports_1 = load_processed_ports_1(ports)
+    buffer_and_index_1 = add_buffer_and_index(upstream_tasks=[processed_ports_1])
+
+    ports_fao_areas = compute_ports_fao_areas(upstream_tasks=[buffer_and_index_1])
+    ports_facade = compute_ports_facade(upstream_tasks=[buffer_and_index_1])
+    ports = extract_processed_ports_tmp(upstream_tasks=[buffer_and_index_1])
+
+    ports = merge_ports_facade_fao_areas(ports, ports_facade, ports_fao_areas)
+    processed_ports_2 = load_processed_ports_2(ports)
 
 
 # **** Flow to extract ports from data.gouv.fr and upload to Monitorfish database ****
@@ -416,51 +602,29 @@ def extract_datagouv_ports(ports_url: str = PORTS_URL, proxies: dict = None):
         "country_code_iso2": str,
         "locode": str,
         "port_name": str,
-        "is_fiching_port": str,
-        "is_landing_place": str,
-        "is_commercial_port": str,
         "region": str,
         "latitude": float,
         "longitude": float,
+        "facade": str,
     }
 
-    use_cols = [
-        "country_code_iso2",
-        "region",
-        "locode",
-        "port_name",
-        "latitude",
-        "longitude",
-    ]
+    ports = pd.read_csv(f, dtype=dtype, converters={"fao_areas": literal_eval})
 
-    ports = pd.read_csv(f, dtype=dtype, usecols=use_cols)
     return ports
 
 
 @task(checkpoint=False)
 def load_ports_to_monitorfish(ports):
 
-    schema = "public"
-    table_name = "ports"
-    e = create_engine("monitorfish_remote")
-    logger = prefect.context.get("logger")
-
-    ports_table = get_table(table_name, schema, e, logger)
-
-    with e.begin() as connection:
-
-        # Delete all rows from table
-        delete(ports_table, connection, logger)
-
-        # Insert data into table
-        ports.to_sql(
-            name=table_name,
-            con=connection,
-            schema=schema,
-            index=False,
-            method=psql_insert_copy,
-            if_exists="append",
-        )
+    load(
+        ports,
+        table_name="ports",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+        pg_array_columns=["fao_areas"],
+    )
 
 
 with Flow("Ports") as flow:

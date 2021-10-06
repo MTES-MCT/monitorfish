@@ -213,7 +213,7 @@ const VesselsLayer = ({ map }) => {
     })
 
     if (!vesselsFeatures?.length) {
-      return []
+      return resolve([])
     }
 
     dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))

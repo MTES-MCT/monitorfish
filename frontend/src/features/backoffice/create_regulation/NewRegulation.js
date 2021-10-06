@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+import { COLORS, REGULATION_ACTION_TYPE } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
@@ -203,12 +203,12 @@ const CreateRegulation = ({ title, isEdition }) => {
   const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
-    const actionType = isEdition ? 'update' : 'insert'
+    const actionType = isEdition ? REGULATION_ACTION_TYPE.UPDATE : REGULATION_ACTION_TYPE.INSERT
     dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
     if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
       emptyFeature.setId(`${Layers.REGULATORY.code}.${originalGeometryId}`)
-      dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, 'update'))
+      dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
   }
 

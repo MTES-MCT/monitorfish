@@ -52,7 +52,7 @@ function getDDCoordinates (transformedCoordinates) {
     return []
   }
 
-  const negative = Math.sign(transformedCoordinates[0])
+  const negative = Math.sign(transformedCoordinates[0]) === -1
   const degreeSplit = transformedCoordinates[0].toString().split('.')
   if (degreeSplit.length) {
     let longitude = degreeSplit[0].trim().replace(/-/g, '')

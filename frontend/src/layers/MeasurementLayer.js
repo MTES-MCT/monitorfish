@@ -7,7 +7,11 @@ import Draw from 'ol/interaction/Draw'
 import { unByKey } from 'ol/Observable'
 import LineString from 'ol/geom/LineString'
 import { getLength } from 'ol/sphere'
-import { removeMeasurementDrawed, resetMeasurementTypeToAdd } from '../domain/shared_slices/Map'
+import {
+  removeMeasurementDrawed,
+  resetMeasurementTypeToAdd,
+  setCircleMeasurementInDrawing
+} from '../domain/shared_slices/Measurement'
 import VectorLayer from 'ol/layer/Vector'
 import Circle from 'ol/geom/Circle'
 import { circular, fromCircle } from 'ol/geom/Polygon'
@@ -18,6 +22,9 @@ import MeasurementOverlay from '../features/map/overlays/MeasurementOverlay'
 import { getNauticalMilesFromMeters } from '../utils'
 import saveMeasurement from '../domain/use_cases/saveMeasurement'
 import { measurementStyle } from './styles/measurement.style'
+import { transform } from 'ol/proj'
+import { getCenter } from 'ol/extent'
+import Layers from '../domain/entities/layers'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -30,7 +37,7 @@ const MeasurementLayer = ({ map }) => {
     measurementTypeToAdd,
     measurementsDrawed,
     circleMeasurementToAdd
-  } = useSelector(state => state.map)
+  } = useSelector(state => state.measurement)
 
   const [measurementInProgress, _setMeasurementInProgress] = useState(null)
   const measurementInProgressRef = useRef(measurementInProgress)
@@ -45,7 +52,8 @@ const MeasurementLayer = ({ map }) => {
     renderBuffer: 7,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
-    style: measurementStyle
+    style: measurementStyle,
+    className: Layers.MEASUREMENT.code
   }))
 
   useEffect(() => {
@@ -146,25 +154,37 @@ const MeasurementLayer = ({ map }) => {
     })
   }
 
+  function circleMeasurementHasCoordinatesAndRadiusFromForm () {
+    return circleMeasurementToAdd?.circleCoordinatesToAdd?.length === 2 && circleMeasurementToAdd?.circleRadiusToAdd
+  }
+
+  function circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw () {
+    return circleMeasurementToAdd?.circleRadiusToAdd && measurementInProgress?.center?.length === 2
+  }
+
   function addCustomCircleMeasurement () {
     const metersForOneNauticalMile = 1852
     const longitude = 1
     const latitude = 0
     const numberOfVertices = 64
 
-    if (circleMeasurementToAdd &&
-      circleMeasurementToAdd.circleCoordinatesToAdd.length === 2 &&
-      circleMeasurementToAdd.circleRadiusToAdd) {
-      const radiusInMeters = METERS_PER_UNIT.m * circleMeasurementToAdd.circleRadiusToAdd * metersForOneNauticalMile
-
-      const coordinates = [circleMeasurementToAdd.circleCoordinatesToAdd[longitude], circleMeasurementToAdd.circleCoordinatesToAdd[latitude]]
-      const circleFeature = new Feature({
-        geometry: circular(coordinates, radiusInMeters, numberOfVertices).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-        style: measurementStyle
-      })
-
-      dispatch(saveMeasurement(circleFeature, `r = ${circleMeasurementToAdd.circleRadiusToAdd} nm`))
+    if (!circleMeasurementHasCoordinatesAndRadiusFromForm() && !circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw()) {
+      return
     }
+
+    const radiusInMeters = METERS_PER_UNIT.m * circleMeasurementToAdd.circleRadiusToAdd * metersForOneNauticalMile
+    let coordinates = []
+    if (circleMeasurementHasCoordinatesAndRadiusFromForm()) {
+      coordinates = [circleMeasurementToAdd.circleCoordinatesToAdd[longitude], circleMeasurementToAdd.circleCoordinatesToAdd[latitude]]
+    } else if (circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw()) {
+      coordinates = transform(measurementInProgress?.center, OPENLAYERS_PROJECTION, WSG84_PROJECTION)
+    }
+
+    const circleFeature = new Feature({
+      geometry: circular(coordinates, radiusInMeters, numberOfVertices).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+      style: measurementStyle
+    })
+    dispatch(saveMeasurement(circleFeature, `r = ${circleMeasurementToAdd.circleRadiusToAdd} nm`))
   }
 
   function deleteFeature (featureId) {
@@ -193,13 +213,23 @@ const MeasurementLayer = ({ map }) => {
 
     setMeasurementInProgress({
       measurement: 0,
-      coordinates: event.feature.getGeometry().getLastCoordinate()
+      coordinates: event.feature.getGeometry().getLastCoordinate(),
+      center: getCenter(event.feature.getGeometry().getExtent())
     })
 
     return event.feature.getGeometry().on('change', changeEvent => {
       updateMeasurementOnNewPoint(changeEvent, firstTooltipCoordinates)
     })
   }
+
+  useEffect(() => {
+    if (measurementInProgress?.center || measurementInProgress?.measurement) {
+      dispatch(setCircleMeasurementInDrawing({
+        measurement: measurementInProgress.measurement,
+        coordinates: measurementInProgress.center
+      }))
+    }
+  }, [measurementInProgress])
 
   function updateMeasurementOnNewPoint (event, tooltipCoordinates) {
     const geom = event.target
@@ -218,7 +248,8 @@ const MeasurementLayer = ({ map }) => {
 
       setMeasurementInProgress({
         measurement: nextMeasurementOutput,
-        coordinates: tooltipCoordinates
+        coordinates: tooltipCoordinates,
+        center: getCenter(geom.getExtent())
       })
     }
   }
@@ -262,8 +293,8 @@ const MeasurementLayer = ({ map }) => {
           measurementInProgress
             ? <MeasurementOverlay
               map={map}
-              measurement={measurementInProgressRef.current.measurement}
-              coordinates={measurementInProgressRef.current.coordinates}
+              measurement={measurementInProgress?.measurement}
+              coordinates={measurementInProgress?.coordinates}
             />
             : null
         }

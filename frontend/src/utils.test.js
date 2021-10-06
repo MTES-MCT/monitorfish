@@ -1,5 +1,5 @@
 import { getCoordinates, getDateTime } from './utils'
-import { CoordinatesFormat, WSG84_PROJECTION } from './domain/entities/map'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
 
 describe('utils', () => {
   it('getDateTime Should respect the timezone given fur UTC', async () => {
@@ -63,5 +63,25 @@ describe('utils', () => {
     expect(coordinates).not.toBeUndefined()
     expect(coordinates[0]).toEqual('49° 37′ 01″  N')
     expect(coordinates[1]).toEqual('000°  00′ 00″')
+  })
+
+  it('getCoordinates Should get coordinates for an East longitude', async () => {
+    // When
+    const coordinates = getCoordinates([881004.7140361258, 6076231.889001969], OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
+
+    // Then
+    expect(coordinates).not.toBeUndefined()
+    expect(coordinates[0]).toEqual('47.8156°')
+    expect(coordinates[1]).toEqual('007.9142°')
+  })
+
+  it('getCoordinates Should get coordinates for a West longitude', async () => {
+    // When
+    const coordinates = getCoordinates([-881004.7140361258, 6076231.889001969], OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
+
+    // Then
+    expect(coordinates).not.toBeUndefined()
+    expect(coordinates[0]).toEqual('47.8156°')
+    expect(coordinates[1]).toEqual('-007.9142°')
   })
 })

@@ -6,12 +6,19 @@ import { COLORS } from '../../constants/constants'
 const DMSCoordinatesInput = props => {
   const {
     getCoordinatesFromFormat,
+    /** @type {string} coordinates - In the [latitude, longitude] format */
     coordinates,
     coordinatesFormat,
     updateCoordinates
   } = props
 
   const [update, setUpdate] = useState([])
+  const [showedValue, setShowedValue] = useState(null)
+
+  /** Convert the coordinates to the [latitude, longitude] string format */
+  useEffect(() => {
+    setShowedValue(getCoordinatesFromFormat(coordinates, coordinatesFormat))
+  }, [coordinates, coordinatesFormat])
 
   useEffect(() => {
     if (coordinatesAreModifiedAndNotRoundedByInput()) {
@@ -29,9 +36,10 @@ const DMSCoordinatesInput = props => {
 
   return <Body>
     <CoordinateInput
+      data-cy={'dms-coordinates-input'}
       onChange={(_, { dd }) => setUpdate(dd)}
       ddPrecision={4}
-      value={getCoordinatesFromFormat(coordinates, coordinatesFormat)}
+      value={showedValue}
     />
     <CoordinatesType>(DMS)</CoordinatesType>
   </Body>

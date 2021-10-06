@@ -6,7 +6,11 @@ import { ReactComponent as MeasurementSVG } from '../icons/Mesure.svg'
 import { ReactComponent as MultiLineSVG } from '../icons/Mesure_ligne_brisee.svg'
 import { ReactComponent as CircleRangeSVG } from '../icons/Mesure_rayon_action.svg'
 import { COLORS } from '../../constants/constants'
-import { setCircleMeasurementToAdd, setMeasurementTypeToAdd } from '../../domain/shared_slices/Map'
+import {
+  resetCircleMeasurementInDrawing,
+  setCircleMeasurementToAdd,
+  setMeasurementTypeToAdd
+} from '../../domain/shared_slices/Measurement'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
 import { MeasurementTypes } from '../../domain/entities/map'
 import CustomCircleRange from './CustomCircleRange'
@@ -20,7 +24,9 @@ const Measurement = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const measurementTypeToAdd = useSelector(state => state.map.measurementTypeToAdd)
+  const {
+    measurementTypeToAdd
+  } = useSelector(state => state.measurement)
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
   const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
@@ -82,12 +88,14 @@ const Measurement = () => {
 
   function cancelAddCircleRange () {
     dispatch(setMeasurementTypeToAdd(null))
+    dispatch(resetCircleMeasurementInDrawing())
     setMeasurementIsOpen(false)
   }
 
   return (
     <Wrapper ref={wrapperRef}>
       <MeasurementWrapper
+        data-cy={'measurement'}
         healthcheckTextWarning={healthcheckTextWarning}
         isOpen={measurementIsOpen || measurementTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}
@@ -103,11 +111,13 @@ const Measurement = () => {
         healthcheckTextWarning={healthcheckTextWarning}
         measurementBoxIsOpen={measurementIsOpen}>
         <MeasurementItem
+          data-cy={'measurement-multiline'}
           title={'Mesure d\'une distance avec lignes brisées'}
           onClick={() => makeMeasurement(MeasurementTypes.MULTILINE)}>
           <MultiLineIcon/>
         </MeasurementItem>
         <MeasurementItem
+          data-cy={'measurement-circle-range'}
           title={'Rayon d\'action'}
           onClick={() => makeMeasurement(MeasurementTypes.CIRCLE_RANGE)}>
           <CircleRangeIcon/>

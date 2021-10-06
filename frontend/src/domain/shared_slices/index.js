@@ -8,6 +8,7 @@ import vessel from './Vessel'
 import gear from './Gear'
 import filter from './Filter'
 import fleetSegment from './FleetSegment'
+import measurement from './Measurement'
 import regulatory from './Regulatory'
 import regulation from '../../features/backoffice/Regulation.slice'
 import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
@@ -28,7 +29,8 @@ const homeReducers = combineReducers({
   filter,
   fleetSegment,
   interestPoint,
-  regulatoryLayerSearch
+  regulatoryLayerSearch,
+  measurement
 })
 
 const backofficeReducers = combineReducers({

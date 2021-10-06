@@ -67,7 +67,7 @@ const DMDCoordinatesInput = props => {
 
   return <Body>
     <IMaskInput
-      data-cy={'test'}
+      data-cy={'dmd-coordinates-input'}
       value={value}
       style={{ border: error ? '1px solid red' : null }}
       lazy={false}

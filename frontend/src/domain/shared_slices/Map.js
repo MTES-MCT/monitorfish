@@ -12,7 +12,6 @@ const vesselLabelLocalStorageKey = 'vesselLabel'
 const savedMapViewLocalStorageKey = 'mapView'
 const savedMapExtentLocalStorageKey = 'mapExtent'
 const baseLayerLocalStorageKey = 'baseLayer'
-const measurementsLocalStorageKey = 'measurements'
 const estimatedPositionsLocalStorageKey = 'estimatedPositions'
 const riskFactorLocalStorageKey = 'riskFactor'
 const coordinatesFormatLocalStorageKey = 'coordinatesFormat'
@@ -35,9 +34,6 @@ const mapSlice = createSlice({
     updatedFromCron: false,
     animateToRegulatoryLayer: null,
     interaction: null,
-    measurementTypeToAdd: null,
-    circleMeasurementToAdd: null,
-    measurementsDrawed: getLocalStorageState([], measurementsLocalStorageKey),
     zonesSelected: [],
     selectedBaseLayer: getLocalStorageState(baseLayers.LIGHT.code, baseLayerLocalStorageKey),
     view: getLocalStorageState({
@@ -108,32 +104,6 @@ const mapSlice = createSlice({
     resetInteraction (state) {
       state.interaction = null
     },
-    setMeasurementTypeToAdd (state, action) {
-      state.measurementTypeToAdd = action.payload
-    },
-    resetMeasurementTypeToAdd (state) {
-      state.measurementTypeToAdd = null
-    },
-    addMeasurementDrawed (state, action) {
-      const nextMeasurementsDrawed = state.measurementsDrawed.concat(action.payload)
-
-      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
-      state.measurementsDrawed = nextMeasurementsDrawed
-    },
-    removeMeasurementDrawed (state, action) {
-      const nextMeasurementsDrawed = state.measurementsDrawed.filter(measurement => {
-        return measurement.feature.id !== action.payload
-      })
-
-      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
-      state.measurementsDrawed = nextMeasurementsDrawed
-    },
-    setCircleMeasurementToAdd (state, action) {
-      state.circleMeasurementToAdd = action.payload
-    },
-    resetCircleMeasurementToAdd (state) {
-      state.circleMeasurementToAdd = null
-    },
     /**
      * Add a selected zone to filter vessels on vessel list
      * @param {Object=} state
@@ -203,12 +173,6 @@ export const {
   selectBaseLayer,
   setInteraction,
   resetInteraction,
-  setMeasurementTypeToAdd,
-  resetMeasurementTypeToAdd,
-  addMeasurementDrawed,
-  removeMeasurementDrawed,
-  setCircleMeasurementToAdd,
-  resetCircleMeasurementToAdd,
   addZoneSelected,
   setZonesSelected,
   removeZoneSelected,

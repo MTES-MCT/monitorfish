@@ -8,8 +8,8 @@ import { Checkbox, CheckboxGroup } from 'rsuite'
 import CustomDatePicker from './CustomDatePicker'
 import { COLORS, INFINITE } from '../../../constants/constants'
 import {
-  addObjectToUpcomingRegulatoryTextListValidityMap,
-  addObjectToRegulatoryTextListValidityMap
+  addObjectToUpcomingRegulatoryTextCheckedMap,
+  addObjectToRegulatoryTextCheckedMap
 } from '../Regulation.slice'
 import Tag from './Tag'
 
@@ -145,14 +145,14 @@ const RegulatoryText = props => {
           endDate: currentEndDate,
           textType: currentTextType
         }
-        payload.validity = updatedRegulatoryText
+        payload.regulatoryText = updatedRegulatoryText
       } else {
-        payload.validity = false
+        payload.regulatoryText = null
       }
       if (source === 'upcomingRegulation') {
-        dispatch(addObjectToUpcomingRegulatoryTextListValidityMap(payload))
+        dispatch(addObjectToUpcomingRegulatoryTextCheckedMap(payload))
       } else {
-        dispatch(addObjectToRegulatoryTextListValidityMap(payload))
+        dispatch(addObjectToRegulatoryTextCheckedMap(payload))
       }
     }
   }, [saveForm, source])

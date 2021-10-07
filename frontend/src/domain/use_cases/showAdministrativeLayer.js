@@ -42,6 +42,7 @@ const getVectorLayer = (type, zone) => {
 
   const layer = new VectorImageLayer({
     source: getAdministrativeVectorSource(type, zone),
+    className: 'administrative',
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     style: feature => {

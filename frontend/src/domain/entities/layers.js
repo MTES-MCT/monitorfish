@@ -394,8 +394,8 @@ export const getZonesAndSubZonesPromises = () => {
             return {
               group: zone.name,
               groupCode: zone.code,
-              label: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
-              name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
+              label: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey]?.replace(/[_]/g, ' ') : 'Aucun nom',
+              name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey]?.replace(/[_]/g, ' ') : 'Aucun nom',
               code: subZone.id,
               value: subZone.id,
               isSubZone: true

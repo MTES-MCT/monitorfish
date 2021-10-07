@@ -38,12 +38,12 @@ const regulationSlice = createSlice({
         /** @type {number} */
         id
       } = action.payload
-      let mapUpdated = {}
+      let newRegulatoryTextCheckedMap = {}
       if (state.regulatoryTextCheckedMap) {
-        mapUpdated = JSON.parse(JSON.stringify(state.regulatoryTextCheckedMap))
+        newRegulatoryTextCheckedMap = JSON.parse(JSON.stringify(state.regulatoryTextCheckedMap))
       }
-      mapUpdated[id] = regulatoryText
-      state.regulatoryTextCheckedMap = mapUpdated
+      newRegulatoryTextCheckedMap[id] = regulatoryText
+      state.regulatoryTextCheckedMap = newRegulatoryTextCheckedMap
     },
     addObjectToUpcomingRegulatoryTextCheckedMap (state, action) {
       const {
@@ -52,12 +52,12 @@ const regulationSlice = createSlice({
         /** @type {number} */
         id
       } = action.payload
-      let mapUpdated = {}
+      let newUpcomingRegulatoryTextCheckedMap = {}
       if (state.upcomingRegulatoryTextCheckedMap) {
-        mapUpdated = JSON.parse(JSON.stringify(state.upcomingRegulatoryTextCheckedMap))
+        newUpcomingRegulatoryTextCheckedMap = JSON.parse(JSON.stringify(state.upcomingRegulatoryTextCheckedMap))
       }
       if (regulatoryText !== false) {
-        mapUpdated[id] = true
+        newUpcomingRegulatoryTextCheckedMap[id] = true
         const newUpcomingRegulation = state.upcomingRegulation
           ? JSON.parse(JSON.stringify(state.upcomingRegulation))
           : { regulatoryTextList: [{}] }
@@ -66,9 +66,9 @@ const regulationSlice = createSlice({
         newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
         state.upcomingRegulation = newUpcomingRegulation
       } else {
-        mapUpdated[id] = false
+        newUpcomingRegulatoryTextCheckedMap[id] = false
       }
-      state.upcomingRegulatoryTextCheckedMap = mapUpdated
+      state.upcomingRegulatoryTextCheckedMap = newUpcomingRegulatoryTextCheckedMap
     },
     setUpcomingRegulatoryTextListCheckedMap (state, action) {
       state.upcomingRegulatoryTextCheckedMap = action.payload

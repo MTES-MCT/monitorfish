@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getHash } from '../../../../utils'
-import { getVectorLayerStyle } from '../../../../layers/styles/vectorLayer.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import Layers, { getGearCategory } from '../../../../domain/entities/layers'
 import { useDispatch, useSelector } from 'react-redux'
 import Checkbox from 'rsuite/lib/Checkbox'
@@ -85,7 +85,7 @@ const RegulatoryLayerSearchResultZone = props => {
       const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
       const gearCategory = getGearCategory(regulatoryZone.gears, gears)
 
-      setZoneStyle(getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
+      setZoneStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
     }
   }, [regulatoryZone, isOpen])
 

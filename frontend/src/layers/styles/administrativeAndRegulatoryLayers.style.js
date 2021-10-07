@@ -7,7 +7,7 @@ import { getColorWithAlpha } from '../../utils'
 import { COLORS } from '../../constants/constants'
 import { metadataIsShowedPropertyName } from '../RegulatoryLayers'
 
-export const getVectorLayerStyle = type => {
+export const getAdministrativeAndRegulatoryLayersStyle = type => {
   switch (type) {
     case Layers.EEZ.code:
       return feature => new Style({
@@ -102,21 +102,21 @@ export const getVectorLayerStyle = type => {
         })
       })
     case Layers.THREE_MILES.code:
-      return new Style({
+      return _ => new Style({
         stroke: new Stroke({
           color: 'rgba(5, 5, 94, 0.5)',
           width: 2
         })
       })
     case Layers.SIX_MILES.code:
-      return new Style({
+      return _ => new Style({
         stroke: new Stroke({
           color: 'rgba(5, 5, 94, 0.5)',
           width: 2
         })
       })
     case Layers.TWELVE_MILES.code:
-      return new Style({
+      return _ => new Style({
         stroke: new Stroke({
           color: 'rgba(5, 5, 94, 0.5)',
           width: 2

@@ -1,5 +1,5 @@
 import layer from '../shared_slices/Layer'
-import { getVectorLayerStyle } from '../../layers/styles/vectorLayer.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
@@ -46,7 +46,7 @@ const getVectorLayer = (type, zone) => {
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     style: feature => {
-      return [getVectorLayerStyle(type)(feature)]
+      return [getAdministrativeAndRegulatoryLayersStyle(type)(feature)]
     },
     declutter: true
   })

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
 import { getHash } from '../../../utils'
-import { getVectorLayerStyle } from '../../../layers/styles/vectorLayer.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
 import { COLORS } from '../../../constants/constants'
 import { useSelector } from 'react-redux'
@@ -79,7 +79,7 @@ const RegulatoryLayerTopic = props => {
       if (regulatoryZone.zone && regulatoryZone.topic && regulatoryZone.gears && gears) {
         const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
         const gearCategory = getGearCategory(regulatoryZone.gears, gears)
-        vectorLayerStyle = getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
+        vectorLayerStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory)
       }
 
       return (

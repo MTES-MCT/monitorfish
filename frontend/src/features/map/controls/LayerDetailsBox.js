@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { getHash } from '../../../utils'
-import { getVectorLayerStyle } from '../../../layers/styles/vectorLayer.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
 
 const LayerDetailsBox = props => {
@@ -34,7 +34,7 @@ const LayerDetailsBox = props => {
       if (zones && layer_name && engins && gears) {
         const hash = getHash(`${layer_name}:${zones}`)
         const gearCategory = getGearCategory(engins, props.gears)
-        setVectorLayerStyle(getVectorLayerStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
+        setVectorLayerStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
       }
     }
   }, [regulatoryFeatureToShowOnCard, gears, setVectorLayerStyle])

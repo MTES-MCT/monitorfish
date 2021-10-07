@@ -56,6 +56,7 @@ const getVectorLayer = (dispatch, getState) => (layerToShow, hash, gearCategory)
 
   const layer = new VectorImageLayer({
     source: getRegulatoryVectorSource(dispatch, getState)(layerToShow),
+    className: 'regulatory',
     style: feature => {
       return [getVectorLayerStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
     }

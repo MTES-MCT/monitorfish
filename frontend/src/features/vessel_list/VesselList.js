@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'rsuite/lib/Modal'
 
 import { COLORS } from '../../constants/constants'
-import { getZonesAndSubZonesPromises, layersType } from '../../domain/entities/layers'
+import { layersType } from '../../domain/entities/layers'
 import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../../domain/shared_slices/Map'
 import { InteractionTypes } from '../../domain/entities/map'
 import VesselListTable from './VesselListTable'
@@ -20,6 +20,7 @@ import { addFilter } from '../../domain/shared_slices/Filter'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { VesselListSVG } from '../commonStyles/icons/VesselListSVG'
+import { getZonesAndSubZonesPromises } from '../../domain/use_cases/getZonesAndSubZonesPromises'
 
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()

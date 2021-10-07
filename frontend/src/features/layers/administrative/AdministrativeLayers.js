@@ -53,7 +53,7 @@ const AdministrativeLayers = props => {
     }
   }, [hideLayersListWhenSearching])
 
-  const callShowAdministrativeZone = namespace => (type, zone) => {
+  const callShowAdministrativeLayer = namespace => (type, zone) => {
     dispatch(showAdministrativeLayer({
       type: type,
       zone: zone,
@@ -61,7 +61,7 @@ const AdministrativeLayers = props => {
     }))
   }
 
-  const callHideAdministrativeZone = namespace => (type, zone) => {
+  const callHideAdministrativeLayer = namespace => (type, zone) => {
     dispatch(hideLayer({
       type: type,
       zone: zone,
@@ -98,8 +98,8 @@ const AdministrativeLayers = props => {
                         key={layers[0].code}
                         isShownOnInit={showedLayers.some(layer_ => layer_.type === layers[0].code)}
                         layer={layers[0]}
-                        callShowAdministrativeZone={callShowAdministrativeZone(namespace)}
-                        callHideAdministrativeZone={callHideAdministrativeZone(namespace)}
+                        callShowAdministrativeZone={callShowAdministrativeLayer(namespace)}
+                        callHideAdministrativeZone={callHideAdministrativeLayer(namespace)}
                       />
                     </ListItem>
                   } else {
@@ -108,8 +108,8 @@ const AdministrativeLayers = props => {
                         isLastItem={zones.length === index + 1}
                         layers={layers}
                         showedLayers={showedLayers}
-                        callShowAdministrativeZone={callShowAdministrativeZone(namespace)}
-                        callHideAdministrativeZone={callHideAdministrativeZone(namespace)}
+                        callShowAdministrativeZone={callShowAdministrativeLayer(namespace)}
+                        callHideAdministrativeZone={callHideAdministrativeLayer(namespace)}
                       />
                     </ListItem>
                   }

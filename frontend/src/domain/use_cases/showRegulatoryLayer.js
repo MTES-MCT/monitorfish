@@ -1,6 +1,6 @@
 import Layers, { getGearCategory } from '../entities/layers'
 import layer from '../shared_slices/Layer'
-import { getVectorLayerStyle } from '../../layers/styles/vectorLayer.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
@@ -58,7 +58,7 @@ const getVectorLayer = (dispatch, getState) => (layerToShow, hash, gearCategory)
     source: getRegulatoryVectorSource(dispatch, getState)(layerToShow),
     className: 'regulatory',
     style: feature => {
-      return [getVectorLayerStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
+      return [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
     }
   })
   layer.name = name

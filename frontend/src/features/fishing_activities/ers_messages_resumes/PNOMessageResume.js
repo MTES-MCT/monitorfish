@@ -118,6 +118,12 @@ const PNOMessageResume = props => {
                     ? <>{ERSMessagePNOPurposeType[props.pnoMessage.message.purpose]} ({props.pnoMessage.message.purpose})</>
                     : <NoValue>-</NoValue>}</Value>
                 </Field>
+                <Field>
+                  <Key>Poids total</Key>
+                  <Value>{props.totalPNOWeight
+                    ? <>{props.totalPNOWeight} kg</>
+                    : <NoValue>-</NoValue>}</Value>
+                </Field>
               </TableBody>
             </Fields>
             <SpeciesAndWeightChart

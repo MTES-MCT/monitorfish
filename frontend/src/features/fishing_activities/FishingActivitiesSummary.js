@@ -23,10 +23,10 @@ import {
   getSpeciesToWeightFARObject,
   getSpeciesToWeightLANObject,
   getSpeciesToWeightPNOObject,
-  getTotalDEPWeightFromMessages,
+  getTotalDEPWeightFromMessage,
   getTotalFAROrDISWeightFromMessages,
-  getTotalLANWeightFromMessages,
-  getTotalPNOWeightFromMessages
+  getTotalLANWeightFromMessage,
+  getTotalPNOWeightFromMessage
 } from '../../domain/entities/fishingActivities'
 
 const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
@@ -89,7 +89,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
       }
 
       if (depMessage) {
-        const totalDEPWeight = getTotalDEPWeightFromMessages(depMessage)
+        const totalDEPWeight = getTotalDEPWeightFromMessage(depMessage)
         totalFARAndDEPWeight += parseFloat(totalDEPWeight)
       }
 
@@ -102,7 +102,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
       }
 
       if (lanMessage) {
-        const totalLANWeight = getTotalLANWeightFromMessages(lanMessage)
+        const totalLANWeight = getTotalLANWeightFromMessage(lanMessage)
         setTotalLANWeight(totalLANWeight)
 
         const speciesToWeightLANObject = getSpeciesToWeightLANObject(lanMessage)
@@ -110,7 +110,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
       }
 
       if (pnoMessage) {
-        const totalPNOWeight = getTotalPNOWeightFromMessages(pnoMessage)
+        const totalPNOWeight = getTotalPNOWeightFromMessage(pnoMessage)
         setTotalPNOWeight(totalPNOWeight)
 
         const speciesToWeightPNOObject = getSpeciesToWeightPNOObject(pnoMessage, totalFARAndDEPWeight)
@@ -279,6 +279,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
                 {pnoMessage
                   ? <PNOMessageResume
                     id={pnoMessage.ersId}
+                    totalPNOWeight={totalPNOWeight}
                     totalFARAndDEPWeight={totalFARAndDEPWeight}
                     speciesToWeightOfPNO={speciesToWeightOfPNO}
                     speciesToWeightOfFAR={speciesToWeightOfFAR}

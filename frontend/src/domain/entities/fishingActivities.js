@@ -39,19 +39,19 @@ export const getTotalFAROrDISWeightFromMessages = ersMessages => {
     }, 0).toFixed(1))
 }
 
-export const getTotalDEPWeightFromMessages = ersMessage => {
+export const getTotalDEPWeightFromMessage = ersMessage => {
   return parseFloat(ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
 }
 
-export const getTotalLANWeightFromMessages = ersMessage => {
+export const getTotalLANWeightFromMessage = ersMessage => {
   return parseFloat(ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
 }
 
-export const getTotalPNOWeightFromMessages = ersMessage => {
+export const getTotalPNOWeightFromMessage = ersMessage => {
   return parseFloat(ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))

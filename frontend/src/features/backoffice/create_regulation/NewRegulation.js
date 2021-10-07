@@ -117,29 +117,31 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   useEffect(() => {
-    if (regulatoryTextCheckedMap) {
+    if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
-      if (saveOrUpdateRegulation) {
-        if (regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length) {
-          if (!regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
-            // update regulatoryTextList
-            setRegulatoryTextList(regulatoryTexts)
-            const featureObject = mapToRegulatoryFeatureObject({
-              selectedRegulationTopic,
-              selectedRegulationLawType,
-              nameZone,
-              selectedSeaFront,
-              selectedRegionList,
-              regulatoryTexts,
-              upcomingRegulation
-            })
-            createOrUpdateRegulation(featureObject)
-          } else {
-            dispatch(setRegulatoryTextCheckedMap(undefined))
-            setSaveOrUpdateRegulation(false)
-            setAtLeastOneValueIsMissing(undefined)
-          }
-        }
+      /**
+       * if regulatoryTexts.length === regulatoryTextList.length all texts has been checked
+       * if !regulatoryTexts.includes(null) all texts has appropriately been filled
+       * if !atLeastOneValueIsMissing all other values are filled
+       */
+      if (regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
+        !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
+        // update regulatoryTextList
+        setRegulatoryTextList(regulatoryTexts)
+        const featureObject = mapToRegulatoryFeatureObject({
+          selectedRegulationTopic,
+          selectedRegulationLawType,
+          nameZone,
+          selectedSeaFront,
+          selectedRegionList,
+          regulatoryTexts,
+          upcomingRegulation
+        })
+        createOrUpdateRegulation(featureObject)
+      } else {
+        dispatch(setRegulatoryTextCheckedMap(undefined))
+        setSaveOrUpdateRegulation(false)
+        setAtLeastOneValueIsMissing(undefined)
       }
     }
   }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap])

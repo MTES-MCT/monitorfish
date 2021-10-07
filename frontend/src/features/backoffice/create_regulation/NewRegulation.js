@@ -160,13 +160,10 @@ const CreateRegulation = ({ title, isEdition }) => {
     setNameZone(zone)
     setSelectedRegionList(region?.split(', '))
     setSelectedSeaFront(seafront)
-    setRegulatoryTextList(JSON.parse(regulatoryReferences))
+    setRegulatoryTextList(regulatoryReferences)
     setSelectedGeometry(id)
-    const upcomingRegulation = upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
-      ? JSON.parse(upcomingRegulatoryReferences)
-      : undefined
-    dispatch(setUpcomingRegulation(upcomingRegulation))
     originalGeometryId = regulatoryZoneMetadata.id
+    dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
   }
 
   const checkRequiredValues = () => {

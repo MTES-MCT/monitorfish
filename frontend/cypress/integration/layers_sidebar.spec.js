@@ -39,7 +39,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 20000 })
     cy.wait(1000)
 
-    cy.get('canvas', { timeout: 20000 }).eq(2).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas', { timeout: 20000 }).eq(0).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
 
     // Close the metadata modal and hide the zone
@@ -47,7 +47,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 20000 })
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas', { timeout: 20000 }).eq(2).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas', { timeout: 20000 }).eq(0).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
   })
 
@@ -73,7 +73,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-topic-show"]').eq(0).click({ timeout: 20000 })
     cy.wait(1000)
 
-    cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
 
@@ -82,7 +82,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 20000 }).should('not.exist');
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas').eq(2).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
 
     // Close the layers sidebar
@@ -120,9 +120,6 @@ context('LayersSidebar', () => {
   })
 
   it('An administrative zone Should be showed and hidden', () => {
-    // Given
-    cy.get('.eez_areas', { timeout: 20000 }).should('not.exist')
-
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="administrative-zones-open"]').click({ timeout: 20000 })
@@ -130,9 +127,10 @@ context('LayersSidebar', () => {
     cy.wait(500)
 
     // Then
-    cy.get('.eez_areas', { timeout: 20000 }).should('exist')
+    cy.get('.ol-layer').eq(0).toMatchImageSnapshot({
+      clip: { x: 400, y: 0, width: 200, height: 200 }
+    })
 
     cy.get('*[data-cy^="administrative-layer-toggle"]').eq(0).click({ timeout: 20000 })
-    cy.get('.eez_areas', { timeout: 20000 }).should('not.exist')
   })
 })

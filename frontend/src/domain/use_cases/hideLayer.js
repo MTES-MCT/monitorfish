@@ -26,34 +26,34 @@ const hideLayer = layerToHide => (dispatch, getState) => {
 
     if (topic && zone) {
       layerToRemove = getState().layer.layers.find(layer => {
-        return layer.className_ === `${type}:${topic}:${zone}`
+        return layer.name === `${type}:${topic}:${zone}`
       })
     } else if (topic) {
       layersToRemove = getState().layer.layers.filter(layer => {
-        return layer.className_.includes(`${type}:${topic}`)
+        return layer.name.includes(`${type}:${topic}`)
       })
     } else if (zone) {
       layersToRemove = getState().layer.layers.filter(layer => {
-        return layer.className_.includes(`${type}:${zone}`)
+        return layer.name.includes(`${type}:${zone}`)
       })
     } else {
-      layerToRemove = getState().layer.layers.find(layer => layer.className_ === type)
+      layerToRemove = getState().layer.layers.find(layer => layer.name === type)
     }
 
     if (layerToRemove) {
       batch(() => {
         dispatch(removeLayer(layerToRemove))
         dispatch(removeShowedLayer(layerToHide))
-        dispatch(removeLayerAndArea(layerToRemove.className_))
-        dispatch(removeLayerToFeatures(layerToRemove.className_))
+        dispatch(removeLayerAndArea(layerToRemove.name))
+        dispatch(removeLayerToFeatures(layerToRemove.name))
       })
     } else if (layersToRemove) {
       batch(() => {
         dispatch(removeLayers(layersToRemove))
         dispatch(removeShowedLayer(layerToHide))
         layersToRemove.forEach(layer => {
-          dispatch(removeLayerAndArea(layer.className_))
-          dispatch(removeLayerToFeatures(layer.className_))
+          dispatch(removeLayerAndArea(layer.name))
+          dispatch(removeLayerToFeatures(layer.name))
         })
       })
     }

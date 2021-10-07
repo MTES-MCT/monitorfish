@@ -91,6 +91,18 @@ export const REGULATION_ACTION_TYPE = {
   INSERT: 'insert'
 }
 
+/**
+ * @typedef {string} RegulatoryTextSource
+ */
+/**
+  * @readonly
+  * @enum {RegulatoryTextSource}
+*/
+export const REGULATORY_TEXT_SOURCE = {
+  UPCOMING_REGULATION: 'upcomingRegulation',
+  REGULATION: 'regulation'
+}
+
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText
     ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))

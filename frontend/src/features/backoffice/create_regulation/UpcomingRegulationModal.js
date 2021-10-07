@@ -11,6 +11,7 @@ import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
+import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
 
 const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
@@ -54,7 +55,7 @@ const UpcomingRegulationModal = () => {
           <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
-            source={'upcomingRegulation'}
+            source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}
             saveForm={saveForm}
           />
         </Section>

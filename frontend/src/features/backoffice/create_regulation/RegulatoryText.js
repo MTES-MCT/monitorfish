@@ -12,6 +12,7 @@ import {
   addObjectToRegulatoryTextCheckedMap
 } from '../Regulation.slice'
 import Tag from './Tag'
+import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -19,6 +20,7 @@ import Tag from './Tag'
  * @prop {RegulatoryText} regulatoryText
  * @prop {Function} addOrRemoveRegulatoryTextInList
  * @prop {Boolean} saveForm
+ * @prop {RegulatoryTextSource} source
  */
 const RegulatoryText = props => {
   const {
@@ -133,11 +135,9 @@ const RegulatoryText = props => {
   }
 
   useEffect(() => {
-    if (saveForm) {
+    if (saveForm && Object.values(REGULATORY_TEXT_SOURCE).includes(source)) {
       const payload = { id: id, source: source }
-      let allValuesAreFilled = !checkNameAndUrl()
-      allValuesAreFilled = !checkOtherRequiredValues() && allValuesAreFilled
-      if (allValuesAreFilled) {
+      if (!checkOtherRequiredValues() && !checkNameAndUrl()) {
         const updatedRegulatoryText = {
           reference: currentRegulatoryTextName,
           url: currentRegulatoryTextURL,
@@ -149,9 +149,9 @@ const RegulatoryText = props => {
       } else {
         payload.regulatoryText = null
       }
-      if (source === 'upcomingRegulation') {
+      if (source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION) {
         dispatch(addObjectToUpcomingRegulatoryTextCheckedMap(payload))
-      } else {
+      } else if (source === REGULATORY_TEXT_SOURCE.REGULATION) {
         dispatch(addObjectToRegulatoryTextCheckedMap(payload))
       }
     }

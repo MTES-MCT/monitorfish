@@ -35,7 +35,8 @@ import Feature from 'ol/Feature'
 import {
   mapToRegulatoryFeatureObject,
   emptyRegulatoryFeatureObject,
-  REGULATION_ACTION_TYPE
+  REGULATION_ACTION_TYPE,
+  REGULATORY_TEXT_SOURCE
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -67,7 +68,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
-  const [selectedGeometryId, setSelectedGeometry] = useState()
+  const [selectedGeometryId, setSelectedGeometry] = useState(429)
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
@@ -280,7 +281,7 @@ const CreateRegulation = ({ title, isEdition }) => {
               <RegulatoryTextSection
                 regulatoryTextList={regulatoryTextList}
                 setRegulatoryTextList={setRegulatoryTextList}
-                source={'regulation'}
+                source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}
                 saveForm={saveOrUpdateRegulation}
               />
             </Content>

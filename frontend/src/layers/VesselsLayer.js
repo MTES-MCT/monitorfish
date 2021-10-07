@@ -147,6 +147,7 @@ const VesselsLayer = ({ map }) => {
   function addLayerToMap () {
     if (map) {
       dispatch(setVesselsLayerSource(vectorSource))
+      layer.name = Layers.VESSELS.code
       map.getLayers().push(layer)
     }
 

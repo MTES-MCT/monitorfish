@@ -53,7 +53,7 @@ const reducers = {
    * @param {{payload: any | null}} action - The OpenLayers VectorLayer object to remove
    */
   removeLayer (state, action) {
-    state.layers = state.layers.filter(layer => layer.className_ !== action.payload.className_)
+    state.layers = state.layers.filter(layer => layer.name !== action.payload.name)
   },
   /**
    * Remove layers
@@ -62,7 +62,7 @@ const reducers = {
    */
   removeLayers (state, action) {
     state.layers = state.layers.filter(layer => !action.payload
-      .some(layerToRemove => layerToRemove.className_ === layer.className_))
+      .some(layerToRemove => layerToRemove.name === layer.name))
   },
   /**
    * Set initial layers

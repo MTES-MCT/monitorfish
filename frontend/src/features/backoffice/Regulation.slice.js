@@ -54,7 +54,7 @@ const regulationSlice = createSlice({
       } = action.payload
       let newUpcomingRegulatoryTextCheckedMap = {}
       if (state.upcomingRegulatoryTextCheckedMap) {
-        newUpcomingRegulatoryTextCheckedMap = JSON.parse(JSON.stringify(state.upcomingRegulatoryTextCheckedMap))
+        newUpcomingRegulatoryTextCheckedMap = { ...state.upcomingRegulatoryTextCheckedMap }
       }
       if (regulatoryText !== false) {
         newUpcomingRegulatoryTextCheckedMap[id] = true

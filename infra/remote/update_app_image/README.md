@@ -3,12 +3,21 @@
 A bash script checks for new bugfixes images (i.e v1.0.X) every minutes.
 The script will run only if the `cron.lock` file contain "End of update".
 
-> The following environment variables need to be set:
->```
-> export MONITORFISH_VERSION="vX.X.X" # To be changed
-> export MONITORFISH_LOGS_FOLDER="/opt/monitorfish" # To be changed
-> export MONITORFISH_GIT_FOLDER="/home/mf/monitorfish # To be changed
+> The env variables are set in the file `$HOME/.monitorfish`.
+> 
+> i.e for the integration environment:
 > ```
+> export MONITORFISH_VERSION="v1.0.3"
+> export MONITORFISH_LOGS_GID="1004"
+> export MONITORFISH_LOGS_FOLDER="/opt/monitorfish"
+> export MONITORFISH_GIT_FOLDER="/home/mf/monitorfish
+> ```
+> 
+> Be sure to add in the `$HOME/.bashrc` or `$HOME/.bash_profile`: 
+> ```
+> source $HOME/.monitorfish
+> ```
+>to add the variables to the shell
 
 To install it:
 - Make the `update_app_image.sh` script executable: 

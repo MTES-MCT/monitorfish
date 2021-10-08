@@ -103,7 +103,7 @@ const RegulatoryTextSection = props => {
       </ValidateButton>}
     </ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION &&
-      upcomingRegulation &&
+      upcomingRegulation && upcomingRegulation !== {} &&
         <UpcommingRegulationSection />
     }
   </Section>)

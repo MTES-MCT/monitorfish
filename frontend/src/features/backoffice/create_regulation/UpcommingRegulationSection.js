@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import InfoBox from './InfoBox'
@@ -7,9 +7,8 @@ import { CancelButton } from '../../commonStyles/Buttons.style'
 import { Link } from '../../commonStyles/Backoffice.style'
 import { setIsModalOpen, setUpcomingRegulation } from '../Regulation.slice'
 
-const UpcommingRegulationSection = () => {
+const UpcommingRegulationSection = ({ upcomingRegulation }) => {
   const dispatch = useDispatch()
-  const { upcomingRegulation } = useSelector(state => state.regulation)
   const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
       <>

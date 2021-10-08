@@ -1,5 +1,4 @@
 /**
-import { DatePicker } from 'rsuite'
  * @typedef Regulation
  * @property {string} bloc
  * @property {string} zoneTheme

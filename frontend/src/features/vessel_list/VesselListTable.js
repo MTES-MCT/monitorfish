@@ -41,7 +41,7 @@ const VesselListTable = props => {
 
   return (
     <TableContent>
-      <VesselsCount>
+      <VesselsCount data-cy={'vessel-list-table-count'}>
         {props.vesselsCountShowed} navires sur {props.vesselsCountTotal}
       </VesselsCount>
       <Table

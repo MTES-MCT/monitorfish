@@ -17,6 +17,7 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="vessels-list-box-filter"]').click({ timeout: 20000 })
     cy.get('body').click(30, 200,{ timeout: 20000 })
     cy.get('body').click(700, 650,{ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
 
     // When
     cy.get('*[data-cy^="preview-filtered-vessels"]').click({ timeout: 20000 })
@@ -25,7 +26,12 @@ context('Vessels list', () => {
     cy.wait(500)
 
     // Then
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 2)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
+    cy.get('.vessels').click(63, 456)
+    cy.get('*[data-cy^="vessel-summary-latitude"]', { timeout: 20000 }).contains('-')
+
+    // Back to vessels list
     cy.get('*[data-cy^="back-to-vessels-list"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
   })
 })

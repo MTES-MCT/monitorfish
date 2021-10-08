@@ -116,7 +116,7 @@ const Control = props => {
           ? <>
             <Key width={80}>Appréhension</Key>
             <SubValue>
-              {control.seizureComment}
+              {control.seizureComments}
             </SubValue><br/>
           </>
           : null
@@ -315,7 +315,8 @@ const Key = styled.span`
   margin-right: 10px;
   width: ${props => props.width ? props.width : '47'}px;
   display: inline-block;
-  vertical-align: bottom;
+  vertical-align: top;
+  padding-top: 4px;
 `
 
 const InfractionKey = styled.th`

@@ -25,16 +25,11 @@ import getGeometryWithoutRegulationReference from '../../../domain/use_cases/get
 import FishingPeriodSection from '../create_regulation/FishingPeriodSection'
 
 import { formatDataForSelectPicker } from '../../../utils'
-<<<<<<< HEAD
-
-import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
-=======
 import {
   /* CancelButton */
   ValidateButton
 } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
->>>>>>> Add fishingPeriod section title with chevron icon
 import {
   resetState,
   setSelectedRegulation,
@@ -50,7 +45,8 @@ import {
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
   SeafrontByRegulatoryTerritory,
-  UE
+  UE,
+  initialFishingPeriodValues
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -79,6 +75,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regionIsMissing, setRegionIsMissing] = useState(false)
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
+  /** @type {FishingPeriod} */
+  const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
@@ -98,8 +96,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   } = useSelector(state => state.regulation)
 
   let originalGeometryId = null
-  /** @type {FishingPeriod} */ // TODO
-  const [fishingPeriod, setFishingPeriod] = useState({})
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {

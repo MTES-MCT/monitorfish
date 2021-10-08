@@ -126,6 +126,28 @@ export const REGULATORY_TEXT_SOURCE = {
   REGULATION: 'regulation'
 }
 
+export const DEFAULT_YEAR = new Date().getFullYear()
+export const DEFAULT_DATE = {
+  day: '',
+  month: '',
+  year: DEFAULT_YEAR
+}
+
+export const DEFAULT_DATE_RANGE = {
+  startDate: DEFAULT_DATE,
+  endDate: DEFAULT_DATE
+}
+
+export const initialFishingPeriodValues = {
+  authorized: false,
+  annualRecurrence: undefined,
+  dateRanges: [DEFAULT_DATE_RANGE],
+  dates: [],
+  weekdays: [],
+  holidays: undefined,
+  daytime: undefined
+}
+
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText
     ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))

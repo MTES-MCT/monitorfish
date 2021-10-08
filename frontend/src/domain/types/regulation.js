@@ -1,4 +1,5 @@
 /**
+import { DatePicker } from 'rsuite'
  * @typedef Regulation
  * @property {string} bloc
  * @property {string} zoneTheme
@@ -57,6 +58,13 @@
  * @typedef DateInterval
  * @property {date} from
  * @property {date} to
+ * /
+
+ /**
+ * @typedef Date
+ * @property {number} day
+ * @property {number} month
+ * @property {number} year
  */
 
 /**
@@ -69,10 +77,11 @@
  * @typedef FishingPeriod
  * @property {boolean} authorized
  * @property {boolean} annualRecurrence
- * @property {(DateInterval)} dateInterval
- * @property {date} date
- * @property {(string)} weekDays
+ * @property {[DateInterval]} dateRanges
+ * @property {[date]} dates
+ * @property {[string]} weekDays
  * @property {boolean} holidays
  * @property {HourInterval} timeInterval
+ * @property {boolean} holidays
  * @property {boolean} daytime
  */

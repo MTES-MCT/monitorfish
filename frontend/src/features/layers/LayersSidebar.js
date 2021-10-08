@@ -19,7 +19,10 @@ const LayersSidebar = () => {
   const {
     regulatoryZoneMetadataPanelIsOpen
   } = useSelector(state => state.regulatory)
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
 
   const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false)
   const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
@@ -42,6 +45,7 @@ const LayersSidebar = () => {
               isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}
               regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
               healthcheckTextWarning={healthcheckTextWarning}
+              isHidden={previewFilteredVesselsMode}
               onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
               <LayersIcon/>
             </SidebarLayersIcon>

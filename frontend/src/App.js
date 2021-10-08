@@ -6,7 +6,7 @@ import { browserName, browserVersion } from 'react-device-detect'
 
 import Map from './features/map/Map'
 import Backoffice from './features/backoffice/Backoffice'
-import VesselsSearchBox from './features/vessel_search/VesselsSearchBox'
+import VesselsSearch from './features/vessel_search/VesselsSearch'
 import VesselSidebar from './features/vessel_sidebar/VesselSidebar'
 import LayersSidebar from './features/layers/LayersSidebar'
 import APIWorker from './api/APIWorker'
@@ -24,6 +24,7 @@ import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
 import VesselLabels from './features/vessel_labels/VesselLabels'
+import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
 import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
 
 function App () {
@@ -69,10 +70,11 @@ function HomePage () {
   return <Provider store={homeStore}>
     <NamespaceContext.Provider value={'homepage'}>
       <Healthcheck/>
+      <PreviewFilteredVessels/>
       <Wrapper>
         <Map/>
         <LayersSidebar/>
-        <VesselsSearchBox/>
+        <VesselsSearch/>
         <RightMenuOnHoverArea/>
         <VesselList namespace={'homepage'}/>
         <VesselFilters/>

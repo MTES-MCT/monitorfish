@@ -22,7 +22,8 @@ const InterestPoint = () => {
   } = useSelector(state => state.interestPoint)
   const {
     healthcheckTextWarning,
-    rightMenuIsOpen
+    rightMenuIsOpen,
+    previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
@@ -70,6 +71,7 @@ const InterestPoint = () => {
     <Wrapper ref={wrapperRef}>
       <InterestPointWrapper
         data-cy={'interest-point'}
+        isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
         isOpen={interestPointIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}

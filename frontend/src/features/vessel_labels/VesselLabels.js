@@ -23,7 +23,10 @@ const VesselLabels = () => {
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap
   } = useSelector(state => state.map)
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
 
   const [vesselVisibilityBoxIsOpen, setVesselLabelsBoxIsOpen] = useState(false)
   const wrapperRef = useRef(null)
@@ -45,6 +48,7 @@ const VesselLabels = () => {
     <Wrapper ref={wrapperRef}>
       <VesselLabelsIcon
         data-cy={'vessel-labels'}
+        isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
         $rightMenuIsOpen={rightMenuIsOpen}
         $isOpen={vesselVisibilityBoxIsOpen}

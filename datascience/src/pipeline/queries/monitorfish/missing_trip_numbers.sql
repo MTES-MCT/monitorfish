@@ -65,5 +65,5 @@ t4 AS (
 
 SELECT
     id,
-    year * 10000 + SUM(is_trip_start) OVER (PARTITION BY cfr, year ORDER BY message_rank) AS computed_trip_number
+    year * 10000 + SUM(is_trip_start) OVER (PARTITION BY cfr, year ORDER BY message_rank) AS trip_number
 FROM t4

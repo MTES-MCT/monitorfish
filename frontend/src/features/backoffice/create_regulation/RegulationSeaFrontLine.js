@@ -10,7 +10,8 @@ const RegulationSeaFrontLine = props => {
   const {
     selectedSeaFront,
     setSelectedSeaFront,
-    seaFrontList
+    seaFrontList,
+    seaFrontIsMissing
   } = props
 
   return <CustomContentLine>
@@ -24,6 +25,7 @@ const RegulationSeaFrontLine = props => {
         renderMenuItem={(_, item) =>
           <MenuItem checked={item.value === selectedSeaFront}
             item={item} tag={'Radio'}/>}
+        valueIsMissing={seaFrontIsMissing}
       />
     {selectedSeaFront &&
       <Tag

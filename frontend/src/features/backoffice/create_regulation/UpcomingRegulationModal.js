@@ -5,19 +5,20 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
-  setRegulatoryTextListValidityMap
+  setUpcomingRegulatoryTextListCheckedMap
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
+import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
 
 const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
     upcomingRegulation,
-    regulatoryTextListValidityMap
+    upcomingRegulatoryTextCheckedMap
   } = useSelector(state => state.regulation)
 
   const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
@@ -31,17 +32,17 @@ const UpcomingRegulationModal = () => {
   }
 
   useEffect(() => {
-    if (regulatoryTextListValidityMap) {
-      const values = Object.values(regulatoryTextListValidityMap)
+    if (upcomingRegulatoryTextCheckedMap) {
+      const values = Object.values(upcomingRegulatoryTextCheckedMap)
       if (saveForm && values.length > 0 && values.length === regulatoryTextList.length) {
-        if (!values.includes(false)) {
+        if (!values.includes(null)) {
           dispatch(setIsModalOpen(false))
         }
-        dispatch(setRegulatoryTextListValidityMap({}))
+        dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
         setSaveForm(false)
       }
     }
-  }, [saveForm, regulatoryTextListValidityMap, regulatoryTextList])
+  }, [saveForm, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
@@ -54,7 +55,7 @@ const UpcomingRegulationModal = () => {
           <RegulatoryTextSection
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
-            source={'upcomingRegulation'}
+            source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}
             saveForm={saveForm}
           />
         </Section>

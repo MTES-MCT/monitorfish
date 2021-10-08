@@ -24,6 +24,7 @@ import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
 import VesselLabels from './features/vessel_labels/VesselLabels'
+import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
 
 function App () {
   switch (browserName) {
@@ -82,6 +83,7 @@ function HomePage () {
         <InterestPoint/>
         <VesselLabels/>
         <APIWorker/>
+        <ErrorToastNotification/>
       </Wrapper>
     </NamespaceContext.Provider>
   </Provider>
@@ -91,16 +93,20 @@ function BackofficePage () {
   const match = useRouteMatch()
   return <Provider store={backofficeStore}>
     <NamespaceContext.Provider value={'backoffice'}>
-    <Switch>
+      <Switch>
         <Route exact path={`${match.path}`}>
           <BackofficeWrapper>
-          <Backoffice/>
-        </BackofficeWrapper>
+            <Backoffice/>
+          </BackofficeWrapper>
         </Route>
         <Route path={`${match.path}/newRegulation`}>
-          <NewRegulation />
+          <NewRegulation title='Saisir une nouvelle réglementation' />
+        </Route>
+        <Route patsh={`${match.path}/editRegulation`}>
+          <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
         </Route>
       </Switch>
+      <ErrorToastNotification/>
     </NamespaceContext.Provider>
   </Provider>
 }

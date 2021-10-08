@@ -5,6 +5,9 @@ const API = null // eslint-disable-line
 
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import { REGULATION_ACTION_TYPE } from '../domain/entities/regulatory'
+import WFS from 'ol/format/WFS'
+import GML from 'ol/format/GML'
 
 const OK = 200
 const NOT_FOUND = 404
@@ -16,11 +19,12 @@ const ERS_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les messages JPE de ce 
 const CONTROLS_ERROR_MESSAGE = 'Nous n\'avons pas pu récuperer les contrôles pour ce navire'
 const VESSEL_SEARCH_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les navires dans notre base'
 const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
-const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
+export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
 const GEOMETRY_ERROR_MEESAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
+const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -30,7 +34,7 @@ function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
   return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`)
 }
 
-const GEOSERVER_URL = self && self.env &&
+export const GEOSERVER_URL = self && self.env &&
   self.env.REACT_APP_GEOSERVER_LOCAL_URL &&
   self.env.REACT_APP_GEOSERVER_LOCAL_URL !== '__REACT_APP_GEOSERVER_LOCAL_URL__'
   ? self.env.REACT_APP_GEOSERVER_LOCAL_URL
@@ -446,6 +450,40 @@ function getHealthcheckFromAPI () {
     })
 }
 
+function updateOrCreateRegulation (feature, actionType) {
+  const formatWFS = new WFS()
+  const formatGML = new GML({
+    featureNS: 'monitorfish',
+    featureType: 'monitorfish:regulatory_areas',
+    srsName: 'EPSG:4326'
+  })
+
+  const xs = new XMLSerializer()
+  let transaction
+  if (actionType === REGULATION_ACTION_TYPE.UPDATE) {
+    transaction  = formatWFS.writeTransaction(null, [feature], null, formatGML)
+  } else if (actionType === REGULATION_ACTION_TYPE.INSERT) {
+    transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
+  }
+  const payload = xs.serializeToString(transaction)
+
+  return fetch(`${GEOSERVER_URL}/geoserver/wfs`, {
+    method: 'POST',
+    mode: 'no-cors',
+    dataType: 'xml',
+    processData: false,
+    contentType: 'text/xml',
+    body: payload.replace('feature:', '')
+  })
+  .then(r => {
+    return r
+  })
+  .catch(error => {
+    console.error(error)
+    throw Error(UPDATE_REGULATION_MESSAGE)
+  })
+}
+
 export {
   getVesselsLastPositionsFromAPI,
   getVesselFromAPI,
@@ -462,5 +500,6 @@ export {
   getAdministrativeSubZonesFromAPI,
   getAllFleetSegmentFromAPI,
   getHealthcheckFromAPI,
-  getAllGeometryWithoutProperty
+  getAllGeometryWithoutProperty,
+  updateOrCreateRegulation
 }

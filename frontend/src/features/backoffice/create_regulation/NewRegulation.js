@@ -1,62 +1,89 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
+  RegulationGeometryLine,
   RegulationLawTypeLine,
-  RegulationTopicLine,
-  RegulationRegionLine,
   RegulationLayerZoneLine,
+  RegulationRegionLine,
   RegulationSeaFrontLine,
+  RegulationTopicLine,
   RegulatoryTextSection,
-  UpcomingRegulationModal,
-  RegulationGeometryLine
+  UpcomingRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
+import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
+import Layers from '../../../domain/entities/layers'
 
-// A déplacer ?
 import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
-import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
-import { Section, SectionTitle, Footer, FooterButton } from '../../commonStyles/Backoffice.style'
-import { setSelectedRegulation } from '../Regulation.slice'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
+import {
+  resetState,
+  setSelectedRegulation,
+  setRegulatoryTextCheckedMap,
+  setUpcomingRegulation
+} from '../Regulation.slice'
+import Feature from 'ol/Feature'
+import {
+  mapToRegulatoryFeatureObject,
+  emptyRegulatoryFeatureObject,
+  REGULATION_ACTION_TYPE,
+  REGULATORY_TEXT_SOURCE
+} from '../../../domain/entities/regulatory'
 
-const CreateRegulation = () => {
+const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
   const {
     regulatoryTopics,
     regulatoryLawTypes,
-    seaFronts
+    seaFronts,
+    regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
-  const { isModalOpen } = useSelector(state => state.regulation)
-
   /** @type {string} */
-  const [selectedReglementationBloc, setSelectedReglementationBloc] = useState()
+  const [selectedRegulationLawType, setSelectedRegulationLawType] = useState()
+  const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
   /** @type {string} */
-  const [selectedReglementationTheme, setSelectedReglementationTheme] = useState()
+  const [selectedRegulationTopic, setSelectedRegulationTopic] = useState()
+  const [regulationTopicIsMissing, setRegulationTopicIsMissing] = useState(false)
   /** @type {string} */
   const [nameZone, setNameZone] = useState()
+  const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
   /** @type {string} */
   const [selectedSeaFront, setSelectedSeaFront] = useState()
+  const [seaFrontIsMissing, setSeaFrontIsMissing] = useState(false)
   /** @type {[String]} */
   const [selectedRegionList, setSelectedRegionList] = useState([])
-  /** @type {string} */
-  const [reglementationBlocName, setReglementationBlocName] = useState('')
+  const [regionIsMissing, setRegionIsMissing] = useState(false)
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
   /** @type {[GeoJSONGeometry]} geometryObjectList */
-  const [geometryObjectList, setGeometryObjectList] = useState()
+  const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
-  const [selectedGeometry, setSelectedGeometry] = useState()
+  const [selectedGeometryId, setSelectedGeometry] = useState()
+  const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
+
+  const [saveOrUpdateRegulation, setSaveOrUpdateRegulation] = useState(false)
+  const {
+    isModalOpen,
+    regulationSaved,
+    regulatoryTextCheckedMap,
+    upcomingRegulation
+  } = useSelector(state => state.regulation)
+  const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
+
+  let originalGeometryId = null
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
@@ -71,10 +98,105 @@ const CreateRegulation = () => {
   }, [])
 
   useEffect(() => {
-    if (geometryObjectList && selectedGeometry && showRegulatoryPreview) {
-      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometry]))
+    if (isEdition && regulatoryZoneMetadata) {
+      initForm()
     }
-  }, [selectedGeometry, geometryObjectList, showRegulatoryPreview])
+  }, [isEdition, regulatoryZoneMetadata])
+
+  const history = useHistory()
+  useEffect(() => {
+    if (regulationSaved) {
+      history.push('/backoffice')
+    }
+    dispatch(resetState())
+  }, [regulationSaved])
+
+  const onGoBack = () => {
+    dispatch(resetState())
+    history.push('/backoffice')
+  }
+
+  useEffect(() => {
+    if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
+      const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
+      /**
+       * if regulatoryTexts.length === regulatoryTextList.length all texts has been checked
+       * if !regulatoryTexts.includes(null) all texts has appropriately been filled
+       * if !atLeastOneValueIsMissing all other values are filled
+       */
+      if (regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
+        !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
+        // update regulatoryTextList
+        setRegulatoryTextList(regulatoryTexts)
+        const featureObject = mapToRegulatoryFeatureObject({
+          selectedRegulationTopic,
+          selectedRegulationLawType,
+          nameZone,
+          selectedSeaFront,
+          selectedRegionList,
+          regulatoryTexts,
+          upcomingRegulation
+        })
+        createOrUpdateRegulation(featureObject)
+      } else {
+        dispatch(setRegulatoryTextCheckedMap(undefined))
+        setSaveOrUpdateRegulation(false)
+        setAtLeastOneValueIsMissing(undefined)
+      }
+    }
+  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap])
+
+  const initForm = () => {
+    const {
+      lawType,
+      seafront,
+      topic,
+      zone,
+      region,
+      regulatoryReferences,
+      id,
+      upcomingRegulatoryReferences
+    } = regulatoryZoneMetadata
+
+    setSelectedRegulationLawType(`${lawType} / ${seafront}`)
+    setSelectedRegulationTopic(topic)
+    setNameZone(zone)
+    setSelectedRegionList(region?.split(', '))
+    setSelectedSeaFront(seafront)
+    setRegulatoryTextList(regulatoryReferences)
+    setSelectedGeometry(id)
+    originalGeometryId = regulatoryZoneMetadata.id
+    dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
+  }
+
+  const checkRequiredValues = () => {
+    let atLeastOneValueIsMissing = false
+    let valueIsMissing = !(selectedRegulationLawType && selectedRegulationLawType !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setLawTypeIsMissing(valueIsMissing)
+    valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setRegulationTopicIsMissing(valueIsMissing)
+    valueIsMissing = !(nameZone && nameZone !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setNameZoneIsMissing(valueIsMissing)
+    valueIsMissing = !(selectedSeaFront && selectedSeaFront !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setSeaFrontIsMissing(valueIsMissing)
+    valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setRegionIsMissing(valueIsMissing)
+    valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
+    setGeometryIsMissing(valueIsMissing)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setAtLeastOneValueIsMissing(atLeastOneValueIsMissing)
+  }
+
+  useEffect(() => {
+    if (geometryObjectList && selectedGeometryId && showRegulatoryPreview) {
+      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometryId] ? geometryObjectList[selectedGeometryId] : regulatoryZoneMetadata.geometry))
+    }
+  }, [selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
@@ -85,12 +207,16 @@ const CreateRegulation = () => {
       })
   }
 
-  const createRegulation = () => {
-    // TODO : Check form values
-    /** if (regulatoryTextHasMissingValue) {
-      console.log('one value is missing somewhere ! ')
-    } */
-    console.log('createRegulation')
+  const createOrUpdateRegulation = (featureObject) => {
+    const feature = new Feature(featureObject)
+    feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
+    const actionType = isEdition ? REGULATION_ACTION_TYPE.UPDATE : REGULATION_ACTION_TYPE.INSERT
+    dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
+    if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
+      const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
+      emptyFeature.setId(`${Layers.REGULATORY.code}.${originalGeometryId}`)
+      dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
+    }
   }
 
   const saveAsDraft = () => {
@@ -104,9 +230,9 @@ const CreateRegulation = () => {
         <Body>
           <Header>
             <LinkSpan><ChevronIcon/>
-              <BackLink to={'/backoffice'}>Revenir à la liste complète des zones</BackLink>
+              <BackLink onClick={onGoBack} >Revenir à la liste complète des zones</BackLink>
             </LinkSpan>
-            <HeaderTitle>Saisir une nouvelle réglementation</HeaderTitle>
+            <HeaderTitle>{title}</HeaderTitle>
             <Span />
           </Header>
           <ContentWrapper>
@@ -116,36 +242,40 @@ const CreateRegulation = () => {
                   identification de la zone réglementaire
                 </SectionTitle>
                 <RegulationLawTypeLine
-                  setSelectedValue={setSelectedReglementationBloc}
-                  selectedValue={selectedReglementationBloc}
-                  selectData={formatDataForSelectPicker(regulatoryTopics)}
-                  reglementationBlocName={reglementationBlocName}
-                  setReglementationBlocName={setReglementationBlocName}
+                  setSelectedValue={setSelectedRegulationLawType}
+                  selectedValue={selectedRegulationLawType}
+                  selectData={formatDataForSelectPicker(regulatoryLawTypes)}
+                  lawTypeIsMissing={lawTypeIsMissing}
                 />
                 <RegulationTopicLine
-                  selectedReglementationTheme={selectedReglementationTheme}
-                  setSelectedReglementationTheme={setSelectedReglementationTheme}
-                  zoneThemeList={formatDataForSelectPicker(regulatoryLawTypes)}
+                  selectedRegulationTopic={selectedRegulationTopic}
+                  setSelectedRegulationTopic={setSelectedRegulationTopic}
+                  zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
+                  regulationTopicIsMissing={regulationTopicIsMissing}
                 />
                 <RegulationLayerZoneLine
                   nameZone={nameZone}
                   setNameZone={setNameZone}
+                  nameZoneIsMissing={nameZoneIsMissing}
                 />
                 <RegulationSeaFrontLine
                   selectedSeaFront={selectedSeaFront}
                   setSelectedSeaFront={setSelectedSeaFront}
                   seaFrontList={formatDataForSelectPicker(seaFronts)}
+                  seaFrontIsMissing={seaFrontIsMissing}
                 />
                 <RegulationRegionLine
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
+                  regionIsMissing={regionIsMissing}
                 />
                 <RegulationGeometryLine
                   setSelectedGeometry={setSelectedGeometry}
                   geometryIdList={geometryIdList}
-                  selectedGeometry={selectedGeometry}
+                  selectedGeometry={selectedGeometryId}
                   setShowRegulatoryPreview={setShowRegulatoryPreview}
                   showRegulatoryPreview={showRegulatoryPreview}
+                  geometryIsMissing={geometryIsMissing}
                 />
               </Section>
             </Content>
@@ -153,7 +283,8 @@ const CreateRegulation = () => {
               <RegulatoryTextSection
                 regulatoryTextList={regulatoryTextList}
                 setRegulatoryTextList={setRegulatoryTextList}
-                source={'regulation'}
+                source={REGULATORY_TEXT_SOURCE.REGULATION}
+                saveForm={saveOrUpdateRegulation}
               />
             </Content>
           </ContentWrapper>
@@ -163,9 +294,15 @@ const CreateRegulation = () => {
             <ValidateButton
               disabled={false}
               isLast={false}
-              onClick={createRegulation}
+              onClick={() => {
+                checkRequiredValues()
+                setSaveOrUpdateRegulation(true)
+              }}
             >
-              Créer la réglementation
+            { isEdition
+              ? 'Enregister les modifications'
+              : 'Créer la réglementation'
+            }
             </ValidateButton>
             <CancelButton
               disabled={false}
@@ -220,7 +357,7 @@ const Span = styled.span`
   flex: 1;
 `
 
-const BackLink = styled(Link)`
+const BackLink = styled.a`
   text-decoration: underline;
   font: normal normal normal 13px;
   letter-spacing: 0px;

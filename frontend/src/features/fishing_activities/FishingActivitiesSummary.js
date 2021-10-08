@@ -18,9 +18,9 @@ import {
   getFAOZonesFromFARMessages,
   getFARMessagesFromMessages,
   getLANMessageFromMessages,
-  getPNOMessageFromMessages, getSpeciesAndPresentationToWeightFARObject,
-  getSpeciesToWeightDISObject,
-  getSpeciesToWeightFARObject,
+  getPNOMessageFromMessages,
+  getSpeciesAndPresentationToWeightFARObject,
+  getFAROrDISSpeciesToWeightObject,
   getSpeciesToWeightLANObject,
   getSpeciesToWeightPNOObject,
   getTotalDEPWeightFromMessage,
@@ -28,6 +28,7 @@ import {
   getTotalLANWeightFromMessage,
   getTotalPNOWeightFromMessage
 } from '../../domain/entities/fishingActivities'
+import { ERSOperationType } from '../../domain/entities/ERS'
 
 const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   const {
@@ -82,7 +83,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
 
-        const speciesToWeightFARObject = getSpeciesToWeightFARObject(farMessages, totalFARWeight)
+        const speciesToWeightFARObject = getFAROrDISSpeciesToWeightObject(farMessages, totalFARWeight)
         const speciesAndPresentationToWeightFARObject = getSpeciesAndPresentationToWeightFARObject(farMessages)
         setSpeciesToWeightOfFAR(speciesToWeightFARObject)
         setSpeciesAndPresentationToWeightOfFAR(speciesAndPresentationToWeightFARObject)
@@ -97,7 +98,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
         const totalDISWeight = getTotalFAROrDISWeightFromMessages(disMessages)
         setTotalDISWeight(totalDISWeight)
 
-        const speciesToWeightDISObject = getSpeciesToWeightDISObject(disMessages, totalDISWeight)
+        const speciesToWeightDISObject = getFAROrDISSpeciesToWeightObject(disMessages, totalDISWeight)
         setSpeciesToWeightOfDIS(speciesToWeightDISObject)
       }
 
@@ -260,7 +261,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
                     id={farMessages[0].ersId}
                     showERSMessages={showERSMessages}
                     totalFARWeight={totalFARWeight}
-                    numberOfMessages={farMessages ? farMessages.length : 0}
+                    numberOfMessages={farMessages ? farMessages.filter(message => message.operationType === ERSOperationType.DAT).length : 0}
                     speciesToWeightOfFAR={speciesToWeightOfFAR}
                     speciesAndPresentationToWeightOfFAR={speciesAndPresentationToWeightOfFAR}/>
                   : <FARMessageResume hasNoMessage={true}/>
@@ -270,7 +271,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
                   ? <DISMessageResume
                     id={disMessages[0].ersId}
                     totalDISWeight={totalDISWeight}
-                    numberOfMessages={disMessages ? disMessages.length : 0}
+                    numberOfMessages={disMessages ? disMessages.filter(message => message.operationType === ERSOperationType.DAT).length : 0}
                     speciesToWeightOfDIS={speciesToWeightOfDIS}
                     showERSMessages={showERSMessages}/>
                   : <DISMessageResume hasNoMessage={true}/>

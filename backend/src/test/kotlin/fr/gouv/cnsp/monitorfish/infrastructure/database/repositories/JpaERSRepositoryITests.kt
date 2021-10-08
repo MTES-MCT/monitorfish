@@ -122,7 +122,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
                 .findAllMessagesBetweenDepartureDates(lastDepartureDate, now, "FAK000999999")
 
         // Then
-        assertThat(messages).hasSize(19)
+        assertThat(messages).hasSize(20)
 
         // LAN
         assertThat(messages[0].message).isInstanceOf(LAN::class.java)
@@ -271,9 +271,15 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         val ackMessage5 = messages[17].message as Acknowledge
         assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
+        // RET
+        assertThat(messages[18].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[18].operationType).isEqualTo(ERSOperationType.RET)
+        val ackMessage6 = messages[18].message as Acknowledge
+        assertThat(ackMessage6.returnStatus).isEqualTo("000")
+
         // DEL
-        assertThat(messages[18].operationType).isEqualTo(ERSOperationType.DEL)
-        assertThat(messages[18].referencedErsId).isEqualTo("OOF20190627059908")
+        assertThat(messages[19].operationType).isEqualTo(ERSOperationType.DEL)
+        assertThat(messages[19].referencedErsId).isEqualTo("OOF20190627059908")
     }
 
     @Test

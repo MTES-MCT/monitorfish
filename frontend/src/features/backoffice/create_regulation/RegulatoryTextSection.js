@@ -7,12 +7,13 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { setIsModalOpen } from '../Regulation.slice'
+import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
  * @prop {[RegulatoryText]} regulatoryTextList
  * @prop {Function} setRegulatoryTextList
- * @prop {'regulation' | 'upcomingRegulation'} source
+ * @prop {RegulatoryTextSource} source
  * @prop {Boolean} saveForm
  */
 const RegulatoryTextSection = props => {
@@ -44,7 +45,7 @@ const RegulatoryTextSection = props => {
   }
 
   const addUpcomingText = () => {
-    if (source === 'upcomingRegulation') {
+    if (source === REGULATORY_TEXT_SOURCE.UPCCOMING_REGULATION) {
       addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
@@ -53,7 +54,9 @@ const RegulatoryTextSection = props => {
 
   return (<Section>
     <SectionTitle>
-      {source === 'upcomingRegulation' ? 'références réglementaires À VENIR' : 'références réglementaires en vigueur'}
+      {source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION
+        ? 'références réglementaires À VENIR'
+        : 'références réglementaires en vigueur'}
     </SectionTitle>
     {
       (regulatoryTextList && regulatoryTextList.length > 0)
@@ -64,6 +67,7 @@ const RegulatoryTextSection = props => {
               regulatoryText={regulatoryText}
               addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
               saveForm={saveForm}
+              source={source}
               listLength={regulatoryTextList.length}
             />
         })
@@ -73,11 +77,12 @@ const RegulatoryTextSection = props => {
             regulatoryText={{}}
             addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
             saveForm={saveForm}
+            source={source}
             listLength={0}
         />
     }
     <ButtonLine>
-    {source === 'regulation'
+    {source === REGULATORY_TEXT_SOURCE.REGULATION
       ? <><ValidateButton
         disabled={false}
         isLast={false}
@@ -97,8 +102,8 @@ const RegulatoryTextSection = props => {
         Ajouter un texte à venir
       </ValidateButton>}
     </ButtonLine>
-    {source === 'regulation' &&
-      upcomingRegulation &&
+    {source === REGULATORY_TEXT_SOURCE.REGULATION &&
+      upcomingRegulation && upcomingRegulation !== {} &&
         <UpcommingRegulationSection />
     }
   </Section>)

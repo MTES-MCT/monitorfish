@@ -10,6 +10,7 @@ export const mapToRegulatoryZone = properties => {
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
     regulatoryReferences: properties.references_reglementaires,
+    upcomingRegulatoryReferences: properties.references_reglementaires_a_venir,
     permissions: properties.autorisations,
     bycatch: properties.captures_accessoires,
     openingDate: properties.date_ouverture,
@@ -27,6 +28,36 @@ export const mapToRegulatoryZone = properties => {
     rejections: properties.rejets,
     deposit: properties.gisement
   }
+}
+
+export const mapToRegulatoryFeatureObject = properties => {
+  const {
+    selectedRegulationTopic,
+    selectedRegulationLawType,
+    nameZone,
+    selectedSeaFront,
+    selectedRegionList,
+    regulatoryTexts,
+    upcomingRegulation
+  } = properties
+  return {
+    layer_name: selectedRegulationTopic,
+    law_type: selectedRegulationLawType.split(' /')[0],
+    zones: nameZone,
+    region: selectedRegionList.join(', '),
+    facade: selectedSeaFront,
+    references_reglementaires: JSON.stringify(regulatoryTexts),
+    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || {})
+  }
+}
+
+export const emptyRegulatoryFeatureObject = {
+  layer_name: null,
+  law_type: null,
+  zones: null,
+  region: null,
+  facade: null,
+  references_reglementaires: null
 }
 
 export const LawTypesToTerritory = {
@@ -49,6 +80,27 @@ export const REGULATORY_SEARCH_PROPERTIES = {
   GEARS: 'gears',
   SPECIES: 'species',
   REGULATORY_REFERENCES: 'regulatoryReferences'
+}
+
+/**
+  * @readonly
+  * @enum {string}
+*/
+export const REGULATION_ACTION_TYPE = {
+  UPDATE: 'update',
+  INSERT: 'insert'
+}
+
+/**
+ * @typedef {string} RegulatoryTextSource
+ */
+/**
+  * @readonly
+  * @enum {RegulatoryTextSource}
+*/
+export const REGULATORY_TEXT_SOURCE = {
+  UPCOMING_REGULATION: 'upcomingRegulation',
+  REGULATION: 'regulation'
 }
 
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {

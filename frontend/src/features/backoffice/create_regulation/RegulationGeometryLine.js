@@ -15,7 +15,8 @@ const RegulationGeometryLine = props => {
     geometryIdList,
     selectedGeometry,
     setShowRegulatoryPreview,
-    showRegulatoryPreview
+    showRegulatoryPreview,
+    geometryIsMissing
   } = props
 
   const onCloseIconClicked = () => {
@@ -34,6 +35,7 @@ const RegulationGeometryLine = props => {
         renderMenuItem={(_, item) =>
           <MenuItem checked={item.value === selectedGeometry}
             item={item} tag={'Radio'}/>}
+        valueIsMissing={geometryIsMissing}
       />
     {selectedGeometry &&
       <><Tag

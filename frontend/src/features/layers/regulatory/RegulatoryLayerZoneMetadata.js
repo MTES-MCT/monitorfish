@@ -28,7 +28,7 @@ const RegulatoryLayerZoneMetadata = () => {
     if (regulatoryZoneMetadata && gears) {
       firstUpdate.current = false
 
-      setRegulatoryReferences(JSON.parse(regulatoryZoneMetadata.regulatoryReferences))
+      setRegulatoryReferences(regulatoryZoneMetadata.regulatoryReferences)
 
       if (!regulatoryZoneMetadata.gears) {
         setFormattedGears(null)

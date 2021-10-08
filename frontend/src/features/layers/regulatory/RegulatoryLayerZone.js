@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import {
+  useRouteMatch,
+  useHistory
+} from 'react-router-dom'
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
+import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
 import { useDispatch, useSelector } from 'react-redux'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/zoomInLayer'
@@ -11,6 +16,7 @@ import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import showRegulatoryLayer from '../../../domain/use_cases/showRegulatoryLayer'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
+import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
@@ -29,6 +35,8 @@ export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, 
 
 const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
+  const match = useRouteMatch()
+  const history = useHistory()
   const {
     callRemoveRegulatoryZoneFromMySelection,
     regulatoryZone,
@@ -37,7 +45,8 @@ const RegulatoryLayerZone = props => {
     allowRemoveZone,
     namespace,
     vectorLayerStyle,
-    isLast
+    isLast,
+    isEditable
   } = props
 
   const {
@@ -90,6 +99,11 @@ const RegulatoryLayerZone = props => {
     }
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
+  const onEditRegulationClick = () => {
+    history.push(`${match.path}/editRegulation`)
+    dispatch(showRegulationToEdit(regulatoryZone))
+  }
+
   return (
     <Zone isLast={isLast}>
       <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
@@ -107,6 +121,10 @@ const RegulatoryLayerZone = props => {
         }
       </ZoneText>
       <Icons>
+
+        { isEditable &&
+          <EditIcon title="Editer la réglementation" onClick={() => onEditRegulationClick()}/>
+        }
         {
           metadataIsShown
             ? <REGPaperDarkIcon
@@ -186,6 +204,13 @@ const ZoneText = styled.span`
   padding-bottom: 3px;
   padding-left: 0;
   margin-top: 5px;
+`
+
+const EditIcon = styled(EditSVG)`
+  width: 16px;
+  flex-shrink: 0;
+  align-self: center;
+  margin-right: 7px;
 `
 
 export default RegulatoryLayerZone

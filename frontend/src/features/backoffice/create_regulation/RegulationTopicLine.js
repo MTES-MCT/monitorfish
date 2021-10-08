@@ -11,9 +11,10 @@ import InfoBox from './InfoBox'
 
 const RegulationTopicLine = props => {
   const {
-    selectedReglementationTheme,
-    setSelectedReglementationTheme,
-    zoneThemeList
+    selectedRegulationTopic,
+    setSelectedRegulationTopic,
+    zoneThemeList,
+    regulationTopicIsMissing
   } = props
 
   const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
@@ -30,23 +31,24 @@ const RegulationTopicLine = props => {
           menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
           placeholder='Choisir une thématique'
           value={'Choisir une thématique'}
-          onChange={setSelectedReglementationTheme}
+          onChange={setSelectedRegulationTopic}
           data={zoneThemeList}
-          renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedReglementationTheme} item={item} tag={'Radio'} />}
+          renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedRegulationTopic} item={item} tag={'Radio'} />}
+          valueIsMissing={regulationTopicIsMissing}
         />
-        {selectedReglementationTheme &&
+        {selectedRegulationTopic &&
           <Tag
-            tagValue={selectedReglementationTheme}
-            onCloseIconClicked={_ => setSelectedReglementationTheme()}
+            tagValue={selectedRegulationTopic}
+            onCloseIconClicked={_ => setSelectedRegulationTopic()}
           />}
         {
         isAddThemeClicked
           ? <CreateRegulationLawTypeForm
-              setSelectedReglementationTheme={setSelectedReglementationTheme}
+              setSelectedRegulationTheme={setSelectedRegulationTopic}
               setIsAddThemeClicked={setIsAddThemeClicked}
               setIsInfoTextShown={setIsInfoTextShown}
             />
-          : !selectedReglementationTheme && <><SquareButton
+          : !selectedRegulationTopic && <><SquareButton
           onClick={() => {
             setIsAddThemeClicked(true)
             setIsInfoTextShown(true)

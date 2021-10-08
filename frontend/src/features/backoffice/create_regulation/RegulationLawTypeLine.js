@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 import Tag from './Tag'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label, CustomInput } from '../../commonStyles/Input.style'
-import { ValidateButton, CancelButton, SquareButton } from '../../commonStyles/Buttons.style'
+import { Label } from '../../commonStyles/Input.style'
 import CustomSelectComponent from './CustomSelectComponent'
 import MenuItem from './MenuItem'
 
@@ -12,22 +10,8 @@ const RegulationLawTypeLine = props => {
     setSelectedValue,
     selectedValue,
     selectData,
-    reglementationBlocName,
-    setReglementationBlocName
+    lawTypeIsMissing
   } = props
-  const [reglementationBlocNameIsRed, setReglementationBlocNameIsRed] = useState(false)
-  const [isAddReglementationBlocClicked, setIsAddReglementationBlocClicked] = useState(false)
-
-  const addNewReglementationBloc = () => {
-    if (reglementationBlocName === '') {
-      setReglementationBlocNameIsRed(true)
-    } else {
-      setSelectedValue(reglementationBlocName)
-      setReglementationBlocName('')
-      setIsAddReglementationBlocClicked(false)
-      setReglementationBlocNameIsRed(false)
-    }
-  }
 
   return (
     <ContentLine>
@@ -39,7 +23,9 @@ const RegulationLawTypeLine = props => {
         value={'Choisir un ensemble'}
         onChange={setSelectedValue}
         data={selectData}
+        data-cy={'regulation-lawtype-select'}
         renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedValue} item={item} tag={'Radio'} />}
+        valueIsMissing={lawTypeIsMissing}
       />
       {selectedValue &&
         <Tag
@@ -47,40 +33,8 @@ const RegulationLawTypeLine = props => {
           onCloseIconClicked={_ => setSelectedValue()}
         />
       }
-      {
-        isAddReglementationBlocClicked
-          ? <CreateReglementationBloc>
-              <CustomInput
-                placeholder='Nommez le nouvel ensemble règlementaire'
-                value={reglementationBlocName}
-                onChange={setReglementationBlocName}
-                width={'250px'}
-                isRed={reglementationBlocNameIsRed}
-              />
-              <ValidateButton
-                disabled={false}
-                isLast={false}
-                onClick={addNewReglementationBloc}>
-                Enregistrer
-              </ValidateButton>
-              <CancelButton
-                disabled={false}
-                isLast={false}
-                onClick={() => setIsAddReglementationBlocClicked(false)}>
-                Annuler
-              </CancelButton>
-            </CreateReglementationBloc>
-          : !selectedValue && <><SquareButton
-              onClick={() => setIsAddReglementationBlocClicked(true)}
-            />
-            <Label>Ajouter un nouvel ensemble</Label></>
-    }
     </ContentLine>
   )
 }
-
-const CreateReglementationBloc = styled.div`
-  display: flex;
-`
 
 export default RegulationLawTypeLine

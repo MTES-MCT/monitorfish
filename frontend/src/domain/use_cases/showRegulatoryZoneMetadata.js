@@ -14,6 +14,7 @@ const showRegulatoryZoneMetadata = regulatoryZone => dispatch => {
     dispatch(setLoadingRegulatoryZoneMetadata())
     getRegulatoryZoneMetadataFromAPI(regulatoryZone).then(regulatoryZoneProperties => {
       const regulatoryZone = mapToRegulatoryZone(regulatoryZoneProperties)
+      regulatoryZone.regulatoryReferences = JSON.parse(regulatoryZone.regulatoryReferences)
       dispatch(setRegulatoryZoneMetadata(regulatoryZone))
     }).catch(error => {
       console.error(error)

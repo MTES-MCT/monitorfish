@@ -30,8 +30,8 @@ const UpcommingRegulationSection = ({ upcomingRegulation }) => {
                 target={'_blank'}
               >{reference}</LinkWithGrayBg>
               {endDate !== 'infinite'
-                ? <TextWithGrayBg color={'#282F3E'}>Du {startDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)} au {endDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)}</TextWithGrayBg>
-                : <TextWithGrayBg color={'#282F3E'}>&Agrave; partir du {startDate.toLocaleString('fr-FR', DATE_STRING_OPTIONS)}</TextWithGrayBg>}
+                ? <TextWithGrayBg color={'#282F3E'}>Du {startDate.toLocaleString([], DATE_STRING_OPTIONS)} au {endDate.toLocaleString([], DATE_STRING_OPTIONS)}</TextWithGrayBg>
+                : <TextWithGrayBg color={'#282F3E'}>&Agrave; partir du {startDate.toLocaleString([], DATE_STRING_OPTIONS)}</TextWithGrayBg>}
             </TextRow>)
           })}
           <Row><CancelButton

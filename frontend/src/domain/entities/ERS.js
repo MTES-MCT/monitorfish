@@ -9,7 +9,7 @@ import {
   LANMessage,
   PNOMessage,
   RTPMessage
-} from '../../features/fishing_activities/ers_messages/index.js'
+} from '../../features/vessel_sidebar/fishing_activities/ers_messages/index.js'
 
 export const ERSMessageType = {
   DEP: {

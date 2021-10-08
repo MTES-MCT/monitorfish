@@ -23,7 +23,10 @@ import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 const VesselFilters = () => {
   const dispatch = useDispatch()
   const { filters, nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
   const previousFilters = usePrevious(filters)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
@@ -72,6 +75,7 @@ const VesselFilters = () => {
       <Wrapper ref={wrapperRef}>
         <VesselFilterIcon
           data-cy={'vessel-filters'}
+          isHidden={previewFilteredVesselsMode}
           healthcheckTextWarning={healthcheckTextWarning}
           rightMenuIsOpen={rightMenuIsOpen}
           isOpen={vesselFilterBoxIsOpen}

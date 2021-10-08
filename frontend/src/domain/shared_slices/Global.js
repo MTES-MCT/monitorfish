@@ -5,9 +5,11 @@ const globalSlice = createSlice({
   initialState: {
     error: null,
     isUpdatingVessels: false,
+    blockVesselsUpdate: false,
     rightMenuIsOpen: false,
     /** @type {string | null} healthcheckTextWarning */
-    healthcheckTextWarning: null
+    healthcheckTextWarning: null,
+    previewFilteredVesselsMode: undefined
   },
   reducers: {
     expandRightMenu (state) {
@@ -35,6 +37,24 @@ const globalSlice = createSlice({
      */
     setHealthcheckTextWarning (state, action) {
       state.healthcheckTextWarning = action.payload
+    },
+    /**
+     * Set the preview mode of the application - Hide the map tooling if the preview mode is true
+     * @param {Object=} state
+     * @param {{payload: boolean}} action - in preview mode when true
+     */
+    setPreviewFilteredVesselsMode (state, action) {
+      state.previewFilteredVesselsMode = action.payload
+      state.blockVesselsUpdate = action.payload
+    },
+    /**
+     * Block or not the vessel update cron - The vessel update is blocked when the
+     * vessel list table is opened or when vessels filters are previewed
+     * @param {Object=} state
+     * @param {{payload: boolean}} action - blocked when true
+     */
+    setBlockVesselsUpdate (state, action) {
+      state.blockVesselsUpdate = action.payload
     }
   }
 })
@@ -46,7 +66,9 @@ export const {
   resetIsUpdatingVessels,
   expandRightMenu,
   contractRightMenu,
-  setHealthcheckTextWarning
+  setHealthcheckTextWarning,
+  setPreviewFilteredVesselsMode,
+  setBlockVesselsUpdate
 } = globalSlice.actions
 
 export default globalSlice.reducer

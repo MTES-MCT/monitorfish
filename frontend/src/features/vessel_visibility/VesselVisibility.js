@@ -17,7 +17,10 @@ import ShowVesselEstimatedPositions from './ShowVesselEstimatedPositions'
 const VesselVisibility = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
-  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
+  const {
+    rightMenuIsOpen,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
   const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
   const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
   const { healthcheckTextWarning } = useSelector(state => state.global)
@@ -52,6 +55,7 @@ const VesselVisibility = () => {
   return (
     <Wrapper ref={wrapperRef}>
       <VesselVisibilityIcon
+        isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}
         isOpen={vesselVisibilityBoxIsOpen}

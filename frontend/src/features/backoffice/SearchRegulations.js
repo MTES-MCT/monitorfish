@@ -4,8 +4,8 @@ import { useRouteMatch } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { COLORS } from '../../constants/constants'
 import { AddRegulationButton } from '../commonStyles/Buttons.style'
-// import { searchByLawType } from '../../domain/entities/regulatory'
-// import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
+import { searchByLawType } from '../../domain/entities/regulatory'
+import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
 
 const SearchRegulations = props => {
   const {
@@ -31,12 +31,12 @@ const SearchRegulations = props => {
     if (searchText === '') {
       setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
     } else {
-      // Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
-      //   const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
-      //   if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
-      //     searchResult[territory] = searchResultByLawType
-      //   }
-      // })
+      Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
+        const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
+        if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
+          searchResult[territory] = searchResultByLawType
+        }
+      })
       setFoundRegulatoryZonesByRegTerritory(searchResult)
     }
   }

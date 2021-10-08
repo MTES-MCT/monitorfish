@@ -23,7 +23,10 @@ import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Re
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import {
+  /* CancelButton */
+  ValidateButton
+} from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import {
   resetState,
@@ -219,9 +222,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }
 
-  const saveAsDraft = () => {
+  /* const saveAsDraft = () => {
     console.log('saveAsDraft')
-  }
+  } */
 
   return (
     <>
@@ -304,13 +307,13 @@ const CreateRegulation = ({ title, isEdition }) => {
               : 'Créer la réglementation'
             }
             </ValidateButton>
-            <CancelButton
+            {/* <CancelButton
               disabled={false}
               isLast={false}
               onClick={saveAsDraft}
             >
               Enregistrer un brouillon
-            </CancelButton>
+            </CancelButton> */}
           </FooterButton>
         </Footer>
       </CreateRegulationWrapper>

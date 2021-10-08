@@ -49,7 +49,8 @@ import {
   REG_LOCALE,
   LAWTYPES_TO_TERRITORY,
   UE,
-  FRANCE
+  FRANCE,
+  initialFishingPeriodValues
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -74,6 +75,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regionIsMissing, setRegionIsMissing] = useState(false)
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
+  /** @type {FishingPeriod} */
+  const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
@@ -94,9 +97,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     isRemoveModalOpen,
     regulationDeleted
   } = useSelector(state => state.regulation)
-
-  /** @type {FishingPeriod} */ // TODO
-  const [fishingPeriod, setFishingPeriod] = useState({})
 
   useEffect(() => {
     if (!regulatoryTopics || regulatoryTopics.length === 0) {

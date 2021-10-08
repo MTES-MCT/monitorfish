@@ -1,81 +1,125 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Label } from '../../commonStyles/Input.style'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { Radio, RadioGroup } from 'rsuite'
 import { SquareButton } from '../../commonStyles/Buttons.style'
-import TimeSlot from './TimeSlot'
+import DateRange from './DateRange'
 import CustomDatePicker from './CustomDatePicker'
 import DayPicker from './DayPicker'
 import { CustomCheckbox } from '../../commonStyles/Backoffice.style'
+import { DEFAULT_DATE_RANGE } from '../../../domain/entities/regulatory'
 
-const FishingPeriod = ({ show }) => {
-  /* const {
+const FishingPeriod = (props) => {
+  const {
+    /** @type {FishingPeriod} fishingPeriod */
     fishingPeriod,
-    setFishingPeriod
-  } = props */
+    setFishingPeriod,
+    show
+  } = props
 
-  const [authorized, setAuthorized] = useState(undefined)
+  const {
+    authorized,
+    annualRecurrence,
+    dateRanges,
+    dates,
+    weekdays,
+    holidays,
+    daytime
+  } = fishingPeriod
+
   const [displayForm, setDisplayForm] = useState(false)
   const [disabled, setDisabled] = useState(true)
-  const [annual, setAnnual] = useState(undefined)
-  const [holidays, setHolidays] = useState(false)
-  const [timeSlots, setTimeSlots] = useState([{}])
-  const [dates, setDates] = useState([undefined])
-  const [weekdays, setWeekdays] = useState([])
+
+  const set = useCallback((key, value) => {
+    const obj = {
+      ...fishingPeriod,
+      [key]: value
+    }
+    setFishingPeriod(obj)
+  })
 
   /**
    * Add a time slot object to the timeSlots list
-   * @param {TimeSlot} timeSlot: object to add
+   * @param {DateRange} timeSlot: object to add
    */
-  const addTimeSlot = (timeSlot) => {
-    console.log(`addTimeSlot ${timeSlot}`)
-    // should we test the values here ?
-    const newTimeSlots = [...timeSlots]
-    newTimeSlots.push(timeSlot)
-    setTimeSlots(newTimeSlots)
+  const addDateRange = () => {
+    const newDateRanges = [...dateRanges]
+    newDateRanges.push(DEFAULT_DATE_RANGE)
+    set('dateRanges', newDateRanges)
   }
-
-  useEffect(() => {
-    console.log('timeSlots has changed')
-  }, [timeSlots])
 
   /**
    * Remove a time slot object from the timeSlots list
    * @param {number} id: object id in the list
    */
-  const removeTimeSlot = (id) => {
-    let newTimeSlots = [...timeSlots]
-    if (newTimeSlots.length === 1) {
-      newTimeSlots = [{}]
+  const removeDateRange = (id) => {
+    let newDateRanges = [...dateRanges]
+    if (newDateRanges.length === 1) {
+      newDateRanges = [{}]
     } else {
-      newTimeSlots.splice(id, 1)
+      newDateRanges.splice(id, 1)
     }
-    setTimeSlots(newTimeSlots)
+    set('dateRanges', newDateRanges)
   }
 
   /**
-   * update a given object in the timeSlots list
+   * update a given object in the dateRanges list
    * @param {number} id: object id
-   * @param {number} timeSlot: new object to insert
+   * @param {number} dateRanges: new object to insert
    */
-  const updateTimeSlots = (id, timeSlot) => {
+  const updateDateRanges = (id, dateRange) => {
     // should we test the values here ?
-    const newTimeSlots = [...timeSlots]
-    newTimeSlots[id] = timeSlot
-    setTimeSlots(newTimeSlots)
+    const newDateRanges = [...dateRanges]
+    newDateRanges[id] = dateRange
+    set('dateRanges', newDateRanges)
   }
+
+  const onPeriodChange = (value) => {
+    set('authorized', value)
+    if (!displayForm) {
+      setDisplayForm(true)
+    }
+  }
+
+  const onRecurrenceChange = (value) => {
+    set('annualRecurrence', value)
+    if (disabled) {
+      setDisabled(false)
+    }
+  }
+
+  const onDateChange = (id, date) => {
+    const newList = [...dates]
+    newList[id] = date
+    set('dates', newList)
+  }
+
+  const onDeleteDate = (id) => {
+    if (!disabled) {
+      const newList = [...dates]
+      newList.splice(id, 1)
+      set('dates', newList)
+    }
+  }
+
+  const onAddDate = () => {
+    if (!disabled) {
+      const newList = [...dates]
+      newList.push(undefined)
+      set('dates', newList)
+    }
+  }
+
+  const setWeekdays = value => set('weekdays', value)
+  const setHolidays = _ => set('holidays', !holidays)
+  const setDaytime = _ => set('daytime', !daytime)
 
   return <Wrapper show={show}>
     <Title>
       <PeriodRadioGroup
         inline={true}
-        onChange={value => {
-          setAuthorized(value)
-          if (!displayForm) {
-            setDisplayForm(true)
-          }
-        }}
+        onChange={onPeriodChange}
       >
         Périodes
         <CustomRadio checked={authorized} value={true} />
@@ -90,13 +134,8 @@ const FishingPeriod = ({ show }) => {
       <Label>Récurrence annuelle</Label>
       <RadioGroup
         inline={true}
-        onChange={value => {
-          setAnnual(value)
-          if (disabled) {
-            setDisabled(false)
-          }
-        }}
-        value={annual}
+        onChange={onRecurrenceChange}
+        value={annualRecurrence}
       >
         <CustomRadio value={true} >oui</CustomRadio>
         <CustomRadio value={false} >non</CustomRadio>
@@ -106,43 +145,45 @@ const FishingPeriod = ({ show }) => {
       <ConditionnalLines display={displayForm} disabled={disabled}>
         <Row>
           <Label>Plages de dates</Label>
-          <TimeSlots>
-            {
-              timeSlots.map((timeSlot, id) => {
-                return <TimeSlot
+          <DateRanges>
+            { dateRanges
+              ? dateRanges.map((dateRange, id) => {
+                return <DateRange
                     key={id}
                     id={id}
-                    annual={annual}
-                    timeSlot={timeSlot}
-                    updateList={updateTimeSlots}
-                    removeTimeSlot={removeTimeSlot}
+                    annualRecurrence={annualRecurrence}
+                    dateRange={dateRange}
+                    updateList={updateDateRanges}
+                    removeDateRange={removeDateRange}
                     disabled={disabled}
                   />
               })
+              : <DateRange
+                key={0}
+                id={0}
+                annualRecurrence={annualRecurrence}
+                dateRange={DEFAULT_DATE_RANGE}
+                updateList={updateDateRanges}
+                removeDateRange={removeDateRange}
+                disabled={disabled}
+              />
             }
-          </TimeSlots>
+          </DateRanges>
           <SquareButton
             disabled={disabled}
-            onClick={() => {
-              console.log('on SquareButton click')
-              addTimeSlot({})
-            }} />
+            onClick={addDateRange} />
         </Row>
         <Row>
           <Label>Dates précises</Label>
           <DateList >
-            {
-              dates.map((date, id) => {
+            { dates && dates.length > 0
+              ? dates.map((date, id) => {
                 return <DateRow key={id}>
                   <CustomDatePicker
                     // $isrequired={startDateIsRequired}
                     disabled={disabled}
                     value={date}
-                    onChange={(date) => {
-                      const newList = [...dates]
-                      newList[id] = date
-                      setDates(newList)
-                    }}
+                    onChange={date => onDateChange(id, date)}
                     format='DD/MM/YYYY'
                     placement={'rightStart'}
                     style={{ marginRight: '10px' }}
@@ -150,26 +191,29 @@ const FishingPeriod = ({ show }) => {
                   <SquareButton
                     type='delete'
                     disabled={disabled}
-                    onClick={() => {
-                      if (!disabled) {
-                        const newList = [...dates]
-                        newList.splice(id, 1)
-                        setDates(newList)
-                      }
-                    }} />
+                    onClick={_ => onDeleteDate(id)} />
                 </DateRow>
               })
+              : <DateRow key={0}>
+                  <CustomDatePicker
+                    // $isrequired={startDateIsRequired}
+                    disabled={disabled}
+                    value={undefined}
+                    onChange={date => onDateChange(0, date)}
+                    format='DD/MM/YYYY'
+                    placement={'rightStart'}
+                    style={{ marginRight: '10px' }}
+                  />
+                  <SquareButton
+                    type='delete'
+                    disabled={disabled}
+                    onClick={_ => onDeleteDate(0)} />
+                </DateRow>
             }
           </DateList>
           <SquareButton
             disabled={disabled}
-            onClick={() => {
-              if (!disabled) {
-                const newList = [...dates]
-                newList.push(undefined)
-                setDates(newList)
-              }
-            }}/>
+            onClick={onAddDate}/>
         </Row>
         <Row>
           <Label>Jours de la semaine</Label>
@@ -181,7 +225,7 @@ const FishingPeriod = ({ show }) => {
         </Row>
         <Row>
           <Label>Jours fériés</Label>
-          <HolidaysCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/>
+          <HolidaysCheckbox disabled={disabled} onChange={setHolidays}/>
         </Row>
         <TimeTitle>Horaires autorisées</TimeTitle>
         <Row>De <CustomDatePicker
@@ -207,7 +251,7 @@ const FishingPeriod = ({ show }) => {
           <SquareButton disabled={disabled}/>
         </Row>
         <Row>
-          ou <DaytimeCheckbox disabled={disabled} onChange={_ => setHolidays(!holidays)}/> du lever au coucher du soleil
+          ou <DaytimeCheckbox disabled={disabled} checked={daytime} onChange={setDaytime}/> du lever au coucher du soleil
         </Row>
       </ConditionnalLines>
     </DateTimeWrapper>
@@ -237,7 +281,6 @@ const Wrapper = styled.div`
 
 const DateRow = styled.div`
   display: flex;
-  margin-bottom: 5px;
 `
 const DateList = styled.div`
   display: flex;
@@ -277,7 +320,7 @@ const TimeTitle = styled(Title)`
   margin-top: 30px;
 `
 
-const TimeSlots = styled.div`
+const DateRanges = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

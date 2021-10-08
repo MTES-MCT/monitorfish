@@ -130,12 +130,35 @@ export const REGULATORY_TEXT_SOURCE = {
   REGULATION: 'regulation'
 }
 
+<<<<<<< HEAD
 export const DEFAULT_REGULATORY_TEXT = {
   url: '',
   reference: '',
   startDate: new Date().getTime(),
   endDate: undefined,
   textType: []
+=======
+export const DEFAULT_YEAR = new Date().getFullYear()
+export const DEFAULT_DATE = {
+  day: '',
+  month: '',
+  year: DEFAULT_YEAR
+}
+
+export const DEFAULT_DATE_RANGE = {
+  startDate: DEFAULT_DATE,
+  endDate: DEFAULT_DATE
+}
+
+export const initialFishingPeriodValues = {
+  authorized: false,
+  annualRecurrence: undefined,
+  dateRanges: [DEFAULT_DATE_RANGE],
+  dates: [],
+  weekdays: [],
+  holidays: undefined,
+  daytime: undefined
+>>>>>>> manage dates with or without years ...
 }
 
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {

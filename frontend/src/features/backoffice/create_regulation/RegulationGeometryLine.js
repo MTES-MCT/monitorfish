@@ -32,10 +32,10 @@ const RegulationGeometryLine = props => {
         value={'Choisir un tracé'}
         onChange={setSelectedGeometry}
         data={geometryIdList}
+        valueIsMissing={geometryIsMissing}
         renderMenuItem={(_, item) =>
           <MenuItem checked={item.value === selectedGeometry}
             item={item} tag={'Radio'}/>}
-        valueIsMissing={geometryIsMissing}
       />
     {selectedGeometry &&
       <><Tag

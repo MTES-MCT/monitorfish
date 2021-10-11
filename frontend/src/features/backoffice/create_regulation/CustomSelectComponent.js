@@ -35,6 +35,10 @@ const CustomSelectComponent = props => {
         menuStyle={menuStyle}
         menuClassName={'new-regulation-select-picker'}
         $valueIsMissing={valueIsMissing}
+        locale={{
+          noResultsText: 'pas de tracé à associer',
+          emptyMessage: 'pas de tracé à associer'
+        }}
       />
     </SelectWrapper>
   )

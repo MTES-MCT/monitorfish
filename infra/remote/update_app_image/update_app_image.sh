@@ -27,7 +27,6 @@ else
     echo "MONITORFISH_VERSION=$MONITORFISH_VERSION"
 fi
 
-
 echo "" > $MONITORFISH_LOGS_FOLDER/cron.lock
 
 # Increment bugfixes version number
@@ -50,11 +49,11 @@ if [ $exit_code -ne 0 ]; then
     exit 0
 fi
 
-echo "Restarting app with version: $MONITORFISH_VERSION_INCREMENT"
-
-cd $MONITORFISH_GIT_FOLDER && make restart-remote-app-dev
-
 echo "Replacing current app version ($MONITORFISH_VERSION) to $MONITORFISH_VERSION_INCREMENT in $HOME/.monitorfish"
 sed -i "s/$MONITORFISH_VERSION/$MONITORFISH_VERSION_INCREMENT/" $HOME/.monitorfish
+source $HOME/.monitorfish
+
+echo "Restarting app with version: $MONITORFISH_VERSION_INCREMENT"
+cd $MONITORFISH_GIT_FOLDER && make restart-remote-app-dev
 
 echo $exit_message > $MONITORFISH_LOGS_FOLDER/cron.lock

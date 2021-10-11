@@ -1,4 +1,4 @@
-import { ERSMessageType as ERSMessageTypeEnum } from './ERS'
+import { ERSMessageType as ERSMessageTypeEnum, ERSOperationType } from './ERS'
 
 export const getDEPMessageFromMessages = ersMessages => ersMessages
   .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
@@ -27,10 +27,31 @@ export const getLANMessageFromMessages = (ersMessages, depMessage) => {
     })
 }
 
+function sortByCorrectedMessagesFirst () {
+  return (x, y) => {
+    if (x.operationType === ERSOperationType.COR) {
+      return -1
+    }
+
+    if (y.operationType === ERSOperationType.COR) {
+      return 1
+    }
+
+    return 0
+  }
+}
+
 export const getTotalFAROrDISWeightFromMessages = ersMessages => {
+  let correctedMessagesReferencedIds = []
+
   return parseFloat(ersMessages
+    .sort(sortByCorrectedMessagesFirst())
     .reduce((accumulator, ersMessage) => {
-      const sumOfCatches = ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
+      if (ersMessage.operationType === ERSOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(ersMessage.referencedErsId)
+      }
+
+      const sumOfCatches = !correctedMessagesReferencedIds.includes(ersMessage.ersId) && ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
         ? ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
           return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
         }, 0)
@@ -39,19 +60,19 @@ export const getTotalFAROrDISWeightFromMessages = ersMessages => {
     }, 0).toFixed(1))
 }
 
-export const getTotalDEPWeightFromMessages = ersMessage => {
+export const getTotalDEPWeightFromMessage = ersMessage => {
   return parseFloat(ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
 }
 
-export const getTotalLANWeightFromMessages = ersMessage => {
+export const getTotalLANWeightFromMessage = ersMessage => {
   return parseFloat(ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
 }
 
-export const getTotalPNOWeightFromMessages = ersMessage => {
+export const getTotalPNOWeightFromMessage = ersMessage => {
   return parseFloat(ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
@@ -101,46 +122,46 @@ function getSpeciesAndPresentationToWeightObject (speciesToWeightObject, species
   }
 }
 
-export const getSpeciesToWeightFARObject = (farMessages, totalFARWeight) => {
-  const speciesToWeightFARObject = {}
+export const getFAROrDISSpeciesToWeightObject = (messages, totalWeight) => {
+  const speciesToWeightObject = {}
+  let correctedMessagesReferencedIds = []
 
-  farMessages.forEach(message => {
-    if (message.acknowledge && message.acknowledge.isSuccess) {
-      message.message.catches.forEach(speciesCatch => {
-        setSpeciesToWeightObject(speciesToWeightFARObject, speciesCatch, totalFARWeight)
-      })
-    }
-  })
+  messages
+    .sort(sortByCorrectedMessagesFirst())
+    .forEach(message => {
+      if (message.operationType === ERSOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedErsId)
+      }
 
-  return speciesToWeightFARObject
+      if (!correctedMessagesReferencedIds.includes(message.ersId) && message.acknowledge && message.acknowledge.isSuccess) {
+        message.message.catches.forEach(speciesCatch => {
+          setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight)
+        })
+      }
+    })
+
+  return speciesToWeightObject
 }
 
 export const getSpeciesAndPresentationToWeightFARObject = farMessages => {
   const speciesAndPresentationToWeightFARObject = {}
+  let correctedMessagesReferencedIds = []
 
-  farMessages.forEach(message => {
-    if (message.acknowledge && message.acknowledge.isSuccess) {
-      message.message.catches.forEach(speciesCatch => {
-        getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
-      })
-    }
-  })
+  farMessages
+    .sort(sortByCorrectedMessagesFirst())
+    .forEach(message => {
+      if (message.operationType === ERSOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedErsId)
+      }
+
+      if (!correctedMessagesReferencedIds.includes(message.ersId) && message.acknowledge && message.acknowledge.isSuccess) {
+        message.message.catches.forEach(speciesCatch => {
+          getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
+        })
+      }
+    })
 
   return speciesAndPresentationToWeightFARObject
-}
-
-export const getSpeciesToWeightDISObject = (disMessages, totalDISWeight) => {
-  const speciesToWeightDISObject = {}
-
-  disMessages.forEach(message => {
-    if (message.acknowledge && message.acknowledge.isSuccess) {
-      message.message.catches.forEach(speciesCatch => {
-        setSpeciesToWeightObject(speciesToWeightDISObject, speciesCatch, totalDISWeight)
-      })
-    }
-  })
-
-  return speciesToWeightDISObject
 }
 
 export const getSpeciesToWeightLANObject = lanMessage => {

@@ -207,8 +207,8 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
        ('OOF20191205059902', ''),
        ('OOF20190227050000', ''),
        ('OOF22103048326325', ''),
-       ('OOF20191030056523', '');
-
+       ('OOF20191030056523', ''),
+       ('OOF20103048326985', '');
 
 INSERT INTO ers (operation_number, analyzed_by_rules, trip_number, operation_country, operation_datetime_utc,
                  operation_type, ers_id,
@@ -337,6 +337,10 @@ VALUES ('OOF20190126059903', 9463713, 'OOF', '2019-02-18T11:45:00Z', 'DAT', 'OOF
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'FAR',
         '{"gear": "GTN", "mesh": 100.0, "catches": [{"weight": 1500.0, "conversionFactor": 1.0, "nbFish": null, "species": "BON", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 86.0, "nbFish": null, "conversionFactor": 1.0, "species": "BON", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 2.0, "nbFish": null, "species": "SOL", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 17.0, "nbFish": null, "species": "RJH", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}], "farDatetimeUtc": "2019-10-17T11:32:00Z"}',
         '2021-01-18T07:17:27.384921Z'),
+       ('OOF20103048326985', null, 'OOF', '2019-10-17T11:36:00Z', 'RET', 'OOF20103048326985', 'OOF20191030059902',
+        '2019-10-30T11:32:00Z',
+        null, null, null, null, null, null, '',
+        '{"returnStatus": "000"}', '2021-01-18T07:19:28.384921Z'),
        ('OOF20191030059903', 9463715, 'OOF', '2019-10-17T11:36:00Z', 'COR', 'OOF20191030059903', 'OOF20191030059902',
         '2019-10-30T11:32:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'FAR',

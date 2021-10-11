@@ -12,6 +12,11 @@ context('Vessels list', () => {
 
   it('Vessels Should be filtered and previewed on the map', () => {
     // Given
+    cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="map-property-trigger"]')
+      .filter(':contains("étiquettes des navires")')
+      .click({ timeout: 20000 })
+
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(0).type('France{enter}')
     cy.get('*[data-cy^="vessels-list-box-filter"]').click({ timeout: 20000 })
@@ -26,7 +31,7 @@ context('Vessels list', () => {
     cy.wait(500)
 
     // Then
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
+    cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 3)
     cy.get('.vessels').click(63, 456)
     cy.get('*[data-cy^="vessel-summary-latitude"]', { timeout: 20000 }).contains('-')
 

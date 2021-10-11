@@ -11,6 +11,7 @@ import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
 const MAX_LABELS_DISPLAYED = 200
+const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
 const NOT_FOUND = -1
 
 const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
@@ -23,6 +24,10 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     hideOtherVessels,
     selectedVessel
   } = useSelector(state => state.vessel)
+
+  const {
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
 
   const {
     vesselLabelsShowedOnMap,
@@ -208,7 +213,11 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       })
     }
 
-    if (filteredFeatures.length < MAX_LABELS_DISPLAYED) {
+    const maxLabelsDisplayed = previewFilteredVesselsMode
+      ? MAX_LABELS_DISPLAYED_IN_PREVIEW
+      : MAX_LABELS_DISPLAYED
+
+    if (filteredFeatures.length < maxLabelsDisplayed) {
       addLabelToFeatures(filteredFeatures)
     } else {
       setFeaturesAndLabels([])
@@ -299,6 +308,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           coordinates={identity.coordinates}
           zoomHasChanged={previousMapZoom.current}
           opacity={opacity}
+          previewFilteredVesselsMode={previewFilteredVesselsMode}
         />
       })
     }

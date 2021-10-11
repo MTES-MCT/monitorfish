@@ -11,15 +11,14 @@ const showRegulationToEdit = regulatoryZone => async (dispatch) => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature.properties)
       const {
         regulatoryReferences,
-        upcomingRegulatoryReferences,
-        geometry
+        upcomingRegulatoryReferences
       } = regulatoryZoneMetadata
       regulatoryZoneMetadata.regulatoryReferences = JSON.parse(regulatoryReferences)
       regulatoryZoneMetadata.upcomingRegulatoryReferences =
         upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
           ? JSON.parse(upcomingRegulatoryReferences)
           : undefined
-      regulatoryZoneMetadata.geometry = geometry
+      regulatoryZoneMetadata.geometry = feature.geometry
       regulatoryZoneMetadata.id = feature.id.split('.')[1]
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
     }).catch(error => {

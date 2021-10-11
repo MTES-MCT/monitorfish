@@ -76,10 +76,14 @@ const baseIcon = css`
 
 const ShowIcon = styled(ShowIconSVG)`
   ${baseIcon}
+  width: 20px;
+  height: 15px;
 `
 
 const HideIcon = styled(HideIconSVG)`
   ${baseIcon}
+  width: 20px;
+  height: 15px;
 `
 
 export default RegulationGeometryLine

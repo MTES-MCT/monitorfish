@@ -251,8 +251,9 @@ const SearchButton = styled(MapButtonStyle)`
 `
 
 const SearchIcon = styled(SearchIconSVG)`
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24x;
+  margin-top: 4px;
   opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `

@@ -231,7 +231,6 @@ const Zone = styled.div`
 
 const Wrapper = styled.li`
   margin: 0;
-  background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
   overflow-y: auto;
@@ -240,6 +239,7 @@ const Wrapper = styled.li`
 `
 
 const ERSMessageContent = styled.div`
+  background: ${COLORS.background};
   width: inherit;
   height: 0;
   opacity: 0;
@@ -257,6 +257,7 @@ const ERSMessageContent = styled.div`
     0%   { opacity: 1; height: ${props => props.chartHeight + 105 + props.speciesNotLandedSize}px; }
     100% { opacity: 0; height: 0; }
   }
+  margin-bottom: ${props => props.isOpen ? 5 : -1}px;
 `
 
 export default PNOMessageResume

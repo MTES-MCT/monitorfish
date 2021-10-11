@@ -71,7 +71,7 @@ const FARMessage = props => {
               : null
           }
         </Zone>
-        <SpeciesList>
+        <SpeciesList hasCatches={catches?.length}>
           {
             catches
               .map((speciesCatch, index) => {
@@ -128,7 +128,7 @@ const SubValue = styled.span`
 `
 
 const SpeciesList = styled.ul`
-  margin: 10px 0 0 0;
+  margin: ${props => props.hasCatches ? 10 : 0}px 0 0 0;
   padding: 0;
   width: -moz-available;
   width: -webkit-fill-available;

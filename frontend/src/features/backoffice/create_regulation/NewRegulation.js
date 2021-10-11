@@ -196,8 +196,10 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   useEffect(() => {
-    if (geometryObjectList && selectedGeometryId && showRegulatoryPreview) {
-      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometryId] ? geometryObjectList[selectedGeometryId] : regulatoryZoneMetadata.geometry))
+    if (showRegulatoryPreview &&
+      ((isEdition && regulatoryZoneMetadata.geometry) ||
+        (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
+      dispatch(setRegulatoryGeometryToPreview(isEdition ? regulatoryZoneMetadata.geometry : geometryObjectList[selectedGeometryId]))
     }
   }, [selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 

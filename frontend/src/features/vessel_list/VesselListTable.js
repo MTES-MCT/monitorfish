@@ -66,7 +66,7 @@ const VesselListTable = props => {
           <HeaderCell>
             <Target/>
           </HeaderCell>
-          <TargetCell dataKey="targetNumber" onChange={props.handleChange}/>
+          <TargetCell dataKey="riskFactor" onChange={props.handleChange}/>
         </Column>
         <Column resizable sortable width={170} fixed>
           <HeaderCell>Nom du navire</HeaderCell>

@@ -44,7 +44,7 @@ const DownloadVesselListModal = props => {
 
   useEffect(() => {
     const columnsNotCheckedByDefault = [
-      CSVOptions.targetNumber.code,
+      CSVOptions.riskFactor.code,
       CSVOptions.species.code,
       CSVOptions.length.code,
       CSVOptions.externalReferenceNumber.code,
@@ -126,7 +126,7 @@ const DownloadVesselListModal = props => {
         >
           <Columns>
             <div>
-              <Checkbox value={CSVOptions.targetNumber.code}>Priorité</Checkbox><br/>
+              <Checkbox value={CSVOptions.riskFactor.code}>Note de risque</Checkbox><br/>
               <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox><br/>
               <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
               <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox><br/>

@@ -54,7 +54,7 @@ const RegulationTopicLine = props => {
             setIsInfoTextShown(true)
           }}
         />
-        <Label isLast={true}>Créer une nouvelle thématique</Label></>
+        <CustomLabel >Créer une nouvelle thématique</CustomLabel></>
         }
       </Wrapper>
       <CustomInfoBox
@@ -66,8 +66,12 @@ const RegulationTopicLine = props => {
       </ContentLine>
 }
 
+const CustomLabel = styled(Label)` 
+  margin-right: 8px;
+`
+
 const CustomInfoBox = styled(InfoBox)`
-  ${props => props.isFormOpened ? '' : 'margin: 5px 0px 0px 10px'};
+  ${props => props.isFormOpened ? '' : 'margin-top: 2px'};
 `
 
 const Wrapper = styled.div`

@@ -4,17 +4,22 @@ import { COLORS } from '../../../constants/constants'
 import { getDate, getDateTime } from '../../../utils'
 import ERSMessageSpecies from './ERSMessageSpecies'
 import { buildCatchArray, ERSMessagePNOPurposeType } from '../../../domain/entities/ERS'
+import { getTotalPNOWeightFromMessage } from '../../../domain/entities/fishingActivities'
 
 const PNOMessage = props => {
   const [catches, setCatches] = useState([])
+  const [totalPNOWeight, setTotalPNOWeight] = useState(null)
 
   useEffect(() => {
     if (props.message && props.message.catchOnboard) {
       const catches = buildCatchArray(props.message.catchOnboard)
-
       setCatches(catches)
+
+      const totalPNOWeight = getTotalPNOWeightFromMessage({ message: props.message })
+      setTotalPNOWeight(totalPNOWeight)
     } else {
       setCatches([])
+      setTotalPNOWeight(null)
     }
   }, [props.message])
 
@@ -29,25 +34,36 @@ const PNOMessage = props => {
                 <Value>{props.message.predictedArrivalDatetimeUtc
                   ? <>{getDateTime(props.message.predictedArrivalDatetimeUtc, true)}{' '}
                     <Gray>(UTC)</Gray></>
-                  : <NoValue>-</NoValue>}</Value>
+                  : <NoValue>-</NoValue>}
+                </Value>
               </Field>
               <Field>
                 <Key>Date de début de la marée</Key>
                 <Value>{props.message.tripStartDate
                   ? <>{getDate(props.message.tripStartDate)}</>
-                  : <NoValue>-</NoValue>}</Value>
+                  : <NoValue>-</NoValue>}
+                </Value>
               </Field>
               <Field>
                 <Key>Port d&apos;arrivée</Key>
                 <Value>{props.message.port && props.message.portName
                   ? <>{props.message.portName} ({props.message.port})</>
-                  : <NoValue>-</NoValue>}</Value>
+                  : <NoValue>-</NoValue>}
+                </Value>
               </Field>
               <Field>
                 <Key>Raison du préavis</Key>
                 <Value>{props.message.purpose
                   ? <>{ERSMessagePNOPurposeType[props.message.purpose]} ({props.message.purpose})</>
-                  : <NoValue>-</NoValue>}</Value>
+                  : <NoValue>-</NoValue>}
+                </Value>
+              </Field>
+              <Field>
+                <Key>Poids total</Key>
+                <Value>{totalPNOWeight
+                  ? <>{totalPNOWeight} kg</>
+                  : <NoValue>-</NoValue>}
+                </Value>
               </Field>
             </TableBody>
           </Fields>

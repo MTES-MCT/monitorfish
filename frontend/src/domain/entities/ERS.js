@@ -102,6 +102,11 @@ export const ERSMessageType = {
   }
 }
 
+export const ERSOperationType = {
+  DAT: 'DAT',
+  COR: 'COR'
+}
+
 export const ERSMessageActivityType = {
   FSH: 'Pêche'
 }

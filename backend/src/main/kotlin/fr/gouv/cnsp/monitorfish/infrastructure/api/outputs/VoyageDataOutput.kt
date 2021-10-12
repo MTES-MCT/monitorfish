@@ -12,8 +12,8 @@ data class VoyageDataOutput(
         fun fromVoyage(voyage: Voyage): VoyageDataOutput {
             return VoyageDataOutput(
                     isLastVoyage = voyage.isLastVoyage,
-                    previousBeforeDateTime = voyage.previousBeforeDateTime,
-                    nextBeforeDateTime = voyage.nextBeforeDateTime,
+                    previousBeforeDateTime = voyage.startDate,
+                    nextBeforeDateTime = voyage.endDate,
                     ersMessagesAndAlerts = ERSMessagesAndAlertsDataOutput
                             .fromERSMessagesAndAlerts(voyage.ersMessagesAndAlerts)
             )

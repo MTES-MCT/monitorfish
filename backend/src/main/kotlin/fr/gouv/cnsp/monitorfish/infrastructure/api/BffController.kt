@@ -22,16 +22,16 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff")
 @Api(description = "API for UI frontend")
 class BffController(
-        private val getLastPositions: GetLastPositions,
-        private val getVessel: GetVessel,
-        private val getVesselLastVoyage: GetVesselLastVoyage,
-        private val getAllGears: GetAllGears,
-        private val getAllSpecies: GetAllSpecies,
-        private val searchVessels: SearchVessels,
-        private val getVesselControls: GetVesselControls,
-        private val getAllFleetSegments: GetAllFleetSegments,
-        private val getHealthcheck: GetHealthcheck,
-        meterRegistry: MeterRegistry) {
+    private val getLastPositions: GetLastPositions,
+    private val getVessel: GetVessel,
+    private val getVesselVoyage: GetVesselVoyage,
+    private val getAllGears: GetAllGears,
+    private val getAllSpecies: GetAllSpecies,
+    private val searchVessels: SearchVessels,
+    private val getVesselControls: GetVesselControls,
+    private val getAllFleetSegments: GetAllFleetSegments,
+    private val getHealthcheck: GetHealthcheck,
+    meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
     val vesselsTimer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
@@ -129,13 +129,16 @@ class BffController(
     fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
                              @RequestParam(name = "internalReferenceNumber")
                              internalReferenceNumber: String,
-                             @ApiParam("before date")
-                             @RequestParam(name = "beforeDateTime", required = false)
+                             @ApiParam("Which trip with respect to date")
+                             @RequestParam(name = "which")
+                             which: String,
+                             @ApiParam("date")
+                             @RequestParam(name = "dateTime", required = false)
                              @DateTimeFormat(pattern = zoneDateTimePattern)
-                             beforeDateTime: ZonedDateTime?): VoyageDataOutput {
+                             dateTime: ZonedDateTime?): VoyageDataOutput {
         val start = System.currentTimeMillis()
 
-        val voyage = getVesselLastVoyage.execute(internalReferenceNumber, beforeDateTime)
+        val voyage = getVesselVoyage.execute(internalReferenceNumber, which, dateTime)
 
         ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return VoyageDataOutput.fromVoyage(voyage)

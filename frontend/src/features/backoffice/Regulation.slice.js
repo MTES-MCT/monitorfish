@@ -59,10 +59,10 @@ const regulationSlice = createSlice({
       if (regulatoryText !== false) {
         newUpcomingRegulatoryTextCheckedMap[id] = true
         const newUpcomingRegulation = state.upcomingRegulation
-          ? JSON.parse(JSON.stringify(state.upcomingRegulation))
+          ? { ...state.upcomingRegulation }
           : { regulatoryTextList: [{}] }
         const newRegulatoryTextList = [...newUpcomingRegulation.regulatoryTextList]
-        newRegulatoryTextList[id] = regulatoryText
+        newRegulatoryTextList[id] = { ...regulatoryText }
         newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
         state.upcomingRegulation = newUpcomingRegulation
       } else {

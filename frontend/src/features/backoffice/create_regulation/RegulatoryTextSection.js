@@ -104,7 +104,7 @@ const RegulatoryTextSection = props => {
     </ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION &&
       upcomingRegulation && upcomingRegulation !== {} &&
-        <UpcommingRegulationSection />
+        <UpcommingRegulationSection upcomingRegulation={upcomingRegulation} />
     }
   </Section>)
 }

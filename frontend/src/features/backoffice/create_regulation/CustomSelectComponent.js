@@ -12,7 +12,8 @@ const CustomSelectComponent = props => {
     data,
     renderMenuItem,
     menuStyle,
-    valueIsMissing
+    valueIsMissing,
+    groupBy
   } = props
 
   const selectPickerStyle = {
@@ -39,6 +40,7 @@ const CustomSelectComponent = props => {
           noResultsText: 'pas de tracé à associer',
           emptyMessage: 'pas de tracé à associer'
         }}
+        groupBy={groupBy}
       />
     </SelectWrapper>
   )
@@ -62,6 +64,9 @@ const CustomSelectPicker = styled(SelectPicker)`
 
   .rs-btn-default.rs-picker-toggle:focus {
     border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+  }
+  .grouped.rs-picker-select-menu-item {
+    padding-left: 0px;
   }
 `
 

@@ -4,6 +4,10 @@ import { resetAnimateTo } from '../../domain/shared_slices/Map'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
 
+/**
+ * Handle map animations - Note that the map  and mapClickEvent parameters are given from
+ * the BaseMap component, event if it's not seen in the props passed to MapVesselAnimation
+ */
 const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   const dispatch = useDispatch()
   const { animateTo } = useSelector(state => state.map)
@@ -54,7 +58,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   }
 
   function showVesselTrackAndSidebarOnMapClick (feature) {
-    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
+    if (feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
       dispatch(showVesselTrackAndSidebar(feature.vessel, false, false))
     }
   }

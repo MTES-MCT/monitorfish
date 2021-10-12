@@ -2,9 +2,9 @@ import React from 'react'
 import DateRangePicker, { afterToday } from 'rsuite/lib/DateRangePicker'
 import styled from 'styled-components'
 
-const TrackDepthDateRange = ({ dates, setDate }) => {
+const TrackDepthDateRange = ({ dates, setDate, width }) => {
   return (
-    <Wrapper>
+    <Wrapper width={width}>
       <DateRangePicker
         showOneCalendar
         placeholder="Choisir une période précise"
@@ -36,7 +36,7 @@ const TrackDepthDateRange = ({ dates, setDate }) => {
 
 const Wrapper = styled.div`
   margin: 12px 0 20px 20px;
-  width: 197px;
+  width: ${props => props.width ? props.width : 197}px;
 `
 
 export default TrackDepthDateRange

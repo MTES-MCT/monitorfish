@@ -16,6 +16,7 @@ import VesselEstimatedPositionLayer from '../../layers/VesselEstimatedPositionLa
 import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
 import VesselsLabelsLayer from '../../layers/VesselsLabelsLayer'
 import InterestPointLayer from '../../layers/InterestPointLayer'
+import MapMenu from './MapMenu'
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
@@ -58,6 +59,7 @@ const Map = () => {
         setShouldUpdateView={setShouldUpdateView}
         historyMoveTrigger={historyMoveTrigger}
       />
+      <MapMenu/>
       <MeasurementLayer/>
       <VesselTrackLayer/>
       <VesselsLayer/>

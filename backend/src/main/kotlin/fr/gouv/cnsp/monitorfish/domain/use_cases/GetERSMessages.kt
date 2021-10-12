@@ -17,9 +17,9 @@ class GetERSMessages(private val ersRepository: ERSRepository,
                      private val ersMessageRepository: ERSMessageRepository) {
     private val logger = LoggerFactory.getLogger(GetERSMessages::class.java)
 
-    fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime): List<ERSMessage> {
+    fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime, tripNumber: Int): List<ERSMessage> {
         val messages = ersRepository
-                .findAllMessagesBetweenDepartureDates(afterDepartureDate, beforeDepartureDate, internalReferenceNumber)
+                .findAllMessagesByTripNumberBetweenDates(internalReferenceNumber, afterDepartureDate, beforeDepartureDate, tripNumber)
                 .sortedBy { it.operationDateTime }
                 .map {
                     try {

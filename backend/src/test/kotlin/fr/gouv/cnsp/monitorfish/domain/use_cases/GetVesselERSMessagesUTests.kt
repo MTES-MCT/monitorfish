@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.LastDepartureDateAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
@@ -44,8 +44,8 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
-        given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getDummyERSMessage())
+        given(ersRepository.findLastTripBefore(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(ersRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -57,7 +57,7 @@ class GetVesselERSMessagesUTests {
 
         // When
         val ersMessages = GetERSMessages(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now())
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -99,8 +99,8 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
-        given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getCorrectedDummyERSMessage())
+        given(ersRepository.findLastTripBefore(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(ersRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getCorrectedDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -112,7 +112,7 @@ class GetVesselERSMessagesUTests {
 
         // When
         val ersMessages = GetERSMessages(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now())
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -133,8 +133,8 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
-        given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getRETDummyERSMessage())
+        given(ersRepository.findLastTripBefore(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(ersRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getRETDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -146,7 +146,7 @@ class GetVesselERSMessagesUTests {
 
         // When
         val ersMessages = GetERSMessages(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now())
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -176,8 +176,8 @@ class GetVesselERSMessagesUTests {
     @Test
     fun `execute Should add the deleted property`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willReturn(LastDepartureDateAndTripNumber(ZonedDateTime.now(), 123))
-        given(ersRepository.findAllMessagesBetweenDepartureDates(any(), any(), any())).willReturn(getRETDummyERSMessage())
+        given(ersRepository.findLastTripBefore(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(ersRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getRETDummyERSMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -189,7 +189,7 @@ class GetVesselERSMessagesUTests {
 
         // When
         val ersMessages = GetERSMessages(ersRepository, gearRepository, speciesRepository, portRepository, ersMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now())
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
 
         // Then
         assertThat(ersMessages).hasSize(2)

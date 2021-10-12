@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
@@ -77,7 +77,7 @@ class GetVesselUTests {
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
         given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
         given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willThrow(NoERSLastDepartureDateFound("ERROR"))
+        given(ersRepository.findLastTripBefore(any(), any())).willThrow(NoLogbookFishingTripFound("ERROR"))
 
         // When
         val pair = runBlocking {
@@ -124,7 +124,7 @@ class GetVesselUTests {
     @Test
     fun `execute Should not throw an exception When a vessel's last DEP is not found`() {
         // Given
-        given(ersRepository.findLastDepartureDateAndTripNumber(any(), any())).willThrow(NoERSLastDepartureDateFound("ERROR"))
+        given(ersRepository.findLastTripBefore(any(), any())).willThrow(NoLogbookFishingTripFound("ERROR"))
         given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
 
         // When

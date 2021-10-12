@@ -53,7 +53,7 @@ class BffControllerITests {
     private lateinit var getAllSpecies: GetAllSpecies
 
     @MockBean
-    private lateinit var getVesselLastVoyage: GetVesselLastVoyage
+    private lateinit var getVesselVoyage: GetVesselVoyage
 
     @MockBean
     private lateinit var searchVessels: SearchVessels
@@ -265,10 +265,10 @@ class BffControllerITests {
     fun `Should find the last ERS messages of vessels`() {
         // Given
         val voyage = Voyage(true, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
-        given(this.getVesselLastVoyage.execute(any(), anyOrNull())).willReturn(voyage)
+        given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&beforeDateTime="))
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&which=lastTripBefore&beforeDateTime="))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(4)))
@@ -280,21 +280,22 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].tripNumber", equalTo(345)))
                 .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
-        Mockito.verify(getVesselLastVoyage).execute("FR224226850", null)
+        Mockito.verify(getVesselVoyage).execute("FR224226850", "lastTripBefore", null)
     }
 
     @Test
     fun `Should find the ERS messages of vessels before a specified date`() {
         // Given
         val voyage = Voyage(true, ZonedDateTime.now().minusMonths(5), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
-        given(this.getVesselLastVoyage.execute(any(), any())).willReturn(voyage)
+        given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&beforeDateTime=2021-05-04T03:04:05.000Z"))
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&which=lastTripBefore&dateTime=2021-05-04T03:04:05.000Z"))
 
-        Mockito.verify(getVesselLastVoyage).execute(
-                "FR224226850",
-                ZonedDateTime.parse("2021-05-04T03:04:05.000Z"))
+        Mockito.verify(getVesselVoyage).execute(
+            "FR224226850",
+            "lastTripBefore",
+            ZonedDateTime.parse("2021-05-04T03:04:05.000Z"))
     }
 
     @Test

@@ -56,6 +56,7 @@ const RegulatoryLayerZone = props => {
 
   const [showRegulatoryZone, setShowRegulatoryZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
+  const [isOver, setIsOver] = useState(false)
 
   const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {
@@ -104,8 +105,11 @@ const RegulatoryLayerZone = props => {
     dispatch(showRegulationToEdit(regulatoryZone))
   }
 
+  const onMouseOver = () => !isOver && setIsOver(true)
+  const onMouseOut = () => isOver && setIsOver(false)
+
   return (
-    <Zone isLast={isLast}>
+    <Zone isLast={isLast} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
       <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
         data-cy={'regulatory-layers-my-zones-zone'}
@@ -123,7 +127,7 @@ const RegulatoryLayerZone = props => {
       <Icons>
 
         { isEditable &&
-          <EditIcon title="Editer la réglementation" onClick={() => onEditRegulationClick()}/>
+          <EditIcon $isOver={isOver} title="Editer la réglementation" onClick={() => onEditRegulationClick()}/>
         }
         {
           metadataIsShown
@@ -207,6 +211,7 @@ const ZoneText = styled.span`
 `
 
 const EditIcon = styled(EditSVG)`
+  display: ${props => props.$isOver ? 'flex' : 'none'};
   width: 16px;
   flex-shrink: 0;
   align-self: center;

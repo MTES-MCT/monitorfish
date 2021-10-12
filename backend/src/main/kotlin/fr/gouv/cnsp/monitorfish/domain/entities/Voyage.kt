@@ -4,6 +4,6 @@ import java.time.ZonedDateTime
 
 data class Voyage(
         val isLastVoyage: Boolean,
-        val previousBeforeDateTime: ZonedDateTime?,
-        val nextBeforeDateTime: ZonedDateTime?,
+        val startDate: ZonedDateTime?,
+        val endDate: ZonedDateTime?,
         val ersMessagesAndAlerts: ERSMessagesAndAlerts)

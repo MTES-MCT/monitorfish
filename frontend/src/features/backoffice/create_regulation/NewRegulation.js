@@ -39,7 +39,9 @@ import {
   mapToRegulatoryFeatureObject,
   emptyRegulatoryFeatureObject,
   REGULATION_ACTION_TYPE,
-  REGULATORY_TEXT_SOURCE
+  REGULATORY_TEXT_SOURCE,
+  SeafrontByRegulatoryTerritory,
+  EU_SEAFRONT
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -270,6 +272,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   seaFrontIsMissing={seaFrontIsMissing}
                 />
                 <RegulationRegionLine
+                  disabled={!selectedSeaFront || SeafrontByRegulatoryTerritory[EU_SEAFRONT].includes(selectedSeaFront) }
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
                   regionIsMissing={regionIsMissing}

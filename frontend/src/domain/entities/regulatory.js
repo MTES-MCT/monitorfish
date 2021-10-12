@@ -72,8 +72,11 @@ export const RegulatoryTerritory = {
   UE: 'Réglementation UE'
 }
 
+export const FRENCH_SEAFRONT = 'Secteurs France'
+export const EU_SEAFRONT = 'Secteurs Union Européenne'
+
 export const SeafrontByRegulatoryTerritory = {
-  'Secteurs France': [
+  [FRENCH_SEAFRONT]: [
     'Mediterranée, MED',
     'NAME',
     'Outre-mer',
@@ -81,7 +84,7 @@ export const SeafrontByRegulatoryTerritory = {
     'Sud-Athlantique, SA',
     'MED'
   ],
-  'Secteurs Union Européenne': [
+  [EU_SEAFRONT]: [
     'Mer du Nord',
     'Eaux occidentales septentionales',
     'Eaux occidentales australes',

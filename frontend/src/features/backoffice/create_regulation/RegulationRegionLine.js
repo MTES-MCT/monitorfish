@@ -11,7 +11,8 @@ const RegulationRegionLine = props => {
   const {
     selectedRegionList,
     setSelectedRegionList,
-    regionIsMissing
+    regionIsMissing,
+    disabled
   } = props
 
   const addRegionToSelectedRegionList = (region) => {
@@ -48,6 +49,7 @@ const RegulationRegionLine = props => {
   return (<ContentLine>
     <Label>Région</Label>
     <CustomSelectComponent
+      disabled={disabled}
       menuStyle={{ width: 200, overflowY: 'hidden', textOverflow: 'ellipsis' }}
       searchable={false}
       placeholder={'Choisir une région'}

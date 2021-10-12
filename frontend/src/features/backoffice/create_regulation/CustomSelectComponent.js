@@ -13,7 +13,8 @@ const CustomSelectComponent = props => {
     renderMenuItem,
     menuStyle,
     valueIsMissing,
-    groupBy
+    groupBy,
+    disabled
   } = props
 
   const selectPickerStyle = {
@@ -41,6 +42,7 @@ const CustomSelectComponent = props => {
           emptyMessage: 'pas de tracé à associer'
         }}
         groupBy={groupBy}
+        disabled={disabled}
       />
     </SelectWrapper>
   )

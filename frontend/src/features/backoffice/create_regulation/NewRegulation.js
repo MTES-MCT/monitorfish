@@ -41,7 +41,7 @@ import {
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
   SeafrontByRegulatoryTerritory,
-  EU_SEAFRONT
+  UE
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -129,7 +129,7 @@ const CreateRegulation = ({ title, isEdition }) => {
        * if !regulatoryTexts.includes(null) all texts has appropriately been filled
        * if !atLeastOneValueIsMissing all other values are filled
        */
-      if (regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
+      if (regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
         !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
         // update regulatoryTextList
         setRegulatoryTextList(regulatoryTexts)
@@ -166,9 +166,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     setSelectedRegulationLawType(`${lawType} / ${seafront}`)
     setSelectedRegulationTopic(topic)
     setNameZone(zone)
-    setSelectedRegionList(region?.split(', '))
+    setSelectedRegionList(region ? region.split(', ') : [])
     setSelectedSeaFront(seafront)
-    setRegulatoryTextList(regulatoryReferences)
+    setRegulatoryTextList(regulatoryReferences || [{}])
     setSelectedGeometry(id)
     originalGeometryId = regulatoryZoneMetadata.id
     dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
@@ -188,7 +188,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(selectedSeaFront && selectedSeaFront !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setSeaFrontIsMissing(valueIsMissing)
-    valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
+    valueIsMissing = selectedSeaFront && !SeafrontByRegulatoryTerritory[UE].includes(selectedSeaFront) &&
+      !(selectedRegionList && selectedRegionList.length !== 0)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
     valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
@@ -272,7 +273,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   seaFrontIsMissing={seaFrontIsMissing}
                 />
                 <RegulationRegionLine
-                  disabled={!selectedSeaFront || SeafrontByRegulatoryTerritory[EU_SEAFRONT].includes(selectedSeaFront) }
+                  disabled={!selectedSeaFront || SeafrontByRegulatoryTerritory[UE].includes(selectedSeaFront)}
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
                   regionIsMissing={regionIsMissing}

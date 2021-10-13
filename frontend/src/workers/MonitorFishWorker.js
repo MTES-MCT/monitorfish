@@ -3,7 +3,8 @@ import {
   getMergedRegulatoryLayers,
   LawTypesToTerritory,
   mapToRegulatoryZone, orderByAlphabeticalLayer,
-  searchByLawType
+  searchByLawType,
+  FRANCE
 } from '../domain/entities/regulatory'
 import { getDateMonthsBefore } from '../utils'
 import { vesselSize } from '../domain/entities/vessel'
@@ -124,7 +125,7 @@ class MonitorFishWorker {
 
         const regulatoryTerritory = LawTypesToTerritory[lawType] ? LawTypesToTerritory[lawType] : 'Autres'
         let newLawType = lawType
-        if (regulatoryTerritory === 'France') {
+        if (regulatoryTerritory === FRANCE) {
           newLawType = `${lawType} / ${seafront}`
           seaFrontList.add(seafront)
         }

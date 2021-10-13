@@ -42,12 +42,12 @@ export const mapToRegulatoryFeatureObject = properties => {
   } = properties
   return {
     layer_name: selectedRegulationTopic,
-    law_type: selectedRegulationLawType.split(' /')[0],
+    law_type: selectedRegulationLawType?.split(' /')[0],
     zones: nameZone,
-    region: selectedRegionList.join(', '),
+    region: selectedRegionList?.join(', '),
     facade: selectedSeaFront,
     references_reglementaires: JSON.stringify(regulatoryTexts),
-    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || {})
+    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || '')
   }
 }
 
@@ -60,38 +60,38 @@ export const emptyRegulatoryFeatureObject = {
   references_reglementaires: null
 }
 
+export const FRANCE = 'France'
+export const UE = 'Union Europérenne'
 export const LawTypesToTerritory = {
-  'Reg locale': 'France',
-  'Reg 494 - Merlu': 'UE',
-  'R(UE) 2019/1241': 'UE',
-  'R(UE) 1380/2013': 'UE'
+  'Reg locale': FRANCE,
+  'Reg 494 - Merlu': UE,
+  'R(UE) 2019/1241': UE,
+  'R(UE) 1380/2013': UE
 }
 
 export const RegulatoryTerritory = {
-  FRANCE: 'Réglementation France',
-  UE: 'Réglementation UE'
+  [FRANCE]: 'Réglementation France',
+  [UE]: 'Réglementation UE'
 }
 
-export const FRENCH_SEAFRONT = 'Secteurs France'
-export const EU_SEAFRONT = 'Secteurs Union Européenne'
-
 export const SeafrontByRegulatoryTerritory = {
-  [FRENCH_SEAFRONT]: [
+  [FRANCE]: [
     'Mediterranée, MED',
-    'NAME',
+    'NAMO',
     'Outre-mer',
     'MEMN',
     'Sud-Athlantique, SA',
     'MED'
   ],
-  [EU_SEAFRONT]: [
+  [UE]: [
     'Mer du Nord',
     'Eaux occidentales septentionales',
     'Eaux occidentales australes',
     'Mer Baltique',
     'Mer Méditerranée',
     'Mer Noire',
-    'Eaux de l\'UE dans l\'OI et l\'Alt. Ouest'
+    'Eaux de l\'UE dans l\'OI et l\'Alt. Ouest',
+    'CPANE'
   ]
 }
 
@@ -255,6 +255,6 @@ export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFo
 
 export const getSelectPickerData = () => {
   return Object.keys(SeafrontByRegulatoryTerritory).map(key => {
-    return formatDataForSelectPicker(SeafrontByRegulatoryTerritory[key], key)
+    return formatDataForSelectPicker(SeafrontByRegulatoryTerritory[key], `Secteurs ${key}`)
   }).flat(1)
 }

@@ -260,8 +260,8 @@ const RegulatoryText = props => {
       <CustomDatePicker
         isRequired={startDateIsRequired}
         value={currentStartDate === INFINITE ? undefined : currentStartDate}
-        onChange={(date) => setCurrentStartDate(date)}
-        onOk={(date, _) => setCurrentStartDate(date)}
+        onChange={(date) => setCurrentStartDate(date.getTime())}
+        onOk={(date, _) => setCurrentStartDate(date.getTime())}
         format='DD/MM/YYYY'
         placement={'rightStart'}
       />
@@ -271,8 +271,8 @@ const RegulatoryText = props => {
       <CustomDatePicker
         isRequired={endDateIsRequired}
         value={currentEndDate === INFINITE ? '' : currentEndDate}
-        onChange={(date) => setCurrentEndDate(date)}
-        onOk={(date, _) => setCurrentEndDate(date)}
+        onChange={(date) => setCurrentEndDate(date.getTime())}
+        onOk={(date, _) => setCurrentEndDate(date.getTime())}
         format='DD/MM/YYYY'
         placement={'rightEnd'}
       />

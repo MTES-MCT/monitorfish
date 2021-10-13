@@ -11,7 +11,8 @@ const RegulationRegionLine = props => {
   const {
     selectedRegionList,
     setSelectedRegionList,
-    regionIsMissing
+    regionIsMissing,
+    disabled
   } = props
 
   const addRegionToSelectedRegionList = (region) => {
@@ -28,7 +29,7 @@ const RegulationRegionLine = props => {
   }
 
   function SelectedRegionList () {
-    return selectedRegionList.map(selectedRegion => {
+    return selectedRegionList?.map(selectedRegion => {
       return <Tag
         key={selectedRegion}
         tagValue={selectedRegion}
@@ -48,13 +49,14 @@ const RegulationRegionLine = props => {
   return (<ContentLine>
     <Label>Région</Label>
     <CustomSelectComponent
+      disabled={disabled}
       menuStyle={{ width: 200, overflowY: 'hidden', textOverflow: 'ellipsis' }}
       searchable={false}
       placeholder={'Choisir une région'}
       onChange={onChange}
       value={'Choisir une région'}
       data={formatDataForSelectPicker(FRENCH_REGION_LIST)}
-      renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList.includes(item.value)} item={item} tag={'Checkbox'} />}
+      renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList?.includes(item.value)} item={item} tag={'Checkbox'} />}
       valueIsMissing={regionIsMissing}
     />
     <>

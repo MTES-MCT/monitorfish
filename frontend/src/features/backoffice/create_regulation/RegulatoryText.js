@@ -121,11 +121,11 @@ const RegulatoryText = props => {
    * @returns true if a regulatory text form value is missing or incorrect, else false
    */
   const checkOtherRequiredValues = () => {
-    let required = !currentStartDate
+    let required = !currentStartDate || currentStartDate === ''
     let oneValueIsMissing = false
     oneValueIsMissing = oneValueIsMissing || required
     setStartDateIsRequired(required)
-    required = !currentEndDate
+    required = !currentEndDate || currentEndDate === ''
     oneValueIsMissing = oneValueIsMissing || required
     setEndDateIsRequired(required)
     required = currentTextType.length === 0
@@ -270,7 +270,7 @@ const RegulatoryText = props => {
       <Label>Fin de validité</Label>
       <CustomDatePicker
         isRequired={endDateIsRequired}
-        value={currentEndDate === INFINITE ? undefined : currentEndDate}
+        value={currentEndDate === INFINITE ? '' : currentEndDate}
         onChange={(date) => setCurrentEndDate(date)}
         onOk={(date, _) => setCurrentEndDate(date)}
         format='DD/MM/YYYY'
@@ -280,7 +280,7 @@ const RegulatoryText = props => {
       <CustomCheckbox
         $isRequired={endDateIsRequired}
         checked={currentEndDate === INFINITE}
-        onChange={_ => setCurrentEndDate(INFINITE)}
+        onChange={(_, checked) => setCurrentEndDate(checked ? INFINITE : '')}
       >{"jusqu'à nouvel ordre"}</CustomCheckbox>
     </ContentLine>
     <CancelContentLine>

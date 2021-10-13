@@ -48,7 +48,10 @@ const CloseVesselTrackOverlay = props => {
   return (
     <WrapperToBeKeptForDOMManagement>
       <div ref={ref}>
-        <CloseVesselTrack onClick={() => setClose(true)}/>
+        <CloseVesselTrack
+          data-cy={'close-vessel-track'}
+          onClick={() => setClose(true)}
+        />
       </div>
     </WrapperToBeKeptForDOMManagement>
   )

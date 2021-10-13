@@ -89,7 +89,10 @@ const MapMenuOverlay = props => {
                 <FirstMenu>
                   {
                     vessel
-                      ? <Menu onClick={() => setShowTrackMenu(!showTrackMenu)}>
+                      ? <Menu
+                      data-cy={'show-vessel-tracks-menu-options'}
+                        onClick={() => setShowTrackMenu(!showTrackMenu)}
+                      >
                         Afficher la piste VMS depuis…
                         <ChevronIcon/>
                       </Menu>
@@ -106,11 +109,18 @@ const MapMenuOverlay = props => {
                             <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWELVE_HOURS)}>12 heures</Menu>
                             <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_DAY)}>24 heures</Menu>
                             <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWO_DAYS)}>2 jours</Menu>
-                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.THREE_DAYS)}>3 jours</Menu>
+                            <Menu second data-cy={'show-vessel-tracks-three-days'} onClick={() => setShowTrackOf(VesselTrackDepth.THREE_DAYS)}>3 jours</Menu>
                             <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_WEEK)}>1 semaine</Menu>
                             <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWO_WEEK)}>2 semaines</Menu>
                             <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_MONTH)}>1 mois</Menu>
-                            <Menu withTopLine second onClick={() => setModalIsOpen(true)}>Choisir une période précise</Menu>
+                            <Menu
+                              withTopLine
+                              second
+                              onClick={() => setModalIsOpen(true)}
+                              data-cy={'show-vessel-tracks-custom-period'}
+                            >
+                              Choisir une période précise
+                            </Menu>
                           </>
                           : null
                       }

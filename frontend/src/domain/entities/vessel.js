@@ -19,6 +19,8 @@ export class Vessel {
   static isLightProperty = 'isLight'
   static nonFilteredVesselsAreHiddenProperty = 'nonFilteredVesselsAreHidden'
   static isShowedInFilterProperty = 'isShowedInFilter'
+  static filterPreviewProperty = 'filterPreview'
+  static inPreviewModeProperty = 'inPreviewMode'
   static isSelectedProperty = 'isSelected'
   static isHiddenProperty = 'isHidden'
 
@@ -69,6 +71,27 @@ export class Vessel {
     const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
 
     feature.set(Vessel.isShowedInFilterProperty, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
+  }
+
+  /**
+   * Apply filter preview property to vessel feature
+   * @param {Object} feature - The OpenLayers feature object
+   * @param previewFilteredVesselsFeaturesUids: string[] - the filtered vessels list
+   */
+  static applyFilterPreviewPropertyToVessels (feature, previewFilteredVesselsFeaturesUids) {
+    const featureFoundInFilteredVesselsIndex = previewFilteredVesselsFeaturesUids.indexOf(feature.ol_uid)
+
+    feature.set(Vessel.filterPreviewProperty, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
+    feature.set(Vessel.inPreviewModeProperty, !!previewFilteredVesselsFeaturesUids?.length)
+  }
+
+  /**
+   * Remove filter preview property to vessel feature
+   * @param {Object} feature - The OpenLayers feature object
+   */
+  static removeFilterPreviewPropertyToVessels (feature) {
+    feature.set(Vessel.filterPreviewProperty, false)
+    feature.set(Vessel.inPreviewModeProperty, false)
   }
 
   static getVesselId (vessel) {

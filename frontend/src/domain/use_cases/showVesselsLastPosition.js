@@ -1,9 +1,14 @@
 import { getVesselsLastPositionsFromAPI } from '../../api/fetch'
-import { setError } from '../shared_slices/Global'
+import { resetIsUpdatingVessels, setError } from '../shared_slices/Global'
 import { setVessels, setVesselsSpeciesAndDistricts } from '../shared_slices/Vessel'
 import getUniqueSpeciesAndDistricts from './getUniqueSpeciesAndDistricts'
 
-const showVesselsLastPosition = () => dispatch => {
+const showVesselsLastPosition = () => (dispatch, getState) => {
+  if (getState().global.blockVesselsUpdate) {
+    dispatch(resetIsUpdatingVessels())
+    return
+  }
+
   getVesselsLastPositionsFromAPI().then(vessels => {
     dispatch(setVessels(vessels))
     dispatch(getUniqueSpeciesAndDistricts(vessels)).then(speciesAndDistricts => {

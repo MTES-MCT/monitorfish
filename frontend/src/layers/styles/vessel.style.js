@@ -69,6 +69,8 @@ export const getVesselStyle = (feature, resolution) => {
   const isShowedInFilter = feature.get(Vessel.isShowedInFilterProperty)
   const isHidden = feature.get(Vessel.isHiddenProperty)
   const isSelected = feature.get(Vessel.isSelectedProperty)
+  const inPreviewMode = feature.get(Vessel.inPreviewModeProperty)
+  const filterPreview = feature.get(Vessel.filterPreviewProperty)
 
   const course = feature.vessel.course
   const speed = feature.vessel.speed
@@ -78,6 +80,10 @@ export const getVesselStyle = (feature, resolution) => {
   }
 
   if (nonFilteredVesselsAreHidden && filterColor && !isShowedInFilter) {
+    return []
+  }
+
+  if (inPreviewMode && !filterPreview) {
     return []
   }
 

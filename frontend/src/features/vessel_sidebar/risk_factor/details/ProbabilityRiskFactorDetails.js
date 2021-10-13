@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import InfractionsResume from '../../../controls/InfractionsResume'
+import InfractionsResume from '../../controls/InfractionsResume'
 import { useSelector } from 'react-redux'
 
 const ProbabilityRiskFactorDetails = ({ isOpen }) => {

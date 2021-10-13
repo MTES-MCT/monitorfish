@@ -24,7 +24,8 @@ const VesselsLayer = ({ map }) => {
   const {
     vessels,
     selectedVesselIdentity,
-    hideOtherVessels
+    hideOtherVessels,
+    previewFilteredVesselsFeaturesUids
   } = useSelector(state => state.vessel)
 
   const {
@@ -68,6 +69,20 @@ const VesselsLayer = ({ map }) => {
       vectorSource.changed()
     })
   }, [filters])
+
+  useEffect(() => {
+    const vesselsFeatures = vectorSource.getFeatures()
+    if (previewFilteredVesselsFeaturesUids?.length) {
+      vesselsFeatures.forEach(feature => {
+        Vessel.applyFilterPreviewPropertyToVessels(feature, previewFilteredVesselsFeaturesUids)
+      })
+    } else {
+      vesselsFeatures.forEach(feature => {
+        Vessel.removeFilterPreviewPropertyToVessels(feature)
+      })
+    }
+    vectorSource.changed()
+  }, [previewFilteredVesselsFeaturesUids])
 
   function setProperties () {
     return ({
@@ -227,6 +242,7 @@ const VesselsLayer = ({ map }) => {
 
         vesselsFeatures.forEach(feature => {
           Vessel.applyIsShowedPropertyToVessels(feature, filteredVesselsUids)
+          Vessel.applyFilterPreviewPropertyToVessels(feature, previewFilteredVesselsFeaturesUids)
         })
 
         return resolve(vesselsFeatures)

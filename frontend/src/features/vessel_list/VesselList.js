@@ -5,12 +5,22 @@ import Modal from 'rsuite/lib/Modal'
 
 import { COLORS } from '../../constants/constants'
 import { layersType } from '../../domain/entities/layers'
-import { removeZoneSelected, resetZonesSelected, setInteraction, setZonesSelected } from '../../domain/shared_slices/Map'
-import { InteractionTypes } from '../../domain/entities/map'
+import {
+  animateToRegulatoryLayer,
+  removeZoneSelected,
+  resetZonesSelected,
+  setInteraction,
+  setZonesSelected
+} from '../../domain/shared_slices/Map'
+import { InteractionTypes, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import VesselListTable from './VesselListTable'
 import DownloadVesselListModal from './DownloadVesselListModal'
 import getAdministrativeZoneGeometry from '../../domain/use_cases/getAdministrativeZoneGeometry'
-import { expandRightMenu } from '../../domain/shared_slices/Global'
+import {
+  expandRightMenu,
+  setBlockVesselsUpdate,
+  setPreviewFilteredVesselsMode
+} from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../../domain/use_cases/getFilteredVessels'
 import VesselListFilters from './VesselListFilters'
@@ -21,6 +31,12 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { VesselListSVG } from '../commonStyles/icons/VesselListSVG'
 import { getZonesAndSubZonesPromises } from '../../domain/use_cases/getZonesAndSubZonesPromises'
+import { setPreviewFilteredVesselsFeaturesUids } from '../../domain/shared_slices/Vessel'
+import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
+import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
+import VectorSource from 'ol/source/Vector'
+import GeoJSON from 'ol/format/GeoJSON'
+import { all } from 'ol/loadingstrategy'
 
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
@@ -36,7 +52,10 @@ const VesselList = ({ namespace }) => {
   } = useSelector(state => state.map)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
   const [vesselListModalIsOpen, setVesselListModalIsOpen] = useState(false)
@@ -100,20 +119,21 @@ const VesselList = ({ namespace }) => {
       dispatch(unselectVessel())
       firstUpdate.current = false
 
+      dispatch(setBlockVesselsUpdate(true))
       updateVesselsList()
     }
   }, [vesselListModalIsOpen])
 
   const updateVesselsList = () => {
     const vessels = []
-    vesselsLayerSource.forEachFeature(feature => {
+    vesselsLayerSource?.forEachFeature(feature => {
       const coordinates = [...feature.getGeometry().getCoordinates()]
 
       vessels.push(getVesselObjectFromFeature(feature, coordinates, coordinatesFormat))
     })
 
     setVessels(vessels)
-    setVesselsCountTotal(vessels.length)
+    setVesselsCountTotal(vessels?.length ? vessels?.length : 0)
   }
 
   useEffect(() => {
@@ -177,6 +197,7 @@ const VesselList = ({ namespace }) => {
     setDistrictsFiltered([])
     setVesselsSizeValuesChecked([])
 
+    dispatch(setBlockVesselsUpdate(false))
     dispatch(resetZonesSelected())
   }
 
@@ -187,11 +208,13 @@ const VesselList = ({ namespace }) => {
   const selectBox = () => {
     setVesselListModalIsOpen(false)
     dispatch(setInteraction(InteractionTypes.SQUARE))
+    dispatch(setBlockVesselsUpdate(true))
   }
 
   const selectPolygon = () => {
     setVesselListModalIsOpen(false)
     dispatch(setInteraction(InteractionTypes.POLYGON))
+    dispatch(setBlockVesselsUpdate(true))
   }
 
   const callRemoveZoneSelected = zoneSelectedToRemove => {
@@ -205,6 +228,40 @@ const VesselList = ({ namespace }) => {
   const saveFilter = () => {
     setSaveVesselFilterModalIsOpen(true)
   }
+
+  const previewFilteredVessels = () => {
+    const vesselsUids = filteredVessels.map(vessel => vessel.uid)
+
+    if (vesselsUids?.length) {
+      dispatch(setPreviewFilteredVesselsFeaturesUids(vesselsUids))
+      dispatch(setPreviewFilteredVesselsMode(true))
+
+      if (zonesSelected?.length) {
+        const vectorSource = new VectorSource({
+          format: new GeoJSON({
+            dataProjection: WSG84_PROJECTION,
+            featureProjection: OPENLAYERS_PROJECTION
+          }),
+          strategy: all
+        })
+        const feature = vectorSource.getFormat().readFeatures(zonesSelected[0]?.feature)
+        const extent = feature[0]?.getGeometry()?.getExtent()
+        if (extent?.length && !Number.isNaN(extent[0]) && !Number.isNaN(extent[1])) {
+          dispatch(animateToRegulatoryLayer({
+            extent: extent
+          }))
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (previewFilteredVesselsMode) {
+      setVesselListModalIsOpen(false)
+    } else if (previewFilteredVesselsMode !== undefined) {
+      setVesselListModalIsOpen(true)
+    }
+  }, [previewFilteredVesselsMode])
 
   useEffect(() => {
     if (zonesSelected && zonesSelected.length) {
@@ -261,6 +318,7 @@ const VesselList = ({ namespace }) => {
       <Wrapper isFiltering={isFiltering}>
         <VesselListIcon
           data-cy={'vessel-list'}
+          isHidden={previewFilteredVesselsMode}
           healthcheckTextWarning={healthcheckTextWarning}
           isOpen={vesselListModalIsOpen}
           selectedVessel={selectedVessel}
@@ -360,13 +418,16 @@ const VesselList = ({ namespace }) => {
             />
           </Modal.Body>
           <Modal.Footer>
-            {/*
-            TODO To check : is this feature still needed ?
-            <ShowOnMapButton
+            <PreviewButton
+              data-cy={'preview-filtered-vessels'}
+              hasIcon
+              toLeft
               disabled={!(filteredVessels && filteredVessels.length)}
-              onClick={() => highLightOnMap()}>
-              Voir sur la carte
-            </ShowOnMapButton> */}
+              isLast={false}
+              onClick={() => previewFilteredVessels()}>
+              <Preview/>
+              Aperçu sur la carte
+            </PreviewButton>
             <BlackButton
               data-cy={'save-filter-modal'}
               disabled={hasNoFilter()}
@@ -413,16 +474,16 @@ const Wrapper = styled(MapComponentStyle)`
   cursor: ${props => props.isFiltering ? 'progress' : 'auto'};
 `
 
-const BlackButton = styled.button`
-  background: ${COLORS.charcoal};
-  padding: 5px 12px;
+const PreviewButton = styled(SecondaryButton)`
+  float: left;
+  margin-left: 25px;
+  padding-left: 5px;
+`
+
+const BlackButton = styled(PrimaryButton)`
   margin: 20px ${props => props.isLast ? '20px' : '0'} 20px 10px;
   font-size: 13px;
   color: ${COLORS.gainsboro};
-  
-  :hover, :focus {
-    background: ${COLORS.charcoal};
-  }
 `
 
 const Title = styled.div`
@@ -472,6 +533,12 @@ const Vessel = styled(VesselListSVG)`
       opacity: 0;
     }
   }
+`
+
+const Preview = styled(PreviewSVG)`
+  width: 23px;
+  margin-right: 8px;
+  vertical-align: text-top;
 `
 
 export default VesselList

@@ -10,9 +10,9 @@ import VesselIdentity from './VesselIdentity'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import VesselSummary from './VesselSummary'
-import VesselFishingActivities from '../fishing_activities/VesselFishingActivities'
+import VesselFishingActivities from './fishing_activities/VesselFishingActivities'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
-import VesselControls from '../controls/VesselControls'
+import VesselControls from './controls/VesselControls'
 import TrackDepthSelection from './track_depth_selection/TrackDepthSelection'
 import TrackExport from './track_export/TrackExport'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
@@ -21,8 +21,10 @@ import HideOtherVessels from './hide_other_vessels/HideOtherVessels'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
-  const { healthcheckTextWarning } = useSelector(state => state.global)
-  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
+  const {
+    healthcheckTextWarning,
+    rightMenuIsOpen
+  } = useSelector(state => state.global)
   const {
     vesselSidebarTab,
     vesselSidebarIsOpen

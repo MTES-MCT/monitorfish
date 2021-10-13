@@ -28,6 +28,7 @@ const Button = styled.button`
   font-size: 13px;
   padding: 5px 12px;
   margin: 20px ${props => props.isLast ? '20px' : '0'} 20px 10px;
+  height: 30px;
 `
 
 const BackofficeButton = styled.button`

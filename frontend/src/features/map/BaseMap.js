@@ -37,7 +37,10 @@ const BaseMap = props => {
     animateToRegulatoryLayer
   } = useSelector(state => state.map)
 
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
   const dispatch = useDispatch()
 
   const [map, setMap] = useState()
@@ -176,22 +179,32 @@ const BaseMap = props => {
   }
 
   function animateToLayer () {
-    if (map && animateToRegulatoryLayer && animateToRegulatoryLayer.center && !isAnimating && initRenderIsDone) {
-      const animateObject = {
-        center: [
-          animateToRegulatoryLayer.center[0],
-          animateToRegulatoryLayer.center[1]
-        ],
-        duration: 1000
+    if (map && animateToRegulatoryLayer && !isAnimating && initRenderIsDone) {
+      if (animateToRegulatoryLayer.extent) {
+        map.getView().fit(animateToRegulatoryLayer.extent, {
+          duration: 1000,
+          callback: () => dispatch(resetAnimateToRegulatoryLayer())
+        })
+        return
       }
-      if (map.getView().getZoom() < 8) {
-        animateObject.zoom = 8
+
+      if (animateToRegulatoryLayer.center) {
+        const animateObject = {
+          center: [
+            animateToRegulatoryLayer.center[0],
+            animateToRegulatoryLayer.center[1]
+          ],
+          duration: 1000
+        }
+        if (map.getView().getZoom() < 8) {
+          animateObject.zoom = 8
+        }
+        setIsAnimating(true)
+        map.getView().animate(animateObject, () => {
+          setIsAnimating(false)
+          dispatch(resetAnimateToRegulatoryLayer())
+        })
       }
-      setIsAnimating(true)
-      map.getView().animate(animateObject, () => {
-        setIsAnimating(false)
-        dispatch(resetAnimateToRegulatoryLayer())
-      })
     }
   }
 
@@ -207,6 +220,7 @@ const BaseMap = props => {
       <MapContainer
         ref={mapElement}
         healthcheckTextWarning={healthcheckTextWarning}
+        previewFilteredVesselsMode={previewFilteredVesselsMode}
       />
       <BaseLayer map={map}/>
       <RegulatoryLayers map={map} mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
@@ -228,7 +242,7 @@ const MapWrapper = styled.div`
 `
 
 const MapContainer = styled.div`
-  height: ${props => props.healthcheckTextWarning ? 'calc(100vh - 50px)' : '100vh'};
+  height: ${props => props.healthcheckTextWarning || props.previewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100vh'};
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

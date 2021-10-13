@@ -16,6 +16,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   const {
     vesselsLayerSource,
     filteredVesselsFeaturesUids,
+    previewFilteredVesselsFeaturesUids,
     hideOtherVessels
   } = useSelector(state => state.vessel)
 
@@ -75,6 +76,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     selectedBaseLayer,
     showingVesselsEstimatedPositions,
     filteredVesselsFeaturesUids,
+    previewFilteredVesselsFeaturesUids,
     nonFilteredVesselsAreHidden
   ])
 
@@ -129,6 +131,14 @@ const VesselEstimatedPositionLayer = ({ map }) => {
       if (nonFilteredVesselsAreHidden &&
         filteredVesselsFeaturesUids?.length > 0) {
         const featureIndex = filteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
+
+        if (featureIndex === NOT_FOUND) {
+          return
+        }
+      }
+
+      if (previewFilteredVesselsFeaturesUids?.length) {
+        const featureIndex = previewFilteredVesselsFeaturesUids.indexOf(vesselFeature.ol_uid)
 
         if (featureIndex === NOT_FOUND) {
           return

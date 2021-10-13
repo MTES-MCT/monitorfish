@@ -41,7 +41,7 @@ import {
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
   SeafrontByRegulatoryTerritory,
-  EU_SEAFRONT
+  UE
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -188,7 +188,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(selectedSeaFront && selectedSeaFront !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setSeaFrontIsMissing(valueIsMissing)
-    valueIsMissing = !(selectedRegionList && selectedRegionList.length !== 0)
+    valueIsMissing = selectedSeaFront && !SeafrontByRegulatoryTerritory[UE].includes(selectedSeaFront) &&
+      !(selectedRegionList && selectedRegionList.length !== 0)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
     valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
@@ -272,7 +273,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   seaFrontIsMissing={seaFrontIsMissing}
                 />
                 <RegulationRegionLine
-                  disabled={!selectedSeaFront || SeafrontByRegulatoryTerritory[EU_SEAFRONT].includes(selectedSeaFront) }
+                  disabled={!selectedSeaFront || SeafrontByRegulatoryTerritory[UE].includes(selectedSeaFront)}
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
                   regionIsMissing={regionIsMissing}

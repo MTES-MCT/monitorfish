@@ -42,11 +42,11 @@ context('NewRegulation', () => {
     cy.get('[data-key="Armor_CSJ_Dragues"]').should('exist')
     cy.get('[data-key="Mayotte_Poulpes"]').should('exist')
   })
-  it('Seafront list contains one element equal to MEMN', () => {
+  it('Seafront list contains 14 elements', () => {
     cy.get('.rs-picker-toggle-placeholder').eq(2).should('have.text', 'Choisir un secteur')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
-    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 13)
+    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 14)
   })
   it('Adding a zone name change input background', () => {
     cy.get('.rs-input').eq(0).type('new zone name')

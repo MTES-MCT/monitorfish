@@ -129,7 +129,6 @@ const Zone = styled.div`
 
 const Wrapper = styled.li`
   margin: 0;
-  background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
   overflow-y: auto;
@@ -138,6 +137,7 @@ const Wrapper = styled.li`
 `
 
 const ERSMessageContent = styled.div`
+  background: ${COLORS.background};
   width: inherit;
   height: ${props => props.isOpen && props.chartHeight ? props.chartHeight + 20 : 0}px;
   opacity: ${props => props.isOpen ? 1 : 0};
@@ -145,6 +145,7 @@ const ERSMessageContent = styled.div`
   padding-left: 20px;
   border-bottom: 1px solid ${COLORS.gray};
   transition: all 0.2s;
+  margin-bottom: ${props => props.isOpen ? 5 : -1}px;
 `
 
 export default FARMessageResume

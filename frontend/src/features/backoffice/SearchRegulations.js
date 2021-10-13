@@ -95,8 +95,10 @@ const SearchBoxInput = styled.input`
 `
 
 const SearchIcon = styled(SearchIconSVG)`
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  margin-right: 8px;
   float: right;
   color: ${COLORS.lightGray}
 `

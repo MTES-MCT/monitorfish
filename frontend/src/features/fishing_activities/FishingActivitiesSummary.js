@@ -180,7 +180,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   return <>
     {fishingActivities
       ? <Body>
-        <Zone>
+        <Zone white>
           <Title>
             <Text>Segment(s) de flotte(s) actuel(s)</Text>
             <TextValue>
@@ -412,7 +412,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
+  background: ${props => props.white ? COLORS.background : 'unset'};
 `
 
 const Fields = styled.table`

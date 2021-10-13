@@ -17,6 +17,7 @@ import NoVesselsInFilterError from '../errors/NoVesselsInFilterError'
 
 export const VESSELS_UPDATE_EVENT = 'UPDATE'
 export const MIN_ZOOM_VESSEL_LABELS = 8
+const NOT_FOUND = -1
 
 const VesselsLayer = ({ map }) => {
   const dispatch = useDispatch()
@@ -24,6 +25,7 @@ const VesselsLayer = ({ map }) => {
   const {
     vessels,
     selectedVesselIdentity,
+    vesselsTracksShowed,
     hideOtherVessels,
     previewFilteredVesselsFeaturesUids
   } = useSelector(state => state.vessel)
@@ -52,7 +54,7 @@ const VesselsLayer = ({ map }) => {
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     useSpatialIndex: false,
-    style: (feature, resolution) => getVesselStyle(feature, resolution)
+    style: feature => getVesselStyle(feature)
   }))
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const VesselsLayer = ({ map }) => {
 
   useEffect(() => {
     const vesselsFeatures = vectorSource.getFeatures()
-    applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(_ => {
+    applyFilterToVessels(vesselsFeatures, () => showSelectedSelectorToShowedTracks(vesselsFeatures)).then(_ => {
       vectorSource.changed()
     })
   }, [filters])
@@ -173,13 +175,18 @@ const VesselsLayer = ({ map }) => {
     }
   }
 
-  const showSelectedVesselSelector = vesselsFeatures => {
+  const showSelectedSelectorToShowedTracks = vesselsFeatures => {
     const feature = vesselsFeatures.find(feature =>
       selectedVesselIdentity && vesselAndVesselFeatureAreEquals(selectedVesselIdentity, feature))
 
     if (feature) {
       feature.set(Vessel.isSelectedProperty, true)
     }
+
+    const vesselIds = Object.keys(vesselsTracksShowed)
+    vesselsFeatures
+      .filter(feature => vesselIds?.findIndex(identity => feature?.getId()?.toString().includes(identity)) !== NOT_FOUND)
+      .forEach(feature => feature.set(Vessel.isSelectedProperty, true))
   }
 
   function addVesselsFeaturesToMap () {
@@ -189,11 +196,11 @@ const VesselsLayer = ({ map }) => {
         .map(currentVessel => Vessel.getFeature(currentVessel))
         .filter(vessel => vessel)
 
-      applyFilterToVessels(vesselsFeatures, () => showSelectedVesselSelector(vesselsFeatures)).then(features => {
+      applyFilterToVessels(vesselsFeatures, () => showSelectedSelectorToShowedTracks(vesselsFeatures)).then(features => {
         if (features) {
           vectorSource.clear(true)
           vectorSource.addFeatures(features)
-          showSelectedVesselSelector(features)
+          showSelectedSelectorToShowedTracks(features)
           vectorSource.dispatchEvent({
             type: VESSELS_UPDATE_EVENT,
             features,

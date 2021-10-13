@@ -9,7 +9,7 @@ import LayersEnum from '../../domain/entities/layers'
  */
 const MapMenu = ({ map }) => {
   const [coordinates, setCoordinates] = useState([])
-  const [isVessel, setIsVessel] = useState(null)
+  const [vessel, setVessel] = useState(null)
 
   useEffect(() => {
     if (map) {
@@ -20,19 +20,19 @@ const MapMenu = ({ map }) => {
         const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
 
         if (feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
-          setIsVessel(true)
+          setVessel(feature)
+          setCoordinates(feature.getGeometry().getCoordinates())
         } else {
-          setIsVessel(false)
+          setVessel(null)
+          setCoordinates([])
         }
-
-        setCoordinates(map.getEventCoordinate(event))
       })
     }
   }, [map])
 
   return (
     <>
-      <MapMenuOverlay map={map} coordinates={coordinates} isVessel={isVessel}/>
+      <MapMenuOverlay map={map} coordinates={coordinates} vessel={vessel}/>
       <div />
     </>
   )

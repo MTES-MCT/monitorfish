@@ -14,6 +14,7 @@ import {
 const X = 0
 const Y = 1
 const initialOffsetValue = [5, -30]
+const initialOffsetValueWhenShownTrack = [33, -25]
 
 const VesselLabelOverlay = ({
   map,
@@ -27,12 +28,13 @@ const VesselLabelOverlay = ({
   zoomHasChanged,
   opacity,
   riskFactorDetailsShowed,
+  trackIsShown,
   triggerShowRiskDetails,
   previewFilteredVesselsMode
 }) => {
   const ref = createRef()
 
-  const currentOffset = useRef(initialOffsetValue)
+  const currentOffset = useRef(trackIsShown ? initialOffsetValueWhenShownTrack : initialOffsetValue)
   const currentCoordinates = useRef([])
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
@@ -47,6 +49,13 @@ const VesselLabelOverlay = ({
 
   useMoveOverlayWhenDragging(overlay, map, currentOffset, moveVesselLabelWithThrottle, showed)
   useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveVesselLabelWithThrottle)
+
+  useEffect(() => {
+    if (trackIsShown) {
+      currentOffset.current = initialOffsetValueWhenShownTrack
+      overlay.setOffset(initialOffsetValueWhenShownTrack)
+    }
+  }, [trackIsShown])
 
   useEffect(() => {
     if (map) {

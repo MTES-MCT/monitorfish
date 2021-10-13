@@ -61,7 +61,7 @@ export const getCircleStyle = vesselObject => {
   return circleStyleCache.get(key)
 }
 
-export const getVesselStyle = (feature, resolution) => {
+export const getVesselStyle = feature => {
   const filterColor = feature.get(Vessel.filterColorProperty)
   const opacity = feature.get(Vessel.opacityProperty)
   const isLight = feature.get(Vessel.isLightProperty)
@@ -96,7 +96,6 @@ export const getVesselStyle = (feature, resolution) => {
 
   if (isSelected) {
     styles.push(selectedVesselStyle)
-    styles[styles.length - 1].getImage().setScale(1 / Math.pow(resolution, 1 / 7))
   }
 
   return styles

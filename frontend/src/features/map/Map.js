@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
 import LayerDetailsBox from './controls/LayerDetailsBox'
-import VesselTrackLayer from '../../layers/VesselTrackLayer'
+import VesselsTracksLayer from '../../layers/VesselsTracksLayer'
 import VesselsLayer from '../../layers/VesselsLayer'
 import DrawLayer from '../../layers/DrawLayer'
 import MapHistory from './MapHistory'
@@ -61,7 +61,7 @@ const Map = () => {
       />
       <MapMenu/>
       <MeasurementLayer/>
-      <VesselTrackLayer/>
+      <VesselsTracksLayer/>
       <VesselsLayer/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>

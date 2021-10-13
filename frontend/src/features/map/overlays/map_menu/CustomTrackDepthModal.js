@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import Modal from 'rsuite/lib/Modal'
 import TrackDepthDateRange from '../../../vessel_sidebar/track_depth_selection/TrackDepthDateRange'
-import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 
 const CustomTrackDepthModal = ({ isModalOpen, setModalIsOpen, datesSelection, setDateSelection }) => {
   return (
@@ -27,7 +26,6 @@ const CustomTrackDepthModal = ({ isModalOpen, setModalIsOpen, datesSelection, se
           setDate={setDateSelection}
           width={265}
         />
-        <Validate>Valider la période</Validate>
       </Body>
     </ModalWithCustomHeight>
   )
@@ -44,14 +42,9 @@ const Body = styled(Modal.Body)`
   text-align: center;
 `
 
-const Validate = styled(PrimaryButton)`
-  margin-left: 0;
-  margin-top: 10px;
-`
-
 const ModalWithCustomHeight = styled(Modal)`
   .rs-modal-content {
-    height: 200px !important;
+    height: 150px !important;
   }
 `
 

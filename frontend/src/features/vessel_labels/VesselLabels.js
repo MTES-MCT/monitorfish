@@ -16,7 +16,9 @@ import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 
 const VesselLabels = () => {
   const dispatch = useDispatch()
-  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const {
+    selectedVessel
+  } = useSelector(state => state.vessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const vesselLabel = useSelector(state => state.map.vesselLabel)
   const {

@@ -129,7 +129,7 @@ const CreateRegulation = ({ title, isEdition }) => {
        * if !regulatoryTexts.includes(null) all texts has appropriately been filled
        * if !atLeastOneValueIsMissing all other values are filled
        */
-      if (regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
+      if (regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
         !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
         // update regulatoryTextList
         setRegulatoryTextList(regulatoryTexts)
@@ -166,9 +166,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     setSelectedRegulationLawType(`${lawType} / ${seafront}`)
     setSelectedRegulationTopic(topic)
     setNameZone(zone)
-    setSelectedRegionList(region?.split(', '))
+    setSelectedRegionList(region ? region.split(', ') : [])
     setSelectedSeaFront(seafront)
-    setRegulatoryTextList(regulatoryReferences)
+    setRegulatoryTextList(regulatoryReferences || [{}])
     setSelectedGeometry(id)
     originalGeometryId = regulatoryZoneMetadata.id
     dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))

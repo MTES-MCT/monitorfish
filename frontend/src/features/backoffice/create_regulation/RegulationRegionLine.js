@@ -16,7 +16,7 @@ const RegulationRegionLine = props => {
   } = props
 
   const addRegionToSelectedRegionList = (region) => {
-    const newArray = [...selectedRegionList]
+    const newArray = selectedRegionList ? [...selectedRegionList] : []
     newArray.push(region)
     setSelectedRegionList(newArray)
   }
@@ -39,7 +39,7 @@ const RegulationRegionLine = props => {
   }
 
   const onChange = (value) => {
-    if (selectedRegionList.includes(value)) {
+    if (selectedRegionList?.includes(value)) {
       removeRegionToSelectedRegionList(value)
     } else {
       addRegionToSelectedRegionList(value)

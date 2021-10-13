@@ -61,8 +61,9 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
         connection.execute(
             """
             UPDATE public.ers e
-                SET trip_number = t.trip_number,
-                SET trip_number_was_computed = TRUE
+            SET
+                trip_number = t.trip_number,
+                trip_number_was_computed = true
             FROM tmp_computed_trip_numbers t
             WHERE e.id = t.id;
         """

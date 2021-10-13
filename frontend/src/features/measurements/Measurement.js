@@ -27,7 +27,10 @@ const Measurement = () => {
   const {
     measurementTypeToAdd
   } = useSelector(state => state.measurement)
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
 
   const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
@@ -96,6 +99,7 @@ const Measurement = () => {
     <Wrapper ref={wrapperRef}>
       <MeasurementWrapper
         data-cy={'measurement'}
+        isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
         isOpen={measurementIsOpen || measurementTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}

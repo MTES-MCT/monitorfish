@@ -4,11 +4,14 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as WarningSVG } from '../icons/Picto_alerte.svg'
 
 const Healthcheck = () => {
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
 
   return (<>
     {
-      healthcheckTextWarning
+      healthcheckTextWarning && !previewFilteredVesselsMode
         ? <HealthcheckWarnings>
           <Warning>
             <WarningIcon />

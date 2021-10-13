@@ -11,6 +11,7 @@ import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
 const MAX_LABELS_DISPLAYED = 200
+const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
 const NOT_FOUND = -1
 
 const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
@@ -18,10 +19,15 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   const {
     filteredVesselsFeaturesUids,
+    previewFilteredVesselsFeaturesUids,
     vesselsLayerSource,
     hideOtherVessels,
     selectedVessel
   } = useSelector(state => state.vessel)
+
+  const {
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
 
   const {
     vesselLabelsShowedOnMap,
@@ -113,6 +119,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     riskFactorShowedOnMap,
     vesselLabel,
     filteredVesselsFeaturesUids,
+    previewFilteredVesselsFeaturesUids,
     vesselsLastPositionVisibility,
     hideOtherVessels
   ])
@@ -181,7 +188,10 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     const features = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
     const filterShowed = filters.find(filter => filter.showed)
 
-    if (filterShowed && nonFilteredVesselsAreHidden && filteredVesselsFeaturesUids?.length) {
+    const isFiltered = filterShowed && nonFilteredVesselsAreHidden && filteredVesselsFeaturesUids?.length
+    const isPreviewed = previewFilteredVesselsFeaturesUids?.length
+
+    if (isFiltered || isPreviewed) {
       addLabelToFilteredFeatures(features)
     } else if (features.length < MAX_LABELS_DISPLAYED) {
       addLabelToFeatures(features)
@@ -192,11 +202,22 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   function addLabelToFilteredFeatures (features) {
-    const filteredFeatures = features.filter(feature => {
-      return isIncludedInFilterList(feature, filteredVesselsFeaturesUids)
-    })
+    let filteredFeatures
+    if (previewFilteredVesselsFeaturesUids?.length) {
+      filteredFeatures = features.filter(feature => {
+        return isIncludedInFilterList(feature, previewFilteredVesselsFeaturesUids)
+      })
+    } else {
+      filteredFeatures = features.filter(feature => {
+        return isIncludedInFilterList(feature, filteredVesselsFeaturesUids)
+      })
+    }
 
-    if (filteredFeatures.length < MAX_LABELS_DISPLAYED) {
+    const maxLabelsDisplayed = previewFilteredVesselsMode
+      ? MAX_LABELS_DISPLAYED_IN_PREVIEW
+      : MAX_LABELS_DISPLAYED
+
+    if (filteredFeatures.length < maxLabelsDisplayed) {
       addLabelToFeatures(filteredFeatures)
     } else {
       setFeaturesAndLabels([])
@@ -205,7 +226,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   function isIncludedInFilterList (feature, arrayOfUids) {
-    return arrayOfUids && arrayOfUids.length && arrayOfUids.indexOf(feature.ol_uid) !== NOT_FOUND
+    return arrayOfUids?.length && arrayOfUids.indexOf(feature.ol_uid) !== NOT_FOUND
   }
 
   function drawMovedLabelIfFoundAndReturnOffset (labelLineFeatureId, feature) {
@@ -287,6 +308,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           coordinates={identity.coordinates}
           zoomHasChanged={previousMapZoom.current}
           opacity={opacity}
+          previewFilteredVesselsMode={previewFilteredVesselsMode}
         />
       })
     }

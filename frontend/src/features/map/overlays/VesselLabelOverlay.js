@@ -27,7 +27,8 @@ const VesselLabelOverlay = ({
   zoomHasChanged,
   opacity,
   riskFactorDetailsShowed,
-  triggerShowRiskDetails
+  triggerShowRiskDetails,
+  previewFilteredVesselsMode
 }) => {
   const ref = createRef()
 
@@ -103,71 +104,86 @@ const VesselLabelOverlay = ({
       <Wrapper ref={ref} data-cy={'vessel-label-draggable'}>
         {
           showed && (text || riskFactor) && opacity
-            ? <>
-              <VesselLabelOverlayElement>
-                <Text>
-                  {
-                    text
-                      ? <>
-                        {
-                          flagState
-                            ? <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`}/>
-                            : null
-                        }
-                        <ZoneText data-cy={'vessel-label-text'}>
-                          {text}
-                        </ZoneText>
-                      </>
-                      : null
-                  }
-                </Text>
-                {
-                  riskFactor?.globalRisk
-                    ? <RiskFactor
-                      withText={text}
-                      onClick={() => {
-                        setShowRiskFactorDetails(!showRiskFactorDetails)
-                        triggerShowRiskDetails(featureId)
-                      }}
-                      data-cy={'vessel-label-risk-factor'}
-                      color={getRiskFactorColor(riskFactor?.globalRisk)}
-                    >
-                      {parseFloat(riskFactor?.globalRisk).toFixed(1)}
-                    </RiskFactor>
-                    : null
-                }
-              </VesselLabelOverlayElement>
+            ? previewFilteredVesselsMode
+              ? <>
               {
-                riskFactor && showRiskFactorDetails
-                  ? <RiskFactorDetails>
-                    <RiskFactorDetail>
-                      <RiskFactorBox color={getRiskFactorColor(riskFactor?.impactRiskFactor)}>
-                        {parseFloat(riskFactor?.impactRiskFactor).toFixed(1)}
-                      </RiskFactorBox>
-                      <SubRiskText>
-                        { getImpactRiskFactorText(riskFactor?.impactRiskFactor, riskFactor?.hasSegments) }
-                      </SubRiskText>
-                    </RiskFactorDetail>
-                    <RiskFactorDetail>
-                      <RiskFactorBox color={getRiskFactorColor(riskFactor?.probabilityRiskFactor)}>
-                        {parseFloat(riskFactor?.probabilityRiskFactor).toFixed(1)}
-                      </RiskFactorBox>
-                      <SubRiskText>
-                        { getProbabilityRiskFactorText(riskFactor?.probabilityRiskFactor, riskFactor?.hasBeenControlledLastFiveYears) }
-                      </SubRiskText>
-                    </RiskFactorDetail>
-                    <RiskFactorDetail>
-                      <RiskFactorBox color={getRiskFactorColor(riskFactor?.detectabilityRiskFactor)}>
-                        {parseFloat(riskFactor?.detectabilityRiskFactor).toFixed(1)}
-                      </RiskFactorBox>
-                      <SubRiskText>
-                        { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false) }
-                      </SubRiskText>
-                    </RiskFactorDetail>
-                  </RiskFactorDetails>
+                text
+                  ? <>
+                    <ZoneText
+                      isLittle
+                      data-cy={'vessel-label-text'}
+                    >
+                      {text}
+                    </ZoneText>
+                  </>
                   : null
               }
-            </>
+              </>
+              : <>
+                  <VesselLabelOverlayElement>
+                    <Text>
+                      {
+                        text
+                          ? <>
+                            {
+                              flagState
+                                ? <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`}/>
+                                : null
+                            }
+                            <ZoneText data-cy={'vessel-label-text'}>
+                              {text}
+                            </ZoneText>
+                          </>
+                          : null
+                      }
+                    </Text>
+                    {
+                      riskFactor?.globalRisk
+                        ? <RiskFactor
+                          withText={text}
+                          onClick={() => {
+                            setShowRiskFactorDetails(!showRiskFactorDetails)
+                            triggerShowRiskDetails(featureId)
+                          }}
+                          data-cy={'vessel-label-risk-factor'}
+                          color={getRiskFactorColor(riskFactor?.globalRisk)}
+                        >
+                          {parseFloat(riskFactor?.globalRisk).toFixed(1)}
+                        </RiskFactor>
+                        : null
+                    }
+                  </VesselLabelOverlayElement>
+                  {
+                    riskFactor && showRiskFactorDetails
+                      ? <RiskFactorDetails>
+                        <RiskFactorDetail>
+                          <RiskFactorBox color={getRiskFactorColor(riskFactor?.impactRiskFactor)}>
+                            {parseFloat(riskFactor?.impactRiskFactor).toFixed(1)}
+                          </RiskFactorBox>
+                          <SubRiskText>
+                            { getImpactRiskFactorText(riskFactor?.impactRiskFactor, riskFactor?.hasSegments) }
+                          </SubRiskText>
+                        </RiskFactorDetail>
+                        <RiskFactorDetail>
+                          <RiskFactorBox color={getRiskFactorColor(riskFactor?.probabilityRiskFactor)}>
+                            {parseFloat(riskFactor?.probabilityRiskFactor).toFixed(1)}
+                          </RiskFactorBox>
+                          <SubRiskText>
+                            { getProbabilityRiskFactorText(riskFactor?.probabilityRiskFactor, riskFactor?.hasBeenControlledLastFiveYears) }
+                          </SubRiskText>
+                        </RiskFactorDetail>
+                        <RiskFactorDetail>
+                          <RiskFactorBox color={getRiskFactorColor(riskFactor?.detectabilityRiskFactor)}>
+                            {parseFloat(riskFactor?.detectabilityRiskFactor).toFixed(1)}
+                          </RiskFactorBox>
+                          <SubRiskText>
+                            { getDetectabilityRiskFactorText(riskFactor?.detectabilityRiskFactor, false) }
+                          </SubRiskText>
+                        </RiskFactorDetail>
+                      </RiskFactorDetails>
+                      : null
+                  }
+                </>
             : null
         }
       </Wrapper>
@@ -246,14 +262,14 @@ const Flag = styled.img`
 `
 
 const ZoneText = styled.span`
-  margin-bottom: 3px;
+  margin-bottom: ${props => props.isLittle ? 0 : 3}px;
   margin-right: 6px;
-  font-size: 11px;
+  font-size: ${props => props.isLittle ? 8 : 11}px;
   font-weight: 500;
   display: inline-block;
   user-select: none;
   color: ${COLORS.gunMetal};
-  line-height: 17px;
+  line-height: ${props => props.isLittle ? 35 : 17}px;
   cursor: grabbing;
   margin-left: 2px;
   vertical-align: middle;

@@ -178,7 +178,7 @@ const VesselListFilters = ({
         <CustomZone>
           ou définir une zone
         </CustomZone>
-        <BoxFilter onClick={() => geometrySelection.selectBox()}/>
+        <BoxFilter data-cy={'vessels-list-box-filter'} onClick={() => geometrySelection.selectBox()}/>
         <PolygonFilter onClick={() => geometrySelection.selectPolygon()}/>
         {
           showZonesSelected()

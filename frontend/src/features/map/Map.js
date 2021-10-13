@@ -11,7 +11,7 @@ import MeasurementLayer from '../../layers/MeasurementLayer'
 import VesselCardOverlay from './overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from './overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from './overlays/TrackTypeCardOverlay'
-import MapVesselAnimation from './MapVesselAnimation'
+import MapVesselClickAndAnimationHandler from './MapVesselClickAndAnimationHandler'
 import VesselEstimatedPositionLayer from '../../layers/VesselEstimatedPositionLayer'
 import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
 import VesselsLabelsLayer from '../../layers/VesselsLabelsLayer'
@@ -50,7 +50,7 @@ const Map = () => {
       showAttributions={true}
       container={'map'}
     >
-      <MapVesselAnimation
+      <MapVesselClickAndAnimationHandler
         mapMovingAndZoomEvent={mapMovingAndZoomEvent}
       />
       <MapHistory

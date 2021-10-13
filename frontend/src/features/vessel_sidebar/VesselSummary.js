@@ -76,7 +76,7 @@ const VesselSummary = props => {
         <ZoneWithoutBackground>
           <LatLon>
             <FieldName>Latitude</FieldName>
-            <FieldValue>{!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude)
+            <FieldValue data-cy={'vessel-summary-latitude'}>{!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude)
               ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
               : <NoValue>-</NoValue>}</FieldValue>
             <FieldName>Longitude</FieldName>

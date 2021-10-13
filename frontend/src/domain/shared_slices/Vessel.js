@@ -15,6 +15,7 @@ const vesselSlice = createSlice({
     uniqueVesselsSpecies: [],
     uniqueVesselsDistricts: [],
     filteredVesselsFeaturesUids: [],
+    previewFilteredVesselsFeaturesUids: [],
     vesselsLayerSource: null,
     /** @type {SelectedVessel | null} selectedVessel */
     selectedVessel: null,
@@ -60,6 +61,16 @@ const vesselSlice = createSlice({
      */
     setFilteredVesselsFeaturesUids (state, action) {
       state.filteredVesselsFeaturesUids = action.payload
+    },
+    /**
+     * Set the list of previewed vessel features Uids (using JS indexOf is good for performance)
+     * @function setPreviewFilteredVesselsFeaturesUids
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: string[]}} action - the previewed vessel features uids
+     */
+    setPreviewFilteredVesselsFeaturesUids (state, action) {
+      state.previewFilteredVesselsFeaturesUids = action.payload
     },
     setVesselsLayerSource (state, action) {
       state.vesselsLayerSource = action.payload
@@ -240,6 +251,7 @@ export const {
   setVessels,
   resetVessels,
   setFilteredVesselsFeaturesUids,
+  setPreviewFilteredVesselsFeaturesUids,
   setVesselsLayerSource,
   loadingVessel,
   resetLoadingVessel,

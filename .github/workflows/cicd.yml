@@ -122,7 +122,6 @@ jobs:
         install-command: npm i
         working-directory: frontend
         record: true
-        parallel: true
         wait-on: 'http://localhost:8880'
         env: PORT=8880
         browser: firefox

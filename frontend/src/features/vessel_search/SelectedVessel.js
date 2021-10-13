@@ -61,8 +61,8 @@ const Wrapper = styled.div`
   border-top-right-radius: 2px;
   color: ${COLORS.gainsboro};
   height: 40px;
-  width: 485px;
-  padding: 0 5px 0 10px;
+  width: 490px;
+  padding: 0 0 0 10px;
   flex: 3;
   text-align: left;
   cursor: text;
@@ -73,8 +73,8 @@ const Wrapper = styled.div`
     : ''} 0.7s ease forwards;
 
   @keyframes vessel-search-opening {
-    0%   { width: ${props => props.vesselName ? '485px' : '320px'};   }
-    100% { width: 485px; }
+    0%   { width: ${props => props.vesselName ? '490px' : '320px'};   }
+    100% { width: 490px; }
   }
 
   :hover, :focus {
@@ -103,7 +103,7 @@ const VesselName = styled.span`
 const CloseIcon = styled(CloseIconSVG)`
   width: 20px;
   float: right;
-  padding: 9px 4px 7px 7px;
+  padding: 9px 9px 7px 7px;
   height: 24px;
   cursor: pointer;
 `

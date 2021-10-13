@@ -309,7 +309,6 @@ const Zone = styled.div`
 
 const Wrapper = styled.li`
   margin: 0;
-  background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
   overflow-y: auto;
@@ -318,6 +317,7 @@ const Wrapper = styled.li`
 `
 
 const ERSMessageContent = styled.div`
+  background: ${COLORS.background};
   width: inherit;
   opacity: ${props => props.isOpen ? 1 : 0};
   overflow: hidden;
@@ -328,8 +328,6 @@ const ERSMessageContent = styled.div`
     : 0
   }px;
   transition: 0.2s all;
-  
-
 `
 
 export default LANMessageResume

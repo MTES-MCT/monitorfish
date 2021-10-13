@@ -98,6 +98,10 @@ export class Vessel {
     return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
   }
 
+  static getVesselIdFromIdentity (identity) {
+    return `${Layers.VESSELS.code}:${identity}`
+  }
+
   static getVesselOpacity (dateTime, vesselIsHidden, vesselIsOpacityReduced) {
     const vesselDate = new Date(dateTime)
 

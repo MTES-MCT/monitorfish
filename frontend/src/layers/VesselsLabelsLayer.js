@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
-import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
+import { getVesselFeatureIdFromVessel, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'
 import VesselLabelOverlay from '../features/map/overlays/VesselLabelOverlay'
 import LineString from 'ol/geom/LineString'
@@ -22,7 +22,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     previewFilteredVesselsFeaturesUids,
     vesselsLayerSource,
     hideOtherVessels,
-    selectedVessel
+    selectedVessel,
+    vesselsTracksShowed
   } = useSelector(state => state.vessel)
 
   const {
@@ -121,7 +122,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     filteredVesselsFeaturesUids,
     previewFilteredVesselsFeaturesUids,
     vesselsLastPositionVisibility,
-    hideOtherVessels
+    hideOtherVessels,
+    vesselsTracksShowed
   ])
 
   useEffect(() => {
@@ -167,10 +169,18 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     setVesselToCoordinates(nextVesselToCoordinates)
   }
 
-  function showOnlySelectedVesselLabel () {
-    const feature = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
-      .find(feature => feature.getId() === Vessel.getVesselId(selectedVessel))
-    addLabelToFeatures([feature])
+  function showOnlySelectedVesselsLabel () {
+    const extent = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
+
+    const selectedVesselFeature = extent
+      .find(feature => selectedVessel && feature.getId() === Vessel.getVesselId(selectedVessel))
+
+    const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
+    const showedTracksFeatures = extent
+      .filter(feature => showedFeaturesIdentities.find(identity => feature.getId().includes(identity)))
+
+    const showedFeaturesLabels = showedTracksFeatures.concat(selectedVesselFeature)
+    addLabelToFeatures(showedFeaturesLabels.filter(feature => feature))
   }
 
   function addVesselLabelToAllFeaturesInExtent () {
@@ -181,7 +191,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
 
     if (hideOtherVessels) {
-      showOnlySelectedVesselLabel()
+      showOnlySelectedVesselsLabel()
       return
     }
 
@@ -254,6 +264,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   function addLabelToFeatures (features) {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+    const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
 
     const nextFeaturesAndLabels = features
       .filter(feature => feature.vessel)
@@ -262,6 +273,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         const identity = feature.vessel
         const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
         const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
+        const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(identity))
 
         return {
           identity: {
@@ -272,6 +284,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
             ircs: feature.vessel.ircs,
             externalReferenceNumber: feature.vessel.externalReferenceNumber
           },
+          trackIsShown: trackIsShown,
           opacity: Vessel.getVesselOpacity(feature.vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced),
           label,
           offset,
@@ -293,7 +306,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   return (<>
     {
-      featuresAndLabels.map(({ identity, label, offset, featureId, opacity }) => {
+      featuresAndLabels.map(({ identity, label, offset, featureId, opacity, trackIsShown }) => {
         return <VesselLabelOverlay
           map={map}
           key={identity.key}
@@ -308,6 +321,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           coordinates={identity.coordinates}
           zoomHasChanged={previousMapZoom.current}
           opacity={opacity}
+          trackIsShown={trackIsShown}
           previewFilteredVesselsMode={previewFilteredVesselsMode}
         />
       })

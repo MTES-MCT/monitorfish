@@ -77,7 +77,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     showingVesselsEstimatedPositions,
     filteredVesselsFeaturesUids,
     previewFilteredVesselsFeaturesUids,
-    nonFilteredVesselsAreHidden
+    nonFilteredVesselsAreHidden,
+    hideOtherVessels
   ])
 
   useEffect(() => {

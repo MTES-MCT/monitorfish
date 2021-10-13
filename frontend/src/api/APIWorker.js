@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import showAllVessels from '../domain/use_cases/showVesselsLastPosition'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
-import updateVesselTrackAndSidebar from '../domain/use_cases/updateVesselTrackAndSidebar'
+import updateVesselTracksAndSidebar from '../domain/use_cases/updateVesselTracksAndSidebar'
 import { VESSELS_UPDATE_EVENT } from '../layers/VesselsLayer'
 import { resetIsUpdatingVessels, setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
@@ -44,7 +44,7 @@ const APIWorker = () => {
         dispatch(setIsUpdatingVessels())
         dispatch(getHealthcheck())
         dispatch(showAllVessels())
-        dispatch(updateVesselTrackAndSidebar())
+        dispatch(updateVesselTracksAndSidebar())
       })
 
       setUpdateVesselSidebarTab(true)

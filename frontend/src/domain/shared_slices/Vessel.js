@@ -10,8 +10,11 @@ import { createSlice } from '@reduxjs/toolkit'
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
+    /** @type {VesselIdentity | null} selectedVesselIdentity */
     selectedVesselIdentity: null,
     vessels: [],
+    /** @type {Object.<string, ShowedVesselTrack>} vesselsTracksShowed */
+    vesselsTracksShowed: {},
     uniqueVesselsSpecies: [],
     uniqueVesselsDistricts: [],
     filteredVesselsFeaturesUids: [],
@@ -39,10 +42,11 @@ const vesselSlice = createSlice({
     controlResumeAndControls: {},
     nextControlResumeAndControls: null,
     controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-    temporaryTrackDepth: {
+    /** @type {VesselTrackDepth} selectedVesselCustomTrackDepth */
+    selectedVesselCustomTrackDepth: {
       trackDepth: null,
-      afterDateTimeRange: null,
-      beforeDateTimeRange: null
+      afterDateTime: null,
+      beforeDateTime: null
     }
   },
   reducers: {
@@ -95,7 +99,7 @@ const vesselSlice = createSlice({
       state.vesselSidebarIsOpen = false
       state.selectedVessel = null
       state.selectedVesselIdentity = null
-      state.temporaryTrackDepth = {
+      state.selectedVesselCustomTrackDepth = {
         trackDepth: null,
         afterDateTime: null,
         beforeDateTime: null
@@ -183,11 +187,11 @@ const vesselSlice = createSlice({
     resetNextControlResumeAndControls (state) {
       state.nextControlResumeAndControls = null
     },
-    setTemporaryTrackDepth (state, action) {
-      state.temporaryTrackDepth = action.payload
+    setSelectedVesselCustomTrackDepth (state, action) {
+      state.selectedVesselCustomTrackDepth = action.payload
     },
-    resetTemporaryTrackDepth (state) {
-      state.temporaryTrackDepth = {
+    resetSelectedVesselCustomTrackDepth (state) {
+      state.selectedVesselCustomTrackDepth = {
         trackDepth: null,
         afterDateTime: null,
         beforeDateTime: null
@@ -246,6 +250,51 @@ const vesselSlice = createSlice({
     setHideOtherVessels (state, action) {
       state.hideOtherVessels = action.payload
     },
+    /**
+     * Add a new vessel track to show or remove -
+     * The `toShow` property trigger the layer to show the track
+     * The `toHide` property trigger the layer to hide the track
+     * @function addVesselTrackShowed
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: {
+     *   identity: string,
+     *   showedVesselTrack: ShowedVesselTrack
+     *  }}} action - the vessel positions to show on map
+     */
+    addVesselTrackShowed (state, action) {
+      state.vesselsTracksShowed[action.payload.identity] = action.payload.showedVesselTrack
+    },
+    /**
+     * Update a given vessel track as showed by the layer
+     * @function updateVesselTrackAsShowed
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - the vessel identity
+     */
+    updateVesselTrackAsShowed (state, action) {
+      state.vesselsTracksShowed[action.payload].toShow = false
+    },
+    /**
+     * Update a given vessel track as to be hidden by the layer
+     * @function updateVesselTrackAsShowed
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - the vessel identity
+     */
+    updateVesselTrackAsToHide (state, action) {
+      state.vesselsTracksShowed[action.payload].toHide = true
+    },
+    /**
+     * Remove the vessel track to the list
+     * @function updateVesselTrackAsHidden
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - the vessel identity
+     */
+    updateVesselTrackAsHidden (state, action) {
+      delete state.vesselsTracksShowed[action.payload]
+    },
   }
 })
 
@@ -276,14 +325,18 @@ export const {
   setFocusOnVesselSearch,
   setTemporaryVesselsToHighLightOnMap,
   resetTemporaryVesselsToHighLightOnMap,
-  setTemporaryTrackDepth,
-  resetTemporaryTrackDepth,
+  setSelectedVesselCustomTrackDepth,
+  resetSelectedVesselCustomTrackDepth,
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,
   setControlFromDate,
   setVesselsSpeciesAndDistricts,
-  setHideOtherVessels
+  setHideOtherVessels,
+  addVesselTrackShowed,
+  updateVesselTrackAsShowed,
+  updateVesselTrackAsToHide,
+  updateVesselTrackAsHidden
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

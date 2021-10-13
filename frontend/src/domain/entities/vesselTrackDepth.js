@@ -1,3 +1,6 @@
+import NoDEPFoundError from '../../errors/NoDEPFoundError'
+import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
+
 export const VesselTrackDepth = {
   LAST_DEPARTURE: 'LAST_DEPARTURE',
   TWELVE_HOURS: 'TWELVE_HOURS',
@@ -9,4 +12,60 @@ export const VesselTrackDepth = {
   THREE_WEEK: 'THREE_WEEK',
   ONE_MONTH: 'ONE_MONTH',
   CUSTOM: 'CUSTOM'
+}
+
+export function getVesselTrackDepth (updateShowedVessel, newWantedTrackDepth, vesselCustomTrackDepth, defaultVesselTrackDepth) {
+  let nextTrackDepth, nextAfterDateTime, nextBeforeDateTime
+
+  nextTrackDepth = vesselCustomTrackDepth.trackDepth ? vesselCustomTrackDepth.trackDepth : defaultVesselTrackDepth
+  nextAfterDateTime = vesselCustomTrackDepth.afterDateTime
+  nextBeforeDateTime = vesselCustomTrackDepth.beforeDateTime
+
+  if (updateShowedVessel) {
+    nextTrackDepth = vesselCustomTrackDepth.trackDepth ? vesselCustomTrackDepth.trackDepth : defaultVesselTrackDepth
+    nextAfterDateTime = vesselCustomTrackDepth.afterDateTime
+    nextBeforeDateTime = vesselCustomTrackDepth.beforeDateTime
+  } else {
+    if (!newWantedTrackDepth ||
+      (!newWantedTrackDepth.trackDepth &&
+        !newWantedTrackDepth.afterDateTime &&
+        !newWantedTrackDepth.beforeDateTime)) {
+      nextTrackDepth = defaultVesselTrackDepth
+    } else {
+      return newWantedTrackDepth
+    }
+  }
+
+  return {
+    trackDepth: nextTrackDepth,
+    afterDateTime: nextAfterDateTime,
+    beforeDateTime: nextBeforeDateTime
+  }
+}
+
+export function getTrackDepthError (vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject) {
+  if (trackDepthHasBeenModifiedFromAPI(vesselAndTrackDepthModified, calledFromCron)) {
+    return new NoDEPFoundError('Nous n\'avons pas trouvé de dernier DEP pour ce navire, nous affichons ' +
+      'les positions des dernières 24 heures.')
+  } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, calledFromCron)) {
+    return new NoPositionsFoundError('Nous n\'avons trouvé aucune position.')
+  } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
+    return new NoPositionsFoundError('Nous n\'avons trouvé aucune position pour ces dates.')
+  }
+
+  return null
+}
+
+function noPositionsFoundForVessel (vesselAndTrackDepthModified, updateShowedVessel) {
+  return !vesselAndTrackDepthModified.vessel.positions?.length && !updateShowedVessel
+}
+
+function noPositionsFoundForEnteredDateTime (vesselAndTrackDepthModified, vesselTrackDepthObject) {
+  return !vesselAndTrackDepthModified.vessel.positions?.length && vesselTrackDepthObject
+}
+
+function trackDepthHasBeenModifiedFromAPI (vesselAndTrackDepthModified, updateShowedVessel) {
+  return vesselAndTrackDepthModified.trackDepthHasBeenModified &&
+    !updateShowedVessel &&
+    vesselAndTrackDepthModified.vessel.positions?.length
 }

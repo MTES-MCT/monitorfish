@@ -5,25 +5,39 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
 import { COLORS } from '../../constants/constants'
 import LastPositionsSlider from './LastPositionsSlider'
-import { setVesselsLastPositionVisibility, setVesselTrackDepth } from '../../domain/shared_slices/Map'
+import {
+  setVesselsLastPositionVisibility,
+  setVesselTrackDepth,
+  showVesselsEstimatedPositions
+} from '../../domain/shared_slices/Map'
 import TrackDepthRadio from '../vessel_labels/TrackDepthRadio'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
-import ShowVesselEstimatedPositions from './ShowVesselEstimatedPositions'
+import { setHideOtherVessels } from '../../domain/shared_slices/Vessel'
+import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
+import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
+import { ReactComponent as EstimatedPositionSVG } from '../icons/Positions_estimees.svg'
+import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
 
 const VesselVisibility = () => {
   const dispatch = useDispatch()
-  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const {
+    selectedVessel,
+    hideOtherVessels
+  } = useSelector(state => state.vessel)
   const {
     rightMenuIsOpen,
-    previewFilteredVesselsMode
+    previewFilteredVesselsMode,
+    healthcheckTextWarning
   } = useSelector(state => state.global)
   const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
-  const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    defaultVesselTrackDepth,
+    showingVesselsEstimatedPositions
+  } = useSelector(state => state.map)
 
   const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
   const wrapperRef = useRef(null)
@@ -89,13 +103,29 @@ const VesselVisibility = () => {
         </Header>
         <TrackDepthRadio
           updateVesselTrackDepth={updateVesselTrackDepth}
-          vesselTrackDepth={vesselTrackDepth}
+          vesselTrackDepth={defaultVesselTrackDepth}
         />
-        <ShowVesselEstimatedPositions/>
+        <MapPropertyTrigger
+          booleanProperty={showingVesselsEstimatedPositions}
+          updateBooleanProperty={isShowed => dispatch(showVesselsEstimatedPositions(isShowed))}
+          text={'les positions estimées des navires'}
+          Icon={EstimatedPosition}
+        />
+        <MapPropertyTrigger
+          inverse
+          booleanProperty={hideOtherVessels}
+          updateBooleanProperty={isHidden => dispatch(setHideOtherVessels(isHidden))}
+          text={'les navires non sélectionnés'}
+          Icon={hideOtherVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
+        />
       </VesselVisibilityBox>
     </Wrapper>
   )
 }
+
+const EstimatedPosition = styled(EstimatedPositionSVG)`
+  width: 10px;
+`
 
 const Wrapper = styled.div`
   transition: all 0.2s;

@@ -6,13 +6,18 @@ import { useClickOutsideComponent } from '../../../hooks/useClickOutside'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import CustomTrackDepthModal from './map_menu/CustomTrackDepthModal'
+import { useDispatch } from 'react-redux'
+import showVesselTrack from '../../../domain/use_cases/showVesselTrack'
+import { convertToUTCDay } from '../../vessel_sidebar/track_depth_selection/TrackDepthDateRange'
 
 const MapMenuOverlay = props => {
   const {
     map,
     coordinates,
-    isVessel
+    vessel
   } = props
+
+  const dispatch = useDispatch()
 
   const ref = createRef()
   const [overlay] = useState(new Overlay({
@@ -25,6 +30,7 @@ const MapMenuOverlay = props => {
   const clickedOutsideComponent = useClickOutsideComponent(ref)
   const [showTrackMenu, setShowTrackMenu] = useState(false)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [iShowed, setIsShowed] = useState(false)
 
   const [showTrackOf, setShowTrackOf] = useState(undefined)
   const [datesSelection, setDateSelection] = useState([])
@@ -36,10 +42,23 @@ const MapMenuOverlay = props => {
   }, [clickedOutsideComponent])
 
   useEffect(() => {
-    if (showTrackOf) {
+    if (showTrackOf || datesSelection?.length) {
+      const { afterDateTime, beforeDateTime } = convertToUTCDay(datesSelection)
+
+      const vesselTrackDepth = {
+        trackDepth: showTrackOf || VesselTrackDepth.CUSTOM,
+        beforeDateTime: beforeDateTime,
+        afterDateTime: afterDateTime
+      }
+      console.log(vesselTrackDepth)
+      dispatch(showVesselTrack(vessel.vessel, false, vesselTrackDepth))
+
       map.removeOverlay(overlay)
+      setIsShowed(false)
+      setShowTrackOf(undefined)
+      setDateSelection([])
     }
-  }, [showTrackOf])
+  }, [showTrackOf, datesSelection])
 
   useEffect(() => {
     if (map && coordinates?.length) {
@@ -48,56 +67,66 @@ const MapMenuOverlay = props => {
       setShowTrackMenu(false)
       ref.current.parentNode.className = 'ol-overlay-container ol-selectable overlay-active'
 
+      setIsShowed(true)
       map.addOverlay(overlay)
 
       return () => {
         map.removeOverlay(overlay)
+        setIsShowed(false)
+        setShowTrackOf(undefined)
+        setDateSelection([])
       }
     }
   }, [overlay, coordinates, map])
 
   return (
-    <WrapperToBeKeptForDOMManagement>
+    <WrapperToBeKeptForDOMManagement ref={ref}>
       <div ref={ref}>
-        <Wrapper>
-          <FirstMenu>
-            {
-              isVessel
-                ? <Menu onClick={() => setShowTrackMenu(!showTrackMenu)}>
-                  Afficher la piste VMS depuis…
-                  <ChevronIcon/>
-                </Menu>
-                : null
-            }
-          </FirstMenu>
-          {
-            showTrackMenu
-              ? <SecondMenu>
+        {
+          iShowed
+            ? <>
+              <Wrapper>
+                <FirstMenu>
                   {
-                    isVessel
-                      ? <>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.LAST_DEPARTURE)}>dernier DEP</Menu>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWELVE_HOURS)}>12 heures</Menu>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_DAY)}>24 heures</Menu>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWO_DAYS)}>2 jours</Menu>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.THREE_DAYS)}>3 jours</Menu>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_WEEK)}>1 semaine</Menu>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWO_WEEK)}>2 semaines</Menu>
-                        <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_MONTH)}>1 mois</Menu>
-                        <Menu withTopLine second onClick={() => setModalIsOpen(true)}>Choisir une période précise</Menu>
-                      </>
+                    vessel
+                      ? <Menu onClick={() => setShowTrackMenu(!showTrackMenu)}>
+                        Afficher la piste VMS depuis…
+                        <ChevronIcon/>
+                      </Menu>
                       : null
                   }
-                </SecondMenu>
-              : null
-          }
-        </Wrapper>
-        <CustomTrackDepthModal
-          isModalOpen={modalIsOpen}
-          setModalIsOpen={setModalIsOpen}
-          datesSelection={datesSelection}
-          setDateSelection={setDateSelection}
-        />
+                </FirstMenu>
+                {
+                  showTrackMenu
+                    ? <SecondMenu>
+                      {
+                        vessel
+                          ? <>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.LAST_DEPARTURE)}>dernier DEP</Menu>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWELVE_HOURS)}>12 heures</Menu>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_DAY)}>24 heures</Menu>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWO_DAYS)}>2 jours</Menu>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.THREE_DAYS)}>3 jours</Menu>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_WEEK)}>1 semaine</Menu>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.TWO_WEEK)}>2 semaines</Menu>
+                            <Menu second onClick={() => setShowTrackOf(VesselTrackDepth.ONE_MONTH)}>1 mois</Menu>
+                            <Menu withTopLine second onClick={() => setModalIsOpen(true)}>Choisir une période précise</Menu>
+                          </>
+                          : null
+                      }
+                    </SecondMenu>
+                    : null
+                }
+              </Wrapper>
+              <CustomTrackDepthModal
+                isModalOpen={modalIsOpen}
+                setModalIsOpen={setModalIsOpen}
+                datesSelection={datesSelection}
+                setDateSelection={setDateSelection}
+              />
+            </>
+            : null
+        }
       </div>
     </WrapperToBeKeptForDOMManagement>
   )
@@ -149,7 +178,7 @@ const Menu = styled.span`
 `
 
 const WrapperToBeKeptForDOMManagement = styled.div`
-  z-index: 99999999;
+  z-index: 456;
 `
 
 export default MapMenuOverlay

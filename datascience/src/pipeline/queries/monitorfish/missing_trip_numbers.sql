@@ -37,33 +37,24 @@ WITH t1 AS (
 t2 AS (
     SELECT 
         *,
-        EXTRACT(YEAR FROM order_datetime_utc)::INTEGER AS year
+        EXTRACT(YEAR FROM order_datetime_utc)::INTEGER AS year,
+        COALESCE((LAG(log_type, 1) OVER cfr_window) = 'LAN', FALSE) AS follows_lan,
+        RANK() OVER cfr_window AS rk
     FROM t1
+    WINDOW cfr_window AS (PARTITION BY cfr ORDER BY order_datetime_utc)
 ),
 
-t3 AS (
+trip_starts AS (
     SELECT 
         id,
-        cfr,
-        year,
-        log_type,
-        RANK() OVER cfr_year_window AS message_rank,
-        COALESCE((LAG(log_type, 1) OVER cfr_year_window) = 'LAN', FALSE) AS follows_lan
+        year * 10000 + SUM(1) OVER (PARTITION BY cfr, year ORDER BY order_datetime_utc) AS trip_number
     FROM t2
-    WINDOW cfr_year_window AS (PARTITION BY cfr, year ORDER BY order_datetime_utc)
-),
-
-t4 AS (
-    SELECT 
-        id,
-        cfr,
-        year,
-        message_rank,
-        ((message_rank = 1) OR follows_lan OR (log_type = 'DEP'))::INTEGER AS is_trip_start
-    FROM t3
+    WHERE rk = 1 OR follows_lan OR (log_type = 'DEP')
 )
 
 SELECT
-    id,
-    year * 10000 + SUM(is_trip_start) OVER (PARTITION BY cfr, year ORDER BY message_rank) AS trip_number
-FROM t4
+    t1.id,
+    MAX(trip_starts.trip_number) OVER (PARTITION BY cfr ORDER BY order_datetime_utc) AS trip_number
+FROM t1
+LEFT JOIN trip_starts
+ON t1.id = trip_starts.id

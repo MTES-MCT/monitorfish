@@ -23,7 +23,10 @@ import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Re
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import {
+  /* CancelButton */
+  ValidateButton
+} from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
 import {
   resetState,
@@ -36,7 +39,9 @@ import {
   mapToRegulatoryFeatureObject,
   emptyRegulatoryFeatureObject,
   REGULATION_ACTION_TYPE,
-  REGULATORY_TEXT_SOURCE
+  REGULATORY_TEXT_SOURCE,
+  SeafrontByRegulatoryTerritory,
+  EU_SEAFRONT
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -193,8 +198,10 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   useEffect(() => {
-    if (geometryObjectList && selectedGeometryId && showRegulatoryPreview) {
-      dispatch(setRegulatoryGeometryToPreview(geometryObjectList[selectedGeometryId] ? geometryObjectList[selectedGeometryId] : regulatoryZoneMetadata.geometry))
+    if (showRegulatoryPreview &&
+      ((isEdition && regulatoryZoneMetadata.geometry) ||
+        (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
+      dispatch(setRegulatoryGeometryToPreview(isEdition ? regulatoryZoneMetadata.geometry : geometryObjectList[selectedGeometryId]))
     }
   }, [selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 
@@ -219,9 +226,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }
 
-  const saveAsDraft = () => {
+  /* const saveAsDraft = () => {
     console.log('saveAsDraft')
-  }
+  } */
 
   return (
     <>
@@ -265,6 +272,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   seaFrontIsMissing={seaFrontIsMissing}
                 />
                 <RegulationRegionLine
+                  disabled={!selectedSeaFront || SeafrontByRegulatoryTerritory[EU_SEAFRONT].includes(selectedSeaFront) }
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
                   regionIsMissing={regionIsMissing}
@@ -304,13 +312,13 @@ const CreateRegulation = ({ title, isEdition }) => {
               : 'Créer la réglementation'
             }
             </ValidateButton>
-            <CancelButton
+            {/* <CancelButton
               disabled={false}
               isLast={false}
               onClick={saveAsDraft}
             >
               Enregistrer un brouillon
-            </CancelButton>
+            </CancelButton> */}
           </FooterButton>
         </Footer>
       </CreateRegulationWrapper>

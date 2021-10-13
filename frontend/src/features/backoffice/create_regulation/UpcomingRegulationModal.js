@@ -61,23 +61,23 @@ const UpcomingRegulationModal = () => {
         </Section>
       </Body>
       <Footer>
-      <FooterButton>
-        <ValidateButton
-          disabled={false}
-          isLast={false}
-          onClick={() => onAddUpcomingRegulation()}
-        >
-          Ajouter la réglementation à venir
-        </ValidateButton>
-        <CancelButton
-          disabled={false}
-          isLast={false}
-          onClick={() => dispatch(setIsModalOpen(false))}
-        >
-          Annuler
-        </CancelButton>
-      </FooterButton>
-    </Footer>
+        <FooterButton>
+          <ValidateButton
+            disabled={false}
+            isLast={false}
+            onClick={onAddUpcomingRegulation}
+          >
+            Ajouter la réglementation à venir
+          </ValidateButton>
+          <CancelButton
+            disabled={false}
+            isLast={false}
+            onClick={() => dispatch(setIsModalOpen(false))}
+          >
+            Annuler
+          </CancelButton>
+        </FooterButton>
+      </Footer>
     </ModalContent>
   </RegulationModal>)
 }
@@ -85,8 +85,10 @@ const UpcomingRegulationModal = () => {
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow: scroll;
   height: calc(100vh - 260px);
+  box-sizing: border-box;
+  width: 100%;
 `
 
 const Footer = styled.div`
@@ -103,6 +105,7 @@ const CloseIcon = styled(CloseIconSVG)`
 
 const RegulationModal = styled.div`
   display: ${props => props.isOpen ? 'block' : 'none'};
+  overflow: none;
   width: 100%;
   height: 100vh;
   z-index: 1000;
@@ -112,8 +115,11 @@ const RegulationModal = styled.div`
 `
 
 const ModalContent = styled.div`
+  box-sizing: border-box;
   margin: 100px 160px;
   background-color: ${COLORS.background};
+  overflow: hidden;
+  height: calc(100vh - 160px);
 `
 
 const ModalTitle = styled.div`

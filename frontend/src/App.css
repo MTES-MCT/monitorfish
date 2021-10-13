@@ -315,6 +315,15 @@ a:hover, a:focus {
     overflow-y: unset;
 }
 
+.grouped .rs-picker-select-menu-item {
+    padding-left: 0px;
+}
+
+.rs-picker-select-menu-items.rs-picker-select-menu-group.rs-picker-select-menu-group-title {
+    font-size: 13px;
+    color: #707785;
+}
+
 .rs-picker-toggle-clean, .rs-picker-toggle-caret {
     color: #707785;
 }

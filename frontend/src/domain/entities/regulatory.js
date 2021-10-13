@@ -1,4 +1,4 @@
-import { getTextForSearch } from '../../utils'
+import { getTextForSearch, formatDataForSelectPicker } from '../../utils'
 
 export const mapToRegulatoryZone = properties => {
   return {
@@ -68,8 +68,31 @@ export const LawTypesToTerritory = {
 }
 
 export const RegulatoryTerritory = {
-  France: 'Réglementation France',
+  FRANCE: 'Réglementation France',
   UE: 'Réglementation UE'
+}
+
+export const FRENCH_SEAFRONT = 'Secteurs France'
+export const EU_SEAFRONT = 'Secteurs Union Européenne'
+
+export const SeafrontByRegulatoryTerritory = {
+  [FRENCH_SEAFRONT]: [
+    'Mediterranée, MED',
+    'NAME',
+    'Outre-mer',
+    'MEMN',
+    'Sud-Athlantique, SA',
+    'MED'
+  ],
+  [EU_SEAFRONT]: [
+    'Mer du Nord',
+    'Eaux occidentales septentionales',
+    'Eaux occidentales australes',
+    'Mer Baltique',
+    'Mer Méditerranée',
+    'Mer Noire',
+    'Eaux de l\'UE dans l\'OI et l\'Alt. Ouest'
+  ]
 }
 
 export const REGULATORY_SEARCH_PROPERTIES = {
@@ -228,4 +251,10 @@ export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFo
   })
 
   return mergedRegulatoryLayers
+}
+
+export const getSelectPickerData = () => {
+  return Object.keys(SeafrontByRegulatoryTerritory).map(key => {
+    return formatDataForSelectPicker(SeafrontByRegulatoryTerritory[key], key)
+  }).flat(1)
 }

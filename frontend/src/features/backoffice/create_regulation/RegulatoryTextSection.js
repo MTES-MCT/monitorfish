@@ -45,7 +45,7 @@ const RegulatoryTextSection = props => {
   }
 
   const addUpcomingText = () => {
-    if (source === REGULATORY_TEXT_SOURCE.UPCCOMING_REGULATION) {
+    if (source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION) {
       addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
@@ -104,7 +104,7 @@ const RegulatoryTextSection = props => {
     </ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION &&
       upcomingRegulation && upcomingRegulation !== {} &&
-        <UpcommingRegulationSection />
+        <UpcommingRegulationSection upcomingRegulation={upcomingRegulation} />
     }
   </Section>)
 }

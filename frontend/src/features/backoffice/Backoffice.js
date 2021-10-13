@@ -201,13 +201,13 @@ const MetadataWrapper = styled.div`
   top: 0;
   left: 50%;
   z-index: 1;
-  width: 380px;
   color: ${COLORS.gunMetal};
   margin: 6px 0 0 6px;
   flex-direction: column;
   max-height: 95vh;
   transition: all 0.5s;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
+  background: ${COLORS.gainsboro};
 `
 
 export default Backoffice

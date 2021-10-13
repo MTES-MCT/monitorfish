@@ -46,10 +46,7 @@ context('NewRegulation', () => {
     cy.get('.rs-picker-toggle-placeholder').eq(2).should('have.text', 'Choisir un secteur')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
-    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 3)
-    cy.get('[data-key="MEMN"]').should('exist')
-    cy.get('[data-key="NAMO"]').should('exist')
-    cy.get('[data-key="Outre-mer"]').should('exist')
+    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 13)
   })
   it('Adding a zone name change input background', () => {
     cy.get('.rs-input').eq(0).type('new zone name')
@@ -57,13 +54,29 @@ context('NewRegulation', () => {
     cy.get('.rs-input').eq(0).clear()
     cy.get('.rs-input').eq(0).should('have.css', 'background-color', 'rgb(255, 255, 255)')
   })
-  it('Region list contains 13 elements', () => {
+  it('If a french seafront has been selected, region list contains 13 elements', () => {
+    // Select a French seafront
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
+    cy.get('.rs-picker-select-menu-item').eq(1).click()
+    // Region select picker should not be disabled
     cy.get('.rs-picker-toggle-placeholder').eq(3).should('have.text', 'Choisir une région')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
+    // Region list length should be equal to 18
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
     cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 18)
   })
+  it('If a EU seafront has been selected, region list should be disabled', () => {
+    // Select a EU seafront
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
+    cy.get('.rs-picker-select-menu-item').eq(6).should('have.text', 'Mer du Nord')
+    cy.get('.rs-picker-select-menu-item').eq(6).click()
+    // Region select picker should be disabled
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).should('have.attr', 'aria-disabled', 'true')
+  })
   it('Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it', () => {
+    // Select a french seafront
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
+    cy.get('.rs-picker-select-menu-item').eq(1).click()
     // Select "Auvergne-Rhône-Alpes" region
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
     cy.get('[data-key="Auvergne-Rhône-Alpes"]').click()
@@ -72,11 +85,13 @@ context('NewRegulation', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(3).click()
     cy.get('[data-key="Grand Est"]').click()
     cy.get('[data-cy="tag-Grand Est"]').should('exist')
-    cy.get('[data-cy^="tag"]').should('have.length', 2)
+    // 3 tags exists (1 seafront and 2 regions)
+    cy.get('[data-cy^="tag"]').should('have.length', 3)
     // Remove tag
     cy.get('[data-cy="close-tag-Auvergne-Rhône-Alpes"]').click()
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('not.exist')
-    cy.get('[data-cy^="tag"]').should('have.length', 1)
+    // 3 tags still exists (1 seafront and 1 regions)
+    cy.get('[data-cy^="tag"]').should('have.length', 2)
   })
   it('Enter a reg text name with a valid url', () => {
     cy.get('[data-cy="reg-text-name"]').type('zone name')

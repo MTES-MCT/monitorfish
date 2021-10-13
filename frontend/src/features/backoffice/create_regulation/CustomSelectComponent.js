@@ -12,7 +12,9 @@ const CustomSelectComponent = props => {
     data,
     renderMenuItem,
     menuStyle,
-    valueIsMissing
+    valueIsMissing,
+    groupBy,
+    disabled
   } = props
 
   const selectPickerStyle = {
@@ -35,6 +37,12 @@ const CustomSelectComponent = props => {
         menuStyle={menuStyle}
         menuClassName={'new-regulation-select-picker'}
         $valueIsMissing={valueIsMissing}
+        locale={{
+          noResultsText: 'pas de tracé à associer',
+          emptyMessage: 'pas de tracé à associer'
+        }}
+        groupBy={groupBy}
+        disabled={disabled}
       />
     </SelectWrapper>
   )
@@ -58,6 +66,9 @@ const CustomSelectPicker = styled(SelectPicker)`
 
   .rs-btn-default.rs-picker-toggle:focus {
     border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+  }
+  .grouped.rs-picker-select-menu-item {
+    padding-left: 0px;
   }
 `
 

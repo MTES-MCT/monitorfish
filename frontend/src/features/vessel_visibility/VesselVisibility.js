@@ -69,6 +69,7 @@ const VesselVisibility = () => {
   return (
     <Wrapper ref={wrapperRef}>
       <VesselVisibilityIcon
+        data-cy={'open-vessels-visibility'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
         rightMenuIsOpen={rightMenuIsOpen}

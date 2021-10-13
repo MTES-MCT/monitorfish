@@ -42,9 +42,9 @@ export const mapToRegulatoryFeatureObject = properties => {
   } = properties
   return {
     layer_name: selectedRegulationTopic,
-    law_type: selectedRegulationLawType.split(' /')[0],
+    law_type: selectedRegulationLawType?.split(' /')[0],
     zones: nameZone,
-    region: selectedRegionList.join(', '),
+    region: selectedRegionList?.join(', '),
     facade: selectedSeaFront,
     references_reglementaires: JSON.stringify(regulatoryTexts),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || {})

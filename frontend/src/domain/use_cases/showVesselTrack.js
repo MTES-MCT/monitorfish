@@ -33,7 +33,6 @@ const showVesselTrack = (
     afterDateTime: null
   }
 
-  console.log(nextVesselTrackDepthObject, getState().map.defaultVesselTrackDepth)
   getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {
       const error = getTrackDepthError(vesselAndTrackDepthModified, calledFromCron, vesselTrackDepth)

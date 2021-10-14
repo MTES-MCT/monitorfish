@@ -32,6 +32,7 @@ class GetVesselVoyageUTests {
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
         val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         given(ersRepository.findSecondToLastTripBefore(any(), any())).willThrow(NoLogbookFishingTripFound("Not found"))
+        given(ersRepository.findLastTripBefore(any(), any())).willReturn(VoyageDatesAndTripNumber(1234, startDate, endDate))
 
         // When
         val voyage = GetVesselVoyage(ersRepository, alertRepository, getERSMessages)
@@ -42,6 +43,7 @@ class GetVesselVoyageUTests {
         // Then
         assertThat(voyage.isFirstVoyage).isTrue
         assertThat(voyage.startDate).isEqualTo(startDate)
+        assertThat(voyage.tripNumber).isEqualTo(1234)
         assertThat(voyage.endDate).isEqualTo(endDate)
         assertThat(alerts).hasSize(0)
     }

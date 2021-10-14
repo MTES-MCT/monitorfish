@@ -54,6 +54,7 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
                 isFirstVoyage,
                 trip.startDate,
                 trip.endDate,
+                trip.tripNumber,
                 ERSMessagesAndAlerts(ersMessages, alerts)
         )
     }

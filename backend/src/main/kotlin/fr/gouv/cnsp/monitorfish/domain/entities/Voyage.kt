@@ -7,4 +7,5 @@ data class Voyage(
         val isFirstVoyage: Boolean,
         val startDate: ZonedDateTime?,
         val endDate: ZonedDateTime?,
+        val tripNumber: Int,
         val ersMessagesAndAlerts: ERSMessagesAndAlerts)

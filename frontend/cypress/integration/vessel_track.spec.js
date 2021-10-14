@@ -64,7 +64,7 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="vessel-track-card-speed"]').contains('8.6')
   })
 
-  it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
+  it.only('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     // When
     cy.get('.vessels').click(460, 480, { timeout: 20000, ctrlKey: true })
     cy.wait(200)
@@ -87,12 +87,14 @@ context('Vessels Track', () => {
 
     cy.log('Close one track')
     cy.get('*[data-cy^="close-vessel-track"]').eq(1).click()
+    cy.wait(200)
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Hide other vessels')
     cy.get('*[data-cy^="open-vessels-visibility"]').click()
     cy.get('*[data-cy^="map-property-trigger"]').eq(1).click({ force: true })
     cy.wait(500)
+    cy.get('.vessels').dblclick(750, 86, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
 
     cy.log('Close the last track')

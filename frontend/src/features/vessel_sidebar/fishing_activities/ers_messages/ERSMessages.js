@@ -8,7 +8,6 @@ import { ReactComponent as ArrowTripSVG } from '../../../icons/Fleche_navigation
 import { ReactComponent as ArrowLastTripSVG } from '../../../icons/Double_fleche_navigation_marees.svg'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
-import { getDEPMessageFromMessages } from '../../../../domain/entities/fishingActivities'
 import { useSelector } from 'react-redux'
 
 const animatedComponents = makeAnimated()
@@ -30,22 +29,17 @@ const options = [
 const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigation }) => {
   const {
     isLastVoyage,
-    previousBeforeDateTime,
+    isFirstVoyage,
+    tripNumber,
     fishingActivities
   } = useSelector(state => state.vessel)
 
   const [ersMessages, setERSMessages] = useState([])
   const [ascendingSort, setAscendingSort] = useState(true)
   const [selectedOptions, setSelectedOptions] = useState(null)
-  const [depMessage, setDEPMessage] = useState(null)
 
   useEffect(() => {
     setERSMessages(fishingActivities.ersMessages)
-
-    if (fishingActivities.ersMessages) {
-      const depMessage = getDEPMessageFromMessages(fishingActivities.ersMessages)
-      setDEPMessage(depMessage)
-    }
   }, [fishingActivities])
 
   useEffect(() => {
@@ -128,13 +122,13 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
       />
       <Navigation selectedOptionsSize={selectedOptions ? selectedOptions.length : 0}>
         <PreviousTrip
-          disabled={!previousBeforeDateTime}
-          onClick={previousBeforeDateTime && navigation.goToPreviousTrip}
+          disabled={isFirstVoyage}
+          onClick={!isFirstVoyage && navigation.goToPreviousTrip}
           title={'Marée précédente'}
         />
         {
-          depMessage?.tripNumber
-            ? `Marée n°${depMessage.tripNumber}`
+          tripNumber
+            ? `Marée n°${tripNumber}`
             : '-'
         }
         <LastTrip

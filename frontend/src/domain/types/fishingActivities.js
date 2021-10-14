@@ -1,8 +1,10 @@
 /**
  * @typedef VesselVoyage
  * @property {boolean} isLastVoyage
- * @property {string | null} previousBeforeDateTime
- * @property {string | null} nextBeforeDateTime
+ * @property {boolean} isFirstVoyage
+ * @property {string | null} startDate
+ * @property {string | null} endDate
+ * @property {int} tripNumber
  * @property {FishingActivities} ersMessagesAndAlerts
  */
 

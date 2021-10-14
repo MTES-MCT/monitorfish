@@ -25,11 +25,11 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
 
     private val postgresChunkSize = 5000
 
-    override fun findLastTripBefore(internalReferenceNumber: String, dateTime: ZonedDateTime): VoyageDatesAndTripNumber {
+    override fun findLastTripBefore(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
-                        internalReferenceNumber, dateTime.toInstant(), PageRequest.of(0,1)).first()
+                        internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0,1)).first()
 
                 return VoyageDatesAndTripNumber(lastTrip.tripNumber, lastTrip.startDate.atZone(UTC), lastTrip.endDate.atZone(UTC))
             }
@@ -42,14 +42,13 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
-
-    override fun findSecondToLastTripBefore(internalReferenceNumber: String, dateTime: ZonedDateTime): VoyageDatesAndTripNumber {
+    override fun findSecondToLastTripBefore(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val lastTwoTrips = dbERSRepository.findTripsBeforeDatetime(
-                    internalReferenceNumber, dateTime.toInstant(), PageRequest.of(0,2))
+                    internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0,2))
 
-                val previousTrip = when(lastTwoTrips.size) {
+                val previousTrip = when (lastTwoTrips.size) {
                     2 -> lastTwoTrips.last()
                     else -> throw NoSuchElementException("No previous trip found.")
                 }
@@ -67,13 +66,13 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
-    override fun findSecondTripAfter(internalReferenceNumber: String, dateTime: ZonedDateTime): VoyageDatesAndTripNumber {
+    override fun findSecondTripAfter(internalReferenceNumber: String, afterDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val nextTwoTrips = dbERSRepository.findTripsAfterDatetime(
-                        internalReferenceNumber, dateTime.toInstant(), PageRequest.of(0,2))
+                        internalReferenceNumber, afterDateTime.toInstant(), PageRequest.of(0,2))
 
-                val nextTrip = when(nextTwoTrips.size) {
+                val nextTrip = when (nextTwoTrips.size) {
                     2 -> nextTwoTrips.last()
                     else -> throw NoSuchElementException("No next trip found.")
                 }
@@ -91,7 +90,6 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
-
     private fun getTripNotFoundExceptionMessage(internalReferenceNumber: String) =
             "No trip found found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
@@ -100,8 +98,7 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,
         beforeDate: ZonedDateTime,
-        tripNumber: Int
-        ): List<ERSMessage> {
+        tripNumber: Int): List<ERSMessage> {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 return dbERSRepository.findAllMessagesByTripNumberBetweenDates(

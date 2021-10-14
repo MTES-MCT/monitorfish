@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
@@ -268,7 +269,7 @@ class BffControllerITests {
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&which=lastTripBefore&beforeDateTime="))
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(4)))
@@ -280,7 +281,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].tripNumber", equalTo(345)))
                 .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
-        Mockito.verify(getVesselVoyage).execute("FR224226850", "lastTripBefore", null)
+        Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null)
     }
 
     @Test
@@ -290,11 +291,11 @@ class BffControllerITests {
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&which=lastTripBefore&dateTime=2021-05-04T03:04:05.000Z"))
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&dateTime=2021-05-04T03:04:05.000Z"))
 
         Mockito.verify(getVesselVoyage).execute(
             "FR224226850",
-            "lastTripBefore",
+            VoyageRequest.PREVIOUS,
             ZonedDateTime.parse("2021-05-04T03:04:05.000Z"))
     }
 

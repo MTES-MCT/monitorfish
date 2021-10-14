@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.swagger.annotations.Api
@@ -129,16 +130,16 @@ class BffController(
     fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
                              @RequestParam(name = "internalReferenceNumber")
                              internalReferenceNumber: String,
-                             @ApiParam("Which trip with respect to date")
-                             @RequestParam(name = "which")
-                             which: String,
-                             @ApiParam("date")
+                             @ApiParam("Voyage request (LAST, PREVIOUS or NEXT) with respect to date", required = true)
+                             @RequestParam(name = "voyageRequest")
+                             voyageRequest: VoyageRequest,
+                             @ApiParam("Date")
                              @RequestParam(name = "dateTime", required = false)
                              @DateTimeFormat(pattern = zoneDateTimePattern)
                              dateTime: ZonedDateTime?): VoyageDataOutput {
         val start = System.currentTimeMillis()
 
-        val voyage = getVesselVoyage.execute(internalReferenceNumber, which, dateTime)
+        val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, dateTime)
 
         ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return VoyageDataOutput.fromVoyage(voyage)

@@ -3,9 +3,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.ERSMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.Voyage
+import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
@@ -15,40 +17,29 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
                       private val getERSMessages: GetERSMessages) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String, which: String, dateTime: ZonedDateTime?): Voyage {
-
-        var isLastVoyage = (dateTime == null) || (which == "secondToLastTripBefore")
-
-        val queryDateTime = when(dateTime != null) {
+    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, dateTime: ZonedDateTime?): Voyage {
+        val queryDateTime = when (dateTime != null) {
             true -> dateTime
             false -> ZonedDateTime.now()
         }
 
         val trip = try {
-            when(which) {
-                "lastTripBefore" -> ersRepository.findLastTripBefore(internalReferenceNumber, queryDateTime)
-                "secondToLastTripBefore" -> ersRepository.findSecondToLastTripBefore(internalReferenceNumber, queryDateTime)
-                "secondTripAfter" -> ersRepository.findSecondTripAfter(internalReferenceNumber, queryDateTime)
-                else -> throw IllegalArgumentException("Invalid 'which' argument")
+            when (voyageRequest) {
+                VoyageRequest.LAST -> ersRepository.findLastTripBefore(internalReferenceNumber, queryDateTime)
+                VoyageRequest.PREVIOUS -> ersRepository.findSecondToLastTripBefore(internalReferenceNumber, queryDateTime)
+                VoyageRequest.NEXT -> ersRepository.findSecondTripAfter(internalReferenceNumber, queryDateTime)
             }
         } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound("Invalid 'which' argument", e)
+            throw NoLogbookFishingTripFound("Invalid 'voyageRequest' argument", e)
         }
 
-        if (!isLastVoyage) {
-            try {
-                ersRepository.findSecondTripAfter(internalReferenceNumber, trip.startDate)
-            } catch (e: NoLogbookFishingTripFound) {
-                isLastVoyage = true
-            }
-        }
+        val isLastVoyage = getIsLastVoyage(dateTime, voyageRequest, internalReferenceNumber, trip)
 
         val alerts = alertRepository.findAlertsOfRules(
             listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
             internalReferenceNumber,
             trip.tripNumber
         )
-
 
         val ersMessages = getERSMessages.execute(
             internalReferenceNumber,
@@ -63,5 +54,23 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
                 trip.endDate,
                 ERSMessagesAndAlerts(ersMessages, alerts)
         )
+    }
+
+    private fun getIsLastVoyage(dateTime: ZonedDateTime?, voyageRequest: VoyageRequest, internalReferenceNumber: String, trip: VoyageDatesAndTripNumber): Boolean {
+        if (dateTime == null) {
+            return true
+        }
+
+        if (voyageRequest == VoyageRequest.PREVIOUS) {
+            return false
+        }
+
+        return try {
+            ersRepository.findSecondTripAfter(internalReferenceNumber, trip.startDate)
+
+            false
+        } catch (e: NoLogbookFishingTripFound) {
+            true
+        }
     }
 }

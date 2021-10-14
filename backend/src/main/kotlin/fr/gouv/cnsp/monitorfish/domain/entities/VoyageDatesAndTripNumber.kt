@@ -5,5 +5,4 @@ import java.time.ZonedDateTime
 data class VoyageDatesAndTripNumber(
         val tripNumber: Int,
         val startDate: ZonedDateTime,
-        val endDate: ZonedDateTime,
-        )
+        val endDate: ZonedDateTime)

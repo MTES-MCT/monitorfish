@@ -83,6 +83,7 @@ const BaseMap = props => {
       const pixel = map.getEventPixel(event.originalEvent)
       const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
 
+      console.log(feature)
       if (feature && feature.getId()) {
         if (setCurrentFeature) {
           setCurrentFeature(feature)

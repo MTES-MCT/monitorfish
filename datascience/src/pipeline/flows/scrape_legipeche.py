@@ -40,7 +40,8 @@ def scrape_legipeche_to_csv():
 
     process = CrawlerProcess(
         settings={
-            "FEEDS": {SCRAPED_FILE_LOCATION / SCRAPED_FILENAME: {"format": "csv"}}
+            "LOG_LEVEL": "INFO",
+            "FEEDS": {SCRAPED_FILE_LOCATION / SCRAPED_FILENAME: {"format": "csv"}},
         }
     )
 

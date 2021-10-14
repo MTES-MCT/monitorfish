@@ -29,7 +29,7 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
-                        internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0,1)).first()
+                        internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0, 1)).first()
 
                 return VoyageDatesAndTripNumber(lastTrip.tripNumber, lastTrip.startDate.atZone(UTC), lastTrip.endDate.atZone(UTC))
             }
@@ -46,7 +46,7 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val lastTwoTrips = dbERSRepository.findTripsBeforeDatetime(
-                    internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0,2))
+                    internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0, 2))
 
                 val previousTrip = when (lastTwoTrips.size) {
                     2 -> lastTwoTrips.last()
@@ -70,7 +70,7 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val nextTwoTrips = dbERSRepository.findTripsAfterDatetime(
-                        internalReferenceNumber, afterDateTime.toInstant(), PageRequest.of(0,2))
+                        internalReferenceNumber, afterDateTime.toInstant(), PageRequest.of(0, 2))
 
                 val nextTrip = when (nextTwoTrips.size) {
                     2 -> nextTwoTrips.last()

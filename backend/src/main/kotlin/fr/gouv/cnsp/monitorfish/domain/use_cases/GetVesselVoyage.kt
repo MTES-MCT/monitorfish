@@ -33,7 +33,8 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
             throw NoLogbookFishingTripFound("Invalid 'voyageRequest' argument", e)
         }
 
-        val isLastVoyage = getIsLastVoyage(dateTime, voyageRequest, internalReferenceNumber, trip)
+        val isLastVoyage = getIsLastVoyage(dateTime, voyageRequest, internalReferenceNumber, trip.startDate)
+        val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.endDate)
 
         val alerts = alertRepository.findAlertsOfRules(
             listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
@@ -50,13 +51,17 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
 
         return Voyage(
                 isLastVoyage,
+                isFirstVoyage,
                 trip.startDate,
                 trip.endDate,
                 ERSMessagesAndAlerts(ersMessages, alerts)
         )
     }
 
-    private fun getIsLastVoyage(dateTime: ZonedDateTime?, voyageRequest: VoyageRequest, internalReferenceNumber: String, trip: VoyageDatesAndTripNumber): Boolean {
+    private fun getIsLastVoyage(dateTime: ZonedDateTime?,
+                                voyageRequest: VoyageRequest,
+                                internalReferenceNumber: String,
+                                startDate: ZonedDateTime): Boolean {
         if (dateTime == null) {
             return true
         }
@@ -66,7 +71,18 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
         }
 
         return try {
-            ersRepository.findSecondTripAfter(internalReferenceNumber, trip.startDate)
+            ersRepository.findSecondTripAfter(internalReferenceNumber, startDate)
+
+            false
+        } catch (e: NoLogbookFishingTripFound) {
+            true
+        }
+    }
+
+    private fun getIsFirstVoyage(internalReferenceNumber: String,
+                                 endDate: ZonedDateTime): Boolean {
+        return try {
+            ersRepository.findSecondToLastTripBefore(internalReferenceNumber, endDate)
 
             false
         } catch (e: NoLogbookFishingTripFound) {

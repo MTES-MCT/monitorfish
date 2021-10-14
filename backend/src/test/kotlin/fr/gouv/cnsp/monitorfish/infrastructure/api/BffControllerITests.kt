@@ -265,17 +265,18 @@ class BffControllerITests {
     @Test
     fun `Should find the last ERS messages of vessels`() {
         // Given
-        val voyage = Voyage(true, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        val voyage = Voyage(true, false, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
         mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="))
                 // Then
                 .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(4)))
+                .andExpect(jsonPath("$.length()", equalTo(5)))
                 .andExpect(jsonPath("$.isLastVoyage", equalTo(true)))
-                .andExpect(jsonPath("$.previousBeforeDateTime", equalTo("2021-01-21T10:21:26.617301+01:00")))
-                .andExpect(jsonPath("$.nextBeforeDateTime", equalTo(null)))
+                .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
+                .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
+                .andExpect(jsonPath("$.endDate", equalTo(null)))
                 .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages.length()", equalTo(3)))
                 .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].messageType", equalTo("DEP")))
                 .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].tripNumber", equalTo(345)))
@@ -287,7 +288,7 @@ class BffControllerITests {
     @Test
     fun `Should find the ERS messages of vessels before a specified date`() {
         // Given
-        val voyage = Voyage(true, ZonedDateTime.now().minusMonths(5), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        val voyage = Voyage(true, false, ZonedDateTime.now().minusMonths(5), null, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When

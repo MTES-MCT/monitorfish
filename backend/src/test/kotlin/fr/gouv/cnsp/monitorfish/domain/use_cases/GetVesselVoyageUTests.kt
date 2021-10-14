@@ -27,6 +27,26 @@ class GetVesselVoyageUTests {
     private lateinit var getERSMessages: GetERSMessages
 
     @Test
+    fun `execute Should return a voyage with isFirstVoyage as true When dateTime is null`() {
+        // Given
+        val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
+        val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
+        given(ersRepository.findSecondToLastTripBefore(any(), any())).willThrow(NoLogbookFishingTripFound("Not found"))
+
+        // When
+        val voyage = GetVesselVoyage(ersRepository, alertRepository, getERSMessages)
+                .execute("FR224226850", VoyageRequest.LAST, null)
+
+        val (_, alerts) = voyage.ersMessagesAndAlerts
+
+        // Then
+        assertThat(voyage.isFirstVoyage).isTrue
+        assertThat(voyage.startDate).isEqualTo(startDate)
+        assertThat(voyage.endDate).isEqualTo(endDate)
+        assertThat(alerts).hasSize(0)
+    }
+
+    @Test
     fun `execute Should return a voyage with isLastVoyage as true When dateTime is null`() {
         // Given
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
@@ -42,6 +62,7 @@ class GetVesselVoyageUTests {
 
         // Then
         assertThat(voyage.isLastVoyage).isTrue
+        assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(startDate)
         assertThat(voyage.endDate).isEqualTo(endDate)
         assertThat(alerts).hasSize(0)
@@ -63,6 +84,7 @@ class GetVesselVoyageUTests {
 
         // Then
         assertThat(voyage.isLastVoyage).isFalse
+        assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(startDate)
         assertThat(voyage.endDate).isEqualTo(endDate)
         assertThat(alerts).hasSize(0)
@@ -86,9 +108,9 @@ class GetVesselVoyageUTests {
 
         // Then
         assertThat(voyage.isLastVoyage).isTrue
+        assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(startDate)
         assertThat(voyage.endDate).isEqualTo(endDate)
         assertThat(alerts).hasSize(0)
     }
-
 }

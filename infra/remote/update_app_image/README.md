@@ -20,7 +20,7 @@ The script will run only if the `cron.lock` file contain "End of update".
 >to add the variables to the shell
 
 To install it:
-- Make the `update_app_image.sh` script executable: 
+- Make the `update_app_image.sh` script executable (you might need to run before `chown user:group $MONITORFISH_GIT_FOLDER/infra/remote/update_app_image/update_app_image.sh`): 
 ```
 chmod +x $MONITORFISH_GIT_FOLDER/infra/remote/update_app_image/update_app_image.sh
 ```

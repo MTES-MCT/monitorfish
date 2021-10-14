@@ -75,7 +75,7 @@ context('Vessels Track', () => {
     cy.wait(500)
 
     cy.log('Show only the selected vessels')
-    cy.get('*[data-cy^="trigger-hide-other-vessels-from-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="trigger-hide-other-vessels-from-sidebar"]').click({ timeout: 20000, force: true })
     cy.get('.vessels').dblclick(486, 888, { timeout: 20000 })
 
     cy.wait(500)

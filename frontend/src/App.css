@@ -12,6 +12,10 @@ html {
     z-index: 9999999999999;
 }
 
+.vessel-card {
+    z-index: 9999999;
+}
+
 .zoom {
     bottom: 38px;
     left: .5em;

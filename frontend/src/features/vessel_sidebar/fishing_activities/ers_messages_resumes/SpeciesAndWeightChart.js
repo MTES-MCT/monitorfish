@@ -130,12 +130,15 @@ const SpeciesAndWeightChart = ({
 }
 
 const Presentation = styled.div`
-  display: flex;
   height: 20px;
   margin: 2px 0 0 10px;
   font-size: 13px;
   color: ${COLORS.gunMetal};
   font-weight: 300;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap;
+  max-width: 252px;
 `
 
 const Wrapper = styled.div``

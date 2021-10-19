@@ -42,17 +42,18 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
+    @Cacheable(value = ["previous_ers"])
     override fun findTripBeforeTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                val previousTripNumber = dbERSRepository.findPreviousTripNumber(internalReferenceNumber, tripNumber)
-
-                val voyageDates = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, previousTripNumber)
+                val previousTripNumber = dbERSRepository.findPreviousTripNumber(
+                        internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
+                val previousTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, previousTripNumber)
 
                 return VoyageDatesAndTripNumber(
                         previousTripNumber,
-                        voyageDates.startDate.atZone(UTC),
-                        voyageDates.endDate.atZone(UTC))
+                        previousTrip.startDate.atZone(UTC),
+                        previousTrip.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -65,17 +66,18 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
+    @Cacheable(value = ["next_ers"])
     override fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                val nextTripNumber = dbERSRepository.findNextTripNumber(internalReferenceNumber, tripNumber)
-
-                val voyageDates = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, nextTripNumber)
+                val nextTripNumber = dbERSRepository.findNextTripNumber(
+                        internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
+                val nextTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, nextTripNumber)
 
                 return VoyageDatesAndTripNumber(
                         nextTripNumber,
-                        voyageDates.startDate.atZone(UTC),
-                        voyageDates.endDate.atZone(UTC))
+                        nextTrip.startDate.atZone(UTC),
+                        nextTrip.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -91,7 +93,7 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
     private fun getTripNotFoundExceptionMessage(internalReferenceNumber: String) =
             "No trip found found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
-    @Cacheable(value = ["ers"])
+    @Cacheable(value = ["ers_messages"])
     override fun findAllMessagesByTripNumberBetweenDates(
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,

@@ -299,8 +299,8 @@ def get_dead_links(
     for unknown_link in unknown_links:
         try:
             unknown_link_alias = unknown_link.replace(
-                "http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr",
-                "http://legipeche.metier.i2",
+                "intranets.developpement-durable.ader.gouv.fr",
+                "i2",
             )
             r = requests.get(unknown_link_alias)
             r.raise_for_status()

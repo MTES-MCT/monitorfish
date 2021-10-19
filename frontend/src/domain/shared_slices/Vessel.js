@@ -32,8 +32,6 @@ const vesselSlice = createSlice({
     lastFishingActivities: {},
     isLastVoyage: null,
     isFirstVoyage: null,
-    voyageStartDate: null,
-    voyageEndDate: null,
     tripNumber: null,
     /** @type {FishingActivities | null} nextFishingActivities */
     nextFishingActivities: null,
@@ -124,8 +122,6 @@ const vesselSlice = createSlice({
       state.fishingActivities = action.payload.ersMessagesAndAlerts
       state.isLastVoyage = action.payload.isLastVoyage
       state.isFirstVoyage = action.payload.isFirstVoyage
-      state.voyageStartDate = action.payload.startDate
-      state.voyageEndDate = action.payload.endDate
       state.tripNumber = action.payload.tripNumber
       state.loadingVessel = null
     },
@@ -142,8 +138,6 @@ const vesselSlice = createSlice({
       state.fishingActivities = action.payload.ersMessagesAndAlerts
       state.isLastVoyage = action.payload.isLastVoyage
       state.isFirstVoyage = action.payload.isFirstVoyage
-      state.voyageStartDate = action.payload.startDate
-      state.voyageEndDate = action.payload.endDate
       state.tripNumber = action.payload.tripNumber
       state.loadingVessel = null
     },

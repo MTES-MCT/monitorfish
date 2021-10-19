@@ -23,8 +23,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     const {
       lastFishingActivities,
       isLastVoyage,
-      voyageStartDate,
-      voyageEndDate
+      tripNumber
     } = getState().vessel
 
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
@@ -35,24 +34,11 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       return
     }
 
-    let dateTime = null
-    switch (navigateTo) {
-      case NAVIGATE_TO.PREVIOUS:
-        dateTime = voyageEndDate
-        break
-      case NAVIGATE_TO.NEXT:
-        dateTime = voyageStartDate
-        break
-      case NAVIGATE_TO.LAST:
-        dateTime = null
-        break
-    }
-
     if (!fromCron) {
       dispatch(loadingFisheriesActivities())
     }
 
-    getVesselVoyageFromAPI(vesselIdentity, navigateTo, dateTime).then(voyage => {
+    getVesselVoyageFromAPI(vesselIdentity, navigateTo, tripNumber).then(voyage => {
       if (!voyage) {
         dispatch(setVoyage({
           ersMessagesAndAlerts: {

@@ -39,11 +39,33 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         jpaERSRepository.deleteAll()
     }
 
+    /**
+     *                               Trips overlap in test data (see V666.5__Insert_ers.sql)
+     *
+     *        <- 2019-01-18T11:45Z
+     *        +----------------------------------+
+     *        | Trip number 13                   |
+     *        +----------------------------------+
+     *                        2019-02-23T13:08Z ->
+     *
+     *                                <- 2019-02-17T01:05Z
+     *                                +--------------------------------------+
+     *                                | Trip number 14                       |
+     *                                +--------------------------------------+
+     *                                                    2019-10-15T12:01Z ->
+     *
+     *                                                                            <- 2019-10-11T02:06Z
+     *                                                                            +------------------------+
+     *                                                                            | Trip number 15         |
+     *                                                                            +------------------------+
+     *                                                                                  2019-10-22T11:06Z ->
+     */
+
     @Test
     @Transactional
     fun `findLastTripBefore Should return the last departure date When the CFR is given`() {
         // When
-        val lastTrip = jpaERSRepository.findLastTripBefore("FAK000999999", ZonedDateTime.now())
+        val lastTrip = jpaERSRepository.findLastTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
 
         // Then
         assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
@@ -54,7 +76,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should throw an exception When no parameter is given`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastTripBefore("", ZonedDateTime.now()) }
+        val throwable = catchThrowable { jpaERSRepository.findLastTripBeforeDateTime("", ZonedDateTime.now()) }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
@@ -65,7 +87,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastTripBefore("ARGH", ZonedDateTime.now()) }
+        val throwable = catchThrowable { jpaERSRepository.findLastTripBeforeDateTime("ARGH", ZonedDateTime.now()) }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
@@ -74,36 +96,84 @@ class JpaERSRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findSecondTripAfter Should return the second departure date When the second DEP is not the last one`() {
+    fun `findTripBeforeTripNumber Should return the previous trip number When there is an overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaERSRepository.findSecondTripAfter(
+        val secondTrip = jpaERSRepository.findTripBeforeTripNumber(
                 "FAK000999999",
-                ZonedDateTime.parse("2019-02-15T01:05:00Z"))
+                9463714)
 
         // Then
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-18T11:45Z")
         assertThat(secondTrip.tripNumber).isEqualTo(9463713)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-01-18T11:45Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-02-23T13:08Z")
     }
 
     @Test
     @Transactional
-    fun `findSecondTripAfter Should return the second departure date When the second DEP is the last DEP`() {
+    fun `findTripBeforeTripNumber Should return an exception When the current trip number is invalid`() {
         // When
-        val secondTrip = jpaERSRepository.findSecondTripAfter(
-                "FAK000999999",
-                ZonedDateTime.parse("2019-02-18T01:05:00Z"))
+        val throwable = catchThrowable {
+            jpaERSRepository.findTripBeforeTripNumber(
+                    "FAK000999999",
+                    9463712)
+        }
 
         // Then
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-27T01:05Z")
-        assertThat(secondTrip.tripNumber).isEqualTo(9463714)
+        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
+        assertThat(throwable.message).contains("No trip found found for the vessel.")
     }
 
     @Test
     @Transactional
-    fun `findSecondTripAfter Should throw an exception When no second DEP is found`() {
+    fun `findTripBeforeTripNumber Should return the previous trip number When there is no overlap between the current and previous trip`() {
         // When
+        val secondTrip = jpaERSRepository.findTripBeforeTripNumber(
+                "FAK000999999",
+                9463715)
+
+        // Then
+        assertThat(secondTrip.tripNumber).isEqualTo(9463714)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
+    }
+
+    @Test
+    @Transactional
+    fun `findTripAfterTripNumber Should return the next trip number When there is an overlap between the current and previous trip`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findSecondTripAfter("FAK000999999", ZonedDateTime.parse("2019-10-28T01:05:00Z")) }
+        val secondTrip = jpaERSRepository.findTripAfterTripNumber(
+                "FAK000999999",
+                9463713)
+
+        // Then
+        assertThat(secondTrip.tripNumber).isEqualTo(9463714)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
+    }
+
+    @Test
+    @Transactional
+    fun `findTripAfterTripNumber Should return the next trip number When there is no overlap between the current and previous trip`() {
+        // When
+        val secondTrip = jpaERSRepository.findTripAfterTripNumber(
+                "FAK000999999",
+                9463714)
+
+        // Then
+        assertThat(secondTrip.tripNumber).isEqualTo(9463715)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
+    }
+
+    @Test
+    @Transactional
+    fun `findTripAfterTripNumber Should throw an exception When there is no next trip found`() {
+        // When
+        val throwable = catchThrowable {
+            jpaERSRepository.findTripAfterTripNumber(
+                    "FAK000999999",
+                    9463715)
+        }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)

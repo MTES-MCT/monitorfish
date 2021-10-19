@@ -50,7 +50,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
                 try {
                     // We substract 4h to this date to ensure the track starts at the port
                     // (the departure message may be sent after the departure)
-                    ersRepository.findLastTripBefore(internalReferenceNumber, ZonedDateTime.now())
+                    ersRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
                             .startDate.minusHours(4)
                 } catch (e: NoLogbookFishingTripFound) {
                     logger.warn(e.message)

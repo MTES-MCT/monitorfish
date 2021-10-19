@@ -293,12 +293,12 @@ class BffControllerITests {
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&dateTime=2021-05-04T03:04:05.000Z"))
+        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345"))
 
         Mockito.verify(getVesselVoyage).execute(
             "FR224226850",
             VoyageRequest.PREVIOUS,
-            ZonedDateTime.parse("2021-05-04T03:04:05.000Z"))
+            12345)
     }
 
     @Test

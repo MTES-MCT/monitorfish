@@ -25,7 +25,7 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
 
     private val postgresChunkSize = 5000
 
-    override fun findLastTripBefore(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
+    override fun findLastTripBeforeDateTime(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
@@ -42,50 +42,48 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
         }
     }
 
-    override fun findSecondToLastTripBefore(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
+    override fun findTripBeforeTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                val lastTwoTrips = dbERSRepository.findTripsBeforeDatetime(
-                    internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0, 2))
+                val previousTripNumber = dbERSRepository.findPreviousTripNumber(internalReferenceNumber, tripNumber)
 
-                val previousTrip = when (lastTwoTrips.size) {
-                    2 -> lastTwoTrips.last()
-                    else -> throw NoSuchElementException("No previous trip found.")
-                }
+                val voyageDates = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, previousTripNumber)
 
-                return VoyageDatesAndTripNumber(previousTrip.tripNumber,
-                                                previousTrip.startDate.atZone(UTC),
-                                                previousTrip.endDate.atZone(UTC))
+                return VoyageDatesAndTripNumber(
+                        previousTripNumber,
+                        voyageDates.startDate.atZone(UTC),
+                        voyageDates.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
         } catch (e: NoSuchElementException) {
             throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         } catch (e: IllegalArgumentException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: EmptyResultDataAccessException) {
             throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         }
     }
 
-    override fun findSecondTripAfter(internalReferenceNumber: String, afterDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
+    override fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                val nextTwoTrips = dbERSRepository.findTripsAfterDatetime(
-                        internalReferenceNumber, afterDateTime.toInstant(), PageRequest.of(0, 2))
+                val nextTripNumber = dbERSRepository.findNextTripNumber(internalReferenceNumber, tripNumber)
 
-                val nextTrip = when (nextTwoTrips.size) {
-                    2 -> nextTwoTrips.last()
-                    else -> throw NoSuchElementException("No next trip found.")
-                }
+                val voyageDates = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, nextTripNumber)
 
-                return VoyageDatesAndTripNumber(nextTrip.tripNumber,
-                                                nextTrip.startDate.atZone(UTC),
-                                                nextTrip.endDate.atZone(UTC))
+                return VoyageDatesAndTripNumber(
+                        nextTripNumber,
+                        voyageDates.startDate.atZone(UTC),
+                        voyageDates.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
         } catch (e: NoSuchElementException) {
             throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         } catch (e: IllegalArgumentException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: EmptyResultDataAccessException) {
             throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         }
     }

@@ -8,13 +8,13 @@ import kotlin.jvm.Throws
 
 interface ERSRepository {
     @Throws(NoLogbookFishingTripFound::class)
-    fun findLastTripBefore(internalReferenceNumber: String,
-                           beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber
-    @Throws(NoLogbookFishingTripFound::class)
-    fun findSecondToLastTripBefore(internalReferenceNumber: String,
+    fun findLastTripBeforeDateTime(internalReferenceNumber: String,
                                    beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber
     @Throws(NoLogbookFishingTripFound::class)
-    fun findSecondTripAfter(internalReferenceNumber: String, afterDateTime: ZonedDateTime): VoyageDatesAndTripNumber
+    fun findTripBeforeTripNumber(internalReferenceNumber: String,
+                                 tripNumber: Int): VoyageDatesAndTripNumber
+    @Throws(NoLogbookFishingTripFound::class)
+    fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber
     fun findAllMessagesByTripNumberBetweenDates(internalReferenceNumber: String,
                                                 afterDate: ZonedDateTime,
                                                 beforeDate: ZonedDateTime,
@@ -25,7 +25,4 @@ interface ERSRepository {
     fun findLastMessageDate(): ZonedDateTime
     // For test purpose
     fun deleteAll()
-
-
-
 }

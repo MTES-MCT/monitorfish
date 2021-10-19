@@ -133,13 +133,12 @@ class BffController(
                              @ApiParam("Voyage request (LAST, PREVIOUS or NEXT) with respect to date", required = true)
                              @RequestParam(name = "voyageRequest")
                              voyageRequest: VoyageRequest,
-                             @ApiParam("Date")
-                             @RequestParam(name = "dateTime", required = false)
-                             @DateTimeFormat(pattern = zoneDateTimePattern)
-                             dateTime: ZonedDateTime?): VoyageDataOutput {
+                             @ApiParam("Trip number")
+                             @RequestParam(name = "tripNumber", required = false)
+                             tripNumber: Int?): VoyageDataOutput {
         val start = System.currentTimeMillis()
 
-        val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, dateTime)
+        val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)
 
         ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return VoyageDataOutput.fromVoyage(voyage)

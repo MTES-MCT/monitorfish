@@ -22,10 +22,10 @@ def delete_csv():
     """Deletes `legipeche.csv` if it exists."""
     logger = prefect.context.get("logger")
     if SCRAPED_FILENAME in os.listdir(SCRAPED_FILE_LOCATION):
-        logger.info("{SCRAPED_FILENAME} found, deleting.")
+        logger.info(f"{SCRAPED_FILENAME} found, deleting.")
         os.remove(SCRAPED_FILE_LOCATION / SCRAPED_FILENAME)
     else:
-        logger.info("legipeche.csv not found, skipping.")
+        logger.info(f"{SCRAPED_FILENAME} not found, skipping.")
 
 
 @task(checkpoint=False)

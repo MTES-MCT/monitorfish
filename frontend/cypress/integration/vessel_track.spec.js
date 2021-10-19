@@ -27,7 +27,7 @@ context('Vessel Track', () => {
 
   it('Position card Should be seen on the map on vessel track pointer move', () => {
     // When we click on the vessel
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
 
     // When we move the pointer cursor to a track point (from one point to another to emit an event)
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 910, clientY: 300, pointerId: 1, force: true, pixel: [411, 635] })

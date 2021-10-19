@@ -1,0 +1,47 @@
+<h2>Légipêche VS Monitorfish (ง •̀_•́)ง</h2>
+<h4>Vérification du {{ verification_date }}</h4>
+
+<br>
+<br>
+<hr />
+<h3>Modifications de pages existantes</h3>
+{% if modified_regulations %}
+<p>Les {{ n_modified_regulations }} réglementations suivantes de Monitorfish font référence à une page de Légipêche sur laquelle des documents ont été ajoutés ou supprimés entre le {{ previous_extraction_datetime_utc }} et le {{ latest_extraction_datetime_utc }}:</p>
+{{ modified_regulations }}
+<p>Pensez à vérifier que les résumés réglementaires correspondants ont bien été mis à jour dans le <a href={{ backoffice_url }}>Back'O'Fish</a> ( ˘ ³˘)♥</p>
+{% else %}
+<p>Aucun document n'a été ajouté ou supprimé d'une page de Légipêche référencée dans une réglementation de Monitorfish entre le {{ previous_extraction_datetime_utc }} et le {{ latest_extraction_datetime_utc }} (っ▀¯▀)つ</p>
+{% endif %}
+
+<br>
+<br>
+<hr />
+<h3>Références manquantes dans Monitorfish</h3>
+
+
+{% if missing_references %}
+    <p>Les {{ n_missing_references }} réglementations suivantes ne comportent pas de référence réglementaire ¯\_(ツ)_/¯</p>
+    {{ missing_references }}
+    <p>Pensez à ajouter des références réglementaires dans le <a href={{ backoffice_url }}>Back'O'Fish</a> `·.¸¸ ><((((º>.·´¯`·><((((º> </p>
+{% else %}
+    <p>Aucune référence réglementaire manquante dans Monitorfish: au moins une référence réglementaire est indiquée pour chaque zone! ♪♪ ヽ(ˇ∀ˇ )ゞ</p>
+{% endif %}
+
+<br>
+<br>
+<hr />
+<h3>Liens morts dans Monitorfish</h3>
+
+{% if dead_links %} 
+    <p>Les {{ n_dead_links }} références réglementaires suivantes renvoient à une page inexistante (҂◡_◡)</p>
+    {{ dead_links }}
+    <p></p>
+{% else %}
+    <p>Aucune lien mort dans Monitorfish ☜(⌒▽⌒)☞ </p>
+{% endif %}
+
+
+<br>
+<br>
+<p>© 2020 - 2021 | Mérule Inc.</p>
+

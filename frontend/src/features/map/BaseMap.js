@@ -61,15 +61,15 @@ const BaseMap = props => {
   }
 
   function allowClickOnMapFeaturesOverlayArePositionedOnTop () {
-    for (const s of document.querySelectorAll('.ol-overlay-container')) {
+    for (const s of document.querySelectorAll('.overlay-active')) {
       s.style.pointerEvents = 'none'
     }
   }
 
   function resetOverlayPointerStyle () {
-    const elements = document.querySelectorAll('.ol-overlay-container')
+    const elements = document.querySelectorAll('.overlay-active')
     if (elements?.length && elements[0].style.pointerEvents !== 'auto') {
-      for (const s of document.querySelectorAll('.ol-overlay-container')) {
+      for (const s of document.querySelectorAll('.overlay-active')) {
         s.style.pointerEvents = 'auto'
       }
     }

@@ -92,6 +92,9 @@ const Layers = {
     isIntersectable: false,
     zIndex: 1001
   },
+  INTEREST_POINT: {
+    zIndex: 1002
+  },
   REGULATORY: {
     code: 'regulatory_areas',
     name: '',

@@ -30,7 +30,7 @@ const VesselCardOverlay = ({ feature, map }) => {
         overlayObjectRef.current = new Overlay({
           element: ref,
           autoPan: false,
-          className: 'ol-overlay-container ol-selectable'
+          className: 'ol-overlay-container ol-selectable vessel-card'
         })
       } else {
         overlayObjectRef.current = null

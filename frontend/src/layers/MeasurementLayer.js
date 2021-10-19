@@ -53,7 +53,8 @@ const MeasurementLayer = ({ map }) => {
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     style: measurementStyle,
-    className: Layers.MEASUREMENT.code
+    className: Layers.MEASUREMENT.code,
+    zIndex: Layers.MEASUREMENT.zIndex
   }))
 
   useEffect(() => {

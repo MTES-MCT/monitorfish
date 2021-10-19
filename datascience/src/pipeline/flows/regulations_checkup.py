@@ -2,16 +2,14 @@ import datetime
 import logging
 import os
 from email.message import EmailMessage
-from typing import Iterable, List, Tuple, Union
+from typing import List, Tuple
 
 import jinja2
-import markdown
 import pandas as pd
 import prefect
 import pytz
 import requests
 from prefect import Flow, task
-from prefect.tasks.prefect import StartFlowRun
 
 from config import (
     BACKOFFICE_URL,
@@ -21,7 +19,7 @@ from config import (
     LIBRARY_LOCATION,
 )
 from src.pipeline.email.email import create_html_email, send_email
-from src.pipeline.generic_tasks import extract, load
+from src.pipeline.generic_tasks import extract
 from src.pipeline.processing import try_get_factory
 
 ####################################### Helpers #######################################

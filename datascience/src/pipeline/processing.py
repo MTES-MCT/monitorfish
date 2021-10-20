@@ -2,7 +2,7 @@ import datetime
 import logging
 from functools import partial
 from time import sleep
-from typing import Any, Iterable, List, Union
+from typing import Any, Hashable, Iterable, List, Union
 
 import numpy as np
 import pandas as pd
@@ -474,3 +474,22 @@ def join_on_multiple_keys(
     res = res[columns_order]
 
     return res
+
+
+def try_get_factory(key: Hashable, error_value: Any = None):
+    def try_get(d: Any) -> Any:
+        """
+        Attempt to fetch an element from what is supposed to be dict (but may not be),
+        return error_value if it fails (for any reason).
+
+        This is useful to extract values from a series of dictionnaries which may not all
+        contain the searched key. It is faster than checking for the presence of the key
+        each time.
+        """
+
+        try:
+            return d[key]
+        except:
+            return error_value
+
+    return try_get

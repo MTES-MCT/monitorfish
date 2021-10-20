@@ -16,7 +16,9 @@ from src.pipeline.flows import (
     missing_trip_numbers,
     ports,
     regulations,
+    regulations_checkup,
     risk_factor,
+    scrape_legipeche,
     species,
     vessels,
 )
@@ -41,7 +43,9 @@ infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = CronSchedule("* * * * *")
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 regulations.flow.schedule = CronSchedule("* * * * *")
+regulations_checkup.flow.schedule = CronSchedule("55 7 * * 1,2,3,4,5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
+scrape_legipeche.flow.schedule = CronSchedule("35 7 * * 1,2,3,4,5")
 species.flow.schedule = CronSchedule("0 8 * * *")
 vessels.flow.schedule = CronSchedule("5 8 * * *")
 
@@ -62,7 +66,9 @@ flows_to_register = [
     missing_trip_numbers.flow,
     ports.flow,
     regulations.flow,
+    regulations_checkup.flow,
     risk_factor.flow,
+    scrape_legipeche.flow,
     species.flow,
     vessels.flow,
 ]

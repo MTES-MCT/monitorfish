@@ -9,6 +9,7 @@ import sqlalchemy
 from src.pipeline.flows.vessels import (
     clean_vessels,
     extract_cee_vessels,
+    extract_control_charters,
     extract_floats,
     extract_fr_vessels,
     extract_nav_licences,
@@ -48,6 +49,12 @@ class TestVesselsFlow(unittest.TestCase):
     def test_extract_non_cee_vessels(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
         query = extract_non_cee_vessels.run()
+        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
+
+    @patch("src.pipeline.flows.vessels.extract")
+    def test_extract_control_charters(self, mock_extract):
+        mock_extract.side_effect = mock_extract_side_effect
+        query = extract_control_charters.run()
         self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     def test_clean_vessels(self):
@@ -109,6 +116,7 @@ class TestVesselsFlow(unittest.TestCase):
                 ],
                 "sailing_category": ["2ème", None],
                 "beacon_number": [None, "beacbeac"],
+                "under_charter": [True, False],
             }
         )
 
@@ -144,6 +152,7 @@ class TestVesselsFlow(unittest.TestCase):
             "vessel_phones",
             "vessel_emails",
             "beacon_number",
+            "under_charter",
         ]
 
         expected_values = [
@@ -177,6 +186,7 @@ class TestVesselsFlow(unittest.TestCase):
                 ["0123456789", "9876543210"],
                 [],
                 None,
+                True,
             ],
             [
                 2,
@@ -208,6 +218,7 @@ class TestVesselsFlow(unittest.TestCase):
                 [],
                 [],
                 "beacbeac",
+                False,
             ],
         ]
 

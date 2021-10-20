@@ -34,4 +34,5 @@ data class Vessel(
         val proprietorEmails: List<String>? = null,
         val vesselPhones: List<String>? = null,
         val vesselEmails: List<String>? = null,
-        val beaconNumber: String? = null)
+        val beaconNumber: String? = null,
+        val underCharter: Boolean? = null)

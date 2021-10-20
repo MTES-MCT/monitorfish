@@ -183,7 +183,7 @@ To run tests on the data pipeline, run
 
 .. code-block:: shell
 
-    make test-data-pipeline
+    make test-pipeline
 
 ----
 

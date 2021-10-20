@@ -1,5 +1,3 @@
-from typing import Any, Hashable, Union
-
 import geopandas as gpd
 import pandas as pd
 import prefect
@@ -18,28 +16,10 @@ from src.pipeline.processing import (
     df_to_dict_series,
     df_values_to_psql_arrays,
     to_json,
+    try_get_factory,
     zeros_ones_to_bools,
 )
 from src.pipeline.utils import delete, get_table, psql_insert_copy
-
-
-def try_get_factory(key: Hashable, error_value: Any = None):
-    def try_get(d: Any) -> Any:
-        """
-        Attempt to fetch an element from what is supposed to be dict (but may not be),
-        return error_value if it fails (for any reason).
-
-        This is useful to extract values from a series of dictionnaries which may not all
-        contain the searched key. It is faster than checking for the presence of the key
-        each time.
-        """
-
-        try:
-            return d[key]
-        except:
-            return error_value
-
-    return try_get
 
 
 # ********************************** Tasks and flow ***********************************

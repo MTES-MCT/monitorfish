@@ -5,10 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Package structure
 ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
+EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/email/templates")
+EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("pipeline/email/stylesheets")
 
 # Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")
@@ -63,3 +66,15 @@ default_risk_factors = {
         * (2 ** risk_factor_coefficients["detectability"])
     ),
 }
+
+# App URL
+MONITORFISH_URL = "https://monitorfish.din.developpement-durable.gouv.fr/"
+BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
+
+# Email server
+MONITORFISH_EMAIL_SERVER_URL = os.environ.get("MONITORFISH_EMAIL_SERVER_URL")
+MONITORFISH_EMAIL_SERVER_PORT = os.environ.get("MONITORFISH_EMAIL_SERVER_PORT")
+MONITORFISH_EMAIL_ADDRESS = os.environ.get("MONITORFISH_EMAIL_ADDRESS")
+
+# Recipients
+CNSP_FRANCE_EMAIL_ADDRESS = os.environ.get("CNSP_FRANCE_EMAIL_ADDRESS")

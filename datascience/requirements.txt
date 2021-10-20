@@ -40,9 +40,11 @@ incremental==17.5.0; python_version >= "3.6" and python_full_version < "3.0.0" o
 isort==5.7.0; python_version >= "3.6" and python_version < "4.0"
 itemadapter==0.2.0; python_version >= "3.6"
 itemloaders==1.0.4; python_version >= "3.6"
+jinja2==3.0.2; python_version >= "3.6"
 jmespath==0.10.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" and python_version >= "3.6"
 jsonschema==3.2.0; python_version >= "3.4"
 lxml==4.6.3; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
+markupsafe==2.0.1; python_version >= "3.6"
 marshmallow-oneofschema==2.1.0; python_version >= "3.6"
 marshmallow==3.10.0; python_version >= "3.6"
 mccabe==0.6.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
@@ -80,7 +82,7 @@ python-box==5.3.0; python_version >= "3.6"
 python-dateutil==2.8.1; python_full_version >= "3.7.1" and python_version >= "3.6" and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6") and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6")
 python-dotenv==0.15.0
 python-slugify==4.0.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
-pytz==2021.1; python_full_version >= "3.7.1" and python_version >= "3.6"
+pytz==2021.3
 pytzdata==2020.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 pywin32==227; python_version >= "3.4" and python_full_version < "3.0.0" and sys_platform == "win32" or python_full_version >= "3.5.0" and python_version >= "3.4" and sys_platform == "win32"
 pyyaml==5.4.1; python_full_version >= "3.6.1" and python_version >= "3.4" and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6")

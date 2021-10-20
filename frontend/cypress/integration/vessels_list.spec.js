@@ -28,7 +28,7 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="preview-filtered-vessels"]').click({ timeout: 20000 })
     cy.wait(500)
     cy.get('.vessels').dblclick(0, 0, { force: true })
-    cy.wait(500)
+    cy.wait(1000)
 
     // Then
     cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 3)

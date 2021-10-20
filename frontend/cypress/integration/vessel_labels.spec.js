@@ -28,6 +28,7 @@ context('Vessel labels', () => {
 
     // Then
     cy.contains('*[data-cy^="vessel-label-text"]', 'FRAIS AVIS MODE')
+    cy.get('*[data-cy^="FRAIS AVIS MODE-under-charter"]').should('exist')
   })
 
   it('Vessels names Should be movable', () => {

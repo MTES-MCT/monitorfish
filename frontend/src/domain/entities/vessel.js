@@ -136,7 +136,8 @@ export class Vessel {
 
     const label = {
       labelText: null,
-      riskFactor: null
+      riskFactor: null,
+      underCharter: feature.vessel.underCharter
     }
 
     if (vesselDate.getTime() > vesselIsHidden.getTime()) {

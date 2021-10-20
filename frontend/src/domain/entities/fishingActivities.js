@@ -12,19 +12,9 @@ export const getPNOMessageFromMessages = ersMessages => ersMessages
 export const getFARMessagesFromMessages = ersMessages => ersMessages
   .filter(message => message.messageType === ERSMessageTypeEnum.FAR.code)
 
-export const getLANMessageFromMessages = (ersMessages, depMessage) => {
+export const getLANMessageFromMessages = ersMessages => {
   return ersMessages
-    .filter(message => message.messageType === ERSMessageTypeEnum.LAN.code)
-    .find(message => {
-      const depTripNumber = depMessage.tripNumber
-      if (depTripNumber) {
-        return depTripNumber === message.tripNumber
-      }
-
-      const landingDatetimeUtc = new Date(message.message.landingDatetimeUtc)
-      const departureDatetimeUtc = new Date(depMessage.message.departureDatetimeUtc)
-      return landingDatetimeUtc > departureDatetimeUtc
-    })
+    .find(message => message.messageType === ERSMessageTypeEnum.LAN.code)
 }
 
 function sortByCorrectedMessagesFirst () {

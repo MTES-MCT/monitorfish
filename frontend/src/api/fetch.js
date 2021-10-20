@@ -323,13 +323,20 @@ function getAllGearCodesFromAPI () {
     })
 }
 
-function getVesselVoyageFromAPI (vesselIdentity, beforeDateTime) {
-  const internalReferenceNumber = vesselIdentity.internalReferenceNumber ? vesselIdentity.internalReferenceNumber : ''
-  const externalReferenceNumber = vesselIdentity.externalReferenceNumber ? vesselIdentity.externalReferenceNumber : ''
-  const ircs = vesselIdentity.ircs ? vesselIdentity.ircs : ''
-  beforeDateTime = beforeDateTime ? new Date(beforeDateTime).toISOString() : ''
+/**
+ * Get vessel voyage
+ * @memberOf API
+ * @returns {Promise<VesselVoyage>} The voyage
+ * @throws {Error}
+ */
+function getVesselVoyageFromAPI (vesselIdentity, voyageRequest, tripNumber) {
+  const internalReferenceNumber = vesselIdentity.internalReferenceNumber || ''
+  const externalReferenceNumber = vesselIdentity.externalReferenceNumber || ''
+  const ircs = vesselIdentity.ircs || ''
+  tripNumber = tripNumber || ''
+  voyageRequest = voyageRequest || ''
 
-  return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&beforeDateTime=${beforeDateTime}`)
+  return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&voyageRequest=${voyageRequest}&tripNumber=${tripNumber}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()

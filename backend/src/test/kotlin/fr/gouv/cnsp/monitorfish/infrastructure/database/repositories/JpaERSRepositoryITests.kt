@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
@@ -39,90 +39,160 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         jpaERSRepository.deleteAll()
     }
 
+    /**
+     *                               Trips overlap in test data (see V666.5__Insert_ers.sql)
+     *
+     *        <- 2019-01-18T11:45Z
+     *        +----------------------------------+
+     *        | Trip number 13                   |
+     *        +----------------------------------+
+     *                        2019-02-23T13:08Z ->
+     *
+     *                                <- 2019-02-17T01:05Z
+     *                                +--------------------------------------+
+     *                                | Trip number 14                       |
+     *                                +--------------------------------------+
+     *                                                    2019-10-15T12:01Z ->
+     *
+     *                                                                            <- 2019-10-11T02:06Z
+     *                                                                            +------------------------+
+     *                                                                            | Trip number 15         |
+     *                                                                            +------------------------+
+     *                                                                                  2019-10-22T11:06Z ->
+     */
+
     @Test
     @Transactional
-    fun `findLastDepartureDateAndTripNumber Should return the last departure date When the CFR is given`() {
+    fun `findLastTripBefore Should return the last departure date When the CFR is given`() {
         // When
-        val lastDepartureDateAndTripNumber = jpaERSRepository.findLastDepartureDateAndTripNumber("FAK000999999", ZonedDateTime.now())
+        val lastTrip = jpaERSRepository.findLastTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
 
         // Then
-        assertThat(lastDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
-        assertThat(lastDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
+        assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastTrip.tripNumber).isEqualTo(9463715)
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDateAndTripNumber Should throw an exception When no parameter is given`() {
+    fun `findLastTripBefore Should throw an exception When no parameter is given`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("", ZonedDateTime.now()) }
+        val throwable = catchThrowable { jpaERSRepository.findLastTripBeforeDateTime("", ZonedDateTime.now()) }
 
         // Then
-        assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
-        assertThat(throwable.message).contains("No departure date (DEP) found for the vessel.")
+        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
+        assertThat(throwable.message).contains("No trip found found for the vessel.")
     }
 
     @Test
     @Transactional
-    fun `findLastDepartureDateAndTripNumber Should throw an exception When the vessel could not be found`() {
+    fun `findLastTripBefore Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable { jpaERSRepository.findLastDepartureDateAndTripNumber("ARGH", ZonedDateTime.now()) }
+        val throwable = catchThrowable { jpaERSRepository.findLastTripBeforeDateTime("ARGH", ZonedDateTime.now()) }
 
         // Then
-        assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
-        assertThat(throwable.message).contains("No departure date (DEP) found for the vessel.")
+        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
+        assertThat(throwable.message).contains("No trip found found for the vessel.")
     }
 
     @Test
     @Transactional
-    fun `findSecondDepartureDateByInternalReferenceNumber Should return the second departure date When the second DEP is not the last one`() {
+    fun `findTripBeforeTripNumber Should return the previous trip number When there is an overlap between the current and previous trip`() {
         // When
-        val secondDepartureDateAndTripNumber = jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber(
+        val secondTrip = jpaERSRepository.findTripBeforeTripNumber(
                 "FAK000999999",
-                ZonedDateTime.parse("2019-02-15T01:05:00Z"))
+                9463714)
 
         // Then
-        assertThat(secondDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-02-27T01:05Z")
-        assertThat(secondDepartureDateAndTripNumber.tripNumber).isEqualTo(9463714)
+        assertThat(secondTrip.tripNumber).isEqualTo(9463713)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-01-18T11:45Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-02-23T13:08Z")
     }
 
     @Test
     @Transactional
-    fun `findSecondDepartureDateByInternalReferenceNumber Should return the second departure date When the second DEP is the last DEP`() {
+    fun `findTripBeforeTripNumber Should return an exception When the current trip number is invalid`() {
         // When
-        val secondDepartureDateAndTripNumber = jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber(
+        val throwable = catchThrowable {
+            jpaERSRepository.findTripBeforeTripNumber(
+                    "FAK000999999",
+                    9463712)
+        }
+
+        // Then
+        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
+        assertThat(throwable.message).contains("No trip found found for the vessel.")
+    }
+
+    @Test
+    @Transactional
+    fun `findTripBeforeTripNumber Should return the previous trip number When there is no overlap between the current and previous trip`() {
+        // When
+        val secondTrip = jpaERSRepository.findTripBeforeTripNumber(
                 "FAK000999999",
-                ZonedDateTime.parse("2019-02-18T01:05:00Z"))
+                9463715)
 
         // Then
-        assertThat(secondDepartureDateAndTripNumber.lastDepartureDate.toString()).isEqualTo("2019-10-11T02:06Z")
-        assertThat(secondDepartureDateAndTripNumber.tripNumber).isEqualTo(9463715)
+        assertThat(secondTrip.tripNumber).isEqualTo(9463714)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
     }
 
     @Test
     @Transactional
-    fun `findSecondDepartureDateByInternalReferenceNumber Should throw an exception When no second DEP is found`() {
+    fun `findTripAfterTripNumber Should return the next trip number When there is an overlap between the current and previous trip`() {
         // When
-        // When
-        val throwable = catchThrowable { jpaERSRepository.findSecondDepartureDateByInternalReferenceNumber("FAK000999999", ZonedDateTime.parse("2019-02-28T01:05:00Z")) }
+        val secondTrip = jpaERSRepository.findTripAfterTripNumber(
+                "FAK000999999",
+                9463713)
 
         // Then
-        assertThat(throwable).isInstanceOf(NoERSLastDepartureDateFound::class.java)
-        assertThat(throwable.message).contains("No departure date (DEP) found for the vessel.")
+        assertThat(secondTrip.tripNumber).isEqualTo(9463714)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
     }
 
     @Test
     @Transactional
-    fun `findAllMessagesAfterDepartureDate Should retrieve all messages When the CFR is given`() {
+    fun `findTripAfterTripNumber Should return the next trip number When there is no overlap between the current and previous trip`() {
+        // When
+        val secondTrip = jpaERSRepository.findTripAfterTripNumber(
+                "FAK000999999",
+                9463714)
+
+        // Then
+        assertThat(secondTrip.tripNumber).isEqualTo(9463715)
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
+    }
+
+    @Test
+    @Transactional
+    fun `findTripAfterTripNumber Should throw an exception When there is no next trip found`() {
+        // When
+        val throwable = catchThrowable {
+            jpaERSRepository.findTripAfterTripNumber(
+                    "FAK000999999",
+                    9463715)
+        }
+
+        // Then
+        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
+        assertThat(throwable.message).contains("No trip found found for the vessel.")
+    }
+
+    @Test
+    @Transactional
+    fun `findAllMessagesByTripNumberBetweenDates Should retrieve all messages When the CFR is given`() {
         // Given
         val lastDepartureDate = ZonedDateTime.of(2019, 10, 11, 2, 6, 0, 0, UTC)
         val now = ZonedDateTime.now()
 
         // When
         val messages = jpaERSRepository
-                .findAllMessagesBetweenDepartureDates(lastDepartureDate, now, "FAK000999999")
+                .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, 9463715)
 
         // Then
-        assertThat(messages).hasSize(20)
+        assertThat(messages).hasSize(19)
 
         // LAN
         assertThat(messages[0].message).isInstanceOf(LAN::class.java)
@@ -212,28 +282,13 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(messages[9].messageType).isEqualTo("COE")
         assertThat(messages[9].message).isInstanceOf(COE::class.java)
 
-        // FAR
-        assertThat(messages[10].message).isInstanceOf(FAR::class.java)
-        val farMessageTwo = messages[10].message as FAR
-        assertThat(farMessageTwo.gear).isEqualTo("GTN")
-        assertThat(farMessageTwo.mesh).isEqualTo(100.0)
-        assertThat(farMessageTwo.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
-        assertThat(farMessageTwo.catches).hasSize(4)
-        assertThat(farMessageTwo.catches.first().weight).isEqualTo(20.0)
-        assertThat(farMessageTwo.catches.first().numberFish).isEqualTo(null)
-        assertThat(farMessageTwo.catches.first().species).isEqualTo("SLS")
-        assertThat(farMessageTwo.catches.first().faoZone).isEqualTo("27.8.a")
-        assertThat(farMessageTwo.catches.first().effortZone).isEqualTo("C")
-        assertThat(farMessageTwo.catches.first().economicZone).isEqualTo("FRA")
-        assertThat(farMessageTwo.catches.first().statisticalRectangle).isEqualTo("23E6")
-
         // COX
-        assertThat(messages[11].messageType).isEqualTo("COX")
-        assertThat(messages[11].message).isInstanceOf(COX::class.java)
+        assertThat(messages[10].messageType).isEqualTo("COX")
+        assertThat(messages[10].message).isInstanceOf(COX::class.java)
 
         // DEP
-        assertThat(messages[12].message).isInstanceOf(DEP::class.java)
-        val depMessage = messages[12].message as DEP
+        assertThat(messages[11].message).isInstanceOf(DEP::class.java)
+        val depMessage = messages[11].message as DEP
         assertThat(depMessage.gearOnboard).hasSize(2)
         assertThat(depMessage.gearOnboard.first().gear).isEqualTo("GTN")
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
@@ -242,44 +297,44 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
 
         // RET
+        assertThat(messages[12].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[12].operationType).isEqualTo(ERSOperationType.RET)
+        val ackMessage1 = messages[12].message as Acknowledge
+        assertThat(ackMessage1.returnStatus).isEqualTo("000")
+
+        // RET
         assertThat(messages[13].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[13].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage1 = messages[13].message as Acknowledge
-        assertThat(ackMessage1.returnStatus).isEqualTo("000")
+        val ackMessage2 = messages[13].message as Acknowledge
+        assertThat(ackMessage2.returnStatus).isEqualTo("002")
 
         // RET
         assertThat(messages[14].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[14].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage2 = messages[14].message as Acknowledge
-        assertThat(ackMessage2.returnStatus).isEqualTo("002")
+        val ackMessage3 = messages[14].message as Acknowledge
+        assertThat(ackMessage3.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[15].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[15].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage3 = messages[15].message as Acknowledge
-        assertThat(ackMessage3.returnStatus).isEqualTo("000")
+        val ackMessage4 = messages[15].message as Acknowledge
+        assertThat(ackMessage4.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[16].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[16].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage4 = messages[16].message as Acknowledge
-        assertThat(ackMessage4.returnStatus).isEqualTo("000")
+        val ackMessage5 = messages[16].message as Acknowledge
+        assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[17].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[17].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage5 = messages[17].message as Acknowledge
-        assertThat(ackMessage5.returnStatus).isEqualTo("000")
-
-        // RET
-        assertThat(messages[18].message).isInstanceOf(Acknowledge::class.java)
-        assertThat(messages[18].operationType).isEqualTo(ERSOperationType.RET)
-        val ackMessage6 = messages[18].message as Acknowledge
+        val ackMessage6 = messages[17].message as Acknowledge
         assertThat(ackMessage6.returnStatus).isEqualTo("000")
 
         // DEL
-        assertThat(messages[19].operationType).isEqualTo(ERSOperationType.DEL)
-        assertThat(messages[19].referencedErsId).isEqualTo("OOF20190627059908")
+        assertThat(messages[18].operationType).isEqualTo(ERSOperationType.DEL)
+        assertThat(messages[18].referencedErsId).isEqualTo("OOF20190627059908")
     }
 
     @Test

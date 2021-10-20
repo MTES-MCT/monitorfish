@@ -5,15 +5,19 @@ import java.time.ZonedDateTime
 
 data class VoyageDataOutput(
         val isLastVoyage: Boolean,
-        val previousBeforeDateTime: ZonedDateTime?,
-        val nextBeforeDateTime: ZonedDateTime?,
+        val isFirstVoyage: Boolean,
+        val startDate: ZonedDateTime?,
+        val endDate: ZonedDateTime?,
+        val tripNumber: Int?,
         val ersMessagesAndAlerts: ERSMessagesAndAlertsDataOutput) {
     companion object {
         fun fromVoyage(voyage: Voyage): VoyageDataOutput {
             return VoyageDataOutput(
                     isLastVoyage = voyage.isLastVoyage,
-                    previousBeforeDateTime = voyage.previousBeforeDateTime,
-                    nextBeforeDateTime = voyage.nextBeforeDateTime,
+                    isFirstVoyage = voyage.isFirstVoyage,
+                    startDate = voyage.startDate,
+                    endDate = voyage.endDate,
+                    tripNumber = voyage.tripNumber,
                     ersMessagesAndAlerts = ERSMessagesAndAlertsDataOutput
                             .fromERSMessagesAndAlerts(voyage.ersMessagesAndAlerts)
             )

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissingParameterApiError
 import org.slf4j.Logger
@@ -27,7 +27,7 @@ class ControllersExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoERSLastDepartureDateFound::class)
+    @ExceptionHandler(NoLogbookFishingTripFound::class)
     fun handleNoERSLastDepartureDateFound(e: Exception): ApiError {
         logger.error(e.message, e.cause)
         return ApiError(e)

@@ -31,8 +31,8 @@ const vesselSlice = createSlice({
     /** @type {FishingActivities} lastFishingActivities */
     lastFishingActivities: {},
     isLastVoyage: null,
-    previousBeforeDateTime: null,
-    nextBeforeDateTime: null,
+    isFirstVoyage: null,
+    tripNumber: null,
     /** @type {FishingActivities | null} nextFishingActivities */
     nextFishingActivities: null,
     /** @type {ControlResume} controlResumeAndControl */
@@ -121,8 +121,8 @@ const vesselSlice = createSlice({
     setVoyage (state, action) {
       state.fishingActivities = action.payload.ersMessagesAndAlerts
       state.isLastVoyage = action.payload.isLastVoyage
-      state.previousBeforeDateTime = action.payload.previousBeforeDateTime
-      state.nextBeforeDateTime = action.payload.nextBeforeDateTime
+      state.isFirstVoyage = action.payload.isFirstVoyage
+      state.tripNumber = action.payload.tripNumber
       state.loadingVessel = null
     },
     /**
@@ -137,15 +137,17 @@ const vesselSlice = createSlice({
       state.lastFishingActivities = action.payload.ersMessagesAndAlerts
       state.fishingActivities = action.payload.ersMessagesAndAlerts
       state.isLastVoyage = action.payload.isLastVoyage
-      state.previousBeforeDateTime = action.payload.previousBeforeDateTime
-      state.nextBeforeDateTime = action.payload.nextBeforeDateTime
+      state.isFirstVoyage = action.payload.isFirstVoyage
+      state.tripNumber = action.payload.tripNumber
       state.loadingVessel = null
     },
     resetVoyage (state) {
       state.fishingActivities = null
       state.isLastVoyage = null
-      state.previousBeforeDateTime = null
-      state.nextBeforeDateTime = null
+      state.isFirstVoyage = null
+      state.voyageStartDate = null
+      state.voyageEndDate = null
+      state.tripNumber = null
       state.loadingVessel = null
     },
     /**

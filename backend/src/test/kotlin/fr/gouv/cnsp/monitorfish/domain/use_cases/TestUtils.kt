@@ -99,13 +99,13 @@ object TestUtils {
         return listOf(
                 ERSMessage(id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646811", operationType = ERSOperationType.DAT, messageType = "FAR",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646816", referencedErsId = "9065646811", operationType = ERSOperationType.RET, messageType = "",
+                ERSMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", ersId = "9065646816", referencedErsId = "9065646811", operationType = ERSOperationType.RET, messageType = "",
                         message = farBadAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
                 ERSMessage(id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646813", operationType = ERSOperationType.DAT, messageType = "FAR",
                         message = farTwo, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646818", referencedErsId = "9065646813", operationType = ERSOperationType.RET, messageType = "",
+                ERSMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", ersId = "9065646818", referencedErsId = "9065646813", operationType = ERSOperationType.RET, messageType = "",
                         message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646818", referencedErsId = "9065646813", operationType = ERSOperationType.DEL, messageType = "",
+                ERSMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", referencedErsId = "9065646813", operationType = ERSOperationType.DEL, messageType = "",
                         message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))
         )
     }

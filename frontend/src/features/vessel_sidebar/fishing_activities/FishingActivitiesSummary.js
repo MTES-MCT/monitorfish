@@ -33,7 +33,8 @@ import { ERSOperationType } from '../../../domain/entities/ERS'
 const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   const {
     isLastVoyage,
-    previousBeforeDateTime,
+    isFirstVoyage,
+    tripNumber,
     fishingActivities,
     selectedVessel
   } = useSelector(state => state.vessel)
@@ -60,12 +61,12 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   const [faoZones, setFAOZones] = useState([])
 
   useEffect(() => {
-    if (fishingActivities && fishingActivities.ersMessages && fishingActivities.ersMessages.length) {
+    if (fishingActivities?.ersMessages?.length) {
       const ersMessages = fishingActivities.ersMessages
       const depMessage = getDEPMessageFromMessages(ersMessages)
       setDEPMessage(depMessage)
 
-      const lanMessage = getLANMessageFromMessages(ersMessages, depMessage)
+      const lanMessage = getLANMessageFromMessages(ersMessages)
       setLANMessage(lanMessage)
 
       const disMessages = getDISMessagesFromMessages(ersMessages)
@@ -144,7 +145,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   }, [fishingActivities])
 
   const getCatchesOverToleranceAlert = () => {
-    if (fishingActivities.alerts && fishingActivities.alerts.length) {
+    if (fishingActivities?.alerts?.length) {
       return fishingActivities.alerts.find(alert => alert.name === AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
     }
 
@@ -152,10 +153,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   }
 
   function getGears () {
-    if (depMessage &&
-      depMessage.message &&
-      depMessage.message.gearOnboard &&
-      depMessage.message.gearOnboard.length) {
+    if (depMessage?.message?.gearOnboard?.length) {
       const uniqueGears = depMessage.message.gearOnboard.reduce((acc, current) => {
         const found = acc.find(item =>
           item.gear === current.gear &&
@@ -202,7 +200,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
               </Field>
               <Field>
                 <Key>Zones de la marée (JPE)</Key>
-                <Value>{faoZones && faoZones.length
+                <Value>{faoZones?.length
                   ? faoZones.map((faoZone, index) => {
                     return <span
                       key={index}>{faoZone}{index === faoZones.length - 1 ? '' : ', '}</span>
@@ -217,14 +215,14 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
             <Text hasTwoLines={false}>Résumé de la marée</Text>
             <TextValue hasTwoLines={false} data-cy={'vessel-fishing-trip-number'}>
               <PreviousTrip
-                disabled={!previousBeforeDateTime}
-                onClick={previousBeforeDateTime ? navigation.goToPreviousTrip : undefined}
+                disabled={isFirstVoyage}
+                onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
                 title={'Marée précédente'}
                 data-cy={'vessel-fishing-previous-trip'}
               />
               {
-                depMessage && depMessage.tripNumber
-                  ? `Marée n°${depMessage.tripNumber}`
+                tripNumber
+                  ? `Marée n°${tripNumber}`
                   : <NoValue>-</NoValue>
               }
               <NextTrip
@@ -243,7 +241,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
             <Arrow onClick={() => showERSMessages()}/>
           </Title>
           {
-            fishingActivities && fishingActivities.ersMessages && fishingActivities.ersMessages.length
+            fishingActivities?.ersMessages?.length
               ? <ERSMessages>
                 {depMessage
                   ? <DEPMessageResume
@@ -256,7 +254,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
                   : <DEPMessageResume hasNoMessage={true}/>
                 }
 
-                {farMessages && farMessages.length && farMessages[0]
+                {farMessages?.length && farMessages[0]
                   ? <FARMessageResume
                     id={farMessages[0].ersId}
                     showERSMessages={showERSMessages}
@@ -267,7 +265,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
                   : <FARMessageResume hasNoMessage={true}/>
                 }
 
-                {disMessages && disMessages.length && disMessages[0]
+                {disMessages?.length && disMessages[0]
                   ? <DISMessageResume
                     id={disMessages[0].ersId}
                     totalDISWeight={totalDISWeight}

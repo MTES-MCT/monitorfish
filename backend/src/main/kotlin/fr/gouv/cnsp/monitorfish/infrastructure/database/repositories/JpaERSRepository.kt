@@ -1,11 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.LastDepartureDateAndTripNumber
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ERSEntity
@@ -25,61 +25,88 @@ class JpaERSRepository(private val dbERSRepository: DBERSRepository,
 
     private val postgresChunkSize = 5000
 
-    override fun findLastDepartureDateAndTripNumber(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): LastDepartureDateAndTripNumber {
+    override fun findLastTripBeforeDateTime(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                val lastDepartureDateAndTripNumber = dbERSRepository.findLastDepartureDateByInternalReferenceNumber(
-                        internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0,1)).first()
-                return LastDepartureDateAndTripNumber(
-                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
-                        lastDepartureDateAndTripNumber.tripNumber)
+                val lastTrip = dbERSRepository.findTripsBeforeDatetime(
+                        internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0, 1)).first()
+
+                return VoyageDatesAndTripNumber(lastTrip.tripNumber, lastTrip.startDate.atZone(UTC), lastTrip.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
         } catch (e: NoSuchElementException) {
-            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         } catch (e: IllegalArgumentException) {
-            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         }
     }
 
-    override fun findSecondDepartureDateByInternalReferenceNumber(internalReferenceNumber: String, afterDateTime: ZonedDateTime): LastDepartureDateAndTripNumber {
+    @Cacheable(value = ["previous_ers"])
+    override fun findTripBeforeTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                val lastDepartureDateAndTripNumberList = dbERSRepository.findNextDepartureDateByInternalReferenceNumber(
-                        internalReferenceNumber, afterDateTime.toInstant(), PageRequest.of(0,2))
+                val previousTripNumber = dbERSRepository.findPreviousTripNumber(
+                        internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
+                val previousTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, previousTripNumber)
 
-                val lastDepartureDateAndTripNumber = when(lastDepartureDateAndTripNumberList.size) {
-                    2 -> lastDepartureDateAndTripNumberList.last()
-                    else -> throw IllegalArgumentException("no second departure message found.")
-                }
-
-                return LastDepartureDateAndTripNumber(
-                        lastDepartureDateAndTripNumber.lastDepartureDate.atZone(UTC),
-                        lastDepartureDateAndTripNumber.tripNumber)
+                return VoyageDatesAndTripNumber(
+                        previousTripNumber,
+                        previousTrip.startDate.atZone(UTC),
+                        previousTrip.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
         } catch (e: NoSuchElementException) {
-            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         } catch (e: IllegalArgumentException) {
-            throw NoERSLastDepartureDateFound(getDepartureDateExceptionMessage(internalReferenceNumber), e)
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: EmptyResultDataAccessException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         }
     }
 
-    private fun getDepartureDateExceptionMessage(internalReferenceNumber: String) =
-            "No departure date (DEP) found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
-
-    @Cacheable(value = ["ers"])
-    override fun findAllMessagesBetweenDepartureDates(afterDateTime: ZonedDateTime,
-                                                      beforeDateTime: ZonedDateTime,
-                                                      internalReferenceNumber: String): List<ERSMessage> {
+    @Cacheable(value = ["next_ers"])
+    override fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
-                return dbERSRepository.findERSMessagesAfterOperationDateTime(
-                        internalReferenceNumber,
-                        afterDateTime.toInstant(),
-                        beforeDateTime.toInstant()).map {
+                val nextTripNumber = dbERSRepository.findNextTripNumber(
+                        internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
+                val nextTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, nextTripNumber)
+
+                return VoyageDatesAndTripNumber(
+                        nextTripNumber,
+                        nextTrip.startDate.atZone(UTC),
+                        nextTrip.endDate.atZone(UTC))
+            }
+
+            throw IllegalArgumentException("No CFR given to find the vessel.")
+        } catch (e: NoSuchElementException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: IllegalArgumentException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: EmptyResultDataAccessException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        }
+    }
+
+    private fun getTripNotFoundExceptionMessage(internalReferenceNumber: String) =
+            "No trip found found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
+
+    @Cacheable(value = ["ers_messages"])
+    override fun findAllMessagesByTripNumberBetweenDates(
+        internalReferenceNumber: String,
+        afterDate: ZonedDateTime,
+        beforeDate: ZonedDateTime,
+        tripNumber: Int): List<ERSMessage> {
+        try {
+            if(internalReferenceNumber.isNotEmpty()) {
+                return dbERSRepository.findAllMessagesByTripNumberBetweenDates(
+                    internalReferenceNumber,
+                    afterDate.toInstant(),
+                    beforeDate.toInstant(),
+                    tripNumber
+                ).map {
                     it.toERSMessage(mapper)
                 }
             }

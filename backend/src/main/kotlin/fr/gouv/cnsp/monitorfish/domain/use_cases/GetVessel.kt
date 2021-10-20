@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSLastDepartureDateFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
@@ -50,9 +50,9 @@ class GetVessel(private val vesselRepository: VesselRepository,
                 try {
                     // We substract 4h to this date to ensure the track starts at the port
                     // (the departure message may be sent after the departure)
-                    ersRepository.findLastDepartureDateAndTripNumber(internalReferenceNumber, ZonedDateTime.now())
-                            .lastDepartureDate.minusHours(4)
-                } catch (e: NoERSLastDepartureDateFound) {
+                    ersRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
+                            .startDate.minusHours(4)
+                } catch (e: NoLogbookFishingTripFound) {
                     logger.warn(e.message)
                     vesselTrackDepthHasBeenModified = true
                     ZonedDateTime.now().minusDays(1)

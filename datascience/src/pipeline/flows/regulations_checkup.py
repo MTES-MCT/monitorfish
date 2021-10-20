@@ -419,9 +419,6 @@ def get_recipients() -> List[str]:
     return [CNSP_FRANCE_EMAIL_ADDRESS]
 
 
-#     return ["vincent.chery@m4x.org", "vincent1.chery@developpement-durable.gouv.fr"]
-
-
 @task(checkpoint=False)
 def create_message(html: str, recipients: List[str]) -> EmailMessage:
 

@@ -4,9 +4,16 @@ html {
 
 body {
   line-height: 1.85;
+  color: #444;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-weight: 300;
+  margin: 6rem auto 1rem;
+  max-width: 48rem;
+  text-align: center;
 }
 
 p {
+  color: #777;
   font-size: 1rem;
   margin-bottom: 1.3rem;
 }
@@ -45,15 +52,6 @@ h6 {
   font-size: .88rem;
 }
 
-body {
-  color: #444;
-  font-family: 'Open Sans', Helvetica, sans-serif;
-  font-weight: 300;
-  margin: 6rem auto 1rem;
-  max-width: 48rem;
-  text-align: center;
-}
-
 a,
 a:visited {
   color: #3498db;
@@ -85,10 +83,6 @@ li {
   text-align: left;
 }
 
-p {
-  color: #777;
-}
-
 table {
     border-collapse: collapse;
     margin: 25px 0;
@@ -102,7 +96,6 @@ table {
 thead tr {
     background-color: rgb(59, 69, 89);
     color: #ffffff;
-/*     text-align: center; */
 }
 
 th, td {

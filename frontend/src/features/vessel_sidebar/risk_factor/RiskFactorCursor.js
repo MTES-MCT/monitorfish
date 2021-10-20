@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { RiskFactorBox } from './styles/RiskFactorBox.style'
 
-const RiskFactorCursor = ({ value, color, progress, isBig, withoutBox, height }) => {
+const RiskFactorCursor = ({ value, color, progress, isBig, withoutBox, height, underCharter }) => {
   const [progressWithDelay, setProgressWithDelay] = useState(0)
 
   useEffect(() => {
@@ -27,6 +27,11 @@ const RiskFactorCursor = ({ value, color, progress, isBig, withoutBox, height })
       >
         {value}
       </RiskFactorBox>
+      {
+        underCharter
+          ? <UnderCharter/>
+          : null
+      }
       <Bar
         isBig={isBig}
         height={height}
@@ -78,6 +83,17 @@ const RiskFactorCursor = ({ value, color, progress, isBig, withoutBox, height })
     </Wrapper>
   )
 }
+
+const UnderCharter = styled.span`
+  border-radius: 5px;
+  width: 10px;
+  height: 10px;
+  background: ${COLORS.mediumSeaGreen} 0% 0% no-repeat padding-box;
+  margin-left: -15px;
+  margin-top: -5px;
+  margin-right: 5px;
+  display: inline-block;
+`
 
 const Wrapper = styled.div`
   margin: ${props => props.withoutBox ? 0 : 9}px 0;

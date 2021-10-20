@@ -52,4 +52,5 @@ data class LastPosition(
         val impactRiskFactor: Double? = null,
         val probabilityRiskFactor: Double? = null,
         val detectabilityRiskFactor: Double? = null,
-        val riskFactor: Double? = null)
+        val riskFactor: Double? = null,
+        val underCharter: Boolean? = null)

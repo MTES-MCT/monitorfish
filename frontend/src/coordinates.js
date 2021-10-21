@@ -97,8 +97,6 @@ function getDMDFromDecimal (dd, latitudeOrLongitude) {
   return `${formattedDegrees}° ${formattedMinutes}.${formattedDecimal}′ ${hemisphere}`
 }
 
-// TODO handle truncating !!!!
-
 function getDMSFromDecimal (dd, latitudeOrLongitude) {
   const hemisphere = getHemisphere(dd, latitudeOrLongitude)
 

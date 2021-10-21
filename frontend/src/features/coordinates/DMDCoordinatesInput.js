@@ -54,7 +54,6 @@ const DMDCoordinatesInput = props => {
     }
     const longitudeMinutes = parseInt(longitude.substring(3, 5))
     const longitudeSeconds = parseInt(longitude.substring(5, 8))
-    console.log(longitude, longitudeDegrees, longitudeMinutes, longitudeSeconds)
 
     const dLatitude = dmsToDecimal(latitudeDegrees, latitudeMinutes + Math.pow(10, -3) * latitudeSeconds, 0, NS, 6)
     const dLongitude = dmsToDecimal(longitudeDegrees, longitudeMinutes + Math.pow(10, -3) * longitudeSeconds, 0, EW, 6)

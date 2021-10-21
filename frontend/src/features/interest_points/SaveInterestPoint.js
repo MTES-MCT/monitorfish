@@ -75,7 +75,6 @@ const SaveInterestPoint = (
           .map(coordinate => {
             return parseFloat(coordinate.replace(/°/g, ''))
           })
-        console.log(ddCoordinates)
         setCoordinates(ddCoordinates)
       }
     }
@@ -116,7 +115,6 @@ const SaveInterestPoint = (
   const updateCoordinates = (nextCoordinates, coordinates) => {
     if (nextCoordinates && nextCoordinates.length) {
       if (!coordinates?.length || coordinatesAreDistinct(nextCoordinates, coordinates)) {
-        console.log(nextCoordinates, coordinates)
         // Convert to [longitude, latitude] and OpenLayers projection
         const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
         dispatch(updateInterestPointKeyBeingDrawed({

@@ -25,7 +25,6 @@ const SetCoordinates = ({ coordinates, updateCoordinates }) => {
           ? coordinates.join(', ')
           : undefined
       case CoordinatesFormat.DEGREES_MINUTES_DECIMALS:
-        console.log('received', getCoordinates([coordinates[1], coordinates[0]], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS))
         return coordinates?.length
           ? getCoordinates([coordinates[1], coordinates[0]], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)
             .map(coordinate => {

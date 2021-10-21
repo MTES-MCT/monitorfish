@@ -21,7 +21,6 @@ const DMSCoordinatesInput = props => {
   }, [coordinates, coordinatesFormat])
 
   useEffect(() => {
-    console.log(update, coordinates)
     if (coordinatesAreModifiedAndNotRoundedByInput()) {
       updateCoordinates(update, coordinates)
     }

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { useSelector } from 'react-redux'
 import { CoordinatesFormat, WSG84_PROJECTION } from '../../domain/entities/map'
-import { getCoordinates } from '../../utils'
+import { getCoordinates } from '../../coordinates'
 import DMDCoordinatesInput from './DMDCoordinatesInput'
 import DMSCoordinatesInput from './DMSCoordinatesInput'
 import DDCoordinatesInput from './DDCoordinatesInput'
@@ -21,11 +21,12 @@ const SetCoordinates = ({ coordinates, updateCoordinates }) => {
   const getCoordinatesFromFormat = (coordinates, coordinatesFormat) => {
     switch (coordinatesFormat) {
       case CoordinatesFormat.DEGREES_MINUTES_SECONDS:
-        return coordinates && Array.isArray(coordinates) && coordinates.length
+        return coordinates?.length
           ? coordinates.join(', ')
           : undefined
       case CoordinatesFormat.DEGREES_MINUTES_DECIMALS:
-        return coordinates && coordinates.length
+        console.log('received', getCoordinates([coordinates[1], coordinates[0]], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS))
+        return coordinates?.length
           ? getCoordinates([coordinates[1], coordinates[0]], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)
             .map(coordinate => {
               return coordinate

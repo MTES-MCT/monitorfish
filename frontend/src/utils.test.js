@@ -1,4 +1,4 @@
-import { getCoordinates, getDateTime } from './utils'
+import { getDateTime } from './utils'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
 
 describe('utils', () => {
@@ -33,55 +33,5 @@ describe('utils', () => {
 
     // Then
     expect(formattedDate).toEqual('06/04/2021 à 23h10')
-  })
-
-  it('getCoordinates Should get coordinates for a dummy lon/lat', async () => {
-    // When
-    const coordinates = getCoordinates([-4.276, 46.947], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_SECONDS)
-
-    // Then
-    expect(coordinates).not.toBeUndefined()
-    expect(coordinates[0]).toEqual('46° 56′ 50″  N')
-    expect(coordinates[1]).toEqual('004°  16′ 34″ W')
-  })
-
-  it('getCoordinates Should get S coordinates for a dummy lon/lat', async () => {
-    // When
-    const coordinates = getCoordinates([4.591, -33.56], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_SECONDS)
-
-    // Then
-    expect(coordinates).not.toBeUndefined()
-    expect(coordinates[0]).toEqual('33° 33′ 37″  S')
-    expect(coordinates[1]).toEqual('004°  35′ 28″ E')
-  })
-
-  it('getCoordinates Should get coordinates for a 0 longitude', async () => {
-    // When
-    const coordinates = getCoordinates([0, 49.6167], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_SECONDS)
-
-    // Then
-    expect(coordinates).not.toBeUndefined()
-    expect(coordinates[0]).toEqual('49° 37′ 01″  N')
-    expect(coordinates[1]).toEqual('000°  00′ 00″')
-  })
-
-  it('getCoordinates Should get coordinates for an East longitude', async () => {
-    // When
-    const coordinates = getCoordinates([881004.7140361258, 6076231.889001969], OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
-
-    // Then
-    expect(coordinates).not.toBeUndefined()
-    expect(coordinates[0]).toEqual('47.8156°')
-    expect(coordinates[1]).toEqual('007.9142°')
-  })
-
-  it('getCoordinates Should get coordinates for a West longitude', async () => {
-    // When
-    const coordinates = getCoordinates([-881004.7140361258, 6076231.889001969], OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
-
-    // Then
-    expect(coordinates).not.toBeUndefined()
-    expect(coordinates[0]).toEqual('47.8156°')
-    expect(coordinates[1]).toEqual('-007.9142°')
   })
 })

@@ -14,7 +14,7 @@ import { ReactComponent as OtherSVG } from '../icons/Point_interet_autre.svg'
 import SetCoordinates from '../coordinates/SetCoordinates'
 import { useDispatch, useSelector } from 'react-redux'
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/shared_slices/InterestPoint'
-import { getCoordinates } from '../../utils'
+import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import { transform } from 'ol/proj'
 import saveInterestPointFeature from '../../domain/use_cases/saveInterestPointFeature'
@@ -63,7 +63,7 @@ const SaveInterestPoint = (
       setName('')
       setObservations('')
       setType('')
-    } else if (!interestPointBeingDrawed) {
+    } else {
       setType(interestPointType.FISHING_VESSEL)
     }
   }, [isOpen, interestPointBeingDrawed])
@@ -71,10 +71,11 @@ const SaveInterestPoint = (
   useEffect(() => {
     if (coordinatesFormat) {
       if (interestPointBeingDrawed?.coordinates?.length) {
-        const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
+        const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false)
           .map(coordinate => {
             return parseFloat(coordinate.replace(/°/g, ''))
           })
+        console.log(ddCoordinates)
         setCoordinates(ddCoordinates)
       }
     }
@@ -114,7 +115,8 @@ const SaveInterestPoint = (
    */
   const updateCoordinates = (nextCoordinates, coordinates) => {
     if (nextCoordinates && nextCoordinates.length) {
-      if (!coordinates || !coordinates.length || areDistinct(nextCoordinates, coordinates)) {
+      if (!coordinates?.length || coordinatesAreDistinct(nextCoordinates, coordinates)) {
+        console.log(nextCoordinates, coordinates)
         // Convert to [longitude, latitude] and OpenLayers projection
         const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
         dispatch(updateInterestPointKeyBeingDrawed({
@@ -123,18 +125,6 @@ const SaveInterestPoint = (
         }))
       }
     }
-  }
-
-  function areDistinct (nextCoordinates, coordinates) {
-    return nextCoordinates &&
-      nextCoordinates.length &&
-      coordinates.length &&
-      !isNaN(coordinates[0]) &&
-      !isNaN(coordinates[1]) &&
-      !isNaN(nextCoordinates[0]) &&
-      !isNaN(nextCoordinates[1]) &&
-      (coordinates[0] !== nextCoordinates[0] ||
-        coordinates[1] !== nextCoordinates[1])
   }
 
   const saveInterestPoint = () => {

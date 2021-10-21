@@ -5,7 +5,7 @@ import { COLORS } from '../../../constants/constants'
 
 import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
 import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
-import { getCoordinates } from '../../../utils'
+import { getCoordinates } from '../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'

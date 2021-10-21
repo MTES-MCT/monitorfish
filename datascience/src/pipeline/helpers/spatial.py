@@ -1,5 +1,7 @@
-from typing import Tuple, Union
+from typing import Iterable, Set, Tuple, Union
 
+import h3
+import pandas as pd
 from pyproj import Geod
 from shapely.geometry import MultiPolygon, Polygon
 
@@ -60,3 +62,49 @@ def estimate_current_position(
             else:
                 raise
     return lat, lon
+
+
+def get_h3_indices(
+    df: pd.DataFrame,
+    lat: str = "latitude",
+    lon: str = "longitude",
+    resolution: int = 12,
+) -> pd.Series:
+    """
+    Returns a Series with the same index as the input DataFrame and values equal to the
+    h3 index corresponding to the latitude and longitude of the indicated columns of
+    the DataFrame
+
+    Args:
+        df (pd.DataFrame): DataFrame with latitude and longitude coordinates in 2 of
+          its columns
+        lat (str): name of the column containing latitudes. Defaults to "latitude".
+        lon (str): name of the column containing longitudes. Defaults to "longitude".
+        resolution (int): h3 resolution of the h3 cells to output.
+
+    Returns:
+        pd.Series: h3 cells indices
+    """
+
+    res = df.apply(
+        lambda row: h3.geo_to_h3(row["latitude"], row["longitude"], resolution), axis=1
+    )
+    return res
+
+
+def get_k_ring_of_h3_cells(h3_sequence: Iterable[str], k: int) -> Set[str]:
+    """
+    Takes an list-like sequence of h3 cells and an integer k, returns the set of h3
+    cells that belong to the k-ring of at least one of the h3 cells in the input
+    sequence.
+
+    Args:
+        h3_sequence (sequence): sequence of h3 cells
+        k (int): number of rings to add around the input cells
+
+    Returns:
+        sequence[str]: sequence of h3 cells belonging to the k-ring of at least one of
+            the h3 cells in the input sequence
+    """
+    h3_cells = [h3.k_ring(h, k) for h in h3_sequence]
+    return set.union(*h3_cells)

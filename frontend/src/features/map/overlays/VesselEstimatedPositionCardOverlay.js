@@ -4,7 +4,7 @@ import Overlay from 'ol/Overlay'
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
 import VesselEstimatedPositionCard from '../cards/VesselEstimatedPositionCard'
-import { getCoordinates } from '../../../utils'
+import { getCoordinates } from '../../../coordinates'
 import { WSG84_PROJECTION } from '../../../domain/entities/map'
 import { useSelector } from 'react-redux'
 

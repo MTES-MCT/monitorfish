@@ -58,7 +58,7 @@ context('Vessel Track', () => {
 
 
     cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 38′ 24″ N')
-    cy.get('*[data-cy^="vessel-track-card-longitude"]').contains('008° 07′ 02″ W')
+    cy.get('*[data-cy^="vessel-track-card-longitude"]').contains('008° 07′ 01″ W')
     cy.get('*[data-cy^="vessel-track-card-course"]').contains('17°')
     cy.get('*[data-cy^="vessel-track-card-speed"]').contains('8.6')
   })

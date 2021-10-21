@@ -5,7 +5,7 @@ import { Radio, RadioGroup } from 'rsuite'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCoordinatesFormat } from '../../../domain/shared_slices/Map'
-import { getCoordinates } from '../../../utils'
+import { getCoordinates } from '../../../coordinates'
 import { useClickOutsideComponent } from '../../../hooks/useClickOutside'
 
 const MapCoordinatesBox = ({ coordinates }) => {

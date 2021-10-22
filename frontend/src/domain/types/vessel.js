@@ -102,6 +102,7 @@
  * @property {string[]} vesselPhones
  * @property {string} vesselType
  * @property {number} width
+ * @property {boolean} underCharter
  */
 
 /**
@@ -157,4 +158,5 @@
  * @property {string | null} lastControlDateTime
  * @property {boolean | null} lastControlInfraction
  * @property {number | null} postControlComment
+ * @property {boolean} underCharter
  */

@@ -105,7 +105,8 @@ data class LastPositionEntity(
         val detectabilityRiskFactor: Double? = null,
         @Column(name = "risk_factor")
         val riskFactor: Double? = null,
-        ) : Serializable {
+        @Column(name = "under_charter")
+        val underCharter: Boolean? = null) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,
@@ -144,5 +145,6 @@ data class LastPositionEntity(
             impactRiskFactor = impactRiskFactor,
             probabilityRiskFactor = probabilityRiskFactor,
             detectabilityRiskFactor = detectabilityRiskFactor,
-            riskFactor = riskFactor)
+            riskFactor = riskFactor,
+            underCharter = underCharter)
 }

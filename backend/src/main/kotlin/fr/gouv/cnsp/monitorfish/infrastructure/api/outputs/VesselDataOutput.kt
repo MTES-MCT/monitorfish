@@ -36,7 +36,8 @@ data class VesselDataOutput(
         val vesselEmails: List<String>? = null,
         val beaconNumber: String? = null,
         val positions: List<PositionDataOutput>,
-        val riskFactor: RiskFactorDataOutput? = null) {
+        val riskFactor: RiskFactorDataOutput? = null,
+        val underCharter: Boolean? = null) {
     companion object {
         fun fromVesselWithData(vesselWithData: VesselWithData): VesselDataOutput {
             return VesselDataOutput(
@@ -73,7 +74,8 @@ data class VesselDataOutput(
                     positions = vesselWithData.positions.map {
                         PositionDataOutput.fromPosition(it)
                     },
-                    riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselWithData.vesselRiskFactor)
+                    riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselWithData.vesselRiskFactor),
+                    underCharter = vesselWithData.vessel.underCharter
             )
         }
     }

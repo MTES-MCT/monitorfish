@@ -303,6 +303,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           text={label?.labelText}
           riskFactor={label?.riskFactor}
           riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
+          underCharter={label?.underCharter}
           flagState={identity.flagState}
           offset={offset}
           coordinates={identity.coordinates}

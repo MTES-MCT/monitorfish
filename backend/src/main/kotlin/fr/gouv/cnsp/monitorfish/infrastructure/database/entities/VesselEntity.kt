@@ -59,7 +59,7 @@ data class VesselEntity(
         val sailingType: String? = null,
         @Column(name = "declared_fishing_gears", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val declaredFishingGears:  List<String>? = null,
+        val declaredFishingGears: List<String>? = null,
         @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
         val navigationLicenceExpirationDate: Date? = null,
 
@@ -67,10 +67,10 @@ data class VesselEntity(
         val operatorName: String? = null,
         @Column(name = "operator_phones", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val operatorPhones:  List<String>? = null,
+        val operatorPhones: List<String>? = null,
         @Column(name = "operator_emails", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val operatorEmails:  List<String>? = null,
+        val operatorEmails: List<String>? = null,
         @Column(name = "proprietor_name")
         val proprietorName: String? = null,
         @Column(name = "proprietor_phones", columnDefinition = "varchar(100)[]")
@@ -78,7 +78,7 @@ data class VesselEntity(
         val proprietorPhones: List<String>? = null,
         @Column(name = "proprietor_emails", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
-        val proprietorEmails: List<String>? = null, 
+        val proprietorEmails: List<String>? = null,
         @Column(name = "vessel_phones", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
         val vesselPhones: List<String>? = null,
@@ -86,9 +86,11 @@ data class VesselEntity(
         @Type(type = "list-array")
         val vesselEmails: List<String>? = null,
         @Column(name = "beacon_number")
-        val beaconNumber: String? = null) {
+        val beaconNumber: String? = null,
+        @Column(name = "under_charter")
+        val underCharter: Boolean? = null) {
 
-        fun toVessel() = Vessel(
+    fun toVessel() = Vessel(
             id = id,
             internalReferenceNumber = internalReferenceNumber,
             ircs = ircs,
@@ -96,12 +98,12 @@ data class VesselEntity(
             externalReferenceNumber = externalReferenceNumber,
             vesselName = vesselName,
             flagState = flagState?.let {
-                try {
-                    CountryCode.valueOf(flagState)
-                } catch (e: IllegalArgumentException) {
-                        logger.warn(e.message)
-                        CountryCode.UNDEFINED
-                }
+                    try {
+                            CountryCode.valueOf(flagState)
+                    } catch (e: IllegalArgumentException) {
+                            logger.warn(e.message)
+                            CountryCode.UNDEFINED
+                    }
             },
             width = width,
             length = length,
@@ -123,42 +125,44 @@ data class VesselEntity(
             proprietorEmails = proprietorEmails,
             vesselPhones = vesselPhones,
             vesselEmails = vesselEmails,
-            beaconNumber = beaconNumber)
+            beaconNumber = beaconNumber,
+            underCharter = underCharter)
 
-        companion object {
-                private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)
 
-                fun fromVessel(vessel: Vessel): VesselEntity {
-                        return VesselEntity(
-                                id = vessel.id,
-                                internalReferenceNumber = vessel.internalReferenceNumber,
-                                ircs = vessel.ircs,
-                                mmsi = vessel.mmsi,
-                                externalReferenceNumber = vessel.externalReferenceNumber,
-                                vesselName = vessel.vesselName,
-                                flagState = vessel.flagState?.alpha2,
-                                width = vessel.width,
-                                length = vessel.length,
-                                district = vessel.district,
-                                districtCode = vessel.districtCode,
-                                gauge = vessel.gauge,
-                                registryPort = vessel.registryPort,
-                                power = vessel.power,
-                                vesselType = vessel.vesselType,
-                                sailingCategory = vessel.sailingCategory,
-                                sailingType = vessel.sailingType,
-                                declaredFishingGears = vessel.declaredFishingGears,
-                                navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
-                                operatorName = vessel.operatorName,
-                                operatorPhones = vessel.operatorPhones,
-                                operatorEmails = vessel.operatorEmails,
-                                proprietorName = vessel.proprietorName,
-                                proprietorPhones = vessel.proprietorPhones,
-                                proprietorEmails = vessel.proprietorEmails,
-                                vesselPhones = vessel.vesselPhones,
-                                vesselEmails = vessel.vesselEmails,
-                                beaconNumber = vessel.beaconNumber
-                        )
-                }
+        fun fromVessel(vessel: Vessel): VesselEntity {
+            return VesselEntity(
+                    id = vessel.id,
+                    internalReferenceNumber = vessel.internalReferenceNumber,
+                    ircs = vessel.ircs,
+                    mmsi = vessel.mmsi,
+                    externalReferenceNumber = vessel.externalReferenceNumber,
+                    vesselName = vessel.vesselName,
+                    flagState = vessel.flagState?.alpha2,
+                    width = vessel.width,
+                    length = vessel.length,
+                    district = vessel.district,
+                    districtCode = vessel.districtCode,
+                    gauge = vessel.gauge,
+                    registryPort = vessel.registryPort,
+                    power = vessel.power,
+                    vesselType = vessel.vesselType,
+                    sailingCategory = vessel.sailingCategory,
+                    sailingType = vessel.sailingType,
+                    declaredFishingGears = vessel.declaredFishingGears,
+                    navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
+                    operatorName = vessel.operatorName,
+                    operatorPhones = vessel.operatorPhones,
+                    operatorEmails = vessel.operatorEmails,
+                    proprietorName = vessel.proprietorName,
+                    proprietorPhones = vessel.proprietorPhones,
+                    proprietorEmails = vessel.proprietorEmails,
+                    vesselPhones = vessel.vesselPhones,
+                    vesselEmails = vessel.vesselEmails,
+                    beaconNumber = vessel.beaconNumber,
+                    underCharter = vessel.underCharter
+            )
         }
+    }
 }

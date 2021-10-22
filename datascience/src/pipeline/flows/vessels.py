@@ -112,8 +112,22 @@ def extract_beacon_numbers() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_control_charters() -> pd.DataFrame:
+    """
+    Extract vessels under control charter.
+    """
+    return extract("monitorfish_remote", "monitorfish/control_charter.sql")
+
+
+@task(checkpoint=False)
 def merge_vessels(
-    floats, fr_vessels, cee_vessels, non_cee_vessels, licences, beacon_numbers
+    floats,
+    fr_vessels,
+    cee_vessels,
+    non_cee_vessels,
+    licences,
+    beacon_numbers,
+    control_charters,
 ):
     res = pd.merge(
         floats,
@@ -154,6 +168,14 @@ def merge_vessels(
         left_on="id_nav_flotteur_f",
         right_on="id_nav_flotteur_bn",
     )
+
+    res = pd.merge(
+        res,
+        control_charters,
+        how="left",
+        left_on="id_nav_flotteur_f",
+        right_on="id",
+    ).drop(columns=["id"])
     return res
 
 
@@ -266,9 +288,15 @@ def clean_vessels(all_vessels):
         "vessel_phones",
         "vessel_emails",
         "beacon_number",
+        "under_charter",
     ]
     res = res[columns]
     logger.info("Columns sorted.")
+
+    # Fill Nones
+    logger.info("Fill None values.")
+    res = res.fillna({"under_charter": False})
+
     return res
 
 
@@ -328,10 +356,17 @@ with Flow("Vessels") as flow:
     floats = extract_floats()
     licences = extract_nav_licences()
     beacon_numbers = extract_beacon_numbers()
+    control_charters = extract_control_charters()
 
     # Transform
     all_vessels = merge_vessels(
-        floats, fr_vessels, cee_vessels, non_cee_vessels, licences, beacon_numbers
+        floats,
+        fr_vessels,
+        cee_vessels,
+        non_cee_vessels,
+        licences,
+        beacon_numbers,
+        control_charters,
     )
     all_vessels = clean_vessels(all_vessels)
 

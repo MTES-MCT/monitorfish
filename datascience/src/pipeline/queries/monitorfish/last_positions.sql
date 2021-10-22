@@ -73,6 +73,7 @@ SELECT
     vessels.registry_port,
     vessels.width,
     vessels.length,
+    vessels.under_charter,
     pos.latitude,
     pos.longitude,
     pos.speed,

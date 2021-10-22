@@ -134,7 +134,7 @@ class BffControllerITests {
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
             Pair(false, VesselWithData(
-                    Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
+                    Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing", underCharter = true),
                     listOf(firstPosition, secondPosition, thirdPosition),
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
         }
@@ -151,6 +151,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
                 .andExpect(jsonPath("$.riskFactor.controlPriorityLevel", equalTo(1.0)))
                 .andExpect(jsonPath("$.riskFactor.riskFactor", equalTo(3.2)))
+                .andExpect(jsonPath("$.underCharter", equalTo(true)))
 
         runBlocking {
             Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)

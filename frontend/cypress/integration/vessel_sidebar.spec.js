@@ -75,7 +75,7 @@ context('VesselSidebar', () => {
     // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-fishing-gears"]').contains("Trémails et filets maillants combinés (GTN)", { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("2 messages - 2256 kg pêchés au total", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("1 message - 2256 kg pêchés au total", { timeout: 20000 })
   })
 
   it('Fishing trips Should be walkable', () => {

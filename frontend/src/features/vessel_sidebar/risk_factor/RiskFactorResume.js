@@ -42,13 +42,22 @@ const RiskFactorResume = () => {
                   value={parseFloat(selectedVessel?.riskFactor?.riskFactor).toFixed(1)}
                   color={getRiskFactorColor(selectedVessel?.riskFactor?.riskFactor)}
                   progress={100 * selectedVessel?.riskFactor?.riskFactor / 4}
+                  underCharter={selectedVessel.underCharter}
                 />
-                <SeeMore
-                  data-cy={'show-risk-factor-explanation-modal'}
-                  onClick={() => setRiskFactorExplanationIsOpen(true)}
-                >
-                  En savoir plus
-                </SeeMore>
+                <GlobalText underCharter={selectedVessel.underCharter}>
+                  <SeeMore
+                    underCharter={selectedVessel.underCharter}
+                    data-cy={'show-risk-factor-explanation-modal'}
+                    onClick={() => setRiskFactorExplanationIsOpen(true)}
+                  >
+                    En savoir plus
+                  </SeeMore>
+                  {
+                    selectedVessel.underCharter
+                      ? <UnderCharterText>navire sous charte</UnderCharterText>
+                      : null
+                  }
+                </GlobalText>
               </GlobalRisk>
               <Line/>
               <SubRisk
@@ -131,6 +140,23 @@ const RiskFactorResume = () => {
   )
 }
 
+const GlobalText = styled.div`
+  ${props => props.underCharter
+  ? `
+  width: 100%;
+  display: inline-block;
+  `
+  : null}
+`
+
+const UnderCharterText = styled.span`
+  color: ${COLORS.mediumSeaGreen};
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 9px;
+  line-height: 39px;
+`
+
 const NoRiskFactor = styled.div`
   margin: 5px 5px 10px 5px;
   padding: 10px 10px 10px 25px;
@@ -168,8 +194,17 @@ const SeeMore = styled.a`
   color: ${COLORS.slateGray};
   text-decoration: underline;
   cursor: pointer;
-  margin-top: 19px;
+  margin-top: ${props => props.underCharter ? -20 : 19}px;
+  margin-right: ${props => props.underCharter ? 25 : 12}px;
+  ${props => props.underCharter
+  ? `
+  position: absolute;
+  right: 10px;
+  `
+  : `
   margin-right: 12px;
+  line-height: 43px;
+  `}
 `
 
 const RiskFactorZone = styled.div`

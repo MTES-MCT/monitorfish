@@ -71,13 +71,13 @@ context('Vessels Track', () => {
     cy.wait(200)
     cy.get('.vessels').click(504, 289, { timeout: 20000, ctrlKey: true })
     cy.wait(200)
-    cy.get('.vessels').click(297, 298, { timeout: 20000 })
+    cy.get('.vessels').click(297, 298, { timeout: 20000, force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
     cy.wait(500)
 
     cy.log('Show only the selected vessels')
     cy.get('*[data-cy^="trigger-hide-other-vessels-from-sidebar"]').click({ timeout: 20000, force: true })
-    cy.get('.vessels').dblclick(486, 888, { timeout: 20000 })
+    cy.get('.vessels').dblclick(486, 888, { timeout: 20000, force: true })
 
     cy.wait(500)
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
@@ -95,7 +95,7 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="open-vessels-visibility"]').click()
     cy.get('*[data-cy^="map-property-trigger"]').eq(1).click({ force: true })
     cy.wait(500)
-    cy.get('.vessels').dblclick(750, 86, { timeout: 20000 })
+    cy.get('.vessels').dblclick(750, 86, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
 
     cy.log('Close the last track')
@@ -105,13 +105,13 @@ context('Vessels Track', () => {
 
   it('A track Should be showed When clicking on a vessel with the custom map menu', () => {
     cy.log('Show a first vessel with a three day track depth')
-    cy.get('.vessels').rightclick(460, 480, { timeout: 20000 })
+    cy.get('.vessels').rightclick(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-three-days"]').click({ force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Show a second vessel with a custom date range')
-    cy.get('.vessels').rightclick(504, 289, { timeout: 20000 })
+    cy.get('.vessels').rightclick(504, 289, { timeout: 20000, force: true })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-custom-period"]').click({ force: true })
     cy.get('.rs-picker-daterange > .rs-btn').eq(1).click(460, 480, { timeout: 20000, force: true })

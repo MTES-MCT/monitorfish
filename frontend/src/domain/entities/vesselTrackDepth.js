@@ -15,21 +15,32 @@ export const VesselTrackDepth = {
 }
 
 export function getVesselTrackDepth (updateShowedVessel, newWantedTrackDepth, vesselCustomTrackDepth, defaultVesselTrackDepth) {
+  const {
+    trackDepth,
+    afterDateTime,
+    beforeDateTime
+  } = vesselCustomTrackDepth
+  const {
+    wantedTrackDepth,
+    wantedAfterDateTime,
+    wantedBeforeDateTime
+  } = vesselCustomTrackDepth
+
   let nextTrackDepth, nextAfterDateTime, nextBeforeDateTime
 
-  nextTrackDepth = vesselCustomTrackDepth.trackDepth ? vesselCustomTrackDepth.trackDepth : defaultVesselTrackDepth
-  nextAfterDateTime = vesselCustomTrackDepth.afterDateTime
-  nextBeforeDateTime = vesselCustomTrackDepth.beforeDateTime
+  nextTrackDepth = trackDepth || defaultVesselTrackDepth
+  nextAfterDateTime = afterDateTime
+  nextBeforeDateTime = beforeDateTime
 
   if (updateShowedVessel) {
-    nextTrackDepth = vesselCustomTrackDepth.trackDepth ? vesselCustomTrackDepth.trackDepth : defaultVesselTrackDepth
-    nextAfterDateTime = vesselCustomTrackDepth.afterDateTime
-    nextBeforeDateTime = vesselCustomTrackDepth.beforeDateTime
+    nextTrackDepth = trackDepth || defaultVesselTrackDepth
+    nextAfterDateTime = afterDateTime
+    nextBeforeDateTime = beforeDateTime
   } else {
     if (!newWantedTrackDepth ||
-      (!newWantedTrackDepth.trackDepth &&
-        !newWantedTrackDepth.afterDateTime &&
-        !newWantedTrackDepth.beforeDateTime)) {
+      (!wantedTrackDepth &&
+        !wantedAfterDateTime &&
+        !wantedBeforeDateTime)) {
       nextTrackDepth = defaultVesselTrackDepth
     } else {
       return newWantedTrackDepth

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import TrackDepthRadio from './TrackDepthRadio'
-import TrackDepthDateRange, { convertToUTCDay } from './TrackDepthDateRange'
+import TrackDepthDateRange from './TrackDepthDateRange'
 import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as VesselSVG } from '../../icons/Icone_navire.svg'
@@ -10,6 +10,7 @@ import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
 import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices/Vessel'
 import showVesselTrackAndSidebar from '../../../domain/use_cases/showVesselTrackAndSidebar'
+import { convertToUTCDay } from '../../../utils'
 
 const TrackDepthSelection = props => {
   const dispatch = useDispatch()

@@ -58,13 +58,14 @@ context('Vessels Track', () => {
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 688, pointerId: 1, force: true })
 
 
+
     cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 38′ 24″ N')
     cy.get('*[data-cy^="vessel-track-card-longitude"]').contains('008° 07′ 02″ W')
     cy.get('*[data-cy^="vessel-track-card-course"]').contains('17°')
     cy.get('*[data-cy^="vessel-track-card-speed"]').contains('8.6')
   })
 
-  it.only('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
+  it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     // When
     cy.get('.vessels').click(460, 480, { timeout: 20000, ctrlKey: true })
     cy.wait(200)

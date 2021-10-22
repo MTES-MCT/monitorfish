@@ -33,7 +33,6 @@ const MapMenu = ({ map }) => {
   return (
     <>
       <MapMenuOverlay map={map} coordinates={coordinates} vessel={vessel}/>
-      <div />
     </>
   )
 }

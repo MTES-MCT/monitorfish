@@ -34,7 +34,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
         dispatch(showVesselTrackAndSidebar(mapClickEvent.feature.vessel, false, false))
       }
     }
-  }, [mapClickEvent])
+  }, [mapClickEvent, previewFilteredVesselsMode])
 
   function animate () {
     if (map &&

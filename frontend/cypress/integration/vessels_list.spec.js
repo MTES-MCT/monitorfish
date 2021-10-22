@@ -28,9 +28,21 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="preview-filtered-vessels"]').click({ timeout: 20000 })
     cy.wait(500)
     cy.get('.vessels').dblclick(0, 0, { force: true })
-    cy.wait(1000)
+    cy.wait(2000)
 
     // Then
+    cy.get('.vessels > canvas').trigger('pointerdown',  { clientX: 411, clientY: 647, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 646, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 647, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 648, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 649, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointerup',  { clientX: 411, clientY: 645, pointerId: 1, force: true, pixel: [411, 635] })
+
     cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 3)
     cy.get('.vessels').click(63, 456, { force: true })
     cy.get('*[data-cy^="vessel-summary-latitude"]', { timeout: 20000 }).contains('-')

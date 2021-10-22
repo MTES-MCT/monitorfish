@@ -43,7 +43,8 @@ data class LastPositionDataOutput(
         val impactRiskFactor: Double? = null,
         val probabilityRiskFactor: Double? = null,
         val detectabilityRiskFactor: Double? = null,
-        val riskFactor: Double? = null) {
+        val riskFactor: Double? = null,
+        val underCharter: Boolean? = null) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -83,7 +84,8 @@ data class LastPositionDataOutput(
                     impactRiskFactor = position.impactRiskFactor,
                     probabilityRiskFactor = position.probabilityRiskFactor,
                     detectabilityRiskFactor = position.detectabilityRiskFactor,
-                    riskFactor = position.riskFactor)
+                    riskFactor = position.riskFactor,
+                    underCharter = position.underCharter)
         }
     }
 }

@@ -31,7 +31,7 @@ context('VesselSidebar', () => {
 
   it('Resume Should be opened When clicking on a vessel', () => {
     // When
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // Then
@@ -51,7 +51,7 @@ context('VesselSidebar', () => {
 
   it('Identity Should contain the vessel identity', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
@@ -65,7 +65,7 @@ context('VesselSidebar', () => {
 
   it('Fishing Should contain the vessel fishing resume', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
@@ -75,12 +75,12 @@ context('VesselSidebar', () => {
     // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-fishing-gears"]').contains("Trémails et filets maillants combinés (GTN)", { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("1 message - 2256 kg pêchés au total", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("2 messages - 2256 kg pêchés au total", { timeout: 20000 })
   })
 
   it('Fishing trips Should be walkable', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
@@ -101,7 +101,7 @@ context('VesselSidebar', () => {
 
   it('Fishing Should contain the vessel DEP message', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
@@ -116,7 +116,7 @@ context('VesselSidebar', () => {
 
   it('Controls Should contain the controls resume', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
@@ -136,7 +136,7 @@ context('VesselSidebar', () => {
 
   it('Last SEA and LAND controls Should be presents', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
@@ -152,7 +152,7 @@ context('VesselSidebar', () => {
 
   it('Vessel track depth Should be changed', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000 })
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When

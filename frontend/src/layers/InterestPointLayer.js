@@ -25,6 +25,7 @@ import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from '../domain/entities/interestPointLine'
 import { usePrevious } from '../hooks/usePrevious'
 import { getLength } from 'ol/sphere'
+import Layers from '../domain/entities/layers'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -52,7 +53,8 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     renderBuffer: 7,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
-    style: (feature, resolution) => getInterestPointStyle(feature, resolution)
+    style: (feature, resolution) => getInterestPointStyle(feature, resolution),
+    zIndex: Layers.INTEREST_POINT.zIndex
   }))
   const previousMapZoom = useRef('')
   const [interestPointToCoordinates, setInterestPointToCoordinates] = useState(new Map())

@@ -73,7 +73,7 @@ const Text = styled.span`
 const Details = styled.span`
   position: absolute;
   bottom: 10px;
-  left: 380px;
+  left: 420px;
   display: flex;
   margin: 1px;
   padding: 0 10px 4px 10px;

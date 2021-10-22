@@ -277,7 +277,7 @@ const TopTriangleShadow = styled.div`
   border-bottom : 11px solid ${COLORS.gainsboro};
   border-left : 6px solid transparent;
   margin-left: 179px;
-  margin-top: -264px;
+  margin-top: -266px;
   clear: top;
 `
 

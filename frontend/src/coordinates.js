@@ -15,6 +15,9 @@ const CoordinateLatLon = {
  * @returns {string[]} coordinates - The [latitude, longitude] coordinates
  */
 export const getCoordinates = (coordinates, projection, coordinatesFormat, forPrint = true) => {
+  if (!coordinates) {
+    return ['', '']
+  }
   const transformedCoordinates = transform(coordinates, projection, WSG84_PROJECTION)
 
   switch (coordinatesFormat) {

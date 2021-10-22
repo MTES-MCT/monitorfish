@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { ReactComponent as ExportSVG } from '../../icons/Bouton_exporter_piste_navire.svg'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
+import { formatToCSVColumnsForExport, getDate } from '../../../utils'
 import { getCoordinates } from '../../../coordinates'
-import { getDate } from '../../../utils'
 import { WSG84_PROJECTION } from '../../../domain/entities/map'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { useSelector } from 'react-redux'
@@ -73,17 +73,6 @@ const options = {
   }
 }
 
-function orderToCSVColumnOrder (positionsObject) {
-  return Object.keys(options)
-    .reduce(
-      (obj, key) => {
-        obj[options[key].name] = positionsObject[options[key].code]
-        return obj
-      },
-      {}
-    )
-}
-
 const TrackExport = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [positions, setPositions] = useState([])
@@ -117,7 +106,7 @@ const TrackExport = props => {
   const download = () => {
     const objectsToExports = positions
       .map(position => {
-        return orderToCSVColumnOrder(position)
+        return formatToCSVColumnsForExport(position, options)
       })
 
     const identifier = positions[0].internalReferenceNumber ? positions[0].internalReferenceNumber : positions[0].ircs

@@ -84,8 +84,7 @@ const Wrapper = styled.li`
   margin: 0;
   border-radius: 0;
   padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   color: ${COLORS.slateGray};
 `
 

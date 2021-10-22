@@ -6,13 +6,16 @@ import { ReactComponent as SortSVG } from '../../../icons/ascendant-descendant.s
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as ArrowTripSVG } from '../../../icons/Fleche_navigation_marees.svg'
 import { ReactComponent as ArrowLastTripSVG } from '../../../icons/Double_fleche_navigation_marees.svg'
+import { ReactComponent as DownloadMessagesSVG } from '../../../icons/Bouton_exporter_piste_navire_dark.svg'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import { useSelector } from 'react-redux'
+import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
+import { ExportToCsv } from 'export-to-csv'
 
 const animatedComponents = makeAnimated()
 
-const options = [
+const messageTypeSelectOptions = [
   { value: 'DEP', label: 'DEP' },
   { value: 'COE', label: 'COE' },
   { value: 'CRO', label: 'CRO' },
@@ -26,6 +29,39 @@ const options = [
   { value: 'LAN', label: 'LAN' }
 ]
 
+const optionsCSV = {
+  fieldSeparator: ',',
+  quoteStrings: '"',
+  decimalSeparator: '.',
+  showLabels: true,
+  showTitle: false,
+  useTextFile: false,
+  useBom: true,
+  useKeysAsHeaders: true
+}
+
+const csvExporter = new ExportToCsv(optionsCSV)
+
+// These properties are ordered for the CSV column order
+const downloadMessagesOptions = {
+  tripNumber: {
+    code: 'tripNumber',
+    name: 'Marée n°'
+  },
+  dateTime: {
+    code: 'operationDateTime',
+    name: 'Date'
+  },
+  messageType: {
+    code: 'messageType',
+    name: 'Type'
+  },
+  rawMessage: {
+    code: 'rawMessage',
+    name: 'Message'
+  }
+}
+
 const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigation }) => {
   const {
     isLastVoyage,
@@ -34,6 +70,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     fishingActivities
   } = useSelector(state => state.vessel)
 
+  /** @type {ERSMessage[]} ersMessages */
   const [ersMessages, setERSMessages] = useState([])
   const [ascendingSort, setAscendingSort] = useState(true)
   const [selectedOptions, setSelectedOptions] = useState(null)
@@ -43,7 +80,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
   }, [fishingActivities])
 
   useEffect(() => {
-    const messageTypes = options.filter(options => options.value === messageTypeFilter)
+    const messageTypes = messageTypeSelectOptions.filter(options => options.value === messageTypeFilter)
     setSelectedOptions(messageTypes)
   }, [messageTypeFilter])
 
@@ -60,6 +97,18 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
 
     setAscendingSort(inversedSort)
     setERSMessages(sortedFishingActivities)
+  }
+
+  function downloadMessages () {
+    const objectsToExports = ersMessages
+      .filter(ersMessages => filterBySelectedType(ersMessages))
+      .map(position => {
+        return formatToCSVColumnsForExport(position, downloadMessagesOptions)
+      })
+
+    const date = new Date()
+    csvExporter.options.filename = `export_ers_${tripNumber}_${getDate(date.toISOString())}`
+    csvExporter.generateCsv(objectsToExports)
   }
 
   const selectStyles = {
@@ -102,6 +151,14 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     menuPortal: base => ({ ...base, zIndex: 9999 })
   }
 
+  function filterBySelectedType (ersMessage) {
+    if (selectedOptions?.length) {
+      return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
+    } else {
+      return true
+    }
+  }
+
   return <Wrapper>
     <Arrow onClick={() => showFishingActivitiesSummary()}/><Previous onClick={() => showFishingActivitiesSummary()}>Revenir
     au résumé</Previous>
@@ -115,7 +172,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
         value={selectedOptions}
         onChange={setSelectedOptions}
         isMulti
-        options={options}
+        options={messageTypeSelectOptions}
         styles={selectStyles}
         isSearchable={false}
         className={'available-width'}
@@ -142,17 +199,19 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
           title={'Marée suivante'}
         />
       </Navigation>
-      <InverseDate ascendingSort={ascendingSort} onClick={() => inverseSort()}/>
+      <DownloadMessages
+        title={'Télécharger tous les messages'}
+        onClick={downloadMessages}
+      />
+      <InverseDate
+        title={'Trier par date'}
+        ascendingSort={ascendingSort}
+        onClick={inverseSort}
+      />
     </Filters>
     {ersMessages?.length
       ? ersMessages
-        .filter(ersMessage => {
-          if (selectedOptions?.length) {
-            return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
-          } else {
-            return true
-          }
-        })
+        .filter(ersMessage => filterBySelectedType(ersMessage))
         .map((message, index) => {
           return <ERSMessage
             key={message.ersId}
@@ -200,7 +259,7 @@ const Navigation = styled.div`
   text-align: center;
   font-size: 13px;
   color: ${COLORS.slateGray};
-  padding: 2px;
+  padding: 3px 2px 2px 2px;
   max-width: 250px;
   margin: 0 10px 0 10px;
   border: 1px solid ${COLORS.lightGray};
@@ -209,17 +268,31 @@ const Navigation = styled.div`
 
 const InverseDate = styled(SortSVG)`
   border: 1px solid ${COLORS.lightGray};
-  width: 30px;
-  height: 12px;
+  width: 37px;
+  height: 14px;
   padding: 6px;
   margin-left: auto;
   cursor: pointer;
   ${props => props.ascendingSort ? 'transform: rotate(180deg);' : null}
 `
 
+const DownloadMessages = styled(DownloadMessagesSVG)`
+  border: 1px solid ${COLORS.lightGray};
+  width: 66px;
+  height: 26px;
+  margin-left: auto;
+  margin-right: 10px;
+  cursor: pointer;
+`
+
 const Filters = styled.div`
   display: flex;
-  margin-top: 10px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  
+  #react-select-3-input {
+    height: 26px;
+  }
 `
 
 const Arrow = styled(ArrowSVG)`

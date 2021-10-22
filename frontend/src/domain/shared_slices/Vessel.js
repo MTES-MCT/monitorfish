@@ -252,8 +252,9 @@ const vesselSlice = createSlice({
     },
     /**
      * Add a new vessel track to show or remove -
-     * The `toShow` property trigger the layer to show the track
-     * The `toHide` property trigger the layer to hide the track
+     * In the ShowedVesselTrack object,
+     * - The `toShow` property trigger the layer to show the track
+     * - The `toHide` property trigger the layer to hide the track
      * @function addVesselTrackShowed
      * @memberOf VesselReducer
      * @param {Object=} state

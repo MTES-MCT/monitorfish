@@ -8,7 +8,7 @@ import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import CustomTrackDepthModal from './map_menu/CustomTrackDepthModal'
 import { useDispatch } from 'react-redux'
 import showVesselTrack from '../../../domain/use_cases/showVesselTrack'
-import { convertToUTCDay } from '../../vessel_sidebar/track_depth_selection/TrackDepthDateRange'
+import { convertToUTCDay } from '../../../utils'
 
 const MapMenuOverlay = props => {
   const {
@@ -39,7 +39,7 @@ const MapMenuOverlay = props => {
     if (clickedOutsideComponent && !modalIsOpen) {
       map.removeOverlay(overlay)
     }
-  }, [clickedOutsideComponent])
+  }, [clickedOutsideComponent, modalIsOpen])
 
   useEffect(() => {
     if (showTrackOf || datesSelection?.length) {

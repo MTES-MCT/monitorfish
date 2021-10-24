@@ -1,9 +1,16 @@
+from dataclasses import dataclass
 from typing import Iterable, Set, Tuple, Union
 
 import h3
 import pandas as pd
 from pyproj import Geod
 from shapely.geometry import MultiPolygon, Polygon
+
+
+@dataclass
+class Position:
+    latitude: float
+    longitude: float
 
 
 def to_multipolygon(p: Union[Polygon, MultiPolygon]) -> MultiPolygon:
@@ -108,3 +115,25 @@ def get_k_ring_of_h3_cells(h3_sequence: Iterable[str], k: int) -> Set[str]:
     """
     h3_cells = [h3.k_ring(h, k) for h in h3_sequence]
     return set.union(*h3_cells)
+
+
+def point_dist(position1: Position, position2: Position) -> float:
+    """
+    Computes the spherical distance between two Position objects in
+    meters.
+
+    Args:
+        position1 (Position)
+        position2 (Position)
+
+    Returns:
+        float: distance in meters between the two input Positions
+    """
+
+    d = h3.point_dist(
+        (position1.latitude, position1.longitude),
+        (position2.latitude, position2.longitude),
+        unit="m",
+    )
+
+    return d

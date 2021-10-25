@@ -19,9 +19,7 @@ const regulationSlice = createSlice({
   name: 'regulation',
   initialState: INITIAL_STATE,
   reducers: {
-    resetState (state) {
-      Object.assign(state, INITIAL_STATE)
-    },
+    resetState: () => INITIAL_STATE,
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
     },

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
-const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon }) => {
+const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse }) => {
   const [value, setValue] = useState(undefined)
 
   useEffect(() => {
@@ -33,7 +33,12 @@ const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon
         data-cy={'map-property-trigger'}
         onClick={update}
       >
-        { value ? 'Masquer' : 'Afficher' } {text}
+        {
+          inverse
+            ? value ? 'Afficher' : 'Masquer'
+            : value ? 'Masquer' : 'Afficher'
+        }
+        {''} {text}
       </ShowLabelText>
     </Wrapper>
   )

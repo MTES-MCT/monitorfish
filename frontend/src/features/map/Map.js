@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
 import LayerDetailsBox from './controls/LayerDetailsBox'
-import VesselTrackLayer from '../../layers/VesselTrackLayer'
+import VesselsTracksLayer from '../../layers/VesselsTracksLayer'
 import VesselsLayer from '../../layers/VesselsLayer'
 import DrawLayer from '../../layers/DrawLayer'
 import MapHistory from './MapHistory'
@@ -16,6 +16,7 @@ import VesselEstimatedPositionLayer from '../../layers/VesselEstimatedPositionLa
 import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
 import VesselsLabelsLayer from '../../layers/VesselsLabelsLayer'
 import InterestPointLayer from '../../layers/InterestPointLayer'
+import MapMenu from './MapMenu'
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
@@ -58,8 +59,9 @@ const Map = () => {
         setShouldUpdateView={setShouldUpdateView}
         historyMoveTrigger={historyMoveTrigger}
       />
+      <MapMenu/>
       <MeasurementLayer/>
-      <VesselTrackLayer/>
+      <VesselsTracksLayer/>
       <VesselsLayer/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>

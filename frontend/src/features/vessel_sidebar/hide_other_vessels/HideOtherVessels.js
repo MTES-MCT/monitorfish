@@ -20,6 +20,7 @@ const HideOtherVessels = props => {
 
   return (
     <HideOtherVesselsButton
+      data-cy={'trigger-hide-other-vessels-from-sidebar'}
       healthcheckTextWarning={healthcheckTextWarning}
       hideOtherVessels={hideOtherVessels}
       openBox={props.openBox}

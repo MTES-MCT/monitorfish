@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setExtent, setView } from '../../domain/shared_slices/Map'
 
 /**
- * Handle browser and LocalStorage history on map URL - NotE that the map parameter is given from
+ * Handle browser and LocalStorage history on map URL - Note that the map parameter is given from
  * the BaseMap component, event if it's not seen in the props passed to MapHistory
  */
 const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {

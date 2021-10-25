@@ -3,7 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { resetAnimateTo } from '../../domain/shared_slices/Map'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
+import showVesselTrack from '../../domain/use_cases/showVesselTrack'
 
+/**
+ * Handle map animations - Note that the map  and mapClickEvent parameters are given from
+ * the BaseMap component, event if it's not seen in the props passed to MapVesselAnimation
+ * @param {Object} map
+ * @param {MapClickEvent} mapClickEvent
+ */
 const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   const dispatch = useDispatch()
   const { animateTo } = useSelector(state => state.map)
@@ -19,8 +26,13 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   }, [animateTo, map, vesselSidebarIsOpen])
 
   useEffect(() => {
-    if (mapClickEvent && mapClickEvent.feature && !previewFilteredVesselsMode) {
-      showVesselTrackAndSidebarOnMapClick(mapClickEvent.feature)
+    if (mapClickEvent?.feature && !previewFilteredVesselsMode &&
+      mapClickEvent?.feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
+      if (mapClickEvent.ctrlKeyPressed) {
+        dispatch(showVesselTrack(mapClickEvent.feature.vessel, false))
+      } else {
+        dispatch(showVesselTrackAndSidebar(mapClickEvent.feature.vessel, false, false))
+      }
     }
   }, [mapClickEvent])
 
@@ -50,12 +62,6 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
       ],
       duration,
       zoom
-    }
-  }
-
-  function showVesselTrackAndSidebarOnMapClick (feature) {
-    if (feature && feature.getId() && feature.getId().toString().includes(LayersEnum.VESSELS.code)) {
-      dispatch(showVesselTrackAndSidebar(feature.vessel, false, false))
     }
   }
 

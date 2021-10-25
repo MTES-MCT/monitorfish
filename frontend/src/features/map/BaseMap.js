@@ -17,6 +17,7 @@ import AdministrativeLayers from '../../layers/AdministrativeLayers'
 import ShowRegulatoryMetadata from './ShowRegulatoryMetadata'
 import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
+import { platformModifierKeyOnly } from 'ol/events/condition'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
@@ -47,6 +48,7 @@ const BaseMap = props => {
   const [isAnimating, setIsAnimating] = useState(false)
   const [initRenderIsDone, setInitRenderIsDone] = useState(false)
   const [cursorCoordinates, setCursorCoordinates] = useState('')
+  /** @type {MapClickEvent} mapClickEvent */
   const [mapClickEvent, setMapClickEvent] = useState(null)
 
   const mapElement = useRef()
@@ -56,7 +58,8 @@ const BaseMap = props => {
   const handleMapClick = (event, map) => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
-      setMapClickEvent({ feature })
+      const isCtrl = platformModifierKeyOnly(event)
+      setMapClickEvent({ feature, ctrlKeyPressed: isCtrl })
     }
   }
 
@@ -69,7 +72,7 @@ const BaseMap = props => {
   function resetOverlayPointerStyle () {
     const elements = document.querySelectorAll('.overlay-active')
     if (elements?.length && elements[0].style.pointerEvents !== 'auto') {
-      for (const s of document.querySelectorAll('.overlay-active')) {
+      for (const s of elements) {
         s.style.pointerEvents = 'auto'
       }
     }

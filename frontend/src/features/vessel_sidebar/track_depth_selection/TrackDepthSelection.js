@@ -8,15 +8,16 @@ import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
-import { setTemporaryTrackDepth } from '../../../domain/shared_slices/Vessel'
+import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices/Vessel'
 import showVesselTrackAndSidebar from '../../../domain/use_cases/showVesselTrackAndSidebar'
+import { convertToUTCDay } from '../../../utils'
 
 const TrackDepthSelection = props => {
   const dispatch = useDispatch()
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const { selectedVesselIdentity } = useSelector(state => state.vessel)
-  const vesselTrackDepth = useSelector(state => state.map.vesselTrackDepth)
+  const defaultVesselTrackDepth = useSelector(state => state.map.defaultVesselTrackDepth)
 
   const [datesSelection, setDateSelection] = useState([])
   const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(null)
@@ -24,19 +25,19 @@ const TrackDepthSelection = props => {
 
   useEffect(() => {
     setDateSelection([])
-    setTrackDepthRadioSelection(vesselTrackDepth)
+    setTrackDepthRadioSelection(defaultVesselTrackDepth)
   }, [selectedVesselIdentity])
 
   useEffect(() => {
     setDateSelection([])
-    setTrackDepthRadioSelection(vesselTrackDepth)
+    setTrackDepthRadioSelection(defaultVesselTrackDepth)
   }, [props.init])
 
   useEffect(() => {
-    if (vesselTrackDepth && !trackDepthRadioSelection) {
-      setTrackDepthRadioSelection(vesselTrackDepth)
+    if (defaultVesselTrackDepth && !trackDepthRadioSelection) {
+      setTrackDepthRadioSelection(defaultVesselTrackDepth)
     }
-  }, [vesselTrackDepth])
+  }, [defaultVesselTrackDepth])
 
   useEffect(() => {
     if (trackDepthRadioSelection) {
@@ -50,19 +51,6 @@ const TrackDepthSelection = props => {
     }
   }, [trackDepthRadioSelection])
 
-  const convertToUTCDay = datesSelection => {
-    const afterDateTime = new Date(datesSelection[0].getTime())
-    const beforeDateTime = new Date(datesSelection[1].getTime())
-
-    afterDateTime.setHours(0, 0, 0)
-    beforeDateTime.setHours(23, 59, 59)
-
-    afterDateTime.setMinutes(afterDateTime.getMinutes() - afterDateTime.getTimezoneOffset())
-    beforeDateTime.setMinutes(beforeDateTime.getMinutes() - beforeDateTime.getTimezoneOffset())
-
-    return { afterDateTime, beforeDateTime }
-  }
-
   useEffect(() => {
     if (datesSelection?.length > 1) {
       if (firstUpdate.current) {
@@ -74,7 +62,7 @@ const TrackDepthSelection = props => {
       showVesselTrackWithTrackDepth(VesselTrackDepth.CUSTOM, afterDateTime, beforeDateTime)
       setTrackDepthRadioSelection(null)
     } else if (!trackDepthRadioSelection) {
-      setTrackDepthRadioSelection(vesselTrackDepth)
+      setTrackDepthRadioSelection(defaultVesselTrackDepth)
     }
   }, [datesSelection])
 
@@ -85,7 +73,7 @@ const TrackDepthSelection = props => {
       beforeDateTime: beforeDateTime
     }
 
-    dispatch(setTemporaryTrackDepth(trackDepthObject))
+    dispatch(setSelectedVesselCustomTrackDepth(trackDepthObject))
     if (selectedVesselIdentity && trackDepth) {
       dispatch(showVesselTrackAndSidebar(
         selectedVesselIdentity,
@@ -115,7 +103,7 @@ const TrackDepthSelection = props => {
       >
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <TrackDepthRadio
-          vesselTrackDepth={vesselTrackDepth}
+          vesselTrackDepth={defaultVesselTrackDepth}
           showVesselTrackWithTrackDepth={showVesselTrackWithTrackDepth}
           trackDepthRadioSelection={trackDepthRadioSelection}
           setTrackDepthRadioSelection={setTrackDepthRadioSelection}

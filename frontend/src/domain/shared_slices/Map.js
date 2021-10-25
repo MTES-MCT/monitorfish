@@ -24,7 +24,7 @@ const mapSlice = createSlice({
       opacityReduced: 6,
       hidden: 48
     }, vesselsLastPositionVisibilityLocalStorageKey),
-    vesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
+    defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
     vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
     vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
     riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
@@ -88,7 +88,7 @@ const mapSlice = createSlice({
     },
     setVesselTrackDepth (state, action) {
       window.localStorage.setItem(vesselTrackDepthLocalStorageKey, JSON.stringify(action.payload))
-      state.vesselTrackDepth = action.payload
+      state.defaultVesselTrackDepth = action.payload
     },
     setVesselLabel (state, action) {
       window.localStorage.setItem(vesselLabelLocalStorageKey, JSON.stringify(action.payload))

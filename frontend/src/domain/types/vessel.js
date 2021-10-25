@@ -14,6 +14,16 @@
  */
 
 /**
+ * @typedef VesselIdentity
+ * @property {string} internalReferenceNumber
+ * @property {string} externalReferenceNumber
+ * @property {string} ircs
+ * @property {string} mmsi
+ * @property {string} flagState
+ * @property {string} vesselName
+ */
+
+/**
  * @typedef VesselLastPosition
  * @property {number} course
  * @property {string} dateTime
@@ -159,4 +169,22 @@
  * @property {boolean | null} lastControlInfraction
  * @property {number | null} postControlComment
  * @property {boolean} underCharter
+ */
+
+/**
+ * @typedef VesselTrackDepth
+ * @property {string | null} trackDepth
+ * @property {string | null} afterDateTime
+ * @property {string | null} beforeDateTime
+ */
+
+/**
+ * @typedef ShowedVesselTrack
+ * @property {string} identity
+ * @property {VesselIdentity} vessel
+ * @property {string[]} coordinates
+ * @property {VesselPosition[]} positions
+ * @property {VesselTrackDepth} trackDepth
+ * @property {boolean} toShow
+ * @property {boolean} toHide
  */

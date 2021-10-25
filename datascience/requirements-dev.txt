@@ -7,7 +7,7 @@ astroid==2.7.2; python_version >= "3.6" and python_version < "4.0"
 async-generator==1.10; python_full_version >= "3.6.1" and python_version >= "3.6"
 attrs==20.3.0; python_full_version >= "3.6.7" and python_version >= "3.6" and (python_version >= "3.4" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.4") and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6")
 automat==20.2.0; python_full_version >= "3.6.7" and python_version >= "3.6"
-babel==2.9.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
+babel==2.9.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
 backcall==0.2.0; python_version >= "3.7"
 bcrypt==3.2.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 black==20.8b1; python_version >= "3.6"

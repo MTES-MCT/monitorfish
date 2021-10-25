@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { getCoordinates, getDateTime, timeagoFrenchLocale } from '../../../utils'
+import { getCoordinates } from '../../../coordinates'
+import { getDateTime, timeagoFrenchLocale } from '../../../utils'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
 import { COLORS } from '../../../constants/constants'
 import * as timeago from 'timeago.js'

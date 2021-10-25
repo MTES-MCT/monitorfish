@@ -40,6 +40,11 @@ const Measurement = () => {
   const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {
+    setCircleCoordinatesToAdd([])
+    setCircleRadiusToAdd('')
+  }, [measurementIsOpen])
+
+  useEffect(() => {
     if (clickedOutsideComponent) {
       setMeasurementIsOpen(false)
     }

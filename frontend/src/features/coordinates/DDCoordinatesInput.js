@@ -14,7 +14,7 @@ const DDCoordinatesInput = props => {
   const [longitude, setLongitude] = useState('')
 
   useEffect(() => {
-    if (coordinates && coordinates.length) {
+    if (coordinates?.length) {
       setLatitude(coordinates[0])
       setLongitude(coordinates[1])
     } else {
@@ -46,14 +46,14 @@ const DDCoordinatesInput = props => {
 
   return <Body>
     <DDInput
-      data-cy={'interest-point-coordinates-dd-input-lat'}
+      data-cy={'coordinates-dd-input-lat'}
       style={{ border: latitudeError ? '1px solid red' : null }}
       value={latitude}
       onChange={e => setLatitude(e.target.value)}
       placeholder={'Latitude'}
     />
     <DDInput
-      data-cy={'interest-point-coordinates-dd-input-lon'}
+      data-cy={'coordinates-dd-input-lon'}
       style={{ border: longitudeError ? '1px solid red' : null }}
       value={longitude}
       onChange={e => setLongitude(e.target.value)}

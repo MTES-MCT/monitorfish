@@ -1,5 +1,5 @@
 // These properties are ordered for the CSV column order
-import { getCoordinates } from '../../utils'
+import { getCoordinates } from '../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 
 export const CSVOptions = {

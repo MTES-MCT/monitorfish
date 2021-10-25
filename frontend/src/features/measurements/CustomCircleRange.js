@@ -1,31 +1,30 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import CoordinateInput from 'react-coordinate-input'
 
 import { COLORS } from '../../constants/constants'
 import { CoordinatesFormat, MeasurementTypes, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { useSelector } from 'react-redux'
-import { getCoordinates } from '../../utils'
+import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
+import SetCoordinates from '../coordinates/SetCoordinates'
 
-const CustomCircleRange = (
-  {
-    measurementTypeToAdd,
-    setCircleCoordinatesToAdd,
-    circleCoordinatesToAdd,
-    circleRadiusToAdd,
-    setCircleRadiusToAdd,
-    cancelAddCircleRange,
-    addCustomCircleRange,
-    healthcheckTextWarning
-  }) => {
+const CustomCircleRange = ({
+  measurementTypeToAdd,
+  setCircleCoordinatesToAdd,
+  circleCoordinatesToAdd,
+  circleRadiusToAdd,
+  setCircleRadiusToAdd,
+  cancelAddCircleRange,
+  addCustomCircleRange,
+  healthcheckTextWarning
+}) => {
   const {
     circleMeasurementInDrawing
   } = useSelector(state => state.measurement)
 
   useEffect(() => {
     if (circleMeasurementInDrawing?.coordinates?.length) {
-      const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES).map(coordinate => {
+      const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false).map(coordinate => {
         return parseFloat(coordinate.replace(/°/g, ''))
       })
       setCircleCoordinatesToAdd(ddCoordinates)
@@ -36,6 +35,21 @@ const CustomCircleRange = (
     }
   }, [circleMeasurementInDrawing])
 
+  /**
+   * Compare with previous coordinates and update interest point coordinates
+   * @param {number[]} nextCoordinates - Coordinates ([latitude, longitude]) to update, in decimal format.
+   * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
+   */
+  const updateCoordinates = (nextCoordinates, coordinates) => {
+    if (nextCoordinates && nextCoordinates.length) {
+      if (!coordinates?.length || coordinatesAreDistinct(nextCoordinates, coordinates)) {
+        // Convert to [longitude, latitude] and OpenLayers projection
+        // const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+        setCircleCoordinatesToAdd(nextCoordinates)
+      }
+    }
+  }
+
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}
@@ -45,16 +59,13 @@ const CustomCircleRange = (
       </Header>
       <Body>
         <p>Coordonnées</p>
-        <CoordinateInput
-          data-cy={'measurement-circle-coordinates-input'}
-          onChange={(_, { dd }) => setCircleCoordinatesToAdd(dd)}
-          value={circleCoordinatesToAdd && Array.isArray(circleCoordinatesToAdd) && circleCoordinatesToAdd.length
-            ? circleCoordinatesToAdd.join(',')
-            : undefined}
+        <SetCoordinates
+          coordinates={circleCoordinatesToAdd}
+          updateCoordinates={updateCoordinates}
         />
-        <span>(DMS)</span>
         <p>Distance (rayon)</p>
         <input
+          style={{ width: 62 }}
           data-cy={'measurement-circle-radius-input'}
           type='text'
           onChange={e => setCircleRadiusToAdd(e.target.value)}
@@ -130,10 +141,6 @@ const Body = styled.div`
     border: none;
     height: 27px;
     padding-left: 8px;
-  }
-  
-  input:nth-of-type(2) {
-    width: 32px;
   }
 `
 

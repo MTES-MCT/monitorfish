@@ -21,24 +21,22 @@ const DMSCoordinatesInput = props => {
   }, [coordinates, coordinatesFormat])
 
   useEffect(() => {
-    if (coordinatesAreModifiedAndNotRoundedByInput()) {
+    if (coordinatesAreModified()) {
       updateCoordinates(update, coordinates)
     }
   }, [update, coordinates, updateCoordinates])
 
-  function coordinatesAreModifiedAndNotRoundedByInput () {
-    return update?.length && coordinates?.length &&
-      (
-        update[0].toFixed(3) !== coordinates[0].toFixed(3) ||
-        update[1].toFixed(3) !== coordinates[1].toFixed(3)
-      )
+  function coordinatesAreModified () {
+    return coordinates?.length
+      ? update?.length && (update[0] !== coordinates[0] || update[1] !== coordinates[1])
+      : update?.length
   }
 
   return <Body>
     <CoordinateInput
       data-cy={'dms-coordinates-input'}
       onChange={(_, { dd }) => setUpdate(dd)}
-      ddPrecision={4}
+      ddPrecision={5}
       value={showedValue}
     />
     <CoordinatesType>(DMS)</CoordinatesType>

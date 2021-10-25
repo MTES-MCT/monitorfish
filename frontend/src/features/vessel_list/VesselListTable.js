@@ -53,6 +53,10 @@ const VesselListTable = props => {
         sortType={sortType}
         onSortColumn={handleSortColumn}
         affixHorizontalScrollbar
+        locale={{
+          emptyMessage: 'Aucun résultat',
+          loading: 'Chargement...'
+        }}
       >
         <Column resizable width={35} fixed>
           <HeaderCell>

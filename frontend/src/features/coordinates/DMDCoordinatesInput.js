@@ -1,8 +1,8 @@
-import { dmsToDecimal } from 'react-coordinate-input'
 import IMaskInput from 'react-imask/esm/input'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
+import { dmsToDecimal } from 'react-coordinate-input'
 
 const DMDCoordinatesInput = props => {
   const {
@@ -16,7 +16,7 @@ const DMDCoordinatesInput = props => {
   const [value, setValue] = useState('')
 
   useEffect(() => {
-    if (coordinates && coordinates.length && coordinatesFormat) {
+    if (coordinates?.length && coordinatesFormat) {
       setValue(getCoordinatesFromFormat(coordinates, coordinatesFormat))
     } else {
       setValue('')
@@ -40,7 +40,7 @@ const DMDCoordinatesInput = props => {
       return
     }
     const latitudeMinutes = parseInt(latitude.substring(2, 4))
-    const latitudeSeconds = parseInt(latitude.substring(4, 7)) * Math.pow(10, -3) * 60
+    const latitudeSeconds = parseInt(latitude.substring(4, 7))
 
     const EW = longitude[longitude.length - 1]
     if (!['E', 'W'].includes(EW)) {
@@ -53,13 +53,13 @@ const DMDCoordinatesInput = props => {
       return
     }
     const longitudeMinutes = parseInt(longitude.substring(3, 5))
-    const longitudeSeconds = parseInt(longitude.substring(5, 8)) * Math.pow(10, -3) * 60
+    const longitudeSeconds = parseInt(longitude.substring(5, 8))
 
-    const ddLatitude = dmsToDecimal(latitudeDegrees, latitudeMinutes, latitudeSeconds, NS, 4)
-    const ddLongitude = dmsToDecimal(longitudeDegrees, longitudeMinutes, longitudeSeconds, EW, 4)
+    const dLatitude = dmsToDecimal(latitudeDegrees, latitudeMinutes + Math.pow(10, -3) * latitudeSeconds, 0, NS, 6)
+    const dLongitude = dmsToDecimal(longitudeDegrees, longitudeMinutes + Math.pow(10, -3) * longitudeSeconds, 0, EW, 6)
 
-    if (!Number.isNaN(ddLatitude) && !Number.isNaN(ddLongitude)) {
-      updateCoordinates([ddLatitude, ddLongitude], coordinates)
+    if (!Number.isNaN(dLatitude) && !Number.isNaN(dLongitude)) {
+      updateCoordinates([dLatitude, dLongitude], coordinates)
     } else {
       setError('Format lat/long invalide')
     }

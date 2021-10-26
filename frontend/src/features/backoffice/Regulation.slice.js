@@ -36,12 +36,10 @@ const regulationSlice = createSlice({
         /** @type {number} */
         id
       } = action.payload
-      let newRegulatoryTextCheckedMap = {}
-      if (state.regulatoryTextCheckedMap) {
-        newRegulatoryTextCheckedMap = JSON.parse(JSON.stringify(state.regulatoryTextCheckedMap))
+      state.regulatoryTextCheckedMap = {
+        ...(state.regulatoryTextCheckedMap || {}),
+        [id]: regulatoryText ? { ...regulatoryText } : null
       }
-      newRegulatoryTextCheckedMap[id] = regulatoryText
-      state.regulatoryTextCheckedMap = newRegulatoryTextCheckedMap
     },
     addObjectToUpcomingRegulatoryTextCheckedMap (state, action) {
       const {
@@ -72,7 +70,7 @@ const regulationSlice = createSlice({
       state.upcomingRegulatoryTextCheckedMap = action.payload
     },
     setRegulatoryTextCheckedMap (state, action) {
-      state.regulatoryTextCheckedListMap = action.payload
+      state.regulatoryTextCheckedMap = { ...action.payload }
     },
     setRegulationSaved (state, action) {
       state.regulationSaved = action.payload

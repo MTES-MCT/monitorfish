@@ -32,7 +32,8 @@ const RegulatoryText = props => {
   } = props
 
   const {
-    saveOrUpdateRegulation
+    saveOrUpdateRegulation,
+    isModalOpen
   } = useSelector(state => state.regulation)
 
   /**
@@ -137,8 +138,14 @@ const RegulatoryText = props => {
     return oneValueIsMissing
   }
 
+  const checkActionSource = () => {
+    return Object.values(REGULATORY_TEXT_SOURCE).includes(source) &&
+      ((source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION && isModalOpen) ||
+        (source === REGULATORY_TEXT_SOURCE.REGULATION && !isModalOpen))
+  }
+
   useEffect(() => {
-    if (saveOrUpdateRegulation && Object.values(REGULATORY_TEXT_SOURCE).includes(source)) {
+    if (saveOrUpdateRegulation && checkActionSource()) {
       const payload = { id: id, source: source }
       if (!checkOtherRequiredValues() && !checkNameAndUrl()) {
         const updatedRegulatoryText = {

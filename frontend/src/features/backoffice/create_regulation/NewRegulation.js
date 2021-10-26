@@ -124,7 +124,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   useEffect(() => {
-    if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
+    if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
       /**
        * if regulatoryTexts.length === regulatoryTextList.length all texts has been checked

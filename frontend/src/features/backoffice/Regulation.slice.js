@@ -11,8 +11,10 @@ const INITIAL_STATE = {
   upcomingRegulatoryTextCheckedMap: undefined,
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
   regulatoryTextCheckedMap: undefined,
+  saveOrUpdateRegulation: false,
   /** @type {boolean} regulatorySaved */
-  regulationSaved: false
+  regulationSaved: false,
+  atLeastOneValueIsMissing: undefined
 }
 
 const regulationSlice = createSlice({
@@ -74,6 +76,12 @@ const regulationSlice = createSlice({
     },
     setRegulationSaved (state, action) {
       state.regulationSaved = action.payload
+    },
+    setSaveOrUpdateRegulation (state, action) {
+      state.saveOrUpdateRegulation = action.payload
+    },
+    setAtLeastOneValueIsMissing (state, action) {
+      state.atLeastOneValueIsMissing = action.payload
     }
   }
 })
@@ -87,7 +95,9 @@ export const {
   setUpcomingRegulatoryTextListCheckedMap,
   setRegulationSaved,
   setRegulatoryTextCheckedMap,
-  addObjectToRegulatoryTextCheckedMap
+  addObjectToRegulatoryTextCheckedMap,
+  setSaveOrUpdateRegulation,
+  setAtLeastOneValueIsMissing
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

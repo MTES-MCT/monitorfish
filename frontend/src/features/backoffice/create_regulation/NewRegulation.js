@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
@@ -32,7 +32,9 @@ import {
   resetState,
   setSelectedRegulation,
   setRegulatoryTextCheckedMap,
-  setUpcomingRegulation
+  setUpcomingRegulation,
+  setSaveOrUpdateRegulation,
+  setAtLeastOneValueIsMissing
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -79,14 +81,14 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
-  const [saveOrUpdateRegulation, setSaveOrUpdateRegulation] = useState(false)
   const {
     isModalOpen,
     regulationSaved,
     regulatoryTextCheckedMap,
-    upcomingRegulation
+    upcomingRegulation,
+    saveOrUpdateRegulation,
+    atLeastOneValueIsMissing
   } = useSelector(state => state.regulation)
-  const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
 
   let originalGeometryId = null
 
@@ -110,10 +112,11 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const history = useHistory()
   useEffect(() => {
+    // console.log(`regulationSave ${regulationSaved}`)
     if (regulationSaved) {
       history.push('/backoffice')
+      dispatch(resetState())
     }
-    dispatch(resetState())
   }, [regulationSaved])
 
   const onGoBack = () => {
@@ -126,27 +129,32 @@ const CreateRegulation = ({ title, isEdition }) => {
       const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
       /**
        * if regulatoryTexts.length === regulatoryTextList.length all texts has been checked
-       * if !regulatoryTexts.includes(null) all texts has appropriately been filled
-       * if !atLeastOneValueIsMissing all other values are filled
-       */
-      if (regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
-        !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
-        // update regulatoryTextList
-        setRegulatoryTextList(regulatoryTexts)
-        const featureObject = mapToRegulatoryFeatureObject({
-          selectedRegulationTopic,
-          selectedRegulationLawType,
-          nameZone,
-          selectedSeaFront,
-          selectedRegionList,
-          regulatoryTexts,
-          upcomingRegulation
-        })
-        createOrUpdateRegulation(featureObject)
-      } else {
-        dispatch(setRegulatoryTextCheckedMap(undefined))
-        setSaveOrUpdateRegulation(false)
-        setAtLeastOneValueIsMissing(undefined)
+      **/
+      if (regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length) {
+        /**
+        * if !regulatoryTexts.includes(null) all texts has appropriately been filled
+        * if !atLeastOneValueIsMissing all other values are filled
+        */
+        if (!regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
+          // update regulatoryTextList
+          setRegulatoryTextList(regulatoryTexts)
+          const featureObject = mapToRegulatoryFeatureObject({
+            selectedRegulationTopic,
+            selectedRegulationLawType,
+            nameZone: encodeURIComponent(nameZone),
+            selectedSeaFront,
+            selectedRegionList,
+            regulatoryTexts,
+            upcomingRegulation
+          })
+          createOrUpdateRegulation(featureObject)
+        } else {
+          batch(() => {
+            dispatch(setRegulatoryTextCheckedMap({}))
+            dispatch(setSaveOrUpdateRegulation(false))
+            dispatch(setAtLeastOneValueIsMissing(undefined))
+          })
+        }
       }
     }
   }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap])
@@ -195,7 +203,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
     setGeometryIsMissing(valueIsMissing)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setAtLeastOneValueIsMissing(atLeastOneValueIsMissing)
+    dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
   }
 
   useEffect(() => {
@@ -216,6 +224,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   const createOrUpdateRegulation = (featureObject) => {
+    // console.log('createOrUpdateRegulation')
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
     const actionType = isEdition ? REGULATION_ACTION_TYPE.UPDATE : REGULATION_ACTION_TYPE.INSERT
@@ -293,7 +302,6 @@ const CreateRegulation = ({ title, isEdition }) => {
                 regulatoryTextList={regulatoryTextList}
                 setRegulatoryTextList={setRegulatoryTextList}
                 source={REGULATORY_TEXT_SOURCE.REGULATION}
-                saveForm={saveOrUpdateRegulation}
               />
             </Content>
           </ContentWrapper>
@@ -305,7 +313,7 @@ const CreateRegulation = ({ title, isEdition }) => {
               isLast={false}
               onClick={() => {
                 checkRequiredValues()
-                setSaveOrUpdateRegulation(true)
+                dispatch(setSaveOrUpdateRegulation(true))
               }}
             >
             { isEdition

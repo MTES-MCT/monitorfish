@@ -8,7 +8,7 @@ from sqlalchemy.exc import InvalidRequestError
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
-    combine_overlapping_columns,
+    coalesce,
     concatenate_columns,
     df_values_to_psql_arrays,
 )
@@ -229,7 +229,7 @@ def clean_vessels(all_vessels):
 
     cols_to_drop = []
     for col_name, cols_list in combine_cols.items():
-        res.loc[:, col_name] = combine_overlapping_columns(res, cols_list)
+        res.loc[:, col_name] = coalesce(res[cols_list])
         cols_to_drop += cols_list
     res = res.drop(columns=cols_to_drop)
     logger.info("Columns combined into single values.")

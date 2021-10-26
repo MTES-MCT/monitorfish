@@ -8,7 +8,7 @@ from prefect import Flow, task
 
 from config import DATA_GOUV_SPECIES_URL, PROXIES
 from src.pipeline.generic_tasks import load
-from src.pipeline.processing import combine_overlapping_columns
+from src.pipeline.processing import coalesce
 
 
 @task(checkpoint=False)
@@ -34,7 +34,7 @@ def transform_species(species: pd.DataFrame) -> pd.DataFrame:
 
     # Coalesce french_name and scientific_name
     name_columns = ["french_name", "scientific_name"]
-    res["species_name"] = combine_overlapping_columns(res, name_columns)
+    res["species_name"] = coalesce(res[name_columns])
     res = res.drop(columns=name_columns)
 
     # Add id column

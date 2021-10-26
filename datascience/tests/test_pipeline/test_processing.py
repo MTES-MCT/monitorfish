@@ -9,7 +9,7 @@ import pytz
 from sqlalchemy import Column, Integer, MetaData, Table
 
 from src.pipeline.processing import (
-    combine_overlapping_columns,
+    coalesce,
     concatenate_columns,
     concatenate_values,
     df_to_dict_series,
@@ -70,7 +70,7 @@ class TestProcessingMethods(unittest.TestCase):
             }
         )
 
-        res = combine_overlapping_columns(df, ["b", "c", "a"])
+        res = coalesce(df[["b", "c", "a"]])
         self.assertEqual(res.values[0], "c")
         self.assertEqual(res.values[1], 2)
         self.assertEqual(res.values[2], "a")

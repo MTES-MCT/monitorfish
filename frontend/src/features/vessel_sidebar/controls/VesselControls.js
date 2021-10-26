@@ -11,7 +11,7 @@ import {
   resetNextControlResumeAndControls,
   setControlFromDate,
   setControlResumeAndControls
-} from '../../../domain/shared_slices/Vessel'
+} from '../../../domain/shared_slices/Controls'
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
 
@@ -19,14 +19,17 @@ const VesselControls = () => {
   const dispatch = useDispatch()
 
   const {
+    selectedVessel,
+    loadingVessel
+  } = useSelector(state => state.vessel)
+
+  const {
     /** @type {ControlResume} controlResumeAndControls */
     controlResumeAndControls,
     /** @type {ControlResume} nextControlResumeAndControls */
     nextControlResumeAndControls,
-    selectedVessel,
-    controlsFromDate,
-    loadingVessel
-  } = useSelector(state => state.vessel)
+    controlsFromDate
+  } = useSelector(state => state.controls)
 
   /** @type {Object.<string, VesselControl[]>} yearsToControls */
   const yearsToControls = useMemo(() => {

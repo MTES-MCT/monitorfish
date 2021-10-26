@@ -1,7 +1,6 @@
 /* eslint-disable */
-import { FishingActivitiesTab, VesselSidebarTab } from '../entities/vessel'
+import { VesselSidebarTab } from '../entities/vessel'
 import { createSlice } from '@reduxjs/toolkit'
-import { getEffectiveDateTimeFromMessage } from '../entities/fishingActivities'
 
 /** @namespace VesselReducer */
 const VesselReducer = null
@@ -29,9 +28,6 @@ const vesselSlice = createSlice({
     vesselSidebarIsOpen: false,
     vesselSidebarTab: VesselSidebarTab.SUMMARY,
     isFocusedOnVesselSearch: false,
-    controlResumeAndControls: {},
-    nextControlResumeAndControls: null,
-    controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     /** @type {VesselTrackDepth} selectedVesselCustomTrackDepth */
     selectedVesselCustomTrackDepth: {
       trackDepth: null,
@@ -102,31 +98,11 @@ const vesselSlice = createSlice({
     setFocusOnVesselSearch (state, action) {
       state.isFocusedOnVesselSearch = action.payload
     },
-    loadingFisheriesActivities (state) {
+    loading (state) {
       state.loadingVessel = true
     },
     resetLoadingVessel (state) {
       state.loadingVessel = false
-    },
-    /**
-     * Set selected vessel control resume and control
-     * @function setControlResumeAndControls
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: ControlResume}} action - the control resume
-     */
-    setControlResumeAndControls (state, action) {
-      state.controlResumeAndControls = action.payload
-      state.loadingVessel = null
-    },
-    loadingControls (state) {
-      state.loadingVessel = true
-    },
-    setNextControlResumeAndControls (state, action) {
-      state.nextControlResumeAndControls = action.payload
-    },
-    resetNextControlResumeAndControls (state) {
-      state.nextControlResumeAndControls = null
     },
     setSelectedVesselCustomTrackDepth (state, action) {
       state.selectedVesselCustomTrackDepth = action.payload
@@ -166,16 +142,6 @@ const vesselSlice = createSlice({
      */
     showVesselSidebarTab (state, action) {
       state.vesselSidebarTab = action.payload
-    },
-    /**
-     * Set the date since controls are fetched
-     * @function setControlFromDate
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: Date}} action - The "from" date
-     */
-    setControlFromDate (state, action) {
-      state.controlsFromDate = action.payload
     },
     setVesselsSpeciesAndDistricts (state, action) {
       state.uniqueVesselsSpecies = action.payload.species
@@ -262,6 +228,7 @@ const vesselSlice = createSlice({
 export const {
   setVessels,
   resetVessels,
+  loading,
   setFilteredVesselsFeaturesUids,
   setPreviewFilteredVesselsFeaturesUids,
   setVesselsLayerSource,
@@ -270,10 +237,6 @@ export const {
   setSelectedVessel,
   resetSelectedVessel,
   closeVesselSidebar,
-  setControlResumeAndControls,
-  setNextControlResumeAndControls,
-  resetNextControlResumeAndControls,
-  loadingControls,
   setFocusOnVesselSearch,
   setTemporaryVesselsToHighLightOnMap,
   resetTemporaryVesselsToHighLightOnMap,
@@ -282,7 +245,6 @@ export const {
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,
-  setControlFromDate,
   setVesselsSpeciesAndDistricts,
   addVesselTrackShowed,
   updateVesselTrackAsShowed,

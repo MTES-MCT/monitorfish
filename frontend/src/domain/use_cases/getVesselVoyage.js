@@ -1,13 +1,15 @@
 import { getVesselVoyageFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
 import {
+  resetLoadingVessel
+} from '../shared_slices/Vessel'
+import {
   loadingFisheriesActivities,
-  resetLoadingVessel,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage,
   showFishingActivitiesOnMap
-} from '../shared_slices/Vessel'
+} from '../shared_slices/FishingActivities'
 import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
 import { batch } from 'react-redux'
@@ -25,7 +27,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       lastFishingActivities,
       isLastVoyage,
       tripNumber
-    } = getState().vessel
+    } = getState().fishingActivities
 
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
     navigateTo = navigateTo || NAVIGATE_TO.LAST
@@ -47,6 +49,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
             alerts: []
           }
         }))
+        dispatch(resetLoadingVessel())
         dispatch(setError(new NoERSMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
         return
       }
@@ -61,6 +64,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         }
 
         dispatch(setVoyage(voyage))
+        dispatch(resetLoadingVessel())
         if (getState().vessel.fishingActivitiesShowedOnMap?.length) {
           dispatch(showFishingActivitiesOnMap())
         }

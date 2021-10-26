@@ -4,7 +4,14 @@ import styled from 'styled-components'
 import FishingActivitiesSummary from './FishingActivitiesSummary'
 import ERSMessages from './ers_messages/ERSMessages'
 import { COLORS } from '../../../constants/constants'
-import { resetNextFishingActivities, setFishingActivitiesTab, setVoyage } from '../../../domain/shared_slices/Vessel'
+import {
+  resetLoadingVessel
+} from '../../../domain/shared_slices/Vessel'
+import {
+  resetNextFishingActivities,
+  setFishingActivitiesTab,
+  setVoyage
+} from '../../../domain/shared_slices/FishingActivities'
 import { useDispatch, useSelector } from 'react-redux'
 import getVesselVoyage, { NAVIGATE_TO } from '../../../domain/use_cases/getVesselVoyage'
 import { FingerprintSpinner } from 'react-epic-spinners'
@@ -16,11 +23,14 @@ const VesselFishingActivities = () => {
   const {
     selectedVesselIdentity,
     selectedVessel,
-    loadingVessel,
+    loadingVessel
+  } = useSelector(state => state.vessel)
+
+  const {
     fishingActivities,
     nextFishingActivities,
     fishingActivitiesTab
-  } = useSelector(state => state.vessel)
+  } = useSelector(state => state.fishingActivities)
 
   const previousSelectedVessel = usePrevious(selectedVessel)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
@@ -59,6 +69,7 @@ const VesselFishingActivities = () => {
   const updateFishingActivities = nextFishingActivities => {
     if (nextFishingActivities) {
       dispatch(setVoyage(nextFishingActivities))
+      dispatch(resetLoadingVessel())
       dispatch(resetNextFishingActivities())
     }
   }

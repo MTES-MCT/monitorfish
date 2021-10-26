@@ -13,6 +13,7 @@ import regulatory from './Regulatory'
 import regulation from '../../features/backoffice/Regulation.slice'
 import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import interestPoint from './InterestPoint'
+import fishingActivities from './FishingActivities'
 import { combineReducers } from '@reduxjs/toolkit'
 
 const commonReducerList = {
@@ -30,7 +31,8 @@ const homeReducers = combineReducers({
   fleetSegment,
   interestPoint,
   regulatoryLayerSearch,
-  measurement
+  measurement,
+  fishingActivities
 })
 
 const backofficeReducers = combineReducers({

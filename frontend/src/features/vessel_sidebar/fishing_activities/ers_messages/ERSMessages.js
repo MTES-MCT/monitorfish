@@ -68,7 +68,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     isFirstVoyage,
     tripNumber,
     fishingActivities
-  } = useSelector(state => state.vessel)
+  } = useSelector(state => state.fishingActivities)
 
   /** @type {ERSMessage[]} ersMessages */
   const [ersMessages, setERSMessages] = useState([])

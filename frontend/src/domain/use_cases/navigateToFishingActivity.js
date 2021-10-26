@@ -1,11 +1,15 @@
 import { FishingActivitiesTab, VesselSidebarTab } from '../entities/vessel'
-import { setFishingActivitiesTab, showVesselSidebarTab } from '../shared_slices/Vessel'
+import { setFishingActivitiesTab } from '../shared_slices/FishingActivities'
+import { showVesselSidebarTab } from '../shared_slices/Vessel'
 
 const navigateToFishingActivity = id => (dispatch, getState) => {
   const {
-    fishingActivitiesTab,
     vesselSidebarTab
   } = getState().vessel
+
+  const {
+    fishingActivitiesTab
+  } = getState().fishingActivities
 
   let domElementsAlreadyAvailable = true
   if (vesselSidebarTab !== VesselSidebarTab.VOYAGES) {

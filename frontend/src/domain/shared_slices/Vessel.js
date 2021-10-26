@@ -28,18 +28,7 @@ const vesselSlice = createSlice({
     loadingVessel: null,
     vesselSidebarIsOpen: false,
     vesselSidebarTab: VesselSidebarTab.SUMMARY,
-    fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
     isFocusedOnVesselSearch: false,
-    /** @type {FishingActivities} fishingActivities */
-    fishingActivities: {},
-    /** @type {FishingActivities} lastFishingActivities */
-    lastFishingActivities: {},
-    isLastVoyage: null,
-    isFirstVoyage: null,
-    tripNumber: null,
-    /** @type {FishingActivities | null} nextFishingActivities */
-    nextFishingActivities: null,
-    /** @type {ControlResume} controlResumeAndControl */
     controlResumeAndControls: {},
     nextControlResumeAndControls: null,
     controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
@@ -120,58 +109,6 @@ const vesselSlice = createSlice({
       state.loadingVessel = false
     },
     /**
-     * Set selected vessel voyage
-     * @function setVoyage
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: VesselVoyage}} action - the vessel voyage
-     */
-    setVoyage (state, action) {
-      state.fishingActivities = action.payload.ersMessagesAndAlerts
-      state.isLastVoyage = action.payload.isLastVoyage
-      state.isFirstVoyage = action.payload.isFirstVoyage
-      state.tripNumber = action.payload.tripNumber
-      state.loadingVessel = null
-    },
-    /**
-     * Set selected vessel last voyage - This voyage is saved to be able to compare it
-     * with new last voyages we will receive from the CRON
-     * @function setLastVoyage
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: VesselVoyage}} action - the vessel last voyage
-     */
-    setLastVoyage (state, action) {
-      state.lastFishingActivities = action.payload.ersMessagesAndAlerts
-      state.fishingActivities = action.payload.ersMessagesAndAlerts
-      state.isLastVoyage = action.payload.isLastVoyage
-      state.isFirstVoyage = action.payload.isFirstVoyage
-      state.tripNumber = action.payload.tripNumber
-      state.loadingVessel = null
-    },
-    resetVoyage (state) {
-      state.fishingActivities = null
-      state.isLastVoyage = null
-      state.isFirstVoyage = null
-      state.voyageStartDate = null
-      state.voyageEndDate = null
-      state.tripNumber = null
-      state.loadingVessel = null
-    },
-    /**
-     * Set selected next vessel fishing activities to propose an update of the current displayed fishing activities
-     * @function setNextFishingActivities
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: FishingActivities}} action - the fishing activities with new messages
-     */
-    setNextFishingActivities (state, action) {
-      state.nextFishingActivities = action.payload
-    },
-    resetNextFishingActivities (state) {
-      state.nextFishingActivities = null
-    },
-    /**
      * Set selected vessel control resume and control
      * @function setControlResumeAndControls
      * @memberOf VesselReducer
@@ -229,16 +166,6 @@ const vesselSlice = createSlice({
      */
     showVesselSidebarTab (state, action) {
       state.vesselSidebarTab = action.payload
-    },
-    /**
-     * Show the specified fishing activities tab (Resume or All messages)
-     * @function setFishingActivitiesTab
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: number}} action - The tab
-     */
-    setFishingActivitiesTab (state, action) {
-      state.fishingActivitiesTab = action.payload
     },
     /**
      * Set the date since controls are fetched
@@ -328,56 +255,6 @@ const vesselSlice = createSlice({
      */
     resetVesselTrackExtent (state) {
       state.vesselTrackExtent = null
-    },
-    /**
-     * Show a single fishing activity on the vessel track, on the map
-     * @function showFishingActivityOnMap
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: string}} action - The fishing activity id to show
-     */
-    showFishingActivityOnMap (state, action) {
-      const fishingActivityToShow = state.fishingActivities.ersMessages
-        .find(fishingActivity => fishingActivity.operationNumber === action.payload)
-
-      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.concat({
-        id: fishingActivityToShow.operationNumber,
-        date: getEffectiveDateTimeFromMessage(fishingActivityToShow),
-        name: fishingActivityToShow.messageType,
-        isDeleted: fishingActivityToShow.deleted,
-        isNotAcknowledged: !fishingActivityToShow.acknowledge?.isSuccess
-      })
-    },
-    /**
-     * Hide fishing activities of the vessel track
-     * @function showFishingActivitiesOnMap
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     */
-    hideFishingActivitiesOnMap (state) {
-      state.fishingActivitiesShowedOnMap = []
-    },
-    /**
-     * Update coordinates of showed fishing activities
-     * @function updateFishingActivitiesOnMapCoordinates
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: {
-     *   id: string,
-     *   coordinates: string[]
-     * }[]}} action - The fishing activities to update
-     */
-    updateFishingActivitiesOnMapCoordinates (state, action) {
-      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.map(fishingActivity => {
-        const fishingActivityWithCoordinates = action.payload
-          .find(fishingActivityToUpdate => fishingActivityToUpdate.id === fishingActivity.id)
-
-        if (fishingActivityWithCoordinates) {
-          return { ...fishingActivity, coordinates: fishingActivityWithCoordinates.coordinates }
-        }
-
-        return fishingActivity
-      })
     }
   }
 })
@@ -393,18 +270,9 @@ export const {
   setSelectedVessel,
   resetSelectedVessel,
   closeVesselSidebar,
-  setVoyage,
-  setLastVoyage,
-  resetVoyage,
-  setLastFishingActivities,
-  setNextFishingActivities,
-  resetNextFishingActivities,
-  addNextDEPDateTime,
-  removeLastFormerDEPDateTime,
   setControlResumeAndControls,
   setNextControlResumeAndControls,
   resetNextControlResumeAndControls,
-  loadingFisheriesActivities,
   loadingControls,
   setFocusOnVesselSearch,
   setTemporaryVesselsToHighLightOnMap,
@@ -414,7 +282,6 @@ export const {
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,
-  setFishingActivitiesTab,
   setControlFromDate,
   setVesselsSpeciesAndDistricts,
   addVesselTrackShowed,
@@ -422,7 +289,8 @@ export const {
   updateVesselTrackAsToHide,
   updateVesselTrackAsHidden,
   setVesselTrackExtent,
-  resetVesselTrackExtent
+  resetVesselTrackExtent,
+  setHideOtherVessels
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

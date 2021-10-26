@@ -72,7 +72,7 @@ const VesselsTracksLayer = ({ map }) => {
 
   function removeVesselTrackFeatures (identity) {
     vectorSource.getFeatures()
-      .filter(feature => feature.getId().includes(identity))
+      .filter(feature => feature?.getId()?.toString()?.includes(identity))
       .map(feature => vectorSource.removeFeature(feature))
   }
 

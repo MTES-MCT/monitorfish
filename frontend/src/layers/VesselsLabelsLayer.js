@@ -177,7 +177,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
     const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
     const showedTracksFeatures = extent
-      .filter(feature => showedFeaturesIdentities.find(identity => feature.getId().includes(identity)))
+      .filter(feature => showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
 
     const showedFeaturesLabels = showedTracksFeatures.concat(selectedVesselFeature)
     addLabelToFeatures(showedFeaturesLabels.filter(feature => feature))

@@ -41,7 +41,7 @@
  * @property {string} internalReferenceNumber
  * @property {string} ircs
  * @property {boolean} isCorrected
- * @property {string} message
+ * @property {Object} message
  * @property {string} messageType
  * @property {string} operationDateTime
  * @property {string} operationNumber

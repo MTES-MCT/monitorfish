@@ -273,3 +273,8 @@ export const VesselSidebarTab = {
   VOYAGES: 3,
   CONTROLS: 4
 }
+
+export const FishingActivitiesTab = {
+  SUMMARY: 1,
+  MESSAGES: 2
+}

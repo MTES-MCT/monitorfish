@@ -5,9 +5,16 @@ import { ERSMessageType as ERSMessageTypeEnum } from '../../../../domain/entitie
 import { ReactComponent as XMLSVG } from '../../../icons/Picto_XML.svg'
 import { ReactComponent as AckOkSVG } from '../../../icons/Message_JPE_acquitté.svg'
 import { ReactComponent as AckNOkSVG } from '../../../icons/Message_JPE_non_acquitté.svg'
+import { ReactComponent as ShowActivitySVG } from '../../../icons/Position_message_JPE_Pin_gris_clair.svg'
+import { ReactComponent as HideActivitySVG } from '../../../icons/Position_message_JPE_Pin_masquer.svg'
 import { getDateTime } from '../../../../utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { hideFishingActivityOnMap, showFishingActivityOnMap } from '../../../../domain/shared_slices/Vessel'
 
 const ERSMessage = ({ message, isFirst }) => {
+  const dispatch = useDispatch()
+  const { fishingActivitiesShowedOnMap } = useSelector(state => state.vessel)
+
   const ersMessageHeaderTitle = useMemo(() => {
     if (message) {
       switch (message.messageType) {
@@ -51,7 +58,7 @@ const ERSMessage = ({ message, isFirst }) => {
 
   return <>
     {message
-      ? <Wrapper isFirst={isFirst}>
+      ? <Wrapper isFirst={isFirst} id={message.operationNumber}>
         <Header>
           <ERSMessageType>{getErsMessageType()}</ERSMessageType>
           <ERSMessageHeaderText
@@ -92,6 +99,19 @@ const ERSMessage = ({ message, isFirst }) => {
                 style={{ cursor: 'pointer' }}
                 onClick={() => openXML(message.rawMessage)}/>
               : <XML/>
+          }
+          {
+            !message.isCorrected
+              ? fishingActivitiesShowedOnMap.find(showed => showed.id === message.operationNumber)
+                ? <HideActivity
+                  title={'Cacher le message sur la piste'}
+                  onClick={() => dispatch(hideFishingActivityOnMap(message.operationNumber))}
+                />
+                : <ShowActivity
+                  title={'Afficher le message sur la piste'}
+                  onClick={() => dispatch(showFishingActivityOnMap(message.operationNumber))}
+                />
+              : null
           }
         </Header>
         <Body>
@@ -251,7 +271,7 @@ const ERSMessageHeaderText = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  max-width: ${props => props.isShortcut ? '205px' : '370px'};
+  max-width: ${props => props.isShortcut ? '185px' : '330px'};
 `
 
 const ERSMessageName = styled.span`
@@ -278,7 +298,7 @@ const ERSMessageType = styled.span`
 const XML = styled(XMLSVG)`
   margin-left: auto;
   margin-top: 6.5px;
-  margin-right: 10px;
+  margin-right: 8px;
   user-select: none;
   
   tspan {
@@ -292,6 +312,22 @@ const AckNOk = styled(AckNOkSVG)`
 
 const AckOk = styled(AckOkSVG)`
   margin-top: 3px;
+`
+
+const ShowActivity = styled(ShowActivitySVG)`
+  height: 19px;
+  width: 15px;
+  margin-top: 8px;
+  margin-right: 10px;
+  cursor: pointer;
+`
+
+const HideActivity = styled(HideActivitySVG)`
+  height: 19px;
+  width: 15px;
+  margin-top: 8px;
+  margin-right: 10px;
+  cursor: pointer;
 `
 
 export default ERSMessage

@@ -6,6 +6,7 @@ import { setUpdatedFromCron } from '../shared_slices/Map'
 import unselectVessel from './unselectVessel'
 import { batch } from 'react-redux'
 import { getTrackDepthError, getVesselTrackDepth } from '../entities/vesselTrackDepth'
+import getVesselVoyage from './getVesselVoyage'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
@@ -26,6 +27,8 @@ const showVesselTrackAndSidebar = (
     selectedVesselCustomTrackDepth
   } = getState().vessel
   unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)
+
+  dispatch(getVesselVoyage(vesselIdentity, null, true))
 
   const feature = vesselsLayerSource.getFeatureById(Vessel.getVesselId(vesselIdentity))
   if (feature) {

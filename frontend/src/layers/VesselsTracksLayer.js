@@ -5,8 +5,8 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
+import { getCircleStyle, getFishingActivityCircleStyle } from './styles/vesselTrack.style'
 import { animateToCoordinates } from '../domain/shared_slices/Map'
-import { getCircleStyle } from './styles/vesselTrack.style'
 import { usePrevious } from '../hooks/usePrevious'
 import {
   setVesselTrackExtent,
@@ -15,14 +15,19 @@ import {
 } from '../domain/shared_slices/Vessel'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
+import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
+import { Feature } from 'ol'
+import Point from 'ol/geom/Point'
 
 const VesselsTracksLayer = ({ map }) => {
   const {
     selectedVessel,
     highlightedVesselTrackPosition,
-    vesselsTracksShowed
+    vesselsTracksShowed,
+    fishingActivitiesShowedOnMap
   } = useSelector(state => state.vessel)
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
+  const previousFishingActivitiesShowedOnMap = usePrevious(fishingActivitiesShowedOnMap)
   const previousSelectedVessel = usePrevious(selectedVessel)
 
   const {
@@ -74,6 +79,63 @@ const VesselsTracksLayer = ({ map }) => {
       updateTrackCircleStyle(previousHighlightedVesselTrackPosition, null)
     }
   }, [highlightedVesselTrackPosition, previousHighlightedVesselTrackPosition])
+
+  useEffect(() => {
+    if (fishingActivitiesShowedOnMap?.length) {
+      if (fishingActivitiesShowedOnMap?.length === previousFishingActivitiesShowedOnMap?.length) {
+        return
+      }
+
+      vectorSource
+        .getFeatures()
+        .filter(feature => feature.getId().includes(`${Layers.VESSEL_TRACK.code}:ers`))
+        .forEach(feature => vectorSource.removeFeature(feature))
+
+      const lines = vectorSource.getFeatures()
+        .filter(feature => feature.getId().includes(`${Layers.VESSEL_TRACK.code}:line`))
+
+      const coordinatesFeaturesAndIds = fishingActivitiesShowedOnMap.map(fishingActivity => {
+        const fishingActivityDateTimestamp = new Date(fishingActivity.date).getTime()
+
+        const foundVesselLine = lines.find(line =>
+          fishingActivityDateTimestamp > new Date(line.firstPositionDate).getTime() &&
+          fishingActivityDateTimestamp < new Date(line.secondPositionDate).getTime())
+
+        if (foundVesselLine) {
+          const totalDistance = new Date(foundVesselLine.secondPositionDate).getTime() - new Date(foundVesselLine.firstPositionDate).getTime()
+          const fishingActivityDistanceFromFirstPoint = fishingActivityDateTimestamp - new Date(foundVesselLine.firstPositionDate).getTime()
+          const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
+
+          const coordinates = foundVesselLine.getGeometry().getCoordinateAt(distanceFraction)
+          console.log(coordinates)
+          const featureToAdd = new Feature({
+            geometry: new Point(coordinates)
+          })
+          featureToAdd.name = fishingActivity.name
+          featureToAdd.setStyle(getFishingActivityCircleStyle())
+          featureToAdd.setId(`${Layers.VESSEL_TRACK.code}:ers:${fishingActivityDateTimestamp}`)
+
+          return {
+            id: fishingActivity.id,
+            coordinates,
+            feature: featureToAdd
+          }
+        } else {
+          console.log(`Nous n'avons pas pu placer le message ${fishingActivity.name} sur la piste du navire.`)
+          return null
+        }
+      }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
+
+      vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
+      vectorSource.changed()
+      dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
+    } else {
+      vectorSource
+        .getFeatures()
+        .filter(feature => feature.getId().includes(`${Layers.VESSEL_TRACK.code}:ers`))
+        .forEach(feature => vectorSource.removeFeature(feature))
+    }
+  }, [fishingActivitiesShowedOnMap])
 
   function removeVesselTrackFeatures (identity) {
     vectorSource.getFeatures()
@@ -178,6 +240,18 @@ const VesselsTracksLayer = ({ map }) => {
               identity={vesselTrack.identity}
               map={map}
               coordinates={vesselTrack.coordinates}
+            />
+          })
+      }
+      {
+        fishingActivitiesShowedOnMap
+          .filter(fishingActivity => fishingActivity.coordinates)
+          .map(fishingActivity => {
+            return <FishingActivityOverlay
+              key={fishingActivity.id}
+              map={map}
+              name={fishingActivity.name}
+              coordinates={fishingActivity.coordinates}
             />
           })
       }

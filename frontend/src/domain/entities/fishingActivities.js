@@ -189,3 +189,25 @@ export const getFAOZonesFromFARMessages = farMessages => {
       return acc
     }, [])
 }
+
+/**
+ * Get effective datetime from ERS message
+ * @param {ERSMessage} message
+ * @return {string} date - Message effective date
+ */
+export const getEffectiveDateTimeFromMessage = message => {
+  switch (message.messageType) {
+    case 'DEP': return message.message.departureDatetimeUtc
+    case 'FAR': return message.message.farDatetimeUtc
+    case 'DIS': return message.message.discardDatetimeUtc
+    case 'COE': return message.message.effortZoneEntryDatetimeUtc
+    case 'COX': return message.message.effortZoneExitDatetimeUtc
+    case 'LAN': return message.message.landingDatetimeUtc
+    case 'EOF': return message.message.endOfFishingDatetimeUtc
+    case 'RTP': return message.message.returnDatetimeUtc
+    case 'PNO': return message.operationDateTime < message.message.predictedArrivalDatetimeUtc
+      ? message.operationDateTime
+      : message.message.predictedArrivalDatetimeUtc
+    default: return message.operationDateTime
+  }
+}

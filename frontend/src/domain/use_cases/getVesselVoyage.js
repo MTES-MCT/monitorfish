@@ -5,7 +5,8 @@ import {
   resetLoadingVessel,
   setLastVoyage,
   setNextFishingActivities,
-  setVoyage
+  setVoyage,
+  showFishingActivitiesOnMap
 } from '../shared_slices/Vessel'
 import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
@@ -57,8 +58,11 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       } else {
         if (voyage.isLastVoyage) {
           dispatch(setLastVoyage(voyage))
-        } else {
-          dispatch(setVoyage(voyage))
+        }
+
+        dispatch(setVoyage(voyage))
+        if (getState().vessel.fishingActivitiesShowedOnMap?.length) {
+          dispatch(showFishingActivitiesOnMap())
         }
       }
       dispatch(removeError())

@@ -44,7 +44,7 @@ const VesselFishingActivities = () => {
         dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
       }
 
-      if (!vesselsAreEquals(previousSelectedVessel, selectedVessel)) {
+      if (previousSelectedVessel && !vesselsAreEquals(previousSelectedVessel, selectedVessel)) {
         dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
       }
     }

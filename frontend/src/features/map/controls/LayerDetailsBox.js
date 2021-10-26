@@ -16,7 +16,7 @@ const LayerDetailsBox = props => {
   const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
 
   useEffect(() => {
-    if (feature && feature.getId().toString().includes(`${Layers.REGULATORY.code}`)) {
+    if (feature?.getId()?.toString()?.includes(`${Layers.REGULATORY.code}`)) {
       setRegulatoryFeatureToShowOnCard(feature)
     } else {
       setRegulatoryFeatureToShowOnCard(null)

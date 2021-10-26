@@ -26,8 +26,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   }, [animateTo, map, vesselSidebarIsOpen])
 
   useEffect(() => {
-    if (mapClickEvent?.feature && !previewFilteredVesselsMode &&
-      mapClickEvent?.feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
+    if (!previewFilteredVesselsMode && mapClickEvent?.feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
       if (mapClickEvent.ctrlKeyPressed) {
         dispatch(showVesselTrack(mapClickEvent.feature.vessel, false))
       } else {

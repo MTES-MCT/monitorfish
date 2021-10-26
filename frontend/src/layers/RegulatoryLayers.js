@@ -76,7 +76,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
         return
       }
 
-      const regulatoryLayers = map.getLayers().getArray().filter(layer => layer.name?.includes(LayersEnum.REGULATORY.code))
+      const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(LayersEnum.REGULATORY.code))
       regulatoryLayers.forEach(layer => {
         const vectorSource = layer.getSource()
 

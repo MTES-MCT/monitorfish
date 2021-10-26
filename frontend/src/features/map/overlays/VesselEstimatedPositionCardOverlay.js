@@ -41,7 +41,7 @@ const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, featur
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature && feature.getId().toString().includes(`${LayersEnum.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
+      if (feature?.getId()?.toString()?.includes(`${LayersEnum.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
         overlayRef.current.style.display = 'block'
 
         const latitude = feature.estimatedPosition.latitude

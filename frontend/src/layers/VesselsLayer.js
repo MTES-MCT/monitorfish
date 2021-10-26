@@ -185,7 +185,7 @@ const VesselsLayer = ({ map }) => {
 
     const vesselIds = Object.keys(vesselsTracksShowed)
     vesselsFeatures
-      .filter(feature => vesselIds?.findIndex(identity => feature?.getId()?.toString().includes(identity)) !== NOT_FOUND)
+      .filter(feature => vesselIds?.findIndex(identity => feature?.getId()?.toString()?.includes(identity)) !== NOT_FOUND)
       .forEach(feature => feature.set(Vessel.isSelectedProperty, true))
   }
 

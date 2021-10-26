@@ -70,21 +70,20 @@ def concatenate_columns(df: pd.DataFrame, input_col_names: List) -> pd.Series:
     return res
 
 
-def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd.Series:
-    """Combines several columns into one by taking the first_valid_value in each row,
-    in the order of the ordered_cols_list.
+def coalesce(df: pd.DataFrame) -> pd.Series:
+    """Combines the input DataFrame's columns into one by taking the non null value in
+    each row, in the order of the DataFrame's columns from left to right.
 
     Returns a pandas Series with the combined results.
 
     Args:
         df (pd.DataFrame): input pandas DataFrame
-        ordered_cols_list (List): list of column names
 
     Returns:
-        pd.Series: Series containing the first valid value in each row of the DataFrame,
-            taken in the ordered_cols_list columns.
+        pd.Series: Series containing the first non null value in each row of the
+          DataFrame, taken in order of the DataFrame's columns from left to right.
     """
-    non_null_rows = df[ordered_cols_list].dropna(how="all")
+    non_null_rows = df.dropna(how="all")
     first_non_null_values_idx = np.argmax(non_null_rows.notnull().values, axis=1)
 
     res_values = np.choose(first_non_null_values_idx, non_null_rows.values.T)
@@ -448,9 +447,7 @@ def join_on_multiple_keys(
 
             cols_to_coalesce = [f"{non_joining_key}_left", f"{non_joining_key}_right"]
 
-            join[non_joining_key] = combine_overlapping_columns(
-                join[cols_to_coalesce], cols_to_coalesce
-            )
+            join[non_joining_key] = coalesce(join[cols_to_coalesce])
 
             join = join.drop(columns=cols_to_coalesce)
 

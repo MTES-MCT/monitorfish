@@ -16,7 +16,7 @@ const UpcommingRegulationSection = ({ upcomingRegulation }) => {
         <YellowRectangle />
         <UpcomingRegulation>
           <Row><InfoBox /> <GrayText >Réglementation à venir</ GrayText></Row>
-          {upcomingRegulation?.regulatoryTextList?.length > 0 && upcomingRegulation.regulatoryTextList.map((upcomingRegulationText, id) => {
+          {upcomingRegulation?.regulatoryTextList?.length > 0 && upcomingRegulation?.regulatoryTextList?.map((upcomingRegulationText, id) => {
             const {
               reference,
               url,

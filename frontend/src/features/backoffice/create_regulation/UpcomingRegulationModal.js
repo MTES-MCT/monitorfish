@@ -24,7 +24,7 @@ const UpcomingRegulationModal = () => {
     saveOrUpdateRegulation
   } = useSelector(state => state.regulation)
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation.regulatoryTextList)
+  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList || [{}])
 
   const onAddUpcomingRegulation = () => {
     dispatch(setSaveOrUpdateRegulation(true))

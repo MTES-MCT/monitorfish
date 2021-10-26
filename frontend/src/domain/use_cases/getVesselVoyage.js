@@ -1,10 +1,7 @@
 import { getVesselVoyageFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
+import { loading, resetLoadingVessel } from '../shared_slices/Vessel'
 import {
-  resetLoadingVessel
-} from '../shared_slices/Vessel'
-import {
-  loadingFisheriesActivities,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage,
@@ -38,7 +35,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     }
 
     if (!fromCron) {
-      dispatch(loadingFisheriesActivities())
+      dispatch(loading())
     }
 
     getVesselVoyageFromAPI(vesselIdentity, navigateTo, tripNumber).then(voyage => {

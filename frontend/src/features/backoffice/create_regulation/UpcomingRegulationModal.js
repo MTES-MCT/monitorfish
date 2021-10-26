@@ -5,7 +5,9 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
-  setUpcomingRegulatoryTextListCheckedMap
+  setUpcomingRegulatoryTextListCheckedMap,
+  setSaveOrUpdateRegulation,
+  setUpcomingRegulation
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -17,32 +19,35 @@ const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    upcomingRegulation,
-    upcomingRegulatoryTextCheckedMap
+    upcomingRegulation = { regulatoryTextList: [{}] },
+    upcomingRegulatoryTextCheckedMap,
+    saveOrUpdateRegulation
   } = useSelector(state => state.regulation)
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
-    ? [...upcomingRegulation.regulatoryTextList]
-    : [{}])
+  const [regulatoryTextList] = useState(upcomingRegulation.regulatoryTextList)
 
-  const [saveForm, setSaveForm] = useState(false)
+  const setRegulatoryTextList = (list) => {
+    const newUpcomingRegulation = { ...upcomingRegulation }
+    newUpcomingRegulation.regulatoryTextList = list
+    dispatch(setUpcomingRegulation(newUpcomingRegulation))
+  }
 
   const onAddUpcomingRegulation = () => {
-    setSaveForm(true)
+    dispatch(setSaveOrUpdateRegulation(true))
   }
 
   useEffect(() => {
     if (upcomingRegulatoryTextCheckedMap) {
       const values = Object.values(upcomingRegulatoryTextCheckedMap)
-      if (saveForm && values.length > 0 && values.length === regulatoryTextList.length) {
-        if (!values.includes(null)) {
+      if (saveOrUpdateRegulation && values.length > 0 && values.length === regulatoryTextList.length) {
+        if (!values.includes(false)) {
           dispatch(setIsModalOpen(false))
         }
         dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
-        setSaveForm(false)
+        dispatch(setSaveOrUpdateRegulation(false))
       }
     }
-  }, [saveForm, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
+  }, [saveOrUpdateRegulation, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
@@ -56,7 +61,6 @@ const UpcomingRegulationModal = () => {
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
             source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}
-            saveForm={saveForm}
           />
         </Section>
       </Body>

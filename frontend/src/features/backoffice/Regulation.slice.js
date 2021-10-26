@@ -50,15 +50,10 @@ const regulationSlice = createSlice({
         /** @type {number} */
         id
       } = action.payload
-      let newUpcomingRegulatoryTextCheckedMap = {}
-      if (state.upcomingRegulatoryTextCheckedMap) {
-        newUpcomingRegulatoryTextCheckedMap = { ...state.upcomingRegulatoryTextCheckedMap }
-      }
-      if (regulatoryText !== false) {
+      const newUpcomingRegulatoryTextCheckedMap = { ...(state.upcomingRegulatoryTextCheckedMap || {}) }
+      if (regulatoryText !== null) {
         newUpcomingRegulatoryTextCheckedMap[id] = true
-        const newUpcomingRegulation = state.upcomingRegulation
-          ? { ...state.upcomingRegulation }
-          : { regulatoryTextList: [{}] }
+        const newUpcomingRegulation = { ...(state.upcomingRegulation || { regulatoryTextList: [{}] }) }
         const newRegulatoryTextList = [...newUpcomingRegulation.regulatoryTextList]
         newRegulatoryTextList[id] = { ...regulatoryText }
         newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList

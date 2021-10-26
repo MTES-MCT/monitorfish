@@ -138,8 +138,6 @@ const RegulatoryText = props => {
   }
 
   useEffect(() => {
-    // console.log(`RegulatoryText useEffect saveForm: ${saveOrUpdateRegulation}`)
-    // console.log(`RegulatoryText useEffect source: ${source}`)
     if (saveOrUpdateRegulation && Object.values(REGULATORY_TEXT_SOURCE).includes(source)) {
       const payload = { id: id, source: source }
       if (!checkOtherRequiredValues() && !checkNameAndUrl()) {

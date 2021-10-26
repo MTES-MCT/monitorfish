@@ -20,7 +20,6 @@ const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
     source,
-    saveForm,
     setRegulatoryTextList
   } = props
 
@@ -66,7 +65,6 @@ const RegulatoryTextSection = props => {
               id={id}
               regulatoryText={regulatoryText}
               addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-              saveForm={saveForm}
               source={source}
               listLength={regulatoryTextList.length}
             />
@@ -76,7 +74,6 @@ const RegulatoryTextSection = props => {
             id={0}
             regulatoryText={{}}
             addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-            saveForm={saveForm}
             source={source}
             listLength={0}
         />

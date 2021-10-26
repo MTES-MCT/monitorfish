@@ -49,7 +49,9 @@ const vesselSlice = createSlice({
       afterDateTime: null,
       beforeDateTime: null
     },
-    vesselTrackExtent: null
+    vesselTrackExtent: null,
+    /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
+    fishingActivitiesShowedOnMap: []
   },
   reducers: {
     setVessels (state, action) {
@@ -326,6 +328,56 @@ const vesselSlice = createSlice({
      */
     resetVesselTrackExtent (state) {
       state.vesselTrackExtent = null
+    },
+    /**
+     * Show a single fishing activity on the vessel track, on the map
+     * @function showFishingActivityOnMap
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - The fishing activity id to show
+     */
+    showFishingActivityOnMap (state, action) {
+      const fishingActivityToShow = state.fishingActivities.ersMessages
+        .find(fishingActivity => fishingActivity.operationNumber === action.payload)
+
+      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.concat({
+        id: fishingActivityToShow.operationNumber,
+        date: getEffectiveDateTimeFromMessage(fishingActivityToShow),
+        name: fishingActivityToShow.messageType,
+        isDeleted: fishingActivityToShow.deleted,
+        isNotAcknowledged: !fishingActivityToShow.acknowledge?.isSuccess
+      })
+    },
+    /**
+     * Hide fishing activities of the vessel track
+     * @function showFishingActivitiesOnMap
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     */
+    hideFishingActivitiesOnMap (state) {
+      state.fishingActivitiesShowedOnMap = []
+    },
+    /**
+     * Update coordinates of showed fishing activities
+     * @function updateFishingActivitiesOnMapCoordinates
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: {
+     *   id: string,
+     *   coordinates: string[]
+     * }[]}} action - The fishing activities to update
+     */
+    updateFishingActivitiesOnMapCoordinates (state, action) {
+      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.map(fishingActivity => {
+        const fishingActivityWithCoordinates = action.payload
+          .find(fishingActivityToUpdate => fishingActivityToUpdate.id === fishingActivity.id)
+
+        if (fishingActivityWithCoordinates) {
+          return { ...fishingActivity, coordinates: fishingActivityWithCoordinates.coordinates }
+        }
+
+        return fishingActivity
+      })
     }
   }
 })

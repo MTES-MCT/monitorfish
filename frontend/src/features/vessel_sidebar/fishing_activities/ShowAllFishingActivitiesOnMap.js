@@ -9,7 +9,10 @@ import { hideFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../../..
 const ShowAllFishingActivitiesOnMap = props => {
   const dispatch = useDispatch()
   const { healthcheckTextWarning } = useSelector(state => state.global)
-  const { fishingActivitiesShowedOnMap } = useSelector(state => state.vessel)
+  const {
+    /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
+    fishingActivitiesShowedOnMap
+  } = useSelector(state => state.vessel)
 
   useEffect(() => {
     if (!props.openBox) {

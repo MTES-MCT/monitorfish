@@ -15,18 +15,21 @@ import {
 } from '../domain/shared_slices/Vessel'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
-import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
+import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
+import { setError } from '../domain/shared_slices/Global'
 
 const VesselsTracksLayer = ({ map }) => {
   const {
     selectedVessel,
     highlightedVesselTrackPosition,
     vesselsTracksShowed,
+    /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap
   } = useSelector(state => state.vessel)
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
+  /** @type {FishingActivityShowedOnMap[]} previousFishingActivitiesShowedOnMap */
   const previousFishingActivitiesShowedOnMap = usePrevious(fishingActivitiesShowedOnMap)
   const previousSelectedVessel = usePrevious(selectedVessel)
 
@@ -94,6 +97,7 @@ const VesselsTracksLayer = ({ map }) => {
       const lines = vectorSource.getFeatures()
         .filter(feature => feature.getId().includes(`${Layers.VESSEL_TRACK.code}:line`))
 
+      let someMessagesCouldNotBeSeenOnTrack = false
       const coordinatesFeaturesAndIds = fishingActivitiesShowedOnMap.map(fishingActivity => {
         const fishingActivityDateTimestamp = new Date(fishingActivity.date).getTime()
 
@@ -107,7 +111,6 @@ const VesselsTracksLayer = ({ map }) => {
           const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
 
           const coordinates = foundVesselLine.getGeometry().getCoordinateAt(distanceFraction)
-          console.log(coordinates)
           const featureToAdd = new Feature({
             geometry: new Point(coordinates)
           })
@@ -121,10 +124,14 @@ const VesselsTracksLayer = ({ map }) => {
             feature: featureToAdd
           }
         } else {
-          console.log(`Nous n'avons pas pu placer le message ${fishingActivity.name} sur la piste du navire.`)
+          someMessagesCouldNotBeSeenOnTrack = true
           return null
         }
       }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
+
+      if (someMessagesCouldNotBeSeenOnTrack) {
+        dispatch(setError(new Error('Certain messages n\'ont pas pu être placés sur la piste affichée')))
+      }
 
       vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
       vectorSource.changed()
@@ -249,9 +256,12 @@ const VesselsTracksLayer = ({ map }) => {
           .map(fishingActivity => {
             return <FishingActivityOverlay
               key={fishingActivity.id}
+              id={fishingActivity.id}
               map={map}
               name={fishingActivity.name}
               coordinates={fishingActivity.coordinates}
+              isDeleted={fishingActivity.isDeleted}
+              isNotAcknowledged={fishingActivity.isNotAcknowledged}
             />
           })
       }

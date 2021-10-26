@@ -1,3 +1,4 @@
+import io
 import pickle
 from dataclasses import dataclass
 from typing import List, Set, Tuple
@@ -5,12 +6,15 @@ from typing import List, Set, Tuple
 import h3
 import numpy as np
 import pandas as pd
+import prefect
+import requests
 from prefect import Flow, Parameter, task
 from sqlalchemy import text
 from vptree import VPTree
 
-from config import ROOT_DIRECTORY
+from config import ANCHORAGES_URL, PROXIES, ROOT_DIRECTORY
 from src.db_config import create_engine
+from src.pipeline.generic_tasks import load
 from src.pipeline.helpers.spatial import (
     Position,
     get_h3_indices,
@@ -20,6 +24,10 @@ from src.pipeline.helpers.spatial import (
 from src.pipeline.utils import psql_insert_copy
 from src.read_query import read_query
 from src.utils.database import print_schemas_tables
+
+#######################################################################################
+####################################### HELPERS #######################################
+#######################################################################################
 
 
 @dataclass
@@ -62,6 +70,13 @@ class PortsVPTree(VPTree):
             "nearest_port_distance": nearest_port_distance,
             "nearest_port_locode": nearest_port_location.locode,
         }
+
+
+#######################################################################################
+################################### TASKS AND FLOWS ###################################
+#######################################################################################
+
+############### Flow to compute anchorages and attribute cells to ports ###############
 
 
 @task(checkpoint=False)
@@ -362,7 +377,7 @@ def get_active_ports(
 
 
 @task(checkpoint=False)
-def merge(
+def merge_closest_port_closest_active_port(
     anchorages_closest_port: pd.DataFrame, anchorages_closest_active_port: pd.DataFrame
 ) -> pd.DataFrame:
     """
@@ -386,7 +401,7 @@ def merge(
 
 
 @task(checkpoint=False)
-def load_anchorages(anchorages: pd.DataFrame):
+def load_processed_anchorages(anchorages: pd.DataFrame):
     """
     Load anchorages to processed.anchorages
     """
@@ -403,7 +418,7 @@ def load_anchorages(anchorages: pd.DataFrame):
     )
 
 
-with Flow("Anchorages") as flow:
+with Flow("Anchorages") as flow_compute_anchorages:
 
     h3_resolution = Parameter("h3_resolution", 9)
     number_signals_threshold = Parameter("number_signals_threshold", 100)
@@ -413,14 +428,14 @@ with Flow("Anchorages") as flow:
         / "data/raw/anchorages/static_vms_positions_2021_03_to_10.parquet",
     )
 
-    ##################################### Extract #####################################
+    # Extract
     ais_anchorage_coordinates = extract_ais_anchorage_coordinates()
     vms_static_positions = extract_vms_static_positions(static_vms_positions_file_path)
     ports = extract_ports()
     ers_ports_locodes = extract_ers_ports_locodes()
     control_ports_locodes = extract_control_ports_locodes()
 
-    #################################### Transform ####################################
+    # Transform
     ais_anchorage_h3_cells = get_ais_anchorage_h3_cells(
         ais_anchorage_coordinates, h3_resolution=h3_resolution
     )
@@ -449,7 +464,71 @@ with Flow("Anchorages") as flow:
         anchorage_h3_cells_rings, active_ports_locations
     )
 
-    anchorages = merge(anchorages_closest_port, anchorages_closest_active_port)
+    anchorages = merge_closest_port_closest_active_port(
+        anchorages_closest_port, anchorages_closest_active_port
+    )
 
-    ####################################### Load ######################################
-    load_anchorages(anchorages)
+    # Load
+    load_processed_anchorages(anchorages)
+
+
+### Flow to extract anchorages from data.gouv.fr and upload to Monitorfish database ###
+
+
+@task(checkpoint=False)
+def extract_datagouv_anchorages(anchorages_url: str, proxies: dict) -> pd.DataFrame:
+    """
+    Downloads anchorages csv file, returns the result as a pandas DataFrame.
+
+    Args:
+        anchorages_url (str): url to download the data from.
+        proxies (dict): dict with http_proxy and https_proxy settings to use for the
+          download
+
+    Returns:
+        pd.DataFrame: anchorages data
+    """
+    r = requests.get(anchorages_url, proxies=proxies)
+    r.encoding = "utf8"
+    f = io.StringIO(r.text)
+
+    dtype = {
+        "h3": str,
+        "ring_number": int,
+        "cell_latitude": float,
+        "cell_longitude": float,
+        "nearest_port_distance": float,
+        "nearest_port_locode": str,
+        "nearest_active_port_distance": float,
+        "nearest_active_port_locode": str,
+    }
+
+    anchorages = pd.read_csv(f, dtype=dtype)
+
+    return anchorages
+
+
+@task(checkpoint=False)
+def load_anchorages_to_monitorfish(anchorages: pd.DataFrame):
+    """
+    Loads anchorages data to monitorfish database.
+
+    Args:
+        anchorages (pd.DataFrame): anchorages data
+    """
+
+    load(
+        anchorages,
+        table_name="anchorages",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+with Flow("Anchorages") as flow:
+    anchorages = extract_datagouv_anchorages(
+        anchorages_url=ANCHORAGES_URL, proxies=PROXIES
+    )
+    load_anchorages_to_monitorfish(anchorages)

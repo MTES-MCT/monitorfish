@@ -91,11 +91,15 @@ const VesselsTracksLayer = ({ map }) => {
 
       vectorSource
         .getFeatures()
-        .filter(feature => feature.getId().includes(`${Layers.VESSEL_TRACK.code}:ers`))
+        .filter(feature =>
+          feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+          feature?.getId()?.toString()?.includes('ers'))
         .forEach(feature => vectorSource.removeFeature(feature))
 
       const lines = vectorSource.getFeatures()
-        .filter(feature => feature.getId().includes(`${Layers.VESSEL_TRACK.code}:line`))
+        .filter(feature =>
+          feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+          feature?.getId()?.toString()?.includes('line'))
 
       let someMessagesCouldNotBeSeenOnTrack = false
       const coordinatesFeaturesAndIds = fishingActivitiesShowedOnMap.map(fishingActivity => {

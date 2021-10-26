@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ReactComponent as ShowFishingActivitiesSVG } from '../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
-import { hideFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../../../domain/shared_slices/Vessel'
+import { hideFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../../../domain/shared_slices/FishingActivities'
 
 const ShowAllFishingActivitiesOnMap = props => {
   const dispatch = useDispatch()
@@ -12,7 +12,7 @@ const ShowAllFishingActivitiesOnMap = props => {
   const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap
-  } = useSelector(state => state.vessel)
+  } = useSelector(state => state.fishingActivities)
 
   useEffect(() => {
     if (!props.openBox) {

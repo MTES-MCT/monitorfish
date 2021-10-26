@@ -9,10 +9,13 @@ import { getCircleStyle, getFishingActivityCircleStyle } from './styles/vesselTr
 import { animateToCoordinates } from '../domain/shared_slices/Map'
 import { usePrevious } from '../hooks/usePrevious'
 import {
-  setVesselTrackExtent,
   updateVesselTrackAsHidden,
+  setVesselTrackExtent,
   updateVesselTrackAsShowed
 } from '../domain/shared_slices/Vessel'
+import {
+  updateFishingActivitiesOnMapCoordinates
+} from '../domain/shared_slices/FishingActivities'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
 import { Feature } from 'ol'
@@ -24,10 +27,12 @@ const VesselsTracksLayer = ({ map }) => {
   const {
     selectedVessel,
     highlightedVesselTrackPosition,
-    vesselsTracksShowed,
+    vesselsTracksShowed
+  } = useSelector(state => state.vessel)
+  const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap
-  } = useSelector(state => state.vessel)
+  } = useSelector(state => state.fishingActivities)
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
   /** @type {FishingActivityShowedOnMap[]} previousFishingActivitiesShowedOnMap */
   const previousFishingActivitiesShowedOnMap = usePrevious(fishingActivitiesShowedOnMap)

@@ -1,4 +1,5 @@
-import { closeVesselSidebar, hideFishingActivitiesOnMap } from '../shared_slices/Vessel'
+import { closeVesselSidebar } from '../shared_slices/Vessel'
+import { hideFishingActivitiesOnMap } from '../shared_slices/FishingActivities'
 import { Vessel } from '../entities/vessel'
 
 const unselectVessel = () => (dispatch, getState) => {

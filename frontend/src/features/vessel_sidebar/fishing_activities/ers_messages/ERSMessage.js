@@ -9,14 +9,14 @@ import { ReactComponent as ShowActivitySVG } from '../../../icons/Position_messa
 import { ReactComponent as HideActivitySVG } from '../../../icons/Position_message_JPE_Pin_masquer.svg'
 import { getDateTime } from '../../../../utils'
 import { useDispatch, useSelector } from 'react-redux'
-import { hideFishingActivityOnMap, showFishingActivityOnMap } from '../../../../domain/shared_slices/Vessel'
+import { hideFishingActivityOnMap, showFishingActivityOnMap } from '../../../../domain/shared_slices/FishingActivities'
 
 const ERSMessage = ({ message, isFirst }) => {
   const dispatch = useDispatch()
   const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap
-  } = useSelector(state => state.vessel)
+  } = useSelector(state => state.fishingActivities)
 
   const ersMessageHeaderTitle = useMemo(() => {
     if (message) {

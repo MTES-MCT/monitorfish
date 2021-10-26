@@ -19,6 +19,7 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { VesselSidebarTab } from '../../domain/entities/vessel'
 import HideOtherVessels from './actions/hide_other_vessels/HideOtherVessels'
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
+import ShowAllFishingActivitiesOnMap from './fishing_activities/ShowAllFishingActivitiesOnMap'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -67,6 +68,10 @@ const VesselSidebar = () => {
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <HideOtherVessels
+        openBox={openSidebar}
+        rightMenuIsOpen={rightMenuIsOpen}
+      />
+      <ShowAllFishingActivitiesOnMap
         openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />

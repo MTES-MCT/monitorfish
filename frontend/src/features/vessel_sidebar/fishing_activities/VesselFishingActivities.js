@@ -4,17 +4,12 @@ import styled from 'styled-components'
 import FishingActivitiesSummary from './FishingActivitiesSummary'
 import ERSMessages from './ers_messages/ERSMessages'
 import { COLORS } from '../../../constants/constants'
-import { resetNextFishingActivities, setVoyage } from '../../../domain/shared_slices/Vessel'
+import { resetNextFishingActivities, setFishingActivitiesTab, setVoyage } from '../../../domain/shared_slices/Vessel'
 import { useDispatch, useSelector } from 'react-redux'
 import getVesselVoyage, { NAVIGATE_TO } from '../../../domain/use_cases/getVesselVoyage'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { usePrevious } from '../../../hooks/usePrevious'
-import { vesselsAreEquals } from '../../../domain/entities/vessel'
-
-const FishingActivitiesTab = {
-  SUMMARY: 1,
-  MESSAGES: 2
-}
+import { FishingActivitiesTab, vesselsAreEquals } from '../../../domain/entities/vessel'
 
 const VesselFishingActivities = () => {
   const dispatch = useDispatch()
@@ -23,11 +18,11 @@ const VesselFishingActivities = () => {
     selectedVessel,
     loadingVessel,
     fishingActivities,
-    nextFishingActivities
+    nextFishingActivities,
+    fishingActivitiesTab
   } = useSelector(state => state.vessel)
 
   const previousSelectedVessel = usePrevious(selectedVessel)
-  const [fishingActivitiesTab, setFishingActivitiesTab] = useState(FishingActivitiesTab.SUMMARY)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
 
   const showMessages = messageType => {
@@ -36,11 +31,11 @@ const VesselFishingActivities = () => {
     } else {
       setMessageTypeFilter(null)
     }
-    setFishingActivitiesTab(FishingActivitiesTab.MESSAGES)
+    dispatch(setFishingActivitiesTab(FishingActivitiesTab.MESSAGES))
   }
 
   const showSummary = () => {
-    setFishingActivitiesTab(FishingActivitiesTab.SUMMARY)
+    dispatch(setFishingActivitiesTab(FishingActivitiesTab.SUMMARY))
   }
 
   useEffect(() => {

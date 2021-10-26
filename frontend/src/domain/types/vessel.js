@@ -188,3 +188,10 @@
  * @property {boolean} toShow
  * @property {boolean} toHide
  */
+
+/**
+ * @typedef FishingActivityShowedOnMap
+ * @property {string} id - The operation number for ERS
+ * @property {Date} date - The effective date of message
+ * @property {string} name - The message name
+ */

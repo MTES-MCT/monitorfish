@@ -1,11 +1,11 @@
 /* eslint-disable */
-import { VesselSidebarTab } from '../entities/vessel'
+import { FishingActivitiesTab, VesselSidebarTab } from '../entities/vessel'
+import { createSlice } from '@reduxjs/toolkit'
+import { getEffectiveDateTimeFromMessage } from '../entities/fishingActivities'
 
 /** @namespace VesselReducer */
 const VesselReducer = null
 /* eslint-disable */
-
-import { createSlice } from '@reduxjs/toolkit'
 
 const vesselSlice = createSlice({
   name: 'vessel',
@@ -28,6 +28,7 @@ const vesselSlice = createSlice({
     loadingVessel: null,
     vesselSidebarIsOpen: false,
     vesselSidebarTab: VesselSidebarTab.SUMMARY,
+    fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
     isFocusedOnVesselSearch: false,
     /** @type {FishingActivities} fishingActivities */
     fishingActivities: {},
@@ -222,10 +223,20 @@ const vesselSlice = createSlice({
      * @function showVesselSidebarTab
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: VesselSidebarTab}} action - The tab
+     * @param {{payload: number}} action - The tab (VesselSidebarTab)
      */
     showVesselSidebarTab (state, action) {
       state.vesselSidebarTab = action.payload
+    },
+    /**
+     * Show the specified fishing activities tab (Resume or All messages)
+     * @function setFishingActivitiesTab
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: number}} action - The tab
+     */
+    setFishingActivitiesTab (state, action) {
+      state.fishingActivitiesTab = action.payload
     },
     /**
      * Set the date since controls are fetched
@@ -351,9 +362,9 @@ export const {
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,
+  setFishingActivitiesTab,
   setControlFromDate,
   setVesselsSpeciesAndDistricts,
-  setHideOtherVessels,
   addVesselTrackShowed,
   updateVesselTrackAsShowed,
   updateVesselTrackAsToHide,

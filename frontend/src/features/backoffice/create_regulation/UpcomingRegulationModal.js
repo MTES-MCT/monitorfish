@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
   setUpcomingRegulatoryTextListCheckedMap,
-  setSaveOrUpdateRegulation
+  setSaveOrUpdateRegulation,
+  setUpcomingRegulation
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -30,14 +31,22 @@ const UpcomingRegulationModal = () => {
   }
 
   useEffect(() => {
-    if (upcomingRegulatoryTextCheckedMap) {
+    if (upcomingRegulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const values = Object.values(upcomingRegulatoryTextCheckedMap)
-      if (saveOrUpdateRegulation && values.length > 0 && values.length === regulatoryTextList.length) {
-        if (!values.includes(false)) {
-          dispatch(setIsModalOpen(false))
+      if (values.length > 0 && values.length === regulatoryTextList.length) {
+        if (!values.includes(null)) {
+          const newUpcomingRegulation = { ...(upcomingRegulation || { regulatoryTextList: [{}] }) }
+          const newRegulatoryTextList = [...values]
+          newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
+          batch(() => {
+            dispatch(setUpcomingRegulation(newUpcomingRegulation))
+            dispatch(setIsModalOpen(false))
+          })
         }
-        dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
-        dispatch(setSaveOrUpdateRegulation(false))
+        batch(() => {
+          dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
+          dispatch(setSaveOrUpdateRegulation(false))
+        })
       }
     }
   }, [saveOrUpdateRegulation, upcomingRegulatoryTextCheckedMap, regulatoryTextList])

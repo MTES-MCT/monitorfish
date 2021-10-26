@@ -112,7 +112,6 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const history = useHistory()
   useEffect(() => {
-    // console.log(`regulationSave ${regulationSaved}`)
     if (regulationSaved) {
       history.push('/backoffice')
       dispatch(resetState())
@@ -176,7 +175,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     setNameZone(zone)
     setSelectedRegionList(region ? region.split(', ') : [])
     setSelectedSeaFront(seafront)
-    setRegulatoryTextList(regulatoryReferences || [{}])
+    setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [{}])
     setSelectedGeometry(id)
     originalGeometryId = regulatoryZoneMetadata.id
     dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
@@ -224,7 +223,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   const createOrUpdateRegulation = (featureObject) => {
-    // console.log('createOrUpdateRegulation')
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
     const actionType = isEdition ? REGULATION_ACTION_TYPE.UPDATE : REGULATION_ACTION_TYPE.INSERT

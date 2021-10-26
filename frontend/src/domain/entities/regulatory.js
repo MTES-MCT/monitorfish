@@ -6,7 +6,7 @@ export const mapToRegulatoryZone = properties => {
     topic: properties.layer_name,
     prohibitedGears: properties.engins_interdits,
     gears: properties.engins,
-    zone: properties.zones,
+    zone: decodeURI(properties.zones),
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
     regulatoryReferences: properties.references_reglementaires,

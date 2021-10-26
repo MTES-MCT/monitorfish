@@ -6,8 +6,7 @@ import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
   setUpcomingRegulatoryTextListCheckedMap,
-  setSaveOrUpdateRegulation,
-  setUpcomingRegulation
+  setSaveOrUpdateRegulation
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -24,13 +23,7 @@ const UpcomingRegulationModal = () => {
     saveOrUpdateRegulation
   } = useSelector(state => state.regulation)
 
-  const [regulatoryTextList] = useState(upcomingRegulation.regulatoryTextList)
-
-  const setRegulatoryTextList = (list) => {
-    const newUpcomingRegulation = { ...upcomingRegulation }
-    newUpcomingRegulation.regulatoryTextList = list
-    dispatch(setUpcomingRegulation(newUpcomingRegulation))
-  }
+  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation.regulatoryTextList)
 
   const onAddUpcomingRegulation = () => {
     dispatch(setSaveOrUpdateRegulation(true))

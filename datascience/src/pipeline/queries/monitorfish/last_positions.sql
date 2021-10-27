@@ -62,6 +62,7 @@ emission_periods AS (
 )
 
 SELECT
+    pos.id AS position_id,
     pos.internal_reference_number AS cfr,
     pos.external_reference_number AS external_immatriculation,
     vessels.mmsi,

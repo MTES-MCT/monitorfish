@@ -20,7 +20,8 @@ const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
     source,
-    setRegulatoryTextList
+    setRegulatoryTextList,
+    saveForm
   } = props
 
   const { upcomingRegulation } = useSelector(state => state.regulation)
@@ -67,6 +68,7 @@ const RegulatoryTextSection = props => {
               addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
               source={source}
               listLength={regulatoryTextList.length}
+              saveForm={saveForm}
             />
         })
         : <RegulatoryText
@@ -76,6 +78,7 @@ const RegulatoryTextSection = props => {
             addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
             source={source}
             listLength={0}
+            saveForm={saveForm}
         />
     }
     <ButtonLine>

@@ -1,4 +1,8 @@
 import { ERSMessageType as ERSMessageTypeEnum, ERSOperationType } from './ERS'
+import { Feature } from 'ol'
+import Point from 'ol/geom/Point'
+import { getFishingActivityCircleStyle } from '../../layers/styles/vesselTrack.style'
+import Layers from './layers'
 
 export const getDEPMessageFromMessages = ersMessages => ersMessages
   .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
@@ -209,5 +213,25 @@ export const getEffectiveDateTimeFromMessage = message => {
       ? message.operationDateTime
       : message.message.predictedArrivalDatetimeUtc
     default: return message.operationDateTime
+  }
+}
+
+export const getFishingActivityFeatureOnTrackLine = (fishingActivity, lineOfFishingActivity, fishingActivityDateTimestamp) => {
+  const totalDistance = new Date(lineOfFishingActivity.secondPositionDate).getTime() - new Date(lineOfFishingActivity.firstPositionDate).getTime()
+  const fishingActivityDistanceFromFirstPoint = fishingActivityDateTimestamp - new Date(lineOfFishingActivity.firstPositionDate).getTime()
+  const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
+
+  const coordinates = lineOfFishingActivity.getGeometry().getCoordinateAt(distanceFraction)
+  const feature = new Feature({
+    geometry: new Point(coordinates)
+  })
+  feature.name = fishingActivity.name
+  feature.setStyle(getFishingActivityCircleStyle())
+  feature.setId(`${Layers.VESSEL_TRACK.code}:ers:${fishingActivityDateTimestamp}`)
+
+  return {
+    feature,
+    coordinates,
+    id: fishingActivity.id
   }
 }

@@ -93,7 +93,7 @@ const ZoneSelected = styled.span`
   color: ${COLORS.gainsboro};
   margin-left: 0;
   font-size: 14px;
-  padding: 0 5px 1px 6px;
+  padding: 0 6px 1px 6px;
   vertical-align: top;
   height: 22px;
   display: inline-block;

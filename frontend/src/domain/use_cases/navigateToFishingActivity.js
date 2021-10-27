@@ -11,22 +11,30 @@ const navigateToFishingActivity = id => (dispatch, getState) => {
     fishingActivitiesTab
   } = getState().fishingActivities
 
-  let domElementsAlreadyAvailable = true
   if (vesselSidebarTab !== VesselSidebarTab.VOYAGES) {
-    domElementsAlreadyAvailable = false
     dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))
   }
   if (fishingActivitiesTab !== FishingActivitiesTab.MESSAGES) {
-    domElementsAlreadyAvailable = false
     dispatch(setFishingActivitiesTab(FishingActivitiesTab.MESSAGES))
   }
 
-  setTimeout(() => {
+  const element = document.getElementById(id)
+  if (element) {
+    scrollTo(element)
+    return
+  }
+
+  const interval = setInterval(() => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      scrollTo(element)
+      clearInterval(interval)
     }
-  }, domElementsAlreadyAvailable ? 0 : 500)
+  }, 100)
+}
+
+function scrollTo (element) {
+  element.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 export default navigateToFishingActivity

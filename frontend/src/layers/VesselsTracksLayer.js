@@ -5,7 +5,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
-import { getCircleStyle, getFishingActivityCircleStyle } from './styles/vesselTrack.style'
+import { getCircleStyle } from './styles/vesselTrack.style'
 import { animateToCoordinates } from '../domain/shared_slices/Map'
 import { usePrevious } from '../hooks/usePrevious'
 import {
@@ -18,10 +18,9 @@ import {
 } from '../domain/shared_slices/FishingActivities'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
-import { Feature } from 'ol'
-import Point from 'ol/geom/Point'
 import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
 import { setError } from '../domain/shared_slices/Global'
+import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/fishingActivities'
 
 const VesselsTracksLayer = ({ map }) => {
   const {
@@ -89,69 +88,70 @@ const VesselsTracksLayer = ({ map }) => {
   }, [highlightedVesselTrackPosition, previousHighlightedVesselTrackPosition])
 
   useEffect(() => {
-    if (fishingActivitiesShowedOnMap?.length) {
-      if (fishingActivitiesShowedOnMap?.length === previousFishingActivitiesShowedOnMap?.length) {
-        return
-      }
-
-      vectorSource
-        .getFeatures()
-        .filter(feature =>
-          feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
-          feature?.getId()?.toString()?.includes('ers'))
-        .forEach(feature => vectorSource.removeFeature(feature))
-
-      const lines = vectorSource.getFeatures()
-        .filter(feature =>
-          feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
-          feature?.getId()?.toString()?.includes('line'))
-
-      let someMessagesCouldNotBeSeenOnTrack = false
-      const coordinatesFeaturesAndIds = fishingActivitiesShowedOnMap.map(fishingActivity => {
-        const fishingActivityDateTimestamp = new Date(fishingActivity.date).getTime()
-
-        const foundVesselLine = lines.find(line =>
-          fishingActivityDateTimestamp > new Date(line.firstPositionDate).getTime() &&
-          fishingActivityDateTimestamp < new Date(line.secondPositionDate).getTime())
-
-        if (foundVesselLine) {
-          const totalDistance = new Date(foundVesselLine.secondPositionDate).getTime() - new Date(foundVesselLine.firstPositionDate).getTime()
-          const fishingActivityDistanceFromFirstPoint = fishingActivityDateTimestamp - new Date(foundVesselLine.firstPositionDate).getTime()
-          const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
-
-          const coordinates = foundVesselLine.getGeometry().getCoordinateAt(distanceFraction)
-          const featureToAdd = new Feature({
-            geometry: new Point(coordinates)
-          })
-          featureToAdd.name = fishingActivity.name
-          featureToAdd.setStyle(getFishingActivityCircleStyle())
-          featureToAdd.setId(`${Layers.VESSEL_TRACK.code}:ers:${fishingActivityDateTimestamp}`)
-
-          return {
-            id: fishingActivity.id,
-            coordinates,
-            feature: featureToAdd
-          }
-        } else {
-          someMessagesCouldNotBeSeenOnTrack = true
-          return null
-        }
-      }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
-
-      if (someMessagesCouldNotBeSeenOnTrack) {
-        dispatch(setError(new Error('Certain messages n\'ont pas pu être placés sur la piste affichée')))
-      }
-
-      vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
-      vectorSource.changed()
-      dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
-    } else {
-      vectorSource
-        .getFeatures()
-        .filter(feature => feature.getId().includes(`${Layers.VESSEL_TRACK.code}:ers`))
-        .forEach(feature => vectorSource.removeFeature(feature))
-    }
+    showFishingActivities()
   }, [fishingActivitiesShowedOnMap])
+
+  function showFishingActivities () {
+    if (!fishingActivitiesShowedOnMap?.length) {
+      removeFishingActivitiesFeatures()
+      return
+    }
+
+    let noAddedOrRemovedFishingActivities = fishingActivitiesShowedOnMap?.length === previousFishingActivitiesShowedOnMap?.length
+    if (noAddedOrRemovedFishingActivities) {
+      return
+    }
+
+    const lines = getVesselTrackLines()
+    let someMessagesCouldNotBeSeenOnTrack = false
+    const coordinatesFeaturesAndIds = fishingActivitiesShowedOnMap.map(fishingActivity => {
+      const fishingActivityDateTimestamp = new Date(fishingActivity.date).getTime()
+
+      const lineOfFishingActivity = lines
+        .find(line => fishingActivityIsWithinTrackLineDates(fishingActivityDateTimestamp, line))
+
+      if (lineOfFishingActivity) {
+        return getFishingActivityFeatureOnTrackLine(fishingActivity, lineOfFishingActivity, fishingActivityDateTimestamp)
+      }
+
+      someMessagesCouldNotBeSeenOnTrack = true
+      return null
+    }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
+
+    if (someMessagesCouldNotBeSeenOnTrack) {
+      dispatch(setError(new Error('Certain messages n\'ont pas pu être placés sur la piste selectionnée. ' +
+        'Changez la date des positions affichées pour voir tous les messages.')))
+    }
+
+    removeFishingActivitiesFeatures()
+    vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
+    vectorSource.changed()
+    dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
+    if (coordinatesFeaturesAndIds.length) {
+      dispatch(animateToCoordinates(coordinatesFeaturesAndIds[coordinatesFeaturesAndIds.length - 1].coordinates))
+    }
+  }
+
+  function fishingActivityIsWithinTrackLineDates (fishingActivityDateTimestamp, line) {
+    return fishingActivityDateTimestamp > new Date(line.firstPositionDate).getTime() &&
+      fishingActivityDateTimestamp < new Date(line.secondPositionDate).getTime()
+  }
+
+  function removeFishingActivitiesFeatures () {
+    vectorSource
+      .getFeatures()
+      .filter(feature =>
+        feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.includes('ers'))
+      .forEach(feature => vectorSource.removeFeature(feature))
+  }
+
+  function getVesselTrackLines () {
+    return vectorSource.getFeatures()
+      .filter(feature =>
+        feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.includes('line'))
+  }
 
   function removeVesselTrackFeatures (identity) {
     vectorSource.getFeatures()

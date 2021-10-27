@@ -22,6 +22,7 @@ const ShowAllFishingActivitiesOnMap = props => {
 
   return (
     <ShowAllFishingActivitiesOnMapButton
+      data-cy={'show-all-fishing-activities-on-map'}
       healthcheckTextWarning={healthcheckTextWarning}
       fishingActivitiesShowedOnMap={fishingActivitiesShowedOnMap?.length}
       openBox={props.openBox}
@@ -31,11 +32,7 @@ const ShowAllFishingActivitiesOnMap = props => {
         : dispatch(showFishingActivitiesOnMap())
       }
     >
-      {
-        fishingActivitiesShowedOnMap?.length
-          ? <ShowFishingActivities />
-          : <ShowFishingActivities />
-      }
+      <ShowFishingActivities />
     </ShowAllFishingActivitiesOnMapButton>
   )
 }

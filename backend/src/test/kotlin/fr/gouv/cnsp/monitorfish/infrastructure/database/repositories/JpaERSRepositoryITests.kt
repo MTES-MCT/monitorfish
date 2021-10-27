@@ -200,12 +200,12 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(lanMessage.port).isEqualTo("AEAJM")
         assertThat(lanMessage.sender).isEqualTo("MAS")
         assertThat(lanMessage.catchLanded).hasSize(6)
-        assertThat(lanMessage.landingDateTime.toString()).isEqualTo("2019-10-22T11:06Z[UTC]")
+        assertThat(lanMessage.landingDateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // RTP
         assertThat(messages[1].message).isInstanceOf(RTP::class.java)
         val rtpMessage = messages[1].message as RTP
-        assertThat(rtpMessage.dateTime).isEqualTo("2019-10-21T11:12:00Z[UTC]")
+        assertThat(rtpMessage.dateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // PNO
         assertThat(messages[2].message).isInstanceOf(PNO::class.java)
@@ -221,7 +221,7 @@ class JpaERSRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchOnboard.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
         assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11T00:00Z[UTC]")
-        assertThat(pnoMessage.predictedArrivalDateTime.toString()).isEqualTo("2019-10-21T08:16Z[UTC]")
+        assertThat(pnoMessage.predictedArrivalDateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // EOF
         assertThat(messages[3].message).isInstanceOf(EOF::class.java)

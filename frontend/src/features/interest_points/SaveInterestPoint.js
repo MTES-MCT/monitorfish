@@ -63,7 +63,10 @@ const SaveInterestPoint = (
       setName('')
       setObservations('')
       setType('')
-    } else {
+      return
+    }
+
+    if (!interestPointBeingDrawed) {
       setType(interestPointType.FISHING_VESSEL)
     }
   }, [isOpen, interestPointBeingDrawed])

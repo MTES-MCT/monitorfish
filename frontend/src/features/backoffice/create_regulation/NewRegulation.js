@@ -300,6 +300,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                 regulatoryTextList={regulatoryTextList}
                 setRegulatoryTextList={setRegulatoryTextList}
                 source={REGULATORY_TEXT_SOURCE.REGULATION}
+                saveForm={saveOrUpdateRegulation}
               />
             </Content>
           </ContentWrapper>

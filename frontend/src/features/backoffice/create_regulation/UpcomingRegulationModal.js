@@ -6,7 +6,7 @@ import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
   setUpcomingRegulatoryTextListCheckedMap,
-  setSaveOrUpdateRegulation,
+  setSaveUpcomingRegulation,
   setUpcomingRegulation
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
@@ -21,22 +21,24 @@ const UpcomingRegulationModal = () => {
     isModalOpen,
     upcomingRegulation = { regulatoryTextList: [{}] },
     upcomingRegulatoryTextCheckedMap,
-    saveOrUpdateRegulation
+    saveUpcomingRegulation
   } = useSelector(state => state.regulation)
 
   const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList || [{}])
 
   const onAddUpcomingRegulation = () => {
-    dispatch(setSaveOrUpdateRegulation(true))
+    dispatch(setSaveUpcomingRegulation(true))
   }
 
   useEffect(() => {
-    if (upcomingRegulatoryTextCheckedMap && saveOrUpdateRegulation) {
-      const values = Object.values(upcomingRegulatoryTextCheckedMap)
-      if (values.length > 0 && values.length === regulatoryTextList.length) {
-        if (!values.includes(null)) {
+    if (upcomingRegulatoryTextCheckedMap && saveUpcomingRegulation) {
+      const regulatoryTexts = Object.values(upcomingRegulatoryTextCheckedMap)
+      const allTextsHaveBeenChecked = regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length
+      if (allTextsHaveBeenChecked) {
+        const allTextsHaveBeenFilled = !regulatoryTexts.includes(null)
+        if (allTextsHaveBeenFilled) {
           const newUpcomingRegulation = { ...(upcomingRegulation || { regulatoryTextList: [{}] }) }
-          const newRegulatoryTextList = [...values]
+          const newRegulatoryTextList = [...regulatoryTexts]
           newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
           batch(() => {
             dispatch(setUpcomingRegulation(newUpcomingRegulation))
@@ -45,11 +47,11 @@ const UpcomingRegulationModal = () => {
         }
         batch(() => {
           dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
-          dispatch(setSaveOrUpdateRegulation(false))
+          dispatch(setSaveUpcomingRegulation(false))
         })
       }
     }
-  }, [saveOrUpdateRegulation, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
+  }, [saveUpcomingRegulation, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
@@ -63,6 +65,7 @@ const UpcomingRegulationModal = () => {
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
             source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}
+            saveForm={saveUpcomingRegulation}
           />
         </Section>
       </Body>

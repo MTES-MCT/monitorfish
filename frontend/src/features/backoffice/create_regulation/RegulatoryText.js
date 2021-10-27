@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { ContentLine, Delimiter } from '../../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../../commonStyles/Input.style'
@@ -28,13 +28,9 @@ const RegulatoryText = props => {
     regulatoryText,
     addOrRemoveRegulatoryTextInList,
     listLength,
-    source
+    source,
+    saveForm
   } = props
-
-  const {
-    saveOrUpdateRegulation,
-    isModalOpen
-  } = useSelector(state => state.regulation)
 
   /**
   * @enum {RegulatoryTextType}
@@ -138,14 +134,8 @@ const RegulatoryText = props => {
     return oneValueIsMissing
   }
 
-  const checkActionSource = () => {
-    return Object.values(REGULATORY_TEXT_SOURCE).includes(source) &&
-      ((source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION && isModalOpen) ||
-        (source === REGULATORY_TEXT_SOURCE.REGULATION && !isModalOpen))
-  }
-
   useEffect(() => {
-    if (saveOrUpdateRegulation && checkActionSource()) {
+    if (saveForm) {
       const payload = { id: id, source: source }
       if (!checkOtherRequiredValues() && !checkNameAndUrl()) {
         const updatedRegulatoryText = {
@@ -165,7 +155,7 @@ const RegulatoryText = props => {
         dispatch(addObjectToRegulatoryTextCheckedMap(payload))
       }
     }
-  }, [saveOrUpdateRegulation, source, id])
+  }, [saveForm, source, id])
 
   const cancelAddNewRegulatoryText = () => {
     setIsEditing(true)

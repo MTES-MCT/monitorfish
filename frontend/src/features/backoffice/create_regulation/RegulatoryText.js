@@ -207,7 +207,7 @@ const RegulatoryText = props => {
           <CustomInput
             placeholder={'Nom'}
             $isRed={nameIsRequired}
-            width={'87px'}
+            width={'250px'}
             value={currentRegulatoryTextName}
             onChange={onNameValueChange}
             data-cy="reg-text-name"
@@ -215,7 +215,7 @@ const RegulatoryText = props => {
           <CustomInput
             placeholder={'URL'}
             $isRed={URLIsrequired}
-            width={'87px'}
+            width={'250px'}
             value={currentRegulatoryTextURL}
             onChange={onURLValueChange}
             data-cy="reg-text-url"

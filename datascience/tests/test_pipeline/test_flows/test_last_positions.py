@@ -23,7 +23,7 @@ class TestLastPositionsFlow(unittest.TestCase):
     @patch("src.pipeline.flows.last_positions.extract")
     def test_extract_last_positions(self, mock_extract):
         mock_extract.side_effect = mock_extract_side_effect
-        query = extract_last_positions.run()
+        query = extract_last_positions.run(minutes=10)
         self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
     @patch("src.pipeline.flows.last_positions.load", autospec=True)

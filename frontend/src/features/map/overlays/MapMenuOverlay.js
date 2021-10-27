@@ -25,7 +25,7 @@ const MapMenuOverlay = props => {
     position: coordinates,
     autoPan: false,
     positioning: 'left-center',
-    zIndex: 9999
+    className: 'ol-overlay-container ol-selectable menu-overlay'
   }))
   const clickedOutsideComponent = useClickOutsideComponent(ref)
   const [showTrackMenu, setShowTrackMenu] = useState(false)
@@ -64,7 +64,7 @@ const MapMenuOverlay = props => {
       overlay.setPosition(coordinates)
       overlay.setElement(ref.current)
       setShowTrackMenu(false)
-      ref.current.parentNode.className = 'ol-overlay-container ol-selectable overlay-active'
+      ref.current.parentNode.className = 'ol-overlay-container ol-selectable menu-overlay'
 
       setIsShowed(true)
       map.addOverlay(overlay)
@@ -89,8 +89,8 @@ const MapMenuOverlay = props => {
                   {
                     vessel
                       ? <Menu
-                      data-cy={'show-vessel-tracks-menu-options'}
-                        onClick={() => setShowTrackMenu(!showTrackMenu)}
+                        data-cy={'show-vessel-tracks-menu-options'}
+                        onMouseEnter={() => setShowTrackMenu(true)}
                       >
                         Afficher la piste VMS depuis…
                         <ChevronIcon/>
@@ -186,8 +186,6 @@ const Menu = styled.span`
   }
 `
 
-const WrapperToBeKeptForDOMManagement = styled.div`
-  z-index: 456;
-`
+const WrapperToBeKeptForDOMManagement = styled.div``
 
 export default MapMenuOverlay

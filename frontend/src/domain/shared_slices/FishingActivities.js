@@ -106,18 +106,21 @@ const fishingActivitiesSlice = createSlice({
     },
     /**
      * Show fishing activities on the vessel track, on the map
+     * Without the corrected messages
      * @function showFishingActivitiesOnMap
      * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      */
     showFishingActivitiesOnMap (state) {
-      state.fishingActivitiesShowedOnMap = state.fishingActivities.ersMessages.map(fishingActivity => ({
-        id: fishingActivity.operationNumber,
-        date: getEffectiveDateTimeFromMessage(fishingActivity),
-        name: fishingActivity.messageType,
-        isDeleted: fishingActivity.deleted,
-        isNotAcknowledged: !fishingActivity.acknowledge?.isSuccess
-      }))
+      state.fishingActivitiesShowedOnMap = state.fishingActivities.ersMessages
+        .filter(fishingActivity => !fishingActivity.isCorrected)
+        .map(fishingActivity => ({
+          id: fishingActivity.operationNumber,
+          date: getEffectiveDateTimeFromMessage(fishingActivity),
+          name: fishingActivity.messageType,
+          isDeleted: fishingActivity.deleted,
+          isNotAcknowledged: !fishingActivity.acknowledge?.isSuccess
+        }))
     },
     /**
      * Hide fishing activities of the vessel track

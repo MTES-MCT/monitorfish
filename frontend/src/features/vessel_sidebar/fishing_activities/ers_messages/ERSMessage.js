@@ -107,10 +107,12 @@ const ERSMessage = ({ message, isFirst }) => {
             !message.isCorrected
               ? fishingActivitiesShowedOnMap.find(showed => showed.id === message.operationNumber)
                 ? <HideActivity
+                  data-cy={'hide-fishing-activity'}
                   title={'Cacher le message sur la piste'}
                   onClick={() => dispatch(hideFishingActivityOnMap(message.operationNumber))}
                 />
                 : <ShowActivity
+                  data-cy={'show-fishing-activity'}
                   title={'Afficher le message sur la piste'}
                   onClick={() => dispatch(showFishingActivityOnMap(message.operationNumber))}
                 />

@@ -30,17 +30,18 @@ const showVesselTrackAndSidebar = (
 
   dispatch(getVesselVoyage(vesselIdentity, null, true))
 
-  const feature = vesselsLayerSource.getFeatureById(Vessel.getVesselId(vesselIdentity))
+  const feature = vesselsLayerSource?.getFeatureById(Vessel.getVesselId(vesselIdentity))
   if (feature) {
     feature.set(Vessel.isSelectedProperty, true)
   }
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
-    calledFromCron,
     vesselTrackDepth,
     selectedVesselCustomTrackDepth,
     getState().map.defaultVesselTrackDepth)
+
+  console.log(nextVesselTrackDepthObject, vesselTrackDepth)
 
   getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {

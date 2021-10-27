@@ -2,6 +2,7 @@ import { getVesselVoyageFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
 import { loading, resetLoadingVessel } from '../shared_slices/Vessel'
 import {
+  hideFishingActivitiesOnMap,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage,
@@ -23,7 +24,8 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     const {
       lastFishingActivities,
       isLastVoyage,
-      tripNumber
+      tripNumber,
+      fishingActivitiesShowedOnMap
     } = getState().fishingActivities
 
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
@@ -47,6 +49,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
           }
         }))
         dispatch(resetLoadingVessel())
+        dispatch(hideFishingActivitiesOnMap())
         dispatch(setError(new NoERSMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
         return
       }
@@ -62,7 +65,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
 
         dispatch(setVoyage(voyage))
         dispatch(resetLoadingVessel())
-        if (getState().vessel.fishingActivitiesShowedOnMap?.length) {
+        if (fishingActivitiesShowedOnMap?.length) {
           dispatch(showFishingActivitiesOnMap())
         }
       }

@@ -9,11 +9,15 @@ html {
 }
 
 .overlay-active {
-    z-index: 9999999999999;
+    z-index: 999999999;
 }
 
 .vessel-card {
-    z-index: 9999999;
+    z-index: 9999999999;
+}
+
+.menu-overlay {
+    z-index: 99999999999;
 }
 
 .zoom {
@@ -76,6 +80,11 @@ button:hover, button:focus {
 
 .active-tab {
     background-color: #707785;
+}
+
+.rs-table-body-info {
+    font-size: 13px;
+    color: #707785;
 }
 
 table:not(.horizontal) th, table:not(.horizontal) td {

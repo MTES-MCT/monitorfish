@@ -8,7 +8,7 @@ import { getCoordinates } from '../../../coordinates'
 import { highlightVesselTrackPosition } from '../../../domain/shared_slices/Vessel'
 import { CSVOptions } from '../../vessel_list/dataFormatting'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map'
-import { animateTo } from '../../../domain/shared_slices/Map'
+import { animateToCoordinates } from '../../../domain/shared_slices/Map'
 import { useClickOutsideComponent } from '../../../hooks/useClickOutside'
 import { ReactComponent as ManualPositionSVG } from '../../icons/Pastille_position_manuelle.svg'
 
@@ -93,7 +93,7 @@ export const SpeedCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...pr
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
-      onClick={() => dispatch(animateTo(olCoordinates))}
+      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
       { rowData[dataKey] } nds
     </Cell>
@@ -110,7 +110,7 @@ export const CourseCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...p
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
-      onClick={() => dispatch(animateTo(olCoordinates))}
+      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
       { rowData[dataKey] || rowData[dataKey] === 0 ? `${rowData[dataKey]}°` : '' }
     </Cell>
@@ -132,7 +132,7 @@ export const DateTimeCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ..
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
-      onClick={() => dispatch(animateTo(olCoordinates))}
+      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
       { dateTimeStringWithoutMilliSeconds } { rowData.isManual ? <ManualPosition title={'Position manuelle (4h-report)'}/> : '' }
     </Cell>

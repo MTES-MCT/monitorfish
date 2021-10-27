@@ -11,7 +11,7 @@ export const Label = styled.span`
 `
 
 export const CustomInput = styled(Input)`
-  font-size: 11px;
+  font-size: 13px;
   height: 35px;
   ${props => props.width ? '' : 'min-width: 100px;'}
   ${props => props.width ? `width: ${props.width};` : ''}
@@ -31,5 +31,9 @@ export const CustomInput = styled(Input)`
     color: ${COLORS.gunMetal}!important;
     border-color: ${COLORS.lightGray}!important;
     cursor: pointer;
+  }
+  ::placeholder {
+    font-size: 11px;
+    color: ${COLORS.slateGray};
   }
 `

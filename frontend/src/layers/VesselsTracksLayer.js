@@ -97,7 +97,7 @@ const VesselsTracksLayer = ({ map }) => {
       return
     }
 
-    let noAddedOrRemovedFishingActivities = fishingActivitiesShowedOnMap?.length === previousFishingActivitiesShowedOnMap?.length
+    const noAddedOrRemovedFishingActivities = fishingActivitiesShowedOnMap?.length === previousFishingActivitiesShowedOnMap?.length
     if (noAddedOrRemovedFishingActivities) {
       return
     }

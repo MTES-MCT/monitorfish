@@ -6,7 +6,7 @@ import Checkbox from 'rsuite/lib/Checkbox'
 import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
-import { getDate } from '../../utils'
+import { formatToCSVColumnsForExport, getDate } from '../../utils'
 import { CSVOptions } from './dataFormatting'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
@@ -23,19 +23,6 @@ const optionsCSV = {
 }
 
 const csvExporter = new ExportToCsv(optionsCSV)
-
-function orderToCSVColumnOrder (valuesChecked, filteredVesselObject) {
-  return Object.keys(CSVOptions)
-    .filter(value => {
-      return valuesChecked.some(valueChecked => value === valueChecked)
-    }).reduce(
-      (obj, key) => {
-        obj[CSVOptions[key].name] = filteredVesselObject[CSVOptions[key].name]
-        return obj
-      },
-      {}
-    )
-}
 
 const DownloadVesselListModal = props => {
   const [indeterminate, setIndeterminate] = useState(false)
@@ -93,7 +80,7 @@ const DownloadVesselListModal = props => {
           }
         })
 
-        return orderToCSVColumnOrder(valuesChecked, filteredVesselObject)
+        return formatToCSVColumnsForExport(filteredVesselObject, CSVOptions, valuesChecked)
       })
 
     const date = new Date()

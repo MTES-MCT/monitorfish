@@ -224,6 +224,32 @@ export const formatDataForSelectPicker = (list, groupName) => {
 }
 
 /**
+ * Format object's data as specified in the CSV column
+ * @param {Object} initialObject - The value object
+ * @param {Object} csvColumns - The columns to be exported in the CSV
+ * @param {string[]=} filters - Filters of the exported columns contained in the csvColumns object
+ * @returns a new array
+ */
+export function formatToCSVColumnsForExport (initialObject, csvColumns, filters) {
+  let columnsKeys = Object.keys(csvColumns)
+
+  if (filters?.length) {
+    columnsKeys = columnsKeys.filter(value => {
+      return filters.some(filter => value === filter)
+    })
+  }
+
+  return columnsKeys
+    .reduce(
+      (obj, key) => {
+        obj[csvColumns[key].name] = initialObject[csvColumns[key].code]
+        return obj
+      },
+      {}
+    )
+}
+
+/**
  * Get full days in date range (to avoid missing hours in the selected date range)
  * @param {string[]} datesSelection Dates array ([afterDateTime, beforeDateTime])
  * @returns {{

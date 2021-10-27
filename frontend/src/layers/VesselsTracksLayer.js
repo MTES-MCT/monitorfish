@@ -4,7 +4,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
-import { animateTo } from '../domain/shared_slices/Map'
+import { animateToCoordinates, animateToExtent } from '../domain/shared_slices/Map'
 import { getCircleStyle } from './styles/vesselTrack.style'
 import { usePrevious } from '../hooks/usePrevious'
 import { updateVesselTrackAsHidden, updateVesselTrackAsShowed } from '../domain/shared_slices/Vessel'
@@ -139,8 +139,12 @@ const VesselsTracksLayer = ({ map }) => {
       const vesselTrack = new VesselTrack(selectedVessel.positions, getVesselFeatureIdFromVessel(selectedVessel))
 
       vectorSource.addFeatures(vesselTrack.features)
-      if (!updatedFromCron && vesselTrack.lastPositionCoordinates) {
-        dispatch(animateTo(vesselTrack.lastPositionCoordinates))
+      if (!updatedFromCron) {
+        if (vesselTrack.features.length > 5) {
+          dispatch(animateToExtent(vectorSource.getExtent()))
+        } else if (vesselTrack.lastPositionCoordinates) {
+          dispatch(animateToCoordinates(vesselTrack.lastPositionCoordinates))
+        }
       }
     }
   }

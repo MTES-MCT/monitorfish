@@ -6,7 +6,7 @@ import { SquareButton } from '../../commonStyles/Buttons.style'
 import CustomSelectComponent from './CustomSelectComponent'
 import Tag from './Tag'
 import MenuItem from './MenuItem'
-import CreateRegulationLawTypeForm from './CreateRegulationLawTypeForm'
+import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from './InfoBox'
 
 const RegulationTopicLine = props => {
@@ -17,11 +17,11 @@ const RegulationTopicLine = props => {
     regulationTopicIsMissing
   } = props
 
-  const [isAddThemeClicked, setIsAddThemeClicked] = useState(false)
+  const [isAddTopicClicked, setIsAddTopicClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
   return <ContentLine
-    isFormOpened={isAddThemeClicked}
+    isFormOpened={isAddTopicClicked}
     isInfoTextShown={isInfoTextShown}
     >
       <Wrapper>
@@ -42,15 +42,15 @@ const RegulationTopicLine = props => {
             onCloseIconClicked={_ => setSelectedRegulationTopic()}
           />}
         {
-        isAddThemeClicked
-          ? <CreateRegulationLawTypeForm
-              setSelectedRegulationTheme={setSelectedRegulationTopic}
-              setIsAddThemeClicked={setIsAddThemeClicked}
+        isAddTopicClicked
+          ? <CreateRegulationTopicForm
+              setSelectedRegulationTopic={setSelectedRegulationTopic}
+              setIsAddTopicClicked={setIsAddTopicClicked}
               setIsInfoTextShown={setIsInfoTextShown}
             />
           : !selectedRegulationTopic && <><SquareButton
           onClick={() => {
-            setIsAddThemeClicked(true)
+            setIsAddTopicClicked(true)
             setIsInfoTextShown(true)
           }}
         />
@@ -60,7 +60,7 @@ const RegulationTopicLine = props => {
       <CustomInfoBox
         isInfoTextShown={isInfoTextShown}
         setIsInfoTextShown={setIsInfoTextShown}
-        isFormOpened={isAddThemeClicked}
+        isFormOpened={isAddTopicClicked}
         message={'zoneTheme'}
       />
       </ContentLine>

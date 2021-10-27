@@ -19,7 +19,7 @@ import BaseMap from '../../map/BaseMap'
 import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
 import Layers from '../../../domain/entities/layers'
 
-import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
+import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
@@ -122,6 +122,12 @@ const CreateRegulation = ({ title, isEdition }) => {
     dispatch(resetState())
     history.push('/backoffice')
   }
+
+  useEffect(() => {
+    return () => {
+      dispatch(setRegulatoryZoneMetadata(undefined))
+    }
+  }, [])
 
   useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {

@@ -326,6 +326,23 @@ def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
     return df.applymap(to_json, na_action="ignore").fillna("null")
 
 
+def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
+    """Serializes the values of a DataFrame that contains numbers that represent
+    possibly null (np.nan or None) integers. This is useful to prepare data before
+    loading to integer Postgres columns, as pandas automatically converts integer
+    Series to float dtype if they contain nulls.
+
+    Args:
+        df (pd.DataFrame): DataFrame of integer, possibly with None and np.nan values
+
+    Returns:
+        pd.DataFrame: same DataFrame converted to string dtype
+    """
+    return df.applymap(lambda x: str(int(x)), na_action="ignore").where(
+        df.notnull(), None
+    )
+
+
 def drop_rows_already_in_table(
     df: pd.DataFrame,
     df_column_name: str,
@@ -376,6 +393,7 @@ def prepare_df_for_loading(
     handle_array_conversion_errors: bool = True,
     value_on_array_conversion_error="{}",
     jsonb_columns: Union[None, list] = None,
+    nullable_integer_columns: Union[None, list] = None,
 ):
 
     df_ = df.copy(deep=True)
@@ -392,6 +410,13 @@ def prepare_df_for_loading(
             df_[pg_array_columns],
             handle_errors=handle_array_conversion_errors,
             value_on_error=value_on_array_conversion_error,
+        )
+
+    # Serialize columns that contain nullable integers (stored an float in python)
+    if nullable_integer_columns:
+        logger.info("Serializing nullable integer columns")
+        df_[nullable_integer_columns] = serialize_nullable_integer_df(
+            df_[nullable_integer_columns]
         )
 
     return df_

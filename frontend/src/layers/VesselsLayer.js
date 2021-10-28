@@ -33,7 +33,8 @@ const VesselsLayer = ({ map }) => {
   const {
     selectedBaseLayer,
     vesselsLastPositionVisibility,
-    showingVesselsEstimatedPositions
+    showingVesselsEstimatedPositions,
+    hideVesselsAtPort
   } = useSelector(state => state.map)
 
   const {
@@ -93,7 +94,8 @@ const VesselsLayer = ({ map }) => {
       filterColor,
       vesselsLastPositionVisibility,
       nonFilteredVesselsAreHidden,
-      hideOtherVessels
+      hideOtherVessels,
+      hideVesselsAtPort
     }) => {
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
 
@@ -106,6 +108,7 @@ const VesselsLayer = ({ map }) => {
         feature.set(Vessel.nonFilteredVesselsAreHiddenProperty, nonFilteredVesselsAreHidden, true)
         feature.set(Vessel.filterColorProperty, filterColor, true)
         feature.set(Vessel.isHiddenProperty, hideOtherVessels, true)
+        feature.set(Vessel.hideVesselsAtPortProperty, hideVesselsAtPort, true)
       })
       vectorSource.changed()
     }
@@ -133,6 +136,12 @@ const VesselsLayer = ({ map }) => {
       feature.set(Vessel.isHiddenProperty, hideOtherVessels)
     })
   }, [hideOtherVessels])
+
+  useEffect(() => {
+    vectorSource.forEachFeature(feature => {
+      feature.set(Vessel.hideVesselsAtPortProperty, hideVesselsAtPort)
+    })
+  }, [hideVesselsAtPort])
 
   useEffect(() => {
     vectorSource.forEachFeature(feature => {
@@ -209,7 +218,8 @@ const VesselsLayer = ({ map }) => {
             vesselsLastPositionVisibility,
             selectedBaseLayer,
             nonFilteredVesselsAreHidden,
-            hideOtherVessels
+            hideOtherVessels,
+            hideVesselsAtPort
           })
           dispatch(resetVessels())
         }

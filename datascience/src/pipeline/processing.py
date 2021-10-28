@@ -343,6 +343,20 @@ def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+def serialize_timedelta_df(df: pd.DataFrame) -> pd.DataFrame:
+    """Serializes the values of a DataFrame that contains `timedelta` values.
+    This is useful to prepare data before loading to timedelta Postgres columns, as
+    sqlachemy does not support the timedelta dtype.
+
+    Args:
+        df (pd.DataFrame): DataFrame of timedeltas
+
+    Returns:
+        pd.DataFrame: same DataFrame converted to string dtype
+    """
+    return df.astype(str).replace(["NaT"], [None])
+
+
 def drop_rows_already_in_table(
     df: pd.DataFrame,
     df_column_name: str,
@@ -394,6 +408,7 @@ def prepare_df_for_loading(
     value_on_array_conversion_error="{}",
     jsonb_columns: Union[None, list] = None,
     nullable_integer_columns: Union[None, list] = None,
+    timedelta_columns: Union[None, list] = None,
 ):
 
     df_ = df.copy(deep=True)
@@ -418,6 +433,10 @@ def prepare_df_for_loading(
         df_[nullable_integer_columns] = serialize_nullable_integer_df(
             df_[nullable_integer_columns]
         )
+
+    if timedelta_columns:
+        logger.info("Serializing timedelta columns")
+        df_[timedelta_columns] = serialize_timedelta_df(df_[timedelta_columns])
 
     return df_
 

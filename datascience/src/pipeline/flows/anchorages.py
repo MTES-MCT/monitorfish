@@ -12,7 +12,12 @@ from prefect import Flow, Parameter, task
 from sqlalchemy import text
 from vptree import VPTree
 
-from config import ANCHORAGES_URL, PROXIES, ROOT_DIRECTORY
+from config import (
+    ANCHORAGES_H3_CELL_RESOLUTION,
+    ANCHORAGES_URL,
+    PROXIES,
+    ROOT_DIRECTORY,
+)
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import load
 from src.pipeline.helpers.spatial import (
@@ -420,7 +425,7 @@ def load_processed_anchorages(anchorages: pd.DataFrame):
 
 with Flow("Anchorages") as flow_compute_anchorages:
 
-    h3_resolution = Parameter("h3_resolution", 9)
+    h3_resolution = Parameter("h3_resolution", ANCHORAGES_H3_CELL_RESOLUTION)
     number_signals_threshold = Parameter("number_signals_threshold", 100)
     static_vms_positions_file_path = Parameter(
         "static_vms_positions_file_path",

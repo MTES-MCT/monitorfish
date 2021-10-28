@@ -95,6 +95,7 @@ def load(
     jsonb_columns: Union[None, list] = None,
     table_id_column: Union[None, str] = None,
     df_id_column: Union[None, str] = None,
+    nullable_integer_columns: Union[None, list] = None,
 ):
     """
     Load a DataFrame or GeoDataFrame to a database table using sqlalchemy. The table
@@ -120,6 +121,7 @@ def load(
         handle_array_conversion_errors=handle_array_conversion_errors,
         value_on_array_conversion_error=value_on_array_conversion_error,
         jsonb_columns=jsonb_columns,
+        nullable_integer_columns=nullable_integer_columns,
     )
 
     e = create_engine(db_name)

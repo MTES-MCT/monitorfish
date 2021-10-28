@@ -321,7 +321,15 @@ class TestProcessingMethods(unittest.TestCase):
     def test_prepare_df_for_loading(self):
         df = pd.DataFrame(
             columns=pd.Index(
-                ["id", "column_1", "pg_array_1", "pg_array_2", "json_1", "json_2"]
+                [
+                    "id",
+                    "column_1",
+                    "pg_array_1",
+                    "pg_array_2",
+                    "json_1",
+                    "json_2",
+                    "int",
+                ]
             ),
             data=[
                 [
@@ -331,6 +339,7 @@ class TestProcessingMethods(unittest.TestCase):
                     ["a", "b", "c"],
                     {"a": 1, "b": 2},
                     {"a": 1, "b": None},
+                    2.0,
                 ],
                 [
                     2,
@@ -339,6 +348,7 @@ class TestProcessingMethods(unittest.TestCase):
                     [1, 5, 7],
                     {"a": 1, "b": None, "c": np.nan},
                     {"a": 1, "b": [datetime.datetime(2021, 1, 23, 12, 56, 7), np.nan]},
+                    np.nan,
                 ],
             ],
         )
@@ -352,30 +362,44 @@ class TestProcessingMethods(unittest.TestCase):
             handle_array_conversion_errors=True,
             value_on_array_conversion_error="{}",
             jsonb_columns=["json_1", "json_2"],
+            nullable_integer_columns=["int"],
         )
 
-        expected_values = [
-            [
-                1,
-                "some value",
-                "{1,2,3}",
-                "{a,b,c}",
-                '{"a": 1, "b": 2}',
-                '{"a": 1, "b": null}',
+        expected_res = pd.DataFrame(
+            columns=pd.Index(
+                [
+                    "id",
+                    "column_1",
+                    "pg_array_1",
+                    "pg_array_2",
+                    "json_1",
+                    "json_2",
+                    "int",
+                ]
+            ),
+            data=[
+                [
+                    1,
+                    "some value",
+                    "{1,2,3}",
+                    "{a,b,c}",
+                    '{"a": 1, "b": 2}',
+                    '{"a": 1, "b": null}',
+                    "2",
+                ],
+                [
+                    2,
+                    "some other value",
+                    "{1,2,5}",
+                    "{1,5,7}",
+                    '{"a": 1, "b": null, "c": null}',
+                    '{"a": 1, "b": ["2021-01-23T12:56:07Z", null]}',
+                    None,
+                ],
             ],
-            [
-                2,
-                "some other value",
-                "{1,2,5}",
-                "{1,5,7}",
-                '{"a": 1, "b": null, "c": null}',
-                '{"a": 1, "b": ["2021-01-23T12:56:07Z", null]}',
-            ],
-        ]
+        )
 
-        self.assertTrue(isinstance(res, pd.DataFrame))
-        self.assertEqual(res.shape, (2, 6))
-        self.assertEqual(expected_values, res.values.tolist())
+        pd.testing.assert_frame_equal(res, expected_res)
 
     def test_join_on_multiple_keys(self):
         left = pd.DataFrame(

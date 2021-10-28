@@ -120,7 +120,7 @@ def split(
         new_last_positions (pd.DataFrame)
 
     Returns:
-        Tuple[pd.DataFrame]:
+        Tuple[pd.DataFrame, pd.DataFrame,pd.DataFrame]:
           - unchanged_previous_last_positions
           - new_vessels_last_positions
           - last_positions_to_update
@@ -162,11 +162,11 @@ def compute_emission_period(last_positions_to_update: pd.DataFrame) -> pd.DataFr
     """
     Computes the emission period of the last_positions that require an update.
 
-    If an emissoin period is already present (which might happen if there are more
+    If an emission period is already present (which might happen if there are more
     than one position per vessel in the requested time period of the last_position
     query), this emission period is used. Otherwise, the emission period is taken to
-    be equal to the time between the previous last_postion_datetime_utc and the new
-    last_postion_datetime_utc.
+    be equal to the time between the previous last_position_datetime_utc and the new
+    last_position_datetime_utc.
 
     Args:
         last_positions_to_update (pd.DataFrame): last_positions data for vessels that
@@ -189,8 +189,8 @@ def compute_emission_period(last_positions_to_update: pd.DataFrame) -> pd.DataFr
     )
 
     updated_last_positions = updated_last_positions.drop(
-        columns=["new_to_previous_time_interval"]
-    )
+        columns=["new_to_previous_time_interval", "last_position_datetime_utc_previous"]
+    ).rename(columns={"last_position_datetime_utc_new": "last_position_datetime_utc"})
 
     return updated_last_positions
 
@@ -334,8 +334,6 @@ with Flow("Last positions") as flow:
         last_positions = extract_last_positions(minutes=minutes)
 
     risk_factors = extract_risk_factors()
-
-    # Transform
     last_positions = estimate_current_positions(last_positions)
     last_positions = merge(last_positions, risk_factors)
 

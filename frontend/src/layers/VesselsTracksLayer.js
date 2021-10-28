@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { extend } from 'ol/extent'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
@@ -140,14 +141,29 @@ const VesselsTracksLayer = ({ map }) => {
 
   function showVesselTrack () {
     if (map && selectedVessel?.positions?.length) {
-      const vesselTrack = new VesselTrack(selectedVessel.positions, getVesselFeatureIdFromVessel(selectedVessel))
+      const identity = getVesselFeatureIdFromVessel(selectedVessel)
+      const vesselTrack = new VesselTrack(selectedVessel.positions, identity)
 
       vectorSource.addFeatures(vesselTrack.features)
-      dispatch(setVesselTrackExtent(vectorSource.getExtent()))
+      const vesselTrackExtent = getVesselTrackExtent(vesselTrack, identity)
+
+      dispatch(setVesselTrackExtent(vesselTrackExtent))
       if (!updatedFromCron && vesselTrack.lastPositionCoordinates) {
         dispatch(animateToCoordinates(vesselTrack.lastPositionCoordinates))
       }
     }
+  }
+
+  function getVesselTrackExtent (vesselTrack, identity) {
+    let vesselTrackExtent = vesselTrack.features[0].getGeometry().getExtent().slice(0)
+
+    vesselTrack.features
+      .filter(feature => feature.getId().includes(identity))
+      .forEach(feature => {
+        vesselTrackExtent = extend(vesselTrackExtent, feature.getGeometry().getExtent())
+      })
+
+    return vesselTrackExtent
   }
 
   return (

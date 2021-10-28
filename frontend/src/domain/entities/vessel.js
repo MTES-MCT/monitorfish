@@ -59,6 +59,7 @@ export class Vessel {
       speciesArray: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))] : [],
       district: feature.vessel.district,
       districtCode: feature.vessel.districtCode,
+      isAtPort: feature.vessel.isAtPort,
       lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : ''
     }
   }
@@ -278,6 +279,11 @@ export const vesselSize = {
     text: 'Plus de 12m',
     evaluate: value => value >= 12
   }
+}
+
+export const VesselLocation = {
+  SEA: 'SEA',
+  PORT: 'PORT'
 }
 
 export const TEMPORARY_VESSEL_TRACK = 'temp'

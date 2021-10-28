@@ -7,7 +7,7 @@ import {
   FRANCE
 } from '../domain/entities/regulatory'
 import { getDateMonthsBefore } from '../utils'
-import { vesselSize } from '../domain/entities/vessel'
+import { VesselLocation, vesselSize } from '../domain/entities/vessel'
 
 class MonitorFishWorker {
   #getLayerTopicList = features => {
@@ -195,10 +195,11 @@ class MonitorFishWorker {
       districtsFiltered,
       speciesFiltered,
       vesselsSizeValuesChecked,
-      lastControlMonthsAgo
+      lastControlMonthsAgo,
+      vesselsLocationFilter
     } = filters
 
-    if (countriesFiltered && countriesFiltered.length) {
+    if (countriesFiltered?.length) {
       vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel.flagState === country))
     }
 
@@ -223,38 +224,48 @@ class MonitorFishWorker {
       })
     }
 
-    if (fleetSegmentsFiltered && fleetSegmentsFiltered.length) {
+    if (fleetSegmentsFiltered?.length) {
       vessels = vessels.filter(vessel =>
         fleetSegmentsFiltered.some(fleetSegment => {
           return vessel.fleetSegmentsArray.includes(fleetSegment)
         }))
     }
 
-    if (gearsFiltered && gearsFiltered.length) {
+    if (gearsFiltered?.length) {
       vessels = vessels.filter(vessel =>
         gearsFiltered.some(gear => {
           return vessel.gearsArray.includes(gear)
         }))
     }
 
-    if (speciesFiltered && speciesFiltered.length) {
+    if (speciesFiltered?.length) {
       vessels = vessels.filter(vessel =>
         speciesFiltered.some(species => {
           return vessel.speciesArray.includes(species)
         }))
     }
 
-    if (districtsFiltered && districtsFiltered.length) {
+    if (districtsFiltered?.length) {
       vessels = vessels.filter(vessel =>
         districtsFiltered.some(district => {
           return vessel.district === district
         }))
     }
 
-    if (vesselsSizeValuesChecked && vesselsSizeValuesChecked.length) {
+    if (vesselsSizeValuesChecked?.length) {
       vessels = vessels.filter(vessel => {
         return this.evaluateVesselsSize(vesselsSizeValuesChecked, vessel)
       })
+    }
+
+    if (vesselsLocationFilter?.length === 1) {
+      if (vesselsLocationFilter.includes(VesselLocation.PORT)) {
+        vessels = vessels.filter(vessel => vessel.isAtPort)
+      }
+
+      if (vesselsLocationFilter.includes(VesselLocation.SEA)) {
+        vessels = vessels.filter(vessel => !vessel.isAtPort)
+      }
     }
 
     return vessels

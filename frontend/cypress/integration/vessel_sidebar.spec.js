@@ -171,7 +171,7 @@ context('VesselSidebar', () => {
     cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("7.5 nds", { timeout: 20000 })
   })
 
-  it.only('Vessel track Should fit the view box When I click on animate to track', () => {
+  it('Vessel track Should fit the view box When I click on animate to track', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')

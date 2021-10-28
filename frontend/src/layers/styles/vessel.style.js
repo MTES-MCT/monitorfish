@@ -71,9 +71,11 @@ export const getVesselStyle = feature => {
   const isSelected = feature.get(Vessel.isSelectedProperty)
   const inPreviewMode = feature.get(Vessel.inPreviewModeProperty)
   const filterPreview = feature.get(Vessel.filterPreviewProperty)
+  const hideVesselsAtPort = feature.get(Vessel.hideVesselsAtPortProperty)
 
   const course = feature.vessel.course
   const speed = feature.vessel.speed
+  const isAtPort = feature.vessel.isAtPort
 
   if (isHidden && !isSelected) {
     return []
@@ -84,6 +86,10 @@ export const getVesselStyle = feature => {
   }
 
   if (inPreviewMode && !filterPreview) {
+    return []
+  }
+
+  if (hideVesselsAtPort && isAtPort) {
     return []
   }
 

@@ -34,7 +34,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,
     vesselsLastPositionVisibility,
-    vesselLabel
+    vesselLabel,
+    hideVesselsAtPort
   } = useSelector(state => state.map)
 
   const {
@@ -123,7 +124,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     previewFilteredVesselsFeaturesUids,
     vesselsLastPositionVisibility,
     hideOtherVessels,
-    vesselsTracksShowed
+    vesselsTracksShowed,
+    hideVesselsAtPort
   ])
 
   useEffect(() => {
@@ -269,7 +271,13 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     const nextFeaturesAndLabels = features
       .filter(feature => feature.vessel)
       .map(feature => {
-        const label = Vessel.getVesselFeatureLabel(feature, vesselLabel, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap)
+        const label = Vessel.getVesselFeatureLabel(feature, {
+          vesselLabel,
+          vesselsLastPositionVisibility,
+          riskFactorShowedOnMap,
+          vesselLabelsShowedOnMap,
+          hideVesselsAtPort
+        })
         const identity = feature.vessel
         const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
         const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)

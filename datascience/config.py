@@ -50,8 +50,10 @@ FAO_AREAS_URL = (
     "typeName=fifao:FAO_AREAS_CWP&outputFormat=SHAPE-ZIP"
 )
 
-# Last_positions configuration
+# Anchorages config
+ANCHORAGES_H3_CELL_RESOLUTION = 9
 
+# Last_positions configuration
 CURRENT_POSITION_ESTIMATION_MAX_HOURS = 2.0
 
 # Risk factor configuration

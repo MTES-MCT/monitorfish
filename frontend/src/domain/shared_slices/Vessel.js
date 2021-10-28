@@ -302,7 +302,7 @@ const vesselSlice = createSlice({
      * @function setVesselTrackExtent
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: string[]}} action - the extent
+     * @param {{payload: number[]}} action - the extent
      */
     setVesselTrackExtent (state, action) {
       state.vesselTrackExtent = action.payload

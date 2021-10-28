@@ -62,15 +62,15 @@ const VesselSidebar = () => {
         trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
         setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
       />
+      <AnimateToTrack
+        openBox={openSidebar}
+        rightMenuIsOpen={rightMenuIsOpen}
+      />
       <HideOtherVessels
         openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <TrackExport
-        openBox={openSidebar}
-        rightMenuIsOpen={rightMenuIsOpen}
-      />
-      <AnimateToTrack
         openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />

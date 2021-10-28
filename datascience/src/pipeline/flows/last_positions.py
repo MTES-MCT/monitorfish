@@ -5,7 +5,9 @@ import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
+from prefect.tasks.control_flow import merge
 
+from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS
 from src.pipeline.flows.risk_factor import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.spatial import estimate_current_position
@@ -61,6 +63,25 @@ def extract_last_positions(minutes: int) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def add_vessel_identifier(last_positions: pd.DataFrame) -> pd.DataFrame:
+
+    vessel_identifier_labels = {
+        "cfr": "INTERNAL_REFERENCE_NUMBER",
+        "ircs": "IRCS",
+        "external_immatriculation": "EXTERNAL_REFERENCE_NUMBER",
+    }
+
+    last_positions = last_positions.copy(deep=True)
+
+    last_positions["vessel_identifier"] = get_first_non_null_column_name(
+        last_positions[["cfr", "ircs", "external_immatriculation"]],
+        vessel_identifier_labels,
+    )
+
+    return last_positions
+
+
+@task(checkpoint=False)
 def extract_previous_last_positions() -> pd.DataFrame:
     """
     Extracts the contents of the `last_positions` table (which was computed by the
@@ -93,7 +114,7 @@ def drop_unchanched_new_last_positions(
         pd.DataFrame: subset of new_last_positions
     """
     return new_last_positions[
-        ~new_last_positions.position_id.isin(set(previous_last_positions.position_id))
+        ~new_last_positions.id.isin(set(previous_last_positions.id))
     ].copy(deep=True)
 
 
@@ -201,13 +222,31 @@ def concatenate(
     new_vessels_last_positions: pd.DataFrame,
     updated_last_positions: pd.DataFrame,
 ) -> pd.DataFrame:
-    return pd.concat(
-        [
-            unchanged_previous_last_positions,
-            new_vessels_last_positions,
-            updated_last_positions,
-        ]
+    """
+    Concatenates the 3 sets of last_positions and reindexes the rows from 1 to n.
+
+    Args:
+        unchanged_previous_last_positions (pd.DataFrame)
+        new_vessels_last_positions (pd.DataFrame)
+        updated_last_positions (pd.DataFrame)
+
+    Returns:
+        pd.DataFrame: concatenation of the 3 inputs sets of last_positions
+    """
+
+    last_positions = (
+        pd.concat(
+            [
+                unchanged_previous_last_positions,
+                new_vessels_last_positions,
+                updated_last_positions,
+            ]
+        )
+        .reset_index()
+        .drop(columns=["index"])
     )
+
+    return last_positions
 
 
 @task(checkpoint=False)
@@ -219,7 +258,22 @@ def extract_risk_factors():
 
 
 @task(checkpoint=False)
-def estimate_current_positions(last_positions):
+def estimate_current_positions(
+    last_positions: pd.DataFrame, max_hours_since_last_position: float
+) -> pd.DataFrame:
+    """
+
+    Args:
+        last_positions (pd.DataFrame): vessels' last position with route and speed
+          data.
+      max_hours_since_last_position (float): maximum time in hours since the last
+        position above which the current position will not be extrapolated.
+
+    Returns:
+        pd.DataFrame: vessels' last position with added estimated_current_latitude and
+          estimated_current_longitude fields
+
+    """
 
     last_positions = last_positions.copy(deep=True)
     now = datetime.utcnow()
@@ -235,10 +289,10 @@ def estimate_current_positions(last_positions):
             last_longitude=row["longitude"],
             course=row["course"],
             speed=row["speed"],
-            time_since_last_position=(
+            hours_since_last_position=(
                 (now - row["last_position_datetime_utc"]).total_seconds() / 3600
             ),
-            max_time_since_last_position=2,
+            max_hours_since_last_position=max_hours_since_last_position,
             on_error="ignore",
         ),
         axis=1,
@@ -249,18 +303,7 @@ def estimate_current_positions(last_positions):
 
 
 @task(checkpoint=False)
-def merge(last_positions, risk_factors):
-    vessel_identifier_labels = {
-        "cfr": "INTERNAL_REFERENCE_NUMBER",
-        "ircs": "IRCS",
-        "external_immatriculation": "EXTERNAL_REFERENCE_NUMBER",
-    }
-
-    last_positions["vessel_identifier"] = get_first_non_null_column_name(
-        last_positions[["cfr", "ircs", "external_immatriculation"]],
-        vessel_identifier_labels,
-    )
-
+def merge_last_positions_risk_factors(last_positions, risk_factors):
     last_positions = join_on_multiple_keys(
         last_positions,
         risk_factors,
@@ -271,17 +314,6 @@ def merge(last_positions, risk_factors):
     last_positions = last_positions.fillna(
         {**default_risk_factors, "total_weight_onboard": 0.0}
     )
-
-    last_positions.loc[:, "trip_number"] = last_positions.trip_number.map(
-        lambda x: str(int(x)), na_action="ignore"
-    ).replace([np.nan], [None])
-
-    last_positions.loc[:, "emission_period"] = last_positions.emission_period.replace(
-        ["NaT", np.nan], [None, None]
-    )
-
-    last_positions["id"] = np.arange(0, len(last_positions))
-
     return last_positions
 
 
@@ -299,22 +331,32 @@ def load_last_positions(last_positions):
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
+        nullable_integer_columns=["trip_number"],
+        timedelta_columns=["emission_period"],
     )
 
 
 with Flow("Last positions") as flow:
 
     # Parameters
+    current_position_estimation_max_hours = Parameter(
+        "current_position_estimation_max_hours",
+        default=CURRENT_POSITION_ESTIMATION_MAX_HOURS,
+    )
     minutes = Parameter("minutes", default=5)
     action = Parameter("action", default="update")
     action = validate_action(action)
 
     # Extract & Transform
+    risk_factors = extract_risk_factors()
+
+    last_positions = extract_last_positions(minutes=minutes)
+    last_positions = add_vessel_identifier(last_positions)
+
     with case(action, "update"):
-        new_last_positions = extract_last_positions(minutes=minutes)
         previous_last_positions = extract_previous_last_positions()
         new_last_positions = drop_unchanched_new_last_positions(
-            new_last_positions, previous_last_positions
+            last_positions, previous_last_positions
         )
 
         (
@@ -324,18 +366,22 @@ with Flow("Last positions") as flow:
         ) = split(previous_last_positions, new_last_positions)
         updated_last_positions = compute_emission_period(last_positions_to_update)
 
-        last_positions = concatenate(
+        last_positions_1 = concatenate(
             unchanged_previous_last_positions,
             new_vessels_last_positions,
             updated_last_positions,
         )
 
     with case(action, "replace"):
-        last_positions = extract_last_positions(minutes=minutes)
+        last_positions_2 = last_positions
 
-    risk_factors = extract_risk_factors()
-    last_positions = estimate_current_positions(last_positions)
-    last_positions = merge(last_positions, risk_factors)
+    last_positions = merge(last_positions_1, last_positions_2)
+
+    last_positions = estimate_current_positions(
+        last_positions=last_positions,
+        max_hours_since_last_position=current_position_estimation_max_hours,
+    )
+    last_positions = merge_last_positions_risk_factors(last_positions, risk_factors)
 
     # Load
     load_last_positions(last_positions)

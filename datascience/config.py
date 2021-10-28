@@ -50,6 +50,10 @@ FAO_AREAS_URL = (
     "typeName=fifao:FAO_AREAS_CWP&outputFormat=SHAPE-ZIP"
 )
 
+# Last_positions configuration
+
+CURRENT_POSITION_ESTIMATION_MAX_HOURS = 2.0
+
 # Risk factor configuration
 risk_factor_coefficients = {
     "probability": 0.3,

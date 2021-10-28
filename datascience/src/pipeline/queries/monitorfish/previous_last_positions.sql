@@ -1,5 +1,5 @@
 SELECT
-    pos.position_id,
+    pos.id,
     pos.cfr,
     pos.external_immatriculation,
     pos.mmsi,
@@ -17,7 +17,8 @@ SELECT
     pos.speed,
     pos.course,
     pos.last_position_datetime_utc,
-    pos.emission_period
+    pos.emission_period,
+    pos.vessel_identifier
 FROM last_positions pos
 LEFT JOIN vessels
 ON pos.cfr = vessels.cfr

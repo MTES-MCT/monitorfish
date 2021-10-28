@@ -33,41 +33,45 @@ def estimate_current_position(
     last_longitude: float,
     course: float,
     speed: float,
-    time_since_last_position: float,
-    max_time_since_last_position: float = 2,
+    hours_since_last_position: float,
+    max_hours_since_last_position: float = 2.0,
     on_error: str = "ignore",
 ) -> Tuple[float, float]:
     """Estimate the current position of a vessel based on its last position, course and
-    speed. If the last position is older than max_time_since_last_position, returns
-    None.
+    speed. If the last position is older than max_hours_since_last_position, or is in
+    the future (i.e. hours_since_last_position is negative), returns None.
 
     Args:
         last_latitude (float): last known latitude of vessel
         last_longitude (float): last known longitude of vessel
         course (float): last known route of vessel in degrees
         speed (float): last known speed of vessel in nots
-        time_since_last_position (float): time since last known position of vessel, in hours
-        max_time_since_last_position (float): maximum time in hours since last position,
+        hours_since_last_position (float): time since last known position of vessel, in hours
+        max_hours_since_last_position (float): maximum time in hours since last position,
             after which the estimation is not performed (returns None instead).
-            Defaults to 2.
+            Defaults to 2.0.
         on_error (str): 'ignore' or 'raise'.
 
     Returns:
         float: estimated current latitude
         float: estimated current longitude
     """
-    geod = Geod(ellps="WGS84")
-    if time_since_last_position > 2:
+    if not 0 <= hours_since_last_position <= max_hours_since_last_position:
         lat, lon = None, None
     else:
+        geod = Geod(ellps="WGS84")
         try:
-            distance = speed * time_since_last_position * 1852
+            distance = speed * hours_since_last_position * 1852
             lon, lat, _ = geod.fwd(last_longitude, last_latitude, course, distance)
         except:
             if on_error == "ignore":
                 lat, lon = None, None
-            else:
+            elif on_error == "raise":
                 raise
+            else:
+                raise ValueError(
+                    f"on_error argument must be 'ignore' or 'raise', got {on_error}."
+                )
     return lat, lon
 
 

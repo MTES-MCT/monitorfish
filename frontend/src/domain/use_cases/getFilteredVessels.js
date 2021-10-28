@@ -22,7 +22,6 @@ const getFilteredVessels = (vessels, filters) => async () => {
 
   const workerFilters = getFiltersWithoutZonesSelected(filters)
 
-  console.log(filters)
   return worker.getFilteredVessels(vessels, workerFilters).then(filteredVessels => {
     if (filters.zonesSelected?.length) {
       filteredVessels = filterByZones(filteredVessels, filters.zonesSelected)

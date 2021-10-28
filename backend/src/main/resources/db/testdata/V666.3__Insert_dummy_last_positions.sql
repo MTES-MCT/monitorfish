@@ -1022,3 +1022,15 @@ update last_positions set last_position_datetime_utc = now() where cfr = 'FAK123
 update last_positions set last_control_datetime_utc = null where cfr = 'FAK123456789';
 update last_positions set last_control_datetime_utc = '2106-01-15 08:13:00' where cfr = 'FRA000651332';
 
+update last_positions set is_at_port = true where cfr = 'ABC000197677';
+update last_positions set is_at_port = true where cfr = 'ABC000467431';
+update last_positions set is_at_port = true where cfr = 'ABC000701025';
+update last_positions set is_at_port = true where cfr = 'ABC000895886';
+update last_positions set is_at_port = true where cfr = 'ABC000739354';
+update last_positions set is_at_port = true where cfr = 'ABC000760751';
+update last_positions set is_at_port = true where cfr = 'ABC000455406';
+update last_positions set is_at_port = true where cfr = 'ABC000224867';
+update last_positions set is_at_port = true where cfr = 'ABC000607069';
+update last_positions set is_at_port = true where cfr = 'ABC000730777';
+update last_positions set is_at_port = true where cfr = 'ABC000363962';
+

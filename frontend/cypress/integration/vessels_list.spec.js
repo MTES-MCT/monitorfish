@@ -51,4 +51,23 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="back-to-vessels-list"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
   })
+
+  it('Vessels Should be filtered based on their location at port', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('959 navires')
+
+    // When
+    cy.get('*[data-cy^="filter-vessel-at-port"]').click()
+    cy.wait(1000)
+
+    // Then
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('803 navires')
+
+    // Then re-show the vessels at port
+    cy.get('*[data-cy^="filter-vessel-at-port"]').click()
+    cy.wait(1000)
+
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('959 navires')
+  })
 })

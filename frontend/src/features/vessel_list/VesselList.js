@@ -37,6 +37,7 @@ import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { all } from 'ol/loadingstrategy'
+import { VesselLocation } from '../../domain/entities/vessel'
 
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
@@ -83,6 +84,7 @@ const VesselList = ({ namespace }) => {
   const [vesselsSizeValuesChecked, setVesselsSizeValuesChecked] = useState([])
   const zonesSelected = useSelector(state => state.map.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
+  const [vesselsLocationFilter, setVesselsLocationFilter] = useState([VesselLocation.SEA, VesselLocation.PORT])
 
   const hasNoFilter = () => !lastControlMonthsAgo &&
     !zonesSelected?.length &&
@@ -91,7 +93,8 @@ const VesselList = ({ namespace }) => {
     !gearsFiltered?.length &&
     !speciesFiltered?.length &&
     !districtsFiltered?.length &&
-    !vesselsSizeValuesChecked?.length
+    !vesselsSizeValuesChecked?.length &&
+    vesselsLocationFilter?.length === 2
 
   useEffect(() => {
     const nextZonesPromises = getZonesAndSubZonesPromises()
@@ -137,7 +140,7 @@ const VesselList = ({ namespace }) => {
   }
 
   useEffect(() => {
-    if (vessels && vessels.length) {
+    if (vessels?.length) {
       const filters = {
         countriesFiltered,
         lastPositionTimeAgoFilter,
@@ -147,7 +150,8 @@ const VesselList = ({ namespace }) => {
         districtsFiltered,
         speciesFiltered,
         vesselsSizeValuesChecked,
-        lastControlMonthsAgo
+        lastControlMonthsAgo,
+        vesselsLocationFilter
       }
 
       dispatch(getFilteredVessels(vessels, filters))
@@ -166,7 +170,8 @@ const VesselList = ({ namespace }) => {
     districtsFiltered,
     speciesFiltered,
     vesselsSizeValuesChecked,
-    lastControlMonthsAgo
+    lastControlMonthsAgo,
+    vesselsLocationFilter
   ])
 
   useEffect(() => {
@@ -196,6 +201,7 @@ const VesselList = ({ namespace }) => {
     setSpeciesFiltered([])
     setDistrictsFiltered([])
     setVesselsSizeValuesChecked([])
+    setVesselsLocationFilter([VesselLocation.SEA, VesselLocation.PORT])
 
     dispatch(setBlockVesselsUpdate(false))
     dispatch(resetZonesSelected())
@@ -400,6 +406,10 @@ const VesselList = ({ namespace }) => {
               controls={{
                 lastControlMonthsAgo,
                 setLastControlMonthsAgo
+              }}
+              location={{
+                vesselsLocationFilter,
+                setVesselsLocationFilter
               }}
             />
             <VesselListTable

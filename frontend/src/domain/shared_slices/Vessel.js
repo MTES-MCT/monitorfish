@@ -47,7 +47,8 @@ const vesselSlice = createSlice({
       trackDepth: null,
       afterDateTime: null,
       beforeDateTime: null
-    }
+    },
+    vesselTrackExtent: null
   },
   reducers: {
     setVessels (state, action) {
@@ -296,6 +297,25 @@ const vesselSlice = createSlice({
     updateVesselTrackAsHidden (state, action) {
       delete state.vesselsTracksShowed[action.payload]
     },
+    /**
+     * Set the vessel track features extent - used to fit the extent into the OpenLayers view
+     * @function setVesselTrackExtent
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: string[]}} action - the extent
+     */
+    setVesselTrackExtent (state, action) {
+      state.vesselTrackExtent = action.payload
+    },
+    /**
+     * Reset the vessel track features extent
+     * @function setVesselTrackExtent
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     */
+    resetVesselTrackExtent (state) {
+      state.vesselTrackExtent = null
+    }
   }
 })
 
@@ -337,7 +357,9 @@ export const {
   addVesselTrackShowed,
   updateVesselTrackAsShowed,
   updateVesselTrackAsToHide,
-  updateVesselTrackAsHidden
+  updateVesselTrackAsHidden,
+  setVesselTrackExtent,
+  resetVesselTrackExtent
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

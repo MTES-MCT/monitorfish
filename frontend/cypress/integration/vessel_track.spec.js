@@ -57,8 +57,6 @@ context('Vessels Track', () => {
     cy.wait(20)
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 688, pointerId: 1, force: true })
 
-
-
     cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 38′ 24″ N')
     cy.get('*[data-cy^="vessel-track-card-longitude"]').contains('008° 07′ 01″ W')
     cy.get('*[data-cy^="vessel-track-card-course"]').contains('17°')

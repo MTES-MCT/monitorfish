@@ -13,11 +13,12 @@ import VesselSummary from './VesselSummary'
 import VesselFishingActivities from './fishing_activities/VesselFishingActivities'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
 import VesselControls from './controls/VesselControls'
-import TrackDepthSelection from './track_depth_selection/TrackDepthSelection'
-import TrackExport from './track_export/TrackExport'
+import TrackDepthSelection from './actions/track_depth_selection/TrackDepthSelection'
+import TrackExport from './actions/track_export/TrackExport'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { VesselSidebarTab } from '../../domain/entities/vessel'
-import HideOtherVessels from './hide_other_vessels/HideOtherVessels'
+import HideOtherVessels from './actions/hide_other_vessels/HideOtherVessels'
+import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -61,11 +62,15 @@ const VesselSidebar = () => {
         trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
         setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
       />
+      <HideOtherVessels
+        openBox={openSidebar}
+        rightMenuIsOpen={rightMenuIsOpen}
+      />
       <TrackExport
         openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />
-      <HideOtherVessels
+      <AnimateToTrack
         openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />

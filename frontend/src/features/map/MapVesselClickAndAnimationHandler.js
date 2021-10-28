@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetAnimateToCoordinates } from '../../domain/shared_slices/Map'
+import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
 import showVesselTrack from '../../domain/use_cases/showVesselTrack'
@@ -18,7 +18,8 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     animateToExtent
   } = useSelector(state => state.map)
   const {
-    vesselSidebarIsOpen
+    vesselSidebarIsOpen,
+    vesselTrackExtent
   } = useSelector(state => state.vessel)
   const {
     previewFilteredVesselsMode
@@ -30,7 +31,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
 
   useEffect(() => {
     animateViewToExtent()
-  }, [animateToExtent, map, vesselSidebarIsOpen])
+  }, [animateToExtent, vesselTrackExtent, map, vesselSidebarIsOpen])
 
   useEffect(() => {
     if (!previewFilteredVesselsMode && mapClickEvent?.feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
@@ -43,11 +44,14 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   }, [mapClickEvent])
 
   function animateViewToExtent () {
-    if (map && vesselSidebarIsOpen && animateToExtent) {
-      map.getView().fit(animateToExtent, {
+    if (map && vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
+      map.getView().fit(vesselTrackExtent, {
         duration: 500,
         padding: [100, 550, 100, 50],
-        maxZoom: 10
+        maxZoom: 10,
+        callback: () => {
+          dispatch(resetAnimateToExtent())
+        }
       })
     }
   }

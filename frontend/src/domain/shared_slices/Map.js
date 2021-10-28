@@ -62,14 +62,11 @@ const mapSlice = createSlice({
       state.animateToCoordinates = null
     },
     /**
-     * Animate map to the specified OpenLayers coordinates
+     * Animate map to the vessel track extent stored in the Vessel reduced
      * @param {Object=} state
-     * @param {{
-     * payload: String[]
-     * }} action - The OpenLayers internal [longitude, latitude] coordinates
      */
-    animateToExtent (state, action) {
-      state.animateToExtent = action.payload
+    animateToExtent (state) {
+      state.animateToExtent = true
     },
     resetAnimateToExtent (state) {
       state.animateToExtent = null

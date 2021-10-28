@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import styled from 'styled-components'
-import { ReactComponent as HidingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_actif.svg'
-import { ReactComponent as ShowingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_inactif.svg'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
+import { ReactComponent as HidingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_actif.svg'
+import { ReactComponent as ShowingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_inactif.svg'
+import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
-import { setHideOtherVessels } from '../../../domain/shared_slices/Vessel'
+import { setHideOtherVessels } from '../../../../domain/shared_slices/Vessel'
 
 const HideOtherVessels = props => {
   const dispatch = useDispatch()

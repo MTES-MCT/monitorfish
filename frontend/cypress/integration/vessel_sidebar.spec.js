@@ -170,4 +170,29 @@ context('VesselSidebar', () => {
     cy.get('.rs-table-cell-group > :nth-child(1) > .rs-table-cell > .rs-table-cell-content').click({ timeout: 20000 })
     cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("7.5 nds", { timeout: 20000 })
   })
+
+  it('Vessel track Should fit the view box When I click on animate to track', () => {
+    // Given
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+
+    // When
+    cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
+
+    // Then, the last position should be positioned in the bottom of the window
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 833, pointerId: 1, force: true })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 830, pointerId: 1, force: true })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 316, clientY: 835, pointerId: 1, force: true })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 830, pointerId: 1, force: true })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 835, pointerId: 1, force: true })
+    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 833, pointerId: 1, force: true })
+    cy.wait(20)
+
+    cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 20′ 54″ N')
+  })
 })

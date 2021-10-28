@@ -18,7 +18,8 @@ SELECT
     pos.course,
     pos.last_position_datetime_utc,
     pos.emission_period,
-    pos.vessel_identifier
+    pos.vessel_identifier,
+    pos.is_at_port
 FROM last_positions pos
 LEFT JOIN vessels
 ON pos.cfr = vessels.cfr

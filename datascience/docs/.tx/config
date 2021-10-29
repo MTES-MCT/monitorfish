@@ -463,3 +463,63 @@ source_file = pot/flows/risk-factor.pot
 source_lang = en
 type = PO
 
+[monitorfish.pot_autoapi_datascience_src_pipeline_helpers_segments_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/helpers/segments/index.po
+source_file = pot/autoapi/datascience/src/pipeline/helpers/segments/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_helpers_fao_areas_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/helpers/fao_areas/index.po
+source_file = pot/autoapi/datascience/src/pipeline/helpers/fao_areas/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_email_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/email/index.po
+source_file = pot/autoapi/datascience/src/pipeline/email/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_email_email_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/email/email/index.po
+source_file = pot/autoapi/datascience/src/pipeline/email/email/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_flows_regulations_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/flows/regulations/index.po
+source_file = pot/autoapi/datascience/src/pipeline/flows/regulations/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_flows_regulations_checkup_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/flows/regulations_checkup/index.po
+source_file = pot/autoapi/datascience/src/pipeline/flows/regulations_checkup/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_flows_fao_areas_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/flows/fao_areas/index.po
+source_file = pot/autoapi/datascience/src/pipeline/flows/fao_areas/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_flows_facade_areas_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/flows/facade_areas/index.po
+source_file = pot/autoapi/datascience/src/pipeline/flows/facade_areas/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_flows_scrape_legipeche_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/flows/scrape_legipeche/index.po
+source_file = pot/autoapi/datascience/src/pipeline/flows/scrape_legipeche/index.pot
+source_lang = en
+type = PO
+
+[monitorfish.pot_autoapi_datascience_src_pipeline_flows_missing_trip_numbers_index]
+file_filter = locale/<lang>/LC_MESSAGES/autoapi/datascience/src/pipeline/flows/missing_trip_numbers/index.po
+source_file = pot/autoapi/datascience/src/pipeline/flows/missing_trip_numbers/index.pot
+source_lang = en
+type = PO
+

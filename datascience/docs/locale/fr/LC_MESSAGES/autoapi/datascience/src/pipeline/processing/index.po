@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"POT-Creation-Date: 2021-10-29 15:44+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,63 +18,63 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:2
-#: 0ea0469ea70d4e27904d03ba30532ca8
+#: 79e0fcae8612411e9340b9eec32a6969
 msgid ":py:mod:`datascience.src.pipeline.processing`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:8
-#: 67bbd88b83de489c98254295bb6ddda0
+#: 26bf5af6d19640d596593da4e34e99df
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:12
-#: afc84e36a24f411786134821e1f6aeeb
+#: 747b85867b8947a99b668bed23920f41
 msgid "Functions"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: d85bcdb82c13485fb2885ecf3296432e
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 58ee8e8d34784df8be50feb95e984dfa
 msgid ""
 ":obj:`is_a_value <datascience.src.pipeline.processing.is_a_value>`\\ \\(x\\)"
 " → bool"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:36
-#: fbd95a2a938d4740bf1c4319947c9900 a8c51785f3224cca9c3535858f65f68f
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:38
+#: 70bb07ce69d9466cbf025bc8e2bdf242 bc111d8b9c1043dc8e1b9c0d351d1f57
 msgid "Returns False if pd.isna(x), True otherwise."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 8711180dab13478f844a41c21f16a945
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: c0e13b1461524fb48b0832c7d253f39e
 msgid ""
 ":obj:`concatenate_values "
 "<datascience.src.pipeline.processing.concatenate_values>`\\ \\(row\\: "
 "pandas.Series\\) → List"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 308ac9a16c784d0299bd30da7eab7829
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 8fcaf8dc2c6742c283c69e5f48c5d985
 msgid "Filters the input pandas Series to keep only distinct non null values"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: c999bc7fbd314bc1a71a7fc3ddc6a28a
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 5a8679f99730432887d16f5a4ca20354
 msgid ""
 ":obj:`concatenate_columns "
 "<datascience.src.pipeline.processing.concatenate_columns>`\\ \\(df\\: "
 "pandas.DataFrame\\, input\\_col\\_names\\: List\\) → pandas.Series"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 5fd2604085744c248e4b4ef2e235a46a
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: cb6a4db61dc14b6a810df773e8625ba2
 msgid ""
 "For each row in the input DataFrame, the distinct and non null values "
 "contained in"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: c59f6cd079a745e0a81c3dd36829789f
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 22a5f5c24fe34c5b97e4ce75cc6f3201
 msgid ""
 ":obj:`combine_overlapping_columns "
 "<datascience.src.pipeline.processing.combine_overlapping_columns>`\\ "
@@ -82,15 +82,15 @@ msgid ""
 "pandas.Series"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 5936244d2da4411dbd51d1aaf365f4c4
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 3aa929f908aa420a8c95c118736c9c18
 msgid ""
 "Combines several columns into one by taking the first_valid_value in each "
 "row,"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 73e640181d594b8e8116e31cd356a075
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: d7f6a07dfd7a474aad803ade4e372d21
 msgid ""
 ":obj:`get_first_non_null_column_name "
 "<datascience.src.pipeline.processing.get_first_non_null_column_name>`\\ "
@@ -98,42 +98,57 @@ msgid ""
 "None\\) → pandas.Series"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 5f296ba4c0804730b43f8d1a3b40bc99
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 80e9ac40f84144f8bc7973ad39640a18
 msgid ""
 "Returns a Series with the same index as the input DataFrame, whose values "
 "are"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 4d16d6de859541b3900d3ec29aca25ef
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: b66a922931b44c4f805fd726135fdc47
+msgid ""
+":obj:`remove_nones_from_dict "
+"<datascience.src.pipeline.processing.remove_nones_from_dict>`\\ \\(d\\: "
+"dict\\) → dict"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:118
+#: e0d6eae2c2634b87abadb68060fb784c 100c6992b94945b5a6dbc2e7268d76e0
+msgid "Takes a dictionary and removes ``None`` values from it."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: b51a1ea4a8b54f918976edf3094aee63
 msgid ""
 ":obj:`df_to_dict_series "
 "<datascience.src.pipeline.processing.df_to_dict_series>`\\ \\(df\\: "
-"pandas.DataFrame\\, result\\_colname\\: str \\= \\'json\\_col\\'\\)"
+"pandas.DataFrame\\, result\\_colname\\: str \\= \\'json\\_col\\'\\, "
+"remove\\_nulls\\: bool \\= False\\)"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 424965c1cc51467eb4a725737b820f8e
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 76024ae3e6cf479aa3523e3703c4c6c6
 msgid ""
 "Converts a pandas DataFrame into a Series with the same index as the input"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 90b943d15f36401dadc722d73903b670
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: b66a922931b44c4f805fd726135fdc47
 msgid ""
 ":obj:`zeros_ones_to_bools "
 "<datascience.src.pipeline.processing.zeros_ones_to_bools>`\\ \\(df\\: "
 "pandas.DataFrame\\) → pandas.DataFrame"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 64701ffb76374fc0a0df05b5460ef516
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 3340c1c14f134f58b44299eafa478055
 msgid "Converts a pandas DataFrame containing \"0\", \"1\" and None values"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: d004b244f4a54e12b904f4832b9e7a65
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: ecddc5e47f9544cb9dabc129b784d173
 msgid ""
 ":obj:`to_pgarr <datascience.src.pipeline.processing.to_pgarr>`\\ \\(x\\: "
 "Union\\[list\\, set\\, numpy.ndarray\\]\\, handle\\_errors\\: bool \\= "
@@ -141,15 +156,15 @@ msgid ""
 "Union\\[str\\, None\\]"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 8e1b0d6799b74ef0b940480809fca214
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 5954b995969747f8ae55b06b7f47d7d0
 msgid ""
 "Converts a python `list`, `set` or `numpy.ndarray` to a string with "
 "Postgresql"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 7f5f3feb11884bfd9bd16069d5e95ad2
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 36bee429f51040c18999f87e7361a1be
 msgid ""
 ":obj:`df_values_to_psql_arrays "
 "<datascience.src.pipeline.processing.df_values_to_psql_arrays>`\\ \\(df\\: "
@@ -157,54 +172,54 @@ msgid ""
 "value\\_on\\_error\\: Union\\[str\\, None\\] \\= None\\) → pandas.DataFrame"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 0ec7ed87f04e435abf75aa7ce0532304
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 6169530cc527475eadf25e5b714cfc99
 msgid "Returns a `pandas.DataFrame` with all values serialized as strings"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 9a706adebc0b47f88bfce42a71271ab4
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 5912eb9125684d1cae732008fa9f2060
 msgid ""
 ":obj:`json_converter <datascience.src.pipeline.processing.json_converter>`\\"
 " \\(x\\)"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:210
-#: cafb21a703014f29bd9021a75dad063e f16849e9cee54f6ca2faa1e6ef89c557
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:237
+#: 042907740bef4c10832f97fec8ac47a3 042907740bef4c10832f97fec8ac47a3
 msgid "Converter for types not natively handled by json.dumps"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 49f74452580246efb7203ec1a77c4a0c
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: d18f8d731c40489cbdcf3101f9cb5c31
 msgid ""
 ":obj:`to_json <datascience.src.pipeline.processing.to_json>`\\ \\(x\\: "
 "Any\\) → str"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:215
-#: f10a9ad7b8e549449da8da360822f06f c809901bb74b42f8a34aca58b690b25a
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:242
+#: 787db17e9afa4ef791b720b90f67a4b4 787db17e9afa4ef791b720b90f67a4b4
 msgid "Converts python object to json string."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 845d3a6961e040a6b8650ea061e8c67e
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 1529dbf8b2884791bab47d55e18b0518
 msgid ""
 ":obj:`df_values_to_json "
 "<datascience.src.pipeline.processing.df_values_to_json>`\\ \\(df\\: "
 "pandas.DataFrame\\) → pandas.DataFrame"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:220
-#: dfa5870303784e0380a04a7a7c2fd5ff ff747536178243b5ba0761ef9b346ac7
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:247
+#: 32f5f9d17fab4037b2875c635af94b4e 32f5f9d17fab4037b2875c635af94b4e
 msgid ""
 "Returns a `pandas.DataFrame` with all values serialized to json string."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 4055c69d01d142e0b76ec052cf32060a
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 74e59099ef58493aba5fda142cd39ded
 msgid ""
 ":obj:`drop_rows_already_in_table "
 "<datascience.src.pipeline.processing.drop_rows_already_in_table>`\\ \\(df\\:"
@@ -214,15 +229,15 @@ msgid ""
 "pandas.DataFrame"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: cdc349d345b84b55b2abcc14bb3b069d
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 11917f70371c471bb8324bbdd9d2cb61
 msgid ""
 "Removes rows from the input DataFrame `df` in which the column "
 "`df_column_name`"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 75d795ce9f71463e9795851331106c52
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: d260cdcf89e64a75aa6a7c91308ec650
 msgid ""
 ":obj:`prepare_df_for_loading "
 "<datascience.src.pipeline.processing.prepare_df_for_loading>`\\ \\(df\\: "
@@ -232,8 +247,8 @@ msgid ""
 "jsonb\\_columns\\: Union\\[None\\, list\\] \\= None\\)"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: 67ed3a1476a548f09c64a648e0fb820b
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 496ee8d72572411d96bc9f4264248a9e
 msgid ""
 ":obj:`join_on_multiple_keys "
 "<datascience.src.pipeline.processing.join_on_multiple_keys>`\\ \\(left\\: "
@@ -241,14 +256,22 @@ msgid ""
 "\\= \\'inner\\'\\)"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:33:<autosummary>:1
-#: cc321fc82e2d4c6ebf8fab969eb92c1d
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: 4a1613e21e3f4811bcf654a9efa0a1a3
 msgid ""
 "Join two pandas DataFrames, attempting to match rows on several keys by"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:38
-#: 55d3e5f50f6243a198911ca99b568c49
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:35:<autosummary>:1
+#: b51a1ea4a8b54f918976edf3094aee63
+msgid ""
+":obj:`try_get_factory "
+"<datascience.src.pipeline.processing.try_get_factory>`\\ \\(key\\: "
+"Hashable\\, error\\_value\\: Any \\= None\\)"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:40
+#: 9431f0a61ff745bca0284d7a6573b395
 msgid ""
 "NB : The same result could be obtained simply by checking pd.isna(x), but "
 "checking if x is None before checking pd.isna(x) improves performance on "
@@ -266,16 +289,18 @@ msgstr ""
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
-#: 7e4d0dd32d1c4a3eba696eb8a22c2c6f a8018bf6752340eab9a78278a70644cb
-#: ff2d2df0fa2d42ff9fcd34da53d683b5 bdd3df452f2945579db966eda58873bb
-#: 21488bbc5b084893b9f05e9bfe64e9af ef6fc35179bb40ad9232b77801d6b6f7
-#: d719cf6c62e541308b092593212c1cdb 32e35be53e63438eb8f8bad32ffc5d63
-#: 90c0f716db604534b9bd0e84f3619dc0 850e9f2850e54cc7bccdf2df03384567
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
+#: 861b4153c570495da16ee9c2efb80a35 861b4153c570495da16ee9c2efb80a35
+#: 861b4153c570495da16ee9c2efb80a35 861b4153c570495da16ee9c2efb80a35
+#: 861b4153c570495da16ee9c2efb80a35 861b4153c570495da16ee9c2efb80a35
+#: 861b4153c570495da16ee9c2efb80a35 861b4153c570495da16ee9c2efb80a35
+#: 861b4153c570495da16ee9c2efb80a35 6ea25558649d4bf3b709f7be814bdae1
+#: 861b4153c570495da16ee9c2efb80a35
 msgid "Parameters"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:43
-#: c7dd4318234f45448d40ad2a72d5d225
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:45
+#: a179e4909ccb4aa9bd0563b0abd4109b
 msgid "Anything"
 msgstr ""
 
@@ -289,16 +314,18 @@ msgstr ""
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
-#: 30bd03df2ff34540a571b9fe19dd34c2 1f6e8ee6715240d5b25597617c5e5f8d
-#: e94a9822c6a94e74b2c84124c3c73a7a 43c727fe523d4d958fa66e228a5d435a
-#: 8a1b8500458340f192960b87c1679d8b 1b8a0729235841e9b5d3c1967137b903
-#: 43803b3ba76d4ec9b6c5378dab2b9929 f2afe2f286d14f1cb25f8f55b94f6259
-#: 3b7c01288f814376aee7d1990b9e5db4 9c14b1f1026b4a7c84cced7cd76af4bd
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
+#: 11158c3a1ce444aba06f9b5071e2d308 11158c3a1ce444aba06f9b5071e2d308
+#: 11158c3a1ce444aba06f9b5071e2d308 11158c3a1ce444aba06f9b5071e2d308
+#: 11158c3a1ce444aba06f9b5071e2d308 11158c3a1ce444aba06f9b5071e2d308
+#: 517498d805d047139dff73c6a6e770b7 11158c3a1ce444aba06f9b5071e2d308
+#: 11158c3a1ce444aba06f9b5071e2d308 11158c3a1ce444aba06f9b5071e2d308
+#: 11158c3a1ce444aba06f9b5071e2d308
 msgid "Returns"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:45
-#: 1ea398173a444103978a0aa61f1b6f80
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:47
+#: 1bb8ef3607584ece834b2ee9ddc87a92
 msgid "False if pd.isna(x), True otherwise"
 msgstr ""
 
@@ -312,34 +339,36 @@ msgstr ""
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
-#: 93e53dd9f0b045388a4838a34c0e4bfe 1811eb70b77e400ca32cff75012975b7
-#: 50bf0db4790d4c35a5df511c6e15bfa0 9aba4b2976ab4007bbeef3c96d489a89
-#: b408585db2924f9b89263c3a677b333f cf2b6e0d14c94fd5a097c1701781fac9
-#: 7ca2352516a442c9a8d22e73ba12ca12 5f9c8d9a1d0a4abb85401375b0089542
-#: 9587cc00c7a643d59fa069ebf86aa339 daa5c940f62a476281b758d929a58b19
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
+#: 275b86a3bb00472aa88d8a410cbfa2f4 275b86a3bb00472aa88d8a410cbfa2f4
+#: 275b86a3bb00472aa88d8a410cbfa2f4 275b86a3bb00472aa88d8a410cbfa2f4
+#: 275b86a3bb00472aa88d8a410cbfa2f4 275b86a3bb00472aa88d8a410cbfa2f4
+#: f31f409dbd4f493697594c11fe208d85 275b86a3bb00472aa88d8a410cbfa2f4
+#: 275b86a3bb00472aa88d8a410cbfa2f4 275b86a3bb00472aa88d8a410cbfa2f4
+#: 275b86a3bb00472aa88d8a410cbfa2f4
 msgid "Return type"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:51
-#: 82c154a2e6c743b7a706f226661ac225
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:53
+#: 6650ed5a91ab4c5eaec10a20d34f73b9
 msgid ""
 "Filters the input pandas Series to keep only distinct non null values and "
 "returns the result as a python list."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:54
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:126
-#: ac51ba98ad0c4ab490d24df83478c8ed 7be0d60cec3842678b45b1da069206c6
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:56
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:153
+#: d8f658ce7d6749aeb5bdf718712a2e92 d8f658ce7d6749aeb5bdf718712a2e92
 msgid "pandas Series"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:57
-#: 27c32c83e12c4446a42d558f76d0d83b
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:59
+#: dec84fd43ce644b384c3ae912109c9db
 msgid "list of distinct non null values in row"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:63
-#: 9867420ab3a9402f8d5067f51b261055
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:65
+#: 4779c37ad9634b5691baf712cc959f26
 msgid ""
 "For each row in the input DataFrame, the distinct and non null values "
 "contained in the columns input_col_names are stored in a list. A pandas "
@@ -347,181 +376,197 @@ msgid ""
 "these lists as values."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:67
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:121
-#: 5349e123c47c4cc6a972ff4968915174 8022064cc8484557a4bdcaec62b78e1d
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:69
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:145
+#: 18292367d81a4f5a864b8d4bcf8288c8 18292367d81a4f5a864b8d4bcf8288c8
 msgid "input DataFrame"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:69
-#: 3c058cdf03f647ff83729719d27040d7
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:71
+#: 7d9b4ae063714104a392e1b8adafde89
 msgid "the names of the columns to use"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:72
-#: 4a4350b2e2b54f8d8c53289f5d436750
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:74
+#: 23cd2ef1fc4648c9a444b589f3b3ff18
 msgid "resulting Series"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:78
-#: 902ce1f5f7b14dfd9e44bc0220a4d0a4
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:80
+#: aebf0d559a1040689269866132613e9b
 msgid ""
 "Combines several columns into one by taking the first_valid_value in each "
 "row, in the order of the ordered_cols_list."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:81
-#: 58d0171e0cfe4f62b040edbdd75020fa
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:83
+#: 2af658d428904519957bc8c74ddc2278
 msgid "Returns a pandas Series with the combined results."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:83
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:103
-#: c5b94b7689994c8c9ad9614972b3e986 85b9e8a4f282444ea464255a3f4399cd
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:85
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:105
+#: d10da1238a854affb9504e614fb05730 d10da1238a854affb9504e614fb05730
 msgid "input pandas DataFrame"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:85
-#: 202f6435300941cdbd9e1621880e8768
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:87
+#: eb21363754334891bfa84f18adec8896
 msgid "list of column names"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:88
-#: 8996bfcbfb754fcaa4eab0fe06babd66
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:90
+#: 73976d5b97e843ecbe1315f160b03752
 msgid ""
 "Series containing the first valid value in each row of the DataFrame,     "
 "taken in the ordered_cols_list columns."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:90
-#: 41c59154e89c4dcfa534191926970d96
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:92
+#: a212e84dd0cb48dfbab323a9a71d97b0
 msgid "Series containing the first valid value in each row of the DataFrame,"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:91
-#: 192d0f4eb57749009180ad00d2b0d3b8
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:93
+#: e118948c45f940e2a230cb181a676f3b
 msgid "taken in the ordered_cols_list columns."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:97
-#: 4622ecf75c224234811ebb0015d7f9ce
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:99
+#: cdec67b6c44f440e877946f7302418ee
 msgid ""
 "Returns a Series with the same index as the input DataFrame, whose values "
 "are the name of the first column (or the corresponding label, if provided) "
 "with a non-null value in each row, from left to right."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:101
-#: 017b4dcd9ec74e64956316097493232c
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:103
+#: 8edf59bea2cd4033a535c2757db9e8e2
 msgid "Rows with all null values return None."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:105
-#: e38e9f84751a4d9cb5a958a4c9a7f3ec
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:107
+#: 82b566f2045f400b8bc71f032ba4fad1
 msgid "if provided, must be a mapping of column names to the"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:109
-#: 544ff9f7d85e4f81b75fece4cb25ea0b
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:111
+#: 02cc1fddd5da471185044f197c05aded
 msgid ""
 "Series containing the name of the first column with a non-null value in each"
 " row of the DataFrame, from left to right"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:116
-#: 98a5e465a7bd4706b32de7f320aa8ab2
-msgid ""
-"Converts a pandas DataFrame into a Series with the same index as the input "
-"DataFrame and whose values are dictionnaries like :"
-msgstr ""
-
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:119
-#: d22ef1ee78394f9fb35807cb0b9973c6
-msgid "{'column_1' : value, 'column_2': value}"
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:120
+#: e7c6bfb9946c455ea3eef18e4ae1fdf4
+msgid "a dictionary"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:123
-#: e96348ae35f3466ab6adb6762b5d06b4
+#: 626b9f19c4b34c3787225ddaaec3487b
+msgid "the input dictionary, with all ``None``s removed."
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:127
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:194
+#: ec60f58912cd489a85e8c623df9fd06f ec60f58912cd489a85e8c623df9fd06f
+msgid "Examples"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:140
+#: bf224eb4712640048ff8f687ef3f54b3
+msgid ""
+"Converts a pandas DataFrame into a Series with the same index as the input "
+"DataFrame and whose values are dictionaries like :"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:143
+#: abac1a5afb9449809bde1b5518ba5fb4
+msgid "{'column_1' : value, 'column_2': value}"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:147
+#: da9d3090d99642a4abab0ead97c0a597
 msgid "optionnal, name of result Series"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:132
-#: 71382a98f3f043cd8b44909becf82d2f
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:149
+#: 3083514ffa99454284cc9a2bcc382a46
+msgid "if set to ``True``, ``null`` values are recursively"
+msgstr ""
+
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:159
+#: c817bfeadc634d58a2112b449e81b83e
 msgid ""
 "Converts a pandas DataFrame containing \"0\", \"1\" and None values to a "
 "DataFrame with False, True and None values respectively."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:135
-#: 5ee620471b764fd193099be56961132b
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:162
+#: 0d2c9cefb9f1482594143a36ab7390c3
 msgid ""
 "Useful to convert boolean data extracted from Oracle databases, since Oracle"
 " does not have a boolean data type and boolean data is often stored as "
 "\"0\"s and \"1\"s."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:141
-#: 545d6eb108704dc18a4b8921491865f5
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:168
+#: 778f50b8b366436eb17f940fa427af34
 msgid ""
 "Converts a python `list`, `set` or `numpy.ndarray` to a string with "
 "Postgresql array syntax."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:144
-#: 0f6747636ecc46c596e0694006ea6f2a
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:171
+#: ffdfd2c60b274086a801d555f21b2a6f
 msgid ""
 "Elements of the list-like input argument are converted to `string` type, "
 "then stripped of leading and trailing blank spaces, and finally filtered to "
 "keep only non empty strings."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:148
-#: f78f16c1a9c94bd5915255b5de5e3b01
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:175
+#: 1d5fd21938084448b6f71a97e5e15a73
 msgid ""
 "This transformation is required on the elements of a DataFrame's columns "
 "that contain collections before bulk inserting the DataFrame into Postgresql"
 " with the psql_insert_copy method."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:152
-#: b058566ecf5c43d5a641891c7541ccb5
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:179
+#: 056466de58c6440d8536842ebbcb44b7
 msgid "iterable to serialize as Postgres array"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:154
-#: a8a6e52f0d08487e84186c83298f6b83
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:181
+#: b93754cd117241afa016a694ab14e693
 msgid ""
 "if ``True``, returns ``value_on_error`` instead of raising ``ValueError`` "
 "when the input is of an unexpected type"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:157
-#: 5df951cf9f584e8397c0cd75771f6b16
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:184
+#: 4c16490fd7fa420089c124da8123bd38
 msgid "value to return on errors, if ``handle_errors`` is ``True``"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:161
-#: e678620d767d4a26a1b671e5ef483d5e
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:188
+#: def32c34f5cb47d0b6b43cff6fcf2086
 msgid "string with Postgresql Array compatible syntax"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/processing/index.rst:0
-#: e86d861309204cb69bbae0515d231661
+#: 827cd18cc3db4244ba77d19c8eda76c4
 msgid "Raises"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:164
-#: 6f7efa0307ae4995acd3dba5c4964e28
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:191
+#: 43468022c69f43a4b74b9e5b8a7ccc7c
 msgid "when ``handle_errors`` is False and ``x`` is not list-like."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:167
-#: 870e55ece9d54c28b6780864c8e3d693
-msgid "Examples"
-msgstr ""
-
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:181
-#: 0ee90f635c324869b7bfb08320c42a2b
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:208
+#: 7a3c1c3a6a3c4708a20905b505e8de9e
 msgid ""
 "Returns a `pandas.DataFrame` with all values serialized as strings with "
 "Postgresql array syntax. All values must be of type list, set or numpy "
@@ -529,76 +574,76 @@ msgid ""
 "set to True."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:185
-#: 425fcaf36b66494e9b861a6f588bfaa6
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:212
+#: 80a86104cccf45a0a3917d97a0d4dfa8
 msgid "See `to_pgarr` for details on error handling."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:187
-#: 554a5e9473e1489ab35da5c3a658ade7
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:214
+#: 546ebdcaaa984df8a8c07f4becf61235
 msgid ""
 "This is required before bulk loading a pandas.DataFrame into a Postgresql "
 "table with the psql_insert_copy method."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:191
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:227
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:264
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:266
-#: cb29ae5b6e7d489f8e431f99435f66b6 ac2f804d9ce145f5b428da00fe137272
-#: 675984905e27457ba4ccecff70500e93 16393f307c984d38a9a52b86094290a3
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:218
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:254
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:291
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:293
+#: 22b3c45d15f244cba1d5be06e9afe79d cd28c99a33a14254b88b5ce058b0862d
+#: 22b3c45d15f244cba1d5be06e9afe79d 22b3c45d15f244cba1d5be06e9afe79d
 msgid "pandas DataFrame"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:194
-#: 150224a8101842d9a98167514a56a313
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:221
+#: 45143f4ea9304764b4bd4176ead8c32d
 msgid ""
 "pandas DataFrame with the same shape and index, all values     serialized as"
 " strings with Postgresql array syntax."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:196
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:232
-#: 01d0f2eeeca1431db6007367ff0c8543 7ee0ef0bfde0453cb810ced2c99f2931
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:223
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:259
+#: 90a276f922d342139c9d404a8ac70268 90a276f922d342139c9d404a8ac70268
 msgid "pandas DataFrame with the same shape and index, all values"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:197
-#: 67a39b26a6a34ccfa9b9fb04f43bbb25
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:224
+#: 237494a3ee964a889c60d5d489b78417
 msgid "serialized as strings with Postgresql array syntax."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:200
-#: df60889a03ad4233a9cbcf577c027a6c
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:227
+#: 75a8466f465d49e89592551a23a62ddc
 msgid "Examples :"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:222
-#: 33c547500ccf4b8ca685448d675ee021
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:249
+#: 73a706b0343a4abaa367e0ae1c46090a
 msgid ""
 "This is required before bulk loading into a Postgresql table with the "
 "psql_insert_copy method."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:225
-#: 08ebe4375242472383725cdd51dadb61
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:252
+#: 90060071093b49ceb1fe73bc394cb40b
 msgid "See `to_json` function for details."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:230
-#: f563cd4dcb9b4fc192945fa94314bf28
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:257
+#: 4afc6fd97fe74bf89fc7142e5431792b
 msgid ""
 "pandas DataFrame with the same shape and index, all values     serialized as"
 " json strings."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:233
-#: e29c54f123884097bc1d0b59cbda8991
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:260
+#: c0a181ff1d694a00a8564b8623370b0d
 msgid "serialized as json strings."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:239
-#: 1610e1b36daa463987ecd213074cd220
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:266
+#: 0dbe403c364143dd917f220fb296f13f
 msgid ""
 "Removes rows from the input DataFrame `df` in which the column "
 "`df_column_name` contains values that are already present in the column "
@@ -606,15 +651,15 @@ msgid ""
 "DataFrame."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:249
-#: 6d1f2e1aa7084dcdbb213ced075a203d
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:276
+#: 9671cea0337a43dd9ec8a418207fef2d
 msgid ""
 "Join two pandas DataFrames, attempting to match rows on several keys by "
 "decreasing order of priority."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:252
-#: 562d2ee92c3d4008b0cfcc130564c7d4
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:279
+#: f81d73497def4ccf81dc22085cc1b0f0
 msgid ""
 "Joins are performed successively with each of the keys listed in `on`, and "
 "results are then concatenated to form the final result. This is different "
@@ -623,32 +668,32 @@ msgid ""
 "keys match."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:257
-#: e844c8108ae74670a48502c6aa8bc6ac
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:284
+#: f3e7807c02784bec8a789854be2c3252
 msgid ""
 "Joins are performed on the keys listed in `on` by \"decreasing order or "
 "priority\" in the sense that rows of left and right that have been matched "
 "on one key are removed from ulterior joins perfomed on the next keys."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:261
-#: cb95dc5690e746498098218ffbb417d3
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:288
+#: 59817dda36a344f3bfe79acef7b70570
 msgid ""
 "During each of the joins on the individual keys, non-joining key pairs from "
 "left and right DataFrames are coalesced."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:268
-#: 6dd5d92e90864d0db84fffa4b78d7f9a
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:295
+#: 8b2fdb2a434f472da92c727fc3fcc0fa
 msgid "list of column names to use as join keys"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:270
-#: 96bb5888213b40d8b930a6e2bfbe4776
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:297
+#: 71809ffb200e4f3fad138a3530152824
 msgid "'inner', 'left', 'right' or 'outer'. Defaults to 'inner'."
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:273
-#: f4936d822d044a8c8bdc787786d75f91
+#: ../source/autoapi/datascience/src/pipeline/processing/index.rst:300
+#: 809b4577ac214222b72842becfd6daad
 msgid "result of join operation"
 msgstr ""

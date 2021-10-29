@@ -97,7 +97,7 @@ Impact score
 ============
 
 The *impact* score is defined by taking the risk level of the :doc:`fleet segment <fleet-segments>` a fishing vessel belongs to in real time. 
-This risk level is evaluated each year for each fleet segment during the *risk assessment* process.
+This risk level represents the **impact of the fishing activity** and is evaluated each year for each fleet segment during the *risk assessment* process.
 
 If a fishing vessel belongs to several fleet segments, its *impact score* is defined as the highest risk level among the fleet segments it belongs to.
 

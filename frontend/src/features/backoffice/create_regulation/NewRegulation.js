@@ -146,7 +146,7 @@ const CreateRegulation = ({ title, isEdition }) => {
           const featureObject = mapToRegulatoryFeatureObject({
             selectedRegulationTopic,
             selectedRegulationLawType,
-            nameZone: encodeURIComponent(nameZone),
+            nameZone: nameZone,
             selectedSeaFront,
             selectedRegionList,
             regulatoryTexts,

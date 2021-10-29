@@ -38,6 +38,7 @@ const RegulationTopicLine = props => {
         />
         {selectedRegulationTopic &&
           <Tag
+            data-cy={`${selectedRegulationTopic}`}
             tagValue={selectedRegulationTopic}
             onCloseIconClicked={_ => setSelectedRegulationTopic()}
           />}

@@ -7,6 +7,7 @@ import sqlalchemy
 
 from config import default_risk_factors
 from src.pipeline.flows.last_positions import (
+    add_vessel_identifier,
     compute_emission_period,
     concatenate,
     drop_unchanched_new_last_positions,
@@ -18,6 +19,7 @@ from src.pipeline.flows.last_positions import (
     load_last_positions,
     merge_last_positions_risk_factors,
     split,
+    tag_vessels_at_port,
     validate_action,
 )
 from tests.mocks import mock_extract_side_effect
@@ -360,3 +362,67 @@ class TestLastPositionsFlow(unittest.TestCase):
         ).fillna({**default_risk_factors})
 
         pd.testing.assert_frame_equal(expected_res, res)
+
+    @patch("src.pipeline.flows.last_positions.extract")
+    def test_tag_vessels_at_port(self, mock_extract):
+
+        mock_extract.return_value = pd.DataFrame(
+            {
+                "h3": [
+                    "8900510a463ffff",
+                    "892b2c359d3ffff",
+                    "some_other_h3_cell",
+                ],
+            }
+        )
+
+        last_positions = pd.DataFrame(
+            {
+                "latitude": [45, 85.1, -85.2, 45.3, 45.4],
+                "longitude": [89.1, 10, -10, 12.6, -59.16],
+            }
+        )
+
+        last_positions_with_is_at_port = tag_vessels_at_port.run(last_positions)
+
+        expected_last_positions_with_is_at_port = last_positions.copy().assign(
+            is_at_port=[False, True, False, False, True]
+        )
+
+        pd.testing.assert_frame_equal(
+            last_positions_with_is_at_port, expected_last_positions_with_is_at_port
+        )
+
+    def test_add_vessel_identifier(self):
+
+        last_positions = pd.DataFrame(
+            {
+                "cfr": ["A", "B", None, None, None],
+                "ircs": ["aa", "bb", "cc", None, "ee"],
+                "external_immatriculation": ["aaa", None, None, "ddd", "eee"],
+                "some": [1, 2, None, 1, 1],
+                "more": ["a", None, "c", "d", "e"],
+                "data": [None, 2.256, 0.1, 2.36, None],
+            }
+        )
+
+        last_positions_with_vessel_identifier = add_vessel_identifier.run(
+            last_positions
+        )
+
+        expected_last_positions_with_vessel_identifier = last_positions.copy(
+            deep=True
+        ).assign(
+            vessel_identifier=[
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+                "IRCS",
+                "EXTERNAL_REFERENCE_NUMBER",
+                "IRCS",
+            ]
+        )
+
+        pd.testing.assert_frame_equal(
+            last_positions_with_vessel_identifier,
+            expected_last_positions_with_vessel_identifier,
+        )

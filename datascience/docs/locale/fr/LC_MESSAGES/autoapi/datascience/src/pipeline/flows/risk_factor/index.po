@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"POT-Creation-Date: 2021-10-29 15:44+0200\n"
 "PO-Revision-Date: 2021-08-23 14:49+0000\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:2
-#: b1a4134bed714366adb3db73ec0d9a5e
+#: d2441579107f4991af634249887ab140
 msgid ":py:mod:`datascience.src.pipeline.flows.risk_factor`"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:8
-#: 669cfd7f3b4b45bcaa4766fc2a0ae21e
+#: 9702ba8e6545451291b9573315eb5294
 msgid "Module Contents"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:12
-#: eb92dd4f4f044060a0adf44ba5b1095c
+#: 0bf4b90230c747d0af53594aab50c6a2
 msgid "Functions"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
-#: 5671bf93d79f4d54aaa44cd14c4e7c5d
+#: 2941f655dc93485cba040a6ee5588ae5
 msgid ""
 ":obj:`extract_current_segments "
 "<datascience.src.pipeline.flows.risk_factor.extract_current_segments>`\\ "
@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
-#: 0006d80537164013aa4ab135700661b6
+#: 6d44b483bfcd4db9950901f314b8f32f
 msgid ""
 ":obj:`extract_control_anteriority "
 "<datascience.src.pipeline.flows.risk_factor.extract_control_anteriority>`\\ "
@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
-#: 5d8176456e7f458a90afc5ca8dc73a01
+#: 4f5632d3784b4743adbc2b654dad12bf
 msgid ""
 ":obj:`compute_risk_factors "
 "<datascience.src.pipeline.flows.risk_factor.compute_risk_factors>`\\ "
@@ -58,7 +58,7 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
-#: 33da0ebcc7db491bbfa8b684f0f16cef
+#: 6447568f9e7f4c2cb1667cdedf3f7b3b
 msgid ""
 ":obj:`load_risk_factors "
 "<datascience.src.pipeline.flows.risk_factor.load_risk_factors>`\\ "
@@ -66,45 +66,31 @@ msgid ""
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:54
-#: a8622568e7ce436aa48c021abe13190b 00e1fa92e6774c3ba54538afb2b1b2fc
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:42
+#: ddbae0acbc794b449a9b84673dd01583 4396a4cb52d54772a01bbc89b90dd90a
 msgid ""
 "Load the output of ``compute_risk_factors`` task into ``risk_factors`` "
 "table."
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:24
-#: b5968831896f4938b34cab06fab835f5
+#: b60e4263974c43fab2e241a64fe22a32
 msgid "Attributes"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
-#: 569ae43c24a44710ae343ab6b707ced2
-msgid ""
-":obj:`risk_factor_coefficients "
-"<datascience.src.pipeline.flows.risk_factor.risk_factor_coefficients>`\\"
-msgstr ""
-
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
-#: 7b1b61a2906546718dde51c0ffec5922
-msgid ""
-":obj:`default_risk_factors "
-"<datascience.src.pipeline.flows.risk_factor.default_risk_factors>`\\"
-msgstr ""
-
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
-#: 293e437ad8574e598772296c9dd33121
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:30:<autosummary>:1
+#: 0713696abe514c37a2f2b2b0eb6f7e84
 msgid ""
 ":obj:`current_segments "
 "<datascience.src.pipeline.flows.risk_factor.current_segments>`\\"
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:0
-#: 7b21037822734495ad28e6e8aeba4bce
+#: 6b25a5fa24e14071b71b2d012f901dfc
 msgid "Parameters"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:56
-#: e5c28285bce242569ec68eb17784fb42
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:44
+#: dcf4c40b48af4c2794a9a8c5fe590e11
 msgid "output of ``compute_risk_factors`` task."
 msgstr ""

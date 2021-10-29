@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"POT-Creation-Date: 2021-10-29 15:44+0200\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
@@ -21,11 +21,11 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../source/fleet-segments.rst:3 6059346aed044a7a8249e2448105ecdc
+#: ../source/fleet-segments.rst:3 1ed7c2f078e841458d6497e49d1dc2bd
 msgid "Fleet segments"
 msgstr "Segments de flotte"
 
-#: ../source/fleet-segments.rst:5 1bf4fb5314154c5c908142037bb39b2e
+#: ../source/fleet-segments.rst:5 6e734e05a72b4c2d84009793a132885a
 msgid ""
 "The European Fishing Control Agency's `Guidelines on Risk Assessment "
 "Methodology <https://www.efca.europa.eu/en/content/guidelines-risk-"
@@ -40,7 +40,7 @@ msgstr ""
 "présentant des caractéristiques de pêche similaires (par exemple, engin, "
 "zone et espèces cibles) \"*."
 
-#: ../source/fleet-segments.rst:9 526d19688f35478eac8fc9489c28feb8
+#: ../source/fleet-segments.rst:9 26eb64d102c244739544fb1226c6506c
 msgid ""
 "Each member state is responsible for defining the fleet segments relevant to"
 " its waters and to perform risk assessments on each segment."
@@ -48,11 +48,11 @@ msgstr ""
 "Chaque État membre est chargé de définir les segments de flotte pertinents "
 "pour ses eaux et d'effectuer une évaluation des risques pour chaque segment."
 
-#: ../source/fleet-segments.rst:15 e4977f3cfb4f40a58729c70398561b50
+#: ../source/fleet-segments.rst:15 e1fc906b904b4752b1be747ea2c55472
 msgid "Fleet segment risk assessment and control objectives"
 msgstr "Évaluation des risques et objectifs de contrôle du segment de flotte"
 
-#: ../source/fleet-segments.rst:17 411e0ee52cca4f5a881ab448bf27ce84
+#: ../source/fleet-segments.rst:17 cf94a50ef5054ff0b907102e5a8dc71e
 msgid ""
 "In France, fleet segments were defined by the `Direction des Pêches "
 "Maritimes et de l'Aquaculture <https://agriculture.gouv.fr/administration-"
@@ -67,15 +67,15 @@ msgstr ""
 "de la Mer "
 "<https://fr.wikipedia.org/wiki/Direction_interr%C3%A9gionale_de_la_Mer#:~:text=Les%20directions%20interr%C3%A9gionales%20de%20la,marin%20et%20gestion%20des%20ressources>`_."
 
-#: ../source/fleet-segments.rst:21 40c1cfb58e18417eb3a55bfdcf45b6bf
+#: ../source/fleet-segments.rst:21 56de45a5ce9642ac9312edb93aa3b177
 msgid ""
-"During this process, a risk level is computed for each fleet segment based "
-"on"
+"During this process, a **risk level** is computed for each fleet segment "
+"based on"
 msgstr ""
-"Au cours de ce processus, un niveau de risque est calculé pour chaque "
+"Au cours de ce processus, un **niveau de risque** est calculé pour chaque "
 "segment de flotte sur la base des éléments suivants"
 
-#: ../source/fleet-segments.rst:23 e7efc41cbe534bdda5e4873ce8ba7844
+#: ../source/fleet-segments.rst:23 d80e6f55a26e4a04b18ebd8eb865ef9b
 msgid ""
 "scientific data on the **state of the stock** (healthy, threatened, "
 "collapsed...)"
@@ -83,16 +83,25 @@ msgstr ""
 "des données scientifiques sur l' **état du stock** (sain, menacé, "
 "effondré...)"
 
-#: ../source/fleet-segments.rst:24 92179397d1794badb0832b148c1b7dbd
+#: ../source/fleet-segments.rst:24 56933166321c4a2fad3ed46eece7dda9
 msgid ""
-"national metrics to estimate the pressure that the fishing activity puts on "
-"the stock and the level of non-compliance observed on the fleet segment"
+"national metrics to estimate the **pressure** that the fishing activity puts"
+" on the stock and the **level of non-compliance** observed on the fleet "
+"segment"
 msgstr ""
-"des métriques nationales pour estimer la pression exercée par l'activité de "
-"pêche sur le stock et le niveau de non-conformité observé sur le segment de "
-"flotte."
+"des métriques nationales pour estimer la **pression** exercée par l'activité"
+" de pêche sur le stock et le **niveau de non-conformité** observé sur le "
+"segment de flotte."
 
-#: ../source/fleet-segments.rst:26 dee34fea1bd844e68e033c401387cc13
+#: ../source/fleet-segments.rst:26 171c33ce129e4ffab75546b00bbf019e
+msgid ""
+"This risk level represents the **impact of the fishing activity** on the "
+"ressources."
+msgstr ""
+"Ce niveau de risque représente **l'impact de l'activité de pêche** sur les "
+"ressources."
+
+#: ../source/fleet-segments.rst:28 5b5d2483629b4bb2a17324d600419451
 msgid ""
 "In addition, and based on the risk assessment conclusions, an objective of a"
 " minimum number of controls to perform on each fleet segment is defined."
@@ -101,11 +110,11 @@ msgstr ""
 "objectif d'un nombre minimum de contrôles à effectuer sur chaque segment de "
 "flotte est défini."
 
-#: ../source/fleet-segments.rst:29 2b3afbb835924b7bac08a98604f36598
+#: ../source/fleet-segments.rst:31 7469ace8cdb34775b6597c5890831a80
 msgid "Fleet segments computation and display"
 msgstr "Calcul et affichage des segments de flotte"
 
-#: ../source/fleet-segments.rst:31 1454bf52741a4c4db5ba4c21f67037ee
+#: ../source/fleet-segments.rst:33 e6456c5da74949339a22e03862e57b75
 msgid ""
 "The :doc:`flows/current-segments` flow computes the fleet segments each "
 "vessel belongs to in real time, based on ERS data."
@@ -114,7 +123,7 @@ msgstr ""
 "auxquels appartient chaque navire en temps réel, sur la base des données "
 "ERS."
 
-#: ../source/fleet-segments.rst:33 a3509412c20b4a94beef997abce8558f
+#: ../source/fleet-segments.rst:35 171c33ce129e4ffab75546b00bbf019e
 msgid ""
 "Fishing vessels' fleet segment(s) can then be visualized on the map in real "
 "time, filtered based on their fleet segments..."
@@ -123,6 +132,6 @@ msgstr ""
 "visualisés sur la carte en temps réel, les navires peuvent être filtrés en "
 "fonction de leurs segments de flotte..."
 
-#: ../source/fleet-segments.rstNone 5e9433745c3045b1803745a7b2d62870
+#: ../source/fleet-segments.rstNone 11b798b13cd84e2fa7be5df027c6178d
 msgid "Map showing vessels with fleet segments labels"
 msgstr "Carte montrant les navires avec des étiquettes de segments de flotte"

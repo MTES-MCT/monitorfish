@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2021-10-29 15:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: ../source/fleet-segments.rst:21
 #: 56de45a5ce9642ac9312edb93aa3b177
-msgid "During this process, a risk level is computed for each fleet segment based on"
+msgid "During this process, a **risk level** is computed for each fleet segment based on"
 msgstr ""
 
 #: ../source/fleet-segments.rst:23
@@ -53,25 +53,30 @@ msgstr ""
 
 #: ../source/fleet-segments.rst:24
 #: 56933166321c4a2fad3ed46eece7dda9
-msgid "national metrics to estimate the pressure that the fishing activity puts on the stock and the level of non-compliance observed on the fleet segment"
+msgid "national metrics to estimate the **pressure** that the fishing activity puts on the stock and the **level of non-compliance** observed on the fleet segment"
 msgstr ""
 
 #: ../source/fleet-segments.rst:26
+#: 171c33ce129e4ffab75546b00bbf019e
+msgid "This risk level represents the **impact of the fishing activity** on the ressources."
+msgstr ""
+
+#: ../source/fleet-segments.rst:28
 #: 5b5d2483629b4bb2a17324d600419451
 msgid "In addition, and based on the risk assessment conclusions, an objective of a minimum number of controls to perform on each fleet segment is defined."
 msgstr ""
 
-#: ../source/fleet-segments.rst:29
+#: ../source/fleet-segments.rst:31
 #: 7469ace8cdb34775b6597c5890831a80
 msgid "Fleet segments computation and display"
 msgstr ""
 
-#: ../source/fleet-segments.rst:31
+#: ../source/fleet-segments.rst:33
 #: e6456c5da74949339a22e03862e57b75
 msgid "The :doc:`flows/current-segments` flow computes the fleet segments each vessel belongs to in real time, based on ERS data."
 msgstr ""
 
-#: ../source/fleet-segments.rst:33
+#: ../source/fleet-segments.rst:35
 #: 171c33ce129e4ffab75546b00bbf019e
 msgid "Fishing vessels' fleet segment(s) can then be visualized on the map in real time, filtered based on their fleet segments..."
 msgstr ""

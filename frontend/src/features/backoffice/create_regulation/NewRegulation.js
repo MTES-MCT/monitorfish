@@ -314,6 +314,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         <Footer>
           <FooterButton>
             <ValidateButton
+              data-cy="validate-button"
               disabled={false}
               isLast={false}
               onClick={() => {

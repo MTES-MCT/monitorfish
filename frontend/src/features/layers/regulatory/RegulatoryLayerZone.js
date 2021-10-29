@@ -109,7 +109,11 @@ const RegulatoryLayerZone = props => {
   const onMouseOut = () => isOver && setIsOver(false)
 
   return (
-    <Zone isLast={isLast} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+    <Zone
+      data-cy="regulatory-layer-zone"
+      isLast={isLast}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}>
       <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
         data-cy={'regulatory-layers-my-zones-zone'}
@@ -127,7 +131,11 @@ const RegulatoryLayerZone = props => {
       <Icons>
 
         { isEditable &&
-          <EditIcon $isOver={isOver} title="Editer la réglementation" onClick={() => onEditRegulationClick()}/>
+          <EditIcon
+            data-cy="regulatory-layer-zone-edit"
+            $isOver={isOver}
+            title="Editer la réglementation"
+            onClick={() => onEditRegulationClick()}/>
         }
         {
           metadataIsShown

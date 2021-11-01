@@ -10,6 +10,7 @@ context('NewRegulation', () => {
     cy.visit(`http://localhost:${port}/backoffice`)
     cy.wait(2000)
 
+    // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
     cy.get('[data-cy="law-type"]').eq(0).click()
     cy.get('[data-cy="regulatory-layer-topic-row"]').should('have.length', 1)
@@ -21,7 +22,7 @@ context('NewRegulation', () => {
     cy.url().should('include', '/editRegulation')
     cy.wait(400)
   })
-  // cliquer sur une zone et l'éditer
+
   it('Edit a layer zone', () => {
     // check expected form values
     cy.get('[data-cy="tag"]').should('have.length', 7)
@@ -43,7 +44,7 @@ context('NewRegulation', () => {
     cy.get('.rs-checkbox-inner').before('border-color').should('eq', 'rgb(225, 0, 15)')
   })
   it('Save request open /backoffice page', () => {
-    // Listen to POST to comments
+    // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     cy.get('.rs-checkbox-inner').before('border-color').should('not.eq', 'rgb(225, 0, 15)')
     // complete missing values in form

@@ -27,9 +27,9 @@ const CreateRegulationTopicForm = props => {
       setTopicPlaceIsRed(true)
     } else {
       const regulationLawType = `${topicPlace}
-      ${topicSpecies ? ' - ' + topicSpecies : ''}
-      ${topicGears ? ' - ' + topicGears : ''}
-      ${topicOtherIndications ? ' - ' + topicGears : ''}`
+        ${topicSpecies ? ' - ' + topicSpecies : ''}
+        ${topicGears ? ' - ' + topicGears : ''}
+        ${topicOtherIndications ? ' - ' + topicGears : ''}`
       setSelectedRegulationTopic(regulationLawType)
       resetThemeForm()
       setIsAddTopicClicked(false)

@@ -13,6 +13,7 @@ const CustomDatePicker = props => {
     placement
   } = props
   return <DatePickerStyled
+    date-cy="custom-date-picker"
     $isrequired={isRequired}
     oneTap
     ranges={[]}

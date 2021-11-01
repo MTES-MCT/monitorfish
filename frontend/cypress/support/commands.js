@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -23,3 +24,21 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+/// <reference types="cypress" />
+
+function unquote (str) {
+  return str.replace(/(^")|("$)/g, '')
+}
+
+Cypress.Commands.add(
+  'before',
+  {
+    prevSubject: 'element'
+  },
+  (el, property) => {
+    const win = el[0].ownerDocument.defaultView
+    const before = win.getComputedStyle(el[0], 'before')
+    return unquote(before.getPropertyValue(property))
+  }
+)

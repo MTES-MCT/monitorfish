@@ -132,15 +132,10 @@ const CreateRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
-      /**
-       * if regulatoryTexts.length === regulatoryTextList.length all texts has been checked
-      **/
-      if (regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length) {
-        /**
-        * if !regulatoryTexts.includes(null) all texts has appropriately been filled
-        * if !atLeastOneValueIsMissing all other values are filled
-        */
-        if (!regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
+      const allTextsHaveBeenChecked = regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length
+      if (allTextsHaveBeenChecked) {
+        const allRequiredValuesHaveBeenFilled = !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing
+        if (allRequiredValuesHaveBeenFilled) {
           // update regulatoryTextList
           setRegulatoryTextList(regulatoryTexts)
           const featureObject = mapToRegulatoryFeatureObject({

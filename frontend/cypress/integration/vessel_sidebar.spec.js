@@ -242,21 +242,10 @@ context('VesselSidebar', () => {
 
     // When
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
-    cy.wait(1000)
 
     // Then, the last position should be positioned in the bottom of the window
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 833, pointerId: 1, force: true })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 830, pointerId: 1, force: true })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 316, clientY: 835, pointerId: 1, force: true })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 830, pointerId: 1, force: true })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 835, pointerId: 1, force: true })
-    cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 833, pointerId: 1, force: true })
-    cy.wait(20)
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 910, clientY: 300, pointerId: 1, force: true })
+    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 315, clientY: 835, pointerId: 1, force: true })
 
     cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 20′ 53″ N')
   })

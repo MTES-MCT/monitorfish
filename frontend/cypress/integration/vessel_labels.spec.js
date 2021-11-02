@@ -24,7 +24,7 @@ context('Vessel labels', () => {
     cy.get('*[data-cy^="map-property-trigger"]', { timeout: 20000 })
       .filter(':contains("étiquettes des navires")')
       .click({ timeout: 20000 })
-    cy.wait(1000)
+    cy.get('#root').dblclick(880, 760, { timeout: 20000 })
 
     // Then
     cy.contains('*[data-cy^="vessel-label-text"]', 'FRAIS AVIS MODE')

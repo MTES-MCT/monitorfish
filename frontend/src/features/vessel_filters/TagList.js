@@ -12,7 +12,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
   useEffect(() => {
     let nextTags = []
 
-    if (filters.countriesFiltered && filters.countriesFiltered.length) {
+    if (filters.countriesFiltered?.length) {
       const countriesTags = filters.countriesFiltered.map(country => {
         return {
           iconElement: <Flag title={countries.getName(country, 'fr')} rel="preload" src={`flags/${country}.svg`}/>,
@@ -25,7 +25,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       nextTags = nextTags.concat(countriesTags)
     }
 
-    if (filters.gearsFiltered && filters.gearsFiltered.length) {
+    if (filters.gearsFiltered?.length) {
       const gearsTags = filters.gearsFiltered.map(gear => {
         return {
           iconElement: IconTypes.GEAR,
@@ -38,7 +38,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       nextTags = nextTags.concat(gearsTags)
     }
 
-    if (filters.speciesFiltered && filters.speciesFiltered.length) {
+    if (filters.speciesFiltered?.length) {
       const speciesTags = filters.speciesFiltered.map(species => {
         return {
           iconElement: IconTypes.SPECIES,
@@ -51,7 +51,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       nextTags = nextTags.concat(speciesTags)
     }
 
-    if (filters.zonesSelected && filters.zonesSelected.length) {
+    if (filters.zonesSelected?.length) {
       const zonesSelectedTags = filters.zonesSelected.map(zoneSelected => {
         return {
           iconElement: IconTypes.ZONE,
@@ -64,7 +64,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       nextTags = nextTags.concat(zonesSelectedTags)
     }
 
-    if (filters.fleetSegmentsFiltered && filters.fleetSegmentsFiltered.length) {
+    if (filters.fleetSegmentsFiltered?.length) {
       const fleetSegmentsTags = filters.fleetSegmentsFiltered.map(fleetSegment => {
         return {
           iconElement: IconTypes.FLEET_SEGMENT,
@@ -77,7 +77,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       nextTags = nextTags.concat(fleetSegmentsTags)
     }
 
-    if (filters.districtsFiltered && filters.districtsFiltered.length) {
+    if (filters.districtsFiltered?.length) {
       const districtsTags = filters.districtsFiltered.map(district => {
         return {
           iconElement: IconTypes.DISTRICTS,
@@ -90,7 +90,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       nextTags = nextTags.concat(districtsTags)
     }
 
-    if (filters.vesselsSizeValuesChecked && filters.vesselsSizeValuesChecked.length) {
+    if (filters.vesselsSizeValuesChecked?.length) {
       const vesselsLengthTags = filters.vesselsSizeValuesChecked.map(lengthCode => {
         const sizeObject = Object.keys(vesselSize)
           .map(key => vesselSize[key])

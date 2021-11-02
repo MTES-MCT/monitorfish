@@ -6,6 +6,7 @@ import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
 import { COLORS } from '../../constants/constants'
 import LastPositionsSlider from './LastPositionsSlider'
 import {
+  setHideVesselsAtPort,
   setVesselsLastPositionVisibility,
   setVesselTrackDepth,
   showVesselsEstimatedPositions
@@ -19,6 +20,7 @@ import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 import { setHideOtherVessels } from '../../domain/shared_slices/Vessel'
 import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
+import { ReactComponent as HideVesselsAtPortSVG } from '../icons/Masquer_navires_au_port.svg'
 import { ReactComponent as EstimatedPositionSVG } from '../icons/Positions_estimees.svg'
 import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
 
@@ -36,7 +38,8 @@ const VesselVisibility = () => {
   const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
   const {
     defaultVesselTrackDepth,
-    showingVesselsEstimatedPositions
+    showingVesselsEstimatedPositions,
+    hideVesselsAtPort
   } = useSelector(state => state.map)
 
   const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
@@ -118,6 +121,13 @@ const VesselVisibility = () => {
           updateBooleanProperty={isHidden => dispatch(setHideOtherVessels(isHidden))}
           text={'les navires non sélectionnés'}
           Icon={hideOtherVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
+        />
+        <MapPropertyTrigger
+          inverse
+          booleanProperty={hideVesselsAtPort}
+          updateBooleanProperty={isHidden => dispatch(setHideVesselsAtPort(isHidden))}
+          text={'les navires au port'}
+          Icon={HideVesselsAtPortSVG}
         />
       </VesselVisibilityBox>
     </Wrapper>

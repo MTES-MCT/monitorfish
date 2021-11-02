@@ -181,6 +181,7 @@ export function getVesselObjectFromFeature (feature, coordinates, coordinatesFor
     species: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))].join(', ') : '',
     speciesArray: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))] : [],
     district: feature.vessel.district,
+    isAtPort: feature.vessel.isAtPort,
     districtCode: feature.vessel.districtCode,
     lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : '',
     lastControlDateTime: feature.vessel.lastControlDateTime,

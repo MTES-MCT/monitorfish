@@ -59,6 +59,8 @@
  * @property {number} postControlComment
  * @property {number} estimatedCurrentLatitude
  * @property {number} estimatedCurrentLongitude
+ * @property {boolean} isAtPort
+ * @property {boolean} underCharter
  */
 
 /**

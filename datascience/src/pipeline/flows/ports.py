@@ -13,7 +13,7 @@ from config import LIBRARY_LOCATION, PORTS_URL, PROXIES
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
-from src.pipeline.processing import combine_overlapping_columns
+from src.pipeline.processing import coalesce
 from src.pipeline.utils import delete, get_table, psql_insert_copy
 from src.read_query import read_query, read_table
 from src.utils.geocode import geocode
@@ -264,7 +264,7 @@ def combine_columns_into_value(ports):
     cols_to_drop = []
     res = ports.copy(deep=True)
     for col_name, cols_list in combine_cols.items():
-        res.loc[:, col_name] = combine_overlapping_columns(res, cols_list)
+        res.loc[:, col_name] = coalesce(res[cols_list])
         cols_to_drop += cols_list
     res = res.drop(columns=cols_to_drop)
 
@@ -382,7 +382,7 @@ def merge_lat_lon(geocoded_ports):
 
     res = geocoded_ports.copy(deep=True)
     for col_name, cols_list in combine_cols.items():
-        res.loc[:, col_name] = combine_overlapping_columns(res, cols_list)
+        res.loc[:, col_name] = coalesce(res[cols_list])
     res = res.drop(columns=["geocoded_latitude", "geocoded_longitude"])
     return res
 

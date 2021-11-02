@@ -23,6 +23,7 @@ export class Vessel {
   static inPreviewModeProperty = 'inPreviewMode'
   static isSelectedProperty = 'isSelected'
   static isHiddenProperty = 'isHidden'
+  static hideVesselsAtPortProperty = 'hideVesselsAtPort'
 
   /**
    * Get Vessel OpenLayers feature object
@@ -58,6 +59,7 @@ export class Vessel {
       speciesArray: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))] : [],
       district: feature.vessel.district,
       districtCode: feature.vessel.districtCode,
+      isAtPort: feature.vessel.isAtPort,
       lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : ''
     }
   }
@@ -118,10 +120,13 @@ export class Vessel {
   /**
    * Add text label to vessel feature
    * @param {Object} feature - The OpenLayers feature object
-   * @param {string} vesselLabelTypeEnum
-   * @param {Object} vesselsLastPositionVisibility
-   * @param {boolean} riskFactorShowedOnMap
-   * @param {boolean} vesselLabelsShowedOnMap
+   * @param {{
+   *   vesselLabel: string,
+   *   vesselsLastPositionVisibility: Object,
+   *   vesselLabelsShowedOnMap: boolean,
+   *   hideVesselsAtPort: boolean,
+   *   riskFactorShowedOnMap: boolean
+   * }} options
    * @return {{
         labelText: string | null,
         riskFactor: {
@@ -132,7 +137,14 @@ export class Vessel {
         } | null,
       }} - The label object
    */
-  static getVesselFeatureLabel (feature, vesselLabelTypeEnum, vesselsLastPositionVisibility, riskFactorShowedOnMap, vesselLabelsShowedOnMap) {
+  static getVesselFeatureLabel (feature, options) {
+    const {
+      vesselLabel,
+      vesselsLastPositionVisibility,
+      riskFactorShowedOnMap,
+      vesselLabelsShowedOnMap,
+      hideVesselsAtPort
+    } = options
     const vesselDate = new Date(feature.vessel.dateTime)
     const vesselIsHidden = new Date()
     const hasBeenControlledLastFiveYears = new Date(feature.vessel.lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
@@ -144,41 +156,45 @@ export class Vessel {
       underCharter: feature.vessel.underCharter
     }
 
-    if (vesselDate.getTime() > vesselIsHidden.getTime()) {
-      if (vesselLabelsShowedOnMap) {
-        switch (vesselLabelTypeEnum) {
-          case vesselLabelEnum.VESSEL_NAME: {
-            label.labelText = feature.vessel.vesselName
-            break
-          }
-          case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
-            label.labelText = feature.vessel.internalReferenceNumber
-            break
-          }
-          case vesselLabelEnum.VESSEL_NATIONALITY: {
-            label.labelText = feature.vessel.flagState ? countries.getName(feature.vessel.flagState, 'fr') : null
-            break
-          }
-          case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
-            label.labelText = feature.vessel.segments.join(', ')
-            break
-          }
-          default: label.labelText = null
-        }
-      }
-
-      if (riskFactorShowedOnMap) {
-        label.riskFactor = {
-          globalRisk: feature.vessel.riskFactor,
-          impactRiskFactor: feature.vessel.impactRiskFactor,
-          probabilityRiskFactor: feature.vessel.probabilityRiskFactor,
-          detectabilityRiskFactor: feature.vessel.detectabilityRiskFactor,
-          hasBeenControlledLastFiveYears,
-          hasSegments: feature.vessel.segments?.length
-        }
-      }
-
+    if (vesselDate.getTime() < vesselIsHidden.getTime()) {
       return label
+    }
+
+    if (hideVesselsAtPort && feature.vessel.isAtPort) {
+      return label
+    }
+
+    if (vesselLabelsShowedOnMap) {
+      switch (vesselLabel) {
+        case vesselLabelEnum.VESSEL_NAME: {
+          label.labelText = feature.vessel.vesselName
+          break
+        }
+        case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
+          label.labelText = feature.vessel.internalReferenceNumber
+          break
+        }
+        case vesselLabelEnum.VESSEL_NATIONALITY: {
+          label.labelText = feature.vessel.flagState ? countries.getName(feature.vessel.flagState, 'fr') : null
+          break
+        }
+        case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
+          label.labelText = feature.vessel.segments.join(', ')
+          break
+        }
+        default: label.labelText = null
+      }
+    }
+
+    if (riskFactorShowedOnMap) {
+      label.riskFactor = {
+        globalRisk: feature.vessel.riskFactor,
+        impactRiskFactor: feature.vessel.impactRiskFactor,
+        probabilityRiskFactor: feature.vessel.probabilityRiskFactor,
+        detectabilityRiskFactor: feature.vessel.detectabilityRiskFactor,
+        hasBeenControlledLastFiveYears,
+        hasSegments: feature.vessel.segments?.length
+      }
     }
 
     return label
@@ -263,6 +279,11 @@ export const vesselSize = {
     text: 'Plus de 12m',
     evaluate: value => value >= 12
   }
+}
+
+export const VesselLocation = {
+  SEA: 'SEA',
+  PORT: 'PORT'
 }
 
 export const TEMPORARY_VESSEL_TRACK = 'temp'

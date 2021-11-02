@@ -15,6 +15,7 @@ const baseLayerLocalStorageKey = 'baseLayer'
 const estimatedPositionsLocalStorageKey = 'estimatedPositions'
 const riskFactorLocalStorageKey = 'riskFactor'
 const coordinatesFormatLocalStorageKey = 'coordinatesFormat'
+const hideVesselsAtPortLocalStorageKey = 'hideVesselsAtPort'
 
 const mapSlice = createSlice({
   name: 'map',
@@ -24,6 +25,7 @@ const mapSlice = createSlice({
       opacityReduced: 6,
       hidden: 48
     }, vesselsLastPositionVisibilityLocalStorageKey),
+    hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
     defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
     vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
     vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
@@ -166,6 +168,16 @@ const mapSlice = createSlice({
     showVesselsEstimatedPositions (state, action) {
       window.localStorage.setItem(estimatedPositionsLocalStorageKey, JSON.stringify(action.payload))
       state.showingVesselsEstimatedPositions = action.payload
+    },
+    /**
+     * Show or hide the vessels located in a port
+     * @param {Object=} state
+     * @param {{
+     * payload: boolean}} action - true if the vessels at port are hidden
+     */
+    setHideVesselsAtPort (state, action) {
+      window.localStorage.setItem(hideVesselsAtPortLocalStorageKey, JSON.stringify(action.payload))
+      state.hideVesselsAtPort = action.payload
     }
   }
 })
@@ -193,7 +205,8 @@ export const {
   showVesselsEstimatedPositions,
   setUpdatedFromCron,
   setCoordinatesFormat,
-  setRiskFactorShowedOnMap
+  setRiskFactorShowedOnMap,
+  setHideVesselsAtPort
 } = mapSlice.actions
 
 export default mapSlice.reducer

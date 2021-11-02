@@ -11,7 +11,7 @@ import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygon
 import Countries from 'i18n-iso-countries'
 import Checkbox from 'rsuite/lib/Checkbox'
 import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
-import { vesselSize } from '../../domain/entities/vessel'
+import { VesselLocation, vesselSize } from '../../domain/entities/vessel'
 import Tag from 'rsuite/lib/Tag'
 import FilterTag from '../vessel_filters/FilterTag'
 
@@ -26,7 +26,8 @@ const VesselListFilters = ({
   geometrySelection,
   seeMore,
   size,
-  controls
+  controls,
+  location
 }) => {
   const { current: countriesField } = useRef(Object.keys(Countries.getAlpha2Codes()).map(country => {
     return {
@@ -184,6 +185,16 @@ const VesselListFilters = ({
           showZonesSelected()
         }
       </ZoneFilter><br/>
+      <CheckboxGroup
+        inline
+        name="checkboxList"
+        value={location.vesselsLocationFilter}
+        onChange={location.setVesselsLocationFilter}
+        style={{ display: 'inline-block', color: COLORS.slateGray, height: 40, marginLeft: -15 }}
+      >
+        <Checkbox value={VesselLocation.SEA}><Gray>Navires en mer</Gray></Checkbox>
+        <Checkbox value={VesselLocation.PORT} data-cy={'filter-vessel-at-port'}><Gray>Navires au port</Gray></Checkbox>
+      </CheckboxGroup><br/>
       {
         seeMore.seeMoreIsOpen
           ? <>

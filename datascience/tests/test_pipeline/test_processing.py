@@ -9,7 +9,7 @@ import pytz
 from sqlalchemy import Column, Integer, MetaData, Table
 
 from src.pipeline.processing import (
-    combine_overlapping_columns,
+    coalesce,
     concatenate_columns,
     concatenate_values,
     df_to_dict_series,
@@ -70,7 +70,7 @@ class TestProcessingMethods(unittest.TestCase):
             }
         )
 
-        res = combine_overlapping_columns(df, ["b", "c", "a"])
+        res = coalesce(df[["b", "c", "a"]])
         self.assertEqual(res.values[0], "c")
         self.assertEqual(res.values[1], 2)
         self.assertEqual(res.values[2], "a")
@@ -321,7 +321,16 @@ class TestProcessingMethods(unittest.TestCase):
     def test_prepare_df_for_loading(self):
         df = pd.DataFrame(
             columns=pd.Index(
-                ["id", "column_1", "pg_array_1", "pg_array_2", "json_1", "json_2"]
+                [
+                    "id",
+                    "column_1",
+                    "pg_array_1",
+                    "pg_array_2",
+                    "json_1",
+                    "json_2",
+                    "int",
+                    "timedelta",
+                ]
             ),
             data=[
                 [
@@ -331,6 +340,8 @@ class TestProcessingMethods(unittest.TestCase):
                     ["a", "b", "c"],
                     {"a": 1, "b": 2},
                     {"a": 1, "b": None},
+                    2.0,
+                    datetime.timedelta(days=1, seconds=21),
                 ],
                 [
                     2,
@@ -339,6 +350,8 @@ class TestProcessingMethods(unittest.TestCase):
                     [1, 5, 7],
                     {"a": 1, "b": None, "c": np.nan},
                     {"a": 1, "b": [datetime.datetime(2021, 1, 23, 12, 56, 7), np.nan]},
+                    np.nan,
+                    None,
                 ],
             ],
         )
@@ -352,30 +365,48 @@ class TestProcessingMethods(unittest.TestCase):
             handle_array_conversion_errors=True,
             value_on_array_conversion_error="{}",
             jsonb_columns=["json_1", "json_2"],
+            nullable_integer_columns=["int"],
+            timedelta_columns=["timedelta"],
         )
 
-        expected_values = [
-            [
-                1,
-                "some value",
-                "{1,2,3}",
-                "{a,b,c}",
-                '{"a": 1, "b": 2}',
-                '{"a": 1, "b": null}',
+        expected_res = pd.DataFrame(
+            columns=pd.Index(
+                [
+                    "id",
+                    "column_1",
+                    "pg_array_1",
+                    "pg_array_2",
+                    "json_1",
+                    "json_2",
+                    "int",
+                    "timedelta",
+                ]
+            ),
+            data=[
+                [
+                    1,
+                    "some value",
+                    "{1,2,3}",
+                    "{a,b,c}",
+                    '{"a": 1, "b": 2}',
+                    '{"a": 1, "b": null}',
+                    "2",
+                    "1 days 00:00:21",
+                ],
+                [
+                    2,
+                    "some other value",
+                    "{1,2,5}",
+                    "{1,5,7}",
+                    '{"a": 1, "b": null, "c": null}',
+                    '{"a": 1, "b": ["2021-01-23T12:56:07Z", null]}',
+                    None,
+                    None,
+                ],
             ],
-            [
-                2,
-                "some other value",
-                "{1,2,5}",
-                "{1,5,7}",
-                '{"a": 1, "b": null, "c": null}',
-                '{"a": 1, "b": ["2021-01-23T12:56:07Z", null]}',
-            ],
-        ]
+        )
 
-        self.assertTrue(isinstance(res, pd.DataFrame))
-        self.assertEqual(res.shape, (2, 6))
-        self.assertEqual(expected_values, res.values.tolist())
+        pd.testing.assert_frame_equal(res, expected_res)
 
     def test_join_on_multiple_keys(self):
         left = pd.DataFrame(

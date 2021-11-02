@@ -74,7 +74,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
-    "cypress": "^7.1.0",
+    "cypress": "^8.7.0",
     "cypress-mouse-position": "^1.0.0",
     "eslint": "^7.25.0",
     "eslint-config-standard": "^16.0.2",

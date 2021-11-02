@@ -1,0 +1,233 @@
+<rsm:FLUXFAReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 xsd/FLUXFAReportMessage_3p1/FLUXFAReportMessage_3p1.xsd" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         <rsm:FLUXReportDocument>
+            <ram:ID schemeID="UUID">4a4c8d24-f4be-4ccb-8aef-99ab5aae7e02</ram:ID>
+            <ram:CreationDateTime>
+               <udt:DateTime>2020-05-06T18:40:05.354Z</udt:DateTime>
+            </ram:CreationDateTime>
+            <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+            <ram:Purpose>FLUX-FA-EU-710511 </ram:Purpose>
+            <ram:OwnerFLUXParty>
+               <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+            </ram:OwnerFLUXParty>
+         </rsm:FLUXReportDocument>
+         <rsm:FAReportDocument>
+            <ram:TypeCode listID="FLUX_FA_REPORT_TYPE">DECLARATION</ram:TypeCode>
+            <ram:AcceptanceDateTime>
+               <udt:DateTime>2020-05-06T13:40:05.354Z</udt:DateTime>
+            </ram:AcceptanceDateTime>
+            <ram:RelatedFLUXReportDocument>
+               <ram:ID schemeID="UUID">1a87f3de-dea9-4018-8c2e-d6cdfa97318e</ram:ID>
+               <ram:CreationDateTime>
+                  <udt:DateTime>2020-05-06T15:40:05.354Z</udt:DateTime>
+               </ram:CreationDateTime>
+               <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+               <ram:OwnerFLUXParty>
+                  <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+               </ram:OwnerFLUXParty>
+            </ram:RelatedFLUXReportDocument>
+            <!--haul 1-->
+            <ram:SpecifiedFishingActivity>
+               <ram:TypeCode listID="FLUX_FA_TYPE">FISHING_OPERATION</ram:TypeCode>
+               
+               <ram:VesselRelatedActivityCode listID="VESSEL_ACTIVITY">FIS</ram:VesselRelatedActivityCode>
+
+			<!--catch of the haul-->
+               <ram:SpecifiedFACatch>
+                  <ram:SpeciesCode listID="FAO_SPECIES">COD</ram:SpeciesCode>
+                  <ram:WeightMeasure unitCode="KGM">1000</ram:WeightMeasure>
+                  <ram:TypeCode listID="FA_CATCH_TYPE">ONBOARD</ram:TypeCode>
+                  <ram:SpecifiedSizeDistribution>
+                     <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                  </ram:SpecifiedSizeDistribution>                  
+               </ram:SpecifiedFACatch>
+
+               <!--location/area-->
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="MANAGEMENT_AREA">NEAFC_RA</ram:ID>
+               </ram:RelatedFLUXLocation>
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="FAO_AREA">27.8.e.1</ram:ID>
+               </ram:RelatedFLUXLocation>
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="STAT_RECTANGLE">21D5</ram:ID>
+               </ram:RelatedFLUXLocation>
+               
+			<!--gear deployed-->
+               <ram:SpecifiedFishingGear>
+                  <ram:TypeCode listID="GEAR_TYPE">TBB</ram:TypeCode>
+                  <ram:ApplicableGearCharacteristic>
+                     <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">ME</ram:TypeCode>
+                     <ram:ValueMeasure unitCode="MMT">140</ram:ValueMeasure>
+                  </ram:ApplicableGearCharacteristic>
+                  <ram:ApplicableGearCharacteristic>
+                     <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">GM</ram:TypeCode>
+                     <ram:ValueMeasure unitCode="MTR">250</ram:ValueMeasure>
+                  </ram:ApplicableGearCharacteristic>
+                  <ram:ApplicableGearCharacteristic>
+                     <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">GN</ram:TypeCode>
+                     <ram:ValueQuantity unitCode="C62">3</ram:ValueQuantity>
+                  </ram:ApplicableGearCharacteristic>
+               </ram:SpecifiedFishingGear>
+
+               <!--haul detail-->
+               <ram:RelatedFishingActivity>
+                  <ram:TypeCode listID="FLUX_FA_TYPE">GEAR_SHOT</ram:TypeCode>
+                  <ram:OccurrenceDateTime>
+                     <udt:DateTime>2020-05-04T19:40:05.354Z</udt:DateTime>
+                  </ram:OccurrenceDateTime>
+                  <ram:RelatedFLUXLocation>
+                     <ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+                     <ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                        <ram:LongitudeMeasure>0.5983</ram:LongitudeMeasure>
+                        <ram:LatitudeMeasure>57.7258</ram:LatitudeMeasure>
+                     </ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                  </ram:RelatedFLUXLocation>
+               </ram:RelatedFishingActivity>
+               <ram:RelatedFishingActivity>
+                  <ram:TypeCode listID="FLUX_FA_TYPE">GEAR_RETRIEVAL</ram:TypeCode>
+                  <ram:OccurrenceDateTime>
+                     <udt:DateTime>2020-05-05T19:40:05.354Z</udt:DateTime>
+                  </ram:OccurrenceDateTime>
+                  <ram:RelatedFLUXLocation>
+                     <ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+                     <ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                        <ram:LongitudeMeasure>0.5983</ram:LongitudeMeasure>
+                        <ram:LatitudeMeasure>57.7258</ram:LatitudeMeasure>
+                     </ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                  </ram:RelatedFLUXLocation>
+               </ram:RelatedFishingActivity>
+
+			<!--duration time-->
+               <ram:SpecifiedDelimitedPeriod>
+               <!--random number, not linked to start/end date/time-->
+				<ram:DurationMeasure unitCode="MIN">480</ram:DurationMeasure>
+			</ram:SpecifiedDelimitedPeriod>
+               
+               <ram:SpecifiedFishingTrip>
+                  <ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194005354</ram:ID>
+               </ram:SpecifiedFishingTrip>
+			
+            </ram:SpecifiedFishingActivity>
+			
+			<!--haul 2 (if on the same day)-->
+		  <ram:SpecifiedFishingActivity>
+               <ram:TypeCode listID="FLUX_FA_TYPE">FISHING_OPERATION</ram:TypeCode>
+               
+               <ram:VesselRelatedActivityCode listID="VESSEL_ACTIVITY">FIS</ram:VesselRelatedActivityCode>
+
+			<!--catch of the haul-->
+               <ram:SpecifiedFACatch>
+                  <ram:SpeciesCode listID="FAO_SPECIES">COD</ram:SpeciesCode>
+                  <ram:WeightMeasure unitCode="KGM">600</ram:WeightMeasure>
+                  <ram:TypeCode listID="FA_CATCH_TYPE">ONBOARD</ram:TypeCode>
+                  <ram:SpecifiedSizeDistribution>
+                     <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                  </ram:SpecifiedSizeDistribution>                  
+               </ram:SpecifiedFACatch>
+
+               <!--location/area-->
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="MANAGEMENT_AREA">NEAFC_RA</ram:ID>
+               </ram:RelatedFLUXLocation>
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="FAO_AREA">27.8.e.1</ram:ID>
+               </ram:RelatedFLUXLocation>
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="STAT_RECTANGLE">21D6</ram:ID>
+               </ram:RelatedFLUXLocation>
+               
+			<!--gear deployed-->
+               <ram:SpecifiedFishingGear>
+                  <ram:TypeCode listID="GEAR_TYPE">TBB</ram:TypeCode>
+                  <ram:ApplicableGearCharacteristic>
+                     <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">ME</ram:TypeCode>
+                     <ram:ValueMeasure unitCode="MMT">140</ram:ValueMeasure>
+                  </ram:ApplicableGearCharacteristic>
+                  <ram:ApplicableGearCharacteristic>
+                     <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">GM</ram:TypeCode>
+                     <ram:ValueMeasure unitCode="MTR">250</ram:ValueMeasure>
+                  </ram:ApplicableGearCharacteristic>
+                  <ram:ApplicableGearCharacteristic>
+                     <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">GN</ram:TypeCode>
+                     <ram:ValueQuantity unitCode="C62">3</ram:ValueQuantity>
+                  </ram:ApplicableGearCharacteristic>
+               </ram:SpecifiedFishingGear>
+
+               <!--haul detail-->
+               <ram:RelatedFishingActivity>
+                  <ram:TypeCode listID="FLUX_FA_TYPE">GEAR_SHOT</ram:TypeCode>
+                  <ram:OccurrenceDateTime>
+                     <udt:DateTime>2020-05-04T19:40:05.354Z</udt:DateTime>
+                  </ram:OccurrenceDateTime>
+                  <ram:RelatedFLUXLocation>
+                     <ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+                     <ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                        <ram:LongitudeMeasure>0.500</ram:LongitudeMeasure>
+                        <ram:LatitudeMeasure>57.900</ram:LatitudeMeasure>
+                     </ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                  </ram:RelatedFLUXLocation>
+               </ram:RelatedFishingActivity>
+               <ram:RelatedFishingActivity>
+                  <ram:TypeCode listID="FLUX_FA_TYPE">GEAR_RETRIEVAL</ram:TypeCode>
+                  <ram:OccurrenceDateTime>
+                     <udt:DateTime>2020-05-05T19:40:05.354Z</udt:DateTime>
+                  </ram:OccurrenceDateTime>
+                  <ram:RelatedFLUXLocation>
+                     <ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+                     <ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                        <ram:LongitudeMeasure>0.510</ram:LongitudeMeasure>
+                        <ram:LatitudeMeasure>57.890</ram:LatitudeMeasure>
+                     </ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                  </ram:RelatedFLUXLocation>
+               </ram:RelatedFishingActivity>
+               
+
+               <!--duration time-->
+               <ram:SpecifiedDelimitedPeriod>
+               	<!--random number, not linked to start/end date/time-->
+				<ram:DurationMeasure unitCode="MIN">60</ram:DurationMeasure>
+			</ram:SpecifiedDelimitedPeriod>
+
+			<ram:SpecifiedFishingTrip>
+                  <ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194005354</ram:ID>
+               </ram:SpecifiedFishingTrip>
+			
+            </ram:SpecifiedFishingActivity>
+            
+            <!--reporting vessel-->
+            <ram:SpecifiedVesselTransportMeans>
+               <ram:ID schemeID="CFR">CYP123456789</ram:ID>
+               <ram:ID schemeID="IRCS">IRCS6</ram:ID>
+               <ram:ID schemeID="EXT_MARK">XR006</ram:ID>
+			<ram:ID schemeID="UVI">1234567</ram:ID>
+               <ram:Name>GOLF</ram:Name>
+               <ram:RegistrationVesselCountry>
+                  <ram:ID schemeID="TERRITORY">CYP</ram:ID>
+               </ram:RegistrationVesselCountry>
+               
+               <!--master name and address-->
+               <ram:SpecifiedContactParty>
+                  <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+                  <ram:SpecifiedStructuredAddress>
+                     <ram:StreetName>ABC</ram:StreetName>
+                     <ram:CityName>CABOURG</ram:CityName>
+                     <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                     <ram:PlotIdentification>17</ram:PlotIdentification>
+                     <ram:PostalArea> 14390</ram:PostalArea>
+                  </ram:SpecifiedStructuredAddress>
+                  <ram:SpecifiedContactPerson>
+                     <ram:GivenName>John</ram:GivenName>
+                     <ram:FamilyName>Doe</ram:FamilyName>
+                     <ram:Alias>Captain Jack</ram:Alias>
+                  </ram:SpecifiedContactPerson>
+               </ram:SpecifiedContactParty>
+            </ram:SpecifiedVesselTransportMeans>
+            
+         </rsm:FAReportDocument>
+      </rsm:FLUXFAReportMessage>

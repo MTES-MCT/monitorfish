@@ -26,6 +26,7 @@ const HideOtherVessels = props => {
       openBox={props.openBox}
       rightMenuIsOpen={props.rightMenuIsOpen}
       onClick={() => dispatch(setHideOtherVessels(!hideOtherVessels))}
+      title={`${hideOtherVessels ? 'Afficher' : 'Cacher'} les autres navires`}
     >
       {
         hideOtherVessels

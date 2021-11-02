@@ -17,13 +17,12 @@ const Tag = props => {
     onCloseIconClicked
   } = props
 
-  return <TagWrapper data-cy="tag">
+  return <TagWrapper data-cy={`tag-${tagValue}`}>
     {!tagUrl
-      ? <SelectedValue data-cy={`tag-${tagValue}`}>{tagValue}</SelectedValue>
+      ? <SelectedValue >{tagValue}</SelectedValue>
       : <Link
           href={tagUrl}
           target={'_blank'}
-          data-cy={`tag-${tagValue}`}
         >{tagValue}</Link>
     }
     <CloseIcon data-cy={`close-tag-${tagValue}`} onClick={_ => onCloseIconClicked(tagValue)}/>

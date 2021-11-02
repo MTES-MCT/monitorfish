@@ -25,7 +25,7 @@ context('NewRegulation', () => {
 
   it('Edit a layer zone', () => {
     // check expected form values
-    cy.get('[data-cy="tag"]').should('have.length', 7)
+    cy.get('[data-cy^="tag"]').should('have.length', 7)
     cy.get('[data-cy="tag-Reg locale / MEMN"]').should('exist')
     cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('exist')
     cy.get('[data-cy="tag-MEMN"]').should('exist')

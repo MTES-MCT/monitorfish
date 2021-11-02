@@ -136,7 +136,6 @@ const CreateRegulation = ({ title, isEdition }) => {
       if (allTextsHaveBeenChecked) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing
         if (allRequiredValuesHaveBeenFilled) {
-          // update regulatoryTextList
           setRegulatoryTextList(regulatoryTexts)
           const featureObject = mapToRegulatoryFeatureObject({
             selectedRegulationTopic,

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import styled from 'styled-components'
-import { ReactComponent as ShowFishingActivitiesSVG } from '../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
+import { ReactComponent as ShowFishingActivitiesSVG } from '../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
+import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
-import { hideFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../../../domain/shared_slices/FishingActivities'
+import { hideFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../../../../domain/shared_slices/FishingActivities'
 
-const ShowAllFishingActivitiesOnMap = props => {
+const ShowFishingActivitiesOnMap = ({ openBox, rightMenuIsOpen }) => {
   const dispatch = useDispatch()
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const {
@@ -15,29 +15,30 @@ const ShowAllFishingActivitiesOnMap = props => {
   } = useSelector(state => state.fishingActivities)
 
   useEffect(() => {
-    if (!props.openBox) {
+    if (!openBox) {
       dispatch(hideFishingActivitiesOnMap())
     }
-  }, [props.openBox])
+  }, [openBox])
 
   return (
-    <ShowAllFishingActivitiesOnMapButton
+    <ShowFishingActivitiesOnMapButton
+      title={`${fishingActivitiesShowedOnMap?.length ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
       data-cy={'show-all-fishing-activities-on-map'}
       healthcheckTextWarning={healthcheckTextWarning}
       fishingActivitiesShowedOnMap={fishingActivitiesShowedOnMap?.length}
-      openBox={props.openBox}
-      rightMenuIsOpen={props.rightMenuIsOpen}
+      openBox={openBox}
+      rightMenuIsOpen={rightMenuIsOpen}
       onClick={() => fishingActivitiesShowedOnMap?.length
         ? dispatch(hideFishingActivitiesOnMap())
         : dispatch(showFishingActivitiesOnMap())
       }
     >
       <ShowFishingActivities />
-    </ShowAllFishingActivitiesOnMapButton>
+    </ShowFishingActivitiesOnMapButton>
   )
 }
 
-const ShowAllFishingActivitiesOnMapButton = styled(MapButtonStyle)`
+const ShowFishingActivitiesOnMapButton = styled(MapButtonStyle)`
   top: 223px;
   height: 30px;
   width: 30px;
@@ -64,4 +65,4 @@ const ShowFishingActivities = styled(ShowFishingActivitiesSVG)`
   width: 30px;
 `
 
-export default ShowAllFishingActivitiesOnMap
+export default ShowFishingActivitiesOnMap

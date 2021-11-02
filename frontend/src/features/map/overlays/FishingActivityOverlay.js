@@ -18,7 +18,7 @@ const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAc
   }))
 
   useEffect(() => {
-    if (map) {
+    if (map && overlay) {
       overlay.setElement(ref.current)
       overlay.setPosition(coordinates)
 
@@ -28,7 +28,7 @@ const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAc
         map.removeOverlay(overlay)
       }
     }
-  }, [name, map])
+  }, [name, map, overlay])
 
   return (
     <div>

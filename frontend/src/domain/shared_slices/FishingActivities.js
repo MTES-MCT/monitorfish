@@ -32,10 +32,17 @@ const fishingActivitiesSlice = createSlice({
      * @param {{payload: VesselVoyage}} action - the vessel voyage
      */
     setVoyage (state, action) {
-      state.fishingActivities = action.payload.ersMessagesAndAlerts
-      state.isLastVoyage = action.payload.isLastVoyage
-      state.isFirstVoyage = action.payload.isFirstVoyage
-      state.tripNumber = action.payload.tripNumber
+      const {
+        ersMessagesAndAlerts,
+        isLastVoyage,
+        isFirstVoyage,
+        tripNumber
+      } = action.payload
+
+      state.fishingActivities = ersMessagesAndAlerts
+      state.isLastVoyage = isLastVoyage
+      state.isFirstVoyage = isFirstVoyage
+      state.tripNumber = tripNumber
     },
     /**
      * Set selected vessel last voyage - This voyage is saved to be able to compare it

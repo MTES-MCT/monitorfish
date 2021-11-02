@@ -1,0 +1,249 @@
+<rsm:FLUXFAReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 xsd/FLUXFAReportMessage_3p1/FLUXFAReportMessage_3p1.xsd" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         	<rsm:FLUXReportDocument>
+		<ram:ID schemeID="UUID">60e0d2e0-2713-43d7-9fa1-fcf968e34d82</ram:ID>
+		<ram:CreationDateTime>
+			<udt:DateTime>2020-05-06T18:40:28.615Z</udt:DateTime>
+		</ram:CreationDateTime>
+		<ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+		<ram:Purpose>FLUX-FA-EU-710601 </ram:Purpose>
+		<ram:OwnerFLUXParty>
+			<ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+		</ram:OwnerFLUXParty>
+	</rsm:FLUXReportDocument>
+	<rsm:FAReportDocument>
+		<ram:TypeCode listID="FLUX_FA_REPORT_TYPE">DECLARATION</ram:TypeCode>
+		<ram:AcceptanceDateTime>
+			<udt:DateTime>2020-05-06T13:40:28.615Z</udt:DateTime>
+		</ram:AcceptanceDateTime>
+		<ram:RelatedFLUXReportDocument>
+			<ram:ID schemeID="UUID">a36d23c5-b339-455d-9b0b-bf766a9d57d9</ram:ID>
+			<ram:CreationDateTime>
+				<udt:DateTime>2020-05-06T15:40:28.615Z</udt:DateTime>
+			</ram:CreationDateTime>
+			<ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+			<ram:OwnerFLUXParty>
+				<ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+			</ram:OwnerFLUXParty>
+		</ram:RelatedFLUXReportDocument>
+		<ram:SpecifiedFishingActivity>
+			<!--JFO ID-->
+			<ram:ID schemeID="JFO">2018-123</ram:ID>
+			<ram:TypeCode listID="FLUX_FA_TYPE">JOINT_FISHING_OPERATION</ram:TypeCode>
+			
+			<ram:OccurrenceDateTime>
+				<udt:DateTime>2020-05-06T11:40:28.615Z</udt:DateTime>
+			</ram:OccurrenceDateTime>
+			
+               <ram:VesselRelatedActivityCode listID="VESSEL_ACTIVITY">FIS</ram:VesselRelatedActivityCode>
+               <ram:SpeciesTargetCode listID="FAO_SPECIES">BFT</ram:SpeciesTargetCode>
+
+			<!--Total catches taken during the operation-->
+			<ram:SpecifiedFACatch>
+				<ram:SpeciesCode listID="FAO_SPECIES">BFT</ram:SpeciesCode>
+				<ram:UnitQuantity unitCode="C62">100</ram:UnitQuantity>
+				<ram:WeightMeasure unitCode="KGM">15000</ram:WeightMeasure>
+				<ram:WeighingMeansCode listID="WEIGHT_MEANS">ESTIMATED</ram:WeighingMeansCode>
+				<ram:TypeCode listID="FA_CATCH_TYPE">KEPT_IN_NET</ram:TypeCode>
+				<!--size-->
+				<ram:SpecifiedSizeDistribution>
+					<ram:CategoryCode listID="FA_BFT_SIZE_CATEGORY">S8</ram:CategoryCode>
+					<ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+				</ram:SpecifiedSizeDistribution>
+				<!--processing-->
+				<ram:AppliedAAPProcess>
+                     <ram:TypeCode listID="FISH_PRESENTATION">WHL</ram:TypeCode>
+                     <ram:TypeCode listID="FISH_PRESERVATION">ALI</ram:TypeCode>
+                     <ram:ConversionFactorNumeric>1</ram:ConversionFactorNumeric>
+                  </ram:AppliedAAPProcess>
+			</ram:SpecifiedFACatch>
+
+			<!--Location of the operation-->
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+				<ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+					<ram:LongitudeMeasure>6.820</ram:LongitudeMeasure>
+					<ram:LatitudeMeasure>39.660</ram:LatitudeMeasure>
+				</ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="TERRITORY">ITA</ram:ID>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="FAO_AREA">37.1.1</ram:ID>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="STAT_RECTANGLE">M19C5</ram:ID>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="GFCM_GSA">11.1</ram:ID>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="MANAGEMENT_AREA">ICCAT_CA</ram:ID>
+			</ram:RelatedFLUXLocation>
+
+			<!--Gear used-->
+			<ram:SpecifiedFishingGear>
+				<ram:TypeCode listID="GEAR_TYPE">PS</ram:TypeCode>
+				<ram:RoleCode listID="FA_GEAR_ROLE">DEPLOYED</ram:RoleCode>
+				<ram:ApplicableGearCharacteristic>
+					<ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">ME</ram:TypeCode>
+					<ram:ValueMeasure unitCode="MMT">140</ram:ValueMeasure>
+				</ram:ApplicableGearCharacteristic>
+				<ram:ApplicableGearCharacteristic>
+					<ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">GM</ram:TypeCode>
+					<ram:ValueMeasure unitCode="MTR">100</ram:ValueMeasure>
+				</ram:ApplicableGearCharacteristic>
+				<ram:ApplicableGearCharacteristic>
+					<ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">HE</ram:TypeCode>
+					<ram:ValueMeasure unitCode="MTR">70</ram:ValueMeasure>
+				</ram:ApplicableGearCharacteristic>
+			</ram:SpecifiedFishingGear>
+
+			<!--Quota allocations-->
+			<ram:RelatedFishingActivity>
+				<ram:TypeCode listID="FLUX_FA_TYPE">RELOCATION</ram:TypeCode>
+				<ram:SpecifiedFACatch>
+					<ram:SpeciesCode listID="FAO_SPECIES">BFT</ram:SpeciesCode>
+					<ram:UnitQuantity unitCode="C62">35</ram:UnitQuantity>
+					<ram:WeightMeasure unitCode="KGM">5250</ram:WeightMeasure>
+					<ram:TypeCode listID="FA_CATCH_TYPE">ALLOCATED_TO_QUOTA</ram:TypeCode>
+				</ram:SpecifiedFACatch>
+				<ram:RelatedVesselTransportMeans>
+					<ram:ID schemeID="CFR">CYP123456789</ram:ID>
+					<ram:ID schemeID="ICCAT">ATEU0CYP13245</ram:ID>
+					<ram:Name>GOLF</ram:Name>
+					<ram:RoleCode listID="FA_VESSEL_ROLE">CATCHING_VESSEL</ram:RoleCode>
+					<ram:RegistrationVesselCountry>
+						<ram:ID schemeID="TERRITORY">CYP</ram:ID>
+					</ram:RegistrationVesselCountry>
+				</ram:RelatedVesselTransportMeans>
+			</ram:RelatedFishingActivity>
+			<ram:RelatedFishingActivity>
+				<ram:TypeCode listID="FLUX_FA_TYPE">RELOCATION</ram:TypeCode>
+				<ram:SpecifiedFACatch>
+					<ram:SpeciesCode listID="FAO_SPECIES">BFT</ram:SpeciesCode>
+					<ram:UnitQuantity unitCode="C62">29</ram:UnitQuantity>
+					<ram:WeightMeasure unitCode="KGM">4350</ram:WeightMeasure>
+					<ram:TypeCode listID="FA_CATCH_TYPE">ALLOCATED_TO_QUOTA</ram:TypeCode>
+				</ram:SpecifiedFACatch>
+				<ram:RelatedVesselTransportMeans>
+					<ram:ID schemeID="CFR">SVN123456789</ram:ID>
+					<ram:ID schemeID="ICCAT">ATEU0SVN13245</ram:ID>
+					<ram:RoleCode listID="FA_VESSEL_ROLE">PARTICIPATING_VESSEL</ram:RoleCode>
+					<ram:RegistrationVesselCountry>
+						<ram:ID schemeID="TERRITORY">SVN</ram:ID>
+					</ram:RegistrationVesselCountry>
+				</ram:RelatedVesselTransportMeans>
+			</ram:RelatedFishingActivity>
+			<ram:RelatedFishingActivity>
+				<ram:TypeCode listID="FLUX_FA_TYPE">RELOCATION</ram:TypeCode>
+				<ram:SpecifiedFACatch>
+					<ram:SpeciesCode listID="FAO_SPECIES">BFT</ram:SpeciesCode>
+					<ram:UnitQuantity unitCode="C62">15</ram:UnitQuantity>
+					<ram:WeightMeasure unitCode="KGM">2250</ram:WeightMeasure>
+					<ram:TypeCode listID="FA_CATCH_TYPE">ALLOCATED_TO_QUOTA</ram:TypeCode>
+				</ram:SpecifiedFACatch>
+				<ram:RelatedVesselTransportMeans>
+					<ram:ID schemeID="CFR">SVK123456789</ram:ID>
+					<ram:ID schemeID="ICCAT">ATEU0SVK13245</ram:ID>
+					<ram:RoleCode listID="FA_VESSEL_ROLE">PARTICIPATING_VESSEL</ram:RoleCode>
+					<ram:RegistrationVesselCountry>
+						<ram:ID schemeID="TERRITORY">SVK</ram:ID>
+					</ram:RegistrationVesselCountry>
+				</ram:RelatedVesselTransportMeans>
+			</ram:RelatedFishingActivity>
+			<ram:RelatedFishingActivity>
+				<ram:TypeCode listID="FLUX_FA_TYPE">RELOCATION</ram:TypeCode>
+				<ram:SpecifiedFACatch>
+					<ram:SpeciesCode listID="FAO_SPECIES">BFT</ram:SpeciesCode>
+					<ram:UnitQuantity unitCode="C62">21</ram:UnitQuantity>
+					<ram:WeightMeasure unitCode="KGM">3150</ram:WeightMeasure>
+					<ram:TypeCode listID="FA_CATCH_TYPE">ALLOCATED_TO_QUOTA</ram:TypeCode>
+				</ram:SpecifiedFACatch>
+				<ram:RelatedVesselTransportMeans>
+					<ram:ID schemeID="CFR">LUX123456789</ram:ID>
+					<ram:ID schemeID="ICCAT">ATEU0LUX13245</ram:ID>
+					<ram:RoleCode listID="FA_VESSEL_ROLE">PARTICIPATING_VESSEL</ram:RoleCode>
+					<ram:RegistrationVesselCountry>
+						<ram:ID schemeID="TERRITORY">LUX</ram:ID>
+					</ram:RegistrationVesselCountry>
+				</ram:RelatedVesselTransportMeans>
+			</ram:RelatedFishingActivity>
+
+			<!--Trip information-->
+			<ram:SpecifiedFishingTrip>
+				<ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194028615</ram:ID>
+                  	<ram:TypeCode listID="FISHING_TRIP_TYPE">JFO</ram:TypeCode>
+			</ram:SpecifiedFishingTrip>
+			
+
+			<!-- Vessels physically involved in the operation-->
+			<ram:RelatedVesselTransportMeans>
+				<ram:ID schemeID="CFR">SVK123456789</ram:ID>
+				<ram:ID schemeID="ICCAT">ATEU0SVK13245</ram:ID>
+				<ram:RoleCode listID="FA_VESSEL_ROLE">PARTICIPATING_VESSEL</ram:RoleCode>
+				<ram:RegistrationVesselCountry>
+					<ram:ID schemeID="TERRITORY">SVK</ram:ID>
+				</ram:RegistrationVesselCountry>
+			</ram:RelatedVesselTransportMeans>
+
+			<ram:RelatedVesselTransportMeans>
+				<ram:ID schemeID="CFR">SVN123456789</ram:ID>
+				<ram:ID schemeID="ICCAT">ATEU0SVN13245</ram:ID>
+				<ram:RoleCode listID="FA_VESSEL_ROLE">PARTICIPATING_VESSEL</ram:RoleCode>
+				<ram:RegistrationVesselCountry>
+					<ram:ID schemeID="TERRITORY">SVN</ram:ID>
+				</ram:RegistrationVesselCountry>
+			</ram:RelatedVesselTransportMeans>
+
+			<ram:RelatedVesselTransportMeans>
+				<ram:ID schemeID="CFR">LUX123456789</ram:ID>
+				<ram:ID schemeID="ICCAT">ATEU0LUX13245</ram:ID>
+				<ram:RoleCode listID="FA_VESSEL_ROLE">PARTICIPATING_VESSEL</ram:RoleCode>
+				<ram:RegistrationVesselCountry>
+					<ram:ID schemeID="TERRITORY">LUX</ram:ID>
+				</ram:RegistrationVesselCountry>
+			</ram:RelatedVesselTransportMeans>
+
+		</ram:SpecifiedFishingActivity>
+
+		<!--Reporting vessel-->
+		<ram:SpecifiedVesselTransportMeans>
+               <ram:ID schemeID="CFR">CYP123456789</ram:ID>
+               <ram:ID schemeID="IRCS">IRCS6</ram:ID>
+               <ram:ID schemeID="EXT_MARK">XR006</ram:ID>
+			<ram:ID schemeID="UVI">1234567</ram:ID>
+			<ram:ID schemeID="ICCAT">ATEU0CYP13245</ram:ID>
+               <ram:Name>GOLF</ram:Name>
+               
+               <ram:RoleCode listID="FA_VESSEL_ROLE">CATCHING_VESSEL</ram:RoleCode>
+               
+               <ram:RegistrationVesselCountry>
+                  <ram:ID schemeID="TERRITORY">CYP</ram:ID>
+               </ram:RegistrationVesselCountry>
+               
+               <!--master name and address-->
+               <ram:SpecifiedContactParty>
+                  <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+                  <ram:SpecifiedStructuredAddress>
+                     <ram:StreetName>ABC</ram:StreetName>
+                     <ram:CityName>CABOURG</ram:CityName>
+                     <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                     <ram:PlotIdentification>17</ram:PlotIdentification>
+                     <ram:PostalArea> 14390</ram:PostalArea>
+                  </ram:SpecifiedStructuredAddress>
+                  <ram:SpecifiedContactPerson>
+                     <ram:GivenName>John</ram:GivenName>
+                     <ram:FamilyName>Doe</ram:FamilyName>
+                     <ram:Alias>Captain Jack</ram:Alias>
+                  </ram:SpecifiedContactPerson>
+               </ram:SpecifiedContactParty>
+            </ram:SpecifiedVesselTransportMeans>
+            
+	</rsm:FAReportDocument>
+</rsm:FLUXFAReportMessage>

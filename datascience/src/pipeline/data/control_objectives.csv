@@ -1,0 +1,8 @@
+facade,segment,year,target_number_of_controls_at_sea,target_number_of_controls_at_port,control_priority_level
+MEMN,NWW01/02,2021,78,82,3
+MEMN,NS01/03,2021,12,11,3
+MEMN,PEL03,2021,109,119,3
+MED,MED01,2021,136,57,3
+SA,ATL01,2021,4,3,3
+SA,MED06/ATL02,2021,16,19,3
+MED,MED06/ATL02,2021,152,330,4

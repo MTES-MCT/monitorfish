@@ -26,6 +26,8 @@ GeoAlchemy2 = "^0.9.4"
 Rtree = "^0.9.7"
 Jinja2 = "^3.0.2"
 pytz = "^2021.3"
+h3 = "^3.7.3"
+vptree = "^1.2"
 
 [tool.poetry.dev-dependencies]
 plotly = "^4.14.3"

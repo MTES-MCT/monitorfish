@@ -70,21 +70,20 @@ def concatenate_columns(df: pd.DataFrame, input_col_names: List) -> pd.Series:
     return res
 
 
-def combine_overlapping_columns(df: pd.DataFrame, ordered_cols_list: List) -> pd.Series:
-    """Combines several columns into one by taking the first_valid_value in each row,
-    in the order of the ordered_cols_list.
+def coalesce(df: pd.DataFrame) -> pd.Series:
+    """Combines the input DataFrame's columns into one by taking the non null value in
+    each row, in the order of the DataFrame's columns from left to right.
 
     Returns a pandas Series with the combined results.
 
     Args:
         df (pd.DataFrame): input pandas DataFrame
-        ordered_cols_list (List): list of column names
 
     Returns:
-        pd.Series: Series containing the first valid value in each row of the DataFrame,
-            taken in the ordered_cols_list columns.
+        pd.Series: Series containing the first non null value in each row of the
+          DataFrame, taken in order of the DataFrame's columns from left to right.
     """
-    non_null_rows = df[ordered_cols_list].dropna(how="all")
+    non_null_rows = df.dropna(how="all")
     first_non_null_values_idx = np.argmax(non_null_rows.notnull().values, axis=1)
 
     res_values = np.choose(first_non_null_values_idx, non_null_rows.values.T)
@@ -327,6 +326,37 @@ def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
     return df.applymap(to_json, na_action="ignore").fillna("null")
 
 
+def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
+    """Serializes the values of a DataFrame that contains numbers that represent
+    possibly null (np.nan or None) integers. This is useful to prepare data before
+    loading to integer Postgres columns, as pandas automatically converts integer
+    Series to float dtype if they contain nulls.
+
+    Args:
+        df (pd.DataFrame): DataFrame of integer, possibly with None and np.nan values
+
+    Returns:
+        pd.DataFrame: same DataFrame converted to string dtype
+    """
+    return df.applymap(lambda x: str(int(x)), na_action="ignore").where(
+        df.notnull(), None
+    )
+
+
+def serialize_timedelta_df(df: pd.DataFrame) -> pd.DataFrame:
+    """Serializes the values of a DataFrame that contains `timedelta` values.
+    This is useful to prepare data before loading to timedelta Postgres columns, as
+    sqlachemy does not support the timedelta dtype.
+
+    Args:
+        df (pd.DataFrame): DataFrame of timedeltas
+
+    Returns:
+        pd.DataFrame: same DataFrame converted to string dtype
+    """
+    return df.astype(str).replace(["NaT"], [None])
+
+
 def drop_rows_already_in_table(
     df: pd.DataFrame,
     df_column_name: str,
@@ -377,6 +407,8 @@ def prepare_df_for_loading(
     handle_array_conversion_errors: bool = True,
     value_on_array_conversion_error="{}",
     jsonb_columns: Union[None, list] = None,
+    nullable_integer_columns: Union[None, list] = None,
+    timedelta_columns: Union[None, list] = None,
 ):
 
     df_ = df.copy(deep=True)
@@ -394,6 +426,17 @@ def prepare_df_for_loading(
             handle_errors=handle_array_conversion_errors,
             value_on_error=value_on_array_conversion_error,
         )
+
+    # Serialize columns that contain nullable integers (stored an float in python)
+    if nullable_integer_columns:
+        logger.info("Serializing nullable integer columns")
+        df_[nullable_integer_columns] = serialize_nullable_integer_df(
+            df_[nullable_integer_columns]
+        )
+
+    if timedelta_columns:
+        logger.info("Serializing timedelta columns")
+        df_[timedelta_columns] = serialize_timedelta_df(df_[timedelta_columns])
 
     return df_
 
@@ -448,9 +491,7 @@ def join_on_multiple_keys(
 
             cols_to_coalesce = [f"{non_joining_key}_left", f"{non_joining_key}_right"]
 
-            join[non_joining_key] = combine_overlapping_columns(
-                join[cols_to_coalesce], cols_to_coalesce
-            )
+            join[non_joining_key] = coalesce(join[cols_to_coalesce])
 
             join = join.drop(columns=cols_to_coalesce)
 

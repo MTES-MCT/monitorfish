@@ -28,7 +28,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   const {
     selectedBaseLayer,
     showingVesselsEstimatedPositions,
-    vesselsLastPositionVisibility
+    vesselsLastPositionVisibility,
+    hideVesselsAtPort
   } = useSelector(state => state.map)
 
   const [vectorSource] = useState(new VectorSource({
@@ -78,7 +79,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     filteredVesselsFeaturesUids,
     previewFilteredVesselsFeaturesUids,
     nonFilteredVesselsAreHidden,
-    hideOtherVessels
+    hideOtherVessels,
+    hideVesselsAtPort
   ])
 
   useEffect(() => {
@@ -126,7 +128,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         estimatedCurrentLongitude,
         latitude,
         longitude,
-        dateTime
+        dateTime,
+        isAtPort
       } = vesselFeature.vessel
 
       if (nonFilteredVesselsAreHidden &&
@@ -144,6 +147,10 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         if (featureIndex === NOT_FOUND) {
           return
         }
+      }
+
+      if (hideVesselsAtPort && isAtPort) {
+        return
       }
 
       if (estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {

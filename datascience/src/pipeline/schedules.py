@@ -1,6 +1,7 @@
 from prefect.schedules import CronSchedule, Schedule, clocks
 
 from src.pipeline.flows import (
+    anchorages,
     control_anteriority,
     controllers,
     controls,
@@ -26,7 +27,6 @@ from src.pipeline.flows import (
 ################################ Define flow schedules ################################
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 controllers.flow.schedule = CronSchedule("0 8 * * *")
-
 controls.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -35,12 +35,18 @@ controls.flow.schedule = Schedule(
         )
     ]
 )
-
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
 ers.flow.schedule = CronSchedule("* * * * *")
 fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")
 infractions.flow.schedule = CronSchedule("1 8 * * *")
-last_positions.flow.schedule = CronSchedule("* * * * *")
+last_positions.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "* * * * *",
+            parameter_defaults={"minutes": 2, "action": "update"},
+        )
+    ]
+)
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 regulations.flow.schedule = CronSchedule("* * * * *")
 regulations_checkup.flow.schedule = CronSchedule("55 7 * * 1,2,3,4,5")
@@ -51,6 +57,7 @@ vessels.flow.schedule = CronSchedule("5 8 * * *")
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [
+    anchorages.flow,
     controllers.flow,
     controls.flow,
     control_anteriority.flow,

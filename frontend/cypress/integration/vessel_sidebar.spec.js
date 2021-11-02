@@ -242,6 +242,7 @@ context('VesselSidebar', () => {
 
     // When
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
+    cy.wait(1000)
 
     // Then, the last position should be positioned in the bottom of the window
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 314, clientY: 833, pointerId: 1, force: true })

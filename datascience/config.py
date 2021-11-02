@@ -23,6 +23,10 @@ PROXIES = {
 }
 
 # URLs to fetch data from
+ANCHORAGES_URL = (
+    "https://www.data.gouv.fr/fr/datasets/r/e21a667e-bb25-4719-83f5-4b9ba441e93d"
+)
+
 PORTS_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/60fe965d-5888-493b-9321-24bc3b1f84db"
 )
@@ -45,6 +49,12 @@ FAO_AREAS_URL = (
     "service=WFS&request=GetFeature&version=1.0.0&"
     "typeName=fifao:FAO_AREAS_CWP&outputFormat=SHAPE-ZIP"
 )
+
+# Anchorages config
+ANCHORAGES_H3_CELL_RESOLUTION = 9
+
+# Last_positions configuration
+CURRENT_POSITION_ESTIMATION_MAX_HOURS = 2.0
 
 # Risk factor configuration
 risk_factor_coefficients = {

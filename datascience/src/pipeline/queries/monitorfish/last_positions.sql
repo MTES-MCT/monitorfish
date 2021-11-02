@@ -1,4 +1,4 @@
-WITH last_54_hours_positions AS (
+WITH last_n_minutes_positions AS (
     SELECT 
         id,
         internal_reference_number,
@@ -16,7 +16,7 @@ WITH last_54_hours_positions AS (
             PARTITION BY internal_reference_number, external_reference_number, ircs
             ORDER BY date_time DESC) AS rk
     FROM positions
-    WHERE date_time > CURRENT_TIMESTAMP - INTERVAL '2 days 6 hours'
+    WHERE date_time > CURRENT_TIMESTAMP - make_interval(mins => :minutes)
     AND date_time < CURRENT_TIMESTAMP + INTERVAL '1 day'
     AND (internal_reference_number IS NOT NULL OR 
          external_reference_number IS NOT NULL OR
@@ -38,7 +38,7 @@ last_two_positions AS (
         course,
         date_time,
         rk
-    FROM last_54_hours_positions
+    FROM last_n_minutes_positions
     WHERE rk <=2
 ),
 
@@ -62,7 +62,7 @@ emission_periods AS (
 )
 
 SELECT
-    pos.id AS position_id,
+    pos.id,
     pos.internal_reference_number AS cfr,
     pos.external_reference_number AS external_immatriculation,
     vessels.mmsi,

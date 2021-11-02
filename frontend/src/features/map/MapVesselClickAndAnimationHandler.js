@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetAnimateTo } from '../../domain/shared_slices/Map'
+import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
 import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
 import LayersEnum from '../../domain/entities/layers'
 import showVesselTrack from '../../domain/use_cases/showVesselTrack'
@@ -13,17 +13,25 @@ import showVesselTrack from '../../domain/use_cases/showVesselTrack'
  */
 const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   const dispatch = useDispatch()
-  const { animateTo } = useSelector(state => state.map)
   const {
-    vesselSidebarIsOpen
+    animateToCoordinates,
+    animateToExtent
+  } = useSelector(state => state.map)
+  const {
+    vesselSidebarIsOpen,
+    vesselTrackExtent
   } = useSelector(state => state.vessel)
   const {
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
   useEffect(() => {
-    animate()
-  }, [animateTo, map, vesselSidebarIsOpen])
+    animateViewToCoordinates()
+  }, [animateToCoordinates, map, vesselSidebarIsOpen])
+
+  useEffect(() => {
+    animateViewToExtent()
+  }, [animateToExtent, vesselTrackExtent, map, vesselSidebarIsOpen])
 
   useEffect(() => {
     if (!previewFilteredVesselsMode && mapClickEvent?.feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
@@ -35,10 +43,21 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     }
   }, [mapClickEvent])
 
-  function animate () {
-    if (map &&
-      animateTo &&
-      vesselSidebarIsOpen) {
+  function animateViewToExtent () {
+    if (map && vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
+      map.getView().fit(vesselTrackExtent, {
+        duration: 500,
+        padding: [100, 550, 100, 50],
+        maxZoom: 10,
+        callback: () => {
+          dispatch(resetAnimateToExtent())
+        }
+      })
+    }
+  }
+
+  function animateViewToCoordinates () {
+    if (map && animateToCoordinates && vesselSidebarIsOpen) {
       if (map.getView().getZoom() >= 8) {
         const resolution = map.getView().getResolution()
         map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
@@ -49,15 +68,15 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
         })
       }
 
-      dispatch(resetAnimateTo())
+      dispatch(resetAnimateToCoordinates())
     }
   }
 
   function createAnimateObject (resolution, duration, zoom) {
     return {
       center: [
-        animateTo[0] + resolution,
-        animateTo[1]
+        animateToCoordinates[0] + resolution,
+        animateToCoordinates[1]
       ],
       duration,
       zoom

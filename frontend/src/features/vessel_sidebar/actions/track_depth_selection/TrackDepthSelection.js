@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import TrackDepthRadio from './TrackDepthRadio'
 import TrackDepthDateRange from './TrackDepthDateRange'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import styled from 'styled-components'
-import { ReactComponent as VesselSVG } from '../../icons/Icone_navire.svg'
-import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
+import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
+import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
-import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices/Vessel'
-import showVesselTrackAndSidebar from '../../../domain/use_cases/showVesselTrackAndSidebar'
-import { convertToUTCDay } from '../../../utils'
+import { setSelectedVesselCustomTrackDepth } from '../../../../domain/shared_slices/Vessel'
+import showVesselTrackAndSidebar from '../../../../domain/use_cases/showVesselTrackAndSidebar'
+import { convertToUTCDay } from '../../../../utils'
 
 const TrackDepthSelection = props => {
   const dispatch = useDispatch()
@@ -92,8 +92,9 @@ const TrackDepthSelection = props => {
         trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
         onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
         data-cy={'vessel-track-depth-selection'}
+        title={'Paramétrer l\'affichage de la piste VMS'}
       >
-        <ClockIcon/>
+        <VesselIcon/>
       </TrackDepthSelectionButton>
       <TrackDepthSelectionContent
         healthcheckTextWarning={healthcheckTextWarning}
@@ -165,7 +166,7 @@ const TrackDepthSelectionContent = styled(MapComponentStyle)`
   : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 `
 
-const ClockIcon = styled(VesselSVG)`
+const VesselIcon = styled(VesselSVG)`
   width: 20px;
   background: none;
   margin-top: 2px;

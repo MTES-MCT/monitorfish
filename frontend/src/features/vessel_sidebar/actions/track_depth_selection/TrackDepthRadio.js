@@ -1,7 +1,7 @@
 import React from 'react'
 import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
-import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 
 const TrackDepthRadio = props => {
   return (

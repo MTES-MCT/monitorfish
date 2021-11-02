@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import styled from 'styled-components'
-import { ReactComponent as ExportSVG } from '../../icons/Bouton_exporter_piste_navire.svg'
+import { ReactComponent as ExportSVG } from '../../../icons/Bouton_exporter_piste_navire.svg'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
-import { formatToCSVColumnsForExport, getDate } from '../../../utils'
-import { getCoordinates } from '../../../coordinates'
-import { WSG84_PROJECTION } from '../../../domain/entities/map'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
+import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
+import { getCoordinates } from '../../../../coordinates'
+import { WSG84_PROJECTION } from '../../../../domain/entities/map'
+import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useSelector } from 'react-redux'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
@@ -117,6 +117,7 @@ const TrackExport = props => {
 
   return (
     <TrackExportButton
+      title={'Exporter la piste'}
       healthcheckTextWarning={healthcheckTextWarning}
       isClickable={selectedVessel && selectedVessel.positions && selectedVessel.positions.length}
       openBox={props.openBox}
@@ -129,7 +130,7 @@ const TrackExport = props => {
 }
 
 const TrackExportButton = styled(MapButtonStyle)`
-  top: 153px;
+  top: 223px;
   height: 30px;
   width: 30px;
   background: ${COLORS.charcoal};

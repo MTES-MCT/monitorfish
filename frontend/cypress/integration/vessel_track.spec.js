@@ -57,8 +57,6 @@ context('Vessels Track', () => {
     cy.wait(20)
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 688, pointerId: 1, force: true })
 
-
-
     cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 38′ 24″ N')
     cy.get('*[data-cy^="vessel-track-card-longitude"]').contains('008° 07′ 01″ W')
     cy.get('*[data-cy^="vessel-track-card-course"]').contains('17°')
@@ -120,8 +118,8 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="show-vessel-tracks-custom-period"]').click({ force: true })
     cy.get('.rs-picker-daterange > .rs-btn').eq(1).click(460, 480, { timeout: 20000, force: true })
 
-    cy.get('.rs-calendar-table-cell-content').eq(20).click({ timeout: 20000, force: true })
-    cy.get('.rs-calendar-table-cell-content').eq(23).click({ timeout: 20000, force: true })
+    cy.get('.rs-calendar-table-cell-is-today').click({ timeout: 20000, force: true })
+    cy.get('.rs-calendar-table-cell-is-today').prev().click({ timeout: 20000, force: true })
     cy.get('.rs-picker-toolbar-right-btn-ok').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
   })

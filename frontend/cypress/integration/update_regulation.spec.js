@@ -8,7 +8,7 @@ context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice`)
-    cy.wait(2000)
+    cy.wait(3000)
 
     // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
@@ -32,7 +32,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="tag-Normandie"]').should('exist')
     cy.get('[data-cy="tag-Bretagne"]').should('exist')
     cy.get('[data-cy="tag-598"]').should('exist')
-    cy.get('[data-cy="tag-ArrÃªtÃ© PrÃ©fectoral 168/2020 ModifiÃ© - dÃ©lib 2020/PR-B-16 / MEMN"]').should('exist')
+    cy.get('[data-cy="tag-texte de reference"]').should('exist')
     cy.get('[data-cy="input-Praires_Ouest_cotentin"]').should('exist')
     cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
     // try to save
@@ -43,7 +43,7 @@ context('NewRegulation', () => {
     cy.get('.rs-checkbox-inner').should('have.length', 3)
     cy.get('.rs-checkbox-inner').before('border-color').should('eq', 'rgb(225, 0, 15)')
   })
-  it('Save request open /backoffice page', () => {
+  it('Save request as a corr', () => {
     // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     cy.get('.rs-checkbox-inner').before('border-color').should('not.eq', 'rgb(225, 0, 15)')
@@ -53,6 +53,19 @@ context('NewRegulation', () => {
     // save form
     cy.get('[data-cy="validate-button"]').click()
     cy.wait(200)
-    cy.wait('@postRegulation').its('request.body').should('contain', '<Transaction xmlns="http://www.opengis.net/wfs" service="WFS" version="1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><Update typeName="monitorfish:regulatory_areas" xmlns:feature="monitorfish"><Property><Name>layer_name</Name><Value>Ouest_Cotentin_Bivalves</Value></Property><Property><Name>law_type</Name><Value>Reg locale</Value></Property><Property><Name>zones</Name><Value>Praires_Ouest_cotentin</Value></Property><Property><Name>region</Name><Value>Normandie, Bretagne</Value></Property><Property><Name>facade</Name><Value>MEMN</Value></Property><Property><Name>references_reglementaires</Name><Value>[{"reference":"ArrÃªtÃ© PrÃ©fectoral 168/2020 ModifiÃ© - dÃ©lib 2020/PR-B-16 / MEMN","url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634","startDate":1635771799409,"endDate":"infinite","textType":["creation"]}]</Value></Property><Property><Name>references_reglementaires_a_venir</Name><Value>""</Value></Property><Filter xmlns="http://www.opengis.net/ogc"><FeatureId fid="regulatory_areas.598"/></Filter></Update></Transaction>')
+    const body = cy.wait('@postRegulation').its('request.body')
+    body.should('contain', 'typeName="monitorfish:regulatory_areas"')
+    body.should('contain', '<Value>Reg locale</Value>')
+    body.should('contain', '<Value>Praires_Ouest_cotentin</Value>')
+    body.should('contain', '<Value>Normandie, Bretagne</Value>')
+    body.should('contain', '<Value>MEMN</Value>')
+    body.should('contain', '"reference":"texte de reference"')
+    body.should('contain', '"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"')
+    body.should('not.equal', '"startDate":""')
+    body.should('contain', '"endDate":"infinite"')
+    body.should('contain', '"textType":["creation"]')
+    body.should('contain', '<Value>""</Value>')
+    body.should('contain', '<FeatureId fid="regulatory_areas.598"/>')
+    cy.url().should('include', '/backoffice')
   })
 })

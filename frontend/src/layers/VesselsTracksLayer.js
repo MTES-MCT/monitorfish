@@ -67,7 +67,7 @@ const VesselsTracksLayer = ({ map }) => {
   }, [previousSelectedVessel, selectedVessel])
 
   useEffect(() => {
-    if (!Object.keys(vesselsTracksShowed)?.length) {
+    if (!Object.keys(vesselsTracksShowed)?.length || !vectorSource) {
       return
     }
 
@@ -76,7 +76,7 @@ const VesselsTracksLayer = ({ map }) => {
 
     showVesselsTracks(vesselTracks)
     hideVesselsTracks(vesselTracks)
-  }, [vesselsTracksShowed])
+  }, [vesselsTracksShowed, vectorSource])
 
   useEffect(() => {
     if (highlightedVesselTrackPosition) {

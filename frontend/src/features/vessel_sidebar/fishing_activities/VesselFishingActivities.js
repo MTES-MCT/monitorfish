@@ -12,7 +12,7 @@ import {
   setFishingActivitiesTab,
   setVoyage
 } from '../../../domain/shared_slices/FishingActivities'
-import { useDispatch, useSelector } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import getVesselVoyage, { NAVIGATE_TO } from '../../../domain/use_cases/getVesselVoyage'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { usePrevious } from '../../../hooks/usePrevious'
@@ -68,9 +68,11 @@ const VesselFishingActivities = () => {
 
   const updateFishingActivities = nextFishingActivities => {
     if (nextFishingActivities) {
-      dispatch(setVoyage(nextFishingActivities))
-      dispatch(resetLoadingVessel())
-      dispatch(resetNextFishingActivities())
+      batch(() => {
+        dispatch(setVoyage(nextFishingActivities))
+        dispatch(resetLoadingVessel())
+        dispatch(resetNextFishingActivities())
+      })
     }
   }
 

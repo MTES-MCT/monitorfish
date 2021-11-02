@@ -22,7 +22,6 @@ const controlsSlice = createSlice({
      */
     setControlResumeAndControls (state, action) {
       state.controlResumeAndControls = action.payload
-      state.loadingVessel = null
     },
     setNextControlResumeAndControls (state, action) {
       state.nextControlResumeAndControls = action.payload

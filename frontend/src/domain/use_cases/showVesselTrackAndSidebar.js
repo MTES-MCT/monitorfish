@@ -41,8 +41,6 @@ const showVesselTrackAndSidebar = (
     selectedVesselCustomTrackDepth,
     getState().map.defaultVesselTrackDepth)
 
-  console.log(nextVesselTrackDepthObject, vesselTrackDepth)
-
   getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {
       const error = getTrackDepthError(vesselAndTrackDepthModified, calledFromCron, vesselTrackDepth)

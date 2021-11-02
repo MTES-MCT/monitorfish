@@ -6,7 +6,7 @@ import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
 import { animateToExtent } from '../../../../domain/shared_slices/Map'
 
-const AnimateToTrack = props => {
+const AnimateToTrack = ({ openBox, rightMenuIsOpen }) => {
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const dispatch = useDispatch()
 
@@ -15,8 +15,8 @@ const AnimateToTrack = props => {
       data-cy={'animate-to-track'}
       title={'Centrer sur la piste'}
       healthcheckTextWarning={healthcheckTextWarning}
-      openBox={props.openBox}
-      rightMenuIsOpen={props.rightMenuIsOpen}
+      openBox={openBox}
+      rightMenuIsOpen={rightMenuIsOpen}
       onClick={() => dispatch(animateToExtent())}
     >
       <ShowTrackIcon/>

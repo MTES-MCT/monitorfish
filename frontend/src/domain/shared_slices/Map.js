@@ -30,7 +30,8 @@ const mapSlice = createSlice({
     riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
     showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
     // End of vessels map properties
-    animateTo: null,
+    animateToCoordinates: null,
+    animateToExtent: null,
     updatedFromCron: false,
     animateToRegulatoryLayer: null,
     interaction: null,
@@ -54,11 +55,21 @@ const mapSlice = createSlice({
      * payload: String[]
      * }} action - The OpenLayers internal [longitude, latitude] coordinates
      */
-    animateTo (state, action) {
-      state.animateTo = action.payload
+    animateToCoordinates (state, action) {
+      state.animateToCoordinates = action.payload
     },
-    resetAnimateTo (state) {
-      state.animateTo = null
+    resetAnimateToCoordinates (state) {
+      state.animateToCoordinates = null
+    },
+    /**
+     * Animate map to the vessel track extent stored in the Vessel reduced
+     * @param {Object=} state
+     */
+    animateToExtent (state) {
+      state.animateToExtent = true
+    },
+    resetAnimateToExtent (state) {
+      state.animateToExtent = null
     },
     animateToRegulatoryLayer (state, action) {
       state.animateToRegulatoryLayer = action.payload
@@ -160,8 +171,10 @@ const mapSlice = createSlice({
 })
 
 export const {
-  animateTo,
-  resetAnimateTo,
+  animateToCoordinates,
+  resetAnimateToCoordinates,
+  animateToExtent,
+  resetAnimateToExtent,
   animateToRegulatoryLayer,
   resetAnimateToRegulatoryLayer,
   setVesselLabelsShowedOnMap,

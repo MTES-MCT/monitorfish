@@ -7,24 +7,24 @@ import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
 import { setHideOtherVessels } from '../../../../domain/shared_slices/Vessel'
 
-const HideOtherVessels = props => {
+const HideOtherVessels = ({ openBox, rightMenuIsOpen }) => {
   const dispatch = useDispatch()
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const { hideOtherVessels } = useSelector(state => state.vessel)
 
   useEffect(() => {
-    if (!props.openBox) {
+    if (!openBox) {
       dispatch(setHideOtherVessels(false))
     }
-  }, [props.openBox])
+  }, [openBox])
 
   return (
     <HideOtherVesselsButton
       data-cy={'trigger-hide-other-vessels-from-sidebar'}
       healthcheckTextWarning={healthcheckTextWarning}
       hideOtherVessels={hideOtherVessels}
-      openBox={props.openBox}
-      rightMenuIsOpen={props.rightMenuIsOpen}
+      openBox={openBox}
+      rightMenuIsOpen={rightMenuIsOpen}
       onClick={() => dispatch(setHideOtherVessels(!hideOtherVessels))}
       title={`${hideOtherVessels ? 'Afficher' : 'Cacher'} les autres navires`}
     >

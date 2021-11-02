@@ -1,26 +1,25 @@
 import { getVesselControlsFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
-import {
-  loadingControls,
-  resetLoadingVessel,
-  setControlResumeAndControls,
-  setNextControlResumeAndControls
-} from '../shared_slices/Vessel'
+import { setControlResumeAndControls, setNextControlResumeAndControls } from '../shared_slices/Controls'
 import NoControlsFoundError from '../../errors/NoControlsFoundError'
 import { batch } from 'react-redux'
+import { loading, resetLoadingVessel } from '../shared_slices/Vessel'
 
 const getControls = userRequest => (dispatch, getState) => {
   const {
-    currentControlResumeAndControls,
-    controlsFromDate,
     selectedVessel
   } = getState().vessel
+
+  const {
+    currentControlResumeAndControls,
+    controlsFromDate
+  } = getState().controls
 
   if (selectedVessel?.id) {
     const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.id, currentControlResumeAndControls)
 
     if (!isSameVesselAsCurrentlyShowed) {
-      dispatch(loadingControls())
+      dispatch(loading())
     }
 
     getVesselControlsFromAPI(selectedVessel.id, controlsFromDate).then(controlResumeAndControls => {
@@ -32,6 +31,7 @@ const getControls = userRequest => (dispatch, getState) => {
         dispatch(setControlResumeAndControls(controlResumeAndControls))
       }
       dispatch(removeError())
+      dispatch(resetLoadingVessel())
     }).catch(error => {
       console.error(error)
       batch(() => {
@@ -45,6 +45,7 @@ const getControls = userRequest => (dispatch, getState) => {
       dispatch(setControlResumeAndControls({
         controls: []
       }))
+      dispatch(resetLoadingVessel())
     })
   }
 }

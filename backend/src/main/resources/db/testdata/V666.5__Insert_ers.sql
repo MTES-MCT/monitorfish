@@ -406,3 +406,28 @@ VALUES  ('OOF20190227050000', 9463711, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OO
         '2106-10-30T11:32:00Z',
         null, null, null, null, null, null, '',
         '{"returnStatus": "000"}', '2100-01-18T07:19:28.384921Z');
+
+UPDATE ers
+SET
+ value = jsonb_set(value, '{predictedArrivalDatetimeUtc}', concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
+ ers_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes'
+WHERE operation_number = 'OOF20191011059902';
+
+UPDATE ers
+SET
+ value = jsonb_set(value, '{returnDatetimeUtc}', concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '22 hours 10 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
+ ers_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '22 hours 10 minutes'
+WHERE operation_number = 'OOF20190830059906';
+
+UPDATE ers
+SET
+ value = jsonb_set(value, '{landingDatetimeUtc}', concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
+ ers_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes'
+WHERE operation_number = 'OOF20190627059908';
+
+UPDATE ers
+SET
+ value = jsonb_set(value, '{discardDatetimeUtc}', concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
+ ers_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes'
+WHERE operation_number = 'OOF20191030059909';
+

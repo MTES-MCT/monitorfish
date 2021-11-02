@@ -1,4 +1,8 @@
 import { ERSMessageType as ERSMessageTypeEnum, ERSOperationType } from './ERS'
+import { Feature } from 'ol'
+import Point from 'ol/geom/Point'
+import { getFishingActivityCircleStyle } from '../../layers/styles/vesselTrack.style'
+import Layers from './layers'
 
 export const getDEPMessageFromMessages = ersMessages => ersMessages
   .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
@@ -188,4 +192,46 @@ export const getFAOZonesFromFARMessages = farMessages => {
 
       return acc
     }, [])
+}
+
+/**
+ * Get effective datetime from ERS message
+ * @param {ERSMessage} message
+ * @return {string} date - Message effective date
+ */
+export const getEffectiveDateTimeFromMessage = message => {
+  switch (message.messageType) {
+    case 'DEP': return message.message.departureDatetimeUtc
+    case 'FAR': return message.message.farDatetimeUtc
+    case 'DIS': return message.message.discardDatetimeUtc
+    case 'COE': return message.message.effortZoneEntryDatetimeUtc
+    case 'COX': return message.message.effortZoneExitDatetimeUtc
+    case 'LAN': return message.message.landingDatetimeUtc
+    case 'EOF': return message.message.endOfFishingDatetimeUtc
+    case 'RTP': return message.message.returnDatetimeUtc
+    case 'PNO': return message.operationDateTime < message.message.predictedArrivalDatetimeUtc
+      ? message.operationDateTime
+      : message.message.predictedArrivalDatetimeUtc
+    default: return message.operationDateTime
+  }
+}
+
+export const getFishingActivityFeatureOnTrackLine = (fishingActivity, lineOfFishingActivity, fishingActivityDateTimestamp) => {
+  const totalDistance = new Date(lineOfFishingActivity.secondPositionDate).getTime() - new Date(lineOfFishingActivity.firstPositionDate).getTime()
+  const fishingActivityDistanceFromFirstPoint = fishingActivityDateTimestamp - new Date(lineOfFishingActivity.firstPositionDate).getTime()
+  const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
+
+  const coordinates = lineOfFishingActivity.getGeometry().getCoordinateAt(distanceFraction)
+  const feature = new Feature({
+    geometry: new Point(coordinates)
+  })
+  feature.name = fishingActivity.name
+  feature.setStyle(getFishingActivityCircleStyle())
+  feature.setId(`${Layers.VESSEL_TRACK.code}:ers:${fishingActivityDateTimestamp}`)
+
+  return {
+    feature,
+    coordinates,
+    id: fishingActivity.id
+  }
 }

@@ -68,7 +68,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     isFirstVoyage,
     tripNumber,
     fishingActivities
-  } = useSelector(state => state.vessel)
+  } = useSelector(state => state.fishingActivities)
 
   /** @type {ERSMessage[]} ersMessages */
   const [ersMessages, setERSMessages] = useState([])
@@ -180,7 +180,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
       <Navigation selectedOptionsSize={selectedOptions ? selectedOptions.length : 0}>
         <PreviousTrip
           disabled={isFirstVoyage}
-          onClick={!isFirstVoyage && navigation.goToPreviousTrip}
+          onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
           title={'Marée précédente'}
         />
         {
@@ -190,12 +190,12 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
         }
         <LastTrip
           disabled={isLastVoyage}
-          onClick={!isLastVoyage && navigation.goToLastTrip}
+          onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
           title={'Dernière marée'}
         />
         <NextTrip
           disabled={isLastVoyage}
-          onClick={!isLastVoyage && navigation.goToNextTrip}
+          onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
           title={'Marée suivante'}
         />
       </Navigation>

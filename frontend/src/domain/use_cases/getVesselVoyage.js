@@ -1,12 +1,13 @@
 import { getVesselVoyageFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
+import { loading, resetLoadingVessel } from '../shared_slices/Vessel'
 import {
-  loadingFisheriesActivities,
-  resetLoadingVessel,
+  hideFishingActivitiesOnMap,
   setLastVoyage,
   setNextFishingActivities,
-  setVoyage
-} from '../shared_slices/Vessel'
+  setVoyage,
+  showFishingActivitiesOnMap
+} from '../shared_slices/FishingActivities'
 import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
 import { batch } from 'react-redux'
@@ -23,8 +24,9 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     const {
       lastFishingActivities,
       isLastVoyage,
-      tripNumber
-    } = getState().vessel
+      tripNumber,
+      fishingActivitiesShowedOnMap
+    } = getState().fishingActivities
 
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
     navigateTo = navigateTo || NAVIGATE_TO.LAST
@@ -35,7 +37,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     }
 
     if (!fromCron) {
-      dispatch(loadingFisheriesActivities())
+      dispatch(loading())
     }
 
     getVesselVoyageFromAPI(vesselIdentity, navigateTo, tripNumber).then(voyage => {
@@ -46,6 +48,8 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
             alerts: []
           }
         }))
+        dispatch(resetLoadingVessel())
+        dispatch(hideFishingActivitiesOnMap())
         dispatch(setError(new NoERSMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
         return
       }
@@ -57,8 +61,12 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       } else {
         if (voyage.isLastVoyage) {
           dispatch(setLastVoyage(voyage))
-        } else {
-          dispatch(setVoyage(voyage))
+        }
+
+        dispatch(setVoyage(voyage))
+        dispatch(resetLoadingVessel())
+        if (fishingActivitiesShowedOnMap?.length) {
+          dispatch(showFishingActivitiesOnMap())
         }
       }
       dispatch(removeError())

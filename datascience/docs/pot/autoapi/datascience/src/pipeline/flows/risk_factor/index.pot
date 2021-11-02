@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2021-10-29 15:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,7 @@ msgid ":obj:`load_risk_factors <datascience.src.pipeline.flows.risk_factor.load_
 msgstr ""
 
 #: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:22:<autosummary>:1
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:54
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:42
 #: ddbae0acbc794b449a9b84673dd01583
 #: 4396a4cb52d54772a01bbc89b90dd90a
 msgid "Load the output of ``compute_risk_factors`` task into ``risk_factors`` table."
@@ -63,17 +63,7 @@ msgstr ""
 msgid "Attributes"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
-#: 2df31389dfe94b00a222cddea6043a00
-msgid ":obj:`risk_factor_coefficients <datascience.src.pipeline.flows.risk_factor.risk_factor_coefficients>`\\"
-msgstr ""
-
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
-#: c8179bea02ba404cba88e25c2739da71
-msgid ":obj:`default_risk_factors <datascience.src.pipeline.flows.risk_factor.default_risk_factors>`\\"
-msgstr ""
-
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:32:<autosummary>:1
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:30:<autosummary>:1
 #: 0713696abe514c37a2f2b2b0eb6f7e84
 msgid ":obj:`current_segments <datascience.src.pipeline.flows.risk_factor.current_segments>`\\"
 msgstr ""
@@ -83,7 +73,7 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
-#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:56
+#: ../source/autoapi/datascience/src/pipeline/flows/risk_factor/index.rst:44
 #: dcf4c40b48af4c2794a9a8c5fe590e11
 msgid "output of ``compute_risk_factors`` task."
 msgstr ""

@@ -18,10 +18,12 @@ In France, fleet segments were defined by the `Direction des Pêches Maritimes e
 and risk assessments on these fleet segments are performed each year by the 
 `Directions Interrégionales de la Mer <https://fr.wikipedia.org/wiki/Direction_interr%C3%A9gionale_de_la_Mer#:~:text=Les%20directions%20interr%C3%A9gionales%20de%20la,marin%20et%20gestion%20des%20ressources>`_.
 
-During this process, a risk level is computed for each fleet segment based on 
+During this process, a **risk level** is computed for each fleet segment based on 
 
 * scientific data on the **state of the stock** (healthy, threatened, collapsed...)
-* national metrics to estimate the pressure that the fishing activity puts on the stock and the level of non-compliance observed on the fleet segment
+* national metrics to estimate the **pressure** that the fishing activity puts on the stock and the **level of non-compliance** observed on the fleet segment
+
+This risk level represents the **impact of the fishing activity** on the ressources.
 
 In addition, and based on the risk assessment conclusions, an objective of a minimum number of controls to perform on each fleet segment is defined.
 

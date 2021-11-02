@@ -55,8 +55,8 @@
 
 /**
  * @typedef DateInterval
- * @property {date} from
- * @property {date} to
+ * @property {date} startDate
+ * @property {date} endDate
  * /
 
  /**

@@ -148,6 +148,16 @@ export const initialFishingPeriodValues = {
   daytime: undefined
 }
 
+export const WEEKDAYS = {
+  lundi: 'L',
+  mardi: 'M',
+  mercredi: 'M',
+  jeudi: 'J',
+  vendredi: 'V',
+  samedi: 'S',
+  dimanche: 'D'
+}
+
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText
     ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))

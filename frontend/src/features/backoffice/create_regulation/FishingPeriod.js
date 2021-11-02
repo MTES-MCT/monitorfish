@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Label } from '../../commonStyles/Input.style'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../constants/constants'
@@ -8,7 +8,7 @@ import DateRange from './DateRange'
 import CustomDatePicker from './CustomDatePicker'
 import DayPicker from './DayPicker'
 import { CustomCheckbox } from '../../commonStyles/Backoffice.style'
-import { DEFAULT_DATE_RANGE } from '../../../domain/entities/regulatory'
+import { DEFAULT_DATE_RANGE, DEFAULT_DATE } from '../../../domain/entities/regulatory'
 
 const FishingPeriod = (props) => {
   const {
@@ -30,6 +30,7 @@ const FishingPeriod = (props) => {
 
   const [displayForm, setDisplayForm] = useState(false)
   const [disabled, setDisabled] = useState(true)
+  const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
 
   const set = useCallback((key, value) => {
     const obj = {
@@ -115,6 +116,36 @@ const FishingPeriod = (props) => {
   const setHolidays = _ => set('holidays', !holidays)
   const setDaytime = _ => set('daytime', !daytime)
 
+  useEffect(() => {
+    console.log('useEffect')
+    console.log(fishingPeriod)
+    if (dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0) {
+      setFishingPeriodAsString(toString())
+    }
+  }, [fishingPeriod, fishingPeriodAsString])
+
+  const toString = () => {
+    const textArray = []
+    if (dateRanges?.length > 0) {
+      textArray.push(dateRanges.map(({ startDate, endDate }) => {
+        if (startDate && startDate !== DEFAULT_DATE && endDate && endDate !== DEFAULT_DATE) {
+          return `du ${startDate.day}/${startDate.month}${annualRecurrence && `/${startDate.year}`} 
+            au ${endDate.day}/${endDate.month}${annualRecurrence && `/${endDate.year}`} `
+        }
+        return null
+      }).join(', '))
+    }
+    if (dates?.length > 0) {
+      textArray.push(dates.map(date => {
+        return `le ${date.getDay()}/${date.getMonth()}/${date.getYear()} `
+      }).join('et '))
+    }
+    if (weekdays?.length > 0) {
+      textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${weekdays.join(', ')}.`)
+    }
+    return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
+  }
+
   return <Wrapper show={show}>
     <Title>
       <PeriodRadioGroup
@@ -180,7 +211,6 @@ const FishingPeriod = (props) => {
               ? dates.map((date, id) => {
                 return <DateRow key={id}>
                   <CustomDatePicker
-                    // $isrequired={startDateIsRequired}
                     disabled={disabled}
                     value={date}
                     onChange={date => onDateChange(id, date)}
@@ -196,7 +226,6 @@ const FishingPeriod = (props) => {
               })
               : <DateRow key={0}>
                   <CustomDatePicker
-                    // $isrequired={startDateIsRequired}
                     disabled={disabled}
                     value={undefined}
                     onChange={date => onDateChange(0, date)}
@@ -229,20 +258,12 @@ const FishingPeriod = (props) => {
         </Row>
         <TimeTitle>Horaires autorisées</TimeTitle>
         <Row>De <CustomDatePicker
-            /* $isrequired={startDateIsRequired}
-            value={currentStartDate}
-            onChange={(date) => setCurrentStartDate(date)}
-            onOk={(date, _) => setCurrentStartDate(date)} */
             format='MM/DD/YYYY'
             placement={'rightStart'}
             style={{ margin: '0px 5px' }}
             disabled={disabled}
           />
           à <CustomDatePicker
-            /* $isrequired={startDateIsRequired}
-            value={currentStartDate}
-            onChange={(date) => setCurrentStartDate(date)}
-            onOk={(date, _) => setCurrentStartDate(date)} */
             format='DD/MM/YYYY'
             placement={'rightStart'}
             style={{ margin: '0px 5px' }}
@@ -255,8 +276,29 @@ const FishingPeriod = (props) => {
         </Row>
       </ConditionnalLines>
     </DateTimeWrapper>
+    {fishingPeriodAsString &&
+    <PeriodAsStringWrapper display={displayForm} authorized={authorized}>
+      <PeriodAsString >
+        {fishingPeriodAsString}
+      </PeriodAsString >
+    </PeriodAsStringWrapper>}
   </Wrapper>
 }
+
+const PeriodAsStringWrapper = styled.div`
+  ${props => !props.display ? 'display: none;' : ''}
+  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
+  padding-top: 20px;
+  margin-bottom: 30px;
+`
+const PeriodAsString = styled.div`
+  width: 420px;
+  font-size: 13px;
+  color: ${COLORS.gunMetal};
+  background: ${COLORS.gainsboro};
+  padding: 10px;
+  margin-left: 15px;
+`
 
 const PeriodRow = styled.div`
   ${props => !props.display ? 'display: none;' : ''}
@@ -295,7 +337,6 @@ const HolidaysCheckbox = styled(CustomCheckbox)`
 const DateTimeWrapper = styled.div`
   display: ${props => props.display ? 'flex' : 'none'};
   flex-direction: row;
-  margin-bottom: 30px;
   opacity: ${props => props.disabled ? '0.4' : '1'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-left: 15px;

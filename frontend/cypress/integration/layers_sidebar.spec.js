@@ -121,7 +121,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
   })
 
-  it('An administrative zone Should be showed and hidden', () => {
+  it.only('An administrative zone Should be showed and hidden', () => {
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="administrative-zones-open"]').click({ timeout: 20000 })
@@ -130,7 +130,7 @@ context('LayersSidebar', () => {
 
     // Then
     cy.get('.administrative').eq(0).toMatchImageSnapshot({
-      clip: { x: 400, y: 0, width: 200, height: 200 }
+      clip: { x: 510, y: 0, width: 200, height: 200 }
     })
 
     cy.get('*[data-cy^="administrative-layer-toggle"]').eq(0).click({ timeout: 20000 })

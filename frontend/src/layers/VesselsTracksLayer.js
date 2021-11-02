@@ -5,16 +5,22 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
-import { animateToCoordinates } from '../domain/shared_slices/Map'
 import { getCircleStyle } from './styles/vesselTrack.style'
+import { animateToCoordinates } from '../domain/shared_slices/Map'
 import { usePrevious } from '../hooks/usePrevious'
 import {
-  setVesselTrackExtent,
   updateVesselTrackAsHidden,
+  setVesselTrackExtent,
   updateVesselTrackAsShowed
 } from '../domain/shared_slices/Vessel'
+import {
+  updateFishingActivitiesOnMapCoordinates
+} from '../domain/shared_slices/FishingActivities'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
+import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
+import { setError } from '../domain/shared_slices/Global'
+import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/fishingActivities'
 
 const VesselsTracksLayer = ({ map }) => {
   const {
@@ -22,7 +28,13 @@ const VesselsTracksLayer = ({ map }) => {
     highlightedVesselTrackPosition,
     vesselsTracksShowed
   } = useSelector(state => state.vessel)
+  const {
+    /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
+    fishingActivitiesShowedOnMap
+  } = useSelector(state => state.fishingActivities)
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
+  /** @type {FishingActivityShowedOnMap[]} previousFishingActivitiesShowedOnMap */
+  const previousFishingActivitiesShowedOnMap = usePrevious(fishingActivitiesShowedOnMap)
   const previousSelectedVessel = usePrevious(selectedVessel)
 
   const {
@@ -55,7 +67,7 @@ const VesselsTracksLayer = ({ map }) => {
   }, [previousSelectedVessel, selectedVessel])
 
   useEffect(() => {
-    if (!Object.keys(vesselsTracksShowed)?.length) {
+    if (!Object.keys(vesselsTracksShowed)?.length || !vectorSource) {
       return
     }
 
@@ -64,7 +76,7 @@ const VesselsTracksLayer = ({ map }) => {
 
     showVesselsTracks(vesselTracks)
     hideVesselsTracks(vesselTracks)
-  }, [vesselsTracksShowed])
+  }, [vesselsTracksShowed, vectorSource])
 
   useEffect(() => {
     if (highlightedVesselTrackPosition) {
@@ -74,6 +86,72 @@ const VesselsTracksLayer = ({ map }) => {
       updateTrackCircleStyle(previousHighlightedVesselTrackPosition, null)
     }
   }, [highlightedVesselTrackPosition, previousHighlightedVesselTrackPosition])
+
+  useEffect(() => {
+    showFishingActivities()
+  }, [fishingActivitiesShowedOnMap])
+
+  function showFishingActivities () {
+    if (!fishingActivitiesShowedOnMap?.length) {
+      removeFishingActivitiesFeatures()
+      return
+    }
+
+    const noAddedOrRemovedFishingActivities = fishingActivitiesShowedOnMap?.length === previousFishingActivitiesShowedOnMap?.length
+    if (noAddedOrRemovedFishingActivities) {
+      return
+    }
+
+    const lines = getVesselTrackLines()
+    let someMessagesCouldNotBeSeenOnTrack = false
+    const coordinatesFeaturesAndIds = fishingActivitiesShowedOnMap.map(fishingActivity => {
+      const fishingActivityDateTimestamp = new Date(fishingActivity.date).getTime()
+
+      const lineOfFishingActivity = lines
+        .find(line => fishingActivityIsWithinTrackLineDates(fishingActivityDateTimestamp, line))
+
+      if (lineOfFishingActivity) {
+        return getFishingActivityFeatureOnTrackLine(fishingActivity, lineOfFishingActivity, fishingActivityDateTimestamp)
+      }
+
+      someMessagesCouldNotBeSeenOnTrack = true
+      return null
+    }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
+
+    if (someMessagesCouldNotBeSeenOnTrack) {
+      dispatch(setError(new Error('Certain messages n\'ont pas pu être placés sur la piste selectionnée. ' +
+        'Changez la date des positions affichées pour voir tous les messages.')))
+    }
+
+    removeFishingActivitiesFeatures()
+    vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
+    vectorSource.changed()
+    dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
+    if (coordinatesFeaturesAndIds.length) {
+      dispatch(animateToCoordinates(coordinatesFeaturesAndIds[coordinatesFeaturesAndIds.length - 1].coordinates))
+    }
+  }
+
+  function fishingActivityIsWithinTrackLineDates (fishingActivityDateTimestamp, line) {
+    return fishingActivityDateTimestamp > new Date(line.firstPositionDate).getTime() &&
+      fishingActivityDateTimestamp < new Date(line.secondPositionDate).getTime()
+  }
+
+  function removeFishingActivitiesFeatures () {
+    vectorSource
+      .getFeatures()
+      .filter(feature =>
+        feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.includes('ers'))
+      .forEach(feature => vectorSource.removeFeature(feature))
+  }
+
+  function getVesselTrackLines () {
+    return vectorSource.getFeatures()
+      .filter(feature =>
+        feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.includes('line'))
+  }
 
   function removeVesselTrackFeatures (identity) {
     vectorSource.getFeatures()
@@ -178,6 +256,21 @@ const VesselsTracksLayer = ({ map }) => {
               identity={vesselTrack.identity}
               map={map}
               coordinates={vesselTrack.coordinates}
+            />
+          })
+      }
+      {
+        fishingActivitiesShowedOnMap
+          .filter(fishingActivity => fishingActivity.coordinates)
+          .map(fishingActivity => {
+            return <FishingActivityOverlay
+              key={fishingActivity.id}
+              id={fishingActivity.id}
+              map={map}
+              name={fishingActivity.name}
+              coordinates={fishingActivity.coordinates}
+              isDeleted={fishingActivity.isDeleted}
+              isNotAcknowledged={fishingActivity.isNotAcknowledged}
             />
           })
       }

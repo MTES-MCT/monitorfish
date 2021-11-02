@@ -1,4 +1,5 @@
 import { closeVesselSidebar } from '../shared_slices/Vessel'
+import { hideFishingActivitiesOnMap } from '../shared_slices/FishingActivities'
 import { Vessel } from '../entities/vessel'
 
 const unselectVessel = () => (dispatch, getState) => {
@@ -14,6 +15,7 @@ const unselectVessel = () => (dispatch, getState) => {
     }
   }
 
+  dispatch(hideFishingActivitiesOnMap())
   dispatch(closeVesselSidebar())
 }
 

@@ -73,7 +73,7 @@ const options = {
   }
 }
 
-const TrackExport = props => {
+const TrackExport = ({ openBox, rightMenuIsOpen }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [positions, setPositions] = useState([])
   const { healthcheckTextWarning } = useSelector(state => state.global)
@@ -120,8 +120,8 @@ const TrackExport = props => {
       title={'Exporter la piste'}
       healthcheckTextWarning={healthcheckTextWarning}
       isClickable={selectedVessel && selectedVessel.positions && selectedVessel.positions.length}
-      openBox={props.openBox}
-      rightMenuIsOpen={props.rightMenuIsOpen}
+      openBox={openBox}
+      rightMenuIsOpen={rightMenuIsOpen}
       onClick={() => selectedVessel && selectedVessel.positions && selectedVessel.positions.length ? download() : undefined}
     >
       <ExportIcon/>
@@ -130,7 +130,7 @@ const TrackExport = props => {
 }
 
 const TrackExportButton = styled(MapButtonStyle)`
-  top: 223px;
+  top: 258px;
   height: 30px;
   width: 30px;
   background: ${COLORS.charcoal};

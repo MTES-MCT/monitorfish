@@ -1,11 +1,10 @@
 /* eslint-disable */
 import { VesselSidebarTab } from '../entities/vessel'
+import { createSlice } from '@reduxjs/toolkit'
 
 /** @namespace VesselReducer */
 const VesselReducer = null
 /* eslint-disable */
-
-import { createSlice } from '@reduxjs/toolkit'
 
 const vesselSlice = createSlice({
   name: 'vessel',
@@ -29,26 +28,15 @@ const vesselSlice = createSlice({
     vesselSidebarIsOpen: false,
     vesselSidebarTab: VesselSidebarTab.SUMMARY,
     isFocusedOnVesselSearch: false,
-    /** @type {FishingActivities} fishingActivities */
-    fishingActivities: {},
-    /** @type {FishingActivities} lastFishingActivities */
-    lastFishingActivities: {},
-    isLastVoyage: null,
-    isFirstVoyage: null,
-    tripNumber: null,
-    /** @type {FishingActivities | null} nextFishingActivities */
-    nextFishingActivities: null,
-    /** @type {ControlResume} controlResumeAndControl */
-    controlResumeAndControls: {},
-    nextControlResumeAndControls: null,
-    controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     /** @type {VesselTrackDepth} selectedVesselCustomTrackDepth */
     selectedVesselCustomTrackDepth: {
       trackDepth: null,
       afterDateTime: null,
       beforeDateTime: null
     },
-    vesselTrackExtent: null
+    vesselTrackExtent: null,
+    /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
+    fishingActivitiesShowedOnMap: []
   },
   reducers: {
     setVessels (state, action) {
@@ -110,83 +98,11 @@ const vesselSlice = createSlice({
     setFocusOnVesselSearch (state, action) {
       state.isFocusedOnVesselSearch = action.payload
     },
-    loadingFisheriesActivities (state) {
+    loading (state) {
       state.loadingVessel = true
     },
     resetLoadingVessel (state) {
       state.loadingVessel = false
-    },
-    /**
-     * Set selected vessel voyage
-     * @function setVoyage
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: VesselVoyage}} action - the vessel voyage
-     */
-    setVoyage (state, action) {
-      state.fishingActivities = action.payload.ersMessagesAndAlerts
-      state.isLastVoyage = action.payload.isLastVoyage
-      state.isFirstVoyage = action.payload.isFirstVoyage
-      state.tripNumber = action.payload.tripNumber
-      state.loadingVessel = null
-    },
-    /**
-     * Set selected vessel last voyage - This voyage is saved to be able to compare it
-     * with new last voyages we will receive from the CRON
-     * @function setLastVoyage
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: VesselVoyage}} action - the vessel last voyage
-     */
-    setLastVoyage (state, action) {
-      state.lastFishingActivities = action.payload.ersMessagesAndAlerts
-      state.fishingActivities = action.payload.ersMessagesAndAlerts
-      state.isLastVoyage = action.payload.isLastVoyage
-      state.isFirstVoyage = action.payload.isFirstVoyage
-      state.tripNumber = action.payload.tripNumber
-      state.loadingVessel = null
-    },
-    resetVoyage (state) {
-      state.fishingActivities = null
-      state.isLastVoyage = null
-      state.isFirstVoyage = null
-      state.voyageStartDate = null
-      state.voyageEndDate = null
-      state.tripNumber = null
-      state.loadingVessel = null
-    },
-    /**
-     * Set selected next vessel fishing activities to propose an update of the current displayed fishing activities
-     * @function setNextFishingActivities
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: FishingActivities}} action - the fishing activities with new messages
-     */
-    setNextFishingActivities (state, action) {
-      state.nextFishingActivities = action.payload
-    },
-    resetNextFishingActivities (state) {
-      state.nextFishingActivities = null
-    },
-    /**
-     * Set selected vessel control resume and control
-     * @function setControlResumeAndControls
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: ControlResume}} action - the control resume
-     */
-    setControlResumeAndControls (state, action) {
-      state.controlResumeAndControls = action.payload
-      state.loadingVessel = null
-    },
-    loadingControls (state) {
-      state.loadingVessel = true
-    },
-    setNextControlResumeAndControls (state, action) {
-      state.nextControlResumeAndControls = action.payload
-    },
-    resetNextControlResumeAndControls (state) {
-      state.nextControlResumeAndControls = null
     },
     setSelectedVesselCustomTrackDepth (state, action) {
       state.selectedVesselCustomTrackDepth = action.payload
@@ -222,20 +138,10 @@ const vesselSlice = createSlice({
      * @function showVesselSidebarTab
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: VesselSidebarTab}} action - The tab
+     * @param {{payload: number}} action - The tab (VesselSidebarTab)
      */
     showVesselSidebarTab (state, action) {
       state.vesselSidebarTab = action.payload
-    },
-    /**
-     * Set the date since controls are fetched
-     * @function setControlFromDate
-     * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: Date}} action - The "from" date
-     */
-    setControlFromDate (state, action) {
-      state.controlsFromDate = action.payload
     },
     setVesselsSpeciesAndDistricts (state, action) {
       state.uniqueVesselsSpecies = action.payload.species
@@ -322,6 +228,7 @@ const vesselSlice = createSlice({
 export const {
   setVessels,
   resetVessels,
+  loading,
   setFilteredVesselsFeaturesUids,
   setPreviewFilteredVesselsFeaturesUids,
   setVesselsLayerSource,
@@ -330,19 +237,6 @@ export const {
   setSelectedVessel,
   resetSelectedVessel,
   closeVesselSidebar,
-  setVoyage,
-  setLastVoyage,
-  resetVoyage,
-  setLastFishingActivities,
-  setNextFishingActivities,
-  resetNextFishingActivities,
-  addNextDEPDateTime,
-  removeLastFormerDEPDateTime,
-  setControlResumeAndControls,
-  setNextControlResumeAndControls,
-  resetNextControlResumeAndControls,
-  loadingFisheriesActivities,
-  loadingControls,
   setFocusOnVesselSearch,
   setTemporaryVesselsToHighLightOnMap,
   resetTemporaryVesselsToHighLightOnMap,
@@ -351,15 +245,14 @@ export const {
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,
-  setControlFromDate,
   setVesselsSpeciesAndDistricts,
-  setHideOtherVessels,
   addVesselTrackShowed,
   updateVesselTrackAsShowed,
   updateVesselTrackAsToHide,
   updateVesselTrackAsHidden,
   setVesselTrackExtent,
-  resetVesselTrackExtent
+  resetVesselTrackExtent,
+  setHideOtherVessels
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

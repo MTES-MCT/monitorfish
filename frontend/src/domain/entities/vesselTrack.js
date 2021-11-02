@@ -8,6 +8,8 @@ import { getLineStyle, getArrowStyle, getCircleStyle } from '../../layers/styles
 import LineString from 'ol/geom/LineString'
 import { COLORS } from '../../constants/constants'
 
+const NUMBER_HOURS_TIME_ELLIPSIS = 4
+
 export class VesselTrack {
   /**
    * Vessel track object for building OpenLayers vessel track features
@@ -17,7 +19,7 @@ export class VesselTrack {
   constructor (positions, identity) {
     let vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(positions, identity)
 
-    const hasMoreThanOnePoint = vesselTrackLineFeatures && vesselTrackLineFeatures.length
+    const hasMoreThanOnePoint = vesselTrackLineFeatures?.length
     const hasOnlyOnePoint = positions?.length
 
     if (hasMoreThanOnePoint) {
@@ -140,13 +142,16 @@ export class VesselTrack {
         const rotation = Math.atan2(dy, dx)
 
         const firstPositionDate = new Date(position.dateTime)
-        firstPositionDate.setHours(firstPositionDate.getHours() + 4)
         const secondPositionDate = new Date(secondPosition.dateTime)
+        const positionDateWithFourHoursOffset = new Date(firstPositionDate.getTime())
+        positionDateWithFourHoursOffset.setHours(positionDateWithFourHoursOffset.getHours() + NUMBER_HOURS_TIME_ELLIPSIS)
 
         const feature = new Feature({
           geometry: new LineString([firstPoint, secondPoint])
         })
-        feature.isTimeEllipsis = firstPositionDate.getTime() < secondPositionDate.getTime()
+        feature.firstPositionDate = firstPositionDate
+        feature.secondPositionDate = secondPositionDate
+        feature.isTimeEllipsis = positionDateWithFourHoursOffset.getTime() < secondPositionDate.getTime()
         feature.trackType = getTrackTypeFromSpeedAndEllipsis(position.speed, feature.isTimeEllipsis)
         feature.course = -rotation
         feature.speed = position.speed

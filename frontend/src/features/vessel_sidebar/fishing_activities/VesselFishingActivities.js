@@ -4,30 +4,35 @@ import styled from 'styled-components'
 import FishingActivitiesSummary from './FishingActivitiesSummary'
 import ERSMessages from './ers_messages/ERSMessages'
 import { COLORS } from '../../../constants/constants'
-import { resetNextFishingActivities, setVoyage } from '../../../domain/shared_slices/Vessel'
-import { useDispatch, useSelector } from 'react-redux'
+import {
+  resetLoadingVessel
+} from '../../../domain/shared_slices/Vessel'
+import {
+  resetNextFishingActivities,
+  setFishingActivitiesTab,
+  setVoyage
+} from '../../../domain/shared_slices/FishingActivities'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import getVesselVoyage, { NAVIGATE_TO } from '../../../domain/use_cases/getVesselVoyage'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { usePrevious } from '../../../hooks/usePrevious'
-import { vesselsAreEquals } from '../../../domain/entities/vessel'
-
-const FishingActivitiesTab = {
-  SUMMARY: 1,
-  MESSAGES: 2
-}
+import { FishingActivitiesTab, vesselsAreEquals } from '../../../domain/entities/vessel'
 
 const VesselFishingActivities = () => {
   const dispatch = useDispatch()
   const {
     selectedVesselIdentity,
     selectedVessel,
-    loadingVessel,
-    fishingActivities,
-    nextFishingActivities
+    loadingVessel
   } = useSelector(state => state.vessel)
 
+  const {
+    fishingActivities,
+    nextFishingActivities,
+    fishingActivitiesTab
+  } = useSelector(state => state.fishingActivities)
+
   const previousSelectedVessel = usePrevious(selectedVessel)
-  const [fishingActivitiesTab, setFishingActivitiesTab] = useState(FishingActivitiesTab.SUMMARY)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
 
   const showMessages = messageType => {
@@ -36,11 +41,11 @@ const VesselFishingActivities = () => {
     } else {
       setMessageTypeFilter(null)
     }
-    setFishingActivitiesTab(FishingActivitiesTab.MESSAGES)
+    dispatch(setFishingActivitiesTab(FishingActivitiesTab.MESSAGES))
   }
 
   const showSummary = () => {
-    setFishingActivitiesTab(FishingActivitiesTab.SUMMARY)
+    dispatch(setFishingActivitiesTab(FishingActivitiesTab.SUMMARY))
   }
 
   useEffect(() => {
@@ -49,7 +54,7 @@ const VesselFishingActivities = () => {
         dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
       }
 
-      if (!vesselsAreEquals(previousSelectedVessel, selectedVessel)) {
+      if (previousSelectedVessel && !vesselsAreEquals(previousSelectedVessel, selectedVessel)) {
         dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
       }
     }
@@ -63,8 +68,11 @@ const VesselFishingActivities = () => {
 
   const updateFishingActivities = nextFishingActivities => {
     if (nextFishingActivities) {
-      dispatch(setVoyage(nextFishingActivities))
-      dispatch(resetNextFishingActivities())
+      batch(() => {
+        dispatch(setVoyage(nextFishingActivities))
+        dispatch(resetLoadingVessel())
+        dispatch(resetNextFishingActivities())
+      })
     }
   }
 

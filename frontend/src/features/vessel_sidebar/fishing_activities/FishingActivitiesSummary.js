@@ -32,12 +32,16 @@ import { ERSOperationType } from '../../../domain/entities/ERS'
 
 const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
   const {
-    isLastVoyage,
-    isFirstVoyage,
-    tripNumber,
-    fishingActivities,
     selectedVessel
   } = useSelector(state => state.vessel)
+
+  const {
+    fishingActivities,
+    tripNumber,
+    isLastVoyage,
+    isFirstVoyage
+  } = useSelector(state => state.fishingActivities)
+
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
 
   const [depMessage, setDEPMessage] = useState(null)

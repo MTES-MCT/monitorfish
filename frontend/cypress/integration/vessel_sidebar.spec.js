@@ -247,6 +247,6 @@ context('VesselSidebar', () => {
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 910, clientY: 300, pointerId: 1, force: true })
     cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 315, clientY: 835, pointerId: 1, force: true })
 
-    cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 20′ 53″ N')
+    cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')
   })
 })

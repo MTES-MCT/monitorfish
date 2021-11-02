@@ -126,7 +126,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="administrative-zones-open"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="administrative-layer-toggle"]').eq(0).click({ timeout: 20000 })
-    cy.wait(500)
+    cy.wait(1000)
 
     // Then
     cy.get('.administrative').eq(0).toMatchImageSnapshot({

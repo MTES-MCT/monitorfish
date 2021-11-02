@@ -117,6 +117,7 @@ const TrackExport = props => {
 
   return (
     <TrackExportButton
+      title={'Exporter la piste'}
       healthcheckTextWarning={healthcheckTextWarning}
       isClickable={selectedVessel && selectedVessel.positions && selectedVessel.positions.length}
       openBox={props.openBox}

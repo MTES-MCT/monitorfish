@@ -92,8 +92,9 @@ const TrackDepthSelection = props => {
         trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
         onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
         data-cy={'vessel-track-depth-selection'}
+        title={'Paramétrer l\'affichage de la piste VMS'}
       >
-        <ClockIcon/>
+        <VesselIcon/>
       </TrackDepthSelectionButton>
       <TrackDepthSelectionContent
         healthcheckTextWarning={healthcheckTextWarning}
@@ -165,7 +166,7 @@ const TrackDepthSelectionContent = styled(MapComponentStyle)`
   : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 `
 
-const ClockIcon = styled(VesselSVG)`
+const VesselIcon = styled(VesselSVG)`
   width: 20px;
   background: none;
   margin-top: 2px;

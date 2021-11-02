@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-26 11:35+0200\n"
+"POT-Creation-Date: 2021-10-29 15:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -215,7 +215,7 @@ msgstr ""
 
 #: ../source/risk-factor.rst:99
 #: da80c5deecab450d83c8e344a350d3d7
-msgid "The *impact* score is defined by taking the risk level of the :doc:`fleet segment <fleet-segments>` a fishing vessel belongs to in real time. This risk level is evaluated each year for each fleet segment during the *risk assessment* process."
+msgid "The *impact* score is defined by taking the risk level of the :doc:`fleet segment <fleet-segments>` a fishing vessel belongs to in real time. This risk level represents the **impact of the fishing activity** and is evaluated each year for each fleet segment during the *risk assessment* process."
 msgstr ""
 
 #: ../source/risk-factor.rst:102

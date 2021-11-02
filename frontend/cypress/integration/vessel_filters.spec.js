@@ -10,7 +10,7 @@ context('Vessel filters', () => {
     cy.url().should('include', '@-82')
   })
 
-  it('A Filter Should created and added on the map', () => {
+  it('A Filter Should be created and added on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(0).type('France{enter}')
@@ -32,9 +32,9 @@ context('Vessel filters', () => {
     cy.get('*[data-cy="vessel-filter-tag"]').eq(2).contains('NWW01/02', { timeout: 20000 })
 
     // Then
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 20)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 18)
     cy.get('*[data-cy="vessel-filters-hide-other-vessels"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 4)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
 
     // Remove tags
     cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(2).click({ timeout: 20000 })

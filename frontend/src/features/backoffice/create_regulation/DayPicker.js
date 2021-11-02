@@ -1,17 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
+import { WEEKDAYS } from '../../../domain/entities/regulatory'
 
 const DayPicker = ({ selectedList, setSelectedList, disabled }) => {
-  const WEEKDAYS = {
-    lundi: 'L',
-    mardi: 'M',
-    mercredi: 'M',
-    jeudi: 'J',
-    vendredi: 'V',
-    samedi: 'S',
-    dimanche: 'D'
-  }
   return <>
     {
       Object.keys(WEEKDAYS).map((weekday, id) => {

@@ -59,6 +59,7 @@ def extract_last_positions(minutes: int) -> pd.DataFrame:
         db_name="monitorfish_remote",
         query_filepath="monitorfish/last_positions.sql",
         params={"minutes": minutes},
+        dtypes={"last_position_datetime_utc": "datetime64[ns]"},
     )
 
 

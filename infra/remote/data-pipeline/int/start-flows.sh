@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker run -d -t --rm --network=host --name monitorfish-pipeline-flows \
+docker run -d -t --network=host --name monitorfish-pipeline-flows \
         -v prefect_flows:/home/monitorfish-pipeline/.prefect \
         -u monitorfish-pipeline:"$(getent group di_etlmf | cut -d: -f3)" \
         -v /opt2/monitorfish-data/ers:/opt2/monitorfish-data/ers \

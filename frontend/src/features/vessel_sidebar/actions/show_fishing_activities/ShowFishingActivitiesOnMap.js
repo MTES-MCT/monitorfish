@@ -11,7 +11,8 @@ const ShowFishingActivitiesOnMap = ({ openBox, rightMenuIsOpen }) => {
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
-    fishingActivitiesShowedOnMap
+    fishingActivitiesShowedOnMap,
+    fishingActivitiesAreShowedOnMap
   } = useSelector(state => state.fishingActivities)
 
   useEffect(() => {
@@ -22,13 +23,13 @@ const ShowFishingActivitiesOnMap = ({ openBox, rightMenuIsOpen }) => {
 
   return (
     <ShowFishingActivitiesOnMapButton
-      title={`${fishingActivitiesShowedOnMap?.length ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
+      title={`${fishingActivitiesAreShowedOnMap || fishingActivitiesShowedOnMap?.length ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
       data-cy={'show-all-fishing-activities-on-map'}
       healthcheckTextWarning={healthcheckTextWarning}
-      fishingActivitiesShowedOnMap={fishingActivitiesShowedOnMap?.length}
+      fishingActivitiesShowedOnMap={fishingActivitiesAreShowedOnMap || fishingActivitiesShowedOnMap?.length}
       openBox={openBox}
       rightMenuIsOpen={rightMenuIsOpen}
-      onClick={() => fishingActivitiesShowedOnMap?.length
+      onClick={() => fishingActivitiesAreShowedOnMap || fishingActivitiesShowedOnMap?.length
         ? dispatch(hideFishingActivitiesOnMap())
         : dispatch(showFishingActivitiesOnMap())
       }

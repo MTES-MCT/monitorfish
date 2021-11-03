@@ -7,6 +7,7 @@ import unselectVessel from './unselectVessel'
 import { batch } from 'react-redux'
 import { getTrackDepthError, getVesselTrackDepth } from '../entities/vesselTrackDepth'
 import getVesselVoyage from './getVesselVoyage'
+import { removeFishingActivitiesFromMap } from '../shared_slices/FishingActivities'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
@@ -26,6 +27,11 @@ const showVesselTrackAndSidebar = (
     vesselsLayerSource,
     selectedVesselCustomTrackDepth
   } = getState().vessel
+
+  const {
+    fishingActivitiesAreShowedOnMap
+  } = getState().fishingActivities
+
   unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)
 
   dispatch(getVesselVoyage(vesselIdentity, null, true))
@@ -40,6 +46,10 @@ const showVesselTrackAndSidebar = (
     vesselTrackDepth,
     selectedVesselCustomTrackDepth,
     getState().map.defaultVesselTrackDepth)
+
+  if (fishingActivitiesAreShowedOnMap) {
+    dispatch(removeFishingActivitiesFromMap())
+  }
 
   getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
     .then(vesselAndTrackDepthModified => {

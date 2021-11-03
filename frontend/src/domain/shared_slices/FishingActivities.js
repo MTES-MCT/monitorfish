@@ -22,6 +22,7 @@ const fishingActivitiesSlice = createSlice({
     nextFishingActivities: null,
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap: [],
+    fishingActivitiesAreShowedOnMap: true,
     loadingFishingActivities: false
   },
   reducers: {
@@ -110,7 +111,7 @@ const fishingActivitiesSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: string}} action - The fishing activity id to hide
      */
-    hideFishingActivityOnMap (state, action) {
+    removeFishingActivityFromMap (state, action) {
       state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.filter(showed => showed.id !== action.payload)
     },
     /**
@@ -121,6 +122,7 @@ const fishingActivitiesSlice = createSlice({
      * @param {Object=} state
      */
     showFishingActivitiesOnMap (state) {
+      state.fishingActivitiesAreShowedOnMap = true
       state.fishingActivitiesShowedOnMap = state.fishingActivities.ersMessages
         .filter(fishingActivity => !fishingActivity.isCorrected)
         .map(fishingActivity => ({
@@ -132,12 +134,22 @@ const fishingActivitiesSlice = createSlice({
         }))
     },
     /**
+     * Remove fishing activities from the map
+     * @function showFishingActivitiesOnMap
+     * @memberOf FishingActivitiesReducer
+     * @param {Object=} state
+     */
+    removeFishingActivitiesFromMap (state) {
+      state.fishingActivitiesShowedOnMap = []
+    },
+    /**
      * Hide fishing activities of the vessel track
      * @function showFishingActivitiesOnMap
      * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      */
     hideFishingActivitiesOnMap (state) {
+      state.fishingActivitiesAreShowedOnMap = false
       state.fishingActivitiesShowedOnMap = []
     },
     /**
@@ -183,7 +195,8 @@ export const {
   loadingFisheriesActivities,
   setFishingActivitiesTab,
   showFishingActivityOnMap,
-  hideFishingActivityOnMap,
+  removeFishingActivityFromMap,
+  removeFishingActivitiesFromMap,
   showFishingActivitiesOnMap,
   hideFishingActivitiesOnMap,
   updateFishingActivitiesOnMapCoordinates,

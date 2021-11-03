@@ -13,16 +13,23 @@ const DMSCoordinatesInput = props => {
   } = props
 
   const [update, setUpdate] = useState([])
-  const [showedValue, setShowedValue] = useState(null)
+  const [showedValue, setShowedValue] = useState(undefined)
 
   /** Convert the coordinates to the [latitude, longitude] string format */
   useEffect(() => {
-    setShowedValue(getCoordinatesFromFormat(coordinates, coordinatesFormat))
+    if (coordinates?.length && coordinatesFormat) {
+      setShowedValue(getCoordinatesFromFormat(coordinates, coordinatesFormat))
+    } else {
+      setShowedValue(undefined)
+      setUpdate([])
+    }
   }, [coordinates, coordinatesFormat])
 
   useEffect(() => {
     if (coordinatesAreModified()) {
       updateCoordinates(update, coordinates)
+      setShowedValue(undefined)
+      setUpdate([])
     }
   }, [update, coordinates, updateCoordinates])
 

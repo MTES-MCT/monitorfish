@@ -70,7 +70,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   useEffect(() => {
     if (map && isDrawing) {
-      addEmptyNextMeasurement()
+      addEmptyNextInterestPoint()
       drawNewFeatureOnMap()
     }
   }, [map, isDrawing])
@@ -121,7 +121,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   }
 
   function modifyFeatureWhenCoordinatesOrTypeModified () {
-    if (interestPointBeingDrawed?.coordinates && interestPointBeingDrawed?.uuid) {
+    if (interestPointBeingDrawed?.coordinates?.length && interestPointBeingDrawed?.uuid) {
       const drawingFeatureToUpdate = vectorSource.getFeatureById(interestPointBeingDrawed.uuid)
 
       if (drawingFeatureToUpdate && coordinatesOrTypeAreModified(drawingFeatureToUpdate, interestPointBeingDrawed)) {
@@ -267,7 +267,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     }, 300)
   }
 
-  function addEmptyNextMeasurement () {
+  function addEmptyNextInterestPoint () {
     dispatch(updateInterestPointBeingDrawed({
       uuid: uuidv4(),
       name: null,

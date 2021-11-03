@@ -51,7 +51,6 @@ const interestPointSlice = createSlice({
         state.interestPoints = state.interestPoints.concat(state.interestPointBeingDrawed)
       }
       state.isDrawing = false
-      state.isEditing = false
       state.interestPointBeingDrawed = null
       window.localStorage.setItem(interestPointsLocalStorageKey, JSON.stringify(state.interestPoints))
     },

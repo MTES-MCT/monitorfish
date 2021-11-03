@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - '**.kt'
+    - '**.png'
     - '**.js'
     - '**.ts'
     - '**.yml'

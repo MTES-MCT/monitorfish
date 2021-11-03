@@ -34,7 +34,7 @@ const showVesselTrackAndSidebar = (
 
   unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)
 
-  dispatch(getVesselVoyage(vesselIdentity, null, true))
+  dispatch(getVesselVoyage(vesselIdentity, null, calledFromCron))
 
   const feature = vesselsLayerSource?.getFeatureById(Vessel.getVesselId(vesselIdentity))
   if (feature) {

@@ -8,7 +8,10 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 
 const UpdatingVesselLoader = () => {
   const isUpdatingVessels = useSelector(state => state.global.isUpdatingVessels)
-  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const {
+    vesselSidebarIsOpen,
+    loadingVessel
+  } = useSelector(state => state.vessel)
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const [loadingApp, setLoadingApp] = useState(false)
   const [appIsLoaded, setAppIsLoaded] = useState(false)
@@ -37,9 +40,9 @@ const UpdatingVesselLoader = () => {
       }
       <UpdateWrapper
         healthcheckTextWarning={healthcheckTextWarning}
-        selectedVessel={selectedVessel}>
+        vesselSidebarIsOpen={vesselSidebarIsOpen}>
         {
-          isUpdatingVessels && !loadingApp
+          (isUpdatingVessels || loadingVessel) && !loadingApp
             ? <>
               <FulfillingBouncingCircleSpinner
                 color={COLORS.background}
@@ -80,7 +83,7 @@ const BigVessel = styled(VesselSVG)`
 const UpdateWrapper = styled(MapComponentStyle)`
   position: absolute;
   top: 30px;
-  right: ${props => props.selectedVessel ? '510px' : '370px'};
+  right: ${props => props.vesselSidebarIsOpen ? '510px' : '370px'};
   width: 30px;
   transform: translate(-50%, -50%);
 `

@@ -133,6 +133,7 @@ const Measurement = () => {
         </MeasurementItem>
       </MeasurementOptions>
       <CustomCircleRange
+        measurementIsOpen={measurementIsOpen}
         healthcheckTextWarning={healthcheckTextWarning}
         measurementTypeToAdd={measurementTypeToAdd}
         circleCoordinatesToAdd={circleCoordinatesToAdd}

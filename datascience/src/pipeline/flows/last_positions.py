@@ -89,24 +89,30 @@ def tag_vessels_at_port(last_positions: pd.DataFrame) -> pd.DataFrame:
 
     last_positions = last_positions.copy(deep=True)
 
-    last_positions["h3"] = get_h3_indices(
-        last_positions,
-        lat="latitude",
-        lon="longitude",
-        resolution=ANCHORAGES_H3_CELL_RESOLUTION,
-    )
+    if len(last_positions) == 0:
+        last_positions["is_at_port"] = False
 
-    h3_indices_at_port = set(
-        extract(
-            db_name="monitorfish_remote",
-            query_filepath="monitorfish/h3_is_anchorage.sql",
-            params={"h3_cells": tuple(last_positions.h3)},
-        )["h3"]
-    )
+    else:
 
-    last_positions["is_at_port"] = last_positions.h3.isin(h3_indices_at_port)
+        last_positions["h3"] = get_h3_indices(
+            last_positions,
+            lat="latitude",
+            lon="longitude",
+            resolution=ANCHORAGES_H3_CELL_RESOLUTION,
+        )
 
-    last_positions = last_positions.drop(columns=["h3"])
+        h3_indices_at_port = set(
+            extract(
+                db_name="monitorfish_remote",
+                query_filepath="monitorfish/h3_is_anchorage.sql",
+                params={"h3_cells": tuple(last_positions.h3)},
+            )["h3"]
+        )
+
+        last_positions["is_at_port"] = last_positions.h3.isin(h3_indices_at_port)
+
+        last_positions = last_positions.drop(columns=["h3"])
+
     return last_positions
 
 

@@ -393,6 +393,31 @@ class TestLastPositionsFlow(unittest.TestCase):
             last_positions_with_is_at_port, expected_last_positions_with_is_at_port
         )
 
+    @patch("src.pipeline.flows.last_positions.extract")
+    def test_tag_vessels_at_port_empty_dataframe(self, mock_extract):
+
+        last_positions = pd.DataFrame(
+            {
+                "latitude": [],
+                "longitude": [],
+            }
+        ).astype({"latitude": float, "longitude": float})
+
+        last_positions_with_is_at_port = tag_vessels_at_port.run(last_positions)
+
+        # Query should not be run with empty list in WHERE condition
+        mock_extract.assert_not_called()
+
+        expected_last_positions_with_is_at_port = pd.DataFrame(
+            columns=pd.Index(["latitude", "longitude", "is_at_port"])
+        ).astype({"latitude": float, "longitude": float, "is_at_port": bool})
+
+        pd.testing.assert_frame_equal(
+            last_positions_with_is_at_port,
+            expected_last_positions_with_is_at_port,
+            check_index_type=False,
+        )
+
     def test_add_vessel_identifier(self):
 
         last_positions = pd.DataFrame(

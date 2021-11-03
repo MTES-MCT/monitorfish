@@ -97,9 +97,14 @@ def get_h3_indices(
         pd.Series: h3 cells indices
     """
 
-    res = df.apply(
-        lambda row: h3.geo_to_h3(row["latitude"], row["longitude"], resolution), axis=1
-    )
+    if len(df) == 0:
+        res = pd.Series([], dtype=object)
+    else:
+        res = df.apply(
+            lambda row: h3.geo_to_h3(row["latitude"], row["longitude"], resolution),
+            axis=1,
+        )
+
     return res
 
 

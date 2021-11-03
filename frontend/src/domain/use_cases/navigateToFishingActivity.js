@@ -11,17 +11,19 @@ const navigateToFishingActivity = id => (dispatch, getState) => {
     fishingActivitiesTab
   } = getState().fishingActivities
 
+  if (vesselSidebarTab === VesselSidebarTab.VOYAGES && fishingActivitiesTab === FishingActivitiesTab.MESSAGES) {
+    const element = document.getElementById(id)
+    if (element) {
+      scrollTo(element)
+      return
+    }
+  }
+
   if (vesselSidebarTab !== VesselSidebarTab.VOYAGES) {
     dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))
   }
   if (fishingActivitiesTab !== FishingActivitiesTab.MESSAGES) {
     dispatch(setFishingActivitiesTab(FishingActivitiesTab.MESSAGES))
-  }
-
-  const element = document.getElementById(id)
-  if (element) {
-    scrollTo(element)
-    return
   }
 
   const interval = setInterval(() => {
@@ -34,7 +36,7 @@ const navigateToFishingActivity = id => (dispatch, getState) => {
 }
 
 function scrollTo (element) {
-  element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 }
 
 export default navigateToFishingActivity

@@ -1,8 +1,8 @@
 import { getVesselVoyageFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
-import { loading, resetLoadingVessel } from '../shared_slices/Vessel'
 import {
   hideFishingActivitiesOnMap,
+  loadFishingActivities,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage,
@@ -37,18 +37,12 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     }
 
     if (!fromCron) {
-      dispatch(loading())
+      dispatch(loadFishingActivities())
     }
 
     getVesselVoyageFromAPI(vesselIdentity, navigateTo, tripNumber).then(voyage => {
       if (!voyage) {
-        dispatch(setVoyage({
-          ersMessagesAndAlerts: {
-            ersMessages: [],
-            alerts: []
-          }
-        }))
-        dispatch(resetLoadingVessel())
+        dispatch(setVoyage(emptyVoyage))
         dispatch(hideFishingActivitiesOnMap())
         dispatch(setError(new NoERSMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
         return
@@ -64,7 +58,6 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         }
 
         dispatch(setVoyage(voyage))
-        dispatch(resetLoadingVessel())
         if (fishingActivitiesShowedOnMap?.length) {
           dispatch(showFishingActivitiesOnMap())
         }
@@ -73,14 +66,8 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     }).catch(error => {
       console.error(error)
       batch(() => {
-        dispatch(setVoyage({
-          ersMessagesAndAlerts: {
-            ersMessages: [],
-            alerts: []
-          }
-        }))
+        dispatch(setVoyage(emptyVoyage))
         dispatch(setError(error))
-        dispatch(resetLoadingVessel())
       })
     })
   }
@@ -92,6 +79,13 @@ function gotNewFishingActivitiesWithMoreMessagesOrAlerts (lastFishingActivities,
       voyage.ersMessagesAndAlerts.alerts.length > lastFishingActivities.alerts.length) ||
     (lastFishingActivities.ersMessages && voyage.ersMessagesAndAlerts.ersMessages &&
       voyage.ersMessagesAndAlerts.ersMessages.length > lastFishingActivities.ersMessages.length)
+}
+
+const emptyVoyage = {
+  ersMessagesAndAlerts: {
+    ersMessages: [],
+    alerts: []
+  }
 }
 
 export default getVesselVoyage

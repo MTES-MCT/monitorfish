@@ -222,10 +222,13 @@ const VesselsTracksLayer = ({ map }) => {
       const identity = getVesselFeatureIdFromVessel(selectedVessel)
       const vesselTrack = new VesselTrack(selectedVessel.positions, identity)
 
-      vectorSource.addFeatures(vesselTrack.features)
-      const vesselTrackExtent = getVesselTrackExtent(vesselTrack, identity)
+      if (vesselTrack.features?.length) {
+        vectorSource.addFeatures(vesselTrack.features)
+        const vesselTrackExtent = getVesselTrackExtent(vesselTrack, identity)
 
-      dispatch(setVesselTrackExtent(vesselTrackExtent))
+        dispatch(setVesselTrackExtent(vesselTrackExtent))
+      }
+
       if (!updatedFromCron && vesselTrack.lastPositionCoordinates) {
         dispatch(animateToCoordinates(vesselTrack.lastPositionCoordinates))
       }

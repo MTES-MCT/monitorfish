@@ -5,9 +5,6 @@ import FishingActivitiesSummary from './FishingActivitiesSummary'
 import ERSMessages from './ers_messages/ERSMessages'
 import { COLORS } from '../../../constants/constants'
 import {
-  resetLoadingVessel
-} from '../../../domain/shared_slices/Vessel'
-import {
   resetNextFishingActivities,
   setFishingActivitiesTab,
   setVoyage
@@ -22,18 +19,19 @@ const VesselFishingActivities = () => {
   const dispatch = useDispatch()
   const {
     selectedVesselIdentity,
-    selectedVessel,
-    loadingVessel
+    selectedVessel
   } = useSelector(state => state.vessel)
 
   const {
     fishingActivities,
     nextFishingActivities,
-    fishingActivitiesTab
+    fishingActivitiesTab,
+    loadingFishingActivities
   } = useSelector(state => state.fishingActivities)
 
   const previousSelectedVessel = usePrevious(selectedVessel)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
+  const [processingMessagesResume, setProcessingMessagesResume] = useState(false)
 
   const showMessages = messageType => {
     if (messageType) {
@@ -70,7 +68,6 @@ const VesselFishingActivities = () => {
     if (nextFishingActivities) {
       batch(() => {
         dispatch(setVoyage(nextFishingActivities))
-        dispatch(resetLoadingVessel())
         dispatch(resetNextFishingActivities())
       })
     }
@@ -89,7 +86,7 @@ const VesselFishingActivities = () => {
   }
 
   return <>
-    { !loadingVessel
+    { !loadingFishingActivities && !processingMessagesResume
       ? <Wrapper data-cy={'vessel-fishing'}>
         {
           nextFishingActivities
@@ -111,6 +108,7 @@ const VesselFishingActivities = () => {
                 goToNextTrip,
                 goToLastTrip
               }}
+              setProcessingMessagesResume={setProcessingMessagesResume}
             />
             : null
         }

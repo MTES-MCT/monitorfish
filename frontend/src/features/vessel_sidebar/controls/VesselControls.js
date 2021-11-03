@@ -19,8 +19,7 @@ const VesselControls = () => {
   const dispatch = useDispatch()
 
   const {
-    selectedVessel,
-    loadingVessel
+    selectedVessel
   } = useSelector(state => state.vessel)
 
   const {
@@ -28,7 +27,8 @@ const VesselControls = () => {
     controlResumeAndControls,
     /** @type {ControlResume} nextControlResumeAndControls */
     nextControlResumeAndControls,
-    controlsFromDate
+    controlsFromDate,
+    loadingControls
   } = useSelector(state => state.controls)
 
   /** @type {Object.<string, VesselControl[]>} yearsToControls */
@@ -79,7 +79,7 @@ const VesselControls = () => {
     </>
     }
     {
-      !loadingVessel
+      !loadingControls
         ? <Body data-cy={'vessel-controls'}>
           <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls}/>
           <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate}/>

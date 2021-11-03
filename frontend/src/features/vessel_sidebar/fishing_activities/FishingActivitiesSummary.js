@@ -30,7 +30,7 @@ import {
 } from '../../../domain/entities/fishingActivities'
 import { ERSOperationType } from '../../../domain/entities/ERS'
 
-const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
+const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMessagesResume }) => {
   const {
     selectedVessel
   } = useSelector(state => state.vessel)
@@ -66,6 +66,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
 
   useEffect(() => {
     if (fishingActivities?.ersMessages?.length) {
+      setProcessingMessagesResume(true)
       const ersMessages = fishingActivities.ersMessages
       const depMessage = getDEPMessageFromMessages(ersMessages)
       setDEPMessage(depMessage)
@@ -83,7 +84,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
       setFARMessages(farMessages)
 
       let totalFARAndDEPWeight = 0
-      if (farMessages && farMessages.length) {
+      if (farMessages?.length) {
         const totalFARWeight = getTotalFAROrDISWeightFromMessages(farMessages)
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
@@ -99,7 +100,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
         totalFARAndDEPWeight += parseFloat(totalDEPWeight)
       }
 
-      if (disMessages && disMessages.length) {
+      if (disMessages?.length) {
         const totalDISWeight = getTotalFAROrDISWeightFromMessages(disMessages)
         setTotalDISWeight(totalDISWeight)
 
@@ -146,6 +147,8 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation }) => {
       setSpeciesToWeightOfLAN({})
       setFAOZones([])
     }
+
+    setProcessingMessagesResume(false)
   }, [fishingActivities])
 
   const getCatchesOverToleranceAlert = () => {

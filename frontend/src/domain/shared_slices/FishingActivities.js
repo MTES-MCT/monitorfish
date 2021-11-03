@@ -21,7 +21,8 @@ const fishingActivitiesSlice = createSlice({
     /** @type {FishingActivities | null} nextFishingActivities */
     nextFishingActivities: null,
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
-    fishingActivitiesShowedOnMap: []
+    fishingActivitiesShowedOnMap: [],
+    loadingFishingActivities: false
   },
   reducers: {
     /**
@@ -43,6 +44,7 @@ const fishingActivitiesSlice = createSlice({
       state.isLastVoyage = isLastVoyage
       state.isFirstVoyage = isFirstVoyage
       state.tripNumber = tripNumber
+      state.loadingFishingActivities = false
     },
     /**
      * Set selected vessel last voyage - This voyage is saved to be able to compare it
@@ -159,6 +161,15 @@ const fishingActivitiesSlice = createSlice({
 
         return fishingActivity
       })
+    },
+    /**
+     * Set the loading of fishing activities to true, and shows a loader in the fishing activities tab
+     * @function loadFishingActivities
+     * @memberOf FishingActivitiesReducer
+     * @param {Object=} state
+     */
+    loadFishingActivities (state) {
+      state.loadingFishingActivities = true
     }
   }
 })
@@ -176,7 +187,8 @@ export const {
   showFishingActivitiesOnMap,
   hideFishingActivitiesOnMap,
   updateFishingActivitiesOnMapCoordinates,
-  navigateToFishingActivity
+  navigateToFishingActivity,
+  loadFishingActivities
 } = fishingActivitiesSlice.actions
 
 export default fishingActivitiesSlice.reducer

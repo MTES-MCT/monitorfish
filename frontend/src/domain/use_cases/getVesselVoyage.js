@@ -25,7 +25,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       lastFishingActivities,
       isLastVoyage,
       tripNumber,
-      fishingActivitiesShowedOnMap
+      fishingActivitiesAreShowedOnMap
     } = getState().fishingActivities
 
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
@@ -58,7 +58,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         }
 
         dispatch(setVoyage(voyage))
-        if (fishingActivitiesShowedOnMap?.length) {
+        if (fishingActivitiesAreShowedOnMap) {
           dispatch(showFishingActivitiesOnMap())
         }
       }

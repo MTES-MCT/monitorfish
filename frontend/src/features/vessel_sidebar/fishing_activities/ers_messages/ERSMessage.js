@@ -9,7 +9,7 @@ import { ReactComponent as ShowActivitySVG } from '../../../icons/Position_messa
 import { ReactComponent as HideActivitySVG } from '../../../icons/Position_message_JPE_Pin_masquer.svg'
 import { getDateTime } from '../../../../utils'
 import { useDispatch, useSelector } from 'react-redux'
-import { hideFishingActivityOnMap, showFishingActivityOnMap } from '../../../../domain/shared_slices/FishingActivities'
+import { removeFishingActivityFromMap, showFishingActivityOnMap } from '../../../../domain/shared_slices/FishingActivities'
 
 const ERSMessage = ({ message, isFirst }) => {
   const dispatch = useDispatch()
@@ -109,7 +109,7 @@ const ERSMessage = ({ message, isFirst }) => {
                 ? <HideActivity
                   data-cy={'hide-fishing-activity'}
                   title={'Cacher le message sur la piste'}
-                  onClick={() => dispatch(hideFishingActivityOnMap(message.operationNumber))}
+                  onClick={() => dispatch(removeFishingActivityFromMap(message.operationNumber))}
                 />
                 : <ShowActivity
                   data-cy={'show-fishing-activity'}

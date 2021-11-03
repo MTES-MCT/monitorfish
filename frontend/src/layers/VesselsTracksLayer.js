@@ -30,7 +30,8 @@ const VesselsTracksLayer = ({ map }) => {
   } = useSelector(state => state.vessel)
   const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
-    fishingActivitiesShowedOnMap
+    fishingActivitiesShowedOnMap,
+    showFishingActivitiesOnMap
   } = useSelector(state => state.fishingActivities)
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
   /** @type {FishingActivityShowedOnMap[]} previousFishingActivitiesShowedOnMap */
@@ -89,7 +90,7 @@ const VesselsTracksLayer = ({ map }) => {
 
   useEffect(() => {
     showFishingActivities()
-  }, [fishingActivitiesShowedOnMap])
+  }, [fishingActivitiesShowedOnMap, showFishingActivitiesOnMap])
 
   function showFishingActivities () {
     if (!fishingActivitiesShowedOnMap?.length) {

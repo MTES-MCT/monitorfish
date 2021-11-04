@@ -129,7 +129,7 @@ const VesselsTracksLayer = ({ map }) => {
     vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
     vectorSource.changed()
     dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
-    if (coordinatesFeaturesAndIds.length) {
+    if (coordinatesFeaturesAndIds.length && !previousFishingActivitiesShowedOnMap?.length) {
       dispatch(animateToCoordinates(coordinatesFeaturesAndIds[coordinatesFeaturesAndIds.length - 1].coordinates))
     }
   }

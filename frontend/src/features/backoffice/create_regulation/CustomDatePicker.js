@@ -13,7 +13,7 @@ const CustomDatePicker = props => {
     placement
   } = props
   return <DatePickerStyled
-    date-cy="custom-date-picker"
+    data-cy={`custom-date-picker-${value}`}
     $isrequired={isRequired}
     oneTap
     ranges={[]}
@@ -60,14 +60,17 @@ const DatePickerStyled = styled(DatePicker)`
 
   .rs-picker-toggle.rs-btn {
     border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray}  !important;
+    border-color: ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
     box-sizing: border-box;
     padding: 6px;
   }
   .rs-picker-toggle.rs-btn:focus {
-    border: 1px solid ${COLORS.lightGray}!important;
+    border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray}  !important;
+    border-color: ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
   }
   .rs-picker-toggle.rs-btn:hover {
-    border: 1px solid ${COLORS.lightGray}!important;
+    border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray}  !important;
+    border-color: ${props => props.$isrequired ? COLORS.red : COLORS.lightGray} !important;
   }
 `
 

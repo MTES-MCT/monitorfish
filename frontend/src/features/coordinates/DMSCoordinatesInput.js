@@ -2,6 +2,7 @@ import CoordinateInput from 'react-coordinate-input'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
+import { usePrevious } from '../../hooks/usePrevious'
 
 const DMSCoordinatesInput = props => {
   const {
@@ -13,6 +14,7 @@ const DMSCoordinatesInput = props => {
   } = props
 
   const [update, setUpdate] = useState([])
+  const previousUpdate = usePrevious(update)
   const [showedValue, setShowedValue] = useState(undefined)
 
   /** Convert the coordinates to the [latitude, longitude] string format */
@@ -20,12 +22,16 @@ const DMSCoordinatesInput = props => {
     if (coordinates?.length && coordinatesFormat) {
       setShowedValue(getCoordinatesFromFormat(coordinates, coordinatesFormat))
     } else {
-      setShowedValue(undefined)
+      setShowedValue('')
       setUpdate([])
     }
   }, [coordinates, coordinatesFormat])
 
   useEffect(() => {
+    if (previousUpdate?.length && update?.length && (update[0] === previousUpdate[0] && update[1] === previousUpdate[1])) {
+      return
+    }
+
     if (coordinatesAreModified()) {
       updateCoordinates(update, coordinates)
       setShowedValue(undefined)

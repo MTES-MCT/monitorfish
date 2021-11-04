@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
 import { setSelectedVesselCustomTrackDepth } from '../../../../domain/shared_slices/Vessel'
-import showVesselTrackAndSidebar from '../../../../domain/use_cases/showVesselTrackAndSidebar'
+import modifyVesselTrackDepth from '../../../../domain/use_cases/modifyVesselTrackDepth'
 import { convertToUTCDay } from '../../../../utils'
 
 const TrackDepthSelection = props => {
@@ -75,10 +75,8 @@ const TrackDepthSelection = props => {
 
     dispatch(setSelectedVesselCustomTrackDepth(trackDepthObject))
     if (selectedVesselIdentity && trackDepth) {
-      dispatch(showVesselTrackAndSidebar(
+      dispatch(modifyVesselTrackDepth(
         selectedVesselIdentity,
-        false,
-        false,
         trackDepthObject))
     }
   }

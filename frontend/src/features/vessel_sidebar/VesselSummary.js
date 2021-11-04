@@ -18,7 +18,8 @@ const VesselSummary = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const {
     loadingVessel,
-    selectedVessel
+    selectedVessel,
+    selectedVesselPositions
   } = useSelector(state => state.vessel)
   const [photoFallback, setPhotoFallback] = useState(false)
   const [lastPosition, setLastPosition] = useState(null)
@@ -50,8 +51,8 @@ const VesselSummary = props => {
         speed,
         dateTime
       })
-    } else if (selectedVessel && selectedVessel.positions && selectedVessel.positions.length) {
-      setLastPosition(selectedVessel.positions[selectedVessel.positions.length - 1])
+    } else if (selectedVesselPositions?.length) {
+      setLastPosition(selectedVesselPositions[selectedVesselPositions.length - 1])
     } else {
       setLastPosition(null)
     }

@@ -24,7 +24,7 @@ const CustomCircleRange = ({
   } = useSelector(state => state.measurement)
 
   useEffect(() => {
-    if (measurementIsOpen) {
+    if (measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE) {
       if (circleMeasurementInDrawing?.coordinates?.length) {
         const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false).map(coordinate => {
           return parseFloat(coordinate.replace(/°/g, ''))
@@ -39,7 +39,7 @@ const CustomCircleRange = ({
       setCircleCoordinatesToAdd([])
       setCircleRadiusToAdd('')
     }
-  }, [circleMeasurementInDrawing, measurementIsOpen])
+  }, [circleMeasurementInDrawing, measurementTypeToAdd])
 
   /**
    * Compare with previous coordinates and update interest point coordinates

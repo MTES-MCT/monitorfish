@@ -182,7 +182,6 @@ const GrayOverlay = styled.div`
 
 const Panel = styled.div`
   padding: 0;
-  overflow-y: auto;
   background: ${COLORS.gainsboro};
   max-height: ${props => props.healthcheckTextWarning ? 77 : 82}vh;
 `

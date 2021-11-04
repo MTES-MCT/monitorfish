@@ -91,22 +91,15 @@ const Wrapper = styled.li`
 const ERSMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
-  height: 0;
-  opacity: 0;
   overflow: hidden;
   padding-left: 20px;
   border-bottom: 1px solid ${COLORS.gray};
-  animation: ${props => props.firstUpdate.current && !props.isOpen ? '' : props.isOpen ? `list-resume-${props.name}-${props.id}-opening` : `list-resume-${props.name}-${props.id}-closing`} 0.2s ease forwards;
-
-  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-opening` : null} {
-    0%   { height: 0; opacity: 0; }
-    100% { height: ${props => props.chartHeight + 20}px; opacity: 1; }
-  }
-
-  @keyframes ${props => props.name ? `list-resume-${props.name}-${props.id}-closing` : null} {
-    0%   { opacity: 1; height: ${props => props.chartHeight + 20}px; }
-    100% { opacity: 0; height: 0; }
-  }
+  opacity: ${props => props.isOpen ? 1 : 0};
+  height: ${props => props.isOpen
+    ? props.chartHeight + 20
+    : 0
+  }px;
+  transition: 0.2s all;
   margin-bottom: ${props => props.isOpen ? 5 : -1}px;
 `
 

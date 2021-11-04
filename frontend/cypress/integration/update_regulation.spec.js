@@ -16,7 +16,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="regulatory-layer-topic-row"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click()
     cy.get('[data-cy="regulatory-layer-zone"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover')
+    cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
     cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-zone-edit"]').eq(0).click()
     cy.url().should('include', '/editRegulation')
@@ -38,12 +38,11 @@ context('NewRegulation', () => {
     // try to save
     cy.get('[data-cy="validate-button"]').contains('Enregister les modifications')
     cy.get('[data-cy="validate-button"]').click()
-    cy.wait(1000)
-    cy.get('[date-cy="custom-date-picker"]').eq(1).should('have.css', 'border-color', 'rgb(225, 0, 15)')
+    cy.get('[data-cy="custom-date-picker-undefined"]').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
     cy.get('.rs-checkbox-inner').should('have.length', 3)
-    // cy.get('.rs-checkbox-inner').before('border-color').should('eq', 'rgb(225, 0, 15)')
+    cy.get('.rs-checkbox-inner').before('border-top-color').should('eq', 'rgb(225, 0, 15)')
   })
-  it('Save request as a corr', () => {
+  it('Save regulation click button open backoffice page', () => {
     // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     cy.get('.rs-checkbox-inner').before('border-color').should('not.eq', 'rgb(225, 0, 15)')
@@ -52,7 +51,7 @@ context('NewRegulation', () => {
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
     // save form
     cy.get('[data-cy="validate-button"]').click()
-    cy.wait(1000)
+    cy.wait(200)
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(request.body).contain('typeName="monitorfish:regulatory_areas"')

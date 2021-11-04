@@ -21,7 +21,9 @@ const ERSMessageResumeHeader = props => {
         <ERSMessageTitle
           onClick={() => props.setIsOpen(!props.isOpen)}
           hasNoMessage={props.hasNoMessage || props.noContent}
-          isLastItem={props.isLastItem}>
+          isLastItem={props.isLastItem}
+          isOpen={props.isOpen}
+        >
           {
             props.hasNoMessage || props.noContent ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
           }
@@ -127,7 +129,7 @@ const ERSMessageTitle = styled.div`
   padding: 0 0 0 20px;
   user-select: none;
   ${props => !props.hasNoMessage ? 'cursor: pointer;' : null}}
-  ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => !props.isLastItem || (props.isLastItem && props.isOpen) ? `border-bottom: 1px solid ${COLORS.gray};` : null}
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

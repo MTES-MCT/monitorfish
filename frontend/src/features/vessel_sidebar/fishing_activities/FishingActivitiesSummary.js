@@ -120,7 +120,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
         const totalPNOWeight = getTotalPNOWeightFromMessage(pnoMessage)
         setTotalPNOWeight(totalPNOWeight)
 
-        const speciesToWeightPNOObject = getSpeciesToWeightPNOObject(pnoMessage, totalFARAndDEPWeight)
+        const speciesToWeightPNOObject = getSpeciesToWeightPNOObject(pnoMessage, totalPNOWeight)
         setSpeciesToWeightOfPNO(speciesToWeightPNOObject)
       }
 

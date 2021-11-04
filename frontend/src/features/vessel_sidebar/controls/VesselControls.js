@@ -169,6 +169,7 @@ const UpdateControlsButton = styled.div`
 const Body = styled.div`
   padding: 0 5px 1px 5px;
   overflow-x: hidden;
+  max-height: 730px;
 `
 
 export default VesselControls

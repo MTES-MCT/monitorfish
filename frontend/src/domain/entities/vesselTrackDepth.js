@@ -37,29 +37,27 @@ export function getVesselTrackDepth (newWantedTrackDepth, vesselCustomTrackDepth
   }
 }
 
-export function getTrackDepthError (vesselAndTrackDepthModified, calledFromCron, vesselTrackDepthObject) {
-  if (trackDepthHasBeenModifiedFromAPI(vesselAndTrackDepthModified, calledFromCron)) {
+export function getTrackDepthError (positions, trackDepthHasBeenModified, calledFromCron, vesselTrackDepthObject) {
+  if (trackDepthHasBeenModifiedFromAPI(positions, trackDepthHasBeenModified, calledFromCron)) {
     return new NoDEPFoundError('Nous n\'avons pas trouvé de dernier DEP pour ce navire, nous affichons ' +
       'les positions des dernières 24 heures.')
-  } else if (noPositionsFoundForVessel(vesselAndTrackDepthModified, calledFromCron)) {
+  } else if (noPositionsFoundForVessel(positions, calledFromCron)) {
     return new NoPositionsFoundError('Nous n\'avons trouvé aucune position.')
-  } else if (noPositionsFoundForEnteredDateTime(vesselAndTrackDepthModified, vesselTrackDepthObject)) {
+  } else if (noPositionsFoundForEnteredDateTime(positions, vesselTrackDepthObject)) {
     return new NoPositionsFoundError('Nous n\'avons trouvé aucune position pour ces dates.')
   }
 
   return null
 }
 
-function noPositionsFoundForVessel (vesselAndTrackDepthModified, updateShowedVessel) {
-  return !vesselAndTrackDepthModified.vessel.positions?.length && !updateShowedVessel
+function noPositionsFoundForVessel (positions, updateShowedVessel) {
+  return !positions?.length && !updateShowedVessel
 }
 
-function noPositionsFoundForEnteredDateTime (vesselAndTrackDepthModified, vesselTrackDepthObject) {
-  return !vesselAndTrackDepthModified.vessel.positions?.length && vesselTrackDepthObject
+function noPositionsFoundForEnteredDateTime (positions, vesselTrackDepthObject) {
+  return !positions?.length && vesselTrackDepthObject
 }
 
-function trackDepthHasBeenModifiedFromAPI (vesselAndTrackDepthModified, updateShowedVessel) {
-  return vesselAndTrackDepthModified.trackDepthHasBeenModified &&
-    !updateShowedVessel &&
-    vesselAndTrackDepthModified.vessel.positions?.length
+function trackDepthHasBeenModifiedFromAPI (positions, trackDepthHasBeenModified, updateShowedVessel) {
+  return positions?.length && trackDepthHasBeenModified && !updateShowedVessel
 }

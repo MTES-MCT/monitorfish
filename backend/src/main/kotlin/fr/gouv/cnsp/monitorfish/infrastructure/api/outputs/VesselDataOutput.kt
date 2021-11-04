@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import java.util.*
 
 data class VesselDataOutput(
@@ -35,47 +37,43 @@ data class VesselDataOutput(
         val vesselPhones: List<String>? = null,
         val vesselEmails: List<String>? = null,
         val beaconNumber: String? = null,
-        val positions: List<PositionDataOutput>,
         val riskFactor: RiskFactorDataOutput? = null,
         val underCharter: Boolean? = null) {
     companion object {
-        fun fromVesselWithData(vesselWithData: VesselWithData): VesselDataOutput {
+        fun fromVesselAndRiskFactor(vessel: Vessel, vesselRiskFactor: VesselRiskFactor): VesselDataOutput {
             return VesselDataOutput(
-                    id = vesselWithData.vessel.id,
-                    internalReferenceNumber = vesselWithData.vessel.internalReferenceNumber,
-                    IMO = vesselWithData.vessel.imo,
-                    ircs = vesselWithData.vessel.ircs,
-                    mmsi = vesselWithData.vessel.mmsi,
-                    externalReferenceNumber = vesselWithData.vessel.externalReferenceNumber,
-                    vesselName = vesselWithData.vessel.vesselName,
-                    flagState = vesselWithData.vessel.flagState,
-                    width = vesselWithData.vessel.width,
-                    length = vesselWithData.vessel.length,
-                    district = vesselWithData.vessel.district,
-                    districtCode = vesselWithData.vessel.districtCode,
-                    gauge = vesselWithData.vessel.gauge,
-                    registryPort = vesselWithData.vessel.registryPort,
-                    power = vesselWithData.vessel.power,
-                    vesselType = vesselWithData.vessel.vesselType,
-                    sailingCategory = vesselWithData.vessel.sailingCategory,
-                    sailingType = vesselWithData.vessel.sailingType,
-                    declaredFishingGears = vesselWithData.vessel.declaredFishingGears,
-                    pinger = vesselWithData.vessel.pinger,
-                    navigationLicenceExpirationDate = vesselWithData.vessel.navigationLicenceExpirationDate,
-                    operatorName = vesselWithData.vessel.operatorName,
-                    operatorPhones = vesselWithData.vessel.operatorPhones,
-                    operatorEmails = vesselWithData.vessel.operatorEmails,
-                    proprietorName = vesselWithData.vessel.proprietorName,
-                    proprietorPhones = vesselWithData.vessel.proprietorPhones,
-                    proprietorEmails = vesselWithData.vessel.proprietorEmails,
-                    vesselPhones = vesselWithData.vessel.vesselPhones,
-                    vesselEmails = vesselWithData.vessel.vesselEmails,
-                    beaconNumber = vesselWithData.vessel.beaconNumber,
-                    positions = vesselWithData.positions.map {
-                        PositionDataOutput.fromPosition(it)
-                    },
-                    riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselWithData.vesselRiskFactor),
-                    underCharter = vesselWithData.vessel.underCharter
+                    id = vessel.id,
+                    internalReferenceNumber = vessel.internalReferenceNumber,
+                    IMO = vessel.imo,
+                    ircs = vessel.ircs,
+                    mmsi = vessel.mmsi,
+                    externalReferenceNumber = vessel.externalReferenceNumber,
+                    vesselName = vessel.vesselName,
+                    flagState = vessel.flagState,
+                    width = vessel.width,
+                    length = vessel.length,
+                    district = vessel.district,
+                    districtCode = vessel.districtCode,
+                    gauge = vessel.gauge,
+                    registryPort = vessel.registryPort,
+                    power = vessel.power,
+                    vesselType = vessel.vesselType,
+                    sailingCategory = vessel.sailingCategory,
+                    sailingType = vessel.sailingType,
+                    declaredFishingGears = vessel.declaredFishingGears,
+                    pinger = vessel.pinger,
+                    navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
+                    operatorName = vessel.operatorName,
+                    operatorPhones = vessel.operatorPhones,
+                    operatorEmails = vessel.operatorEmails,
+                    proprietorName = vessel.proprietorName,
+                    proprietorPhones = vessel.proprietorPhones,
+                    proprietorEmails = vessel.proprietorEmails,
+                    vesselPhones = vessel.vesselPhones,
+                    vesselEmails = vessel.vesselEmails,
+                    beaconNumber = vessel.beaconNumber,
+                    riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselRiskFactor),
+                    underCharter = vessel.underCharter
             )
         }
     }

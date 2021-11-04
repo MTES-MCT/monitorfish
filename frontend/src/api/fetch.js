@@ -23,7 +23,7 @@ export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu réc
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
-const GEOMETRY_ERROR_MEESAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
+const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
 const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
@@ -68,9 +68,15 @@ function getVesselsLastPositionsFromAPI () {
 }
 
 /**
- * Get vessel information and last positions
+ * Get vessel information and positions
  * @memberOf API
- * @returns {Promise<Vessel>} The vessels
+ * @returns {Promise<{
+ *   vesselAndPositions: {
+ *     vessel: Vessel,
+ *     positions: VesselPosition[]
+ *   },
+ *   trackDepthHasBeenModified: boolean
+ * }>} The vessel
  * @throws {Error}
  */
 function getVesselFromAPI (identity, vesselTrackDepthObject) {
@@ -85,16 +91,16 @@ function getVesselFromAPI (identity, vesselTrackDepthObject) {
   return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
     .then(response => {
       if (response.status === OK) {
-        return response.json().then(vessel => {
+        return response.json().then(vesselAndPositions => {
           return {
-            vessel: vessel,
+            vesselAndPositions: vesselAndPositions,
             trackDepthHasBeenModified: false
           }
         })
       } else if (response.status === ACCEPTED) {
-        return response.json().then(vessel => {
+        return response.json().then(vesselAndPositions => {
           return {
-            vessel: vessel,
+            vesselAndPositions: vesselAndPositions,
             trackDepthHasBeenModified: true
           }
         })
@@ -110,6 +116,54 @@ function getVesselFromAPI (identity, vesselTrackDepthObject) {
       throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
     })
     .then(vessel => vessel)
+}
+
+/**
+ * Get vessel positions
+ * @memberOf API
+ * @returns {Promise<{
+ *   positions: VesselPosition[],
+ *   trackDepthHasBeenModified: boolean
+ * }>} The positions
+ * @throws {Error}
+ */
+function getVesselPositionsFromAPI (identity, vesselTrackDepthObject) {
+  const internalReferenceNumber = identity.internalReferenceNumber || ''
+  const externalReferenceNumber = identity.externalReferenceNumber || ''
+  const ircs = identity.ircs || ''
+  const vesselIdentifier = identity.vesselIdentifier || 'UNDEFINED'
+  const trackDepth = vesselTrackDepthObject.trackDepth ? vesselTrackDepthObject.trackDepth : ''
+  const afterDateTime = vesselTrackDepthObject.afterDateTime ? vesselTrackDepthObject.afterDateTime.toISOString() : ''
+  const beforeDateTime = vesselTrackDepthObject.beforeDateTime ? vesselTrackDepthObject.beforeDateTime.toISOString() : ''
+
+  return fetch(`/bff/v1/vessels/positions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json().then(positions => {
+          return {
+            positions: positions,
+            trackDepthHasBeenModified: false
+          }
+        })
+      } else if (response.status === ACCEPTED) {
+        return response.json().then(positions => {
+          return {
+            positions: positions,
+            trackDepthHasBeenModified: true
+          }
+        })
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(VESSEL_POSITIONS_ERROR_MESSAGE)
+    })
+    .then(positions => positions)
 }
 
 function searchVesselsFromAPI (searched) {
@@ -169,12 +223,12 @@ function getAllGeometryWithoutProperty () {
         response.text().then(text => {
           console.error(text)
         })
-        throw Error(GEOMETRY_ERROR_MEESAGE)
+        throw Error(GEOMETRY_ERROR_MESSAGE)
       }
     })
     .catch(error => {
       console.error(error)
-      throw Error(GEOMETRY_ERROR_MEESAGE)
+      throw Error(GEOMETRY_ERROR_MESSAGE)
     })
 }
 
@@ -494,6 +548,7 @@ function updateOrCreateRegulation (feature, actionType) {
 export {
   getVesselsLastPositionsFromAPI,
   getVesselFromAPI,
+  getVesselPositionsFromAPI,
   searchVesselsFromAPI,
   getAllRegulatoryLayersFromAPI,
   getAdministrativeZoneFromAPI,

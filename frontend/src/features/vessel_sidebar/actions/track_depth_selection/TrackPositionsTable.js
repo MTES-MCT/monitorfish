@@ -17,7 +17,7 @@ const { Column, HeaderCell, Cell } = Table
 const TrackPositionsTable = () => {
   const dispatch = useDispatch()
   const { coordinatesFormat } = useSelector(state => state.map)
-  const { selectedVessel } = useSelector(state => state.vessel)
+  const { selectedVesselPositions } = useSelector(state => state.vessel)
 
   const [sortColumn, setSortColumn] = useState(CSVOptions.dateTime.code)
   const [sortType, setSortType] = useState(SortType.DESC)
@@ -32,12 +32,12 @@ const TrackPositionsTable = () => {
   }, [clickedOutsideComponent])
 
   useEffect(() => {
-    if (selectedVessel) {
-      setPositions(selectedVessel.positions)
+    if (selectedVesselPositions?.length) {
+      setPositions(selectedVesselPositions)
     } else {
       setPositions([])
     }
-  }, [selectedVessel])
+  }, [selectedVesselPositions])
 
   const handleSortColumn = (sortColumn, sortType) => {
     setSortColumn(sortColumn)

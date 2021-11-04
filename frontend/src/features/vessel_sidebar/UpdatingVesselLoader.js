@@ -10,7 +10,7 @@ const UpdatingVesselLoader = () => {
   const isUpdatingVessels = useSelector(state => state.global.isUpdatingVessels)
   const {
     vesselSidebarIsOpen,
-    loadingVessel
+    loadingPositions
   } = useSelector(state => state.vessel)
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const [loadingApp, setLoadingApp] = useState(false)
@@ -42,7 +42,7 @@ const UpdatingVesselLoader = () => {
         healthcheckTextWarning={healthcheckTextWarning}
         vesselSidebarIsOpen={vesselSidebarIsOpen}>
         {
-          (isUpdatingVessels || loadingVessel) && !loadingApp
+          (isUpdatingVessels || loadingPositions) && !loadingApp
             ? <>
               <FulfillingBouncingCircleSpinner
                 color={COLORS.background}

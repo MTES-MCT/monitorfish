@@ -25,6 +25,7 @@ import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/fishing
 const VesselsTracksLayer = ({ map }) => {
   const {
     selectedVessel,
+    selectedVesselPositions,
     highlightedVesselTrackPosition,
     vesselsTracksShowed
   } = useSelector(state => state.vessel)
@@ -39,7 +40,7 @@ const VesselsTracksLayer = ({ map }) => {
   const previousSelectedVessel = usePrevious(selectedVessel)
 
   const {
-    updatedFromCron
+    doNotAnimate
   } = useSelector(state => state.map)
 
   const dispatch = useDispatch()
@@ -61,7 +62,7 @@ const VesselsTracksLayer = ({ map }) => {
 
   useEffect(() => {
     showVesselTrack()
-  }, [selectedVessel])
+  }, [selectedVessel, selectedVesselPositions])
 
   useEffect(() => {
     hidePreviouslySelectedVessel()
@@ -219,9 +220,11 @@ const VesselsTracksLayer = ({ map }) => {
   }
 
   function showVesselTrack () {
-    if (map && selectedVessel?.positions?.length) {
+    if (map && selectedVessel && selectedVesselPositions?.length) {
       const identity = getVesselFeatureIdFromVessel(selectedVessel)
-      const vesselTrack = new VesselTrack(selectedVessel.positions, identity)
+      removeVesselTrackFeatures(identity)
+
+      const vesselTrack = new VesselTrack(selectedVesselPositions, identity)
 
       if (vesselTrack.features?.length) {
         vectorSource.addFeatures(vesselTrack.features)
@@ -230,7 +233,7 @@ const VesselsTracksLayer = ({ map }) => {
         dispatch(setVesselTrackExtent(vesselTrackExtent))
       }
 
-      if (!updatedFromCron && vesselTrack.lastPositionCoordinates) {
+      if (!doNotAnimate && vesselTrack.lastPositionCoordinates) {
         dispatch(animateToCoordinates(vesselTrack.lastPositionCoordinates))
       }
     }

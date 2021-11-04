@@ -1,14 +1,14 @@
-import showVesselTrackAndSidebar from './showVesselTrackAndSidebar'
+import showVessel from './showVessel'
 import showVesselTrack from './showVesselTrack'
 
-const updateVesselTracksAndSidebar = () => (dispatch, getState) => {
+const updateVesselTracks = () => (dispatch, getState) => {
   const {
     selectedVesselIdentity,
     vesselsTracksShowed
   } = getState().vessel
 
   if (selectedVesselIdentity) {
-    dispatch(showVesselTrackAndSidebar(selectedVesselIdentity, false, true))
+    dispatch(showVessel(selectedVesselIdentity, false, true))
   }
 
   Object.keys(vesselsTracksShowed)
@@ -20,4 +20,4 @@ const updateVesselTracksAndSidebar = () => (dispatch, getState) => {
     })
 }
 
-export default updateVesselTracksAndSidebar
+export default updateVesselTracks

@@ -2,22 +2,21 @@ import { getVesselFromAPI } from '../../api/fetch'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../shared_slices/Vessel'
 import { removeError, setError } from '../shared_slices/Global'
 import { Vessel, vesselsAreEquals } from '../entities/vessel'
-import { setUpdatedFromCron } from '../shared_slices/Map'
+import { doNotAnimate } from '../shared_slices/Map'
 import unselectVessel from './unselectVessel'
 import { batch } from 'react-redux'
 import { getTrackDepthError, getVesselTrackDepth } from '../entities/vesselTrackDepth'
-import getVesselVoyage from './getVesselVoyage'
 import { removeFishingActivitiesFromMap } from '../shared_slices/FishingActivities'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
- * @function showVesselTrack
+ * @function showVessel
  * @param {VesselIdentity} vesselIdentity
  * @param {boolean} calledFromCron
  * @param {boolean} fromSearch
  * @param {VesselTrackDepth=} vesselTrackDepth
  */
-const showVesselTrackAndSidebar = (
+const showVessel = (
   vesselIdentity,
   fromSearch,
   calledFromCron,
@@ -33,8 +32,6 @@ const showVesselTrackAndSidebar = (
   } = getState().fishingActivities
 
   unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)
-
-  dispatch(getVesselVoyage(vesselIdentity, null, calledFromCron))
 
   const feature = vesselsLayerSource?.getFeatureById(Vessel.getVesselId(vesselIdentity))
   if (feature) {
@@ -52,8 +49,12 @@ const showVesselTrackAndSidebar = (
   }
 
   getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
-    .then(vesselAndTrackDepthModified => {
-      const error = getTrackDepthError(vesselAndTrackDepthModified, calledFromCron, vesselTrackDepth)
+    .then(({ vesselAndPositions, trackDepthHasBeenModified }) => {
+      const error = getTrackDepthError(
+        vesselAndPositions.positions,
+        trackDepthHasBeenModified,
+        calledFromCron,
+        vesselTrackDepth)
       if (error) {
         dispatch(setError(error))
       } else {
@@ -61,12 +62,15 @@ const showVesselTrackAndSidebar = (
       }
 
       const vessel = {
-        ...vesselAndTrackDepthModified?.vessel,
+        ...vesselAndPositions?.vessel,
         ...vesselIdentity,
         globalRiskFactor: vesselIdentity?.riskFactor,
-        riskFactor: vesselAndTrackDepthModified?.vessel?.riskFactor
+        riskFactor: vesselAndPositions?.vessel?.riskFactor
       }
-      dispatch(setSelectedVessel(vessel))
+      dispatch(setSelectedVessel({
+        vessel: vessel,
+        positions: vesselAndPositions.positions
+      }))
     }).catch(error => {
       console.error(error)
       dispatch(setError(error))
@@ -76,7 +80,7 @@ const showVesselTrackAndSidebar = (
 
 function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
   batch(() => {
-    dispatch(setUpdatedFromCron(calledFromCron))
+    dispatch(doNotAnimate(calledFromCron))
     dispatch(removeError())
     dispatch(loadingVessel({
       vesselIdentity,
@@ -86,11 +90,9 @@ function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
 }
 
 function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch) {
-  if (!calledFromCron &&
-    vesselIdentity &&
-    !vesselsAreEquals(vesselIdentity, alreadySelectedVessel)) {
+  if (!calledFromCron && vesselIdentity && !vesselsAreEquals(vesselIdentity, alreadySelectedVessel)) {
     dispatch(unselectVessel())
   }
 }
 
-export default showVesselTrackAndSidebar
+export default showVessel

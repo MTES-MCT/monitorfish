@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
-import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
+import showVessel from '../../domain/use_cases/showVessel'
 import LayersEnum from '../../domain/entities/layers'
 import showVesselTrack from '../../domain/use_cases/showVesselTrack'
+import getVesselVoyage from '../../domain/use_cases/getVesselVoyage'
 
 /**
  * Handle map animations - Note that the map  and mapClickEvent parameters are given from
@@ -38,7 +39,8 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
       if (mapClickEvent.ctrlKeyPressed) {
         dispatch(showVesselTrack(mapClickEvent.feature.vessel, false))
       } else {
-        dispatch(showVesselTrackAndSidebar(mapClickEvent.feature.vessel, false, false))
+        dispatch(showVessel(mapClickEvent.feature.vessel, false, false))
+        dispatch(getVesselVoyage(mapClickEvent.feature.vessel, null, false))
       }
     }
   }, [mapClickEvent])

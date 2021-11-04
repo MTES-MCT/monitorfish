@@ -71,7 +71,12 @@ const SaveInterestPoint = (
   }, [isOpen, interestPointBeingDrawed])
 
   useEffect(() => {
-    if (isOpen && interestPointBeingDrawed?.coordinates?.length) {
+    if (isOpen) {
+      if (!interestPointBeingDrawed?.coordinates?.length) {
+        setCoordinates([])
+        return
+      }
+
       const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false)
 
       setCoordinates([

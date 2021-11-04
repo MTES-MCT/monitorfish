@@ -43,7 +43,7 @@ const DMSCoordinatesInput = props => {
     <CoordinateInput
       data-cy={'dms-coordinates-input'}
       onChange={(_, { dd }) => setUpdate(dd)}
-      ddPrecision={5}
+      ddPrecision={6}
       value={showedValue}
     />
     <CoordinatesType>(DMS)</CoordinatesType>

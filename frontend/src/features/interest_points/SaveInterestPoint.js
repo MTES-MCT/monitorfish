@@ -76,10 +76,10 @@ const SaveInterestPoint = (
 
       setCoordinates([
         parseFloat(ddCoordinates[0].replace(/°/g, '')),
-        parseFloat(parseFloat(ddCoordinates[1].replace(/°/g, '')).toFixed(5))
+        parseFloat(ddCoordinates[1].replace(/°/g, ''))
       ])
     }
-  }, [interestPointBeingDrawed])
+  }, [interestPointBeingDrawed, isEditing, isOpen])
 
   useEffect(() => {
     if (name && interestPointBeingDrawed?.name !== name) {

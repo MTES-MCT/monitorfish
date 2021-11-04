@@ -55,7 +55,6 @@ const SpeciesAndWeightChart = ({
   }
 
   const getPercentOfTotalFARWeight = speciesAndWeight => {
-    console.log(speciesAndWeight.weight, speciesAndWeight.totalWeight, 'weight')
     return parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
   }
 

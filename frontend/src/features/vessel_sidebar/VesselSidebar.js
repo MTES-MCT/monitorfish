@@ -218,7 +218,7 @@ const Wrapper = styled(MapComponentStyle)`
   max-height: 93vh;
   z-index: 999;
   padding: 0;
-  background: white;
+  background: ${COLORS.gainsboro};
   overflow: hidden;
   margin-right: -510px;
  

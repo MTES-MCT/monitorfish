@@ -12,8 +12,6 @@ const PNOMessageResume = props => {
   const [chartHeight, setChartHeight] = useState(0)
   const [boxHeight, setBoxHeight] = useState(0)
 
-  console.log(chartHeight, boxHeight)
-
   const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
   const [speciesNotLandedArray, setSpeciesNotLandedArray] = useState([])
   const [totalWeightNotLanded, setTotalWeightNotLanded] = useState(null)

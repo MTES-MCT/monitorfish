@@ -14,6 +14,7 @@ import {
   updateVesselTrackAsShowed
 } from '../domain/shared_slices/Vessel'
 import {
+  endRedrawFishingActivitiesOnMap,
   updateFishingActivitiesOnMapCoordinates
 } from '../domain/shared_slices/FishingActivities'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
@@ -32,7 +33,7 @@ const VesselsTracksLayer = ({ map }) => {
   const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap,
-    showFishingActivitiesOnMap
+    redrawFishingActivitiesOnMap
   } = useSelector(state => state.fishingActivities)
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
   /** @type {FishingActivityShowedOnMap[]} previousFishingActivitiesShowedOnMap */
@@ -61,7 +62,7 @@ const VesselsTracksLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    showVesselTrack()
+    showSelectedVesselTrack()
   }, [selectedVessel, selectedVesselPositions])
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const VesselsTracksLayer = ({ map }) => {
 
   useEffect(() => {
     showFishingActivities()
-  }, [fishingActivitiesShowedOnMap, showFishingActivitiesOnMap])
+  }, [fishingActivitiesShowedOnMap, selectedVesselPositions, redrawFishingActivitiesOnMap])
 
   function showFishingActivities () {
     if (!fishingActivitiesShowedOnMap?.length) {
@@ -100,7 +101,12 @@ const VesselsTracksLayer = ({ map }) => {
     }
 
     const noAddedOrRemovedFishingActivities = fishingActivitiesShowedOnMap?.length === previousFishingActivitiesShowedOnMap?.length
-    if (noAddedOrRemovedFishingActivities) {
+    if (noAddedOrRemovedFishingActivities && !redrawFishingActivitiesOnMap) {
+      return
+    }
+    dispatch(endRedrawFishingActivitiesOnMap())
+
+    if (!selectedVesselPositions?.length) {
       return
     }
 
@@ -121,17 +127,13 @@ const VesselsTracksLayer = ({ map }) => {
     }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
 
     if (someMessagesCouldNotBeSeenOnTrack) {
-      dispatch(setError(new Error('Certain messages n\'ont pas pu être placés sur la piste selectionnée. ' +
-        'Changez la date des positions affichées pour voir tous les messages.')))
+      dispatch(setError(new Error('Certain messages n\'ont pas pu être placés sur la piste selectionnée.')))
     }
 
     removeFishingActivitiesFeatures()
     vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
     vectorSource.changed()
     dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
-    if (coordinatesFeaturesAndIds.length && !previousFishingActivitiesShowedOnMap?.length) {
-      dispatch(animateToCoordinates(coordinatesFeaturesAndIds[coordinatesFeaturesAndIds.length - 1].coordinates))
-    }
   }
 
   function fishingActivityIsWithinTrackLineDates (fishingActivityDateTimestamp, line) {
@@ -219,7 +221,7 @@ const VesselsTracksLayer = ({ map }) => {
     }
   }
 
-  function showVesselTrack () {
+  function showSelectedVesselTrack () {
     if (map && selectedVessel && selectedVesselPositions?.length) {
       const identity = getVesselFeatureIdFromVessel(selectedVessel)
       removeVesselTrackFeatures(identity)

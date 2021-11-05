@@ -13,6 +13,7 @@ export const mapToRegulatoryZone = properties => {
     prohibitedSpecies: properties.especes_interdites,
     regulatoryReferences: properties.references_reglementaires,
     upcomingRegulatoryReferences: properties.references_reglementaires_a_venir,
+    fishingPeriod: properties.fishing_period,
     permissions: properties.autorisations,
     bycatch: properties.captures_accessoires,
     openingDate: properties.date_ouverture,

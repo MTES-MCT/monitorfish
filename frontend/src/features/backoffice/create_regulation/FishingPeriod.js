@@ -53,17 +53,16 @@ const FishingPeriod = (props) => {
     set('dateRanges', newDateRanges)
   }
 
-  // TODO make a unique function here
+  // TODO make generic function to add and remove elements in an array
 
   /**
    * Remove a time slot object from the timeSlots list
    * @param {number} id: object id in the list
    */
   const removeDateRange = (id) => {
-    let newDateRanges = [...dateRanges]
-    if (newDateRanges.length === 1) {
-      newDateRanges = [{}]
-    } else {
+    let newDateRanges = []
+    if (newDateRanges.length > 1) {
+      newDateRanges = [...dateRanges]
       newDateRanges.splice(id, 1)
     }
     set('dateRanges', newDateRanges)
@@ -83,10 +82,9 @@ const FishingPeriod = (props) => {
    * @param {number} id
    */
   const removeTimeInterval = (id) => {
-    let newTimeIntervals = [...timeIntervals]
-    if (newTimeIntervals.length === 1) {
-      newTimeIntervals = [{}]
-    } else {
+    let newTimeIntervals = []
+    if (newTimeIntervals.length > 1) {
+      newTimeIntervals = [...timeIntervals]
       newTimeIntervals.splice(id, 1)
     }
     set('timeIntervals', newTimeIntervals)
@@ -100,7 +98,11 @@ const FishingPeriod = (props) => {
   const updateDateRanges = (id, dateRange) => {
     // should we test the values here ?
     const newDateRanges = [...dateRanges]
-    newDateRanges[id] = dateRange
+    if (id === -1) {
+      newDateRanges.push(dateRange)
+    } else {
+      newDateRanges[id] = dateRange
+    }
     set('dateRanges', newDateRanges)
   }
 
@@ -120,7 +122,7 @@ const FishingPeriod = (props) => {
 
   const onDateChange = (id, date) => {
     let newList = []
-    if (date?.length > 0) {
+    if (id !== -1 && date?.length > 0) {
       newList = [...dates]
       newList[id] = date
     } else {
@@ -130,11 +132,12 @@ const FishingPeriod = (props) => {
   }
 
   const onDeleteDate = (id) => {
-    if (!disabled) {
-      const newList = [...dates]
+    let newList = []
+    if (dates?.length > 1) {
+      newList = [...dates]
       newList.splice(id, 1)
-      set('dates', newList)
     }
+    set('dates', newList)
   }
 
   const onAddDate = () => {
@@ -145,22 +148,31 @@ const FishingPeriod = (props) => {
   }
 
   const onTimeIntervalChange = (id, timeInterval) => {
-    if (!disabled) {
-      const newList = [...timeIntervals]
+    let newList = []
+    if (id !== -1 && timeIntervals?.length > 0) {
+      newList = [...timeIntervals]
       newList[id] = timeInterval
-      set('timeIntervals', newList)
+    } else {
+      newList.push(timeInterval)
     }
+    set('timeIntervals', newList)
   }
 
   const setWeekdays = value => set('weekdays', value)
   const setHolidays = _ => set('holidays', !holidays)
-  const setDaytime = _ => set('daytime', !daytime)
+  const setDaytime = _ => {
+    if (!daytime) {
+      console.log('set time intervals')
+      set('timeIntervals', [])
+    }
+    set('daytime', !daytime)
+  }
 
   useEffect(() => {
-    console.log('useEffect')
-    console.log(fishingPeriod)
     if (dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0) {
       setFishingPeriodAsString(toString())
+    } else {
+      setFishingPeriodAsString(undefined)
     }
   }, [fishingPeriod, fishingPeriodAsString])
 
@@ -234,8 +246,8 @@ const FishingPeriod = (props) => {
                   />
               })
               : <DateRange
-                key={0}
-                id={0}
+                key={-1}
+                id={-1}
                 annualRecurrence={annualRecurrence}
                 dateRange={DEFAULT_DATE_RANGE}
                 updateList={updateDateRanges}
@@ -246,7 +258,7 @@ const FishingPeriod = (props) => {
           </DateRanges>
           <SquareButton
             disabled={disabled || dateRanges?.length === 0}
-            onClick={addDateRange} />
+            onClick={_ => !disabled && dateRanges?.length !== 0 && addDateRange()} />
         </Row>
         <Row>
           <Label>Dates précises</Label>
@@ -264,15 +276,15 @@ const FishingPeriod = (props) => {
                   />
                   <SquareButton
                     type='delete'
-                    disabled={disabled}
-                    onClick={_ => onDeleteDate(id)} />
+                    disabled={disabled || date === undefined}
+                    onClick={_ => !disabled && date !== undefined && onDeleteDate(id)} />
                 </DateRow>
               })
-              : <DateRow key={0}>
+              : <DateRow key={-1}>
                   <CustomDatePicker
                     disabled={disabled}
                     value={undefined}
-                    onChange={date => onDateChange(0, date)}
+                    onChange={date => onDateChange(-1, date)}
                     format='DD/MM/YYYY'
                     placement={'rightStart'}
                     style={{ marginRight: '10px' }}
@@ -280,13 +292,13 @@ const FishingPeriod = (props) => {
                   <SquareButton
                     type='delete'
                     disabled={true}
-                    onClick={_ => onDeleteDate(0)} />
+                  />
                 </DateRow>
             }
           </DateList>
           <SquareButton
             disabled={disabled || dates?.length === 0}
-            onClick={onAddDate}/>
+            onClick={_ => !disabled && dates?.length !== 0 && onAddDate()}/>
         </Row>
         <Row>
           <Label>Jours de la semaine</Label>
@@ -303,22 +315,22 @@ const FishingPeriod = (props) => {
         <TimeTitle>Horaires autorisées</TimeTitle>
         <Row>
           <DateRanges>
-              { timeIntervals?.lenght > 0
+              { timeIntervals?.length > 0
                 ? timeIntervals.map((timeInterval, id) => {
                   return <TimeInterval
                     key={id}
                     id={id}
                     timeInterval={timeInterval}
-                    disabled={disabled && !daytime}
+                    disabled={disabled || daytime}
                     onTimeIntervalChange={onTimeIntervalChange}
                     removeTimeInterval={removeTimeInterval}
                   />
                 })
                 : <TimeInterval
-                  key={0}
-                  id={0}
+                  key={-1}
+                  id={-1}
                   timeInterval={undefined}
-                  disabled={disabled && !daytime}
+                  disabled={disabled || daytime}
                   onTimeIntervalChange={onTimeIntervalChange}
                   removeTimeInterval={removeTimeInterval}
                 />
@@ -326,7 +338,7 @@ const FishingPeriod = (props) => {
           </DateRanges>
           <SquareButton
               disabled={disabled || timeIntervals?.length === 0}
-              onClick={addTimeInterval} />
+              onClick={_ => !disabled && timeIntervals?.length !== 0 && addTimeInterval()} />
         </Row>
         <Row>
           ou <DaytimeCheckbox

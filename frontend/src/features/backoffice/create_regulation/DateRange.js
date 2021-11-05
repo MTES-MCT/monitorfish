@@ -86,9 +86,7 @@ const DateRange = (props) => {
         />
       </ DateRangeRow>
     : <DateRangeRow>
-      Du <MonthDateInputSlot
-          // $isrequired={startDateIsRequired}
-        >
+      Du <MonthDateInputSlot >
           <MonthDateInput
             value={startDate?.day || undefined}
             onChange={(e) => setStartDateWhithoutYear('day', e.target.value)}
@@ -112,7 +110,10 @@ const DateRange = (props) => {
         </MonthDateInputSlot>
     </DateRangeRow>
     }
-    <SquareButton disabled={dateRange === DEFAULT_DATE_RANGE} type='delete' onClick={() => removeDateRange(id)} />
+    <SquareButton
+      disabled={dateRange === DEFAULT_DATE_RANGE}
+      type='delete'
+      onClick={_ => dateRange !== DEFAULT_DATE_RANGE && removeDateRange(id)} />
     </Wrapper>
 }
 

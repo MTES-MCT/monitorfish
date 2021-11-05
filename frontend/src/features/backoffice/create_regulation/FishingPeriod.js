@@ -35,6 +35,12 @@ const FishingPeriod = (props) => {
   const [disabled, setDisabled] = useState(annualRecurrence === undefined)
   const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
 
+  useEffect(() => {
+    if (daytime) {
+      set('timeIntervals', [])
+    }
+  }, [daytime])
+
   const set = useCallback((key, value) => {
     const obj = {
       ...fishingPeriod,
@@ -160,13 +166,7 @@ const FishingPeriod = (props) => {
 
   const setWeekdays = value => set('weekdays', value)
   const setHolidays = _ => set('holidays', !holidays)
-  const setDaytime = _ => {
-    if (!daytime) {
-      console.log('set time intervals')
-      set('timeIntervals', [])
-    }
-    set('daytime', !daytime)
-  }
+  const setDaytime = _ => set('daytime', !daytime)
 
   useEffect(() => {
     if (dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0) {

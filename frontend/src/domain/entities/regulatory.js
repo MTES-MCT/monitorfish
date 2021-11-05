@@ -141,12 +141,12 @@ export const DEFAULT_DATE_RANGE = {
 export const initialFishingPeriodValues = {
   authorized: true,
   annualRecurrence: true,
-  dateRanges: [DEFAULT_DATE_RANGE],
+  dateRanges: [],
   dates: [],
   weekdays: [],
   holidays: undefined,
   daytime: undefined,
-  timeIntervals: [{}]
+  timeIntervals: []
 }
 
 export const WEEKDAYS = {

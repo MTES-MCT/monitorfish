@@ -23,6 +23,7 @@ const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, remove
         disabled={disabled}
         value={timeInterval?.from}
         onChange={value => setTimeInterval('from', value)}
+        onOk={value => setTimeInterval('from', value)}
         onSelect={value => setTimeInterval('from', value)}
       />
       à <CustomDatePicker
@@ -31,12 +32,16 @@ const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, remove
         type='time'
         placement={'rightStart'}
         style={{ width: '55px', margin: '0px 5px' }}
-        disabled={disabled === 2}
+        disabled={disabled}
         value={timeInterval?.to}
         onChange={value => setTimeInterval('to', value)}
+        onOk={value => setTimeInterval('to', value)}
         onSelect={value => setTimeInterval('to', value)}
       />
-      <SquareButton disabled={timeInterval === undefined} type='delete' onClick={() => removeTimeInterval(id)} />
+      <SquareButton
+        disabled={timeInterval === undefined}
+        type='delete'
+        onClick={_ => timeInterval !== undefined && removeTimeInterval(id)} />
     </Wrapper>
   )
 }

@@ -130,14 +130,14 @@ export const REGULATORY_TEXT_SOURCE = {
   REGULATION: 'regulation'
 }
 
-<<<<<<< HEAD
 export const DEFAULT_REGULATORY_TEXT = {
   url: '',
   reference: '',
   startDate: new Date().getTime(),
   endDate: undefined,
   textType: []
-=======
+}
+
 export const DEFAULT_YEAR = new Date().getFullYear()
 export const DEFAULT_DATE = {
   day: '',
@@ -151,14 +151,14 @@ export const DEFAULT_DATE_RANGE = {
 }
 
 export const initialFishingPeriodValues = {
-  authorized: false,
-  annualRecurrence: undefined,
+  authorized: true,
+  annualRecurrence: true,
   dateRanges: [DEFAULT_DATE_RANGE],
   dates: [],
   weekdays: [],
   holidays: undefined,
-  daytime: undefined
->>>>>>> manage dates with or without years ...
+  daytime: undefined,
+  timeIntervals: [{}]
 }
 
 export const WEEKDAYS = {

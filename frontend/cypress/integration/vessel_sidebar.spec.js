@@ -171,6 +171,26 @@ context('VesselSidebar', () => {
     cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("8.7 nds", { timeout: 20000 })
   })
 
+  it('Vessel track dates Should be changed When walking in fishing trips', () => {
+    // Given
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+
+    // When
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+
+    // Then
+    cy.get('.rs-picker-toggle-value').contains('16-02-2019')
+    cy.get('.rs-picker-toggle-value').contains('16-10-2019')
+    cy.get('*[data-cy^="vessel-track-depth-three-days"]').should('not.have.class', 'rs-radio-checked')
+
+    // Then, back to another trip depth of three days
+    cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
+  })
+
   it('Fishing activities Should be seen on the vessel track and showed from the map', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
@@ -179,11 +199,8 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
 
-    // When
-    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
-    cy.wait(200)
-
     // Then
+    cy.wait(200)
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
     cy.get('*[data-cy^="fishing-activity-name"]').eq(2).click({ timeout: 20000 })
     cy.get('#OOF20191030059909').should('be.visible')
@@ -194,7 +211,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
-  it('Fishing activities Should be cleaned When walking in fishing trips', () => {
+  it('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -203,13 +220,17 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
 
     // When
-    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
     cy.wait(200)
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
 
     // Then
+    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
+
+    // Hide fishing activities
+    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
@@ -220,6 +241,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })

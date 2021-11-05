@@ -109,7 +109,9 @@ const RegulatoryLayerTopic = props => {
   return (
     <NamespaceContext.Consumer>
       {namespace => (
-        <Row isOpen={isOpen}>
+        <Row
+          data-cy="regulatory-layer-topic-row"
+          isOpen={isOpen}>
           <Zone isLastItem={isLastItem} isOpen={isOpen}>
             <Name
               data-cy={'regulatory-layers-my-zones-topic'}

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import {
   setIsModalOpen,
-  setUpcomingRegulatoryTextListCheckedMap
+  setUpcomingRegulatoryTextListCheckedMap,
+  setSaveUpcomingRegulation,
+  setUpcomingRegulation
 } from '../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
@@ -17,32 +19,39 @@ const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    upcomingRegulation,
-    upcomingRegulatoryTextCheckedMap
+    upcomingRegulation = { regulatoryTextList: [{}] },
+    upcomingRegulatoryTextCheckedMap,
+    saveUpcomingRegulation
   } = useSelector(state => state.regulation)
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList
-    ? [...upcomingRegulation.regulatoryTextList]
-    : [{}])
-
-  const [saveForm, setSaveForm] = useState(false)
+  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList || [{}])
 
   const onAddUpcomingRegulation = () => {
-    setSaveForm(true)
+    dispatch(setSaveUpcomingRegulation(true))
   }
 
   useEffect(() => {
-    if (upcomingRegulatoryTextCheckedMap) {
-      const values = Object.values(upcomingRegulatoryTextCheckedMap)
-      if (saveForm && values.length > 0 && values.length === regulatoryTextList.length) {
-        if (!values.includes(null)) {
-          dispatch(setIsModalOpen(false))
+    if (upcomingRegulatoryTextCheckedMap && saveUpcomingRegulation) {
+      const regulatoryTexts = Object.values(upcomingRegulatoryTextCheckedMap)
+      const allTextsHaveBeenChecked = regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length
+      if (allTextsHaveBeenChecked) {
+        const allTextsHaveBeenFilled = !regulatoryTexts.includes(null)
+        if (allTextsHaveBeenFilled) {
+          const newUpcomingRegulation = { ...(upcomingRegulation || { regulatoryTextList: [{}] }) }
+          const newRegulatoryTextList = [...regulatoryTexts]
+          newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
+          batch(() => {
+            dispatch(setUpcomingRegulation(newUpcomingRegulation))
+            dispatch(setIsModalOpen(false))
+          })
         }
-        dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
-        setSaveForm(false)
+        batch(() => {
+          dispatch(setUpcomingRegulatoryTextListCheckedMap({}))
+          dispatch(setSaveUpcomingRegulation(false))
+        })
       }
     }
-  }, [saveForm, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
+  }, [saveUpcomingRegulation, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
@@ -56,7 +65,7 @@ const UpcomingRegulationModal = () => {
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
             source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}
-            saveForm={saveForm}
+            saveForm={saveUpcomingRegulation}
           />
         </Section>
       </Body>

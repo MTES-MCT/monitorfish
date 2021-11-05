@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
@@ -19,7 +19,7 @@ import BaseMap from '../../map/BaseMap'
 import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
 import Layers from '../../../domain/entities/layers'
 
-import { setRegulatoryGeometryToPreview } from '../../../domain/shared_slices/Regulatory'
+import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
@@ -32,7 +32,9 @@ import {
   resetState,
   setSelectedRegulation,
   setRegulatoryTextCheckedMap,
-  setUpcomingRegulation
+  setUpcomingRegulation,
+  setSaveOrUpdateRegulation,
+  setAtLeastOneValueIsMissing
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -79,14 +81,14 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
 
-  const [saveOrUpdateRegulation, setSaveOrUpdateRegulation] = useState(false)
   const {
     isModalOpen,
     regulationSaved,
     regulatoryTextCheckedMap,
-    upcomingRegulation
+    upcomingRegulation,
+    saveOrUpdateRegulation,
+    atLeastOneValueIsMissing
   } = useSelector(state => state.regulation)
-  const [atLeastOneValueIsMissing, setAtLeastOneValueIsMissing] = useState(undefined)
 
   let originalGeometryId = null
 
@@ -112,8 +114,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     if (regulationSaved) {
       history.push('/backoffice')
+      dispatch(resetState())
     }
-    dispatch(resetState())
   }, [regulationSaved])
 
   const onGoBack = () => {
@@ -122,31 +124,36 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   useEffect(() => {
-    if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
+    return () => {
+      dispatch(setRegulatoryZoneMetadata(undefined))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
-      /**
-       * if regulatoryTexts.length === regulatoryTextList.length all texts has been checked
-       * if !regulatoryTexts.includes(null) all texts has appropriately been filled
-       * if !atLeastOneValueIsMissing all other values are filled
-       */
-      if (regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length &&
-        !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing) {
-        // update regulatoryTextList
-        setRegulatoryTextList(regulatoryTexts)
-        const featureObject = mapToRegulatoryFeatureObject({
-          selectedRegulationTopic,
-          selectedRegulationLawType,
-          nameZone,
-          selectedSeaFront,
-          selectedRegionList,
-          regulatoryTexts,
-          upcomingRegulation
-        })
-        createOrUpdateRegulation(featureObject)
-      } else {
-        dispatch(setRegulatoryTextCheckedMap(undefined))
-        setSaveOrUpdateRegulation(false)
-        setAtLeastOneValueIsMissing(undefined)
+      const allTextsHaveBeenChecked = regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length
+      if (allTextsHaveBeenChecked) {
+        const allRequiredValuesHaveBeenFilled = !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing
+        if (allRequiredValuesHaveBeenFilled) {
+          setRegulatoryTextList(regulatoryTexts)
+          const featureObject = mapToRegulatoryFeatureObject({
+            selectedRegulationTopic,
+            selectedRegulationLawType,
+            nameZone: nameZone,
+            selectedSeaFront,
+            selectedRegionList,
+            regulatoryTexts,
+            upcomingRegulation
+          })
+          createOrUpdateRegulation(featureObject)
+        } else {
+          batch(() => {
+            dispatch(setRegulatoryTextCheckedMap({}))
+            dispatch(setSaveOrUpdateRegulation(false))
+            dispatch(setAtLeastOneValueIsMissing(undefined))
+          })
+        }
       }
     }
   }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap])
@@ -168,7 +175,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     setNameZone(zone)
     setSelectedRegionList(region ? region.split(', ') : [])
     setSelectedSeaFront(seafront)
-    setRegulatoryTextList(regulatoryReferences || [{}])
+    setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [{}])
     setSelectedGeometry(id)
     originalGeometryId = regulatoryZoneMetadata.id
     dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
@@ -195,7 +202,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
     setGeometryIsMissing(valueIsMissing)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setAtLeastOneValueIsMissing(atLeastOneValueIsMissing)
+    dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
   }
 
   useEffect(() => {
@@ -301,11 +308,12 @@ const CreateRegulation = ({ title, isEdition }) => {
         <Footer>
           <FooterButton>
             <ValidateButton
+              data-cy="validate-button"
               disabled={false}
               isLast={false}
               onClick={() => {
                 checkRequiredValues()
-                setSaveOrUpdateRegulation(true)
+                dispatch(setSaveOrUpdateRegulation(true))
               }}
             >
             { isEdition

@@ -29,9 +29,9 @@ const CustomDatePicker = props => {
     onSelect={onSelect}
     cleanable={false}
     placement={placement}
-    placeholder={decodeURIComponent(type === 'time'
+    placeholder={type === 'time'
       ? '\xa0\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0\xa0'
-      : '\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0')}
+      : '\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0'}
     format={format}
     style={style}
     locale={{

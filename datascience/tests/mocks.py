@@ -12,6 +12,9 @@ def mock_extract_side_effect(
     dtypes: Union[None, dict] = None,
     parse_dates: Union[list, dict, None] = None,
     params: Union[dict, None] = None,
+    backend: str = "pandas",
+    geom_col: str = "geom",
+    crs: Union[int, None] = None,
 ):
     @patch("src.read_query.pd")
     @patch("src.read_query.create_engine")

@@ -119,8 +119,13 @@ const FishingPeriod = (props) => {
   }
 
   const onDateChange = (id, date) => {
-    const newList = [...dates]
-    newList[id] = date
+    let newList = []
+    if (date?.length > 0) {
+      newList = [...dates]
+      newList[id] = date
+    } else {
+      newList.push(date)
+    }
     set('dates', newList)
   }
 
@@ -134,8 +139,7 @@ const FishingPeriod = (props) => {
 
   const onAddDate = () => {
     if (!disabled) {
-      const newList = [...dates]
-      newList.push(undefined)
+      const newList = [...dates, undefined]
       set('dates', newList)
     }
   }
@@ -173,7 +177,10 @@ const FishingPeriod = (props) => {
     }
     if (dates?.length > 0) {
       textArray.push(dates.map(date => {
-        return `le ${date.getDay()}/${date.getMonth()}/${date.getYear()} `
+        if (date) {
+          return `le ${date.getDay()}/${date.getMonth()}/${date.getYear()} `
+        }
+        return null
       }).join('et '))
     }
     if (weekdays?.length > 0) {
@@ -214,7 +221,7 @@ const FishingPeriod = (props) => {
         <Row>
           <Label>Plages de dates</Label>
           <DateRanges>
-            { dateRanges
+            { dateRanges?.length > 0
               ? dateRanges.map((dateRange, id) => {
                 return <DateRange
                     key={id}
@@ -238,13 +245,13 @@ const FishingPeriod = (props) => {
             }
           </DateRanges>
           <SquareButton
-            disabled={disabled}
+            disabled={disabled || dateRanges?.length === 0}
             onClick={addDateRange} />
         </Row>
         <Row>
           <Label>Dates précises</Label>
           <DateList >
-            { dates && dates.length > 0
+            { dates?.length > 0
               ? dates.map((date, id) => {
                 return <DateRow key={id}>
                   <CustomDatePicker
@@ -272,13 +279,13 @@ const FishingPeriod = (props) => {
                   />
                   <SquareButton
                     type='delete'
-                    disabled={disabled}
+                    disabled={true}
                     onClick={_ => onDeleteDate(0)} />
                 </DateRow>
             }
           </DateList>
           <SquareButton
-            disabled={disabled}
+            disabled={disabled || dates?.length === 0}
             onClick={onAddDate}/>
         </Row>
         <Row>
@@ -295,8 +302,8 @@ const FishingPeriod = (props) => {
         </Row>
         <TimeTitle>Horaires autorisées</TimeTitle>
         <Row>
-          <TimeIntervals>
-              { timeIntervals
+          <DateRanges>
+              { timeIntervals?.lenght > 0
                 ? timeIntervals.map((timeInterval, id) => {
                   return <TimeInterval
                     key={id}
@@ -310,14 +317,15 @@ const FishingPeriod = (props) => {
                 : <TimeInterval
                   key={0}
                   id={0}
+                  timeInterval={undefined}
                   disabled={disabled && !daytime}
                   onTimeIntervalChange={onTimeIntervalChange}
                   removeTimeInterval={removeTimeInterval}
                 />
               }
-          </TimeIntervals>
+          </DateRanges>
           <SquareButton
-              disabled={disabled}
+              disabled={disabled || timeIntervals?.length === 0}
               onClick={addTimeInterval} />
         </Row>
         <Row>
@@ -425,10 +433,6 @@ const DateRanges = styled.div`
   margin-right: 10px;
 `
 
-const TimeIntervals = styled.div`
-  display: flex;
-  flex-direction: column;
-`
 const circle = css`
   display: inline-block;
   height: 10px;

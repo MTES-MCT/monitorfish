@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 
-import { DEFAULT_DATE } from '../../../domain/entities/regulatory'
+import { DEFAULT_DATE, DEFAULT_DATE_RANGE } from '../../../domain/entities/regulatory'
 
 /**
  * TODO
@@ -112,7 +112,7 @@ const DateRange = (props) => {
         </MonthDateInputSlot>
     </DateRangeRow>
     }
-    <SquareButton type='delete' onClick={() => removeDateRange(id)} />
+    <SquareButton disabled={dateRange === DEFAULT_DATE_RANGE} type='delete' onClick={() => removeDateRange(id)} />
     </Wrapper>
 }
 

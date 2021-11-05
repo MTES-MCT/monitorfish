@@ -1,10 +1,12 @@
+from datetime import datetime
 from typing import Union
 
+import geopandas as gpd
 import pandas as pd
 import prefect
 from prefect import Flow, task
 
-from config import default_risk_factors, risk_factor_coefficients
+from config import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.segments import (
     attribute_segments_to_catches,
@@ -12,14 +14,67 @@ from src.pipeline.helpers.segments import (
     unnest_segments,
 )
 from src.pipeline.processing import df_to_dict_series
+from src.pipeline.shared_tasks.facades import extract_facade_areas
 from src.read_query import read_saved_query
 
 
 @task(checkpoint=False)
-def extract_catches():  # pragma: no cover
+def extract_catches():
     return extract(
         db_name="monitorfish_remote", query_filepath="monitorfish/current_catches.sql"
     )
+
+
+@task(checkpoint=False)
+def extract_control_priorities():
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/control_priorities.sql",
+        params={"year": datetime.utcnow().year},
+    )
+
+
+@task(checkpoint=False)
+def extract_last_positions():
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/last_positions.sql",
+        backend="geopandas",
+        geom_col="geometry",
+        crs=4326,
+    )
+
+
+@task(checkpoint=False)
+def compute_last_positions_facade(
+    last_positions: gpd.GeoDataFrame, facade_areas: gpd.GeoDataFrame
+) -> pd.DataFrame:
+
+    last_positions_facade_1 = gpd.sjoin(last_positions, facade_areas)[["cfr", "facade"]]
+
+    unassigned_last_positions = last_positions[
+        ~last_positions.cfr.isin(last_positions_facade_1.cfr)
+    ].copy(deep=True)
+
+    # Vessels that are not directly in a facade geometry are oftentimes vessels in a
+    # port, which facade geometries genereally do not encompass. In order to match
+    # these vessels to a nearby facade, we drawed a ~10km circle around them
+    # and attempt a spatial join on this buffered geometry.
+    unassigned_last_positions["geometry"] = unassigned_last_positions.buffer(0.1)
+
+    last_positions_facade_2 = gpd.sjoin(
+        unassigned_last_positions, facade_areas, how="left"
+    )[["cfr", "facade"]]
+
+    last_positions_facade_2 = last_positions_facade_2.drop_duplicates(
+        subset=["cfr", "facade"]
+    )
+
+    last_positions_facade = pd.concat(
+        [last_positions_facade_1, last_positions_facade_2]
+    ).set_index("cfr")
+
+    return last_positions_facade
 
 
 @task(checkpoint=False)
@@ -34,7 +89,6 @@ def compute_current_segments(catches, segments):
                 "fao_area",
                 "species",
                 "impact_risk_factor",
-                "control_priority_level",
             ]
         ],
     )
@@ -51,14 +105,6 @@ def compute_current_segments(catches, segments):
                 "segment": "segment_highest_impact",
             }
         )
-    )
-
-    current_segments_priority = (
-        current_segments.sort_values("control_priority_level", ascending=False)
-        .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
-        .head(1)
-        .set_index("cfr")
-        .rename(columns={"segment": "segment_highest_priority"})
     )
 
     current_segments = (
@@ -83,19 +129,48 @@ def compute_current_segments(catches, segments):
         right_index=True,
         how="outer",
     )
-    current_segments = pd.merge(
-        current_segments,
-        current_segments_priority,
-        left_index=True,
-        right_index=True,
-        how="outer",
-    )
 
     return current_segments
 
 
 @task(checkpoint=False)
-def merge_segments_catches(catches, current_segments):
+def compute_control_priorities(
+    current_segments: pd.DataFrame,
+    last_positions_facade: pd.DataFrame,
+    control_priorities: pd.DataFrame,
+) -> pd.DataFrame:
+
+    cfr_segment_facade = (
+        current_segments[["segments"]]
+        .join(last_positions_facade)
+        .explode("segments")
+        .rename(columns={"segments": "segment"})
+        .reset_index()
+        .dropna(subset=["segment", "facade"])
+    )
+
+    control_priorities = (
+        pd.merge(cfr_segment_facade, control_priorities, on=["segment", "facade"])
+        .sort_values("control_priority_level")
+        .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
+        .head(1)
+        .set_index("cfr")
+        .rename(
+            columns={
+                "segment": "segment_highest_priority",
+            }
+        )
+    )
+
+    return control_priorities
+
+
+@task(checkpoint=False)
+def join(
+    catches: pd.DataFrame,
+    current_segments: pd.DataFrame,
+    control_priorities: pd.DataFrame,
+) -> pd.DataFrame:
 
     # Group catch data of each vessel in a list of dicts like
     # [{"gear": "DRB", "species": "SCE", "faoZone": "27.7", "weight": 156.2}, ...]
@@ -123,7 +198,13 @@ def merge_segments_catches(catches, current_segments):
 
     # Join departure, catches and segments information into a single table with 1 line
     # by vessel
-    res = last_ers.join(species_onboard).join(current_segments).reset_index()
+    res = (
+        last_ers.join(species_onboard)
+        .join(current_segments)
+        .join(control_priorities)
+        .reset_index()
+    )
+
     res = res.fillna({"total_weight_onboard": 0, **default_risk_factors})
 
     return res
@@ -148,9 +229,21 @@ def load_current_segments(vessels_segments):  # pragma: no cover
 
 with Flow("Current segments") as flow:
 
+    # Extract
     catches = extract_catches()
+    last_positions = extract_last_positions()
     segments = extract_segments()
+    facade_areas = extract_facade_areas()
+    control_priorities = extract_control_priorities()
+
+    # Transform
+    last_positions_facade = compute_last_positions_facade(last_positions, facade_areas)
     segments = unnest_segments(segments)
     current_segments = compute_current_segments(catches, segments)
-    current_segments = merge_segments_catches(catches, current_segments)
+    control_priorities = compute_control_priorities(
+        current_segments, last_positions_facade, control_priorities
+    )
+    current_segments = join(catches, current_segments, control_priorities)
+
+    # Load
     load_current_segments(current_segments)

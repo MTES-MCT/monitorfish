@@ -22,7 +22,6 @@ const DateRange = (props) => {
     dateRange,
     updateList,
     removeDateRange,
-    // saveForm,
     disabled
   } = props
 
@@ -38,15 +37,11 @@ const DateRange = (props) => {
     if (day !== '' && month !== '') {
       return new Date(year, month - 1, day)
     }
-    // pour éviter l'affichage incomplet d'une date
     return undefined
   }
 
   const memoizedStartDateAsDateType = useMemo(() => startDate ? getDate(startDate) : undefined)
   const memoizedEndDateAsDateType = useMemo(() => endDate ? getDate(endDate) : undefined)
-
-  /* const [startDateIsRequired, setStartDateIsRequired] = useState(false)
-  const [endDateIsRequired, setEndDateIsRequired] = useState(false) */
 
   const setDateRange = (key, value) => {
     const newDateRange = {
@@ -69,28 +64,9 @@ const DateRange = (props) => {
   const setStartDateFromDateType = value => setDateRange('startDate', dateAsObject(value))
   const setEndDateFromDateType = value => setDateRange('endDate', dateAsObject(value))
 
-  /* const requiredValuesAreFilled = () => {
-    const {
-      startDate,
-      endDate
-    } = dateRange
-    const startDateIsFilled = startDate && startDate !== ''
-    setStartDateIsRequired(!startDateIsFilled)
-    const endDateIsFilled = endDate && endDate !== ''
-    setEndDateIsRequired(!endDateIsFilled)
-    return startDateIsFilled && endDateIsFilled
-  } */
-
-  /* useEffect(() => {
-    if (saveForm && requiredValuesAreFilled()) {
-      updateList(id, { dateRange.startDate, dateRange.endDate })
-    }
-  }, [saveForm]) */
-
   return <Wrapper disabled={disabled}>{annualRecurrence
     ? <DateRangeRow>
         Du <CustomDatePicker
-          // $isrequired={startDateIsRequired}
           value={memoizedStartDateAsDateType}
           onChange={setStartDateFromDateType}
           onOk={setStartDateFromDateType}
@@ -100,7 +76,6 @@ const DateRange = (props) => {
           disabled={disabled}
         />
         au <CustomDatePicker
-          // $isrequired={endDateIsRequired}
           value={memoizedEndDateAsDateType}
           onChange={setEndDateFromDateType}
           onOk={setEndDateFromDateType}

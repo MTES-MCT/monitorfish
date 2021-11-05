@@ -56,7 +56,7 @@ padding: 0px 8px;
 cursor: pointer;
 `
 
-const CustomCheckbox = styled(Checkbox)`
+export const CustomCheckbox = styled(Checkbox)`
   padding-right: 15px;
   font-size: 13px;
   color: ${COLORS.gunMetal};

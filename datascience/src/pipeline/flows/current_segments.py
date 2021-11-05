@@ -151,7 +151,7 @@ def compute_control_priorities(
 
     control_priorities = (
         pd.merge(cfr_segment_facade, control_priorities, on=["segment", "facade"])
-        .sort_values("control_priority_level")
+        .sort_values("control_priority_level", ascending=False)
         .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
         .head(1)
         .set_index("cfr")

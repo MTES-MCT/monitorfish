@@ -7,7 +7,9 @@ import { SquareButton } from '../../commonStyles/Buttons.style'
 import DateRange from './DateRange'
 import CustomDatePicker from './CustomDatePicker'
 import DayPicker from './DayPicker'
+import TimeInterval from './TimeInterval'
 import { CustomCheckbox } from '../../commonStyles/Backoffice.style'
+import { Row } from '../../commonStyles/FishingPeriod.style'
 import { DEFAULT_DATE_RANGE, DEFAULT_DATE } from '../../../domain/entities/regulatory'
 
 const FishingPeriod = (props) => {
@@ -25,11 +27,12 @@ const FishingPeriod = (props) => {
     dates,
     weekdays,
     holidays,
-    daytime
+    daytime,
+    timeIntervals
   } = fishingPeriod
 
-  const [displayForm, setDisplayForm] = useState(false)
-  const [disabled, setDisabled] = useState(true)
+  const [displayForm, setDisplayForm] = useState(authorized)
+  const [disabled, setDisabled] = useState(annualRecurrence === undefined)
   const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
 
   const set = useCallback((key, value) => {
@@ -50,6 +53,8 @@ const FishingPeriod = (props) => {
     set('dateRanges', newDateRanges)
   }
 
+  // TODO make a unique function here
+
   /**
    * Remove a time slot object from the timeSlots list
    * @param {number} id: object id in the list
@@ -62,6 +67,29 @@ const FishingPeriod = (props) => {
       newDateRanges.splice(id, 1)
     }
     set('dateRanges', newDateRanges)
+  }
+
+  /**
+   * Add an empty time interval in the timeIntervals list
+   */
+  const addTimeInterval = () => {
+    const newTimeIntervals = [...timeIntervals]
+    newTimeIntervals.push({})
+    set('timeIntervals', newTimeIntervals)
+  }
+
+  /**
+   * Remove the element at the id index from the list
+   * @param {number} id
+   */
+  const removeTimeInterval = (id) => {
+    let newTimeIntervals = [...timeIntervals]
+    if (newTimeIntervals.length === 1) {
+      newTimeIntervals = [{}]
+    } else {
+      newTimeIntervals.splice(id, 1)
+    }
+    set('timeIntervals', newTimeIntervals)
   }
 
   /**
@@ -112,6 +140,14 @@ const FishingPeriod = (props) => {
     }
   }
 
+  const onTimeIntervalChange = (id, timeInterval) => {
+    if (!disabled) {
+      const newList = [...timeIntervals]
+      newList[id] = timeInterval
+      set('timeIntervals', newList)
+    }
+  }
+
   const setWeekdays = value => set('weekdays', value)
   const setHolidays = _ => set('holidays', !holidays)
   const setDaytime = _ => set('daytime', !daytime)
@@ -151,9 +187,10 @@ const FishingPeriod = (props) => {
       <PeriodRadioGroup
         inline={true}
         onChange={onPeriodChange}
+        value={authorized}
       >
         Périodes
-        <CustomRadio checked={authorized} value={true} />
+        <CustomRadio checked={authorized === true} value={true} />
         {' autorisées'}
         <GreenCircle />
         <CustomRadio checked={authorized === false} value={false} />
@@ -257,22 +294,38 @@ const FishingPeriod = (props) => {
           <HolidaysCheckbox disabled={disabled} onChange={setHolidays}/>
         </Row>
         <TimeTitle>Horaires autorisées</TimeTitle>
-        <Row>De <CustomDatePicker
-            format='MM/DD/YYYY'
-            placement={'rightStart'}
-            style={{ margin: '0px 5px' }}
-            disabled={disabled}
-          />
-          à <CustomDatePicker
-            format='DD/MM/YYYY'
-            placement={'rightStart'}
-            style={{ margin: '0px 5px' }}
-            disabled={disabled === 2}
-          />
-          <SquareButton disabled={disabled}/>
+        <Row>
+          <TimeIntervals>
+              { timeIntervals
+                ? timeIntervals.map((timeInterval, id) => {
+                  return <TimeInterval
+                    key={id}
+                    id={id}
+                    timeInterval={timeInterval}
+                    disabled={disabled && !daytime}
+                    onTimeIntervalChange={onTimeIntervalChange}
+                    removeTimeInterval={removeTimeInterval}
+                  />
+                })
+                : <TimeInterval
+                  key={0}
+                  id={0}
+                  disabled={disabled && !daytime}
+                  onTimeIntervalChange={onTimeIntervalChange}
+                  removeTimeInterval={removeTimeInterval}
+                />
+              }
+          </TimeIntervals>
+          <SquareButton
+              disabled={disabled}
+              onClick={addTimeInterval} />
         </Row>
         <Row>
-          ou <DaytimeCheckbox disabled={disabled} checked={daytime} onChange={setDaytime}/> du lever au coucher du soleil
+          ou <DaytimeCheckbox
+            disabled={disabled}
+            checked={daytime}
+            onChange={setDaytime}
+          /> du lever au coucher du soleil
         </Row>
       </ConditionnalLines>
     </DateTimeWrapper>
@@ -328,9 +381,11 @@ const DateList = styled.div`
   display: flex;
   flex-direction: column;
 `
+
 const DaytimeCheckbox = styled(CustomCheckbox)`
   margin: -15px 5px 0px 5px;
 `
+
 const HolidaysCheckbox = styled(CustomCheckbox)`
   margin-top: -15px;
 `
@@ -370,13 +425,10 @@ const DateRanges = styled.div`
   margin-right: 10px;
 `
 
-const Row = styled.div`
-  display: ${props => props.display === false ? 'none' : 'flex'};
-  margin-bottom: 8px;
-  align-items: center;
-  color: ${COLORS.slateGray}
+const TimeIntervals = styled.div`
+  display: flex;
+  flex-direction: column;
 `
-
 const circle = css`
   display: inline-block;
   height: 10px;

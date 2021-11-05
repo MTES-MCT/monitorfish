@@ -132,6 +132,13 @@ const vesselSlice = createSlice({
       state.loadingVessel = false
       state.loadingPositions = false
     },
+    /**
+     * Set a custom track depth of the selected vessel
+     * @function setSelectedVesselCustomTrackDepth
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: VesselTrackDepth | null}} action - The track depth
+     */
     setSelectedVesselCustomTrackDepth (state, action) {
       state.selectedVesselCustomTrackDepth = action.payload
     },

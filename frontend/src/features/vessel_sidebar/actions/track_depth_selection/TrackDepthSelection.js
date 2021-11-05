@@ -10,17 +10,21 @@ import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
 import { setSelectedVesselCustomTrackDepth } from '../../../../domain/shared_slices/Vessel'
 import modifyVesselTrackDepth from '../../../../domain/use_cases/modifyVesselTrackDepth'
-import { convertToUTCDay } from '../../../../utils'
+import { usePrevious } from '../../../../hooks/usePrevious'
 
 const TrackDepthSelection = props => {
   const dispatch = useDispatch()
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
-  const { selectedVesselIdentity } = useSelector(state => state.vessel)
+  const {
+    selectedVesselIdentity,
+    selectedVesselCustomTrackDepth
+  } = useSelector(state => state.vessel)
   const defaultVesselTrackDepth = useSelector(state => state.map.defaultVesselTrackDepth)
 
   const [datesSelection, setDateSelection] = useState([])
   const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(null)
+  const previousTrackDepthRadioSelection = usePrevious(trackDepthRadioSelection)
   const firstUpdate = useRef(true)
 
   useEffect(() => {
@@ -40,13 +44,28 @@ const TrackDepthSelection = props => {
   }, [defaultVesselTrackDepth])
 
   useEffect(() => {
-    if (trackDepthRadioSelection) {
-      if (firstUpdate.current) {
-        firstUpdate.current = false
-        return
-      }
+    const {
+      afterDateTime,
+      beforeDateTime
+    } = selectedVesselCustomTrackDepth
 
-      showVesselTrackWithTrackDepth(trackDepthRadioSelection, null, null)
+    if (afterDateTime && beforeDateTime &&
+      (!datesSelection?.length ||
+        (datesSelection?.length && (datesSelection[0].getTime() !== afterDateTime.getTime() || datesSelection[1].getTime() !== beforeDateTime.getTime())))) {
+      setDateSelection([afterDateTime, beforeDateTime])
+      setTrackDepthRadioSelection(null)
+    }
+  }, [selectedVesselCustomTrackDepth])
+
+  useEffect(() => {
+    if (trackDepthRadioSelection && trackDepthRadioSelection !== previousTrackDepthRadioSelection) {
+      const nextTrackDepth = {
+        trackDepth: trackDepthRadioSelection,
+        beforeDatetime: null,
+        afterDatetime: null
+      }
+      dispatch(setSelectedVesselCustomTrackDepth(nextTrackDepth))
+      dispatch(modifyVesselTrackDepth(selectedVesselIdentity, nextTrackDepth))
       setDateSelection([])
     }
   }, [trackDepthRadioSelection])
@@ -58,28 +77,18 @@ const TrackDepthSelection = props => {
         return
       }
 
-      const { afterDateTime, beforeDateTime } = convertToUTCDay(datesSelection)
-      showVesselTrackWithTrackDepth(VesselTrackDepth.CUSTOM, afterDateTime, beforeDateTime)
+      const vesselTrackDepth = {
+        trackDepth: VesselTrackDepth.CUSTOM,
+        afterDateTime: datesSelection[0],
+        beforeDateTime: datesSelection[1]
+      }
+      dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
+      dispatch(modifyVesselTrackDepth(selectedVesselIdentity, vesselTrackDepth, true))
       setTrackDepthRadioSelection(null)
     } else if (!trackDepthRadioSelection) {
       setTrackDepthRadioSelection(defaultVesselTrackDepth)
     }
   }, [datesSelection])
-
-  const showVesselTrackWithTrackDepth = (trackDepth, afterDateTime, beforeDateTime) => {
-    const trackDepthObject = {
-      trackDepth: trackDepth,
-      afterDateTime: afterDateTime,
-      beforeDateTime: beforeDateTime
-    }
-
-    dispatch(setSelectedVesselCustomTrackDepth(trackDepthObject))
-    if (selectedVesselIdentity && trackDepth) {
-      dispatch(modifyVesselTrackDepth(
-        selectedVesselIdentity,
-        trackDepthObject))
-    }
-  }
 
   return (
     <>
@@ -103,7 +112,6 @@ const TrackDepthSelection = props => {
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <TrackDepthRadio
           vesselTrackDepth={defaultVesselTrackDepth}
-          showVesselTrackWithTrackDepth={showVesselTrackWithTrackDepth}
           trackDepthRadioSelection={trackDepthRadioSelection}
           setTrackDepthRadioSelection={setTrackDepthRadioSelection}
         />

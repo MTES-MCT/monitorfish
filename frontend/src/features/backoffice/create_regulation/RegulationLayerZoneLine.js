@@ -19,6 +19,7 @@ const RegulationLayerZoneLine = props => {
   return <ContentLine>
     <Label>Nom de la zone</Label>
     <CustomInput
+      data-cy={`input-${nameZone}`}
       placeholder=''
       value={nameZone}
       onChange={value => setNameZone(value)}

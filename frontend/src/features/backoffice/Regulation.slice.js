@@ -11,17 +11,18 @@ const INITIAL_STATE = {
   upcomingRegulatoryTextCheckedMap: undefined,
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
   regulatoryTextCheckedMap: undefined,
+  saveOrUpdateRegulation: false,
+  saveUpcomingRegulation: false,
   /** @type {boolean} regulatorySaved */
-  regulationSaved: false
+  regulationSaved: false,
+  atLeastOneValueIsMissing: undefined
 }
 
 const regulationSlice = createSlice({
   name: 'regulation',
   initialState: INITIAL_STATE,
   reducers: {
-    resetState (state) {
-      Object.assign(state, INITIAL_STATE)
-    },
+    resetState: () => INITIAL_STATE,
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
     },
@@ -38,12 +39,10 @@ const regulationSlice = createSlice({
         /** @type {number} */
         id
       } = action.payload
-      let newRegulatoryTextCheckedMap = {}
-      if (state.regulatoryTextCheckedMap) {
-        newRegulatoryTextCheckedMap = JSON.parse(JSON.stringify(state.regulatoryTextCheckedMap))
+      state.regulatoryTextCheckedMap = {
+        ...(state.regulatoryTextCheckedMap || {}),
+        [id]: regulatoryText ? { ...regulatoryText } : null
       }
-      newRegulatoryTextCheckedMap[id] = regulatoryText
-      state.regulatoryTextCheckedMap = newRegulatoryTextCheckedMap
     },
     addObjectToUpcomingRegulatoryTextCheckedMap (state, action) {
       const {
@@ -52,32 +51,28 @@ const regulationSlice = createSlice({
         /** @type {number} */
         id
       } = action.payload
-      let newUpcomingRegulatoryTextCheckedMap = {}
-      if (state.upcomingRegulatoryTextCheckedMap) {
-        newUpcomingRegulatoryTextCheckedMap = { ...state.upcomingRegulatoryTextCheckedMap }
+      state.upcomingRegulatoryTextCheckedMap = {
+        ...(state.upcomingRegulatoryTextCheckedMap || {}),
+        [id]: regulatoryText ? { ...regulatoryText } : null
       }
-      if (regulatoryText !== false) {
-        newUpcomingRegulatoryTextCheckedMap[id] = true
-        const newUpcomingRegulation = state.upcomingRegulation
-          ? { ...state.upcomingRegulation }
-          : { regulatoryTextList: [{}] }
-        const newRegulatoryTextList = [...newUpcomingRegulation.regulatoryTextList]
-        newRegulatoryTextList[id] = { ...regulatoryText }
-        newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
-        state.upcomingRegulation = newUpcomingRegulation
-      } else {
-        newUpcomingRegulatoryTextCheckedMap[id] = false
-      }
-      state.upcomingRegulatoryTextCheckedMap = newUpcomingRegulatoryTextCheckedMap
     },
     setUpcomingRegulatoryTextListCheckedMap (state, action) {
       state.upcomingRegulatoryTextCheckedMap = action.payload
     },
     setRegulatoryTextCheckedMap (state, action) {
-      state.regulatoryTextCheckedListMap = action.payload
+      state.regulatoryTextCheckedMap = { ...action.payload }
     },
     setRegulationSaved (state, action) {
       state.regulationSaved = action.payload
+    },
+    setSaveOrUpdateRegulation (state, action) {
+      state.saveOrUpdateRegulation = action.payload
+    },
+    setAtLeastOneValueIsMissing (state, action) {
+      state.atLeastOneValueIsMissing = action.payload
+    },
+    setSaveUpcomingRegulation (state, action) {
+      state.saveUpcomingRegulation = action.payload
     }
   }
 })
@@ -91,7 +86,10 @@ export const {
   setUpcomingRegulatoryTextListCheckedMap,
   setRegulationSaved,
   setRegulatoryTextCheckedMap,
-  addObjectToRegulatoryTextCheckedMap
+  addObjectToRegulatoryTextCheckedMap,
+  setSaveOrUpdateRegulation,
+  setAtLeastOneValueIsMissing,
+  setSaveUpcomingRegulation
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

@@ -267,7 +267,7 @@ function getRegulatoryZoneURL (type, regulatoryZone) {
     throw new Error('Le nom de la zone n\'est pas renseigné')
   }
 
-  const filter = `layer_name='${regulatoryZone.topic.replace(/'/g, '\'\'')}' AND zones='${regulatoryZone.zone.replace(/'/g, '\'\'')}'`
+  const filter = `layer_name='${encodeURIComponent(regulatoryZone.topic)}' AND zones='${encodeURIComponent(regulatoryZone.zone)}'`
   return (
     `${GEOSERVER_URL}/geoserver/wfs?service=WFS` +
     `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +

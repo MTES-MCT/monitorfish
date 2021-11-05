@@ -63,7 +63,7 @@ const LawType = props => {
     setIsOpen(!isOpen)
   }
 
-  return (<LawTypeContainer>
+  return (<LawTypeContainer data-cy='law-type'>
     <LawTypeName onClick={openLawTypeList}>
       <LawTypeText>{lawType}</LawTypeText>
       <ChevronIcon isOpen={isOpen}/>

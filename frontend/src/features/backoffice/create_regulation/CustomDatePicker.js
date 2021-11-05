@@ -5,6 +5,8 @@ import { COLORS } from '../../../constants/constants'
 
 const CustomDatePicker = props => {
   const {
+    onSelect,
+    type,
     value,
     onChange,
     onOk,
@@ -14,6 +16,7 @@ const CustomDatePicker = props => {
     style,
     disabled
   } = props
+
   return <DatePickerStyled
     data-cy={`custom-date-picker-${value}`}
     $isrequired={isRequired}
@@ -23,9 +26,12 @@ const CustomDatePicker = props => {
     value={value}
     onChange={onChange}
     onOk={onOk}
+    onSelect={onSelect}
     cleanable={false}
     placement={placement}
-    placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    placeholder={decodeURIComponent(type === 'time'
+      ? '\xa0\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0\xa0'
+      : '\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0')}
     format={format}
     style={style}
     locale={{

@@ -111,7 +111,7 @@ function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingAc
 }
 
 function getDateRangePlusOneDay (afterDateTime, beforeDateTime) {
-  if (!afterDateTime && !afterDateTime) {
+  if (!afterDateTime && !beforeDateTime) {
     return {
       afterDateTime: null,
       beforeDateTime: null

@@ -81,7 +81,7 @@ const VesselListFilters = ({
   }, [districts.districts])
 
   const showZonesSelected = useCallback(() => {
-    return zones.zonesSelected && zones.zonesSelected.length && zones.zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
+    return zones.zonesSelected?.length && zones.zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
       ? zones.zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
         return <InlineTagWrapper key={zoneSelected.code + index}>
           <FilterTag

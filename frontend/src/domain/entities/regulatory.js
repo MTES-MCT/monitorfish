@@ -264,3 +264,27 @@ export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFo
 
   return mergedRegulatoryLayers
 }
+
+export const getSelectPickerData = () => {
+  return Object.keys(SeafrontByRegulatoryTerritory).map(key => {
+    return formatDataForSelectPicker(SeafrontByRegulatoryTerritory[key], `Secteurs ${key}`)
+  }).flat(1)
+}
+
+/**
+ * Remove the Territory part of the regulatory layer object (see `setRegulatoryLayers` method within the `Regulatory` reducer)
+ * @param {Object} layersTopicsByRegTerritory - The regulatory object
+ * @return {Object} The regulatory object without Territory
+ */
+export const getRegulatoryLayersWithoutTerritory = layersTopicsByRegTerritory => {
+  let nextRegulatoryLayersWithoutTerritory = {}
+
+  Object.keys(layersTopicsByRegTerritory).forEach(territory => {
+    nextRegulatoryLayersWithoutTerritory = {
+      ...nextRegulatoryLayersWithoutTerritory,
+      ...layersTopicsByRegTerritory[territory]
+    }
+  })
+
+  return nextRegulatoryLayersWithoutTerritory
+}

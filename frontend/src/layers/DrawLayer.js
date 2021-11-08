@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
@@ -10,14 +10,51 @@ import { addZoneSelected } from '../features/vessel_list/VesselList.slice'
 import GeoJSON from 'ol/format/GeoJSON'
 import { drawStyle } from './styles/draw.style'
 import { setZoneSelected } from '../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
+import VectorLayer from 'ol/layer/Vector'
+import { dottedLayerStyle } from './styles/dottedLayer.style'
 
 const DrawLayer = ({ map }) => {
   const interaction = useSelector(state => state.map.interaction)
+  const {
+    zoneSelected
+  } = useSelector(state => state.regulatoryLayerSearch)
   const dispatch = useDispatch()
+
+  const [vectorSource] = useState(new VectorSource({
+    format: new GeoJSON({
+      dataProjection: WSG84_PROJECTION,
+      featureProjection: OPENLAYERS_PROJECTION
+    }),
+    projection: OPENLAYERS_PROJECTION
+  }))
+  const [vectorLayer] = useState(new VectorLayer({
+    source: vectorSource,
+    renderBuffer: 7,
+    updateWhileAnimating: true,
+    updateWhileInteracting: true,
+    zIndex: 999,
+    style: dottedLayerStyle
+  }))
+
+  useEffect(() => {
+    addLayerToMap()
+  }, [map, vectorLayer])
 
   useEffect(() => {
     drawOnMap()
   }, [map, interaction])
+
+  function addLayerToMap () {
+    if (map) {
+      map.getLayers().push(vectorLayer)
+    }
+
+    return () => {
+      if (map) {
+        map.removeLayer(vectorLayer)
+      }
+    }
+  }
 
   function drawOnMap () {
     if (map && interaction) {
@@ -71,6 +108,24 @@ const DrawLayer = ({ map }) => {
       })
     }
   }
+
+  useEffect(() => {
+    if (!vectorSource) {
+      return
+    }
+
+    if (zoneSelected?.feature) {
+      const features = vectorSource.getFormat().readFeatures(zoneSelected?.feature)
+      features.map(feature => feature.setId(feature.ol_uid))
+      console.log(features)
+      vectorSource.clear(true)
+      vectorSource.addFeatures(features)
+    } else {
+      vectorSource.clear(true)
+    }
+
+    console.log(zoneSelected?.feature, vectorSource.getFeatures())
+  }, [zoneSelected, vectorSource])
 
   return null
 }

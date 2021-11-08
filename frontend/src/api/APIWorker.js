@@ -13,6 +13,7 @@ import { VesselSidebarTab } from '../domain/entities/vessel'
 import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
 import { unByKey } from 'ol/Observable'
+import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
 
 export const TEN_MINUTES = 600000
 
@@ -57,13 +58,7 @@ const APIWorker = () => {
 
   useEffect(() => {
     if (layersTopicsByRegTerritory) {
-      let nextRegulatoryLayersWithoutTerritory = {}
-      Object.keys(layersTopicsByRegTerritory).forEach(territory => {
-        nextRegulatoryLayersWithoutTerritory = {
-          ...nextRegulatoryLayersWithoutTerritory,
-          ...layersTopicsByRegTerritory[territory]
-        }
-      })
+      const nextRegulatoryLayersWithoutTerritory = getRegulatoryLayersWithoutTerritory(layersTopicsByRegTerritory)
       dispatch(setRegulatoryLayers(nextRegulatoryLayersWithoutTerritory))
     }
   }, [layersTopicsByRegTerritory])

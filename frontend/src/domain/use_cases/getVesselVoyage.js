@@ -79,8 +79,10 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(setVoyage(voyage))
       if (fishingActivitiesAreShowedOnMap || isFirstTimeVesselVoyageIsShowed) {
         dispatch(showFishingActivitiesOnMap())
+      } else {
+        dispatch(hideFishingActivitiesOnMap())
       }
-      dispatch(showFishingActivitiesOnMap())
+
       dispatch(removeError())
     }).catch(error => {
       console.error(error)
@@ -106,6 +108,8 @@ function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingAc
     dispatch(setVoyage(voyage))
     if (fishingActivitiesAreShowedOnMap) {
       dispatch(showFishingActivitiesOnMap())
+    } else {
+      dispatch(hideFishingActivitiesOnMap())
     }
   })
 }

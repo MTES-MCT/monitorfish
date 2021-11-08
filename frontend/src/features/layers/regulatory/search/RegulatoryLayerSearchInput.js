@@ -6,16 +6,16 @@ import { REGULATORY_SEARCH_PROPERTIES } from '../../../../domain/entities/regula
 import searchRegulatoryLayers from '../../../../domain/use_cases/searchRegulatoryLayers'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import {
-  resetRegulatoryZonesChecked,
+  resetRegulatoryZonesChecked, resetZoneSelected,
   setAdvancedSearchIsOpen,
   setRegulatoryLayersSearchResult
 } from './RegulatoryLayerSearch.slice'
 import { ReactComponent as BoxFilterSVG } from '../../../icons/Filtre_zone_rectangle.svg'
 import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_polygone.svg'
-import { getExtentFromGeoJSON } from '../../../../utils'
 import { setInteraction } from '../../../../domain/shared_slices/Map'
 import { InteractionTypes } from '../../../../domain/entities/map'
 import { layersType } from '../../../../domain/entities/layers'
+import FilterTag from '../../../vessel_filters/FilterTag'
 
 const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
 
@@ -25,9 +25,6 @@ const RegulatoryLayerSearchInput = props => {
     setInitSearchFields
   } = props
   const dispatch = useDispatch()
-  const {
-    regulatoryLayers
-  } = useSelector(state => state.regulatory)
   const {
     advancedSearchIsOpen,
     zoneSelected
@@ -83,12 +80,13 @@ const RegulatoryLayerSearchInput = props => {
   }
 
   useEffect(() => {
-    if (nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+    const inputsAreEmpty = nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
       placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
       gearSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
       regulatoryReferencesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-      speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-      !zoneSelected) {
+      speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER
+
+    if (inputsAreEmpty && !zoneSelected) {
       batch(() => {
         dispatch(setRegulatoryLayersSearchResult({}))
         dispatch(resetRegulatoryZonesChecked())
@@ -96,15 +94,9 @@ const RegulatoryLayerSearchInput = props => {
       return
     }
 
-    let extent = []
-    if (zoneSelected) {
-      extent = getExtentFromGeoJSON(zoneSelected.feature)
-    }
-    console.log(extent)
-
     batch(() => {
       dispatch(resetRegulatoryZonesChecked())
-      dispatch(searchRegulatoryLayers(searchFields, regulatoryLayers)).then(foundRegulatoryLayers => {
+      dispatch(searchRegulatoryLayers(searchFields, inputsAreEmpty)).then(foundRegulatoryLayers => {
         dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
       })
     })
@@ -142,14 +134,31 @@ const RegulatoryLayerSearchInput = props => {
         />
         <SearchByGeometry>
           ou définir une zone sur la carte <br/>
-          <BoxFilter data-cy={'vessels-list-box-filter'} onClick={() => dispatch(setInteraction({
-            type: InteractionTypes.SQUARE,
-            listener: layersType.REGULATORY
-          }))}/>
-          <PolygonFilter onClick={() => dispatch(setInteraction({
-            type: InteractionTypes.POLYGON,
-            listener: layersType.REGULATORY
-          }))}/>
+          <BoxFilter
+            data-cy={'vessels-list-box-filter'}
+            onClick={() => dispatch(setInteraction({
+              type: InteractionTypes.SQUARE,
+              listener: layersType.REGULATORY
+            }))}
+          />
+          <PolygonFilter
+            onClick={() => dispatch(setInteraction({
+              type: InteractionTypes.POLYGON,
+              listener: layersType.REGULATORY
+            }))}
+          />
+          {
+            zoneSelected
+              ? <InlineTagWrapper>
+                  <FilterTag
+                    key={zoneSelected.code}
+                    value={'Effacer la zone définie'}
+                    text={'Effacer la zone définie'}
+                    removeTagFromFilter={() => dispatch(resetZoneSelected())}
+                  />
+                </InlineTagWrapper>
+              : null
+          }
         </SearchByGeometry>
         <AdvancedSearchInput
           data-cy={'regulatory-layers-advanced-search-gears'}
@@ -175,6 +184,13 @@ const RegulatoryLayerSearchInput = props => {
       </AdvancedSearchBox>
     </>)
 }
+
+const InlineTagWrapper = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 5px;
+  margin-top: 2px;
+`
 
 const SearchByGeometry = styled.div`
   color: ${COLORS.slateGray};

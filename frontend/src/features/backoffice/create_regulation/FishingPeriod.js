@@ -208,7 +208,7 @@ const FishingPeriod = (props) => {
     if (dates?.length) {
       const array = toArrayString(dates.map((date) => {
         if (date) {
-          return `le ${date.getDay()}/${date.getMonth()}/${date.getYear()} `
+          return `le ${date.getDate()}/${date.getMonth()}/${date.getYear()} `
         }
         return undefined
       }).filter(e => e))
@@ -218,6 +218,9 @@ const FishingPeriod = (props) => {
     }
     if (weekdays?.length) {
       textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${toArrayString(weekdays)}`)
+    }
+    if (holidays) {
+      textArray.push('les jours fériés')
     }
     if (timeIntervals?.length) {
       const array = toArrayString(timeIntervals.map(({ from, to }) => {

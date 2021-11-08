@@ -67,7 +67,7 @@ const FishingPeriod = (props) => {
    */
   const removeDateRange = (id) => {
     let newDateRanges = []
-    if (newDateRanges.length > 1) {
+    if (dateRanges.length > 1) {
       newDateRanges = [...dateRanges]
       newDateRanges.splice(id, 1)
     }
@@ -148,7 +148,8 @@ const FishingPeriod = (props) => {
 
   const onAddDate = () => {
     if (!disabled) {
-      const newList = [...dates, undefined]
+      const newList = [...dates]
+      newList.push(undefined)
       set('dates', newList)
     }
   }
@@ -176,29 +177,44 @@ const FishingPeriod = (props) => {
     }
   }, [fishingPeriod, fishingPeriodAsString])
 
+  const toArrayString = (array) => {
+    if (!array.length) {
+      return ''
+    } else if (array.length === 1) {
+      return array[0]
+    } else if (array.length === 2) {
+      return array.join(' et ')
+    } else {
+      array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
+    }
+  }
+
   const toString = () => {
     const textArray = []
     if (dateRanges?.length > 0) {
-      textArray.push(dateRanges.map(({ startDate, endDate }) => {
+      textArray.push(toArrayString(dateRanges.map(({ startDate, endDate }, id) => {
         if (startDate && startDate !== DEFAULT_DATE && endDate && endDate !== DEFAULT_DATE) {
-          return `du ${startDate.day}/${startDate.month}${annualRecurrence && `/${startDate.year}`} 
-            au ${endDate.day}/${endDate.month}${annualRecurrence && `/${endDate.year}`} `
+          return `du ${startDate.day}/${startDate.month}${annualRecurrence ? `/${startDate.year}` : ''} 
+            au ${endDate.day}/${endDate.month}${annualRecurrence ? `/${endDate.year}` : ''}`
         }
         return null
-      }).join(', '))
+      })))
     }
     if (dates?.length > 0) {
-      textArray.push(dates.map(date => {
+      textArray.push(toArrayString(dates.map((date, id) => {
         if (date) {
           return `le ${date.getDay()}/${date.getMonth()}/${date.getYear()} `
         }
         return null
-      }).join('et '))
+      }).join('et ')))
     }
     if (weekdays?.length > 0) {
-      textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${weekdays.join(', ')}.`)
+      textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${toArrayString(weekdays)}`)
     }
-    return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
+    if (textArray?.length > 0) {
+      return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
+    }
+    return null
   }
 
   return <Wrapper show={show}>

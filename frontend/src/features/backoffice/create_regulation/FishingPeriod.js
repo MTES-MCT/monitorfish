@@ -10,7 +10,7 @@ import DayPicker from './DayPicker'
 import TimeInterval from './TimeInterval'
 import { CustomCheckbox } from '../../commonStyles/Backoffice.style'
 import { Row } from '../../commonStyles/FishingPeriod.style'
-import { DEFAULT_DATE_RANGE, DEFAULT_DATE } from '../../../domain/entities/regulatory'
+import { DEFAULT_DATE_RANGE } from '../../../domain/entities/regulatory'
 
 const FishingPeriod = (props) => {
   const {
@@ -170,7 +170,7 @@ const FishingPeriod = (props) => {
   const setDaytime = _ => set('daytime', !daytime)
 
   useEffect(() => {
-    if (dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0) {
+    if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime) {
       setFishingPeriodAsString(toString())
     } else {
       setFishingPeriodAsString(undefined)
@@ -178,44 +178,58 @@ const FishingPeriod = (props) => {
   }, [fishingPeriod, fishingPeriodAsString])
 
   const toArrayString = (array) => {
-    if (!array.length) {
-      return ''
-    } else if (array.length === 1) {
-      return array[0]
-    } else if (array.length === 2) {
-      return array.join(' et ')
-    } else {
-      array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
+    if (array?.length) {
+      if (array.length === 1) {
+        return array[0]
+      } else if (array.length === 2) {
+        return array.join(' et ')
+      } else {
+        return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
+      }
     }
   }
 
   const toString = () => {
     const textArray = []
     if (dateRanges?.length) {
-      textArray.push(toArrayString(dateRanges.map(({ startDate, endDate }, id) => {
-        if (startDate && startDate !== DEFAULT_DATE && endDate && endDate !== DEFAULT_DATE) {
-          return `du ${startDate.day}/${startDate.month}${annualRecurrence ? `/${startDate.year}` : ''} 
-            au ${endDate.day}/${endDate.month}${annualRecurrence ? `/${endDate.year}` : ''}`
-        }
-        return null
-      })))
+      const array = toArrayString(
+        dateRanges.map(({ startDate, endDate }) => {
+          if (startDate && endDate) {
+            return `du ${startDate.getDate()}/${startDate.getMonth() + 1}${annualRecurrence ? `/${startDate.getYear()}` : ''}
+              au ${endDate.getDate()}/${endDate.getMonth() + 1}${annualRecurrence ? `/${endDate.getYear()}` : ''}`
+          }
+          return undefined
+        }).filter(e => e)
+      )
+      if (array?.length) {
+        textArray.push(array)
+      }
     }
     if (dates?.length) {
-      textArray.push(toArrayString(dates.map((date, id) => {
+      const array = toArrayString(dates.map((date) => {
         if (date) {
           return `le ${date.getDay()}/${date.getMonth()}/${date.getYear()} `
         }
-        return null
-      }).join('et ')))
+        return undefined
+      }).filter(e => e))
+      if (array?.length) {
+        textArray.push(array)
+      }
     }
     if (weekdays?.length) {
       textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${toArrayString(weekdays)}`)
     }
     if (timeIntervals?.length) {
-      textArray.push(toArrayString(timeIntervals.map((timeInterval, id) => {
-        return `de ${timeInterval.from.getHours()}:${timeInterval.from.getMinutes()} 
-          à ${timeInterval.to.getHours()}:${timeInterval.to.getMinutes()}`
-      })))
+      const array = toArrayString(timeIntervals.map(({ from, to }) => {
+        if (from && to) {
+          return `de ${from.getHours()}:${from.getMinutes()} 
+            à ${to.getHours()}:${to.getMinutes()}`
+        }
+        return undefined
+      }).filter(e => e))
+      if (array?.length) {
+        textArray.push(array)
+      }
     } else if (daytime) {
       textArray.push('du lever au coucher du soleil')
     }

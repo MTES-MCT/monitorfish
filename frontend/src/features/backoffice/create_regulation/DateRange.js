@@ -1,10 +1,8 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import CustomDatePicker from './CustomDatePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { SquareButton } from '../../commonStyles/Buttons.style'
-
-import { DEFAULT_DATE, DEFAULT_DATE_RANGE } from '../../../domain/entities/regulatory'
 
 /**
  * TODO
@@ -32,17 +30,6 @@ const DateRange = (props) => {
     endDate
   } = dateRange
 
-  const getDate = date => {
-    const { day, month, year } = date
-    if (day !== '' && month !== '') {
-      return new Date(year, month - 1, day)
-    }
-    return undefined
-  }
-
-  const memoizedStartDateAsDateType = useMemo(() => startDate ? getDate(startDate) : undefined)
-  const memoizedEndDateAsDateType = useMemo(() => endDate ? getDate(endDate) : undefined)
-
   const setDateRange = (key, value) => {
     const newDateRange = {
       ...dateRange,
@@ -51,32 +38,30 @@ const DateRange = (props) => {
     updateList(id, newDateRange)
   }
 
-  const setStartDateWhithoutYear = (key, value) => setDateRange('startDate', { ...startDate || DEFAULT_DATE, [key]: value })
-  const setEndDateWhithoutYear = (key, value) => setDateRange('endDate', { ...endDate || DEFAULT_DATE, [key]: value })
-
-  const dateAsObject = value => {
-    return {
-      day: value.getDate(),
-      month: value.getMonth() + 1,
-      year: value.getFullYear()
+  const setDateWhithoutYear = (key, value, range) => {
+    if (key === 'month') {
+      setDateRange(range, new Date().setMonth(value - 1))
+    } else if (key === 'day') {
+      setDateRange(range, new Date().setDate(value))
     }
   }
-  const setStartDateFromDateType = value => setDateRange('startDate', dateAsObject(value))
-  const setEndDateFromDateType = value => setDateRange('endDate', dateAsObject(value))
+
+  const setStartDateFromDateType = value => setDateRange('startDate', value)
+  const setEndDateFromDateType = value => setDateRange('endDate', value)
 
   return <Wrapper disabled={disabled}>{annualRecurrence
     ? <DateRangeRow>
         Du <CustomDatePicker
-          value={memoizedStartDateAsDateType}
+          value={startDate}
           onChange={setStartDateFromDateType}
           onOk={setStartDateFromDateType}
-          format='MM/DD/YYYY'
+          format='DD/MM/YYYY'
           placement={'rightStart'}
           style={{ margin: '0px 5px' }}
           disabled={disabled}
         />
         au <CustomDatePicker
-          value={memoizedEndDateAsDateType}
+          value={endDate}
           onChange={setEndDateFromDateType}
           onOk={setEndDateFromDateType}
           format='DD/MM/YYYY'
@@ -88,32 +73,30 @@ const DateRange = (props) => {
     : <DateRangeRow>
       Du <MonthDateInputSlot >
           <MonthDateInput
-            value={startDate?.day || undefined}
-            onChange={(e) => setStartDateWhithoutYear('day', e.target.value)}
+            value={startDate?.getDate() || undefined}
+            onChange={(e) => setDateWhithoutYear('startDate', 'day', e.target.value)}
           />
           /<MonthDateInput
-            value={startDate?.month || undefined}
-            onChange={(e) => setStartDateWhithoutYear('month', e.target.value) }
+            value={startDate?.getMonth() + 1 || undefined}
+            onChange={(e) => setDateWhithoutYear('startDate', 'month', e.target.value) }
           />
         </MonthDateInputSlot>
-      au <MonthDateInputSlot
-            // $isrequired={endDateIsRequired}
-          >
+      au <MonthDateInputSlot >
           <MonthDateInput
-            value={endDate?.day || undefined}
-            onChange={(e) => setEndDateWhithoutYear('day', e.target.value) }
+            value={endDate?.getDate() || undefined}
+            onChange={(e) => setDateWhithoutYear('endDate', 'day', e.target.value) }
           />
           /<MonthDateInput
-            value={endDate?.month || undefined}
-            onChange={(e) => setEndDateWhithoutYear('month', e.target.value) }
+            value={endDate?.getMonth() + 1 || undefined}
+            onChange={(e) => setDateWhithoutYear('endDate', 'month', e.target.value) }
           />
         </MonthDateInputSlot>
     </DateRangeRow>
     }
     <SquareButton
-      disabled={dateRange === DEFAULT_DATE_RANGE}
+      disabled={dateRange?.startDate === undefined && dateRange?.endDate === undefined}
       type='delete'
-      onClick={_ => dateRange !== DEFAULT_DATE_RANGE && removeDateRange(id)} />
+      onClick={_ => dateRange?.startDate !== undefined && dateRange?.endDate !== undefined && removeDateRange(id)} />
     </Wrapper>
 }
 

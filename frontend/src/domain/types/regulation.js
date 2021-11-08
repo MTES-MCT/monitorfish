@@ -66,7 +66,7 @@
  */
 
 /**
- * @typedef HourInterval
+ * @typedef TimeInterval
  * @property {time} from
  * @property {time} to
  */
@@ -79,7 +79,7 @@
  * @property {[date]} dates
  * @property {[string]} weekDays
  * @property {boolean} holidays
- * @property {HourInterval} timeInterval
+ * @property {TimeInterval} timeIntervals
  * @property {boolean} holidays
  * @property {boolean} daytime
  */

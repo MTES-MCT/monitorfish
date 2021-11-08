@@ -116,9 +116,6 @@ export const REGULATION_ACTION_TYPE = {
 }
 
 /**
- * @typedef {string} RegulatoryTextSource
- */
-/**
   * @readonly
   * @enum {RegulatoryTextSource}
 */
@@ -127,16 +124,9 @@ export const REGULATORY_TEXT_SOURCE = {
   REGULATION: 'regulation'
 }
 
-export const DEFAULT_YEAR = new Date().getFullYear()
-export const DEFAULT_DATE = {
-  day: '',
-  month: '',
-  year: DEFAULT_YEAR
-}
-
 export const DEFAULT_DATE_RANGE = {
-  startDate: DEFAULT_DATE,
-  endDate: DEFAULT_DATE
+  startDate: undefined,
+  endDate: undefined
 }
 
 export const initialFishingPeriodValues = {

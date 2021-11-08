@@ -87,12 +87,14 @@ context('Measurement', () => {
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 20000 })
     cy.get('#root').click(490, 580, { timeout: 20000 })
     cy.get('#root').click(450, 585, { timeout: 20000 })
+    cy.get('*[data-cy="measurement-value"]').should('have.length', 1)
 
     cy.get('*[data-cy="measurement"]').click({ timeout: 20000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 20000 })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 20000 }).eq(1).should('have.value', '__° __′ __″ _ ___° __′ __″ _')
     cy.get('#root').click(690, 680, { timeout: 20000 })
     cy.get('#root').click(750, 785, { timeout: 20000 })
+    cy.get('*[data-cy="measurement-value"]').should('have.length', 2)
 
     // Then
     cy.get('*[data-cy="measurement-value"]').eq(1).contains('r = 5.', { timeout: 20000 })

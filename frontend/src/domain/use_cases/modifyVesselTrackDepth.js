@@ -43,14 +43,18 @@ const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, useFullDays = 
         dispatch(removeError())
       }
 
-      dispatch(updateSelectedVesselPositions(positions))
-      dispatch(showFishingActivitiesOnMap())
-      dispatch(redrawFishingActivitiesOnMap())
-      dispatch(animateToExtent())
+      batch(() => {
+        dispatch(updateSelectedVesselPositions(positions))
+        dispatch(showFishingActivitiesOnMap())
+        dispatch(redrawFishingActivitiesOnMap())
+        dispatch(animateToExtent())
+      })
     }).catch(error => {
       console.error(error)
-      dispatch(setError(error))
-      dispatch(resetLoadingVessel())
+      batch(() => {
+        dispatch(setError(error))
+        dispatch(resetLoadingVessel())
+      })
     })
 }
 

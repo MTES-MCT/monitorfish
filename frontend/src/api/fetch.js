@@ -84,24 +84,17 @@ function getVesselFromAPI (identity, vesselTrackDepthObject) {
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
   const vesselIdentifier = identity.vesselIdentifier || 'UNDEFINED'
-  const trackDepth = vesselTrackDepthObject.trackDepth ? vesselTrackDepthObject.trackDepth : ''
-  const afterDateTime = vesselTrackDepthObject.afterDateTime ? vesselTrackDepthObject.afterDateTime.toISOString() : ''
-  const beforeDateTime = vesselTrackDepthObject.beforeDateTime ? vesselTrackDepthObject.beforeDateTime.toISOString() : ''
+  const trackDepth = vesselTrackDepthObject.trackDepth || ''
+  const afterDateTime = vesselTrackDepthObject.afterDateTime?.toISOString() || ''
+  const beforeDateTime = vesselTrackDepthObject.beforeDateTime?.toISOString() || ''
 
   return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === OK || response.status === ACCEPTED) {
         return response.json().then(vesselAndPositions => {
           return {
             vesselAndPositions: vesselAndPositions,
-            trackDepthHasBeenModified: false
-          }
-        })
-      } else if (response.status === ACCEPTED) {
-        return response.json().then(vesselAndPositions => {
-          return {
-            vesselAndPositions: vesselAndPositions,
-            trackDepthHasBeenModified: true
+            trackDepthHasBeenModified: response.status === ACCEPTED
           }
         })
       } else {
@@ -132,24 +125,17 @@ function getVesselPositionsFromAPI (identity, vesselTrackDepthObject) {
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
   const vesselIdentifier = identity.vesselIdentifier || 'UNDEFINED'
-  const trackDepth = vesselTrackDepthObject.trackDepth ? vesselTrackDepthObject.trackDepth : ''
-  const afterDateTime = vesselTrackDepthObject.afterDateTime ? vesselTrackDepthObject.afterDateTime.toISOString() : ''
-  const beforeDateTime = vesselTrackDepthObject.beforeDateTime ? vesselTrackDepthObject.beforeDateTime.toISOString() : ''
+  const trackDepth = vesselTrackDepthObject.trackDepth || ''
+  const afterDateTime = vesselTrackDepthObject.afterDateTime?.toISOString() || ''
+  const beforeDateTime = vesselTrackDepthObject.beforeDateTime?.toISOString() || ''
 
   return fetch(`/bff/v1/vessels/positions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === OK || response.status === ACCEPTED) {
         return response.json().then(positions => {
           return {
             positions: positions,
-            trackDepthHasBeenModified: false
-          }
-        })
-      } else if (response.status === ACCEPTED) {
-        return response.json().then(positions => {
-          return {
-            positions: positions,
-            trackDepthHasBeenModified: true
+            trackDepthHasBeenModified: response.status === ACCEPTED
           }
         })
       } else {

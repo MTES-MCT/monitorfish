@@ -1,5 +1,5 @@
 import { getAdministrativeZoneFromAPI } from '../../api/fetch'
-import { addZoneSelected } from '../shared_slices/Map'
+import { addZoneSelected } from '../../features/vessel_list/VesselList.slice'
 import layer from '../shared_slices/Layer'
 
 const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zoneName, namespace) => (dispatch, getState) => {

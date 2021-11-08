@@ -10,6 +10,12 @@ import {
   setAdvancedSearchIsOpen,
   setRegulatoryLayersSearchResult
 } from './RegulatoryLayerSearch.slice'
+import { ReactComponent as BoxFilterSVG } from '../../../icons/Filtre_zone_rectangle.svg'
+import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_polygone.svg'
+import { getExtentFromGeoJSON } from '../../../../utils'
+import { setInteraction } from '../../../../domain/shared_slices/Map'
+import { InteractionTypes } from '../../../../domain/entities/map'
+import { layersType } from '../../../../domain/entities/layers'
 
 const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
 
@@ -23,7 +29,8 @@ const RegulatoryLayerSearchInput = props => {
     regulatoryLayers
   } = useSelector(state => state.regulatory)
   const {
-    advancedSearchIsOpen
+    advancedSearchIsOpen,
+    zoneSelected
   } = useSelector(state => state.regulatoryLayerSearch)
 
   const [nameSearchText, setNameSearchText] = useState('')
@@ -80,7 +87,8 @@ const RegulatoryLayerSearchInput = props => {
       placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
       gearSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
       regulatoryReferencesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-      speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) {
+      speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+      !zoneSelected) {
       batch(() => {
         dispatch(setRegulatoryLayersSearchResult({}))
         dispatch(resetRegulatoryZonesChecked())
@@ -88,13 +96,19 @@ const RegulatoryLayerSearchInput = props => {
       return
     }
 
+    let extent = []
+    if (zoneSelected) {
+      extent = getExtentFromGeoJSON(zoneSelected.feature)
+    }
+    console.log(extent)
+
     batch(() => {
       dispatch(resetRegulatoryZonesChecked())
       dispatch(searchRegulatoryLayers(searchFields, regulatoryLayers)).then(foundRegulatoryLayers => {
         dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
       })
     })
-  }, [nameSearchText, placeSearchText, speciesSearchText, gearSearchText, regulatoryReferencesSearchText])
+  }, [nameSearchText, placeSearchText, speciesSearchText, gearSearchText, regulatoryReferencesSearchText, zoneSelected])
 
   return (
     <>
@@ -119,12 +133,24 @@ const RegulatoryLayerSearchInput = props => {
       </PrincipalSearchInput>
       <AdvancedSearchBox advancedSearchIsOpen={advancedSearchIsOpen}>
         <AdvancedSearchInput
+          withoutMarginBottom
           data-cy={'regulatory-layers-advanced-search-zone'}
           placeholder={'Zone (ex. Med, Bretagne, mer Celtique…)'}
           type="text"
           value={placeSearchText}
           onChange={e => setPlaceSearchText(e.target.value)}
         />
+        <SearchByGeometry>
+          ou définir une zone sur la carte <br/>
+          <BoxFilter data-cy={'vessels-list-box-filter'} onClick={() => dispatch(setInteraction({
+            type: InteractionTypes.SQUARE,
+            listener: layersType.REGULATORY
+          }))}/>
+          <PolygonFilter onClick={() => dispatch(setInteraction({
+            type: InteractionTypes.POLYGON,
+            listener: layersType.REGULATORY
+          }))}/>
+        </SearchByGeometry>
         <AdvancedSearchInput
           data-cy={'regulatory-layers-advanced-search-gears'}
           placeholder={'Engins (ex. chaluts, casiers, FPO, GNS…)'}
@@ -150,9 +176,33 @@ const RegulatoryLayerSearchInput = props => {
     </>)
 }
 
+const SearchByGeometry = styled.div`
+  color: ${COLORS.slateGray};
+  margin: 2px 0 10px 0;
+  font-weight: 300;
+  font-size: 11px;
+`
+
+const BoxFilter = styled(BoxFilterSVG)`
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-top: 2px;
+  vertical-align: text-bottom;
+`
+
+const PolygonFilter = styled(PolygonFilterSVG)`
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: 2px;
+  vertical-align: text-bottom;
+`
+
 const AdvancedSearchBox = styled.div`
   background-color: white;
-  height: ${props => props.advancedSearchIsOpen ? 160 : 0}px;
+  height: ${props => props.advancedSearchIsOpen ? 210 : 0}px;
   width: 320px;
   transition: 0.5s all;
   padding: ${props => props.advancedSearchIsOpen ? 10 : 0}px 15px;
@@ -194,7 +244,7 @@ const AdvancedSearchInput = styled.input`
   background: ${COLORS.background} !important;
   overflow: none !important;
   width: 265px;
-  margin: 5px 0 15px 0 !important;
+  margin: 5px 0 ${props => props.withoutMarginBottom ? 0 : 15}px 0 !important;
   font-size: 13px;
   color: ${COLORS.gunMetal};
 

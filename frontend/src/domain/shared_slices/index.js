@@ -12,6 +12,7 @@ import measurement from './Measurement'
 import regulatory from './Regulatory'
 import regulation from '../../features/backoffice/Regulation.slice'
 import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
+import vesselList from '../../features/vessel_list/VesselList.slice'
 import interestPoint from './InterestPoint'
 import fishingActivities from './FishingActivities'
 import controls from './Controls'
@@ -32,6 +33,7 @@ const homeReducers = combineReducers({
   fleetSegment,
   interestPoint,
   regulatoryLayerSearch,
+  vesselList,
   measurement,
   fishingActivities,
   controls

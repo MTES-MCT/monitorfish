@@ -37,7 +37,6 @@ const mapSlice = createSlice({
     doNotAnimate: false,
     animateToRegulatoryLayer: null,
     interaction: null,
-    zonesSelected: [],
     selectedBaseLayer: getLocalStorageState(baseLayers.LIGHT.code, baseLayerLocalStorageKey),
     view: getLocalStorageState({
       zoom: null,
@@ -111,43 +110,23 @@ const mapSlice = createSlice({
       window.localStorage.setItem(baseLayerLocalStorageKey, JSON.stringify(action.payload))
       state.selectedBaseLayer = action.payload
     },
+    /**
+     * Start an interaction with the OpenLayers map, hence use the mouse to draw geometries
+     * @param {Object=} state
+     * @param {{payload: {
+     *   type: (InteractionTypes.SQUARE|InteractionTypes.POLYGON),
+     *   listener: (layersType.REGULATORY|layersType.VESSEL)
+     * }}} action - The interaction type (see InteractionTypes enum) and listener (see layersType enum)
+     */
     setInteraction (state, action) {
       state.interaction = action.payload
     },
+    /**
+     * Reset tje interaction with the OpenLayers map
+     * @param {Object=} state
+     */
     resetInteraction (state) {
       state.interaction = null
-    },
-    /**
-     * Add a selected zone to filter vessels on vessel list
-     * @param {Object=} state
-     * @param {{
-     * payload: {
-     *  name: string,
-     *  code: string,
-     *  feature: GeoJSON
-     * }}} action - The zone to add
-     */
-    addZoneSelected (state, action) {
-      if (!state.zonesSelected.find(zone => zone.code === action.payload.code)) {
-        state.zonesSelected = state.zonesSelected.concat(action.payload)
-      }
-    },
-    /**
-     * Remove a selected zone
-     * @param {Object=} state
-     * @param {{
-     * payload: string}} action - The name of the zone
-     */
-    removeZoneSelected (state, action) {
-      state.zonesSelected = state.zonesSelected.filter(zoneSelected => {
-        return zoneSelected.code !== action.payload
-      })
-    },
-    setZonesSelected (state, action) {
-      state.zonesSelected = action.payload
-    },
-    resetZonesSelected (state) {
-      state.zonesSelected = []
     },
     /**
      * Set the coordinate format in the whole application (as DMS, DMD or DD)
@@ -198,10 +177,6 @@ export const {
   selectBaseLayer,
   setInteraction,
   resetInteraction,
-  addZoneSelected,
-  setZonesSelected,
-  removeZoneSelected,
-  resetZonesSelected,
   showVesselsEstimatedPositions,
   doNotAnimate,
   setCoordinatesFormat,

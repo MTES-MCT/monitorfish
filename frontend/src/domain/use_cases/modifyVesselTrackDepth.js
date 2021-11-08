@@ -15,6 +15,7 @@ import { convertToUTCFullDay } from '../../utils'
  * @param {boolean} useFullDays
  */
 const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, useFullDays = false) => (dispatch, getState) => {
+  const fishingActivitiesAreShowedOnMap = getState().fishingActivities.fishingActivitiesAreShowedOnMap
   if (!vesselIdentity || !vesselTrackDepth) {
     return
   }
@@ -45,8 +46,10 @@ const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, useFullDays = 
 
       batch(() => {
         dispatch(updateSelectedVesselPositions(positions))
-        dispatch(showFishingActivitiesOnMap())
-        dispatch(redrawFishingActivitiesOnMap())
+        if (fishingActivitiesAreShowedOnMap) {
+          dispatch(showFishingActivitiesOnMap())
+          dispatch(redrawFishingActivitiesOnMap())
+        }
         dispatch(animateToExtent())
       })
     }).catch(error => {

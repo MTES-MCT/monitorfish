@@ -191,7 +191,7 @@ const FishingPeriod = (props) => {
 
   const toString = () => {
     const textArray = []
-    if (dateRanges?.length > 0) {
+    if (dateRanges?.length) {
       textArray.push(toArrayString(dateRanges.map(({ startDate, endDate }, id) => {
         if (startDate && startDate !== DEFAULT_DATE && endDate && endDate !== DEFAULT_DATE) {
           return `du ${startDate.day}/${startDate.month}${annualRecurrence ? `/${startDate.year}` : ''} 
@@ -200,7 +200,7 @@ const FishingPeriod = (props) => {
         return null
       })))
     }
-    if (dates?.length > 0) {
+    if (dates?.length) {
       textArray.push(toArrayString(dates.map((date, id) => {
         if (date) {
           return `le ${date.getDay()}/${date.getMonth()}/${date.getYear()} `
@@ -208,10 +208,18 @@ const FishingPeriod = (props) => {
         return null
       }).join('et ')))
     }
-    if (weekdays?.length > 0) {
+    if (weekdays?.length) {
       textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${toArrayString(weekdays)}`)
     }
-    if (textArray?.length > 0) {
+    if (timeIntervals?.length) {
+      textArray.push(toArrayString(timeIntervals.map((timeInterval, id) => {
+        return `de ${timeInterval.from.getHours()}:${timeInterval.from.getMinutes()} 
+          à ${timeInterval.to.getHours()}:${timeInterval.to.getMinutes()}`
+      })))
+    } else if (daytime) {
+      textArray.push('du lever au coucher du soleil')
+    }
+    if (textArray?.length) {
       return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
     }
     return null

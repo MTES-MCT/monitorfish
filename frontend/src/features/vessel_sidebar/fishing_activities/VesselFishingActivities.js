@@ -131,7 +131,10 @@ const VesselFishingActivities = () => {
   </>
 }
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  overflow-x: hidden;
+  max-height: 730px;
+`
 
 const UpdateFishingActivities = styled.div`
   background: ${COLORS.background};

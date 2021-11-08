@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
-import showVesselTrackAndSidebar from '../../domain/use_cases/showVesselTrackAndSidebar'
+import showVessel from '../../domain/use_cases/showVessel'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
@@ -17,6 +17,7 @@ import SelectedVessel from './SelectedVessel'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
 import { findMatchingFeature, removeDuplicatedFoundVessels } from './vesselsSearchUtils'
+import getVesselVoyage from '../../domain/use_cases/getVesselVoyage'
 
 const VesselsSearch = () => {
   const dispatch = useDispatch()
@@ -100,7 +101,8 @@ const VesselsSearch = () => {
       if (!vesselsHasBeenUpdated) {
         if (!vesselIdentity ||
           (vesselIdentity && !vesselsAreEquals(selectedVesselIdentity, vesselIdentity))) {
-          dispatch(showVesselTrackAndSidebar(selectedVesselIdentity, true, false))
+          dispatch(showVessel(selectedVesselIdentity, true, false))
+          dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
         }
 
         setSearchText('')

@@ -34,7 +34,7 @@ const mapSlice = createSlice({
     // End of vessels map properties
     animateToCoordinates: null,
     animateToExtent: null,
-    updatedFromCron: false,
+    doNotAnimate: false,
     animateToRegulatoryLayer: null,
     interaction: null,
     zonesSelected: [],
@@ -47,8 +47,8 @@ const mapSlice = createSlice({
     coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey)
   },
   reducers: {
-    setUpdatedFromCron (state, action) {
-      state.updatedFromCron = action.payload
+    doNotAnimate (state, action) {
+      state.doNotAnimate = action.payload
     },
     /**
      * Animate map to the specified OpenLayers coordinates
@@ -203,7 +203,7 @@ export const {
   removeZoneSelected,
   resetZonesSelected,
   showVesselsEstimatedPositions,
-  setUpdatedFromCron,
+  doNotAnimate,
   setCoordinatesFormat,
   setRiskFactorShowedOnMap,
   setHideVesselsAtPort

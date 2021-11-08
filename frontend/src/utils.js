@@ -251,22 +251,27 @@ export function formatToCSVColumnsForExport (initialObject, csvColumns, filters)
 
 /**
  * Get full days in date range (to avoid missing hours in the selected date range)
- * @param {string[]} datesSelection Dates array ([afterDateTime, beforeDateTime])
+ * @param {string | Date} afterDateTime After date
+ * @param {string | Date} beforeDateTime Before date
  * @returns {{
       afterDateTime: Date,
       beforeDateTime: Date
     }} date range
  */
-export const convertToUTCDay = datesSelection => {
-  if (!(datesSelection?.length === 2)) {
+export const convertToUTCFullDay = (afterDateTime, beforeDateTime) => {
+  if (!afterDateTime && !beforeDateTime) {
     return {
       afterDateTime: null,
       beforeDateTime: null
     }
   }
 
-  const afterDateTime = new Date(datesSelection[0].getTime())
-  const beforeDateTime = new Date(datesSelection[1].getTime())
+  afterDateTime = new Date(afterDateTime instanceof Date
+    ? afterDateTime.getTime()
+    : afterDateTime)
+  beforeDateTime = new Date(beforeDateTime instanceof Date
+    ? beforeDateTime.getTime()
+    : beforeDateTime)
 
   afterDateTime.setHours(0, 0, 0)
   beforeDateTime.setHours(23, 59, 59)
@@ -274,5 +279,8 @@ export const convertToUTCDay = datesSelection => {
   afterDateTime.setMinutes(afterDateTime.getMinutes() - afterDateTime.getTimezoneOffset())
   beforeDateTime.setMinutes(beforeDateTime.getMinutes() - beforeDateTime.getTimezoneOffset())
 
-  return { afterDateTime, beforeDateTime }
+  return {
+    afterDateTime,
+    beforeDateTime
+  }
 }

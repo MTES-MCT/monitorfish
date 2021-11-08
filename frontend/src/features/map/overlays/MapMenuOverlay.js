@@ -8,7 +8,6 @@ import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import CustomTrackDepthModal from './map_menu/CustomTrackDepthModal'
 import { useDispatch } from 'react-redux'
 import showVesselTrack from '../../../domain/use_cases/showVesselTrack'
-import { convertToUTCDay } from '../../../utils'
 
 const MapMenuOverlay = props => {
   const {
@@ -43,12 +42,10 @@ const MapMenuOverlay = props => {
 
   useEffect(() => {
     if (showTrackOf || datesSelection?.length) {
-      const { afterDateTime, beforeDateTime } = convertToUTCDay(datesSelection)
-
       const vesselTrackDepth = {
         trackDepth: showTrackOf || VesselTrackDepth.CUSTOM,
-        beforeDateTime: beforeDateTime,
-        afterDateTime: afterDateTime
+        afterDateTime: datesSelection[0],
+        beforeDateTime: datesSelection[1]
       }
       dispatch(showVesselTrack(vessel.vessel, false, vesselTrackDepth))
 

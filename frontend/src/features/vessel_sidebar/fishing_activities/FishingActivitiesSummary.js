@@ -120,7 +120,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
         const totalPNOWeight = getTotalPNOWeightFromMessage(pnoMessage)
         setTotalPNOWeight(totalPNOWeight)
 
-        const speciesToWeightPNOObject = getSpeciesToWeightPNOObject(pnoMessage, totalFARAndDEPWeight)
+        const speciesToWeightPNOObject = getSpeciesToWeightPNOObject(pnoMessage, totalPNOWeight)
         setSpeciesToWeightOfPNO(speciesToWeightPNOObject)
       }
 
@@ -395,8 +395,6 @@ const TextValue = styled.div`
 
 const Body = styled.div`
   padding: 5px 5px 1px 5px;
-  overflow-x: hidden;
-  max-height: 730px;
 `
 
 const TableBody = styled.tbody``

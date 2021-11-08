@@ -1,9 +1,10 @@
-import { getVesselFromAPI } from '../../api/fetch'
+import { getVesselPositionsFromAPI } from '../../api/fetch'
 import { addVesselTrackShowed, resetLoadingVessel } from '../shared_slices/Vessel'
 import { removeError, setError } from '../shared_slices/Global'
 import { getVesselFeatureIdFromVessel, Vessel } from '../entities/vessel'
-import { setUpdatedFromCron } from '../shared_slices/Map'
+import { doNotAnimate } from '../shared_slices/Map'
 import { getTrackDepthError } from '../entities/vesselTrackDepth'
+import { convertToUTCFullDay } from '../../utils'
 
 /**
  * Show a specified vessel track on map
@@ -12,30 +13,26 @@ import { getTrackDepthError } from '../entities/vesselTrackDepth'
  * @param {boolean} calledFromCron
  * @param {VesselTrackDepth=} vesselTrackDepth
  */
-const showVesselTrack = (
-  vesselIdentity,
-  calledFromCron,
-  vesselTrackDepth) => (dispatch, getState) => {
+const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
   const {
     vesselsLayerSource
   } = getState().vessel
-
+  const nextVesselTrackDepthObject = geNextVesselTrackDepthObject(vesselTrackDepth, getState)
   const feature = vesselsLayerSource.getFeatureById(Vessel.getVesselId(vesselIdentity))
   if (feature) {
     feature.set(Vessel.isSelectedProperty, true)
   }
-  dispatch(setUpdatedFromCron(calledFromCron))
+  dispatch(doNotAnimate(calledFromCron))
   dispatch(removeError())
 
-  const nextVesselTrackDepthObject = vesselTrackDepth || {
-    trackDepth: getState().map.defaultVesselTrackDepth,
-    beforeDateTime: null,
-    afterDateTime: null
-  }
+  getVesselPositionsFromAPI(vesselIdentity, nextVesselTrackDepthObject)
+    .then(({ positions, trackDepthHasBeenModified }) => {
+      const error = getTrackDepthError(
+        positions,
+        trackDepthHasBeenModified,
+        calledFromCron,
+        vesselTrackDepth)
 
-  getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
-    .then(vesselAndTrackDepthModified => {
-      const error = getTrackDepthError(vesselAndTrackDepthModified, calledFromCron, vesselTrackDepth)
       if (error) {
         dispatch(setError(error))
       } else {
@@ -49,7 +46,7 @@ const showVesselTrack = (
           identity: identity,
           vessel: vesselIdentity,
           coordinates: feature.getGeometry().getCoordinates(),
-          positions: vesselAndTrackDepthModified.vessel.positions,
+          positions: positions,
           trackDepth: nextVesselTrackDepthObject,
           toShow: true,
           toHide: false
@@ -60,6 +57,23 @@ const showVesselTrack = (
       dispatch(setError(error))
       dispatch(resetLoadingVessel())
     })
+}
+
+function geNextVesselTrackDepthObject (vesselTrackDepth, getState) {
+  let nextVesselTrackDepthObject = vesselTrackDepth || {
+    trackDepth: getState().map.defaultVesselTrackDepth,
+    beforeDateTime: null,
+    afterDateTime: null
+  }
+
+  const { afterDateTime, beforeDateTime } = convertToUTCFullDay(nextVesselTrackDepthObject?.afterDateTime, nextVesselTrackDepthObject?.beforeDateTime)
+  nextVesselTrackDepthObject = {
+    trackDepth: nextVesselTrackDepthObject?.trackDepth,
+    afterDateTime,
+    beforeDateTime
+  }
+
+  return nextVesselTrackDepthObject
 }
 
 export default showVesselTrack

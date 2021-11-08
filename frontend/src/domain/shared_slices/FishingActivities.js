@@ -23,7 +23,8 @@ const fishingActivitiesSlice = createSlice({
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap: [],
     fishingActivitiesAreShowedOnMap: true,
-    loadingFishingActivities: false
+    loadingFishingActivities: false,
+    redrawFishingActivitiesOnMap: false
   },
   reducers: {
     /**
@@ -175,6 +176,24 @@ const fishingActivitiesSlice = createSlice({
       })
     },
     /**
+     * Redraw fishing activities on map
+     * @function redrawFishingActivitiesOnMap
+     * @memberOf FishingActivitiesReducer
+     * @param {Object=} state
+     */
+    redrawFishingActivitiesOnMap (state) {
+      state.redrawFishingActivitiesOnMap = true
+    },
+    /**
+     * End redraw fishing activities on map
+     * @function endRedrawFishingActivitiesOnMap
+     * @memberOf FishingActivitiesReducer
+     * @param {Object=} state
+     */
+    endRedrawFishingActivitiesOnMap (state) {
+      state.redrawFishingActivitiesOnMap = false
+    },
+    /**
      * Set the loading of fishing activities to true, and shows a loader in the fishing activities tab
      * @function loadFishingActivities
      * @memberOf FishingActivitiesReducer
@@ -201,7 +220,9 @@ export const {
   hideFishingActivitiesOnMap,
   updateFishingActivitiesOnMapCoordinates,
   navigateToFishingActivity,
-  loadFishingActivities
+  loadFishingActivities,
+  redrawFishingActivitiesOnMap,
+  endRedrawFishingActivitiesOnMap
 } = fishingActivitiesSlice.actions
 
 export default fishingActivitiesSlice.reducer

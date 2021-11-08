@@ -3,6 +3,8 @@ import { removeError, setError } from '../shared_slices/Global'
 import {
   hideFishingActivitiesOnMap,
   loadFishingActivities,
+  redrawFishingActivitiesOnMap,
+  removeFishingActivitiesFromMap,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage,
@@ -108,8 +110,9 @@ function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingAc
     dispatch(setVoyage(voyage))
     if (fishingActivitiesAreShowedOnMap) {
       dispatch(showFishingActivitiesOnMap())
+      dispatch(redrawFishingActivitiesOnMap())
     } else {
-      dispatch(hideFishingActivitiesOnMap())
+      dispatch(removeFishingActivitiesFromMap())
     }
   })
 }

@@ -9,8 +9,6 @@ const VesselReducer = null
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
-    /** @type {VesselIdentity | null} selectedVesselIdentity */
-    selectedVesselIdentity: null,
     vessels: [],
     /** @type {Object.<string, ShowedVesselTrack>} vesselsTracksShowed */
     vesselsTracksShowed: {},
@@ -19,12 +17,17 @@ const vesselSlice = createSlice({
     filteredVesselsFeaturesUids: [],
     previewFilteredVesselsFeaturesUids: [],
     vesselsLayerSource: null,
+    /** @type {VesselIdentity | null} selectedVesselIdentity */
+    selectedVesselIdentity: null,
     /** @type {SelectedVessel | null} selectedVessel */
     selectedVessel: null,
+    /** @type {VesselPosition[] | null} selectedVesselPositions */
+    selectedVesselPositions: null,
     hideOtherVessels: false,
     /** @type {VesselPosition | null} highlightedVesselTrackPosition */
     highlightedVesselTrackPosition: null,
     loadingVessel: null,
+    loadingPositions: null,
     vesselSidebarIsOpen: false,
     vesselSidebarTab: VesselSidebarTab.SUMMARY,
     isFocusedOnVesselSearch: false,
@@ -74,11 +77,38 @@ const vesselSlice = createSlice({
       if (!action.payload.calledFromCron) {
         state.selectedVessel = null
         state.loadingVessel = true
+        state.loadingPositions = true
       }
     },
+    updatingVesselTrackDepth (state) {
+      state.loadingPositions = true
+    },
+    /**
+     * Set the selected vessel and positions
+     * @function setSelectedVessel
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: {
+     *   vessel: Vessel,
+     *   positions: VesselPosition[]
+     * }}} action - The positions
+     */
     setSelectedVessel (state, action) {
       state.loadingVessel = null
-      state.selectedVessel = action.payload
+      state.loadingPositions = null
+      state.selectedVessel = action.payload.vessel
+      state.selectedVesselPositions = action.payload.positions
+    },
+    /**
+     * Update the positions of the vessel
+     * @function updateSelectedVesselPositions
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: VesselPosition[]}} action - The positions
+     */
+    updateSelectedVesselPositions (state, action) {
+      state.loadingPositions = null
+      state.selectedVesselPositions = action.payload
     },
     resetSelectedVessel (state) {
       state.selectedVessel = null
@@ -98,12 +128,17 @@ const vesselSlice = createSlice({
     setFocusOnVesselSearch (state, action) {
       state.isFocusedOnVesselSearch = action.payload
     },
-    loading (state) {
-      state.loadingVessel = true
-    },
     resetLoadingVessel (state) {
       state.loadingVessel = false
+      state.loadingPositions = false
     },
+    /**
+     * Set a custom track depth of the selected vessel
+     * @function setSelectedVesselCustomTrackDepth
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: VesselTrackDepth | null}} action - The track depth
+     */
     setSelectedVesselCustomTrackDepth (state, action) {
       state.selectedVesselCustomTrackDepth = action.payload
     },
@@ -119,7 +154,7 @@ const vesselSlice = createSlice({
      * @function highlightVesselTrackPosition
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: Position | null}} action - The position
+     * @param {{payload: VesselPosition | null}} action - The position
      */
     highlightVesselTrackPosition (state, action) {
       state.highlightedVesselTrackPosition = action.payload
@@ -228,13 +263,14 @@ const vesselSlice = createSlice({
 export const {
   setVessels,
   resetVessels,
-  loading,
   setFilteredVesselsFeaturesUids,
   setPreviewFilteredVesselsFeaturesUids,
   setVesselsLayerSource,
   loadingVessel,
   resetLoadingVessel,
+  updatingVesselTrackDepth,
   setSelectedVessel,
+  updateSelectedVesselPositions,
   resetSelectedVessel,
   closeVesselSidebar,
   setFocusOnVesselSearch,

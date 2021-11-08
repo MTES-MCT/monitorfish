@@ -16,24 +16,30 @@ const CustomCircleRange = ({
   setCircleRadiusToAdd,
   cancelAddCircleRange,
   addCustomCircleRange,
-  healthcheckTextWarning
+  healthcheckTextWarning,
+  measurementIsOpen
 }) => {
   const {
     circleMeasurementInDrawing
   } = useSelector(state => state.measurement)
 
   useEffect(() => {
-    if (circleMeasurementInDrawing?.coordinates?.length) {
-      const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false).map(coordinate => {
-        return parseFloat(coordinate.replace(/°/g, ''))
-      })
-      setCircleCoordinatesToAdd(ddCoordinates)
-    }
+    if (measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE) {
+      if (circleMeasurementInDrawing?.coordinates?.length) {
+        const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false).map(coordinate => {
+          return parseFloat(coordinate.replace(/°/g, ''))
+        })
+        setCircleCoordinatesToAdd(ddCoordinates)
+      }
 
-    if (circleMeasurementInDrawing?.measurement) {
-      setCircleRadiusToAdd(circleMeasurementInDrawing?.measurement.replace('r = ', '').replace('nm', ''))
+      if (circleMeasurementInDrawing?.measurement) {
+        setCircleRadiusToAdd(circleMeasurementInDrawing?.measurement.replace('r = ', '').replace('nm', ''))
+      }
+    } else {
+      setCircleCoordinatesToAdd([])
+      setCircleRadiusToAdd('')
     }
-  }, [circleMeasurementInDrawing])
+  }, [circleMeasurementInDrawing, measurementTypeToAdd])
 
   /**
    * Compare with previous coordinates and update interest point coordinates

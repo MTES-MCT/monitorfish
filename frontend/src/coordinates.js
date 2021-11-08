@@ -150,19 +150,18 @@ function truncate (n) {
 }
 
 /**
- * Check if coordinates are the same
+ * Check if coordinates are the same or roughly the same (to the 0.000001 decimal degree - to avoid infinite rounding loop)
  * @param {number[]} nextCoordinates - Next coordinates ([longitude, latitude]) in decimal format.
  * @param {number[]} coordinates - Coordinates ([longitude, latitude]) in decimal format.
  * @returns {boolean}
  */
 export const coordinatesAreDistinct = (nextCoordinates, coordinates) => {
-  return nextCoordinates &&
-    nextCoordinates.length &&
-    coordinates.length &&
-    !isNaN(coordinates[0]) &&
-    !isNaN(coordinates[1]) &&
-    !isNaN(nextCoordinates[0]) &&
-    !isNaN(nextCoordinates[1]) &&
-    (coordinates[0] !== nextCoordinates[0] ||
-      coordinates[1] !== nextCoordinates[1])
+  const roundingDifference = 0.000002
+
+  return nextCoordinates?.length && coordinates.length &&
+    !isNaN(coordinates[0]) && !isNaN(coordinates[1]) &&
+    !isNaN(nextCoordinates[0]) && !isNaN(nextCoordinates[1]) &&
+    (coordinates[0] !== nextCoordinates[0] || coordinates[1] !== nextCoordinates[1]) &&
+    (Math.abs(nextCoordinates[0] - coordinates[0]) > roundingDifference ||
+      Math.abs(nextCoordinates[1] - coordinates[1]) > roundingDifference)
 }

@@ -12,7 +12,8 @@ countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 const VesselIdentity = () => {
   const {
     loadingVessel,
-    selectedVessel
+    selectedVessel,
+    selectedVesselPositions
   } = useSelector(state => state.vessel)
   const gears = useSelector(state => state.gear.gears)
 
@@ -22,8 +23,8 @@ const VesselIdentity = () => {
 
   useEffect(() => {
     if (selectedVessel) {
-      if (selectedVessel.positions && selectedVessel.positions.length) {
-        setLastPosition(selectedVessel.positions[selectedVessel.positions.length - 1])
+      if (selectedVesselPositions?.length) {
+        setLastPosition(selectedVesselPositions[selectedVesselPositions.length - 1])
       } else {
         if (!vesselsAreEquals(selectedVessel, vessel)) {
           setLastPosition(null)

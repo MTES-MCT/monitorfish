@@ -176,8 +176,8 @@
 /**
  * @typedef VesselTrackDepth
  * @property {string | null} trackDepth
- * @property {string | null} afterDateTime
- * @property {string | null} beforeDateTime
+ * @property {Date | null} afterDateTime
+ * @property {Date | null} beforeDateTime
  */
 
 /**

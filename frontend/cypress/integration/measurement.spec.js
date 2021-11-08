@@ -77,4 +77,29 @@ context('Measurement', () => {
     cy.get('#root').click(590, 590, { timeout: 20000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
   })
+
+  it('Many measurements Should be created When clicking on the map', () => {
+    // Given
+    cy.get('.measurement', { timeout: 20000 }).should('exist')
+
+    // When
+    cy.get('*[data-cy="measurement"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 20000 })
+    cy.get('#root').click(490, 580, { timeout: 20000 })
+    cy.get('#root').click(450, 585, { timeout: 20000 })
+    cy.get('*[data-cy="measurement-value"]').should('have.length', 1)
+
+    cy.get('*[data-cy="measurement"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 20000 }).eq(1).should('have.value', '__° __′ __″ _ ___° __′ __″ _')
+    cy.get('#root').click(690, 680, { timeout: 20000 })
+    cy.get('#root').click(750, 785, { timeout: 20000 })
+    cy.get('*[data-cy="measurement-value"]').should('have.length', 2)
+
+    // Then
+    cy.get('*[data-cy="measurement-value"]').eq(1).contains('r = 5.', { timeout: 20000 })
+    cy.get('*[data-cy="close-measurement"]').eq(1).click({ timeout: 20000 })
+    cy.get('*[data-cy="close-measurement"]').eq(0).click({ timeout: 20000 })
+    cy.get('*[data-cy="measurement-value"]').should('not.exist')
+  })
 })

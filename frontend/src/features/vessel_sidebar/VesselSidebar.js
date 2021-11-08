@@ -182,7 +182,6 @@ const GrayOverlay = styled.div`
 
 const Panel = styled.div`
   padding: 0;
-  overflow-y: auto;
   background: ${COLORS.gainsboro};
   max-height: ${props => props.healthcheckTextWarning ? 77 : 82}vh;
 `
@@ -219,7 +218,7 @@ const Wrapper = styled(MapComponentStyle)`
   max-height: 93vh;
   z-index: 999;
   padding: 0;
-  background: white;
+  background: ${COLORS.gainsboro};
   overflow: hidden;
   margin-right: -510px;
  

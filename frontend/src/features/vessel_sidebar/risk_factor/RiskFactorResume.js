@@ -198,8 +198,11 @@ const SeeMore = styled.a`
   margin-right: ${props => props.underCharter ? 25 : 12}px;
   ${props => props.underCharter
   ? `
-  position: absolute;
-  right: 10px;
+  margin-top: -20px;
+  margin-right: 25px;
+  position: relative;
+  right: -100px;
+  float: left;
   `
   : `
   margin-right: 12px;

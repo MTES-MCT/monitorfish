@@ -16,11 +16,7 @@ import { removeFishingActivitiesFromMap } from '../shared_slices/FishingActiviti
  * @param {boolean} fromSearch
  * @param {VesselTrackDepth=} vesselTrackDepth
  */
-const showVessel = (
-  vesselIdentity,
-  fromSearch,
-  calledFromCron,
-  vesselTrackDepth) => (dispatch, getState) => {
+const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
   const {
     selectedVessel: alreadySelectedVessel,
     vesselsLayerSource,
@@ -44,7 +40,7 @@ const showVessel = (
     selectedVesselCustomTrackDepth,
     getState().map.defaultVesselTrackDepth)
 
-  if (fishingActivitiesAreShowedOnMap) {
+  if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
   }
 

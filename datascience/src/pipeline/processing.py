@@ -345,7 +345,7 @@ def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
 
 def serialize_timedelta_df(df: pd.DataFrame) -> pd.DataFrame:
     """Serializes the values of a DataFrame that contains `timedelta` values.
-    This is useful to prepare data before loading to timedelta Postgres columns, as
+    This is useful to prepare data before loading to `interval` Postgres columns, as
     sqlachemy does not support the timedelta dtype.
 
     Args:
@@ -354,7 +354,7 @@ def serialize_timedelta_df(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: same DataFrame converted to string dtype
     """
-    return df.astype(str).replace(["NaT"], [None])
+    return df.astype("timedelta64[ns]").astype(str).replace(["NaT"], [None])
 
 
 def drop_rows_already_in_table(

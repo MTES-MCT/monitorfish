@@ -330,6 +330,7 @@ class TestProcessingMethods(unittest.TestCase):
                     "json_2",
                     "int",
                     "timedelta",
+                    "timedelta_only_nulls",
                 ]
             ),
             data=[
@@ -342,6 +343,7 @@ class TestProcessingMethods(unittest.TestCase):
                     {"a": 1, "b": None},
                     2.0,
                     datetime.timedelta(days=1, seconds=21),
+                    None,
                 ],
                 [
                     2,
@@ -351,6 +353,7 @@ class TestProcessingMethods(unittest.TestCase):
                     {"a": 1, "b": None, "c": np.nan},
                     {"a": 1, "b": [datetime.datetime(2021, 1, 23, 12, 56, 7), np.nan]},
                     np.nan,
+                    None,
                     None,
                 ],
             ],
@@ -366,7 +369,7 @@ class TestProcessingMethods(unittest.TestCase):
             value_on_array_conversion_error="{}",
             jsonb_columns=["json_1", "json_2"],
             nullable_integer_columns=["int"],
-            timedelta_columns=["timedelta"],
+            timedelta_columns=["timedelta", "timedelta_only_nulls"],
         )
 
         expected_res = pd.DataFrame(
@@ -380,6 +383,7 @@ class TestProcessingMethods(unittest.TestCase):
                     "json_2",
                     "int",
                     "timedelta",
+                    "timedelta_only_nulls",
                 ]
             ),
             data=[
@@ -392,6 +396,7 @@ class TestProcessingMethods(unittest.TestCase):
                     '{"a": 1, "b": null}',
                     "2",
                     "1 days 00:00:21",
+                    None,
                 ],
                 [
                     2,
@@ -400,6 +405,7 @@ class TestProcessingMethods(unittest.TestCase):
                     "{1,5,7}",
                     '{"a": 1, "b": null, "c": null}',
                     '{"a": 1, "b": ["2021-01-23T12:56:07Z", null]}',
+                    None,
                     None,
                     None,
                 ],

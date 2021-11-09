@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { setIsModalOpen } from '../Regulation.slice'
-import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
+import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -30,12 +30,12 @@ const RegulatoryTextSection = props => {
 
   const addOrRemoveRegulatoryTextInList = (id) => {
     let newRegulatoryTextList = [...regulatoryTextList]
-    if (id) {
-      newRegulatoryTextList.splice(id, 1)
-    } else if (id === 0) {
-      newRegulatoryTextList = [{}]
+    if (id === undefined) {
+      newRegulatoryTextList.push(DEFAULT_REGULATORY_TEXT)
+    } else if (regulatoryTextList.length === 1) {
+      newRegulatoryTextList = [DEFAULT_REGULATORY_TEXT]
     } else {
-      newRegulatoryTextList.push({})
+      newRegulatoryTextList.splice(id, 1)
     }
     setRegulatoryTextList(newRegulatoryTextList)
   }
@@ -50,6 +50,12 @@ const RegulatoryTextSection = props => {
     } else {
       dispatch(setIsModalOpen(true))
     }
+  }
+
+  const setRegulatoryText = (id, regulatoryText) => {
+    const newRegulatoryTextList = [...regulatoryTextList]
+    newRegulatoryTextList[id] = regulatoryText
+    setRegulatoryTextList(newRegulatoryTextList)
   }
 
   return (<Section>
@@ -69,6 +75,7 @@ const RegulatoryTextSection = props => {
               source={source}
               listLength={regulatoryTextList.length}
               saveForm={saveForm}
+              setRegulatoryText={setRegulatoryText}
             />
         })
         : <RegulatoryText
@@ -79,6 +86,7 @@ const RegulatoryTextSection = props => {
             source={source}
             listLength={0}
             saveForm={saveForm}
+            setRegulatoryTextList={setRegulatoryTextList}
         />
     }
     <ButtonLine>

@@ -46,7 +46,8 @@ import {
   REGULATORY_TEXT_SOURCE,
   SeafrontByRegulatoryTerritory,
   UE,
-  initialFishingPeriodValues
+  initialFishingPeriodValues,
+  DEFAULT_REGULATORY_TEXT
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -74,13 +75,13 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [regionIsMissing, setRegionIsMissing] = useState(false)
   /** @type {[regulatoryText]} */
-  const [regulatoryTextList, setRegulatoryTextList] = useState([{}])
+  const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
   /** @type {FishingPeriod} */
   const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
-  const [selectedGeometryId, setSelectedGeometry] = useState()
+  const [selectedGeometryId, setSelectedGeometry] = useState(429)
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
@@ -136,19 +137,18 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
-      const regulatoryTexts = Object.values(regulatoryTextCheckedMap)
-      const allTextsHaveBeenChecked = regulatoryTexts?.length > 0 && regulatoryTexts.length === regulatoryTextList.length
+      const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
+      const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
       if (allTextsHaveBeenChecked) {
-        const allRequiredValuesHaveBeenFilled = !regulatoryTexts.includes(null) && !atLeastOneValueIsMissing
+        const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !atLeastOneValueIsMissing
         if (allRequiredValuesHaveBeenFilled) {
-          setRegulatoryTextList(regulatoryTexts)
           const featureObject = mapToRegulatoryFeatureObject({
             selectedRegulationTopic,
             selectedRegulationLawType,
             nameZone: nameZone,
             selectedSeaFront,
             selectedRegionList,
-            regulatoryTexts,
+            regulatoryTexts: [...regulatoryTextList],
             upcomingRegulation,
             fishingPeriod
           })

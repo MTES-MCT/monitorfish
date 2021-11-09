@@ -39,7 +39,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     selectedSeaFront,
     selectedRegionList,
     regulatoryTexts,
-    upcomingRegulation
+    upcomingRegulation,
+    fishingPeriod
   } = properties
   return {
     layer_name: selectedRegulationTopic,
@@ -48,7 +49,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     region: selectedRegionList?.join(', '),
     facade: selectedSeaFront,
     references_reglementaires: JSON.stringify(regulatoryTexts),
-    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || '')
+    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || ''),
+    fishing_period: JSON.stringify(fishingPeriod || '')
   }
 }
 

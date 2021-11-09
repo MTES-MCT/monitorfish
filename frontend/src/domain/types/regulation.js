@@ -59,17 +59,10 @@
  * @property {date} endDate
  * /
 
- /**
- * @typedef Date
- * @property {number} day
- * @property {number} month
- * @property {number} year
- */
-
 /**
  * @typedef TimeInterval
- * @property {time} from
- * @property {time} to
+ * @property {date} from
+ * @property {date} to
  */
 
 /**

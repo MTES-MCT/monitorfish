@@ -149,7 +149,8 @@ const CreateRegulation = ({ title, isEdition }) => {
             selectedSeaFront,
             selectedRegionList,
             regulatoryTexts,
-            upcomingRegulation
+            upcomingRegulation,
+            fishingPeriod
           })
           createOrUpdateRegulation(featureObject)
         } else {

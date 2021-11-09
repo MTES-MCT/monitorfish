@@ -13,7 +13,7 @@ export const mapToRegulatoryZone = properties => {
     prohibitedSpecies: properties.especes_interdites,
     regulatoryReferences: properties.references_reglementaires,
     upcomingRegulatoryReferences: properties.references_reglementaires_a_venir,
-    fishingPeriod: properties.fishing_period,
+    fishingPeriod: mapToFishingPeriodObject(properties.fishing_period),
     permissions: properties.autorisations,
     bycatch: properties.captures_accessoires,
     openingDate: properties.date_ouverture,
@@ -29,6 +29,50 @@ export const mapToRegulatoryZone = properties => {
     obligations: properties.obligations,
     rejections: properties.rejets,
     deposit: properties.gisement
+  }
+}
+
+const mapToFishingPeriodObject = fishingPeriod => {
+  if (fishingPeriod) {
+    const {
+      authorized,
+      annualRecurrence,
+      dateRanges,
+      dates,
+      weekdays,
+      holidays,
+      daytime,
+      timeIntervals
+    } = JSON.parse(fishingPeriod)
+
+    const newDateRanges = dateRanges?.map(({ startDate, endDate }) => {
+      return {
+        startDate: new Date(startDate),
+        endDate: new Date(endDate)
+      }
+    })
+
+    const newDates = dates?.map(date => new Date(date))
+
+    const newTimeIntervals = timeIntervals?.map(({ from, to }) => {
+      return {
+        from: new Date(from),
+        to: new Date(to)
+      }
+    })
+
+    return {
+      authorized,
+      annualRecurrence,
+      dateRanges: newDateRanges,
+      dates: newDates,
+      weekdays,
+      holidays,
+      daytime,
+      timeIntervals: newTimeIntervals
+    }
+  } else {
+    return initialFishingPeriodValues
   }
 }
 
@@ -144,8 +188,8 @@ export const DEFAULT_DATE_RANGE = {
 }
 
 export const initialFishingPeriodValues = {
-  authorized: true,
-  annualRecurrence: true,
+  authorized: undefined,
+  annualRecurrence: undefined,
   dateRanges: [],
   dates: [],
   weekdays: [],

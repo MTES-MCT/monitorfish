@@ -171,7 +171,7 @@ const FishingPeriod = (props) => {
 
   useEffect(() => {
     if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime) {
-      setFishingPeriodAsString(toString())
+      setFishingPeriodAsString(fishingPeriodToString())
     } else {
       setFishingPeriodAsString(undefined)
     }
@@ -189,14 +189,21 @@ const FishingPeriod = (props) => {
     }
   }
 
-  const toString = () => {
+  const dateToString = (date) => {
+    const options = { day: 'numeric', month: 'long' }
+    if (annualRecurrence) {
+      options.year = 'numeric'
+    }
+    return date.toLocaleDateString('fr-FR', options)
+  }
+
+  const fishingPeriodToString = () => {
     const textArray = []
     if (dateRanges?.length) {
       const array = toArrayString(
         dateRanges.map(({ startDate, endDate }) => {
           if (startDate && endDate) {
-            return `du ${startDate.getDate()}/${startDate.getMonth() + 1}${annualRecurrence ? `/${startDate.getYear()}` : ''}
-              au ${endDate.getDate()}/${endDate.getMonth() + 1}${annualRecurrence ? `/${endDate.getYear()}` : ''}`
+            return `du ${dateToString(startDate)} au ${dateToString(endDate)}`
           }
           return undefined
         }).filter(e => e)
@@ -208,7 +215,7 @@ const FishingPeriod = (props) => {
     if (dates?.length) {
       const array = toArrayString(dates.map((date) => {
         if (date) {
-          return `le ${date.getDate()}/${date.getMonth()}/${date.getYear()} `
+          return `le ${dateToString(date)} `
         }
         return undefined
       }).filter(e => e))

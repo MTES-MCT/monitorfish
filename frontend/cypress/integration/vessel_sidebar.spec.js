@@ -223,14 +223,25 @@ context('VesselSidebar', () => {
     cy.wait(200)
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+    cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
 
     // Then
+    cy.wait('@previousTripPositions').its('response.url')
+      .should('eq', 'http://localhost:3000/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+      '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
+        '&afterDateTime=2019-02-16T23:05:00.000Z&beforeDateTime=2019-10-15T12:01:00.000Z')
+
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
+    cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 20000 })
+    cy.wait('@previousTripPositions').its('response.url')
+      .should('eq', 'http://localhost:3000/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
+        '&afterDateTime=2019-10-11T00:06:00.000Z&beforeDateTime=2019-10-22T11:06:00.000Z')
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 

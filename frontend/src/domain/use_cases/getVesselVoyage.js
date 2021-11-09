@@ -97,7 +97,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
 }
 
 function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingActivitiesAreShowedOnMap) {
-  const { afterDateTime, beforeDateTime } = getDateRangePlusOneDay(voyage.startDate, voyage.endDate)
+  const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHours(voyage.startDate, voyage.endDate)
 
   const trackDepthObject = {
     trackDepth: VesselTrackDepth.CUSTOM,
@@ -117,7 +117,7 @@ function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingAc
   })
 }
 
-function getDateRangePlusOneDay (afterDateTime, beforeDateTime) {
+function getDateRangeMinusFourHours (afterDateTime, beforeDateTime) {
   if (!afterDateTime && !beforeDateTime) {
     return {
       afterDateTime: null,
@@ -126,10 +126,9 @@ function getDateRangePlusOneDay (afterDateTime, beforeDateTime) {
   }
 
   afterDateTime = new Date(afterDateTime)
-  afterDateTime.setDate(afterDateTime.getDate() - 1)
-
+  const fourHours = 4
+  afterDateTime.setTime(afterDateTime.getTime() - (fourHours * 60 * 60 * 1000))
   beforeDateTime = new Date(beforeDateTime)
-  beforeDateTime.setDate(beforeDateTime.getDate() + 1)
 
   return {
     afterDateTime,

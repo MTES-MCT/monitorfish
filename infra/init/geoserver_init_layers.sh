@@ -130,6 +130,19 @@ EOF
 curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
+    "name": "regulatory_areas_write",
+    "nativeName": "reglementation_peche",
+    "title": "Regulatory Areas for write operation",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
     "name": "1241_eaux_occidentales_australes_areas",
     "nativeName": "1241_eaux_occidentales_australes_areas",
     "title": "1241 eaux occidentales australes areas",

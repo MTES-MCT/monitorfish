@@ -501,7 +501,7 @@ function updateOrCreateRegulation (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
     featureNS: 'monitorfish',
-    featureType: 'monitorfish:regulatory_areas',
+    featureType: 'monitorfish:regulatory_areas_write',
     srsName: 'EPSG:4326'
   })
 

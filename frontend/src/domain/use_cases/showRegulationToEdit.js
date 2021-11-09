@@ -23,10 +23,12 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature.properties)
       const {
         regulatoryReferences,
-        upcomingRegulatoryReferences
+        upcomingRegulatoryReferences,
+        fishingPeriod
       } = regulatoryZoneMetadata
       const parsedReg = parseRegulatoryTexts(regulatoryReferences)
       regulatoryZoneMetadata.regulatoryReferences = parsedReg
+      regulatoryZoneMetadata.fishingPeriod = fishingPeriod
       regulatoryZoneMetadata.upcomingRegulatoryReferences =
         upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
           ? JSON.parse(upcomingRegulatoryReferences)

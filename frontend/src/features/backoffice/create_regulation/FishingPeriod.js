@@ -41,6 +41,18 @@ const FishingPeriod = (props) => {
     }
   }, [daytime])
 
+  useEffect(() => {
+    if (!displayForm) {
+      setDisplayForm(true)
+    }
+  }, [authorized])
+
+  useEffect(() => {
+    if (disabled) {
+      setDisabled(false)
+    }
+  })
+
   const set = useCallback((key, value) => {
     const obj = {
       ...fishingPeriod,
@@ -110,20 +122,6 @@ const FishingPeriod = (props) => {
       newDateRanges[id] = dateRange
     }
     set('dateRanges', newDateRanges)
-  }
-
-  const onPeriodChange = (value) => {
-    set('authorized', value)
-    if (!displayForm) {
-      setDisplayForm(true)
-    }
-  }
-
-  const onRecurrenceChange = (value) => {
-    set('annualRecurrence', value)
-    if (disabled) {
-      setDisabled(false)
-    }
   }
 
   const onDateChange = (id, date) => {
@@ -253,7 +251,7 @@ const FishingPeriod = (props) => {
     <Title>
       <PeriodRadioGroup
         inline={true}
-        onChange={onPeriodChange}
+        onChange={value => set('authorized', value)}
         value={authorized}
       >
         Périodes
@@ -269,7 +267,7 @@ const FishingPeriod = (props) => {
       <Label>Récurrence annuelle</Label>
       <RadioGroup
         inline={true}
-        onChange={onRecurrenceChange}
+        onChange={value => set('annualRecurrence', value)}
         value={annualRecurrence}
       >
         <CustomRadio value={true} >oui</CustomRadio>

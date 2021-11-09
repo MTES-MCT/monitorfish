@@ -224,12 +224,12 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
-    feature.setId(`${Layers.REGULATORY.code}.${selectedGeometryId}`)
+    feature.setId(`${Layers.REGULATORY.code}_write.${selectedGeometryId}`)
     const actionType = isEdition ? REGULATION_ACTION_TYPE.UPDATE : REGULATION_ACTION_TYPE.INSERT
     dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
     if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
-      emptyFeature.setId(`${Layers.REGULATORY.code}.${originalGeometryId}`)
+      emptyFeature.setId(`${Layers.REGULATORY.code}_write.${originalGeometryId}`)
       dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
   }

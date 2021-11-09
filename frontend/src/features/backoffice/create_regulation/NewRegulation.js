@@ -149,7 +149,8 @@ const CreateRegulation = ({ title, isEdition }) => {
             nameZone: nameZone,
             selectedRegionList,
             regulatoryTexts: [...regulatoryTextList],
-            upcomingRegulation
+            upcomingRegulation,
+            fishingPeriod
           })
 
           createOrUpdateRegulation(featureObject)

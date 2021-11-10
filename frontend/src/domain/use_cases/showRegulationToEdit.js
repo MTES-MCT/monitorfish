@@ -19,7 +19,9 @@ const showRegulationToEdit = regulatoryZone => async (dispatch) => {
           ? JSON.parse(upcomingRegulatoryReferences)
           : undefined
       regulatoryZoneMetadata.geometry = feature.geometry
-      regulatoryZoneMetadata.id = feature.id.split('.')[1]
+      if (!regulatoryZoneMetadata.id) {
+        regulatoryZoneMetadata.id = feature.id.split('.')[1]
+      }
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
     }).catch(error => {
       console.error(error)

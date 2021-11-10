@@ -35,25 +35,25 @@ const regulationSlice = createSlice({
     addObjectToRegulatoryTextCheckedMap (state, action) {
       const {
         /** @type {boolean} */
-        valid,
+        complete,
         /** @type {number} */
         id
       } = action.payload
       state.regulatoryTextCheckedMap = {
         ...(state.regulatoryTextCheckedMap || {}),
-        [id]: valid
+        [id]: complete
       }
     },
     addObjectToUpcomingRegulatoryTextCheckedMap (state, action) {
       const {
         /** @type {boolean} */
-        valid,
+        complete,
         /** @type {number} */
         id
       } = action.payload
       state.upcomingRegulatoryTextCheckedMap = {
         ...(state.upcomingRegulatoryTextCheckedMap || {}),
-        [id]: valid
+        [id]: complete
       }
     },
     setUpcomingRegulatoryTextListCheckedMap (state, action) {

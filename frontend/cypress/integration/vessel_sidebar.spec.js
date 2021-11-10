@@ -229,8 +229,8 @@ context('VesselSidebar', () => {
     // Then
     cy.wait('@previousTripPositions').its('response.url')
       .should('eq', 'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
-      '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-        '&afterDateTime=2019-02-16T23:05:00.000Z&beforeDateTime=2019-10-15T12:01:00.000Z')
+        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
+        '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T12:01:00.000Z')
 
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
 
@@ -241,7 +241,7 @@ context('VesselSidebar', () => {
     cy.wait('@previousTripPositions').its('response.url')
       .should('eq', 'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
         '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-        '&afterDateTime=2019-10-11T00:06:00.000Z&beforeDateTime=2019-10-22T11:06:00.000Z')
+        '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T11:06:00.000Z')
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 

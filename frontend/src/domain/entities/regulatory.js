@@ -112,7 +112,8 @@ export const REGULATORY_SEARCH_PROPERTIES = {
 */
 export const REGULATION_ACTION_TYPE = {
   UPDATE: 'update',
-  INSERT: 'insert'
+  INSERT: 'insert',
+  DELETE: 'delete'
 }
 
 /**

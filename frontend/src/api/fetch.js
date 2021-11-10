@@ -497,7 +497,7 @@ function getHealthcheckFromAPI () {
     })
 }
 
-function updateOrCreateRegulation (feature, actionType) {
+function regulatoryAreaTransaction (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
     featureNS: 'monitorfish',
@@ -510,6 +510,8 @@ function updateOrCreateRegulation (feature, actionType) {
   if (actionType === REGULATION_ACTION_TYPE.UPDATE) {
     transaction  = formatWFS.writeTransaction(null, [feature], null, formatGML)
   } else if (actionType === REGULATION_ACTION_TYPE.INSERT) {
+    transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
+  } else if (actionType === REGULATION_ACTION_TYPE.DELETE) {
     transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
   }
   const payload = xs.serializeToString(transaction)
@@ -549,5 +551,5 @@ export {
   getAllFleetSegmentFromAPI,
   getHealthcheckFromAPI,
   getAllGeometryWithoutProperty,
-  updateOrCreateRegulation
+  regulatoryAreaTransaction
 }

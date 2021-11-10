@@ -42,7 +42,8 @@ const mapToFishingPeriodObject = fishingPeriod => {
       weekdays,
       holidays,
       daytime,
-      timeIntervals
+      timeIntervals,
+      otherInfo
     } = JSON.parse(fishingPeriod)
 
     const newDateRanges = dateRanges?.map(({ startDate, endDate }) => {
@@ -69,7 +70,8 @@ const mapToFishingPeriodObject = fishingPeriod => {
       weekdays,
       holidays,
       daytime,
-      timeIntervals: newTimeIntervals
+      timeIntervals: newTimeIntervals,
+      otherInfo
     }
   } else {
     return initialFishingPeriodValues

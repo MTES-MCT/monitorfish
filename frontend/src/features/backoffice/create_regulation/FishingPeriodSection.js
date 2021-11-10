@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
 import FishingPeriod from './FishingPeriod'
 import SectionTitle from '../SectionTitle'
-import { Label } from '../../commonStyles/Input.style'
+import { Label, CustomInput } from '../../commonStyles/Input.style'
 
 const FishingPeriodSection = (props) => {
   const {
@@ -12,6 +11,14 @@ const FishingPeriodSection = (props) => {
   } = props
 
   const [show, setShow] = useState(false)
+
+  const setOtherInfo = value => {
+    console.log(value)
+    setFishingPeriod({
+      ...fishingPeriod,
+      otherInfo: value
+    })
+  }
 
   return <>
     <SectionTitle
@@ -26,19 +33,16 @@ const FishingPeriodSection = (props) => {
     />
     <Other show={show}>
       <Label>Autres points sur la période</Label>
-      <TextInput value={fishingPeriod?.otherInfo || ''}/>
+      <CustomInput
+        width={'730px'}
+        value={fishingPeriod?.otherInfo || ''}
+        onChange={setOtherInfo} />
     </Other>
   </>
 }
 
 const Other = styled.div`
   display: ${props => props.show ? 'flex' : 'none'};
-`
-
-const TextInput = styled.input`
-  height: 25px;
-  width: 730px;
-  border: 1px solid ${COLORS.lightGray};
 `
 
 export default FishingPeriodSection

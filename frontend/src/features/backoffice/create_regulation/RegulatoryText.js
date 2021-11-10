@@ -236,12 +236,12 @@ const RegulatoryText = props => {
         <CustomCheckbox
           $isRequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.CREATION}
-          data-cy={'create-zone-checkbox'}
+          data-cy='create-zone-checkbox'
         >création de la zone</CustomCheckbox>
         <CustomCheckbox
           $isRequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.REGULATION}
-          data-cy={'zone-regulation-checkbox'}
+          data-cy='zone-regulation-checkbox'
         >réglementation de la zone</CustomCheckbox>
       </CustomCheckboxGroup>
     </ContentLine>

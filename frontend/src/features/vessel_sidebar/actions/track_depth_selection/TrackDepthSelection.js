@@ -91,7 +91,7 @@ const TrackDepthSelection = props => {
           beforeDateTime: datesSelection[1]
         }
         dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
-        dispatch(modifyVesselTrackDepth(selectedVesselIdentity, vesselTrackDepth, true))
+        dispatch(modifyVesselTrackDepth(selectedVesselIdentity, vesselTrackDepth, false, true))
         setUpdateTrackDepthFromDates(false)
       }
       setTrackDepthRadioSelection(null)

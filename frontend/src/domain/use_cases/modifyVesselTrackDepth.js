@@ -4,7 +4,7 @@ import { removeError, setError } from '../shared_slices/Global'
 import { animateToExtent, doNotAnimate } from '../shared_slices/Map'
 import { batch } from 'react-redux'
 import { getTrackDepthError } from '../entities/vesselTrackDepth'
-import { redrawFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../shared_slices/FishingActivities'
+import { showFishingActivitiesOnMap } from '../shared_slices/FishingActivities'
 import { convertToUTCFullDay } from '../../utils'
 
 /**
@@ -12,9 +12,10 @@ import { convertToUTCFullDay } from '../../utils'
  * @function modifyVesselTrackDepth
  * @param {VesselIdentity} vesselIdentity
  * @param {VesselTrackDepth=} vesselTrackDepth
- * @param {boolean} useFullDays
+ * @param {boolean=} doNotRedrawFishingMessages
+ * @param {boolean=} useFullDays
  */
-const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, useFullDays = false) => (dispatch, getState) => {
+const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, doNotRedrawFishingMessages = false, useFullDays = false) => (dispatch, getState) => {
   const fishingActivitiesAreShowedOnMap = getState().fishingActivities.fishingActivitiesAreShowedOnMap
   if (!vesselIdentity || !vesselTrackDepth) {
     return
@@ -46,9 +47,8 @@ const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, useFullDays = 
 
       batch(() => {
         dispatch(updateSelectedVesselPositions(positions))
-        if (fishingActivitiesAreShowedOnMap) {
-          dispatch(showFishingActivitiesOnMap())
-          dispatch(redrawFishingActivitiesOnMap())
+        if (fishingActivitiesAreShowedOnMap && !doNotRedrawFishingMessages) {
+          dispatch(showFishingActivitiesOnMap(true))
         }
         dispatch(animateToExtent())
       })

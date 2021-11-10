@@ -17,7 +17,7 @@ const TrackDepthRadio = props => {
         <Columns>
           <ColumnOne>
             <Radio value={VesselTrackDepth.LAST_DEPARTURE}>dernier DEP</Radio>
-            <Radio value={VesselTrackDepth.TWELVE_HOURS}>12 heures</Radio>
+            <Radio value={VesselTrackDepth.TWELVE_HOURS} data-cy={'vessel-track-depth-twelve-hours'}>12 heures</Radio>
             <Radio value={VesselTrackDepth.ONE_DAY}>24 heures</Radio>
             <Radio value={VesselTrackDepth.TWO_DAYS}>2 jours</Radio>
           </ColumnOne>

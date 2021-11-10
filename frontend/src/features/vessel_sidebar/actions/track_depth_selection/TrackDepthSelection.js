@@ -47,7 +47,8 @@ const TrackDepthSelection = props => {
   useEffect(() => {
     const {
       afterDateTime,
-      beforeDateTime
+      beforeDateTime,
+      trackDepth
     } = selectedVesselCustomTrackDepth
 
     if (afterDateTime && beforeDateTime &&
@@ -56,6 +57,11 @@ const TrackDepthSelection = props => {
       setDateSelection([afterDateTime, beforeDateTime])
       setUpdateTrackDepthFromDates(false)
       setTrackDepthRadioSelection(null)
+      return
+    }
+
+    if (trackDepth && trackDepth !== trackDepthRadioSelection) {
+      setTrackDepthRadioSelection(trackDepth)
     }
   }, [selectedVesselCustomTrackDepth])
 

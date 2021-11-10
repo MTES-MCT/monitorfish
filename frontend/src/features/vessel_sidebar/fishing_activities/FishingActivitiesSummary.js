@@ -29,6 +29,7 @@ import {
   getTotalPNOWeightFromMessage
 } from '../../../domain/entities/fishingActivities'
 import { ERSOperationType } from '../../../domain/entities/ERS'
+import CustomDatesShowedInfo from './CustomDatesShowedInfo'
 
 const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMessagesResume }) => {
   const {
@@ -247,6 +248,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
             <SeeAll onClick={() => showERSMessages()} data-cy={'vessel-fishing-see-all'}>Voir tous les messages</SeeAll>
             <Arrow onClick={() => showERSMessages()}/>
           </Title>
+          <CustomDatesShowedInfo/>
           {
             fishingActivities?.ersMessages?.length
               ? <ERSMessages>

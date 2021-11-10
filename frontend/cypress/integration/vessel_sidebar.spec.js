@@ -198,6 +198,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // Then
     cy.wait(200)
@@ -218,6 +219,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // When
     cy.wait(200)
@@ -228,21 +230,29 @@ context('VesselSidebar', () => {
 
     // Then
     cy.wait('@previousTripPositions').its('response.url')
-      .should('eq', 'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+      .should('eq', 'http://localhost:3000/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
         '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
         '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T13:01:00.000Z')
 
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
+    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 16/02/19 au 15/10/19')
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 20000 })
     cy.wait('@previousTripPositions').its('response.url')
-      .should('eq', 'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+      .should('eq', 'http://localhost:3000/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
         '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
         '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z')
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
+    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 10/10/19 au 22/10/19')
+
+    // Go back to the default track depth
+    cy.get('*[data-cy="custom-dates-show-last-positions"]').click()
+    cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-twelve-hours"]').should('have.class', 'rs-radio-checked')
   })
 
   it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
@@ -252,7 +262,6 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })

@@ -12,6 +12,7 @@ import makeAnimated from 'react-select/animated'
 import { useSelector } from 'react-redux'
 import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
 import { ExportToCsv } from 'export-to-csv'
+import CustomDatesShowedInfo from '../CustomDatesShowedInfo'
 
 const animatedComponents = makeAnimated()
 
@@ -209,6 +210,9 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
         onClick={inverseSort}
       />
     </Filters>
+    <CustomDatesShowedInfoWithMargin>
+      <CustomDatesShowedInfo width={460}/>
+    </CustomDatesShowedInfoWithMargin>
     {ersMessages?.length
       ? ersMessages
         .filter(ersMessage => filterBySelectedType(ersMessage))
@@ -222,6 +226,10 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
       : <NoMessage>Aucun message reçu</NoMessage>}
   </Wrapper>
 }
+
+const CustomDatesShowedInfoWithMargin = styled.div`
+  margin-bottom: 8px;
+`
 
 const PreviousTrip = styled(ArrowTripSVG)`
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};

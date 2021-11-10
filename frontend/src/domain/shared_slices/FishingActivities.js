@@ -22,7 +22,7 @@ const fishingActivitiesSlice = createSlice({
     nextFishingActivities: null,
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap: [],
-    fishingActivitiesAreShowedOnMap: true,
+    fishingActivitiesAreShowedOnMap: false,
     loadingFishingActivities: false,
     redrawFishingActivitiesOnMap: false
   },

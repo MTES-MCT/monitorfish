@@ -40,7 +40,6 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
     } = getState().fishingActivities
 
     const updateVesselTrack = navigateTo && !fromCron
-    const isFirstTimeVesselVoyageIsShowed = !navigateTo && !fromCron
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
     navigateTo = navigateTo || NAVIGATE_TO.LAST
 
@@ -78,7 +77,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
 
       dispatch(setLastVoyage(voyage))
       dispatch(setVoyage(voyage))
-      if (fishingActivitiesAreShowedOnMap || isFirstTimeVesselVoyageIsShowed) {
+      if (fishingActivitiesAreShowedOnMap) {
         dispatch(showFishingActivitiesOnMap(true))
       } else {
         dispatch(hideFishingActivitiesOnMap())

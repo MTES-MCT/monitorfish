@@ -9,8 +9,8 @@ import { getCircleStyle } from './styles/vesselTrack.style'
 import { animateToCoordinates } from '../domain/shared_slices/Map'
 import { usePrevious } from '../hooks/usePrevious'
 import {
-  updateVesselTrackAsHidden,
   setVesselTrackExtent,
+  updateVesselTrackAsHidden,
   updateVesselTrackAsShowed
 } from '../domain/shared_slices/Vessel'
 import {
@@ -20,7 +20,6 @@ import {
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
-import { setError } from '../domain/shared_slices/Global'
 import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/fishingActivities'
 
 const VesselsTracksLayer = ({ map }) => {
@@ -111,7 +110,6 @@ const VesselsTracksLayer = ({ map }) => {
     }
 
     const lines = getVesselTrackLines()
-    let someMessagesCouldNotBeSeenOnTrack = false
     const coordinatesFeaturesAndIds = fishingActivitiesShowedOnMap.map(fishingActivity => {
       const fishingActivityDateTimestamp = new Date(fishingActivity.date).getTime()
 
@@ -121,14 +119,8 @@ const VesselsTracksLayer = ({ map }) => {
       if (lineOfFishingActivity) {
         return getFishingActivityFeatureOnTrackLine(fishingActivity, lineOfFishingActivity, fishingActivityDateTimestamp)
       }
-
-      someMessagesCouldNotBeSeenOnTrack = true
       return null
     }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
-
-    if (someMessagesCouldNotBeSeenOnTrack) {
-      dispatch(setError(new Error('Certain messages n\'ont pas pu être placés sur la piste selectionnée.')))
-    }
 
     removeFishingActivitiesFeatures()
     vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))

@@ -200,7 +200,7 @@ function getAllRegulatoryLayersFromAPI () {
 function getAllGeometryWithoutProperty () {
   const filter = 'references_reglementaires IS NULL AND zones IS NULL AND region IS NULL AND facade IS NULL AND law_type IS NULL AND layer_name IS NULL'
   const REQUEST = `${GEOSERVER_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-  `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+  `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
     .then(response => {
       if (response.status === OK) {

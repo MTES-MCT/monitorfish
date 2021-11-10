@@ -139,7 +139,7 @@ const RegulatoryText = props => {
       const payload = {
         id: id,
         source: source,
-        valid: !checkOtherRequiredValues() && !checkNameAndUrl()
+        complete: !checkOtherRequiredValues() && !checkNameAndUrl()
       }
       if (source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION) {
         dispatch(addObjectToUpcomingRegulatoryTextCheckedMap(payload))

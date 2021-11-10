@@ -33,14 +33,14 @@ class MonitorFishWorker {
       })
   }
 
-  #getGeometryIdFromFeatureId = (feature) => {
-    return feature.split('.')[1]
+  #getGeometryIdFromFeatureId = feature => {
+    return feature.properties.id || feature.id.split('.')[1]
   }
 
   getGeometryWithoutRegulationRef (features) {
     const geometryListAsObject = {}
     features.features.forEach(feature => {
-      geometryListAsObject[this.#getGeometryIdFromFeatureId(feature.id)] = feature.geometry
+      geometryListAsObject[this.#getGeometryIdFromFeatureId(feature)] = feature.geometry
     })
     return geometryListAsObject
   }

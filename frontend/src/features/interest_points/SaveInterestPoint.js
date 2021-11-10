@@ -37,13 +37,15 @@ const SaveInterestPoint = (
   const [coordinates, setCoordinates] = useState([])
   const [name, setName] = useState('')
   const [observations, setObservations] = useState('')
-  const [type, setType] = useState(interestPointType.FISHING_VESSEL)
+  const [type, setType] = useState(null)
+  const [readyToUpdate, setReadyToUpdate] = useState(false)
 
   useEffect(() => {
     if (isEditing && interestPointBeingDrawed) {
       setName(interestPointBeingDrawed.name)
       setObservations(interestPointBeingDrawed.observations)
       setType(interestPointBeingDrawed.type)
+      setReadyToUpdate(true)
     }
   }, [interestPointBeingDrawed, isEditing])
 
@@ -53,6 +55,7 @@ const SaveInterestPoint = (
       setObservations('')
       setType(interestPointType.FISHING_VESSEL)
       setCoordinates([])
+      setReadyToUpdate(false)
     }
   }, [isEditing])
 
@@ -62,16 +65,18 @@ const SaveInterestPoint = (
       setObservations('')
       setType(interestPointType.FISHING_VESSEL)
       setCoordinates([])
+      setReadyToUpdate(false)
       return
     }
 
     if (!interestPointBeingDrawed) {
       setType(interestPointType.FISHING_VESSEL)
+      setReadyToUpdate(false)
     }
   }, [isOpen, interestPointBeingDrawed])
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && readyToUpdate) {
       if (!interestPointBeingDrawed?.coordinates?.length) {
         setCoordinates([])
         return
@@ -84,34 +89,34 @@ const SaveInterestPoint = (
         parseFloat(ddCoordinates[1].replace(/°/g, ''))
       ])
     }
-  }, [interestPointBeingDrawed, isEditing, isOpen])
+  }, [interestPointBeingDrawed, isEditing, isOpen, readyToUpdate])
 
   useEffect(() => {
-    if (name && interestPointBeingDrawed?.name !== name) {
+    if (name && interestPointBeingDrawed?.name !== name && readyToUpdate) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'name',
         value: name
       }))
     }
-  }, [name, interestPointBeingDrawed])
+  }, [name, interestPointBeingDrawed, readyToUpdate])
 
   useEffect(() => {
-    if (observations && interestPointBeingDrawed?.observations !== observations) {
+    if (observations && interestPointBeingDrawed?.observations !== observations && readyToUpdate) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'observations',
         value: observations
       }))
     }
-  }, [observations, interestPointBeingDrawed])
+  }, [observations, interestPointBeingDrawed, readyToUpdate])
 
   useEffect(() => {
-    if (type && interestPointBeingDrawed?.type !== type) {
+    if (type && interestPointBeingDrawed?.type !== type && readyToUpdate) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'type',
         value: type
       }))
     }
-  }, [type, interestPointBeingDrawed])
+  }, [type, interestPointBeingDrawed, readyToUpdate])
 
   /**
    * Compare with previous coordinates and update interest point coordinates

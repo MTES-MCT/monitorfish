@@ -128,7 +128,7 @@ const RegulatoryText = props => {
     valueIsMissing = !endDate || endDate === ''
     oneValueIsMissing = oneValueIsMissing || valueIsMissing
     setEndDateIsRequired(valueIsMissing)
-    valueIsMissing = textType?.length === 0
+    valueIsMissing = !textType || textType.length === 0
     oneValueIsMissing = oneValueIsMissing || valueIsMissing
     setTextTypeIsRequired(valueIsMissing)
     return oneValueIsMissing

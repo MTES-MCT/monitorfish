@@ -38,14 +38,11 @@ context('NewRegulation', () => {
     // try to save
     cy.get('[data-cy="validate-button"]').contains('Enregister les modifications')
     cy.get('[data-cy="validate-button"]').click()
-    cy.get('[data-cy="custom-date-picker-undefined"]').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
-    cy.get('.rs-checkbox-inner').should('have.length', 3)
-    cy.get('.rs-checkbox-inner').before('border-top-color').should('eq', 'rgb(225, 0, 15)')
+    cy.get('.rs-checkbox-wrapper').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
   })
   it('Save regulation click button open backoffice page', () => {
     // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
-    cy.get('.rs-checkbox-inner').before('border-color').should('not.eq', 'rgb(225, 0, 15)')
     // complete missing values in form
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })

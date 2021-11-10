@@ -73,7 +73,9 @@ const RegulatoryText = props => {
   })
 
   useEffect(() => {
-    setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
+    if (!isEditing) {
+      setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
+    }
   }, [reference, url])
 
   /**
@@ -139,8 +141,12 @@ const RegulatoryText = props => {
 
   const cancelAddNewRegulatoryText = () => {
     setIsEditing(true)
-    set('reference', '')
-    set('url', '')
+    const obj = {
+      ...regulatoryText,
+      reference: '',
+      url: ''
+    }
+    setRegulatoryText(id, obj)
   }
 
   const onCloseIconClicked = () => {

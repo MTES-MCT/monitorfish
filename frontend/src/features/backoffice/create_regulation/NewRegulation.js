@@ -76,7 +76,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
-  const [selectedGeometryId, setSelectedGeometry] = useState(429)
+  const [selectedGeometryId, setSelectedGeometry] = useState()
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */

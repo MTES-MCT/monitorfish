@@ -78,6 +78,8 @@ const RegulatoryText = props => {
     if (!startDate) {
       set('startDate', new Date().getTime())
     }
+  }, [startDate])
+  useEffect(() => {
     if (fromForm) {
       if (!isEditing) {
         setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
@@ -85,7 +87,7 @@ const RegulatoryText = props => {
     } else {
       setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
     }
-  }, [startDate, reference, url, fromForm])
+  }, [reference, url, fromForm])
 
   /**
    * @function checkUrl
@@ -109,7 +111,6 @@ const RegulatoryText = props => {
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
     if (!oneValueIsMissing) {
-      // setIsEditing(false)
       setFromForm(false)
       return false
     }
@@ -247,6 +248,7 @@ const RegulatoryText = props => {
     <ContentLine>
       <Label>Début de validité</Label>
       <CustomDatePicker
+        key={startDate}
         isRequired={startDateIsRequired}
         value={startDate ? new Date(startDate) : new Date()}
         onChange={(date) => set('startDate', date.getTime())}

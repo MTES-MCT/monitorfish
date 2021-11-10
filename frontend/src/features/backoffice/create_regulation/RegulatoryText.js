@@ -52,7 +52,9 @@ const RegulatoryText = props => {
   const dispatch = useDispatch()
 
   /** @type {boolean} isEditing */
-  const [isEditing, setIsEditing] = useState()
+  const [isEditing, setIsEditing] = useState(undefined)
+  /** @type {boolean} fromForm */
+  const [fromForm, setFromForm] = useState(false)
   /** @type {boolean} nameIsRequired */
   const [nameIsRequired, setNameIsRequired] = useState(false)
   /** @type {boolean} URLIsrequired */
@@ -73,10 +75,17 @@ const RegulatoryText = props => {
   })
 
   useEffect(() => {
-    if (!isEditing) {
+    if (!startDate) {
+      set('startDate', new Date().getTime())
+    }
+    if (fromForm) {
+      if (!isEditing) {
+        setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
+      }
+    } else {
       setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
     }
-  }, [reference, url])
+  }, [startDate, reference, url, fromForm])
 
   /**
    * @function checkUrl
@@ -100,7 +109,8 @@ const RegulatoryText = props => {
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
     if (!oneValueIsMissing) {
-      setIsEditing(false)
+      // setIsEditing(false)
+      setFromForm(false)
       return false
     }
     return true
@@ -161,6 +171,13 @@ const RegulatoryText = props => {
       (!url || url === '')
   }
 
+  const onInputValueChange = (key, value) => {
+    set(key, value)
+    if (!fromForm) {
+      setFromForm(true)
+    }
+  }
+
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
@@ -171,7 +188,7 @@ const RegulatoryText = props => {
             $isRed={nameIsRequired}
             width={'250px'}
             value={reference || ''}
-            onChange={value => set('reference', value)}
+            onChange={value => onInputValueChange('reference', value)}
             data-cy="reg-text-name"
           />
           <CustomInput
@@ -179,7 +196,7 @@ const RegulatoryText = props => {
             $isRed={URLIsrequired}
             width={'250px'}
             value={url || ''}
-            onChange={value => set('url', value)}
+            onChange={value => onInputValueChange('url', value)}
             data-cy="reg-text-url"
           />
           {(reference || url) &&

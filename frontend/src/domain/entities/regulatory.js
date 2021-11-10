@@ -2,6 +2,7 @@ import { getTextForSearch, formatDataForSelectPicker } from '../../utils'
 
 export const mapToRegulatoryZone = properties => {
   return {
+    id: properties.id,
     lawType: properties.law_type,
     topic: properties.layer_name,
     prohibitedGears: properties.engins_interdits,

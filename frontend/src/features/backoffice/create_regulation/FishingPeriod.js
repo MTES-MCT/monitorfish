@@ -31,8 +31,8 @@ const FishingPeriod = (props) => {
     timeIntervals
   } = fishingPeriod
 
-  const [displayForm, setDisplayForm] = useState(authorized)
-  const [disabled, setDisabled] = useState(annualRecurrence === undefined)
+  const [displayForm, setDisplayForm] = useState(false)
+  const [disabled, setDisabled] = useState(true)
   const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
 
   useEffect(() => {
@@ -42,16 +42,16 @@ const FishingPeriod = (props) => {
   }, [daytime])
 
   useEffect(() => {
-    if (!displayForm) {
+    if (!displayForm && authorized !== undefined) {
       setDisplayForm(true)
     }
   }, [authorized])
 
   useEffect(() => {
-    if (disabled) {
+    if (disabled && annualRecurrence !== undefined) {
       setDisabled(false)
     }
-  })
+  }, [annualRecurrence])
 
   const set = useCallback((key, value) => {
     const obj = {

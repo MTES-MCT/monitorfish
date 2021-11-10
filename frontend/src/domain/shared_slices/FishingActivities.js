@@ -121,8 +121,9 @@ const fishingActivitiesSlice = createSlice({
      * @function showFishingActivitiesOnMap
      * @memberOf FishingActivitiesReducer
      * @param {Object=} state
+     * @param {{payload: boolean}} action - To force a redraw
      */
-    showFishingActivitiesOnMap (state) {
+    showFishingActivitiesOnMap (state, action) {
       state.fishingActivitiesAreShowedOnMap = true
       state.fishingActivitiesShowedOnMap = state.fishingActivities.ersMessages
         .filter(fishingActivity => !fishingActivity.isCorrected)
@@ -133,6 +134,10 @@ const fishingActivitiesSlice = createSlice({
           isDeleted: fishingActivity.deleted,
           isNotAcknowledged: !fishingActivity.acknowledge?.isSuccess
         }))
+
+      if (action.payload) {
+        state.redrawFishingActivitiesOnMap = true
+      }
     },
     /**
      * Remove fishing activities from the map
@@ -176,15 +181,6 @@ const fishingActivitiesSlice = createSlice({
       })
     },
     /**
-     * Redraw fishing activities on map
-     * @function redrawFishingActivitiesOnMap
-     * @memberOf FishingActivitiesReducer
-     * @param {Object=} state
-     */
-    redrawFishingActivitiesOnMap (state) {
-      state.redrawFishingActivitiesOnMap = true
-    },
-    /**
      * End redraw fishing activities on map
      * @function endRedrawFishingActivitiesOnMap
      * @memberOf FishingActivitiesReducer
@@ -221,7 +217,6 @@ export const {
   updateFishingActivitiesOnMapCoordinates,
   navigateToFishingActivity,
   loadFishingActivities,
-  redrawFishingActivitiesOnMap,
   endRedrawFishingActivitiesOnMap
 } = fishingActivitiesSlice.actions
 

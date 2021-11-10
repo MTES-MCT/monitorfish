@@ -3,7 +3,6 @@ import { removeError, setError } from '../shared_slices/Global'
 import {
   hideFishingActivitiesOnMap,
   loadFishingActivities,
-  redrawFishingActivitiesOnMap,
   removeFishingActivitiesFromMap,
   setLastVoyage,
   setNextFishingActivities,
@@ -80,7 +79,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(setLastVoyage(voyage))
       dispatch(setVoyage(voyage))
       if (fishingActivitiesAreShowedOnMap || isFirstTimeVesselVoyageIsShowed) {
-        dispatch(showFishingActivitiesOnMap())
+        dispatch(showFishingActivitiesOnMap(true))
       } else {
         dispatch(hideFishingActivitiesOnMap())
       }
@@ -97,7 +96,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
 }
 
 function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingActivitiesAreShowedOnMap) {
-  const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHours(voyage.startDate, voyage.endDate)
+  const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHoursPlusOneHour(voyage.startDate, voyage.endDate)
 
   const trackDepthObject = {
     trackDepth: VesselTrackDepth.CUSTOM,
@@ -106,18 +105,19 @@ function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingAc
   }
 
   dispatch(setSelectedVesselCustomTrackDepth(trackDepthObject))
-  dispatch(modifyVesselTrackDepth(vesselIdentity, trackDepthObject)).then(() => {
+  dispatch(modifyVesselTrackDepth(vesselIdentity, trackDepthObject, true)).then(() => {
     dispatch(setVoyage(voyage))
     if (fishingActivitiesAreShowedOnMap) {
-      dispatch(showFishingActivitiesOnMap())
-      dispatch(redrawFishingActivitiesOnMap())
+      batch(() => {
+        dispatch(showFishingActivitiesOnMap(true))
+      })
     } else {
       dispatch(removeFishingActivitiesFromMap())
     }
   })
 }
 
-function getDateRangeMinusFourHours (afterDateTime, beforeDateTime) {
+function getDateRangeMinusFourHoursPlusOneHour (afterDateTime, beforeDateTime) {
   if (!afterDateTime && !beforeDateTime) {
     return {
       afterDateTime: null,
@@ -128,7 +128,10 @@ function getDateRangeMinusFourHours (afterDateTime, beforeDateTime) {
   afterDateTime = new Date(afterDateTime)
   const fourHours = 4
   afterDateTime.setTime(afterDateTime.getTime() - (fourHours * 60 * 60 * 1000))
+
   beforeDateTime = new Date(beforeDateTime)
+  const oneHour = 1
+  beforeDateTime.setTime(beforeDateTime.getTime() + (oneHour * 60 * 60 * 1000))
 
   return {
     afterDateTime,

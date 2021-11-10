@@ -52,7 +52,7 @@ const RegulatoryText = props => {
   const dispatch = useDispatch()
 
   /** @type {boolean} isEditing */
-  const [isEditing, setIsEditing] = useState(reference === undefined || reference === '' || url === undefined || url === '')
+  const [isEditing, setIsEditing] = useState()
   /** @type {boolean} nameIsRequired */
   const [nameIsRequired, setNameIsRequired] = useState(false)
   /** @type {boolean} URLIsrequired */
@@ -72,6 +72,10 @@ const RegulatoryText = props => {
     setRegulatoryText(id, obj)
   })
 
+  useEffect(() => {
+    setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
+  }, [reference, url])
+
   /**
    * @function checkUrl
    * @param {String} url
@@ -87,10 +91,10 @@ const RegulatoryText = props => {
    * @return true if a value is missing, else false
    */
   const checkNameAndUrl = () => {
-    let required = !reference || url === ''
+    let required = !reference || reference === ''
     let oneValueIsMissing = required
     setNameIsRequired(required)
-    required = !reference || reference === '' || !checkURL(url)
+    required = !url || url === '' || !checkURL(url)
     oneValueIsMissing = oneValueIsMissing || required
     setURLIsrequired(required)
     if (!oneValueIsMissing) {
@@ -105,16 +109,16 @@ const RegulatoryText = props => {
    * @returns true if a regulatory text form value is missing or incorrect, else false
    */
   const checkOtherRequiredValues = () => {
-    let required = !startDate || startDate === ''
     let oneValueIsMissing = false
-    oneValueIsMissing = oneValueIsMissing || required
-    setStartDateIsRequired(required)
-    required = !endDate || endDate === ''
-    oneValueIsMissing = oneValueIsMissing || required
-    setEndDateIsRequired(required)
-    required = textType.length === 0
-    oneValueIsMissing = oneValueIsMissing || required
-    setTextTypeIsRequired(required)
+    let valueIsMissing = !startDate || startDate === ''
+    oneValueIsMissing = oneValueIsMissing || valueIsMissing
+    setStartDateIsRequired(valueIsMissing)
+    valueIsMissing = !endDate || endDate === ''
+    oneValueIsMissing = oneValueIsMissing || valueIsMissing
+    setEndDateIsRequired(valueIsMissing)
+    valueIsMissing = textType?.length === 0
+    oneValueIsMissing = oneValueIsMissing || valueIsMissing
+    setTextTypeIsRequired(valueIsMissing)
     return oneValueIsMissing
   }
 
@@ -139,20 +143,6 @@ const RegulatoryText = props => {
     set('url', '')
   }
 
-  const onNameValueChange = (value) => {
-    if (!isEditing) {
-      setIsEditing(true)
-    }
-    set('reference', value)
-  }
-
-  const onURLValueChange = (value) => {
-    if (!isEditing) {
-      setIsEditing(true)
-    }
-    set('url', value)
-  }
-
   const onCloseIconClicked = () => {
     setIsEditing(true)
   }
@@ -175,7 +165,7 @@ const RegulatoryText = props => {
             $isRed={nameIsRequired}
             width={'250px'}
             value={reference || ''}
-            onChange={onNameValueChange}
+            onChange={value => set('reference', value)}
             data-cy="reg-text-name"
           />
           <CustomInput
@@ -183,7 +173,7 @@ const RegulatoryText = props => {
             $isRed={URLIsrequired}
             width={'250px'}
             value={url || ''}
-            onChange={onURLValueChange}
+            onChange={value => set('url', value)}
             data-cy="reg-text-url"
           />
           {(reference || url) &&
@@ -245,6 +235,7 @@ const RegulatoryText = props => {
     <ContentLine>
       <Label>Fin de validité</Label>
       <CustomDatePicker
+        key={endDate}
         isRequired={endDateIsRequired}
         value={(!endDate || endDate === INFINITE) ? undefined : new Date(endDate)}
         onChange={(date) => set('endDate', date.getTime())}
@@ -290,11 +281,11 @@ const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
+    border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray}
   }
   .rs-checkbox-wrapper .rs-checkbox-inner {
-    border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray} !important;
     &:before {
-      border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray} !important;
+      border: none!important;
       box-sizing: border-box;
     }
     &:after {

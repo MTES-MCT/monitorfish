@@ -175,7 +175,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     setNameZone(zone)
     setSelectedRegionList(region ? region.split(', ') : [])
     setSelectedSeaFront(seafront)
-    setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [{}])
+    setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
     setSelectedGeometry(id)
     originalGeometryId = regulatoryZoneMetadata.id
     dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))

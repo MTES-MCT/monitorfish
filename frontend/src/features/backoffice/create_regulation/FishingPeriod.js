@@ -195,6 +195,12 @@ const FishingPeriod = (props) => {
     return date.toLocaleDateString('fr-FR', options)
   }
 
+  const timeToString = (date) => {
+    const minutes = date.getMinutes()
+    const hours = date.getHours()
+    return `${hours < 10 ? '0' : ''}${hours}h${minutes < 10 ? '0' : ''}${minutes}`
+  }
+
   const fishingPeriodToString = () => {
     const textArray = []
     if (dateRanges?.length) {
@@ -230,8 +236,7 @@ const FishingPeriod = (props) => {
     if (timeIntervals?.length) {
       const array = toArrayString(timeIntervals.map(({ from, to }) => {
         if (from && to) {
-          return `de ${from.getHours()}:${from.getMinutes()} 
-            à ${to.getHours()}:${to.getMinutes()}`
+          return `de ${timeToString(from)} à ${timeToString(to)}`
         }
         return undefined
       }).filter(e => e))

@@ -34,26 +34,26 @@ const regulationSlice = createSlice({
     },
     addObjectToRegulatoryTextCheckedMap (state, action) {
       const {
-        /** @type {RegulatoryText | null} */
-        regulatoryText,
+        /** @type {boolean} */
+        valid,
         /** @type {number} */
         id
       } = action.payload
       state.regulatoryTextCheckedMap = {
         ...(state.regulatoryTextCheckedMap || {}),
-        [id]: regulatoryText ? { ...regulatoryText } : null
+        [id]: valid
       }
     },
     addObjectToUpcomingRegulatoryTextCheckedMap (state, action) {
       const {
-        /** @type {RegulatoryText | null} */
-        regulatoryText,
+        /** @type {boolean} */
+        valid,
         /** @type {number} */
         id
       } = action.payload
       state.upcomingRegulatoryTextCheckedMap = {
         ...(state.upcomingRegulatoryTextCheckedMap || {}),
-        [id]: regulatoryText ? { ...regulatoryText } : null
+        [id]: valid
       }
     },
     setUpcomingRegulatoryTextListCheckedMap (state, action) {

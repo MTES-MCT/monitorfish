@@ -17,7 +17,11 @@ import {
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
 } from '../domain/shared_slices/InterestPoint'
-import { coordinatesAreModified, coordinatesOrTypeAreModified } from '../domain/entities/interestPoints'
+import {
+  coordinatesAreModified,
+  coordinatesOrTypeAreModified,
+  interestPointType
+} from '../domain/entities/interestPoints'
 import saveInterestPointFeature from '../domain/use_cases/saveInterestPointFeature'
 import { getInterestPointStyle } from './styles/interestPoint.style'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -218,7 +222,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
   function handleDrawEvents () {
     if (drawObject) {
       drawObject.once(DRAW_START_EVENT, event => {
-        startDrawing(event, interestPointBeingDrawed.type)
+        startDrawing(event, interestPointBeingDrawed.type || interestPointType.FISHING_VESSEL)
       })
 
       drawObject.once(DRAW_ABORT_EVENT, () => {

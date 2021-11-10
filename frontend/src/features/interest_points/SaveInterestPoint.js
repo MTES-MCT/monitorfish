@@ -19,12 +19,7 @@ import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../.
 import { transform } from 'ol/proj'
 import saveInterestPointFeature from '../../domain/use_cases/saveInterestPointFeature'
 
-const SaveInterestPoint = (
-  {
-    healthcheckTextWarning,
-    isOpen,
-    close
-  }) => {
+const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   const dispatch = useDispatch()
 
   const {
@@ -38,45 +33,31 @@ const SaveInterestPoint = (
   const [name, setName] = useState('')
   const [observations, setObservations] = useState('')
   const [type, setType] = useState(null)
-  const [readyToUpdate, setReadyToUpdate] = useState(false)
+  const [updateInterestPoint, setUpdateInterestPoint] = useState(false)
 
   useEffect(() => {
-    if (isEditing && interestPointBeingDrawed) {
-      setName(interestPointBeingDrawed.name)
-      setObservations(interestPointBeingDrawed.observations)
-      setType(interestPointBeingDrawed.type)
-      setReadyToUpdate(true)
-    }
-  }, [interestPointBeingDrawed, isEditing])
-
-  useEffect(() => {
-    if (!isEditing) {
+    if (!isOpen) {
       setName('')
       setObservations('')
       setType(interestPointType.FISHING_VESSEL)
       setCoordinates([])
-      setReadyToUpdate(false)
-    }
-  }, [isEditing])
-
-  useEffect(() => {
-    if (!isOpen && !interestPointBeingDrawed) {
-      setName('')
-      setObservations('')
-      setType(interestPointType.FISHING_VESSEL)
-      setCoordinates([])
-      setReadyToUpdate(false)
       return
     }
 
-    if (!interestPointBeingDrawed) {
-      setType(interestPointType.FISHING_VESSEL)
-      setReadyToUpdate(false)
-    }
-  }, [isOpen, interestPointBeingDrawed])
+    setUpdateInterestPoint(false)
+    setName(interestPointBeingDrawed?.name || '')
+    setObservations(interestPointBeingDrawed?.observations || '')
+    setType(interestPointBeingDrawed?.type || interestPointType.FISHING_VESSEL)
+  }, [interestPointBeingDrawed, isEditing, isOpen])
 
   useEffect(() => {
-    if (isOpen && readyToUpdate) {
+    if (type && !interestPointBeingDrawed?.type && !updateInterestPoint) {
+      setUpdateInterestPoint(true)
+    }
+  }, [type, interestPointBeingDrawed, updateInterestPoint])
+
+  useEffect(() => {
+    if (isOpen) {
       if (!interestPointBeingDrawed?.coordinates?.length) {
         setCoordinates([])
         return
@@ -89,34 +70,34 @@ const SaveInterestPoint = (
         parseFloat(ddCoordinates[1].replace(/°/g, ''))
       ])
     }
-  }, [interestPointBeingDrawed, isEditing, isOpen, readyToUpdate])
+  }, [interestPointBeingDrawed, isEditing, isOpen])
 
   useEffect(() => {
-    if (name && interestPointBeingDrawed?.name !== name && readyToUpdate) {
+    if (name && interestPointBeingDrawed?.name !== name && updateInterestPoint) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'name',
         value: name
       }))
     }
-  }, [name, interestPointBeingDrawed, readyToUpdate])
+  }, [name, interestPointBeingDrawed, updateInterestPoint])
 
   useEffect(() => {
-    if (observations && interestPointBeingDrawed?.observations !== observations && readyToUpdate) {
+    if (observations && interestPointBeingDrawed?.observations !== observations && updateInterestPoint) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'observations',
         value: observations
       }))
     }
-  }, [observations, interestPointBeingDrawed, readyToUpdate])
+  }, [observations, interestPointBeingDrawed, updateInterestPoint])
 
   useEffect(() => {
-    if (type && interestPointBeingDrawed?.type !== type && readyToUpdate) {
+    if (type && interestPointBeingDrawed?.type !== type && updateInterestPoint) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'type',
         value: type
       }))
     }
-  }, [type, interestPointBeingDrawed, readyToUpdate])
+  }, [type, interestPointBeingDrawed, updateInterestPoint])
 
   /**
    * Compare with previous coordinates and update interest point coordinates
@@ -164,6 +145,7 @@ const SaveInterestPoint = (
             name="interestTypeRadio"
             value={type}
             onChange={value => {
+              setUpdateInterestPoint(true)
               setType(value)
             }}
           >
@@ -189,13 +171,19 @@ const SaveInterestPoint = (
         <Name
           data-cy={'interest-point-name-input'}
           type='text'
-          onChange={e => setName(e.target.value)}
+          onChange={e => {
+            setUpdateInterestPoint(true)
+            setName(e.target.value)
+          }}
           value={name}
         />
         <p>Observations</p>
         <textarea
           data-cy={'interest-point-observations-input'}
-          onChange={e => setObservations(e.target.value)}
+          onChange={e => {
+            setUpdateInterestPoint(true)
+            setObservations(e.target.value)
+          }}
           value={observations}
         />
         <OkButton

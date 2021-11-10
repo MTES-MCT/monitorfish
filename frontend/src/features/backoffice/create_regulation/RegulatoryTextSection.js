@@ -65,8 +65,8 @@ const RegulatoryTextSection = props => {
         : 'références réglementaires en vigueur'}
     </SectionTitle>
     {
-      (regulatoryTextList && regulatoryTextList.length > 0)
-        ? regulatoryTextList.map((regulatoryText, id) => {
+      (regulatoryTextList && regulatoryTextList.length > 0) &&
+        regulatoryTextList.map((regulatoryText, id) => {
           return <RegulatoryText
               key={id}
               id={id}
@@ -78,16 +78,6 @@ const RegulatoryTextSection = props => {
               setRegulatoryText={setRegulatoryText}
             />
         })
-        : <RegulatoryText
-            key={0}
-            id={0}
-            regulatoryText={{}}
-            addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-            source={source}
-            listLength={0}
-            saveForm={saveForm}
-            setRegulatoryTextList={setRegulatoryTextList}
-        />
     }
     <ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION

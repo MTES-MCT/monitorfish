@@ -220,7 +220,7 @@ const RegulatoryText = props => {
           </>
         : <Tag
             tagValue={reference}
-            tagUrl={reference}
+            tagUrl={url}
             onCloseIconClicked={onCloseIconClicked}
           />
     }

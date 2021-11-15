@@ -10,13 +10,18 @@ const DayPicker = ({ selectedList, setSelectedList, disabled }) => {
         return <Circle
           key={id}
           disabled={disabled}
+          value={weekday}
           $isGray={selectedList?.includes(weekday)}
-          onClick={_ => {
-            const newSelectedList = [...selectedList]
-            if (selectedList?.includes(weekday)) {
-              newSelectedList.splice(id, 1)
+          onClick={e => {
+            let newSelectedList
+            const value = e.currentTarget.getAttribute('value')
+            if (selectedList?.includes(value)) {
+              newSelectedList = selectedList.filter(elem => elem !== value)
             } else {
-              newSelectedList.push(weekday)
+              newSelectedList = [
+                ...selectedList,
+                value
+              ]
             }
             setSelectedList(newSelectedList)
           }}>

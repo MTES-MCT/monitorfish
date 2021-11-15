@@ -13,18 +13,18 @@ import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
-import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
+import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../domain/entities/regulatory'
 
 const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    upcomingRegulation = { regulatoryTextList: [{}] },
+    upcomingRegulation = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] },
     upcomingRegulatoryTextCheckedMap,
     saveUpcomingRegulation
   } = useSelector(state => state.regulation)
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList || [{}])
+  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList || [DEFAULT_REGULATORY_TEXT])
 
   const onAddUpcomingRegulation = () => {
     dispatch(setSaveUpcomingRegulation(true))
@@ -32,14 +32,13 @@ const UpcomingRegulationModal = () => {
 
   useEffect(() => {
     if (upcomingRegulatoryTextCheckedMap && saveUpcomingRegulation) {
-      const regulatoryTexts = Object.values(upcomingRegulatoryTextCheckedMap)
-      const allTextsHaveBeenChecked = regulatoryTexts.length > 0 && regulatoryTexts.length === regulatoryTextList.length
+      const regulatoryTextCheckList = Object.values(upcomingRegulatoryTextCheckedMap)
+      const allTextsHaveBeenChecked = regulatoryTextCheckList.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
       if (allTextsHaveBeenChecked) {
-        const allTextsHaveBeenFilled = !regulatoryTexts.includes(null)
+        const allTextsHaveBeenFilled = !regulatoryTextCheckList.includes(false)
         if (allTextsHaveBeenFilled) {
-          const newUpcomingRegulation = { ...(upcomingRegulation || { regulatoryTextList: [{}] }) }
-          const newRegulatoryTextList = [...regulatoryTexts]
-          newUpcomingRegulation.regulatoryTextList = newRegulatoryTextList
+          const newUpcomingRegulation = { ...(upcomingRegulation || { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }) }
+          newUpcomingRegulation.regulatoryTextList = [...regulatoryTextList]
           batch(() => {
             dispatch(setUpcomingRegulation(newUpcomingRegulation))
             dispatch(setIsModalOpen(false))

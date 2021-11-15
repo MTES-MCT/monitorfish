@@ -127,6 +127,14 @@ export const REGULATORY_TEXT_SOURCE = {
   REGULATION: 'regulation'
 }
 
+export const DEFAULT_REGULATORY_TEXT = {
+  url: '',
+  reference: '',
+  startDate: new Date().getTime(),
+  endDate: undefined,
+  textType: []
+}
+
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText
     ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))

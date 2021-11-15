@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcommingRegulationSection from './UpcommingRegulationSection'
 import { setIsModalOpen } from '../Regulation.slice'
-import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
+import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -30,12 +30,12 @@ const RegulatoryTextSection = props => {
 
   const addOrRemoveRegulatoryTextInList = (id) => {
     let newRegulatoryTextList = [...regulatoryTextList]
-    if (id) {
-      newRegulatoryTextList.splice(id, 1)
-    } else if (id === 0) {
-      newRegulatoryTextList = [{}]
+    if (id === undefined) {
+      newRegulatoryTextList.push(DEFAULT_REGULATORY_TEXT)
+    } else if (regulatoryTextList.length === 1) {
+      newRegulatoryTextList = [DEFAULT_REGULATORY_TEXT]
     } else {
-      newRegulatoryTextList.push({})
+      newRegulatoryTextList.splice(id, 1)
     }
     setRegulatoryTextList(newRegulatoryTextList)
   }
@@ -52,6 +52,12 @@ const RegulatoryTextSection = props => {
     }
   }
 
+  const setRegulatoryText = (id, regulatoryText) => {
+    const newRegulatoryTextList = [...regulatoryTextList]
+    newRegulatoryTextList[id] = regulatoryText
+    setRegulatoryTextList(newRegulatoryTextList)
+  }
+
   return (<Section>
     <SectionTitle>
       {source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION
@@ -59,8 +65,8 @@ const RegulatoryTextSection = props => {
         : 'références réglementaires en vigueur'}
     </SectionTitle>
     {
-      (regulatoryTextList && regulatoryTextList.length > 0)
-        ? regulatoryTextList.map((regulatoryText, id) => {
+      (regulatoryTextList && regulatoryTextList.length > 0) &&
+        regulatoryTextList.map((regulatoryText, id) => {
           return <RegulatoryText
               key={id}
               id={id}
@@ -69,17 +75,9 @@ const RegulatoryTextSection = props => {
               source={source}
               listLength={regulatoryTextList.length}
               saveForm={saveForm}
+              setRegulatoryText={setRegulatoryText}
             />
         })
-        : <RegulatoryText
-            key={0}
-            id={0}
-            regulatoryText={{}}
-            addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-            source={source}
-            listLength={0}
-            saveForm={saveForm}
-        />
     }
     <ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION

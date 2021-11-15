@@ -299,3 +299,152 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(metadata, expected_metadata)
         data = data_list[0]
         self.assertEqual(data, {"value": {"returnStatus": "000"}})
+
+    def test_multi_line_message(self):
+        test_file = "multi_line_message.xml"
+        metadata, data_list = self.parse_file(test_file)
+        expected_metadata = {
+            "operation_number": "FAC20211018001928",
+            "operation_country": "FAC",
+            "operation_datetime_utc": datetime.datetime(2021, 10, 18, 15, 31),
+            "operation_type": "DAT",
+            "ers_id": "FAC20211018001928",
+            "ers_datetime_utc": datetime.datetime(2021, 10, 18, 15, 31),
+            "cfr": "Immat navire",
+            "ircs": "CALL1",
+            "external_identification": "AA 000000",
+            "vessel_name": "Le navire qui pêche",
+            "flag_state": "XXX",
+            "imo": None,
+            "trip_number": "21091911",
+        }
+
+        expected_data_list = [
+            {
+                "log_type": "DEP",
+                "value": {
+                    "departureDatetimeUtc": "2021-09-19T18:00:00Z",
+                    "departurePort": "FRRTB",
+                    "anticipatedActivity": None,
+                    "gearOnboard": [{"gear": "OTB", "mesh": 75.0, "dimensions": 12.0}],
+                },
+            },
+            {
+                "log_type": "FAR",
+                "value": {
+                    "farDatetimeUtc": "2021-09-19T00:00:00Z",
+                    "gear": "OTB",
+                    "mesh": 75.0,
+                    "dimensions": 12.0,
+                    "catches": [
+                        {
+                            "species": "SQZ",
+                            "weight": 30.0,
+                            "nbFish": None,
+                            "faoZone": "27.7.d",
+                            "economicZone": None,
+                            "statisticalRectangle": "27E9",
+                            "effortZone": None,
+                            "presentation": "WHL",
+                            "packaging": None,
+                            "freshness": None,
+                            "preservationState": None,
+                            "conversionFactor": None,
+                        },
+                        {
+                            "species": "PLE",
+                            "weight": 30.0,
+                            "nbFish": None,
+                            "faoZone": "27.7.d",
+                            "economicZone": None,
+                            "statisticalRectangle": "27E9",
+                            "effortZone": None,
+                            "presentation": "WHL",
+                            "packaging": None,
+                            "freshness": None,
+                            "preservationState": None,
+                            "conversionFactor": None,
+                        },
+                        {
+                            "species": "RJC",
+                            "weight": 20.0,
+                            "nbFish": None,
+                            "faoZone": "27.7.d",
+                            "economicZone": None,
+                            "statisticalRectangle": "27E9",
+                            "effortZone": None,
+                            "presentation": "WHL",
+                            "packaging": None,
+                            "freshness": None,
+                            "preservationState": None,
+                            "conversionFactor": None,
+                        },
+                    ],
+                    "latitude": 0.0,
+                    "longitude": 0.0,
+                },
+            },
+            {
+                "log_type": "RTP",
+                "value": {
+                    "returnDatetimeUtc": "2021-09-19T22:15:00Z",
+                    "port": "FRRTB",
+                    "reasonOfReturn": None,
+                },
+            },
+            {
+                "log_type": "LAN",
+                "value": {
+                    "landingDatetimeUtc": "2021-09-19T22:15:00Z",
+                    "port": "FRRTB",
+                    "sender": "MAS",
+                    "catchLanded": [
+                        {
+                            "species": "SQZ",
+                            "weight": 30.0,
+                            "nbFish": None,
+                            "faoZone": "27.7.d",
+                            "economicZone": None,
+                            "statisticalRectangle": None,
+                            "effortZone": None,
+                            "presentation": "WHL",
+                            "packaging": None,
+                            "freshness": None,
+                            "preservationState": None,
+                            "conversionFactor": 1.0,
+                        },
+                        {
+                            "species": "PLE",
+                            "weight": 30.0,
+                            "nbFish": None,
+                            "faoZone": "27.7.d",
+                            "economicZone": None,
+                            "statisticalRectangle": None,
+                            "effortZone": None,
+                            "presentation": "WHL",
+                            "packaging": None,
+                            "freshness": None,
+                            "preservationState": None,
+                            "conversionFactor": 1.0,
+                        },
+                        {
+                            "species": "RJC",
+                            "weight": 20.0,
+                            "nbFish": None,
+                            "faoZone": "27.7.d",
+                            "economicZone": None,
+                            "statisticalRectangle": None,
+                            "effortZone": None,
+                            "presentation": "WHL",
+                            "packaging": None,
+                            "freshness": None,
+                            "preservationState": None,
+                            "conversionFactor": 1.0,
+                        },
+                    ],
+                },
+            },
+        ]
+
+        self.assertEqual(metadata, expected_metadata)
+        self.assertEqual(data_list, expected_data_list)

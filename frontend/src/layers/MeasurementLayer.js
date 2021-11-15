@@ -21,7 +21,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import MeasurementOverlay from '../features/map/overlays/MeasurementOverlay'
 import { getNauticalMilesFromMeters } from '../utils'
 import saveMeasurement from '../domain/use_cases/saveMeasurement'
-import { measurementStyle } from './styles/measurement.style'
+import { measurementStyle, measurementStyleWithCenter } from './styles/measurement.style'
 import { transform } from 'ol/proj'
 import { getCenter } from 'ol/extent'
 import Layers from '../domain/entities/layers'
@@ -52,7 +52,7 @@ const MeasurementLayer = ({ map }) => {
     renderBuffer: 7,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
-    style: measurementStyle,
+    style: [measurementStyle, measurementStyleWithCenter],
     className: Layers.MEASUREMENT.code,
     zIndex: Layers.MEASUREMENT.zIndex
   }))
@@ -183,7 +183,7 @@ const MeasurementLayer = ({ map }) => {
 
     const circleFeature = new Feature({
       geometry: circular(coordinates, radiusInMeters, numberOfVertices).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-      style: measurementStyle
+      style: [measurementStyle, measurementStyleWithCenter]
     })
     dispatch(saveMeasurement(circleFeature, `r = ${circleMeasurementToAdd.circleRadiusToAdd} nm`))
   }
@@ -202,7 +202,7 @@ const MeasurementLayer = ({ map }) => {
     const draw = new Draw({
       source: vectorSource,
       type: measurementTypeToAdd,
-      style: measurementStyle
+      style: [measurementStyle, measurementStyleWithCenter]
     })
 
     map.addInteraction(draw)

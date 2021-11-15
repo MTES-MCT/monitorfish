@@ -250,15 +250,6 @@ def load_ers(cleaned_data: List[dict]):
             # Drop rows for which the operation number already exists in the
             # ers_messages database
 
-            parsed = drop_rows_already_in_table(
-                df=parsed,
-                df_column_name="operation_number",
-                table=ers_messages_table,
-                table_column_name="operation_number",
-                connection=connection,
-                logger=logger,
-            )
-
             parsed_with_xml = drop_rows_already_in_table(
                 df=parsed_with_xml,
                 df_column_name="operation_number",
@@ -267,6 +258,10 @@ def load_ers(cleaned_data: List[dict]):
                 connection=connection,
                 logger=logger,
             )
+
+            parsed = parsed[
+                parsed.operation_number.isin(parsed_with_xml.operation_number)
+            ]
 
             if len(parsed_with_xml) > 0:
                 n_lines = len(parsed_with_xml)

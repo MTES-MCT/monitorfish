@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { ReactComponent as TargetSVG } from '../icons/target.svg'
+
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import Table from 'rsuite/lib/Table'
 import Checkbox from 'rsuite/lib/Checkbox'
@@ -66,10 +66,8 @@ const VesselListTable = props => {
           </HeaderCell>
           <CheckedCell dataKey="checked" onChange={props.handleChange}/>
         </Column>
-        <Column resizable sortable width={50} fixed>
-          <HeaderCell>
-            <Target/>
-          </HeaderCell>
+        <Column resizable sortable width={95} fixed>
+          <HeaderCell>N. de risque</HeaderCell>
           <TargetCell dataKey="riskFactor" onChange={props.handleChange}/>
         </Column>
         <Column resizable sortable width={170} fixed>
@@ -171,12 +169,6 @@ const VesselsCount = styled.span`
   font-size: 13px;
   margin-bottom: 5px;
   display: inline-block;
-`
-
-const Target = styled(TargetSVG)`
-  width: 20px;
-  height: 20px;
-  vertical-align: top;
 `
 
 const FlagIcon = styled(FlagSVG)`

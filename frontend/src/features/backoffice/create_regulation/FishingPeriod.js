@@ -34,6 +34,12 @@ const FishingPeriod = (props) => {
   const [displayForm, setDisplayForm] = useState(false)
   const [disabled, setDisabled] = useState(true)
   const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
+  const [timeIsDisabled, setTimeIsDisabled] = useState(true)
+
+  useEffect(() => {
+    const atLeastOneDateElementIsCompleted = dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0 || holidays !== undefined
+    setTimeIsDisabled(!atLeastOneDateElementIsCompleted)
+  }, [fishingPeriod, timeIsDisabled])
 
   useEffect(() => {
     if (daytime) {
@@ -364,7 +370,7 @@ const FishingPeriod = (props) => {
           <HolidaysCheckbox disabled={disabled} onChange={setHolidays}/>
         </Row>
         <TimeTitle>Horaires autorisées</TimeTitle>
-        <Row>
+        <TimeRow disabled={timeIsDisabled}>
           <DateRanges>
               { timeIntervals?.length > 0
                 ? timeIntervals.map((timeInterval, id) => {
@@ -372,7 +378,7 @@ const FishingPeriod = (props) => {
                     key={id}
                     id={id}
                     timeInterval={timeInterval}
-                    disabled={disabled || daytime}
+                    disabled={timeIsDisabled || disabled || daytime}
                     onTimeIntervalChange={onTimeIntervalChange}
                     removeTimeInterval={removeTimeInterval}
                   />
@@ -381,23 +387,23 @@ const FishingPeriod = (props) => {
                   key={-1}
                   id={-1}
                   timeInterval={undefined}
-                  disabled={disabled || daytime}
+                  disabled={timeIsDisabled || disabled || daytime}
                   onTimeIntervalChange={onTimeIntervalChange}
                   removeTimeInterval={removeTimeInterval}
                 />
               }
           </DateRanges>
           <SquareButton
-              disabled={disabled || timeIntervals?.length === 0}
+              disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
               onClick={_ => !disabled && timeIntervals?.length !== 0 && addTimeInterval()} />
-        </Row>
-        <Row>
+        </TimeRow>
+        <TimeRow disabled={timeIsDisabled}>
           ou <DaytimeCheckbox
-            disabled={disabled}
+            disabled={timeIsDisabled || disabled}
             checked={daytime}
             onChange={setDaytime}
           /> du lever au coucher du soleil
-        </Row>
+        </TimeRow>
       </ConditionnalLines>
     </DateTimeWrapper>
     {fishingPeriodAsString &&
@@ -432,6 +438,10 @@ const PeriodRow = styled.div`
   .rs-radio-group {
     margin-left: 13px;
   }
+`
+
+const TimeRow = styled(Row)`
+  opacity: ${props => props.disabled ? '0.4' : '1'};
 `
 
 const ConditionnalLines = styled.div`

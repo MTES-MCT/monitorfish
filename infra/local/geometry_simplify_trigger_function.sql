@@ -1,4 +1,5 @@
 UPDATE prod.reglementation_peche SET geometry_simplified = ST_Simplify(ST_CurveToLine(geometry), 0.001);
+UPDATE prod.reglementation_peche SET geometry = ST_CurveToLine(geometry);
 
 -- This trigger function
 --   * is triggered whenever a row in the local regulation database is inserted or modified

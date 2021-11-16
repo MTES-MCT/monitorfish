@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg'
 import { REGULATORY_SEARCH_PROPERTIES } from '../../../../domain/entities/regulatory'
 import searchRegulatoryLayers from '../../../../domain/use_cases/searchRegulatoryLayers'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import {
-  resetRegulatoryZonesChecked, resetZoneSelected,
+  resetRegulatoryZonesChecked,
+  resetZoneSelected,
   setAdvancedSearchIsOpen,
   setRegulatoryLayersSearchResult
 } from './RegulatoryLayerSearch.slice'
 import { ReactComponent as BoxFilterSVG } from '../../../icons/Filtre_zone_rectangle.svg'
 import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_polygone.svg'
+import { ReactComponent as BoxFilterSelectedSVG } from '../../../icons/Filtre_zone_rectangle_selected.svg'
+import { ReactComponent as PolygonFilterSelectedSVG } from '../../../icons/Filtre_zone_polygone_selected.svg'
 import { setInteraction } from '../../../../domain/shared_slices/Map'
 import { InteractionTypes } from '../../../../domain/entities/map'
 import { layersType } from '../../../../domain/entities/layers'
@@ -29,6 +32,8 @@ const RegulatoryLayerSearchInput = props => {
     advancedSearchIsOpen,
     zoneSelected
   } = useSelector(state => state.regulatoryLayerSearch)
+
+  console.log(zoneSelected)
 
   const [nameSearchText, setNameSearchText] = useState('')
   const [placeSearchText, setPlaceSearchText] = useState('')
@@ -53,6 +58,7 @@ const RegulatoryLayerSearchInput = props => {
       setGearSearchText('')
       setSpeciesSearchText('')
       setRegulatoryReferenceSearchText('')
+      dispatch(resetZoneSelected())
     }
   }, [advancedSearchIsOpen])
 
@@ -134,19 +140,40 @@ const RegulatoryLayerSearchInput = props => {
         />
         <SearchByGeometry>
           ou définir une zone sur la carte <br/>
-          <BoxFilter
-            data-cy={'vessels-list-box-filter'}
-            onClick={() => dispatch(setInteraction({
-              type: InteractionTypes.SQUARE,
-              listener: layersType.REGULATORY
-            }))}
-          />
-          <PolygonFilter
-            onClick={() => dispatch(setInteraction({
-              type: InteractionTypes.POLYGON,
-              listener: layersType.REGULATORY
-            }))}
-          />
+          {
+            JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.SQUARE
+              ? <BoxFilterSelected
+                data-cy={'regulation-search-box-filter-selected'}
+                onClick={() => dispatch(setInteraction({
+                  type: InteractionTypes.SQUARE,
+                  listener: layersType.REGULATORY
+                }))}
+              />
+              : <BoxFilter
+                data-cy={'regulation-search-box-filter'}
+                onClick={() => dispatch(setInteraction({
+                  type: InteractionTypes.SQUARE,
+                  listener: layersType.REGULATORY
+                }))}
+              />
+          }
+          {
+            JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.POLYGON
+              ? <PolygonFilterSelected
+                data-cy={'regulation-search-polygon-filter-selected'}
+                onClick={() => dispatch(setInteraction({
+                  type: InteractionTypes.POLYGON,
+                  listener: layersType.REGULATORY
+                }))}
+              />
+              : <PolygonFilter
+                data-cy={'regulation-search-polygon-filter'}
+                onClick={() => dispatch(setInteraction({
+                  type: InteractionTypes.POLYGON,
+                  listener: layersType.REGULATORY
+                }))}
+              />
+          }
           {
             zoneSelected
               ? <InlineTagWrapper>
@@ -199,7 +226,7 @@ const SearchByGeometry = styled.div`
   font-size: 11px;
 `
 
-const BoxFilter = styled(BoxFilterSVG)`
+const boxFilterProperties = css`
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -207,13 +234,29 @@ const BoxFilter = styled(BoxFilterSVG)`
   vertical-align: text-bottom;
 `
 
-const PolygonFilter = styled(PolygonFilterSVG)`
+const polygonFilterProperties = css`
   width: 30px;
   height: 30px;
   cursor: pointer;
   margin-left: 5px;
   margin-top: 2px;
   vertical-align: text-bottom;
+`
+
+const BoxFilter = styled(BoxFilterSVG)`
+  ${boxFilterProperties}
+`
+
+const PolygonFilter = styled(PolygonFilterSVG)`
+  ${polygonFilterProperties}
+`
+
+const BoxFilterSelected = styled(BoxFilterSelectedSVG)`
+  ${boxFilterProperties}
+`
+
+const PolygonFilterSelected = styled(PolygonFilterSelectedSVG)`
+  ${polygonFilterProperties}
 `
 
 const AdvancedSearchBox = styled.div`

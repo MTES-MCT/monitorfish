@@ -121,6 +121,55 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
   })
 
+  it('A regulation Should be searched with a rectangle', () => {
+    // When
+    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+
+    cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
+    cy.get('*[data-cy="regulation-search-box-filter"]').click()
+
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).click(230, 630, { timeout: 20000, force: true })
+
+    cy.get('*[data-cy="regulation-search-box-filter"]').should('not.exist')
+    cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('exist')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').should('have.length', 2)
+    cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Armor CSJ')
+
+    cy.get('*[data-cy^="regulatory-search-input"]').type('Cotentin')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').should('have.length', 1)
+
+    cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click()
+    cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')
+    cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('not.exist')
+  })
+
+  it('A regulation Should be searched with a rectangle', () => {
+    // When
+    cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
+
+    cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
+    cy.get('*[data-cy="regulation-search-polygon-filter"]').click()
+
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).click(230, 630, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).dblclick(300, 700, { timeout: 20000, force: true })
+
+    cy.get('*[data-cy="regulation-search-polygon-filter"]').should('not.exist')
+    cy.get('*[data-cy="regulation-search-polygon-filter-selected"]').should('exist')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').should('have.length', 2)
+    cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Armor CSJ')
+
+    cy.get('*[data-cy^="regulatory-search-input"]').type('Cotentin')
+    cy.get('*[data-cy^="regulatory-layer-topic"]').should('have.length', 1)
+
+    cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click()
+    cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')
+    cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('not.exist')
+  })
+
   it('An administrative zone Should be showed and hidden', () => {
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })

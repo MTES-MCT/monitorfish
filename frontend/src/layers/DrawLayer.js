@@ -83,10 +83,14 @@ const DrawLayer = ({ map }) => {
 
       draw.on('drawend', event => {
         const format = new GeoJSON()
+        const feature = event.feature
+        feature.set('type', interaction.type)
         const geoJSONString = format.writeFeature(event.feature, {
           dataProjection: WSG84_PROJECTION,
           featureProjection: OPENLAYERS_PROJECTION
         })
+
+        console.log(geoJSONString)
 
         switch (interaction.listener) {
           case layersType.VESSEL: dispatch(addZoneSelected({

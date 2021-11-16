@@ -86,7 +86,7 @@ const Backoffice = () => {
           const territoryNumber = Object.keys(RegulatoryTerritory).length
           return (
             <Territory key={territory} isLast={territoryNumber - 1 === id }>
-              <TerritoryName >{RegulatoryTerritory[territory]}</TerritoryName>
+              <TerritoryName >{territory}</TerritoryName>
               {displayRegulatoryZoneByRegTerritory(territory)}
             </Territory>
           )

@@ -111,7 +111,6 @@ class MonitorFishWorker {
   convertGeoJSONFeaturesToStructuredRegulatoryObject (features) {
     const lawTypeList = new Set()
     const regulatoryTopicList = new Set()
-    const seaFrontList = new Set()
     const layerTopicArray = this.#getLayerTopicList(features)
     const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
       const {
@@ -120,14 +119,13 @@ class MonitorFishWorker {
         seafront
       } = zone[0]
 
-      if (topic && lawType && seafront) {
+      if (topic && lawType) {
         regulatoryTopicList.add(topic)
 
         const regulatoryTerritory = LawTypesToTerritory[lawType] ? LawTypesToTerritory[lawType] : 'Autres'
         let newLawType = lawType
-        if (regulatoryTerritory === FRANCE) {
+        if (regulatoryTerritory === FRANCE && !lawType.includes(' /') && seafront) {
           newLawType = `${lawType} / ${seafront}`
-          seaFrontList.add(seafront)
         }
 
         lawTypeList.add(newLawType)
@@ -144,12 +142,9 @@ class MonitorFishWorker {
 
       return accumulatedObject
     }, {})
-
     return {
       layersTopicsByRegulatoryTerritory,
-      regulatoryTopics: [...regulatoryTopicList],
-      regulatoryLawTypes: [...lawTypeList],
-      seaFronts: [...seaFrontList]
+      regulatoryTopics: [...regulatoryTopicList]
     }
   }
 

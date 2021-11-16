@@ -73,10 +73,10 @@ const DownloadVesselListModal = props => {
         valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
             case CSVOptions.flagState.code:
-              filteredVesselObject[CSVOptions[valueChecked].name] = vessel[valueChecked] ? countries.getName(vessel[valueChecked], 'fr') : ''
+              filteredVesselObject[CSVOptions[valueChecked].code] = vessel[valueChecked] ? countries.getName(vessel[valueChecked], 'fr') : ''
               break
             default:
-              filteredVesselObject[CSVOptions[valueChecked].name] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
+              filteredVesselObject[CSVOptions[valueChecked].code] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
           }
         })
 

@@ -20,7 +20,6 @@ const CustomDatesShowedInfo = ({ width }) => {
       beforeDatetime: null,
       afterDatetime: null
     }
-    console.log(defaultVesselTrackDepth)
     dispatch(setSelectedVesselCustomTrackDepth(nextTrackDepth))
     dispatch(modifyVesselTrackDepth(selectedVesselIdentity, nextTrackDepth))
   }

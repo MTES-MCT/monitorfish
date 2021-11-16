@@ -24,8 +24,11 @@ export function sortArrayByColumn (a, b, sortColumn, sortType) {
   }
 
   if (typeof x === 'string' && typeof y === 'string') {
-    x = x.charCodeAt()
-    y = y.charCodeAt()
+    if (sortType === SortType.ASC) {
+      return x.localeCompare(y)
+    } else {
+      return y.localeCompare(x)
+    }
   }
 
   if (x === '') {

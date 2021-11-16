@@ -13,7 +13,8 @@ import {
   RegulationSeaFrontLine,
   RegulationTopicLine,
   RegulatoryTextSection,
-  UpcomingRegulationModal
+  UpcomingRegulationModal,
+  RemoveRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
 import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
@@ -24,7 +25,7 @@ import getGeometryWithoutRegulationReference from '../../../domain/use_cases/get
 
 import { formatDataForSelectPicker } from '../../../utils'
 import {
-  /* CancelButton */
+  CancelButton,
   ValidateButton
 } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
@@ -34,7 +35,8 @@ import {
   setRegulatoryTextCheckedMap,
   setUpcomingRegulation,
   setSaveOrUpdateRegulation,
-  setAtLeastOneValueIsMissing
+  setIsRemoveModalOpen,
+  setSelectedGeometryId
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -75,7 +77,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
-  const [selectedGeometryId, setSelectedGeometry] = useState()
   /** @type {GeoJSONGeometry} selectedGeometry */
   const [initialGeometryId, setInitialGeometryId] = useState()
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
@@ -89,7 +90,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     regulatoryTextCheckedMap,
     upcomingRegulation,
     saveOrUpdateRegulation,
-    atLeastOneValueIsMissing
+    selectedGeometryId,
+    isRemoveModalOpen,
+    regulationDeleted
   } = useSelector(state => state.regulation)
 
   useEffect(() => {
@@ -112,11 +115,10 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const history = useHistory()
   useEffect(() => {
-    if (regulationSaved) {
-      history.push('/backoffice')
-      dispatch(resetState())
+    if (regulationSaved || regulationDeleted) {
+      onGoBack()
     }
-  }, [regulationSaved])
+  }, [regulationSaved, regulationDeleted])
 
   const onGoBack = () => {
     dispatch(resetState())
@@ -173,9 +175,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     setSelectedRegulationTopic(topic)
     setNameZone(zone)
     setSelectedRegionList(region ? region.split(', ') : [])
-    setSelectedSeaFront(seafront)
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
-    setSelectedGeometry(id)
+    setSelectedGeometryId(id)
     setInitialGeometryId(id)
     dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
   }
@@ -284,9 +285,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   regionIsMissing={regionIsMissing}
                 />
                 <RegulationGeometryLine
-                  setSelectedGeometry={setSelectedGeometry}
                   geometryIdList={geometryIdList}
-                  selectedGeometry={selectedGeometryId}
                   setShowRegulatoryPreview={setShowRegulatoryPreview}
                   showRegulatoryPreview={showRegulatoryPreview}
                   geometryIsMissing={geometryIsMissing}
@@ -326,12 +325,20 @@ const CreateRegulation = ({ title, isEdition }) => {
             >
               Enregistrer un brouillon
             </CancelButton> */}
+            <CancelButton
+              disabled={false}
+              isLast={false}
+              onClick={() => dispatch(setIsRemoveModalOpen(true))}
+            >
+              Supprimer la réglementation
+            </CancelButton>
           </FooterButton>
         </Footer>
       </CreateRegulationWrapper>
     { showRegulatoryPreview && <BaseMap />}
     </Wrapper>
     {isModalOpen && <UpcomingRegulationModal />}
+    {isRemoveModalOpen && <RemoveRegulationModal />}
     </>
   )
 }

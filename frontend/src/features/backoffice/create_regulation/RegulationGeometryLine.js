@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label } from '../../commonStyles/Input.style'
@@ -8,19 +9,20 @@ import Tag from './Tag'
 import { ReactComponent as ShowIconSVG } from '../../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../../icons/oeil_masque.svg'
 import { COLORS } from '../../../constants/constants'
+import { setSelectedGeometryId } from '../Regulation.slice'
 
 const RegulationGeometryLine = props => {
   const {
-    setSelectedGeometry,
     geometryIdList,
-    selectedGeometry,
     setShowRegulatoryPreview,
     showRegulatoryPreview,
     geometryIsMissing
   } = props
 
+  const { selectedGeometryId } = useSelector(state => state.regulation)
+
   const onCloseIconClicked = () => {
-    setSelectedGeometry()
+    setSelectedGeometryId()
     setShowRegulatoryPreview(false)
   }
 
@@ -30,16 +32,16 @@ const RegulationGeometryLine = props => {
         searchable={false}
         placeholder='Choisir un tracé'
         value={'Choisir un tracé'}
-        onChange={setSelectedGeometry}
+        onChange={setSelectedGeometryId}
         data={geometryIdList}
         valueIsMissing={geometryIsMissing}
         renderMenuItem={(_, item) =>
-          <MenuItem checked={item.value === selectedGeometry}
+          <MenuItem checked={item.value === selectedGeometryId}
             item={item} tag={'Radio'}/>}
       />
-    {selectedGeometry &&
+    {selectedGeometryId &&
       <><Tag
-        tagValue={selectedGeometry}
+        tagValue={selectedGeometryId}
         onCloseIconClicked={onCloseIconClicked}
       />
       <EyeWrapper>

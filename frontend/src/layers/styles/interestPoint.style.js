@@ -3,6 +3,8 @@ import { INTEREST_POINT_STYLE, interestPointType } from '../../domain/entities/i
 import { InterestPointLine } from '../../domain/entities/interestPointLine'
 import Stroke from 'ol/style/Stroke'
 import { COLORS } from '../../constants/constants'
+import CircleStyle from 'ol/style/Circle'
+import Fill from 'ol/style/Fill'
 
 const interestPointStylesCache = new Map()
 
@@ -55,3 +57,20 @@ const getFilename = type => {
     case interestPointType.OTHER: return 'Point_interet_feature_autre.png'
   }
 }
+
+export const POIStyle = new Style({
+  stroke: new Stroke({
+    color: COLORS.slateGray,
+    lineDash: [4, 4],
+    width: 2
+  }),
+  image: new CircleStyle({
+    radius: 2,
+    stroke: new Stroke({
+      color: COLORS.slateGray
+    }),
+    fill: new Fill({
+      color: COLORS.slateGray
+    })
+  })
+})

@@ -75,8 +75,9 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
-  /** @type {GeoJSONGeometry} selectedGeometry */
   const [selectedGeometryId, setSelectedGeometry] = useState()
+  /** @type {GeoJSONGeometry} selectedGeometry */
+  const [initialGeometryId, setInitialGeometryId] = useState()
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
@@ -90,8 +91,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     saveOrUpdateRegulation,
     atLeastOneValueIsMissing
   } = useSelector(state => state.regulation)
-
-  let originalGeometryId = null
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
@@ -177,7 +176,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     setSelectedSeaFront(seafront)
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
     setSelectedGeometry(id)
-    originalGeometryId = regulatoryZoneMetadata.id
+    setInitialGeometryId(id)
     dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
   }
 
@@ -226,9 +225,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}_write.${selectedGeometryId}`)
     dispatch(createOrUpdateRegulationInGeoserver(feature, REGULATION_ACTION_TYPE.UPDATE))
-    if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
+    if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
-      emptyFeature.setId(`${Layers.REGULATORY.code}_write.${originalGeometryId}`)
+      emptyFeature.setId(`${Layers.REGULATORY.code}_write.${initialGeometryId}`)
       dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
   }

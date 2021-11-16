@@ -512,7 +512,7 @@ function regulatoryAreaTransaction (feature, actionType) {
   } else if (actionType === REGULATION_ACTION_TYPE.INSERT) {
     transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
   } else if (actionType === REGULATION_ACTION_TYPE.DELETE) {
-    transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
+    transaction = formatWFS.writeTransaction(null, null, [feature], formatGML)
   }
   const payload = xs.serializeToString(transaction)
 

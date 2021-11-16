@@ -7,6 +7,7 @@ import RegulationGeometryLine from './RegulationGeometryLine'
 import RegulatoryText from './RegulatoryText'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import UpcomingRegulationModal from './UpcomingRegulationModal'
+import RemoveRegulationModal from './RemoveRegulationModal'
 
 export {
   RegulationLawTypeLine,
@@ -17,5 +18,6 @@ export {
   RegulationGeometryLine,
   RegulatoryText,
   RegulatoryTextSection,
-  UpcomingRegulationModal
+  UpcomingRegulationModal,
+  RemoveRegulationModal
 }

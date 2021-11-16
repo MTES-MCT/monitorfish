@@ -115,10 +115,10 @@ const Control = props => {
       {
         control.seizure
           ? <>
-            <Key width={80}>Appréhension</Key>
-            <SubValue>
+            <Key width={85}>Appréhension</Key>
+            <Comment>
               {control.seizureComments}
-            </SubValue><br/>
+            </Comment><br/>
           </>
           : null
       }
@@ -308,6 +308,7 @@ const SubKey = styled.span`
   font-size: 13px;
   color: ${COLORS.slateGray};
   margin-right: 10px;
+  vertical-align: sub;
 `
 
 const Key = styled.span`
@@ -343,7 +344,7 @@ const InfractionValue = styled.th`
   width: 350px;
   white-space: break-spaces;
   vertical-align: top;
-  padding-top: 4px;
+  padding-top: 0px;
 `
 
 const SubValue = styled.span`
@@ -351,6 +352,7 @@ const SubValue = styled.span`
   color: ${COLORS.gunMetal};
   margin-right: 10px;
   font-weight: 500;
+  vertical-align: bottom;
 `
 
 const GyroGreen = styled(GyroGreenSVG)`

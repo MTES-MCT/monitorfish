@@ -90,8 +90,6 @@ const DrawLayer = ({ map }) => {
           featureProjection: OPENLAYERS_PROJECTION
         })
 
-        console.log(geoJSONString)
-
         switch (interaction.listener) {
           case layersType.VESSEL: dispatch(addZoneSelected({
             name: 'Tracé libre',
@@ -121,14 +119,11 @@ const DrawLayer = ({ map }) => {
     if (zoneSelected?.feature) {
       const features = vectorSource.getFormat().readFeatures(zoneSelected?.feature)
       features.map(feature => feature.setId(feature.ol_uid))
-      console.log(features)
       vectorSource.clear(true)
       vectorSource.addFeatures(features)
     } else {
       vectorSource.clear(true)
     }
-
-    console.log(zoneSelected?.feature, vectorSource.getFeatures())
   }, [zoneSelected, vectorSource])
 
   return null

@@ -34,8 +34,6 @@ const regulatorySlice = createSlice({
     regulatoryZoneMetadataPanelIsOpen: false,
     lawTypeOpened: null,
     regulatoryTopics: [],
-    regulatoryLawTypes: [],
-    seaFronts: [],
     layersTopicsByRegTerritory: {},
     regulatoryGeometryToPreview: null,
     simplifiedGeometries: true
@@ -172,12 +170,6 @@ const regulatorySlice = createSlice({
     setRegulatoryTopics (state, action) {
       state.regulatoryTopics = action.payload
     },
-    setRegulatoryLawTypes (state, action) {
-      state.regulatoryLawTypes = action.payload
-    },
-    setSeaFronts (state, action) {
-      state.seaFronts = action.payload
-    },
     setLayersTopicsByRegTerritory (state, action) {
       state.layersTopicsByRegTerritory = action.payload
     },
@@ -201,8 +193,6 @@ export const {
   setRegulatoryLayers,
   setLawTypeOpened,
   setRegulatoryTopics,
-  setRegulatoryLawTypes,
-  setSeaFronts,
   setLayersTopicsByRegTerritory,
   setRegulatoryGeometryToPreview,
   showSimplifiedGeometries,

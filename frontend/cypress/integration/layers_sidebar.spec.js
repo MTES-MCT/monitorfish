@@ -145,7 +145,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('not.exist')
   })
 
-  it('A regulation Should be searched with a rectangle', () => {
+  it('A regulation Should be searched with a polygon', () => {
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
 

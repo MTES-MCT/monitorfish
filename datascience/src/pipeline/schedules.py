@@ -43,7 +43,7 @@ last_positions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
             "* * * * *",
-            parameter_defaults={"minutes": 2, "action": "update"},
+            parameter_defaults={"minutes": 15, "action": "update"},
         )
     ]
 )

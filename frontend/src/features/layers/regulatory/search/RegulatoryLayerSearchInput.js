@@ -33,8 +33,6 @@ const RegulatoryLayerSearchInput = props => {
     zoneSelected
   } = useSelector(state => state.regulatoryLayerSearch)
 
-  console.log(zoneSelected)
-
   const [nameSearchText, setNameSearchText] = useState('')
   const [placeSearchText, setPlaceSearchText] = useState('')
   const [gearSearchText, setGearSearchText] = useState('')

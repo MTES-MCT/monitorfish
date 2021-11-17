@@ -5,11 +5,13 @@ from zipfile import ZipFile
 
 import prefect
 from prefect import Flow, task
+from prefect.tasks.control_flow import case
 
 from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
 from src.pipeline.parsers.ers import batch_parse
 from src.pipeline.processing import drop_rows_already_in_table, to_json
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.utils import get_table, move, psql_insert_copy
 
 RECEIVED_DIRECTORY = ERS_FILES_LOCATION / "received"
@@ -311,13 +313,18 @@ def load_ers(cleaned_data: List[dict]):
 
 
 with Flow("ERS") as flow:
-    zipfiles = extract_zipfiles(
-        RECEIVED_DIRECTORY,
-        TREATED_DIRECTORY,
-        NON_TREATED_DIRECTORY,
-        ERROR_DIRECTORY,
-    )
-    zipfiles = extract_xmls_from_zipfile.map(zipfiles)
-    zipfiles = parse_xmls.map(zipfiles)
-    zipfiles = clean.map(zipfiles)
-    load_ers(zipfiles)
+
+    # Only run if the previous run has finished running
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
+
+        zipfiles = extract_zipfiles(
+            RECEIVED_DIRECTORY,
+            TREATED_DIRECTORY,
+            NON_TREATED_DIRECTORY,
+            ERROR_DIRECTORY,
+        )
+        zipfiles = extract_xmls_from_zipfile.map(zipfiles)
+        zipfiles = parse_xmls.map(zipfiles)
+        zipfiles = clean.map(zipfiles)
+        load_ers(zipfiles)

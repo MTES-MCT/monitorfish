@@ -55,7 +55,7 @@ const SearchRegulations = props => {
         <SearchIcon />
         </SearchBox>
         <AddRegulationButton
-          to={match.url + '/newRegulation'}
+          to={match.url + '/regulation/new'}
           disabled={false}
           isLast={false}
           title={'Saisir une nouvelle réglementation'}

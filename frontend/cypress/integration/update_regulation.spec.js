@@ -19,7 +19,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
     cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-zone-edit"]').eq(0).click()
-    cy.url().should('include', '/editRegulation')
+    cy.url().should('include', '/regulation/edit')
     cy.wait(1000)
   })
 

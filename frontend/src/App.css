@@ -419,3 +419,8 @@ a:hover, a:focus {
 .new-regulation-select-picker a {
     padding: 8px 0px;
 }
+
+.rs-table-row-expanded {
+    height: 100px !important;
+    background: white !important;
+}

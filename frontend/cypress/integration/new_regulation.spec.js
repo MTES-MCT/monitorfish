@@ -6,7 +6,7 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
-    cy.visit(`http://localhost:${port}/backoffice/newRegulation`)
+    cy.visit(`http://localhost:${port}/backoffice/regulation/new`)
     cy.wait(400)
   })
 

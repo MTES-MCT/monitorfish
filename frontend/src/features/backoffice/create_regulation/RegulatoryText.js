@@ -79,6 +79,7 @@ const RegulatoryText = props => {
       set('startDate', new Date().getTime())
     }
   }, [startDate])
+
   useEffect(() => {
     if (fromForm) {
       if (!isEditing) {
@@ -161,6 +162,7 @@ const RegulatoryText = props => {
   }
 
   const onCloseIconClicked = () => {
+    setFromForm(true)
     setIsEditing(true)
   }
 

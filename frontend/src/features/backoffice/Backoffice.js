@@ -10,7 +10,7 @@ import getAllGearCodes from '../../domain/use_cases/getAllGearCodes'
 import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
-import { RegulatoryTerritory } from '../../domain/entities/regulatory'
+import { REGULATORY_TERRITORY } from '../../domain/entities/regulatory'
 /* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {
@@ -80,16 +80,14 @@ const Backoffice = () => {
   }
 
   const displaySearchResultList = () => {
+    const territoryList = Object.keys(REGULATORY_TERRITORY)
     return (
       <SearchResultList>
-        {Object.keys(RegulatoryTerritory).map((territory, id) => {
-          const territoryNumber = Object.keys(RegulatoryTerritory).length
-          return (
-            <Territory key={territory} isLast={territoryNumber - 1 === id }>
+        {territoryList.map((territory, id) => {
+          return <Territory key={territory} isLast={territoryList.length - 1 === id }>
               <TerritoryName >{territory}</TerritoryName>
               {displayRegulatoryZoneByRegTerritory(territory)}
             </Territory>
-          )
         })}
       </SearchResultList>)
   }

@@ -16,6 +16,7 @@ from src.pipeline.processing import (
     get_first_non_null_column_name,
     join_on_multiple_keys,
 )
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)
@@ -374,51 +375,55 @@ def load_last_positions(last_positions):
 
 with Flow("Last positions") as flow:
 
-    # Parameters
-    current_position_estimation_max_hours = Parameter(
-        "current_position_estimation_max_hours",
-        default=CURRENT_POSITION_ESTIMATION_MAX_HOURS,
-    )
-    minutes = Parameter("minutes", default=5)
-    action = Parameter("action", default="update")
-    action = validate_action(action)
+    # Only run if the previous run has finished running
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Extract & Transform
-    risk_factors = extract_risk_factors()
-
-    last_positions = extract_last_positions(minutes=minutes)
-    last_positions = add_vessel_identifier(last_positions)
-    last_positions = tag_vessels_at_port(last_positions)
-
-    with case(action, "update"):
-        previous_last_positions = extract_previous_last_positions()
-        new_last_positions = drop_unchanched_new_last_positions(
-            last_positions, previous_last_positions
+        # Parameters
+        current_position_estimation_max_hours = Parameter(
+            "current_position_estimation_max_hours",
+            default=CURRENT_POSITION_ESTIMATION_MAX_HOURS,
         )
+        minutes = Parameter("minutes", default=5)
+        action = Parameter("action", default="update")
+        action = validate_action(action)
 
-        (
-            unchanged_previous_last_positions,
-            new_vessels_last_positions,
-            last_positions_to_update,
-        ) = split(previous_last_positions, new_last_positions)
-        updated_last_positions = compute_emission_period(last_positions_to_update)
+        # Extract & Transform
+        risk_factors = extract_risk_factors()
 
-        last_positions_1 = concatenate(
-            unchanged_previous_last_positions,
-            new_vessels_last_positions,
-            updated_last_positions,
+        last_positions = extract_last_positions(minutes=minutes)
+        last_positions = add_vessel_identifier(last_positions)
+        last_positions = tag_vessels_at_port(last_positions)
+
+        with case(action, "update"):
+            previous_last_positions = extract_previous_last_positions()
+            new_last_positions = drop_unchanched_new_last_positions(
+                last_positions, previous_last_positions
+            )
+
+            (
+                unchanged_previous_last_positions,
+                new_vessels_last_positions,
+                last_positions_to_update,
+            ) = split(previous_last_positions, new_last_positions)
+            updated_last_positions = compute_emission_period(last_positions_to_update)
+
+            last_positions_1 = concatenate(
+                unchanged_previous_last_positions,
+                new_vessels_last_positions,
+                updated_last_positions,
+            )
+
+        with case(action, "replace"):
+            last_positions_2 = last_positions
+
+        last_positions = merge(last_positions_1, last_positions_2)
+
+        last_positions = estimate_current_positions(
+            last_positions=last_positions,
+            max_hours_since_last_position=current_position_estimation_max_hours,
         )
+        last_positions = merge_last_positions_risk_factors(last_positions, risk_factors)
 
-    with case(action, "replace"):
-        last_positions_2 = last_positions
-
-    last_positions = merge(last_positions_1, last_positions_2)
-
-    last_positions = estimate_current_positions(
-        last_positions=last_positions,
-        max_hours_since_last_position=current_position_estimation_max_hours,
-    )
-    last_positions = merge_last_positions_risk_factors(last_positions, risk_factors)
-
-    # Load
-    load_last_positions(last_positions)
+        # Load
+        load_last_positions(last_positions)

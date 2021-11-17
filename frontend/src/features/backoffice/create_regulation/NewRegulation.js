@@ -36,7 +36,8 @@ import {
   setUpcomingRegulation,
   setSaveOrUpdateRegulation,
   setIsRemoveModalOpen,
-  setSelectedGeometryId
+  setSelectedGeometryId,
+  setAtLeastOneValueIsMissing
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -92,7 +93,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     saveOrUpdateRegulation,
     selectedGeometryId,
     isRemoveModalOpen,
-    regulationDeleted
+    regulationDeleted,
+    atLeastOneValueIsMissing
   } = useSelector(state => state.regulation)
 
   useEffect(() => {

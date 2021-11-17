@@ -7,7 +7,7 @@ import { setIsRemoveModalOpen } from '../Regulation.slice'
 import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
-import deleteRegulationInGeoserver from '../../../domain/use_cases/deleteRegulationInGeoserver'
+import manageRegulationInGeoserver from '../../../domain/use_cases/manageRegulationInGeoserver'
 import Feature from 'ol/Feature'
 import Layers from '../../../domain/entities/layers'
 import { REGULATION_ACTION_TYPE } from '../../../domain/entities/regulatory'
@@ -22,7 +22,7 @@ const RemoveRegulationModal = () => {
   const deleteRegulation = () => {
     const feature = new Feature({})
     feature.setId(`${Layers.REGULATORY.code}_write.${selectedGeometryId}`)
-    dispatch(deleteRegulationInGeoserver(feature, REGULATION_ACTION_TYPE.DELETE))
+    dispatch(manageRegulationInGeoserver(feature, REGULATION_ACTION_TYPE.DELETE))
   }
 
   return (<RegulationModal isOpen={isRemoveModalOpen}>

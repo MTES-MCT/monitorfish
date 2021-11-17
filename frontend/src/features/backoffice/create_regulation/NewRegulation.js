@@ -17,7 +17,7 @@ import {
   RemoveRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
-import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
+import manageRegulationInGeoserver from '../../../domain/use_cases/manageRegulationInGeoserver'
 import Layers from '../../../domain/entities/layers'
 
 import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
@@ -229,11 +229,11 @@ const CreateRegulation = ({ title, isEdition }) => {
   const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
     feature.setId(`${Layers.REGULATORY.code}_write.${selectedGeometryId}`)
-    dispatch(createOrUpdateRegulationInGeoserver(feature, REGULATION_ACTION_TYPE.UPDATE))
+    dispatch(manageRegulationInGeoserver(feature, REGULATION_ACTION_TYPE.UPDATE))
     if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
       emptyFeature.setId(`${Layers.REGULATORY.code}_write.${initialGeometryId}`)
-      dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
+      dispatch(manageRegulationInGeoserver(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
   }
 

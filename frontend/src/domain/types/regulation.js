@@ -42,7 +42,6 @@
  * @property {string} prohibitedSpecies
  * @property {string} regulatoryReferences
  * @property {string} region
- * @property {string} seafront
  */
 
 /**

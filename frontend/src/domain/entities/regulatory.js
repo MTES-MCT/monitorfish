@@ -25,7 +25,6 @@ export const mapToRegulatoryZone = properties => {
     quantity: properties.quantites,
     size: properties.taille,
     region: properties.region,
-    seafront: properties.facade,
     obligations: properties.obligations,
     rejections: properties.rejets,
     deposit: properties.gisement
@@ -60,51 +59,42 @@ export const emptyRegulatoryFeatureObject = {
   law_type: null,
   zones: null,
   region: null,
-  facade: null,
-  references_reglementaires: null
+  references_reglementaires: null,
+  references_reglementaires_a_venir: null
 }
 
 export const FRANCE = 'Réglementation France'
 export const UE = 'Réglementation UE'
+export const REG_LOCALE = 'Reg locale'
 
-/* const REG_MED = 'Reg. MED'
+const REG_MED = 'Reg. MED'
 const REG_SA = 'Reg. SA'
 const REG_NAMO = 'Reg. NAMO'
 const REG_MEMN = 'Reg. MEMN'
 const REG_OUTRE_MER = 'Reg. Outre-Mer'
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
-const RUE_494 = 'R(CE) 494/2002' */
+const RUE_494 = 'R(CE) 494/2002'
+const RUE_2019_OLD = 'R(UE) 2019/1241'
+const RUE_1380_OLD = 'R(UE) 1380/2013'
+const RUE_494_OLD = 'R(CE) 494/2002'
 
-export const REG_LOCALE = 'Reg locale'
-const REG_MED = 'Reg locale / Méditerranée, MED'
-const REG_SA = 'Reg locale / Sud-Athlantique, SA'
-const REG_NAMO = 'Reg locale / NAMO'
-const REG_MEMN = 'Reg locale / MEMN'
-const REG_OUTRE_MER = 'Reg. Locale / Outre-mer'
-const RUE_2019 = 'R(UE) 2019/1241'
-const RUE_1380 = 'R(UE) 1380/2013'
-const RUE_494 = 'Reg 494 - Merlu'
-
-export const LawTypesToTerritory = {
+export const LAWTYPES_TO_TERRITORY = {
+  [REG_MED]: FRANCE,
+  [REG_SA]: FRANCE,
+  [REG_NAMO]: FRANCE,
+  [REG_MEMN]: FRANCE,
+  [REG_OUTRE_MER]: FRANCE,
   [REG_LOCALE]: FRANCE,
   [RUE_2019]: UE,
   [RUE_1380]: UE,
-  [RUE_494]: UE
+  [RUE_494]: UE,
+  [RUE_2019_OLD]: UE,
+  [RUE_1380_OLD]: UE,
+  [RUE_494_OLD]: UE
 }
 
-export const LawTypesList = [
-  REG_MED,
-  REG_SA,
-  REG_NAMO,
-  REG_MEMN,
-  REG_OUTRE_MER,
-  RUE_2019,
-  RUE_1380,
-  RUE_494
-]
-
-export const RegulatoryTerritory = {
+export const REGULATORY_TERRITORY = {
   [FRANCE]: 'Réglementation France',
   [UE]: 'Réglementation UE'
 }
@@ -113,7 +103,6 @@ export const REGULATORY_SEARCH_PROPERTIES = {
   TOPIC: 'topic',
   ZONE: 'zone',
   REGION: 'region',
-  SEAFRONT: 'seafront',
   GEARS: 'gears',
   SPECIES: 'species',
   REGULATORY_REFERENCES: 'regulatoryReferences'

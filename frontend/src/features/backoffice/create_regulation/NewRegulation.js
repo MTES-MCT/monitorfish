@@ -16,13 +16,7 @@ import {
   RemoveRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
-<<<<<<< HEAD
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
-=======
-import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
-
-import Layers from '../../../domain/entities/layers'
->>>>>>> remove seafront in interface reg
 
 import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
@@ -41,8 +35,7 @@ import {
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
   setIsRemoveModalOpen,
-  setSelectedGeometryId,
-  setAtLeastOneValueIsMissing
+  setSelectedGeometryId
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -53,7 +46,9 @@ import {
   REGULATORY_TEXT_SOURCE,
   DEFAULT_REGULATORY_TEXT,
   REG_LOCALE,
-  LawTypesList
+  LAWTYPES_TO_TERRITORY,
+  UE,
+  FRANCE
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -238,7 +233,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   const onLawTypeChange = (value) => {
-    if (!value.includes(REG_LOCALE)) {
+    if (LAWTYPES_TO_TERRITORY[value] !== UE) {
       setSelectedRegionList([])
     }
     setSelectedRegulationLawType(value)
@@ -269,7 +264,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                 <RegulationLawTypeLine
                   setSelectedValue={onLawTypeChange}
                   selectedValue={selectedRegulationLawType}
-                  selectData={formatDataForSelectPicker(LawTypesList)}
+                  selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
                   lawTypeIsMissing={lawTypeIsMissing}
                 />
                 <RegulationTopicLine
@@ -284,7 +279,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   nameZoneIsMissing={nameZoneIsMissing}
                 />
                 <RegulationRegionLine
-                  disabled={!selectedRegulationLawType || !selectedRegulationLawType.includes(REG_LOCALE)}
+                  disabled={!selectedRegulationLawType || LAWTYPES_TO_TERRITORY[selectedRegulationLawType] !== FRANCE}
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
                   regionIsMissing={regionIsMissing}

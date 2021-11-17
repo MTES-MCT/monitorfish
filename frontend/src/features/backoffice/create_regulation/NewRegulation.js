@@ -329,13 +329,14 @@ const CreateRegulation = ({ title, isEdition }) => {
             >
               Enregistrer un brouillon
             </CancelButton> */}
-            <CancelButton
-              disabled={false}
-              isLast={false}
-              onClick={() => dispatch(setIsRemoveModalOpen(true))}
-            >
-              Supprimer la réglementation
-            </CancelButton>
+            {isEdition &&
+              <CancelButton
+                disabled={false}
+                isLast={false}
+                onClick={() => dispatch(setIsRemoveModalOpen(true))}
+              >
+                Supprimer la réglementation
+              </CancelButton>}
           </FooterButton>
         </Footer>
       </CreateRegulationWrapper>

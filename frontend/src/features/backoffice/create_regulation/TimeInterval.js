@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import CustomDatePicker from './CustomDatePicker'
-// import { Row } from '../../commonStyles/FishingPeriod.style'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 import { COLORS } from '../../../constants/constants'
 

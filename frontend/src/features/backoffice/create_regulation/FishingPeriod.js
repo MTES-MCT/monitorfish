@@ -77,8 +77,6 @@ const FishingPeriod = (props) => {
     set('dateRanges', newDateRanges)
   }
 
-  // TODO make generic function to add and remove elements in an array
-
   /**
    * Remove a time slot object from the timeSlots list
    * @param {number} id: object id in the list

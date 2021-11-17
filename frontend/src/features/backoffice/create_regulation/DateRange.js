@@ -4,14 +4,6 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 
-/**
- * TODO
- * 1. Quand on passe de non annuel à annuel on doit avoir saisi correctement les dates
- * si on a commencé à saisir => sinon date à moitier correct
- *
- * 2. Lors de l'enregistrement des dates sans années, il faut vérifier qu'elles soient valides
- * (jours entre 1 et 31 et mois entre 1 et 12) -> est-ce qu'il y aurait une méthode pour ça ?
- */
 const DateRange = (props) => {
   const {
     id,

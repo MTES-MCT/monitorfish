@@ -13,7 +13,6 @@ const FishingPeriodSection = (props) => {
   const [show, setShow] = useState(false)
 
   const setOtherInfo = value => {
-    console.log(value)
     setFishingPeriod({
       ...fishingPeriod,
       otherInfo: value

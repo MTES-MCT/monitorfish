@@ -172,15 +172,17 @@ const CreateRegulation = ({ title, isEdition }) => {
       id,
       upcomingRegulatoryReferences
     } = regulatoryZoneMetadata
-
     setSelectedRegulationLawType(`${lawType} / ${seafront}`)
     setSelectedRegulationTopic(topic)
     setNameZone(zone)
+    setSelectedSeaFront(seafront)
     setSelectedRegionList(region ? region.split(', ') : [])
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
-    setSelectedGeometryId(id)
     setInitialGeometryId(id)
-    dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
+    batch(() => {
+      dispatch(setSelectedGeometryId(id))
+      dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
+    })
   }
 
   const checkRequiredValues = () => {

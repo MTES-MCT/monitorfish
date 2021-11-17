@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { ContentLine } from '../../commonStyles/Backoffice.style'
 import { Label } from '../../commonStyles/Input.style'
@@ -19,10 +19,12 @@ const RegulationGeometryLine = props => {
     geometryIsMissing
   } = props
 
+  const dispatch = useDispatch()
+
   const { selectedGeometryId } = useSelector(state => state.regulation)
 
   const onCloseIconClicked = () => {
-    setSelectedGeometryId()
+    dispatch(setSelectedGeometryId(undefined))
     setShowRegulatoryPreview(false)
   }
 
@@ -32,7 +34,7 @@ const RegulationGeometryLine = props => {
         searchable={false}
         placeholder='Choisir un tracé'
         value={'Choisir un tracé'}
-        onChange={setSelectedGeometryId}
+        onChange={value => dispatch(setSelectedGeometryId(value))}
         data={geometryIdList}
         valueIsMissing={geometryIsMissing}
         renderMenuItem={(_, item) =>

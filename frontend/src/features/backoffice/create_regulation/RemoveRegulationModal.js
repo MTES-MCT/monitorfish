@@ -42,6 +42,7 @@ const RemoveRegulationModal = () => {
             disabled={false}
             isLast={false}
             onClick={deleteRegulation}
+            width={'120px'}
           >
             Oui
           </ValidateButton>
@@ -49,6 +50,7 @@ const RemoveRegulationModal = () => {
             disabled={false}
             isLast={false}
             onClick={() => dispatch(setIsRemoveModalOpen(false))}
+            width={'120px'}
           >
             Annuler
           </CancelButton>

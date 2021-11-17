@@ -19,6 +19,7 @@ from src.pipeline.processing import (
     try_get_factory,
     zeros_ones_to_bools,
 )
+from src.pipeline.shared_tasks.facades import extract_facade_areas
 from src.pipeline.utils import delete, get_table, psql_insert_copy
 
 
@@ -90,23 +91,6 @@ def extract_catch_controls() -> pd.DataFrame:
     return extract(
         db_name="fmc",
         query_filepath="fmc/catch_controls.sql",
-    )
-
-
-@task(checkpoint=False)
-def extract_facade_areas() -> gpd.GeoDataFrame:
-    """
-    Extracts facade areas as a `GeoDataFrame`.
-
-    Returns:
-        gpd.GeoDataFrame : GeoDataFrame of facade areas.
-    """
-    return extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/facade_areas.sql",
-        backend="geopandas",
-        geom_col="geometry",
-        crs=4326,
     )
 
 

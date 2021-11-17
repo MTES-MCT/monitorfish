@@ -3,6 +3,7 @@ from prefect.schedules import CronSchedule, Schedule, clocks
 from src.pipeline.flows import (
     anchorages,
     control_anteriority,
+    control_objectives,
     controllers,
     controls,
     current_segments,
@@ -58,9 +59,10 @@ vessels.flow.schedule = CronSchedule("5 8 * * *")
 ###################### List flows to register with prefect server #####################
 flows_to_register = [
     anchorages.flow,
+    control_anteriority.flow,
+    control_objectives.flow,
     controllers.flow,
     controls.flow,
-    control_anteriority.flow,
     current_segments.flow,
     ers.flow,
     facade_areas.flow,

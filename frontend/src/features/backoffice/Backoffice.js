@@ -11,7 +11,7 @@ import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { RegulatoryTerritory } from '../../domain/entities/regulatory'
-import { SecondaryButton } from '../commonStyles/Buttons.style'
+/* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
@@ -104,11 +104,11 @@ const Backoffice = () => {
             setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
             regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
           />
-          <ButtonList>
+          {/* <ButtonList>
             <SecondaryButton>Brouillon (X)</SecondaryButton>
             <SecondaryButton>Tracé en attente (X)</SecondaryButton>
             <SecondaryButton disabled>Dernière publications (X)</SecondaryButton>
-          </ButtonList>
+          </ButtonList> */}
           {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
             ? displaySearchResultList()
             : <div>En attente de chargement</div>}
@@ -172,13 +172,13 @@ const RegulatoryZoneListByLawTypeList = styled.div`
   margin: 10px 0;
 `
 
-const ButtonList = styled.div`
+/* const ButtonList = styled.div`
   display: flex;
   flex-direction:row;
   justify-content: flex-start;
   align-items: center;
   padding: 0 40px 0 30px;
-`
+` */
 
 const BackofficeContainer = styled.div`
   display: flex;

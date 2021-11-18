@@ -4,11 +4,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.annotations.*
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -18,6 +17,7 @@ import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import javax.websocket.server.PathParam
+
 
 @RestController
 @RequestMapping("/bff")
@@ -33,6 +33,8 @@ class BffController(
     private val getVesselControls: GetVesselControls,
     private val getAllFleetSegments: GetAllFleetSegments,
     private val getHealthcheck: GetHealthcheck,
+    private val getAllControlObjectives: GetAllControlObjectives,
+    private val updateControlObjective: UpdateControlObjective,
     meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -221,5 +223,28 @@ class BffController(
     @ApiOperation("Get healtcheck of positions and ers")
     fun getHealthcheck(): HealthDataOutput {
         return HealthDataOutput.fromHealth(getHealthcheck.execute())
+    }
+
+    @GetMapping("/v1/control_objectives")
+    @ApiOperation("Get control objectives")
+    fun getControlObjectives(): List<ControlObjectiveDataOutput> {
+        return getAllControlObjectives.execute().map { controlObjective ->
+            ControlObjectiveDataOutput.fromControlObjective(controlObjective)
+        }
+    }
+
+    @PutMapping(value = ["/v1/control_objectives/{controlObjectiveId}"], consumes = ["application/json"])
+    @ApiOperation("Update a control objective")
+    fun updateControlObjective(@PathParam("Control objective id")
+                    @PathVariable(name = "controlObjectiveId")
+                    controlObjectiveId: Int,
+                    @RequestBody
+                    updateControlObjectiveData: UpdateControlObjectiveDataInput) {
+        updateControlObjective.execute(
+                id = controlObjectiveId,
+                targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
+                targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
+                controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel
+        )
     }
 }

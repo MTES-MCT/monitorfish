@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
@@ -29,6 +30,13 @@ class ControllersExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoLogbookFishingTripFound::class)
     fun handleNoERSLastDepartureDateFound(e: Exception): ApiError {
+        logger.error(e.message, e.cause)
+        return ApiError(e)
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CouldNotUpdateControlObjectiveException::class)
+    fun handleCouldNotUpdateControlObjectiveException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
         return ApiError(e)
     }

@@ -27,7 +27,7 @@ import VesselLabels from './features/vessel_labels/VesselLabels'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
 import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
 import Menu from './features/backoffice/menu/Menu'
-import FleetSegments from './features/backoffice/fleet_segments/FleetSegments'
+import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
 
 function App () {
@@ -113,8 +113,8 @@ function BackofficePage () {
           <Route path={`${match.path}/regulation/edit`}>
             <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
           </Route>
-          <Route path={`${match.path}/fleet_segments`}>
-            <FleetSegments/>
+          <Route path={`${match.path}/control_objectives`}>
+            <ControlObjectives/>
           </Route>
         </Switch>
       </BackofficeWrapper>

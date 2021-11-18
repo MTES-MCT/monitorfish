@@ -12,8 +12,7 @@ class TestLogParsers(unittest.TestCase):
     def parse_file(self, test_file: str, has_data: bool = False):
         with open(os.path.join(XML_TEST_DATA_LOCATION, test_file), "r") as f:
             xml_string = f.read()
-        res = parse_xml_document(xml_string)
-        print(res)
+        res = parse_xml_document(xml_string,False)
         metadata = res[0][0]
         data_iter = res[0][1]
         data_list = list(data_iter)
@@ -57,8 +56,11 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value, expected_value)
 
     def test_dep_parser(self):
+        self.maxDiff = None
         test_file = "FLUX-FA-EU-710301 - Departure (Catch onboard).xml"
         metadata, data_list = self.parse_file(test_file)
+        print(metadata)
+        print(data_list)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "DEP")
@@ -75,13 +77,10 @@ class TestLogParsers(unittest.TestCase):
                     "species": "COD",
                     "weight": 50.0,
                     "nbFish": None,
+                    "economicZone": "ESP",
                     "faoZone": "27.9.b.2",
-                    "economicZone": None,
-                    "statisticalRectangle": None,
-                    "effortZone": None,
                     "presentation": "GUT",
                     "packaging": "BOX",
-                    "freshness": None,
                     "preservationState": "FRO",
                     "conversionFactor": 1.1,
                 }
@@ -113,7 +112,7 @@ class TestLogParsers(unittest.TestCase):
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
-        self.assertEqual(data, {"log_type": "TRANSHIPMENT"})
+        self.assertEqual(data, {"log_type": "TRA"})
 
     def test_rtp_parser(self):
         test_file = "FLUX-FA-EU-711102 - Arrival declaration (Reason = Landing).xml"

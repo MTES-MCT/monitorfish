@@ -18,12 +18,12 @@ const Menu = () => {
         </LinkText>
       </MenuLink>
       <MenuLink
-        to={'/backoffice/fleet_segments'}
-        title={'Segments de flotte'}
+        to={'/backoffice/control_objectives'}
+        title={'Objectifs de contrôle'}
       >
         <Fleet/>
         <LinkText>
-          Segments <br/>de flotte
+          Objectifs <br/>de contrôle
         </LinkText>
       </MenuLink>
   </Wrapper>

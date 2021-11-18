@@ -41,9 +41,8 @@ data class FleetSegmentEntity(
         @Type(type = "string-array")
         @Column(name = "bycatch_species", columnDefinition = "varchar(3)[]")
         val bycatchSpecies: List<String>,
-        @Type(type = "string-array")
-        @Column(name = "flag_states", columnDefinition = "varchar(3)[]")
-        val flagStates: List<String>) {
+        @Column(name = "impact_risk_factor")
+        val impactRiskFactor: Double) {
 
         fun toFleetSegment() = FleetSegment(
                 segment = this.segment,
@@ -53,5 +52,6 @@ data class FleetSegmentEntity(
                 faoAreas = this.faoAreas,
                 targetSpecies = this.targetSpecies,
                 bycatchSpecies = this.bycatchSpecies,
+                impactRiskFactor = this.impactRiskFactor
     )
 }

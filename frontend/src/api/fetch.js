@@ -497,7 +497,7 @@ function getHealthcheckFromAPI () {
     })
 }
 
-function regulatoryAreaTransaction (feature, actionType) {
+function sendRegulationTransaction (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
     featureNS: 'monitorfish',
@@ -551,5 +551,5 @@ export {
   getAllFleetSegmentFromAPI,
   getHealthcheckFromAPI,
   getAllGeometryWithoutProperty,
-  regulatoryAreaTransaction
+  sendRegulationTransaction
 }

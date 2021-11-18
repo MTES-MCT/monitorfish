@@ -3,7 +3,7 @@ import { setRegulationSaved, setRegulationDeleted } from '../../features/backoff
 import { setError } from '../shared_slices/Global'
 import { REGULATION_ACTION_TYPE } from '../entities/regulatory'
 
-const manageRegulationInGeoserver = (feature, type) => (dispatch) => {
+const updateRegulation = (feature, type) => (dispatch) => {
   return sendRegulationTransaction(feature, type)
     .then(_ => {
       if (type === REGULATION_ACTION_TYPE.DELETE) {
@@ -18,4 +18,4 @@ const manageRegulationInGeoserver = (feature, type) => (dispatch) => {
     })
 }
 
-export default manageRegulationInGeoserver
+export default updateRegulation

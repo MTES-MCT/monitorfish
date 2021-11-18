@@ -1,5 +1,7 @@
-from src.utils.flux import tagged_children, try_float,get_text
-
+from src.utils.flux import get_text,remove_none_values
+from src.pipeline.parsers.utils import tagged_children, try_float
+ 
+ 
 def parse_ras(ras):
     data = {
         "faoZone": get_text(ras,'.//*[@schemeID="FAO_AREA"]'),
@@ -8,7 +10,7 @@ def parse_ras(ras):
         "effortZone": get_text(ras,'.//*[@schemeID="EFFORT_ZONE"]'),
     }
 
-    return data
+    return remove_none_values(data)
 
 
 def parse_pro(pro):
@@ -19,7 +21,7 @@ def parse_pro(pro):
         "preservationState": get_text(pro,'.//*[@listID="FISH_PRESERVATION"]'),
         "conversionFactor": try_float(get_text(pro,'.//ram:ConversionFactorNumeric')),
     }
-    return data
+    return remove_none_values(data)
 
 
 def parse_spe(spe):
@@ -47,8 +49,8 @@ def parse_gea(gea):
 
     data = {
         "gear": get_text(gea,'.//ram:TypeCode[@listID="GEAR_TYPE"]'),
-        "mesh": try_float(get_text(gea,'.//ram:ValueMeasure[@unitCode="MMT"]')),
-        "dimensions": try_float(get_text(gea,'.//ram:ValueMeasure[@unitCode="MTR"]')),
+        "mesh": try_float(get_text(gea,".//ram:ApplicableGearCharacteristic[ram:TypeCode='ME']/ram:ValueMeasure")),
+        "dimensions": try_float(get_text(gea,"ram:ApplicableGearCharacteristic[ram:TypeCode='GM']/ram:ValueMeasure")),
     }
 
     return data

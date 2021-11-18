@@ -8,11 +8,9 @@ from src.pipeline.parsers.flux.childless_parsers import (
 from src.utils.flux import (
     get_type,
     get_text,
-    get_element,
-    tagged_children,
-    try_float,
-    try_float
+    get_element
 )
+from src.pipeline.parsers.utils import tagged_children, try_float
 
 def default_log_parser(el: xml.etree.ElementTree.Element):
     return {"log_type": get_type(el)}
@@ -81,8 +79,6 @@ def parse_dis(dis):
 
 
 def parse_coe(coe):
-    date = coe.get("DA")
-    time = coe.get("TI")
     
     children = tagged_children(coe)
 
@@ -132,28 +128,6 @@ def parse_cox(cox):
     return data
 
 
-def parse_cro(cro):
-    children = tagged_children(cro)
-
-    value = {}
-
-    if "COE" in children:
-        assert len(children["COE"]) == 1
-        coe = children["COE"][0]
-        coe_data = parse_coe(coe)
-        value = coe_data["value"]
-
-    if "COX" in children:
-        assert len(children["COX"]) == 1
-        cox = children["COX"][0]
-        cox_data = parse_cox(cox)
-        cox_value = cox_data["value"]
-        value = {**value, **cox_value}
-
-    data = {"log_type": "CRO", "value": value}
-    return data
-
-
 def parse_pno(pno):
 
     children = tagged_children(pno)
@@ -166,9 +140,9 @@ def parse_pno(pno):
     }
     
     if "RelatedFLUXLocation" in children:
-        ras = get_element(pno,'.//ram:RelatedFLUXLocation')
-        ras_data = parse_ras(ras)
-        value = {**value, **ras_data}
+        for ras in children["RelatedFLUXLocation"]:
+            ras_data = parse_ras(ras)
+            value = {**value, **ras_data}
 
     if "SpecifiedFACatch" in children:
         catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]

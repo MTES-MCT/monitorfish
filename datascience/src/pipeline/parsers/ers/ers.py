@@ -21,8 +21,8 @@ from src.pipeline.parsers.ers.log_parsers import (
     parse_pno,
     parse_rtp,
 )
-from src.utils.ers import get_first_child, get_root_tag, make_datetime, remove_namespace
-
+from src.utils.ers import get_first_child, make_datetime
+from src.pipeline.parsers.utils import get_root_tag, remove_namespace
 
 class ERSParsingError(Exception):
     """Raised when an ERS message cannot be parsed."""

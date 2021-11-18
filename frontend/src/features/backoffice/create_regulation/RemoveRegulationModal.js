@@ -9,8 +9,7 @@ import { FooterButton } from '../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
 import Feature from 'ol/Feature'
-import Layers from '../../../domain/entities/layers'
-import { REGULATION_ACTION_TYPE } from '../../../domain/entities/regulatory'
+import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../domain/entities/regulatory'
 
 const RemoveRegulationModal = () => {
   const dispatch = useDispatch()
@@ -21,7 +20,7 @@ const RemoveRegulationModal = () => {
 
   const deleteRegulation = () => {
     const feature = new Feature({})
-    feature.setId(`${Layers.REGULATORY.code}_write.${selectedGeometryId}`)
+    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.DELETE))
   }
 

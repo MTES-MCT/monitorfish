@@ -38,16 +38,12 @@ const RemoveRegulationModal = () => {
       <Footer>
         <FooterButton>
           <ValidateButton
-            disabled={false}
-            isLast={false}
             onClick={deleteRegulation}
             width={'120px'}
           >
             Oui
           </ValidateButton>
           <CancelButton
-            disabled={false}
-            isLast={false}
             onClick={() => dispatch(setIsRemoveModalOpen(false))}
             width={'120px'}
           >

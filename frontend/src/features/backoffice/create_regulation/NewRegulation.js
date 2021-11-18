@@ -18,7 +18,6 @@ import {
 } from './'
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
-import Layers from '../../../domain/entities/layers'
 
 import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
@@ -43,6 +42,7 @@ import Feature from 'ol/Feature'
 import {
   mapToRegulatoryFeatureObject,
   emptyRegulatoryFeatureObject,
+  getRegulatoryFeatureId,
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
   SeafrontByRegulatoryTerritory,
@@ -228,11 +228,11 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
-    feature.setId(`${Layers.REGULATORY.code}_write.${selectedGeometryId}`)
+    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
     if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
-      emptyFeature.setId(`${Layers.REGULATORY.code}_write.${initialGeometryId}`)
+      emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
       dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
   }

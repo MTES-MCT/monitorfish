@@ -110,16 +110,16 @@ function BackofficePage () {
             path="/backoffice"
             render={() => <Redirect to="/backoffice/regulation"/>}
           />
-          <Route path={`${match.path}/regulation`}>
+          <Route exact path={`${match.path}/regulation`}>
             <Backoffice/>
           </Route>
-          <Route path={`${match.path}/regulation/new`}>
+          <Route exact path={`${match.path}/regulation/new`}>
             <NewRegulation title='Saisir une nouvelle réglementation' />
           </Route>
-          <Route path={`${match.path}/regulation/edit`}>
+          <Route exact path={`${match.path}/regulation/edit`}>
             <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
           </Route>
-          <Route path={`${match.path}/control_objectives`}>
+          <Route exact path={`${match.path}/control_objectives`}>
             <ControlObjectives/>
           </Route>
         </Switch>

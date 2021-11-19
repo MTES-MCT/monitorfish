@@ -17,25 +17,23 @@ const ControlObjectives = () => {
     })
   }, [])
 
-  console.log(controlObjectives)
-
   return (
     <ControlObjectivesContainer>
       <SeaFrontControlObjectives
         title={'NORD ATLANTIQUE - MANCHE OUEST (NAMO)'}
-        data={controlObjectives.filter(controlObjective => controlObjective.facade === 'NAMO')}
+        data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'NAMO')}
       />
       <SeaFrontControlObjectives
         title={'MANCHE EST – MER DU NORD (MEMN)'}
-        data={controlObjectives.filter(controlObjective => controlObjective.facade === 'MEMN')}
+        data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MEMN')}
       />
       <SeaFrontControlObjectives
         title={'SUD-ATLANTIQUE (SA)'}
-        data={controlObjectives.filter(controlObjective => controlObjective.facade === 'SA')}
+        data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'SA')}
       />
       <SeaFrontControlObjectives
         title={'Méditerranée (MED)'}
-        data={controlObjectives.filter(controlObjective => controlObjective.facade === 'MED')}
+        data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MED')}
       />
     </ControlObjectivesContainer>
   )
@@ -44,8 +42,8 @@ const ControlObjectives = () => {
 const ControlObjectivesContainer = styled.div`
   background-color: ${COLORS.white};
   width: 100%;
-  height: calc(100vh - 160px);
-  padding: 80px 20px;
+  height: calc(100vh - 40px);
+  padding: 20px 20px;
   display: flex;
   flex-wrap: wrap;
   overflow: auto;

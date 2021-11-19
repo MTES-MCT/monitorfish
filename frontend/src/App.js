@@ -29,6 +29,7 @@ import ErrorToastNotification from './features/commonComponents/ErrorToastNotifi
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
+import Redirect from 'react-router-dom/es/Redirect'
 
 function App () {
   switch (browserName) {
@@ -104,7 +105,12 @@ function BackofficePage () {
       <BackofficeWrapper>
         <Menu/>
         <Switch>
-          <Route exact path={`${match.path}/regulation`}>
+          <Route
+            exact
+            path="/backoffice"
+            render={() => <Redirect to="/backoffice/regulation"/>}
+          />
+          <Route path={`${match.path}/regulation`}>
             <Backoffice/>
           </Route>
           <Route path={`${match.path}/regulation/new`}>

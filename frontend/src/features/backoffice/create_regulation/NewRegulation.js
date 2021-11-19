@@ -121,7 +121,7 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const onGoBack = () => {
     dispatch(resetState())
-    history.push('/backoffice')
+    history.push('/backoffice/regulation')
   }
 
   useEffect(() => {

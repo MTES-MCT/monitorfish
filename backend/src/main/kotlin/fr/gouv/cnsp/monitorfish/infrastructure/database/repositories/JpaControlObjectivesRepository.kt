@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjective
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBControlObjectivesRepository
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
 class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: DBControlObjectivesRepository) : ControlObjectivesRepository {
@@ -15,6 +16,7 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
         }
     }
 
+    @Transactional
     override fun update(id: Int, targetNumberOfControlsAtSea: Int?, targetNumberOfControlsAtPort: Int?, controlPriorityLevel: Double?) {
         try {
             controlPriorityLevel?.let {

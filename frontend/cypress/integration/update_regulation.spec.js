@@ -39,6 +39,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="validate-button"]').click()
     cy.get('.rs-checkbox-wrapper').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
   })
+
   it('Save regulation click button open backoffice page', () => {
     // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')

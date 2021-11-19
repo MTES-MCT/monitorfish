@@ -19,7 +19,7 @@ context('Control objectives', () => {
     cy.get('.rs-table-cell-content').eq(10).children().should('have.value', '0')
     cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '20')
     cy.get('.rs-table-cell-content').eq(12).children().contains('1.7')
-    cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('2')
+    cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('1')
   })
 
   it('Should update the targetNumberOfControlsAtPort field on an objective', () => {

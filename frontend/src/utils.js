@@ -213,14 +213,20 @@ const item = (e) => {
  * @returns a new array
  */
 export const formatDataForSelectPicker = (list, groupName) => {
-  const array = list.map(e => {
-    const i = item(e)
-    if (groupName) {
-      i.group = groupName
-    }
-    return i
-  })
-  return array
+  const orderedList = [...list]
+  if (list?.length > 0) {
+    const array = orderedList
+      .sort()
+      .map(e => {
+        const i = item(e)
+        if (groupName) {
+          i.group = groupName
+        }
+        return i
+      })
+    return array
+  }
+  return []
 }
 
 /**

@@ -42,7 +42,7 @@ context('LayersSidebar', () => {
     cy.wait(1000)
 
     cy.get('canvas', { timeout: 20000 }).eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
 
     // Close the metadata modal and hide the zone
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
@@ -50,7 +50,7 @@ context('LayersSidebar', () => {
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('canvas', { timeout: 20000 }).eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 20000 }).should('not.exist')
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
@@ -76,16 +76,16 @@ context('LayersSidebar', () => {
     cy.wait(1000)
 
     cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
 
     // Delete the zone
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-delete"]').click()
-    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 20000 }).should('not.exist');
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 20000 }).should('not.exist')
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]', { timeout: 20000 }).should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 20000 }).should('not.exist')
 
     // Close the layers sidebar
     cy.get('*[data-cy^="layers-sidebar"]', { timeout: 20000 }).click({ timeout: 20000 })
@@ -104,7 +104,7 @@ context('LayersSidebar', () => {
 
     // Then show the metadata
     cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
-    cy.get('*[data-cy="regulatory-layers-metadata-seafront"]').contains('MEMN')
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues remorquées par bateau (DRB)')
   })
 

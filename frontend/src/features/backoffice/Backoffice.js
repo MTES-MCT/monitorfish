@@ -56,20 +56,21 @@ const Backoffice = () => {
   }
 
   const displayRegulatoryZoneListByLawType = (regZoneByLawType) => {
-    return (
-      regZoneByLawType && Object.keys(regZoneByLawType).length > 0
-        ? Object.keys(regZoneByLawType).map(lawType => {
-          return <LawType
-            key={lawType}
-            lawType={lawType}
-            regZoneByLawType={regZoneByLawType}
-            showedLayers={showedLayers}
-            gears={gears}
-            callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-            isEditable={true}
-          />
-        })
-        : <EmptyResult>Aucun résultat</EmptyResult>)
+    return (regZoneByLawType && Object.keys(regZoneByLawType)
+      .sort()
+      .length > 0
+      ? Object.keys(regZoneByLawType).map(lawType => {
+        return <LawType
+          key={lawType}
+          lawType={lawType}
+          regZoneByLawType={regZoneByLawType}
+          showedLayers={showedLayers}
+          gears={gears}
+          callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+          isEditable={true}
+        />
+      })
+      : <EmptyResult>Aucun résultat</EmptyResult>)
   }
 
   const displayRegulatoryZoneByRegTerritory = (territory) => {

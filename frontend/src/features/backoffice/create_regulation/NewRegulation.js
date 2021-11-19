@@ -91,8 +91,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     atLeastOneValueIsMissing,
     selectedGeometryId,
     isRemoveModalOpen,
-    regulationDeleted,
-    atLeastOneValueIsMissing
+    regulationDeleted
   } = useSelector(state => state.regulation)
 
   useEffect(() => {
@@ -172,9 +171,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     setSelectedRegulationLawType(lawType)
     setSelectedRegulationTopic(topic)
     setNameZone(zone)
-    setSelectedSeaFront(seafront)
     setSelectedRegionList(region ? region.split(', ') : [])
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
+    dispatch(setSelectedGeometryId(id))
     setInitialGeometryId(id)
     batch(() => {
       dispatch(setSelectedGeometryId(id))

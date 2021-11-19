@@ -101,7 +101,7 @@ const RegulatoryLayerZone = props => {
   }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
 
   const onEditRegulationClick = () => {
-    history.push(`${match.path}/regulation/edit`)
+    history.push(`${match.path}/edit`)
     dispatch(showRegulationToEdit(regulatoryZone))
   }
 

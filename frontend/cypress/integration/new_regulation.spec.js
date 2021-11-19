@@ -62,7 +62,6 @@ context('NewRegulation', () => {
     cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 18)
   })
 
-  // A revoir
   it('If a EU law type has been selected, region list should be disabled', () => {
     // Select a EU law type
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()

@@ -175,11 +175,6 @@ const RegulatoryText = props => {
     }
   }
 
-  const onStartDateChange = (date) => {
-    console.log(date)
-    set('startDate', date.getTime())
-  }
-
   return <>
     <ContentLine>
       <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
@@ -252,7 +247,7 @@ const RegulatoryText = props => {
         key={startDate}
         isRequired={startDateIsRequired}
         value={startDate ? new Date(startDate) : new Date()}
-        onChange={onStartDateChange}
+        onChange={(date) => set('startDate', date.getTime())}
         onOk={(date, _) => set('startDate', date.getTime())}
         format='DD/MM/YYYY'
         placement={'rightStart'}

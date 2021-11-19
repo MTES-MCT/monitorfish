@@ -79,6 +79,7 @@ const RegulatoryText = props => {
       set('startDate', new Date().getTime())
     }
   }, [startDate])
+
   useEffect(() => {
     if (fromForm) {
       if (!isEditing) {
@@ -161,6 +162,7 @@ const RegulatoryText = props => {
   }
 
   const onCloseIconClicked = () => {
+    setFromForm(true)
     setIsEditing(true)
   }
 
@@ -220,7 +222,7 @@ const RegulatoryText = props => {
           </>
         : <Tag
             tagValue={reference}
-            tagUrl={reference}
+            tagUrl={url}
             onCloseIconClicked={onCloseIconClicked}
           />
     }
@@ -236,12 +238,12 @@ const RegulatoryText = props => {
         <CustomCheckbox
           $isRequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.CREATION}
-          data-cy={'create-zone-checkbox'}
+          data-cy='create-zone-checkbox'
         >création de la zone</CustomCheckbox>
         <CustomCheckbox
           $isRequired={textTypeIsRequired}
           value={REGULATORY_TEXT_TYPE.REGULATION}
-          data-cy={'zone-regulation-checkbox'}
+          data-cy='zone-regulation-checkbox'
         >réglementation de la zone</CustomCheckbox>
       </CustomCheckboxGroup>
     </ContentLine>

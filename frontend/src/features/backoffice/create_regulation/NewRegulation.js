@@ -13,18 +13,18 @@ import {
   RegulationSeaFrontLine,
   RegulationTopicLine,
   RegulatoryTextSection,
-  UpcomingRegulationModal
+  UpcomingRegulationModal,
+  RemoveRegulationModal
 } from './'
 import BaseMap from '../../map/BaseMap'
-import createOrUpdateRegulationInGeoserver from '../../../domain/use_cases/createOrUpdateRegulationInGeoserver'
-import Layers from '../../../domain/entities/layers'
+import updateRegulation from '../../../domain/use_cases/updateRegulation'
 
 import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
 import {
-  /* CancelButton */
+  CancelButton,
   ValidateButton
 } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
@@ -34,12 +34,15 @@ import {
   setRegulatoryTextCheckedMap,
   setUpcomingRegulation,
   setSaveOrUpdateRegulation,
+  setIsRemoveModalOpen,
+  setSelectedGeometryId,
   setAtLeastOneValueIsMissing
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
   mapToRegulatoryFeatureObject,
   emptyRegulatoryFeatureObject,
+  getRegulatoryFeatureId,
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
   SeafrontByRegulatoryTerritory,
@@ -76,7 +79,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
-  const [selectedGeometryId, setSelectedGeometry] = useState()
+  const [initialGeometryId, setInitialGeometryId] = useState()
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
@@ -88,10 +91,11 @@ const CreateRegulation = ({ title, isEdition }) => {
     regulatoryTextCheckedMap,
     upcomingRegulation,
     saveOrUpdateRegulation,
+    selectedGeometryId,
+    isRemoveModalOpen,
+    regulationDeleted,
     atLeastOneValueIsMissing
   } = useSelector(state => state.regulation)
-
-  let originalGeometryId = null
 
   useEffect(() => {
     if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
@@ -113,11 +117,10 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const history = useHistory()
   useEffect(() => {
-    if (regulationSaved) {
-      history.push('/backoffice')
-      dispatch(resetState())
+    if (regulationSaved || regulationDeleted) {
+      onGoBack()
     }
-  }, [regulationSaved])
+  }, [regulationSaved, regulationDeleted])
 
   const onGoBack = () => {
     dispatch(resetState())
@@ -169,16 +172,17 @@ const CreateRegulation = ({ title, isEdition }) => {
       id,
       upcomingRegulatoryReferences
     } = regulatoryZoneMetadata
-
     setSelectedRegulationLawType(`${lawType} / ${seafront}`)
     setSelectedRegulationTopic(topic)
     setNameZone(zone)
-    setSelectedRegionList(region ? region.split(', ') : [])
     setSelectedSeaFront(seafront)
+    setSelectedRegionList(region ? region.split(', ') : [])
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
-    setSelectedGeometry(id)
-    originalGeometryId = regulatoryZoneMetadata.id
-    dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
+    setInitialGeometryId(id)
+    batch(() => {
+      dispatch(setSelectedGeometryId(id))
+      dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
+    })
   }
 
   const checkRequiredValues = () => {
@@ -224,13 +228,12 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const createOrUpdateRegulation = (featureObject) => {
     const feature = new Feature(featureObject)
-    feature.setId(`${Layers.REGULATORY.code}_write.${selectedGeometryId}`)
-    const actionType = isEdition ? REGULATION_ACTION_TYPE.UPDATE : REGULATION_ACTION_TYPE.INSERT
-    dispatch(createOrUpdateRegulationInGeoserver(feature, actionType))
-    if (originalGeometryId && originalGeometryId !== selectedGeometryId) {
+    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
+    dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
+    if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
-      emptyFeature.setId(`${Layers.REGULATORY.code}_write.${originalGeometryId}`)
-      dispatch(createOrUpdateRegulationInGeoserver(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
+      emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
+      dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
   }
 
@@ -286,9 +289,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   regionIsMissing={regionIsMissing}
                 />
                 <RegulationGeometryLine
-                  setSelectedGeometry={setSelectedGeometry}
                   geometryIdList={geometryIdList}
-                  selectedGeometry={selectedGeometryId}
                   setShowRegulatoryPreview={setShowRegulatoryPreview}
                   showRegulatoryPreview={showRegulatoryPreview}
                   geometryIsMissing={geometryIsMissing}
@@ -328,12 +329,21 @@ const CreateRegulation = ({ title, isEdition }) => {
             >
               Enregistrer un brouillon
             </CancelButton> */}
+            {isEdition &&
+              <CancelButton
+                disabled={false}
+                isLast={false}
+                onClick={() => dispatch(setIsRemoveModalOpen(true))}
+              >
+                Supprimer la réglementation
+              </CancelButton>}
           </FooterButton>
         </Footer>
       </CreateRegulationWrapper>
     { showRegulatoryPreview && <BaseMap />}
     </Wrapper>
     {isModalOpen && <UpcomingRegulationModal />}
+    {isRemoveModalOpen && <RemoveRegulationModal />}
     </>
   )
 }

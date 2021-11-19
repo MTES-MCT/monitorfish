@@ -68,7 +68,7 @@ const RegulatoryTextSection = props => {
       (regulatoryTextList && regulatoryTextList.length > 0) &&
         regulatoryTextList.map((regulatoryText, id) => {
           return <RegulatoryText
-              key={id}
+              key={regulatoryText}
               id={id}
               regulatoryText={regulatoryText}
               addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}

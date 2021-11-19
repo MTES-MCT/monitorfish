@@ -107,7 +107,6 @@ class MonitorFishWorker {
    * }
    */
   convertGeoJSONFeaturesToStructuredRegulatoryObject (features) {
-    console.log('convertGeoJSONFeaturesToStructuredRegulatoryObject')
     const regulatoryTopicList = new Set()
     const layerTopicArray = this.#getLayerTopicList(features)
     const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
@@ -119,7 +118,6 @@ class MonitorFishWorker {
       if (topic && lawType) {
         regulatoryTopicList.add(topic)
         const regulatoryTerritory = LAWTYPES_TO_TERRITORY[lawType]
-        console.log(regulatoryTerritory)
         if (regulatoryTerritory) {
           if (!accumulatedObject[regulatoryTerritory]) {
             accumulatedObject[regulatoryTerritory] = {}

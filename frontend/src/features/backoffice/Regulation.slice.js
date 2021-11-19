@@ -15,7 +15,9 @@ const INITIAL_STATE = {
   saveUpcomingRegulation: false,
   /** @type {boolean} regulatorySaved */
   regulationSaved: false,
-  atLeastOneValueIsMissing: undefined
+  regulationDeleted: false,
+  isRemoveModalOpen: false,
+  selectedGeometryId: undefined
 }
 
 const regulationSlice = createSlice({
@@ -73,6 +75,15 @@ const regulationSlice = createSlice({
     },
     setSaveUpcomingRegulation (state, action) {
       state.saveUpcomingRegulation = action.payload
+    },
+    setRegulationDeleted (state, action) {
+      state.regulationDeleted = action.payload
+    },
+    setIsRemoveModalOpen (state, action) {
+      state.isRemoveModalOpen = action.payload
+    },
+    setSelectedGeometryId (state, action) {
+      state.selectedGeometryId = action.payload
     }
   }
 })
@@ -89,7 +100,10 @@ export const {
   addObjectToRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
-  setSaveUpcomingRegulation
+  setSaveUpcomingRegulation,
+  setRegulationDeleted,
+  setIsRemoveModalOpen,
+  setSelectedGeometryId
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

@@ -1,4 +1,5 @@
 import { getTextForSearch, formatDataForSelectPicker } from '../../utils'
+import Layers from './layers'
 
 export const mapToRegulatoryZone = properties => {
   return {
@@ -50,6 +51,10 @@ export const mapToRegulatoryFeatureObject = properties => {
     references_reglementaires: JSON.stringify(regulatoryTexts),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || '')
   }
+}
+
+export const getRegulatoryFeatureId = (id) => {
+  return `${Layers.REGULATORY.code}_write.${id}`
 }
 
 export const emptyRegulatoryFeatureObject = {
@@ -112,7 +117,8 @@ export const REGULATORY_SEARCH_PROPERTIES = {
 */
 export const REGULATION_ACTION_TYPE = {
   UPDATE: 'update',
-  INSERT: 'insert'
+  INSERT: 'insert',
+  DELETE: 'delete'
 }
 
 /**

@@ -200,7 +200,7 @@ function getAllRegulatoryLayersFromAPI () {
 function getAllGeometryWithoutProperty () {
   const filter = 'references_reglementaires IS NULL AND zones IS NULL AND region IS NULL AND facade IS NULL AND law_type IS NULL AND layer_name IS NULL'
   const REQUEST = `${GEOSERVER_URL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-  `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+  `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
     .then(response => {
       if (response.status === OK) {
@@ -497,7 +497,7 @@ function getHealthcheckFromAPI () {
     })
 }
 
-function updateOrCreateRegulation (feature, actionType) {
+function sendRegulationTransaction (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
     featureNS: 'monitorfish',
@@ -511,6 +511,8 @@ function updateOrCreateRegulation (feature, actionType) {
     transaction  = formatWFS.writeTransaction(null, [feature], null, formatGML)
   } else if (actionType === REGULATION_ACTION_TYPE.INSERT) {
     transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
+  } else if (actionType === REGULATION_ACTION_TYPE.DELETE) {
+    transaction = formatWFS.writeTransaction(null, null, [feature], formatGML)
   }
   const payload = xs.serializeToString(transaction)
 
@@ -549,5 +551,5 @@ export {
   getAllFleetSegmentFromAPI,
   getHealthcheckFromAPI,
   getAllGeometryWithoutProperty,
-  updateOrCreateRegulation
+  sendRegulationTransaction
 }

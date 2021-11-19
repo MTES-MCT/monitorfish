@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 export const basePrimaryButton = css`
   background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
+  ${props => props.width ? `width: ${props.width};` : ''}
   :hover, :focus {
     background: ${COLORS.charcoal};
   }
@@ -18,6 +19,7 @@ export const basePrimaryButton = css`
 const baseSecondaryButton = css`
   border: 1px solid ${COLORS.charcoal};
   color: ${COLORS.gunMetal};
+  ${props => props.width ? `width: ${props.width};` : ''}
   :disabled {
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.slateGray};

@@ -127,7 +127,11 @@ class MonitorFishWorker {
           if (!accumulatedObject[regulatoryTerritory][lawType]) {
             accumulatedObject[regulatoryTerritory][lawType] = {}
           }
-          accumulatedObject[regulatoryTerritory][lawType][topic] = zone
+          let orderZoneList = zone
+          if (zone.length > 1) {
+            orderZoneList = zone.sort()
+          }
+          accumulatedObject[regulatoryTerritory][lawType][topic] = orderZoneList
         }
       }
       return accumulatedObject

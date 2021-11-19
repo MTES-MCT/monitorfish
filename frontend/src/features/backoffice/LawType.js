@@ -38,18 +38,20 @@ const LawType = props => {
   const displayRegulatoryTopics = (regulatoryTopics) => {
     return (
       regulatoryTopics && Object.keys(regulatoryTopics).length > 0
-        ? Object.keys(regulatoryTopics).map((regulatoryTopic, index) => {
-          return <RegulatoryLayerTopic
-            key={regulatoryTopic}
-            increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-            decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-            regulatoryTopic={regulatoryTopic}
-            regulatoryZones={regulatoryTopics[regulatoryTopic]}
-            isLastItem={Object.keys(regulatoryTopics).length === index + 1}
-            allowRemoveZone={false}
-            isEditable={isEditable}
-          />
-        })
+        ? Object.keys(regulatoryTopics)
+          .sort()
+          .map((regulatoryTopic, index) => {
+            return <RegulatoryLayerTopic
+              key={regulatoryTopic}
+              increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+              decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+              regulatoryTopic={regulatoryTopic}
+              regulatoryZones={regulatoryTopics[regulatoryTopic]}
+              isLastItem={Object.keys(regulatoryTopics).length === index + 1}
+              allowRemoveZone={false}
+              isEditable={isEditable}
+            />
+          })
         : <EmptyResult>Aucun résultat</EmptyResult>
     )
   }

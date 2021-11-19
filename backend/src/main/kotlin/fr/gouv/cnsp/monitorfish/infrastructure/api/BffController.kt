@@ -240,6 +240,7 @@ class BffController(
                     controlObjectiveId: Int,
                     @RequestBody
                     updateControlObjectiveData: UpdateControlObjectiveDataInput) {
+        println(updateControlObjectiveData.toString())
         updateControlObjective.execute(
                 id = controlObjectiveId,
                 targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,

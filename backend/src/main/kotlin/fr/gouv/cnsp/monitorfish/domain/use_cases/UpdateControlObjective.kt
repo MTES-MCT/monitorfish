@@ -14,7 +14,7 @@ class UpdateControlObjective(private val controlObjectivesRepository: ControlObj
                 targetNumberOfControlsAtPort: Int?,
                 controlPriorityLevel: Double?) {
 
-        require(targetNumberOfControlsAtSea == null && targetNumberOfControlsAtPort == null && controlPriorityLevel == null) {
+        require(targetNumberOfControlsAtSea != null || targetNumberOfControlsAtPort != null || controlPriorityLevel != null) {
             "No value to update"
         }
 

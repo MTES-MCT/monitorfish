@@ -25,10 +25,9 @@ context('NewRegulation', () => {
 
   it('Edit a layer zone', () => {
     // check expected form values
-    cy.get('[data-cy^="tag"]').should('have.length', 7)
-    cy.get('[data-cy="tag-Reg locale / MEMN"]').should('exist')
+    cy.get('[data-cy^="tag"]').should('have.length', 6)
+    cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('exist')
-    cy.get('[data-cy="tag-MEMN"]').should('exist')
     cy.get('[data-cy="tag-Normandie"]').should('exist')
     cy.get('[data-cy="tag-Bretagne"]').should('exist')
     cy.get('[data-cy="tag-598"]').should('exist')
@@ -52,10 +51,9 @@ context('NewRegulation', () => {
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(request.body).contain('typeName="monitorfish:regulatory_areas_write"')
-        expect(request.body).contain('<Value>Reg locale</Value>')
+        expect(request.body).contain('<Value>Reg. MEMN</Value>')
         expect(request.body).contain('<Value>Praires_Ouest_cotentin</Value>')
         expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
-        expect(request.body).contain('<Value>MEMN</Value>')
         expect(request.body).contain('"reference":"texte de reference"')
         expect(request.body).contain('"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"')
         expect(request.body).not.equal('"startDate":""')

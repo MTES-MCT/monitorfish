@@ -264,12 +264,14 @@ const FishingPeriod = (props) => {
         value={authorized}
       >
         Périodes
-        <CustomRadio checked={authorized === true} value={true} />
-        {' autorisées'}
-        <GreenCircle />
-        <CustomRadio checked={authorized === false} value={false} />
-        {' interdites'}
-        <RedCircle />
+        <CustomRadio checked={authorized === true} value={true} >
+          autorisées
+          <GreenCircle />
+        </CustomRadio>
+        <CustomRadio checked={authorized === false} value={false} >
+          interdites
+          <RedCircle />
+        </CustomRadio>
       </PeriodRadioGroup>
     </Title>
     <PeriodRow display={displayForm} authorized={authorized}>

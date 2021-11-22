@@ -1,18 +1,20 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import Modal from 'rsuite/lib/Modal'
 
 import { COLORS } from '../../constants/constants'
 import { layersType } from '../../domain/entities/layers'
 import {
-  animateToRegulatoryLayer,
+  animateToExtent,
+  setInteraction
+} from '../../domain/shared_slices/Map'
+import {
   removeZoneSelected,
   resetZonesSelected,
-  setInteraction,
   setZonesSelected
-} from '../../domain/shared_slices/Map'
-import { InteractionTypes, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
+} from './VesselList.slice'
+import { InteractionTypes } from '../../domain/entities/map'
 import VesselListTable from './VesselListTable'
 import DownloadVesselListModal from './DownloadVesselListModal'
 import getAdministrativeZoneGeometry from '../../domain/use_cases/getAdministrativeZoneGeometry'
@@ -34,10 +36,9 @@ import { getZonesAndSubZonesPromises } from '../../domain/use_cases/getZonesAndS
 import { setPreviewFilteredVesselsFeaturesUids } from '../../domain/shared_slices/Vessel'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
-import VectorSource from 'ol/source/Vector'
-import GeoJSON from 'ol/format/GeoJSON'
-import { all } from 'ol/loadingstrategy'
 import { VesselLocation } from '../../domain/entities/vessel'
+import { setRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
+import { getExtentFromGeoJSON } from '../../utils'
 
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
@@ -82,7 +83,7 @@ const VesselList = ({ namespace }) => {
   const [speciesFiltered, setSpeciesFiltered] = useState([])
   const [districtsFiltered, setDistrictsFiltered] = useState([])
   const [vesselsSizeValuesChecked, setVesselsSizeValuesChecked] = useState([])
-  const zonesSelected = useSelector(state => state.map.zonesSelected)
+  const zonesSelected = useSelector(state => state.vesselList.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
   const [vesselsLocationFilter, setVesselsLocationFilter] = useState([VesselLocation.SEA, VesselLocation.PORT])
 
@@ -213,13 +214,19 @@ const VesselList = ({ namespace }) => {
 
   const selectBox = () => {
     setVesselListModalIsOpen(false)
-    dispatch(setInteraction(InteractionTypes.SQUARE))
+    dispatch(setInteraction({
+      type: InteractionTypes.SQUARE,
+      listener: layersType.VESSEL
+    }))
     dispatch(setBlockVesselsUpdate(true))
   }
 
   const selectPolygon = () => {
     setVesselListModalIsOpen(false)
-    dispatch(setInteraction(InteractionTypes.POLYGON))
+    dispatch(setInteraction({
+      type: InteractionTypes.POLYGON,
+      listener: layersType.VESSEL
+    }))
     dispatch(setBlockVesselsUpdate(true))
   }
 
@@ -243,19 +250,12 @@ const VesselList = ({ namespace }) => {
       dispatch(setPreviewFilteredVesselsMode(true))
 
       if (zonesSelected?.length) {
-        const vectorSource = new VectorSource({
-          format: new GeoJSON({
-            dataProjection: WSG84_PROJECTION,
-            featureProjection: OPENLAYERS_PROJECTION
-          }),
-          strategy: all
-        })
-        const feature = vectorSource.getFormat().readFeatures(zonesSelected[0]?.feature)
-        const extent = feature[0]?.getGeometry()?.getExtent()
+        const extent = getExtentFromGeoJSON(zonesSelected[0]?.feature)
         if (extent?.length && !Number.isNaN(extent[0]) && !Number.isNaN(extent[1])) {
-          dispatch(animateToRegulatoryLayer({
-            extent: extent
-          }))
+          batch(() => {
+            dispatch(setRegulationSearchedZoneExtent(extent))
+            dispatch(animateToExtent())
+          })
         }
       }
     }
@@ -270,14 +270,13 @@ const VesselList = ({ namespace }) => {
   }, [previewFilteredVesselsMode])
 
   useEffect(() => {
-    if (zonesSelected && zonesSelected.length) {
+    if (zonesSelected?.length) {
       setVesselListModalIsOpen(true)
     }
   }, [zonesSelected])
 
   useEffect(() => {
-    if (administrativeZonesFiltered && zonesSelected &&
-      administrativeZonesFiltered.length > zonesSelected.length) {
+    if (administrativeZonesFiltered?.length > zonesSelected?.length) {
       setIsFiltering(true)
 
       const zonesGeometryToFetch = administrativeZonesFiltered

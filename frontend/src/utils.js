@@ -1,5 +1,9 @@
 import { asArray, asString } from 'ol/color'
 import { createSlice } from '@reduxjs/toolkit'
+import VectorSource from 'ol/source/Vector'
+import GeoJSON from 'ol/format/GeoJSON'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
+import { all } from 'ol/loadingstrategy'
 
 export const calculatePointsDistance = (coord1, coord2) => {
   const dx = coord1[0] - coord2[0]
@@ -289,4 +293,23 @@ export const convertToUTCFullDay = (afterDateTime, beforeDateTime) => {
     afterDateTime,
     beforeDateTime
   }
+}
+
+/**
+ * Get the extent of the first feature found in the GeoJSON object
+ * @param {GeoJSON} features - GEoJSON object
+ * @returns {number[]} The extent
+ */
+export const getExtentFromGeoJSON = features => {
+  const vectorSource = new VectorSource({
+    format: new GeoJSON({
+      dataProjection: WSG84_PROJECTION,
+      featureProjection: OPENLAYERS_PROJECTION
+    }),
+    strategy: all
+  })
+
+  const feature = vectorSource.getFormat().readFeatures(features)
+
+  return feature[0]?.getGeometry()?.getExtent()
 }

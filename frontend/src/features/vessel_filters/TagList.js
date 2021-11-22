@@ -124,7 +124,7 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
   return (
     <List>
       {
-        tags && tags.length
+        tags?.length
           ? tags.map(tag => {
             return <FilterTag
               uuid={uuid}

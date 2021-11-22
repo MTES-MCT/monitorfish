@@ -19,6 +19,7 @@ const ERS_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les messages JPE de ce 
 const CONTROLS_ERROR_MESSAGE = 'Nous n\'avons pas pu récuperer les contrôles pour ce navire'
 const VESSEL_SEARCH_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les navires dans notre base'
 const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
+const REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE = 'Nous n\'avons pas pu filtrer les zones réglementaires par zone'
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
@@ -314,6 +315,48 @@ function getRegulatoryZoneURL (type, regulatoryZone) {
     '&outputFormat=application/json&CQL_FILTER=' +
     filter.replace(/'/g, '%27').replace(/ /g, '%20')
   )
+}
+
+/**
+ * Get the regulatory zones GeoJSON feature filtered with the OpenLayers extent (the BBOX)
+ * @memberOf API
+ * @param {string[]|null} extent
+ * @returns {Promise<GeoJSON>} The feature GeoJSON
+ * @throws {Error}
+ */
+export function getRegulatoryZonesInExtentFromAPI (extent) {
+  try {
+    return fetch(`${GEOSERVER_URL}/geoserver/wfs?service=WFS` +
+      `&version=1.1.0&request=GetFeature&typename=monitorfish:${Layers.REGULATORY.code}` +
+      `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
+      `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
+      `&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`
+        .replace(/'/g, '%27')
+        .replace(/\(/g, '%28')
+        .replace(/\)/g, '%29')
+        .replace(/ /g, '%20'))
+      .then(response => {
+        if (response.status === OK) {
+          return response.json().then(response => {
+            return response
+          }).catch(error => {
+            console.error(error)
+            throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
+          })
+        } else {
+          response.text().then(response => {
+            console.error(response)
+          })
+          throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
+        }
+      }).catch(error => {
+        console.error(error)
+        throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
+      })
+  } catch (error) {
+    console.error(error)
+    return Promise.reject(REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE)
+  }
 }
 
 function getRegulatoryZoneMetadataFromAPI (regulatorySubZone) {

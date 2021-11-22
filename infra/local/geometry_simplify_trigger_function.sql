@@ -1,4 +1,5 @@
 UPDATE prod.reglementation_peche SET geometry_simplified = ST_Simplify(ST_CurveToLine(geometry), 0.001);
+UPDATE prod.reglementation_peche SET geometry = ST_CurveToLine(geometry);
 
 -- This trigger function
 --   * is triggered whenever a row in the local regulation database is inserted or modified
@@ -10,7 +11,7 @@ DROP FUNCTION IF EXISTS prod.simplify_geometry CASCADE;
 
 CREATE FUNCTION prod.simplify_geometry() RETURNS trigger AS $$
     BEGIN
-        NEW.geometry_simplified := ST_Simplify(NEW.geometry, 0.001);
+        NEW.geometry_simplified := ST_Simplify(ST_CurveToLine(NEW.geometry), 0.001);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;

@@ -1,0 +1,22 @@
+<svg id="Filtre_zone_rectangle_30_px" data-name="Filtre zone_rectangle_30 px" xmlns="http://www.w3.org/2000/svg"
+     width="30" height="30" viewBox="0 0 30 30">
+    <rect id="Rectangle_1389" data-name="Rectangle 1389" width="30" height="30" fill="#3B4559"/>
+    <g id="Picto_selection-02" transform="translate(4.62 4.621)">
+        <path id="Tracé_123" data-name="Tracé 123" d="M21.38,19.38v2h-2" transform="translate(-2 -2)" fill="none"
+              stroke="#E5E5EB" stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Ligne_520" data-name="Ligne 520" x1="11.77" transform="translate(3.961 19.38)" fill="none"
+              stroke="#E5E5EB" stroke-miterlimit="10" stroke-width="1.5" stroke-dasharray="3.765 2.824"/>
+        <path id="Tracé_124" data-name="Tracé 124" d="M3.38,21.38h-2v-2" transform="translate(0 -2)" fill="none"
+              stroke="#E5E5EB" stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Ligne_521" data-name="Ligne 521" y1="11.77" transform="translate(1.38 3.961)" fill="none"
+              stroke="#E5E5EB" stroke-miterlimit="10" stroke-width="1.5" stroke-dasharray="3.765 2.824"/>
+        <path id="Tracé_125" data-name="Tracé 125" d="M1.38,3.38v-2h2" fill="none" stroke="#E5E5EB"
+              stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Ligne_522" data-name="Ligne 522" x2="11.76" transform="translate(5.038 1.38)" fill="none"
+              stroke="#E5E5EB" stroke-miterlimit="10" stroke-width="1.5" stroke-dasharray="3.765 2.824"/>
+        <path id="Tracé_126" data-name="Tracé 126" d="M19.38,1.38h2v2" transform="translate(-2)" fill="none"
+              stroke="#E5E5EB" stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Ligne_1172" data-name="Ligne 1172" y2="11.76" transform="translate(19.38 5.037)" fill="none"
+              stroke="#E5E5EB" stroke-miterlimit="10" stroke-width="1.5" stroke-dasharray="3.765 2.824"/>
+    </g>
+</svg>

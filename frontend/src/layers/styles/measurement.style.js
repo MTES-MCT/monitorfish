@@ -10,7 +10,7 @@ export const measurementStyleWithCenter = new Style({
   image: new CircleStyle({
     radius: 2,
     fill: new Fill({
-      color: COLORS.staleGray
+      color: COLORS.slateGray
     })
   }),
   geometry: (feature) => {
@@ -19,27 +19,11 @@ export const measurementStyleWithCenter = new Style({
     return new Point(center)
   }
 })
+
 export const measurementStyle = new Style({
   stroke: new Stroke({
     color: COLORS.slateGray,
     lineDash: [4, 4],
     width: 2
-  })
-})
-
-export const POIStyle = new Style({
-  stroke: new Stroke({
-    color: COLORS.slateGray,
-    lineDash: [4, 4],
-    width: 2
-  }),
-  image: new CircleStyle({
-    radius: 2,
-    stroke: new Stroke({
-      color: COLORS.orange
-    }),
-    fill: new Fill({
-      color: COLORS.red
-    })
   })
 })

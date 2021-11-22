@@ -264,3 +264,21 @@ export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFo
 
   return mergedRegulatoryLayers
 }
+
+/**
+ * Remove the Territory part of the regulatory layer object (see `setRegulatoryLayers` method within the `Regulatory` reducer)
+ * @param {Object} layersTopicsByRegTerritory - The regulatory object
+ * @return {Object} The regulatory object without Territory
+ */
+export const getRegulatoryLayersWithoutTerritory = layersTopicsByRegTerritory => {
+  let nextRegulatoryLayersWithoutTerritory = {}
+
+  Object.keys(layersTopicsByRegTerritory).forEach(territory => {
+    nextRegulatoryLayersWithoutTerritory = {
+      ...nextRegulatoryLayersWithoutTerritory,
+      ...layersTopicsByRegTerritory[territory]
+    }
+  })
+
+  return nextRegulatoryLayersWithoutTerritory
+}

@@ -5,7 +5,7 @@ import VectorSource from 'ol/source/Vector'
 import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
-import { POIStyle } from './styles/measurement.style'
+import { getInterestPointStyle, POIStyle } from './styles/interestPoint.style'
 import { v4 as uuidv4 } from 'uuid'
 import InterestPointOverlay from '../features/map/overlays/InterestPointOverlay'
 import {
@@ -23,7 +23,6 @@ import {
   interestPointType
 } from '../domain/entities/interestPoints'
 import saveInterestPointFeature from '../domain/use_cases/saveInterestPointFeature'
-import { getInterestPointStyle } from './styles/interestPoint.style'
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from '../domain/entities/interestPointLine'

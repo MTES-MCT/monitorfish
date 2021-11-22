@@ -3,6 +3,11 @@ import { getLocalStorageState } from '../../utils'
 
 const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
 
+/* eslint-disable */
+/** @namespace RegulatoryReducer */
+const RegulatoryReducer = null
+/* eslint-enable */
+
 export const reOrderOldObjectHierarchyIfFound = layers => {
   Object.keys(layers)
     .forEach(layer => {
@@ -36,7 +41,8 @@ const regulatorySlice = createSlice({
     regulatoryTopics: [],
     layersTopicsByRegTerritory: {},
     regulatoryGeometryToPreview: null,
-    simplifiedGeometries: true
+    simplifiedGeometries: true,
+    regulationSearchedZoneExtent: []
   },
   reducers: {
     setRegulatoryGeometryToPreview (state, action) {
@@ -44,6 +50,7 @@ const regulatorySlice = createSlice({
     },
     /**
      * Add regulatory zones to "My Zones" regulatory selection
+     * @memberOf RegulatoryReducer
      * @param {Object=} state
      * @param {SelectedRegulatoryZone[]} action - The regulatory zones
      */
@@ -68,6 +75,7 @@ const regulatorySlice = createSlice({
     /**
      * Remove regulatory zone(s) from "My Zones" regulatory selection, by providing a topic name to remove multiple zones
      * or simply the zone name to remove a specified zone
+     * @memberOf RegulatoryReducer
      * @param {Object=} state
      * @param {{
      *          topic: string=,
@@ -121,6 +129,7 @@ const regulatorySlice = createSlice({
      * (see example)
      * @param {Object=} state
      * @param {{payload: RegulatoryLawTypes}} action - The regulatory data
+     * @memberOf RegulatoryReducer
      * @example
      * {
      *  "Reg locale / NAMO": {
@@ -177,6 +186,16 @@ const regulatorySlice = createSlice({
     },
     showWholeGeometries (state) {
       state.simplifiedGeometries = false
+    },
+    /**
+     * Set the regulation searched zone extent - used to fit the extent into the OpenLayers view
+     * @function setRegulationSearchedZoneExtent
+     * @memberOf RegulatoryReducer
+     * @param {Object=} state
+     * @param {{payload: number[]}} action - the extent
+     */
+    setRegulationSearchedZoneExtent (state, action) {
+      state.regulationSearchedZoneExtent = action.payload
     }
   }
 })
@@ -195,7 +214,8 @@ export const {
   setLayersTopicsByRegTerritory,
   setRegulatoryGeometryToPreview,
   showSimplifiedGeometries,
-  showWholeGeometries
+  showWholeGeometries,
+  setRegulationSearchedZoneExtent
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

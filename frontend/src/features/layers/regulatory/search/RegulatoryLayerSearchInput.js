@@ -32,6 +32,9 @@ const RegulatoryLayerSearchInput = props => {
     advancedSearchIsOpen,
     zoneSelected
   } = useSelector(state => state.regulatoryLayerSearch)
+  const {
+    interaction
+  } = useSelector(state => state.map)
 
   const [nameSearchText, setNameSearchText] = useState('')
   const [placeSearchText, setPlaceSearchText] = useState('')
@@ -139,7 +142,8 @@ const RegulatoryLayerSearchInput = props => {
         <SearchByGeometry>
           ou définir une zone sur la carte <br/>
           {
-            JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.SQUARE
+            (JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.SQUARE ||
+              interaction?.type === InteractionTypes.SQUARE)
               ? <BoxFilterSelected
                 data-cy={'regulation-search-box-filter-selected'}
                 onClick={() => dispatch(setInteraction({
@@ -156,7 +160,8 @@ const RegulatoryLayerSearchInput = props => {
               />
           }
           {
-            JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.POLYGON
+            JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.POLYGON ||
+            interaction?.type === InteractionTypes.POLYGON
               ? <PolygonFilterSelected
                 data-cy={'regulation-search-polygon-filter-selected'}
                 onClick={() => dispatch(setInteraction({

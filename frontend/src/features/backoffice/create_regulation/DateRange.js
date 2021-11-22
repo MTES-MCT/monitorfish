@@ -22,18 +22,14 @@ const DateRange = (props) => {
   } = dateRange
 
   const setDateRange = (key, value) => {
-    console.log('setDateRange')
     const newDateRange = {
       ...dateRange,
       [key]: value
     }
-    console.log(newDateRange)
     updateList(id, newDateRange)
   }
 
   const setStartDateFromDateType = value => {
-    console.log('setStartDateFromDateType')
-    console.log(value)
     setDateRange('startDate', value)
   }
   const setEndDateFromDateType = value => setDateRange('endDate', value)
@@ -78,38 +74,5 @@ const DateRangeRow = styled.div`
   flex-direction: row;
   align-items: center;
 `
-
-/* const MonthDateInput = styled.input`
-  border: none!important;
-  background: ${COLORS.white}!important;
-  -webkit-appearance: none;
-  -moz-appearance: textfield;
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  ::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-  }
-  apparance: none;
-  max-width: 20px;
-  text-align: right;
-  box-sizing: border-box;
-  padding: 0px 2px 1px 2px;
-  background-color: ${COLORS.white};
-  color: ${COLORS.gunMetal}
-`
-
-const MonthDateInputSlot = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 0px 5px;
-  border: 1px solid ${props => props.$isrequired ? COLORS.red : COLORS.lightGray};
-  height: 35px;
-  width: 50px;
-  box-sizing: border-box;
-  color: ${COLORS.lightGray}
-` */
 
 export default DateRange

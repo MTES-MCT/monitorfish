@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Iterable, Set, Tuple, Union
 
 import h3
+import numpy as np
 import pandas as pd
 from pyproj import Geod
 from shapely.geometry import MultiPolygon, Polygon
@@ -146,3 +147,56 @@ def point_dist(position1: Position, position2: Position) -> float:
     )
 
     return d
+
+
+def get_step_distances(
+    df: pd.DataFrame,
+    lat: str = "latitude",
+    lon: str = "longitude",
+    how: str = "backward",
+    unit: str = "m",
+) -> np.array:
+    """Compute the distance between successive positions (rows). The DataFrame must
+    have latitude and longitude columns.
+    Returns a numpy array with the same length as the input DataFrame and distances as
+    values.
+
+    Args:
+        df
+        lat (str): column name containing latitudes
+        lon (str): column name containing longitudes
+        how (str): if, 'forward', computes the interval between each position and the
+            next one. if 'backward', computes the interval between each position and
+            the previous one.
+        unit (str): the distance unit (passed to h3.point_dist).
+            Defaults to 'm'.
+
+    Returns:
+        np.array: array of distances between the successive positions.
+    """
+
+    if len(df) < 2:
+        distances = [np.nan] * len(df)
+    else:
+
+        strides = np.lib.stride_tricks.sliding_window_view(
+            df[[lat, lon]].values,
+            window_shape=(2, 2),
+        ).reshape((len(df) - 1, 4))
+
+        distances = np.apply_along_axis(
+            lambda x: h3.point_dist(tuple(x[[0, 1]]), tuple(x[[2, 3]]), unit=unit),
+            axis=1,
+            arr=strides,
+        )
+
+        if how == "forward":
+            distances = np.append(distances, [np.nan])
+        elif how == "backward":
+            distances = np.append([np.nan], distances)
+        else:
+            raise ValueError(f"how must be 'forward' or 'backward', got f{how}")
+
+    res = np.array(distances)
+
+    return res

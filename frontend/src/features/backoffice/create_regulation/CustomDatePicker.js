@@ -25,6 +25,7 @@ const CustomDatePicker = props => {
   } = props
 
   return <DatePickerStyled
+    key={value}
     data-cy={`custom-date-picker-${value}`}
     $isrequired={isRequired}
     disabled={disabled}

@@ -58,7 +58,7 @@ const DateRange = (props) => {
     <SquareButton
       disabled={dateRange?.startDate === undefined && dateRange?.endDate === undefined}
       type='delete'
-      onClick={_ => dateRange?.startDate !== undefined && dateRange?.endDate !== undefined && removeDateRange(id)} />
+      onClick={_ => (dateRange?.startDate !== undefined || dateRange?.endDate !== undefined) && removeDateRange(id)} />
     </Wrapper>
 }
 

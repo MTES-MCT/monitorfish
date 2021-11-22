@@ -122,7 +122,7 @@ const mapSlice = createSlice({
       state.interaction = action.payload
     },
     /**
-     * Reset tje interaction with the OpenLayers map
+     * Reset the interaction with the OpenLayers map
      * @param {Object=} state
      */
     resetInteraction (state) {

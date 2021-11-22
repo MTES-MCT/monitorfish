@@ -1,10 +1,10 @@
+import { createSlice } from '@reduxjs/toolkit'
+import { getLocalStorageState } from '../../utils'
+
 /* eslint-disable */
 /** @namespace FilterReducer */
 const FilterReducer = null
-/* eslint-disable */
-
-import { createSlice } from '@reduxjs/toolkit'
-import { getLocalStorageState } from '../../utils'
+/* eslint-enable */
 
 const vesselsFiltersLocalStorageKey = 'vesselsFilters'
 const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'

@@ -1,6 +1,3 @@
-/**
- * Est-ce qu'on ne devrait pas mettre de fichier à la racine de /src ?
- */
 import layer from './Layer'
 import global from './Global'
 import map from './Map'

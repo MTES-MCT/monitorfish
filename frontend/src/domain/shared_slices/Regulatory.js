@@ -1,11 +1,12 @@
-/* eslint-disable */
 import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
 
 const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
 
+/* eslint-disable */
 /** @namespace RegulatoryReducer */
 const RegulatoryReducer = null
+/* eslint-enable */
 
 export const reOrderOldObjectHierarchyIfFound = layers => {
   Object.keys(layers)
@@ -195,7 +196,7 @@ const regulatorySlice = createSlice({
      */
     setRegulationSearchedZoneExtent (state, action) {
       state.regulationSearchedZoneExtent = action.payload
-    },
+    }
   }
 })
 

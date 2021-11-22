@@ -12,9 +12,8 @@ import { batch } from 'react-redux'
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
-const getAllRegulatoryLayersByRegTerritory = () => {
-  return async (dispatch) => {
-    const worker = await new MonitorFishWorker()
+const getAllRegulatoryLayersByRegTerritory = () => async (dispatch) => {
+  const worker = await new MonitorFishWorker()
 
   return getAllRegulatoryLayersFromAPI()
     .then(features => {

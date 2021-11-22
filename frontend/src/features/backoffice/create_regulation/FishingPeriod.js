@@ -128,9 +128,8 @@ const FishingPeriod = (props) => {
   }
 
   const onDateChange = (id, date) => {
-    let newList = []
-    if (id !== -1 && date?.length > 0) {
-      newList = [...dates]
+    const newList = dates ? [...dates] : []
+    if (id !== -1 && dates?.length > 0) {
       newList[id] = date
     } else {
       newList.push(date)

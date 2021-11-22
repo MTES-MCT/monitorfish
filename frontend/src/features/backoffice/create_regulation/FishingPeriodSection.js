@@ -42,6 +42,8 @@ const FishingPeriodSection = (props) => {
 
 const Other = styled.div`
   display: ${props => props.show ? 'flex' : 'none'};
+  align-items: center;
+  margin-top: 30px;
 `
 
 export default FishingPeriodSection

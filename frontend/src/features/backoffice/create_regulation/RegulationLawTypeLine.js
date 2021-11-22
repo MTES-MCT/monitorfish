@@ -24,7 +24,11 @@ const RegulationLawTypeLine = props => {
         onChange={setSelectedValue}
         data={selectData}
         data-cy={'regulation-lawtype-select'}
-        renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedValue} item={item} tag={'Radio'} />}
+        renderMenuItem={(_, item) =>
+          <MenuItem
+            checked={item.value === selectedValue}
+            item={item}
+            tag={'Radio'} />}
         valueIsMissing={lawTypeIsMissing}
       />
       {selectedValue &&

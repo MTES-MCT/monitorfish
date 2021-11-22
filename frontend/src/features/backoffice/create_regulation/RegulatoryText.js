@@ -75,12 +75,6 @@ const RegulatoryText = props => {
   })
 
   useEffect(() => {
-    if (!startDate) {
-      set('startDate', new Date().getTime())
-    }
-  }, [startDate])
-
-  useEffect(() => {
     if (fromForm) {
       if (!isEditing) {
         setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')

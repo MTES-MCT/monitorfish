@@ -16,6 +16,7 @@ const INITIAL_STATE = {
   /** @type {boolean} regulatorySaved */
   regulationSaved: false,
   regulationDeleted: false,
+  atLeastOneValueIsMissing: undefined,
   isRemoveModalOpen: false,
   selectedGeometryId: undefined
 }

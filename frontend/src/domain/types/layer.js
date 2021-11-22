@@ -44,9 +44,7 @@
  * @property {string} quantity
  * @property {string} size
  * @property {string} region
- * @property {string} seafront
  * @property {string} obligations
  * @property {string} rejections
  * @property {string} deposit
   */
-

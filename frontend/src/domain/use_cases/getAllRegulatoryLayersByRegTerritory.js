@@ -5,8 +5,6 @@ import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import { setError } from '../shared_slices/Global'
 import {
   setRegulatoryTopics,
-  setRegulatoryLawTypes,
-  setSeaFronts,
   setLayersTopicsByRegTerritory
 } from '../shared_slices/Regulatory'
 import { batch } from 'react-redux'
@@ -24,15 +22,11 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch) => {
     .then(response => {
       const {
         layersTopicsByRegulatoryTerritory,
-        regulatoryTopics,
-        regulatoryLawTypes,
-        seaFronts
+        regulatoryTopics
       } = response
 
       batch(() => {
         dispatch(setRegulatoryTopics(regulatoryTopics))
-        dispatch(setRegulatoryLawTypes(regulatoryLawTypes))
-        dispatch(setSeaFronts(seaFronts))
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
       })
     })

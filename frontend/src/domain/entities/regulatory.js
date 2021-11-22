@@ -1,4 +1,4 @@
-import { getTextForSearch, formatDataForSelectPicker } from '../../utils'
+import { getTextForSearch } from '../../utils'
 import Layers from './layers'
 
 export const mapToRegulatoryZone = properties => {
@@ -25,7 +25,6 @@ export const mapToRegulatoryZone = properties => {
     quantity: properties.quantites,
     size: properties.taille,
     region: properties.region,
-    seafront: properties.facade,
     obligations: properties.obligations,
     rejections: properties.rejets,
     deposit: properties.gisement
@@ -37,17 +36,15 @@ export const mapToRegulatoryFeatureObject = properties => {
     selectedRegulationTopic,
     selectedRegulationLawType,
     nameZone,
-    selectedSeaFront,
     selectedRegionList,
     regulatoryTexts,
     upcomingRegulation
   } = properties
   return {
     layer_name: selectedRegulationTopic,
-    law_type: selectedRegulationLawType?.split(' /')[0],
+    law_type: selectedRegulationLawType,
     zones: nameZone,
     region: selectedRegionList?.join(', '),
-    facade: selectedSeaFront,
     references_reglementaires: JSON.stringify(regulatoryTexts),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || '')
   }
@@ -62,50 +59,50 @@ export const emptyRegulatoryFeatureObject = {
   law_type: null,
   zones: null,
   region: null,
-  facade: null,
-  references_reglementaires: null
+  references_reglementaires: null,
+  references_reglementaires_a_venir: null
 }
 
-export const FRANCE = 'France'
-export const UE = 'Union Europérenne'
-export const LawTypesToTerritory = {
-  'Reg locale': FRANCE,
-  'Reg 494 - Merlu': UE,
-  'R(UE) 2019/1241': UE,
-  'R(UE) 1380/2013': UE
+export const FRANCE = 'Réglementation France'
+export const UE = 'Réglementation UE'
+export const REG_LOCALE = 'Reg locale'
+
+const REG_MED = 'Reg. MED'
+const REG_SA = 'Reg. SA'
+const REG_NAMO = 'Reg. NAMO'
+const REG_MEMN = 'Reg. MEMN'
+const REG_OUTRE_MER = 'Reg. Outre-mer'
+const RUE_2019 = 'R(UE) 2019/1241'
+const RUE_1380 = 'R(UE) 1380/2013'
+const RUE_494 = 'R(CE) 494/2002'
+const RUE_2019_OLD = 'R(UE) 2019/1241'
+const RUE_1380_OLD = 'R(UE) 1380/2013'
+const RUE_494_OLD = 'R(CE) 494/2002'
+
+export const LAWTYPES_TO_TERRITORY = {
+  [REG_MED]: FRANCE,
+  [REG_SA]: FRANCE,
+  [REG_NAMO]: FRANCE,
+  [REG_MEMN]: FRANCE,
+  [REG_OUTRE_MER]: FRANCE,
+  [REG_LOCALE]: FRANCE,
+  [RUE_2019]: UE,
+  [RUE_1380]: UE,
+  [RUE_494]: UE,
+  [RUE_2019_OLD]: UE,
+  [RUE_1380_OLD]: UE,
+  [RUE_494_OLD]: UE
 }
 
-export const RegulatoryTerritory = {
+export const REGULATORY_TERRITORY = {
   [FRANCE]: 'Réglementation France',
   [UE]: 'Réglementation UE'
-}
-
-export const SeafrontByRegulatoryTerritory = {
-  [FRANCE]: [
-    'Mediterranée, MED',
-    'NAMO',
-    'Outre-mer',
-    'MEMN',
-    'Sud-Athlantique, SA',
-    'MED'
-  ],
-  [UE]: [
-    'Mer du Nord',
-    'Eaux occidentales septentionales',
-    'Eaux occidentales australes',
-    'Mer Baltique',
-    'Mer Méditerranée',
-    'Mer Noire',
-    'Eaux de l\'UE dans l\'OI et l\'Alt. Ouest',
-    'CPANE'
-  ]
 }
 
 export const REGULATORY_SEARCH_PROPERTIES = {
   TOPIC: 'topic',
   ZONE: 'zone',
   REGION: 'region',
-  SEAFRONT: 'seafront',
   GEARS: 'gears',
   SPECIES: 'species',
   REGULATORY_REFERENCES: 'regulatoryReferences'
@@ -266,10 +263,4 @@ export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFo
   })
 
   return mergedRegulatoryLayers
-}
-
-export const getSelectPickerData = () => {
-  return Object.keys(SeafrontByRegulatoryTerritory).map(key => {
-    return formatDataForSelectPicker(SeafrontByRegulatoryTerritory[key], `Secteurs ${key}`)
-  }).flat(1)
 }

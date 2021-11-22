@@ -87,7 +87,7 @@ const RegulatoryLayerZoneMetadata = () => {
             </Warning>
             <Content>
               {
-                regulatoryZoneMetadata.seafront ||
+                regulatoryZoneMetadata.lawType ||
                 regulatoryZoneMetadata.region ||
                 regulatoryZoneMetadata.zone ||
                 regulatoryZoneMetadata.deposit
@@ -95,9 +95,9 @@ const RegulatoryLayerZoneMetadata = () => {
                     <Fields>
                       <Body>
                         <Field>
-                          <Key>Façade</Key>
-                          <Value data-cy={'regulatory-layers-metadata-seafront'}>{regulatoryZoneMetadata.seafront
-                            ? regulatoryZoneMetadata.seafront
+                          <Key>Réglementation</Key>
+                          <Value data-cy={'regulatory-layers-metadata-lawtype'}>{regulatoryZoneMetadata.lawType
+                            ? regulatoryZoneMetadata.lawType
                             : <NoValue>-</NoValue>}</Value>
                         </Field>
                         <Field>

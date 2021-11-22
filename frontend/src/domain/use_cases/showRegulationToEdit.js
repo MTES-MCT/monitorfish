@@ -4,6 +4,18 @@ import { mapToRegulatoryZone } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
 import Layers from '../entities/layers'
 
+const parseRegulatoryTexts = (regulatoryTextsString) => {
+  const regulatoryTexts = JSON.parse(regulatoryTextsString)
+  if (regulatoryTexts && regulatoryTexts.length > 0) {
+    return regulatoryTexts.map((regulatoryText) => {
+      if (!regulatoryText.startDate || regulatoryText.startDate === '') {
+        regulatoryText.startDate = new Date().getTime()
+      }
+      return regulatoryText
+    })
+  }
+  return undefined
+}
 const showRegulationToEdit = regulatoryZone => async (dispatch) => {
   return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone)
     .then(response => {
@@ -13,7 +25,8 @@ const showRegulationToEdit = regulatoryZone => async (dispatch) => {
         regulatoryReferences,
         upcomingRegulatoryReferences
       } = regulatoryZoneMetadata
-      regulatoryZoneMetadata.regulatoryReferences = JSON.parse(regulatoryReferences)
+      const parsedReg = parseRegulatoryTexts(regulatoryReferences)
+      regulatoryZoneMetadata.regulatoryReferences = parsedReg
       regulatoryZoneMetadata.upcomingRegulatoryReferences =
         upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
           ? JSON.parse(upcomingRegulatoryReferences)

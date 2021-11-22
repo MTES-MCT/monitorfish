@@ -127,7 +127,7 @@ class MonitorFishWorker {
           }
           let orderZoneList = zone
           if (zone.length > 1) {
-            orderZoneList = zone.sort()
+            orderZoneList = zone.sort((a, b) => a.zone > b.zone ? 1 : a.zone === b.zone ? 0 : -1)
           }
           accumulatedObject[regulatoryTerritory][lawType][topic] = orderZoneList
         }

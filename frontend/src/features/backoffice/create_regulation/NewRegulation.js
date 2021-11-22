@@ -10,7 +10,6 @@ import {
   RegulationLawTypeLine,
   RegulationLayerZoneLine,
   RegulationRegionLine,
-  RegulationSeaFrontLine,
   RegulationTopicLine,
   RegulatoryTextSection,
   UpcomingRegulationModal,
@@ -34,9 +33,9 @@ import {
   setRegulatoryTextCheckedMap,
   setUpcomingRegulation,
   setSaveOrUpdateRegulation,
+  setAtLeastOneValueIsMissing,
   setIsRemoveModalOpen,
-  setSelectedGeometryId,
-  setAtLeastOneValueIsMissing
+  setSelectedGeometryId
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -45,17 +44,17 @@ import {
   getRegulatoryFeatureId,
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
-  SeafrontByRegulatoryTerritory,
+  DEFAULT_REGULATORY_TEXT,
+  REG_LOCALE,
+  LAWTYPES_TO_TERRITORY,
   UE,
-  DEFAULT_REGULATORY_TEXT
+  FRANCE
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
   const {
     regulatoryTopics,
-    regulatoryLawTypes,
-    seaFronts,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
@@ -69,8 +68,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [nameZone, setNameZone] = useState()
   const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
   /** @type {string} */
-  const [selectedSeaFront, setSelectedSeaFront] = useState()
-  const [seaFrontIsMissing, setSeaFrontIsMissing] = useState(false)
   /** @type {[String]} */
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [regionIsMissing, setRegionIsMissing] = useState(false)
@@ -91,14 +88,14 @@ const CreateRegulation = ({ title, isEdition }) => {
     regulatoryTextCheckedMap,
     upcomingRegulation,
     saveOrUpdateRegulation,
+    atLeastOneValueIsMissing,
     selectedGeometryId,
     isRemoveModalOpen,
-    regulationDeleted,
-    atLeastOneValueIsMissing
+    regulationDeleted
   } = useSelector(state => state.regulation)
 
   useEffect(() => {
-    if (regulatoryTopics && regulatoryLawTypes && seaFronts) {
+    if (!regulatoryTopics || regulatoryTopics.length === 0) {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
     const newRegulation = {
@@ -144,7 +141,6 @@ const CreateRegulation = ({ title, isEdition }) => {
             selectedRegulationTopic,
             selectedRegulationLawType,
             nameZone: nameZone,
-            selectedSeaFront,
             selectedRegionList,
             regulatoryTexts: [...regulatoryTextList],
             upcomingRegulation
@@ -164,7 +160,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   const initForm = () => {
     const {
       lawType,
-      seafront,
       topic,
       zone,
       region,
@@ -172,12 +167,13 @@ const CreateRegulation = ({ title, isEdition }) => {
       id,
       upcomingRegulatoryReferences
     } = regulatoryZoneMetadata
-    setSelectedRegulationLawType(`${lawType} / ${seafront}`)
+
+    setSelectedRegulationLawType(lawType)
     setSelectedRegulationTopic(topic)
     setNameZone(zone)
-    setSelectedSeaFront(seafront)
     setSelectedRegionList(region ? region.split(', ') : [])
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
+    dispatch(setSelectedGeometryId(id))
     setInitialGeometryId(id)
     batch(() => {
       dispatch(setSelectedGeometryId(id))
@@ -196,10 +192,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     valueIsMissing = !(nameZone && nameZone !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setNameZoneIsMissing(valueIsMissing)
-    valueIsMissing = !(selectedSeaFront && selectedSeaFront !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setSeaFrontIsMissing(valueIsMissing)
-    valueIsMissing = selectedSeaFront && !SeafrontByRegulatoryTerritory[UE].includes(selectedSeaFront) &&
+    valueIsMissing = selectedRegulationLawType && selectedRegulationLawType !== '' &&
+      selectedRegulationLawType.includes(REG_LOCALE) &&
       !(selectedRegionList && selectedRegionList.length !== 0)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
@@ -237,6 +231,13 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }
 
+  const onLawTypeChange = (value) => {
+    if (LAWTYPES_TO_TERRITORY[value] !== UE) {
+      setSelectedRegionList([])
+    }
+    setSelectedRegulationLawType(value)
+  }
+
   /* const saveAsDraft = () => {
     console.log('saveAsDraft')
   } */
@@ -260,9 +261,9 @@ const CreateRegulation = ({ title, isEdition }) => {
                   identification de la zone réglementaire
                 </SectionTitle>
                 <RegulationLawTypeLine
-                  setSelectedValue={setSelectedRegulationLawType}
+                  setSelectedValue={onLawTypeChange}
                   selectedValue={selectedRegulationLawType}
-                  selectData={formatDataForSelectPicker(regulatoryLawTypes)}
+                  selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
                   lawTypeIsMissing={lawTypeIsMissing}
                 />
                 <RegulationTopicLine
@@ -276,14 +277,8 @@ const CreateRegulation = ({ title, isEdition }) => {
                   setNameZone={setNameZone}
                   nameZoneIsMissing={nameZoneIsMissing}
                 />
-                <RegulationSeaFrontLine
-                  selectedSeaFront={selectedSeaFront}
-                  setSelectedSeaFront={setSelectedSeaFront}
-                  seaFrontList={formatDataForSelectPicker(seaFronts)}
-                  seaFrontIsMissing={seaFrontIsMissing}
-                />
                 <RegulationRegionLine
-                  disabled={!selectedSeaFront || SeafrontByRegulatoryTerritory[UE].includes(selectedSeaFront)}
+                  disabled={!selectedRegulationLawType || LAWTYPES_TO_TERRITORY[selectedRegulationLawType] !== FRANCE}
                   setSelectedRegionList={setSelectedRegionList}
                   selectedRegionList={selectedRegionList}
                   regionIsMissing={regionIsMissing}

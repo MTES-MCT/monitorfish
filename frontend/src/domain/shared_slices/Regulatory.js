@@ -34,8 +34,6 @@ const regulatorySlice = createSlice({
     regulatoryZoneMetadataPanelIsOpen: false,
     lawTypeOpened: null,
     regulatoryTopics: [],
-    regulatoryLawTypes: [],
-    seaFronts: [],
     layersTopicsByRegTerritory: {},
     regulatoryGeometryToPreview: null,
     simplifiedGeometries: true
@@ -147,7 +145,6 @@ const regulatorySlice = createSlice({
      *         {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\",
      *         \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
      *       rejections: undefined,
-     *       seafront: "NAMO",
      *       size: undefined,
      *       species: "SCE",
      *       state: undefined,
@@ -172,12 +169,6 @@ const regulatorySlice = createSlice({
     setRegulatoryTopics (state, action) {
       state.regulatoryTopics = action.payload
     },
-    setRegulatoryLawTypes (state, action) {
-      state.regulatoryLawTypes = action.payload
-    },
-    setSeaFronts (state, action) {
-      state.seaFronts = action.payload
-    },
     setLayersTopicsByRegTerritory (state, action) {
       state.layersTopicsByRegTerritory = action.payload
     },
@@ -201,8 +192,6 @@ export const {
   setRegulatoryLayers,
   setLawTypeOpened,
   setRegulatoryTopics,
-  setRegulatoryLawTypes,
-  setSeaFronts,
   setLayersTopicsByRegTerritory,
   setRegulatoryGeometryToPreview,
   showSimplifiedGeometries,

@@ -2,7 +2,6 @@ import RegulationLawTypeLine from './RegulationLawTypeLine'
 import RegulationTopicLine from './RegulationTopicLine'
 import RegulationRegionLine from './RegulationRegionLine'
 import RegulationLayerZoneLine from './RegulationLayerZoneLine'
-import RegulationSeaFrontLine from './RegulationSeaFrontLine'
 import RegulationGeometryLine from './RegulationGeometryLine'
 import RegulatoryText from './RegulatoryText'
 import RegulatoryTextSection from './RegulatoryTextSection'
@@ -14,7 +13,6 @@ export {
   RegulationTopicLine,
   RegulationRegionLine,
   RegulationLayerZoneLine,
-  RegulationSeaFrontLine,
   RegulationGeometryLine,
   RegulatoryText,
   RegulatoryTextSection,

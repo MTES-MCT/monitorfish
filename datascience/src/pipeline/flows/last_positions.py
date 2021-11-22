@@ -6,7 +6,7 @@ import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
 
-from config import ANCHORAGES_H3_CELL_RESOLUTION, CURRENT_POSITION_ESTIMATION_MAX_HOURS
+from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS
 from src.pipeline.flows.risk_factor import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.spatial import estimate_current_position, get_h3_indices
@@ -18,6 +18,7 @@ from src.pipeline.processing import (
     left_isin_right_by_decreasing_priority,
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running, merge
+from src.pipeline.shared_tasks.positions import tag_positions_at_port
 
 
 @task(checkpoint=False)
@@ -102,41 +103,6 @@ def add_vessel_identifier(last_positions: pd.DataFrame) -> pd.DataFrame:
         last_positions[["cfr", "ircs", "external_immatriculation"]],
         vessel_identifier_labels,
     )
-
-    return last_positions
-
-
-@task(checkpoint=False)
-def tag_vessels_at_port(last_positions: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds an `is_at_port` boolean field to the last_positions DataFrame.
-    """
-
-    last_positions = last_positions.copy(deep=True)
-
-    if len(last_positions) == 0:
-        last_positions["is_at_port"] = False
-
-    else:
-
-        last_positions["h3"] = get_h3_indices(
-            last_positions,
-            lat="latitude",
-            lon="longitude",
-            resolution=ANCHORAGES_H3_CELL_RESOLUTION,
-        )
-
-        h3_indices_at_port = set(
-            extract(
-                db_name="monitorfish_remote",
-                query_filepath="monitorfish/h3_is_anchorage.sql",
-                params={"h3_cells": tuple(last_positions.h3)},
-            )["h3"]
-        )
-
-        last_positions["is_at_port"] = last_positions.h3.isin(h3_indices_at_port)
-
-        last_positions = last_positions.drop(columns=["h3"])
 
     return last_positions
 
@@ -429,7 +395,7 @@ with Flow("Last positions") as flow:
         last_positions = extract_last_positions(minutes=minutes)
         last_positions = drop_duplicates(last_positions)
         last_positions = add_vessel_identifier(last_positions)
-        last_positions = tag_vessels_at_port(last_positions)
+        last_positions = tag_positions_at_port(last_positions)
 
         with case(action, "update"):
             previous_last_positions = extract_previous_last_positions()

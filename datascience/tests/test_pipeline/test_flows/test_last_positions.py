@@ -20,7 +20,7 @@ from src.pipeline.flows.last_positions import (
     load_last_positions,
     merge_last_positions_risk_factors,
     split,
-    tag_vessels_at_port,
+    tag_positions_at_port,
     validate_action,
 )
 from tests.mocks import mock_extract_side_effect
@@ -364,61 +364,6 @@ class TestLastPositionsFlow(unittest.TestCase):
         ).fillna({**default_risk_factors})
 
         pd.testing.assert_frame_equal(expected_res, res)
-
-    @patch("src.pipeline.flows.last_positions.extract")
-    def test_tag_vessels_at_port(self, mock_extract):
-
-        mock_extract.return_value = pd.DataFrame(
-            {
-                "h3": [
-                    "8900510a463ffff",
-                    "892b2c359d3ffff",
-                    "some_other_h3_cell",
-                ],
-            }
-        )
-
-        last_positions = pd.DataFrame(
-            {
-                "latitude": [45, 85.1, -85.2, 45.3, 45.4],
-                "longitude": [89.1, 10, -10, 12.6, -59.16],
-            }
-        )
-
-        last_positions_with_is_at_port = tag_vessels_at_port.run(last_positions)
-
-        expected_last_positions_with_is_at_port = last_positions.copy().assign(
-            is_at_port=[False, True, False, False, True]
-        )
-
-        pd.testing.assert_frame_equal(
-            last_positions_with_is_at_port, expected_last_positions_with_is_at_port
-        )
-
-    @patch("src.pipeline.flows.last_positions.extract")
-    def test_tag_vessels_at_port_empty_dataframe(self, mock_extract):
-
-        last_positions = pd.DataFrame(
-            {
-                "latitude": [],
-                "longitude": [],
-            }
-        ).astype({"latitude": float, "longitude": float})
-
-        last_positions_with_is_at_port = tag_vessels_at_port.run(last_positions)
-
-        # Query should not be run with empty list in WHERE condition
-        mock_extract.assert_not_called()
-
-        expected_last_positions_with_is_at_port = pd.DataFrame(
-            columns=pd.Index(["latitude", "longitude", "is_at_port"])
-        ).astype({"latitude": float, "longitude": float, "is_at_port": bool})
-
-        pd.testing.assert_frame_equal(
-            last_positions_with_is_at_port,
-            expected_last_positions_with_is_at_port,
-            check_index_type=False,
-        )
 
     def test_add_vessel_identifier(self):
 

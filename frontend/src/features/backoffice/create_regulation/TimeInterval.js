@@ -16,7 +16,8 @@ const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, remove
   return (
     <Wrapper>De <CustomDatePicker
         format='HH:mm'
-        type='time'
+        ranges={[]}
+        type={CUSTOM_DATEPICKER_TYPES.TIME}
         placement={'rightStart'}
         style={{ width: '55px', margin: '0px 5px' }}
         disabled={disabled}
@@ -28,7 +29,7 @@ const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, remove
       à <CustomDatePicker
         format='HH:mm'
         ranges={[]}
-        type={CUSTOM_DATEPICKER_TYPES.TYPE}
+        type={CUSTOM_DATEPICKER_TYPES.TIME}
         placement={'rightStart'}
         style={{ width: '55px', margin: '0px 5px' }}
         disabled={disabled}

@@ -9,11 +9,11 @@ import org.springframework.data.repository.query.Param
 interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity, Int> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE control_objectives SET target_number_of_controls_at_sea = :targetNumberOfControlsAtSea WHERE id = :controlObjectiveId", nativeQuery = true)
-    fun updateTargetNumberOfControlsAtSea(@Param("controlObjectiveId") controlObjectiveId: Int, @Param("targetNumberOfControlsAtSea") targetNumberOfControlsAtSea: Int)
+    fun updateTargetNumberOfControlsAtSea(controlObjectiveId: Int, targetNumberOfControlsAtSea: Int)
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE control_objectives SET target_number_of_controls_at_port = :targetNumberOfControlsAtPort WHERE id = :controlObjectiveId", nativeQuery = true)
-    fun updateTargetNumberOfControlsAtPort(@Param("controlObjectiveId") controlObjectiveId: Int, @Param("targetNumberOfControlsAtPort") targetNumberOfControlsAtPort: Int)
+    fun updateTargetNumberOfControlsAtPort(controlObjectiveId: Int, targetNumberOfControlsAtPort: Int)
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel WHERE id = :controlObjectiveId", nativeQuery = true)

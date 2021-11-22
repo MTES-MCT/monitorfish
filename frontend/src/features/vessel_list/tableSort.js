@@ -31,10 +31,10 @@ export function sortArrayByColumn (a, b, sortColumn, sortType) {
     }
   }
 
-  if (x === '') {
+  if (x === '' || x === null) {
     return 1
   }
-  if (y === '') {
+  if (y === '' || y === null) {
     return -1
   }
 

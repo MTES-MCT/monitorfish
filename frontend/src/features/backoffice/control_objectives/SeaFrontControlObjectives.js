@@ -16,9 +16,9 @@ const SeaFrontControlObjectives = ({ title, data }) => {
   const { fleetSegments } = useSelector(state => state.fleetSegment)
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([])
-  const [dataWithSegmentDetails, setDataWithSegmentDetails] = React.useState([])
-  const [sortColumn, setSortColumn] = React.useState('segment')
-  const [sortType, setSortType] = React.useState(SortType.ASC)
+  const [dataWithSegmentDetails, setDataWithSegmentDetails] = useState([])
+  const [sortColumn, setSortColumn] = useState('segment')
+  const [sortType, setSortType] = useState(SortType.ASC)
 
   const handleSortColumn = (sortColumn, sortType) => {
     setSortColumn(sortColumn)
@@ -36,7 +36,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
 
       setDataWithSegmentDetails(dataWithSegmentDetails)
     }
-  }, [data, sortColumn, sortType])
+  }, [data, sortColumn, sortType, fleetSegments])
 
   const handleExpanded = (rowData, dataKey) => {
     let open = false
@@ -57,7 +57,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
     setExpandedRowKeys(nextExpandedRowKeys)
   }
 
-  const handleChangeModifiableKey = (id, key, value) => {
+  const handleChangeModifiableKey = (id, key, value, sortColumn, sortType) => {
     const nextDataWithSegmentDetails = Object.assign([], dataWithSegmentDetails)
 
     const updateJSON = {
@@ -69,6 +69,8 @@ const SeaFrontControlObjectives = ({ title, data }) => {
 
     dispatch(updateControlObjective(id, updateJSON)).then(() => {
       nextDataWithSegmentDetails.find(item => item.id === id)[key] = value
+      nextDataWithSegmentDetails
+        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
       setDataWithSegmentDetails(nextDataWithSegmentDetails)
     })
   }
@@ -113,7 +115,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
           <HeaderCell>Obj. contrôles au Port</HeaderCell>
           <ModifiableCell
             dataKey={'targetNumberOfControlsAtPort'}
-            onChange={handleChangeModifiableKey}
+            onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
           />
         </Column>
 
@@ -121,7 +123,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
           <HeaderCell>Obj. contrôles en Mer</HeaderCell>
           <ModifiableCell
             dataKey={'targetNumberOfControlsAtSea'}
-            onChange={handleChangeModifiableKey}
+            onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
           />
         </Column>
 
@@ -134,7 +136,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
           <HeaderCell>Priorité</HeaderCell>
           <ControlPriorityCell
             dataKey={'controlPriorityLevel'}
-            onChange={handleChangeModifiableKey}
+            onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
           />
         </Column>
       </Table>
@@ -162,6 +164,11 @@ const Wrapper = styled.div`
   
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
     padding-right: 17px;
+  }
+  
+  .rs-input:focus {
+    background: ${COLORS.charcoal};
+    color: ${COLORS.background};
   }
 `
 

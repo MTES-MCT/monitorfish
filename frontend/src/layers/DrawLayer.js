@@ -90,18 +90,15 @@ const DrawLayer = ({ map }) => {
           featureProjection: OPENLAYERS_PROJECTION
         })
 
+        const newSelectedZone = {
+          name: 'Tracé libre',
+          code: LayersType.FREE_DRAW,
+          feature: geoJSONString
+        }
         switch (interaction.listener) {
-          case layersType.VESSEL: dispatch(addZoneSelected({
-            name: 'Tracé libre',
-            code: LayersType.FREE_DRAW,
-            feature: geoJSONString
-          }))
+          case layersType.VESSEL: dispatch(addZoneSelected(newSelectedZone))
             break
-          case layersType.REGULATORY: dispatch(setZoneSelected({
-            name: 'Tracé libre',
-            code: LayersType.FREE_DRAW,
-            feature: geoJSONString
-          }))
+          case layersType.REGULATORY: dispatch(setZoneSelected(newSelectedZone))
             break
         }
 

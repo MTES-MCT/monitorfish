@@ -1,10 +1,10 @@
-/* eslint-disable */
 import { VesselSidebarTab } from '../entities/vessel'
 import { createSlice } from '@reduxjs/toolkit'
 
+/* eslint-disable */
 /** @namespace VesselReducer */
 const VesselReducer = null
-/* eslint-disable */
+/* eslint-enable */
 
 const vesselSlice = createSlice({
   name: 'vessel',

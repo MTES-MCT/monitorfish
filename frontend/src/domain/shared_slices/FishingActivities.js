@@ -1,11 +1,11 @@
-/* eslint-disable */
 import { FishingActivitiesTab } from '../entities/vessel'
 import { createSlice } from '@reduxjs/toolkit'
 import { getEffectiveDateTimeFromMessage } from '../entities/fishingActivities'
 
+/* eslint-disable */
 /** @namespace FishingActivitiesReducer */
 const FishingActivitiesReducer = null
-/* eslint-disable */
+/* eslint-enable */
 
 const fishingActivitiesSlice = createSlice({
   name: 'fishingActivities',

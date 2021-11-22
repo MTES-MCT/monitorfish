@@ -1,9 +1,9 @@
-/* eslint-disable */
 import { createSlice } from '@reduxjs/toolkit'
 
+/* eslint-disable */
 /** @namespace ControlsReducer */
 const ControlsReducer = null
-/* eslint-disable */
+/* eslint-enable */
 
 const controlsSlice = createSlice({
   name: 'controls',
@@ -58,7 +58,7 @@ export const {
   setNextControlResumeAndControls,
   resetNextControlResumeAndControls,
   loadControls,
-  setControlFromDate,
+  setControlFromDate
 } = controlsSlice.actions
 
 export default controlsSlice.reducer

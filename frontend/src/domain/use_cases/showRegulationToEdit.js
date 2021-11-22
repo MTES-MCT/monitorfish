@@ -4,15 +4,14 @@ import { mapToRegulatoryZone } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
 import Layers from '../entities/layers'
 
-const parseRegulatoryTexts = (regulatoryTexts) => {
-  const parse = JSON.parse(regulatoryTexts)
-  if (parse && parse.length > 0) {
-    return parse.map((regulatoryText) => {
-      const parsedRegulatoryText = { ...regulatoryText }
-      if (!parsedRegulatoryText.startDate || parsedRegulatoryText.startDate === '') {
-        parsedRegulatoryText.startDate = new Date().getTime()
+const parseRegulatoryTexts = (regulatoryTextsString) => {
+  const regulatoryTexts = JSON.parse(regulatoryTextsString)
+  if (regulatoryTexts && regulatoryTexts.length > 0) {
+    return regulatoryTexts.map((regulatoryText) => {
+      if (!regulatoryText.startDate || regulatoryText.startDate === '') {
+        regulatoryText.startDate = new Date().getTime()
       }
-      return parsedRegulatoryText
+      return regulatoryText
     })
   }
   return undefined

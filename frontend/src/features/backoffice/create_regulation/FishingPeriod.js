@@ -372,7 +372,7 @@ const FishingPeriod = (props) => {
         </Row>
         <Row>
           <Label>Jours fériés</Label>
-          <HolidaysCheckbox disabled={disabled} onChange={setHolidays}/>
+          <HolidaysCheckbox disabled={disabled} onChange={setHolidays} checked={holidays}/>
         </Row>
         <TimeTitle>Horaires autorisées</TimeTitle>
         <TimeRow disabled={timeIsDisabled}>

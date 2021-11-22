@@ -118,7 +118,6 @@ const FishingPeriod = (props) => {
    * @param {number} dateRanges: new object to insert
    */
   const updateDateRanges = (id, dateRange) => {
-    // should we test the values here ?
     const newDateRanges = [...dateRanges]
     if (id === -1) {
       newDateRanges.push(dateRange)
@@ -172,6 +171,13 @@ const FishingPeriod = (props) => {
   const setDaytime = _ => set('daytime', !daytime)
 
   useEffect(() => {
+    const {
+      dateRanges,
+      dates,
+      weekdays,
+      timeIntervals,
+      daytime
+    } = fishingPeriod
     if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime) {
       setFishingPeriodAsString(fishingPeriodToString())
     } else {
@@ -419,7 +425,6 @@ const PeriodAsStringWrapper = styled.div`
   ${props => !props.display ? 'display: none;' : ''}
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-top: 20px;
-  margin-bottom: 30px;
 `
 const PeriodAsString = styled.div`
   width: 420px;

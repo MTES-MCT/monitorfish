@@ -4,6 +4,14 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 
+/**
+ * @enum {string}
+ */
+const DATE_KEYS = {
+  DAY: 'day',
+  MONTH: 'month'
+}
+
 const DateRange = (props) => {
   const {
     id,
@@ -31,9 +39,9 @@ const DateRange = (props) => {
   }
 
   const setDateWhithoutYear = (key, value, range) => {
-    if (key === 'month') {
+    if (key === DATE_KEYS.MONTH) {
       setDateRange(range, new Date().setMonth(value - 1))
-    } else if (key === 'day') {
+    } else if (key === DATE_KEYS.DAY) {
       setDateRange(range, new Date().setDate(value))
     }
   }
@@ -66,21 +74,21 @@ const DateRange = (props) => {
       Du <MonthDateInputSlot >
           <MonthDateInput
             value={startDate?.getDate() || undefined}
-            onChange={(e) => setDateWhithoutYear('startDate', 'day', e.target.value)}
+            onChange={(e) => setDateWhithoutYear('startDate', DATE_KEYS.DAY, e.target.value)}
           />
           /<MonthDateInput
             value={startDate?.getMonth() + 1 || undefined}
-            onChange={(e) => setDateWhithoutYear('startDate', 'month', e.target.value) }
+            onChange={(e) => setDateWhithoutYear('startDate', DATE_KEYS.MONTH, e.target.value) }
           />
         </MonthDateInputSlot>
       au <MonthDateInputSlot >
           <MonthDateInput
             value={endDate?.getDate() || undefined}
-            onChange={(e) => setDateWhithoutYear('endDate', 'day', e.target.value) }
+            onChange={(e) => setDateWhithoutYear('endDate', DATE_KEYS.DAY, e.target.value) }
           />
           /<MonthDateInput
             value={endDate?.getMonth() + 1 || undefined}
-            onChange={(e) => setDateWhithoutYear('endDate', 'month', e.target.value) }
+            onChange={(e) => setDateWhithoutYear('endDate', DATE_KEYS.MONTH, e.target.value) }
           />
         </MonthDateInputSlot>
     </DateRangeRow>

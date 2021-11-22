@@ -3,6 +3,13 @@ import { DatePicker } from 'rsuite'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
+/**
+ * @enum {string}
+ */
+export const CUSTOM_DATEPICKER_TYPES = {
+  TIME: 'time'
+}
+
 const CustomDatePicker = props => {
   const {
     onSelect,
@@ -29,7 +36,7 @@ const CustomDatePicker = props => {
     onSelect={onSelect}
     cleanable={false}
     placement={placement}
-    placeholder={type === 'time'
+    placeholder={type === CUSTOM_DATEPICKER_TYPES.TIME
       ? '\xa0\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0\xa0'
       : '\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0'}
     format={format}

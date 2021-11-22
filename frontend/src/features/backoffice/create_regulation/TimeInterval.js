@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import CustomDatePicker from './CustomDatePicker'
+import CustomDatePicker, { CUSTOM_DATEPICKER_TYPES } from './CustomDatePicker'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 import { COLORS } from '../../../constants/constants'
 
@@ -28,7 +28,7 @@ const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, remove
       à <CustomDatePicker
         format='HH:mm'
         ranges={[]}
-        type='time'
+        type={CUSTOM_DATEPICKER_TYPES.TYPE}
         placement={'rightStart'}
         style={{ width: '55px', margin: '0px 5px' }}
         disabled={disabled}

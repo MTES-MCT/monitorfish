@@ -9,7 +9,6 @@ context('Control objectives', () => {
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
-    cy.wait(200)
   })
 
   it('Should render the objectives', () => {

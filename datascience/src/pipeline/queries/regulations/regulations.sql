@@ -20,6 +20,7 @@ SELECT
     autre_reglementation,
     references_reglementaires,
     ST_CurveToLine(geometry) AS geometry,
+    geometry_simplified,
     row_hash
 FROM prod.reglementation_peche
 WHERE id IN :ids

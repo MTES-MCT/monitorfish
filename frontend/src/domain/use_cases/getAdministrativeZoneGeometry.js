@@ -10,7 +10,7 @@ const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zone
     dispatchZoneSelected(foundCache.value)
   }
 
-  getAdministrativeZoneFromAPI(administrativeZoneCode, null, subZoneCode).then(administrativeZoneFeature => {
+  getAdministrativeZoneFromAPI(administrativeZoneCode, null, subZoneCode, getState().global.inBackofficeMode).then(administrativeZoneFeature => {
     if (administrativeZoneFeature.numberReturned === 1) {
       dispatchZoneSelected(administrativeZoneFeature)
       dispatch(addAdministrativeZoneGeometryToCache({

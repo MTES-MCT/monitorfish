@@ -16,8 +16,8 @@ const parseRegulatoryTexts = (regulatoryTextsString) => {
   }
   return undefined
 }
-const showRegulationToEdit = regulatoryZone => async (dispatch) => {
-  return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone)
+const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
+  return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone, getState().global.inBackofficeMode)
     .then(response => {
       const feature = response.features[0]
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature.properties)

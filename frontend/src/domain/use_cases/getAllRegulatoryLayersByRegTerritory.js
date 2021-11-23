@@ -12,10 +12,10 @@ import { batch } from 'react-redux'
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
-const getAllRegulatoryLayersByRegTerritory = () => async dispatch => {
+const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) => {
   const worker = await new MonitorFishWorker()
 
-  return getAllRegulatoryLayersFromAPI()
+  return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
     .then(features => {
       return worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
     })

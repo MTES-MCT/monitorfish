@@ -1,14 +1,14 @@
 import { getAdministrativeSubZonesFromAPI } from '../../api/fetch'
 import Layers, { layersType } from '../entities/layers'
 
-export const getZonesAndSubZonesPromises = () => {
+export const getZonesAndSubZonesPromises = () => (dispatch, getState) => {
   return Object.keys(Layers)
     .map(layer => Layers[layer])
     .filter(layer => layer.type === layersType.ADMINISTRATIVE)
     .filter(layer => layer.isIntersectable)
     .map(zone => {
       if (zone.containsMultipleZones) {
-        return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
+        return getAdministrativeSubZonesFromAPI(zone.code, getState().global.inBackofficeMode).then(subZonesFeatures => {
           return subZonesFeatures.features.map(subZone => {
             return {
               group: zone.name,

@@ -26,6 +26,7 @@ import InterestPoint from './features/interest_points/InterestPoint'
 import VesselLabels from './features/vessel_labels/VesselLabels'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
 import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
+import BackofficeMode from './api/BackofficeMode'
 
 function App () {
   switch (browserName) {
@@ -69,6 +70,7 @@ function App () {
 function HomePage () {
   return <Provider store={homeStore}>
     <NamespaceContext.Provider value={'homepage'}>
+      <BackofficeMode inBackofficeMode={false}/>
       <Healthcheck/>
       <PreviewFilteredVessels/>
       <Wrapper>
@@ -95,6 +97,7 @@ function BackofficePage () {
   const match = useRouteMatch()
   return <Provider store={backofficeStore}>
     <NamespaceContext.Provider value={'backoffice'}>
+      <BackofficeMode inBackofficeMode={true}/>
       <Switch>
         <Route exact path={`${match.path}`}>
           <BackofficeWrapper>

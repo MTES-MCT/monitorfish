@@ -7,10 +7,10 @@ import { setError } from '../shared_slices/Global'
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
-const getGeometryWithoutRegulationReference = () => async (dispatch) => {
+const getGeometryWithoutRegulationReference = () => async (dispatch, getState) => {
   const worker = await new MonitorFishWorker()
 
-  return getAllGeometryWithoutProperty()
+  return getAllGeometryWithoutProperty(getState().global.inBackofficeMode)
     .then(features => {
       return worker.getGeometryWithoutRegulationRef(features)
     }).catch(error => {

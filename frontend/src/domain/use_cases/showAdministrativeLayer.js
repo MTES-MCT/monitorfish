@@ -19,7 +19,7 @@ const setIrretrievableFeaturesEvent = error => {
   }
 }
 
-const showAdministrativeLayer = layerToShow => dispatch => {
+const showAdministrativeLayer = layerToShow => (dispatch, getState) => {
   currentNamespace = layerToShow.namespace
   const {
     addLayer,
@@ -27,12 +27,12 @@ const showAdministrativeLayer = layerToShow => dispatch => {
   } = layer[currentNamespace].actions
 
   batch(() => {
-    dispatch(addLayer(getVectorLayer(layerToShow.type, layerToShow.zone)))
+    dispatch(addLayer(getVectorLayer(layerToShow.type, layerToShow.zone, getState().global.inBackofficeMode)))
     dispatch(addShowedLayer(layerToShow))
   })
 }
 
-const getVectorLayer = (type, zone) => {
+const getVectorLayer = (type, zone, inBackofficeMode) => {
   let name
   if (zone) {
     name = `${type}:${zone}`
@@ -41,7 +41,7 @@ const getVectorLayer = (type, zone) => {
   }
 
   const layer = new VectorImageLayer({
-    source: getAdministrativeVectorSource(type, zone),
+    source: getAdministrativeVectorSource(type, zone, inBackofficeMode),
     className: 'administrative',
     updateWhileAnimating: true,
     updateWhileInteracting: true,
@@ -55,15 +55,15 @@ const getVectorLayer = (type, zone) => {
   return layer
 }
 
-const getAdministrativeVectorSource = (type, subZone) => {
+const getAdministrativeVectorSource = (type, subZone, inBackofficeMode) => {
   if (subZone) {
-    return showWholeVectorIfSubZone(type, subZone)
+    return showWholeVectorIfSubZone(type, subZone, inBackofficeMode)
   } else {
-    return showBboxIfBigZone(type, subZone)
+    return showBboxIfBigZone(type, subZone, inBackofficeMode)
   }
 }
 
-function showWholeVectorIfSubZone (type, subZone) {
+function showWholeVectorIfSubZone (type, subZone, inBackofficeMode) {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -72,7 +72,7 @@ function showWholeVectorIfSubZone (type, subZone) {
     strategy: all
   })
 
-  getAdministrativeZoneFromAPI(type, null, subZone).then(administrativeZoneFeature => {
+  getAdministrativeZoneFromAPI(type, null, subZone, inBackofficeMode).then(administrativeZoneFeature => {
     vectorSource.addFeatures(vectorSource.getFormat().readFeatures(administrativeZoneFeature))
   }).catch(e => {
     vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
@@ -85,14 +85,14 @@ function showWholeVectorIfSubZone (type, subZone) {
   return vectorSource
 }
 
-function showBboxIfBigZone (type, subZone) {
+function showBboxIfBigZone (type, subZone, inBackofficeMode) {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
       featureProjection: OPENLAYERS_PROJECTION
     }),
     loader: extent => {
-      getAdministrativeZoneFromAPI(type, extent, subZone).then(administrativeZone => {
+      getAdministrativeZoneFromAPI(type, extent, subZone, inBackofficeMode).then(administrativeZone => {
         vectorSource.clear(true)
         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(administrativeZone))
       }).catch(e => {

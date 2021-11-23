@@ -98,7 +98,7 @@ const VesselList = ({ namespace }) => {
     vesselsLocationFilter?.length === 2
 
   useEffect(() => {
-    const nextZonesPromises = getZonesAndSubZonesPromises()
+    const nextZonesPromises = dispatch(getZonesAndSubZonesPromises())
 
     Promise.all(nextZonesPromises).then((nextZones) => {
       let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)

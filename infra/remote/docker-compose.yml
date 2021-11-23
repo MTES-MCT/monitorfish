@@ -21,6 +21,7 @@ services:
     user: "monitorfish:${MONITORFISH_LOGS_GID}"
     environment:
       - ENV_DB_URL=jdbc:postgresql://db:5432/$POSTGRES_DB?user=$POSTGRES_USER&password=$POSTGRES_PASSWORD
+      - REACT_APP_GEOSERVER_LOCAL_URL=http://monitorfish-test.csam.e2.rie.gouv.fr
       - SPRING_PROFILES_ACTIVE=prod
       - HOST_IP=127.0.0.1
     ports:
@@ -40,9 +41,27 @@ services:
       options:
         max-size: "1024m"
 
+  geoserver:
+    container_name: monitorfish_geoserver
+    image: kartoza/geoserver:2.18.0
+    restart: always
+    ports:
+      - 8001:8080
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    networks:
+      - backend
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/geoserver/index.html || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
 networks:
   backend:
 
 volumes:
   db-data:
+    driver: local
+  geoserver-data:
     driver: local

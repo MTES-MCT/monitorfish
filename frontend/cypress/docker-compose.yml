@@ -27,6 +27,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - HOST_IP=127.0.0.1
       - REACT_APP_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
+      - REACT_APP_CYPRESS_TEST=true
     ports:
       - 8880:8880
       - 8000:8000

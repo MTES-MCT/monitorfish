@@ -81,7 +81,7 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
       featureProjection: OPENLAYERS_PROJECTION
     }),
     loader: extent => {
-      getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties).then(regulatoryZone => {
+      getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.inBackofficeMode).then(regulatoryZone => {
         const simplifiedRegulatoryZone = simplify(regulatoryZone, { tolerance: 0.01, highQuality: false })
 
         const features = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone : regulatoryZone

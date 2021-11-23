@@ -9,7 +9,8 @@ const globalSlice = createSlice({
     rightMenuIsOpen: false,
     /** @type {string | null} healthcheckTextWarning */
     healthcheckTextWarning: null,
-    previewFilteredVesselsMode: undefined
+    previewFilteredVesselsMode: undefined,
+    inBackofficeMode: false
   },
   reducers: {
     expandRightMenu (state) {
@@ -55,6 +56,14 @@ const globalSlice = createSlice({
      */
     setBlockVesselsUpdate (state, action) {
       state.blockVesselsUpdate = action.payload
+    },
+    /**
+     * Set if in backoffice or not - If true, the local geoserver is used
+     * @param {Object=} state
+     * @param {{payload: boolean}} action - true if in backoffice mode
+     */
+    setInBackofficeMode (state, action) {
+      state.inBackofficeMode = action.payload
     }
   }
 })
@@ -68,7 +77,8 @@ export const {
   contractRightMenu,
   setHealthcheckTextWarning,
   setPreviewFilteredVesselsMode,
-  setBlockVesselsUpdate
+  setBlockVesselsUpdate,
+  setInBackofficeMode
 } = globalSlice.actions
 
 export default globalSlice.reducer

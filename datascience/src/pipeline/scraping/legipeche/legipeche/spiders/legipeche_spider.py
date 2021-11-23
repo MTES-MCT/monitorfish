@@ -29,7 +29,12 @@ class LegipecheSpider(scrapy.Spider):
                     }
             else:
                 # When the article contains no downloadable documents
-                yield {"page_title": title, "page_url": response.url}
+                yield {
+                    "page_title": title,
+                    "page_url": response.url,
+                    "document_title": None,
+                    "document_url": None,
+                }
 
         ##############
         # Follow links

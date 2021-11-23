@@ -9,10 +9,10 @@ import { mapToRegulatoryZone } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
 import { batch } from 'react-redux'
 
-const showRegulatoryZoneMetadata = regulatoryZone => dispatch => {
+const showRegulatoryZoneMetadata = regulatoryZone => (dispatch, getState) => {
   if (regulatoryZone) {
     dispatch(setLoadingRegulatoryZoneMetadata())
-    getRegulatoryZoneMetadataFromAPI(regulatoryZone).then(regulatoryZoneProperties => {
+    getRegulatoryZoneMetadataFromAPI(regulatoryZone, getState().global.inBackofficeMode).then(regulatoryZoneProperties => {
       const regulatoryZone = mapToRegulatoryZone(regulatoryZoneProperties)
       regulatoryZone.regulatoryReferences = JSON.parse(regulatoryZone.regulatoryReferences)
       dispatch(setRegulatoryZoneMetadata(regulatoryZone))

@@ -1,7 +1,7 @@
 import LayersEnum, { layersType } from '../entities/layers'
 import { getAdministrativeSubZonesFromAPI } from '../../api/fetch'
 
-const getAdministrativeZonesAndSubZones = administrativeZones => async () => {
+const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch, getState) => {
   let nextZones = []
 
   nextZones = administrativeZones
@@ -25,7 +25,7 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async () => {
     .filter(zone => zone.showMultipleZonesInAdministrativeZones)
     .map(zone => {
       if (zone.containsMultipleZones) {
-        return getAdministrativeSubZonesFromAPI(zone.code).then(subZonesFeatures => {
+        return getAdministrativeSubZonesFromAPI(zone.code, getState().global.inBackofficeMode).then(subZonesFeatures => {
           return subZonesFeatures.features.map(subZone => {
             return {
               group: zone.group,

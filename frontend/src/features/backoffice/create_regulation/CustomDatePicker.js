@@ -30,7 +30,6 @@ const CustomDatePicker = props => {
     $isrequired={isRequired}
     disabled={disabled}
     oneTap
-    ranges={[]}
     value={value}
     onChange={onChange}
     onOk={onOk}

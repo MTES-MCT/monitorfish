@@ -105,7 +105,7 @@ const FishingPeriod = (props) => {
    */
   const removeTimeInterval = (id) => {
     let newTimeIntervals = []
-    if (newTimeIntervals.length > 1) {
+    if (timeIntervals?.length > 1) {
       newTimeIntervals = [...timeIntervals]
       newTimeIntervals.splice(id, 1)
     }
@@ -374,7 +374,7 @@ const FishingPeriod = (props) => {
           <Label>Jours fériés</Label>
           <HolidaysCheckbox disabled={disabled} onChange={setHolidays} checked={holidays}/>
         </Row>
-        <TimeTitle>Horaires autorisées</TimeTitle>
+        <TimeTitle>Horaires {authorized ? 'autorisés' : 'interdits'}</TimeTitle>
         <TimeRow disabled={timeIsDisabled}>
           <DateRanges>
               { timeIntervals?.length > 0
@@ -403,7 +403,7 @@ const FishingPeriod = (props) => {
               onClick={_ => !disabled && timeIntervals?.length !== 0 && addTimeInterval()} />
         </TimeRow>
         <TimeRow disabled={timeIsDisabled}>
-          ou <DaytimeCheckbox
+          Ou<DaytimeCheckbox
             disabled={timeIsDisabled || disabled}
             checked={daytime}
             onChange={setDaytime}
@@ -468,7 +468,7 @@ const DateList = styled.div`
 `
 
 const DaytimeCheckbox = styled(CustomCheckbox)`
-  margin: -15px 5px 0px 5px;
+  margin-left: 5px;
 `
 
 const HolidaysCheckbox = styled(CustomCheckbox)`

@@ -4,7 +4,14 @@ import CustomDatePicker, { CUSTOM_DATEPICKER_TYPES } from './CustomDatePicker'
 import { SquareButton } from '../../commonStyles/Buttons.style'
 import { COLORS } from '../../../constants/constants'
 
-const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, removeTimeInterval }) => {
+const TimeInterval = props => {
+  const {
+    disabled,
+    id,
+    timeInterval,
+    onTimeIntervalChange,
+    removeTimeInterval
+  } = props
   const setTimeInterval = (key, value) => {
     const newTimeInterval = {
       ...timeInterval,
@@ -14,9 +21,8 @@ const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, remove
   }
 
   return (
-    <Wrapper>De <CustomDatePicker
+    <Wrapper>De<CustomDatePicker
         format='HH:mm'
-        ranges={[]}
         type={CUSTOM_DATEPICKER_TYPES.TIME}
         placement={'rightStart'}
         style={{ width: '55px', margin: '0px 5px' }}
@@ -26,9 +32,8 @@ const TimeInterval = ({ disabled, id, timeInterval, onTimeIntervalChange, remove
         onOk={value => setTimeInterval('from', value)}
         onSelect={value => setTimeInterval('from', value)}
       />
-      à <CustomDatePicker
+      à<CustomDatePicker
         format='HH:mm'
-        ranges={[]}
         type={CUSTOM_DATEPICKER_TYPES.TIME}
         placement={'rightStart'}
         style={{ width: '55px', margin: '0px 5px' }}

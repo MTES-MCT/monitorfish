@@ -1,40 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
-const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse }) => {
-  const [value, setValue] = useState(undefined)
-
-  useEffect(() => {
-    if (booleanProperty !== undefined && value === undefined) {
-      setValue(booleanProperty)
-    }
-  }, [booleanProperty])
-
+const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse, size }) => {
   function update () {
-    updateBooleanProperty(!value)
-    setValue(!value)
+    updateBooleanProperty(!booleanProperty)
   }
+  const padding = size ? (36 - size) / 2 : 0
 
   return (
-    <Wrapper>
+    <Wrapper onClick={update}>
       <Icon
         style={{
-          width: 36,
-          height: 36,
-          background: value ? COLORS.shadowBlue : COLORS.charcoal,
+          width: size || 36,
+          height: size || 36,
+          padding,
+          background: booleanProperty ? COLORS.shadowBlue : COLORS.charcoal,
           transition: 'all 0.2s',
           cursor: 'pointer'
         }}
+        isSelected={booleanProperty}
       />
       <ShowLabelText
         data-cy={'map-property-trigger'}
-        onClick={update}
       >
         {
           inverse
-            ? value ? 'Afficher' : 'Masquer'
-            : value ? 'Masquer' : 'Afficher'
+            ? booleanProperty ? 'Afficher' : 'Masquer'
+            : booleanProperty ? 'Masquer' : 'Afficher'
         }
         {''} {text}
       </ShowLabelText>
@@ -49,6 +42,7 @@ const Wrapper = styled.div`
   border-top: 1px solid ${COLORS.lightGray};
   text-align: left;
   height: 36px;
+  cursor: pointer;
 `
 
 const ShowLabelText = styled.span`
@@ -57,7 +51,6 @@ const ShowLabelText = styled.span`
   padding: 8.5px 10px;
   vertical-align: top;
   display: inline-block;
-  cursor: pointer;
 `
 
 export default MapPropertyTrigger

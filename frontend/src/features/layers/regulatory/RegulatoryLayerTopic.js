@@ -77,7 +77,7 @@ const RegulatoryLayerTopic = props => {
   const showRegulatoryZones = namespace => {
     return regulatoryZones.map((regulatoryZone, index) => {
       let vectorLayerStyle
-      if (regulatoryZone.zone && regulatoryZone.topic && regulatoryZone.gears && gears) {
+      if (regulatoryZone.zone && regulatoryZone.topic && gears) {
         const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
         const gearCategory = getGearCategory(regulatoryZone.gears, gears)
         vectorLayerStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory)

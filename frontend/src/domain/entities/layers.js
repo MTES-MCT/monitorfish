@@ -414,6 +414,7 @@ export function getGearCategory (layerGears, gears) {
           })
       })
   }
+
   return gear ? gear.category : null
 }
 

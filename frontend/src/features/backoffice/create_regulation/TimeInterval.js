@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import CustomDatePicker, { CUSTOM_DATEPICKER_TYPES } from './CustomDatePicker'
-import { SquareButton } from '../../commonStyles/Buttons.style'
 import { COLORS } from '../../../constants/constants'
 
 const TimeInterval = props => {
@@ -10,8 +9,9 @@ const TimeInterval = props => {
     id,
     timeInterval,
     onTimeIntervalChange,
-    removeTimeInterval
+    isLast
   } = props
+
   const setTimeInterval = (key, value) => {
     const newTimeInterval = {
       ...timeInterval,
@@ -21,7 +21,7 @@ const TimeInterval = props => {
   }
 
   return (
-    <Wrapper>De<CustomDatePicker
+    <Wrapper $isLast={isLast}>De<CustomDatePicker
         format='HH:mm'
         type={CUSTOM_DATEPICKER_TYPES.TIME}
         placement={'rightStart'}
@@ -43,10 +43,6 @@ const TimeInterval = props => {
         onOk={value => setTimeInterval('to', value)}
         onSelect={value => setTimeInterval('to', value)}
       />
-      <SquareButton
-        disabled={timeInterval === undefined}
-        type='delete'
-        onClick={_ => timeInterval !== undefined && removeTimeInterval(id)} />
     </Wrapper>
   )
 }
@@ -55,6 +51,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  ${props => props.$isLast ? '' : 'margin-bottom: 5px;'}
   color: ${COLORS.slateGray};
   opacity: ${props => props.disabled ? '0.4' : '1'};
 `

@@ -48,17 +48,19 @@ const mapToFishingPeriodObject = fishingPeriod => {
 
     const newDateRanges = dateRanges?.map(({ startDate, endDate }) => {
       return {
-        startDate: new Date(startDate),
-        endDate: new Date(endDate)
+        startDate: startDate ? new Date(startDate) : undefined,
+        endDate: endDate ? new Date(endDate) : undefined
       }
     })
 
-    const newDates = dates?.map(date => new Date(date))
+    const newDates = dates?.map(date => {
+      return date ? new Date(date) : undefined
+    })
 
     const newTimeIntervals = timeIntervals?.map(({ from, to }) => {
       return {
-        from: new Date(from),
-        to: new Date(to)
+        from: from ? new Date(from) : undefined,
+        to: to ? new Date(to) : undefined
       }
     })
 
@@ -353,4 +355,93 @@ export const getRegulatoryLayersWithoutTerritory = layersTopicsByRegTerritory =>
   })
 
   return nextRegulatoryLayersWithoutTerritory
+}
+
+const toArrayString = (array) => {
+  if (array?.length) {
+    if (array.length === 1) {
+      return array[0]
+    } else if (array.length === 2) {
+      return array.join(' et ')
+    } else {
+      return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
+    }
+  }
+}
+
+const dateToString = (date, annualRecurrence) => {
+  const options = { day: 'numeric', month: 'long' }
+  if (annualRecurrence) {
+    options.year = 'numeric'
+  }
+  return date.toLocaleDateString('fr-FR', options)
+}
+
+const timeToString = (date) => {
+  const minutes = date.getMinutes()
+  const hours = date.getHours()
+  return `${hours < 10 ? '0' : ''}${hours}h${minutes < 10 ? '0' : ''}${minutes}`
+}
+
+export const fishingPeriodToString = (fishingPeriod) => {
+  const {
+    dateRanges,
+    annualRecurrence,
+    dates,
+    weekdays,
+    holidays,
+    timeIntervals,
+    daytime,
+    authorized
+  } = fishingPeriod
+  const textArray = []
+  if (dateRanges?.length) {
+    let array = toArrayString(
+      dateRanges.map(({ startDate, endDate }) => {
+        if (startDate && endDate) {
+          return `du ${dateToString(startDate, annualRecurrence)} au ${dateToString(endDate, annualRecurrence)}`
+        }
+        return undefined
+      }).filter(e => e))
+    if (array?.length) {
+      if (annualRecurrence) {
+        array = 'tous les ans '.concat(array)
+      }
+      textArray.push(array)
+    }
+  }
+  if (dates?.length) {
+    const array = toArrayString(dates.map((date) => {
+      if (date) {
+        return `le ${dateToString(date)} `
+      }
+      return undefined
+    }).filter(e => e))
+    if (array?.length) {
+      textArray.push(array)
+    }
+  }
+  if (weekdays?.length) {
+    textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${toArrayString(weekdays)}`)
+  }
+  if (holidays) {
+    textArray.push('les jours fériés')
+  }
+  if (timeIntervals?.length) {
+    const array = toArrayString(timeIntervals.map(({ from, to }) => {
+      if (from && to) {
+        return `de ${timeToString(from)} à ${timeToString(to)}`
+      }
+      return undefined
+    }).filter(e => e))
+    if (array?.length) {
+      textArray.push(array)
+    }
+  } else if (daytime) {
+    textArray.push('du lever au coucher du soleil')
+  }
+  if (textArray?.length) {
+    return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
+  }
+  return null
 }

@@ -18,7 +18,13 @@ const setIrretrievableFeaturesEvent = error => {
     error: error
   }
 }
-
+/**
+ *
+ * @param {Object} layerToShow
+ * @param {string} layerToShow.type
+ * @param {string} layerToShow.zone
+ * @returns
+ */
 const showAdministrativeLayer = layerToShow => (dispatch, getState) => {
   currentNamespace = layerToShow.namespace
   const {

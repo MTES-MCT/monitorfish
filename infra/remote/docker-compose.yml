@@ -21,6 +21,8 @@ services:
     user: "monitorfish:${MONITORFISH_LOGS_GID}"
     environment:
       - ENV_DB_URL=jdbc:postgresql://db:5432/$POSTGRES_DB?user=$POSTGRES_USER&password=$POSTGRES_PASSWORD
+      - REACT_APP_GEOSERVER_REMOTE_URL=https://monitorfish.din.developpement-durable.gouv.fr
+      - REACT_APP_GEOSERVER_LOCAL_URL=https://10.56.205.25:8082
       - SPRING_PROFILES_ACTIVE=prod
       - HOST_IP=127.0.0.1
     ports:

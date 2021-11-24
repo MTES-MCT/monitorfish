@@ -20,6 +20,8 @@ import DownloadVesselListModal from './DownloadVesselListModal'
 import getAdministrativeZoneGeometry from '../../domain/use_cases/getAdministrativeZoneGeometry'
 import {
   expandRightMenu,
+  openVesselListModal,
+  closeVesselListModal,
   setBlockVesselsUpdate,
   setPreviewFilteredVesselsMode
 } from '../../domain/shared_slices/Global'
@@ -43,6 +45,7 @@ import { getExtentFromGeoJSON } from '../../utils'
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
+  const vesselListModalIsOpen = useSelector(state => state.global.vesselListModalIsOpen)
   const {
     vesselsLayerSource,
     selectedVessel,
@@ -60,7 +63,6 @@ const VesselList = ({ namespace }) => {
   } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
-  const [vesselListModalIsOpen, setVesselListModalIsOpen] = useState(false)
   const [downloadVesselListModalIsOpen, setDownloadVesselListModalIsOpen] = useState(false)
   const [saveVesselFilterModalIsOpen, setSaveVesselFilterModalIsOpen] = useState(false)
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
@@ -193,7 +195,7 @@ const VesselList = ({ namespace }) => {
   }
 
   const closeAndResetVesselList = () => {
-    setVesselListModalIsOpen(false)
+    dispatch(closeVesselListModal())
     setCountriesFiltered([])
     setAdministrativeZonesFiltered([])
     setLastPositionTimeAgoFilter(3)
@@ -213,7 +215,7 @@ const VesselList = ({ namespace }) => {
   }, [])
 
   const selectBox = () => {
-    setVesselListModalIsOpen(false)
+    dispatch(closeVesselListModal())
     dispatch(setInteraction({
       type: InteractionTypes.SQUARE,
       listener: layersType.VESSEL
@@ -222,7 +224,7 @@ const VesselList = ({ namespace }) => {
   }
 
   const selectPolygon = () => {
-    setVesselListModalIsOpen(false)
+    dispatch(closeVesselListModal())
     dispatch(setInteraction({
       type: InteractionTypes.POLYGON,
       listener: layersType.VESSEL
@@ -263,15 +265,15 @@ const VesselList = ({ namespace }) => {
 
   useEffect(() => {
     if (previewFilteredVesselsMode) {
-      setVesselListModalIsOpen(false)
+      dispatch(closeVesselListModal())
     } else if (previewFilteredVesselsMode !== undefined) {
-      setVesselListModalIsOpen(true)
+      dispatch(openVesselListModal())
     }
   }, [previewFilteredVesselsMode])
 
   useEffect(() => {
     if (zonesSelected?.length) {
-      setVesselListModalIsOpen(true)
+      dispatch(openVesselListModal())
     }
   }, [zonesSelected])
 
@@ -330,7 +332,7 @@ const VesselList = ({ namespace }) => {
           onMouseEnter={() => dispatch(expandRightMenu())}
           rightMenuIsOpen={rightMenuIsOpen}
           title={'Liste des navires avec VMS'}
-          onClick={() => setVesselListModalIsOpen(true)}>
+          onClick={() => dispatch(openVesselListModal())}>
           <Vessel
             background={vesselListModalIsOpen ? COLORS.shadowBlue : COLORS.charcoal}
             selectedVessel={selectedVessel}

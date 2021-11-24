@@ -42,7 +42,7 @@ curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspac
     "name": "fao_areas",
     "nativeName": "fao_areas",
     "title": "FAO",
-    "nativeCRS": "EPSG:32631",
+    "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
     "enabled": true,
   }

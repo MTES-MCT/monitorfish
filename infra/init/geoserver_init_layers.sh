@@ -29,7 +29,7 @@ curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspac
     "name": "eez_areas",
     "nativeName": "eez_areas",
     "title": "EEZ",
-    "nativeCRS": "EPSG:32631",
+    "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
     "enabled": true,
   }

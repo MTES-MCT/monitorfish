@@ -91,19 +91,6 @@ EOF
 curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "coast_lines",
-    "nativeName": "coast_lines",
-    "title": "Coast lines",
-    "nativeCRS": "EPSG:4326",
-    "srs": "EPSG:4326",
-    "enabled": true,
-  }
-}
-EOF
-
-curl -v -u admin:geoserver -X POST http://localhost:8081/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
-{
-  "featureType": {
     "name": "regulatory_areas",
     "nativeName": "reglementation_peche_view",
     "title": "Regulatory Areas",

@@ -2,7 +2,6 @@ import React from 'react'
 import CustomDatePicker from './CustomDatePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { SquareButton } from '../../commonStyles/Buttons.style'
 
 const DateRange = (props) => {
   const {
@@ -10,8 +9,8 @@ const DateRange = (props) => {
     /** @type {DateRange} */
     dateRange,
     updateList,
-    removeDateRange,
-    disabled
+    disabled,
+    isLast
   } = props
 
   const {
@@ -34,7 +33,7 @@ const DateRange = (props) => {
   }
   const setEndDateFromDateType = value => setDateRange('endDate', value)
 
-  return <Wrapper disabled={disabled}>
+  return <Wrapper $isLast={isLast} disabled={disabled}>
     <DateRangeRow>
         Du <CustomDatePicker
           value={startDate}
@@ -51,15 +50,11 @@ const DateRange = (props) => {
           onOk={setEndDateFromDateType}
           format='DD/MM/YYYY'
           placement={'rightStart'}
-          style={{ margin: '0px 5px' }}
+          style={{ margin: '0px 0px 0px 5px' }}
           disabled={disabled}
         />
     </DateRangeRow>
-    <SquareButton
-      disabled={dateRange?.startDate === undefined && dateRange?.endDate === undefined}
-      type='delete'
-      onClick={_ => (dateRange?.startDate !== undefined || dateRange?.endDate !== undefined) && removeDateRange(id)} />
-    </Wrapper>
+  </Wrapper>
 }
 
 const Wrapper = styled.div`
@@ -67,6 +62,7 @@ const Wrapper = styled.div`
   flex-direction: row;
   color: ${COLORS.slateGray};
   opacity: ${props => props.disabled ? '0.4' : '1'};
+  ${props => props.$isLast ? '' : 'margin-bottom: 5px'};
 `
 
 const DateRangeRow = styled.div`

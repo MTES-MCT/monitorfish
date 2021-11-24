@@ -1,4 +1,4 @@
-import { COLORS } from '../../constants/constants'
+import { COLORS, SQUARE_BUTTON_TYPE } from '../../constants/constants'
 import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
@@ -110,7 +110,7 @@ height: 35px;
 border: 1px solid ${COLORS.lightGray};
 border-radius: 2px;
 color: ${COLORS.lightGray};
-margin-right: 8px;
+margin-right: 5px;
 opacity: ${props => props.disabled ? '0.4' : '1'};
 &:after {
   content: "";  
@@ -132,8 +132,8 @@ opacity: ${props => props.disabled ? '0.4' : '1'};
   transform: translate(-50%, -50%);
 }
 &:before {
-  height: ${props => props.type === 'delete' ? '1.5px' : '15px'};
-  width: ${props => props.type === 'delete' ? '15px' : '1.5px'};
+  height: ${props => props.type === SQUARE_BUTTON_TYPE.DELETE ? '1.5px' : '15px'};
+  width: ${props => props.type === SQUARE_BUTTON_TYPE.DELETE ? '15px' : '1.5px'};
 }
 &:after {
   height: 1.5px;

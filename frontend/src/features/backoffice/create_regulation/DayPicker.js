@@ -42,7 +42,7 @@ const Circle = styled.a`
   margin-right: 5px;
   text-align: center;
   line-height: 2em;
-  color: ${COLORS.slateGray};
+  color: ${props => props.$isGray ? COLORS.slateGray : COLORS.grayShadow};
   ${props => props.$isGray ? `background-color: ${COLORS.gainsboro}` : ''};
   text-decoration: none;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};

@@ -70,3 +70,10 @@ export const INFO_TEXT = {
 }
 
 export const INFINITE = 'infinite'
+
+/**
+ * @enum {string}
+ */
+export const SQUARE_BUTTON_TYPE = {
+  DELETE: 'delete'
+}

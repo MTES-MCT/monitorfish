@@ -35,13 +35,11 @@ function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
   return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`)
 }
 
-export const GEOSERVER_URL = self && self.env &&
-  self.env.REACT_APP_GEOSERVER_LOCAL_URL &&
-  self.env.REACT_APP_GEOSERVER_LOCAL_URL !== '__REACT_APP_GEOSERVER_LOCAL_URL__'
-  ? self.env.REACT_APP_GEOSERVER_LOCAL_URL
-  : process.env.REACT_APP_GEOSERVER_LOCAL_URL
+export const GEOSERVER_URL = self?.env?.REACT_APP_GEOSERVER_REMOTE_URL !== '__REACT_APP_GEOSERVER_REMOTE_URL__'
+  ? self.env.REACT_APP_GEOSERVER_REMOTE_URL
+  : process.env.REACT_APP_GEOSERVER_REMOTE_URL
 
-export const GEOSERVER_BACKOFFICE_URL = process.env.REACT_APP_CYPRESS_TEST
+export const GEOSERVER_BACKOFFICE_URL = self?.env?.REACT_APP_GEOSERVER_LOCAL_URL !== '__REACT_APP_GEOSERVER_LOCAL_URL__'
   ? self.env.REACT_APP_GEOSERVER_LOCAL_URL
   : process.env.REACT_APP_GEOSERVER_LOCAL_URL
 

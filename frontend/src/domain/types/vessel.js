@@ -61,6 +61,7 @@
  * @property {number} estimatedCurrentLongitude
  * @property {boolean} isAtPort
  * @property {boolean} underCharter
+ * @property {String[]} alerts
  */
 
 /**

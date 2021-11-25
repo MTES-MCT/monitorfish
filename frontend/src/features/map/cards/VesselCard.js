@@ -7,10 +7,13 @@ import { COLORS } from '../../../constants/constants'
 import * as timeago from 'timeago.js'
 import { OverlayPosition } from '../overlays/position'
 import { useSelector } from 'react-redux'
+import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
+import { AlertTypes } from '../../../domain/entities/alerts'
+import { marginsWithoutAlert, marginsWithAlert } from '../overlays/VesselCardOverlay'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselCard = ({ feature, overlayPosition }) => {
+const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
 
   return (
@@ -46,6 +49,19 @@ const VesselCard = ({ feature, overlayPosition }) => {
             </ERS>
         }
       </VesselCardHeader>
+      {
+        feature?.vessel?.alerts?.length
+          ? <VesselCardAlerts>
+            <AlertIcon/>
+            {
+              feature?.vessel?.alerts?.length === 1
+                ? AlertTypes[feature?.vessel?.alerts[0]].name
+                : `${feature?.vessel?.alerts?.length} alertes`
+            }
+          </VesselCardAlerts>
+          : null
+      }
+
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
@@ -144,21 +160,39 @@ const VesselCard = ({ feature, overlayPosition }) => {
       </VesselCardBottom>
       <TrianglePointer>
         {
-          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
+          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow hasAlert={hasAlert}/> : null
         }
         {
-          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
+          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow hasAlert={hasAlert}/> : null
         }
         {
-          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
+          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow hasAlert={hasAlert}/> : null
         }
         {
-          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
+          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow hasAlert={hasAlert}/> : null
         }
       </TrianglePointer>
     </>
   )
 }
+
+const AlertIcon = styled(AlertSVG)`
+  width: 18px;
+  height: 18px;
+  margin-bottom: -4px;
+  margin-right: 5px;
+`
+
+const VesselCardAlerts = styled.div`
+  background: #E1000F;
+  font-weight: 500;
+  font-size: 13px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+`
 
 const MessageText = styled.span`
   vertical-align: text-top;
@@ -264,7 +298,7 @@ const BottomTriangleShadow = styled.div`
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.gainsboro} transparent transparent transparent;
-  margin-left: 179px;
+  margin-left: ${props => -(props.hasAlert ? marginsWithAlert.xMiddle : marginsWithoutAlert.xMiddle) - 6}px;
   margin-top: -1px;
   clear: top;
 `
@@ -277,8 +311,8 @@ const TopTriangleShadow = styled.div`
   border-right : 6px solid transparent;
   border-bottom : 11px solid ${COLORS.gainsboro};
   border-left : 6px solid transparent;
-  margin-left: 179px;
-  margin-top: -266px;
+  margin-left: ${props => -(props.hasAlert ? marginsWithAlert.xMiddle : marginsWithoutAlert.xMiddle) - 6}px;
+  margin-top: ${props => (props.hasAlert ? marginsWithAlert.yBottom : marginsWithoutAlert.yBottom) + 10}px;
   clear: top;
 `
 
@@ -290,8 +324,8 @@ const RightTriangleShadow = styled.div`
   border-top : 6px solid transparent;
   border-bottom : 6px solid transparent;
   border-left : 11px solid ${COLORS.gainsboro};
-  margin-left: 385px;
-  margin-top: -134px;
+  margin-left: ${props => -(props.hasAlert ? marginsWithAlert.xRight : marginsWithoutAlert.xRight) - 20}px;
+  margin-top: ${props => (props.hasAlert ? marginsWithAlert.yMiddle : marginsWithoutAlert.yMiddle) - 6}px;
   clear: top;
 `
 
@@ -305,7 +339,7 @@ const LeftTriangleShadow = styled.div`
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
-  margin-top: -134px;
+  margin-top: ${props => (props.hasAlert ? marginsWithAlert.yMiddle : marginsWithoutAlert.yMiddle) - 6}px;
   clear: top;
 `
 
@@ -347,6 +381,8 @@ const FieldValue = styled.div`
   font-size: 13px;
   font-weight: 500;
   margin-top: 2px;
+  max-height: 20px;
+  overflow: clip;
 `
 
 const LatLon = styled.div`

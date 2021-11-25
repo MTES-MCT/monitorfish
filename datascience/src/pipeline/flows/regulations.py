@@ -7,7 +7,7 @@ from src.pipeline.generic_tasks import delete_rows, extract, load
 
 @task(checkpoint=False)
 def extract_local_hashes() -> pd.DataFrame:
-    return extract("monitorfish_local", "regulations/hashes.sql")
+    return extract("monitorfish_local", "cross/hashes.sql")
 
 
 @task(checkpoint=False)
@@ -83,7 +83,7 @@ def delete(ids_to_delete: set):
 def extract_new_regulations(ids_to_update: set) -> pd.DataFrame:
     return extract(
         "monitorfish_local",
-        "regulations/regulations.sql",
+        "cross/regulations.sql",
         params={"ids": tuple(ids_to_update)},
     )
 

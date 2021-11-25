@@ -1,3 +1,4 @@
+from prefect.executors.dask import LocalDaskExecutor
 from prefect.schedules import CronSchedule, Schedule, clocks
 
 from src.pipeline.flows import (
@@ -56,6 +57,12 @@ risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
 scrape_legipeche.flow.schedule = CronSchedule("35 7 * * 1,2,3,4,5")
 species.flow.schedule = CronSchedule("0 8 * * *")
 vessels.flow.schedule = CronSchedule("5 8 * * *")
+
+################################ Define flows' executor ###############################
+admin_areas.flow.executor = LocalDaskExecutor()
+controls.flow.executor = LocalDaskExecutor()
+last_positions.flow.executor = LocalDaskExecutor()
+vessels.flow.executor = LocalDaskExecutor()
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [

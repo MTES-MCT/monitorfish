@@ -55,7 +55,7 @@ const VesselsLayer = ({ map }) => {
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     useSpatialIndex: false,
-    style: feature => getVesselStyle(feature)
+    style: (feature, resolution) => getVesselStyle(feature, resolution)
   }))
 
   useEffect(() => {

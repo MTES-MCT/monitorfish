@@ -7,6 +7,7 @@ import Layers, { baseLayers } from './layers'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 import countries from 'i18n-iso-countries'
 
+export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200

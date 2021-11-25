@@ -6,8 +6,8 @@ import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './position'
 
-const overlayBoxSize = 260
-const margins = {
+const overlayHeight = 260
+export const marginsWithoutAlert = {
   xRight: -407,
   xMiddle: -185,
   xLeft: 20,
@@ -16,11 +16,20 @@ const margins = {
   yBottom: -277
 }
 
+export const marginsWithAlert = {
+  xRight: -407,
+  xMiddle: -185,
+  xLeft: 20,
+  yTop: 20,
+  yMiddle: -141,
+  yBottom: -307
+}
+
 const VesselCardOverlay = ({ feature, map }) => {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
-  const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([margins.yBottom, margins.xMiddle])
+  const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([marginsWithoutAlert.yBottom, marginsWithoutAlert.xMiddle])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
 
   const overlayCallback = useCallback(
@@ -51,20 +60,21 @@ const VesselCardOverlay = ({ feature, map }) => {
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
 
-        const nextOverlayPosition = getNextOverlayPosition()
+        const hasAlert = !!feature?.vessel?.alerts?.length
+        const nextOverlayPosition = getNextOverlayPosition(hasAlert)
         setOverlayPosition(nextOverlayPosition)
-        setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
+        setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, hasAlert ? marginsWithAlert : marginsWithoutAlert))
       } else {
-        overlayRef.current.style.display = 'none'
-        setVesselFeatureToShowOnCard(null)
+        // overlayRef.current.style.display = 'none'
+        // setVesselFeatureToShowOnCard(null)
       }
     }
   }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef])
 
-  function getNextOverlayPosition () {
+  function getNextOverlayPosition (hasAlerts) {
     const [x, y] = feature.getGeometry().getCoordinates()
     const extent = map.getView().calculateExtent()
-    const boxSize = map.getView().getResolution() * overlayBoxSize
+    const boxSize = map.getView().getResolution() * overlayHeight + (hasAlerts ? 30 : 0)
 
     return getOverlayPosition(boxSize, x, y, extent)
   }
@@ -73,8 +83,11 @@ const VesselCardOverlay = ({ feature, map }) => {
     <VesselCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
       {
         vesselFeatureToShowOnCard
-          ? <VesselCard feature={vesselFeatureToShowOnCard}
-                        overlayPosition={overlayPosition}/>
+          ? <VesselCard
+            feature={vesselFeatureToShowOnCard}
+            overlayPosition={overlayPosition}
+            hasAlert={!!feature?.vessel?.alerts?.length}
+          />
           : null
       }
     </VesselCardOverlayComponent>

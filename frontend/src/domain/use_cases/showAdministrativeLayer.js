@@ -28,24 +28,21 @@ const setIrretrievableFeaturesEvent = error => {
 const showAdministrativeLayer = layerToShow => (dispatch, getState) => {
   currentNamespace = layerToShow.namespace
   const {
-    addLayer,
     addShowedLayer
   } = layer[currentNamespace].actions
 
   batch(() => {
-    dispatch(addLayer(getVectorLayer(layerToShow.type, layerToShow.zone, getState().global.inBackofficeMode)))
     dispatch(addShowedLayer(layerToShow))
   })
 }
 
-const getVectorLayer = (type, zone, inBackofficeMode) => {
+export const getVectorLayer = (type, zone, inBackofficeMode) => {
   let name
   if (zone) {
     name = `${type}:${zone}`
   } else {
     name = type
   }
-
   const layer = new VectorImageLayer({
     source: getAdministrativeVectorSource(type, zone, inBackofficeMode),
     className: 'administrative',

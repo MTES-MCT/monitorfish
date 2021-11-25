@@ -13,7 +13,8 @@ import regulatoryLayerSearch from '../../features/layers/regulatory/search/Regul
 import vesselList from '../../features/vessel_list/VesselList.slice'
 import interestPoint from './InterestPoint'
 import fishingActivities from './FishingActivities'
-import controls from './Controls'
+import controls from './Control'
+import alert from './Alert'
 import { combineReducers } from '@reduxjs/toolkit'
 
 const commonReducerList = {
@@ -35,7 +36,8 @@ const homeReducers = combineReducers({
   vesselList,
   measurement,
   fishingActivities,
-  controls
+  controls,
+  alert
 })
 
 const backofficeReducers = combineReducers({

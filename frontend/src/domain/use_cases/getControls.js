@@ -4,7 +4,7 @@ import {
   loadControls,
   setControlResumeAndControls,
   setNextControlResumeAndControls
-} from '../shared_slices/Controls'
+} from '../shared_slices/Control'
 import NoControlsFoundError from '../../errors/NoControlsFoundError'
 import { batch } from 'react-redux'
 

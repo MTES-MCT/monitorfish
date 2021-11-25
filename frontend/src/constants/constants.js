@@ -27,7 +27,8 @@ export const COLORS = {
   trackFishing: '#2A4670',
   trackTransit: '#1C9B7B',
   overlayShadow: '#7077851A',
-  yellow: '#F6D012'
+  yellow: '#F6D012',
+  titleBottomBorder: '#E0E0E0'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

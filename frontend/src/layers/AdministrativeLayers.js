@@ -1,42 +1,35 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import layer from '../domain/shared_slices/Layer'
+import { useSelector } from 'react-redux'
+import { getVectorLayer } from '../domain/use_cases/showAdministrativeLayer'
 import Layers, { layersType } from '../domain/entities/layers'
 
-const AdministrativeLayers = ({ map, namespace = 'homepage' }) => {
-  const { removeLayer } = layer[namespace].actions
-  const stateLayer = useSelector(state => state.layer)
-  const { showedLayers, layers } = stateLayer
-  const dispatch = useDispatch()
+const AdministrativeLayers = ({ map }) => {
+  const { showedLayers } = useSelector(state => state.layer)
+  const inBackofficeMode = useSelector(state => state.global.inBackofficeMode)
+
   const administrativeLayers = Object.keys(Layers)
     .map(topic => Layers[topic])
     .filter(layer => layer.type === layersType.ADMINISTRATIVE)
 
   useEffect(() => {
-    if (map && layers && layers.length) {
-      addAdministrativeLayersToMap()
-    }
-  }, [layers])
-
-  useEffect(() => {
     if (map && showedLayers) {
+      addAdministrativeLayersToMap()
       removeAdministrativeLayersToMap()
     }
   }, [showedLayers])
 
   function addAdministrativeLayersToMap () {
-    const layersToInsert = layers
-      .filter(layer => !map.getLayers().getArray().some(layer_ => layer === layer_))
+    const layersToInsert = showedLayers
+      .filter(layer => !map.getLayers().getArray().some(layer_ => layer.type === layer_.name)) // Les couches dans showedLayers qui ne sont pas dans OL
       .filter(layer => administrativeLayers
-        .some(administrativeLayer => layer.name?.includes(administrativeLayer.code)))
+        .some(administrativeLayer => layer.type?.includes(administrativeLayer.code))) // Les couches de type administrativeLayer
 
     layersToInsert.forEach(layerToInsert => {
       if (!layerToInsert) {
         return
       }
-
-      map.getLayers().push(layerToInsert)
-      dispatch(removeLayer(layerToInsert))
+      const VectorLayer = getVectorLayer(layerToInsert.type, layerToInsert.zone, inBackofficeMode)
+      map.getLayers().push(VectorLayer)
     })
   }
 

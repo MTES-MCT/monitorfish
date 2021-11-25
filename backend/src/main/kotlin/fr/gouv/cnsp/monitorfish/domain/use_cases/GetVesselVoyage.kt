@@ -42,7 +42,7 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
         val isLastVoyage = getIsLastVoyage(currentTripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)
         val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.tripNumber)
 
-        val alerts = alertRepository.findAlertsOfRules(
+        val alerts = alertRepository.findAlertsOfTypes(
             listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
             internalReferenceNumber,
             trip.tripNumber

@@ -45,7 +45,8 @@ data class LastPositionDataOutput(
         val detectabilityRiskFactor: Double? = null,
         val riskFactor: Double? = null,
         val underCharter: Boolean? = null,
-        val isAtPort: Boolean? = null) {
+        val isAtPort: Boolean? = null,
+        val alerts: List<String>? = listOf()) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -87,7 +88,8 @@ data class LastPositionDataOutput(
                     detectabilityRiskFactor = position.detectabilityRiskFactor,
                     riskFactor = position.riskFactor,
                     underCharter = position.underCharter,
-                    isAtPort = position.isAtPort)
+                    isAtPort = position.isAtPort,
+                    alerts = position.alerts)
         }
     }
 }

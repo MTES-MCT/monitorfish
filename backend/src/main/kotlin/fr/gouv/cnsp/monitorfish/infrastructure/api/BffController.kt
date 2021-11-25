@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
@@ -35,6 +36,7 @@ class BffController(
         private val getHealthcheck: GetHealthcheck,
         private val getAllControlObjectives: GetAllControlObjectives,
         private val updateControlObjective: UpdateControlObjective,
+        private val getOperationalAlerts: GetOperationalAlerts,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -244,5 +246,11 @@ class BffController(
                 targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
                 controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel
         )
+    }
+
+    @GetMapping("/v1/alerts")
+    @ApiOperation("Get operational alerts")
+    fun getOperationalAlerts(): List<Alert> {
+        return getOperationalAlerts.execute()
     }
 }

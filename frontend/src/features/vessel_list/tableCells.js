@@ -42,9 +42,9 @@ export const CheckedCell = ({ rowData, dataKey, onClick, onChange, ...props }) =
   )
 }
 
-export const FlagCell = ({ rowData, dataKey, ...props }) => (
+export const FlagCell = ({ rowData, dataKey, baseUrl, ...props }) => (
   <Cell {...props} style={{ padding: 0 }}>
-    <Flag title={countries.getName(rowData[dataKey], 'fr')} rel="preload" src={`flags/${rowData[dataKey]}.svg`}/>
+    <Flag title={countries.getName(rowData[dataKey], 'fr')} rel="preload" src={`${baseUrl}/flags/${rowData[dataKey]}.svg`}/>
   </Cell>
 )
 

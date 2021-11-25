@@ -154,5 +154,6 @@ data class LastPositionEntity(
             detectabilityRiskFactor = detectabilityRiskFactor,
             riskFactor = riskFactor,
             underCharter = underCharter,
-            isAtPort = isAtPort)
+            isAtPort = isAtPort,
+            alerts = alerts)
 }

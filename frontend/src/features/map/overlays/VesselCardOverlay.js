@@ -65,8 +65,8 @@ const VesselCardOverlay = ({ feature, map }) => {
         setOverlayPosition(nextOverlayPosition)
         setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, hasAlert ? marginsWithAlert : marginsWithoutAlert))
       } else {
-        // overlayRef.current.style.display = 'none'
-        // setVesselFeatureToShowOnCard(null)
+        overlayRef.current.style.display = 'none'
+        setVesselFeatureToShowOnCard(null)
       }
     }
   }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef])

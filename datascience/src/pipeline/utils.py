@@ -123,9 +123,9 @@ def psql_insert_copy(table, conn, keys, data_iter):
 
         columns = ", ".join('"{}"'.format(k) for k in keys)
         if table.schema:
-            table_name = "{}.{}".format(table.schema, table.name)
+            table_name = f'"{table.schema}"."{table.name}"'
         else:
-            table_name = table.name
+            table_name = f'"{table.name}"'
 
         sql = "COPY {} ({}) FROM STDIN WITH CSV".format(table_name, columns)
         cur.copy_expert(sql=sql, file=s_buf)

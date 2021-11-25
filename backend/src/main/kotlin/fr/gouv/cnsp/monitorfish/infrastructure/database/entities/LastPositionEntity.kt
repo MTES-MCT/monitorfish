@@ -7,6 +7,8 @@ import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import org.hibernate.annotations.Type
@@ -108,7 +110,10 @@ data class LastPositionEntity(
         @Column(name = "under_charter")
         val underCharter: Boolean? = null,
         @Column(name = "is_at_port")
-        val isAtPort: Boolean? = null) : Serializable {
+        val isAtPort: Boolean? = null,
+        @Type(type = "string-array")
+        @Column(name = "alerts", columnDefinition = "varchar(200)[]")
+        val alerts: List<String>? = listOf()) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,

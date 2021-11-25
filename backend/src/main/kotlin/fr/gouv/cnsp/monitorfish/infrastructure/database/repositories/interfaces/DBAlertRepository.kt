@@ -8,6 +8,8 @@ import org.springframework.data.repository.CrudRepository
 @DynamicUpdate
 interface DBAlertRepository : CrudRepository<AlertEntity, Long> {
     @Query("select * from alerts where internal_reference_number = :internalReferenceNumber " +
-            "and trip_number = :tripNumber and name in (:rules)", nativeQuery = true)
-    fun findAlertsOfRules(rules: List<String>, internalReferenceNumber: String, tripNumber: Int?): List<AlertEntity>
+            "and trip_number = :tripNumber and name in (:types)", nativeQuery = true)
+    fun findAlertsOfRules(types: List<String>, internalReferenceNumber: String, tripNumber: Int?): List<AlertEntity>
+    @Query("select * from alerts where name in (:types)", nativeQuery = true)
+    fun findAlertsOfRules(types: List<String>): List<AlertEntity>
 }

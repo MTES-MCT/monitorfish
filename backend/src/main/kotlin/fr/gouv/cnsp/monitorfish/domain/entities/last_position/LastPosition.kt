@@ -54,4 +54,5 @@ data class LastPosition(
         val detectabilityRiskFactor: Double? = null,
         val riskFactor: Double? = null,
         val underCharter: Boolean? = null,
-        val isAtPort: Boolean? = null)
+        val isAtPort: Boolean? = null,
+        val alerts: List<String>? = listOf())

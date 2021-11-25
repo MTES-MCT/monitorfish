@@ -16,10 +16,17 @@ class JpaAlertRepository(private val dbAlertRepository: DBAlertRepository,
         dbAlertRepository.save(AlertEntity.fromAlert(alert, mapper))
     }
 
-    override fun findAlertsOfRules(rules: List<AlertTypeMapping>, internalReferenceNumber: String, tripNumber: Int): List<Alert> {
-        val rulesAsString = rules.map { it.name }
+    override fun findAlertsOfTypes(types: List<AlertTypeMapping>, internalReferenceNumber: String, tripNumber: Int): List<Alert> {
+        val rulesAsString = types.map { it.name }
 
         return dbAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)
+                .map { it.toAlert(mapper) }
+    }
+
+    override fun findAlertsOfTypes(types: List<AlertTypeMapping>): List<Alert> {
+        val rulesAsString = types.map { it.name }
+
+        return dbAlertRepository.findAlertsOfRules(rulesAsString)
                 .map { it.toAlert(mapper) }
     }
 }

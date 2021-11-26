@@ -33,11 +33,11 @@ export const renderRowExpanded = rowData => {
           <TableBody>
             <Field>
               <Key>Vitesse</Key>
-              <Value>{rowData.value.speed || <NoValue>-</NoValue>}</Value>
+              <Value>{rowData.speed || <NoValue>-</NoValue>}</Value>
             </Field>
             <Field>
               <Key>Nb d&apos;incursions</Key>
-              <Value>{rowData.value.incursionNumber || <NoValue>-</NoValue>}</Value>
+              <Value>{rowData.numberOfIncursion || <NoValue>-</NoValue>}</Value>
             </Field>
           </TableBody>
         </Fields>

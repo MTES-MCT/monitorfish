@@ -21,7 +21,7 @@ import HideOtherVessels from './actions/hide_other_vessels/HideOtherVessels'
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
 import { getAlertNameFromType } from '../../domain/entities/alerts'
-import { openAlertList } from '../../domain/shared_slices/Alert'
+import { focusOnAlert, openAlertList } from '../../domain/shared_slices/Alert'
 import { ReactComponent as AlertSVG } from '../icons/Icone_alertes.svg'
 
 const VesselSidebar = () => {
@@ -138,7 +138,15 @@ const VesselSidebar = () => {
           <Panel healthcheckTextWarning={healthcheckTextWarning}>
             {
               selectedVessel?.alerts.length
-                ? <VesselCardAlerts onClick={() => dispatch(openAlertList())}>
+                ? <VesselCardAlerts onClick={() => {
+                  dispatch(openAlertList())
+                  dispatch(focusOnAlert({
+                    name: selectedVessel?.alerts[0],
+                    internalReferenceNumber: selectedVessel.internalReferenceNumber,
+                    externalReferenceNumber: selectedVessel.externalReferenceNumber,
+                    ircs: selectedVessel.ircs
+                  }))
+                }}>
                   <AlertIcon/>
                   {
                     selectedVessel?.alerts.length === 1

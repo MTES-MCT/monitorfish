@@ -6,6 +6,82 @@ from src.pipeline.generic_tasks import extract, load
 
 
 @task(checkpoint=False)
+def extract_3_miles_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/3_miles_areas.sql")
+
+
+@task(checkpoint=False)
+def load_3_miles_areas(
+    three_miles_areas: pd.DataFrame,
+):
+    load(
+        three_miles_areas,
+        table_name="3_miles_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_6_miles_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/6_miles_areas.sql")
+
+
+@task(checkpoint=False)
+def load_6_miles_areas(
+    six_miles_areas: pd.DataFrame,
+):
+    load(
+        six_miles_areas,
+        table_name="6_miles_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_12_miles_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/12_miles_areas.sql")
+
+
+@task(checkpoint=False)
+def load_12_miles_areas(
+    twelve_miles_areas: pd.DataFrame,
+):
+    load(
+        twelve_miles_areas,
+        table_name="12_miles_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_eez_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/eez_areas.sql")
+
+
+@task(checkpoint=False)
+def load_eez_areas(
+    eez_areas: pd.DataFrame,
+):
+    load(
+        eez_areas,
+        table_name="eez_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
 def extract_1241_eaux_occidentales_australes_areas() -> pd.DataFrame:
     return extract(
         "monitorfish_local", "cross/1241_eaux_occidentales_australes_areas.sql"
@@ -375,6 +451,18 @@ def load_situs_areas(situs_areas: pd.DataFrame):
 
 
 with Flow("Administrative areas") as flow:
+
+    three_miles_areas = extract_3_miles_areas()
+    load_3_miles_areas(three_miles_areas)
+
+    six_miles_areas = extract_6_miles_areas()
+    load_6_miles_areas(six_miles_areas)
+
+    twelve_miles_areas = extract_12_miles_areas()
+    load_12_miles_areas(twelve_miles_areas)
+
+    eez_areas = extract_eez_areas()
+    load_eez_areas(eez_areas)
 
     eaux_occidentales_australes_areas = extract_1241_eaux_occidentales_australes_areas()
     load_1241_eaux_occidentales_australes_areas(eaux_occidentales_australes_areas)

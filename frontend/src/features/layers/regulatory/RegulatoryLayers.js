@@ -82,7 +82,7 @@ const RegulatoryLayers = props => {
         regulatoryLayersAddedToMySelection={regulatoryLayersAddedToMySelection}
         showRegulatoryLayers={showRegulatoryLayers}
       >
-        Mes zones réglementaires <ChevronIcon isOpen={showRegulatoryLayers}/>
+        Mes zones réglementaires <ChevronIcon $isOpen={showRegulatoryLayers}/>
       </RegulatoryLayersTitle>
       <RegulatoryLayersList
         topicLength={Object.keys(selectedRegulatoryLayers).length}

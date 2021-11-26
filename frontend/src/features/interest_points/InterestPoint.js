@@ -79,7 +79,7 @@ const InterestPoint = () => {
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Créer un point d\'intérêt'}
         onClick={openOrCloseInterestPoint}>
-        <InterestPointIcon rightMenuIsOpen={rightMenuIsOpen} selectedVessel={selectedVessel}/>
+        <InterestPointIcon $rightMenuIsOpen={rightMenuIsOpen} $selectedVessel={selectedVessel}/>
       </InterestPointWrapper>
       <SaveInterestPoint
         healthcheckTextWarning={healthcheckTextWarning}
@@ -118,7 +118,7 @@ const InterestPointWrapper = styled(MapButtonStyle)`
 
 const InterestPointIcon = styled(InterestPointSVG)`
   width: 40px;
-  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `
 

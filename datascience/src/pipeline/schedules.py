@@ -35,7 +35,11 @@ controls.flow.schedule = Schedule(
         clocks.CronClock(
             "1 * * * *",
             parameter_defaults={"number_of_months": 1, "loading_mode": "upsert"},
-        )
+        ),
+        clocks.CronClock(
+            "10 8 * * *",
+            parameter_defaults={"number_of_months": 120, "loading_mode": "replace"},
+        ),
     ]
 )
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")

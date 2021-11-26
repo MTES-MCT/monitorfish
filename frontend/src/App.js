@@ -29,7 +29,7 @@ import ErrorToastNotification from './features/commonComponents/ErrorToastNotifi
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
-import AlertsMapButton from './features/alerts/AlertsMapButton'
+import AlertListMapButton from './features/alert_list/AlertListMapButton'
 
 function App () {
   switch (browserName) {
@@ -79,7 +79,7 @@ function HomePage () {
       <Wrapper>
         <Map/>
         <LayersSidebar/>
-        <AlertsMapButton/>
+        <AlertListMapButton/>
         <VesselsSearch/>
         <RightMenuOnHoverArea/>
         <VesselList namespace={'homepage'}/>

@@ -1,36 +1,42 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
 import { COLORS } from '../../constants/constants'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import AlertsWindow from './alerts_window/AlertsWindow'
+import { closeAlertList, openAlertList } from '../../domain/shared_slices/Alert'
 
-const AlertsMapButton = () => {
+const AlertListMapButton = () => {
+  const dispatch = useDispatch()
   const {
     regulatoryZoneMetadataPanelIsOpen
   } = useSelector(state => state.regulatory)
   const {
+    alertListIsOpen
+  } = useSelector(state => state.alert)
+  const {
     healthcheckTextWarning,
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
-  const [alertsWindowIsOpen, setAlertsWindowIsOpen] = useState(false)
+
+  console.log(alertListIsOpen)
 
   return <>
     <Wrapper
       data-cy={'alerts-button'}
       title={'Alertes'}
-      isVisible={alertsWindowIsOpen}
+      isVisible={alertListIsOpen}
       regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       healthcheckTextWarning={healthcheckTextWarning}
       isHidden={previewFilteredVesselsMode}
-      onClick={() => setAlertsWindowIsOpen(!alertsWindowIsOpen)}>
+      onClick={() => alertListIsOpen ? dispatch(closeAlertList()) : dispatch(openAlertList())}>
       <AlertsIcon/>
     </Wrapper>
     <AlertsWindow
-      isOpen={alertsWindowIsOpen}
-      setIsOpen={setAlertsWindowIsOpen}
+      isOpen={alertListIsOpen}
+      closeAlertList={() => dispatch(closeAlertList())}
       baseUrl={window.location.origin}
     />
   </>
@@ -57,4 +63,4 @@ const AlertsIcon = styled(AlertsSVG)`
   margin-top: 3px;
 `
 
-export default AlertsMapButton
+export default AlertListMapButton

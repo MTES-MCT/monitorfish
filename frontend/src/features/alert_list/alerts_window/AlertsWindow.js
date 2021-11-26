@@ -14,7 +14,7 @@ export const MenuSeaFronts = {
   OUTREMEROI: 'OUTRE-MER OI'
 }
 
-const AlertsWindow = ({ baseUrl, isOpen, setIsOpen }) => {
+const AlertsWindow = ({ baseUrl, isOpen, closeAlertList }) => {
   const [selectedSeaFront, setSelectedSeaFront] = useState(MenuSeaFronts.MEMN)
 
   return isOpen
@@ -22,7 +22,7 @@ const AlertsWindow = ({ baseUrl, isOpen, setIsOpen }) => {
     name={'Alertes'}
     title={'Alertes'}
     features={{ width: '1200px', height: '900px' }}
-    onUnload={() => setIsOpen(false)}
+    onUnload={() => closeAlertList()}
   >
       <Wrapper>
         <AlertsWindowFirstMenu/>

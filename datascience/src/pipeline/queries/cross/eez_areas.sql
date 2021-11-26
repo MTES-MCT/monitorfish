@@ -1,7 +1,7 @@
 SELECT 
     ogc_fid,
     wkb_geometry,
-    union,
+    "union",
     mrgid_eez,
     territory1,
     mrgid_ter1,

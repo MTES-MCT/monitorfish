@@ -19,8 +19,8 @@ const AlertsWindowTable = ({ alerts, alertType, baseUrl }) => {
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([])
   const [sortedAlerts, setSortedAlerts] = useState([])
-  const [sortColumn, setSortColumn] = useState('segment')
-  const [sortType, setSortType] = useState(SortType.ASC)
+  const [sortColumn, setSortColumn] = useState('creationDate')
+  const [sortType, setSortType] = useState(SortType.DESC)
 
   const handleSortColumn = (sortColumn, sortType) => {
     setSortColumn(sortColumn)

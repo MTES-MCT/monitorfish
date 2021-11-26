@@ -22,7 +22,7 @@ const AdministrativeLayerGroup = props => {
               {props.layers[0].group.name.replace(/[_]/g, ' ')}
             </Text>
             <Chevron
-              isOpen={isOpen}
+              $isOpen={isOpen}
               onClick={() => setIsOpen(!isOpen)}
             />
           </Zone>

@@ -68,7 +68,7 @@ const RiskFactorResume = () => {
                   <SubRiskTitle>
                     Impact sur la ressource
                   </SubRiskTitle>
-                  <Chevron isOpen={impactRiskFactorIsOpen}/>
+                  <Chevron $isOpen={impactRiskFactorIsOpen}/>
                 </SubRiskHeader>
                 <RiskFactorImpact/>
                 <RiskFactorCursor
@@ -91,7 +91,7 @@ const RiskFactorResume = () => {
                   <SubRiskTitle>
                     Probabilité d&apos;infraction
                   </SubRiskTitle>
-                  <Chevron isOpen={probabilityRiskFactorIsOpen}/>
+                  <Chevron $isOpen={probabilityRiskFactorIsOpen}/>
                 </SubRiskHeader>
                 <RiskFactorInfractions/>
                 <RiskFactorCursor
@@ -114,7 +114,7 @@ const RiskFactorResume = () => {
                   <SubRiskTitle>
                     Priorité de contrôle
                   </SubRiskTitle>
-                  <Chevron isOpen={detectabilityRiskFactorIsOpen}/>
+                  <Chevron $isOpen={detectabilityRiskFactorIsOpen}/>
                 </SubRiskHeader>
                 <RiskFactorControl/>
                 <RiskFactorCursor

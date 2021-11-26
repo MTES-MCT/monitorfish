@@ -18,7 +18,7 @@ const Filter = ({ filter, index, isLastItem, removeFilter, showFilter, hideFilte
           data-cy={'vessel-filter'}
           title={filter.name.replace(/[_]/g, ' ')}
           onClick={() => setIsOpen(!isOpen)}>
-          <ChevronIcon isOpen={isOpen}/>
+          <ChevronIcon $isOpen={isOpen}/>
           <FilterIcon fill={filter.color}/>
           {filter.name
             ? filter.name.replace(/[_]/g, ' ')
@@ -118,7 +118,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 8px;
   margin-top: 5px;
   
-  animation: ${props => props.isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
+  animation: ${props => props.$isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
 
   @keyframes chevron-layer-opening {
     0%   { transform: rotate(180deg); }

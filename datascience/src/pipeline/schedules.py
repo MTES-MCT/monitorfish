@@ -60,7 +60,7 @@ regulations_checkup.flow.schedule = CronSchedule("55 7 * * 1,2,3,4,5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
 scrape_legipeche.flow.schedule = CronSchedule("35 7 * * 1,2,3,4,5")
 species.flow.schedule = CronSchedule("0 8 * * *")
-vessels.flow.schedule = CronSchedule("5 8 * * *")
+vessels.flow.schedule = CronSchedule("5 2,5,8,11,14,17,20,23 * * *")
 
 ################################ Define flows' executor ###############################
 admin_areas.flow.executor = LocalDaskExecutor()

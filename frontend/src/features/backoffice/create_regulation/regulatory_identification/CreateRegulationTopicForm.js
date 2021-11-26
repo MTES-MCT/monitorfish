@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import { CustomInput } from '../../../commonStyles/Input.style'
@@ -6,14 +6,29 @@ import { CustomInput } from '../../../commonStyles/Input.style'
 const CreateRegulationTopicForm = props => {
   const {
     setSelectedRegulationTopic,
-    setIsAddTopicClicked,
-    setIsInfoTextShown
+    selectedRegulationTopic,
+    updateLayerName,
+    onCancelEdit
   } = props
   const [topicPlace, setTopicPlace] = useState('')
   const [topicPlaceIsRed, setTopicPlaceIsRed] = useState(false)
   const [topicGears, setTopicGears] = useState('')
   const [topicSpecies, setTopicSpecies] = useState('')
   const [topicOtherIndications, setTopicOtherIndications] = useState('')
+
+  useEffect(() => {
+    if (selectedRegulationTopic) {
+      initForm()
+    }
+  }, [selectedRegulationTopic])
+
+  const initForm = () => {
+    const themeSplitted = selectedRegulationTopic.split(' - ')
+    setTopicPlace(themeSplitted[0])
+    setTopicGears(themeSplitted[1])
+    setTopicSpecies(themeSplitted[2])
+    setTopicOtherIndications(themeSplitted[3])
+  }
 
   const resetThemeForm = () => {
     setTopicPlace('')
@@ -26,13 +41,16 @@ const CreateRegulationTopicForm = props => {
     if (topicPlace === '') {
       setTopicPlaceIsRed(true)
     } else {
-      const regulationLawType = `${topicPlace}
+      const regulationLayerName = `${topicPlace}
         ${topicSpecies ? ' - ' + topicSpecies : ''}
         ${topicGears ? ' - ' + topicGears : ''}
         ${topicOtherIndications ? ' - ' + topicOtherIndications : ''}`
-      setSelectedRegulationTopic(regulationLawType)
+      setSelectedRegulationTopic(regulationLayerName)
+      if (updateLayerName) {
+        updateLayerName(regulationLayerName)
+      }
       resetThemeForm()
-      setIsAddTopicClicked(false)
+      onCancelEdit()
       setTopicPlaceIsRed(false)
     }
   }
@@ -69,10 +87,7 @@ const CreateRegulationTopicForm = props => {
       <CancelButton
         disabled={false}
         isLast={false}
-        onClick={() => {
-          setIsAddTopicClicked(false)
-          setIsInfoTextShown(false)
-        }}
+        onClick={onCancelEdit}
       >
         Annuler
       </CancelButton>

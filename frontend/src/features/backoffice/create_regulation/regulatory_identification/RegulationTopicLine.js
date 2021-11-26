@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-// import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { ContentLine, InfoText } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
@@ -9,25 +9,28 @@ import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
 import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from '../InfoBox'
+import { INFO_TEXT } from '../../../../constants/constants'
+import updateLayerName from '../../../../domain/use_cases/updateLayerName'
+import { LAWTYPES_TO_TERRITORY } from '../../../../domain/entities/regulatory'
 
 const RegulationTopicLine = props => {
   const {
     selectedRegulationTopic,
     setSelectedRegulationTopic,
     zoneThemeList,
-    regulationTopicIsMissing
-    // selectedRegulationLawType
+    regulationTopicIsMissing,
+    selectedRegulationLawType
   } = props
 
   const [isAddTopicClicked, setIsAddTopicClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+  const [isEditLayerName, setIsEditLayerName] = useState(false)
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-  /* const onUpdateLayerName = () => {
-    const newLayerName = 'update layer name'
+  const onUpdateLayerName = (newLayerName) => {
     dispatch(updateLayerName(LAWTYPES_TO_TERRITORY[selectedRegulationLawType], selectedRegulationLawType, selectedRegulationTopic, newLayerName))
-  } */
+  }
 
   return <ContentLine
     isFormOpened={isAddTopicClicked}
@@ -45,18 +48,27 @@ const RegulationTopicLine = props => {
           renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedRegulationTopic} item={item} tag={'Radio'} />}
           valueIsMissing={regulationTopicIsMissing}
         />
-        {selectedRegulationTopic &&
+        {selectedRegulationTopic && !(isEditLayerName || isAddTopicClicked) &&
           <Tag
             data-cy={`${selectedRegulationTopic}`}
             tagValue={selectedRegulationTopic}
             onCloseIconClicked={_ => setSelectedRegulationTopic()}
+            onClickText={_ => {
+              setIsEditLayerName(true)
+              setIsAddTopicClicked(true)
+            }}
           />}
         {
         isAddTopicClicked
           ? <CreateRegulationTopicForm
               setSelectedRegulationTopic={setSelectedRegulationTopic}
-              setIsAddTopicClicked={setIsAddTopicClicked}
-              setIsInfoTextShown={setIsInfoTextShown}
+              selectedRegulationTopic={isEditLayerName ? selectedRegulationTopic : undefined}
+              updateLayerName={onUpdateLayerName}
+              onCancelEdit={_ => {
+                setIsAddTopicClicked(false)
+                setIsInfoTextShown(false)
+                setIsEditLayerName(false)
+              }}
             />
           : !selectedRegulationTopic && <><SquareButton
           onClick={() => {
@@ -71,8 +83,15 @@ const RegulationTopicLine = props => {
         isInfoTextShown={isInfoTextShown}
         setIsInfoTextShown={setIsInfoTextShown}
         isFormOpened={isAddTopicClicked}
-        message={'zoneTheme'}
-      />
+        pointer
+      >
+          {isEditLayerName
+            ? <InfoText bold>{INFO_TEXT.layerNamePart1}</InfoText>
+            : <InfoText bold red>{INFO_TEXT.editLayerNamePart1}</InfoText>}
+          <InfoText >
+            {INFO_TEXT.layerNamePart2}
+          </InfoText>
+        </CustomInfoBox>
       </ContentLine>
 }
 

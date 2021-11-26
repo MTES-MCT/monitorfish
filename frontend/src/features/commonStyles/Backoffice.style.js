@@ -50,10 +50,21 @@ export const Delimiter = styled.div`
 `
 
 export const Link = styled.a`
-color: ${COLORS.blue};
-font-size: 13px;
-padding: 0px 8px;
-cursor: pointer;
+  color: ${props => props.tagUrl ? COLORS.gainsboro : COLORS.gunMetal};
+  font-size: 13px;
+  padding: 0px 8px;
+  cursor: pointer;
+  ${props => !props.tagUrl ? 'font-weight: 500;' : ''}
+`
+
+export const InfoText = styled.span`
+  ${props => props.bold ? 'font-weight: bold;' : ''}
+  align-self: center;
+  display: 'flex';
+  font-size: 13px;
+  color: ${props => props.red ? COLORS.red : COLORS.gunMetal};
+  padding-left: 8px;
+  white-space: pre-line;
 `
 
 export const CustomCheckbox = styled(Checkbox)`

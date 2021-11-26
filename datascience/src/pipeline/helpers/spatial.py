@@ -7,6 +7,8 @@ import pandas as pd
 from pyproj import Geod
 from shapely.geometry import MultiPolygon, Polygon
 
+from src.pipeline.helpers.datetime import get_datetime_intervals
+
 
 @dataclass
 class Position:
@@ -200,3 +202,47 @@ def get_step_distances(
     res = np.array(distances)
 
     return res
+
+
+def enrich_positions(
+    positions: pd.DataFrame,
+    lat: str = "latitude",
+    lon: str = "longitude",
+    datetime_col: str = "datetime_utc",
+) -> pd.DataFrame:
+    """Takes a pandas DataFrame with
+        - latitude, longitude columns (float dtypes)
+        - a datetime column
+    whose rows represent successive positions of a vessel
+    Returns pandas DataFrame with the same index and columns, plus addtionnal computed
+    features in new columns : speed, distance and time between successive positions.
+
+    Rows are assumed to be sorted in the correct order.
+
+    Args:
+        positions (pd.DataFrame): DataFrame representing a vessel route
+        lat (str) : column name of latitude values
+        lon (str) : column name of longitude values
+        datetime_col (str): column name of datetime values
+
+    Returns:
+        pd.DataFrame: the same DataFrame, plus added columns with the computed features
+    """
+
+    enriched_positions = positions.copy(deep=True)
+
+    enriched_positions["meters_from_previous_position"] = get_step_distances(
+        positions, lat=lat, lon=lon, how="backward", unit="m"
+    )
+
+    enriched_positions["minutes_since_previous_position"] = get_datetime_intervals(
+        positions[datetime_col], unit="min", how="backward"
+    )
+
+    enriched_positions["average_speed"] = (
+        enriched_positions["meters_from_previous_position"].values
+        / 1852
+        / (enriched_positions["minutes_since_previous_position"].values / 60)
+    )
+
+    return enriched_positions

@@ -135,6 +135,15 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })
+    case Layers.REGULATORY_PREVIEW.code:
+      return _ => new Style({
+        stroke: new Stroke({
+          color: getColorWithAlpha(COLORS.charcoal, 0.75)
+        }),
+        fill: new Fill({
+          color: getColorWithAlpha('#7B9FCC', 0.75)
+        })
+      })
     case Layers.REGULATORY.code:
       return (feature, hash, gearCategory) => {
         const lastNumber = hash.toString().slice(-1)

@@ -12,10 +12,13 @@ const alertSlice = createSlice({
     /** @type {Alert[]} alerts */
     alerts: [{
       id: 1,
+      type: 'THREE_MILES_TRAWLING_ALERT',
       seaFront: MenuSeaFronts.MEMN,
       vesselName: 'PHENOMENE',
       flagState: 'FR',
-      internalReferenceNumber: 'FRA000021705',
+      internalReferenceNumber: 'FAK000999999',
+      externalReferenceNumber: 'DONTSINK',
+      ircs: 'CALLME',
       dateTime: '2020-04-30T00:00:00.000Z',
       value: {
         speed: 2.56,
@@ -24,10 +27,13 @@ const alertSlice = createSlice({
     },
     {
       id: 2,
+      type: 'THREE_MILES_TRAWLING_ALERT',
       seaFront: MenuSeaFronts.NAMOSA,
       vesselName: 'PHENOMENE 2',
       flagState: 'FR',
-      internalReferenceNumber: 'FRA000021705',
+      internalReferenceNumber: 'FAK000939999',
+      externalReferenceNumber: 'DFGRG',
+      ircs: 'CALLME',
       dateTime: '2020-04-30T00:00:00.000Z',
       value: {
         speed: 2.56,

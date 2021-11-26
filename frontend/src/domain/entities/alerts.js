@@ -11,3 +11,9 @@ export const AlertTypes = {
     name: 'CHALUTAGE DANS LES 3 MILLES'
   }
 }
+
+export const getAlertNameFromType = type => {
+  return AlertTypes[type]
+    ? AlertTypes[type].name
+    : 'Alerte inconnue'
+}

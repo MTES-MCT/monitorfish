@@ -211,7 +211,7 @@ const SeeMore = styled.a`
 `
 
 const RiskFactorZone = styled.div`
-  margin: 5px 5px 10px 5px;
+  margin: 10px 10px 10px 10px;
   padding-top: 10px;
   text-align: left;
   display: flex;

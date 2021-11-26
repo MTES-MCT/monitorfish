@@ -20,6 +20,9 @@ import { VesselSidebarTab } from '../../domain/entities/vessel'
 import HideOtherVessels from './actions/hide_other_vessels/HideOtherVessels'
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
+import { getAlertNameFromType } from '../../domain/entities/alerts'
+import { openAlertList } from '../../domain/shared_slices/Alert'
+import { ReactComponent as AlertSVG } from '../icons/Icone_alertes.svg'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -28,6 +31,7 @@ const VesselSidebar = () => {
     rightMenuIsOpen
   } = useSelector(state => state.global)
   const {
+    selectedVessel,
     vesselSidebarTab,
     vesselSidebarIsOpen
   } = useSelector(state => state.vessel)
@@ -90,76 +94,154 @@ const VesselSidebar = () => {
           <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
         }
         <div>
-          <div>
-            <TabList>
-              <Tab
-                isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
-                onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.SUMMARY))}
-                data-cy={'vessel-menu-resume'}
-              >
-                <SummaryIcon/> <br/> Résumé
-              </Tab>
-              <Tab
-                isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
-                onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))}
-                data-cy={'vessel-menu-identity'}
-              >
-                <VesselIDIcon/> <br/> Identité
-              </Tab>
-              <Tab
-                isActive={vesselSidebarTab === VesselSidebarTab.VOYAGES}
-                onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))}
-                data-cy={'vessel-menu-fishing'}
-              >
-                <FisheriesIcon/> <br/> Pêche
-              </Tab>
-              <Tab
-                isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
-                onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.CONTROLS))}
-                data-cy={'vessel-menu-controls'}
-              >
-                <ControlsIcon/> <br/> Contrôles
-              </Tab>
-              <Tab
-                disabled
-              >
-                <ObservationsIcon/> <br/> Ciblage
-              </Tab>
-              <Tab
-                isLast
-                disabled
-              >
-                <VMSIcon/> <br/> VMS/ERS
-              </Tab>
-            </TabList>
-            <Panel healthcheckTextWarning={healthcheckTextWarning}>
-              {
-                vesselSidebarTab === VesselSidebarTab.SUMMARY
-                  ? <VesselSummary/>
-                  : null
-              }
-              {
-                vesselSidebarTab === VesselSidebarTab.IDENTITY
-                  ? <VesselIdentity/>
-                  : null
-              }
-              {
-                vesselSidebarTab === VesselSidebarTab.VOYAGES
-                  ? <VesselFishingActivities/>
-                  : null
-              }
-              {
-                vesselSidebarTab === VesselSidebarTab.CONTROLS
-                  ? <VesselControls/>
-                  : null
-              }
-            </Panel>
-          </div>
+          <TabList>
+            <Tab
+              isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
+              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.SUMMARY))}
+              data-cy={'vessel-menu-resume'}
+            >
+              <SummaryIcon/> <br/> Résumé
+            </Tab>
+            <Tab
+              isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
+              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))}
+              data-cy={'vessel-menu-identity'}
+            >
+              <VesselIDIcon/> <br/> Identité
+            </Tab>
+            <Tab
+              isActive={vesselSidebarTab === VesselSidebarTab.VOYAGES}
+              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))}
+              data-cy={'vessel-menu-fishing'}
+            >
+              <FisheriesIcon/> <br/> Pêche
+            </Tab>
+            <Tab
+              isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
+              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.CONTROLS))}
+              data-cy={'vessel-menu-controls'}
+            >
+              <ControlsIcon/> <br/> Contrôles
+            </Tab>
+            <Tab
+              disabled
+            >
+              <ObservationsIcon/> <br/> Ciblage
+            </Tab>
+            <Tab
+              isLast
+              disabled
+            >
+              <VMSIcon/> <br/> VMS/ERS
+            </Tab>
+          </TabList>
+          <Panel healthcheckTextWarning={healthcheckTextWarning}>
+            {
+              selectedVessel?.alerts.length
+                ? <VesselCardAlerts onClick={() => dispatch(openAlertList())}>
+                  <AlertIcon/>
+                  {
+                    selectedVessel?.alerts.length === 1
+                      ? getAlertNameFromType(selectedVessel?.alerts[0])
+                      : `${selectedVessel?.alerts.length} alertes`
+                  }
+                  <SeeAlert>
+                    {
+                      selectedVessel?.alerts.length === 1
+                        ? 'Voir l\'alerte dans la liste'
+                        : 'Voir les alertes dans la liste'
+                    }
+                  </SeeAlert>
+                </VesselCardAlerts>
+                : null
+            }
+            {
+              vesselSidebarTab === VesselSidebarTab.SUMMARY
+                ? <VesselSummary/>
+                : null
+            }
+            {
+              vesselSidebarTab === VesselSidebarTab.IDENTITY
+                ? <VesselIdentity/>
+                : null
+            }
+            {
+              vesselSidebarTab === VesselSidebarTab.VOYAGES
+                ? <VesselFishingActivities/>
+                : null
+            }
+            {
+              vesselSidebarTab === VesselSidebarTab.CONTROLS
+                ? <VesselControls/>
+                : null
+            }
+          </Panel>
         </div>
       </Wrapper>
     </>
   )
 }
+
+const SeeAlert = styled.span`
+  font-size: 11px;
+  float: right;
+  margin-right: 10px;
+  text-decoration: underline;
+  text-transform: lowercase;
+  line-height: 17px;
+`
+
+const AlertIcon = styled(AlertSVG)`
+  width: 18px;
+  height: 18px;
+  margin-bottom: -4px;
+  margin-right: 5px;
+  margin-left: 7px;
+  
+  animation: ring 4s .7s ease-in-out;
+  animation-iteration-count: 1;
+  transform-origin: 50% 4px;
+  
+  @keyframes ring {
+    0% { transform: rotate(0); }
+    1% { transform: rotate(30deg); }
+    3% { transform: rotate(-28deg); }
+    5% { transform: rotate(34deg); }
+    7% { transform: rotate(-32deg); }
+    9% { transform: rotate(30deg); }
+    11% { transform: rotate(-28deg); }
+    13% { transform: rotate(26deg); }
+    15% { transform: rotate(-24deg); }
+    17% { transform: rotate(22deg); }
+    19% { transform: rotate(-20deg); }
+    21% { transform: rotate(18deg); }
+    23% { transform: rotate(-16deg); }
+    25% { transform: rotate(14deg); }
+    27% { transform: rotate(-12deg); }
+    29% { transform: rotate(10deg); }
+    31% { transform: rotate(-8deg); }
+    33% { transform: rotate(6deg); }
+    35% { transform: rotate(-4deg); }
+    37% { transform: rotate(2deg); }
+    39% { transform: rotate(-1deg); }
+    41% { transform: rotate(1deg); }
+    43% { transform: rotate(0); }
+    100% { transform: rotate(0); }
+  }
+`
+
+const VesselCardAlerts = styled.div`
+  cursor: pointer;
+  background: #E1000F;
+  font-weight: 500;
+  font-size: 13px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: left;
+  padding: 5px 0;
+  margin-top: 1px;
+`
 
 const GrayOverlay = styled.div`
   position: absolute;

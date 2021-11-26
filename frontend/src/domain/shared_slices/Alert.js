@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { MenuSeaFronts } from '../../features/alerts/alerts_window/AlertsWindow'
+import { MenuSeaFronts } from '../../features/alert_list/alerts_window/AlertsWindow'
 
 /* eslint-disable */
 /** @namespace AlertReducer */
@@ -39,7 +39,8 @@ const alertSlice = createSlice({
         speed: 2.56,
         incursionNumber: 5
       }
-    }]
+    }],
+    alertListIsOpen: false
   },
   reducers: {
     /**
@@ -51,12 +52,32 @@ const alertSlice = createSlice({
      */
     setAlerts (state, action) {
       state.alerts = action.payload
+    },
+    /**
+     * Open alert list
+     * @function openAlertList
+     * @memberOf AlertReducer
+     * @param {Object=} state
+     */
+    openAlertList (state) {
+      state.alertListIsOpen = true
+    },
+    /**
+     * Close alert list
+     * @function closeAlertList
+     * @memberOf AlertReducer
+     * @param {Object=} state
+     */
+    closeAlertList (state) {
+      state.alertListIsOpen = false
     }
   }
 })
 
 export const {
-  setAlerts
+  setAlerts,
+  openAlertList,
+  closeAlertList
 } = alertSlice.actions
 
 export default alertSlice.reducer

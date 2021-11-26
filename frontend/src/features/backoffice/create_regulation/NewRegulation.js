@@ -151,16 +151,15 @@ const CreateRegulation = ({ title, isEdition }) => {
 
         if (allRequiredValuesHaveBeenFilled) {
           const featureObject = mapToRegulatoryFeatureObject({
-            selectedRegulationTopic,
-            selectedRegulationLawType,
-            nameZone: nameZone,
-            selectedRegionList,
-            regulatoryTexts: [...regulatoryTextList],
-            upcomingRegulation,
-            fishingPeriod,
+            layerName: selectedRegulationTopic,
+            lawType: selectedRegulationLawType,
+            zone: nameZone,
+            region: selectedRegionList.selectedRegionList?.join(', '),
+            regulatoryReferences: JSON.stringify([...regulatoryTextList]),
+            upcomingRegulatoryReferences: JSON.stringify(upcomingRegulation),
+            fishingPeriod: JSON.stringify(fishingPeriod || ''),
             regulatorySpecies
           })
-
           createOrUpdateRegulation(featureObject)
         } else {
           batch(() => {
@@ -293,6 +292,7 @@ const CreateRegulation = ({ title, isEdition }) => {
                   setSelectedRegulationTopic={setSelectedRegulationTopic}
                   zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
                   regulationTopicIsMissing={regulationTopicIsMissing}
+                  selectedRegulationLawType={selectedRegulationLawType}
                 />
                 <RegulationLayerZoneLine
                   nameZone={nameZone}

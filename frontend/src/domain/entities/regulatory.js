@@ -110,24 +110,24 @@ const mapToFishingPeriodObject = fishingPeriod => {
 
 export const mapToRegulatoryFeatureObject = properties => {
   const {
-    selectedRegulationTopic,
-    selectedRegulationLawType,
-    nameZone,
-    selectedRegionList,
-    regulatoryTexts,
-    upcomingRegulation,
+    layerName,
+    lawType,
+    zone,
+    region,
+    regulatoryReferences,
+    upcomingRegulatoryReferences,
     fishingPeriod,
     regulatorySpecies
   } = properties
 
   return {
-    layer_name: selectedRegulationTopic,
-    law_type: selectedRegulationLawType,
-    zones: nameZone,
-    region: selectedRegionList?.join(', '),
-    references_reglementaires: JSON.stringify(regulatoryTexts),
-    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || ''),
-    fishing_period: JSON.stringify(fishingPeriod || ''),
+    layer_name: layerName,
+    law_type: lawType,
+    zones: zone,
+    region,
+    references_reglementaires: regulatoryReferences,
+    references_reglementaires_a_venir: upcomingRegulatoryReferences,
+    fishing_period: fishingPeriod,
     species: JSON.stringify(regulatorySpecies || '')
   }
 }

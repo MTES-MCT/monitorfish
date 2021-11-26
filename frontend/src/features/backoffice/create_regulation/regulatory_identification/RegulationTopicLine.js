@@ -56,6 +56,7 @@ const RegulationTopicLine = props => {
             onClickText={_ => {
               setIsEditLayerName(true)
               setIsAddTopicClicked(true)
+              setIsInfoTextShown(true)
             }}
           />}
         {
@@ -86,8 +87,8 @@ const RegulationTopicLine = props => {
         pointer
       >
           {isEditLayerName
-            ? <InfoText bold>{INFO_TEXT.layerNamePart1}</InfoText>
-            : <InfoText bold red>{INFO_TEXT.editLayerNamePart1}</InfoText>}
+            ? <InfoText bold red>{INFO_TEXT.editLayerNamePart1}</InfoText>
+            : <InfoText bold>{INFO_TEXT.layerNamePart1}</InfoText>}
           <InfoText >
             {INFO_TEXT.layerNamePart2}
           </InfoText>

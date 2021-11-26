@@ -55,8 +55,9 @@ export const FRENCH_REGION_LIST = [
 ]
 
 export const INFO_TEXT = {
-  zoneTheme: `Avant de créer une nouvelle thématique, vérifiez bien qu'il n'en existe pas déjà une qui pourrait correspondre.
-  
+  layerNamePart1: 'Avant de créer une nouvelle thématique, vérifiez bien qu\'il n\'en existe pas déjà une qui pourrait correspondre.',
+  editLayerNamePart1: 'Attention, le nom de la thématique sera modifié pour toutes les zones qu\'elle contient.',
+  layerNamePart2: `
   Le nom de la thématique doit permettre de connaître en un coup d'œil le lieu et le sujet de la réglementation.
   Il peut être intéressant de mentionner une zone totalement interdite à la pêche avec le mot "interdiction" (dans le champ "autres indications").
   

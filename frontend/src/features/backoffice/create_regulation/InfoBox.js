@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS, INFO_TEXT } from '../../../constants/constants'
+import { COLORS } from '../../../constants/constants'
 
 const InfoBox = props => {
   const {
@@ -8,7 +8,8 @@ const InfoBox = props => {
     setIsInfoTextShown,
     isFormOpened,
     message,
-    className
+    className,
+    children
   } = props
   return (
     <InfoTextParent
@@ -27,9 +28,9 @@ const InfoBox = props => {
           <InfoPoint
             isInfoTextShown={isInfoTextShown}
           >!</InfoPoint>
-          <InfoText>
-            {INFO_TEXT[message]}
-          </InfoText>
+          <ChildrenWrapper>
+            {children}
+          </ChildrenWrapper>
         </InfoTextWrapper>
         : <InfoPoint
           onMouseEnter={() => setIsInfoTextShown && setIsInfoTextShown(true)}
@@ -48,6 +49,11 @@ const InfoTextParent = styled.div`
   ${props => props.isFormOpened && props.isInfoTextShown ? 'margin-top: 8px' : ''};
 `
 
+const ChildrenWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 const InfoTextWrapper = styled.div`
   display: flex;
   ${props => props.isFormOpened ? '' : 'position: absolute;'};
@@ -60,15 +66,6 @@ const InfoTextWrapper = styled.div`
   ${props => props.isInfoTextShown && !props.isFormOpened ? 'margin-top: -10px;' : ''}
   box-sizing: border-box;
   z-index: 30;
-`
-
-const InfoText = styled.span`
-  align-self: center;
-  display: 'flex';
-  font-size: 13px;
-  color: ${COLORS.gunMetal};
-  padding-left: 8px;
-  white-space: pre-line;
 `
 
 const InfoPoint = styled.a`

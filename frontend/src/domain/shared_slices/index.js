@@ -39,7 +39,8 @@ const homeReducers = combineReducers({
 const backofficeReducers = combineReducers({
   ...commonReducerList,
   layer: layer.backoffice.reducer,
-  regulation
+  regulation,
+  fleetSegment
 })
 
 export { homeReducers, backofficeReducers }

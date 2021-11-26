@@ -8,4 +8,5 @@ data class FleetSegment(
         val faoAreas: List<String>,
         val targetSpecies: List<String>,
         val bycatchSpecies: List<String>,
+        val impactRiskFactor: Double
 )

@@ -26,7 +26,10 @@ import InterestPoint from './features/interest_points/InterestPoint'
 import VesselLabels from './features/vessel_labels/VesselLabels'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
 import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
+import Menu from './features/backoffice/menu/Menu'
+import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
+import Redirect from 'react-router-dom/es/Redirect'
 
 function App () {
   switch (browserName) {
@@ -95,22 +98,32 @@ function HomePage () {
 
 function BackofficePage () {
   const match = useRouteMatch()
+
   return <Provider store={backofficeStore}>
     <NamespaceContext.Provider value={'backoffice'}>
       <BackofficeMode inBackofficeMode={true}/>
-      <Switch>
-        <Route exact path={`${match.path}`}>
-          <BackofficeWrapper>
+      <BackofficeWrapper>
+        <Menu/>
+        <Switch>
+          <Route
+            exact
+            path="/backoffice"
+            render={() => <Redirect to="/backoffice/regulation"/>}
+          />
+          <Route exact path={`${match.path}/regulation`}>
             <Backoffice/>
-          </BackofficeWrapper>
-        </Route>
-        <Route path={`${match.path}/newRegulation`}>
-          <NewRegulation title='Saisir une nouvelle réglementation' />
-        </Route>
-        <Route patsh={`${match.path}/editRegulation`}>
-          <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
-        </Route>
-      </Switch>
+          </Route>
+          <Route exact path={`${match.path}/regulation/new`}>
+            <NewRegulation title='Saisir une nouvelle réglementation' />
+          </Route>
+          <Route exact path={`${match.path}/regulation/edit`}>
+            <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
+          </Route>
+          <Route exact path={`${match.path}/control_objectives`}>
+            <ControlObjectives/>
+          </Route>
+        </Switch>
+      </BackofficeWrapper>
       <ErrorToastNotification/>
     </NamespaceContext.Provider>
   </Provider>
@@ -169,6 +182,7 @@ const BackofficeWrapper = styled.div`
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
+  display: flex;
 `
 
 export default App

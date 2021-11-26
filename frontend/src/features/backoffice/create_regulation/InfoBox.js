@@ -54,8 +54,8 @@ const InfoTextWrapper = styled.div`
   border: 1px solid ${COLORS.lightGray};
   background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
   border-radius: 2px;
-  min-width: 560px;
-  max-width: 600px;
+  min-width: 460px;
+  max-width: 500px;
   padding: 8px 20px 20px 8px;
   ${props => props.isInfoTextShown && !props.isFormOpened ? 'margin-top: -10px;' : ''}
   box-sizing: border-box;

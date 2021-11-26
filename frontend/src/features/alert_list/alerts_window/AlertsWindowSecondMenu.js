@@ -2,37 +2,37 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import AlertsWindowSecondMenuLink from './AlertsWindowSecondMenuLink'
-import { MenuSeaFronts } from './AlertsWindow'
+import { MenuSeaFronts } from '../../../domain/entities/alerts'
 
-const AlertsWindowSecondMenu = ({ selectedSeaFront, setSelectedSeaFront }) => {
+const AlertsWindowSecondMenu = ({ selectedMenuSeaFront, setSelectedMenuSeaFront }) => {
   return <Menu>
     <Title>
       Vue d&apos;ensemble
     </Title>
     <AlertsWindowSecondMenuLink
       menu={MenuSeaFronts.MEMN}
-      selectedSeaFront={selectedSeaFront}
-      setSelectedSeaFront={setSelectedSeaFront}
+      selectedSeaFront={selectedMenuSeaFront}
+      setSelectedSeaFront={setSelectedMenuSeaFront}
     />
     <AlertsWindowSecondMenuLink
       menu={MenuSeaFronts.NAMOSA}
-      selectedSeaFront={selectedSeaFront}
-      setSelectedSeaFront={setSelectedSeaFront}
+      selectedSeaFront={selectedMenuSeaFront}
+      setSelectedSeaFront={setSelectedMenuSeaFront}
     />
     <AlertsWindowSecondMenuLink
       menu={MenuSeaFronts.MED}
-      selectedSeaFront={selectedSeaFront}
-      setSelectedSeaFront={setSelectedSeaFront}
+      selectedSeaFront={selectedMenuSeaFront}
+      setSelectedSeaFront={setSelectedMenuSeaFront}
     />
     <AlertsWindowSecondMenuLink
       menu={MenuSeaFronts.OUTREMEROA}
-      selectedSeaFront={selectedSeaFront}
-      setSelectedSeaFront={setSelectedSeaFront}
+      selectedSeaFront={selectedMenuSeaFront}
+      setSelectedSeaFront={setSelectedMenuSeaFront}
     />
     <AlertsWindowSecondMenuLink
       menu={MenuSeaFronts.OUTREMEROI}
-      selectedSeaFront={selectedSeaFront}
-      setSelectedSeaFront={setSelectedSeaFront}
+      selectedSeaFront={selectedMenuSeaFront}
+      setSelectedSeaFront={setSelectedMenuSeaFront}
     />
   </Menu>
 }

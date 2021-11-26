@@ -7,11 +7,16 @@ import Table from 'rsuite/lib/Table'
 import { ExpandCell, renderRowExpanded } from './tableCells'
 import { CellWithTitle, FlagCell, TimeAgoCell } from '../../vessel_list/tableCells'
 import { ReactComponent as FlagSVG } from '../../icons/flag.svg'
+import { useSelector } from 'react-redux'
 
 const { Column, HeaderCell, Cell } = Table
 const rowKey = 'id'
 
 const AlertsWindowTable = ({ alerts, alertType, baseUrl }) => {
+  const {
+    focusOnAlert
+  } = useSelector(state => state.alert)
+
   const [expandedRowKeys, setExpandedRowKeys] = useState([])
   const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn, setSortColumn] = useState('segment')
@@ -21,6 +26,12 @@ const AlertsWindowTable = ({ alerts, alertType, baseUrl }) => {
     setSortColumn(sortColumn)
     setSortType(sortType)
   }
+
+  useEffect(() => {
+    if (focusOnAlert) {
+      setExpandedRowKeys(expandedRowKeys.concat(focusOnAlert.id))
+    }
+  }, [focusOnAlert])
 
   useEffect(() => {
     if (alerts) {
@@ -95,7 +106,7 @@ const AlertsWindowTable = ({ alerts, alertType, baseUrl }) => {
 
       <Column sortable width={130}>
         <HeaderCell>Alerte il y a...</HeaderCell>
-        <TimeAgoCell dataKey="dateTime"/>
+        <TimeAgoCell dataKey="creationDateTimestamp"/>
       </Column>
     </Table>
   </Content>

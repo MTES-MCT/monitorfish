@@ -14,6 +14,7 @@ import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegu
 import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
 import { unByKey } from 'ol/Observable'
 import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
+import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 
 export const TEN_MINUTES = 600000
 
@@ -37,6 +38,7 @@ const APIWorker = () => {
       dispatch(getAllGearCodes())
       dispatch(getAllFleetSegments())
       dispatch(showAllVessels())
+      dispatch(getOperationalAlerts())
       dispatch(getAllRegulatoryLayersByRegTerritory())
     })
 
@@ -45,6 +47,7 @@ const APIWorker = () => {
         dispatch(setIsUpdatingVessels())
         dispatch(getHealthcheck())
         dispatch(showAllVessels())
+        dispatch(getOperationalAlerts())
         dispatch(updateVesselTracks())
       })
 

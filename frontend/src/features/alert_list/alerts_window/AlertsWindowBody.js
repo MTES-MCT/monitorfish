@@ -3,18 +3,21 @@ import styled from 'styled-components'
 import AlertsWindowTable from './AlertsWindowTable'
 import { getAlertForTable } from './dataFormatting'
 import { useSelector } from 'react-redux'
+import { AlertsMenuSeaFrontsToSeaFrontList, AlertTypes } from '../../../domain/entities/alerts'
 
-const AlertsWindowBody = ({ selectedSeaFront, baseUrl }) => {
+const AlertsWindowBody = ({ selectedMenuSeaFront, baseUrl }) => {
   const {
     alerts
   } = useSelector(state => state.alert)
 
   return <Content>
     <AlertsWindowTable
-      alertType={'CHALUTAGE DANS LES 3 MILLES'}
+      alertType={AlertTypes.THREE_MILES_TRAWLING_ALERT.name}
       alerts={alerts
         .map(alert => getAlertForTable(alert))
-        .filter(alert => alert.seaFront === selectedSeaFront)}
+        .filter(alert =>
+          (AlertsMenuSeaFrontsToSeaFrontList[selectedMenuSeaFront?.code]?.seaFronts || []).includes(alert?.seaFront))
+      }
       baseUrl={baseUrl}
     />
   </Content>

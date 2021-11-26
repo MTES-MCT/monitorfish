@@ -17,3 +17,49 @@ export const getAlertNameFromType = type => {
     ? AlertTypes[type].name
     : 'Alerte inconnue'
 }
+
+export const MenuSeaFronts = {
+  MEMN: {
+    name: 'MEMN',
+    code: 'MEMN'
+  },
+  NAMOSA: {
+    name: 'NAMO / SA',
+    code: 'NAMOSA'
+  },
+  MED: {
+    name: 'MED',
+    code: 'MED'
+  },
+  OUTREMEROA: {
+    name: 'OUTRE-MER OA',
+    code: 'OUTREMEROA'
+  },
+  OUTREMEROI: {
+    name: 'OUTRE-MER OI',
+    code: 'OUTREMEROI'
+  }
+}
+
+export const AlertsMenuSeaFrontsToSeaFrontList = {
+  MEMN: {
+    menuSeaFront: 'MEMN',
+    seaFronts: ['MEMN']
+  },
+  NAMOSA: {
+    menuSeaFront: 'NAMOSA',
+    seaFronts: ['NAMO', 'SA']
+  },
+  MED: {
+    menuSeaFront: 'MED',
+    seaFronts: ['MED']
+  },
+  OUTREMEROA: {
+    menuSeaFront: 'OUTREMEROA',
+    seaFronts: ['Guadeloupe', 'Guyane', 'Martinique']
+  },
+  OUTREMEROI: {
+    menuSeaFront: 'OUTREMEROI',
+    seaFronts: ['Sud Océan Indien']
+  }
+}

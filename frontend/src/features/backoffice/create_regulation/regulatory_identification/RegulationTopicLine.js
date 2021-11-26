@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+// import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
@@ -15,10 +16,18 @@ const RegulationTopicLine = props => {
     setSelectedRegulationTopic,
     zoneThemeList,
     regulationTopicIsMissing
+    // selectedRegulationLawType
   } = props
 
   const [isAddTopicClicked, setIsAddTopicClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
+
+  // const dispatch = useDispatch()
+
+  /* const onUpdateLayerName = () => {
+    const newLayerName = 'update layer name'
+    dispatch(updateLayerName(LAWTYPES_TO_TERRITORY[selectedRegulationLawType], selectedRegulationLawType, selectedRegulationTopic, newLayerName))
+  } */
 
   return <ContentLine
     isFormOpened={isAddTopicClicked}

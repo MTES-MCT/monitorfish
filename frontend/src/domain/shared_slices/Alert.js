@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { MenuSeaFronts } from '../../features/alert_list/alerts_window/AlertsWindow'
 
 /* eslint-disable */
 /** @namespace AlertReducer */
@@ -10,37 +9,10 @@ const alertSlice = createSlice({
   name: 'alert',
   initialState: {
     /** @type {Alert[]} alerts */
-    alerts: [{
-      id: 1,
-      type: 'THREE_MILES_TRAWLING_ALERT',
-      seaFront: MenuSeaFronts.MEMN,
-      vesselName: 'PHENOMENE',
-      flagState: 'FR',
-      internalReferenceNumber: 'FAK000999999',
-      externalReferenceNumber: 'DONTSINK',
-      ircs: 'CALLME',
-      dateTime: '2020-04-30T00:00:00.000Z',
-      value: {
-        speed: 2.56,
-        incursionNumber: 5
-      }
-    },
-    {
-      id: 2,
-      type: 'THREE_MILES_TRAWLING_ALERT',
-      seaFront: MenuSeaFronts.NAMOSA,
-      vesselName: 'PHENOMENE 2',
-      flagState: 'FR',
-      internalReferenceNumber: 'FAK000939999',
-      externalReferenceNumber: 'DFGRG',
-      ircs: 'CALLME',
-      dateTime: '2020-04-30T00:00:00.000Z',
-      value: {
-        speed: 2.56,
-        incursionNumber: 5
-      }
-    }],
-    alertListIsOpen: false
+    alerts: [],
+    alertListIsOpen: false,
+    /** @type {Alert | null} focusOnAlert */
+    focusOnAlert: null
   },
   reducers: {
     /**
@@ -70,6 +42,41 @@ const alertSlice = createSlice({
      */
     closeAlertList (state) {
       state.alertListIsOpen = false
+    },
+    /**
+     * Focus on alert in the alert list
+     * @function setFocusOnAlert
+     * @memberOf AlertReducer
+     * @param {Object=} state
+     * @param {{payload: {
+     *   name: string,
+     *   internalReferenceNumber: string,
+     *   externalReferenceNumber: string,
+     *   ircs: string,
+     * }}} action - An alert to be focused on
+     */
+    focusOnAlert (state, action) {
+      const {
+        name,
+        internalReferenceNumber,
+        externalReferenceNumber,
+        ircs
+      } = action.payload
+
+      state.focusOnAlert = state.alerts.find(alert =>
+        alert.name === name &&
+        alert.internalReferenceNumber === internalReferenceNumber &&
+        alert.externalReferenceNumber === externalReferenceNumber &&
+        alert.ircs === ircs)
+    },
+    /**
+     * Reset focus on alert
+     * @function setFocusOnAlert
+     * @memberOf AlertReducer
+     * @param {Object=} state
+     */
+    resetFocusOnAlert (state) {
+      state.focusOnAlert = null
     }
   }
 })
@@ -77,7 +84,9 @@ const alertSlice = createSlice({
 export const {
   setAlerts,
   openAlertList,
-  closeAlertList
+  closeAlertList,
+  focusOnAlert,
+  resetFocusOnAlert
 } = alertSlice.actions
 
 export default alertSlice.reducer

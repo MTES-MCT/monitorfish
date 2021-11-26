@@ -29,6 +29,7 @@ const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tr
 const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
+const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -571,6 +572,29 @@ function getAllFleetSegmentFromAPI () {
 }
 
 /**
+ * Get operational alerts
+ * @memberOf API
+ * @returns {Promise<Alert[]>} The alerts
+ * @throws {Error}
+ */
+function getOperationalAlertsFromAPI () {
+  return fetch('/bff/v1/alerts')
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(ALERTS_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(ALERTS_ERROR_MESSAGE)
+    })
+}
+
+/**
  * Get application healthcheck
  * @memberOf API
  * @returns {Promise<Healthcheck>} The healthcheck dates of positions and ers messages
@@ -702,5 +726,6 @@ export {
   sendRegulationTransaction,
   getControlObjectivesFromAPI,
   updateControlObjectiveFromAPI,
-  getAllSpeciesFromAPI
+  getAllSpeciesFromAPI,
+  getOperationalAlertsFromAPI
 }

@@ -22,6 +22,8 @@ data class AlertEntity(
         val id: UUID,
         @Column(name = "name", nullable = false)
         val name: String,
+        @Column(name = "vessel_name")
+        val vesselName: String? = null,
         @Column(name = "internal_reference_number", nullable = false)
         val internalReferenceNumber: String? = null,
         @Column(name = "external_reference_number", nullable = false)
@@ -40,6 +42,7 @@ data class AlertEntity(
             return Alert(
                     id = id,
                     name = name,
+                    vesselName = vesselName,
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = ircs,
@@ -53,6 +56,7 @@ data class AlertEntity(
                 fun fromAlert(alert: Alert, mapper: ObjectMapper) = AlertEntity(
                         id = alert.id,
                         name = alert.name,
+                        vesselName = alert.vesselName,
                         internalReferenceNumber = alert.internalReferenceNumber,
                         externalReferenceNumber = alert.externalReferenceNumber,
                         ircs = alert.ircs,

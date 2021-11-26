@@ -21,8 +21,6 @@ const AlertListMapButton = () => {
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
-  console.log(alertListIsOpen)
-
   return <>
     <Wrapper
       data-cy={'alerts-button'}

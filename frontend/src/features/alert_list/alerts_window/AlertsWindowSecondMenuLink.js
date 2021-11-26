@@ -4,15 +4,15 @@ import { COLORS } from '../../../constants/constants'
 
 const AlertsWindowSecondMenuLink = ({ menu, selectedSeaFront, setSelectedSeaFront }) => {
   return <Link
-    selected={selectedSeaFront === menu}
+    selected={selectedSeaFront.code === menu.code}
     onClick={() => setSelectedSeaFront(menu)}
   >
     {
-      selectedSeaFront === menu
-        ? <Dot selected={selectedSeaFront === menu}/>
+      selectedSeaFront.code === menu.code
+        ? <Dot selected={selectedSeaFront.code === menu.code}/>
         : null
     }
-    { menu }
+    { menu.name }
   </Link>
 }
 

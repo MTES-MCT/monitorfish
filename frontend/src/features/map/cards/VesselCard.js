@@ -8,8 +8,8 @@ import * as timeago from 'timeago.js'
 import { OverlayPosition } from '../overlays/position'
 import { useSelector } from 'react-redux'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
-import { AlertTypes } from '../../../domain/entities/alerts'
-import { marginsWithoutAlert, marginsWithAlert } from '../overlays/VesselCardOverlay'
+import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import { marginsWithAlert, marginsWithoutAlert } from '../overlays/VesselCardOverlay'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -55,13 +55,12 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
             <AlertIcon/>
             {
               feature?.vessel?.alerts?.length === 1
-                ? AlertTypes[feature?.vessel?.alerts[0]].name
+                ? getAlertNameFromType(feature?.vessel?.alerts[0])
                 : `${feature?.vessel?.alerts?.length} alertes`
             }
           </VesselCardAlerts>
           : null
       }
-
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>

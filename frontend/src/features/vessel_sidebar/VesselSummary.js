@@ -11,6 +11,8 @@ import { ReactComponent as InfoSVG } from '../icons/Information.svg'
 import { useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import RiskFactorResume from './risk_factor/RiskFactorResume'
+import { getAlertNameFromType } from '../../domain/entities/alerts'
+import { ReactComponent as AlertSVG } from '../icons/Icone_alertes.svg'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -63,6 +65,25 @@ const VesselSummary = props => {
   return !loadingVessel
     ? (
       <Body>
+        {
+          selectedVessel?.alerts.length
+            ? <VesselCardAlerts>
+              <AlertIcon/>
+              {
+                selectedVessel?.alerts.length === 1
+                  ? getAlertNameFromType(selectedVessel?.alerts[0])
+                  : `${selectedVessel?.alerts.length} alertes`
+              }
+              <SeeAlert>
+                {
+                  selectedVessel?.alerts.length === 1
+                    ? 'Voir l\'alerte dans la liste'
+                    : 'Voir les alertes dans la liste'
+                }
+              </SeeAlert>
+            </VesselCardAlerts>
+            : null
+        }
         <PhotoZone>
           {
             photoFallback
@@ -127,6 +148,35 @@ const VesselSummary = props => {
     : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
 }
 
+const SeeAlert = styled.span`
+  font-size: 11px;
+  float: right;
+  margin-right: 10px;
+  text-decoration: underline;
+  text-transform: lowercase;
+  line-height: 17px;
+  cursor: pointer;
+`
+
+const AlertIcon = styled(AlertSVG)`
+  width: 18px;
+  height: 18px;
+  margin-bottom: -4px;
+  margin-right: 5px;
+  margin-left: 7px;
+`
+
+const VesselCardAlerts = styled.div`
+  background: #E1000F;
+  font-weight: 500;
+  font-size: 13px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: left;
+  padding: 5px 0;
+`
+
 const Gray = styled.span`
   color: ${COLORS.gunMetal};
   font-weight: 300;
@@ -154,14 +204,14 @@ const FieldValue = styled.div`
 `
 
 const PhotoZone = styled.div`
-  margin: 5px 5px 10px 5px;
+  margin: 10px 10px 10px 10px;
   background: ${COLORS.background};
 `
 
 const Body = styled.div`
-  padding: 5px 5px 1px 5px;
+  padding: 1px 0px 1px 0px;
   overflow-x: hidden;
-  max-height: 730px;
+  max-height: 743px;
 `
 
 const Photo = styled.img`
@@ -178,7 +228,7 @@ const NoValue = styled.span`
 `
 
 const ZoneWithoutBackground = styled.div`
-  margin: 5px 5px 10px 5px;
+  margin: 10px 10px 10px 10px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;

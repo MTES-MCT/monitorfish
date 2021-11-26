@@ -6,6 +6,25 @@ from src.pipeline.generic_tasks import extract, load
 
 
 @task(checkpoint=False)
+def extract_n_miles_to_shore_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/n_miles_to_shore_areas.sql")
+
+
+@task(checkpoint=False)
+def load_n_miles_to_shore_areas(
+    n_miles_to_shore_areas: pd.DataFrame,
+):
+    load(
+        n_miles_to_shore_areas,
+        table_name="n_miles_to_shore_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
 def extract_3_miles_areas() -> pd.DataFrame:
     return extract("monitorfish_local", "cross/3_miles_areas.sql")
 
@@ -451,6 +470,9 @@ def load_situs_areas(situs_areas: pd.DataFrame):
 
 
 with Flow("Administrative areas") as flow:
+
+    n_miles_to_shore_areas = extract_n_miles_to_shore_areas()
+    load_n_miles_to_shore_areas(n_miles_to_shore_areas)
 
     three_miles_areas = extract_3_miles_areas()
     load_3_miles_areas(three_miles_areas)

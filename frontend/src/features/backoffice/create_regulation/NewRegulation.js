@@ -121,7 +121,7 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const onGoBack = () => {
     dispatch(resetState())
-    history.push('/backoffice')
+    history.push('/backoffice/regulation')
   }
 
   useEffect(() => {
@@ -134,8 +134,10 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
       const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
+
       if (allTextsHaveBeenChecked) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !atLeastOneValueIsMissing
+
         if (allRequiredValuesHaveBeenFilled) {
           const featureObject = mapToRegulatoryFeatureObject({
             selectedRegulationTopic,
@@ -145,6 +147,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             regulatoryTexts: [...regulatoryTextList],
             upcomingRegulation
           })
+
           createOrUpdateRegulation(featureObject)
         } else {
           batch(() => {
@@ -187,17 +190,21 @@ const CreateRegulation = ({ title, isEdition }) => {
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setLawTypeIsMissing(valueIsMissing)
     valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
+
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegulationTopicIsMissing(valueIsMissing)
     valueIsMissing = !(nameZone && nameZone !== '')
+
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setNameZoneIsMissing(valueIsMissing)
     valueIsMissing = selectedRegulationLawType && selectedRegulationLawType !== '' &&
       selectedRegulationLawType.includes(REG_LOCALE) &&
       !(selectedRegionList && selectedRegionList.length !== 0)
+
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
     valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
+
     setGeometryIsMissing(valueIsMissing)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
@@ -205,9 +212,10 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   useEffect(() => {
     if (showRegulatoryPreview &&
-      ((isEdition && regulatoryZoneMetadata.geometry) ||
-        (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
-      dispatch(setRegulatoryGeometryToPreview(isEdition ? regulatoryZoneMetadata.geometry : geometryObjectList[selectedGeometryId]))
+      ((isEdition && regulatoryZoneMetadata.geometry) || (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
+      dispatch(setRegulatoryGeometryToPreview(isEdition
+        ? regulatoryZoneMetadata.geometry
+        : geometryObjectList[selectedGeometryId]))
     }
   }, [selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 
@@ -224,6 +232,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     const feature = new Feature(featureObject)
     feature.setId(getRegulatoryFeatureId(selectedGeometryId))
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
+
     if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
       emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
@@ -237,10 +246,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
     setSelectedRegulationLawType(value)
   }
-
-  /* const saveAsDraft = () => {
-    console.log('saveAsDraft')
-  } */
 
   return (
     <>
@@ -346,6 +351,7 @@ const CreateRegulation = ({ title, isEdition }) => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
 `
 
 const Body = styled.div`

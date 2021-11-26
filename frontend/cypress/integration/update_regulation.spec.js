@@ -19,7 +19,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
     cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-zone-edit"]').eq(0).click()
-    cy.url().should('include', '/editRegulation')
+    cy.url().should('include', '/regulation/edit')
     cy.wait(1000)
   })
 
@@ -39,6 +39,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="validate-button"]').click()
     cy.get('.rs-checkbox-wrapper').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
   })
+
   it('Save regulation click button open backoffice page', () => {
     // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')

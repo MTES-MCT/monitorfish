@@ -182,7 +182,8 @@ const RegulatoryZoneListByLawTypeList = styled.div`
 const BackofficeContainer = styled.div`
   display: flex;
   position: relative;
-  background-color: ${COLORS.white}:
+  background-color: ${COLORS.white};
+  width: 100%;
 `
 
 const RegulatoryZonePanel = styled.div`
@@ -198,7 +199,7 @@ const MetadataWrapper = styled.div`
   display: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none'};
   position: absolute;
   top: 0;
-  left: 50%;
+  left: calc(50% + 72px);
   z-index: 1;
   color: ${COLORS.gunMetal};
   margin: 6px 0 0 6px;

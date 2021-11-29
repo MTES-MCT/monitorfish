@@ -1,5 +1,4 @@
 CREATE TABLE public.control_objectives (
-    id serial,
     facade TEXT,
     segment VARCHAR(50),
     year INTEGER,

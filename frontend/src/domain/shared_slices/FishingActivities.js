@@ -1,6 +1,6 @@
 import { FishingActivitiesTab } from '../entities/vessel'
 import { createSlice } from '@reduxjs/toolkit'
-import { getEffectiveDateTimeFromMessage } from '../entities/fishingActivities'
+import { getEffectiveDateTimeFromMessage, getErsMessageType } from '../entities/fishingActivities'
 
 /* eslint-disable */
 /** @namespace FishingActivitiesReducer */
@@ -100,7 +100,7 @@ const fishingActivitiesSlice = createSlice({
       state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.concat({
         id: fishingActivityToShow.operationNumber,
         date: getEffectiveDateTimeFromMessage(fishingActivityToShow),
-        name: fishingActivityToShow.messageType,
+        name: getErsMessageType(fishingActivityToShow),
         isDeleted: fishingActivityToShow.deleted,
         isNotAcknowledged: !fishingActivityToShow.acknowledge?.isSuccess
       })
@@ -130,7 +130,7 @@ const fishingActivitiesSlice = createSlice({
         .map(fishingActivity => ({
           id: fishingActivity.operationNumber,
           date: getEffectiveDateTimeFromMessage(fishingActivity),
-          name: fishingActivity.messageType,
+          name: getErsMessageType(fishingActivity),
           isDeleted: fishingActivity.deleted,
           isNotAcknowledged: !fishingActivity.acknowledge?.isSuccess
         }))

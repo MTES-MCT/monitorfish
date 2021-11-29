@@ -10,6 +10,7 @@ import { ReactComponent as HideActivitySVG } from '../../../icons/Position_messa
 import { getDateTime } from '../../../../utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeFishingActivityFromMap, showFishingActivityOnMap } from '../../../../domain/shared_slices/FishingActivities'
+import { getErsMessageType } from '../../../../domain/entities/fishingActivities'
 
 const ERSMessage = ({ message, isFirst }) => {
   const dispatch = useDispatch()
@@ -51,19 +52,11 @@ const ERSMessage = ({ message, isFirst }) => {
     }
   }
 
-  function getErsMessageType () {
-    if (message.messageType === ERSMessageTypeEnum.DIS.code &&
-      message.message.catches.some(aCatch => aCatch.presentation === ERSMessageTypeEnum.DIM.code)) {
-      return ERSMessageTypeEnum.DIM.code
-    }
-    return message.messageType
-  }
-
   return <>
     {message
       ? <Wrapper isFirst={isFirst} id={message.operationNumber}>
         <Header>
-          <ERSMessageType>{getErsMessageType()}</ERSMessageType>
+          <ERSMessageType>{getErsMessageType(message)}</ERSMessageType>
           <ERSMessageHeaderText
             isShortcut={message.isCorrected || message.deleted || message.referencedErsId}
             title={typeof ersMessageHeaderTitle === 'string' ? ersMessageHeaderTitle : ''}

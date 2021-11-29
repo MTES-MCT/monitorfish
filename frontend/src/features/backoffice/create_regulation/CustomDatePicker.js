@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { DatePicker } from 'rsuite'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
@@ -12,11 +12,9 @@ export const CUSTOM_DATEPICKER_TYPES = {
 
 const CustomDatePicker = props => {
   const {
-    onSelect,
     type,
     value,
-    onChange,
-    onOk,
+    saveValue,
     isRequired,
     format,
     placement,
@@ -24,6 +22,8 @@ const CustomDatePicker = props => {
     oneTap,
     disabled
   } = props
+
+  const [val, setVal] = useState()
 
   return <DatePickerStyled
     key={value}
@@ -33,9 +33,19 @@ const CustomDatePicker = props => {
     oneTap={oneTap}
     ranges={[]}
     value={value}
-    onCalendarDateChange={onChange}
-    onOk={onOk}
-    onSelect={onSelect}
+    onSelect={value => {
+      if (oneTap) {
+        saveValue(value)
+      } else {
+        setVal(value)
+      }
+    }}
+    onOk={value => {
+      if (!oneTap) {
+        saveValue(value)
+      }
+    }}
+    onExit={_ => saveValue(val)}
     cleanable={false}
     placement={placement}
     placeholder={type === CUSTOM_DATEPICKER_TYPES.TIME

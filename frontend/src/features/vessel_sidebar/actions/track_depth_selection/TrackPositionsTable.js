@@ -95,7 +95,12 @@ export const SpeedCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...pr
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
-      { rowData[dataKey] } nds
+      {
+        Number.isNaN(parseFloat(rowData[dataKey]))
+          ? ''
+          : `${rowData[dataKey]} nds`
+      }
+
     </Cell>
   )
 }

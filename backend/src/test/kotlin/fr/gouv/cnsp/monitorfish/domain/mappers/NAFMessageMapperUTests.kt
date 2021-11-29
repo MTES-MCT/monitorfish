@@ -206,4 +206,16 @@ internal class NAFMessageMapperUTests {
 
         assertThat(position.vesselName).isEqualTo("LADY CHRIS 7")
     }
+
+    @Test
+    internal fun `init Should set the speed and course as null When not specified in the NAF message`() {
+        // Given
+        val naf = "//SR//TM/POS//NA/LADY CHRIS 7//RC/FLBO//FS/X//DA/20210929//TI/1234//LT/-13.477//LG/-141.731//FR/FRA//RD/20210929//RT/1234//ER//"
+
+        // When
+        val position = NAFMessageMapper(naf).toPosition()
+
+        assertThat(position.speed).isNull()
+        assertThat(position.course).isNull()
+    }
 }

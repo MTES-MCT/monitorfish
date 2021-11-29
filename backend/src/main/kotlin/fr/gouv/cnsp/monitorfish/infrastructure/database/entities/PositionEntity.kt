@@ -49,7 +49,7 @@ data class PositionEntity(
         @Column(name = "longitude")
         val longitude: Double,
         @Column(name = "speed")
-        val speed: Double,
+        val speed: Double? = null,
         @Column(name = "course")
         val course: Double? = null,
         @Column(name = "date_time")

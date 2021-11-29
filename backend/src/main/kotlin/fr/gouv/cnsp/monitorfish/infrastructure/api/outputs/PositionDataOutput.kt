@@ -14,7 +14,7 @@ data class PositionDataOutput(
         val flagState: CountryCode? = null,
         val latitude: Double,
         val longitude: Double,
-        val speed: Double,
+        val speed: Double?,
         val course: Double?,
         val dateTime: ZonedDateTime,
         val from: CountryCode? = null,

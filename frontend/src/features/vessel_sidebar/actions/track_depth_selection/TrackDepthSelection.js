@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TrackDepthRadio from './TrackDepthRadio'
 import TrackDepthDateRange from './TrackDepthDateRange'
 import { COLORS } from '../../../../constants/constants'
@@ -26,7 +26,6 @@ const TrackDepthSelection = props => {
   const [updateTrackDepthFromDates, setUpdateTrackDepthFromDates] = useState(false)
   const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(null)
   const previousTrackDepthRadioSelection = usePrevious(trackDepthRadioSelection)
-  const firstUpdate = useRef(true)
 
   useEffect(() => {
     setDateSelection([])
@@ -85,11 +84,6 @@ const TrackDepthSelection = props => {
 
   useEffect(() => {
     if (datesSelection?.length > 1) {
-      if (firstUpdate.current) {
-        firstUpdate.current = false
-        return
-      }
-
       if (updateTrackDepthFromDates) {
         const vesselTrackDepth = {
           trackDepth: VesselTrackDepth.CUSTOM,

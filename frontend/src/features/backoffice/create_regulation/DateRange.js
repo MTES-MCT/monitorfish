@@ -43,6 +43,7 @@ const DateRange = (props) => {
           placement={'rightStart'}
           style={{ margin: '0px 5px' }}
           disabled={disabled}
+          oneTap
         />
         au <CustomDatePicker
           value={endDate}
@@ -52,6 +53,7 @@ const DateRange = (props) => {
           placement={'rightStart'}
           style={{ margin: '0px 0px 0px 5px' }}
           disabled={disabled}
+          oneTap
         />
     </DateRangeRow>
   </Wrapper>

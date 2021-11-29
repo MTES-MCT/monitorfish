@@ -214,6 +214,7 @@ const FishingPeriod = (props) => {
                     onChange={date => onDateChange(id, date)}
                     format='DD/MM/YYYY'
                     placement={'rightStart'}
+                    oneTap
                   />
                 </DateRow>
               })
@@ -224,6 +225,7 @@ const FishingPeriod = (props) => {
                     onChange={date => onDateChange(-1, date)}
                     format='DD/MM/YYYY'
                     placement={'rightStart'}
+                    oneTap
                   />
                 </DateRow>
             }

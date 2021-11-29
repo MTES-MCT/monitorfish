@@ -2,19 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
-const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse, size }) => {
+const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse }) => {
   function update () {
     updateBooleanProperty(!booleanProperty)
   }
-  const padding = size ? (36 - size) / 2 : 0
 
   return (
     <Wrapper onClick={update}>
       <Icon
         style={{
-          width: size || 36,
-          height: size || 36,
-          padding,
+          width: 36,
+          height: 36,
           background: booleanProperty ? COLORS.shadowBlue : COLORS.charcoal,
           transition: 'all 0.2s',
           cursor: 'pointer'

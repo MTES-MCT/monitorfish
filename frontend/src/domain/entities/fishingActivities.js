@@ -235,3 +235,16 @@ export const getFishingActivityFeatureOnTrackLine = (fishingActivity, lineOfFish
     id: fishingActivity.id
   }
 }
+
+/**
+ * Get the ERS message type - used to handle the specific DIM message type case
+ * @param {ERSMessage} message
+ * @return {string} messageType - The message type
+ */
+export const getErsMessageType = message => {
+  if (message.messageType === ERSMessageTypeEnum.DIS.code &&
+    message.message.catches.some(aCatch => aCatch.presentation === ERSMessageTypeEnum.DIM.code)) {
+    return ERSMessageTypeEnum.DIM.code
+  }
+  return message.messageType
+}

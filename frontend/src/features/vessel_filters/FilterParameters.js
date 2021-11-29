@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 
 import { openVesselListModal } from '../../domain/shared_slices/Global'
 import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
-import { ReactComponent as HideIconSVG } from '../icons/eye_not.svg'
-import { ReactComponent as ShowIconSVG } from '../icons/eye.svg'
+
+import { ReactComponent as HidingOtherVesselsSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
+import { ReactComponent as ShowingOtherVesselsSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
 import { COLORS } from '../../constants/constants'
 
-const HideNonFilteredVessels = ({ nonFilteredVesselsAreHidden, setNonFilteredVesselsAreHidden }) => {
-  const [value, setValue] = useState(undefined)
+const FilterParameters = ({ nonFilteredVesselsAreHidden, setNonFilteredVesselsAreHidden }) => {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (nonFilteredVesselsAreHidden !== undefined && value === undefined) {
-      setValue(nonFilteredVesselsAreHidden)
-    }
-  }, [nonFilteredVesselsAreHidden])
   const handleCreateFilter = () => {
     dispatch(openVesselListModal())
   }
@@ -24,48 +19,42 @@ const HideNonFilteredVessels = ({ nonFilteredVesselsAreHidden, setNonFilteredVes
   return (
     <Wrapper>
       <CreateFilterWrapper onClick={handleCreateFilter}>
-        <ButtonCreateFilter>+</ButtonCreateFilter>
+        <CreateFilterButton>+</CreateFilterButton>
         <ShowLabelText data-cy={'vessel-filters-create-new-filter'} >
           Créer un nouveau filtre
         </ShowLabelText>
       </CreateFilterWrapper>
-      {value !== undefined
-        ? <MapPropertyTrigger
-            booleanProperty={value}
-            updateBooleanProperty={isChecked => {
-              setNonFilteredVesselsAreHidden(isChecked)
-              setValue(isChecked)
-            }
-            }
-            text={'les autres navires'}
-            Icon={value ? HideIconSVG : ShowIconSVG}
-            size={24}
-          />
-        : null
-      }
+      <MapPropertyTrigger
+        inverse
+        booleanProperty={nonFilteredVesselsAreHidden}
+        updateBooleanProperty={isChecked => setNonFilteredVesselsAreHidden(isChecked)}
+        text={'les autres navires'}
+        Icon={nonFilteredVesselsAreHidden ? ShowingOtherVesselsSVG : HidingOtherVesselsSVG}
+      />
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
   background: ${COLORS.gainsboro};
-  padding: 0 0 9px 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 `
 
 const ShowLabelText = styled.span`
-  margin-left: 5px;
+  padding: 8px 10px;
   color: ${COLORS.slateGray};
+  vertical-align: top;
+  display: inline-block;
 `
-const ButtonCreateFilter = styled.span`
+const CreateFilterButton = styled.span`
   background: ${COLORS.charcoal};
   display: inline-block;
   font-size: 32px;
   width: 36px;
   height: 36px;
   line-height: 23px;
-  font-weight: 300;
+  font-weight: 400;
   text-align: center;
   vertical-align: middle;
   color: ${COLORS.white};
@@ -76,4 +65,4 @@ const CreateFilterWrapper = styled.div`
   text-align: left;
 `
 
-export default HideNonFilteredVessels
+export default FilterParameters

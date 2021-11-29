@@ -35,7 +35,7 @@ const VesselSummary = props => {
   }, [selectedVessel, props.error])
 
   useEffect(() => {
-    if (selectedVessel) {
+    if (selectedVessel && selectedVessel?.dateTime) {
       const {
         course,
         latitude,
@@ -52,11 +52,13 @@ const VesselSummary = props => {
         dateTime
       })
     } else if (selectedVesselPositions?.length) {
-      setLastPosition(selectedVesselPositions[selectedVesselPositions.length - 1])
+      const sortedPositionsByDateTimeDesc = selectedVesselPositions.slice()
+        .sort((a, b) => -a.dateTime.localeCompare(b.dateTime))
+      setLastPosition(sortedPositionsByDateTimeDesc[0])
     } else {
       setLastPosition(null)
     }
-  }, [selectedVessel])
+  }, [selectedVessel, selectedVesselPositions])
 
   return !loadingVessel
     ? (

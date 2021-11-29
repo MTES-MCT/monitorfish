@@ -21,6 +21,7 @@ const CustomDatePicker = props => {
     format,
     placement,
     style,
+    // oneTap,
     disabled
   } = props
 
@@ -29,12 +30,14 @@ const CustomDatePicker = props => {
     data-cy={`custom-date-picker-${value}`}
     $isrequired={isRequired}
     disabled={disabled}
-    oneTap
+    oneTap={false}
     ranges={[]}
     value={value}
     onChange={onChange}
     onOk={onOk}
     onSelect={onSelect}
+    onExiting={onChange}
+    shouldCloseOnSelect={false}
     cleanable={false}
     placement={placement}
     placeholder={type === CUSTOM_DATEPICKER_TYPES.TIME

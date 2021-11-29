@@ -413,7 +413,7 @@ export const fishingPeriodToString = (fishingPeriod) => {
   if (dates?.length) {
     const array = toArrayString(dates.map((date) => {
       if (date) {
-        return `le ${dateToString(date)} `
+        return `le ${dateToString(date)}`
       }
       return undefined
     }).filter(e => e))

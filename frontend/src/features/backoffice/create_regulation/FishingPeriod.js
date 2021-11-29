@@ -310,7 +310,7 @@ const ContentWrapper = styled.div`
 `
 
 const PeriodAsStringWrapper = styled.div`
-  ${props => !props.display ? 'display: none;' : ''}
+  display: ${props => !props.display ? 'none' : 'flex'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-top: 20px;
 `
@@ -321,15 +321,16 @@ const PeriodAsString = styled.div`
   background: ${COLORS.gainsboro};
   padding: 10px;
   margin-left: 15px;
+  text-align: left;
 `
 
 const PeriodRow = styled.div`
-  ${props => !props.display ? 'display: none;' : ''}
+  display: ${props => !props.display ? 'none' : 'flex'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-left: 15px;
   padding-bottom: 15px;
   .rs-radio-group {
-    margin-left: 13px;
+    margin-left: -10px;
   }
 `
 

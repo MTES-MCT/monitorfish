@@ -162,18 +162,6 @@ internal class NAFMessageMapperUTests {
     }
 
     @Test
-    internal fun `init Should not throw an exception When no speed`() {
-        // Given
-        val naf = "//SR//FR/SWE//TM/POS//RC/F1007//IR/SWE0000F1007//XR/EXT3//LT/57.037//LG/12.214" +
-                "//CO/190//DA/20170817//TI/0500//NA/Ship1007//FS/SWE//ER//"
-
-        // When
-        val position = NAFMessageMapper(naf).toPosition()
-
-        assertThat(position.speed).isEqualTo(0.0)
-    }
-
-    @Test
     internal fun `init Should not throw an exception When no course`() {
         // Given
         val naf = "//SR//FR/SWE//TM/POS//RC/F1007//IR/SWE0000F1007//XR/EXT3//LT/57.037//LG/12.214" +
@@ -205,5 +193,17 @@ internal class NAFMessageMapperUTests {
         val position = NAFMessageMapper(naf).toPosition()
 
         assertThat(position.vesselName).isEqualTo("LADY CHRIS 7")
+    }
+
+    @Test
+    internal fun `init Should set the speed and course as null When not specified in the NAF message`() {
+        // Given
+        val naf = "//SR//TM/POS//NA/LADY CHRIS 7//RC/FLBO//FS/X//DA/20210929//TI/1234//LT/-13.477//LG/-141.731//FR/FRA//RD/20210929//RT/1234//ER//"
+
+        // When
+        val position = NAFMessageMapper(naf).toPosition()
+
+        assertThat(position.speed).isNull()
+        assertThat(position.course).isNull()
     }
 }

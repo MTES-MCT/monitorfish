@@ -95,7 +95,12 @@ export const SpeedCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...pr
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
-      { rowData[dataKey] } nds
+      {
+        Number.isNaN(parseFloat(rowData[dataKey]))
+          ? ''
+          : `${rowData[dataKey]} nds`
+      }
+
     </Cell>
   )
 }
@@ -122,8 +127,10 @@ export const DateTimeCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ..
   const olCoordinates = rowData ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION) : []
 
   let dateTimeStringWithoutMilliSeconds = rowData[dataKey].split('.')[0]
-  if (!dateTimeStringWithoutMilliSeconds.includes('Z')) {
+  if (rowData[dataKey].includes('Z') && !dateTimeStringWithoutMilliSeconds.includes('Z')) {
     dateTimeStringWithoutMilliSeconds += 'Z'
+  } else if (rowData[dataKey].includes('+') && !dateTimeStringWithoutMilliSeconds.includes('+')) {
+    dateTimeStringWithoutMilliSeconds += '+' + rowData[dataKey].split('+')[1]
   }
 
   return (

@@ -237,18 +237,18 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
           }
           default: {
             // Pièges
-            return getStyle(getColorWithAlpha('#022f40', 0.75), metadataIsShowed)
+            return getStyle(getColorWithAlpha('#7B9FCC', 0.75), metadataIsShowed)
           }
         }
       }
     default:
       return () => new Style({
         stroke: new Stroke({
-          color: 'rgba(5, 5, 94, 0.5)',
+          color: getColorWithAlpha('#7B9FCC', 0.5),
           width: 2
         }),
         fill: new Fill({
-          color: 'rgba(5, 5, 94, 0.2)'
+          color: getColorWithAlpha('#7B9FCC', 0.2)
         })
       })
   }

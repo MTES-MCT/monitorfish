@@ -31,10 +31,12 @@ const LayerDetailsBox = props => {
         engins
       } = regulatoryFeatureToShowOnCard.getProperties()
 
-      if (zones && layer_name && engins && gears) {
+      if (zones && layer_name && gears) {
         const hash = getHash(`${layer_name}:${zones}`)
-        const gearCategory = getGearCategory(engins, props.gears)
+        const gearCategory = getGearCategory(engins, gears)
         setVectorLayerStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
+      } else {
+        setVectorLayerStyle(null)
       }
     }
   }, [regulatoryFeatureToShowOnCard, gears, setVectorLayerStyle])
@@ -59,8 +61,8 @@ const LayerDetailsBox = props => {
 const Rectangle = styled.div`
   width: 14px;
   height: 14px;
-  background: ${props => props.vectorLayerStyle && props.vectorLayerStyle.getFill() ? props.vectorLayerStyle.getFill().getColor() : COLORS.gray};
-  border: 1px solid ${props => props.vectorLayerStyle && props.vectorLayerStyle.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : COLORS.grayDarkerTwo};
+  background: ${props => props.vectorLayerStyle?.getFill() ? props.vectorLayerStyle.getFill().getColor() : COLORS.gray};
+  border: 1px solid ${props => props.vectorLayerStyle?.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : COLORS.grayDarkerTwo};
   margin-right: 7px;
   margin-top: 5px;
 `

@@ -13,6 +13,8 @@ const TimeInterval = props => {
   } = props
 
   const setTimeInterval = (key, value) => {
+    console.log('setTimeInterval')
+    console.log(value)
     const newTimeInterval = {
       ...timeInterval,
       [key]: value
@@ -22,26 +24,26 @@ const TimeInterval = props => {
 
   return (
     <Wrapper $isLast={isLast}>De<CustomDatePicker
-        format='HH:mm'
+        format={'HH:mm'}
         type={CUSTOM_DATEPICKER_TYPES.TIME}
-        placement={'rightStart'}
+        placement={'rightEnd'}
         style={{ width: '55px', margin: '0px 5px' }}
         disabled={disabled}
         value={timeInterval?.from}
         onChange={value => setTimeInterval('from', value)}
         onOk={value => setTimeInterval('from', value)}
-        onSelect={value => setTimeInterval('from', value)}
+        // onSelect={value => setTimeInterval('from', value)}
       />
       à<CustomDatePicker
-        format='HH:mm'
+        format={'HH:mm'}
         type={CUSTOM_DATEPICKER_TYPES.TIME}
-        placement={'rightStart'}
+        placement={'rightEnd'}
         style={{ width: '55px', margin: '0px 5px' }}
         disabled={disabled}
         value={timeInterval?.to}
-        onChange={value => setTimeInterval('to', value)}
+        onChange={value => setTimeInterval('from', value)}
         onOk={value => setTimeInterval('to', value)}
-        onSelect={value => setTimeInterval('to', value)}
+        // onSelect={value => setTimeInterval('to', value)}
       />
     </Wrapper>
   )

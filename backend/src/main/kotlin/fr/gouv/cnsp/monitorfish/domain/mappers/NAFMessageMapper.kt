@@ -30,7 +30,7 @@ class NAFMessageMapper(private val naf: String) {
     private var latitude by Delegates.notNull<Double>()
     private var longitude by Delegates.notNull<Double>()
     private var course: Double? = null
-    private var speed: Double = 0.0
+    private var speed: Double? = null
     private var tripNumber: Int? = null
     private var isManual: Boolean = false
 

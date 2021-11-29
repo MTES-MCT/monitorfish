@@ -162,18 +162,6 @@ internal class NAFMessageMapperUTests {
     }
 
     @Test
-    internal fun `init Should not throw an exception When no speed`() {
-        // Given
-        val naf = "//SR//FR/SWE//TM/POS//RC/F1007//IR/SWE0000F1007//XR/EXT3//LT/57.037//LG/12.214" +
-                "//CO/190//DA/20170817//TI/0500//NA/Ship1007//FS/SWE//ER//"
-
-        // When
-        val position = NAFMessageMapper(naf).toPosition()
-
-        assertThat(position.speed).isEqualTo(0.0)
-    }
-
-    @Test
     internal fun `init Should not throw an exception When no course`() {
         // Given
         val naf = "//SR//FR/SWE//TM/POS//RC/F1007//IR/SWE0000F1007//XR/EXT3//LT/57.037//LG/12.214" +

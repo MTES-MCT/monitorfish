@@ -247,10 +247,10 @@ const RegulatoryText = props => {
         key={startDate}
         isRequired={startDateIsRequired}
         value={startDate ? new Date(startDate) : new Date()}
-        onChange={(date) => set('startDate', date.getTime())}
-        onOk={(date, _) => set('startDate', date.getTime())}
+        saveValue={date => set('startDate', date.getTime())}
         format='DD/MM/YYYY'
         placement={'rightStart'}
+        oneTap
       />
     </ContentLine>
     <ContentLine>
@@ -259,8 +259,8 @@ const RegulatoryText = props => {
         key={endDate}
         isRequired={endDateIsRequired}
         value={(!endDate || endDate === INFINITE) ? undefined : new Date(endDate)}
-        onChange={(date) => set('endDate', date.getTime())}
-        onOk={(date, _) => set('endDate', date.getTime())}
+        saveValue={date => set('endDate', date.getTime())}
+        oneTap
         format='DD/MM/YYYY'
         placement={'rightEnd'}
       />

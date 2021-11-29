@@ -211,7 +211,7 @@ const FishingPeriod = (props) => {
                   <CustomDatePicker
                     disabled={disabled}
                     value={date}
-                    onChange={date => onDateChange(id, date)}
+                    saveValue={date => onDateChange(id, date)}
                     format='DD/MM/YYYY'
                     placement={'rightStart'}
                     oneTap
@@ -222,7 +222,7 @@ const FishingPeriod = (props) => {
                   <CustomDatePicker
                     disabled={disabled}
                     value={undefined}
-                    onChange={date => onDateChange(-1, date)}
+                    saveValue={date => onDateChange(-1, date)}
                     format='DD/MM/YYYY'
                     placement={'rightStart'}
                     oneTap

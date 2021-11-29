@@ -30,8 +30,7 @@ const TimeInterval = props => {
         style={{ width: '55px', margin: '0px 5px' }}
         disabled={disabled}
         value={timeInterval?.from}
-        onChange={value => setTimeInterval('from', value)}
-        onOk={value => setTimeInterval('from', value)}
+        saveValue={value => setTimeInterval('from', value)}
       />
       à<CustomDatePicker
         format={'HH:mm'}
@@ -40,8 +39,7 @@ const TimeInterval = props => {
         style={{ width: '55px', margin: '0px 5px' }}
         disabled={disabled}
         value={timeInterval?.to}
-        onChange={value => setTimeInterval('from', value)}
-        onOk={value => setTimeInterval('to', value)}
+        saveValue={value => setTimeInterval('to', value)}
       />
     </Wrapper>
   )

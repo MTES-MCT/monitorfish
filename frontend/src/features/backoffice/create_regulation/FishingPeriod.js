@@ -306,6 +306,7 @@ const FishingPeriod = (props) => {
 
 const ContentWrapper = styled.div`
   display: flex;
+  align-items:flex-end;
   flex-direction: row;
   height: 100%;
   ${props => props.alignItems ? `align-items: ${props.alignItems}` : ''};

@@ -12,10 +12,16 @@ const UPDATE_LAYER_NAME_ERROR = 'Une erreur est survenue lors la mise à jour de
 
 const updateLayerName = (territory, lawType, oldLayerName, newLayerName) => (dispatch, getState) => {
   const { layersTopicsByRegTerritory } = getState().regulatory
-  if (layersTopicsByRegTerritory &&
-      layersTopicsByRegTerritory[territory] &&
-      layersTopicsByRegTerritory[territory][lawType] &&
-      layersTopicsByRegTerritory[territory][lawType][oldLayerName]) {
+  if (!layersTopicsByRegTerritory || !layersTopicsByRegTerritory[territory] ||
+      !layersTopicsByRegTerritory[territory][lawType]) {
+    console.error(`${UPDATE_LAYER_NAME_ERROR}
+      One value is undefined: 
+      layersTopicsByRegTerritory is ${layersTopicsByRegTerritory}
+      territory is ${territory}
+      lawType is ${lawType}`)
+    dispatch(setError(new Error(UPDATE_LAYER_NAME_ERROR)))
+  }
+  if (layersTopicsByRegTerritory[territory][lawType][oldLayerName]) {
     const zoneListToUpdate = layersTopicsByRegTerritory[territory][lawType][oldLayerName]
     const promisesList = zoneListToUpdate.map((zone) => {
       const featureObject = mapToRegulatoryFeatureObject({
@@ -37,8 +43,7 @@ const updateLayerName = (territory, lawType, oldLayerName, newLayerName) => (dis
         dispatch(setError(e))
       })
   } else {
-    console.error(UPDATE_LAYER_NAME_ERROR)
-    dispatch(setError(new Error(UPDATE_LAYER_NAME_ERROR)))
+    dispatch(setLayerNameUpdated(true))
   }
 }
 

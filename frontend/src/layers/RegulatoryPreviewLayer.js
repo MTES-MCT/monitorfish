@@ -6,6 +6,7 @@ import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import zoomInLayer from '../domain/use_cases/zoomInLayer'
+import { regulatoryPreviewStyle } from './styles/regulatoryPreview.style'
 
 const RegulatoryPreviewLayer = ({ map }) => {
   const dispatch = useDispatch()
@@ -17,7 +18,8 @@ const RegulatoryPreviewLayer = ({ map }) => {
     renderBuffer: 4,
     source: vectorSource,
     updateWhileAnimating: true,
-    updateWhileInteracting: true
+    updateWhileInteracting: true,
+    style: regulatoryPreviewStyle
   }))
 
   useEffect(() => {

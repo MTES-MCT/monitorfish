@@ -81,7 +81,7 @@ const RegulatoryLayerSearchResultZone = props => {
       return
     }
 
-    if (regulatoryZone.zone && regulatoryZone.topic && regulatoryZone.gears && gears) {
+    if (regulatoryZone.zone && regulatoryZone.topic && gears) {
       const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
       const gearCategory = getGearCategory(regulatoryZone.gears, gears)
 

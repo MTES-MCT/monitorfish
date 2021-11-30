@@ -91,13 +91,13 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   }, [observations, interestPointBeingDrawed, updateInterestPoint])
 
   useEffect(() => {
-    if (type && interestPointBeingDrawed?.type !== type && updateInterestPoint) {
+    if (type && interestPointBeingDrawed?.type !== type && updateInterestPoint && coordinates?.length) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'type',
         value: type
       }))
     }
-  }, [type, interestPointBeingDrawed, updateInterestPoint])
+  }, [type, interestPointBeingDrawed, updateInterestPoint, coordinates])
 
   /**
    * Compare with previous coordinates and update interest point coordinates
@@ -149,19 +149,28 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
               setType(value)
             }}
           >
-            <Radio value={interestPointType.CONTROL_ENTITY}>
+            <Radio
+              value={interestPointType.CONTROL_ENTITY}
+            >
               <Control/>
               Moyen de contrôle
             </Radio>
-            <Radio value={interestPointType.FISHING_VESSEL}>
+            <Radio
+              value={interestPointType.FISHING_VESSEL}
+            >
               <Vessel/>
               Navire de pêche
             </Radio>
-            <Radio value={interestPointType.FISHING_GEAR}>
+            <Radio
+              value={interestPointType.FISHING_GEAR}
+            >
               <Gear/>
               Engin de pêche
             </Radio>
-            <Radio value={interestPointType.OTHER}>
+            <Radio
+              data-cy={'interest-point-type-radio-input'}
+              value={interestPointType.OTHER}
+            >
               <Other/>
               Autre point
             </Radio>

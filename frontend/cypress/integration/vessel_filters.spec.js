@@ -33,7 +33,9 @@ context('Vessel filters', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 18)
-    cy.get('*[data-cy="vessel-filters-hide-other-vessels"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="map-property-trigger"]')
+      .filter(':contains("les autres navires")')
+      .click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
 
     // Remove tags

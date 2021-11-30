@@ -19,7 +19,11 @@ import {
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
 
-import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
+import {
+  setRegulatoryGeometryToPreview,
+  setRegulatoryZoneMetadata,
+  setRegulatoryTopics
+} from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
@@ -58,7 +62,7 @@ import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
   const {
-    regulatoryTopics,
+    layersTopicsByRegTerritory,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
@@ -99,11 +103,12 @@ const CreateRegulation = ({ title, isEdition }) => {
     atLeastOneValueIsMissing,
     selectedGeometryId,
     isRemoveModalOpen,
+    layerNameUpdated,
     regulationDeleted
   } = useSelector(state => state.regulation)
 
   useEffect(() => {
-    if (!regulatoryTopics || regulatoryTopics.length === 0) {
+    if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
 
@@ -116,6 +121,19 @@ const CreateRegulation = ({ title, isEdition }) => {
     getGeometryObjectList()
     dispatch(setSelectedRegulation(newRegulation))
   }, [])
+
+  useEffect(() => {
+    if (layerNameUpdated) {
+      // dispatch(getAllRegulatoryLayersByRegTerritory())
+      console.log('la les zones portants cette thématiques on été mises à jour.')
+    }
+  }, [layerNameUpdated])
+
+  /* useEffect(() => {
+    if (isEdition && regulatoryTopics) {
+      setLayerTypeList(regulatoryTopics)
+    }
+  }, [regulatoryTopics]) */
 
   useEffect(() => {
     if (isEdition && regulatoryZoneMetadata) {
@@ -140,6 +158,14 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(setRegulatoryZoneMetadata(undefined))
     }
   }, [])
+
+  useEffect(() => {
+    if (selectedRegulationLawType) {
+      const territory = layersTopicsByRegTerritory[LAWTYPES_TO_TERRITORY[selectedRegulationLawType]]
+      const layerNameList = territory[selectedRegulationLawType]
+      dispatch(setRegulatoryTopics(Object.keys(layerNameList)))
+    }
+  }, [selectedRegulationLawType, layersTopicsByRegTerritory])
 
   useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
@@ -288,9 +314,9 @@ const CreateRegulation = ({ title, isEdition }) => {
                   lawTypeIsMissing={lawTypeIsMissing}
                 />
                 <RegulationTopicLine
+                  disabled={!selectedRegulationLawType}
                   selectedRegulationTopic={selectedRegulationTopic}
                   setSelectedRegulationTopic={setSelectedRegulationTopic}
-                  zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
                   regulationTopicIsMissing={regulationTopicIsMissing}
                   selectedRegulationLawType={selectedRegulationLawType}
                 />

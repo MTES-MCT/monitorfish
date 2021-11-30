@@ -8,9 +8,13 @@ import {
 } from '../entities/regulatory'
 import { Feature } from 'ol'
 
+import {
+  setLayersTopicsByRegTerritory
+} from '../shared_slices/Regulatory'
+
 const UPDATE_LAYER_NAME_ERROR = 'Une erreur est survenue lors la mise à jour de la thématique'
 
-const updateLayerName = (territory, lawType, oldLayerName, newLayerName) => (dispatch, getState) => {
+const updateLayerNameForAllZones = (territory, lawType, oldLayerName, newLayerName) => (dispatch, getState) => {
   const { layersTopicsByRegTerritory } = getState().regulatory
   if (!layersTopicsByRegTerritory || !layersTopicsByRegTerritory[territory] ||
       !layersTopicsByRegTerritory[territory][lawType]) {
@@ -37,9 +41,21 @@ const updateLayerName = (territory, lawType, oldLayerName, newLayerName) => (dis
       })
     })
     return Promise.all(promisesList)
-      .then(_ => dispatch(setLayerNameUpdated(true)))
+      .then(_ => {
+        const newTerritoryObject = { ...layersTopicsByRegTerritory[territory] }
+        const newLawTypeObject = { ...newTerritoryObject[lawType] }
+        newLawTypeObject[newLayerName] = [...newLawTypeObject[oldLayerName]]
+        delete newLawTypeObject[oldLayerName]
+        newTerritoryObject[lawType] = newLawTypeObject
+        const newLayersTopicsByRegTerritory = {
+          ...layersTopicsByRegTerritory,
+          [territory]: newTerritoryObject
+        }
+        dispatch(setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
+        dispatch(setLayerNameUpdated(true))
+      })
       .catch(e => {
-        console.error(e.error)
+        console.error(e)
         dispatch(setError(e))
       })
   } else {
@@ -47,4 +63,4 @@ const updateLayerName = (territory, lawType, oldLayerName, newLayerName) => (dis
   }
 }
 
-export default updateLayerName
+export default updateLayerNameForAllZones

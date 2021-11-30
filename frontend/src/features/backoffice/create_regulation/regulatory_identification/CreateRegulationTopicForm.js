@@ -5,7 +5,6 @@ import { CustomInput } from '../../../commonStyles/Input.style'
 
 const CreateRegulationTopicForm = props => {
   const {
-    setSelectedRegulationTopic,
     selectedRegulationTopic,
     updateLayerName,
     onCancelEdit
@@ -45,10 +44,7 @@ const CreateRegulationTopicForm = props => {
         ${topicSpecies ? ' - ' + topicSpecies : ''}
         ${topicGears ? ' - ' + topicGears : ''}
         ${topicOtherIndications ? ' - ' + topicOtherIndications : ''}`
-      setSelectedRegulationTopic(regulationLayerName)
-      if (updateLayerName) {
-        updateLayerName(regulationLayerName)
-      }
+      updateLayerName(regulationLayerName)
       resetThemeForm()
       onCancelEdit()
       setTopicPlaceIsRed(false)

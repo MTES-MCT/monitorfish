@@ -135,8 +135,8 @@ class MonitorFishWorker {
       return accumulatedObject
     }, {})
     return {
-      layersTopicsByRegulatoryTerritory,
-      regulatoryTopics: [...regulatoryTopicList]
+      layersTopicsByRegulatoryTerritory
+      // regulatoryTopics: [...regulatoryTopicList]
     }
   }
 

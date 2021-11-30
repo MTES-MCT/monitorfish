@@ -4,7 +4,6 @@ import * as Comlink from 'comlink'
 import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import { setError } from '../shared_slices/Global'
 import {
-  setRegulatoryTopics,
   setLayersTopicsByRegTerritory
 } from '../shared_slices/Regulatory'
 import { batch } from 'react-redux'
@@ -21,12 +20,10 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     })
     .then(response => {
       const {
-        layersTopicsByRegulatoryTerritory,
-        regulatoryTopics
+        layersTopicsByRegulatoryTerritory
       } = response
 
       batch(() => {
-        dispatch(setRegulatoryTopics(regulatoryTopics))
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
       })
     })

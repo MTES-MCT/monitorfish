@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
-from src.pipeline.helpers.datetime import get_datetime_intervals
+from src.pipeline.helpers.dates import get_datetime_intervals
 
 
 class TestHelpersDatetime(unittest.TestCase):

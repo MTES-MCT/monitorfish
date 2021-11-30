@@ -470,6 +470,7 @@ def join_on_multiple_keys(
     """
 
     joins = []
+    keys_already_joined = set()
 
     # Attempt to perform the join successively on each key
     for key in on:
@@ -490,6 +491,10 @@ def join_on_multiple_keys(
         for non_joining_key in non_joining_keys:
 
             cols_to_coalesce = [f"{non_joining_key}_left", f"{non_joining_key}_right"]
+            [l, r] = cols_to_coalesce
+
+            if non_joining_key in keys_already_joined:
+                join = join[(join[r].isna()) | (join[l].isna())]
 
             join[non_joining_key] = coalesce(join[cols_to_coalesce])
 
@@ -498,6 +503,7 @@ def join_on_multiple_keys(
         left = left[~left[key].isin(join[key])]
         right = right[~right[key].isin(join[key])]
 
+        keys_already_joined.add(key)
         joins.append(join)
 
     # Add unmatched rows if performing left, right or outer joins

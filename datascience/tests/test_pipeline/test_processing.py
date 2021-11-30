@@ -417,20 +417,20 @@ class TestProcessingMethods(unittest.TestCase):
     def test_join_on_multiple_keys(self):
         left = pd.DataFrame(
             {
-                "key_1": [1, 2, None, 4, None, 6, None, np.nan],
-                "key_2": ["a", None, "c", "d", "e", None, None, np.nan],
-                "key_3": ["A", "B", np.nan, "D", "E", None, None, np.nan],
-                "value_left_1": [9, 8, 7, 6, 5, 4, 3, 2],
-                "value_left_2": [90, 80, "70", None, 5.025, "left", 40, 30],
+                "key_1": [1, 2, None, 4, None, 6, None, np.nan, "conflict"],
+                "key_2": ["a", None, "c", "d", "e", None, None, np.nan, None],
+                "key_3": ["A", "B", np.nan, "D", "E", None, None, np.nan, "H"],
+                "value_left_1": [9, 8, 7, 6, 5, 4, 3, 2, 42],
+                "value_left_2": [90, 80, "70", None, 5.025, "left", 40, 30, 48],
             }
         )
 
         right = pd.DataFrame(
             {
-                "key_1": [1, 2, 3, 4, 5, 7, np.nan],
-                "key_2": ["a", None, "c", "ddd", np.nan, None, np.nan],
-                "key_3": ["A", "B", "C", "DDD", "E", None, np.nan],
-                "value_right": ["R1", "R2", "R3", "R4", "R5", "right", np.nan],
+                "key_1": [1, 2, 3, 4, 5, 7, np.nan, "conflicting"],
+                "key_2": ["a", None, "c", "ddd", np.nan, None, np.nan, None],
+                "key_3": ["A", "B", "C", "DDD", "E", None, np.nan, "H"],
+                "value_right": ["R1", "R2", "R3", "R4", "R5", "right", np.nan, "ABC"],
             }
         )
 
@@ -463,6 +463,7 @@ class TestProcessingMethods(unittest.TestCase):
             [6.0, "null", "null", 4, "left", "null"],
             ["null", "null", "null", 3, 40, "null"],
             ["null", "null", "null", 2, 30, "null"],
+            ["conflict", "null", "H", 42, 48, "null"],
         ]
 
         self.assertEqual(res_left.values.tolist(), expected_values)
@@ -480,6 +481,7 @@ class TestProcessingMethods(unittest.TestCase):
             [5.0, "e", "E", 5.0, 5.025, "R5"],
             [7.0, "null", "null", "null", "null", "right"],
             ["null", "null", "null", "null", "null", "null"],
+            ["conflicting", "null", "H", "null", "null", "ABC"],
         ]
 
         self.assertEqual(res_right.values.tolist(), expected_values)
@@ -498,8 +500,10 @@ class TestProcessingMethods(unittest.TestCase):
             [6.0, "null", "null", 4.0, "left", "null"],
             ["null", "null", "null", 3.0, 40, "null"],
             ["null", "null", "null", 2.0, 30, "null"],
+            ["conflict", "null", "H", 42, 48, "null"],
             [7.0, "null", "null", "null", "null", "right"],
             ["null", "null", "null", "null", "null", "null"],
+            ["conflicting", "null", "H", "null", "null", "ABC"],
         ]
 
         self.assertEqual(res_outer.values.tolist(), expected_values)

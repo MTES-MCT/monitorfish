@@ -13,8 +13,6 @@ const TimeInterval = props => {
   } = props
 
   const setTimeInterval = (key, value) => {
-    console.log('setTimeInterval')
-    console.log(value)
     const newTimeInterval = {
       ...timeInterval,
       [key]: value

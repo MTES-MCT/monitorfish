@@ -23,7 +23,7 @@ const FISHING_PERIOD_KEYS = {
   DAYTIME: 'daytime'
 }
 
-const FishingPeriod = (props) => {
+const FishingPeriodForm = (props) => {
   const {
     /** @type {FishingPeriod} fishingPeriod */
     fishingPeriod,
@@ -92,21 +92,21 @@ const FishingPeriod = (props) => {
     }
 
     setFishingPeriod(obj)
-  })
+  }, [setFishingPeriod])
 
   const push = useCallback((key, array, defaultValue) => {
     const newArray = array ? [...array] : []
     newArray.push(defaultValue || undefined)
 
     set(key, newArray)
-  })
+  }, [set])
 
   const pop = useCallback((key, array) => {
     const newArray = [...array]
     newArray.pop()
 
     set(key, newArray)
-  })
+  }, [set])
 
   const update = useCallback((id, key, array, value) => {
     const newArray = array ? [...array] : []
@@ -118,7 +118,7 @@ const FishingPeriod = (props) => {
     }
 
     set(key, newArray)
-  })
+  }, [set])
 
   const updateDateRanges = (id, dateRange) => {
     update(id, FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, dateRange)
@@ -161,8 +161,8 @@ const FishingPeriod = (props) => {
         onChange={value => set(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE, value)}
         value={annualRecurrence}
       >
-        <CustomRadio value={true} >oui</CustomRadio>
-        <CustomRadio value={false} >non</CustomRadio>
+        <CustomRadio value={true}>oui</CustomRadio>
+        <CustomRadio value={false}>non</CustomRadio>
       </RadioGroup>
     </PeriodRow>
     <DateTimeWrapper display={displayForm} authorized={authorized}>
@@ -458,4 +458,4 @@ const CustomRadio = styled(Radio)`
   }
 `
 
-export default FishingPeriod
+export default FishingPeriodForm

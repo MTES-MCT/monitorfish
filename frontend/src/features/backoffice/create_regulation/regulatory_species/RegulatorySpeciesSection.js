@@ -1,40 +1,29 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import FishingPeriodForm from './FishingPeriodForm'
 import SectionTitle from '../../SectionTitle'
-import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import { CustomInput, Label } from '../../../commonStyles/Input.style'
 
-const FishingPeriodSection = (props) => {
-  const {
-    fishingPeriod,
-    setFishingPeriod
-  } = props
-
+const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) => {
   const [show, setShow] = useState(false)
 
   const setOtherInfo = value => {
-    setFishingPeriod({
-      ...fishingPeriod,
+    setRegulatorySpecies({
+      ...regulatorySpecies,
       otherInfo: value
     })
   }
 
   return <>
     <SectionTitle
-      title={'Périodes de pêche'}
+      title={'ESPÈCES RÉGLEMENTÉES'}
       isOpen={show}
       setIsOpen={setShow}
     />
-    <FishingPeriodForm
-      show={show}
-      fishingPeriod={fishingPeriod}
-      setFishingPeriod={setFishingPeriod}
-    />
     <OtherRemark show={show}>
-      <Label>Autres points sur la période</Label>
+      <Label>Autres points sur les espèces</Label>
       <CustomInput
         width={'730px'}
-        value={fishingPeriod?.otherInfo || ''}
+        value={regulatorySpecies?.otherInfo || ''}
         onChange={setOtherInfo} />
     </OtherRemark>
   </>
@@ -46,4 +35,4 @@ const OtherRemark = styled.div`
   margin-top: 10px;
 `
 
-export default FishingPeriodSection
+export default RegulatorySpeciesSection

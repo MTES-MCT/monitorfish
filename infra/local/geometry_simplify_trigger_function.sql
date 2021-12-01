@@ -1,5 +1,6 @@
 UPDATE prod.reglementation_peche SET geometry_simplified = ST_Simplify(ST_CurveToLine(geometry), 0.001);
-UPDATE prod.reglementation_peche SET geometry = ST_CurveToLine(geometry);
+UPDATE prod.reglementation_peche SET geometry = ST_MakeValid(ST_CurveToLine(geometry));
+ALTER TABLE reglementation_peche ADD CONSTRAINT geometry_is_valid_check CHECK (st_isvalid(geometry));
 
 -- This trigger function
 --   * is triggered whenever a row in the local regulation database is inserted or modified

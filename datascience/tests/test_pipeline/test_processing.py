@@ -19,6 +19,7 @@ from src.pipeline.processing import (
     get_unused_col_name,
     is_a_value,
     join_on_multiple_keys,
+    left_isin_right_by_decreasing_priority,
     prepare_df_for_loading,
     to_json,
     to_pgarr,
@@ -525,3 +526,49 @@ class TestProcessingMethods(unittest.TestCase):
         ]
 
         self.assertEqual(res_outer.values.tolist(), expected_values)
+
+    def test_left_isin_right_by_decreasing_priority(self):
+        left = pd.DataFrame(
+            {
+                "cfr": ["A", "B", "C", "D", None, None, None, "H"],
+                "external_immatriculation": [
+                    "AA",
+                    None,
+                    None,
+                    "DD",
+                    "EE",
+                    None,
+                    None,
+                    "HH",
+                ],
+                "ircs": ["AAA", None, "CCC", None, None, "FFF", None, "HHH"],
+            },
+            index=pd.Index([1, 2, 5, 12, 4, 23, 11, 120]),
+        )
+
+        right = pd.DataFrame(
+            {
+                "cfr": ["A", "B", "C", "D", None, "no conflict F", None, "conflict H"],
+                "external_immatriculation": [
+                    "AA",
+                    "BB",
+                    None,
+                    "DD",
+                    "EE",
+                    None,
+                    None,
+                    "HH",
+                ],
+                "ircs": ["AAA", None, "no conflic CCC", None, None, "FFF", None, "HHH"],
+            }
+        )
+
+        res = left_isin_right_by_decreasing_priority(left, right)
+
+        expected = pd.Series(
+            index=left.index,
+            data=[True, True, True, True, True, True, False, False],
+            name="isin_right",
+        )
+
+        pd.testing.assert_series_equal(res, expected)

@@ -16,6 +16,7 @@ from src.pipeline.processing import (
     df_values_to_json,
     df_values_to_psql_arrays,
     drop_rows_already_in_table,
+    get_unused_col_name,
     is_a_value,
     join_on_multiple_keys,
     prepare_df_for_loading,
@@ -25,6 +26,23 @@ from src.pipeline.processing import (
 
 
 class TestProcessingMethods(unittest.TestCase):
+    def test_get_unused_col_name(self):
+
+        self.assertEqual(
+            get_unused_col_name("id", pd.DataFrame({"id": [1, 2, 3]})), "id_0"
+        )
+
+        self.assertEqual(
+            get_unused_col_name(
+                "id", pd.DataFrame({"id": [1, 2, 3], "id_0": [1, 2, 3]})
+            ),
+            "id_1",
+        )
+
+        self.assertEqual(
+            get_unused_col_name("id", pd.DataFrame({"idx": [1, 2, 3]})), "id"
+        )
+
     def test_is_a_value(self):
         self.assertTrue(is_a_value(1))
         self.assertTrue(is_a_value(""))

@@ -1,33 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import { CustomInput } from '../../../commonStyles/Input.style'
 
 const CreateRegulationTopicForm = props => {
   const {
-    selectedRegulationTopic,
-    updateLayerName,
-    onCancelEdit
+    onCancelEdit,
+    updateLayerName
   } = props
   const [topicPlace, setTopicPlace] = useState('')
   const [topicPlaceIsRed, setTopicPlaceIsRed] = useState(false)
   const [topicGears, setTopicGears] = useState('')
   const [topicSpecies, setTopicSpecies] = useState('')
   const [topicOtherIndications, setTopicOtherIndications] = useState('')
-
-  useEffect(() => {
-    if (selectedRegulationTopic) {
-      initForm()
-    }
-  }, [selectedRegulationTopic])
-
-  const initForm = () => {
-    const themeSplitted = selectedRegulationTopic.split(' - ')
-    setTopicPlace(themeSplitted[0])
-    setTopicGears(themeSplitted[1])
-    setTopicSpecies(themeSplitted[2])
-    setTopicOtherIndications(themeSplitted[3])
-  }
 
   const resetThemeForm = () => {
     setTopicPlace('')

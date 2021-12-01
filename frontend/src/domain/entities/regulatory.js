@@ -125,10 +125,10 @@ export const mapToRegulatoryFeatureObject = properties => {
     law_type: lawType,
     zones: zone,
     region,
-    references_reglementaires: regulatoryReferences,
-    references_reglementaires_a_venir: upcomingRegulatoryReferences,
-    fishing_period: fishingPeriod,
-    species: JSON.stringify(regulatorySpecies || '')
+    references_reglementaires: JSON.stringify(regulatoryReferences),
+    references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
+    fishing_period: JSON.stringify(fishingPeriod),
+    species: JSON.stringify(regulatorySpecies)
   }
 }
 

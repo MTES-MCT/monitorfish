@@ -1,6 +1,6 @@
 import { setRegulatoryZoneMetadata } from '../shared_slices/Regulatory'
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../api/fetch'
-import { mapToRegulatoryZone, mapToFishingPeriodObject } from '../entities/regulatory'
+import { mapToRegulatoryZone } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
 import Layers from '../entities/layers'
 

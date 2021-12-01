@@ -189,7 +189,7 @@ const Text = styled.span`
 const Name = styled.span`
   line-height: 2.7em;
   font-size: 13px;
-  padding-left: 10px;
+  padding: 2px 10px;
   width: 79%;
   display: inline-block;
   text-overflow: ellipsis;

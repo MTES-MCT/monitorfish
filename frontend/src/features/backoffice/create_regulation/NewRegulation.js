@@ -103,7 +103,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     atLeastOneValueIsMissing,
     selectedGeometryId,
     isRemoveModalOpen,
-    layerNameUpdated,
     regulationDeleted
   } = useSelector(state => state.regulation)
 
@@ -121,19 +120,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     getGeometryObjectList()
     dispatch(setSelectedRegulation(newRegulation))
   }, [])
-
-  useEffect(() => {
-    if (layerNameUpdated) {
-      // dispatch(getAllRegulatoryLayersByRegTerritory())
-      console.log('la les zones portants cette thématiques on été mises à jour.')
-    }
-  }, [layerNameUpdated])
-
-  /* useEffect(() => {
-    if (isEdition && regulatoryTopics) {
-      setLayerTypeList(regulatoryTopics)
-    }
-  }, [regulatoryTopics]) */
 
   useEffect(() => {
     if (isEdition && regulatoryZoneMetadata) {

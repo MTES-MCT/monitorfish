@@ -13,6 +13,7 @@ export const mapToRegulatoryZone = properties => {
     prohibitedSpecies: properties.especes_interdites,
     regulatoryReferences: properties.references_reglementaires,
     upcomingRegulatoryReferences: properties.references_reglementaires_a_venir,
+    fishingPeriod: mapToFishingPeriodObject(properties.fishing_period),
     permissions: properties.autorisations,
     bycatch: properties.captures_accessoires,
     openingDate: properties.date_ouverture,
@@ -31,6 +32,54 @@ export const mapToRegulatoryZone = properties => {
   }
 }
 
+const mapToFishingPeriodObject = fishingPeriod => {
+  if (fishingPeriod) {
+    const {
+      authorized,
+      annualRecurrence,
+      dateRanges,
+      dates,
+      weekdays,
+      holidays,
+      daytime,
+      timeIntervals,
+      otherInfo
+    } = JSON.parse(fishingPeriod)
+
+    const newDateRanges = dateRanges?.map(({ startDate, endDate }) => {
+      return {
+        startDate: startDate ? new Date(startDate) : undefined,
+        endDate: endDate ? new Date(endDate) : undefined
+      }
+    })
+
+    const newDates = dates?.map(date => {
+      return date ? new Date(date) : undefined
+    })
+
+    const newTimeIntervals = timeIntervals?.map(({ from, to }) => {
+      return {
+        from: from ? new Date(from) : undefined,
+        to: to ? new Date(to) : undefined
+      }
+    })
+
+    return {
+      authorized,
+      annualRecurrence,
+      dateRanges: newDateRanges,
+      dates: newDates,
+      weekdays,
+      holidays,
+      daytime,
+      timeIntervals: newTimeIntervals,
+      otherInfo
+    }
+  } else {
+    return initialFishingPeriodValues
+  }
+}
+
 export const mapToRegulatoryFeatureObject = properties => {
   const {
     selectedRegulationTopic,
@@ -38,7 +87,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     nameZone,
     selectedRegionList,
     regulatoryTexts,
-    upcomingRegulation
+    upcomingRegulation,
+    fishingPeriod
   } = properties
   return {
     layer_name: selectedRegulationTopic,
@@ -46,7 +96,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     zones: nameZone,
     region: selectedRegionList?.join(', '),
     references_reglementaires: JSON.stringify(regulatoryTexts),
-    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || '')
+    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || ''),
+    fishing_period: JSON.stringify(fishingPeriod || '')
   }
 }
 
@@ -119,9 +170,6 @@ export const REGULATION_ACTION_TYPE = {
 }
 
 /**
- * @typedef {string} RegulatoryTextSource
- */
-/**
   * @readonly
   * @enum {RegulatoryTextSource}
 */
@@ -136,6 +184,32 @@ export const DEFAULT_REGULATORY_TEXT = {
   startDate: new Date().getTime(),
   endDate: undefined,
   textType: []
+}
+
+export const DEFAULT_DATE_RANGE = {
+  startDate: undefined,
+  endDate: undefined
+}
+
+export const initialFishingPeriodValues = {
+  authorized: undefined,
+  annualRecurrence: undefined,
+  dateRanges: [],
+  dates: [],
+  weekdays: [],
+  holidays: undefined,
+  daytime: undefined,
+  timeIntervals: []
+}
+
+export const WEEKDAYS = {
+  lundi: 'L',
+  mardi: 'M',
+  mercredi: 'M',
+  jeudi: 'J',
+  vendredi: 'V',
+  samedi: 'S',
+  dimanche: 'D'
 }
 
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
@@ -281,4 +355,93 @@ export const getRegulatoryLayersWithoutTerritory = layersTopicsByRegTerritory =>
   })
 
   return nextRegulatoryLayersWithoutTerritory
+}
+
+const toArrayString = (array) => {
+  if (array?.length) {
+    if (array.length === 1) {
+      return array[0]
+    } else if (array.length === 2) {
+      return array.join(' et ')
+    } else {
+      return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
+    }
+  }
+}
+
+const dateToString = (date, annualRecurrence) => {
+  const options = { day: 'numeric', month: 'long' }
+  if (annualRecurrence) {
+    options.year = 'numeric'
+  }
+  return date.toLocaleDateString('fr-FR', options)
+}
+
+const timeToString = (date) => {
+  const minutes = date.getMinutes()
+  const hours = date.getHours()
+  return `${hours < 10 ? '0' : ''}${hours}h${minutes < 10 ? '0' : ''}${minutes}`
+}
+
+export const fishingPeriodToString = (fishingPeriod) => {
+  const {
+    dateRanges,
+    annualRecurrence,
+    dates,
+    weekdays,
+    holidays,
+    timeIntervals,
+    daytime,
+    authorized
+  } = fishingPeriod
+  const textArray = []
+  if (dateRanges?.length) {
+    let array = toArrayString(
+      dateRanges.map(({ startDate, endDate }) => {
+        if (startDate && endDate) {
+          return `du ${dateToString(startDate, annualRecurrence)} au ${dateToString(endDate, annualRecurrence)}`
+        }
+        return undefined
+      }).filter(e => e))
+    if (array?.length) {
+      if (annualRecurrence) {
+        array = 'tous les ans '.concat(array)
+      }
+      textArray.push(array)
+    }
+  }
+  if (dates?.length) {
+    const array = toArrayString(dates.map((date) => {
+      if (date) {
+        return `le ${dateToString(date)}`
+      }
+      return undefined
+    }).filter(e => e))
+    if (array?.length) {
+      textArray.push(array)
+    }
+  }
+  if (weekdays?.length) {
+    textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${toArrayString(weekdays)}`)
+  }
+  if (holidays) {
+    textArray.push('les jours fériés')
+  }
+  if (timeIntervals?.length) {
+    const array = toArrayString(timeIntervals.map(({ from, to }) => {
+      if (from && to) {
+        return `de ${timeToString(from)} à ${timeToString(to)}`
+      }
+      return undefined
+    }).filter(e => e))
+    if (array?.length) {
+      textArray.push(array)
+    }
+  } else if (daytime) {
+    textArray.push('du lever au coucher du soleil')
+  }
+  if (textArray?.length) {
+    return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
+  }
+  return null
 }

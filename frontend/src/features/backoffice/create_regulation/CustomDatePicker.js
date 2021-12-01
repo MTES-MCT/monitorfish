@@ -1,29 +1,58 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { DatePicker } from 'rsuite'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
+/**
+ * @enum {string}
+ */
+export const CUSTOM_DATEPICKER_TYPES = {
+  TIME: 'time'
+}
+
 const CustomDatePicker = props => {
   const {
+    type,
     value,
-    onChange,
-    onOk,
+    saveValue,
     isRequired,
     format,
-    placement
+    placement,
+    style,
+    oneTap,
+    disabled
   } = props
+
+  const [val, setVal] = useState()
+
   return <DatePickerStyled
+    key={value}
     data-cy={`custom-date-picker-${value}`}
     $isrequired={isRequired}
-    oneTap
+    disabled={disabled}
+    oneTap={oneTap}
     ranges={[]}
     value={value}
-    onChange={onChange}
-    onOk={onOk}
+    onSelect={value => {
+      if (oneTap) {
+        saveValue(value)
+      } else {
+        setVal(value)
+      }
+    }}
+    onOk={value => {
+      if (!oneTap) {
+        saveValue(value)
+      }
+    }}
+    onExit={_ => saveValue(val)}
     cleanable={false}
     placement={placement}
-    placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    placeholder={type === CUSTOM_DATEPICKER_TYPES.TIME
+      ? '\xa0\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0\xa0'
+      : '\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0'}
     format={format}
+    style={style}
     locale={{
       sunday: 'Dim',
       monday: 'Lundi',

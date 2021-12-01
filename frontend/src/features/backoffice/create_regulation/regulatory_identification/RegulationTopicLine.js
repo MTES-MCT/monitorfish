@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { ContentLine, InfoText } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
@@ -10,8 +10,6 @@ import MenuItem from '../custom_form/MenuItem'
 import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../../../constants/constants'
-import { LAWTYPES_TO_TERRITORY } from '../../../../domain/entities/regulatory'
-import updateLayerNameForAllZones from '../../../../domain/use_cases/updateLayerNameForAllZones'
 import { formatDataForSelectPicker } from '../../../../utils'
 
 const RegulationTopicLine = props => {
@@ -19,8 +17,7 @@ const RegulationTopicLine = props => {
     disabled,
     selectedRegulationTopic,
     setSelectedRegulationTopic,
-    regulationTopicIsMissing,
-    selectedRegulationLawType
+    regulationTopicIsMissing
   } = props
 
   const {
@@ -28,8 +25,6 @@ const RegulationTopicLine = props => {
   } = useSelector(state => state.regulatory)
 
   useEffect(() => {
-    console.log('regulatoryTopics has changed?')
-    console.log(regulatoryTopics)
     if (regulatoryTopics) {
       setLayerTypeList(formatDataForSelectPicker(regulatoryTopics))
     }
@@ -38,19 +33,12 @@ const RegulationTopicLine = props => {
   const [layerTypeList, setLayerTypeList] = useState()
   const [isAddTopicClicked, setIsAddTopicClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
-  const [isEditLayerName, setIsEditLayerName] = useState(false)
-
-  const dispatch = useDispatch()
 
   const updateLayerName = (newLayerName) => {
-    // let newRegulatoryTopics = [...regulatoryTopics]
-    if (isEditLayerName) {
-      // newRegulatoryTopics = newRegulatoryTopics.filter(topic => topic !== selectedRegulationTopic)
-      dispatch(updateLayerNameForAllZones(LAWTYPES_TO_TERRITORY[selectedRegulationLawType], selectedRegulationLawType, selectedRegulationTopic, newLayerName))
-    }
-    // newRegulatoryTopics.push(newLayerName)
-    // newRegulatoryTopics.sort()
-    // dispatch(setRegulatoryTopics(newRegulatoryTopics))
+    /* let newRegulatoryTopics = [...regulatoryTopics]
+    newRegulatoryTopics.push(newLayerName)
+    newRegulatoryTopics.sort()
+    dispatch(setRegulatoryTopics(newRegulatoryTopics)) */
     setSelectedRegulationTopic(newLayerName)
   }
 
@@ -72,26 +60,19 @@ const RegulationTopicLine = props => {
           renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedRegulationTopic} item={item} tag={'Radio'} />}
           valueIsMissing={regulationTopicIsMissing}
         />
-        {selectedRegulationTopic && !(isEditLayerName || isAddTopicClicked) &&
+        {selectedRegulationTopic && !isAddTopicClicked &&
           <Tag
             data-cy={`${selectedRegulationTopic}`}
             tagValue={selectedRegulationTopic}
             onCloseIconClicked={_ => setSelectedRegulationTopic()}
-            onClickText={_ => {
-              setIsEditLayerName(true)
-              setIsAddTopicClicked(true)
-              setIsInfoTextShown(true)
-            }}
           />}
         {
         isAddTopicClicked
           ? <CreateRegulationTopicForm
-              selectedRegulationTopic={isEditLayerName ? selectedRegulationTopic : undefined}
               updateLayerName={updateLayerName}
               onCancelEdit={_ => {
                 setIsAddTopicClicked(false)
                 setIsInfoTextShown(false)
-                setIsEditLayerName(false)
               }}
             />
           : !selectedRegulationTopic && !disabled && <><SquareButton
@@ -109,9 +90,7 @@ const RegulationTopicLine = props => {
         isFormOpened={isAddTopicClicked}
         pointer
       >
-        {isEditLayerName
-          ? <InfoText bold red>{INFO_TEXT.editLayerNamePart1}</InfoText>
-          : <InfoText bold>{INFO_TEXT.layerNamePart1}</InfoText>}
+        <InfoText bold>{INFO_TEXT.layerNamePart1}</InfoText>
         <InfoText >
           {INFO_TEXT.layerNamePart2}
         </InfoText>

@@ -318,7 +318,6 @@ const CreateRegulation = ({ title, isEdition }) => {
                   selectedRegulationTopic={selectedRegulationTopic}
                   setSelectedRegulationTopic={setSelectedRegulationTopic}
                   regulationTopicIsMissing={regulationTopicIsMissing}
-                  selectedRegulationLawType={selectedRegulationLawType}
                 />
                 <RegulationLayerZoneLine
                   nameZone={nameZone}

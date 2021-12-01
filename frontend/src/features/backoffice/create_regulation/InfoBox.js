@@ -52,6 +52,7 @@ const InfoTextParent = styled.div`
 const ChildrenWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: left;
 `
 
 const InfoTextWrapper = styled.div`

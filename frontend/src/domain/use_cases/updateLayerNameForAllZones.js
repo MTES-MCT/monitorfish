@@ -1,5 +1,4 @@
 import { sendRegulationTransaction } from '../../api/fetch'
-import { setLayerNameUpdated } from '../../features/backoffice/Regulation.slice'
 import { setError } from '../shared_slices/Global'
 import {
   REGULATION_ACTION_TYPE,
@@ -36,15 +35,8 @@ const updateLayerNameForAllZones = (territory, lawType, oldLayerName, newLayerNa
       feature.setId(getRegulatoryFeatureId(zone.id))
       return new Promise((resolve, reject) => {
         sendRegulationTransaction(feature, REGULATION_ACTION_TYPE.UPDATE)
-          .then(_ => {
-            console.log(zone)
-            resolve(true)
-          })
-          .catch(e => {
-            console.errer(e)
-            console.log(zone)
-            reject(e)
-          })
+          .then(_ => resolve(true))
+          .catch(e => reject(e))
       })
     })
     return Promise.all(promisesList)
@@ -59,14 +51,11 @@ const updateLayerNameForAllZones = (territory, lawType, oldLayerName, newLayerNa
           [territory]: newTerritoryObject
         }
         dispatch(setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
-        dispatch(setLayerNameUpdated(true))
       })
       .catch(e => {
         console.error(e)
         dispatch(setError(e))
       })
-  } else {
-    dispatch(setLayerNameUpdated(true))
   }
 }
 

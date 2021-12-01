@@ -96,32 +96,34 @@ class TestLastPositionsFlow(unittest.TestCase):
     def test_split(self):
         previous_last_positions = pd.DataFrame(
             {
-                "cfr": ["A", "B", "C", None, None],
-                "external_immatriculation": ["AA", "BB", None, "DD", None],
-                "ircs": ["AAA", None, None, None, "EEE"],
+                "cfr": ["A", "B", "C", None, None, "G"],
+                "external_immatriculation": ["AA", "BB", None, "DD", None, "GG"],
+                "ircs": ["AAA", None, None, None, "EEE", "GGG"],
                 "last_position_datetime_utc": [
                     datetime(2021, 10, 1, 20, 52, 10),
                     datetime(2021, 10, 1, 20, 42, 10),
                     datetime(2021, 10, 1, 20, 32, 10),
                     datetime(2021, 10, 1, 19, 52, 10),
                     datetime(2021, 10, 1, 20, 16, 10),
+                    datetime(2021, 10, 1, 19, 16, 55),
                 ],
             }
         )
 
         new_last_positions = pd.DataFrame(
             {
-                "cfr": ["A", None, "F"],
-                "external_immatriculation": ["AA", None, "FF"],
-                "ircs": ["AAA", "EEE", None],
+                "cfr": ["A", None, "F", "G"],
+                "external_immatriculation": ["AA", None, "FF", "GG"],
+                "ircs": ["AAA", "EEE", None, None],
                 "last_position_datetime_utc": [
                     datetime(2021, 10, 1, 21, 52, 10),
                     datetime(2021, 10, 1, 21, 56, 10),
                     datetime(2021, 10, 1, 21, 54, 10),
+                    datetime(2021, 10, 1, 20, 17, 25),
                 ],
-                "some": [1, 2, 3],
-                "more": ["a", "b", "c"],
-                "data": [None, 2.256, "Bla"],
+                "some": [1, 2, 3, 4],
+                "more": ["a", "b", "c", "g"],
+                "data": [None, 2.256, "Bla", "Picachu"],
             }
         )
 
@@ -131,59 +133,44 @@ class TestLastPositionsFlow(unittest.TestCase):
             last_positions_to_update,
         ) = split.run(previous_last_positions, new_last_positions)
 
-        expected_unchanged_previous_last_positions = (
-            previous_last_positions.iloc[[1, 2, 3]]
-            .reset_index()
-            .drop(columns=["index"])
-        )
+        expected_unchanged_previous_last_positions = previous_last_positions.iloc[
+            [1, 2, 3]
+        ]
 
-        expected_new_vessels_last_positions = (
-            new_last_positions.iloc[[2]].reset_index().drop(columns=["index"])
-        )
+        expected_new_vessels_last_positions = new_last_positions.iloc[[2]]
 
         expected_last_positions_to_update = pd.DataFrame(
             {
-                "cfr": ["A", None],
-                "external_immatriculation": ["AA", None],
-                "ircs": ["AAA", "EEE"],
+                "cfr": ["A", "G", None],
+                "external_immatriculation": ["AA", "GG", None],
+                "ircs": ["AAA", "GGG", "EEE"],
                 "last_position_datetime_utc_previous": [
                     datetime(2021, 10, 1, 20, 52, 10),
+                    datetime(2021, 10, 1, 19, 16, 55),
                     datetime(2021, 10, 1, 20, 16, 10),
                 ],
                 "last_position_datetime_utc_new": [
                     datetime(2021, 10, 1, 21, 52, 10),
+                    datetime(2021, 10, 1, 20, 17, 25),
                     datetime(2021, 10, 1, 21, 56, 10),
                 ],
-                "some": [1, 2],
-                "more": ["a", "b"],
-                "data": [None, 2.256],
+                "some": [1, 4, 2],
+                "more": ["a", "g", "b"],
+                "data": [None, "Picachu", 2.256],
             },
         ).astype({"data": "object"})
 
-        self.assertEqual(
-            list(unchanged_previous_last_positions),
-            list(expected_unchanged_previous_last_positions),
+        pd.testing.assert_frame_equal(
+            unchanged_previous_last_positions,
+            expected_unchanged_previous_last_positions,
         )
 
-        self.assertTrue(
-            unchanged_previous_last_positions.equals(
-                expected_unchanged_previous_last_positions
-            )
+        pd.testing.assert_frame_equal(
+            new_vessels_last_positions, expected_new_vessels_last_positions
         )
 
-        self.assertEqual(
-            list(new_vessels_last_positions), list(expected_new_vessels_last_positions)
-        )
-        self.assertTrue(
-            new_vessels_last_positions.equals(expected_new_vessels_last_positions)
-        )
-
-        self.assertEqual(
-            list(last_positions_to_update), list(expected_last_positions_to_update)
-        )
-
-        self.assertTrue(
-            last_positions_to_update.equals(expected_last_positions_to_update)
+        pd.testing.assert_frame_equal(
+            last_positions_to_update, expected_last_positions_to_update
         )
 
     def test_compute_emission_period(self):

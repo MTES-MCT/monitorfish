@@ -143,6 +143,7 @@ const RegulatoryLayerTopic = props => {
                 : <LayerNameInput
                   layerName={regulatoryTopic}
                   updateLayerName={updateLayerName}
+                  setIsLayerNameEditable={setIsLayerNameEditable}
                 />
               }
             </Name>

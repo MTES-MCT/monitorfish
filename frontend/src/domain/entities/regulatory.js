@@ -60,7 +60,7 @@ const parseRegulatoryReferences = regulatoryTextsString => {
   return undefined
 }
 
-const mapToFishingPeriodObject = fishingPeriod => {
+export const mapToFishingPeriodObject = fishingPeriod => {
   if (fishingPeriod) {
     const {
       authorized,

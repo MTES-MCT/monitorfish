@@ -1,34 +1,42 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { CustomInput } from '../commonStyles/Input.style'
 
 const LayerNameInput = props => {
   const {
-    layerName: initialLayerName
-    // updateLayerName
+    layerName,
+    updateLayerName,
+    setIsLayerNameEditable
   } = props
 
-  const [layerName, setLayerName] = useState()
+  const [value, setValue] = useState()
+  const ref = useRef()
 
-  const handleClickOutside = () => {
-    // updateLayerName && updateLayerName(initialLayerName, layerName)
-    console.log('should update from click outside')
+  const update = () => {
+    if (value && value !== layerName) {
+      updateLayerName(layerName, value)
+    }
+    setIsLayerNameEditable(false)
   }
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      // updateLayerName && updateLayerName(initialLayerName, layerName)
-      console.log('should update from enter')
+      update(value)
     }
   }
 
   useEffect(() => {
-    setLayerName(initialLayerName)
-  }, [initialLayerName])
+    ref.current.focus()
+  }, [])
+
+  useEffect(() => {
+    setValue(layerName)
+  }, [layerName])
 
   return (<CustomInput
-      value={layerName && layerName.replace(/[_]/g, ' ')}
-      onChange={value => setLayerName(value)}
-      onBlur={handleClickOutside}
+      inputRef={ref}
+      value={value && value.replace(/[_]/g, ' ')}
+      onChange={val => setValue(val)}
+      onBlur={update}
       onKeyDown={handleKeyDown}
     />)
 }

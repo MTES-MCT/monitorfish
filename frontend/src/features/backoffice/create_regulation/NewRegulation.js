@@ -50,8 +50,9 @@ import {
   LAWTYPES_TO_TERRITORY,
   UE,
   FRANCE,
-  initialFishingPeriodValues
+  initialFishingPeriodValues, initialRegulatorySpeciesValues
 } from '../../../domain/entities/regulatory'
+import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -77,6 +78,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
   /** @type {FishingPeriod} */
   const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
+  /** @type {RegulatorySpecies} */
+  const [regulatorySpecies, setRegulatorySpecies] = useState(initialRegulatorySpeciesValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
@@ -314,6 +317,12 @@ const CreateRegulation = ({ title, isEdition }) => {
               <FishingPeriodSection
                 fishingPeriod={fishingPeriod}
                 setFishingPeriod={setFishingPeriod}
+              />
+            </Content>
+            <Content>
+              <RegulatorySpeciesSection
+                regulatorySpecies={regulatorySpecies}
+                setRegulatorySpecies={setRegulatorySpecies}
               />
             </Content>
           </ContentWrapper>

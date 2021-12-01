@@ -11,7 +11,7 @@ import { VesselLocation, vesselSize } from '../domain/entities/vessel'
 class MonitorFishWorker {
   #getLayerTopicList = features => {
     const featuresWithoutGeometry = features.features.map(feature => {
-      return mapToRegulatoryZone(feature.properties)
+      return mapToRegulatoryZone(feature)
     })
 
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch, useRouteMatch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import { browserName, browserVersion } from 'react-device-detect'
@@ -29,7 +29,6 @@ import ErrorToastNotification from './features/commonComponents/ErrorToastNotifi
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
-import Redirect from 'react-router-dom/es/Redirect'
 
 function App () {
   switch (browserName) {

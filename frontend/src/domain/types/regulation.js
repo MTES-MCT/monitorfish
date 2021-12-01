@@ -79,7 +79,7 @@
  */
 
 /**
- * @typedef Species
+ * @typedef RegulatorySpecies
  * @property {boolean} authorized
  * @property {boolean} allSpecies
  * @property {string} otherInfo

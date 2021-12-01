@@ -298,7 +298,7 @@ function getRegulatoryZoneFromAPI (type, regulatoryZone, fromBackoffice) {
       .then(response => {
         if (response.status === OK) {
           return response.json().then(response => {
-            return response
+            return getFirstFeature(response)
           }).catch(e => {
             throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
           })
@@ -377,7 +377,18 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
   }
 }
 
-function getRegulatoryZoneMetadataFromAPI (regulatorySubZone, fromBackoffice) {
+function getFirstFeature (response) {
+  // There must be only one feature per regulation
+  const FIRST_FEATURE = 0
+
+  if (response.features.length === 1 && response.features[FIRST_FEATURE]) {
+    return response.features[FIRST_FEATURE]
+  } else {
+    throw Error('We found multiple features for this zone')
+  }
+}
+
+function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice) {
   let url
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
@@ -391,11 +402,7 @@ function getRegulatoryZoneMetadataFromAPI (regulatorySubZone, fromBackoffice) {
     .then(response => {
       if (response.status === OK) {
         return response.json().then(response => {
-          if (response.features.length === 1 && response.features[0]) {
-            return response.features[0].properties
-          } else {
-            throw Error('We found multiple layers for this layer')
-          }
+          return getFirstFeature(response)
         })
       } else {
         response.text().then(text => {
@@ -660,7 +667,7 @@ export {
   getAdministrativeZoneURL,
   getRegulatoryZoneFromAPI,
   getRegulatoryZoneURL,
-  getRegulatoryZoneMetadataFromAPI,
+  getRegulatoryFeatureMetadataFromAPI,
   getAllGearCodesFromAPI,
   getVesselVoyageFromAPI,
   getVesselControlsFromAPI,

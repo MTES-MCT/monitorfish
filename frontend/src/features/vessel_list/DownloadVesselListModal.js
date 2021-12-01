@@ -35,7 +35,6 @@ const DownloadVesselListModal = props => {
       CSVOptions.species.code,
       CSVOptions.length.code,
       CSVOptions.externalReferenceNumber.code,
-      CSVOptions.mmsi.code,
       CSVOptions.flagState.code,
       CSVOptions.fleetSegments.code,
       CSVOptions.gears.code,

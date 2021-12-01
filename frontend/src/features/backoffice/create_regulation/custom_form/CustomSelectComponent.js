@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { SelectPicker } from 'rsuite'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 
 const CustomSelectComponent = props => {
   const {

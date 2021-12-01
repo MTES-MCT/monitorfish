@@ -1,7 +1,7 @@
 import React from 'react'
-import CustomDatePicker from './CustomDatePicker'
+import CustomDatePicker from '../custom_form/CustomDatePicker'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 
 const DateRange = (props) => {
   const {

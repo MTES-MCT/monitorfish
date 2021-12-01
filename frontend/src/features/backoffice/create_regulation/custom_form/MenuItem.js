@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import { Radio, Checkbox } from 'rsuite'
 
 const MenuItem = ({ checked, item, tag }) => {

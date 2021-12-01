@@ -1,11 +1,11 @@
 import React from 'react'
-import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label } from '../../commonStyles/Input.style'
-import CustomSelectComponent from './CustomSelectComponent'
-import { formatDataForSelectPicker } from '../../../utils'
-import { FRENCH_REGION_LIST } from '../../../constants/constants'
-import Tag from './Tag'
-import MenuItem from './MenuItem'
+import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { Label } from '../../../commonStyles/Input.style'
+import CustomSelectComponent from '../custom_form/CustomSelectComponent'
+import { formatDataForSelectPicker } from '../../../../utils'
+import { FRENCH_REGION_LIST } from '../../../../constants/constants'
+import Tag from '../Tag'
+import MenuItem from '../custom_form/MenuItem'
 
 const RegulationRegionLine = props => {
   const {

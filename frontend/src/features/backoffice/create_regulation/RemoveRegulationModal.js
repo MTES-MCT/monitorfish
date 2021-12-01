@@ -100,7 +100,9 @@ const ModalTitle = styled.div`
   background-color: ${COLORS.charcoal};
   text-align: center;
   padding: 9px;
-  font-size:13px;
+  font-size: 13px;
+  box-sizing: border-box;
+  width: 100%;
   color: ${COLORS.white};
 `
 

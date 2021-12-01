@@ -13,7 +13,8 @@ import {
   RegulationTopicLine,
   RegulatoryTextSection,
   UpcomingRegulationModal,
-  RemoveRegulationModal
+  RemoveRegulationModal,
+  FishingPeriodSection
 } from './'
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
@@ -26,7 +27,7 @@ import {
   CancelButton,
   ValidateButton
 } from '../../commonStyles/Buttons.style'
-import { Footer, FooterButton, Section, SectionTitle } from '../../commonStyles/Backoffice.style'
+import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
 import {
   resetState,
   setSelectedRegulation,
@@ -48,7 +49,8 @@ import {
   REG_LOCALE,
   LAWTYPES_TO_TERRITORY,
   UE,
-  FRANCE
+  FRANCE,
+  initialFishingPeriodValues
 } from '../../../domain/entities/regulatory'
 
 const CreateRegulation = ({ title, isEdition }) => {
@@ -73,6 +75,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regionIsMissing, setRegionIsMissing] = useState(false)
   /** @type {[regulatoryText]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
+  /** @type {FishingPeriod} */
+  const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
@@ -145,7 +149,8 @@ const CreateRegulation = ({ title, isEdition }) => {
             nameZone: nameZone,
             selectedRegionList,
             regulatoryTexts: [...regulatoryTextList],
-            upcomingRegulation
+            upcomingRegulation,
+            fishingPeriod
           })
 
           createOrUpdateRegulation(featureObject)
@@ -168,7 +173,8 @@ const CreateRegulation = ({ title, isEdition }) => {
       region,
       regulatoryReferences,
       id,
-      upcomingRegulatoryReferences
+      upcomingRegulatoryReferences,
+      fishingPeriod
     } = regulatoryZoneMetadata
 
     setSelectedRegulationLawType(lawType)
@@ -176,8 +182,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     setNameZone(zone)
     setSelectedRegionList(region ? region.split(', ') : [])
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
-    dispatch(setSelectedGeometryId(id))
     setInitialGeometryId(id)
+    setFishingPeriod(fishingPeriod)
     batch(() => {
       dispatch(setSelectedGeometryId(id))
       dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
@@ -262,9 +268,9 @@ const CreateRegulation = ({ title, isEdition }) => {
           <ContentWrapper>
             <Content>
               <Section>
-                <SectionTitle>
+                <Title>
                   identification de la zone réglementaire
-                </SectionTitle>
+                </Title>
                 <RegulationLawTypeLine
                   setSelectedValue={onLawTypeChange}
                   selectedValue={selectedRegulationLawType}
@@ -302,6 +308,12 @@ const CreateRegulation = ({ title, isEdition }) => {
                 setRegulatoryTextList={setRegulatoryTextList}
                 source={REGULATORY_TEXT_SOURCE.REGULATION}
                 saveForm={saveOrUpdateRegulation}
+              />
+            </Content>
+            <Content>
+              <FishingPeriodSection
+                fishingPeriod={fishingPeriod}
+                setFishingPeriod={setFishingPeriod}
               />
             </Content>
           </ContentWrapper>

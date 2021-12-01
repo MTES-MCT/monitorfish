@@ -51,3 +51,28 @@
 /**
  * @typedef RegulatoryLawTypes {Object.<string, RegulatoryTopics>}
  **/
+
+/**
+ * @typedef DateInterval
+ * @property {date} startDate
+ * @property {date} endDate
+ * /
+
+/**
+ * @typedef TimeInterval
+ * @property {date} from
+ * @property {date} to
+ */
+
+/**
+ * @typedef FishingPeriod
+ * @property {boolean} authorized
+ * @property {boolean} annualRecurrence
+ * @property {[DateInterval]} dateRanges
+ * @property {[date]} dates
+ * @property {[string]} weekDays
+ * @property {boolean} holidays
+ * @property {TimeInterval} timeIntervals
+ * @property {boolean} holidays
+ * @property {boolean} daytime
+ */

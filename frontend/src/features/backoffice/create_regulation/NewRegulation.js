@@ -272,6 +272,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (LAWTYPES_TO_TERRITORY[value] !== UE) {
       setSelectedRegionList([])
     }
+    setSelectedRegulationTopic(undefined)
     setSelectedRegulationLawType(value)
   }
 

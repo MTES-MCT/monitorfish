@@ -12,6 +12,42 @@ import sqlalchemy
 from sqlalchemy import select
 
 
+def get_unused_col_name(col_name: str, df: pd.DataFrame) -> str:
+    """
+    If `col_name` is not already a column name of the DataFrame `df`, returns
+    `col_name`. Otherwise, appends a number to `col_name`, trying 0, 1, 2, ...
+    until a unused column name if found.
+
+    Args:
+        col_name (str): desired column name
+        df (pd.DataFrame): DataFrame for which we want to ensure the column name is not
+          already used
+
+    Returns:
+        str: column name
+
+    Examples:
+        >>> get_unused_col_name("id", pd.DataFrame({"idx": [1, 2, 3]}))
+        "id"
+
+        >>> get_unused_col_name("id", pd.DataFrame({"id": [1, 2, 3]}))
+        "id_0"
+
+        >>> get_unused_col_name("id", pd.DataFrame({"id": [1, 2, 3], "id_0": [4, 5, 6]}))
+        "id_1"
+    """
+    df_columns = list(df)
+    attempt_col_name = col_name
+    while attempt_col_name in df_columns:
+        if "i" not in locals():
+            i = 0
+        else:
+            i += 1
+        attempt_col_name = f"{col_name}_{i}"
+
+    return attempt_col_name
+
+
 def is_a_value(x) -> bool:
     """Returns False if pd.isna(x), True otherwise.
 

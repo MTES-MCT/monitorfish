@@ -36,8 +36,15 @@ const updateLayerNameForAllZones = (territory, lawType, oldLayerName, newLayerNa
       feature.setId(getRegulatoryFeatureId(zone.id))
       return new Promise((resolve, reject) => {
         sendRegulationTransaction(feature, REGULATION_ACTION_TYPE.UPDATE)
-          .then(_ => resolve(true))
-          .catch(e => reject(e))
+          .then(_ => {
+            console.log(zone)
+            resolve(true)
+          })
+          .catch(e => {
+            console.errer(e)
+            console.log(zone)
+            reject(e)
+          })
       })
     })
     return Promise.all(promisesList)

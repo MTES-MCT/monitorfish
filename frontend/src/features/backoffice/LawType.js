@@ -38,7 +38,7 @@ const LawType = props => {
   }
 
   function updateLayerName (oldLayerName, newLayerName) {
-    updateLayerNameForAllZones(territory, lawType, oldLayerName, newLayerName)
+    dispatch(updateLayerNameForAllZones(territory, lawType, oldLayerName, newLayerName))
   }
 
   const displayRegulatoryTopics = (regulatoryTopics) => {

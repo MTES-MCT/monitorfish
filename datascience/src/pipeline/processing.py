@@ -559,6 +559,60 @@ def join_on_multiple_keys(
     return res
 
 
+def left_isin_right_by_decreasing_priority(
+    left: pd.DataFrame, right: pd.DataFrame
+) -> pd.Series:
+    """
+    Performs an operation similar to `pandas.DataFrame.isin` on multiple columns, with
+    the differences that :
+
+    - the columns are tested one by one (instead of being tested simultaneously as in
+    the case of `pandas.DataFrame.isin`), the first column of `left` being tested
+    against the first column of `right`, the second column of `left` being tested
+    against the second column of `right`...
+    - columns are considered to be sorted by decreasing priority, meaning that a match
+    on 2 rows of `left` and `right` on a given column will be taken into account only
+    if the columns of higher priority on those 2 rows have values that are either equal
+    or null.
+
+    Takes two DataFrames `left` and `right` with the same columns, returns a Series
+    with the same index as the `left` DataFrame and whose values are :
+
+    - `True` if the corresponding row in `left` has a match in `right' in at least one
+    column
+    - `False` if the corresponding row in `left` has no match in `right'
+
+    This is typically useful to filter vessels' data based on some other vessels' data,
+    both datasets being index with multiple identifiers (cfr, ircs, external immat...).
+
+    Args:
+        left (pd.DataFrame): DataFrame
+        right (pd.DataFrame): DataFrame with values for which to test if they are
+          present in `left`
+
+    Returns:
+        List[bool]: list of booleans with the same length as `left`
+    """
+
+    assert list(left) == list(right)
+
+    left = left.copy(deep=True)
+    right = right.copy(deep=True)
+    cols = list(left)
+
+    id_col = get_unused_col_name("id", left)
+    left[id_col] = np.arange(len(left))
+
+    isin_right_col = get_unused_col_name("isin_right", right)
+    right[isin_right_col] = True
+
+    res = join_on_multiple_keys(left, right, on=cols, how="left")
+    res = res.sort_values(id_col)[isin_right_col].fillna(False)
+    res.index = left.index
+
+    return res
+
+
 def try_get_factory(key: Hashable, error_value: Any = None):
     def try_get(d: Any) -> Any:
         """

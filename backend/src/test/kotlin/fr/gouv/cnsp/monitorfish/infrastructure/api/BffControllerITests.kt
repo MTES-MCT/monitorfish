@@ -61,7 +61,7 @@ class BffControllerITests {
     private lateinit var getAllGears: GetAllGears
 
     @MockBean
-    private lateinit var getAllSpecies: GetAllSpecies
+    private lateinit var getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups
 
     @MockBean
     private lateinit var getVesselVoyage: GetVesselVoyage
@@ -435,5 +435,20 @@ class BffControllerITests {
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(3)))
+    }
+
+    @Test
+    fun `Should get all species`() {
+        // Given
+        given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(SpeciesAndSpeciesGroups(
+                listOf(Species("FAK", "Facochère")),
+                listOf(SpeciesGroup("FAKOKO", "Facochère group"))))
+
+        // When
+        mockMvc.perform(get("/bff/v1/species"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.species.length()", equalTo(1)))
+                .andExpect(jsonPath("$.groups.length()", equalTo(1)))
     }
 }

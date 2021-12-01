@@ -20,6 +20,7 @@ class CaffeineConfiguration {
     val ports = "ports"
     val port = "port"
     val allSpecies = "all_species"
+    val allSpeciesGroups = "all_species_groups"
     val species = "species"
     val ers = "ers_messages"
     val nextErs = "next_ers"
@@ -48,6 +49,7 @@ class CaffeineConfiguration {
 
         val allSpeciesCache = buildCache(allSpecies, ticker, oneWeek)
         val speciesCache = buildCache(species, ticker, oneWeek)
+        val allSpeciesGroupsCache = buildCache(allSpeciesGroups, ticker, oneWeek)
 
         val portsCache = buildCache(ports, ticker, oneWeek)
         val portCache = buildCache(port, ticker, oneWeek)
@@ -82,7 +84,8 @@ class CaffeineConfiguration {
                 fleetSegmentsCache,
                 currentSegmentsCache,
                 controlAnteriorityCache,
-                riskFactorsCache))
+                riskFactorsCache,
+                allSpeciesGroupsCache))
 
         return manager
     }

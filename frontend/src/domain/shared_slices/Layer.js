@@ -1,12 +1,10 @@
-import Layers from '../entities/layers'
+import Layers, { getLayerNameNormalized } from '../entities/layers'
 import { createGenericSlice, getLocalStorageState } from '../../utils'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
 const initialState = {
-  layers: [],
   lastShowedFeatures: [],
-  layersAndAreas: [],
   layersToFeatures: [],
   administrativeZonesGeometryCache: [],
   layersSidebarOpenedLayer: ''
@@ -40,39 +38,6 @@ const reducers = {
     state.administrativeZonesGeometryCache = state.administrativeZonesGeometryCache.concat(action.payload)
   },
   /**
-   * Add a new layer
-   * @param {Object=} state
-   * @param {{payload: any | null}} action - The OpenLayers VectorLayer object to add
-   */
-  addLayer (state, action) {
-    state.layers = state.layers.concat(action.payload)
-  },
-  /**
-   * Remove a layer
-   * @param {Object=} state
-   * @param {{payload: any | null}} action - The OpenLayers VectorLayer object to remove
-   */
-  removeLayer (state, action) {
-    state.layers = state.layers.filter(layer => layer.name !== action.payload.name)
-  },
-  /**
-   * Remove layers
-   * @param {Object=} state
-   * @param {{payload: any[] | null}} action - The OpenLayers VectorLayer objects to remove
-   */
-  removeLayers (state, action) {
-    state.layers = state.layers.filter(layer => !action.payload
-      .some(layerToRemove => layerToRemove.name === layer.name))
-  },
-  /**
-   * Set initial layers
-   * @param {Object=} state
-   * @param {{payload: any[] | null}} action - The OpenLayers VectorLayer objects
-   */
-  setLayers (state, action) {
-    state.layers = action.payload
-  },
-  /**
    * Show a Regulatory or Administrative layer
    * @param {Object=} state
    * @param {{payload: AdministrativeOrRegulatoryLayer | null}} action - The layer to show
@@ -85,23 +50,9 @@ const reducers = {
       namespace
     } = action.payload
     if (type !== Layers.VESSELS.code) {
-      let found = false
-      if (type === Layers.REGULATORY.code) {
-        found = state.showedLayers
-          .filter(layer => layer.type === Layers.REGULATORY.code)
-          .some(layer => (
-            layer.topic === topic &&
-            layer.zone === zone
-          ))
-      } else if (zone) {
-        found = state.showedLayers
-          .some(layer => (
-            layer.type === type &&
-            layer.layer === zone
-          ))
-      } else {
-        found = state.showedLayers.some(layer => layer.type === type)
-      }
+      const SeachedLayerName = getLayerNameNormalized({ type, topic, zone })
+      const found = !!state.showedLayers
+        .find(layer => getLayerNameNormalized(layer) === SeachedLayerName)
 
       if (!found) {
         state.showedLayers = state.showedLayers.concat(action.payload)
@@ -142,27 +93,6 @@ const reducers = {
       state.showedLayers = state.showedLayers.filter(layer => layer.type !== type)
     }
     window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
-  },
-  /**
-   * Add a new layer with an area to show layers in a sort order (the biggest are under the smallest)
-   * @param {Object=} state
-   * @param {{payload: LayerAndArea | null}} action - The layer and area
-   */
-  pushLayerAndArea (state, action) {
-    state.layersAndAreas = state.layersAndAreas.filter(layerAndArea => {
-      return layerAndArea.name !== action.payload.name
-    })
-    state.layersAndAreas = state.layersAndAreas.concat(action.payload)
-  },
-  /**
-   * Remove a layer with an area
-   * @param {Object=} state
-   * @param {{payload: LayerAndArea | null}} action - The layer and area
-   */
-  removeLayerAndArea (state, action) {
-    state.layersAndAreas = state.layersAndAreas.filter(layerAndArea => {
-      return layerAndArea.name !== action.payload
-    })
   },
   /**
    * Store layer to feature and simplified feature - To show simplified features if the zoom is low

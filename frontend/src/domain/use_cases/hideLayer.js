@@ -1,5 +1,6 @@
 import layer from '../shared_slices/Layer'
 import { batch } from 'react-redux'
+import { getLayerNameNormalized } from '../entities/layers'
 
 /**
  * hide a Regulatory or Administrative layer
@@ -14,23 +15,22 @@ const hideLayer = layerToHide => (dispatch, getState) => {
   } = layerToHide
 
   const {
-    removeLayerAndArea,
     removeShowedLayer,
     removeLayerToFeatures
   } = layer[namespace].actions
 
   const { showedLayers } = getState().layer
   if (type && showedLayers) {
-    const layername = [type, topic, zone].filter(Boolean).join(':')
+    const layername = getLayerNameNormalized({ type, topic, zone })
+
     const layersToRemove = showedLayers.filter(layer_ => {
-      return [layer_.type, layer_.topic, layer_.zone].filter(Boolean).join(':') === layername
+      return getLayerNameNormalized(layer_) === layername
     })
 
     if (layersToRemove) {
       batch(() => {
         dispatch(removeShowedLayer(layerToHide))
         layersToRemove.forEach(layer => {
-          dispatch(removeLayerAndArea(layer.type))
           dispatch(removeLayerToFeatures(layer.type))
         })
       })

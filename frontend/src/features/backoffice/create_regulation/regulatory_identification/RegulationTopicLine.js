@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label } from '../../commonStyles/Input.style'
-import { SquareButton } from '../../commonStyles/Buttons.style'
-import CustomSelectComponent from './CustomSelectComponent'
-import Tag from './Tag'
-import MenuItem from './MenuItem'
+import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { Label } from '../../../commonStyles/Input.style'
+import { SquareButton } from '../../../commonStyles/Buttons.style'
+import CustomSelectComponent from '../custom_form/CustomSelectComponent'
+import Tag from '../Tag'
+import MenuItem from '../custom_form/MenuItem'
 import CreateRegulationTopicForm from './CreateRegulationTopicForm'
-import InfoBox from './InfoBox'
+import InfoBox from '../InfoBox'
 
 const RegulationTopicLine = props => {
   const {

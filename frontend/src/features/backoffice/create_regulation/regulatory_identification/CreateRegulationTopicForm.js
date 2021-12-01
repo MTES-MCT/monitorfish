@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
-import { CustomInput } from '../../commonStyles/Input.style'
+import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
+import { CustomInput } from '../../../commonStyles/Input.style'
 
 const CreateRegulationTopicForm = props => {
   const {

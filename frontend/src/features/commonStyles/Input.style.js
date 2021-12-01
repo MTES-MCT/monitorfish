@@ -22,16 +22,19 @@ export const CustomInput = styled(Input)`
   background-color: ${props => props.$isGray ? COLORS.gainsboro : COLORS.white};
   margin: 0px 10px 0px 0px;
   padding: 8px;
+
   &:focus {
     color: ${COLORS.gunMetal}!important;
     border-color: ${COLORS.lightGray}!important;
-    cursor: pointer;
+    cursor: text;
   }
+
   &:hover {
     color: ${COLORS.gunMetal}!important;
     border-color: ${COLORS.lightGray}!important;
-    cursor: pointer;
+    cursor: text;
   }
+
   ::placeholder {
     font-size: 11px;
     color: ${COLORS.slateGray};

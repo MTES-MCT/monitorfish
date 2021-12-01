@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { WEEKDAYS } from '../../../domain/entities/regulatory'
+import { COLORS } from '../../../../constants/constants'
+import { WEEKDAYS } from '../../../../domain/entities/regulatory'
 
 const DayPicker = ({ selectedList, setSelectedList, disabled }) => {
   return <>

@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { COLORS } from '../../../constants/constants'
-import { Section, Title } from '../../commonStyles/Backoffice.style'
-import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
+import { COLORS } from '../../../../constants/constants'
+import { Section, Title } from '../../../commonStyles/Backoffice.style'
+import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
-import UpcommingRegulationSection from './UpcommingRegulationSection'
-import { setIsModalOpen } from '../Regulation.slice'
-import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../domain/entities/regulatory'
+import UpcomingRegulationSection from './UpcomingRegulationSection'
+import { setIsModalOpen } from '../../Regulation.slice'
+import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -102,7 +102,7 @@ const RegulatoryTextSection = props => {
     </ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION &&
       upcomingRegulation && upcomingRegulation !== {} &&
-        <UpcommingRegulationSection upcomingRegulation={upcomingRegulation} />
+        <UpcomingRegulationSection upcomingRegulation={upcomingRegulation} />
     }
   </Section>)
 }

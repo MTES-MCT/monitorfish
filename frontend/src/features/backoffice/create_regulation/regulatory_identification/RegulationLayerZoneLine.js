@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label, CustomInput } from '../../commonStyles/Input.style'
-import InfoBox from './InfoBox'
+import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import InfoBox from '../InfoBox'
 const RegulationLayerZoneLine = props => {
   const {
     nameZone,

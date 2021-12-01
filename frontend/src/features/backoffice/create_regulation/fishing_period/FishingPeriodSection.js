@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import FishingPeriod from './FishingPeriod'
-import SectionTitle from '../SectionTitle'
-import { Label, CustomInput } from '../../commonStyles/Input.style'
+import SectionTitle from '../../SectionTitle'
+import { Label, CustomInput } from '../../../commonStyles/Input.style'
 
 const FishingPeriodSection = (props) => {
   const {
@@ -30,20 +30,20 @@ const FishingPeriodSection = (props) => {
       fishingPeriod={fishingPeriod}
       setFishingPeriod={setFishingPeriod}
     />
-    <Other show={show}>
+    <OtherRemark show={show}>
       <Label>Autres points sur la période</Label>
       <CustomInput
         width={'730px'}
         value={fishingPeriod?.otherInfo || ''}
         onChange={setOtherInfo} />
-    </Other>
+    </OtherRemark>
   </>
 }
 
-const Other = styled.div`
+const OtherRemark = styled.div`
   display: ${props => props.show ? 'flex' : 'none'};
   align-items: center;
-  margin-top: 30px;
+  margin-top: 10px;
 `
 
 export default FishingPeriodSection

@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { ContentLine, Delimiter, CustomCheckbox } from '../../commonStyles/Backoffice.style'
-import { CustomInput, Label } from '../../commonStyles/Input.style'
-import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
+import { ContentLine, Delimiter, CustomCheckbox } from '../../../commonStyles/Backoffice.style'
+import { CustomInput, Label } from '../../../commonStyles/Input.style'
+import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { CheckboxGroup } from 'rsuite'
-import CustomDatePicker from './CustomDatePicker'
-import { COLORS, INFINITE } from '../../../constants/constants'
+import CustomDatePicker from '../custom_form/CustomDatePicker'
+import { COLORS, INFINITE } from '../../../../constants/constants'
 import {
   addObjectToUpcomingRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap
-} from '../Regulation.slice'
-import Tag from './Tag'
-import { REGULATORY_TEXT_SOURCE } from '../../../domain/entities/regulatory'
+} from '../../Regulation.slice'
+import Tag from '../Tag'
+import { REGULATORY_TEXT_SOURCE } from '../../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props

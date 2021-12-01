@@ -4,20 +4,23 @@ import {
   useRouteMatch,
   useHistory
 } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
+
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
 import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
-import { useDispatch, useSelector } from 'react-redux'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/zoomInLayer'
 import hideLayer from '../../../domain/use_cases/hideLayer'
-import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import showRegulatoryLayer from '../../../domain/use_cases/showRegulatoryLayer'
+
+import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
-import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
+import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -90,7 +93,7 @@ const RegulatoryLayerZone = props => {
 
   useEffect(() => {
     if (showRegulatoryZone && isReadyToShowRegulatoryLayers) {
-      dispatch(showRegulatoryLayer({ ...regulatoryZone, namespace }))
+      dispatch(showRegulatoryLayer({ type: LayersEnum.REGULATORY.code, ...regulatoryZone, namespace }))
     } else {
       dispatch(hideLayer({
         type: LayersEnum.REGULATORY.code,

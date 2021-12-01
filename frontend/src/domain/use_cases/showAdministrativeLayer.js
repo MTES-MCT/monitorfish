@@ -1,12 +1,13 @@
-import layer from '../shared_slices/Layer'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { batch } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
-import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
-import { getAdministrativeZoneFromAPI } from '../../api/fetch'
-import { batch } from 'react-redux'
 import VectorImageLayer from 'ol/layer/VectorImage'
+import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
+
+import layer from '../shared_slices/Layer'
+import { getAdministrativeZoneFromAPI } from '../../api/fetch'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 

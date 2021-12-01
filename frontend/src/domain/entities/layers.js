@@ -1,3 +1,15 @@
+/**
+ *
+ * @param {Object} layer
+ * @param { String } layer.type
+ * @param { String } layer.topic
+ * @param { String } layer.zone
+ * @returns String
+ */
+export const getLayerNameNormalized = (layer) => {
+  return [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
+}
+
 export const layersGroups = {
   TWELVE_FORTY_ONE: {
     code: 'twelve_forty_one',

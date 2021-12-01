@@ -1,17 +1,18 @@
-import Layers, { getGearCategory } from '../entities/layers'
-import layer from '../shared_slices/Layer'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
-import VectorSource from 'ol/source/Vector'
-import GeoJSON from 'ol/format/GeoJSON'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
-import { all } from 'ol/loadingstrategy'
-import { getHash } from '../../utils'
-import { getRegulatoryZoneFromAPI } from '../../api/fetch'
-import { getArea, getCenter } from 'ol/extent'
-import { animateToRegulatoryLayer } from '../shared_slices/Map'
 import { batch } from 'react-redux'
-import { simplify } from '@turf/turf'
+import { getArea, getCenter } from 'ol/extent'
+import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
+import { all } from 'ol/loadingstrategy'
+import VectorSource from 'ol/source/Vector'
+import { simplify } from '@turf/turf'
+
+import Layers, { getGearCategory } from '../entities/layers'
+import { animateToRegulatoryLayer } from '../shared_slices/Map'
+import layer from '../shared_slices/Layer'
+import { getRegulatoryZoneFromAPI } from '../../api/fetch'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
+import { getHash } from '../../utils'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -28,30 +29,26 @@ const setIrretrievableFeaturesEvent = error => {
  * Show a Regulatory or Administrative layer
  * @param layerToShow {AdministrativeOrRegulatoryLayer} - The layer to show
  */
-const showRegulatoryLayer = layerToShow => (dispatch, getState) => {
+const showRegulatoryLayer = layerToShow => (dispatch) => {
   currentNamespace = layerToShow.namespace
   const {
-    addLayer,
     addShowedLayer
   } = layer[currentNamespace].actions
-
-  const getVectorLayerClosure = getVectorLayer(dispatch, getState)
 
   if (!layerToShow.zone) {
     console.error('No regulatory layer to show.')
     return
   }
-
-  const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
-  const gearCategory = getGearCategory(layerToShow.gears, getState().gear.gears)
-  const vectorLayer = getVectorLayerClosure(layerToShow, hash, gearCategory)
   batch(() => {
-    dispatch(addLayer(vectorLayer))
     dispatch(addShowedLayer(layerToShow))
   })
 }
 
-const getVectorLayer = (dispatch, getState) => (layerToShow, hash, gearCategory) => {
+export const getVectorLayer = (dispatch, getState) => (layerToShow) => {
+  const { gears } = getState().gear
+  const gearCategory = getGearCategory(layerToShow.gears, gears)
+  const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
+  // TODO: switch to LayersType.REGULATORY ?
   const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
   const layer = new VectorImageLayer({
@@ -67,10 +64,10 @@ const getVectorLayer = (dispatch, getState) => (layerToShow, hash, gearCategory)
 }
 
 const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {
+  // TODO: switch to LayersType.REGULATORY ?
   const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
   const {
-    pushLayerAndArea,
     setLastShowedFeatures,
     pushLayerToFeatures
   } = layer[currentNamespace].actions
@@ -86,26 +83,24 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
 
         const features = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone : regulatoryZone
         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(features))
-
+        const center = getCenter(vectorSource.getExtent())
+        const centerHasValidCoordinates = center && center.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])
         batch(() => {
           dispatch(pushLayerToFeatures({
             name: zoneName,
+            area: getArea(vectorSource.getExtent()),
             simplifiedFeatures: simplifiedRegulatoryZone,
             features: regulatoryZone
           }))
           dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
-          dispatch(pushLayerAndArea({
-            name: zoneName,
-            area: getArea(vectorSource.getExtent())
-          }))
+
+          if (centerHasValidCoordinates) {
+            dispatch(animateToRegulatoryLayer({
+              name: zoneName,
+              center: center
+            }))
+          }
         })
-        const center = getCenter(vectorSource.getExtent())
-        if (center && center.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])) {
-          dispatch(animateToRegulatoryLayer({
-            name: `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`,
-            center: center
-          }))
-        }
       }).catch(e => {
         vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
         vectorSource.removeLoadedExtent(extent)

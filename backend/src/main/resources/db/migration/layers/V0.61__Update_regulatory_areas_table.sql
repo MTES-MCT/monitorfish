@@ -7,5 +7,6 @@ CREATE OR REPLACE VIEW reglementation_peche_view AS SELECT id, law_type,
                                                            mesures_techniques, especes, quantites, taille,
                                                            especes_interdites, autre_reglementation_especes,
                                                            documents_obligatoires, autre_reglementation,
-                                                           references_reglementaires, geometry_simplified, row_hash FROM reglementation_peche;
+                                                           references_reglementaires, references_reglementaires,
+                                                           geometry_simplified, row_hash FROM reglementation_peche;
 ALTER TABLE reglementation_peche_view RENAME COLUMN geometry_simplified to geometry;

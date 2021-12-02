@@ -21,6 +21,7 @@ SELECT
     documents_obligatoires,
     autre_reglementation,
     references_reglementaires,
+    references_reglementaires_a_venir,
     ST_CurveToLine(geometry) AS geometry,
     geometry_simplified,
     row_hash

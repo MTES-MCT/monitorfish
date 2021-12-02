@@ -148,8 +148,12 @@ const CreateRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     if (selectedRegulationLawType) {
       const territory = layersTopicsByRegTerritory[LAWTYPES_TO_TERRITORY[selectedRegulationLawType]]
-      const layerNameList = territory[selectedRegulationLawType]
-      dispatch(setRegulatoryTopics(Object.keys(layerNameList)))
+      let regulatoryTopicList = []
+      if (territory) {
+        const lawTypeObject = territory[selectedRegulationLawType]
+        regulatoryTopicList = lawTypeObject ? Object.keys(lawTypeObject) : []
+      }
+      dispatch(setRegulatoryTopics(regulatoryTopicList))
     }
   }, [selectedRegulationLawType, layersTopicsByRegTerritory])
 

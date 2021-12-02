@@ -18,7 +18,7 @@ from config import (
     EMAIL_TEMPLATES_LOCATION,
     LIBRARY_LOCATION,
 )
-from src.pipeline.email.email import create_html_email, send_email
+from src.pipeline.emails.emails import create_html_email, send_email
 from src.pipeline.generic_tasks import extract
 from src.pipeline.processing import try_get_factory
 

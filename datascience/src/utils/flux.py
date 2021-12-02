@@ -21,7 +21,6 @@ msg_types = {
     "DEPARTURE": "DEP",
     "FISHING_OPERATION": "FAR",
     "DISCARD": "DIS",
-    "NOTIFICATION": "NOT",
     "ARRIVAL": "RTP",
     "LANDING": "LAN",
     "RELOCATION": "RLC",
@@ -31,29 +30,31 @@ msg_types = {
     "JOINT_FISHING_OPERATION": "JOINT_FISHING_OPERATION",
 }
 
-def get_type(xml_element):
-    #Renvoie le type d'operation (DAT, COR,...) ou le type de message(DEP, LAN,...)
-    type=None
-    purpose = get_purpose(xml_element)
-    report_type = get_element(xml_element,'.//ram:TypeCode[@listID="FLUX_FA_REPORT_TYPE"]')
-    if purpose is None:
-        type = msg_types[get_text(xml_element,'.//*[@listID="FLUX_FA_TYPE"]')]
-    elif report_type.text=='NOTIFICATION':
-        type = msg_types[report_type.text] 
-    else :
-        type = purpose
+def get_msg_type(xml_element):
+    #Renvoie le type de message(DEP, LAN,...)
+    message_type = get_text(xml_element,'.//ram:TypeCode[@listID="FLUX_FA_TYPE"]')
+    try:
+        type = msg_types[message_type] 
+    except:
+        type=message_type
     return type
+
+def get_op_type(xml_element):
+    #Renvoie le type d'operation (DAT, COR, DEL ou NOTIFICATION)
+    report_type = get_text(xml_element,'.//ram:TypeCode[@listID="FLUX_FA_REPORT_TYPE"]')
+    if report_type=='NOTIFICATION':
+        return 'NOT'
+    else :
+        return get_purpose(xml_element)
 
 def get_purpose(xml_element):
     purpose = get_text(xml_element,'.//*[@listID="FLUX_GP_PURPOSE"]')
     purpose_list={'9':'DAT','1':'DEL','3':'DEL','5':'COR'}
-    if purpose is None:
-        return None
-    else:
-        try:
-            op_type=purpose_list[purpose]
-        except ValueError:
-            print('Parser not implemented for purpose code: ' + purpose)
+    try:
+        op_type=purpose_list[purpose]
+    except KeyError:
+        logging.warning('Parser not implemented for purpose code: ' + purpose)
+        raise Exception
     return op_type
 
 
@@ -67,13 +68,13 @@ def get_text(xml_element, xml_path):
 def make_datetime(date: str):
     try:
         res = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ").replace(microsecond=0)
-    except ValueError:
-        logging.warning("FLUX datetime could not be parsed")
-        res = None
+    except :
+        try:
+            res = datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")
+        except ValueError:
+            logging.warning("FLUX datetime could not be parsed")
+            res = None
     return res
 
-def remove_none_values(data_list):
-    for key,value in dict(data_list).items():
-        if value is None:
-            del data_list[key]
-    return data_list
+def remove_none_values(d: dict) -> dict:
+    return {key: d[key] for key in d if d[key] is not None}

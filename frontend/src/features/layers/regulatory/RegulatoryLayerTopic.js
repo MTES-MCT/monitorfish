@@ -115,7 +115,6 @@ const RegulatoryLayerTopic = props => {
   const onMouseOut = () => isOver && setIsOver(false)
 
   const onEditLayerNameClick = () => {
-    console.log('make this line editable please')
     setIsLayerNameEditable(true)
   }
 

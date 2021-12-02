@@ -11,6 +11,7 @@ import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { REGULATORY_TERRITORY } from '../../domain/entities/regulatory'
+import getAllSpecies from '../../domain/use_cases/getAllSpecies'
 /* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {
@@ -32,6 +33,7 @@ const Backoffice = () => {
     batch(() => {
       dispatch(getAllRegulatoryLayersByRegTerritory())
       dispatch(getAllGearCodes())
+      dispatch(getAllSpecies())
     })
   }
 

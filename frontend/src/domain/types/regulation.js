@@ -83,6 +83,13 @@
  * @property {boolean} authorized
  * @property {boolean} allSpecies
  * @property {string} otherInfo
- * @property {string[]} species - FAO codes
+ * @property {RegulatorySpeciesDetail[]} species
  * @property {string[]} speciesGroups - group name
+ */
+
+/**
+ * @typedef RegulatorySpeciesDetail
+ * @property {string} code - FAO code
+ * @property {string} quantity
+ * @property {string} minimumSize
  */

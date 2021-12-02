@@ -59,12 +59,10 @@ const RegulationRegionLine = props => {
       renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList?.includes(item.value)} item={item} tag={'Checkbox'} />}
       valueIsMissing={regionIsMissing}
     />
-    <>
     {
-    selectedRegionList && selectedRegionList.length > 0 &&
+      selectedRegionList?.length > 0 &&
       <SelectedRegionList />
     }
-    </>
   </ContentLine>)
 }
 

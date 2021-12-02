@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import SectionTitle from '../../SectionTitle'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
+import RegulatorySpeciesForm from './RegulatorySpeciesForm'
 
 const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) => {
   const [show, setShow] = useState(false)
@@ -18,6 +19,11 @@ const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) =
       title={'ESPÈCES RÉGLEMENTÉES'}
       isOpen={show}
       setIsOpen={setShow}
+    />
+    <RegulatorySpeciesForm
+      regulatorySpecies={regulatorySpecies}
+      setRegulatorySpecies={setRegulatorySpecies}
+      show={show}
     />
     <OtherRemark show={show}>
       <Label>Autres points sur les espèces</Label>

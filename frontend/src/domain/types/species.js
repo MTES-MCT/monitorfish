@@ -11,7 +11,7 @@
  */
 
 /**
- * @typedef SpeciesAndSpeciesGroup
+ * @typedef SpeciesAndSpeciesGroups
  * @property {Species[]} species
  * @property {SpeciesGroup[]} groups
  */

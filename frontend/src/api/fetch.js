@@ -22,6 +22,7 @@ const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zon
 const REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE = 'Nous n\'avons pas pu filtrer les zones réglementaires par zone'
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
+const SPECIES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les espèces'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
 const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
@@ -434,6 +435,29 @@ function getAllGearCodesFromAPI () {
 }
 
 /**
+ * Get species
+ * @memberOf API
+ * @returns {Promise<SpeciesAndSpeciesGroups>}
+ * @throws {Error}
+ */
+function getAllSpeciesFromAPI () {
+  return fetch('/bff/v1/species')
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(SPECIES_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(SPECIES_ERROR_MESSAGE)
+    })
+}
+
+/**
  * Get vessel voyage
  * @memberOf API
  * @returns {Promise<VesselVoyage>} The voyage
@@ -677,5 +701,6 @@ export {
   getAllGeometryWithoutProperty,
   sendRegulationTransaction,
   getControlObjectivesFromAPI,
-  updateControlObjectiveFromAPI
+  updateControlObjectiveFromAPI,
+  getAllSpeciesFromAPI
 }

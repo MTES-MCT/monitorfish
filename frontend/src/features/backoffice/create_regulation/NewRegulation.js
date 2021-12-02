@@ -177,7 +177,8 @@ const CreateRegulation = ({ title, isEdition }) => {
       regulatoryReferences,
       id,
       upcomingRegulatoryReferences,
-      fishingPeriod
+      fishingPeriod,
+      regulatorySpecies
     } = regulatoryZoneMetadata
 
     setSelectedRegulationLawType(lawType)
@@ -187,6 +188,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
     setInitialGeometryId(id)
     setFishingPeriod(fishingPeriod)
+    setRegulatorySpecies(regulatorySpecies)
+
     batch(() => {
       dispatch(setSelectedGeometryId(id))
       dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))

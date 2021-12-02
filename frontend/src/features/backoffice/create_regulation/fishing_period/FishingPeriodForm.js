@@ -138,7 +138,7 @@ const FishingPeriodForm = (props) => {
 
   return <Wrapper show={show}>
     <Title>
-      <PeriodRadioGroup
+      <AuthorizedRadio
         inline={true}
         onChange={value => set(FISHING_PERIOD_KEYS.AUTHORIZED, value)}
         value={authorized}
@@ -152,9 +152,9 @@ const FishingPeriodForm = (props) => {
           interdites
           <RedCircle />
         </CustomRadio>
-      </PeriodRadioGroup>
+      </AuthorizedRadio>
     </Title>
-    <PeriodRow display={displayForm} authorized={authorized}>
+    <AnnualRecurrence display={displayForm} authorized={authorized}>
       <Label>Récurrence annuelle</Label>
       <RadioGroup
         inline={true}
@@ -164,8 +164,8 @@ const FishingPeriodForm = (props) => {
         <CustomRadio value={true}>oui</CustomRadio>
         <CustomRadio value={false}>non</CustomRadio>
       </RadioGroup>
-    </PeriodRow>
-    <DateTimeWrapper display={displayForm} authorized={authorized}>
+    </AnnualRecurrence>
+    <DateTime display={displayForm} authorized={authorized}>
       <ConditionalLines display={displayForm} disabled={disabled}>
         <Row>
           <ContentWrapper>
@@ -209,7 +209,7 @@ const FishingPeriodForm = (props) => {
           <ContentWrapper>
             <Label>Dates précises</Label>
           </ContentWrapper>
-          <DateList >
+          <DateList>
             { dates?.length > 0
               ? dates.map((date, id) => {
                 return <DateRow key={id} $isLast={id === dates.length - 1}>
@@ -299,12 +299,12 @@ const FishingPeriodForm = (props) => {
           >du lever au coucher du soleil</DaytimeCheckbox>
         </TimeRow>
       </ConditionalLines>
-    </DateTimeWrapper>
+    </DateTime>
     {fishingPeriodAsString &&
     <PeriodAsStringWrapper display={displayForm} authorized={authorized}>
-      <PeriodAsString >
+      <PeriodAsString>
         {fishingPeriodAsString}
-      </PeriodAsString >
+      </PeriodAsString>
     </PeriodAsStringWrapper>}
   </Wrapper>
 }
@@ -332,7 +332,7 @@ const PeriodAsString = styled.div`
   text-align: left;
 `
 
-const PeriodRow = styled.div`
+const AnnualRecurrence = styled.div`
   display: ${props => !props.display ? 'none' : 'flex'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-left: 15px;
@@ -374,7 +374,7 @@ const DaytimeCheckbox = styled(CustomCheckbox)`
 const HolidaysCheckbox = styled(CustomCheckbox)`
   margin-top: -15px;
 `
-const DateTimeWrapper = styled.div`
+const DateTime = styled.div`
   display: ${props => props.display ? 'flex' : 'none'};
   flex-direction: row;
   opacity: ${props => props.disabled ? '0.4' : '1'};
@@ -428,7 +428,7 @@ const RedCircle = styled.span`
   background-color: ${COLORS.red};
 `
 
-const PeriodRadioGroup = styled(RadioGroup)` 
+const AuthorizedRadio = styled(RadioGroup)` 
   display: flex;
   flex-direction: row;
   align-items: center;

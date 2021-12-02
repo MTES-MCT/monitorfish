@@ -53,6 +53,7 @@ import {
   initialFishingPeriodValues, initialRegulatorySpeciesValues
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
+import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -105,6 +106,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (!regulatoryTopics || regulatoryTopics.length === 0) {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
+
+    dispatch(getAllSpecies())
+
     const newRegulation = {
       regulatoryText: [],
       upcomingRegulation: [{}]
@@ -153,7 +157,8 @@ const CreateRegulation = ({ title, isEdition }) => {
             selectedRegionList,
             regulatoryTexts: [...regulatoryTextList],
             upcomingRegulation,
-            fishingPeriod
+            fishingPeriod,
+            regulatorySpecies
           })
 
           createOrUpdateRegulation(featureObject)

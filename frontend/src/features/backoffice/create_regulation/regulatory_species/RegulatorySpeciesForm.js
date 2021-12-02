@@ -24,8 +24,6 @@ const RegulatorySpeciesForm = props => {
     speciesGroups: speciesGroupsState
   } = useSelector(state => state.species)
 
-  console.log(speciesGroupsState)
-
   const {
     /** @type {RegulatorySpecies} regulatorySpecies */
     regulatorySpecies,
@@ -42,13 +40,26 @@ const RegulatorySpeciesForm = props => {
 
   const [displayForm, setDisplayForm] = useState(false)
 
-  console.log(regulatorySpecies)
-
   useEffect(() => {
     if (!displayForm && authorized !== undefined) {
       setDisplayForm(true)
     }
+
+    if (!authorized && species?.length) {
+      initSpeciesQuantityAndMinimumSize()
+    }
   }, [authorized])
+
+  function initSpeciesQuantityAndMinimumSize () {
+    const nextSpecies = [...species]
+      .map(species => {
+        species.minimumSize = undefined
+        species.quantity = undefined
+
+        return species
+      })
+    set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
+  }
 
   const set = useCallback((key, value) => {
     const obj = {
@@ -57,7 +68,7 @@ const RegulatorySpeciesForm = props => {
     }
 
     setRegulatorySpecies(obj)
-  }, [setRegulatorySpecies])
+  }, [setRegulatorySpecies, regulatorySpecies])
 
   const push = useCallback((key, array, value) => {
     const newArray = array ? [...array] : []
@@ -193,36 +204,59 @@ const RegulatorySpeciesForm = props => {
         />
       </ContentLine>
       {
-        species?.length > 0 &&
-        species.map((speciesValue, index) => (
-          <SpeciesDetails key={index}>
-            <SpeciesDetail>
-              <Label>Espèce {index + 1}</Label>
-              <Tag
-                key={speciesValue.code}
-                tagValue={speciesValue.code}
-                onCloseIconClicked={removeSpeciesToRegulatorySpeciesList}
-              />
-            </SpeciesDetail>
-            <SpeciesDetail>
-              <Label>Quantités</Label>
-              <CustomInput
-                placeholder=''
-                value={speciesValue.quantity}
-                onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
-                width={'200px'}
-              />
-            </SpeciesDetail>
-            <SpeciesDetail>
-              <Label>Taille minimale</Label>
-              <CustomInput
-                placeholder=''
-                value={speciesValue.minimumSize}
-                onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
-                width={'200px'}
-              />
-            </SpeciesDetail>
-          </SpeciesDetails>
+        speciesGroups?.map((speciesGroup, index) => (
+          <SpeciesDetail key={speciesGroup.group}>
+            <Label>Catégorie {index + 1}</Label>
+            <Tag
+              key={speciesGroup}
+              tagValue={speciesGroup}
+              onCloseIconClicked={removeSpeciesGroupToRegulatorySpeciesList}
+            />
+          </SpeciesDetail>
+        ))
+      }
+      {
+        species?.map((speciesValue, index) => (
+          <>
+            {authorized
+              ? <SpeciesDetails key={speciesValue.code}>
+                <SpeciesDetail>
+                  <Label>Espèce {index + 1}</Label>
+                  <Tag
+                    key={speciesValue.code}
+                    tagValue={speciesValue.code}
+                    onCloseIconClicked={removeSpeciesToRegulatorySpeciesList}
+                  />
+                </SpeciesDetail>
+                <SpeciesDetail>
+                  <Label>Quantités</Label>
+                  <CustomInput
+                    placeholder=''
+                    value={speciesValue.quantity || ''}
+                    onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
+                    width={'200px'}
+                  />
+                </SpeciesDetail>
+                <SpeciesDetail>
+                  <Label>Taille minimale</Label>
+                  <CustomInput
+                    placeholder=''
+                    value={speciesValue.minimumSize || ''}
+                    onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
+                    width={'200px'}
+                  />
+                </SpeciesDetail>
+              </SpeciesDetails>
+              : <SpeciesDetail key={speciesValue.code}>
+                <Label>Espèce {index + 1}</Label>
+                <Tag
+                  key={speciesValue.code}
+                  tagValue={speciesValue.code}
+                  onCloseIconClicked={removeSpeciesToRegulatorySpeciesList}
+                />
+              </SpeciesDetail>
+            }
+            </>
         ))
       }
     </Content>
@@ -253,6 +287,7 @@ const Wrapper = styled.div`
   display: ${props => props.show ? 'flex' : 'none'};
   ${props => props.show ? 'flex-direction: column;' : ''};
   width: 100%;
+  margin-bottom: ${props => props.show ? 10 : 0}px;
 `
 
 const normalTitle = css`

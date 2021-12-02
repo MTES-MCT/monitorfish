@@ -12,7 +12,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     zone: decodeURI(properties.zones),
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
-    structuredSpecies: properties.species,
+    regulatorySpecies: properties.species ? JSON.parse(properties.species) : initialRegulatorySpeciesValues,
     regulatoryReferences: parseRegulatoryReferences(properties.references_reglementaires),
     upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(properties.references_reglementaires_a_venir),
     fishingPeriod: mapToFishingPeriodObject(properties.fishing_period),
@@ -111,7 +111,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     selectedRegionList,
     regulatoryTexts,
     upcomingRegulation,
-    fishingPeriod
+    fishingPeriod,
+    regulatorySpecies
   } = properties
 
   return {
@@ -121,7 +122,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     region: selectedRegionList?.join(', '),
     references_reglementaires: JSON.stringify(regulatoryTexts),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || ''),
-    fishing_period: JSON.stringify(fishingPeriod || '')
+    fishing_period: JSON.stringify(fishingPeriod || ''),
+    species: JSON.stringify(regulatorySpecies || '')
   }
 }
 

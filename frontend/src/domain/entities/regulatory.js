@@ -40,9 +40,14 @@ const parseUpcomingRegulatoryReferences = upcomingRegulatoryReferences =>
     : undefined
 
 const parseRegulatoryReferences = regulatoryTextsString => {
-  const regulatoryTexts = JSON.parse(regulatoryTextsString)
+  if (!regulatoryTextsString) {
+    return undefined
+  }
 
-  if (regulatoryTexts && regulatoryTexts.length > 0) {
+  const regulatoryTexts = typeof regulatoryTextsString === 'string'
+    ? JSON.parse(regulatoryTextsString)
+    : regulatoryTextsString
+  if (regulatoryTexts?.length > 0 && Array.isArray(regulatoryTexts)) {
     return regulatoryTexts.map(regulatoryText => {
       if (!regulatoryText.startDate || regulatoryText.startDate === '') {
         regulatoryText.startDate = new Date().getTime()

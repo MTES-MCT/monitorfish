@@ -16,6 +16,7 @@ const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) =
 
   return <>
     <SectionTitle
+      dataCy={'open-regulated-species'}
       title={'ESPÈCES RÉGLEMENTÉES'}
       isOpen={show}
       setIsOpen={setShow}
@@ -28,6 +29,7 @@ const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) =
     <OtherRemark show={show}>
       <Label>Autres points sur les espèces</Label>
       <CustomInput
+        data-cy={'regulatory-species-other-info'}
         width={'730px'}
         value={regulatorySpecies?.otherInfo || ''}
         onChange={setOtherInfo} />

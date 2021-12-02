@@ -15,6 +15,7 @@ from src.pipeline.processing import (
     coalesce,
     get_first_non_null_column_name,
     join_on_multiple_keys,
+    left_isin_right_by_decreasing_priority,
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
@@ -178,7 +179,7 @@ def split(
         new_last_positions (pd.DataFrame)
 
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame,pd.DataFrame]:
+        Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
           - unchanged_previous_last_positions
           - new_vessels_last_positions
           - last_positions_to_update
@@ -189,29 +190,41 @@ def split(
 
     vessel_id_cols = ["cfr", "external_immatriculation", "ircs"]
 
-    previous_last_positions = previous_last_positions.set_index(vessel_id_cols)
-    new_last_positions = new_last_positions.set_index(vessel_id_cols)
-
     unchanged_previous_last_positions = previous_last_positions[
-        ~previous_last_positions.index.isin(new_last_positions.index)
+        ~left_isin_right_by_decreasing_priority(
+            previous_last_positions[vessel_id_cols], new_last_positions[vessel_id_cols]
+        )
     ]
 
     new_vessels_last_positions = new_last_positions[
-        ~new_last_positions.index.isin(previous_last_positions.index)
+        ~left_isin_right_by_decreasing_priority(
+            new_last_positions[vessel_id_cols], previous_last_positions[vessel_id_cols]
+        )
     ]
 
-    last_positions_to_update = pd.merge(
-        previous_last_positions[["last_position_datetime_utc"]],
-        new_last_positions,
-        right_index=True,
-        left_index=True,
-        suffixes=("_previous", "_new"),
+    last_positions_to_update = join_on_multiple_keys(
+        (
+            previous_last_positions[
+                vessel_id_cols + ["last_position_datetime_utc"]
+            ].rename(
+                columns={
+                    "last_position_datetime_utc": "last_position_datetime_utc_previous"
+                }
+            )
+        ),
+        (
+            new_last_positions.rename(
+                columns={"last_position_datetime_utc": "last_position_datetime_utc_new"}
+            )
+        ),
+        on=vessel_id_cols,
+        how="inner",
     )
 
     return (
-        unchanged_previous_last_positions.reset_index().copy(deep=True),
-        new_vessels_last_positions.reset_index().copy(deep=True),
-        last_positions_to_update.reset_index().copy(deep=True),
+        unchanged_previous_last_positions,
+        new_vessels_last_positions,
+        last_positions_to_update,
     )
 
 

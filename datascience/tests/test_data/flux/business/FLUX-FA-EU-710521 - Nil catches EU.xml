@@ -1,76 +1,8 @@
-<rsm:FLUXFAReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 xsd/FLUXFAReportMessage_3p1/FLUXFAReportMessage_3p1.xsd" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-         <rsm:FLUXReportDocument>
-            <ram:ID schemeID="UUID">251db84c-1d8b-49be-b426-f70bb2c68a2d</ram:ID>
-            <ram:CreationDateTime>
-               <udt:DateTime>2020-05-06T18:40:11.291Z</udt:DateTime>
-            </ram:CreationDateTime>
-            <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
-            <ram:Purpose>FLUX-FA-EU-710521 </ram:Purpose>
-            <ram:OwnerFLUXParty>
-               <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
-            </ram:OwnerFLUXParty>
-         </rsm:FLUXReportDocument>
-         <rsm:FAReportDocument>
-            <ram:TypeCode listID="FLUX_FA_REPORT_TYPE">DECLARATION</ram:TypeCode>
-            <ram:AcceptanceDateTime>
-               <udt:DateTime>2020-05-06T13:40:11.291Z</udt:DateTime>
-            </ram:AcceptanceDateTime>
-            <ram:RelatedFLUXReportDocument>
-               <ram:ID schemeID="UUID">fe7acdb9-ff2e-4cfa-91a9-fd2e06b556e1</ram:ID>
-               <ram:CreationDateTime>
-                  <udt:DateTime>2020-05-06T15:40:11.291Z</udt:DateTime>
-               </ram:CreationDateTime>
-               <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
-               <ram:OwnerFLUXParty>
-                  <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
-               </ram:OwnerFLUXParty>
-            </ram:RelatedFLUXReportDocument>
-            <ram:SpecifiedFishingActivity>
-               <ram:TypeCode listID="FLUX_FA_TYPE">FISHING_OPERATION</ram:TypeCode>
-               
-               <ram:OccurrenceDateTime>
-                     <udt:DateTime>2020-05-06T11:40:11.291Z</udt:DateTime>
-                </ram:OccurrenceDateTime>
-                
-                <ram:VesselRelatedActivityCode listID="VESSEL_ACTIVITY">STE</ram:VesselRelatedActivityCode>
-                <ram:OperationsQuantity unitCode="C62">0</ram:OperationsQuantity>
-
-                <ram:RelatedFLUXLocation>
-                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
-                  <ram:ID schemeID="TERRITORY">ESP</ram:ID>
-                </ram:RelatedFLUXLocation>
-
-               <!--Trip information-->
-               <ram:SpecifiedFishingTrip>
-                  <ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194011291</ram:ID>
-               </ram:SpecifiedFishingTrip>
-               
-            </ram:SpecifiedFishingActivity>
-            
-            <!--reporting vessel-->
-            <ram:SpecifiedVesselTransportMeans>
-               <ram:ID schemeID="CFR">CYP123456789</ram:ID>
-               <ram:RegistrationVesselCountry>
-                  <ram:ID schemeID="TERRITORY">CYP</ram:ID>
-               </ram:RegistrationVesselCountry>
-               
-               <!--master name and address-->
-               <ram:SpecifiedContactParty>
-                  <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
-                  <ram:SpecifiedStructuredAddress>
-                     <ram:StreetName>ABC</ram:StreetName>
-                     <ram:CityName>CABOURG</ram:CityName>
-                     <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
-                     <ram:PlotIdentification>17</ram:PlotIdentification>
-                     <ram:PostalArea> 14390</ram:PostalArea>
-                  </ram:SpecifiedStructuredAddress>
-                  <ram:SpecifiedContactPerson>
-                     <ram:GivenName>John</ram:GivenName>
-                     <ram:FamilyName>Doe</ram:FamilyName>
-                     <ram:Alias>Captain Jack</ram:Alias>
-                  </ram:SpecifiedContactPerson>
-               </ram:SpecifiedContactParty>
-            </ram:SpecifiedVesselTransportMeans>
-            
-         </rsm:FAReportDocument>
-      </rsm:FLUXFAReportMessage>
+<?xml version="1.0"?>
+<BASE64DATA encoding="Base64"
+      xmlns:tns="urn:xeu:flux-transport:wsdl:v1"
+      xmlns:flux="urn:xeu:flux-transport:v1"
+      xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+      xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema">H4sIANT1p2EC/61X23KqSBR99ysY3omAlyiVUEUQM5wygWkxlcyL1cLWUMPFaZp48venuZho5JY5Y1lW0r0v3Wuvtbv7hiShMl+snucagn1M6AMkCd4B9zPxlcR9hRAvYhdTP45u+ZRESpp9wQX268IWu1TxMMVKQnHkYeJVxVIGLJrXr5hZD/ZS3fgV8+G5n2EQJQrBYbfsCNIEbwLQdjsCO0zhLk38iAU1o21MwnwfRkR9+q7I4jF66tFu0VfRvykO/K0P3oxNOO97OAnDkPwNiI5RGO63/Cule6XfPxwOV4fBVUx2fVkUpf7zw2KZl0TwoyyaC7za446fm2Mpi8iz2E1DiOiJRW6EQ8WccXlpwZzd8quVOeNVeSR5m8nQFSRvshGG0w0Im6E8FrbX4mYju+MJlr2bfuFcEVEnkGPLYAHHD+HcJLNiICsfs7Ioi4I4EsSxI02UoahI0pU8lf6+6Z+ZnefptyfK12KnZB8noMcecIGf0GyTGSzre3ttr5BtLQ1enRbhTmzrI6mZtzDXBGMlXEviSJa4M+8KT+sQAcncbEzo+yUaF1X4WKCGnBdeXSK9Bu1+Y3g23UaCgiZaK0kydl9iONfWyLAt5KydF5vhODP0hYY0x7Qei6Ud3Soiaq4L+5y2/4Emg2/RpC1Vvh4EAZv02iTToJotXGPX20yF7VYGYehusTCVMPvXk0Ecb0ajMUjVdewsnEZQRh1B6Sif/1VBHaXwW2poF8SHRcdi52tZ7sHNu/zcT179aKe51H/z63RcK5RCIXNz+af5eL+2bKNdJ+xTDaLrpoRAk3TauCJ158oR1A5Je5XFfGKnGgQl5Ef0zjB6MpZLY7HWdMd8MvMaO0aRtdZXrc5l7YHknE7+SnF+tHNp5NPM45bXxzKviuV2LgzVXnXIE64cLz+1vK2u/sLS81qXHNCQobWUvVIHjoGQ6ViI4WMs7VoNXFL8c9kXdPpDEBzi7zn/80YkCNXM/qqDzK/bwo3V2kGmvc6aJFOv4CBbcBwn46M4EsfSdChKEmNii6w7LaDX7lct4N5XXEjeGJg995aT8Csu56AURHUIjpLiJsf+6HBy6HPEq/qLLcmD4Wh8PZk2HxAIdoxYBXGLjHqcRpS8f5tBLGcL3N1zVbEqxAkFwkU4BI7ddDnseYQFaSWXHkeUXZKbjwcUBxUy061Hh7WQNbIWTGUPGmsiqNxKaV8b8CP9kpLUpSlhzaZYcF1nzb0oAaCPbIuqdlceSidjDZ46o19uo2t31grdl+fxcbTJs6hBXVmfjVUZ62jXFMwOYmp67Nhjey9bhHRdnuSXU02BYvYCCTR2n1A5aTiYlk32ZLgK+f73oa8mC5CkeX33/htEObQ/4teoSPw51uA4x6EfFEWZxVA4now1eGqBjxNVx+zi6UfcD+z+U15G8/F2OJr3VmNcd9/5Rpu6eD7UPA4+HxdfXq/qLwoc3vFGEAAA
+</BASE64DATA>

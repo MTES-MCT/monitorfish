@@ -6,14 +6,15 @@ from src.pipeline.parsers.flux.childless_parsers import (
     parse_spe,
 )
 from src.utils.flux import (
-    get_type,
+    get_msg_type,
     get_text,
-    get_element
+    get_element,
+    NS_FLUX
 )
 from src.pipeline.parsers.utils import tagged_children, try_float
 
 def default_log_parser(el: xml.etree.ElementTree.Element):
-    return {"log_type": get_type(el)}
+    return {"log_type": get_msg_type(el)}
 
 
 def parse_dep(dep):
@@ -136,7 +137,7 @@ def parse_pno(pno):
         "predictedArrivalDatetimeUtc": get_text(pno,'.//ram:OccurrenceDateTime/udt:DateTime'),
         "port": get_text(pno,'.//ram:RelatedFLUXLocation/ram:ID[@schemeID="LOCATION"]'),
         "purpose": get_text(pno,'.//ram:ReasonCode'),
-        "tripStartDate": get_text(pno,'.//ram:EndDateTime/udt:DateTime'),
+        "tripStartDate": get_text(pno,'.//ram:StartDateTime/udt:DateTime'),
     }
     
     if "RelatedFLUXLocation" in children:
@@ -145,7 +146,8 @@ def parse_pno(pno):
             value = {**value, **ras_data}
 
     if "SpecifiedFACatch" in children:
-        catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        unloaded_catches = pno.findall(".//ram:SpecifiedFACatch[ram:TypeCode='UNLOADED']", NS_FLUX)
+        catches = [parse_spe(spe) for spe in unloaded_catches]
         value["catchOnboard"] = catches
 
     pos=get_element(pno,'.//ram:SpecifiedPhysicalFLUXGeographicalCoordinate')
@@ -167,7 +169,6 @@ def parse_lan(lan):
     }
 
     children = tagged_children(lan)
-
     if "SpecifiedFACatch" in children:
         catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
         value["catchLanded"] = catches

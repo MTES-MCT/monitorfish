@@ -60,19 +60,19 @@ def parse_ops(ops):
 
 
 def parse_cor(cor):
-    metadata = {"operation_type": "COR", "referenced_ers_id": cor.get("RN")}
+    metadata = {"operation_type": "COR", "referenced_report_id": cor.get("RN")}
     child = get_first_child(cor, assert_child_single=True)
     return metadata, child, None, None
 
 
 def parse_del(del_):
-    metadata = {"operation_type": "DEL", "referenced_ers_id": del_.get("RN")}
+    metadata = {"operation_type": "DEL", "referenced_report_id": del_.get("RN")}
 
     return metadata, None, None, {"value": None}
 
 
 def parse_ret(ret):
-    metadata = {"operation_type": "RET", "referenced_ers_id": ret.get("ON")}
+    metadata = {"operation_type": "RET", "referenced_report_id": ret.get("ON")}
 
     data = {
         "returnStatus": ret.get("RS"),
@@ -92,7 +92,7 @@ def parse_ers(ers):
 
     ers_datetime = make_datetime(ers_date, ers_time)
 
-    metadata = {"ers_id": ers.get("RN"), "ers_datetime_utc": ers_datetime}
+    metadata = {"report_id": ers.get("RN"), "report_datetime_utc": ers_datetime}
 
     children = list(ers)
     child = get_first_child(
@@ -218,9 +218,9 @@ def batch_parse(ers_xmls: List[str]):
         "operation_country": None,
         "operation_datetime_utc": None,
         "operation_type": None,
-        "ers_id": None,
-        "referenced_ers_id": None,
-        "ers_datetime_utc": None,
+        "report_id": None,
+        "referenced_report_id": None,
+        "report_datetime_utc": None,
         "cfr": None,
         "ircs": None,
         "external_identification": None,
@@ -236,9 +236,9 @@ def batch_parse(ers_xmls: List[str]):
         "operation_country": None,
         "operation_datetime_utc": None,
         "operation_type": None,
-        "ers_id": None,
-        "referenced_ers_id": None,
-        "ers_datetime_utc": None,
+        "report_id": None,
+        "referenced_report_id": None,
+        "report_datetime_utc": None,
         "cfr": None,
         "ircs": None,
         "external_identification": None,

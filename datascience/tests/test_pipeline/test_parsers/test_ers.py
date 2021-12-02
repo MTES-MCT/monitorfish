@@ -25,9 +25,9 @@ class TestLogParsers(unittest.TestCase):
             "operation_country": "OOE",
             "operation_datetime_utc": datetime.datetime(2020, 4, 2, 8, 57),
             "operation_type": "COR",
-            "referenced_ers_id": "OOE20200401018605",
-            "ers_id": "OOE20200402018600",
-            "ers_datetime_utc": datetime.datetime(2020, 4, 2, 8, 57),
+            "referenced_report_id": "OOE20200401018605",
+            "report_id": "OOE20200402018600",
+            "report_datetime_utc": datetime.datetime(2020, 4, 2, 8, 57),
             "cfr": "un id",
             "ircs": "un call sign",
             "external_identification": "marqueur externe",
@@ -60,8 +60,8 @@ class TestLogParsers(unittest.TestCase):
             "operation_country": "OOE",
             "operation_datetime_utc": datetime.datetime(2020, 3, 23, 6, 8),
             "operation_type": "DAT",
-            "ers_id": "OOE20200323034701",
-            "ers_datetime_utc": datetime.datetime(2020, 3, 23, 6, 8),
+            "report_id": "OOE20200323034701",
+            "report_datetime_utc": datetime.datetime(2020, 3, 23, 6, 8),
             "cfr": "un id",
             "ircs": "call sign",
             "external_identification": "marqueur externe",
@@ -279,7 +279,7 @@ class TestLogParsers(unittest.TestCase):
             "operation_country": "OOF",
             "operation_datetime_utc": datetime.datetime(2020, 3, 21, 13, 39),
             "operation_type": "DEL",
-            "referenced_ers_id": "OOF20200321016002",
+            "referenced_report_id": "OOF20200321016002",
         }
         self.assertEqual(metadata, expected_metadata)
         data = data_list[0]
@@ -294,7 +294,7 @@ class TestLogParsers(unittest.TestCase):
             "operation_country": "FRA",
             "operation_datetime_utc": datetime.datetime(2020, 3, 21, 22, 14),
             "operation_type": "RET",
-            "referenced_ers_id": "OOE20200321041702",
+            "referenced_report_id": "OOE20200321041702",
         }
         self.assertEqual(metadata, expected_metadata)
         data = data_list[0]

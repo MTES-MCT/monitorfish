@@ -37,6 +37,7 @@ const RegulationGeometryLine = props => {
         onChange={value => dispatch(setSelectedGeometryId(value))}
         data={geometryIdList}
         valueIsMissing={geometryIsMissing}
+        emptyMessage={'aucun tracé à associer'}
         renderMenuItem={(_, item) =>
           <MenuItem checked={item.value === selectedGeometryId}
             item={item} tag={'Radio'}/>}

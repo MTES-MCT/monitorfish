@@ -206,7 +206,7 @@ const RegulatorySpeciesForm = props => {
           onChange={onSpeciesGroupChange}
           value={'Choisir une ou des catégories d\'espèces'}
           data={getFormattedSpeciesGroups()}
-          noResultsText={'Aucune catégorie'}
+          emptyMessage={'Aucune catégorie'}
           renderMenuItem={(_, item) => <MenuItem checked={speciesGroups?.includes(item.value)} item={item} tag={'Checkbox'} />}
         />
       </ContentLine>
@@ -219,7 +219,7 @@ const RegulatorySpeciesForm = props => {
           onChange={onSpeciesChange}
           value={'Choisir une ou des espèces'}
           data={getFormattedSpecies()}
-          noResultsText={'Aucune espèce'}
+          emptyMessage={'Aucune espèce'}
           renderMenuItem={(_, item) =>
             <MenuItem checked={species?.some(species => species?.code?.includes(item.value))} item={item} tag={'Checkbox'} />}
         />

@@ -33,6 +33,7 @@ const LayerNameInput = props => {
   }, [layerName])
 
   return (<CustomInput
+      data-cy="layer-name-input"
       inputRef={ref}
       value={value && value.replace(/[_]/g, ' ')}
       onChange={val => setValue(val)}

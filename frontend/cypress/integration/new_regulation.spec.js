@@ -39,15 +39,13 @@ context('NewRegulation', () => {
     cy.get('[data-key="Reg. MEMN"]').eq(0).click()
     // Select the first layer name in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
-    cy.get('.rs-picker-select-menu-item').should('have.length', 1)
     cy.get('[data-key="Ouest_Cotentin_Bivalves"]').should('exist')
 
     // Select Reg. NAMO law type in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.get('[data-key="Reg. NAMO"]').eq(0).click()
     // Select the first layer name in the dropdown menu
-    cy.get('*[class="rs-btn rs-btn-default rs-picker-toggle"]').eq(1).click()
-    cy.get('.rs-picker-select-menu-item').should('have.length', 1)
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
     // layer name should have changed
     cy.get('[data-key="Armor_CSJ_Dragues"]').should('exist')
   })
@@ -57,9 +55,8 @@ context('NewRegulation', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
 
-    cy.get('*[class="rs-btn rs-btn-default rs-picker-toggle"]').eq(1).click()
-    cy.get('.rs-picker-select-menu-item').should('have.length', 0)
-    cy.get('.rs-picker-none').should('have.text', 'aucune thématique à afficher')
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
+    cy.get('.rs-picker-none').contains('aucune thématique à afficher')
   })
 
   it('Adding a zone name change input background', () => {

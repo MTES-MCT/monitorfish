@@ -73,7 +73,7 @@ const LawType = props => {
   }
 
   return (<LawTypeContainer data-cy='law-type'>
-    <LawTypeName onClick={openLawTypeList}>
+    <LawTypeName onClick={openLawTypeList} data-cy={lawType}>
       <LawTypeText>{lawType}</LawTypeText>
       <ChevronIcon $isOpen={isOpen}/>
     </LawTypeName>

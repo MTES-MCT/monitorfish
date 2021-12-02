@@ -24,6 +24,7 @@ const RegulationLawTypeLine = props => {
         onChange={setSelectedValue}
         data={selectData}
         data-cy={'regulation-lawtype-select'}
+        emptyMessage={'aucun ensemble à afficher'}
         renderMenuItem={(_, item) =>
           <MenuItem
             checked={item.value === selectedValue}

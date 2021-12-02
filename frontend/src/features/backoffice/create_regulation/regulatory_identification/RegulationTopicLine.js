@@ -59,6 +59,7 @@ const RegulationTopicLine = props => {
           data={layerTypeList}
           renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedRegulationTopic} item={item} tag={'Radio'} />}
           valueIsMissing={regulationTopicIsMissing}
+          emptyMessage={'aucune thématique à afficher'}
         />
         {selectedRegulationTopic && !isAddTopicClicked &&
           <Tag

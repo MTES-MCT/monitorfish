@@ -55,6 +55,7 @@ const RegulationRegionLine = props => {
       placeholder={'Choisir une région'}
       onChange={onChange}
       value={'Choisir une région'}
+      emptyMessage={'aucune région à afficher'}
       data={formatDataForSelectPicker(FRENCH_REGION_LIST)}
       renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList?.includes(item.value)} item={item} tag={'Checkbox'} />}
       valueIsMissing={regionIsMissing}

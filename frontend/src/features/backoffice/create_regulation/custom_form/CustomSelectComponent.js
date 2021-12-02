@@ -15,7 +15,7 @@ const CustomSelectComponent = props => {
     valueIsMissing,
     groupBy,
     disabled,
-    noResultsText
+    emptyMessage
   } = props
 
   const selectPickerStyle = {
@@ -39,8 +39,8 @@ const CustomSelectComponent = props => {
         menuClassName={'new-regulation-select-picker'}
         $valueIsMissing={valueIsMissing}
         locale={{
-          noResultsText: noResultsText || 'pas de tracé à associer',
-          emptyMessage: noResultsText || 'pas de tracé à associer'
+          noResultsText: emptyMessage,
+          emptyMessage: emptyMessage
         }}
         groupBy={groupBy}
         disabled={disabled}

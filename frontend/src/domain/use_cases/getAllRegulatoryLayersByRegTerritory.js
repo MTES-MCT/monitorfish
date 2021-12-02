@@ -31,6 +31,7 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
       })
     })
     .catch(error => {
+      console.error(error)
       dispatch(setError(error))
     })
 }

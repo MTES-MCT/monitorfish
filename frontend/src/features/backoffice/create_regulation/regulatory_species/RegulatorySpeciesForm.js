@@ -50,24 +50,37 @@ const RegulatorySpeciesForm = props => {
     }
   }, [authorized])
 
+  useEffect(() => {
+    if (allSpecies) {
+      const regulatorySpeciesWithoutSpecies = {
+        ...regulatorySpecies,
+        [REGULATORY_SPECIES_KEYS.SPECIES]: [],
+        [REGULATORY_SPECIES_KEYS.SPECIES_GROUPS]: []
+      }
+
+      setRegulatorySpecies(regulatorySpeciesWithoutSpecies)
+    }
+  }, [allSpecies])
+
   function initSpeciesQuantityAndMinimumSize () {
     const nextSpecies = [...species]
       .map(species => {
-        species.minimumSize = undefined
-        species.quantity = undefined
-
-        return species
+        return {
+          ...species,
+          minimumSize: undefined,
+          quantity: undefined
+        }
       })
     set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
   }
 
   const set = useCallback((key, value) => {
-    const obj = {
+    const nextRegulatorySpecies = {
       ...regulatorySpecies,
       [key]: value
     }
 
-    setRegulatorySpecies(obj)
+    setRegulatorySpecies(nextRegulatorySpecies)
   }, [setRegulatorySpecies, regulatorySpecies])
 
   const push = useCallback((key, array, value) => {
@@ -147,11 +160,17 @@ const RegulatorySpeciesForm = props => {
         value={authorized}
       >
         Espèces
-        <CustomRadio checked={authorized === true} value={true} >
+        <CustomRadio
+          checked={authorized === true}
+          value={true}
+        >
           autorisées
-          <GreenCircle />
+          <GreenCircle data-cy={'regulation-authorized-species'}/>
         </CustomRadio>
-        <CustomRadio checked={authorized === false} value={false} >
+        <CustomRadio
+          checked={authorized === false}
+          value={false}
+        >
           interdites
           <RedCircle />
         </CustomRadio>
@@ -180,6 +199,7 @@ const RegulatorySpeciesForm = props => {
       }
       <ContentLine>
         <CustomSelectComponent
+          disabled={allSpecies}
           menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
           searchable={true}
           placeholder={'Choisir une ou des catégories d\'espèces'}
@@ -192,6 +212,7 @@ const RegulatorySpeciesForm = props => {
       </ContentLine>
       <ContentLine>
         <CustomSelectComponent
+          disabled={allSpecies}
           menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
           searchable={true}
           placeholder={'Choisir une ou des espèces'}
@@ -231,6 +252,7 @@ const RegulatorySpeciesForm = props => {
                 <SpeciesDetail>
                   <Label>Quantités</Label>
                   <CustomInput
+                    data-cy={'regulatory-species-quantity'}
                     placeholder=''
                     value={speciesValue.quantity || ''}
                     onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
@@ -240,6 +262,7 @@ const RegulatorySpeciesForm = props => {
                 <SpeciesDetail>
                   <Label>Taille minimale</Label>
                   <CustomInput
+                    data-cy={'regulatory-species-minimum-size'}
                     placeholder=''
                     value={speciesValue.minimumSize || ''}
                     onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}

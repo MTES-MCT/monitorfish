@@ -170,10 +170,10 @@ const CreateRegulation = ({ title, isEdition }) => {
             layerName: selectedRegulationTopic,
             lawType: selectedRegulationLawType,
             zone: nameZone,
-            region: selectedRegionList.selectedRegionList?.join(', '),
-            regulatoryReferences: JSON.stringify([...regulatoryTextList]),
-            upcomingRegulatoryReferences: JSON.stringify(upcomingRegulation),
-            fishingPeriod: JSON.stringify(fishingPeriod || ''),
+            region: selectedRegionList?.join(', '),
+            regulatoryReferences: regulatoryTextList,
+            upcomingRegulatoryReferences: upcomingRegulation,
+            fishingPeriod: fishingPeriod || '',
             regulatorySpecies
           })
           createOrUpdateRegulation(featureObject)
@@ -339,7 +339,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             </Content>
             <Content>
               <FishingPeriodSection
-                fishingPeriod={fishingPeriod}
+                fishingPeriod={fishingPeriod || initialFishingPeriodValues}
                 setFishingPeriod={setFishingPeriod}
               />
             </Content>

@@ -134,10 +134,7 @@ class MonitorFishWorker {
       }
       return accumulatedObject
     }, {})
-    return {
-      layersTopicsByRegulatoryTerritory
-      // regulatoryTopics: [...regulatoryTopicList]
-    }
+    return layersTopicsByRegulatoryTerritory
   }
 
   getUniqueSpeciesAndDistricts (vessels) {

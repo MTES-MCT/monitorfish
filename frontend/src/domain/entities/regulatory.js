@@ -61,6 +61,8 @@ const parseRegulatoryReferences = regulatoryTextsString => {
 }
 
 export const mapToFishingPeriodObject = fishingPeriod => {
+  console.log('mapToFishingPeriodObject')
+  console.log(fishingPeriod)
   if (fishingPeriod) {
     const {
       authorized,
@@ -167,7 +169,6 @@ export const LAWTYPES_TO_TERRITORY = {
   [REG_NAMO]: FRANCE,
   [REG_MEMN]: FRANCE,
   [REG_OUTRE_MER]: FRANCE,
-  [REG_LOCALE]: FRANCE,
   [RUE_2019]: UE,
   [RUE_1380]: UE,
   [RUE_494]: UE,

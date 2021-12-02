@@ -64,7 +64,9 @@ const CustomDatePicker = props => {
       ok: 'OK',
       hours: 'Heures',
       minutes: 'Minutes',
-      seconds: 'Secondes'
+      seconds: 'Secondes',
+      formattedMonthPattern: 'DD/MM/YYYY',
+      formattedDayPattern: 'DD/MM/YYYY'
     }} />
 }
 

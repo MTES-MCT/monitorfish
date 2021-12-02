@@ -61,8 +61,6 @@ const parseRegulatoryReferences = regulatoryTextsString => {
 }
 
 export const mapToFishingPeriodObject = fishingPeriod => {
-  console.log('mapToFishingPeriodObject')
-  console.log(fishingPeriod)
   if (fishingPeriod) {
     const {
       authorized,
@@ -105,9 +103,8 @@ export const mapToFishingPeriodObject = fishingPeriod => {
       timeIntervals: newTimeIntervals,
       otherInfo
     }
-  } else {
-    return initialFishingPeriodValues
   }
+  return undefined
 }
 
 export const mapToRegulatoryFeatureObject = properties => {
@@ -159,9 +156,6 @@ const REG_OUTRE_MER = 'Reg. Outre-mer'
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
 const RUE_494 = 'R(CE) 494/2002'
-const RUE_2019_OLD = 'R(UE) 2019/1241'
-const RUE_1380_OLD = 'R(UE) 1380/2013'
-const RUE_494_OLD = 'R(CE) 494/2002'
 
 export const LAWTYPES_TO_TERRITORY = {
   [REG_MED]: FRANCE,
@@ -171,10 +165,7 @@ export const LAWTYPES_TO_TERRITORY = {
   [REG_OUTRE_MER]: FRANCE,
   [RUE_2019]: UE,
   [RUE_1380]: UE,
-  [RUE_494]: UE,
-  [RUE_2019_OLD]: UE,
-  [RUE_1380_OLD]: UE,
-  [RUE_494_OLD]: UE
+  [RUE_494]: UE
 }
 
 export const REGULATORY_TERRITORY = {
@@ -498,4 +489,22 @@ export const fishingPeriodToString = fishingPeriod => {
   }
 
   return null
+}
+
+export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
+  const UEObject = { ...layersTopicsByRegTerritory[UE] }
+
+  const FRObject = { ...layersTopicsByRegTerritory[FRANCE] }
+  const newFRObject = {
+    [REG_MEMN]: FRObject[REG_MEMN],
+    [REG_NAMO]: FRObject[REG_NAMO],
+    [REG_SA]: FRObject[REG_SA],
+    [REG_MED]: FRObject[REG_MED],
+    [REG_OUTRE_MER]: FRObject[REG_OUTRE_MER]
+  }
+
+  return {
+    [UE]: UEObject.sort(),
+    [FRANCE]: newFRObject
+  }
 }

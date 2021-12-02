@@ -20,7 +20,7 @@ const LayerNameInput = props => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      update(value)
+      update()
     }
   }
 

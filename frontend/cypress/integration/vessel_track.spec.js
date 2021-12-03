@@ -94,7 +94,9 @@ context('Vessels Track', () => {
 
     cy.log('Hide other vessels')
     cy.get('*[data-cy^="open-vessels-visibility"]').click()
-    cy.get('*[data-cy^="map-property-trigger"]').eq(1).click({ force: true })
+    cy.get('*[data-cy^="map-property-trigger"]')
+      .filter(':contains("les navires non sélectionnés")')
+      .click({ timeout: 20000, force: true })
     cy.wait(500)
     cy.get('.vessels').dblclick(750, 86, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)

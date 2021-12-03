@@ -13,7 +13,7 @@ import {
   setNonFilteredVesselsAreHidden,
   showFilter
 } from '../../domain/shared_slices/Filter'
-import HideNonFilteredVessels from './HideNonFilteredVessels'
+import FilterParameters from './FilterParameters'
 import { usePrevious } from '../../hooks/usePrevious'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
@@ -116,7 +116,7 @@ const VesselFilters = () => {
                 Aucun filtre
               </LastPositionInfo>
           }
-          <HideNonFilteredVessels
+          <FilterParameters
             setNonFilteredVesselsAreHidden={setNonFilteredVesselsAreHiddenCallback}
             nonFilteredVesselsAreHidden={nonFilteredVesselsAreHidden}
           />

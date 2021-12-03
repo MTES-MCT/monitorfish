@@ -148,10 +148,9 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   function addRegulatoryLayersToMap () {
     if (showedLayers.length) {
       const layersToInsert = showedLayers
-        .filter(layer => !map.getLayers()?.getArray().some(layer_ => {
-          return getLayerNameNormalized({ ...layer, type: LayersEnum.REGULATORY.code }) === layer_.name
-        })) // Les couches dans showedLayers qui ne sont pas dans OL
-        .filter(layer => layer.type === LayersEnum.REGULATORY.code) // Les couches de type regulatoryLayer
+        .filter(layer => layersNotInCurrentOLMap(layer))
+        .filter(layer => layersOfTypeRegulatoryLayer(layer))
+
       layersToInsert.forEach(layerToInsert => {
         if (!layerToInsert) {
           return
@@ -163,15 +162,32 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
     }
   }
 
+  function layersNotInCurrentOLMap (layer) {
+    return !map.getLayers()?.getArray().some(olLayer => olLayer.name ===
+      getLayerNameNormalized({ type: LayersEnum.REGULATORY.code, ...layer }))
+  }
+
+  function layersOfTypeRegulatoryLayer (layer) {
+    return layer.type === LayersEnum.REGULATORY.code
+  }
+
   function removeRegulatoryLayersToMap () {
     const _showedLayers = showedLayers.length ? showedLayers : []
     const layersToRemove = map?.getLayers()?.getArray()
-      .filter(OLLayer => !_showedLayers.some(layer_ => OLLayer.name === getLayerNameNormalized(layer_)))
-      .filter(OLLayer => OLLayer?.name?.includes(LayersEnum.REGULATORY.code))
+      .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
+      .filter(olLayer => layersNotPresentInShowedLayers(_showedLayers, olLayer))
 
     layersToRemove?.forEach(layerToRemove => {
       map.getLayers().remove(layerToRemove)
     })
+  }
+
+  function layersNotPresentInShowedLayers (_showedLayers, olLayer) {
+    return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
+  }
+
+  function layersOfTypeRegulatoryLayerInCurrentMap (olLayer) {
+    return olLayer?.name?.includes(LayersEnum.REGULATORY.code)
   }
 
   return null

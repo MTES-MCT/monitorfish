@@ -93,7 +93,11 @@ const RegulatoryLayerZone = props => {
 
   useEffect(() => {
     if (showRegulatoryZone && isReadyToShowRegulatoryLayers) {
-      dispatch(showRegulatoryLayer({ type: LayersEnum.REGULATORY.code, ...regulatoryZone, namespace }))
+      dispatch(showRegulatoryLayer({
+        type: LayersEnum.REGULATORY.code,
+        ...regulatoryZone,
+        namespace
+      }))
     } else {
       dispatch(hideLayer({
         type: LayersEnum.REGULATORY.code,

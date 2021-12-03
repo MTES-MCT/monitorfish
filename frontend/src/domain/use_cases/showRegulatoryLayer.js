@@ -29,7 +29,7 @@ const setIrretrievableFeaturesEvent = error => {
  * Show a Regulatory or Administrative layer
  * @param layerToShow {AdministrativeOrRegulatoryLayer} - The layer to show
  */
-const showRegulatoryLayer = layerToShow => (dispatch) => {
+const showRegulatoryLayer = layerToShow => dispatch => {
   currentNamespace = layerToShow.namespace
   const {
     addShowedLayer
@@ -48,7 +48,6 @@ export const getVectorLayer = (dispatch, getState) => (layerToShow) => {
   const { gears } = getState().gear
   const gearCategory = getGearCategory(layerToShow.gears, gears)
   const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
-  // TODO: switch to LayersType.REGULATORY ?
   const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
   const layer = new VectorImageLayer({
@@ -64,7 +63,6 @@ export const getVectorLayer = (dispatch, getState) => (layerToShow) => {
 }
 
 const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {
-  // TODO: switch to LayersType.REGULATORY ?
   const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
   const {
@@ -84,7 +82,7 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
         const features = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone : regulatoryZone
         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(features))
         const center = getCenter(vectorSource.getExtent())
-        const centerHasValidCoordinates = center && center.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])
+        const centerHasValidCoordinates = center?.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])
         batch(() => {
           dispatch(pushLayerToFeatures({
             name: zoneName,

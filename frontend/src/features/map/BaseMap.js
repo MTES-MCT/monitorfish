@@ -115,6 +115,7 @@ const BaseMap = props => {
     if (!map) {
       const centeredOnFrance = [2.99049, 46.82801]
       const initialMap = new OpenLayerMap({
+        keyboardEventTarget: document,
         target: mapElement.current,
         layers: [],
         renderer: (['webgl', 'canvas']),

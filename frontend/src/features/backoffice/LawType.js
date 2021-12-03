@@ -6,7 +6,7 @@ import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryLayerTopic'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { setLawTypeOpened } from '../../domain/shared_slices/Regulatory'
-import updateLayerNameForAllZones from '../../domain/use_cases/updateLayerNameForAllZones'
+import updateLayerNameForAllLayerZones from '../../domain/use_cases/updateLayerNameForAllLayerZones'
 
 const LawType = props => {
   const dispatch = useDispatch()
@@ -38,7 +38,7 @@ const LawType = props => {
   }
 
   function updateLayerName (oldLayerName, newLayerName) {
-    dispatch(updateLayerNameForAllZones(territory, lawType, oldLayerName, newLayerName))
+    dispatch(updateLayerNameForAllLayerZones(territory, lawType, oldLayerName, newLayerName))
   }
 
   const displayRegulatoryTopics = (regulatoryTopics) => {

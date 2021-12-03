@@ -9,7 +9,7 @@ import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
 import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from '../InfoBox'
-import { INFO_TEXT } from '../../../../constants/constants'
+import { INFO_TEXT } from '../../constants'
 import { formatDataForSelectPicker } from '../../../../utils'
 
 const RegulationTopicLine = props => {
@@ -35,10 +35,6 @@ const RegulationTopicLine = props => {
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
   const updateLayerName = (newLayerName) => {
-    /* let newRegulatoryTopics = [...regulatoryTopics]
-    newRegulatoryTopics.push(newLayerName)
-    newRegulatoryTopics.sort()
-    dispatch(setRegulatoryTopics(newRegulatoryTopics)) */
     setSelectedRegulationTopic(newLayerName)
   }
 

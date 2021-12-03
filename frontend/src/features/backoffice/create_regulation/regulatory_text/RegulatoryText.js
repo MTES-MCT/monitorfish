@@ -6,7 +6,8 @@ import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { CheckboxGroup } from 'rsuite'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
-import { COLORS, INFINITE } from '../../../../constants/constants'
+import { INFINITE } from '../../constants'
+import { COLORS } from '../../../../constants/constants'
 import {
   addObjectToUpcomingRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap

@@ -173,7 +173,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             region: selectedRegionList?.join(', '),
             regulatoryReferences: regulatoryTextList,
             upcomingRegulatoryReferences: upcomingRegulation,
-            fishingPeriod: fishingPeriod || '',
+            fishingPeriod,
             regulatorySpecies
           })
           createOrUpdateRegulation(featureObject)
@@ -339,7 +339,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             </Content>
             <Content>
               <FishingPeriodSection
-                fishingPeriod={fishingPeriod || initialFishingPeriodValues}
+                fishingPeriod={fishingPeriod}
                 setFishingPeriod={setFishingPeriod}
               />
             </Content>

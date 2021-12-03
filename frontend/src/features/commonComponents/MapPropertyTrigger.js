@@ -26,8 +26,6 @@ const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon
           transition: 'all 0.2s',
           cursor: 'pointer'
         }}
-        isSelected={value}
-        onClick={update}
       />
       <ShowLabelText
         data-cy={'map-property-trigger'}

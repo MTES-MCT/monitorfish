@@ -82,8 +82,8 @@ const VesselVisibility = () => {
         title={'Affichage des dernières positions'}
         onClick={() => setVesselVisibilityBoxIsOpen(!vesselVisibilityBoxIsOpen)}>
         <Vessel
-          rightMenuIsOpen={rightMenuIsOpen}
-          selectedVessel={selectedVessel}/>
+          $rightMenuIsOpen={rightMenuIsOpen}
+          $selectedVessel={selectedVessel}/>
       </VesselVisibilityIcon>
       <VesselVisibilityBox
         healthcheckTextWarning={healthcheckTextWarning}
@@ -233,7 +233,7 @@ const VesselVisibilityIcon = styled(MapButtonStyle)`
 const Vessel = styled(VesselSVG)`
   width: 25px;
   height: 25px;
-  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `
 

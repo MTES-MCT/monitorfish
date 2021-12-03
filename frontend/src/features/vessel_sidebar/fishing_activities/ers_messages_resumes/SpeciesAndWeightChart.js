@@ -87,7 +87,7 @@ const SpeciesAndWeightChart = ({
                 </WeightText>
                 {
                   speciesPresentationAndWeightArray
-                    ? <ChevronIcon isOpen={speciesAndWeight.species === speciesPresentationOpened}/>
+                    ? <ChevronIcon $isOpen={speciesAndWeight.species === speciesPresentationOpened}/>
                     : null
                 }
               </Weight>
@@ -229,7 +229,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   float: right;
   margin-right: 10px;
   margin-top: 0;
-  transform: ${props => !props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${props => !props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
   transition: all 0.5;
   text-align: right;
   margin-left: auto;

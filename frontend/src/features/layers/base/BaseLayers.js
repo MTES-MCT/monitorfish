@@ -35,7 +35,7 @@ const BaseLayers = ({ namespace }) => {
   return (
     <>
       <SectionTitle onClick={() => onSectionTitleClicked()} showBaseLayers={showBaseLayers}>
-        Fonds de carte <ChevronIcon isOpen={showBaseLayers}/>
+        Fonds de carte <ChevronIcon $isOpen={showBaseLayers}/>
       </SectionTitle>
       <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={baseLayersKeys.length}>
         {

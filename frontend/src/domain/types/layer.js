@@ -2,7 +2,7 @@
  * @typedef AdministrativeOrRegulatoryLayer
  * @property {string} type
  * @property {string | null} topic
- * @property {RegulatoryZone | null} zone
+ * @property {string | null} zone
  * @property {string} namespace
  */
 

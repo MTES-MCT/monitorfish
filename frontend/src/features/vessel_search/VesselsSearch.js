@@ -163,8 +163,8 @@ const VesselsSearch = () => {
         isOpen={selectedVessel}
         selectedVessel={selectedVessel}>
         <SearchIcon
-          rightMenuIsOpen={rightMenuIsOpen}
-          selectedVessel={selectedVessel}/>
+          $rightMenuIsOpen={rightMenuIsOpen}
+          $selectedVessel={selectedVessel}/>
       </SearchButton>
     </>)
 }
@@ -259,7 +259,7 @@ const SearchIcon = styled(SearchIconSVG)`
   width: 24px;
   height: 24x;
   margin-top: 4px;
-  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `
 

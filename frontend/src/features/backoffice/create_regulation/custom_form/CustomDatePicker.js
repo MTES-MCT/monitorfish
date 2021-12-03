@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { DatePicker } from 'rsuite'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 
 /**
  * @enum {string}

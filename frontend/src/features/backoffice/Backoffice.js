@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector, batch } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from '../map/BaseMap'
 import LawType from './LawType'

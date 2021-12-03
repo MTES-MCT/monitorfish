@@ -17,10 +17,12 @@ CREATE FUNCTION prod.compute_reglementation_md5() RETURNS trigger AS $$
 			COALESCE(NEW.date_fermeture::text, '') ||
 			COALESCE(NEW.date_ouverture::text, '') ||
 			COALESCE(NEW.periodes::text, '') ||
+			COALESCE(NEW.fishing_periods::text, '') ||
 			COALESCE(NEW.engins::text, '') ||
 			COALESCE(NEW.engins_interdits::text, '') ||
 			COALESCE(NEW.mesures_techniques::text, '') ||
 			COALESCE(NEW.especes::text, '') ||
+			COALESCE(NEW.species::text, '') ||
 			COALESCE(NEW.quantites::text, '') ||
 			COALESCE(NEW.taille::text, '') ||
 			COALESCE(NEW.especes_interdites::text, '') ||
@@ -28,6 +30,7 @@ CREATE FUNCTION prod.compute_reglementation_md5() RETURNS trigger AS $$
 			COALESCE(NEW.documents_obligatoires::text, '') ||
 			COALESCE(NEW.autre_reglementation::text, '') ||
 			COALESCE(NEW.references_reglementaires::text, '') ||
+			COALESCE(NEW.references_reglementaires_a_venir::text, '') ||
 			COALESCE(NEW.geometry::text, '')
 		);
         RETURN NEW;

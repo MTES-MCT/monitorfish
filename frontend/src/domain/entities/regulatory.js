@@ -1,9 +1,10 @@
 import { getTextForSearch } from '../../utils'
 import Layers from './layers'
 
-export const mapToRegulatoryZone = properties => {
+export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
   return {
-    id: properties.id,
+    id: properties.id || id?.split('.')[1],
+    geometry: geometry,
     lawType: properties.law_type,
     topic: properties.layer_name,
     prohibitedGears: properties.engins_interdits,
@@ -11,8 +12,9 @@ export const mapToRegulatoryZone = properties => {
     zone: decodeURI(properties.zones),
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
-    regulatoryReferences: properties.references_reglementaires,
-    upcomingRegulatoryReferences: properties.references_reglementaires_a_venir,
+    regulatorySpecies: properties.species ? JSON.parse(properties.species) : initialRegulatorySpeciesValues,
+    regulatoryReferences: parseRegulatoryReferences(properties.references_reglementaires),
+    upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(properties.references_reglementaires_a_venir),
     fishingPeriod: mapToFishingPeriodObject(properties.fishing_period),
     permissions: properties.autorisations,
     bycatch: properties.captures_accessoires,
@@ -30,6 +32,32 @@ export const mapToRegulatoryZone = properties => {
     rejections: properties.rejets,
     deposit: properties.gisement
   }
+}
+
+const parseUpcomingRegulatoryReferences = upcomingRegulatoryReferences =>
+  upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
+    ? JSON.parse(upcomingRegulatoryReferences)
+    : undefined
+
+const parseRegulatoryReferences = regulatoryTextsString => {
+  if (!regulatoryTextsString) {
+    return undefined
+  }
+
+  const regulatoryTexts = typeof regulatoryTextsString === 'string'
+    ? JSON.parse(regulatoryTextsString)
+    : regulatoryTextsString
+  if (regulatoryTexts?.length > 0 && Array.isArray(regulatoryTexts)) {
+    return regulatoryTexts.map(regulatoryText => {
+      if (!regulatoryText.startDate || regulatoryText.startDate === '') {
+        regulatoryText.startDate = new Date().getTime()
+      }
+
+      return regulatoryText
+    })
+  }
+
+  return undefined
 }
 
 const mapToFishingPeriodObject = fishingPeriod => {
@@ -88,8 +116,10 @@ export const mapToRegulatoryFeatureObject = properties => {
     selectedRegionList,
     regulatoryTexts,
     upcomingRegulation,
-    fishingPeriod
+    fishingPeriod,
+    regulatorySpecies
   } = properties
+
   return {
     layer_name: selectedRegulationTopic,
     law_type: selectedRegulationLawType,
@@ -97,7 +127,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     region: selectedRegionList?.join(', '),
     references_reglementaires: JSON.stringify(regulatoryTexts),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || ''),
-    fishing_period: JSON.stringify(fishingPeriod || '')
+    fishing_period: JSON.stringify(fishingPeriod || ''),
+    species: JSON.stringify(regulatorySpecies || '')
   }
 }
 
@@ -191,6 +222,7 @@ export const DEFAULT_DATE_RANGE = {
   endDate: undefined
 }
 
+/** @type {FishingPeriod} */
 export const initialFishingPeriodValues = {
   authorized: undefined,
   annualRecurrence: undefined,
@@ -200,6 +232,15 @@ export const initialFishingPeriodValues = {
   holidays: undefined,
   daytime: undefined,
   timeIntervals: []
+}
+
+/** @type {RegulatorySpecies} */
+export const initialRegulatorySpeciesValues = {
+  authorized: undefined,
+  allSpecies: undefined,
+  otherInfo: undefined,
+  species: [],
+  speciesGroups: []
 }
 
 export const WEEKDAYS = {
@@ -383,7 +424,7 @@ const timeToString = (date) => {
   return `${hours < 10 ? '0' : ''}${hours}h${minutes < 10 ? '0' : ''}${minutes}`
 }
 
-export const fishingPeriodToString = (fishingPeriod) => {
+export const fishingPeriodToString = fishingPeriod => {
   const {
     dateRanges,
     annualRecurrence,
@@ -394,6 +435,7 @@ export const fishingPeriodToString = (fishingPeriod) => {
     daytime,
     authorized
   } = fishingPeriod
+
   const textArray = []
   if (dateRanges?.length) {
     let array = toArrayString(
@@ -401,8 +443,10 @@ export const fishingPeriodToString = (fishingPeriod) => {
         if (startDate && endDate) {
           return `du ${dateToString(startDate, annualRecurrence)} au ${dateToString(endDate, annualRecurrence)}`
         }
+
         return undefined
       }).filter(e => e))
+
     if (array?.length) {
       if (annualRecurrence) {
         array = 'tous les ans '.concat(array)
@@ -410,23 +454,29 @@ export const fishingPeriodToString = (fishingPeriod) => {
       textArray.push(array)
     }
   }
+
   if (dates?.length) {
     const array = toArrayString(dates.map((date) => {
       if (date) {
         return `le ${dateToString(date)}`
       }
+
       return undefined
     }).filter(e => e))
+
     if (array?.length) {
       textArray.push(array)
     }
   }
+
   if (weekdays?.length) {
     textArray.push(`le${weekdays.length > 1 ? 's' : ''} ${toArrayString(weekdays)}`)
   }
+
   if (holidays) {
     textArray.push('les jours fériés')
   }
+
   if (timeIntervals?.length) {
     const array = toArrayString(timeIntervals.map(({ from, to }) => {
       if (from && to) {
@@ -434,14 +484,17 @@ export const fishingPeriodToString = (fishingPeriod) => {
       }
       return undefined
     }).filter(e => e))
+
     if (array?.length) {
       textArray.push(array)
     }
   } else if (daytime) {
     textArray.push('du lever au coucher du soleil')
   }
+
   if (textArray?.length) {
     return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
   }
+
   return null
 }

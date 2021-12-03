@@ -1,13 +1,13 @@
-import RegulationLawTypeLine from './RegulationLawTypeLine'
-import RegulationTopicLine from './RegulationTopicLine'
-import RegulationRegionLine from './RegulationRegionLine'
-import RegulationLayerZoneLine from './RegulationLayerZoneLine'
-import RegulationGeometryLine from './RegulationGeometryLine'
-import RegulatoryText from './RegulatoryText'
-import RegulatoryTextSection from './RegulatoryTextSection'
-import UpcomingRegulationModal from './UpcomingRegulationModal'
-import RemoveRegulationModal from './RemoveRegulationModal'
-import FishingPeriodSection from './FishingPeriodSection'
+import RegulationLawTypeLine from './regulatory_identification/RegulationLawTypeLine'
+import RegulationTopicLine from './regulatory_identification/RegulationTopicLine'
+import RegulationRegionLine from './regulatory_identification/RegulationRegionLine'
+import RegulationLayerZoneLine from './regulatory_identification/RegulationLayerZoneLine'
+import RegulationGeometryLine from './regulatory_identification/RegulationGeometryLine'
+import RegulatoryText from './regulatory_text/RegulatoryText'
+import RegulatoryTextSection from './regulatory_text/RegulatoryTextSection'
+import UpcomingRegulationModal from './regulatory_text/UpcomingRegulationModal'
+import RemoveRegulationModal from './regulatory_text/RemoveRegulationModal'
+import FishingPeriodSection from './fishing_period/FishingPeriodSection'
 
 export {
   RegulationLawTypeLine,

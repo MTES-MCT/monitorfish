@@ -50,8 +50,10 @@ import {
   LAWTYPES_TO_TERRITORY,
   UE,
   FRANCE,
-  initialFishingPeriodValues
+  initialFishingPeriodValues, initialRegulatorySpeciesValues
 } from '../../../domain/entities/regulatory'
+import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
+import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -77,6 +79,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
   /** @type {FishingPeriod} */
   const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
+  /** @type {RegulatorySpecies} */
+  const [regulatorySpecies, setRegulatorySpecies] = useState(initialRegulatorySpeciesValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
@@ -102,6 +106,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (!regulatoryTopics || regulatoryTopics.length === 0) {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
+
+    dispatch(getAllSpecies())
+
     const newRegulation = {
       regulatoryText: [],
       upcomingRegulation: [{}]
@@ -150,7 +157,8 @@ const CreateRegulation = ({ title, isEdition }) => {
             selectedRegionList,
             regulatoryTexts: [...regulatoryTextList],
             upcomingRegulation,
-            fishingPeriod
+            fishingPeriod,
+            regulatorySpecies
           })
 
           createOrUpdateRegulation(featureObject)
@@ -174,7 +182,8 @@ const CreateRegulation = ({ title, isEdition }) => {
       regulatoryReferences,
       id,
       upcomingRegulatoryReferences,
-      fishingPeriod
+      fishingPeriod,
+      regulatorySpecies
     } = regulatoryZoneMetadata
 
     setSelectedRegulationLawType(lawType)
@@ -184,6 +193,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
     setInitialGeometryId(id)
     setFishingPeriod(fishingPeriod)
+    setRegulatorySpecies(regulatorySpecies)
+
     batch(() => {
       dispatch(setSelectedGeometryId(id))
       dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
@@ -314,6 +325,12 @@ const CreateRegulation = ({ title, isEdition }) => {
               <FishingPeriodSection
                 fishingPeriod={fishingPeriod}
                 setFishingPeriod={setFishingPeriod}
+              />
+            </Content>
+            <Content>
+              <RegulatorySpeciesSection
+                regulatorySpecies={regulatorySpecies}
+                setRegulatorySpecies={setRegulatorySpecies}
               />
             </Content>
           </ContentWrapper>

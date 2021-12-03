@@ -70,9 +70,26 @@
  * @property {boolean} annualRecurrence
  * @property {[DateInterval]} dateRanges
  * @property {[date]} dates
- * @property {[string]} weekDays
+ * @property {[string]} weekdays
  * @property {boolean} holidays
  * @property {TimeInterval} timeIntervals
  * @property {boolean} holidays
  * @property {boolean} daytime
+ * @property {string} otherInfo
+ */
+
+/**
+ * @typedef RegulatorySpecies
+ * @property {boolean} authorized
+ * @property {boolean} allSpecies
+ * @property {string} otherInfo
+ * @property {RegulatorySpeciesDetail[]} species
+ * @property {string[]} speciesGroups - group name
+ */
+
+/**
+ * @typedef RegulatorySpeciesDetail
+ * @property {string} code - FAO code
+ * @property {string} quantity
+ * @property {string} minimumSize
  */

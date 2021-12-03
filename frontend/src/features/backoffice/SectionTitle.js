@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { Title } from '../commonStyles/Backoffice.style'
 
-const SectionTitle = ({ title, isOpen, setIsOpen }) => {
-  return <Title onClick={() => setIsOpen(!isOpen)}>
+const SectionTitle = ({ title, isOpen, setIsOpen, dataCy }) => {
+  return <Title onClick={() => setIsOpen(!isOpen)} data-cy={dataCy}>
      {title}
      <ChevronIcon isOpen={isOpen}/>
   </Title>

@@ -1,11 +1,11 @@
 import React from 'react'
-import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label } from '../../commonStyles/Input.style'
-import CustomSelectComponent from './CustomSelectComponent'
-import { formatDataForSelectPicker } from '../../../utils'
-import { FRENCH_REGION_LIST } from '../../../constants/constants'
-import Tag from './Tag'
-import MenuItem from './MenuItem'
+import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { Label } from '../../../commonStyles/Input.style'
+import CustomSelectComponent from '../custom_form/CustomSelectComponent'
+import { formatDataForSelectPicker } from '../../../../utils'
+import { FRENCH_REGION_LIST } from '../../../../constants/constants'
+import Tag from '../Tag'
+import MenuItem from '../custom_form/MenuItem'
 
 const RegulationRegionLine = props => {
   const {
@@ -59,12 +59,10 @@ const RegulationRegionLine = props => {
       renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList?.includes(item.value)} item={item} tag={'Checkbox'} />}
       valueIsMissing={regionIsMissing}
     />
-    <>
     {
-    selectedRegionList && selectedRegionList.length > 0 &&
+      selectedRegionList?.length > 0 &&
       <SelectedRegionList />
     }
-    </>
   </ContentLine>)
 }
 

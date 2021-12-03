@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import CustomDatePicker, { CUSTOM_DATEPICKER_TYPES } from './CustomDatePicker'
-import { COLORS } from '../../../constants/constants'
+import CustomDatePicker, { CUSTOM_DATEPICKER_TYPES } from '../custom_form/CustomDatePicker'
+import { COLORS } from '../../../../constants/constants'
 
 const TimeInterval = props => {
   const {

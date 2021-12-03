@@ -1,9 +1,9 @@
 import React from 'react'
-import Tag from './Tag'
-import { ContentLine } from '../../commonStyles/Backoffice.style'
-import { Label } from '../../commonStyles/Input.style'
-import CustomSelectComponent from './CustomSelectComponent'
-import MenuItem from './MenuItem'
+import Tag from '../Tag'
+import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { Label } from '../../../commonStyles/Input.style'
+import CustomSelectComponent from '../custom_form/CustomSelectComponent'
+import MenuItem from '../custom_form/MenuItem'
 
 const RegulationLawTypeLine = props => {
   const {

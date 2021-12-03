@@ -23,19 +23,19 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff")
 @Api(description = "API for UI frontend")
 class BffController(
-    private val getLastPositions: GetLastPositions,
-    private val getVessel: GetVessel,
-    private val getVesselPositions: GetVesselPositions,
-    private val getVesselVoyage: GetVesselVoyage,
-    private val getAllGears: GetAllGears,
-    private val getAllSpecies: GetAllSpecies,
-    private val searchVessels: SearchVessels,
-    private val getVesselControls: GetVesselControls,
-    private val getAllFleetSegments: GetAllFleetSegments,
-    private val getHealthcheck: GetHealthcheck,
-    private val getAllControlObjectives: GetAllControlObjectives,
-    private val updateControlObjective: UpdateControlObjective,
-    meterRegistry: MeterRegistry) {
+        private val getLastPositions: GetLastPositions,
+        private val getVessel: GetVessel,
+        private val getVesselPositions: GetVesselPositions,
+        private val getVesselVoyage: GetVesselVoyage,
+        private val getAllGears: GetAllGears,
+        private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
+        private val searchVessels: SearchVessels,
+        private val getVesselControls: GetVesselControls,
+        private val getAllFleetSegments: GetAllFleetSegments,
+        private val getHealthcheck: GetHealthcheck,
+        private val getAllControlObjectives: GetAllControlObjectives,
+        private val updateControlObjective: UpdateControlObjective,
+        meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
     val vesselsTimer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
@@ -204,11 +204,9 @@ class BffController(
     }
 
     @GetMapping("/v1/species")
-    @ApiOperation("Get FAO species codes")
-    fun getSpecies(): List<SpeciesDataOutput> {
-        return getAllSpecies.execute().map { species ->
-            SpeciesDataOutput.fromSpecies(species)
-        }
+    @ApiOperation("Get FAO species codes and groups")
+    fun getSpecies(): SpeciesAndSpeciesGroupsDataOutput {
+        return SpeciesAndSpeciesGroupsDataOutput.fromSpeciesAndSpeciesGroups(getAllSpeciesAndSpeciesGroups.execute())
     }
 
     @GetMapping("/v1/fleet_segments")

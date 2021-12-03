@@ -12,10 +12,10 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     zone: decodeURI(properties.zones),
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
-    regulatorySpecies: properties.species ? JSON.parse(properties.species) : initialRegulatorySpeciesValues,
+    regulatorySpecies: parseRegulatorySpecies(properties.species),
     regulatoryReferences: parseRegulatoryReferences(properties.references_reglementaires),
     upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(properties.references_reglementaires_a_venir),
-    fishingPeriod: mapToFishingPeriodObject(properties.fishing_period),
+    fishingPeriod: parseFishingPeriod(properties.fishing_period),
     permissions: properties.autorisations,
     bycatch: properties.captures_accessoires,
     openingDate: properties.date_ouverture,
@@ -34,9 +34,15 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
   }
 }
 
+function parseRegulatorySpecies (species) {
+  return species
+    ? parseJSON(species)
+    : initialRegulatorySpeciesValues
+}
+
 const parseUpcomingRegulatoryReferences = upcomingRegulatoryReferences =>
   upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
-    ? JSON.parse(upcomingRegulatoryReferences)
+    ? parseJSON(upcomingRegulatoryReferences)
     : undefined
 
 const parseRegulatoryReferences = regulatoryTextsString => {
@@ -44,9 +50,7 @@ const parseRegulatoryReferences = regulatoryTextsString => {
     return undefined
   }
 
-  const regulatoryTexts = typeof regulatoryTextsString === 'string'
-    ? JSON.parse(regulatoryTextsString)
-    : regulatoryTextsString
+  const regulatoryTexts = parseJSON(regulatoryTextsString)
   if (regulatoryTexts?.length > 0 && Array.isArray(regulatoryTexts)) {
     return regulatoryTexts.map(regulatoryText => {
       if (!regulatoryText.startDate || regulatoryText.startDate === '') {
@@ -60,7 +64,11 @@ const parseRegulatoryReferences = regulatoryTextsString => {
   return undefined
 }
 
-export const mapToFishingPeriodObject = fishingPeriod => {
+const parseJSON = text => typeof text === 'string'
+  ? JSON.parse(text)
+  : text
+
+export const parseFishingPeriod = fishingPeriod => {
   if (fishingPeriod) {
     const {
       authorized,
@@ -104,7 +112,8 @@ export const mapToFishingPeriodObject = fishingPeriod => {
       otherInfo
     }
   }
-  return undefined
+
+  return initialFishingPeriodValues
 }
 
 export const mapToRegulatoryFeatureObject = properties => {

@@ -195,7 +195,6 @@ const VesselList = ({ namespace }) => {
   }
 
   const closeAndResetVesselList = () => {
-    dispatch(closeVesselListModal())
     setCountriesFiltered([])
     setAdministrativeZonesFiltered([])
     setLastPositionTimeAgoFilter(3)
@@ -206,8 +205,11 @@ const VesselList = ({ namespace }) => {
     setVesselsSizeValuesChecked([])
     setVesselsLocationFilter([VesselLocation.SEA, VesselLocation.PORT])
 
-    dispatch(setBlockVesselsUpdate(false))
-    dispatch(resetZonesSelected())
+    batch(() => {
+      dispatch(closeVesselListModal())
+      dispatch(setBlockVesselsUpdate(false))
+      dispatch(resetZonesSelected())
+    })
   }
 
   const addFilterCallback = useCallback(filter => {
@@ -215,21 +217,25 @@ const VesselList = ({ namespace }) => {
   }, [])
 
   const selectBox = () => {
-    dispatch(closeVesselListModal())
-    dispatch(setInteraction({
-      type: InteractionTypes.SQUARE,
-      listener: layersType.VESSEL
-    }))
-    dispatch(setBlockVesselsUpdate(true))
+    batch(() => {
+      dispatch(closeVesselListModal())
+      dispatch(setInteraction({
+        type: InteractionTypes.SQUARE,
+        listener: layersType.VESSEL
+      }))
+      dispatch(setBlockVesselsUpdate(true))
+    })
   }
 
   const selectPolygon = () => {
-    dispatch(closeVesselListModal())
-    dispatch(setInteraction({
-      type: InteractionTypes.POLYGON,
-      listener: layersType.VESSEL
-    }))
-    dispatch(setBlockVesselsUpdate(true))
+    batch(() => {
+      dispatch(closeVesselListModal())
+      dispatch(setInteraction({
+        type: InteractionTypes.POLYGON,
+        listener: layersType.VESSEL
+      }))
+      dispatch(setBlockVesselsUpdate(true))
+    })
   }
 
   const callRemoveZoneSelected = zoneSelectedToRemove => {

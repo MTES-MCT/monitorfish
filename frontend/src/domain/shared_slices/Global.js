@@ -7,6 +7,7 @@ const globalSlice = createSlice({
     isUpdatingVessels: false,
     blockVesselsUpdate: false,
     rightMenuIsOpen: false,
+    vesselListModalIsOpen: false,
     /** @type {string | null} healthcheckTextWarning */
     healthcheckTextWarning: null,
     previewFilteredVesselsMode: undefined,
@@ -21,6 +22,12 @@ const globalSlice = createSlice({
     },
     setIsUpdatingVessels (state) {
       state.isUpdatingVessels = true
+    },
+    openVesselListModal (state) {
+      state.vesselListModalIsOpen = true
+    },
+    closeVesselListModal (state) {
+      state.vesselListModalIsOpen = false
     },
     resetIsUpdatingVessels (state) {
       state.isUpdatingVessels = false
@@ -75,6 +82,8 @@ export const {
   resetIsUpdatingVessels,
   expandRightMenu,
   contractRightMenu,
+  openVesselListModal,
+  closeVesselListModal,
   setHealthcheckTextWarning,
   setPreviewFilteredVesselsMode,
   setBlockVesselsUpdate,

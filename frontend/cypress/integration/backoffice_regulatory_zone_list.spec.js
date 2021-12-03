@@ -9,6 +9,7 @@ context('Backoffice', () => {
     cy.visit(`http://localhost:${port}/backoffice/regulation`)
     cy.wait(3000)
   })
+
   it('regulatory zones are displayed by layer name and law types', () => {
     cy.get('[data-cy="law-type"]').should('have.length', 3)
     // test Reg. MEMN values
@@ -33,6 +34,7 @@ context('Backoffice', () => {
     cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click({ force: true })
     cy.get('[title="Poulpes Mayotte"]').should('exist')
   })
+
   it('on mouse over layer name edit button appears', () => {
     // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')

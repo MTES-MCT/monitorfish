@@ -49,13 +49,19 @@ const reducers = {
       zone,
       namespace
     } = action.payload
+
     if (type !== Layers.VESSELS.code) {
-      const SeachedLayerName = getLayerNameNormalized({ type, topic, zone })
+      const searchedLayerName = getLayerNameNormalized({ type, topic, zone })
       const found = !!state.showedLayers
-        .find(layer => getLayerNameNormalized(layer) === SeachedLayerName)
+        .find(layer => getLayerNameNormalized(layer) === searchedLayerName)
 
       if (!found) {
-        state.showedLayers = state.showedLayers.concat(action.payload)
+        state.showedLayers = state.showedLayers.concat({
+          type,
+          topic,
+          zone,
+          namespace
+        })
         window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
       }
     }
@@ -81,16 +87,16 @@ const reducers = {
       if (zone && topic) {
         state.showedLayers = state.showedLayers
           .filter(layer => !(layer.topic === topic && layer.zone === zone))
-          // LayerName is not used anymore, but may be still store in LocalStorage
+          // LayerName is not used anymore, but may be still stored in LocalStorage (see l. 17)
           .filter(layer => !(layer.layerName === topic && layer.zone === zone))
       } else if (topic) {
         state.showedLayers = state.showedLayers
           .filter(layer => !(layer.topic === topic))
-          // LayerName is not used anymore, but may be still store in LocalStorage
+          // LayerName is not used anymore, but may be still stored in LocalStorage (see l. 17)
           .filter(layer => !(layer.layerName === topic))
       }
     } else {
-      state.showedLayers = state.showedLayers.filter(layer => layer.type !== type)
+      state.showedLayers = state.showedLayers.filter(layer => !(layer.type === type && layer.zone === zone))
     }
     window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
   },

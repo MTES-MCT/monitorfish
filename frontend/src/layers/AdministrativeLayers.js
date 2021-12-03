@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getVectorLayer } from '../domain/use_cases/showAdministrativeLayer'
-import Layers, { layersType } from '../domain/entities/layers'
+import Layers, { getLayerNameNormalized, layersType } from '../domain/entities/layers'
 
 const AdministrativeLayers = ({ map }) => {
   const { showedLayers } = useSelector(state => state.layer)
@@ -20,9 +20,8 @@ const AdministrativeLayers = ({ map }) => {
 
   function addAdministrativeLayersToMap () {
     const layersToInsert = showedLayers
-      .filter(layer => !map.getLayers().getArray().some(layer_ => layer.type === layer_.name)) // Les couches dans showedLayers qui ne sont pas dans OL
-      .filter(layer => administrativeLayers
-        .some(administrativeLayer => layer.type?.includes(administrativeLayer.code))) // Les couches de type administrativeLayer
+      .filter(layer => layerOfTypeAdministrativeLayer(layer))
+      .filter(layer => layersNotInCurrentOLMap(layer))
 
     layersToInsert.forEach(layerToInsert => {
       if (!layerToInsert) {
@@ -33,17 +32,34 @@ const AdministrativeLayers = ({ map }) => {
     })
   }
 
+  function layersNotInCurrentOLMap (layer) {
+    return !map.getLayers().getArray().some(layer_ => layer_.name === getLayerNameNormalized(layer))
+  }
+
+  function layerOfTypeAdministrativeLayer (layer) {
+    return administrativeLayers
+      .some(administrativeLayer => layer.type?.includes(administrativeLayer.code))
+  }
+
   function removeAdministrativeLayersToMap () {
     const _showedLayers = showedLayers?.length ? showedLayers : []
 
     const layersToRemove = map.getLayers().getArray()
-      .filter(OLLayer => !_showedLayers.some(layer_ => OLLayer.name === layer_.type)) // les couches dans OL qui ne sont plus dans le state showedLayers
-      .filter(OLLayer => administrativeLayers
-        .some(administrativeLayer => OLLayer.name?.includes(administrativeLayer.code))) // les couches de type administrativeLayer
+      .filter(olLayer => layerOfTypeAdministrativeLayerInCurrentMap(olLayer))
+      .filter(olLayer => layersNotInShowedLayers(_showedLayers, olLayer))
 
     layersToRemove.forEach(layerToRemove => {
       map.getLayers().remove(layerToRemove)
     })
+  }
+
+  function layerOfTypeAdministrativeLayerInCurrentMap (olLayer) {
+    return administrativeLayers
+      .some(administrativeLayer => olLayer.name?.includes(administrativeLayer.code))
+  }
+
+  function layersNotInShowedLayers (_showedLayers, olLayer) {
+    return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
   }
 
   return null

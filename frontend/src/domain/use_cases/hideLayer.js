@@ -21,10 +21,10 @@ const hideLayer = layerToHide => (dispatch, getState) => {
 
   const { showedLayers } = getState().layer
   if (type && showedLayers) {
-    const layername = getLayerNameNormalized({ type, topic, zone })
+    const layerName = getLayerNameNormalized({ type, topic, zone })
 
     const layersToRemove = showedLayers.filter(layer_ => {
-      return getLayerNameNormalized(layer_) === layername
+      return getLayerNameNormalized(layer_) === layerName
     })
 
     if (layersToRemove) {

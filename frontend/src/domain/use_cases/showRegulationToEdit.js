@@ -37,7 +37,7 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
       if (!regulatoryZoneMetadata.id) {
         regulatoryZoneMetadata.id = feature.id.split('.')[1]
       }
-      console.log(regulatoryZoneMetadata)
+
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
     }).catch(error => {
       console.error(error)

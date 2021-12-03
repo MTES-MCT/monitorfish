@@ -22,6 +22,7 @@ const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zon
 const REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE = 'Nous n\'avons pas pu filtrer les zones réglementaires par zone'
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const GEAR_CODES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les codes des engins de pêches'
+const SPECIES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les espèces'
 const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 const HEALTH_CHECK_ERROR_MESSAGE = 'Nous n\'avons pas pu vérifier si l\'application est à jour'
 const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
@@ -298,7 +299,7 @@ function getRegulatoryZoneFromAPI (type, regulatoryZone, fromBackoffice) {
       .then(response => {
         if (response.status === OK) {
           return response.json().then(response => {
-            return response
+            return getFirstFeature(response)
           }).catch(e => {
             throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
           })
@@ -377,7 +378,18 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
   }
 }
 
-function getRegulatoryZoneMetadataFromAPI (regulatorySubZone, fromBackoffice) {
+function getFirstFeature (response) {
+  // There must be only one feature per regulation
+  const FIRST_FEATURE = 0
+
+  if (response.features.length === 1 && response.features[FIRST_FEATURE]) {
+    return response.features[FIRST_FEATURE]
+  } else {
+    throw Error('We found multiple features for this zone')
+  }
+}
+
+function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice) {
   let url
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
@@ -391,11 +403,7 @@ function getRegulatoryZoneMetadataFromAPI (regulatorySubZone, fromBackoffice) {
     .then(response => {
       if (response.status === OK) {
         return response.json().then(response => {
-          if (response.features.length === 1 && response.features[0]) {
-            return response.features[0].properties
-          } else {
-            throw Error('We found multiple layers for this layer')
-          }
+          return getFirstFeature(response)
         })
       } else {
         response.text().then(text => {
@@ -423,6 +431,29 @@ function getAllGearCodesFromAPI () {
     }).catch(error => {
       console.error(error)
       throw Error(GEAR_CODES_ERROR_MESSAGE)
+    })
+}
+
+/**
+ * Get species
+ * @memberOf API
+ * @returns {Promise<SpeciesAndSpeciesGroups>}
+ * @throws {Error}
+ */
+function getAllSpeciesFromAPI () {
+  return fetch('/bff/v1/species')
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(SPECIES_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(SPECIES_ERROR_MESSAGE)
     })
 }
 
@@ -660,7 +691,7 @@ export {
   getAdministrativeZoneURL,
   getRegulatoryZoneFromAPI,
   getRegulatoryZoneURL,
-  getRegulatoryZoneMetadataFromAPI,
+  getRegulatoryFeatureMetadataFromAPI,
   getAllGearCodesFromAPI,
   getVesselVoyageFromAPI,
   getVesselControlsFromAPI,
@@ -670,5 +701,6 @@ export {
   getAllGeometryWithoutProperty,
   sendRegulationTransaction,
   getControlObjectivesFromAPI,
-  updateControlObjectiveFromAPI
+  updateControlObjectiveFromAPI,
+  getAllSpeciesFromAPI
 }

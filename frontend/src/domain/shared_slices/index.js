@@ -3,6 +3,7 @@ import global from './Global'
 import map from './Map'
 import vessel from './Vessel'
 import gear from './Gear'
+import species from './Species'
 import filter from './Filter'
 import fleetSegment from './FleetSegment'
 import measurement from './Measurement'
@@ -19,6 +20,7 @@ const commonReducerList = {
   map,
   global,
   gear,
+  species,
   regulatory
 }
 

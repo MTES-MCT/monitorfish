@@ -79,10 +79,11 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
       getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.inBackofficeMode).then(regulatoryZone => {
         const simplifiedRegulatoryZone = simplify(regulatoryZone, { tolerance: 0.01, highQuality: false })
 
-        const features = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone : regulatoryZone
-        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(features))
+        const feature = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone : regulatoryZone
+        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(feature))
         const center = getCenter(vectorSource.getExtent())
         const centerHasValidCoordinates = center?.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])
+
         batch(() => {
           dispatch(pushLayerToFeatures({
             name: zoneName,

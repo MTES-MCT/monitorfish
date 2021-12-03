@@ -1,13 +1,13 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import InfoBox from './InfoBox'
-import { CancelButton } from '../../commonStyles/Buttons.style'
-import { Link } from '../../commonStyles/Backoffice.style'
-import { setIsModalOpen, setUpcomingRegulation } from '../Regulation.slice'
+import { COLORS } from '../../../../constants/constants'
+import InfoBox from '../InfoBox'
+import { CancelButton } from '../../../commonStyles/Buttons.style'
+import { Link } from '../../../commonStyles/Backoffice.style'
+import { setIsModalOpen, setUpcomingRegulation } from '../../Regulation.slice'
 
-const UpcommingRegulationSection = ({ upcomingRegulation }) => {
+const UpcomingRegulationSection = ({ upcomingRegulation }) => {
   const dispatch = useDispatch()
   const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
@@ -108,4 +108,4 @@ const UpcomingRegulation = styled.div`
   padding: 10px 15px;
 `
 
-export default UpcommingRegulationSection
+export default UpcomingRegulationSection

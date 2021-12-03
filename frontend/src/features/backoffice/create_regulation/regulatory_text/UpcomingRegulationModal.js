@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import {
   setIsModalOpen,
   setUpcomingRegulatoryTextListCheckedMap,
   setSaveUpcomingRegulation,
   setUpcomingRegulation
-} from '../Regulation.slice'
+} from '../../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
-import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
-import { FooterButton } from '../../commonStyles/Backoffice.style'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
-import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../domain/entities/regulatory'
+import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
+import { FooterButton } from '../../../commonStyles/Backoffice.style'
+import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise_clair.svg'
+import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
 
 const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()

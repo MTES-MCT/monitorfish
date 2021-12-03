@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { SelectPicker } from 'rsuite'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 
 const CustomSelectComponent = props => {
   const {
@@ -14,7 +14,8 @@ const CustomSelectComponent = props => {
     menuStyle,
     valueIsMissing,
     groupBy,
-    disabled
+    disabled,
+    noResultsText
   } = props
 
   const selectPickerStyle = {
@@ -38,8 +39,8 @@ const CustomSelectComponent = props => {
         menuClassName={'new-regulation-select-picker'}
         $valueIsMissing={valueIsMissing}
         locale={{
-          noResultsText: 'pas de tracé à associer',
-          emptyMessage: 'pas de tracé à associer'
+          noResultsText: noResultsText || 'pas de tracé à associer',
+          emptyMessage: noResultsText || 'pas de tracé à associer'
         }}
         groupBy={groupBy}
         disabled={disabled}

@@ -1,4 +1,4 @@
-import { getRegulatoryZoneMetadataFromAPI } from '../../api/fetch'
+import { getRegulatoryFeatureMetadataFromAPI } from '../../api/fetch'
 import {
   closeRegulatoryZoneMetadataPanel,
   resetLoadingRegulatoryZoneMetadata,
@@ -12,9 +12,8 @@ import { batch } from 'react-redux'
 const showRegulatoryZoneMetadata = regulatoryZone => (dispatch, getState) => {
   if (regulatoryZone) {
     dispatch(setLoadingRegulatoryZoneMetadata())
-    getRegulatoryZoneMetadataFromAPI(regulatoryZone, getState().global.inBackofficeMode).then(regulatoryZoneProperties => {
-      const regulatoryZone = mapToRegulatoryZone(regulatoryZoneProperties)
-      regulatoryZone.regulatoryReferences = JSON.parse(regulatoryZone.regulatoryReferences)
+    getRegulatoryFeatureMetadataFromAPI(regulatoryZone, getState().global.inBackofficeMode).then(feature => {
+      const regulatoryZone = mapToRegulatoryZone(feature)
       dispatch(setRegulatoryZoneMetadata(regulatoryZone))
     }).catch(error => {
       console.error(error)

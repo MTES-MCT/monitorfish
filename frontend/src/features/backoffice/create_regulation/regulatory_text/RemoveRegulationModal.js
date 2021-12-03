@@ -2,14 +2,14 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-import { setIsRemoveModalOpen } from '../Regulation.slice'
-import { ValidateButton, CancelButton } from '../../commonStyles/Buttons.style'
-import { FooterButton } from '../../commonStyles/Backoffice.style'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
-import updateRegulation from '../../../domain/use_cases/updateRegulation'
+import { COLORS } from '../../../../constants/constants'
+import { setIsRemoveModalOpen } from '../../Regulation.slice'
+import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
+import { FooterButton } from '../../../commonStyles/Backoffice.style'
+import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise_clair.svg'
+import updateRegulation from '../../../../domain/use_cases/updateRegulation'
 import Feature from 'ol/Feature'
-import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../domain/entities/regulatory'
+import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../../domain/entities/regulatory'
 
 const RemoveRegulationModal = () => {
   const dispatch = useDispatch()

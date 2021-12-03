@@ -14,17 +14,17 @@ context('NewRegulation', () => {
     cy.get('[data-cy="law-type"]').should('have.length', 3)
     cy.get('[data-cy="law-type"]').eq(0).click()
     cy.get('[data-cy="regulatory-layer-topic-row"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click({ force: true })
+    cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click()
     cy.get('[data-cy="regulatory-layer-zone"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
+    cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', )
     cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-layer-zone-edit"]').eq(0).click({ force: true })
+    cy.get('[data-cy="regulatory-layer-zone-edit"]').eq(0).click()
     cy.url().should('include', '/regulation/edit')
     cy.wait(1000)
   })
 
-  it('Edit a layer zone', () => {
-    // check expected form values
+  it('A layer zone Should be edited', () => {
+    // When check expected form values
     cy.get('[data-cy^="tag"]').should('have.length', 6)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('exist')
@@ -34,21 +34,25 @@ context('NewRegulation', () => {
     cy.get('[data-cy="tag-texte de reference"]').should('exist')
     cy.get('[data-cy="input-Praires_Ouest_cotentin"]').should('exist')
     cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
-    // try to save
+
+    // Then try to save
     cy.get('[data-cy="validate-button"]').contains('Enregister les modifications')
     cy.get('[data-cy="validate-button"]').click()
     cy.get('.rs-checkbox-wrapper').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
   })
 
-  it('Save regulation click button open backoffice page', () => {
-    // listen Post request to /geoserver/wfs
+  it('Save regulation Should send the update payload to Geoserver and go back to backoffice page', () => {
+    // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
-    // save form
+
+    // When save form
     cy.get('[data-cy="validate-button"]').click()
     cy.wait(200)
+
+    // Then
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(request.body).contain('typeName="monitorfish:regulatory_areas_write"')
@@ -62,6 +66,45 @@ context('NewRegulation', () => {
         expect(request.body).contain('"textType":["creation"]')
         expect(request.body).contain('<Value>""</Value>')
         expect(request.body).contain('<FeatureId fid="regulatory_areas_write.598"/>')
+        expect(response.statusCode).equal(200)
+      })
+    cy.url().should('include', '/backoffice')
+  })
+
+  it('Save regulation Should send the regulated species update object to Geoserver', () => {
+    // Given
+    cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
+    // complete missing values in form
+    cy.get('[type="checkbox"]').first().check({ force: true })
+    cy.get('[type="checkbox"]').eq(2).check({ force: true })
+    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
+    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
+    cy.scrollTo(0, 500)
+    cy.get('.rs-picker-toggle-placeholder')
+      .filter(':contains("catégories d\'espèces")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-search-bar-input').type('Espèce{enter}')
+    cy.get('.rs-picker-toggle-placeholder')
+      .filter(':contains("des espèces")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-search-bar-input').type('HKE{enter}')
+    cy.get('*[data-cy^="regulatory-species-quantity"]').type('Ne pas en prendre beaucoup please')
+    cy.get('*[data-cy^="regulatory-species-minimum-size"]').type('à peu près 60 cm')
+    cy.get('*[data-cy^="regulatory-species-other-info"]').type('Mhm pas d\'autre info !')
+
+    // When
+    cy.get('[data-cy="validate-button"]').click()
+    cy.wait(200)
+
+    // Then
+    cy.wait('@postRegulation')
+      .then(({ request, response }) => {
+        expect(request.body)
+          .contain('"authorized":true')
+          .contain('"otherInfo":"Mhm pas d\'autre info !"')
+          .contain('"species":[{"code":"HKE","quantity":"Ne pas en prendre beaucoup please","minimumSize":"à peu près 60 cm"}]')
+          .contain('"speciesGroups":["Espèces eau profonde"]')
+
         expect(response.statusCode).equal(200)
       })
     cy.url().should('include', '/backoffice')

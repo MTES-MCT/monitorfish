@@ -69,7 +69,7 @@ const Measurement = () => {
       case MeasurementTypes.CIRCLE_RANGE:
         return <CircleRangeIcon/>
       default:
-        return <MeasurementIcon rightMenuIsOpen={rightMenuIsOpen} selectedVessel={selectedVessel}/>
+        return <MeasurementIcon $rightMenuIsOpen={rightMenuIsOpen} $selectedVessel={selectedVessel}/>
     }
   }
 
@@ -209,7 +209,7 @@ const MeasurementWrapper = styled(MapButtonStyle)`
 
 const MeasurementIcon = styled(MeasurementSVG)`
   width: 40px;
-  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `
 

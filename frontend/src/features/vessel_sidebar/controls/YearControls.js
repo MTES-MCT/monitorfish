@@ -31,7 +31,7 @@ const YearControls = props => {
       <YearTitle isEmpty={yearControls.length === 0} isLastItem={props.isLastItem} isOpen={isOpen}>
         <Text isEmpty={yearControls.length === 0} isOpen={isOpen} title={props.year} onClick={() => setIsOpen(!isOpen)}>
           {
-            yearControls.length ? <ChevronIcon isOpen={isOpen}/> : null
+            yearControls.length ? <ChevronIcon $isOpen={isOpen}/> : null
           }
           <Year>{props.year}</Year>
           <YearResume data-cy={'vessel-controls-year'}>
@@ -131,7 +131,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-top: 9px;
   float: right;
   
-  animation: ${props => props.isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
+  animation: ${props => props.$isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
 
   @keyframes chevron-layer-opening {
     0%   { transform: rotate(180deg); }

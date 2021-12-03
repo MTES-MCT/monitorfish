@@ -84,8 +84,8 @@ const VesselFilters = () => {
           title={'Mes filtres'}
           onClick={() => setVesselFilterBoxIsOpen(!vesselFilterBoxIsOpen)}>
           <FilterIcon
-            rightMenuIsOpen={rightMenuIsOpen}
-            selectedVessel={selectedVessel}/>
+            $rightMenuIsOpen={rightMenuIsOpen}
+            $selectedVessel={selectedVessel}/>
         </VesselFilterIcon>
         <VesselFilterBox
           healthcheckTextWarning={healthcheckTextWarning}
@@ -239,7 +239,7 @@ const FilterIcon = styled(FilterSVG)`
   height: 23px;
   margin-right: 3px;
   margin-top: 2px;
-  opacity: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
   transition: all 0.2s;
 `
 

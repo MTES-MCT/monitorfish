@@ -25,7 +25,7 @@ const ERSMessageResumeHeader = props => {
           isOpen={props.isOpen}
         >
           {
-            props.hasNoMessage || props.noContent ? null : <ChevronIcon isOpen={props.isOpen} name={props.messageType}/>
+            props.hasNoMessage || props.noContent ? null : <ChevronIcon $isOpen={props.isOpen} name={props.messageType}/>
           }
           <ERSMessageName
             isNotAcknowledged={props.isNotAcknowledged}
@@ -139,7 +139,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 10px;
   margin-top: 12px;
   
-  animation: ${props => props.isOpen ? `chevron-${props.name}-resume-opening` : `chevron-${props.name}-resume-closing`} 0.2s ease forwards;
+  animation: ${props => props.$isOpen ? `chevron-${props.name}-resume-opening` : `chevron-${props.name}-resume-closing`} 0.2s ease forwards;
 
   ${props => `
       @keyframes chevron-${props.name}-resume-opening {

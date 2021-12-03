@@ -1,12 +1,13 @@
-import layer from '../shared_slices/Layer'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { batch } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
-import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
-import { getAdministrativeZoneFromAPI } from '../../api/fetch'
-import { batch } from 'react-redux'
 import VectorImageLayer from 'ol/layer/VectorImage'
+import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
+
+import layer from '../shared_slices/Layer'
+import { getAdministrativeZoneFromAPI } from '../../api/fetch'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -18,28 +19,31 @@ const setIrretrievableFeaturesEvent = error => {
     error: error
   }
 }
-
-const showAdministrativeLayer = layerToShow => (dispatch, getState) => {
+/**
+ *
+ * @param {Object} layerToShow
+ * @param {string} layerToShow.type
+ * @param {string} layerToShow.zone
+ * @returns
+ */
+const showAdministrativeLayer = layerToShow => dispatch => {
   currentNamespace = layerToShow.namespace
   const {
-    addLayer,
     addShowedLayer
   } = layer[currentNamespace].actions
 
   batch(() => {
-    dispatch(addLayer(getVectorLayer(layerToShow.type, layerToShow.zone, getState().global.inBackofficeMode)))
     dispatch(addShowedLayer(layerToShow))
   })
 }
 
-const getVectorLayer = (type, zone, inBackofficeMode) => {
+export const getVectorLayer = (type, zone, inBackofficeMode) => {
   let name
   if (zone) {
     name = `${type}:${zone}`
   } else {
     name = type
   }
-
   const layer = new VectorImageLayer({
     source: getAdministrativeVectorSource(type, zone, inBackofficeMode),
     className: 'administrative',

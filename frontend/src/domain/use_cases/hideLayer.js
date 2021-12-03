@@ -1,5 +1,6 @@
 import layer from '../shared_slices/Layer'
 import { batch } from 'react-redux'
+import { getLayerNameNormalized } from '../entities/layers'
 
 /**
  * hide a Regulatory or Administrative layer
@@ -14,46 +15,23 @@ const hideLayer = layerToHide => (dispatch, getState) => {
   } = layerToHide
 
   const {
-    removeLayer,
-    removeLayerAndArea,
-    removeLayers,
     removeShowedLayer,
     removeLayerToFeatures
   } = layer[namespace].actions
 
-  if (type) {
-    let layerToRemove, layersToRemove
+  const { showedLayers } = getState().layer
+  if (type && showedLayers) {
+    const layerName = getLayerNameNormalized({ type, topic, zone })
 
-    if (topic && zone) {
-      layerToRemove = getState().layer.layers.find(layer => {
-        return layer.name === `${type}:${topic}:${zone}`
-      })
-    } else if (topic) {
-      layersToRemove = getState().layer.layers.filter(layer => {
-        return layer.name.includes(`${type}:${topic}`)
-      })
-    } else if (zone) {
-      layersToRemove = getState().layer.layers.filter(layer => {
-        return layer.name.includes(`${type}:${zone}`)
-      })
-    } else {
-      layerToRemove = getState().layer.layers.find(layer => layer.name === type)
-    }
+    const layersToRemove = showedLayers.filter(layer_ => {
+      return getLayerNameNormalized(layer_) === layerName
+    })
 
-    if (layerToRemove) {
+    if (layersToRemove) {
       batch(() => {
-        dispatch(removeLayer(layerToRemove))
-        dispatch(removeShowedLayer(layerToHide))
-        dispatch(removeLayerAndArea(layerToRemove.name))
-        dispatch(removeLayerToFeatures(layerToRemove.name))
-      })
-    } else if (layersToRemove) {
-      batch(() => {
-        dispatch(removeLayers(layersToRemove))
         dispatch(removeShowedLayer(layerToHide))
         layersToRemove.forEach(layer => {
-          dispatch(removeLayerAndArea(layer.name))
-          dispatch(removeLayerToFeatures(layer.name))
+          dispatch(removeLayerToFeatures(layer.type))
         })
       })
     }

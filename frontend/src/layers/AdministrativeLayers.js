@@ -1,52 +1,65 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import Layers, { layersType } from '../domain/entities/layers'
+import { getVectorLayer } from '../domain/use_cases/showAdministrativeLayer'
+import Layers, { getLayerNameNormalized, layersType } from '../domain/entities/layers'
 
 const AdministrativeLayers = ({ map }) => {
-  const layer = useSelector(state => state.layer)
+  const { showedLayers } = useSelector(state => state.layer)
+  const inBackofficeMode = useSelector(state => state.global.inBackofficeMode)
+
   const administrativeLayers = Object.keys(Layers)
     .map(topic => Layers[topic])
     .filter(layer => layer.type === layersType.ADMINISTRATIVE)
 
   useEffect(() => {
-    addOrRemoveAdministrativeLayers()
-  }, [layer.layers])
-
-  function addOrRemoveAdministrativeLayers () {
-    if (map && layer.layers) {
+    if (map && showedLayers) {
       addAdministrativeLayersToMap()
       removeAdministrativeLayersToMap()
     }
-  }
+  }, [showedLayers])
 
   function addAdministrativeLayersToMap () {
-    if (layer.layers.length) {
-      const layersToInsert = layer.layers
-        .filter(layer => !map.getLayers().getArray().some(layer_ => layer === layer_))
-        .filter(showedLayer => administrativeLayers
-          .some(administrativeLayer => showedLayer.name?.includes(administrativeLayer.code)))
+    const layersToInsert = showedLayers
+      .filter(layer => layerOfTypeAdministrativeLayer(layer))
+      .filter(layer => layersNotInCurrentOLMap(layer))
 
-      layersToInsert.forEach(layerToInsert => {
-        if (!layerToInsert) {
-          return
-        }
+    layersToInsert.forEach(layerToInsert => {
+      if (!layerToInsert) {
+        return
+      }
+      const VectorLayer = getVectorLayer(layerToInsert.type, layerToInsert.zone, inBackofficeMode)
+      map.getLayers().push(VectorLayer)
+    })
+  }
 
-        map.getLayers().push(layerToInsert)
-      })
-    }
+  function layersNotInCurrentOLMap (layer) {
+    return !map.getLayers().getArray().some(layer_ => layer_.name === getLayerNameNormalized(layer))
+  }
+
+  function layerOfTypeAdministrativeLayer (layer) {
+    return administrativeLayers
+      .some(administrativeLayer => layer.type?.includes(administrativeLayer.code))
   }
 
   function removeAdministrativeLayersToMap () {
-    const layers = layer.layers.length ? layer.layers : []
+    const _showedLayers = showedLayers?.length ? showedLayers : []
 
     const layersToRemove = map.getLayers().getArray()
-      .filter(showedLayer => !layers.some(layer_ => showedLayer === layer_))
-      .filter(showedLayer => administrativeLayers
-        .some(administrativeLayer => showedLayer.name?.includes(administrativeLayer.code)))
+      .filter(olLayer => layerOfTypeAdministrativeLayerInCurrentMap(olLayer))
+      .filter(olLayer => layersNotInShowedLayers(_showedLayers, olLayer))
 
     layersToRemove.forEach(layerToRemove => {
       map.getLayers().remove(layerToRemove)
     })
+  }
+
+  function layerOfTypeAdministrativeLayerInCurrentMap (olLayer) {
+    return administrativeLayers
+      .some(administrativeLayer => olLayer.name?.includes(administrativeLayer.code))
+  }
+
+  function layersNotInShowedLayers (_showedLayers, olLayer) {
+    return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
   }
 
   return null

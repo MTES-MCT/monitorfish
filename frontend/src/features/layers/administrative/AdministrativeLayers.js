@@ -84,7 +84,7 @@ const AdministrativeLayers = props => {
         showZones={showZones}
         data-cy={'administrative-zones-open'}
       >
-        Zones administratives <ChevronIcon isOpen={showZones}/>
+        Zones administratives <ChevronIcon $isOpen={showZones}/>
       </SectionTitle>
       <NamespaceContext.Consumer>
         {namespace => (

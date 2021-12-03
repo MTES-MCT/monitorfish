@@ -32,7 +32,7 @@ const ERSMessageSpecies = props => {
             <InlineKey>Poids total (estimé) </InlineKey>
             <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
           </Weight>
-          <ChevronIcon isOpen={isOpen} name={props.species.species}/>
+          <ChevronIcon $isOpen={isOpen} name={props.species.species}/>
         </Title>
         <Content isOpen={isOpen} name={props.species.species}
                  length={props.species.properties ? props.species.properties.length : 1}>
@@ -244,7 +244,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 10px;
   margin-top: 2px;
   
-  animation: ${props => props.isOpen ? `chevron-${props.name}-zones-opening` : `chevron-${props.name}-zones-closing`} 0.2s ease forwards;
+  animation: ${props => props.$isOpen ? `chevron-${props.name}-zones-opening` : `chevron-${props.name}-zones-closing`} 0.2s ease forwards;
 
   ${props => `
       @keyframes chevron-${props.name}-zones-opening {

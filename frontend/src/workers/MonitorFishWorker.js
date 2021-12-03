@@ -134,6 +134,7 @@ class MonitorFishWorker {
       }
       return accumulatedObject
     }, {})
+
     return layersTopicsByRegulatoryTerritory
   }
 

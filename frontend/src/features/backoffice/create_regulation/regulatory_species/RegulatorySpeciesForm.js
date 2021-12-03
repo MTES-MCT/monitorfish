@@ -155,13 +155,13 @@ const RegulatorySpeciesForm = props => {
   return <Wrapper show={show}>
     <Title>
       <AuthorizedRadio
-        inline={true}
+        inline
         onChange={value => set(REGULATORY_SPECIES_KEYS.AUTHORIZED, value)}
         value={authorized}
       >
         Espèces
         <CustomRadio
-          checked={authorized === true}
+          checked={authorized}
           value={true}
         >
           autorisées

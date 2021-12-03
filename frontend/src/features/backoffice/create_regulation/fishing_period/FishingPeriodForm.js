@@ -139,12 +139,12 @@ const FishingPeriodForm = (props) => {
   return <Wrapper show={show}>
     <Title>
       <AuthorizedRadio
-        inline={true}
+        inline
         onChange={value => set(FISHING_PERIOD_KEYS.AUTHORIZED, value)}
         value={authorized}
       >
         Périodes
-        <CustomRadio checked={authorized === true} value={true} >
+        <CustomRadio checked={authorized} value={true} >
           autorisées
           <GreenCircle />
         </CustomRadio>
@@ -157,7 +157,7 @@ const FishingPeriodForm = (props) => {
     <AnnualRecurrence display={displayForm} authorized={authorized}>
       <Label>Récurrence annuelle</Label>
       <RadioGroup
-        inline={true}
+        inline
         onChange={value => set(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE, value)}
         value={annualRecurrence}
       >

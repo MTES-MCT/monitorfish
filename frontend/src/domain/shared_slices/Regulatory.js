@@ -38,6 +38,8 @@ const regulatorySlice = createSlice({
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
     lawTypeOpened: null,
+    regulatoryTopicOpened: [],
+    regulatoryZoneToEdit: null,
     regulatoryTopics: [],
     layersTopicsByRegTerritory: {},
     regulatoryGeometryToPreview: null,
@@ -120,6 +122,18 @@ const regulatorySlice = createSlice({
     },
     setLawTypeOpened (state, action) {
       state.lawTypeOpened = action.payload
+    },
+    setRegulatoryTopicOpened (state, action) {
+      state.regulatoryTopicOpened = action.payload
+    },
+    addRegulatoryTopicOpened (state, action) {
+      state.regulatoryTopicOpened.push(action.payload)
+    },
+    removeRegulatoryTopicOpened (state, action) {
+      state.regulatoryTopicOpened.pop(action.payload)
+    },
+    setRegulatoryZoneToEdit (state, action) {
+      state.regulatoryZoneToEdit = action.payload
     },
     /**
      * Set regulatory data structured as
@@ -210,6 +224,10 @@ export const {
   closeRegulatoryZoneMetadataPanel,
   setRegulatoryLayers,
   setLawTypeOpened,
+  addRegulatoryTopicOpened,
+  removeRegulatoryTopicOpened,
+  setRegulatoryTopicOpened,
+  setRegulatoryZoneToEdit,
   setRegulatoryTopics,
   setLayersTopicsByRegTerritory,
   setRegulatoryGeometryToPreview,

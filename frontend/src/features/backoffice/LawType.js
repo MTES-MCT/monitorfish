@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryLayerTopic'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import { setLawTypeOpened } from '../../domain/shared_slices/Regulatory'
+import { setLawTypeOpened, setRegulatoryTopicOpened } from '../../domain/shared_slices/Regulatory'
 import updateLayerNameForAllLayerZones from '../../domain/use_cases/updateLayerNameForAllLayerZones'
 
 const LawType = props => {
@@ -65,7 +65,10 @@ const LawType = props => {
 
   const openLawTypeList = () => {
     if (isOpen) {
-      dispatch(setLawTypeOpened(null))
+      batch(() => {
+        dispatch(setLawTypeOpened(null))
+        dispatch(setRegulatoryTopicOpened([]))
+      })
     } else {
       dispatch(setLawTypeOpened(lawType))
     }

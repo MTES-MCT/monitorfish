@@ -92,7 +92,7 @@ const FishingPeriodForm = (props) => {
     }
 
     setFishingPeriod(obj)
-  }, [setFishingPeriod])
+  }, [fishingPeriod, setFishingPeriod])
 
   const push = useCallback((key, array, defaultValue) => {
     const newArray = array ? [...array] : []

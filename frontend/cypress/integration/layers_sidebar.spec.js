@@ -8,7 +8,7 @@ context('LayersSidebar', () => {
     cy.visit(`http://localhost:${port}/#@-224002.65,6302673.54,8.70`)
 
     cy.request('GET', 'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
-      'monitorfish:regulatory_areas&outputFormat=application/json&propertyName=law_type,layer_name,engins,' +
+      'monitorfish:regulatory_areas&outputFormat=application/json&propertyName=id,law_type,layer_name,engins,' +
       'engins_interdits,especes,especes_interdites,references_reglementaires,zones,region').then(
       (response) => {
         cy.log(response.body)

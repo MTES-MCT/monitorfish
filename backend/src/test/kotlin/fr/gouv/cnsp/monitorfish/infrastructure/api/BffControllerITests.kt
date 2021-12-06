@@ -84,6 +84,9 @@ class BffControllerITests {
     @MockBean
     private lateinit var getAllControlObjective: GetAllControlObjectives
 
+    @MockBean
+    private lateinit var getOperationalAlerts: GetOperationalAlerts
+
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
 

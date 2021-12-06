@@ -93,7 +93,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
-
+  /** @type {boolean} saveIsForbidden */
+  const [saveIsForbidden, setSaveIsForbidden] = useState(false)
   const {
     isModalOpen,
     regulationSaved,
@@ -177,12 +178,14 @@ const CreateRegulation = ({ title, isEdition }) => {
             regulatorySpecies
           })
           createOrUpdateRegulation(featureObject)
+          setSaveIsForbidden(false)
         } else {
           batch(() => {
             dispatch(setRegulatoryTextCheckedMap({}))
             dispatch(setSaveOrUpdateRegulation(false))
             dispatch(setAtLeastOneValueIsMissing(undefined))
           })
+          setSaveIsForbidden(true)
         }
       }
     }
@@ -353,20 +356,25 @@ const CreateRegulation = ({ title, isEdition }) => {
         </Body>
         <Footer>
           <FooterButton>
-            <ValidateButton
-              data-cy="validate-button"
-              disabled={false}
-              isLast={false}
-              onClick={() => {
-                checkRequiredValues()
-                dispatch(setSaveOrUpdateRegulation(true))
-              }}
-            >
-            { isEdition
-              ? 'Enregister les modifications'
-              : 'Créer la réglementation'
-            }
-            </ValidateButton>
+            <Validate>
+              {saveIsForbidden && <ErrorMessage>
+                Veuillez vérifier les champs surlignés en rouge dans le formulaire
+              </ErrorMessage>}
+              <ValidateButton
+                data-cy="validate-button"
+                disabled={false}
+                isLast={false}
+                onClick={() => {
+                  checkRequiredValues()
+                  dispatch(setSaveOrUpdateRegulation(true))
+                }}
+              >
+              { isEdition
+                ? 'Enregister les modifications'
+                : 'Créer la réglementation'
+              }
+              </ValidateButton>
+            </Validate>
             {/* <CancelButton
               disabled={false}
               isLast={false}
@@ -392,6 +400,16 @@ const CreateRegulation = ({ title, isEdition }) => {
     </>
   )
 }
+
+const Validate = styled.div`
+  display: block;
+`
+
+const ErrorMessage = styled.div`
+  color: ${COLORS.red};
+  width: 250px;
+  margin-bottom: 10px;
+`
 
 const Wrapper = styled.div`
   display: flex;

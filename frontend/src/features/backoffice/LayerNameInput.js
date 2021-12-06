@@ -22,6 +22,9 @@ const LayerNameInput = props => {
     if (event.key === 'Enter') {
       update()
     }
+    if (event.key === 'Escape') {
+      setValue(layerName)
+    }
   }
 
   useEffect(() => {

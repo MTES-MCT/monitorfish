@@ -413,7 +413,7 @@ const toArrayString = (array) => {
 
 const dateToString = (date, annualRecurrence) => {
   const options = { day: 'numeric', month: 'long' }
-  if (annualRecurrence) {
+  if (!annualRecurrence) {
     options.year = 'numeric'
   }
   return date.toLocaleDateString('fr-FR', options)

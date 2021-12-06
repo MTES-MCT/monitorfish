@@ -3,7 +3,8 @@ import {
   getMergedRegulatoryLayers,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone, orderByAlphabeticalLayer,
-  searchByLawType
+  searchByLawType,
+  FRANCE
 } from '../domain/entities/regulatory'
 import { getDateMonthsBefore } from '../utils'
 import { VesselLocation, vesselSize } from '../domain/entities/vessel'
@@ -134,10 +135,18 @@ class MonitorFishWorker {
       }
       return accumulatedObject
     }, {})
-    return {
-      layersTopicsByRegulatoryTerritory,
-      regulatoryTopics: [...regulatoryTopicList]
-    }
+
+    const orderedFrenchLayersTopics = {}
+    Object.keys(LAWTYPES_TO_TERRITORY).forEach(lawType => {
+      const lawTypeObject = layersTopicsByRegulatoryTerritory[FRANCE][lawType]
+      if (lawTypeObject) {
+        orderedFrenchLayersTopics[lawType] = lawTypeObject
+      }
+      return null
+    })
+    layersTopicsByRegulatoryTerritory[FRANCE] = orderedFrenchLayersTopics
+
+    return layersTopicsByRegulatoryTerritory
   }
 
   getUniqueSpeciesAndDistricts (vessels) {

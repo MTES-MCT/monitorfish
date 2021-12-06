@@ -4,10 +4,8 @@ import * as Comlink from 'comlink'
 import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import { setError } from '../shared_slices/Global'
 import {
-  setRegulatoryTopics,
   setLayersTopicsByRegTerritory
 } from '../shared_slices/Regulatory'
-import { batch } from 'react-redux'
 
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
@@ -19,17 +17,7 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     .then(features => {
       return worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
     })
-    .then(response => {
-      const {
-        layersTopicsByRegulatoryTerritory,
-        regulatoryTopics
-      } = response
-
-      batch(() => {
-        dispatch(setRegulatoryTopics(regulatoryTopics))
-        dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
-      })
-    })
+    .then(response => dispatch(setLayersTopicsByRegTerritory(response)))
     .catch(error => {
       console.error(error)
       dispatch(setError(error))

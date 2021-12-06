@@ -12,10 +12,10 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     zone: decodeURI(properties.zones),
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
-    regulatorySpecies: properties.species ? JSON.parse(properties.species) : initialRegulatorySpeciesValues,
+    regulatorySpecies: parseRegulatorySpecies(properties.species),
     regulatoryReferences: parseRegulatoryReferences(properties.references_reglementaires),
     upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(properties.references_reglementaires_a_venir),
-    fishingPeriod: mapToFishingPeriodObject(properties.fishing_period),
+    fishingPeriod: parseFishingPeriod(properties.fishing_period),
     permissions: properties.autorisations,
     bycatch: properties.captures_accessoires,
     openingDate: properties.date_ouverture,
@@ -34,9 +34,15 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
   }
 }
 
+function parseRegulatorySpecies (species) {
+  return species
+    ? parseJSON(species)
+    : initialRegulatorySpeciesValues
+}
+
 const parseUpcomingRegulatoryReferences = upcomingRegulatoryReferences =>
   upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
-    ? JSON.parse(upcomingRegulatoryReferences)
+    ? parseJSON(upcomingRegulatoryReferences)
     : undefined
 
 const parseRegulatoryReferences = regulatoryTextsString => {
@@ -44,9 +50,7 @@ const parseRegulatoryReferences = regulatoryTextsString => {
     return undefined
   }
 
-  const regulatoryTexts = typeof regulatoryTextsString === 'string'
-    ? JSON.parse(regulatoryTextsString)
-    : regulatoryTextsString
+  const regulatoryTexts = parseJSON(regulatoryTextsString)
   if (regulatoryTexts?.length > 0 && Array.isArray(regulatoryTexts)) {
     return regulatoryTexts.map(regulatoryText => {
       if (!regulatoryText.startDate || regulatoryText.startDate === '') {
@@ -60,7 +64,11 @@ const parseRegulatoryReferences = regulatoryTextsString => {
   return undefined
 }
 
-const mapToFishingPeriodObject = fishingPeriod => {
+const parseJSON = text => typeof text === 'string'
+  ? JSON.parse(text)
+  : text
+
+export const parseFishingPeriod = fishingPeriod => {
   if (fishingPeriod) {
     const {
       authorized,
@@ -103,32 +111,32 @@ const mapToFishingPeriodObject = fishingPeriod => {
       timeIntervals: newTimeIntervals,
       otherInfo
     }
-  } else {
-    return initialFishingPeriodValues
   }
+
+  return initialFishingPeriodValues
 }
 
 export const mapToRegulatoryFeatureObject = properties => {
   const {
-    selectedRegulationTopic,
-    selectedRegulationLawType,
-    nameZone,
-    selectedRegionList,
-    regulatoryTexts,
-    upcomingRegulation,
+    layerName,
+    lawType,
+    zone,
+    region,
+    regulatoryReferences,
+    upcomingRegulatoryReferences,
     fishingPeriod,
     regulatorySpecies
   } = properties
 
   return {
-    layer_name: selectedRegulationTopic,
-    law_type: selectedRegulationLawType,
-    zones: nameZone,
-    region: selectedRegionList?.join(', '),
-    references_reglementaires: JSON.stringify(regulatoryTexts),
-    references_reglementaires_a_venir: JSON.stringify(upcomingRegulation || ''),
-    fishing_period: JSON.stringify(fishingPeriod || ''),
-    species: JSON.stringify(regulatorySpecies || '')
+    layer_name: layerName,
+    law_type: lawType,
+    zones: zone,
+    region,
+    references_reglementaires: JSON.stringify(regulatoryReferences),
+    references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
+    fishing_period: JSON.stringify(fishingPeriod),
+    species: JSON.stringify(regulatorySpecies)
   }
 }
 
@@ -157,9 +165,6 @@ const REG_OUTRE_MER = 'Reg. Outre-mer'
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
 const RUE_494 = 'R(CE) 494/2002'
-const RUE_2019_OLD = 'R(UE) 2019/1241'
-const RUE_1380_OLD = 'R(UE) 1380/2013'
-const RUE_494_OLD = 'R(CE) 494/2002'
 
 export const LAWTYPES_TO_TERRITORY = {
   [REG_MED]: FRANCE,
@@ -167,13 +172,9 @@ export const LAWTYPES_TO_TERRITORY = {
   [REG_NAMO]: FRANCE,
   [REG_MEMN]: FRANCE,
   [REG_OUTRE_MER]: FRANCE,
-  [REG_LOCALE]: FRANCE,
   [RUE_2019]: UE,
   [RUE_1380]: UE,
-  [RUE_494]: UE,
-  [RUE_2019_OLD]: UE,
-  [RUE_1380_OLD]: UE,
-  [RUE_494_OLD]: UE
+  [RUE_494]: UE
 }
 
 export const REGULATORY_TERRITORY = {
@@ -412,7 +413,7 @@ const toArrayString = (array) => {
 
 const dateToString = (date, annualRecurrence) => {
   const options = { day: 'numeric', month: 'long' }
-  if (annualRecurrence) {
+  if (!annualRecurrence) {
     options.year = 'numeric'
   }
   return date.toLocaleDateString('fr-FR', options)
@@ -497,4 +498,22 @@ export const fishingPeriodToString = fishingPeriod => {
   }
 
   return null
+}
+
+export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
+  const UEObject = { ...layersTopicsByRegTerritory[UE] }
+
+  const FRObject = { ...layersTopicsByRegTerritory[FRANCE] }
+  const newFRObject = {
+    [REG_MEMN]: FRObject[REG_MEMN],
+    [REG_NAMO]: FRObject[REG_NAMO],
+    [REG_SA]: FRObject[REG_SA],
+    [REG_MED]: FRObject[REG_MED],
+    [REG_OUTRE_MER]: FRObject[REG_OUTRE_MER]
+  }
+
+  return {
+    [UE]: UEObject.sort(),
+    [FRANCE]: newFRObject
+  }
 }

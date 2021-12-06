@@ -10,6 +10,8 @@ import NamespaceContext from '../../../domain/context/NamespaceContext'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
+import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
+import LayerNameInput from '../../backoffice/LayerNameInput'
 
 const RegulatoryLayerTopic = props => {
   const {
@@ -20,7 +22,8 @@ const RegulatoryLayerTopic = props => {
     decreaseNumberOfZonesOpened,
     regulatoryZones,
     isLastItem,
-    isEditable
+    isEditable,
+    updateLayerName
   } = props
 
   const gears = useSelector(state => state.gear.gears)
@@ -32,6 +35,7 @@ const RegulatoryLayerTopic = props => {
   const [isOpen, setIsOpen] = useState(false)
   const [showWholeLayer, setShowWholeLayer] = useState(undefined)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
+  const [isLayerNameEditable, setIsLayerNameEditable] = useState(false)
 
   useEffect(() => {
     if (showedLayers && regulatoryTopic) {
@@ -106,23 +110,48 @@ const RegulatoryLayerTopic = props => {
         layer.zone === zone.zone)
   }, [showedLayers])
 
+  const [isOver, setIsOver] = useState(false)
+  const onMouseOver = () => !isOver && setIsOver(true)
+  const onMouseOut = () => isOver && setIsOver(false)
+
+  const onEditLayerNameClick = () => {
+    setIsLayerNameEditable(true)
+  }
+
   return (
     <NamespaceContext.Consumer>
       {namespace => (
         <Row
           data-cy="regulatory-layer-topic-row"
           isOpen={isOpen}>
-          <Zone isLastItem={isLastItem} isOpen={isOpen}>
+          <Zone
+            isLastItem={isLastItem}
+            isOpen={isOpen}
+            onMouseOver={onMouseOver}
+            onMouseOut={onMouseOut}
+          >
             <Name
               data-cy={'regulatory-layers-my-zones-topic'}
               title={regulatoryTopic.replace(/[_]/g, ' ')}
               onClick={() => setIsOpen(!isOpen)}
             >
-              <Text>
-                {regulatoryTopic.replace(/[_]/g, ' ')}
-              </Text>
+              {!isLayerNameEditable
+                ? <Text>
+                  {regulatoryTopic.replace(/[_]/g, ' ')}
+                </Text>
+                : <LayerNameInput
+                  layerName={regulatoryTopic}
+                  updateLayerName={updateLayerName}
+                  setIsLayerNameEditable={setIsLayerNameEditable}
+                />
+              }
             </Name>
             {displayNumberOfZones()}
+            <EditIcon
+              data-cy="regulatory-layername-edit"
+              $isOver={isOver}
+              title="Editer la thématique"
+              onClick={() => onEditLayerNameClick()}/>
             {
               atLeastOneLayerIsShowed
                 ? <ShowIcon
@@ -159,7 +188,7 @@ const Text = styled.span`
 const Name = styled.span`
   line-height: 2.7em;
   font-size: 13px;
-  padding-left: 10px;
+  padding: 2px 10px;
   width: 79%;
   display: inline-block;
   text-overflow: ellipsis;
@@ -203,7 +232,8 @@ const Row = styled.li`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  cursor: pointer;
+  cursor: pointer;import LayerNameInput from '../../backoffice/LayerNameInput'
+
   margin: 0;
   line-height: 1.9em;
   display: block;

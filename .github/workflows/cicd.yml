@@ -6,6 +6,7 @@ on:
     - '**.kt'
     - '**.png'
     - '**.js'
+    - '**.json'
     - '**.ts'
     - '**.yml'
     - '.github/workflows/cicd.yml'

@@ -5,9 +5,8 @@ import { CustomInput } from '../../../commonStyles/Input.style'
 
 const CreateRegulationTopicForm = props => {
   const {
-    setSelectedRegulationTopic,
-    setIsAddTopicClicked,
-    setIsInfoTextShown
+    onCancelEdit,
+    updateLayerName
   } = props
   const [topicPlace, setTopicPlace] = useState('')
   const [topicPlaceIsRed, setTopicPlaceIsRed] = useState(false)
@@ -26,13 +25,13 @@ const CreateRegulationTopicForm = props => {
     if (topicPlace === '') {
       setTopicPlaceIsRed(true)
     } else {
-      const regulationLawType = `${topicPlace}
+      const regulationLayerName = `${topicPlace}
         ${topicSpecies ? ' - ' + topicSpecies : ''}
         ${topicGears ? ' - ' + topicGears : ''}
         ${topicOtherIndications ? ' - ' + topicOtherIndications : ''}`
-      setSelectedRegulationTopic(regulationLawType)
+      updateLayerName(regulationLayerName)
       resetThemeForm()
-      setIsAddTopicClicked(false)
+      onCancelEdit()
       setTopicPlaceIsRed(false)
     }
   }
@@ -69,10 +68,7 @@ const CreateRegulationTopicForm = props => {
       <CancelButton
         disabled={false}
         isLast={false}
-        onClick={() => {
-          setIsAddTopicClicked(false)
-          setIsInfoTextShown(false)
-        }}
+        onClick={onCancelEdit}
       >
         Annuler
       </CancelButton>

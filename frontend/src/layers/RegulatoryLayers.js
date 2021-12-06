@@ -27,7 +27,9 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   const isThrottled = useRef(false)
 
   useEffect(() => {
-    sortRegulatoryLayersFromAreas()
+    if (map) {
+      sortRegulatoryLayersFromAreas()
+    }
   }, [map, layersToFeatures])
 
   useEffect(() => {

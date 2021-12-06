@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import { browserName, browserVersion } from 'react-device-detect'

@@ -170,7 +170,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('not.exist')
   })
 
-  it('An administrative zone Should be showed and hidden', () => {
+  it.only('An administrative zone Should be showed and hidden', () => {
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="administrative-zones-open"]').click({ timeout: 20000 })

@@ -156,11 +156,8 @@ const TrackDepthSelectionButton = styled(MapComponentStyle)`
   cursor: pointer;
   border-radius: 1px;
   z-index: 999;
-  transition: 0.5s all;
-  
-  animation: ${props => props.rightMenuIsOpen && props.openBox
-  ? 'vessel-box-opening-with-right-menu-hover'
-  : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
+  right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
+  transition: all 0.5s, right 0.3s;
 `
 
 const TrackDepthSelectionContent = styled(MapComponentStyle)`

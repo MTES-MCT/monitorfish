@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import javax.websocket.server.PathParam
 
-
 @RestController
 @RequestMapping("/bff")
 @Api(description = "API for UI frontend")

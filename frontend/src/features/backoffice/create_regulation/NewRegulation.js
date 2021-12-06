@@ -19,7 +19,11 @@ import {
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
 
-import { setRegulatoryGeometryToPreview, setRegulatoryZoneMetadata } from '../../../domain/shared_slices/Regulatory'
+import {
+  setRegulatoryGeometryToPreview,
+  setRegulatoryZoneMetadata,
+  setRegulatoryTopics
+} from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
 import { formatDataForSelectPicker } from '../../../utils'
@@ -58,7 +62,7 @@ import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
   const {
-    regulatoryTopics,
+    layersTopicsByRegTerritory,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
@@ -103,7 +107,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   } = useSelector(state => state.regulation)
 
   useEffect(() => {
-    if (!regulatoryTopics || regulatoryTopics.length === 0) {
+    if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
 
@@ -142,6 +146,18 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [])
 
   useEffect(() => {
+    if (selectedRegulationLawType) {
+      const territory = layersTopicsByRegTerritory[LAWTYPES_TO_TERRITORY[selectedRegulationLawType]]
+      let regulatoryTopicList = []
+      if (territory) {
+        const lawTypeObject = territory[selectedRegulationLawType]
+        regulatoryTopicList = lawTypeObject ? Object.keys(lawTypeObject) : []
+      }
+      dispatch(setRegulatoryTopics(regulatoryTopicList))
+    }
+  }, [selectedRegulationLawType, layersTopicsByRegTerritory])
+
+  useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
       const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
@@ -151,16 +167,15 @@ const CreateRegulation = ({ title, isEdition }) => {
 
         if (allRequiredValuesHaveBeenFilled) {
           const featureObject = mapToRegulatoryFeatureObject({
-            selectedRegulationTopic,
-            selectedRegulationLawType,
-            nameZone: nameZone,
-            selectedRegionList,
-            regulatoryTexts: [...regulatoryTextList],
-            upcomingRegulation,
+            layerName: selectedRegulationTopic,
+            lawType: selectedRegulationLawType,
+            zone: nameZone,
+            region: selectedRegionList?.join(', '),
+            regulatoryReferences: regulatoryTextList,
+            upcomingRegulatoryReferences: upcomingRegulation,
             fishingPeriod,
             regulatorySpecies
           })
-
           createOrUpdateRegulation(featureObject)
         } else {
           batch(() => {
@@ -261,6 +276,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (LAWTYPES_TO_TERRITORY[value] !== UE) {
       setSelectedRegionList([])
     }
+    setSelectedRegulationTopic(undefined)
     setSelectedRegulationLawType(value)
   }
 
@@ -289,9 +305,9 @@ const CreateRegulation = ({ title, isEdition }) => {
                   lawTypeIsMissing={lawTypeIsMissing}
                 />
                 <RegulationTopicLine
+                  disabled={!selectedRegulationLawType}
                   selectedRegulationTopic={selectedRegulationTopic}
                   setSelectedRegulationTopic={setSelectedRegulationTopic}
-                  zoneThemeList={formatDataForSelectPicker(regulatoryTopics)}
                   regulationTopicIsMissing={regulationTopicIsMissing}
                 />
                 <RegulationLayerZoneLine

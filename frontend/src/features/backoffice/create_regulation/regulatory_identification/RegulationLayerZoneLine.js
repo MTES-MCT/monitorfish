@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { ContentLine, InfoText } from '../../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import InfoBox from '../InfoBox'
+import { INFO_TEXT } from '../../constants'
+
 const RegulationLayerZoneLine = props => {
   const {
     nameZone,
@@ -32,8 +34,12 @@ const RegulationLayerZoneLine = props => {
       isInfoTextShown={isInfoTextShown}
       setIsInfoTextShown={setIsInfoTextShown}
       isFormOpened={false}
-      message={'zoneName'}
-    />
+      pointer
+    >
+      <InfoText>
+        {INFO_TEXT.zoneName}
+      </InfoText>
+    </InfoBox>
   </ContentLine>
 }
 

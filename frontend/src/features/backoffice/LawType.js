@@ -6,6 +6,7 @@ import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryLayerTopic'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { setLawTypeOpened } from '../../domain/shared_slices/Regulatory'
+import updateLayerNameForAllLayerZones from '../../domain/use_cases/updateLayerNameForAllLayerZones'
 
 const LawType = props => {
   const dispatch = useDispatch()
@@ -14,7 +15,8 @@ const LawType = props => {
   const {
     lawType,
     regZoneByLawType,
-    isEditable
+    isEditable,
+    territory
   } = props
   const [isOpen, setIsOpen] = useState(false)
 
@@ -35,6 +37,10 @@ const LawType = props => {
     }
   }
 
+  function updateLayerName (oldLayerName, newLayerName) {
+    dispatch(updateLayerNameForAllLayerZones(territory, lawType, oldLayerName, newLayerName))
+  }
+
   const displayRegulatoryTopics = (regulatoryTopics) => {
     return (
       regulatoryTopics && Object.keys(regulatoryTopics).length > 0
@@ -50,6 +56,7 @@ const LawType = props => {
               isLastItem={Object.keys(regulatoryTopics).length === index + 1}
               allowRemoveZone={false}
               isEditable={isEditable}
+              updateLayerName={updateLayerName}
             />
           })
         : <EmptyResult>Aucun résultat</EmptyResult>
@@ -66,7 +73,7 @@ const LawType = props => {
   }
 
   return (<LawTypeContainer data-cy='law-type'>
-    <LawTypeName onClick={openLawTypeList}>
+    <LawTypeName onClick={openLawTypeList} data-cy={lawType}>
       <LawTypeText>{lawType}</LawTypeText>
       <ChevronIcon $isOpen={isOpen}/>
     </LawTypeName>

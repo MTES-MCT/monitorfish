@@ -7,12 +7,12 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
-    cy.visit(`http://localhost:${port}/backoffice`)
+    cy.visit(`http://localhost:${port}/backoffice/regulation`)
     cy.wait(3000)
 
     // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
-    cy.get('[data-cy="law-type"]').eq(0).click()
+    cy.get('[data-cy="law-type"]').eq(1).click()
     cy.get('[data-cy="regulatory-layer-topic-row"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click()
     cy.get('[data-cy="regulatory-layer-zone"]').should('have.length', 1)
@@ -41,6 +41,12 @@ context('NewRegulation', () => {
     cy.get('.rs-checkbox-wrapper').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
   })
 
+  it('Select another law type should reset selected layer name', () => {
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
+    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
+    cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('not.exist')
+  })
+
   it('Save regulation Should send the update payload to Geoserver and go back to backoffice page', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
@@ -64,7 +70,6 @@ context('NewRegulation', () => {
         expect(request.body).not.equal('"startDate":""')
         expect(request.body).contain('"endDate":"infinite"')
         expect(request.body).contain('"textType":["creation"]')
-        expect(request.body).contain('<Value>""</Value>')
         expect(request.body).contain('<FeatureId fid="regulatory_areas_write.598"/>')
         expect(response.statusCode).equal(200)
       })

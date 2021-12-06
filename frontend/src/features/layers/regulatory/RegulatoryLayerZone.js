@@ -20,7 +20,7 @@ import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
-import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
+import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -223,14 +223,6 @@ const ZoneText = styled.span`
   padding-bottom: 3px;
   padding-left: 0;
   margin-top: 5px;
-`
-
-const EditIcon = styled(EditSVG)`
-  display: ${props => props.$isOver ? 'flex' : 'none'};
-  width: 16px;
-  flex-shrink: 0;
-  align-self: center;
-  margin-right: 7px;
 `
 
 export default RegulatoryLayerZone

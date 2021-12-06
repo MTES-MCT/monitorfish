@@ -55,7 +55,7 @@ const Backoffice = () => {
     dispatch(closeRegulatoryZoneMetadata())
   }
 
-  const displayRegulatoryZoneListByLawType = (regZoneByLawType) => {
+  const displayRegulatoryZoneListByLawType = (territory, regZoneByLawType) => {
     return (regZoneByLawType && Object.keys(regZoneByLawType)
       .sort()
       .length > 0
@@ -68,6 +68,7 @@ const Backoffice = () => {
           gears={gears}
           callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
           isEditable={true}
+          territory={territory}
         />
       })
       : <EmptyResult>Aucun résultat</EmptyResult>)
@@ -76,7 +77,7 @@ const Backoffice = () => {
   const displayRegulatoryZoneByRegTerritory = (territory) => {
     const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
     return territoryRegList
-      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territoryRegList)}</RegulatoryZoneListByLawTypeList>
+      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territory, territoryRegList)}</RegulatoryZoneListByLawTypeList>
       : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
   }
 

@@ -6,7 +6,8 @@ import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { CheckboxGroup } from 'rsuite'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
-import { COLORS, INFINITE } from '../../../../constants/constants'
+import { INFINITE } from '../../constants'
+import { COLORS } from '../../../../constants/constants'
 import {
   addObjectToUpcomingRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap
@@ -248,7 +249,7 @@ const RegulatoryText = props => {
         isRequired={startDateIsRequired}
         value={startDate ? new Date(startDate) : new Date()}
         saveValue={date => set('startDate', date.getTime())}
-        format='DD/MM/YYYY'
+        format={'DD/MM/YYYY'}
         placement={'rightStart'}
         oneTap
       />
@@ -261,7 +262,7 @@ const RegulatoryText = props => {
         value={(!endDate || endDate === INFINITE) ? undefined : new Date(endDate)}
         saveValue={date => set('endDate', date.getTime())}
         oneTap
-        format='DD/MM/YYYY'
+        format={'DD/MM/YYYY'}
         placement={'rightEnd'}
       />
       <Or>&nbsp;ou</Or>

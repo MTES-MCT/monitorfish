@@ -7,7 +7,7 @@ import { ReactComponent as ControlsSVG } from '../icons/Picto_controles.svg'
 import { ReactComponent as ObservationsSVG } from '../icons/Picto_ciblage.svg'
 import { ReactComponent as VMSSVG } from '../icons/Picto_VMS_ERS.svg'
 import VesselIdentity from './VesselIdentity'
-import { useDispatch, useSelector } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import VesselSummary from './VesselSummary'
 import VesselFishingActivities from './fishing_activities/VesselFishingActivities'
@@ -138,15 +138,20 @@ const VesselSidebar = () => {
           <Panel healthcheckTextWarning={healthcheckTextWarning}>
             {
               selectedVessel?.alerts.length
-                ? <VesselCardAlerts onClick={() => {
-                  dispatch(openAlertList())
-                  dispatch(focusOnAlert({
-                    name: selectedVessel?.alerts[0],
-                    internalReferenceNumber: selectedVessel.internalReferenceNumber,
-                    externalReferenceNumber: selectedVessel.externalReferenceNumber,
-                    ircs: selectedVessel.ircs
-                  }))
-                }}>
+                ? <VesselCardAlerts
+                  onClick={() => {
+                    batch(() => {
+                      dispatch(openAlertList())
+                      dispatch(focusOnAlert({
+                        name: selectedVessel?.alerts[0],
+                        internalReferenceNumber: selectedVessel.internalReferenceNumber,
+                        externalReferenceNumber: selectedVessel.externalReferenceNumber,
+                        ircs: selectedVessel.ircs
+                      }))
+                    })
+                  }}
+                  data-cy={'vessel-sidebar-alert'}
+                >
                   <AlertIcon/>
                   {
                     selectedVessel?.alerts.length === 1
@@ -310,30 +315,9 @@ const Wrapper = styled(MapComponentStyle)`
   padding: 0;
   background: ${COLORS.gainsboro};
   overflow: hidden;
-  margin-right: -510px;
- 
-  animation: ${props => props.firstUpdate && !props.openBox ? '' : props.openBox ? 'vessel-box-opening' : 'vessel-box-closing'} 0.5s ease forwards,
-  ${props => props.rightMenuIsOpen && props.openBox ? 'vessel-box-opening-with-right-menu-hover' : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
-
-  @keyframes vessel-box-opening {
-    0%   { margin-right: -510px;   }
-    100% { margin-right: 0; }
-  }
-
-  @keyframes vessel-box-closing {
-    0% { margin-right: 0; }
-    100%   { margin-right: -510px;   }
-  }
-  
-  @keyframes vessel-box-opening-with-right-menu-hover {
-    0%   { right: 10px;   }
-    100% { right: 55px; }
-  }
-
-  @keyframes vessel-box-closing-with-right-menu-hover {
-    0% { right: 55px; }
-    100%   { right: 10px;   }
-  }
+  margin-right: ${props => props.openBox ? 0 : -510}px;
+  right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
+  transition: all 0.5s, right 0.3s;
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`

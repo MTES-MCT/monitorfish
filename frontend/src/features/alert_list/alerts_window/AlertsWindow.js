@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import NewWindow from 'react-new-window'
 
 import AlertsWindowFirstMenu from './AlertsWindowFirstMenu'
 import AlertsWindowSecondMenu from './AlertsWindowSecondMenu'
 import AlertsWindowBody from './AlertsWindowBody'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { AlertsMenuSeaFrontsToSeaFrontList, MenuSeaFronts } from '../../../domain/entities/alerts'
-import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 
-const AlertsWindow = ({ baseUrl, isOpen, closeAlertList }) => {
-  const dispatch = useDispatch()
+const AlertsWindow = () => {
   const {
     focusOnAlert
   } = useSelector(state => state.alert)
   const [selectedMenuSeaFront, setSelectedMenuSeaFront] = useState(MenuSeaFronts.MEMN)
+  const baseUrl = window.location.origin
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -30,29 +28,17 @@ const AlertsWindow = ({ baseUrl, isOpen, closeAlertList }) => {
     }
   }, [focusOnAlert])
 
-  return isOpen
-    ? <NewWindow
-      name={'Alertes'}
-      title={'Alertes'}
-      features={{ width: '1200px', height: '900px' }}
-      onUnload={() => {
-        closeAlertList()
-        dispatch(resetFocusOnAlert())
-      }}
-    >
-      <Wrapper>
-        <AlertsWindowFirstMenu/>
-        <AlertsWindowSecondMenu
-          selectedMenuSeaFront={selectedMenuSeaFront}
-          setSelectedMenuSeaFront={setSelectedMenuSeaFront}
-        />
-        <AlertsWindowBody
-          selectedMenuSeaFront={selectedMenuSeaFront}
-          baseUrl={baseUrl}
-        />
-      </Wrapper>
-    </NewWindow>
-    : null
+  return <Wrapper>
+    <AlertsWindowFirstMenu/>
+    <AlertsWindowSecondMenu
+      selectedMenuSeaFront={selectedMenuSeaFront}
+      setSelectedMenuSeaFront={setSelectedMenuSeaFront}
+    />
+    <AlertsWindowBody
+      selectedMenuSeaFront={selectedMenuSeaFront}
+      baseUrl={baseUrl}
+    />
+  </Wrapper>
 }
 
 const Wrapper = styled.div`

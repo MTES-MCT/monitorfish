@@ -10,6 +10,8 @@ const AlertsWindowBody = ({ selectedMenuSeaFront, baseUrl }) => {
     alerts
   } = useSelector(state => state.alert)
 
+  console.log(alerts)
+
   return <Content>
     <AlertsWindowTable
       alertType={AlertTypes.THREE_MILES_TRAWLING_ALERT.name}

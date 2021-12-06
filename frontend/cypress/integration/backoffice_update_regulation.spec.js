@@ -70,7 +70,6 @@ context('NewRegulation', () => {
         expect(request.body).not.equal('"startDate":""')
         expect(request.body).contain('"endDate":"infinite"')
         expect(request.body).contain('"textType":["creation"]')
-        expect(request.body).contain('<Value>""</Value>')
         expect(request.body).contain('<FeatureId fid="regulatory_areas_write.598"/>')
         expect(response.statusCode).equal(200)
       })

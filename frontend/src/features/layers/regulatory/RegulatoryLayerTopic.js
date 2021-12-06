@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
 import { getHash } from '../../../utils'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
 import { COLORS } from '../../../constants/constants'
-import { useSelector } from 'react-redux'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 import LayerNameInput from '../../backoffice/LayerNameInput'
+import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened } from '../../../domain/shared_slices/Regulatory'
 
 const RegulatoryLayerTopic = props => {
   const {
@@ -26,10 +27,15 @@ const RegulatoryLayerTopic = props => {
     updateLayerName
   } = props
 
+  const dispatch = useDispatch()
+  const ref = useRef()
+
   const gears = useSelector(state => state.gear.gears)
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const {
-    regulatoryZoneMetadata
+    regulatoryZoneMetadata,
+    regulatoryTopicOpened,
+    regulatoryZoneToEdit
   } = useSelector(state => state.regulatory)
 
   const [isOpen, setIsOpen] = useState(false)
@@ -59,10 +65,16 @@ const RegulatoryLayerTopic = props => {
   }, [isOpen])
 
   useEffect(() => {
-    if (regulatoryZoneMetadata && regulatoryTopic && regulatoryZoneMetadata.topic === regulatoryTopic) {
+    if (regulatoryTopic && ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
+      (regulatoryTopicOpened && regulatoryTopicOpened.includes(regulatoryTopic)))) {
       setIsOpen(true)
+      if (!regulatoryZoneToEdit && regulatoryTopicOpened[regulatoryTopicOpened.length - 1] === regulatoryTopic) {
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
+      }
+    } else {
+      setIsOpen(false)
     }
-  }, [regulatoryZoneMetadata, regulatoryTopic, setIsOpen])
+  }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicOpened, regulatoryZoneToEdit, setIsOpen])
 
   const getRegulatoryLayerName = regulatoryZones => {
     return {
@@ -117,6 +129,13 @@ const RegulatoryLayerTopic = props => {
   const onEditLayerNameClick = () => {
     setIsLayerNameEditable(true)
   }
+  const onRegulatoryTopicClick = useCallback(() => {
+    if (isOpen) {
+      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+    } else {
+      dispatch(addRegulatoryTopicOpened(regulatoryTopic))
+    }
+  }, [isOpen, regulatoryTopic])
 
   return (
     <NamespaceContext.Consumer>
@@ -131,9 +150,10 @@ const RegulatoryLayerTopic = props => {
             onMouseOut={onMouseOut}
           >
             <Name
+              ref={ref}
               data-cy={'regulatory-layers-my-zones-topic'}
               title={regulatoryTopic.replace(/[_]/g, ' ')}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={onRegulatoryTopicClick}
             >
               {!isLayerNameEditable
                 ? <Text>

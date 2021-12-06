@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import {
   useRouteMatch,
   useHistory
 } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
@@ -21,6 +21,7 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
+import { setRegulatoryZoneToEdit } from '../../../domain/shared_slices/Regulatory'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -40,6 +41,7 @@ const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
   const match = useRouteMatch()
   const history = useHistory()
+  const ref = useRef()
   const {
     callRemoveRegulatoryZoneFromMySelection,
     regulatoryZone,
@@ -54,12 +56,20 @@ const RegulatoryLayerZone = props => {
 
   const {
     isReadyToShowRegulatoryLayers,
-    regulatoryZoneMetadata
+    regulatoryZoneMetadata,
+    regulatoryZoneToEdit
   } = useSelector(state => state.regulatory)
 
   const [showRegulatoryZone, setShowRegulatoryZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
+
+  useEffect(() => {
+    if (ref?.current && regulatoryZoneToEdit === regulatoryZone.zone) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
+      dispatch(setRegulatoryZoneToEdit(null))
+    }
+  }, [ref.current, regulatoryZoneToEdit, regulatoryZone.zone])
 
   const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {
@@ -109,7 +119,10 @@ const RegulatoryLayerZone = props => {
 
   const onEditRegulationClick = () => {
     history.push(`${match.path}/edit`)
-    dispatch(showRegulationToEdit(regulatoryZone))
+    batch(() => {
+      dispatch(showRegulationToEdit(regulatoryZone))
+      dispatch(setRegulatoryZoneToEdit(regulatoryZone.zone))
+    })
   }
 
   const onMouseOver = () => !isOver && setIsOver(true)
@@ -123,6 +136,7 @@ const RegulatoryLayerZone = props => {
       onMouseOut={onMouseOut}>
       <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
+        ref={ref}
         data-cy={'regulatory-layers-my-zones-zone'}
         title={regulatoryZone.zone
           ? regulatoryZone.zone.replace(/[_]/g, ' ')
@@ -142,7 +156,7 @@ const RegulatoryLayerZone = props => {
             data-cy="regulatory-layer-zone-edit"
             $isOver={isOver}
             title="Editer la réglementation"
-            onClick={() => onEditRegulationClick()}/>
+            onClick={onEditRegulationClick}/>
         }
         {
           metadataIsShown

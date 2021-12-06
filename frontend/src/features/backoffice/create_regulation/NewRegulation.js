@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { useDispatch, useSelector, batch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
@@ -16,6 +16,7 @@ import {
   RemoveRegulationModal,
   FishingPeriodSection
 } from './'
+import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
 
@@ -33,14 +34,15 @@ import {
 } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
 import {
-  resetState,
   setSelectedRegulation,
   setRegulatoryTextCheckedMap,
   setUpcomingRegulation,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
   setIsRemoveModalOpen,
-  setSelectedGeometryId
+  setSelectedGeometryId,
+  setIsConfirmModalOpen,
+  resetState
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -61,6 +63,7 @@ import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const {
     layersTopicsByRegTerritory,
     regulatoryZoneMetadata
@@ -104,6 +107,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     atLeastOneValueIsMissing,
     selectedGeometryId,
     isRemoveModalOpen,
+    isConfirmModalOpen,
     regulationDeleted
   } = useSelector(state => state.regulation)
 
@@ -128,17 +132,20 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }, [isEdition, regulatoryZoneMetadata])
 
-  const history = useHistory()
   useEffect(() => {
     if (regulationSaved || regulationDeleted) {
-      onGoBack()
+      goBackofficeHome()
     }
   }, [regulationSaved, regulationDeleted])
 
   const onGoBack = () => {
+    dispatch(setIsConfirmModalOpen(true))
+  }
+
+  const goBackofficeHome = useCallback(() => {
     dispatch(resetState())
     history.push('/backoffice/regulation')
-  }
+  }, [resetState])
 
   useEffect(() => {
     return () => {
@@ -159,6 +166,9 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [selectedRegulationLawType, layersTopicsByRegTerritory])
 
   useEffect(() => {
+    if (saveOrUpdateRegulation && atLeastOneValueIsMissing === undefined) {
+      checkRequiredValues()
+    }
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
       const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
@@ -397,6 +407,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     </Wrapper>
     {isModalOpen && <UpcomingRegulationModal />}
     {isRemoveModalOpen && <RemoveRegulationModal />}
+    {isConfirmModalOpen && <ConfirmRegulationModal goBackofficeHome={goBackofficeHome} />}
     </>
   )
 }

@@ -18,7 +18,7 @@ const RegulationLawTypeLine = props => {
       <Label>Ensemble réglementaire</Label>
       <CustomSelectComponent
         searchable={false}
-        menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
+        menuStyle={{ width: 250, overflowY: 'scroll', textOverflow: 'ellipsis' }}
         placeholder='Choisir un ensemble'
         value={'Choisir un ensemble'}
         onChange={setSelectedValue}

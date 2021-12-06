@@ -26,7 +26,7 @@ const RegulationTopicLine = props => {
 
   useEffect(() => {
     if (regulatoryTopics) {
-      setLayerTypeList(formatDataForSelectPicker(regulatoryTopics))
+      setLayerTypeList(formatDataForSelectPicker([...regulatoryTopics].sort()))
     }
   }, [regulatoryTopics])
 

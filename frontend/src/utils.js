@@ -220,7 +220,6 @@ export const formatDataForSelectPicker = (list, groupName) => {
   const orderedList = [...list]
   if (list?.length > 0) {
     const array = orderedList
-      .sort()
       .map(e => {
         const i = item(e)
         if (groupName) {

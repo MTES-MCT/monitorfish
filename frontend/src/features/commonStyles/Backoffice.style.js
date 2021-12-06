@@ -28,19 +28,22 @@ export const Title = styled.span`
 `
 
 export const Footer = styled.div`
-position: fixed;
-left: O;
-bottom: 0;
-width: 100%;
-background-color:${COLORS.white};
-z-index: 100;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: O;
+  bottom: 0;
+  width: 100%;
+  background-color:${COLORS.white};
+  z-index: 100;
 `
 
 export const FooterButton = styled.div`
-display: flex;
-justify-content: center;
-width: 100%;
-padding: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  padding: 15px 0;
 `
 
 export const Delimiter = styled.div`

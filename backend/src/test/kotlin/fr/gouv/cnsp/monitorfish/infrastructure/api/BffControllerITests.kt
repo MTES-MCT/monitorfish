@@ -38,6 +38,9 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.BeaconStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.Stage
+import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 
 @Import(MeterRegistryConfiguration::class)
@@ -86,6 +89,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var getOperationalAlerts: GetOperationalAlerts
+
+    @MockBean
+    private lateinit var getAllBeaconStatuses: GetAllBeaconStatuses
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -453,5 +459,21 @@ class BffControllerITests {
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.species.length()", equalTo(1)))
                 .andExpect(jsonPath("$.groups.length()", equalTo(1)))
+    }
+
+    @Test
+    fun `Should get all beacon statuses`() {
+        // Given
+        given(this.getAllBeaconStatuses.execute()).willReturn(listOf(BeaconStatus(1, 2, "CFR",
+                VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER, true, ZonedDateTime.now(), null, ZonedDateTime.now())))
+
+        // When
+        mockMvc.perform(get("/bff/v1/beacon_statuses"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(1)))
+                .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo("CFR")))
+                .andExpect(jsonPath("$[0].vesselStatus", equalTo("AT_SEA")))
+                .andExpect(jsonPath("$[0].stage", equalTo("INITIAL_ENCOUNTER")))
     }
 }

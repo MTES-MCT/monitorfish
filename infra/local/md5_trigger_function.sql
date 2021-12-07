@@ -17,7 +17,7 @@ CREATE FUNCTION prod.compute_reglementation_md5() RETURNS trigger AS $$
 			COALESCE(NEW.date_fermeture::text, '') ||
 			COALESCE(NEW.date_ouverture::text, '') ||
 			COALESCE(NEW.periodes::text, '') ||
-			COALESCE(NEW.fishing_periods::text, '') ||
+			COALESCE(NEW.fishing_period::text, '') ||
 			COALESCE(NEW.engins::text, '') ||
 			COALESCE(NEW.engins_interdits::text, '') ||
 			COALESCE(NEW.mesures_techniques::text, '') ||

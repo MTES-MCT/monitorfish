@@ -21,14 +21,20 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
     })
   }
 
-  return (<RegulationModal isOpen={isConfirmModalOpen}>
+  return (<RegulationModal
+      isOpen={isConfirmModalOpen}
+      data-cy='regulation-modal'
+    >
     <ModalContent>
       <Body>
         <ModalTitle>
           Enregistrer les modifications
-          <CloseIcon onClick={() => dispatch(setIsConfirmModalOpen(false))}/>
+          <CloseIcon
+            data-cy='confirm-modal-close-icon'
+            onClick={() => dispatch(setIsConfirmModalOpen(false))}
+          />
         </ModalTitle>
-        <Section>
+        <Section data-cy='confirm-modal-text' >
           {'Voulez-vous enregistrer les modifications\napportées à la réglementation ?'}
         </Section>
       </Body>
@@ -37,12 +43,14 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
           <ValidateButton
             onClick={save}
             width={'120px'}
+            data-cy='confirm-modal-confirm-button'
           >
             Oui
           </ValidateButton>
           <CancelButton
             onClick={goBackofficeHome}
             width={'120px'}
+            data-cy='confirm-modal-cancel-button'
           >
             Non
           </CancelButton>

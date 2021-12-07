@@ -1,10 +1,29 @@
-# Helps commands
+# Commands
 
 ## Export regulatory zones from PostGIS
 
-1. From the local VM, run : `pg_dump -U adl -t prod.reglementation_peche cnsp  > /tmp/ref_reg.sql`
-2. Copy to local folder : `scp -r root@10.56.205.25:/tmp/ref_reg.sql .`
-3. Copy to `/layersdata` folder of the repo
+1. From the local VM, run :
+```
+psql -d cnsp --host <IP> --port 5432 --username "adl" -c "copy(SELECT id, law_type,
+                                                           facade, layer_name, zones, region, date_fermeture,
+                                                           date_ouverture, fishing_period, periodes, engins, engins_interdits,
+                                                           mesures_techniques, especes, species, quantites, taille,
+                                                           especes_interdites, autre_reglementation_especes,
+                                                           documents_obligatoires, autre_reglementation,
+                                                           references_reglementaires, geometry_simplified, row_hash FROM prod.reglementation_peche) to stdout" > dump.tsv
+```
+2. Copy to local folder : `scp -r root@<IP>:/tmp/dump.tsv .`
+3. Add to the beginning of the file :
+```
+COPY public.reglementation_peche (id, law_type,
+                                  facade, layer_name, zones, region, date_fermeture,
+                                  date_ouverture, fishing_period, periodes, engins, engins_interdits,
+                                  mesures_techniques, especes, species, quantites, taille,
+                                  especes_interdites, autre_reglementation_especes,
+                                  documents_obligatoires, autre_reglementation,
+                                  references_reglementaires, geometry_simplified, row_hash) FROM stdin WITH ENCODING 'UTF8';
+```
+4. Copy to `/layersdata` folder of the repo
 
 ## Reset a regulation from the local PostGIS regulation referential
 

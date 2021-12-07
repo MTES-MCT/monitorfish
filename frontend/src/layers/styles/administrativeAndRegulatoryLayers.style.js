@@ -163,88 +163,88 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
           case 'Lignes et hameçons': {
             switch (lastNumber) {
               case '0':
-                return getStyle(getColorWithAlpha('#FFD3C7', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#FFD3C7', 0.60), metadataIsShowed)
               case '1':
-                return getStyle(getColorWithAlpha('#FFB199', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#FFB199', 0.60), metadataIsShowed)
               case '2':
-                return getStyle(getColorWithAlpha('#FFB199', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#FFB199', 0.60), metadataIsShowed)
               case '3':
-                return getStyle(getColorWithAlpha('#FF8F66', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#FF8F66', 0.60), metadataIsShowed)
               case '4':
-                return getStyle(getColorWithAlpha('#FF8F66', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#FF8F66', 0.60), metadataIsShowed)
               case '5':
-                return getStyle(getColorWithAlpha('#FC4C0D', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#FC4C0D', 0.60), metadataIsShowed)
               case '6':
-                return getStyle(getColorWithAlpha('#FC4C0D', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#FC4C0D', 0.60), metadataIsShowed)
               case '7':
-                return getStyle(getColorWithAlpha('#C9390D', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#C9390D', 0.60), metadataIsShowed)
               case '8':
-                return getStyle(getColorWithAlpha('#9B2F08', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#9B2F08', 0.60), metadataIsShowed)
               case '9':
-                return getStyle(getColorWithAlpha('#721E04', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#721E04', 0.60), metadataIsShowed)
             }
             break
           }
           case 'Dragues': {
             switch (lastNumber) {
               case '0':
-                return getStyle(getColorWithAlpha('#F8F8C9', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#F8F8C9', 0.60), metadataIsShowed)
               case '1':
-                return getStyle(getColorWithAlpha('#EAE89B', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#EAE89B', 0.60), metadataIsShowed)
               case '2':
-                return getStyle(getColorWithAlpha('#EAE89B', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#EAE89B', 0.60), metadataIsShowed)
               case '3':
-                return getStyle(getColorWithAlpha('#EBEB60', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#EBEB60', 0.60), metadataIsShowed)
               case '4':
-                return getStyle(getColorWithAlpha('#EBEB60', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#EBEB60', 0.60), metadataIsShowed)
               case '5':
-                return getStyle(getColorWithAlpha('#D9D932', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#D9D932', 0.60), metadataIsShowed)
               case '6':
-                return getStyle(getColorWithAlpha('#D9D932', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#D9D932', 0.60), metadataIsShowed)
               case '7':
-                return getStyle(getColorWithAlpha('#B3B312', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#B3B312', 0.60), metadataIsShowed)
               case '8':
-                return getStyle(getColorWithAlpha('#969600', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#969600', 0.60), metadataIsShowed)
               case '9':
-                return getStyle(getColorWithAlpha('#717100', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#717100', 0.60), metadataIsShowed)
             }
             break
           }
           case 'Pièges': {
             switch (lastNumber) {
               case '0':
-                return getStyle(getColorWithAlpha('#EAD0B2', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#EAD0B2', 0.60), metadataIsShowed)
               case '1':
-                return getStyle(getColorWithAlpha('#DCB57F', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#DCB57F', 0.60), metadataIsShowed)
               case '2':
-                return getStyle(getColorWithAlpha('#DCB57F', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#DCB57F', 0.60), metadataIsShowed)
               case '3':
-                return getStyle(getColorWithAlpha('#CF994F', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#CF994F', 0.60), metadataIsShowed)
               case '4':
-                return getStyle(getColorWithAlpha('#CF994F', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#CF994F', 0.60), metadataIsShowed)
               case '5':
-                return getStyle(getColorWithAlpha('#AD6918', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#AD6918', 0.60), metadataIsShowed)
               case '6':
-                return getStyle(getColorWithAlpha('#AD6918', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#AD6918', 0.60), metadataIsShowed)
               case '7':
-                return getStyle(getColorWithAlpha('#844F10', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#844F10', 0.60), metadataIsShowed)
               case '8':
-                return getStyle(getColorWithAlpha('#703F09', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#703F09', 0.60), metadataIsShowed)
               case '9':
-                return getStyle(getColorWithAlpha('#512A03', 0.75), metadataIsShowed)
+                return getStyle(getColorWithAlpha('#512A03', 0.60), metadataIsShowed)
             }
             break
           }
           default: {
             // Pièges
-            return getStyle(getColorWithAlpha('#7B9FCC', 0.75), metadataIsShowed)
+            return getStyle(getColorWithAlpha('#7B9FCC', 0.60), metadataIsShowed)
           }
         }
       }
     default:
       return () => new Style({
         stroke: new Stroke({
-          color: getColorWithAlpha('#7B9FCC', 0.5),
+          color: getColorWithAlpha('#7B9FCC', 0.60),
           width: 2
         }),
         fill: new Fill({

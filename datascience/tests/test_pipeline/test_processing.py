@@ -548,18 +548,45 @@ class TestProcessingMethods(unittest.TestCase):
 
         right = pd.DataFrame(
             {
-                "cfr": ["A", "B", "C", "D", None, "no conflict F", None, "conflict H"],
+                "cfr": [
+                    "A",
+                    "A",
+                    None,
+                    "B",
+                    "C",
+                    "D",
+                    "E",
+                    None,
+                    "no conflict F",
+                    None,
+                    "conflict H",
+                ],
                 "external_immatriculation": [
+                    "AA",
+                    "AA",
                     "AA",
                     "BB",
                     None,
                     "DD",
                     "EE",
+                    "EE",
                     None,
                     None,
                     "HH",
                 ],
-                "ircs": ["AAA", None, "no conflic CCC", None, None, "FFF", None, "HHH"],
+                "ircs": [
+                    "AAA",
+                    "AAA",
+                    "AAA",
+                    None,
+                    "no conflic CCC",
+                    None,
+                    None,
+                    None,
+                    "FFF",
+                    None,
+                    "HHH",
+                ],
             }
         )
 

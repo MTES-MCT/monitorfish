@@ -607,7 +607,11 @@ def left_isin_right_by_decreasing_priority(
     right[isin_right_col] = True
 
     res = join_on_multiple_keys(left, right, on=cols, how="left")
-    res = res.sort_values(id_col)[isin_right_col].fillna(False)
+    res = (
+        res.drop_duplicates(subset=[id_col])
+        .sort_values(id_col)[isin_right_col]
+        .fillna(False)
+    )
     res.index = left.index
 
     return res

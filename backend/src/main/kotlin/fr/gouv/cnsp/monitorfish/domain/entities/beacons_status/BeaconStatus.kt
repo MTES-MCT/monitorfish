@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 data class BeaconStatus(
         val id: Int,
         val vesselId: Int,
-        val cfr: String?,
+        val internalReferenceNumber: String?,
         val vesselStatus: VesselStatus,
         val stage: Stage,
         val priority: Boolean,

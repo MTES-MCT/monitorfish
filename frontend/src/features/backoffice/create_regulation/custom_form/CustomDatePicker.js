@@ -23,7 +23,7 @@ const CustomDatePicker = props => {
     disabled
   } = props
 
-  const [val, setVal] = useState()
+  const [val, setVal] = useState(undefined)
 
   return <DatePickerStyled
     key={value}

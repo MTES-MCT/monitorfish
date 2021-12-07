@@ -21,7 +21,7 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
-import { setRegulatoryZoneToEdit } from '../../../domain/shared_slices/Regulatory'
+import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened, setRegulatoryZoneToEdit } from '../../../domain/shared_slices/Regulatory'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -51,7 +51,8 @@ const RegulatoryLayerZone = props => {
     namespace,
     vectorLayerStyle,
     isLast,
-    isEditable
+    isEditable,
+    regulatoryTopic
   } = props
 
   const {
@@ -65,10 +66,9 @@ const RegulatoryLayerZone = props => {
   const [isOver, setIsOver] = useState(false)
 
   useLayoutEffect(() => {
-    if (ref?.current && regulatoryZoneToEdit === regulatoryZone.zone) {
-      ref.current.scrollIntoView(true)
-      dispatch(setRegulatoryZoneToEdit(null))
-    }
+    /* if (ref?.current && regulatoryZoneToEdit === regulatoryZone.zone) {
+      ref.current.scrollIntoView({ block: 'end', inline: 'start' })
+    } */
   }, [ref.current, regulatoryZoneToEdit, regulatoryZone.zone])
 
   const callShowRegulatoryZoneMetadata = zone => {
@@ -122,6 +122,8 @@ const RegulatoryLayerZone = props => {
     batch(() => {
       dispatch(showRegulationToEdit(regulatoryZone))
       dispatch(setRegulatoryZoneToEdit(regulatoryZone.zone))
+      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(addRegulatoryTopicOpened(regulatoryTopic))
     })
   }
 

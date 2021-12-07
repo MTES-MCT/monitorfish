@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
@@ -64,13 +64,16 @@ const RegulatoryLayerTopic = props => {
     }
   }, [isOpen])
 
+  useLayoutEffect(() => {
+    if (regulatoryZoneToEdit && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
+      ref.current.scrollIntoView(true)
+    }
+  }, [regulatoryTopicsOpened, regulatoryZoneToEdit])
+
   useEffect(() => {
     if (regulatoryTopic && ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
       (regulatoryTopicsOpened && regulatoryTopicsOpened.includes(regulatoryTopic)))) {
       setIsOpen(true)
-      if (!regulatoryZoneToEdit && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
-      }
     } else {
       setIsOpen(false)
     }
@@ -111,6 +114,7 @@ const RegulatoryLayerTopic = props => {
           zoneIsShown={getZoneIsShown(regulatoryZone)}
           allowRemoveZone={allowRemoveZone}
           isEditable={isEditable}
+          regulatoryTopic={regulatoryTopic}
         />
       )
     })
@@ -141,6 +145,7 @@ const RegulatoryLayerTopic = props => {
     <NamespaceContext.Consumer>
       {namespace => (
         <Row
+          ref={ref}
           data-cy="regulatory-layer-topic-row"
           isOpen={isOpen}>
           <Zone
@@ -150,7 +155,6 @@ const RegulatoryLayerTopic = props => {
             onMouseOut={onMouseOut}
           >
             <Name
-              ref={ref}
               data-cy={'regulatory-layers-my-zones-topic'}
               title={regulatoryTopic.replace(/[_]/g, ' ')}
               onClick={onRegulatoryTopicClick}

@@ -8,7 +8,7 @@ context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation`)
-    cy.wait(3000)
+    cy.wait(500)
 
     // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
@@ -16,11 +16,11 @@ context('NewRegulation', () => {
     cy.get('[data-cy="regulatory-layer-topic-row"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click()
     cy.get('[data-cy="regulatory-layer-zone"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', )
+    cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
     cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-zone-edit"]').eq(0).click()
     cy.url().should('include', '/regulation/edit')
-    cy.wait(1000)
+    cy.wait(500)
   })
 
   it('A layer zone Should be edited', () => {
@@ -110,6 +110,25 @@ context('NewRegulation', () => {
           .contain('"species":[{"code":"HKE","quantity":"Ne pas en prendre beaucoup please","minimumSize":"à peu près 60 cm"}]')
           .contain('"speciesGroups":["Espèces eau profonde"]')
 
+        expect(response.statusCode).equal(200)
+      })
+    cy.url().should('include', '/backoffice')
+  })
+
+  it('Confirm modal is closed on confirm button click and post request is sent', () => {
+    // Given
+    cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    cy.get('[data-cy="regulation-modal"]').should('exist')
+    cy.get('[type="checkbox"]').first().check({ force: true })
+    cy.get('[type="checkbox"]').eq(2).check({ force: true })
+    // When
+    cy.get('[data-cy="confirm-modal-confirm-button"]').click()
+    // Then
+    cy.get('[data-cy="regulation-modal"]').should('not.exist')
+    // Then
+    cy.wait('@postRegulation')
+      .then(({ request, response }) => {
         expect(response.statusCode).equal(200)
       })
     cy.url().should('include', '/backoffice')

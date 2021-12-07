@@ -128,20 +128,43 @@ context('NewRegulation', () => {
     cy.get('[data-cy="reg-text-url"]').invoke('val').should('equal', '')
   })
 
-  /* it('Enter a reg text name with an invalid url', () => {
-    cy.get('[data-cy="reg-text-name"]').type('zone name')
-    cy.get('[data-cy="reg-text-url"]').type('url.com')
-    // When save button is clicked
-    cy.get('[data-cy="save-reg-text-name"]').click({ timeout: 50000 })
-    // Red border are displayed
-    cy.get('[data-cy="reg-text-url"]').should('have.css', 'border-color', 'rgb(225, 0, 15)')
+  it('A modal should be open on go back button click', () => {
+    // When
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    // then
+    cy.get('[data-cy="regulation-modal"]').should('exist')
+    cy.get('[data-cy="confirm-modal-text"]').should('have.text', 'Voulez-vous enregistrer les modifications\napportées à la réglementation ?')
   })
 
-  it('Enter a reg text name with missing name', () => {
-    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
-    // When save button is clicked
-    cy.get('[data-cy="save-reg-text-name"]').click({ timeout: 50000 })
-    // Red border are displayed
-    cy.get('[data-cy="reg-text-name"]').should('have.css', 'border-color', 'rgb(225, 0, 15)')
-  }) */
+  it('Confirm modal is closed on close icon click', () => {
+    // Given
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    cy.get('[data-cy="regulation-modal"]').should('exist')
+    // When
+    cy.get('[data-cy="confirm-modal-close-icon"]').click()
+    // Then
+    cy.get('[data-cy="regulation-modal"]').should('not.exist')
+  })
+
+  it('Confirm modal is closed on confirm button click and error is displayed', () => {
+    // Given
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    cy.get('[data-cy="regulation-modal"]').should('exist')
+    // When
+    cy.get('[data-cy="confirm-modal-confirm-button"]').click()
+    // Then
+    cy.get('[data-cy="regulation-modal"]').should('not.exist')
+    cy.get('[data-cy="save-forbidden-btn"]').should('exist')
+  })
+
+  it('New regulation page is closed and backoffice list is displayed on cancel button click', () => {
+    // Given
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    cy.get('[data-cy="regulation-modal"]').should('exist')
+    // When
+    cy.get('[data-cy="confirm-modal-cancel-button"]').click()
+    // Then
+    cy.get('[data-cy="regulation-modal"]').should('not.exist')
+    cy.url().should('include', '/backoffice')
+  })
 })

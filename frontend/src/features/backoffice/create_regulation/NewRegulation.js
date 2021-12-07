@@ -300,7 +300,10 @@ const CreateRegulation = ({ title, isEdition }) => {
         <Body>
           <Header>
             <LinkSpan><ChevronIcon/>
-              <BackLink onClick={onGoBack} >Revenir à la liste complète des zones</BackLink>
+              <BackLink
+                data-cy='go-back-link'
+                onClick={onGoBack}
+              >Revenir à la liste complète des zones</BackLink>
             </LinkSpan>
             <HeaderTitle>{title}</HeaderTitle>
             <Span />
@@ -367,7 +370,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         <Footer>
           <FooterButton>
             <Validate>
-              {saveIsForbidden && <ErrorMessage>
+              {saveIsForbidden && <ErrorMessage data-cy='save-forbidden-btn'>
                 Veuillez vérifier les champs surlignés en rouge dans le formulaire
               </ErrorMessage>}
               <ValidateButton

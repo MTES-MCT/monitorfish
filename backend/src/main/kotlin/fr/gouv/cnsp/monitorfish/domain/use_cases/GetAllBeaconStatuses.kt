@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
 
 @UseCase
-class GetBeaconStatuses(private val beaconStatusesRepository: BeaconStatusesRepository) {
+class GetAllBeaconStatuses(private val beaconStatusesRepository: BeaconStatusesRepository) {
     fun execute(): List<BeaconStatus> {
         return beaconStatusesRepository.findAll()
     }

@@ -22,7 +22,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         val gears = jpaBeaconStatusesRepository.findAll()
 
         assertThat(gears).hasSize(4)
-        assertThat(gears.first().cfr).isEqualTo("FAK000999999")
+        assertThat(gears.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(gears.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
         assertThat(gears.first().vesselStatus).isEqualTo(VesselStatus.AT_SEA)
     }

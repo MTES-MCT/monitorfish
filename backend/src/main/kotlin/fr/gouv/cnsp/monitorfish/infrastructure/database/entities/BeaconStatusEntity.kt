@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.VesselStatus
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
@@ -36,7 +35,7 @@ data class BeaconStatusEntity(
         fun toBeaconStatus() = BeaconStatus(
                 id = id,
                 vesselId = vesselId,
-                cfr = cfr,
+                internalReferenceNumber = cfr,
                 vesselStatus = vesselStatus,
                 stage = stage,
                 priority = priority,

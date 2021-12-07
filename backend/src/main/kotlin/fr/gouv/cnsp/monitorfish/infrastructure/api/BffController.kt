@@ -8,7 +8,9 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
-import io.swagger.annotations.*
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -36,6 +38,7 @@ class BffController(
         private val getAllControlObjectives: GetAllControlObjectives,
         private val updateControlObjective: UpdateControlObjective,
         private val getOperationalAlerts: GetOperationalAlerts,
+        private val getAllBeaconStatuses: GetAllBeaconStatuses,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -251,5 +254,13 @@ class BffController(
     @ApiOperation("Get operational alerts")
     fun getOperationalAlerts(): List<Alert> {
         return getOperationalAlerts.execute()
+    }
+
+    @GetMapping(value = ["/v1/beacon_statuses"])
+    @ApiOperation("Get all beacon statuses")
+    fun getAllBeaconStatuses(): List<BeaconStatusDataOutput> {
+        return getAllBeaconStatuses.execute().map {
+            BeaconStatusDataOutput.fromBeaconStatus(it)
+        }
     }
 }

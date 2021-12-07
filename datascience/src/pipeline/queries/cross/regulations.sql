@@ -8,7 +8,7 @@ SELECT
     date_fermeture,
     date_ouverture,
     periodes,
-    fishing_periods,
+    fishing_period,
     engins,
     engins_interdits,
     mesures_techniques,

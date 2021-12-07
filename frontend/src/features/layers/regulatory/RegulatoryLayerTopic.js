@@ -34,7 +34,7 @@ const RegulatoryLayerTopic = props => {
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const {
     regulatoryZoneMetadata,
-    regulatoryTopicOpened,
+    regulatoryTopicsOpened,
     regulatoryZoneToEdit
   } = useSelector(state => state.regulatory)
 
@@ -66,15 +66,15 @@ const RegulatoryLayerTopic = props => {
 
   useEffect(() => {
     if (regulatoryTopic && ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
-      (regulatoryTopicOpened && regulatoryTopicOpened.includes(regulatoryTopic)))) {
+      (regulatoryTopicsOpened && regulatoryTopicsOpened.includes(regulatoryTopic)))) {
       setIsOpen(true)
-      if (!regulatoryZoneToEdit && regulatoryTopicOpened[regulatoryTopicOpened.length - 1] === regulatoryTopic) {
+      if (!regulatoryZoneToEdit && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
         ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
       }
     } else {
       setIsOpen(false)
     }
-  }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicOpened, regulatoryZoneToEdit, setIsOpen])
+  }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, regulatoryZoneToEdit, setIsOpen])
 
   const getRegulatoryLayerName = regulatoryZones => {
     return {

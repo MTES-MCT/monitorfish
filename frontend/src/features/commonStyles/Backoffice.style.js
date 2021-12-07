@@ -47,7 +47,7 @@ export const FooterButton = styled.div`
 `
 
 export const Delimiter = styled.div`
-  width: 700px;
+  width: ${props => props.width ? props.width : '700'}px;
   border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 15px;
 `

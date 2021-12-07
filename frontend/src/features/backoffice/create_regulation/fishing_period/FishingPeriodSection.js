@@ -11,6 +11,7 @@ const FishingPeriodSection = (props) => {
   } = props
 
   const [show, setShow] = useState(false)
+  const [isInputFilled, setIsInputFilled] = useState(false)
 
   const setOtherInfo = value => {
     setFishingPeriod({
@@ -35,7 +36,9 @@ const FishingPeriodSection = (props) => {
       <CustomInput
         width={'730px'}
         value={fishingPeriod?.otherInfo || ''}
-        onChange={setOtherInfo} />
+        onChange={setOtherInfo}
+        onMouseLeave={() => setIsInputFilled(fishingPeriod.otherInfo && fishingPeriod.otherInfo !== '')}
+        $isGray={isInputFilled} />
     </OtherRemark>
   </>
 }

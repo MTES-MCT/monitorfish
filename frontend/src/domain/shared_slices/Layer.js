@@ -47,7 +47,8 @@ const reducers = {
       type,
       topic,
       zone,
-      namespace
+      namespace,
+      gears
     } = action.payload
 
     if (type !== Layers.VESSELS.code) {
@@ -60,7 +61,8 @@ const reducers = {
           type,
           topic,
           zone,
-          namespace
+          namespace,
+          gears
         })
         window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
       }

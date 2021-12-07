@@ -130,7 +130,7 @@ const regulatorySlice = createSlice({
       state.regulatoryTopicsOpened.push(action.payload)
     },
     removeRegulatoryTopicOpened (state, action) {
-      state.regulatoryTopicsOpened.pop(action.payload)
+      state.regulatoryTopicsOpened.filter(e => e !== action.payload)
     },
     setRegulatoryZoneToEdit (state, action) {
       state.regulatoryZoneToEdit = action.payload

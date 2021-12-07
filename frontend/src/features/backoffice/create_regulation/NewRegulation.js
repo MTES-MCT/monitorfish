@@ -23,7 +23,8 @@ import updateRegulation from '../../../domain/use_cases/updateRegulation'
 import {
   setRegulatoryGeometryToPreview,
   setRegulatoryZoneMetadata,
-  setRegulatoryTopics
+  setRegulatoryTopics,
+  setRegulatoryZoneToEdit
 } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
@@ -56,7 +57,8 @@ import {
   LAWTYPES_TO_TERRITORY,
   UE,
   FRANCE,
-  initialFishingPeriodValues, initialRegulatorySpeciesValues
+  initialFishingPeriodValues,
+  initialRegulatorySpeciesValues
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
@@ -187,6 +189,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             fishingPeriod,
             regulatorySpecies
           })
+          dispatch(setRegulatoryZoneToEdit(nameZone))
           createOrUpdateRegulation(featureObject)
           setSaveIsForbidden(false)
         } else {

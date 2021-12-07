@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import {
   useRouteMatch,
@@ -64,9 +64,9 @@ const RegulatoryLayerZone = props => {
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref?.current && regulatoryZoneToEdit === regulatoryZone.zone) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
+      ref.current.scrollIntoView(true)
       dispatch(setRegulatoryZoneToEdit(null))
     }
   }, [ref.current, regulatoryZoneToEdit, regulatoryZone.zone])
@@ -130,13 +130,13 @@ const RegulatoryLayerZone = props => {
 
   return (
     <Zone
+      ref={ref}
       data-cy="regulatory-layer-zone"
       isLast={isLast}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}>
       <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
-        ref={ref}
         data-cy={'regulatory-layers-my-zones-zone'}
         title={regulatoryZone.zone
           ? regulatoryZone.zone.replace(/[_]/g, ' ')

@@ -85,7 +85,28 @@ FROM last_positions pos
 LEFT JOIN emission_periods per
 ON (
         pos.internal_reference_number = per.internal_reference_number
-    AND pos.external_reference_number = per.external_reference_number)
+    OR (
+            (
+                pos.internal_reference_number IS NULL OR
+                per.internal_reference_number IS NULL
+            )
+        AND
+            pos.external_reference_number = per.external_reference_number
+    )
+    OR (
+            (
+                pos.internal_reference_number IS NULL OR
+                per.internal_reference_number IS NULL
+            )
+        AND
+            (
+                pos.external_reference_number IS NULL OR
+                per.external_reference_number IS NULL
+            )
+        AND
+            pos.ircs = per.ircs
+    )
+)
 LEFT JOIN vessels
 ON pos.internal_reference_number = vessels.cfr
 WHERE pos.flag_state != 'GB' OR pos.latitude < 46.2294 OR pos.latitude > 46.2305 

@@ -7,7 +7,8 @@ import pandas as pd
 from pyproj import Geod
 from shapely.geometry import MultiPolygon, Polygon
 
-from src.pipeline.helpers.datetime import get_datetime_intervals
+from src.pipeline.helpers.dates import get_datetime_intervals
+from src.pipeline.processing import rows_belong_to_sequence, zeros_ones_to_bools
 
 
 @dataclass
@@ -204,7 +205,7 @@ def get_step_distances(
     return res
 
 
-def enrich_positions(
+def compute_movement_metrics(
     positions: pd.DataFrame,
     lat: str = "latitude",
     lon: str = "longitude",
@@ -213,11 +214,11 @@ def enrich_positions(
     """Takes a pandas DataFrame with
         - latitude, longitude columns (float dtypes)
         - a datetime column
-    whose rows represent successive positions of a vessel
+    whose rows represent successive positions of a vessel, assumed to be sorted
+    chronologically by ascending order.
+
     Returns pandas DataFrame with the same index and columns, plus addtionnal computed
     features in new columns : speed, distance and time between successive positions.
-
-    Rows are assumed to be sorted in the correct order.
 
     Args:
         positions (pd.DataFrame): DataFrame representing a vessel route
@@ -228,21 +229,187 @@ def enrich_positions(
     Returns:
         pd.DataFrame: the same DataFrame, plus added columns with the computed features
     """
+    # TODO: add `maximum_time_between_positions` argument, above which metrics should
+    # not be computed - computing the average speed between positions emitted more than
+    # a few hours apart does not make much sense.
 
-    enriched_positions = positions.copy(deep=True)
+    positions = positions.copy(deep=True)
 
-    enriched_positions["meters_from_previous_position"] = get_step_distances(
+    positions["meters_from_previous_position"] = get_step_distances(
         positions, lat=lat, lon=lon, how="backward", unit="m"
     )
 
-    enriched_positions["minutes_since_previous_position"] = get_datetime_intervals(
-        positions[datetime_col], unit="min", how="backward"
+    positions["time_since_previous_position"] = get_datetime_intervals(
+        positions[datetime_col], how="backward"
     )
 
-    enriched_positions["average_speed"] = (
-        enriched_positions["meters_from_previous_position"].values
+    positions["average_speed"] = (
+        positions["meters_from_previous_position"].values
         / 1852
-        / (enriched_positions["minutes_since_previous_position"].values / 60)
+        / (
+            (
+                positions["time_since_previous_position"].map(
+                    lambda dt: dt.total_seconds()
+                )
+            ).values
+            / 3600
+        )
     )
 
-    return enriched_positions
+    return positions
+
+
+def tag_port_movements(
+    positions: pd.DataFrame,
+    is_at_port_column: str = "is_at_port",
+) -> pd.DataFrame:
+    """
+    Tags positions of a vessel as port entries, port exits or adjacent to a port
+    entry or exit.
+
+    Rows of the input DataFrame represent successive positions of the analyzed vessel,
+    assumed to be sorted chronologically by ascending order.
+
+    The DataFrame must have a two columns indicating
+        1) whether the position is at port
+        2) the time interval since the previous position
+
+    Args:
+        positions (pd.DataFrame) : DataFrame representing successive positions of a
+            vessel, assumed to be sorted by ascending datetime
+        is_at_port_column (str) : column name containing boolean values for whether a
+            position is in at port or not
+
+    Returns:
+        pd.DataFrame: copy of the input DataFrame with the added boolean columns
+          "is_port_exit", "follows_port_exit", "is_port_entry" and
+          "precedes_port_entry".
+    """
+    positions = positions.copy(deep=True)
+    is_at_port = positions[is_at_port_column].values
+
+    if len(is_at_port) == 0:
+        positions["is_port_exit"] = None
+        positions["follows_port_exit"] = None
+        positions["is_port_entry"] = None
+        positions["precedes_port_entry"] = None
+
+    elif len(is_at_port) == 1:
+        if is_at_port[0]:
+            positions["is_port_exit"] = np.nan
+            positions["follows_port_exit"] = False
+            positions["is_port_entry"] = np.nan
+            positions["precedes_port_entry"] = False
+        else:
+            positions["is_port_exit"] = False
+            positions["follows_port_exit"] = np.nan
+            positions["is_port_entry"] = False
+            positions["precedes_port_entry"] = np.nan
+
+    else:
+        # Build couples of successive positions
+        is_at_port_strides = np.lib.stride_tricks.sliding_window_view(is_at_port, 2)
+
+        # Compute port entries and exits based on changes of is_at_port status
+        is_port_exit = (is_at_port_strides == (True, False)).all(axis=1)
+        is_port_exit = np.append(is_port_exit, np.nan if is_at_port[-1] else False)
+        positions["is_port_exit"] = is_port_exit
+        positions["is_port_exit"] = zeros_ones_to_bools(positions["is_port_exit"])
+
+        follows_port_exit = np.append(
+            False if is_at_port[0] else np.nan, is_port_exit[:-1]
+        )
+        positions["follows_port_exit"] = follows_port_exit
+        positions["follows_port_exit"] = zeros_ones_to_bools(
+            positions["follows_port_exit"]
+        )
+
+        is_port_entry = (is_at_port_strides == (False, True)).all(axis=1)
+        is_port_entry = np.append(np.nan if is_at_port[0] else False, is_port_entry)
+        positions["is_port_entry"] = is_port_entry
+        positions["is_port_entry"] = zeros_ones_to_bools(positions["is_port_entry"])
+
+        precedes_port_entry = np.append(
+            is_port_entry[1:],
+            False if is_at_port[-1] else np.nan,
+        )
+        positions["precedes_port_entry"] = precedes_port_entry
+        positions["precedes_port_entry"] = zeros_ones_to_bools(
+            positions["precedes_port_entry"]
+        )
+
+    return positions
+
+
+def detect_fishing_activity(
+    positions: pd.DataFrame,
+    is_at_port_column: str = "is_at_port",
+    follows_port_exit_column: str = "follows_port_exit",
+    precedes_port_entry_column: str = "precedes_port_entry",
+    average_speed_column: str = "average_speed",
+    minimum_consecutive_positions: int = 3,
+    fishing_speed_threshold: float = 4.5,
+) -> pd.DataFrame:
+    """
+    Detects fishing activity from positions of a vessel.
+
+    Rows of the input DataFrame represent successive positions of the analyzed vessel,
+    assumed to be sorted chronologically by ascending order.
+
+    The DataFrame must have a columns indicating
+        1) whether the position is at port
+        2) whether the position is the first position at sea after port exit
+        3) whether the position is the last position at sea before port entry
+        4) the average speed between each position and the previous one, in knots
+
+    A vessel will be considered to be fishing if its speed remains below the
+    `fishing_speed_threshold` for a minimum of `minimum_consecutive_positions`
+    positions.
+
+    Args:
+        positions (pd.DataFrame) : DataFrame representing successive positions of a
+          vessel, assumed to be sorted by ascending datetime
+        is_at_port_column (str) : name of the column containing boolean values for
+          whether a position is in at port or not
+        follows_port_exit_column (str) : name of the column containing boolean values
+          for whether a position directly follows a port exit (first position at sea)
+        precedes_port_entry_column (str) : name of the column containing boolean values
+          for whether a position directly precedes a port entry (last position at sea)
+        average_speed_column (str) : name of the column containing average speed values
+          (distance from previous position divided by time since the last position), in
+          knots
+        minimum_consecutive_positions (int): minimum number of consecutive positions
+          below fishing speed threshold to consider that a vessel is fishing
+        fishing_speed_threshold (float): speed below which a vessel is considered to be
+          fishing
+
+    Returns:
+        pd.DataFrame: copy of the input DataFrame with the added boolean column
+          "is_fishing"
+    """
+
+    positions = positions.copy(deep=True)
+
+    port_movements = positions[
+        [
+            "is_at_port",
+            "follows_port_exit",
+            "precedes_port_entry",
+        ]
+    ].values
+
+    is_at_fishing_speed = (positions["average_speed"].values < fishing_speed_threshold)[
+        :, None
+    ]
+
+    arr = np.concatenate((port_movements, is_at_fishing_speed), axis=1)
+
+    fishing_activity = rows_belong_to_sequence(
+        arr,
+        np.array([False, False, False, True]),
+        window_length=minimum_consecutive_positions,
+    )
+
+    positions["is_fishing"] = fishing_activity
+    positions["is_fishing"] = zeros_ones_to_bools(positions["is_fishing"])
+    return positions

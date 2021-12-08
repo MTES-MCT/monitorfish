@@ -5,10 +5,9 @@ import { getCenter } from 'ol/extent'
 const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
   if (topicAndZone) {
     const name = `${Layers.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
-    const layerToZoomIn = getState().layer.layers.find(layer => layer.name === name)
+    const layerToZoomIn = getState().layer.layersToFeatures.find(layer => layer.name === name)
     if (layerToZoomIn) {
-      const center = getCenter(layerToZoomIn.getSource().getExtent())
-      dispatchAnimateToRegulatoryLayer(center, dispatch, name)
+      dispatchAnimateToRegulatoryLayer(layerToZoomIn.center, dispatch, name)
     }
   } else if (feature) {
     const center = getCenter(feature.getGeometry().getExtent())

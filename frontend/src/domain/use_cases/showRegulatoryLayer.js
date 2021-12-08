@@ -89,7 +89,8 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
             name: zoneName,
             area: getArea(vectorSource.getExtent()),
             simplifiedFeatures: simplifiedRegulatoryZone,
-            features: regulatoryZone
+            features: regulatoryZone,
+            center: center
           }))
           dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
 

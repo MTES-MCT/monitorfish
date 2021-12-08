@@ -186,6 +186,7 @@ const Rectangle = styled.div`
   margin-right: 10px;
   margin-left: 2px;
   margin-top: 7px;
+  cursor: zoom-in;
 `
 
 const Icons = styled.span`

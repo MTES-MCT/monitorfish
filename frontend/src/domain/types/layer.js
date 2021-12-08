@@ -15,8 +15,10 @@
 /**
  * @typedef LayerToFeatures
  * @property {string} name
+ * @property {number} area
  * @property {Object[]} features
  * @property {Object[]} simplifiedFeatures
+ * @property {number[]} center
  */
 
 /**

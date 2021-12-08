@@ -37,6 +37,7 @@ const TimeInterval = props => {
         value={convertTimeToString(timeInterval?.from)}
         onChange={value => setTimeInterval('from', value)}
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
+        padding={'0px'}
       />
       à
       <CustomSelectComponent
@@ -48,13 +49,14 @@ const TimeInterval = props => {
         value={convertTimeToString(timeInterval?.to)}
         onChange={value => setTimeInterval('to', value)}
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
+        padding={'0px'}
       />
     </Wrapper>
   )
 }
 
 const selectPickerStyle = {
-  width: '80px',
+  width: '85px',
   margin: '0px 5px',
   borderColor: COLORS.lightGray,
   boxSizing: 'border-box',

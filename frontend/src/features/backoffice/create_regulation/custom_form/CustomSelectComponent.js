@@ -19,7 +19,8 @@ const CustomSelectComponent = props => {
     placement,
     cleanable,
     style,
-    menuClassName
+    menuClassName,
+    padding
   } = props
 
   const DEFAULT_SELECT_PICKER_STYLE = {
@@ -30,7 +31,7 @@ const CustomSelectComponent = props => {
     textOverflow: 'ellipsis'
   }
   return (
-    <SelectWrapper>
+    <SelectWrapper padding={padding}>
       <CustomSelectPicker
         style={style || DEFAULT_SELECT_PICKER_STYLE}
         searchable={searchable}
@@ -57,7 +58,7 @@ const CustomSelectComponent = props => {
 
 const SelectWrapper = styled.div`
   display: inline-block;
-  margin: 0px 10px 0px 0px;
+  margin: ${props => props.padding ? props.padding : '0px 10px 0px 0px'};
   vertical-align: sub;
 `
 

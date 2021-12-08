@@ -283,14 +283,14 @@ const FishingPeriodForm = (props) => {
                 />
               }
           </DateRanges>
-          <ContentWrapper>
+          <ContentWrapper alignItems={'flex-end'}>
+            <SquareButton
+              disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
+              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})} />
             <SquareButton
               type={SQUARE_BUTTON_TYPE.DELETE}
               disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
               onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)} />
-            <SquareButton
-              disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})} />
           </ContentWrapper>
         </TimeRow>
         <TimeRow disabled={timeIsDisabled}>

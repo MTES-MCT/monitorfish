@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
-const AlertsWindowSecondMenuLink = ({ menu, selectedSeaFront, setSelectedSeaFront }) => {
+const AlertsMenuLink = ({ menu, selectedSeaFront, setSelectedSeaFront }) => {
   return <Link
     selected={selectedSeaFront.code === menu.code}
     onClick={() => setSelectedSeaFront(menu)}
@@ -36,4 +36,4 @@ const Link = styled.div`
   cursor: pointer;
 `
 
-export default AlertsWindowSecondMenuLink
+export default AlertsMenuLink

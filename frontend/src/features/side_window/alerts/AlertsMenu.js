@@ -1,35 +1,35 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import AlertsWindowSecondMenuLink from './AlertsWindowSecondMenuLink'
+import AlertsMenuLink from './AlertsMenuLink'
 import { MenuSeaFronts } from '../../../domain/entities/alerts'
 
-const AlertsWindowSecondMenu = ({ selectedMenuSeaFront, setSelectedMenuSeaFront }) => {
+const AlertsMenu = ({ selectedMenuSeaFront, setSelectedMenuSeaFront }) => {
   return <Menu>
     <Title>
       Vue d&apos;ensemble
     </Title>
-    <AlertsWindowSecondMenuLink
+    <AlertsMenuLink
       menu={MenuSeaFronts.MEMN}
       selectedSeaFront={selectedMenuSeaFront}
       setSelectedSeaFront={setSelectedMenuSeaFront}
     />
-    <AlertsWindowSecondMenuLink
+    <AlertsMenuLink
       menu={MenuSeaFronts.NAMOSA}
       selectedSeaFront={selectedMenuSeaFront}
       setSelectedSeaFront={setSelectedMenuSeaFront}
     />
-    <AlertsWindowSecondMenuLink
+    <AlertsMenuLink
       menu={MenuSeaFronts.MED}
       selectedSeaFront={selectedMenuSeaFront}
       setSelectedSeaFront={setSelectedMenuSeaFront}
     />
-    <AlertsWindowSecondMenuLink
+    <AlertsMenuLink
       menu={MenuSeaFronts.OUTREMEROA}
       selectedSeaFront={selectedMenuSeaFront}
       setSelectedSeaFront={setSelectedMenuSeaFront}
     />
-    <AlertsWindowSecondMenuLink
+    <AlertsMenuLink
       menu={MenuSeaFronts.OUTREMEROI}
       selectedSeaFront={selectedMenuSeaFront}
       setSelectedSeaFront={setSelectedMenuSeaFront}
@@ -55,4 +55,4 @@ const Title = styled.span`
   margin-bottom: 10px;
 `
 
-export default AlertsWindowSecondMenu
+export default AlertsMenu

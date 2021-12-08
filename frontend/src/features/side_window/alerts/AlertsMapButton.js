@@ -2,14 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { batch, useDispatch, useSelector } from 'react-redux'
 
-import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
-import { COLORS } from '../../constants/constants'
-import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import { closeAlertList, openAlertList, resetFocusOnAlert } from '../../domain/shared_slices/Alert'
+import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
+import { COLORS } from '../../../constants/constants'
+import { MapButtonStyle } from '../../commonStyles/MapButton.style'
+import { closeAlertList, openAlertList, resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 import NewWindow from 'react-new-window'
-import AlertsWindow from './alerts_window/AlertsWindow'
+import SideWindow from '../SideWindow'
 
-const AlertListMapButton = () => {
+const AlertsMapButton = () => {
   const dispatch = useDispatch()
   const {
     regulatoryZoneMetadataPanelIsOpen
@@ -46,7 +46,7 @@ const AlertListMapButton = () => {
             })
           }}
         >
-          <AlertsWindow/>
+          <SideWindow/>
         </NewWindow>
         : null
     }
@@ -74,4 +74,4 @@ const AlertsIcon = styled(AlertsSVG)`
   margin-top: 3px;
 `
 
-export default AlertListMapButton
+export default AlertsMapButton

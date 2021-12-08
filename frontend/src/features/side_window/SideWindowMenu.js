@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
+import { COLORS } from '../../constants/constants'
+import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
 
-const AlertsWindowFirstMenu = () => {
+const SideWindowMenu = () => {
   return <Menu>
     <Link selected>
       <AlertsIcon/>
@@ -34,4 +34,4 @@ const AlertsIcon = styled(AlertsSVG)`
   margin-top: 10px;
 `
 
-export default AlertsWindowFirstMenu
+export default SideWindowMenu

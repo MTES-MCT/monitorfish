@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import styled from 'styled-components'
+import AlertsTable from './AlertsTable'
+import { getAlertForTable } from './dataFormatting'
 import { useSelector } from 'react-redux'
-import { AlertsMenuSeaFrontsToSeaFrontList, MenuSeaFronts } from '../../../domain/entities/alerts'
-import AlertsMenu from './AlertsMenu'
-import AlertsBody from './AlertsBody'
+import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu, AlertTypes } from '../../../domain/entities/alerts'
 
-const Alerts = () => {
+const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const {
+    alerts,
     focusOnAlert
   } = useSelector(state => state.alert)
-  const [selectedMenuSeaFront, setSelectedMenuSeaFront] = useState(MenuSeaFronts.MEMN)
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -19,20 +20,27 @@ const Alerts = () => {
         .find(item => item.seaFronts.includes(seaFront))
 
       if (menuSeaFrontName) {
-        setSelectedMenuSeaFront(MenuSeaFronts[menuSeaFrontName.menuSeaFront])
+        setSelectedSubMenu(AlertsSubMenu[menuSeaFrontName.menuSeaFront])
       }
     }
   }, [focusOnAlert])
+  const baseUrl = window.location.origin
 
-  return <>
-    <AlertsMenu
-      selectedMenuSeaFront={selectedMenuSeaFront}
-      setSelectedMenuSeaFront={setSelectedMenuSeaFront}
+  return <Content>
+    <AlertsTable
+      alertType={AlertTypes.THREE_MILES_TRAWLING_ALERT.name}
+      alerts={alerts
+        .map(alert => getAlertForTable(alert))
+        .filter(alert =>
+          (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront))
+      }
+      baseUrl={baseUrl}
     />
-    <AlertsBody
-      selectedMenuSeaFront={selectedMenuSeaFront}
-    />
-  </>
+  </Content>
 }
+
+const Content = styled.div`
+  margin: 30px;
+`
 
 export default Alerts

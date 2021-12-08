@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-
-import AlertsWindowFirstMenu from './AlertsWindowFirstMenu'
-import AlertsWindowSecondMenu from './AlertsWindowSecondMenu'
-import AlertsWindowBody from './AlertsWindowBody'
 import { useSelector } from 'react-redux'
 import { AlertsMenuSeaFrontsToSeaFrontList, MenuSeaFronts } from '../../../domain/entities/alerts'
+import AlertsMenu from './AlertsMenu'
+import AlertsBody from './AlertsBody'
 
-const AlertsWindow = () => {
+const Alerts = () => {
   const {
     focusOnAlert
   } = useSelector(state => state.alert)
   const [selectedMenuSeaFront, setSelectedMenuSeaFront] = useState(MenuSeaFronts.MEMN)
-  const baseUrl = window.location.origin
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -28,21 +24,15 @@ const AlertsWindow = () => {
     }
   }, [focusOnAlert])
 
-  return <Wrapper>
-    <AlertsWindowFirstMenu/>
-    <AlertsWindowSecondMenu
+  return <>
+    <AlertsMenu
       selectedMenuSeaFront={selectedMenuSeaFront}
       setSelectedMenuSeaFront={setSelectedMenuSeaFront}
     />
-    <AlertsWindowBody
+    <AlertsBody
       selectedMenuSeaFront={selectedMenuSeaFront}
-      baseUrl={baseUrl}
     />
-  </Wrapper>
+  </>
 }
 
-const Wrapper = styled.div`
-  display: flex;
-`
-
-export default AlertsWindow
+export default Alerts

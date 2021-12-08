@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 const { Column, HeaderCell, Cell } = Table
 const rowKey = 'id'
 
-const AlertsWindowTable = ({ alerts, alertType, baseUrl }) => {
+const AlertsTable = ({ alerts, alertType, baseUrl }) => {
   const {
     focusOnAlert
   } = useSelector(state => state.alert)
@@ -145,4 +145,4 @@ const AlertsIcon = styled(AlertsSVG)`
   width: 17px;
 `
 
-export default AlertsWindowTable
+export default AlertsTable

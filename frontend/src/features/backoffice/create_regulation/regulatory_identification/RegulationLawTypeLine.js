@@ -4,7 +4,7 @@ import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
-
+import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
 const RegulationLawTypeLine = props => {
   const {
     setSelectedValue,
@@ -31,6 +31,7 @@ const RegulationLawTypeLine = props => {
             item={item}
             tag={'Radio'} />}
         valueIsMissing={lawTypeIsMissing}
+        menuClassName={DEFAULT_MENU_CLASSNAME}
       />
       {selectedValue &&
         <Tag

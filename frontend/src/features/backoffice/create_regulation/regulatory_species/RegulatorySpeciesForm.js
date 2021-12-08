@@ -8,6 +8,7 @@ import { ContentLine, CustomCheckbox } from '../../../commonStyles/Backoffice.st
 import Tag from '../Tag'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import { useSelector } from 'react-redux'
+import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
 
 const REGULATORY_SPECIES_KEYS = {
   AUTHORIZED: 'authorized',
@@ -209,6 +210,7 @@ const RegulatorySpeciesForm = props => {
           data={getFormattedSpeciesGroups()}
           emptyMessage={'Aucune catégorie'}
           renderMenuItem={(_, item) => <MenuItem checked={speciesGroups?.includes(item.value)} item={item} tag={'Checkbox'} />}
+          menuClassName={DEFAULT_MENU_CLASSNAME}
         />
       </ContentLine>
       <ContentLine>
@@ -224,6 +226,7 @@ const RegulatorySpeciesForm = props => {
           emptyMessage={'Aucune espèce'}
           renderMenuItem={(_, item) =>
             <MenuItem checked={species?.some(species => species?.code?.includes(item.value))} item={item} tag={'Checkbox'} />}
+          menuClassName={DEFAULT_MENU_CLASSNAME}
         />
       </ContentLine>
       {

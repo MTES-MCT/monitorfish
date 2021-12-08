@@ -185,6 +185,7 @@ const BackofficeContainer = styled.div`
   position: relative;
   background-color: ${COLORS.white};
   width: 100%;
+  height: 100vh;
 `
 
 const RegulatoryZonePanel = styled.div`

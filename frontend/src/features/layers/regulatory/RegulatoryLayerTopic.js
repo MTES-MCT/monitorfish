@@ -66,9 +66,9 @@ const RegulatoryLayerTopic = props => {
 
   useLayoutEffect(() => {
     if (regulatoryZoneToEdit && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
-      ref.current.scrollIntoView(true)
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
     }
-  }, [regulatoryTopicsOpened, regulatoryZoneToEdit])
+  }, [ref.current, regulatoryTopicsOpened, regulatoryZoneToEdit])
 
   useEffect(() => {
     if (regulatoryTopic && ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
@@ -243,9 +243,10 @@ const Zone = styled.span`
   }
 `
 
-const List = styled.div`
+const List = styled.li`
   height: inherit;
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
   transition: all 0.5s;
   height: ${props => props.isOpen ? props.zonesLength * 37.5 : 0}px;
 `
@@ -259,7 +260,8 @@ const Row = styled.li`
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden !important;
+  overflow-y: scroll !important;
+  overflow-y: hidden !important;
   cursor: pointer;import LayerNameInput from '../../backoffice/LayerNameInput'
 
   margin: 0;

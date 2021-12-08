@@ -704,3 +704,153 @@ def try_get_factory(key: Hashable, error_value: Any = None):
             return error_value
 
     return try_get
+
+
+def array_equals_row_on_window(
+    arr: np.array, row: np.array, window_length: int
+) -> np.array:
+    """Tests whether each row of an input 2D array is the first of a sequence of
+    `window_length` consecutive rows equal to a given `row` 1D array, and returns the
+    result as a float array with the same length as the input array.
+
+    The output array is of `float` dtype and not `bool` dtype, because numpy `bool`
+    arrays cannot contain null values. The values are `0.0` (representing `False`),
+    `1.0` (representing `True`) and `np.nan` representing nulls.
+
+    The first (`window_length` - 1) rows evaluate to `np.nan`, since the sliding window
+    would need to know the values of the previous rows which are not given.
+
+    Args:
+        arr (np.array): 2D numpy array
+        row (np.array): 1D numpy array with the same length as the number of columns in
+          `arr`
+        window_length (int): number of consecutive rows that must be equal to `row` for
+            the result to be `True`
+
+    Returns:
+        np.array: 1D boolean array of the same length as the input arrays
+
+
+    Examples:
+        >>> arr = np.array([
+            [False, True],
+            [False, True],
+            [True, True],
+            [False, True],
+            [False, True],
+        ])
+        >>> row = np.array([False, True])
+        >>> array_equals_row_on_window(arr, row, 2)
+        array([nan,  1.,  0.,  0.,  1.])
+    """
+
+    n_rows, n_columns = arr.shape
+
+    # When the sliding window has more rows that the input array, return all nulls
+    if n_rows < window_length:
+        res = np.array([np.nan] * n_rows)
+
+    else:
+
+        strides = np.lib.stride_tricks.sliding_window_view(
+            arr, (window_length, n_columns)
+        )
+
+        res = (strides == row).all(axis=(1, 2, 3))
+
+        number_na_rows_to_add = window_length - 1
+
+        na_rows_to_add = np.array([np.nan] * number_na_rows_to_add)
+
+        res = np.concatenate((na_rows_to_add, res))
+
+    return res.astype(float)
+
+
+def back_propagate_ones(arr: np.array, steps: int) -> np.array:
+    """
+    Given a 1D array with values `0.0`, `1.0` and `np.nan`, propagates `1.0` backward
+    `steps` times.
+
+    Args:
+        arr (np.array): array containing `0.0`, `1.0` and `np.nan` values
+        steps (int): number of steps that ones should be back-propagated
+
+    returns:
+        np.array: 1D array with the same dimensions as input, with ones back-propagated
+          `steps` times.
+
+    Examples:
+        >>> arr = np.array([np.nan,  0.,  0.,  1.,  0.,  0.,  1.,  1.,  0.,  1.])
+        >>> back_propagate_ones(arr, 1)
+        array([nan,  0.,  1.,  1.,  0.,  1.,  1.,  1.,  1.,  1.])
+    """
+    if steps == 0:
+        return arr
+    else:
+        previous_step = back_propagate_ones(np.append(arr[1:], np.nan), steps - 1)
+        tmp = np.concatenate((arr[:, None], previous_step[:, None]), axis=1)
+
+        ones = np.equal(tmp, 1).any(axis=1)
+        nans = np.isnan(tmp).any(axis=1)
+        res = np.where((nans & (~ones)), np.nan, ones)
+        return res
+
+
+def rows_belong_to_sequence(
+    arr: np.array, row: np.array, window_length: int
+) -> np.array:
+    """Tests whether each row of an input 2D array belongs to a sequence of
+    `window_length` consecutive rows equal to a given `row` 1D array, and returns the
+    result as a float array with the same length as the input array.
+
+    The output array is of `float` dtype and not `bool` dtype, because numpy `bool`
+    arrays cannot contain null values. The values are `0.0` (representing `False`),
+    `1.0` (representing `True`) and `np.nan` representing nulls.
+
+    The first (`window_length` - 1) rows may be `np.nan`, since the sliding window
+    would need to know the values of the previous rows which are not given. They will
+    only be `1.0` if they do belong to a sequence of rows equal to `row`, otherwise
+    they will be `np.nan` regardless of whether their values are equal to `row`.
+
+    Args:
+        arr (np.array): 2D numpy array
+        row (np.array): 1D numpy array with the same length as the number of columns in
+          `arr`
+        window_length (int): number of consecutive rows that must be equal to `row` for
+            the result to be `True`
+
+    Returns:
+        np.array: 1D boolean array of the same length as the input arrays
+
+
+    Examples:
+        >>> arr = np.array([
+            [False, True],
+            [False, True],
+            [True, True],
+            [False, True],
+            [False, True],
+        ])
+        >>> row = np.array([False, True])
+        >>> rows_belong_to_sequence(arr, row, 2)
+        array([1., 1., 0., 1., 1.])
+
+        >>> arr = np.array([
+            [False, True],
+            [True, True],
+            [True, True],
+            [False, True],
+            [False, True],
+        ])
+        >>> row = np.array([False, True])
+        >>> rows_belong_to_sequence(arr, row, 2)
+        array([nan,  0.,  0.,  1.,  1.])
+    """
+    ends_of_sequences = array_equals_row_on_window(
+        arr,
+        row,
+        window_length=window_length,
+    )
+
+    return back_propagate_ones(ends_of_sequences, steps=window_length - 1)

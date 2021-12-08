@@ -16,10 +16,13 @@ const CustomSelectComponent = props => {
     groupBy,
     disabled,
     emptyMessage,
-    placement
+    placement,
+    cleanable,
+    style,
+    menuClassName
   } = props
 
-  const selectPickerStyle = {
+  const DEFAULT_SELECT_PICKER_STYLE = {
     width: 200,
     margin: '0',
     borderColor: COLORS.lightGray,
@@ -29,15 +32,16 @@ const CustomSelectComponent = props => {
   return (
     <SelectWrapper>
       <CustomSelectPicker
-        style={selectPickerStyle}
+        style={style || DEFAULT_SELECT_PICKER_STYLE}
         searchable={searchable}
+        cleanable={cleanable}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         data={data}
         renderMenuItem={renderMenuItem}
         menuStyle={menuStyle}
-        menuClassName={'new-regulation-select-picker'}
+        menuClassName={menuClassName}
         $valueIsMissing={valueIsMissing}
         locale={{
           noResultsText: emptyMessage,

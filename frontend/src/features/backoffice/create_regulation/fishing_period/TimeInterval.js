@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import CustomDatePicker, { CUSTOM_DATEPICKER_TYPES } from '../custom_form/CustomDatePicker'
+import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../../domain/entities/regulatory'
 import { COLORS } from '../../../../constants/constants'
+import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 
 const TimeInterval = props => {
   const {
@@ -13,34 +14,51 @@ const TimeInterval = props => {
   } = props
 
   const setTimeInterval = (key, value) => {
+    const split = value.split('h')
+    const date = new Date()
+    date.setHours(split[0])
+    date.setMinutes(split[1])
     const newTimeInterval = {
       ...timeInterval,
-      [key]: value
+      [key]: date
     }
     onTimeIntervalChange(id, newTimeInterval)
   }
 
   return (
-    <Wrapper $isLast={isLast}>De<CustomDatePicker
-        format={'HH:mm'}
-        type={CUSTOM_DATEPICKER_TYPES.TIME}
-        placement={'rightEnd'}
-        style={{ width: '55px', margin: '0px 5px' }}
+    <Wrapper $isLast={isLast}>
+      De
+      <CustomSelectComponent
+        style={selectPickerStyle}
         disabled={disabled}
-        value={timeInterval?.from}
-        saveValue={value => setTimeInterval('from', value)}
+        data={TIMES_SELECT_PICKER_VALUES}
+        searchable={false}
+        cleanable={false}
+        value={convertTimeToString(timeInterval?.from)}
+        onChange={value => setTimeInterval('from', value)}
+        placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
       />
-      à<CustomDatePicker
-        format={'HH:mm'}
-        type={CUSTOM_DATEPICKER_TYPES.TIME}
-        placement={'rightEnd'}
-        style={{ width: '55px', margin: '0px 5px' }}
+      à
+      <CustomSelectComponent
+        style={selectPickerStyle}
         disabled={disabled}
-        value={timeInterval?.to}
-        saveValue={value => setTimeInterval('to', value)}
+        data={TIMES_SELECT_PICKER_VALUES}
+        searchable={false}
+        cleanable={false}
+        value={convertTimeToString(timeInterval?.to)}
+        onChange={value => setTimeInterval('to', value)}
+        placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
       />
     </Wrapper>
   )
+}
+
+const selectPickerStyle = {
+  width: '80px',
+  margin: '0px 5px',
+  borderColor: COLORS.lightGray,
+  boxSizing: 'border-box',
+  textOverflow: 'ellipsis'
 }
 
 const Wrapper = styled.div`

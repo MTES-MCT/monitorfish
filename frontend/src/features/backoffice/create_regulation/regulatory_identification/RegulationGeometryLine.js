@@ -10,6 +10,7 @@ import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
 import { COLORS } from '../../../../constants/constants'
 import { setSelectedGeometryId } from '../../Regulation.slice'
+import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
 
 const RegulationGeometryLine = props => {
   const {
@@ -41,6 +42,7 @@ const RegulationGeometryLine = props => {
         renderMenuItem={(_, item) =>
           <MenuItem checked={item.value === selectedGeometryId}
             item={item} tag={'Radio'}/>}
+        menuClassName={DEFAULT_MENU_CLASSNAME}
       />
     {selectedGeometryId &&
       <><Tag

@@ -102,7 +102,12 @@ def load_new_regulations(new_regulations: pd.DataFrame):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        jsonb_columns=["references_reglementaires"],
+        jsonb_columns=[
+            "references_reglementaires",
+            "references_reglementaires_a_venir",
+            "fishing_period",
+            "species",
+        ],
         how="upsert",
         table_id_column="id",
         df_id_column="id",

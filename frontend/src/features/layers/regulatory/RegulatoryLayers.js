@@ -93,6 +93,7 @@ const RegulatoryLayers = props => {
           selectedRegulatoryLayers && Object.keys(selectedRegulatoryLayers).length > 0
             ? Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => {
               return (<RegulatoryLayerTopic
+                isEditable={false}
                 key={regulatoryTopic}
                 increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
                 decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}

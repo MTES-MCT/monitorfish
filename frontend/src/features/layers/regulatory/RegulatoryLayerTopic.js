@@ -147,11 +147,15 @@ const RegulatoryLayerTopic = props => {
               }
             </Name>
             {displayNumberOfZones()}
-            <EditIcon
-              data-cy="regulatory-layername-edit"
-              $isOver={isOver}
-              title="Editer la thématique"
-              onClick={() => onEditLayerNameClick()}/>
+            {
+              isEditable
+                ? <EditIcon
+                  data-cy="regulatory-layername-edit"
+                  $isOver={isOver}
+                  title="Editer la thématique"
+                  onClick={() => onEditLayerNameClick()}/>
+                : null
+            }
             {
               atLeastOneLayerIsShowed
                 ? <ShowIcon

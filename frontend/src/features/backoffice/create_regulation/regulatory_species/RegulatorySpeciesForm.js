@@ -199,6 +199,7 @@ const RegulatorySpeciesForm = props => {
       }
       <ContentLine>
         <CustomSelectComponent
+          placement={'topStart'}
           disabled={allSpecies}
           menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
           searchable={true}
@@ -212,6 +213,7 @@ const RegulatorySpeciesForm = props => {
       </ContentLine>
       <ContentLine>
         <CustomSelectComponent
+          placement={'topStart'}
           disabled={allSpecies}
           menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
           searchable={true}
@@ -226,21 +228,21 @@ const RegulatorySpeciesForm = props => {
       </ContentLine>
       {
         speciesGroups?.map((speciesGroup, index) => (
-          <SpeciesDetail key={speciesGroup.group}>
+          <SpeciesGroupDetail key={speciesGroup.group} isFirst={index === 0}>
             <Label>Catégorie {index + 1}</Label>
             <Tag
               key={speciesGroup}
               tagValue={speciesGroup}
               onCloseIconClicked={removeSpeciesGroupToRegulatorySpeciesList}
             />
-          </SpeciesDetail>
+          </SpeciesGroupDetail>
         ))
       }
       {
         species?.map((speciesValue, index) => (
           <>
             {authorized
-              ? <SpeciesDetails key={speciesValue.code}>
+              ? <SpeciesDetails key={speciesValue.code} isFirst={index === 0 && !speciesGroups?.length}>
                 <SpeciesDetail>
                   <Label>Espèce {index + 1}</Label>
                   <Tag
@@ -257,6 +259,7 @@ const RegulatorySpeciesForm = props => {
                     value={speciesValue.quantity || ''}
                     onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
                     width={'200px'}
+                    $isGray={species.find(species => species.code === speciesValue.code)?.quantity}
                   />
                 </SpeciesDetail>
                 <SpeciesDetail>
@@ -267,10 +270,11 @@ const RegulatorySpeciesForm = props => {
                     value={speciesValue.minimumSize || ''}
                     onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
                     width={'200px'}
+                    $isGray={species.find(species => species.code === speciesValue.code)?.minimumSize}
                   />
                 </SpeciesDetail>
               </SpeciesDetails>
-              : <SpeciesDetail key={speciesValue.code}>
+              : <SpeciesDetail key={speciesValue.code} onlySpeciesName={!authorized}>
                 <Label>Espèce {index + 1}</Label>
                 <Tag
                   key={speciesValue.code}
@@ -288,12 +292,17 @@ const RegulatorySpeciesForm = props => {
 
 const SpeciesDetails = styled.div`
   width: 100%;
-  margin-top: 10px;
+  margin-top: ${props => props.isFirst ? 20 : 15}px;
 `
 
 const SpeciesDetail = styled.div`
   display: flex;
-  margin-top: 5px;
+  margin-top: ${props => props.onlySpeciesName ? 8 : 5}px;
+`
+
+const SpeciesGroupDetail = styled.div`
+  display: flex;
+  margin-top: ${props => props.isFirst ? 20 : 8}px;
 `
 
 const CustomCheckboxGroup = styled(CheckboxGroup)`

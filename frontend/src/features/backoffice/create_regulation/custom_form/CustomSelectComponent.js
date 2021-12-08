@@ -15,7 +15,8 @@ const CustomSelectComponent = props => {
     valueIsMissing,
     groupBy,
     disabled,
-    emptyMessage
+    emptyMessage,
+    placement
   } = props
 
   const selectPickerStyle = {
@@ -44,6 +45,7 @@ const CustomSelectComponent = props => {
         }}
         groupBy={groupBy}
         disabled={disabled}
+        placement={placement || 'bottomStart'}
       />
     </SelectWrapper>
   )

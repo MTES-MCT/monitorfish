@@ -55,6 +55,7 @@ const Wrapper = styled.div`
   font-size: 11px;
   color: ${COLORS.gainsboro};
   padding: 15px 0;
+  box-sizing: border-box;
 `
 
 const LinkText = styled.span`

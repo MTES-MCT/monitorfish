@@ -66,9 +66,10 @@ const RegulatoryLayerZone = props => {
   const [isOver, setIsOver] = useState(false)
 
   useLayoutEffect(() => {
-    /* if (ref?.current && regulatoryZoneToEdit === regulatoryZone.zone) {
-      ref.current.scrollIntoView({ block: 'end', inline: 'start' })
-    } */
+    if (regulatoryZoneToEdit === regulatoryZone.zone) {
+      console.log(ref.current)
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
+    }
   }, [ref.current, regulatoryZoneToEdit, regulatoryZone.zone])
 
   const callShowRegulatoryZoneMetadata = zone => {

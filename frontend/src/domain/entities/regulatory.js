@@ -444,11 +444,9 @@ const timeToString = (date) => {
 }
 
 export const convertTimeToString = (date) => {
-  console.log(date)
   if (date) {
     const minutes = date.getMinutes()
     const hours = date.getHours()
-    console.log(`${date.getHours()}h${date.getMinutes()}`)
     return `${hours < 10 ? '0' + hours : hours}h${minutes === 0 ? minutes + '0' : minutes}`
   }
 }

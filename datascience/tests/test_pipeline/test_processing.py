@@ -9,6 +9,8 @@ import pytz
 from sqlalchemy import Column, Integer, MetaData, Table
 
 from src.pipeline.processing import (
+    array_equals_row_on_window,
+    back_propagate_ones,
     coalesce,
     concatenate_columns,
     concatenate_values,
@@ -22,6 +24,7 @@ from src.pipeline.processing import (
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
     prepare_df_for_loading,
+    rows_belong_to_sequence,
     to_json,
     to_pgarr,
 )
@@ -625,3 +628,101 @@ class TestProcessingMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             empty_list = []
             drop_duplicates_by_decreasing_priority(df, empty_list)
+
+    def test_array_equals_row_on_window(self):
+
+        arr = np.array(
+            [
+                [True, True, True],
+                [True, True, False],
+                [True, True, False],
+                [True, True, True],
+                [True, True, False],
+                [True, False, False],
+            ]
+        )
+
+        row = np.array([True, True, False])
+
+        res = array_equals_row_on_window(arr, row, window_length=1)
+        expected_res = np.array([0.0, 1.0, 1.0, 0.0, 1.0, 0.0])
+        np.testing.assert_array_equal(res, expected_res)
+
+        res = array_equals_row_on_window(arr, row, window_length=2)
+        expected_res = np.array([np.nan, 0.0, 1.0, 0.0, 0.0, 0.0])
+        np.testing.assert_array_equal(res, expected_res)
+
+        res = array_equals_row_on_window(arr, row, window_length=3)
+        expected_res = np.array([np.nan, np.nan, 0.0, 0.0, 0.0, 0.0])
+        np.testing.assert_array_equal(res, expected_res)
+
+        res = array_equals_row_on_window(arr, row, window_length=7)
+        expected_res = np.array([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan])
+        np.testing.assert_array_equal(res, expected_res)
+
+    def test_back_propagate_ones(self):
+
+        arr = np.array([0.0, np.nan, 1.0, 0.0, np.nan, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0])
+
+        # Test steps=0
+        np.testing.assert_array_equal(arr, back_propagate_ones(arr, 0))
+
+        # Test steps=1
+        res = back_propagate_ones(arr, 1)
+        expected_res = np.array(
+            [np.nan, 1.0, 1.0, np.nan, np.nan, 1.0, 1.0, 1.0, 1.0, 0.0, np.nan]
+        )
+        np.testing.assert_array_equal(res, expected_res)
+
+        # Test steps=2
+        res = back_propagate_ones(arr, 2)
+        expected_res = np.array(
+            [1.0, 1.0, 1.0, np.nan, 1.0, 1.0, 1.0, 1.0, 1.0, np.nan, np.nan]
+        )
+        np.testing.assert_array_equal(res, expected_res)
+
+    def test_rows_belong_to_sequence(self):
+        row = np.array([False, True])
+
+        arr = np.array(
+            [
+                [False, True],
+                [False, True],
+                [True, True],
+                [False, True],
+                [False, True],
+            ]
+        )
+        res = rows_belong_to_sequence(arr, row, 2)
+        expected_res = np.array([1.0, 1.0, 0.0, 1.0, 1.0])
+        np.testing.assert_array_equal(res, expected_res)
+
+        arr = np.array(
+            [
+                [False, True],
+                [True, True],
+                [True, True],
+                [False, True],
+                [False, True],
+            ]
+        )
+        res = rows_belong_to_sequence(arr, row, 2)
+        expected_res = np.array([np.nan, 0.0, 0.0, 1.0, 1.0])
+        np.testing.assert_array_equal(res, expected_res)
+
+        arr = np.array(
+            [
+                [True, True],
+                [True, True],
+                [True, True],
+                [False, True],
+                [False, True],
+            ]
+        )
+        res = rows_belong_to_sequence(arr, row, 2)
+        expected_res = np.array([np.nan, 0.0, 0.0, 1.0, 1.0])
+        np.testing.assert_array_equal(res, expected_res)
+
+        res = rows_belong_to_sequence(arr, row, 7)
+        expected_res = np.array([np.nan, np.nan, np.nan, np.nan, np.nan])
+        np.testing.assert_array_equal(res, expected_res)

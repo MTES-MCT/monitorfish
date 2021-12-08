@@ -162,7 +162,7 @@ const TerritoryName = styled.div`
   font-weight: 700;
   text-transform: uppercase;
   text-align: left;
-  color: ${COLORS.grayDarkerTwo};
+  color: ${COLORS.slateGray};
 `
 
 const RegulatoryZoneListByLawTypeList = styled.div`

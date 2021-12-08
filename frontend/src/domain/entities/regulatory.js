@@ -427,8 +427,9 @@ const dateToString = (date, annualRecurrence) => {
 const getTimesValues = () => {
   const hours = [...Array(24).keys()]
   const times = hours.reduce((acc, hour) => {
-    acc.push(`${hour}h00`)
-    acc.push(`${hour}h30`)
+    const hourStr = hour < 10 ? '0' + hour : hour
+    acc.push(`${hourStr}h00`)
+    acc.push(`${hourStr}h30`)
     return acc
   }, [])
   return formatDataForSelectPicker(times)
@@ -446,8 +447,9 @@ export const convertTimeToString = (date) => {
   console.log(date)
   if (date) {
     const minutes = date.getMinutes()
+    const hours = date.getHours()
     console.log(`${date.getHours()}h${date.getMinutes()}`)
-    return `${date.getHours()}h${minutes === 0 ? minutes + '0' : minutes}`
+    return `${hours < 10 ? '0' + hours : hours}h${minutes === 0 ? minutes + '0' : minutes}`
   }
 }
 

@@ -18,7 +18,7 @@ export const getAlertNameFromType = type => {
     : 'Alerte inconnue'
 }
 
-export const MenuSeaFronts = {
+export const AlertsSubMenu = {
   MEMN: {
     name: 'MEMN',
     code: 'MEMN'

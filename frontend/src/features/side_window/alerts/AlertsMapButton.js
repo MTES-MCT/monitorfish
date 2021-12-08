@@ -36,9 +36,10 @@ const AlertsMapButton = () => {
     {
       alertListIsOpen
         ? <NewWindow
+          copyStyles
           name={'Alertes'}
           title={'Alertes'}
-          features={{ width: '1200px', height: '900px' }}
+          features={{ width: '1500px', height: '900px' }}
           onUnload={() => {
             batch(() => {
               dispatch(closeAlertList())

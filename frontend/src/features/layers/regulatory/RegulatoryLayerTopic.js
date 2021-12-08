@@ -176,7 +176,7 @@ const RegulatoryLayerTopic = props => {
                 ? <EditIcon
                   data-cy="regulatory-layername-edit"
                   $isOver={isOver}
-                  title="Editer la thématique"
+                  title="Modifier le nom de la thématique"
                   onClick={() => onEditLayerNameClick()}/>
                 : null
             }

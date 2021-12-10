@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
-from src.pipeline.helpers.dates import get_datetime_intervals
+from src.pipeline.helpers.dates import Period, get_datetime_intervals, make_periods
 
 
 class TestHelpersDatetime(unittest.TestCase):
@@ -88,3 +88,73 @@ class TestHelpersDatetime(unittest.TestCase):
         # Test how 'incorrect'
         with self.assertRaises(ValueError):
             get_datetime_intervals(s, how="incorrect")
+
+    def test_make_periods(self):
+        with self.assertRaises(ValueError):
+            make_periods(
+                start_datetime_utc=datetime(2021, 12, 1),
+                end_datetime_utc=datetime(2021, 12, 10),
+                period_duration=timedelta(days=1),
+                overlap=timedelta(days=1),
+            )
+
+        with self.assertRaises(ValueError):
+            make_periods(
+                start_datetime_utc=datetime(2021, 12, 1),
+                end_datetime_utc=datetime(2021, 12, 10),
+                period_duration=timedelta(days=1),
+                overlap=timedelta(days=2),
+            )
+
+        with self.assertRaises(ValueError):
+            make_periods(
+                start_datetime_utc=datetime(2021, 12, 1),
+                end_datetime_utc=datetime(2021, 11, 10),
+                period_duration=timedelta(days=1),
+                overlap=timedelta(hours=4),
+            )
+
+        # Test with overlap specified
+        periods = make_periods(
+            start_datetime_utc=datetime(2021, 12, 1),
+            end_datetime_utc=datetime(2021, 12, 3),
+            period_duration=timedelta(days=1),
+            overlap=timedelta(hours=4),
+        )
+
+        expected_periods = [
+            Period(
+                start=datetime(2021, 12, 1, 0, 0),
+                end=datetime(2021, 12, 2, 0, 0),
+            ),
+            Period(
+                start=datetime(2021, 12, 1, 20, 0),
+                end=datetime(2021, 12, 2, 20, 0),
+            ),
+            Period(
+                start=datetime(2021, 12, 2, 16, 0),
+                end=datetime(2021, 12, 3, 0, 0),
+            ),
+        ]
+
+        self.assertEqual(periods, expected_periods)
+
+        # Test without overlap specified
+        periods = make_periods(
+            start_datetime_utc=datetime(2021, 12, 1),
+            end_datetime_utc=datetime(2021, 12, 3),
+            period_duration=timedelta(days=1),
+        )
+
+        expected_periods = [
+            Period(
+                start=datetime(2021, 12, 1, 0, 0),
+                end=datetime(2021, 12, 2, 0, 0),
+            ),
+            Period(
+                start=datetime(2021, 12, 2, 0, 0),
+                end=datetime(2021, 12, 3, 0, 0),
+            ),
+        ]
+
+        self.assertEqual(periods, expected_periods)

@@ -43,8 +43,6 @@ const RegulatoryLayerTopic = props => {
   const [isLayerNameEditable, setIsLayerNameEditable] = useState(false)
 
   useEffect(() => {
-    console.log(regulatoryTopicsOpened)
-    console.log(regulatoryTopic)
     if (regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
       ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
     }

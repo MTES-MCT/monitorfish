@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
@@ -34,14 +34,21 @@ const RegulatoryLayerTopic = props => {
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const {
     regulatoryZoneMetadata,
-    regulatoryTopicsOpened,
-    regulatoryZoneToEdit
+    regulatoryTopicsOpened
   } = useSelector(state => state.regulatory)
 
   const [isOpen, setIsOpen] = useState(false)
   const [showWholeLayer, setShowWholeLayer] = useState(undefined)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
   const [isLayerNameEditable, setIsLayerNameEditable] = useState(false)
+
+  useEffect(() => {
+    console.log(regulatoryTopicsOpened)
+    console.log(regulatoryTopic)
+    if (regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+    }
+  }, [])
 
   useEffect(() => {
     if (showedLayers && regulatoryTopic) {
@@ -64,12 +71,6 @@ const RegulatoryLayerTopic = props => {
     }
   }, [isOpen])
 
-  useLayoutEffect(() => {
-    if (regulatoryZoneToEdit && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
-    }
-  }, [ref.current, regulatoryTopicsOpened, regulatoryZoneToEdit])
-
   useEffect(() => {
     if (regulatoryTopic && ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
       (regulatoryTopicsOpened && regulatoryTopicsOpened.includes(regulatoryTopic)))) {
@@ -77,7 +78,7 @@ const RegulatoryLayerTopic = props => {
     } else {
       setIsOpen(false)
     }
-  }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, regulatoryZoneToEdit, setIsOpen])
+  }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, setIsOpen])
 
   const getRegulatoryLayerName = regulatoryZones => {
     return {
@@ -119,6 +120,7 @@ const RegulatoryLayerTopic = props => {
       )
     })
   }
+
   const getZoneIsShown = useCallback(zone => {
     return showedLayers
       .some(layer =>
@@ -133,6 +135,7 @@ const RegulatoryLayerTopic = props => {
   const onEditLayerNameClick = () => {
     setIsLayerNameEditable(true)
   }
+
   const onRegulatoryTopicClick = useCallback(() => {
     if (isOpen) {
       dispatch(removeRegulatoryTopicOpened(regulatoryTopic))

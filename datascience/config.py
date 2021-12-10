@@ -10,8 +10,8 @@ ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
-EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/email/templates")
-EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("pipeline/email/stylesheets")
+EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/templates")
+EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/stylesheets")
 
 # Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")

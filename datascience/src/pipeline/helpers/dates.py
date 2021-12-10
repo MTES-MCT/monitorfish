@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from typing import List, Union
 
 import pandas as pd
-from dateutil.relativedelta import relativedelta
 
 from src.pipeline.processing import json_converter
 

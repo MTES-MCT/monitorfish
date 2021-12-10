@@ -125,6 +125,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
     getGeometryObjectList()
     dispatch(setSelectedRegulation(newRegulation))
+    return () => {
+      dispatch(setRegulatoryZoneMetadata(undefined))
+    }
   }, [])
 
   useEffect(() => {
@@ -149,12 +152,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [resetState])
 
   useEffect(() => {
-    return () => {
-      dispatch(setRegulatoryZoneMetadata(undefined))
-    }
-  }, [])
-
-  useEffect(() => {
     if (selectedRegulationLawType) {
       const territory = layersTopicsByRegTerritory[LAWTYPES_TO_TERRITORY[selectedRegulationLawType]]
       let regulatoryTopicList = []
@@ -166,10 +163,51 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }, [selectedRegulationLawType, layersTopicsByRegTerritory])
 
+  const createOrUpdateRegulation = (featureObject) => {
+    const feature = new Feature(featureObject)
+    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
+    dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
+
+    if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
+      const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
+      emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
+      dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
+    }
+  }
+
+  const checkRequiredValues = useCallback(() => {
+    let atLeastOneValueIsMissing = false
+    let valueIsMissing = !(selectedRegulationLawType && selectedRegulationLawType !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setLawTypeIsMissing(valueIsMissing)
+
+    valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setRegulationTopicIsMissing(valueIsMissing)
+
+    valueIsMissing = !(nameZone && nameZone !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setNameZoneIsMissing(valueIsMissing)
+
+    valueIsMissing = selectedRegulationLawType && selectedRegulationLawType !== '' &&
+      selectedRegulationLawType.includes(REG_LOCALE) &&
+      !(selectedRegionList && selectedRegionList.length !== 0)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setRegionIsMissing(valueIsMissing)
+
+    valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
+    setGeometryIsMissing(valueIsMissing)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
+  }, [selectedRegulationLawType, nameZone, selectedRegulationTopic, selectedRegionList, selectedGeometryId])
+
   useEffect(() => {
     if (saveOrUpdateRegulation && atLeastOneValueIsMissing === undefined) {
       checkRequiredValues()
     }
+  }, [saveOrUpdateRegulation, atLeastOneValueIsMissing, checkRequiredValues])
+
+  useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
       const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
@@ -200,7 +238,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         }
       }
     }
-  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap])
+  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap, setSaveIsForbidden, createOrUpdateRegulation])
 
   const initForm = () => {
     const {
@@ -230,32 +268,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     })
   }
 
-  const checkRequiredValues = () => {
-    let atLeastOneValueIsMissing = false
-    let valueIsMissing = !(selectedRegulationLawType && selectedRegulationLawType !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setLawTypeIsMissing(valueIsMissing)
-    valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
-
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setRegulationTopicIsMissing(valueIsMissing)
-    valueIsMissing = !(nameZone && nameZone !== '')
-
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setNameZoneIsMissing(valueIsMissing)
-    valueIsMissing = selectedRegulationLawType && selectedRegulationLawType !== '' &&
-      selectedRegulationLawType.includes(REG_LOCALE) &&
-      !(selectedRegionList && selectedRegionList.length !== 0)
-
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setRegionIsMissing(valueIsMissing)
-    valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
-
-    setGeometryIsMissing(valueIsMissing)
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
-  }
-
   useEffect(() => {
     if (showRegulatoryPreview &&
       ((isEdition && regulatoryZoneMetadata.geometry) || (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
@@ -263,7 +275,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         ? regulatoryZoneMetadata.geometry
         : geometryObjectList[selectedGeometryId]))
     }
-  }, [selectedGeometryId, geometryObjectList, showRegulatoryPreview])
+  }, [isEdition, regulatoryZoneMetadata, selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
@@ -272,18 +284,6 @@ const CreateRegulation = ({ title, isEdition }) => {
           setGeometryObjectList(geometryListAsObject)
         }
       })
-  }
-
-  const createOrUpdateRegulation = (featureObject) => {
-    const feature = new Feature(featureObject)
-    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
-    dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
-
-    if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
-      const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
-      emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
-      dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
-    }
   }
 
   const onLawTypeChange = (value) => {

@@ -22,7 +22,7 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
   }
 
   return (<RegulationModal
-      isOpen={isConfirmModalOpen}
+      $isOpen={isConfirmModalOpen}
       data-cy='regulation-modal'
     >
     <ModalContent>
@@ -81,7 +81,7 @@ const CloseIcon = styled(CloseIconSVG)`
 `
 
 const RegulationModal = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'};
+  display: ${props => props.$isOpen ? 'block' : 'none'};
   overflow: none;
   width: 100%;
   height: 100vh;

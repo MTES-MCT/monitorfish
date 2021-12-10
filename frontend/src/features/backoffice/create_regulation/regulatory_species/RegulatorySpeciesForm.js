@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { CheckboxGroup, Radio, RadioGroup } from 'rsuite'
+import { Radio, RadioGroup } from 'rsuite'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
 import { ContentLine, CustomCheckbox } from '../../../commonStyles/Backoffice.style'
@@ -177,25 +177,18 @@ const RegulatorySpeciesForm = props => {
         </CustomRadio>
       </AuthorizedRadio>
     </Title>
-    <Content display={displayForm} authorized={authorized}>
+    <Content $display={displayForm} authorized={authorized}>
       {
         !authorized &&
         <ContentLine>
-          <CustomCheckboxGroup
-            inline
-            name="checkboxList"
-            value={allSpecies ? [REGULATORY_SPECIES_KEYS.ALL_SPECIES] : []}
-            onChange={value =>
-              value.includes(REGULATORY_SPECIES_KEYS.ALL_SPECIES)
-                ? set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, true)
-                : set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, false)}
-          >
             <CustomCheckbox
+              inline
+              checked
               value={REGULATORY_SPECIES_KEYS.ALL_SPECIES}
+              onChange={value => set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, value)}
             >
               Toutes les espèces
             </CustomCheckbox>
-          </CustomCheckboxGroup>
         </ContentLine>
       }
       <ContentLine>
@@ -308,12 +301,12 @@ const SpeciesGroupDetail = styled.div`
   margin-top: ${props => props.isFirst ? 20 : 8}px;
 `
 
-const CustomCheckboxGroup = styled(CheckboxGroup)`
+/* const CustomCheckboxGroup = styled(CheckboxGroup)`
   margin-bottom: 5px;
-`
+` */
 
 const Content = styled.div`
-  display: ${props => !props.display ? 'none' : ''};
+${props => !props.$display ? 'display: none;' : ''}
   padding-left: 15px;
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
 `

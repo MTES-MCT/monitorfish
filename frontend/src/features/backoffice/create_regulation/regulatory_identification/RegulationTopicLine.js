@@ -46,7 +46,7 @@ const RegulationTopicLine = props => {
       <Wrapper>
         <Label>Thématique de la zone</Label>
         <CustomSelectComponent
-          disabled={disabled && layerTypeList}
+          disabled={disabled}
           searchable={true}
           menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
           placeholder='Choisir une thématique'

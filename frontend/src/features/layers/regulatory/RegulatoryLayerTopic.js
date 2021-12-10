@@ -252,7 +252,7 @@ const List = styled.li`
   height: ${props => props.isOpen ? props.zonesLength * 37.5 : 0}px;
 `
 
-const Row = styled.li`
+const Row = styled.div`
   padding: 0px 5px 0px 0px;
   margin: 0;
   font-size: 13px;

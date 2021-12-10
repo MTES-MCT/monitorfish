@@ -155,7 +155,7 @@ const FishingPeriodForm = (props) => {
       </AuthorizedRadio>
     </Title>
     <Delimiter width='523' />
-    <AnnualRecurrence display={displayForm} authorized={authorized}>
+    <AnnualRecurrence $display={displayForm} authorized={authorized}>
       <Label>Récurrence annuelle</Label>
       <RadioGroup
         inline
@@ -166,8 +166,8 @@ const FishingPeriodForm = (props) => {
         <CustomRadio value={false}>non</CustomRadio>
       </RadioGroup>
     </AnnualRecurrence>
-    <DateTime display={displayForm} authorized={authorized}>
-      <ConditionalLines display={displayForm} disabled={disabled}>
+    <DateTime $display={displayForm} authorized={authorized}>
+      <ConditionalLines $display={displayForm} disabled={disabled}>
         <Row>
           <ContentWrapper>
             <Label>Plages de dates</Label>
@@ -303,7 +303,7 @@ const FishingPeriodForm = (props) => {
       </ConditionalLines>
     </DateTime>
     {fishingPeriodAsString &&
-    <PeriodAsStringWrapper display={displayForm} authorized={authorized}>
+    <PeriodAsStringWrapper $display={displayForm} authorized={authorized}>
       <PeriodAsString>
         {fishingPeriodAsString}
       </PeriodAsString>
@@ -319,7 +319,7 @@ const ContentWrapper = styled.div`
 `
 
 const PeriodAsStringWrapper = styled.div`
-  display: ${props => !props.display ? 'none' : 'flex'};
+  display: ${props => !props.$display ? 'none' : 'flex'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-top: 20px;
 `
@@ -334,7 +334,7 @@ const PeriodAsString = styled.div`
 `
 
 const AnnualRecurrence = styled.div`
-  display: ${props => !props.display ? 'none' : 'flex'};
+  display: ${props => !props.$display ? 'none' : 'flex'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-left: 15px;
   .rs-radio-group {
@@ -347,7 +347,7 @@ const TimeRow = styled(Row)`
 `
 
 const ConditionalLines = styled.div`
-  display: ${props => props.display ? 'flex' : 'none'};
+  display: ${props => props.$display ? 'flex' : 'none'};
   opacity: ${props => props.disabled ? '0.4' : '1'};
   flex-direction: column;
 `
@@ -375,7 +375,7 @@ const HolidaysCheckbox = styled(CustomCheckbox)`
   margin-top: -15px;
 `
 const DateTime = styled.div`
-  display: ${props => props.display ? 'flex' : 'none'};
+  display: ${props => props.$display ? 'flex' : 'none'};
   flex-direction: row;
   opacity: ${props => props.disabled ? '0.4' : '1'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};

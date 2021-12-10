@@ -23,8 +23,7 @@ import updateRegulation from '../../../domain/use_cases/updateRegulation'
 import {
   setRegulatoryGeometryToPreview,
   setRegulatoryZoneMetadata,
-  setRegulatoryTopics,
-  setRegulatoryZoneToEdit
+  setRegulatoryTopics
 } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
@@ -189,7 +188,6 @@ const CreateRegulation = ({ title, isEdition }) => {
             fishingPeriod,
             regulatorySpecies
           })
-          dispatch(setRegulatoryZoneToEdit(nameZone))
           createOrUpdateRegulation(featureObject)
           setSaveIsForbidden(false)
         } else {

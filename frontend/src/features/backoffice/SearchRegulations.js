@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
@@ -7,7 +6,6 @@ import { COLORS } from '../../constants/constants'
 import { AddRegulationButton } from '../commonStyles/Buttons.style'
 import { searchByLawType } from '../../domain/entities/regulatory'
 import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
-import { setRegulatoryZoneToEdit } from '../../domain/shared_slices/Regulatory'
 
 const SearchRegulations = props => {
   const {
@@ -17,7 +15,6 @@ const SearchRegulations = props => {
 
   const searchInput = useRef(null)
   const [searchText, setSearchText] = useState('')
-  const dispatch = useDispatch()
 
   useEffect(() => {
     searchRegulatoryZone()
@@ -48,7 +45,6 @@ const SearchRegulations = props => {
 
   const onAddRegulationClick = () => {
     history.push('/backoffice/regulation/new')
-    dispatch(setRegulatoryZoneToEdit)
   }
 
   return (

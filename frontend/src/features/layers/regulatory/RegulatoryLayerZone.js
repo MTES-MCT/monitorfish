@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import {
   useRouteMatch,
@@ -21,7 +21,7 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
-import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened, setRegulatoryZoneToEdit } from '../../../domain/shared_slices/Regulatory'
+import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened } from '../../../domain/shared_slices/Regulatory'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -57,20 +57,12 @@ const RegulatoryLayerZone = props => {
 
   const {
     isReadyToShowRegulatoryLayers,
-    regulatoryZoneMetadata,
-    regulatoryZoneToEdit
+    regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
 
   const [showRegulatoryZone, setShowRegulatoryZone] = useState(undefined)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
-
-  useLayoutEffect(() => {
-    if (regulatoryZoneToEdit === regulatoryZone.zone) {
-      console.log(ref.current)
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
-    }
-  }, [ref.current, regulatoryZoneToEdit, regulatoryZone.zone])
 
   const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {
@@ -122,7 +114,6 @@ const RegulatoryLayerZone = props => {
     history.push(`${match.path}/edit`)
     batch(() => {
       dispatch(showRegulationToEdit(regulatoryZone))
-      dispatch(setRegulatoryZoneToEdit(regulatoryZone.zone))
       dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
       dispatch(addRegulatoryTopicOpened(regulatoryTopic))
     })

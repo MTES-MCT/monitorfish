@@ -49,9 +49,13 @@ infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "* * * * *",
-            parameter_defaults={"minutes": 15, "action": "update"},
-        )
+            "0 * * * *",
+            parameter_defaults={"minutes": 240, "action": "update"},
+        ),
+        clocks.CronClock(
+            "1-59 * * * *",
+            parameter_defaults={"minutes": 30, "action": "update"},
+        ),
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")

@@ -8,7 +8,6 @@ context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation`)
-    cy.wait(500)
 
     // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
@@ -20,7 +19,6 @@ context('NewRegulation', () => {
     cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-zone-edit"]').eq(0).click()
     cy.url().should('include', '/regulation/edit')
-    cy.wait(500)
   })
 
   it('A layer zone Should be edited', () => {

@@ -5,23 +5,23 @@ FOO	Pêche à pied	Pas d'engin
 FDV	Apnée	Pas d'engin
 NO	Pas d'engin	Pas d'engin
 LA	Filets tournants sans coulisse (lamparo)	Filets tournants
-PS	Sennes coulissantes	Filets tournants
-PS2	Sennes coulissantes manœuvrées par deux navires	Sennes
-PS1	Sennes coulissantes manœuvrées par un navire	Sennes
-SV	Sennes de bateau	Sennes
-SX	Sennes (non spécifiées)	Sennes
-SPR	Sennes manœuvrées par deux bateaux	Sennes
-SSC	Sennes écossaises	Sennes
-SDN	Sennes danoises	Sennes
-SB	Sennes de plage	Sennes
-TMS	Chaluts à crevettes	Chaluts
+PS	Sennes coulissantes	Sennes tournantes coulissantes
+PS2	Sennes coulissantes manœuvrées par deux navires	Sennes tournantes coulissantes
+PS1	Sennes coulissantes manœuvrées par un navire	Sennes tournantes coulissantes
+SV	Sennes de bateau	Sennes tournantes coulissantes
+SX	Sennes (non spécifiées)	Sennes traînantes
+SPR	Sennes manœuvrées par deux bateaux	Sennes tournantes coulissantes
+SSC	Sennes écossaises	Sennes traînantes
+SDN	Sennes danoises	Sennes traînantes
+SB	Sennes de plage	Sennes tournantes coulissantes
+TMS	Chaluts pélagiques à crevettes	Chaluts
 TM	Chaluts pélagiques (non spécifiés)	Chaluts
 TMB	Gangui	Chaluts
 TX	Autres chaluts (non spécifiés)	Chaluts
 PT	Chaluts-bœufs (non spécifiés)	Chaluts
 OT	Chaluts à panneaux (non spécifiés)	Chaluts
 TB	Chaluts de fond (non spécifiés)	Chaluts
-TBS	Chaluts à crevettes	Chaluts
+TBS	Chaluts de fond à crevettes	Chaluts
 TBN	Chaluts à langoustines	Chaluts
 OTT	Chaluts jumeaux à panneaux	Chaluts
 PTM	Chaluts-bœufs pélagiques	Chaluts
@@ -42,17 +42,17 @@ LNB	Filets soulevés manœuvrés par bateau	Filets soulevés
 GNF	Filets maillants fixes (sur perches)	Filets maillants et filets emmêlants
 GEN	Filets maillants et filets emmélants (non spécif.)	Filets maillants et filets emmêlants
 GN	Filets maillants (non spécifiés)	Filets maillants et filets emmêlants
-GTN	Trémails et filets maillants combinés	Filets maillants et filets emmêlants
+GTN Trémails et filets maillants combinés	Filets maillants et filets emmêlants
 GTR	Trémails	Filets maillants et filets emmêlants
 GNC	Filets maillants encerclants	Filets maillants et filets emmêlants
 GND	Filets maillants dérivants (filets dérivants)	Filets maillants et filets emmêlants
 GNS	Filets maillants calés (ancrés)	Filets maillants et filets emmêlants
 FYK	Verveux	Pièges
-FWR	Barrages, parcs, bordigues, etc.	Pièges
+FWR	"Barrages, parcs, bordigues, etc."	Pièges
 FSN	Filets à l'étalage (diables)	Pièges
 FPN	Filets pièges-fixes non couverts	Pièges
 FAR	Pièges aériens	Pièges
-FAG	Balai, Fagot	Pièges
+FAG	"Balai, Fagot"	Pièges
 LL	Palangres (non spécifiées)	Pièges
 FIX	Pièges (non spécifiés)	Pièges
 FPO	Nasses (casiers)	Pièges
@@ -64,12 +64,12 @@ LLD	Palangres dérivantes	Lignes et hameçons
 LLS	Palangres calées	Lignes et hameçons
 LHM	Lignes à main et  à cannes (mécanisées)	Lignes et hameçons
 LHP	Lignes à main et  à cannes (manœuvrées à la main)	Lignes et hameçons
-FG	Autres engins retombants (non spécifiés)	Engins retombants
-FCN	Eperviers	Engins retombants
-HAR	Harpons	Engins de pêche par accrochage ou par blessure
+FG	Autres engins retombants (non spécifiés)	Engins divers
+FCN	Eperviers	Engins divers
+HAR	Harpons	Engins divers
 HMX	Engins de récolte (non spécifiés)	Engins de récolte
 HMS	Scoubidou	Engins de récolte
-MHI	Instruments à main (pinces, râteaux, lances, etc.)	Engins de récolte
+MHI	"Instruments à main (pinces, râteaux, lances, etc.)"	Engins de récolte
 RG	Engin de pêche récréative	Engins de pêche récréative
 MPM	Pompes	Engins divers
 MDV	Plongée sous-marine	Engins divers

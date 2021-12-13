@@ -247,6 +247,16 @@ export const initialRegulatorySpeciesValues = {
   speciesGroups: []
 }
 
+export const initialRegulatoryGearsValues = {
+  authorized: undefined,
+  allGroups: [],
+  allGears: undefined,
+  allTowedGears: undefined,
+  allPassiveGears: undefined,
+  regulatedGearCategories: [],
+  regulatedGears: []
+}
+
 export const WEEKDAYS = {
   lundi: 'L',
   mardi: 'M',

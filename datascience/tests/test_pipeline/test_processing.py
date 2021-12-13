@@ -15,6 +15,7 @@ from src.pipeline.processing import (
     df_to_dict_series,
     df_values_to_json,
     df_values_to_psql_arrays,
+    drop_duplicates_by_decreasing_priority,
     drop_rows_already_in_table,
     get_unused_col_name,
     is_a_value,
@@ -599,3 +600,28 @@ class TestProcessingMethods(unittest.TestCase):
         )
 
         pd.testing.assert_series_equal(res, expected)
+
+    def test_drop_duplicates_by_decreasing_priority(self):
+
+        df = pd.DataFrame(
+            {
+                "A": [1, 2, 3, None, 1, 2, 3, 4, None, 22, None, None, None],
+                "B": [1, 2, 3, None, 1, 22, 3, 4, None, 2, None, None, 6],
+                "C": [1, 2, 3, 4, 1, 2, 33, 4, None, 2, 2, 5, 6],
+                "D": ["W", "h", "a", "t", "e", "v", "e", "r", "d", "a", "t", "a", "a"],
+            },
+            index=[1, 2, 4, 14, 4, 32, 41, 2, 9, 13, 31, 4, 7],
+        )
+
+        res = drop_duplicates_by_decreasing_priority(df, subset=["A", "B", "C"])
+
+        expected_res = df.iloc[[0, 1, 2, 7, 9, 12, 11]]
+
+        pd.testing.assert_frame_equal(res, expected_res)
+
+        with self.assertRaises(TypeError):
+            drop_duplicates_by_decreasing_priority(df, {"not", "a", "list"})
+
+        with self.assertRaises(TypeError):
+            empty_list = []
+            drop_duplicates_by_decreasing_priority(df, empty_list)

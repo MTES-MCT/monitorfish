@@ -14,7 +14,7 @@ WITH last_n_minutes_positions AS (
         date_time,
         ROW_NUMBER() OVER (
             PARTITION BY internal_reference_number, external_reference_number, ircs
-            ORDER BY date_time DESC) AS rk
+            ORDER BY date_time, id DESC) AS rk
     FROM positions
     WHERE date_time > CURRENT_TIMESTAMP - make_interval(mins => :minutes)
     AND date_time < CURRENT_TIMESTAMP + INTERVAL '1 day'
@@ -62,6 +62,9 @@ emission_periods AS (
 )
 
 SELECT
+    -- The DISTINCT ON clause is required to remove possible duplicates due to vessels
+    -- for which we receive each position multiple times
+    DISTINCT ON (pos.internal_reference_number, pos.external_reference_number, pos.ircs)
     pos.id,
     pos.internal_reference_number AS cfr,
     pos.external_reference_number AS external_immatriculation,

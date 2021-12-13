@@ -12,6 +12,7 @@ from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.spatial import estimate_current_position, get_h3_indices
 from src.pipeline.processing import (
     coalesce,
+    drop_duplicates_by_decreasing_priority,
     get_first_non_null_column_name,
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
@@ -61,6 +62,28 @@ def extract_last_positions(minutes: int) -> pd.DataFrame:
         query_filepath="monitorfish/compute_last_positions.sql",
         params={"minutes": minutes},
         dtypes={"last_position_datetime_utc": "datetime64[ns]"},
+    )
+
+
+@task(checkpoint=False)
+def drop_duplicates(positions: pd.DataFrame) -> pd.DataFrame:
+    """
+    Drop duplicate vessels in a `pandas.DataFrame` of positions.
+
+    This is required although the query that computes last positions already contains a
+    DISTINCT ON clause because for some vessels, we receive each position twice with
+    partially different identifiers - for instance, the same CFR but different ircs or
+    external immatriculation.
+
+    Args:
+        positions (pd.DataFrame): positions of vessels. Must contain columns "cfr",
+          "external_immatriculation" and "ircs".
+
+    Returns:
+        pd.DataFrame: DataFrame of vessels' last position with duplicates removed.
+    """
+    return drop_duplicates_by_decreasing_priority(
+        positions, subset=["cfr", "external_immatriculation", "ircs"]
     )
 
 
@@ -404,11 +427,13 @@ with Flow("Last positions") as flow:
         risk_factors = extract_risk_factors()
 
         last_positions = extract_last_positions(minutes=minutes)
+        last_positions = drop_duplicates(last_positions)
         last_positions = add_vessel_identifier(last_positions)
         last_positions = tag_vessels_at_port(last_positions)
 
         with case(action, "update"):
             previous_last_positions = extract_previous_last_positions()
+            previous_last_positions = drop_duplicates(previous_last_positions)
             new_last_positions = drop_unchanched_new_last_positions(
                 last_positions, previous_last_positions
             )

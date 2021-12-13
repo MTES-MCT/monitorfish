@@ -10,6 +10,7 @@ from src.pipeline.flows.last_positions import (
     add_vessel_identifier,
     compute_emission_period,
     concatenate,
+    drop_duplicates,
     drop_unchanched_new_last_positions,
     estimate_current_positions,
     extract_last_positions,
@@ -54,6 +55,20 @@ class TestLastPositionsFlow(unittest.TestCase):
         self.assertEqual(validate_action.run("replace"), "replace")
         with self.assertRaises(ValueError):
             validate_action.run("unknown_option")
+
+    def test_drop_duplicates(self):
+        positions = pd.DataFrame(
+            {
+                "cfr": ["A", "A", "B", "C"],
+                "external_immatriculation": ["AA", "A-A", "BB", "CC"],
+                "ircs": ["AAA", "AAA", "BBB", "CCC"],
+                "other_columns": ["some", "some", "more", "data"],
+            }
+        )
+
+        res = drop_duplicates.run(positions)
+        expected_res = positions.iloc[[0, 2, 3]]
+        pd.testing.assert_frame_equal(res, expected_res)
 
     def test_drop_unchanched_new_last_positions(self):
         previous_last_positions = pd.DataFrame(

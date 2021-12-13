@@ -617,6 +617,76 @@ def left_isin_right_by_decreasing_priority(
     return res
 
 
+def drop_duplicates_by_decreasing_priority(
+    df: pd.DataFrame, subset: List[str]
+) -> pd.DataFrame:
+    """Similar to `pandas.DataFrame.drop_duplicates(subset=subset)`, with the
+    differences that:
+
+    - the rows are deduplicated based on their values in the columns in `subset` one
+      after the other and by decreasing priority, and not simultaneously
+    - `NA` values on a key are not considered
+
+    Rows having all `NA` values in all columns of `subset` are dropped.
+
+    What is meant by "by decreasing proirity" is that keys in `subset` are considered
+    to be sorted by decresing level of priority (for instance `A` and `B`, with `A`
+    having the highest level of priority), and rows with distinct values on `B` but
+    identical values on `A` will be considered duplicated, whereas rows with distinct
+    values on `A` and identical values on `B` will not be considered duplicates. Hence,
+    the first key in `subset` entirely determines whether rows are duplicates or not on
+    all rows with non null `A`, and subsequent keys in `subset` only come into play on
+    rows where `A` is null.
+
+    This is typically useful to deduplicate data containing one row per vessel with
+    potential duplicates but with multiple identifier columns (cfr, external
+    immatriculation, ircs), some identifiers being more reliable than others. For
+    instance, if two rows have the same CFR but different external immatriculation, it
+    is reasonable to assume that it is a one the same vessel, whereas two rows wihout
+    any information on CFR and different external immats should be considered as two
+    distinct vessels.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame
+        id_cols (List[str]): List of column names to use as keys for the
+          `drop_duplicates` operation, by decreasing level of priority
+
+    Returns:
+        pd.DataFrame: Copy of the input DataFrame with duplicate rows removed.
+    """
+    try:
+        assert isinstance(subset, list)
+    except AssertionError:
+        raise TypeError("`subset` must be a list.")
+
+    try:
+        assert len(subset) >= 1
+    except AssertionError:
+        raise TypeError("`subset` must not be empty.")
+
+    if len(subset) == 1:
+        res = df.dropna(subset=subset).drop_duplicates(subset=subset)
+
+    else:
+        first_key_not_null = df.dropna(subset=[subset[0]]).drop_duplicates(
+            subset=[subset[0]]
+        )
+
+        first_key_null = drop_duplicates_by_decreasing_priority(
+            df[df[subset[0]].isna()], subset=subset[1:]
+        )
+
+        first_key_null = first_key_null[
+            ~left_isin_right_by_decreasing_priority(
+                first_key_null[subset], first_key_not_null[subset]
+            )
+        ]
+
+        res = pd.concat([first_key_not_null, first_key_null])
+
+    return res
+
+
 def try_get_factory(key: Hashable, error_value: Any = None):
     def try_get(d: Any) -> Any:
         """

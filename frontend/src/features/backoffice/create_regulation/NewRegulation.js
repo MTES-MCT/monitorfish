@@ -14,7 +14,8 @@ import {
   RegulatoryTextSection,
   UpcomingRegulationModal,
   RemoveRegulationModal,
-  FishingPeriodSection
+  FishingPeriodSection,
+  RegulatoryGearSection
 } from './'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
@@ -57,7 +58,8 @@ import {
   UE,
   FRANCE,
   initialFishingPeriodValues,
-  initialRegulatorySpeciesValues
+  initialRegulatorySpeciesValues,
+  initialRegulatoryGearsValues
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
@@ -89,6 +91,9 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
   /** @type {RegulatorySpecies} */
   const [regulatorySpecies, setRegulatorySpecies] = useState(initialRegulatorySpeciesValues)
+  /** @type {RegulatoryGears} */
+  // initialRegulatoryGearsValues
+  const [regulatoryGears, setRegulatoryGears] = useState(initialRegulatoryGearsValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
@@ -364,6 +369,12 @@ const CreateRegulation = ({ title, isEdition }) => {
               <RegulatorySpeciesSection
                 regulatorySpecies={regulatorySpecies}
                 setRegulatorySpecies={setRegulatorySpecies}
+              />
+            </Content>
+            <Content>
+              <RegulatoryGearSection
+                regulatoryGears={regulatoryGears}
+                setRegulatoryGears={setRegulatoryGears}
               />
             </Content>
           </ContentWrapper>

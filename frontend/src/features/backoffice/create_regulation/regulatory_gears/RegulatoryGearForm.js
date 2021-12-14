@@ -1,12 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { ContentLine, CustomCheckbox } from '../../../commonStyles/Backoffice.style'
+import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, CheckboxGroup, MultiCascader } from 'rsuite'
-import { CustomInput, Label } from '../../../commonStyles/Input.style'
-import Tag from '../Tag'
-import CustomSelectComponent from '../custom_form/CustomSelectComponent'
-// import CustomSelectComponent from '../custom_form/CustomSelectComponent'
+import GearLine from './GearLine'
 
 const REGULATORY_GEAR_KEYS = {
   AUTHORIZED: 'authorized',
@@ -97,14 +94,13 @@ const RegulatoryGearForm = (props) => {
         ...Object.keys(regulatedGearCategories)
       ])
     }
-  }, [regulatedGears, regulatedGearCategories])
+  }, [])
 
   const set = useCallback((key, value) => {
     const obj = {
       ...regulatoryGears,
       [key]: value
     }
-
     setRegulatoryGears(obj)
   }, [regulatoryGears, setRegulatoryGears])
 
@@ -123,20 +119,34 @@ const RegulatoryGearForm = (props) => {
     values.forEach(value => {
       if (isCategory(value)) {
         if (currentRegulatedGearCategories.includes(value)) {
-          nextRegulatedGearCategories[value] = currentRegulatedGearCategories[value]
+          nextRegulatedGearCategories[value] = { ...regulatedGearCategories[value] }
         } else {
           nextRegulatedGearCategories[value] = {}
         }
-        set(REGULATORY_GEAR_KEYS.REGULATED_GEAR_CATEGORIES, nextRegulatedGearCategories)
       } else {
         if (currentRegulatedGears.includes(value)) {
-          nextRegulatedGears[value] = currentRegulatedGears[value]
+          nextRegulatedGears[value] = { ...regulatedGears[value] }
         } else {
           nextRegulatedGears[value] = { ...GEAR_FROM_DB[value] }
         }
-        set(REGULATORY_GEAR_KEYS.REGULATED_GEARS, nextRegulatedGears)
       }
     })
+    const nextMulticascaderValues = [
+      ...Object.keys(nextRegulatedGearCategories),
+      ...Object.keys(nextRegulatedGears)
+    ]
+    setMultiCascaderValues(nextMulticascaderValues)
+    const obj = {
+      ...regulatoryGears,
+      regulatedGears: nextRegulatedGears,
+      regulatedGearCategories: nextRegulatedGearCategories
+    }
+    setRegulatoryGears(obj)
+  }
+
+  const removeGearOrCategory = (gearOrCategory) => {
+    const nextMulticascaderValues = multiCascaderValues.filter(value => value !== gearOrCategory)
+    setRegulatoryGear(nextMulticascaderValues)
   }
 
   const setRegulatedGear = (key, value, gear) => {
@@ -147,7 +157,7 @@ const RegulatoryGearForm = (props) => {
         [key]: value
       }
     }
-    set('regulatedGears', nextRegulatedGears)
+    set(REGULATORY_GEAR_KEYS.REGULATED_GEARS, nextRegulatedGears)
   }
 
   const setRegulatedGearCategory = (key, value, category) => {
@@ -158,7 +168,7 @@ const RegulatoryGearForm = (props) => {
         [key]: value
       }
     }
-    set('regulatedGearCategories', nextRegulatedGearCategories)
+    set(REGULATORY_GEAR_KEYS.REGULATED_GEAR_CATEGORIES, nextRegulatedGearCategories)
   }
 
   return <Wrapper show={show}>
@@ -210,87 +220,43 @@ const RegulatoryGearForm = (props) => {
         onChange={setRegulatoryGear}
         value={multiCascaderValues}
       />
+      <GearList>
       {
-        Object.keys(regulatedGears).map((value, index) =>
-        <GearLine key={value} >
-          <ContentLine>
-            <Label>{`Engin ${index + 1}`}</Label>
-            <Tag tagValue={`${regulatedGears[value].label} (${value})`}/>
-          </ContentLine>
-          <ContentLine>
-            <Label>Maillage</Label>
-            <CustomSelectComponent
-              value={value.interval}
-              onChange={meshInterval => setRegulatedGear('intervalMesh', meshInterval, value)}
-              data={[{
-                value: 'greaterThan',
-                label: 'supérieur ou égal à'
-              }, {
-                value: 'between',
-                label: 'entre'
-              }]}
-              valueIsMissing={false}
+        Object.keys(regulatedGears).map((gearCode, index) => {
+          return <GearLine
+              key={index}
+              id={index}
+              label={regulatedGears[gearCode].label}
+              code={gearCode}
+              onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
+              intervalType={regulatedGears[gearCode].intervalType}
+              intervalValues={regulatedGears[gearCode].intervalValues}
+              onCloseIconClicked={_ => removeGearOrCategory(gearCode)}
             />
-            <><CustomInput
-              width={'60px'}
-              value={value.intervalValues ? value.intervalValues[0] : ''}
-              onChange={intervalValue => {
-                const nextIntervalValue = { ...value.intervalValues }
-                nextIntervalValue[0] = intervalValue
-                setRegulatedGear('intervalValues', nextIntervalValue, value)
-              }} />mm</>
-            {value.intervalValues?.length === 2 &&
-              <>et <CustomInput
-                width={'60px'}
-                value={value.intervalValues[1]}
-                onChange={intervalValue => setRegulatedGear('intervalValues', [...value.intervalValues, intervalValue], value)} />mm</>
-            }
-          </ContentLine>
-        </GearLine>)
+        })
       }
       {
-        Object.keys(regulatedGearCategories).map((value, index) =>
-        <GearLine key={value} >
-          <ContentLine>
-            <Label>{`Type d'engin ${index + 1}`}</Label>
-            <Tag tagValue={value}/>
-          </ContentLine>
-          <ContentLine>
-            <Label>Maillage</Label>
-            <CustomSelectComponent
-              value={value.interval}
-              onChange={meshInterval => setRegulatedGearCategory('intervalMesh', meshInterval, value)}
-              data={[{
-                value: 'greaterThan',
-                label: 'supérieur ou égal à'
-              }, {
-                value: 'between',
-                label: 'entre'
-              }]}
-              valueIsMissing={false}
+        Object.keys(regulatedGearCategories).map((category, index) => {
+          return (<GearLine
+              key={index}
+              id={index}
+              label={category}
+              onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
+              intervalType={regulatedGearCategories[category].intervalType}
+              intervalValues={regulatedGearCategories[category].intervalValues}
+              onCloseIconClicked={_ => removeGearOrCategory(category)}
             />
-            <><CustomInput
-              width={'60px'}
-              value={value.intervalValues ? value.intervalValues[0] : ''}
-              onChange={intervalValue => {
-                const nextIntervalValue = { ...value.intervalValues }
-                nextIntervalValue[0] = intervalValue
-                setRegulatedGearCategory('intervalValues', nextIntervalValue, value)
-              }} />mm</>
-            {value.intervalValues?.length === 2 &&
-              <>et <CustomInput
-                width={'60px'}
-                value={value.intervalValues[1]}
-                onChange={intervalValue => setRegulatedGearCategory('intervalValues', [...value.intervalValues, intervalValue], value)} />mm</>
-            }
-          </ContentLine>
-        </GearLine>)
+          )
+        })
       }
+      </GearList>
     </Content>
   </Wrapper>
 }
 
-const GearLine = styled.span``
+const GearList = styled.div`
+  padding: 20px 0 15px 0;
+`
 
 const MultiCascaderLabel = styled.span`
   font-size: 11px;

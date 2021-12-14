@@ -253,8 +253,8 @@ export const initialRegulatoryGearsValues = {
   allGears: undefined,
   allTowedGears: undefined,
   allPassiveGears: undefined,
-  regulatedGearCategories: [],
-  regulatedGears: []
+  regulatedGearCategories: {},
+  regulatedGears: {}
 }
 
 export const WEEKDAYS = {

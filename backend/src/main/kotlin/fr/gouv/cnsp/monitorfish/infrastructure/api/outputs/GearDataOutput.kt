@@ -5,13 +5,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Gear
 data class GearDataOutput(
         val code: String,
         val name: String,
-        val category: String? = null) {
+        val category: String? = null,
+        val groupId: Int? = null) {
     companion object {
         fun fromGear(gear: Gear): GearDataOutput {
             return GearDataOutput(
                     code = gear.code,
                     name = gear.name,
-                    category = gear.category
+                    category = gear.category,
+                    groupId = gear.groupId
             )
         }
     }

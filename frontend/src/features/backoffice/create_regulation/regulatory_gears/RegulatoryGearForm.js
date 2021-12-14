@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
@@ -15,62 +16,6 @@ const REGULATORY_GEAR_KEYS = {
   REGULATED_GEAR_CATEGORIES: 'regulatedGearCategories'
 }
 
-const GEAR_FROM_DB = {
-  TMS: {
-    label: 'blablabla',
-    category: 'category1',
-    group: 1
-  },
-  RDFF: {
-    label: 'fldslf',
-    category: 'category1',
-    group: 1
-  },
-  PDM: {
-    label: 'zdfa',
-    category: 'category2',
-    group: 2
-  },
-  ASR: {
-    label: 'cncnc',
-    category: 'category2',
-    group: 2
-  }
-}
-
-const REGULATORY_GEAR_EXAMPLE = [
-  {
-    value: 'category1',
-    label: 'category1',
-    children: [
-      {
-        value: 'TMS',
-        label: 'blablabla'
-      },
-      {
-        value: 'RDFF',
-        label: 'fldslf'
-      }
-    ]
-  },
-  {
-    value: 'category2',
-    label: 'category2',
-    children: [
-      {
-        value: 'PDM',
-        label: 'zdfa'
-      },
-      {
-        value: 'ASR',
-        label: 'cncnc'
-      }
-    ]
-  }
-]
-
-// const REGULATORY_GEAR_VALUE_EXAMPLE =  ['category3', 'ASR', 'TMS', 'RDFF']
-
 const RegulatoryGearForm = (props) => {
   const {
     regulatoryGears,
@@ -85,15 +30,71 @@ const RegulatoryGearForm = (props) => {
     allGroups
   } = regulatoryGears
 
+  const { categoriesToGears, groupsToCategories } = useSelector(state => state.gear)
+
   const [multiCascaderValues, setMultiCascaderValues] = useState([])
+  const [allCategoriesAndGears, setAllCategoriesAndGears] = useState([])
+
+  const updateSelectedGearsAndGroups = () => {
+    if (allGroups && Object.keys(allGroups).length > 0) {
+      let newMultiCascaderValues = [...multiCascaderValues]
+      if (allGroups.includes(REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS)) {
+        newMultiCascaderValues = newMultiCascaderValues.concat(groupsToCategories[1])
+      } else {
+        const allTowedGearCategories = groupsToCategories[1]
+        if (regulatedGearCategories) {
+          newMultiCascaderValues = newMultiCascaderValues.concat(allTowedGearCategories
+            .filter(category => regulatedGearCategories.includes(category)))
+        } else {
+          newMultiCascaderValues.filter(category => !allTowedGearCategories.includes(category))
+        }
+      }
+      if (allGroups.includes(REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS)) {
+        newMultiCascaderValues = newMultiCascaderValues.concat(groupsToCategories[2])
+      } else {
+        const allPassivesGearCategories = groupsToCategories[2]
+        if (regulatedGearCategories) {
+          newMultiCascaderValues = newMultiCascaderValues.concat(allPassivesGearCategories
+            .filter(category => regulatedGearCategories.includes(category)))
+        } else {
+          newMultiCascaderValues.filter(category => !allPassivesGearCategories.includes(category))
+        }
+      }
+      if (allGroups.includes(REGULATORY_GEAR_KEYS.ALL_GEARS)) {
+        newMultiCascaderValues = Object.keys(categoriesToGears)
+      } else {
+        newMultiCascaderValues = Object.keys(categoriesToGears)
+          .filter(category => !regulatedGearCategories.includes(category))
+      }
+      setMultiCascaderValues(newMultiCascaderValues)
+    }
+  }
 
   useEffect(() => {
-    if (regulatedGears || regulatedGearCategories) {
-      setMultiCascaderValues([
-        ...Object.keys(regulatedGears),
-        ...Object.keys(regulatedGearCategories)
-      ])
-    }
+    console.log('allGroups has changed')
+    updateSelectedGearsAndGroups()
+  }, [allGroups, categoriesToGears, groupsToCategories, setMultiCascaderValues])
+
+  const makeSelectList = () => {
+    const list = Object.keys(categoriesToGears).map((category) => {
+      const children = categoriesToGears[category].map((gear) => {
+        return {
+          label: gear.name,
+          value: gear.code
+        }
+      })
+      return {
+        label: category,
+        value: category,
+        children
+      }
+    })
+    setAllCategoriesAndGears(list)
+  }
+
+  useEffect(() => {
+    makeSelectList()
+    setMultiCascaderValues(Object.keys(regulatedGears).concat(Object.keys(regulatedGearCategories)))
   }, [])
 
   const set = useCallback((key, value) => {
@@ -105,18 +106,18 @@ const RegulatoryGearForm = (props) => {
   }, [regulatoryGears, setRegulatoryGears])
 
   const isCategory = useCallback(value => {
-    if (!Object.keys(GEAR_FROM_DB).includes(value)) {
+    if (Object.keys(categoriesToGears).includes(value)) {
       return true
     }
     return false
-  }, [REGULATORY_GEAR_EXAMPLE])
+  }, [categoriesToGears])
 
-  const setRegulatoryGear = (values) => {
+  const updateRegulatedGearsAndCategories = () => {
     const currentRegulatedGears = Object.keys(regulatedGears)
     const currentRegulatedGearCategories = Object.keys(regulatedGearCategories)
     const nextRegulatedGears = {}
     const nextRegulatedGearCategories = {}
-    values.forEach(value => {
+    multiCascaderValues.forEach(value => {
       if (isCategory(value)) {
         if (currentRegulatedGearCategories.includes(value)) {
           nextRegulatedGearCategories[value] = { ...regulatedGearCategories[value] }
@@ -127,15 +128,10 @@ const RegulatoryGearForm = (props) => {
         if (currentRegulatedGears.includes(value)) {
           nextRegulatedGears[value] = { ...regulatedGears[value] }
         } else {
-          nextRegulatedGears[value] = { ...GEAR_FROM_DB[value] }
+          nextRegulatedGears[value] = { ...categoriesToGears[value] }
         }
       }
     })
-    const nextMulticascaderValues = [
-      ...Object.keys(nextRegulatedGearCategories),
-      ...Object.keys(nextRegulatedGears)
-    ]
-    setMultiCascaderValues(nextMulticascaderValues)
     const obj = {
       ...regulatoryGears,
       regulatedGears: nextRegulatedGears,
@@ -144,9 +140,13 @@ const RegulatoryGearForm = (props) => {
     setRegulatoryGears(obj)
   }
 
+  useEffect(() => {
+    updateRegulatedGearsAndCategories()
+  }, [multiCascaderValues])
+
   const removeGearOrCategory = (gearOrCategory) => {
     const nextMulticascaderValues = multiCascaderValues.filter(value => value !== gearOrCategory)
-    setRegulatoryGear(nextMulticascaderValues)
+    setMultiCascaderValues(nextMulticascaderValues)
   }
 
   const setRegulatedGear = (key, value, gear) => {
@@ -189,10 +189,13 @@ const RegulatoryGearForm = (props) => {
         </CustomRadio>
       </AuthorizedRadio>
     </Title>
-    <Content display={authorized !== undefined}>
+    <Content authorized={authorized} display={authorized !== undefined}>
       <CheckboxGroup
         value={allGroups}
-        onChange={value => set(REGULATORY_GEAR_KEYS.ALL_GROUPS, value)}
+        onChange={(value, event) => {
+          console.log(event)
+          set(REGULATORY_GEAR_KEYS.ALL_GROUPS, [...value])
+        }}
       >
         {!authorized && <GearCheckBox
           value={REGULATORY_GEAR_KEYS.ALL_GEARS}
@@ -211,13 +214,13 @@ const RegulatoryGearForm = (props) => {
         </GearCheckBox>
       </CheckboxGroup>
       <CustomMultiCascader
-        data={REGULATORY_GEAR_EXAMPLE}
+        data={allCategoriesAndGears}
         style={{ width: 146 }}
         searchable={false}
         cleanable={false}
         placeholder={'Choisir un ou des engins'}
         renderValue={() => <MultiCascaderLabel>Choisir un ou des engins</MultiCascaderLabel>}
-        onChange={setRegulatoryGear}
+        onChange={setMultiCascaderValues}
         value={multiCascaderValues}
       />
       <GearList>

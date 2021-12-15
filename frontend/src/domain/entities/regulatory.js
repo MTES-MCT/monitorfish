@@ -424,7 +424,7 @@ const dateToString = (date, annualRecurrence) => {
   return date.toLocaleDateString('fr-FR', options)
 }
 
-const getTimesValues = () => {
+const getHoursValues = () => {
   const hours = [...Array(24).keys()]
   const times = hours.reduce((acc, hour) => {
     const hourStr = hour < 10 ? '0' + hour : hour
@@ -435,7 +435,7 @@ const getTimesValues = () => {
   return formatDataForSelectPicker(times)
 }
 
-export const TIMES_SELECT_PICKER_VALUES = getTimesValues()
+export const TIMES_SELECT_PICKER_VALUES = getHoursValues()
 
 const timeToString = (date) => {
   const minutes = date.getMinutes()

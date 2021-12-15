@@ -13,7 +13,7 @@ export const RiskFactorBox = styled.div`
   background: ${props => props.color};
   line-height: 14px;
   text-align: center;
-  margin-right: 8px;
+  margin-right:  ${props => props.marginRight ? props.marginRight : 8}px;;
   visibility: ${props => props.hide ? 'hidden' : 'visible'};
   ${props => props.hide ? 'width: 13px;' : ''}
   border-radius: 1px;

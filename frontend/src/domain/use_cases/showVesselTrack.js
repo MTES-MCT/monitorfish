@@ -45,7 +45,7 @@ const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (d
         showedVesselTrack: {
           identity: identity,
           vessel: vesselIdentity,
-          coordinates: feature.getGeometry().getCoordinates(),
+          coordinates: feature?.getGeometry()?.getCoordinates(),
           positions: positions,
           trackDepth: nextVesselTrackDepthObject,
           toShow: true,

@@ -137,7 +137,7 @@ const VesselSidebar = () => {
           </TabList>
           <Panel healthcheckTextWarning={healthcheckTextWarning}>
             {
-              selectedVessel?.alerts.length
+              selectedVessel?.alerts?.length
                 ? <VesselCardAlerts
                   onClick={() => {
                     batch(() => {

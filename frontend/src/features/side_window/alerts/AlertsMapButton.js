@@ -23,7 +23,7 @@ const AlertsMapButton = () => {
   } = useSelector(state => state.global)
 
   return <>
-    <Wrapper
+    <AlertsButton
       data-cy={'alerts-button'}
       title={'Alertes'}
       isVisible={alertListIsOpen}
@@ -32,14 +32,14 @@ const AlertsMapButton = () => {
       isHidden={previewFilteredVesselsMode}
       onClick={() => alertListIsOpen ? dispatch(closeAlertList()) : dispatch(openAlertList())}>
       <AlertsIcon/>
-    </Wrapper>
+    </AlertsButton>
     {
       alertListIsOpen
         ? <NewWindow
           copyStyles
-          name={'Alertes'}
-          title={'Alertes'}
-          features={{ width: '1500px', height: '900px' }}
+          name={'MonitorFish'}
+          title={'MonitorFish'}
+          features={{ scrollbars: true, width: '1500px', height: '900px' }}
           onUnload={() => {
             batch(() => {
               dispatch(closeAlertList())
@@ -54,7 +54,7 @@ const AlertsMapButton = () => {
   </>
 }
 
-const Wrapper = styled(MapButtonStyle)`
+const AlertsButton = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};

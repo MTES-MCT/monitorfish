@@ -1,5 +1,5 @@
 import { getAllGearCodesFromAPI } from '../../api/fetch'
-import { setCategoriesToGears, setGears, setGroupsToCategories } from '../shared_slices/Gear'
+import { setCategoriesToGears, setGears, setGroupsToCategories, setGearsByCode } from '../shared_slices/Gear'
 import { setIsReadyToShowRegulatoryZones } from '../shared_slices/Regulatory'
 import { setError } from '../shared_slices/Global'
 import { batch } from 'react-redux'
@@ -10,14 +10,16 @@ const getAllGearCodes = () => dispatch => {
       dispatch(setGears(gears))
       dispatch(setIsReadyToShowRegulatoryZones())
     })
-
     const categoriesToGears = {}
     const groupToCategories = {}
+    const gearsByCode = {}
     gears.forEach(gear => {
       const {
+        code,
         category,
         groupId
       } = gear
+      gearsByCode[code] = gear
       if (!Object.keys(categoriesToGears).includes(category)) {
         categoriesToGears[category] = [gear]
       } else {
@@ -31,8 +33,11 @@ const getAllGearCodes = () => dispatch => {
         }
       }
     })
-    dispatch(setCategoriesToGears(categoriesToGears))
-    dispatch(setGroupsToCategories(groupToCategories))
+    batch(() => {
+      dispatch(setCategoriesToGears(categoriesToGears))
+      dispatch(setGroupsToCategories(groupToCategories))
+      dispatch(setGearsByCode(gearsByCode))
+    })
   }).catch(error => {
     dispatch(setError(error))
   })

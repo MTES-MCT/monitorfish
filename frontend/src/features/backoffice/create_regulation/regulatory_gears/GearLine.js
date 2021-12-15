@@ -17,7 +17,7 @@ const GearLine = (props) => {
   } = props
   return (<>
       <ContentLine>
-        <Label>{`Engin ${id + 1}`}</Label>
+        <Label>{code ? `Engin ${id + 1}` : `Catégorie ${id + 1}`}</Label>
         <Tag
           tagValue={`${label}${code ? ` (${code})` : ''}`}
           onCloseIconClicked={onCloseIconClicked}

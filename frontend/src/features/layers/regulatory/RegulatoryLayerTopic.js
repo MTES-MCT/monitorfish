@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
@@ -42,7 +42,7 @@ const RegulatoryLayerTopic = props => {
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
   const [isLayerNameEditable, setIsLayerNameEditable] = useState(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
       ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
     }
@@ -118,7 +118,6 @@ const RegulatoryLayerTopic = props => {
       )
     })
   }
-
   const getZoneIsShown = useCallback(zone => {
     return showedLayers
       .some(layer =>
@@ -133,7 +132,6 @@ const RegulatoryLayerTopic = props => {
   const onEditLayerNameClick = () => {
     setIsLayerNameEditable(true)
   }
-
   const onRegulatoryTopicClick = useCallback(() => {
     if (isOpen) {
       dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
@@ -244,15 +242,14 @@ const Zone = styled.span`
   }
 `
 
-const List = styled.li`
+const List = styled.div`
   height: inherit;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
   transition: all 0.5s;
-  height: ${props => props.isOpen ? props.zonesLength * 37.5 : 0}px;
+  height: ${props => props.isOpen ? props.zonesLength * 38 : 0}px;
 `
 
-const Row = styled.div`
+const Row = styled.li`
   padding: 0px 5px 0px 0px;
   margin: 0;
   font-size: 13px;
@@ -261,8 +258,7 @@ const Row = styled.div`
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow-y: scroll !important;
-  overflow-y: hidden !important;
+  overflow: hidden !important;
   cursor: pointer;import LayerNameInput from '../../backoffice/LayerNameInput'
 
   margin: 0;

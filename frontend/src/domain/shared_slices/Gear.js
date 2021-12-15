@@ -4,8 +4,9 @@ const gearSlice = createSlice({
   name: 'gear',
   initialState: {
     gears: [],
-    categoriesToGears: {},
-    groupsToCategories: {}
+    categoriesToGears: undefined,
+    groupsToCategories: undefined,
+    gearsByCode: undefined
   },
   reducers: {
     setGears (state, action) {
@@ -16,6 +17,9 @@ const gearSlice = createSlice({
     },
     setGroupsToCategories (state, action) {
       state.groupsToCategories = action.payload
+    },
+    setGearsByCode (state, action) {
+      state.gearsByCode = action.payload
     }
   }
 })
@@ -23,7 +27,8 @@ const gearSlice = createSlice({
 export const {
   setGears,
   setCategoriesToGears,
-  setGroupsToCategories
+  setGroupsToCategories,
+  setGearsByCode
 } = gearSlice.actions
 
 export default gearSlice.reducer

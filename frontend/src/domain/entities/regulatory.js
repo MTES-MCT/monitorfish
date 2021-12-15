@@ -15,6 +15,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     zone: decodeURI(properties.zones),
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
+    regulatoryGears: parseRegulatoryGears(properties.gears),
     regulatorySpecies: parseRegulatorySpecies(properties.species),
     regulatoryReferences: parseRegulatoryReferences(properties.references_reglementaires),
     upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(properties.references_reglementaires_a_venir),
@@ -35,6 +36,12 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     rejections: properties.rejets,
     deposit: properties.gisement
   }
+}
+
+function parseRegulatoryGears (gears) {
+  return gears
+    ? parseJSON(gears)
+    : initialRegulatoryGearsValues
 }
 
 function parseRegulatorySpecies (species) {
@@ -128,7 +135,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     regulatoryReferences,
     upcomingRegulatoryReferences,
     fishingPeriod,
-    regulatorySpecies
+    regulatorySpecies,
+    regulatoryGears
   } = properties
 
   return {
@@ -139,7 +147,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     references_reglementaires: JSON.stringify(regulatoryReferences),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
-    species: JSON.stringify(regulatorySpecies)
+    species: JSON.stringify(regulatorySpecies),
+    gears: JSON.stringify(regulatoryGears)
   }
 }
 
@@ -249,12 +258,12 @@ export const initialRegulatorySpeciesValues = {
 
 export const initialRegulatoryGearsValues = {
   authorized: undefined,
-  allGroups: [],
   allGears: undefined,
   allTowedGears: undefined,
   allPassiveGears: undefined,
   regulatedGearCategories: {},
-  regulatedGears: {}
+  regulatedGears: {},
+  derogation: undefined
 }
 
 export const WEEKDAYS = {

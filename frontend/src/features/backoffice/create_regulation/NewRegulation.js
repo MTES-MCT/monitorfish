@@ -229,7 +229,8 @@ const CreateRegulation = ({ title, isEdition }) => {
             regulatoryReferences: regulatoryTextList,
             upcomingRegulatoryReferences: upcomingRegulation,
             fishingPeriod,
-            regulatorySpecies
+            regulatorySpecies,
+            regulatoryGears
           })
           createOrUpdateRegulation(featureObject)
           setSaveIsForbidden(false)
@@ -255,7 +256,8 @@ const CreateRegulation = ({ title, isEdition }) => {
       id,
       upcomingRegulatoryReferences,
       fishingPeriod,
-      regulatorySpecies
+      regulatorySpecies,
+      regulatoryGears
     } = regulatoryZoneMetadata
 
     setSelectedRegulationLawType(lawType)
@@ -266,6 +268,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     setInitialGeometryId(id)
     setFishingPeriod(fishingPeriod)
     setRegulatorySpecies(regulatorySpecies)
+    setRegulatoryGears(regulatoryGears)
 
     batch(() => {
       dispatch(setSelectedGeometryId(id))

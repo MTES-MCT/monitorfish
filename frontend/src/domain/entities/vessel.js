@@ -90,7 +90,7 @@ export class Vessel {
 
   /**
    * Remove filter preview property to vessel feature
-   * @param {Object} feature - The OpenLayers feature object
+   * @param {Object} feature - The Openon(VESSELLayers feature object
    */
   static removeFilterPreviewPropertyToVessels (feature) {
     feature.set(Vessel.filterPreviewProperty, false)

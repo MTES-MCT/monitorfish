@@ -4,7 +4,7 @@ import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
-import { BeaconStatusesSubMenu } from '../../domain/entities/beaconStatuses'
+import { BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
 
 const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   return <Menu>

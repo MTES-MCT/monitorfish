@@ -5,9 +5,9 @@ import SideWindowMenu from './SideWindowMenu'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
 import SideWindowSubMenu from './SideWindowSubMenu'
-import BeaconStatuses from './beacon_statuses/BeaconStatuses'
 import Alerts from './alerts/Alerts'
-import { BeaconStatusesSubMenu } from '../../domain/entities/beaconStatuses'
+import { BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
+import { BeaconStatusesBoard } from './beacon_statuses/BeaconStatusesBoard'
 
 const SideWindow = ({ menu }) => {
   const [selectedMenu, setSelectedMenu] = useState(sideWindowMenu.ALERTS)
@@ -40,7 +40,7 @@ const SideWindow = ({ menu }) => {
     }
     {
       selectedMenu === sideWindowMenu.BEACON_STATUSES &&
-      <BeaconStatuses/>
+        <BeaconStatusesBoard/>
     }
   </Wrapper>
 }

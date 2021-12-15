@@ -30,6 +30,7 @@ import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
 import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
+import { BeaconStatusesBoard } from './features/side_window/beacon_statuses/BeaconStatusesBoard'
 
 function App () {
   switch (browserName) {
@@ -74,25 +75,32 @@ function HomePage () {
   return <Provider store={homeStore}>
     <NamespaceContext.Provider value={'homepage'}>
       <BackofficeMode inBackofficeMode={false}/>
-      <Healthcheck/>
-      <PreviewFilteredVessels/>
-      <Wrapper>
-        <Map/>
-        <LayersSidebar/>
-        <AlertsMapButton/>
-        <VesselsSearch/>
-        <RightMenuOnHoverArea/>
-        <VesselList namespace={'homepage'}/>
-        <VesselFilters/>
-        <VesselVisibility/>
-        <VesselSidebar/>
-        <UpdatingVesselLoader/>
-        <Measurement/>
-        <InterestPoint/>
-        <VesselLabels/>
-        <APIWorker/>
-        <ErrorToastNotification/>
-      </Wrapper>
+      <Switch>
+        <Route exact path="/beacons">
+          <BeaconStatusesBoard/>
+        </Route>
+        <Route exact path="/">
+          <Healthcheck/>
+          <PreviewFilteredVessels/>
+          <Wrapper>
+            <Map/>
+            <LayersSidebar/>
+            <AlertsMapButton/>
+            <VesselsSearch/>
+            <RightMenuOnHoverArea/>
+            <VesselList namespace={'homepage'}/>
+            <VesselFilters/>
+            <VesselVisibility/>
+            <VesselSidebar/>
+            <UpdatingVesselLoader/>
+            <Measurement/>
+            <InterestPoint/>
+            <VesselLabels/>
+            <APIWorker/>
+            <ErrorToastNotification/>
+          </Wrapper>
+        </Route>
+      </Switch>
     </NamespaceContext.Provider>
   </Provider>
 }

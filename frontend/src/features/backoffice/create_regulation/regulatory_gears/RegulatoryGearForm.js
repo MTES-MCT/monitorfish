@@ -13,7 +13,8 @@ const REGULATORY_GEAR_KEYS = {
   ALL_TOWED_GEARS: 'allTowedGears',
   ALL_PASSIVE_GEARS: 'allPassiveGears',
   REGULATED_GEARS: 'regulatedGears',
-  REGULATED_GEAR_CATEGORIES: 'regulatedGearCategories'
+  REGULATED_GEAR_CATEGORIES: 'regulatedGearCategories',
+  DEROGATION: 'derogation'
 }
 
 const RegulatoryGearForm = (props) => {
@@ -29,7 +30,8 @@ const RegulatoryGearForm = (props) => {
     authorized,
     allGears,
     allTowedGears,
-    allPassiveGears
+    allPassiveGears,
+    derogation
   } = regulatoryGears
 
   const dispatch = useDispatch()
@@ -235,36 +237,54 @@ const RegulatoryGearForm = (props) => {
         onChange={setMultiCascaderValues}
         value={multiCascaderValues}
       />
-      <GearList>
-      {
-        Object.keys(regulatedGears).map((gearCode, index) => {
-          return <GearLine
-              key={index}
-              id={index}
-              label={regulatedGears[gearCode].name}
-              code={gearCode}
-              onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
-              intervalType={regulatedGears[gearCode].intervalType}
-              intervalValues={regulatedGears[gearCode].intervalValues}
-              onCloseIconClicked={_ => removeGearOrCategory(gearCode)}
-            />
-        })
+      {(Object.keys(regulatedGears)?.length > 0 || Object.keys(regulatedGearCategories)?.length > 0)
+        ? <GearList>
+        {
+          Object.keys(regulatedGears).map((gearCode, index) => {
+            return <GearLine
+                key={index}
+                id={index}
+                label={regulatedGears[gearCode].name}
+                code={gearCode}
+                onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
+                intervalType={regulatedGears[gearCode].intervalType}
+                intervalValues={regulatedGears[gearCode].intervalValues}
+                onCloseIconClicked={_ => removeGearOrCategory(gearCode)}
+              />
+          })
+        }
+        {
+          Object.keys(regulatedGearCategories).map((category, index) => {
+            return (<GearLine
+                key={index}
+                id={index}
+                label={category}
+                onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
+                intervalType={regulatedGearCategories[category].intervalType}
+                intervalValues={regulatedGearCategories[category].intervalValues}
+                onCloseIconClicked={_ => removeGearOrCategory(category)}
+              />
+            )
+          })
+        }
+        </GearList>
+        : null
       }
-      {
-        Object.keys(regulatedGearCategories).map((category, index) => {
-          return (<GearLine
-              key={index}
-              id={index}
-              label={category}
-              onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
-              intervalType={regulatedGearCategories[category].intervalType}
-              intervalValues={regulatedGearCategories[category].intervalValues}
-              onCloseIconClicked={_ => removeGearOrCategory(category)}
-            />
-          )
-        })
-      }
-      </GearList>
+      {!authorized && <DerogationRadio
+        inline
+        onChange={value => set(REGULATORY_GEAR_KEYS.DEROGATION, value)}
+        value={derogation}
+      >
+        <Text>{'Mesure dérogatoire'}</Text>
+        <CustomRadio checked={authorized} value={true} >
+          oui
+          <GreenCircle />
+        </CustomRadio>
+        <CustomRadio checked={authorized === false} value={false} >
+          non
+          <RedCircle />
+        </CustomRadio>
+      </DerogationRadio>}
     </Content>
   </Wrapper>
 }
@@ -333,10 +353,24 @@ const RedCircle = styled.span`
   background-color: ${COLORS.red};
 `
 
-const AuthorizedRadio = styled(RadioGroup)` 
+const customRadioGroup = css`
   display: flex;
   flex-direction: row;
   align-items: center;
+`
+
+const DerogationRadio = styled(RadioGroup)` 
+  ${customRadioGroup}
+  padding-top: 15px!important;
+`
+
+const Text = styled.p`
+  font-size: 13px;
+  color: ${COLORS.slateGray};
+`
+
+const AuthorizedRadio = styled(RadioGroup)` 
+  ${customRadioGroup}
 `
 
 const CustomRadio = styled(Radio)`

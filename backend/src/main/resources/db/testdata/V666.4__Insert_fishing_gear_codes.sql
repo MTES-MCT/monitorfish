@@ -42,7 +42,7 @@ LNB	Filets soulevés manœuvrés par bateau	Filets soulevés
 GNF	Filets maillants fixes (sur perches)	Filets maillants et filets emmêlants
 GEN	Filets maillants et filets emmélants (non spécif.)	Filets maillants et filets emmêlants
 GN	Filets maillants (non spécifiés)	Filets maillants et filets emmêlants
-GTN Trémails et filets maillants combinés	Filets maillants et filets emmêlants
+GTN	Trémails et filets maillants combinés	Filets maillants et filets emmêlants
 GTR	Trémails	Filets maillants et filets emmêlants
 GNC	Filets maillants encerclants	Filets maillants et filets emmêlants
 GND	Filets maillants dérivants (filets dérivants)	Filets maillants et filets emmêlants

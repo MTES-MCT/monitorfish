@@ -18,7 +18,7 @@ const GearLine = (props) => {
     intervalValues
   } = props
   return (<>
-      <ContentLine>
+      <ContentLine data-cy='regulatory-gear-line'>
         <Label>{code ? `Engin ${id + 1}` : `Catégorie ${id + 1}`}</Label>
         <Tag
           tagValue={`${label}${code ? ` (${code})` : ''}`}
@@ -26,7 +26,7 @@ const GearLine = (props) => {
         />
       </ContentLine>
       {allowMesh && <ContentLine>
-        <Label>Maillage</Label>
+        <Label data-cy='mesh-label' >Maillage</Label>
         <CustomSelectComponent
           value={intervalType || 'greaterThan'}
           onChange={meshInterval => onChange('intervalType', meshInterval)}

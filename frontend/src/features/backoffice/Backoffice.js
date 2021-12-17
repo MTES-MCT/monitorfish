@@ -162,7 +162,7 @@ const TerritoryName = styled.div`
   font-weight: 700;
   text-transform: uppercase;
   text-align: left;
-  color: ${COLORS.grayDarkerTwo};
+  color: ${COLORS.slateGray};
 `
 
 const RegulatoryZoneListByLawTypeList = styled.div`
@@ -185,6 +185,7 @@ const BackofficeContainer = styled.div`
   position: relative;
   background-color: ${COLORS.white};
   width: 100%;
+  height: 100vh;
 `
 
 const RegulatoryZonePanel = styled.div`

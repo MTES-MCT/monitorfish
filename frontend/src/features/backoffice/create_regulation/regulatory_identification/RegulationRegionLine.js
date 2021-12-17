@@ -6,6 +6,7 @@ import { formatDataForSelectPicker } from '../../../../utils'
 import { FRENCH_REGION_LIST } from '../../constants'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
+import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
 
 const RegulationRegionLine = props => {
   const {
@@ -59,6 +60,7 @@ const RegulationRegionLine = props => {
       data={formatDataForSelectPicker(FRENCH_REGION_LIST)}
       renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList?.includes(item.value)} item={item} tag={'Checkbox'} />}
       valueIsMissing={regionIsMissing}
+      menuClassName={DEFAULT_MENU_CLASSNAME}
     />
     {
       selectedRegionList?.length > 0 &&

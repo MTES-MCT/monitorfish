@@ -8,7 +8,7 @@ import DateRange from './DateRange'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
 import DayPicker from './DayPicker'
 import TimeInterval from './TimeInterval'
-import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
+import { CustomCheckbox, Delimiter } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { DEFAULT_DATE_RANGE, fishingPeriodToString } from '../../../../domain/entities/regulatory'
 
@@ -137,7 +137,7 @@ const FishingPeriodForm = (props) => {
   const setDaytime = _ => set(FISHING_PERIOD_KEYS.DAYTIME, !daytime)
 
   return <Wrapper show={show}>
-    <Title>
+    <Title >
       <AuthorizedRadio
         inline
         onChange={value => set(FISHING_PERIOD_KEYS.AUTHORIZED, value)}
@@ -154,7 +154,8 @@ const FishingPeriodForm = (props) => {
         </CustomRadio>
       </AuthorizedRadio>
     </Title>
-    <AnnualRecurrence display={displayForm} authorized={authorized}>
+    <Delimiter width='523' />
+    <AnnualRecurrence $display={displayForm} authorized={authorized}>
       <Label>Récurrence annuelle</Label>
       <RadioGroup
         inline
@@ -165,8 +166,8 @@ const FishingPeriodForm = (props) => {
         <CustomRadio value={false}>non</CustomRadio>
       </RadioGroup>
     </AnnualRecurrence>
-    <DateTime display={displayForm} authorized={authorized}>
-      <ConditionalLines display={displayForm} disabled={disabled}>
+    <DateTime $display={displayForm} authorized={authorized}>
+      <ConditionalLines $display={displayForm} disabled={disabled}>
         <Row>
           <ContentWrapper>
             <Label>Plages de dates</Label>
@@ -198,11 +199,11 @@ const FishingPeriodForm = (props) => {
           <ContentWrapper alignItems={'flex-end'}>
             <SquareButton
               disabled={disabled || dateRanges?.length === 0}
-              type={SQUARE_BUTTON_TYPE.DELETE}
-              onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)} />
+              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, DEFAULT_DATE_RANGE)} />
             <SquareButton
               disabled={disabled || dateRanges?.length === 0}
-              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, DEFAULT_DATE_RANGE)} />
+              type={SQUARE_BUTTON_TYPE.DELETE}
+              onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)} />
           </ContentWrapper>
         </Row>
         <Row>
@@ -258,6 +259,7 @@ const FishingPeriodForm = (props) => {
           <HolidaysCheckbox disabled={disabled} onChange={setHolidays} checked={holidays}/>
         </Row>
         <TimeTitle>Horaires {authorized ? 'autorisés' : 'interdits'}</TimeTitle>
+        <Delimiter width='500' />
         <TimeRow disabled={timeIsDisabled}>
           <DateRanges>
               { timeIntervals?.length > 0
@@ -281,14 +283,14 @@ const FishingPeriodForm = (props) => {
                 />
               }
           </DateRanges>
-          <ContentWrapper>
+          <ContentWrapper alignItems={'flex-end'}>
+            <SquareButton
+              disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
+              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})} />
             <SquareButton
               type={SQUARE_BUTTON_TYPE.DELETE}
               disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
               onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)} />
-            <SquareButton
-              disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})} />
           </ContentWrapper>
         </TimeRow>
         <TimeRow disabled={timeIsDisabled}>
@@ -301,7 +303,7 @@ const FishingPeriodForm = (props) => {
       </ConditionalLines>
     </DateTime>
     {fishingPeriodAsString &&
-    <PeriodAsStringWrapper display={displayForm} authorized={authorized}>
+    <PeriodAsStringWrapper $display={displayForm} authorized={authorized}>
       <PeriodAsString>
         {fishingPeriodAsString}
       </PeriodAsString>
@@ -311,14 +313,13 @@ const FishingPeriodForm = (props) => {
 
 const ContentWrapper = styled.div`
   display: flex;
-  align-items:flex-end;
   flex-direction: row;
   height: 100%;
   ${props => props.alignItems ? `align-items: ${props.alignItems}` : ''};
 `
 
 const PeriodAsStringWrapper = styled.div`
-  display: ${props => !props.display ? 'none' : 'flex'};
+  display: ${props => !props.$display ? 'none' : 'flex'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-top: 20px;
 `
@@ -333,10 +334,9 @@ const PeriodAsString = styled.div`
 `
 
 const AnnualRecurrence = styled.div`
-  display: ${props => !props.display ? 'none' : 'flex'};
+  display: ${props => !props.$display ? 'none' : 'flex'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-left: 15px;
-  padding-bottom: 15px;
   .rs-radio-group {
     margin-left: -10px;
   }
@@ -347,7 +347,7 @@ const TimeRow = styled(Row)`
 `
 
 const ConditionalLines = styled.div`
-  display: ${props => props.display ? 'flex' : 'none'};
+  display: ${props => props.$display ? 'flex' : 'none'};
   opacity: ${props => props.disabled ? '0.4' : '1'};
   flex-direction: column;
 `
@@ -375,12 +375,12 @@ const HolidaysCheckbox = styled(CustomCheckbox)`
   margin-top: -15px;
 `
 const DateTime = styled.div`
-  display: ${props => props.display ? 'flex' : 'none'};
+  display: ${props => props.$display ? 'flex' : 'none'};
   flex-direction: row;
   opacity: ${props => props.disabled ? '0.4' : '1'};
   border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-left: 15px;
-  padding-top: 15px;
+  padding-top: 25px;
 `
 
 const normalTitle = css`
@@ -389,11 +389,9 @@ const normalTitle = css`
   align-items: center;
   font-size: 13px;
   color: ${COLORS.slateGray};
-  border-bottom: 1px solid ${COLORS.lightGray};
 `
 const Title = styled.div`
   ${normalTitle}
-  margin-bottom: 18px;
 `
 
 const TimeTitle = styled(Title)`

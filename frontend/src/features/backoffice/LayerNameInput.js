@@ -13,7 +13,7 @@ const LayerNameInput = props => {
 
   const update = () => {
     if (value && value !== layerName) {
-      updateLayerName(layerName, value)
+      updateLayerName(layerName, value.replace(/[ ]/g, '_'))
     }
     setIsLayerNameEditable(false)
   }

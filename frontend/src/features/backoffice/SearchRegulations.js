@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useRouteMatch } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { COLORS } from '../../constants/constants'
 import { AddRegulationButton } from '../commonStyles/Buttons.style'
@@ -41,7 +41,11 @@ const SearchRegulations = props => {
     }
   }
 
-  const match = useRouteMatch()
+  const history = useHistory()
+
+  const onAddRegulationClick = () => {
+    history.push('/backoffice/regulation/new')
+  }
 
   return (
     <SearchContainer>
@@ -55,7 +59,7 @@ const SearchRegulations = props => {
         <SearchIcon />
         </SearchBox>
         <AddRegulationButton
-          to={match.url + '/new'}
+          onClick={onAddRegulationClick}
           disabled={false}
           isLast={false}
           title={'Saisir une nouvelle réglementation'}

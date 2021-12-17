@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import {
   useRouteMatch,
   useHistory
 } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
@@ -21,6 +21,7 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
+import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened } from '../../../domain/shared_slices/Regulatory'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -40,6 +41,7 @@ const RegulatoryLayerZone = props => {
   const dispatch = useDispatch()
   const match = useRouteMatch()
   const history = useHistory()
+  const ref = useRef()
   const {
     callRemoveRegulatoryZoneFromMySelection,
     regulatoryZone,
@@ -49,7 +51,8 @@ const RegulatoryLayerZone = props => {
     namespace,
     vectorLayerStyle,
     isLast,
-    isEditable
+    isEditable,
+    regulatoryTopic
   } = props
 
   const {
@@ -109,7 +112,11 @@ const RegulatoryLayerZone = props => {
 
   const onEditRegulationClick = () => {
     history.push(`${match.path}/edit`)
-    dispatch(showRegulationToEdit(regulatoryZone))
+    batch(() => {
+      dispatch(showRegulationToEdit(regulatoryZone))
+      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(addRegulatoryTopicOpened(regulatoryTopic))
+    })
   }
 
   const onMouseOver = () => !isOver && setIsOver(true)
@@ -117,6 +124,7 @@ const RegulatoryLayerZone = props => {
 
   return (
     <Zone
+      ref={ref}
       data-cy="regulatory-layer-zone"
       isLast={isLast}
       onMouseOver={onMouseOver}
@@ -142,7 +150,7 @@ const RegulatoryLayerZone = props => {
             data-cy="regulatory-layer-zone-edit"
             $isOver={isOver}
             title="Editer la réglementation"
-            onClick={() => onEditRegulationClick()}/>
+            onClick={onEditRegulationClick}/>
         }
         {
           metadataIsShown

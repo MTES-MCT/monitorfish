@@ -16,10 +16,14 @@ const CustomSelectComponent = props => {
     groupBy,
     disabled,
     emptyMessage,
-    placement
+    placement,
+    cleanable,
+    style,
+    menuClassName,
+    padding
   } = props
 
-  const selectPickerStyle = {
+  const DEFAULT_SELECT_PICKER_STYLE = {
     width: 200,
     margin: '0',
     borderColor: COLORS.lightGray,
@@ -27,17 +31,18 @@ const CustomSelectComponent = props => {
     textOverflow: 'ellipsis'
   }
   return (
-    <SelectWrapper>
+    <SelectWrapper padding={padding}>
       <CustomSelectPicker
-        style={selectPickerStyle}
+        style={style || DEFAULT_SELECT_PICKER_STYLE}
         searchable={searchable}
+        cleanable={cleanable}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         data={data}
         renderMenuItem={renderMenuItem}
         menuStyle={menuStyle}
-        menuClassName={'new-regulation-select-picker'}
+        menuClassName={menuClassName}
         $valueIsMissing={valueIsMissing}
         locale={{
           noResultsText: emptyMessage,
@@ -53,7 +58,7 @@ const CustomSelectComponent = props => {
 
 const SelectWrapper = styled.div`
   display: inline-block;
-  margin: 0px 10px 0px 0px;
+  margin: ${props => props.padding ? props.padding : '0px 10px 0px 0px'};
   vertical-align: sub;
 `
 

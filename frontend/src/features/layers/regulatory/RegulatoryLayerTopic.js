@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
 import { getHash } from '../../../utils'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
 import { COLORS } from '../../../constants/constants'
-import { useSelector } from 'react-redux'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 import LayerNameInput from '../../backoffice/LayerNameInput'
+import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened } from '../../../domain/shared_slices/Regulatory'
 
 const RegulatoryLayerTopic = props => {
   const {
@@ -26,16 +27,26 @@ const RegulatoryLayerTopic = props => {
     updateLayerName
   } = props
 
+  const dispatch = useDispatch()
+  const ref = useRef()
+
   const gears = useSelector(state => state.gear.gears)
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const {
-    regulatoryZoneMetadata
+    regulatoryZoneMetadata,
+    regulatoryTopicsOpened
   } = useSelector(state => state.regulatory)
 
   const [isOpen, setIsOpen] = useState(false)
   const [showWholeLayer, setShowWholeLayer] = useState(undefined)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
   const [isLayerNameEditable, setIsLayerNameEditable] = useState(false)
+
+  useLayoutEffect(() => {
+    if (regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+    }
+  }, [])
 
   useEffect(() => {
     if (showedLayers && regulatoryTopic) {
@@ -59,10 +70,13 @@ const RegulatoryLayerTopic = props => {
   }, [isOpen])
 
   useEffect(() => {
-    if (regulatoryZoneMetadata && regulatoryTopic && regulatoryZoneMetadata.topic === regulatoryTopic) {
+    if (regulatoryTopic && ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
+      (regulatoryTopicsOpened && regulatoryTopicsOpened.includes(regulatoryTopic)))) {
       setIsOpen(true)
+    } else {
+      setIsOpen(false)
     }
-  }, [regulatoryZoneMetadata, regulatoryTopic, setIsOpen])
+  }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, setIsOpen])
 
   const getRegulatoryLayerName = regulatoryZones => {
     return {
@@ -99,6 +113,7 @@ const RegulatoryLayerTopic = props => {
           zoneIsShown={getZoneIsShown(regulatoryZone)}
           allowRemoveZone={allowRemoveZone}
           isEditable={isEditable}
+          regulatoryTopic={regulatoryTopic}
         />
       )
     })
@@ -117,11 +132,19 @@ const RegulatoryLayerTopic = props => {
   const onEditLayerNameClick = () => {
     setIsLayerNameEditable(true)
   }
+  const onRegulatoryTopicClick = useCallback(() => {
+    if (isOpen) {
+      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+    } else {
+      dispatch(addRegulatoryTopicOpened(regulatoryTopic))
+    }
+  }, [isOpen, regulatoryTopic])
 
   return (
     <NamespaceContext.Consumer>
       {namespace => (
         <Row
+          ref={ref}
           data-cy="regulatory-layer-topic-row"
           isOpen={isOpen}>
           <Zone
@@ -133,7 +156,7 @@ const RegulatoryLayerTopic = props => {
             <Name
               data-cy={'regulatory-layers-my-zones-topic'}
               title={regulatoryTopic.replace(/[_]/g, ' ')}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={onRegulatoryTopicClick}
             >
               {!isLayerNameEditable
                 ? <Text>
@@ -152,7 +175,7 @@ const RegulatoryLayerTopic = props => {
                 ? <EditIcon
                   data-cy="regulatory-layername-edit"
                   $isOver={isOver}
-                  title="Editer la thématique"
+                  title="Modifier le nom de la thématique"
                   onClick={() => onEditLayerNameClick()}/>
                 : null
             }
@@ -223,7 +246,7 @@ const List = styled.div`
   height: inherit;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${props => props.isOpen ? props.zonesLength * 37.5 : 0}px;
+  height: ${props => props.isOpen ? props.zonesLength * 38 : 0}px;
 `
 
 const Row = styled.li`

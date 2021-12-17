@@ -11,7 +11,7 @@ import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { formatDataForSelectPicker } from '../../../../utils'
-
+import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
 const RegulationTopicLine = props => {
   const {
     disabled,
@@ -46,7 +46,7 @@ const RegulationTopicLine = props => {
       <Wrapper>
         <Label>Thématique de la zone</Label>
         <CustomSelectComponent
-          disabled={disabled && layerTypeList}
+          disabled={disabled}
           searchable={true}
           menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
           placeholder='Choisir une thématique'
@@ -56,6 +56,7 @@ const RegulationTopicLine = props => {
           renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedRegulationTopic} item={item} tag={'Radio'} />}
           valueIsMissing={regulationTopicIsMissing}
           emptyMessage={'aucune thématique à afficher'}
+          menuClassName={DEFAULT_MENU_CLASSNAME}
         />
         {selectedRegulationTopic && !isAddTopicClicked &&
           <Tag

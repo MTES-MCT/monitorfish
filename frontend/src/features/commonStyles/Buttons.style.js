@@ -1,6 +1,5 @@
 import { COLORS, SQUARE_BUTTON_TYPE } from '../../constants/constants'
 import styled, { css } from 'styled-components'
-import { Link } from 'react-router-dom'
 
 export const basePrimaryButton = css`
   background: ${COLORS.charcoal};
@@ -78,7 +77,7 @@ const baseAddButton = css`
   }
 `
 
-export const AddRegulationButton = styled(Link)`
+export const AddRegulationButton = styled.a`
   ${baseAddButton}
   min-width: 40px;
   min-height: 40px;
@@ -105,8 +104,8 @@ export const SquareButton = styled.a`
 position: relative;
 box-sizing: border-box;
 cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-width: 38px;
-height: 35px;
+width: 34px;
+height: 34px;
 border: 1px solid ${COLORS.lightGray};
 border-radius: 2px;
 color: ${COLORS.lightGray};
@@ -132,11 +131,11 @@ opacity: ${props => props.disabled ? '0.4' : '1'};
   transform: translate(-50%, -50%);
 }
 &:before {
-  height: ${props => props.type === SQUARE_BUTTON_TYPE.DELETE ? '1.5px' : '15px'};
-  width: ${props => props.type === SQUARE_BUTTON_TYPE.DELETE ? '15px' : '1.5px'};
+  height: ${props => props.type === SQUARE_BUTTON_TYPE.DELETE ? '1.5px' : '12px'};
+  width: ${props => props.type === SQUARE_BUTTON_TYPE.DELETE ? '12px' : '1.5px'};
 }
 &:after {
   height: 1.5px;
-  width: 15px;
+  width: 12px;
 }
 `

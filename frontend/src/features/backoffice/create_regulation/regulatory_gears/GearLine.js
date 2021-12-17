@@ -10,6 +10,7 @@ const GearLine = (props) => {
     id,
     label,
     code,
+    allowMesh,
     onChange,
     onCloseIconClicked,
     intervalType,
@@ -23,7 +24,7 @@ const GearLine = (props) => {
           onCloseIconClicked={onCloseIconClicked}
         />
       </ContentLine>
-      <ContentLine>
+      {allowMesh && <ContentLine>
         <Label>Maillage</Label>
         <CustomSelectComponent
           value={intervalType || 'greaterThan'}
@@ -59,7 +60,7 @@ const GearLine = (props) => {
           }} /></>
         }
         {'mm'}
-      </ContentLine>
+      </ContentLine>}
     </>
   )
 }

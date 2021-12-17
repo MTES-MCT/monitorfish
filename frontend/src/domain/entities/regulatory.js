@@ -266,6 +266,14 @@ export const initialRegulatoryGearsValues = {
   derogation: undefined
 }
 
+export const GEARS_CATEGORES_WITH_MESH = [
+  'Chaluts',
+  'Sennes traînantes',
+  'Filets tournants',
+  'Filets soulevés',
+  'Filets maillants et filets emmêlants'
+]
+
 export const WEEKDAYS = {
   lundi: 'L',
   mardi: 'M',

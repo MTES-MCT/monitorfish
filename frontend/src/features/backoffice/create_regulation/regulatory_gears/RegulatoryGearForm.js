@@ -6,6 +6,7 @@ import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, MultiCascader } from 'rsuite'
 import GearLine from './GearLine'
 import getAllGearCodes from '../../../../domain/use_cases/getAllGearCodes'
+import { GEARS_CATEGORES_WITH_MESH } from '../../../../domain/entities/regulatory'
 
 const REGULATORY_GEAR_KEYS = {
   AUTHORIZED: 'authorized',
@@ -93,7 +94,6 @@ const RegulatoryGearForm = (props) => {
     } else {
       nextMultiCascaderValues = nextMultiCascaderValues.filter(value => !listToConcat.includes(value))
     }
-    set(option, checked)
     setMultiCascaderValues(nextMultiCascaderValues)
   }
 
@@ -127,33 +127,48 @@ const RegulatoryGearForm = (props) => {
   }, [categoriesToGears])
 
   const updateRegulatedGearsAndCategories = () => {
-    const currentRegulatedGears = Object.keys(regulatedGears)
-    const currentRegulatedGearCategories = Object.keys(regulatedGearCategories)
-    const nextRegulatedGears = {}
-    const nextRegulatedGearCategories = {}
+    if (categoriesToGears && groupsToCategories) {
+      const currentRegulatedGears = Object.keys(regulatedGears)
+      const currentRegulatedGearCategories = Object.keys(regulatedGearCategories)
+      const nextRegulatedGears = {}
+      const nextRegulatedGearCategories = {}
+      let towedGearCategories = 0
+      let passiveGearCategories = 0
+      let categories = 0
 
-    multiCascaderValues.forEach(value => {
-      if (isCategory(value)) {
-        if (currentRegulatedGearCategories.includes(value)) {
-          nextRegulatedGearCategories[value] = { ...regulatedGearCategories[value] }
+      multiCascaderValues.forEach(value => {
+        if (isCategory(value)) {
+          if (currentRegulatedGearCategories.includes(value)) {
+            nextRegulatedGearCategories[value] = { ...regulatedGearCategories[value] }
+          } else {
+            nextRegulatedGearCategories[value] = {}
+          }
+          if (groupsToCategories[1].includes(value)) {
+            towedGearCategories += 1
+          } else if (groupsToCategories[2].includes(value)) {
+            passiveGearCategories += 1
+          }
+          categories += 1
         } else {
-          nextRegulatedGearCategories[value] = {}
+          if (currentRegulatedGears.includes(value)) {
+            nextRegulatedGears[value] = { ...regulatedGears[value] }
+          } else {
+            nextRegulatedGears[value] = gearsByCode[value]
+          }
         }
-      } else {
-        if (currentRegulatedGears.includes(value)) {
-          nextRegulatedGears[value] = { ...regulatedGears[value] }
-        } else {
-          nextRegulatedGears[value] = gearsByCode[value]
-        }
+      })
+
+      const obj = {
+        ...regulatoryGears,
+        [REGULATORY_GEAR_KEYS.ALL_GEARS]: categories === Object.keys(categoriesToGears).length,
+        [REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[1].length,
+        [REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[2].length,
+        [REGULATORY_GEAR_KEYS.REGULATED_GEARS]: nextRegulatedGears,
+        [REGULATORY_GEAR_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories
       }
-    })
 
-    const obj = {
-      ...regulatoryGears,
-      regulatedGears: nextRegulatedGears,
-      regulatedGearCategories: nextRegulatedGearCategories
+      setRegulatoryGears(obj)
     }
-    setRegulatoryGears(obj)
   }
 
   useEffect(() => {
@@ -245,6 +260,7 @@ const RegulatoryGearForm = (props) => {
                 key={index}
                 id={index}
                 label={regulatedGears[gearCode].name}
+                allowMesh={GEARS_CATEGORES_WITH_MESH.includes(regulatedGears[gearCode].category)}
                 code={gearCode}
                 onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
                 intervalType={regulatedGears[gearCode].intervalType}
@@ -255,16 +271,16 @@ const RegulatoryGearForm = (props) => {
         }
         {
           Object.keys(regulatedGearCategories).map((category, index) => {
-            return (<GearLine
-                key={index}
-                id={index}
-                label={category}
-                onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
-                intervalType={regulatedGearCategories[category].intervalType}
-                intervalValues={regulatedGearCategories[category].intervalValues}
-                onCloseIconClicked={_ => removeGearOrCategory(category)}
-              />
-            )
+            return <GearLine
+              key={index}
+              id={index}
+              label={category}
+              allowMesh={GEARS_CATEGORES_WITH_MESH.includes(category)}
+              onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
+              intervalType={regulatedGearCategories[category].intervalType}
+              intervalValues={regulatedGearCategories[category].intervalValues}
+              onCloseIconClicked={_ => removeGearOrCategory(category)}
+            />
           })
         }
         </GearList>

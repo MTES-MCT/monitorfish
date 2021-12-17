@@ -18,6 +18,7 @@ const INITIAL_STATE = {
   regulationDeleted: false,
   atLeastOneValueIsMissing: undefined,
   isRemoveModalOpen: false,
+  isConfirmModalOpen: false,
   selectedGeometryId: undefined
 }
 
@@ -83,6 +84,9 @@ const regulationSlice = createSlice({
     setIsRemoveModalOpen (state, action) {
       state.isRemoveModalOpen = action.payload
     },
+    setIsConfirmModalOpen (state, action) {
+      state.isConfirmModalOpen = action.payload
+    },
     setSelectedGeometryId (state, action) {
       state.selectedGeometryId = action.payload
     }
@@ -104,6 +108,7 @@ export const {
   setSaveUpcomingRegulation,
   setRegulationDeleted,
   setIsRemoveModalOpen,
+  setIsConfirmModalOpen,
   setSelectedGeometryId
 } = regulationSlice.actions
 

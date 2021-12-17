@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { useDispatch, useSelector, batch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
@@ -16,6 +16,7 @@ import {
   RemoveRegulationModal,
   FishingPeriodSection
 } from './'
+import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
 
@@ -33,14 +34,15 @@ import {
 } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
 import {
-  resetState,
   setSelectedRegulation,
   setRegulatoryTextCheckedMap,
   setUpcomingRegulation,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
   setIsRemoveModalOpen,
-  setSelectedGeometryId
+  setSelectedGeometryId,
+  setIsConfirmModalOpen,
+  resetState
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -54,13 +56,15 @@ import {
   LAWTYPES_TO_TERRITORY,
   UE,
   FRANCE,
-  initialFishingPeriodValues, initialRegulatorySpeciesValues
+  initialFishingPeriodValues,
+  initialRegulatorySpeciesValues
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const {
     layersTopicsByRegTerritory,
     regulatoryZoneMetadata
@@ -93,7 +97,8 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {[Number]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
-
+  /** @type {boolean} saveIsForbidden */
+  const [saveIsForbidden, setSaveIsForbidden] = useState(false)
   const {
     isModalOpen,
     regulationSaved,
@@ -103,6 +108,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     atLeastOneValueIsMissing,
     selectedGeometryId,
     isRemoveModalOpen,
+    isConfirmModalOpen,
     regulationDeleted
   } = useSelector(state => state.regulation)
 
@@ -119,6 +125,9 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
     getGeometryObjectList()
     dispatch(setSelectedRegulation(newRegulation))
+    return () => {
+      dispatch(setRegulatoryZoneMetadata(undefined))
+    }
   }, [])
 
   useEffect(() => {
@@ -127,23 +136,20 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }, [isEdition, regulatoryZoneMetadata])
 
-  const history = useHistory()
   useEffect(() => {
     if (regulationSaved || regulationDeleted) {
-      onGoBack()
+      goBackofficeHome()
     }
   }, [regulationSaved, regulationDeleted])
 
   const onGoBack = () => {
-    dispatch(resetState())
-    history.push('/backoffice/regulation')
+    dispatch(setIsConfirmModalOpen(true))
   }
 
-  useEffect(() => {
-    return () => {
-      dispatch(setRegulatoryZoneMetadata(undefined))
-    }
-  }, [])
+  const goBackofficeHome = useCallback(() => {
+    dispatch(resetState())
+    history.push('/backoffice/regulation')
+  }, [resetState])
 
   useEffect(() => {
     if (selectedRegulationLawType) {
@@ -156,6 +162,50 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(setRegulatoryTopics(regulatoryTopicList))
     }
   }, [selectedRegulationLawType, layersTopicsByRegTerritory])
+
+  const createOrUpdateRegulation = (featureObject) => {
+    const feature = new Feature(featureObject)
+    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
+    dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
+
+    if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
+      const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
+      emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
+      dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
+    }
+  }
+
+  const checkRequiredValues = useCallback(() => {
+    let atLeastOneValueIsMissing = false
+    let valueIsMissing = !(selectedRegulationLawType && selectedRegulationLawType !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setLawTypeIsMissing(valueIsMissing)
+
+    valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setRegulationTopicIsMissing(valueIsMissing)
+
+    valueIsMissing = !(nameZone && nameZone !== '')
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setNameZoneIsMissing(valueIsMissing)
+
+    valueIsMissing = selectedRegulationLawType && selectedRegulationLawType !== '' &&
+      selectedRegulationLawType.includes(REG_LOCALE) &&
+      !(selectedRegionList && selectedRegionList.length !== 0)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    setRegionIsMissing(valueIsMissing)
+
+    valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
+    setGeometryIsMissing(valueIsMissing)
+    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
+  }, [selectedRegulationLawType, nameZone, selectedRegulationTopic, selectedRegionList, selectedGeometryId])
+
+  useEffect(() => {
+    if (saveOrUpdateRegulation && atLeastOneValueIsMissing === undefined) {
+      checkRequiredValues()
+    }
+  }, [saveOrUpdateRegulation, atLeastOneValueIsMissing, checkRequiredValues])
 
   useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
@@ -177,16 +227,18 @@ const CreateRegulation = ({ title, isEdition }) => {
             regulatorySpecies
           })
           createOrUpdateRegulation(featureObject)
+          setSaveIsForbidden(false)
         } else {
           batch(() => {
             dispatch(setRegulatoryTextCheckedMap({}))
             dispatch(setSaveOrUpdateRegulation(false))
             dispatch(setAtLeastOneValueIsMissing(undefined))
           })
+          setSaveIsForbidden(true)
         }
       }
     }
-  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap])
+  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap, setSaveIsForbidden, createOrUpdateRegulation])
 
   const initForm = () => {
     const {
@@ -216,32 +268,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     })
   }
 
-  const checkRequiredValues = () => {
-    let atLeastOneValueIsMissing = false
-    let valueIsMissing = !(selectedRegulationLawType && selectedRegulationLawType !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setLawTypeIsMissing(valueIsMissing)
-    valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
-
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setRegulationTopicIsMissing(valueIsMissing)
-    valueIsMissing = !(nameZone && nameZone !== '')
-
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setNameZoneIsMissing(valueIsMissing)
-    valueIsMissing = selectedRegulationLawType && selectedRegulationLawType !== '' &&
-      selectedRegulationLawType.includes(REG_LOCALE) &&
-      !(selectedRegionList && selectedRegionList.length !== 0)
-
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setRegionIsMissing(valueIsMissing)
-    valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
-
-    setGeometryIsMissing(valueIsMissing)
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
-  }
-
   useEffect(() => {
     if (showRegulatoryPreview &&
       ((isEdition && regulatoryZoneMetadata.geometry) || (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
@@ -249,7 +275,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         ? regulatoryZoneMetadata.geometry
         : geometryObjectList[selectedGeometryId]))
     }
-  }, [selectedGeometryId, geometryObjectList, showRegulatoryPreview])
+  }, [isEdition, regulatoryZoneMetadata, selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
@@ -258,18 +284,6 @@ const CreateRegulation = ({ title, isEdition }) => {
           setGeometryObjectList(geometryListAsObject)
         }
       })
-  }
-
-  const createOrUpdateRegulation = (featureObject) => {
-    const feature = new Feature(featureObject)
-    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
-    dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
-
-    if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
-      const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
-      emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
-      dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
-    }
   }
 
   const onLawTypeChange = (value) => {
@@ -287,7 +301,10 @@ const CreateRegulation = ({ title, isEdition }) => {
         <Body>
           <Header>
             <LinkSpan><ChevronIcon/>
-              <BackLink onClick={onGoBack} >Revenir à la liste complète des zones</BackLink>
+              <BackLink
+                data-cy='go-back-link'
+                onClick={onGoBack}
+              >Revenir à la liste complète des zones</BackLink>
             </LinkSpan>
             <HeaderTitle>{title}</HeaderTitle>
             <Span />
@@ -353,20 +370,25 @@ const CreateRegulation = ({ title, isEdition }) => {
         </Body>
         <Footer>
           <FooterButton>
-            <ValidateButton
-              data-cy="validate-button"
-              disabled={false}
-              isLast={false}
-              onClick={() => {
-                checkRequiredValues()
-                dispatch(setSaveOrUpdateRegulation(true))
-              }}
-            >
-            { isEdition
-              ? 'Enregister les modifications'
-              : 'Créer la réglementation'
-            }
-            </ValidateButton>
+            <Validate>
+              {saveIsForbidden && <ErrorMessage data-cy='save-forbidden-btn'>
+                Veuillez vérifier les champs surlignés en rouge dans le formulaire
+              </ErrorMessage>}
+              <ValidateButton
+                data-cy="validate-button"
+                disabled={false}
+                isLast={false}
+                onClick={() => {
+                  checkRequiredValues()
+                  dispatch(setSaveOrUpdateRegulation(true))
+                }}
+              >
+              { isEdition
+                ? 'Enregister les modifications'
+                : 'Créer la réglementation'
+              }
+              </ValidateButton>
+            </Validate>
             {/* <CancelButton
               disabled={false}
               isLast={false}
@@ -389,9 +411,20 @@ const CreateRegulation = ({ title, isEdition }) => {
     </Wrapper>
     {isModalOpen && <UpcomingRegulationModal />}
     {isRemoveModalOpen && <RemoveRegulationModal />}
+    {isConfirmModalOpen && <ConfirmRegulationModal goBackofficeHome={goBackofficeHome} />}
     </>
   )
 }
+
+const Validate = styled.div`
+  display: block;
+`
+
+const ErrorMessage = styled.div`
+  color: ${COLORS.red};
+  width: 250px;
+  margin-bottom: 10px;
+`
 
 const Wrapper = styled.div`
   display: flex;

@@ -1,4 +1,7 @@
-import { getTextForSearch } from '../../utils'
+import {
+  getTextForSearch,
+  formatDataForSelectPicker
+} from '../../utils'
 import Layers from './layers'
 
 export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
@@ -254,6 +257,8 @@ export const WEEKDAYS = {
   dimanche: 'D'
 }
 
+export const DEFAULT_MENU_CLASSNAME = 'new-regulation-select-picker'
+
 export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText
     ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))
@@ -419,10 +424,31 @@ const dateToString = (date, annualRecurrence) => {
   return date.toLocaleDateString('fr-FR', options)
 }
 
+const getHoursValues = () => {
+  const hours = [...Array(24).keys()]
+  const times = hours.reduce((acc, hour) => {
+    const hourStr = hour < 10 ? '0' + hour : hour
+    acc.push(`${hourStr}h00`)
+    acc.push(`${hourStr}h30`)
+    return acc
+  }, [])
+  return formatDataForSelectPicker(times)
+}
+
+export const TIMES_SELECT_PICKER_VALUES = getHoursValues()
+
 const timeToString = (date) => {
   const minutes = date.getMinutes()
   const hours = date.getHours()
   return `${hours < 10 ? '0' : ''}${hours}h${minutes < 10 ? '0' : ''}${minutes}`
+}
+
+export const convertTimeToString = (date) => {
+  if (date) {
+    const minutes = date.getMinutes()
+    const hours = date.getHours()
+    return `${hours < 10 ? '0' + hours : hours}h${minutes === 0 ? minutes + '0' : minutes}`
+  }
 }
 
 export const fishingPeriodToString = fishingPeriod => {

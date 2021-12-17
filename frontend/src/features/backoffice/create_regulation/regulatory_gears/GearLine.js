@@ -4,6 +4,7 @@ import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import Tag from '../Tag'
+import MenuItem from '../custom_form/MenuItem'
 
 const GearLine = (props) => {
   const {
@@ -36,9 +37,12 @@ const GearLine = (props) => {
             value: 'between',
             label: 'entre'
           }]}
+          renderMenuItem={(_, item) =>
+            <MenuItem item={item} />}
           valueIsMissing={false}
           cleanable={false}
           searchable={false}
+          width={165}
         />
         <CustomInput
           width={'60px'}

@@ -20,11 +20,12 @@ const CustomSelectComponent = props => {
     cleanable,
     style,
     menuClassName,
-    padding
+    padding,
+    width
   } = props
 
   const DEFAULT_SELECT_PICKER_STYLE = {
-    width: 200,
+    width: width || 200,
     margin: '0',
     borderColor: COLORS.lightGray,
     boxSizing: 'border-box',

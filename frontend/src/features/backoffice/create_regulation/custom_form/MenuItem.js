@@ -19,9 +19,15 @@ const MenuItem = ({ checked, item, tag }) => {
             title={labelToDisplay}
           >{labelToDisplay}
           </CustomCheckbox>
-        : null
+        : <Text>{labelToDisplay}</Text>
     }</>
 }
+
+const Text = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 8px 0px 4px 10px;
+`
 
 const CustomRadio = styled(Radio)`
   .rs-radio-checker {

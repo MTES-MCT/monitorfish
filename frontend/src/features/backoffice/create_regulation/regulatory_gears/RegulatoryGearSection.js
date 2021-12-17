@@ -24,6 +24,7 @@ const RegulatoryGearSection = (props) => {
       title={'Engins Réglementés'}
       isOpen={show}
       setIsOpen={setShow}
+      dataCy={'regulatory-gears-section'}
     />
     <GearForm
       show={show}

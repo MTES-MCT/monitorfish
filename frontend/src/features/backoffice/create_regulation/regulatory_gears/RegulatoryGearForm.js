@@ -210,18 +210,29 @@ const RegulatoryGearForm = (props) => {
         value={authorized}
       >
         Engins
-        <CustomRadio checked={authorized} value={true} >
+        <CustomRadio
+          data-cy={'regulation-authorized-gears'}
+          checked={authorized}
+          value={true} >
           autorisées
           <GreenCircle />
         </CustomRadio>
-        <CustomRadio checked={authorized === false} value={false} >
+        <CustomRadio
+          data-cy={'regulation-forbidden-gears'}
+          checked={authorized === false}
+          value={false} >
           interdites
           <RedCircle />
         </CustomRadio>
       </AuthorizedRadio>
     </Title>
-    <Content authorized={authorized} display={authorized !== undefined}>
+    <Content
+      authorized={authorized}
+      display={authorized !== undefined}
+      data-cy={'gears-section-content'}
+    >
       {!authorized && <GearCheckBox
+        data-cy={'all-gears-option'}
         value={REGULATORY_GEAR_KEYS.ALL_GEARS}
         onChange={onCheckboxChange}
         checked={allGears}
@@ -232,10 +243,12 @@ const RegulatoryGearForm = (props) => {
         value={REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS}
         onChange={onCheckboxChange}
         checked={allTowedGears}
+        data-cy={'all-towed-gears-option'}
       >
         Engins trainants
       </GearCheckBox>
       <GearCheckBox
+        data-cy={'all-passive-gears-option'}
         value={REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS}
         onChange={onCheckboxChange}
         checked={allPassiveGears}
@@ -243,6 +256,7 @@ const RegulatoryGearForm = (props) => {
         Engins dormants
       </GearCheckBox>
       <CustomMultiCascader
+        data-cy={'gears-selector'}
         data={allCategoriesAndGears}
         style={{ width: 146 }}
         searchable={false}

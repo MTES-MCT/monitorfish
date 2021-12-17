@@ -306,7 +306,7 @@ const RegulatoryGearForm = (props) => {
 }
 
 const GearList = styled.div`
-  padding: 20px 0 15px 0;
+  padding-top: 20px;
 `
 
 const MultiCascaderLabel = styled.span`

@@ -12,14 +12,14 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaGearCodeGroupRepository(private val dbGearCodeGroupRepository: DBGearCodeGroupRepository) : GearCodeGroupRepository {
 
-    @Cacheable(value = ["gearCodeGroups"])
+    @Cacheable(value = ["gear_code_groups"])
     override fun findAll(): List<GearCodeGroup> {
         return dbGearCodeGroupRepository.findAll().map {
             it.toGearCodeGroup()
         }
     }
 
-    @Cacheable(value = ["gearCodeGroup"])
+    @Cacheable(value = ["gear_code_group"])
     override fun find(code: String): GearCodeGroup {
         return try {
             dbGearCodeGroupRepository.findByCodeEquals(code).toGearCodeGroup()

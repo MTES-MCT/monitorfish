@@ -19,7 +19,7 @@ class JpaGearCodeGroupRepository(private val dbGearCodeGroupRepository: DBGearCo
         }
     }
 
-    @Cacheable(value = ["gear"])
+    @Cacheable(value = ["gearCodeGroup"])
     override fun find(code: String): GearCodeGroup {
         return try {
             dbGearCodeGroupRepository.findByCodeEquals(code).toGearCodeGroup()

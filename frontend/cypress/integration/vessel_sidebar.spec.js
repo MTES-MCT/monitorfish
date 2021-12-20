@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
 import { getDate } from '../../src/utils'
@@ -195,9 +196,9 @@ context('VesselSidebar', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // Then
@@ -216,9 +217,9 @@ context('VesselSidebar', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // When
@@ -251,7 +252,7 @@ context('VesselSidebar', () => {
     // Go back to the default track depth
     cy.get('*[data-cy="custom-dates-show-last-positions"]').click()
     cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-twelve-hours"]').should('have.class', 'rs-radio-checked')
   })
 
@@ -259,9 +260,9 @@ context('VesselSidebar', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })

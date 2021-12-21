@@ -3,9 +3,13 @@ import { createSlice } from '@reduxjs/toolkit'
 const gearSlice = createSlice({
   name: 'gear',
   initialState: {
+    /** @type {Gear[]} */
     gears: [],
+    /** @type {Map<String, Gear[]>} */
     categoriesToGears: undefined,
+    /** @type {Map<String, String>} */
     groupsToCategories: undefined,
+    /** @type {Map<String, Gear>} */
     gearsByCode: undefined
   },
   reducers: {

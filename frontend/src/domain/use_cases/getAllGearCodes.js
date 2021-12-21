@@ -6,12 +6,11 @@ import { batch } from 'react-redux'
 
 const getAllGearCodes = () => dispatch => {
   getAllGearCodesFromAPI().then(gears => {
-    batch(() => {
-      dispatch(setGears(gears))
-      dispatch(setIsReadyToShowRegulatoryZones())
-    })
+    /** @type {Map<string, Gear[]>} */
     const categoriesToGears = {}
+    /** @type {Map<string, string>} */
     const groupToCategories = {}
+    /** @type {Map<string, Gear>} */
     const gearsByCode = {}
     gears.forEach(gear => {
       const {
@@ -34,6 +33,8 @@ const getAllGearCodes = () => dispatch => {
       }
     })
     batch(() => {
+      dispatch(setGears(gears))
+      dispatch(setIsReadyToShowRegulatoryZones())
       dispatch(setCategoriesToGears(categoriesToGears))
       dispatch(setGroupsToCategories(groupToCategories))
       dispatch(setGearsByCode(gearsByCode))

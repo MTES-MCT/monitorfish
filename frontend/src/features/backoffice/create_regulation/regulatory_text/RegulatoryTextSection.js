@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../../constants/constants'
-import { Section, Title } from '../../../commonStyles/Backoffice.style'
+import { Title, Section } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcomingRegulationSection from './UpcomingRegulationSection'
@@ -58,53 +58,53 @@ const RegulatoryTextSection = props => {
     setRegulatoryTextList(newRegulatoryTextList)
   }
 
-  return (<Section>
-    <Title>
-      {source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION
-        ? 'références réglementaires À VENIR'
-        : 'références réglementaires en vigueur'}
-    </Title>
-    {
-      (regulatoryTextList && regulatoryTextList.length > 0) &&
-        regulatoryTextList.map((regulatoryText, id) => {
-          return <RegulatoryText
-              key={regulatoryText}
-              id={id}
-              regulatoryText={regulatoryText}
-              addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-              source={source}
-              listLength={regulatoryTextList.length}
-              saveForm={saveForm}
-              setRegulatoryText={setRegulatoryText}
-            />
-        })
-    }
-    <ButtonLine>
-    {source === REGULATORY_TEXT_SOURCE.REGULATION
-      ? <><ValidateButton
-        disabled={false}
-        isLast={false}
-        onClick={addRegRefInEffect}>
-        Ajouter un autre texte en vigueur
-      </ValidateButton>
-      {!upcomingRegulation && <CustomCancelButton
-        disabled={false}
-        isLast={false}
-        onClick={addUpcomingText}>
-        Ajouter un texte à venir
-      </CustomCancelButton>}</>
-      : <ValidateButton
-        disabled={false}
-        isLast={false}
-        onClick={addUpcomingText}>
-        Ajouter un texte à venir
-      </ValidateButton>}
-    </ButtonLine>
-    {source === REGULATORY_TEXT_SOURCE.REGULATION &&
-      upcomingRegulation && upcomingRegulation !== {} &&
-        <UpcomingRegulationSection upcomingRegulation={upcomingRegulation} />
-    }
-  </Section>)
+  return <Section show>
+      <Title>
+        {source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION
+          ? 'références réglementaires À VENIR'
+          : 'références réglementaires en vigueur'}
+      </Title>
+      {
+        (regulatoryTextList && regulatoryTextList.length > 0) &&
+          regulatoryTextList.map((regulatoryText, id) => {
+            return <RegulatoryText
+                key={regulatoryText}
+                id={id}
+                regulatoryText={regulatoryText}
+                addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
+                source={source}
+                listLength={regulatoryTextList.length}
+                saveForm={saveForm}
+                setRegulatoryText={setRegulatoryText}
+              />
+          })
+      }
+      <ButtonLine>
+      {source === REGULATORY_TEXT_SOURCE.REGULATION
+        ? <><ValidateButton
+          disabled={false}
+          isLast={false}
+          onClick={addRegRefInEffect}>
+          Ajouter un autre texte en vigueur
+        </ValidateButton>
+        {!upcomingRegulation && <CustomCancelButton
+          disabled={false}
+          isLast={false}
+          onClick={addUpcomingText}>
+          Ajouter un texte à venir
+        </CustomCancelButton>}</>
+        : <ValidateButton
+          disabled={false}
+          isLast={false}
+          onClick={addUpcomingText}>
+          Ajouter un texte à venir
+        </ValidateButton>}
+      </ButtonLine>
+      {source === REGULATORY_TEXT_SOURCE.REGULATION &&
+        upcomingRegulation && upcomingRegulation !== {} &&
+          <UpcomingRegulationSection upcomingRegulation={upcomingRegulation} />
+      }
+    </Section>
 }
 
 const CustomCancelButton = styled(CancelButton)`

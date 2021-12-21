@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import FishingPeriodForm from './FishingPeriodForm'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 
 const FishingPeriodSection = (props) => {
   const {
@@ -20,7 +20,7 @@ const FishingPeriodSection = (props) => {
     })
   }
 
-  return <>
+  return <Section show>
     <SectionTitle
       title={'Périodes de pêche'}
       isOpen={show}
@@ -40,13 +40,7 @@ const FishingPeriodSection = (props) => {
         onMouseLeave={() => setIsInputFilled(fishingPeriod.otherInfo && fishingPeriod.otherInfo !== '')}
         $isGray={isInputFilled} />
     </OtherRemark>
-  </>
+  </Section>
 }
-
-const OtherRemark = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
-  align-items: center;
-  margin-top: 10px;
-`
 
 export default FishingPeriodSection

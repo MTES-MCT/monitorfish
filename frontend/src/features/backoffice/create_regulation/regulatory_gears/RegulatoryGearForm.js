@@ -1,6 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { CustomCheckbox, customRadioGroup, AuthorizedRadio, Delimiter, RegulatorySectionTitle } from '../../../commonStyles/Backoffice.style'
+import {
+  CustomCheckbox, customRadioGroup, AuthorizedRadio,
+  Delimiter, RegulatorySectionTitle, FormSection, FormContent
+} from '../../../commonStyles/Backoffice.style'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, MultiCascader } from 'rsuite'
@@ -201,7 +204,7 @@ const RegulatoryGearForm = (props) => {
     set(REGULATORY_GEAR_KEYS.REGULATED_GEAR_CATEGORIES, nextRegulatedGearCategories)
   }
 
-  return <Wrapper show={show}>
+  return <FormSection show={show}>
     <RegulatorySectionTitle>
       <AuthorizedRadio
         inline
@@ -226,7 +229,7 @@ const RegulatoryGearForm = (props) => {
       </AuthorizedRadio>
     </RegulatorySectionTitle>
     <Delimiter width='523' />
-    <Content
+    <FormContent
       authorized={authorized}
       display={authorized !== undefined}
       data-cy={'gears-section-content'}
@@ -256,15 +259,17 @@ const RegulatoryGearForm = (props) => {
         Engins dormants
       </GearCheckBox>
       <CustomMultiCascader
-        data-cy={'gears-selector'}
+        data-cy='gears-selector'
         data={allCategoriesAndGears}
-        style={{ width: 146 }}
+        style={{ width: 130 }}
+        menuWidth={175}
         searchable={false}
         cleanable={false}
-        placeholder={'Choisir un ou des engins'}
+        placeholder='Choisir un ou des engins'
         renderValue={() => <MultiCascaderLabel>Choisir un ou des engins</MultiCascaderLabel>}
         onChange={setSelectedCategoriesAndGears}
         value={selectedCategoriesAndGears}
+        placement='autoVerticalStart'
       />
       {(Object.keys(regulatedGears)?.length > 0 || Object.keys(regulatedGearCategories)?.length > 0)
         ? <GearList>
@@ -315,8 +320,8 @@ const RegulatoryGearForm = (props) => {
           <RedCircle />
         </CustomRadio>
       </DerogationRadio>}
-    </Content>
-  </Wrapper>
+    </FormContent>
+  </FormSection>
 }
 
 const GearList = styled.div`
@@ -337,19 +342,6 @@ const CustomMultiCascader = styled(MultiCascader)`
 
 const GearCheckBox = styled(CustomCheckbox)` 
   margin-bottom: 15px;
-`
-
-const Content = styled.div`
-  display: ${props => !props.display ? 'none' : 'flex'};
-  flex-direction: column;
-  align-items: flex-start;
-  padding-left: 15px;
-  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
-`
-
-const Wrapper = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
-  ${props => props.show ? 'flex-direction: column;' : ''};
 `
 
 const circle = css`

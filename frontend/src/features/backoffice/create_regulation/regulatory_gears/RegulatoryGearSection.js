@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import GearForm from './RegulatoryGearForm'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 
 const RegulatoryGearSection = (props) => {
   const {
@@ -19,7 +19,7 @@ const RegulatoryGearSection = (props) => {
     })
   }
 
-  return <>
+  return <Section show>
     <SectionTitle
       title={'Engins Réglementés'}
       isOpen={show}
@@ -38,13 +38,7 @@ const RegulatoryGearSection = (props) => {
         value={regulatoryGears?.otherInfo || ''}
         onChange={setOtherInfo} />
     </OtherRemark>
-  </>
+  </Section>
 }
-
-const OtherRemark = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
-  align-items: center;
-  margin-top: 10px;
-`
 
 export default RegulatoryGearSection

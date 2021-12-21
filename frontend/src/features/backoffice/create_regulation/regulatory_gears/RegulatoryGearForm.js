@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
+import { CustomCheckbox, customRadioGroup, AuthorizedRadio, Delimiter, RegulatorySectionTitle } from '../../../commonStyles/Backoffice.style'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, MultiCascader } from 'rsuite'
@@ -202,7 +202,7 @@ const RegulatoryGearForm = (props) => {
   }
 
   return <Wrapper show={show}>
-    <Title>
+    <RegulatorySectionTitle>
       <AuthorizedRadio
         inline
         onChange={value => set(REGULATORY_GEAR_KEYS.AUTHORIZED, value)}
@@ -224,7 +224,8 @@ const RegulatoryGearForm = (props) => {
           <RedCircle />
         </CustomRadio>
       </AuthorizedRadio>
-    </Title>
+    </RegulatorySectionTitle>
+    <Delimiter width='523' />
     <Content
       authorized={authorized}
       display={authorized !== undefined}
@@ -351,19 +352,6 @@ const Wrapper = styled.div`
   ${props => props.show ? 'flex-direction: column;' : ''};
 `
 
-const normalTitle = css`
-  display: flex;
-  padding: 0px 0px 10px 0px;
-  align-items: center;
-  font-size: 13px;
-  color: ${COLORS.slateGray};
-  border-bottom: 1px solid ${COLORS.lightGray};
-`
-const Title = styled.div`
-  ${normalTitle}
-  margin-bottom: 18px;
-`
-
 const circle = css`
   display: inline-block;
   height: 10px;
@@ -382,12 +370,6 @@ const RedCircle = styled.span`
   background-color: ${COLORS.red};
 `
 
-const customRadioGroup = css`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
 const DerogationRadio = styled(RadioGroup)` 
   ${customRadioGroup}
   padding-top: 15px!important;
@@ -396,10 +378,6 @@ const DerogationRadio = styled(RadioGroup)`
 const Text = styled.p`
   font-size: 13px;
   color: ${COLORS.slateGray};
-`
-
-const AuthorizedRadio = styled(RadioGroup)` 
-  ${customRadioGroup}
 `
 
 const CustomRadio = styled(Radio)`

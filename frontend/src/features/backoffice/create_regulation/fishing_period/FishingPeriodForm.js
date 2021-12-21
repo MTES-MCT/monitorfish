@@ -8,7 +8,7 @@ import DateRange from './DateRange'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
 import DayPicker from './DayPicker'
 import TimeInterval from './TimeInterval'
-import { CustomCheckbox, Delimiter } from '../../../commonStyles/Backoffice.style'
+import { CustomCheckbox, Delimiter, AuthorizedRadio, RegulatorySectionTitle } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { DEFAULT_DATE_RANGE, fishingPeriodToString } from '../../../../domain/entities/regulatory'
 
@@ -137,7 +137,7 @@ const FishingPeriodForm = (props) => {
   const setDaytime = _ => set(FISHING_PERIOD_KEYS.DAYTIME, !daytime)
 
   return <Wrapper show={show}>
-    <Title >
+    <RegulatorySectionTitle >
       <AuthorizedRadio
         inline
         onChange={value => set(FISHING_PERIOD_KEYS.AUTHORIZED, value)}
@@ -153,7 +153,7 @@ const FishingPeriodForm = (props) => {
           <RedCircle />
         </CustomRadio>
       </AuthorizedRadio>
-    </Title>
+    </RegulatorySectionTitle>
     <Delimiter width='523' />
     <AnnualRecurrence $display={displayForm} authorized={authorized}>
       <Label>Récurrence annuelle</Label>
@@ -383,19 +383,7 @@ const DateTime = styled.div`
   padding-top: 25px;
 `
 
-const normalTitle = css`
-  display: flex;
-  padding: 0px 0px 10px 0px;
-  align-items: center;
-  font-size: 13px;
-  color: ${COLORS.slateGray};
-`
-const Title = styled.div`
-  ${normalTitle}
-`
-
-const TimeTitle = styled(Title)`
-  ${normalTitle}
+const TimeTitle = styled(RegulatorySectionTitle)`
   margin-top: 30px;
 `
 
@@ -424,12 +412,6 @@ const GreenCircle = styled.span`
 const RedCircle = styled.span`
   ${circle}
   background-color: ${COLORS.red};
-`
-
-const AuthorizedRadio = styled(RadioGroup)` 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `
 
 const CustomRadio = styled(Radio)`

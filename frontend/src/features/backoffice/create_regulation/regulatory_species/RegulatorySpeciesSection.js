@@ -4,7 +4,12 @@ import SectionTitle from '../../SectionTitle'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import RegulatorySpeciesForm from './RegulatorySpeciesForm'
 
-const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) => {
+const RegulatorySpeciesSection = props => {
+  const {
+    /** @type {RegulatorySpecies} */
+    regulatorySpecies,
+    setRegulatorySpecies
+  } = props
   const [show, setShow] = useState(false)
 
   const setOtherInfo = value => {

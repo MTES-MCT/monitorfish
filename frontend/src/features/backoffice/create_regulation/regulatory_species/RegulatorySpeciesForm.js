@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { Radio, RadioGroup } from 'rsuite'
+import { Radio } from 'rsuite'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
-import { ContentLine, CustomCheckbox } from '../../../commonStyles/Backoffice.style'
+import { ContentLine, CustomCheckbox, AuthorizedRadio, Delimiter, RegulatorySectionTitle } from '../../../commonStyles/Backoffice.style'
 import Tag from '../Tag'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import { useSelector } from 'react-redux'
@@ -154,7 +154,7 @@ const RegulatorySpeciesForm = props => {
   }
 
   return <Wrapper show={show}>
-    <Title>
+    <RegulatorySectionTitle>
       <AuthorizedRadio
         inline
         onChange={value => set(REGULATORY_SPECIES_KEYS.AUTHORIZED, value)}
@@ -176,7 +176,8 @@ const RegulatorySpeciesForm = props => {
           <RedCircle />
         </CustomRadio>
       </AuthorizedRadio>
-    </Title>
+    </RegulatorySectionTitle>
+    <Delimiter width='523' />
     <Content $display={displayForm} authorized={authorized}>
       {
         !authorized &&
@@ -318,19 +319,6 @@ const Wrapper = styled.div`
   margin-bottom: ${props => props.show ? 10 : 0}px;
 `
 
-const normalTitle = css`
-  display: flex;
-  padding: 0px 0px 10px 0px;
-  align-items: center;
-  font-size: 13px;
-  color: ${COLORS.slateGray};
-  border-bottom: 1px solid ${COLORS.lightGray};
-`
-const Title = styled.div`
-  ${normalTitle}
-  margin-bottom: 18px;
-`
-
 const circle = css`
   display: inline-block;
   height: 10px;
@@ -347,12 +335,6 @@ const GreenCircle = styled.span`
 const RedCircle = styled.span`
   ${circle}
   background-color: ${COLORS.red};
-`
-
-const AuthorizedRadio = styled(RadioGroup)` 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `
 
 const CustomRadio = styled(Radio)`

@@ -45,7 +45,7 @@ const CustomDatePicker = props => {
         saveValue(value)
       }
     }}
-    onExit={_ => saveValue(val)}
+    onExit={_ => val && saveValue(val)}
     cleanable={false}
     placement={placement}
     placeholder={type === CUSTOM_DATEPICKER_TYPES.TIME

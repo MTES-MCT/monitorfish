@@ -29,7 +29,7 @@ const GearLine = (props) => {
         <Label data-cy='mesh-label' >Maillage</Label>
         <CustomSelectComponent
           value={intervalType || 'greaterThan'}
-          onChange={meshInterval => onChange('intervalType', meshInterval)}
+          onChange={meshInterval => onChange('meshType', meshInterval)}
           data={[{
             value: 'greaterThan',
             label: 'supérieur ou égal à'
@@ -51,7 +51,7 @@ const GearLine = (props) => {
           onChange={intervalValue => {
             const nextIntervalValue = intervalValues ? [...intervalValues] : []
             nextIntervalValue[0] = intervalValue
-            onChange('intervalValues', nextIntervalValue)
+            onChange('mesh', nextIntervalValue)
           }} />
         {
           intervalType && intervalType === 'between' &&
@@ -60,7 +60,7 @@ const GearLine = (props) => {
           width={'60px'}
           value={intervalValues && intervalValues.length === 2 ? intervalValues[1] : ''}
           onChange={intervalValue => {
-            onChange('intervalValues', [intervalValues[0], intervalValue])
+            onChange('mesh', [intervalValues[0], intervalValue])
           }} /></>
         }
         {'mm'}

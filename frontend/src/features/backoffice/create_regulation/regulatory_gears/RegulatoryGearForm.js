@@ -179,11 +179,11 @@ const RegulatoryGearForm = (props) => {
     setSelectedCategoriesAndGears(selectedCategoriesAndGears.filter(value => value !== gearOrCategory))
   }
 
-  const setRegulatedGear = (key, value, gear) => {
+  const setRegulatedGear = (key, value, gearCode) => {
     const nextRegulatedGears = {
       ...regulatedGears,
-      [gear]: {
-        ...regulatedGears[gear],
+      [gearCode]: {
+        ...regulatedGears[gearCode],
         [key]: value
       }
     }
@@ -194,7 +194,7 @@ const RegulatoryGearForm = (props) => {
     const nextRegulatedGearCategories = {
       ...regulatedGearCategories,
       [category]: {
-        ...regulatedGears[category],
+        ...regulatedGearCategories[category],
         [key]: value
       }
     }
@@ -276,8 +276,8 @@ const RegulatoryGearForm = (props) => {
                 allowMesh={GEARS_CATEGORES_WITH_MESH.includes(regulatedGears[gearCode].category)}
                 code={gearCode}
                 onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
-                intervalType={regulatedGears[gearCode].intervalType}
-                intervalValues={regulatedGears[gearCode].intervalValues}
+                meshType={regulatedGears[gearCode].meshType}
+                mesh={regulatedGears[gearCode].mesh}
                 onCloseIconClicked={_ => removeGearOrCategory(gearCode)}
               />
           })
@@ -290,8 +290,8 @@ const RegulatoryGearForm = (props) => {
               label={category}
               allowMesh={GEARS_CATEGORES_WITH_MESH.includes(category)}
               onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
-              intervalType={regulatedGearCategories[category].intervalType}
-              intervalValues={regulatedGearCategories[category].intervalValues}
+              meshType={regulatedGearCategories[category].meshType}
+              mesh={regulatedGearCategories[category].mesh}
               onCloseIconClicked={_ => removeGearOrCategory(category)}
             />
           })

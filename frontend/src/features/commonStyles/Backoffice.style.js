@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import { Checkbox } from 'rsuite'
+import { Checkbox, RadioGroup } from 'rsuite'
 
 export const ContentLine = styled.div`
   display: flex;
@@ -95,4 +95,22 @@ export const CustomCheckbox = styled(Checkbox)`
     padding-top: 0px !important;
     padding-left: 24px !important;
 } 
+`
+
+export const customRadioGroup = css`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+export const AuthorizedRadio = styled(RadioGroup)` 
+  ${customRadioGroup}
+`
+
+export const RegulatorySectionTitle = styled.div`
+  display: flex;
+  padding: 0px 0px 10px 0px;
+  align-items: center;
+  font-size: 13px;
+  color: ${COLORS.slateGray};
 `

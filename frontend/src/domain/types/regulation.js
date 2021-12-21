@@ -16,10 +16,6 @@ import RegulatorySpeciesForm from '../../features/backoffice/create_regulation/r
  */
 
 /**
- * @typedef {string} RegulatoryTextType
- **/
-
-/**
  * @typedef RegulatoryText
  * @property {string} textName
  * @property {string} textURL
@@ -67,19 +63,19 @@ import RegulatorySpeciesForm from '../../features/backoffice/create_regulation/r
  */
 
 /**
+ * @typedef RegulatorySpeciesDetail
+ * @property {string} code - FAO code
+ * @property {string} quantity
+ * @property {string} minimumSize
+ */
+
+/**
  * @typedef RegulatorySpecies
  * @property {boolean} authorized
  * @property {boolean} allSpecies
  * @property {string} otherInfo
  * @property {RegulatorySpeciesDetail[]} species
  * @property {string[]} speciesGroups - group name
- */
-
-/**
- * @typedef RegulatorySpeciesDetail
- * @property {string} code - FAO code
- * @property {string} quantity
- * @property {string} minimumSize
  */
 
 /**

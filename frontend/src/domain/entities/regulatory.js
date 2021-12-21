@@ -256,6 +256,7 @@ export const initialRegulatorySpeciesValues = {
   speciesGroups: []
 }
 
+/** @type {RegulatoryGears} */
 export const initialRegulatoryGearsValues = {
   authorized: undefined,
   allGears: undefined,

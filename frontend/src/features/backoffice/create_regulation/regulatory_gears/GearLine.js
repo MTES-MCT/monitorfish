@@ -14,8 +14,8 @@ const GearLine = (props) => {
     allowMesh,
     onChange,
     onCloseIconClicked,
-    intervalType,
-    intervalValues
+    meshType,
+    mesh
   } = props
   return (<>
       <ContentLine data-cy='regulatory-gear-line'>
@@ -28,8 +28,8 @@ const GearLine = (props) => {
       {allowMesh && <ContentLine>
         <Label data-cy='mesh-label' >Maillage</Label>
         <CustomSelectComponent
-          value={intervalType || 'greaterThan'}
-          onChange={meshInterval => onChange('meshType', meshInterval)}
+          value={meshType || 'greaterThan'}
+          onChange={value => onChange('meshType', value)}
           data={[{
             value: 'greaterThan',
             label: 'supérieur ou égal à'
@@ -46,21 +46,21 @@ const GearLine = (props) => {
         />
         <CustomInput
           width={'60px'}
-          $isGray={intervalValues && intervalValues[0] !== ''}
-          value={intervalValues ? intervalValues[0] : ''}
+          $isGray={mesh && mesh[0] !== ''}
+          value={mesh?.length > 0 ? mesh[0] : ''}
           onChange={intervalValue => {
-            const nextIntervalValue = intervalValues ? [...intervalValues] : []
+            const nextIntervalValue = mesh ? [...mesh] : []
             nextIntervalValue[0] = intervalValue
             onChange('mesh', nextIntervalValue)
           }} />
         {
-          intervalType && intervalType === 'between' &&
+          meshType && meshType === 'between' &&
           <>{'et'}<SecondCustomInput
-          $isGray={intervalValues && intervalValues.length === 2 && intervalValues[1] !== ''}
+          $isGray={mesh && mesh.length === 2 && mesh[1] !== ''}
           width={'60px'}
-          value={intervalValues && intervalValues.length === 2 ? intervalValues[1] : ''}
-          onChange={intervalValue => {
-            onChange('mesh', [intervalValues[0], intervalValue])
+          value={mesh && mesh.length === 2 ? mesh[1] : ''}
+          onChange={value => {
+            onChange('mesh', [mesh[0], value])
           }} /></>
         }
         {'mm'}

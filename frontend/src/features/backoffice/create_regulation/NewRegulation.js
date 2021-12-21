@@ -33,7 +33,7 @@ import {
   CancelButton,
   ValidateButton
 } from '../../commonStyles/Buttons.style'
-import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
+import { Footer, FooterButton, Title, Section } from '../../commonStyles/Backoffice.style'
 import {
   setSelectedRegulation,
   setRegulatoryTextCheckedMap,
@@ -318,68 +318,58 @@ const CreateRegulation = ({ title, isEdition }) => {
             <Span />
           </Header>
           <ContentWrapper>
-            <Content>
-              <Section>
-                <Title>
-                  identification de la zone réglementaire
-                </Title>
-                <RegulationLawTypeLine
-                  setSelectedValue={onLawTypeChange}
-                  selectedValue={selectedRegulationLawType}
-                  selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
-                  lawTypeIsMissing={lawTypeIsMissing}
-                />
-                <RegulationTopicLine
-                  disabled={!selectedRegulationLawType}
-                  selectedRegulationTopic={selectedRegulationTopic}
-                  setSelectedRegulationTopic={setSelectedRegulationTopic}
-                  regulationTopicIsMissing={regulationTopicIsMissing}
-                />
-                <RegulationLayerZoneLine
-                  nameZone={nameZone}
-                  setNameZone={setNameZone}
-                  nameZoneIsMissing={nameZoneIsMissing}
-                />
-                <RegulationRegionLine
-                  disabled={!selectedRegulationLawType || LAWTYPES_TO_TERRITORY[selectedRegulationLawType] !== FRANCE}
-                  setSelectedRegionList={setSelectedRegionList}
-                  selectedRegionList={selectedRegionList}
-                  regionIsMissing={regionIsMissing}
-                />
-                <RegulationGeometryLine
-                  geometryIdList={geometryIdList}
-                  setShowRegulatoryPreview={setShowRegulatoryPreview}
-                  showRegulatoryPreview={showRegulatoryPreview}
-                  geometryIsMissing={geometryIsMissing}
-                />
-              </Section>
-            </Content>
-            <Content>
-              <RegulatoryTextSection
-                regulatoryTextList={regulatoryTextList}
-                setRegulatoryTextList={setRegulatoryTextList}
-                source={REGULATORY_TEXT_SOURCE.REGULATION}
-                saveForm={saveOrUpdateRegulation}
+            <Section show>
+              <Title>
+                identification de la zone réglementaire
+              </Title>
+              <RegulationLawTypeLine
+                setSelectedValue={onLawTypeChange}
+                selectedValue={selectedRegulationLawType}
+                selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
+                lawTypeIsMissing={lawTypeIsMissing}
               />
-            </Content>
-            <Content>
-              <FishingPeriodSection
-                fishingPeriod={fishingPeriod}
-                setFishingPeriod={setFishingPeriod}
+              <RegulationTopicLine
+                disabled={!selectedRegulationLawType}
+                selectedRegulationTopic={selectedRegulationTopic}
+                setSelectedRegulationTopic={setSelectedRegulationTopic}
+                regulationTopicIsMissing={regulationTopicIsMissing}
               />
-            </Content>
-            <Content>
-              <RegulatorySpeciesSection
-                regulatorySpecies={regulatorySpecies}
-                setRegulatorySpecies={setRegulatorySpecies}
+              <RegulationLayerZoneLine
+                nameZone={nameZone}
+                setNameZone={setNameZone}
+                nameZoneIsMissing={nameZoneIsMissing}
               />
-            </Content>
-            <Content>
-              <RegulatoryGearSection
-                regulatoryGears={regulatoryGears}
-                setRegulatoryGears={setRegulatoryGears}
+              <RegulationRegionLine
+                disabled={!selectedRegulationLawType || LAWTYPES_TO_TERRITORY[selectedRegulationLawType] !== FRANCE}
+                setSelectedRegionList={setSelectedRegionList}
+                selectedRegionList={selectedRegionList}
+                regionIsMissing={regionIsMissing}
               />
-            </Content>
+              <RegulationGeometryLine
+                geometryIdList={geometryIdList}
+                setShowRegulatoryPreview={setShowRegulatoryPreview}
+                showRegulatoryPreview={showRegulatoryPreview}
+                geometryIsMissing={geometryIsMissing}
+              />
+            </Section>
+            <RegulatoryTextSection
+              regulatoryTextList={regulatoryTextList}
+              setRegulatoryTextList={setRegulatoryTextList}
+              source={REGULATORY_TEXT_SOURCE.REGULATION}
+              saveForm={saveOrUpdateRegulation}
+            />
+            <FishingPeriodSection
+              fishingPeriod={fishingPeriod}
+              setFishingPeriod={setFishingPeriod}
+            />
+            <RegulatoryGearSection
+              regulatoryGears={regulatoryGears}
+              setRegulatoryGears={setRegulatoryGears}
+            />
+            <RegulatorySpeciesSection
+              regulatorySpecies={regulatorySpecies}
+              setRegulatorySpecies={setRegulatorySpecies}
+            />
           </ContentWrapper>
         </Body>
         <Footer>
@@ -505,12 +495,6 @@ const ChevronIcon = styled(ChevronIconSVG)`
 
 const ContentWrapper = styled.div`
   padding: 40px;
-`
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 60px;
 `
 
 export default CreateRegulation

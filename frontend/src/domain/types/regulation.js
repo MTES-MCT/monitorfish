@@ -1,5 +1,4 @@
 /**
-import RegulatorySpeciesForm from '../../features/backoffice/create_regulation/regulatory_species/RegulatorySpeciesForm'
  * @typedef RegulatoryZone
  * @property {string} lawType
  * @property {string} topic

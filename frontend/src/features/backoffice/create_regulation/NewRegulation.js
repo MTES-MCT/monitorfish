@@ -92,7 +92,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {RegulatorySpecies} */
   const [regulatorySpecies, setRegulatorySpecies] = useState(initialRegulatorySpeciesValues)
   /** @type {RegulatoryGears} */
-  // initialRegulatoryGearsValues
   const [regulatoryGears, setRegulatoryGears] = useState(initialRegulatoryGearsValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])

@@ -589,7 +589,7 @@ export const fishingPeriodToString = fishingPeriod => {
 /**
  * sortLayersTopicsByRegTerritory
  * Sort the layer topics group by regulatory territory
- * respecting a particuliar order.
+ * respecting a particular order.
  * @param {Map<string, RegulatoryTopics} layersTopicsByRegTerritory
  * @returns {Map<string, RegulatoryTopics}
  */

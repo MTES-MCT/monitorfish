@@ -264,6 +264,7 @@ export const initialRegulatoryGearsValues = {
   allPassiveGears: undefined,
   regulatedGearCategories: {},
   regulatedGears: {},
+  selectedCategoriesAndGears: [],
   derogation: undefined
 }
 

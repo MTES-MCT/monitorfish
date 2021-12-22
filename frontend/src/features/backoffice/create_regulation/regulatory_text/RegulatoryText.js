@@ -295,6 +295,7 @@ const CustomCheckboxGroup = styled(CheckboxGroup)`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+  padding-left: 10px;
 `
 
 const Or = styled.span`

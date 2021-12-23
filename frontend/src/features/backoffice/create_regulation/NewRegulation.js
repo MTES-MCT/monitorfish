@@ -64,6 +64,7 @@ import {
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
+import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -82,11 +83,10 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {string} */
   const [nameZone, setNameZone] = useState()
   const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
-  /** @type {string} */
-  /** @type {[String]} */
+  /** @type {String[]} */
   const [selectedRegionList, setSelectedRegionList] = useState([])
   const [regionIsMissing, setRegionIsMissing] = useState(false)
-  /** @type {[regulatoryText]} */
+  /** @type {regulatoryText[]} */
   const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
   /** @type {FishingPeriod} */
   const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
@@ -100,7 +100,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [initialGeometryId, setInitialGeometryId] = useState()
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
-  /** @type {[Number]} geometryIdList */
+  /** @type {Number[]} geometryIdList */
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
   /** @type {boolean} saveIsForbidden */
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
@@ -117,6 +117,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     regulationDeleted
   } = useSelector(state => state.regulation)
 
+  const selectedRegulation = useSelector(state => state.regulation.selectedRegulation)
+
   useEffect(() => {
     if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
       dispatch(getAllRegulatoryLayersByRegTerritory())
@@ -132,7 +134,12 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(setSelectedRegulation(newRegulation))
       dispatch(closeRegulatoryZoneMetadataPanel())
     })
+
+    if (isEdition && selectedRegulation) {
+      dispatch(showRegulationToEdit(selectedRegulation))
+    }
     return () => {
+      dispatch(setSelectedRegulation(undefined))
       dispatch(setRegulatoryZoneMetadata(undefined))
     }
   }, [])
@@ -154,7 +161,10 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   const goBackofficeHome = useCallback(() => {
-    dispatch(resetState())
+    batch(() => {
+      dispatch(setSelectedRegulation(undefined))
+      dispatch(resetState())
+    })
     history.push('/backoffice/regulation')
   }, [resetState])
 

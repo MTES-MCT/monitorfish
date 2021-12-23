@@ -36,6 +36,11 @@ const regulationSlice = createSlice({
     resetState: () => INITIAL_STATE,
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
+      if (action.payload) {
+        window.localStorage.setItem('selectedRegulation', JSON.stringify(action.payload))
+      } else {
+        window.localStorage.removeItem('selectedRegulation')
+      }
     },
     setIsModalOpen (state, action) {
       state.isModalOpen = action.payload

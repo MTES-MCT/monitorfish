@@ -7,7 +7,6 @@ import { COLORS } from '../../../constants/constants'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
 
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
-import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/zoomInLayer'
 import hideLayer from '../../../domain/use_cases/hideLayer'
@@ -25,6 +24,7 @@ import {
 } from '../../../domain/shared_slices/Regulatory'
 import { getHash } from '../../../utils'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { setSelectedRegulation } from '../../backoffice/Regulation.slice'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -110,7 +110,7 @@ const RegulatoryLayerZone = props => {
   const onEditRegulationClick = () => {
     history.push(`${match.path}/edit`)
     batch(() => {
-      dispatch(showRegulationToEdit(regulatoryZone))
+      dispatch(setSelectedRegulation(regulatoryZone))
       dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
       dispatch(addRegulatoryTopicOpened(regulatoryTopic))
       dispatch(closeRegulatoryZoneMetadataPanel())

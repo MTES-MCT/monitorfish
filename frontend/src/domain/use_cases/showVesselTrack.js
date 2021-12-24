@@ -15,13 +15,11 @@ import { convertToUTCFullDay } from '../../utils'
  */
 const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
   const {
-    vesselsLayerSource
+    vesselsgeojson
   } = getState().vessel
   const nextVesselTrackDepthObject = geNextVesselTrackDepthObject(vesselTrackDepth, getState)
-  const feature = vesselsLayerSource.getFeatureById(Vessel.getVesselId(vesselIdentity))
-  if (feature) {
-    feature.set(Vessel.isSelectedProperty, true)
-  }
+  const feature = vesselsgeojson.find((vessel) => { return Vessel.getVesselId(vesselIdentity) === vessel.vesselId })
+
   dispatch(doNotAnimate(calledFromCron))
   dispatch(removeError())
 
@@ -45,7 +43,8 @@ const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (d
         showedVesselTrack: {
           identity: identity,
           vessel: vesselIdentity,
-          coordinates: feature?.getGeometry()?.getCoordinates(),
+          // coordinates: feature.getGeometry().getCoordinates(),
+          coordinates: feature.coordinates,
           positions: positions,
           trackDepth: nextVesselTrackDepthObject,
           toShow: true,

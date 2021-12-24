@@ -60,6 +60,17 @@ const Layers = {
     isIntersectable: false,
     zIndex: 1000
   },
+  SELECTED_VESSEL: {
+    code: 'selected_vessel',
+    name: '',
+    group: null,
+    type: layersType.VESSEL,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 995
+  },
   VESSELS_LABEL: {
     code: 'label',
     name: '',
@@ -69,7 +80,7 @@ const Layers = {
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
     isIntersectable: false,
-    zIndex: 998
+    zIndex: 980
   },
   VESSEL_TRACK: {
     code: 'vessel_track',
@@ -80,7 +91,7 @@ const Layers = {
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
     isIntersectable: false,
-    zIndex: 999
+    zIndex: 990
   },
   VESSEL_ESTIMATED_POSITION: {
     code: 'estimated_position',
@@ -102,10 +113,10 @@ const Layers = {
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
     isIntersectable: false,
-    zIndex: 1001
+    zIndex: 1010
   },
   INTEREST_POINT: {
-    zIndex: 1002
+    zIndex: 1020
   },
   REGULATORY: {
     code: 'regulatory_areas',

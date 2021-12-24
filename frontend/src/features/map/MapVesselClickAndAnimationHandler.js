@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
 import showVessel from '../../domain/use_cases/showVessel'
 import LayersEnum from '../../domain/entities/layers'
@@ -19,6 +19,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     animateToExtent
   } = useSelector(state => state.map)
   const {
+    vesselsgeojson,
     vesselSidebarIsOpen,
     vesselTrackExtent
   } = useSelector(state => state.vessel)
@@ -35,12 +36,20 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   }, [animateToExtent, vesselTrackExtent, map, vesselSidebarIsOpen])
 
   useEffect(() => {
-    if (!previewFilteredVesselsMode && mapClickEvent?.feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
-      if (mapClickEvent.ctrlKeyPressed) {
-        dispatch(showVesselTrack(mapClickEvent.feature.vessel, false))
-      } else {
-        dispatch(showVessel(mapClickEvent.feature.vessel, false, false))
-        dispatch(getVesselVoyage(mapClickEvent.feature.vessel, null, false))
+    const clickedFeatureId = mapClickEvent?.feature?.getId()
+    if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
+      const feature = vesselsgeojson.find((vessel) => {
+        return clickedFeatureId?.toString()?.includes(vessel.vesselId)
+      })
+      if (feature) {
+        if (mapClickEvent.ctrlKeyPressed) {
+          dispatch(showVesselTrack(feature, false))
+        } else {
+          batch(() => {
+            dispatch(showVessel(feature, false, false))
+            dispatch(getVesselVoyage(feature, null, false))
+          })
+        }
       }
     }
   }, [mapClickEvent])

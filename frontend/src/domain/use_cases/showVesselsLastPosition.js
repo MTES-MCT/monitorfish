@@ -20,6 +20,8 @@ const showVesselsLastPosition = () => (dispatch, getState) => {
   }).catch(error => {
     console.error(error)
     dispatch(setError(error))
+  }).then(() => {
+    dispatch(resetIsUpdatingVessels())
   })
 }
 

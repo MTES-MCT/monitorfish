@@ -5,43 +5,43 @@ import { ReactComponent as HidingOtherTracksSVG } from '../../../icons/Bouton_ma
 import { ReactComponent as ShowingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_inactif.svg'
 import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
-import { setHideOtherVessels } from '../../../../domain/shared_slices/Vessel'
+import { sethideNonSelectedVessels } from '../../../../domain/shared_slices/Vessel'
 
-const HideOtherVessels = ({ openBox, rightMenuIsOpen }) => {
+const HideNonSelectedVessels = ({ openBox, rightMenuIsOpen }) => {
   const dispatch = useDispatch()
   const { healthcheckTextWarning } = useSelector(state => state.global)
-  const { hideOtherVessels } = useSelector(state => state.vessel)
+  const { hideNonSelectedVessels } = useSelector(state => state.vessel)
 
   useEffect(() => {
     if (!openBox) {
-      dispatch(setHideOtherVessels(false))
+      dispatch(sethideNonSelectedVessels(false))
     }
   }, [openBox])
 
   return (
-    <HideOtherVesselsButton
+    <HideNonSelectedVesselsButton
       data-cy={'trigger-hide-other-vessels-from-sidebar'}
       healthcheckTextWarning={healthcheckTextWarning}
-      hideOtherVessels={hideOtherVessels}
+      hideNonSelectedVessels={hideNonSelectedVessels}
       openBox={openBox}
       rightMenuIsOpen={rightMenuIsOpen}
-      onClick={() => dispatch(setHideOtherVessels(!hideOtherVessels))}
-      title={`${hideOtherVessels ? 'Afficher' : 'Cacher'} les autres navires`}
+      onClick={() => dispatch(sethideNonSelectedVessels(!hideNonSelectedVessels))}
+      title={`${hideNonSelectedVessels ? 'Afficher' : 'Cacher'} les autres navires`}
     >
       {
-        hideOtherVessels
+        hideNonSelectedVessels
           ? <HidingOtherTracks />
           : <ShowingOtherTracks/>
       }
-    </HideOtherVesselsButton>
+    </HideNonSelectedVesselsButton>
   )
 }
 
-const HideOtherVesselsButton = styled(MapButtonStyle)`
+const HideNonSelectedVesselsButton = styled(MapButtonStyle)`
   top: 188px;
   height: 30px;
   width: 30px;
-  background: ${props => props.hideOtherVessels ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => props.hideNonSelectedVessels ? COLORS.shadowBlue : COLORS.charcoal};
   position: absolute;
   margin-right: ${props => props.openBox ? 505 : -45}px;
   opacity: ${props => props.openBox ? 1 : 0};
@@ -52,7 +52,7 @@ const HideOtherVesselsButton = styled(MapButtonStyle)`
   transition: all 0.5s, right 0.3s;
 
   :hover, :focus {
-      background: ${props => props.hideOtherVessels ? COLORS.shadowBlue : COLORS.charcoal};
+      background: ${props => props.hideNonSelectedVessels ? COLORS.shadowBlue : COLORS.charcoal};
   }
 `
 
@@ -64,4 +64,4 @@ const ShowingOtherTracks = styled(ShowingOtherTracksSVG)`
   width: 30px;
 `
 
-export default HideOtherVessels
+export default HideNonSelectedVessels

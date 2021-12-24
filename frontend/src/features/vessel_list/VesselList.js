@@ -35,7 +35,7 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { VesselListSVG } from '../commonStyles/icons/VesselListSVG'
 import { getZonesAndSubZonesPromises } from '../../domain/use_cases/getZonesAndSubZonesPromises'
-import { setPreviewFilteredVesselsFeaturesUids } from '../../domain/shared_slices/Vessel'
+import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
 import { VesselLocation } from '../../domain/entities/vessel'
@@ -44,10 +44,14 @@ import { getExtentFromGeoJSON } from '../../utils'
 
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
-  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const vesselListModalIsOpen = useSelector(state => state.global.vesselListModalIsOpen)
   const {
-    vesselsLayerSource,
+    rightMenuIsOpen,
+    vesselListModalIsOpen,
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
+  const {
+    vesselsgeojson,
     selectedVessel,
     uniqueVesselsSpecies: species,
     uniqueVesselsDistricts: districts
@@ -57,10 +61,6 @@ const VesselList = ({ namespace }) => {
   } = useSelector(state => state.map)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
-  const {
-    healthcheckTextWarning,
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
 
   const firstUpdate = useRef(true)
   const [downloadVesselListModalIsOpen, setDownloadVesselListModalIsOpen] = useState(false)
@@ -131,13 +131,7 @@ const VesselList = ({ namespace }) => {
   }, [vesselListModalIsOpen])
 
   const updateVesselsList = () => {
-    const vessels = []
-    vesselsLayerSource?.forEachFeature(feature => {
-      const coordinates = [...feature.getGeometry().getCoordinates()]
-
-      vessels.push(getVesselObjectFromFeature(feature, coordinates, coordinatesFormat))
-    })
-
+    const vessels = vesselsgeojson.map((vessel) => getVesselObjectFromFeature(vessel, coordinatesFormat))
     setVessels(vessels)
     setVesselsCountTotal(vessels?.length ? vessels?.length : 0)
   }
@@ -156,7 +150,6 @@ const VesselList = ({ namespace }) => {
         lastControlMonthsAgo,
         vesselsLocationFilter
       }
-
       dispatch(getFilteredVessels(vessels, filters))
         .then(filteredVessels => {
           setFilteredVessels(filteredVessels)
@@ -179,9 +172,10 @@ const VesselList = ({ namespace }) => {
 
   useEffect(() => {
     const nextVessels = vessels.map(vessel => {
-      vessel.checked = allVesselsChecked.globalCheckbox
-
-      return vessel
+      return {
+        ...vessel,
+        checked: allVesselsChecked.globalCheckbox
+      }
     })
 
     setVessels(nextVessels)
@@ -254,7 +248,7 @@ const VesselList = ({ namespace }) => {
     const vesselsUids = filteredVessels.map(vessel => vessel.uid)
 
     if (vesselsUids?.length) {
-      dispatch(setPreviewFilteredVesselsFeaturesUids(vesselsUids))
+      dispatch(setPreviewFilteredVesselsFeatures(vesselsUids))
       dispatch(setPreviewFilteredVesselsMode(true))
 
       if (zonesSelected?.length) {

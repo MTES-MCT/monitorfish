@@ -1,10 +1,8 @@
+import { batch } from 'react-redux'
 import { getVesselFromAPI } from '../../api/fetch'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../shared_slices/Vessel'
 import { removeError, setError } from '../shared_slices/Global'
-import { Vessel, vesselsAreEquals } from '../entities/vessel'
 import { doNotAnimate } from '../shared_slices/Map'
-import unselectVessel from './unselectVessel'
-import { batch } from 'react-redux'
 import { getTrackDepthError, getVesselTrackDepth } from '../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../shared_slices/FishingActivities'
 
@@ -17,28 +15,21 @@ import { removeFishingActivitiesFromMap } from '../shared_slices/FishingActiviti
  * @param {VesselTrackDepth=} vesselTrackDepth
  */
 const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
+  const { vessel, fishingActivities, map } = getState()
   const {
-    selectedVessel: alreadySelectedVessel,
-    vesselsLayerSource,
     selectedVesselCustomTrackDepth
-  } = getState().vessel
+  } = vessel
 
   const {
     fishingActivitiesAreShowedOnMap
-  } = getState().fishingActivities
+  } = fishingActivities
 
-  unselectPreviousVessel(calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch)
-
-  const feature = vesselsLayerSource?.getFeatureById(Vessel.getVesselId(vesselIdentity))
-  if (feature) {
-    feature.set(Vessel.isSelectedProperty, true)
-  }
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
   const nextVesselTrackDepthObject = getVesselTrackDepth(
     vesselTrackDepth,
     selectedVesselCustomTrackDepth,
-    getState().map.defaultVesselTrackDepth)
+    map.defaultVesselTrackDepth)
 
   if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
@@ -51,26 +42,32 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
         trackDepthHasBeenModified,
         calledFromCron,
         vesselTrackDepth)
-      if (error) {
-        dispatch(setError(error))
-      } else {
-        dispatch(removeError())
-      }
 
-      const vessel = {
+      const selectedVessel = {
         ...vesselAndPositions?.vessel,
         ...vesselIdentity,
         globalRiskFactor: vesselIdentity?.riskFactor,
         riskFactor: vesselAndPositions?.vessel?.riskFactor
       }
-      dispatch(setSelectedVessel({
-        vessel: vessel,
-        positions: vesselAndPositions.positions
-      }))
+
+      batch(() => {
+        if (error) {
+          dispatch(setError(error))
+        } else {
+          dispatch(removeError())
+        }
+
+        dispatch(setSelectedVessel({
+          vessel: selectedVessel,
+          positions: vesselAndPositions.positions
+        }))
+      })
     }).catch(error => {
       console.error(error)
-      dispatch(setError(error))
-      dispatch(resetLoadingVessel())
+      batch(() => {
+        dispatch(setError(error))
+        dispatch(resetLoadingVessel())
+      })
     })
 }
 
@@ -83,12 +80,6 @@ function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
       calledFromCron
     }))
   })
-}
-
-function unselectPreviousVessel (calledFromCron, alreadySelectedVessel, vesselIdentity, dispatch) {
-  if (!calledFromCron && vesselIdentity && !vesselsAreEquals(vesselIdentity, alreadySelectedVessel)) {
-    dispatch(unselectVessel())
-  }
 }
 
 export default showVessel

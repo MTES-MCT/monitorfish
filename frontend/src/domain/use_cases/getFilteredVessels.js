@@ -17,7 +17,7 @@ const vectorSource = new VectorSource({
   strategy: all
 })
 
-const getFilteredVessels = (vessels, filters) => async () => {
+const getFilteredVessels = (vessels, filters) => async (dispatch, getState) => {
   const worker = await new MonitorFishWorker()
 
   const workerFilters = getFiltersWithoutZonesSelected(filters)
@@ -26,7 +26,6 @@ const getFilteredVessels = (vessels, filters) => async () => {
     if (filters.zonesSelected?.length) {
       filteredVessels = filterByZones(filteredVessels, filters.zonesSelected)
     }
-
     return filteredVessels
   })
 }

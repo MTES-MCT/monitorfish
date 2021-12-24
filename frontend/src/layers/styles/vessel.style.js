@@ -1,23 +1,121 @@
-import { Circle, Icon, Style } from 'ol/style'
-import { asArray } from 'ol/color'
-import CircleStyle from 'ol/style/Circle'
-import Fill from 'ol/style/Fill'
-import { Vessel, VESSEL_ALERT_STYLE, VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
+import { Icon, Style } from 'ol/style'
+import { Vessel, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
+import { booleanToInt } from '../../utils'
 
-const iconStyleCache = new Map()
-const circleStyleCache = new Map()
+const featureHas = (key) => ['==', ['get', key], 1]
+const featureHasNot = (key) => ['==', ['get', key], 0]
+const stateIs = (key) => ['==', ['var', key], 1]
+const and = (cond1, cond2) => ['case', cond1, ['case', cond2, true, false], false]
+const or = (...conditions) => {
+  const conditionInArray = conditions.reduce((result, cond) => {
+    return [...result, ...cond]
+  }, [])
+  return ['case', ...conditionInArray, false]
+}
 
-export const selectedVesselStyle = new Style({
-  image: new Icon({
-    opacity: 1,
-    src: 'Selecteur_navire.png',
-    scale: 0.5
-  }),
-  zIndex: VESSEL_SELECTOR_STYLE
-})
+const hideVesselsAtPortCondition = [[
+  'case',
+  // if hideVesselsAtPort...
+  stateIs('hideVesselsAtPort'),
+  // ... hide vessels atPort
+  featureHasNot('isAtPort'),
+  true
+], true]
+const hideNonSelectedVesselsCondition = [
+  // if hideNonSelectedVessels...
+  stateIs('hideNonSelectedVessels'),
+  false // selectedVessel is in a dedicated layer
+]
+const hideDeprecatedPositionsCondition = [
+  // if lastPosition is older than threshold, hide vessel
+  ['>', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']],
+  false
 
+]
+
+export const getWebGLVesselStyle = ({
+  hideVesselsAtPort,
+  hideNonSelectedVessels,
+  nonFilteredVesselsAreHidden,
+  previewFilteredVesselsMode,
+  isLight,
+  vesselIsHiddenTimeThreshold,
+  vesselIsOpacityReducedTimeThreshold,
+  filterColorRed,
+  filterColorGreen,
+  filterColorBlue
+}) => {
+  const filterColor = ['color', ['var', 'filterColorRed'], ['var', 'filterColorGreen'], ['var', 'filterColorBlue']]
+  const defaultVesselColor = ['case', stateIs('isLight'), COLORS.vesselLightColor, COLORS.vesselColor]
+  const booleanFilter = ['case',
+    // in preview mode, show only vessels in preview mode
+    stateIs('previewFilteredVesselsMode'), featureHas('filterPreview'),
+
+    ...hideNonSelectedVesselsCondition,
+    // show only non filtered vessels
+    stateIs('nonFilteredVesselsAreHidden'), and(featureHas('isFiltered'), or(hideDeprecatedPositionsCondition,
+      hideVesselsAtPortCondition)),
+
+    ...hideDeprecatedPositionsCondition,
+    ...hideVesselsAtPortCondition,
+
+    // default
+    true
+  ]
+
+  const style = {
+    variables: {
+      hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
+      hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
+      nonFilteredVesselsAreHidden: booleanToInt(nonFilteredVesselsAreHidden),
+      previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),
+      isLight: booleanToInt(isLight),
+      vesselIsHiddenTimeThreshold,
+      vesselIsOpacityReducedTimeThreshold,
+      filterColorRed,
+      filterColorGreen,
+      filterColorBlue
+    },
+    filter: booleanFilter,
+    symbol: {
+      symbolType: 'image',
+      src: 'boat_icons.png',
+      rotation: ['*', ['get', 'course'], Math.PI / 180],
+      textureCoord: ['case', ['>', ['get', 'speed'], Vessel.vesselIsMovingSpeed], [0, 0, 0.5, 0.25], [0.5, 0, 1, 0.25]],
+      size: 20,
+      color: ['case', stateIs('previewFilteredVesselsMode'), defaultVesselColor, featureHas('isFiltered'), filterColor, defaultVesselColor],
+      opacity: ['case',
+        ['<', ['get', 'lastPositionSentAt'], ['var', 'vesselIsOpacityReducedTimeThreshold']], 0.2,
+        1]
+    }
+  }
+  return style
+}
+
+export const getSelectedVesselStyle = ({ isLight }) => (feature) => {
+  const course = feature.get('course')
+  const style = new Style({
+    image: new Icon({
+      src: 'selecteur_navire_complet.png',
+      rotation: degreesToRadian(course),
+      scale: 0.5,
+      color: isLight ? COLORS.vesselLightColor : COLORS.vesselColor,
+      opacity: 1
+    }),
+    zIndex: VESSEL_SELECTOR_STYLE
+  })
+  return style
+}
+// vesselLightColor: cacce0
+// vesselColor: 3B4559
+
+export function degreesToRadian (course) {
+  return course * Math.PI / 180
+}
+
+/*
 export const vesselAlertBigCircleStyle = new Style({
   image: new Circle({
     fill: new Fill({
@@ -38,127 +136,12 @@ export const vesselAlertBigSmallStyle = new Style({
   zIndex: VESSEL_ALERT_STYLE
 })
 
-export const getIconStyle = vesselObject => {
-  const key = JSON.stringify(vesselObject)
+const hasAlert = !!feature.vessel.alerts?.length
 
-  if (!iconStyleCache.has(key)) {
-    iconStyleCache.set(key, new Style({
-      image: new Icon({
-        src: vesselObject.vesselFileName,
-        offset: [0, 0],
-        imgSize: [8, 16],
-        rotation: degreesToRadian(vesselObject.course),
-        // See https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210
-        color: 'white',
-        opacity: vesselObject.opacity
-      }),
-      zIndex: VESSEL_ICON_STYLE
-    }))
-  }
-
-  return iconStyleCache.get(key)
-}
-
-export const getCircleStyle = vesselObject => {
-  const key = JSON.stringify(vesselObject)
-
-  if (!circleStyleCache.has(key)) {
-    let color = asArray(vesselObject.vesselColor)
-    color = color.slice()
-    color[3] = vesselObject.opacity
-
-    circleStyleCache.set(key, new Style({
-      image: new CircleStyle({
-        radius: 4,
-        fill: new Fill({
-          color: color
-        })
-      }),
-      zIndex: VESSEL_ICON_STYLE
-    }))
-  }
-
-  return circleStyleCache.get(key)
-}
-
-export const getVesselStyle = (feature, resolution) => {
-  const filterColor = feature.get(Vessel.filterColorProperty)
-  const opacity = feature.get(Vessel.opacityProperty)
-  const isLight = feature.get(Vessel.isLightProperty)
-  const nonFilteredVesselsAreHidden = feature.get(Vessel.nonFilteredVesselsAreHiddenProperty)
-  const isShowedInFilter = feature.get(Vessel.isShowedInFilterProperty)
-  const isHidden = feature.get(Vessel.isHiddenProperty)
-  const isSelected = feature.get(Vessel.isSelectedProperty)
-  const inPreviewMode = feature.get(Vessel.inPreviewModeProperty)
-  const filterPreview = feature.get(Vessel.filterPreviewProperty)
-  const hideVesselsAtPort = feature.get(Vessel.hideVesselsAtPortProperty)
-
-  const course = feature.vessel.course
-  const speed = feature.vessel.speed
-  const isAtPort = feature.vessel.isAtPort
-  const hasAlert = !!feature.vessel.alerts?.length
-
-  if (isHidden && !isSelected) {
-    return []
-  }
-
-  if (nonFilteredVesselsAreHidden && filterColor && !isShowedInFilter) {
-    return []
-  }
-
-  if (inPreviewMode && !filterPreview) {
-    return []
-  }
-
-  if (hideVesselsAtPort && isAtPort) {
-    return []
-  }
-
-  const vesselFileName = getVesselFilename(filterColor, isShowedInFilter, isLight)
-  const vesselColor = getVesselColor(filterColor, isShowedInFilter, isLight)
-
-  const styles = speed > Vessel.vesselIsMovingSpeed
-    ? [getIconStyle({ vesselFileName, course, opacity })]
-    : [getCircleStyle({ vesselColor, opacity })]
-
-  if (isSelected) {
-    styles.push(selectedVesselStyle)
-  }
-
-  if (hasAlert) {
+if (hasAlert) {
     styles.push(vesselAlertBigCircleStyle, vesselAlertBigSmallStyle)
     const scale = Math.min(1.5, 0.1 + Math.sqrt(200 / resolution))
     styles[styles.length - 1].getImage().setScale(scale)
     styles[styles.length - 2].getImage().setScale(scale)
   }
-
-  return styles
-}
-
-function getVesselFilename (filterColor, isShowedInFilter, isLight) {
-  let vesselFileName = 'icone_navire_3B4559.png'
-
-  if (filterColor && isShowedInFilter) {
-    vesselFileName = `Couleurs_filtres_navires_${filterColor.replace('#', '')}_png24.png`
-  } else if (isLight) {
-    vesselFileName = 'Couleur_navires_fond_sombre_cacce0_png24.png'
-  }
-
-  return vesselFileName
-}
-
-function getVesselColor (filterColor, isShowedInFilter, isLight) {
-  let vesselColor = COLORS.vesselColor
-
-  if (filterColor && isShowedInFilter) {
-    vesselColor = filterColor
-  } else if (isLight) {
-    vesselColor = COLORS.vesselLightColor
-  }
-
-  return vesselColor
-}
-
-export function degreesToRadian (course) {
-  return course * Math.PI / 180
-}
+ */

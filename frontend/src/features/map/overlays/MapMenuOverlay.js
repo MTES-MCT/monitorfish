@@ -47,7 +47,8 @@ const MapMenuOverlay = props => {
         afterDateTime: datesSelection[0],
         beforeDateTime: datesSelection[1]
       }
-      dispatch(showVesselTrack(vessel.vessel, false, vesselTrackDepth))
+      const vesselProperties = vessel.getProperties()
+      dispatch(showVesselTrack(vesselProperties, false, vesselTrackDepth))
 
       map.removeOverlay(overlay)
       setIsShowed(false)

@@ -12,30 +12,32 @@ timeago.register('fr', timeagoFrenchLocale)
 
 const VesselCard = ({ feature, overlayPosition }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
+  const featureProperties = feature.getProperties()
+  const featureCoordinates = feature.getGeometry().getCoordinates()
 
   return (
     <>
       <VesselCardHeader>
         {
-          feature.vessel.flagState
+          featureProperties.flagState
             ? <>
-              <Flag rel="preload" src={`flags/${feature.vessel.flagState.toLowerCase()}.svg`}/>{' '}</>
+              <Flag rel="preload" src={`flags/${featureProperties.flagState.toLowerCase()}.svg`}/>{' '}</>
             : null
         }
         <VesselCardTitle data-cy={'vessel-card-name'}>
           {
-            feature.vessel.vesselName
-              ? feature.vessel.vesselName
+            featureProperties.vesselName
+              ? featureProperties.vesselName
               : 'NOM INCONNU'
           }{' '}
           {
-            feature.vessel.flagState
-              ? <>({feature.vessel.flagState})</>
+            featureProperties.flagState
+              ? <>({featureProperties.flagState})</>
               : ''
           }
         </VesselCardTitle>
         {
-          feature.vessel.lastErsDateTime
+          featureProperties.lastErsDateTime
             ? <ERS>
               <ERSOK/>
               <MessageText>JPE</MessageText>
@@ -49,34 +51,34 @@ const VesselCard = ({ feature, overlayPosition }) => {
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue data-cy={'vessel-card-latitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
+          <FieldValue data-cy={'vessel-card-latitude'}>{getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue data-cy={'vessel-card-longitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
+          <FieldValue data-cy={'vessel-card-longitude'}>{getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
-          <FieldValue>{feature.vessel.course === 0 || feature.vessel.course
-            ? <>{feature.vessel.course}°</>
+          <FieldValue>{featureProperties.course === 0 || featureProperties.course
+            ? <>{featureProperties.course}°</>
             : <NoValue>-</NoValue>}</FieldValue>
           <FieldName>Vitesse</FieldName>
-          <FieldValue>{feature.vessel.speed === 0 || feature.vessel.speed
-            ? <>{feature.vessel.speed} Nds</>
+          <FieldValue>{featureProperties.speed === 0 || featureProperties.speed
+            ? <>{featureProperties.speed} Nds</>
             : <NoValue>-</NoValue>}</FieldValue>
         </Course>
         <Position>
           <FieldName>Dernier signal VMS</FieldName>
           <FieldValue>
             {
-              feature.vessel.dateTime
-                ? <>{timeago.format(feature.vessel.dateTime, 'fr')}</>
+              featureProperties.dateTime
+                ? <>{timeago.format(featureProperties.dateTime, 'fr')}</>
                 : <NoValue>-</NoValue>
             }
           </FieldValue>
           <FieldName>Cadencement</FieldName>
           <FieldValue>
             {
-              feature.vessel.emissionPeriod
-                ? <>1 signal toutes les {feature.vessel.emissionPeriod / 60} min</>
+              featureProperties.emissionPeriod
+                ? <>1 signal toutes les {featureProperties.emissionPeriod / 60} min</>
                 : <NoValue>-</NoValue>
             }
           </FieldValue>
@@ -88,14 +90,14 @@ const VesselCard = ({ feature, overlayPosition }) => {
             <Body>
               <Field>
                 <Key>CFR</Key>
-                <Value data-cy={'vessel-card-internal-reference-number'}>{feature.vessel.internalReferenceNumber
-                  ? feature.vessel.internalReferenceNumber
+                <Value data-cy={'vessel-card-internal-reference-number'}>{featureProperties.internalReferenceNumber
+                  ? featureProperties.internalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>MMSI</Key>
-                <Value data-cy={'vessel-card-mmsi'}>{feature.vessel.mmsi
-                  ? feature.vessel.mmsi
+                <Value data-cy={'vessel-card-mmsi'}>{featureProperties.mmsi
+                  ? featureProperties.mmsi
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </Body>
@@ -106,14 +108,14 @@ const VesselCard = ({ feature, overlayPosition }) => {
             <Body>
               <Field>
                 <Key>Marquage ext.</Key>
-                <Value data-cy={'vessel-card-external-reference-number'}>{feature.vessel.externalReferenceNumber
-                  ? feature.vessel.externalReferenceNumber
+                <Value data-cy={'vessel-card-external-reference-number'}>{featureProperties.externalReferenceNumber
+                  ? featureProperties.externalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>Call Sign (IRCS)</Key>
-                <Value data-cy={'vessel-card-ircs'}>{feature.vessel.ircs
-                  ? feature.vessel.ircs
+                <Value data-cy={'vessel-card-ircs'}>{featureProperties.ircs
+                  ? featureProperties.ircs
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </Body>
@@ -128,11 +130,11 @@ const VesselCard = ({ feature, overlayPosition }) => {
                 <Key>Taille du navire</Key>
                 <Value>
                   {
-                    feature.vessel.length ? feature.vessel.length : <NoValue>-</NoValue>
+                    featureProperties.length ? featureProperties.length : <NoValue>-</NoValue>
                   }
                   {' '}x{' '}
                   {
-                    feature.vessel.width ? feature.vessel.width : <NoValue>-</NoValue>
+                    featureProperties.width ? featureProperties.width : <NoValue>-</NoValue>
                   }
                   {' '}m
                 </Value>

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import { setExtent, setView } from '../../domain/shared_slices/Map'
 
 /**
@@ -50,17 +50,19 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
 
   function saveMapView () {
     if (map && shouldUpdateView) {
-      const center = map.getView().getCenter()
+      const currentView = map.getView()
+      const center = currentView.getCenter()
       const view = {
-        zoom: map.getView().getZoom().toFixed(2),
+        zoom: currentView.getZoom().toFixed(2),
         center: center
       }
-      const extent = map.getView().calculateExtent()
+      const extent = currentView.calculateExtent()
+      batch(() => {
+        dispatch(setExtent(extent))
+        dispatch(setView(view))
+      })
 
-      dispatch(setExtent(extent))
-      dispatch(setView(view))
-
-      const url = `#@${center[0].toFixed(2)},${center[1].toFixed(2)},${map.getView().getZoom().toFixed(2)}`
+      const url = `#@${center[0].toFixed(2)},${center[1].toFixed(2)},${view.zoom}`
       window.history.pushState(view, 'map', url)
     }
   }

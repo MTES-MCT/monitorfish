@@ -5,6 +5,9 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
 import { all } from 'ol/loadingstrategy'
 
+export const booleanToInt = (boolean) => {
+  return boolean ? 1 : 0
+}
 export const calculatePointsDistance = (coord1, coord2) => {
   const dx = coord1[0] - coord2[0]
   const dy = coord1[1] - coord2[1]

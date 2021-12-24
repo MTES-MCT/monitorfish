@@ -1,8 +1,3 @@
-import { transform } from 'ol/proj'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
-import Feature from 'ol/Feature'
-import Point from 'ol/geom/Point'
-import { toStringHDMS } from 'ol/coordinate'
 import Layers, { baseLayers } from './layers'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 import countries from 'i18n-iso-countries'
@@ -11,89 +6,26 @@ export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
-const NOT_FOUND = -1
-
 export class Vessel {
-  static filterColorProperty = 'filterColor'
-  static opacityProperty = 'opacity'
-  static isLightProperty = 'isLight'
-  static nonFilteredVesselsAreHiddenProperty = 'nonFilteredVesselsAreHidden'
-  static isShowedInFilterProperty = 'isShowedInFilter'
-  static filterPreviewProperty = 'filterPreview'
-  static inPreviewModeProperty = 'inPreviewMode'
-  static isSelectedProperty = 'isSelected'
-  static isHiddenProperty = 'isHidden'
-  static hideVesselsAtPortProperty = 'hideVesselsAtPort'
-
-  /**
-   * Get Vessel OpenLayers feature object
-   * @param {VesselLastPosition} vessel
-   */
-  static getFeature (vessel) {
-    const coordinates = transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-
-    const feature = new Feature({
-      geometry: new Point(coordinates)
-    })
-    feature.vessel = {
-      ...vessel,
-      coordinates: toStringHDMS(coordinates)
-    }
-
-    feature.setId(Vessel.getVesselId(vessel))
-
-    return feature
-  }
-
   static vesselIsMovingSpeed = 0.1
 
   static getObjectForFilteringFromFeature (feature) {
+    const vessel = feature.getProperties()
     return {
       olCoordinates: feature.getGeometry().getCoordinates(),
+      vesselId: vessel.vesselId,
       uid: feature.ol_uid,
-      length: feature.vessel.length,
-      flagState: feature.vessel.flagState?.toLowerCase(),
-      dateTimeTimestamp: new Date(feature.vessel.dateTime).getTime(),
-      gearsArray: feature.vessel.gearOnboard ? [...new Set(feature.vessel.gearOnboard.map(gear => gear.gear))] : [],
-      fleetSegmentsArray: feature.vessel.segments ? feature.vessel.segments.map(segment => segment.replace(' ', '')) : [],
-      speciesArray: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))] : [],
-      district: feature.vessel.district,
-      districtCode: feature.vessel.districtCode,
-      isAtPort: feature.vessel.isAtPort,
-      lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : ''
+      length: vessel.length,
+      flagState: vessel.flagState?.toLowerCase(),
+      dateTimeTimestamp: new Date(vessel.dateTime).getTime(),
+      gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
+      fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
+      speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
+      district: vessel.district,
+      districtCode: vessel.districtCode,
+      isAtPort: vessel.isAtPort,
+      lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : ''
     }
-  }
-
-  /**
-   * Apply filter property to vessel feature
-   * @param {Object} feature - The OpenLayers feature object
-   * @param filteredVesselsUids: string[] - the filtered vessels list
-   */
-  static applyIsShowedPropertyToVessels (feature, filteredVesselsUids) {
-    const featureFoundInFilteredVesselsIndex = filteredVesselsUids.indexOf(feature.ol_uid)
-
-    feature.set(Vessel.isShowedInFilterProperty, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
-  }
-
-  /**
-   * Apply filter preview property to vessel feature
-   * @param {Object} feature - The OpenLayers feature object
-   * @param previewFilteredVesselsFeaturesUids: string[] - the filtered vessels list
-   */
-  static applyFilterPreviewPropertyToVessels (feature, previewFilteredVesselsFeaturesUids) {
-    const featureFoundInFilteredVesselsIndex = previewFilteredVesselsFeaturesUids.indexOf(feature.ol_uid)
-
-    feature.set(Vessel.filterPreviewProperty, featureFoundInFilteredVesselsIndex !== NOT_FOUND)
-    feature.set(Vessel.inPreviewModeProperty, !!previewFilteredVesselsFeaturesUids?.length)
-  }
-
-  /**
-   * Remove filter preview property to vessel feature
-   * @param {Object} feature - The OpenLayers feature object
-   */
-  static removeFilterPreviewPropertyToVessels (feature) {
-    feature.set(Vessel.filterPreviewProperty, false)
-    feature.set(Vessel.inPreviewModeProperty, false)
   }
 
   static getVesselId (vessel) {
@@ -119,7 +51,7 @@ export class Vessel {
 
   /**
    * Add text label to vessel feature
-   * @param {Object} feature - The OpenLayers feature object
+   * @param {Object} feature - The OpenLayers feature.getProperties() object
    * @param {{
    *   vesselLabel: string,
    *   vesselsLastPositionVisibility: Object,
@@ -145,41 +77,41 @@ export class Vessel {
       vesselLabelsShowedOnMap,
       hideVesselsAtPort
     } = options
-    const vesselDate = new Date(feature.vessel.dateTime)
+    const vesselDate = new Date(feature.dateTime)
     const vesselIsHidden = new Date()
-    const hasBeenControlledLastFiveYears = new Date(feature.vessel.lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
+    const hasBeenControlledLastFiveYears = new Date(feature.lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
     const label = {
       labelText: null,
       riskFactor: null,
-      underCharter: feature.vessel.underCharter
+      underCharter: feature.underCharter
     }
 
     if (vesselDate.getTime() < vesselIsHidden.getTime()) {
       return label
     }
 
-    if (hideVesselsAtPort && feature.vessel.isAtPort) {
+    if (hideVesselsAtPort && feature.isAtPort) {
       return label
     }
 
     if (vesselLabelsShowedOnMap) {
       switch (vesselLabel) {
         case vesselLabelEnum.VESSEL_NAME: {
-          label.labelText = feature.vessel.vesselName
+          label.labelText = feature.vesselName
           break
         }
         case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
-          label.labelText = feature.vessel.internalReferenceNumber
+          label.labelText = feature.internalReferenceNumber
           break
         }
         case vesselLabelEnum.VESSEL_NATIONALITY: {
-          label.labelText = feature.vessel.flagState ? countries.getName(feature.vessel.flagState, 'fr') : null
+          label.labelText = feature.flagState ? countries.getName(feature.flagState, 'fr') : null
           break
         }
         case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
-          label.labelText = feature.vessel.segments.join(', ')
+          label.labelText = feature.segments.join(', ')
           break
         }
         default: label.labelText = null
@@ -188,12 +120,12 @@ export class Vessel {
 
     if (riskFactorShowedOnMap) {
       label.riskFactor = {
-        globalRisk: feature.vessel.riskFactor,
-        impactRiskFactor: feature.vessel.impactRiskFactor,
-        probabilityRiskFactor: feature.vessel.probabilityRiskFactor,
-        detectabilityRiskFactor: feature.vessel.detectabilityRiskFactor,
+        globalRisk: feature.riskFactor,
+        impactRiskFactor: feature.impactRiskFactor,
+        probabilityRiskFactor: feature.probabilityRiskFactor,
+        detectabilityRiskFactor: feature.detectabilityRiskFactor,
         hasBeenControlledLastFiveYears,
-        hasSegments: feature.vessel.segments?.length
+        hasSegments: feature.segments?.length
       }
     }
 
@@ -232,7 +164,7 @@ export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibilit
   const vesselIsOpacityReduced = new Date()
   vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
 
-  return { vesselIsHidden, vesselIsOpacityReduced }
+  return { vesselIsHidden: vesselIsHidden, vesselIsOpacityReduced: vesselIsOpacityReduced }
 }
 
 export function vesselAndVesselFeatureAreEquals (vessel, feature) {

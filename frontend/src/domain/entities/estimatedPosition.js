@@ -23,8 +23,9 @@ class EstimatedPosition {
       dateTime: Date
       vesselIsHidden: Date
       vesselIsOpacityReduced: Date
-      hideOtherVessels: boolean
+      hideNonSelectedVessels: boolean
    * }} options
+   * @returns [linefeature, circlefeature] - array containing 2 features: one for the line, one for the point symbolising the last position
    */
   static getFeatures (currentPosition, estimatedPosition, options) {
     const currentCoordinates = transform([currentPosition[0], currentPosition[1]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
@@ -53,7 +54,7 @@ class EstimatedPosition {
       geometry: new LineString([currentCoordinates, estimatedCoordinates]),
       color: lineColor,
       opacity,
-      isHidden: options.hideOtherVessels
+      isHidden: options.hideNonSelectedVessels
     })
     lineFeature.estimatedPosition = estimatedPositionObject
     lineFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:${options.id}`)
@@ -63,7 +64,7 @@ class EstimatedPosition {
       isCircle: true,
       color: vesselColor,
       opacity,
-      isHidden: options.hideOtherVessels
+      isHidden: options.hideNonSelectedVessels
     })
     circleFeature.estimatedPosition = estimatedPositionObject
     circleFeature.setId(`${Layers.VESSEL_ESTIMATED_POSITION.code}:circle:${options.id}`)

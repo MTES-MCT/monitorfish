@@ -319,3 +319,36 @@ def detect_fishing_activity(
     positions["is_fishing"] = fishing_activity
     positions["is_fishing"] = zeros_ones_to_bools(positions["is_fishing"])
     return positions
+
+
+def enrich_positions(
+    positions: pd.DataFrame,
+    lat: str = "latitude",
+    lon: str = "longitude",
+    datetime_col: str = "datetime_utc",
+    is_at_port_column: str = "is_at_port",
+    minimum_consecutive_positions: int = 3,
+    fishing_speed_threshold: float = 4.5,
+) -> pd.DataFrame:
+    """
+    Applies `compute_movement_metrics` and `detect_fishing_activity` successively.
+
+    See these two functions for help.
+    """
+
+    positions = compute_movement_metrics(
+        positions,
+        lat=lat,
+        lon=lon,
+        datetime_col=datetime_col,
+    )
+
+    positions = detect_fishing_activity(
+        positions,
+        is_at_port_column=is_at_port_column,
+        average_speed_column="average_speed",
+        minimum_consecutive_positions=minimum_consecutive_positions,
+        fishing_speed_threshold=fishing_speed_threshold,
+    )
+
+    return positions

@@ -259,93 +259,9 @@ def compute_movement_metrics(
     return positions
 
 
-def tag_port_movements(
-    positions: pd.DataFrame,
-    is_at_port_column: str = "is_at_port",
-) -> pd.DataFrame:
-    """
-    Tags positions of a vessel as port entries, port exits or adjacent to a port
-    entry or exit.
-
-    Rows of the input DataFrame represent successive positions of the analyzed vessel,
-    assumed to be sorted chronologically by ascending order.
-
-    The DataFrame must have a two columns indicating
-        1) whether the position is at port
-        2) the time interval since the previous position
-
-    Args:
-        positions (pd.DataFrame) : DataFrame representing successive positions of a
-            vessel, assumed to be sorted by ascending datetime
-        is_at_port_column (str) : column name containing boolean values for whether a
-            position is in at port or not
-
-    Returns:
-        pd.DataFrame: copy of the input DataFrame with the added boolean columns
-          "is_port_exit", "follows_port_exit", "is_port_entry" and
-          "precedes_port_entry".
-    """
-    positions = positions.copy(deep=True)
-    is_at_port = positions[is_at_port_column].values
-
-    if len(is_at_port) == 0:
-        positions["is_port_exit"] = None
-        positions["follows_port_exit"] = None
-        positions["is_port_entry"] = None
-        positions["precedes_port_entry"] = None
-
-    elif len(is_at_port) == 1:
-        if is_at_port[0]:
-            positions["is_port_exit"] = np.nan
-            positions["follows_port_exit"] = False
-            positions["is_port_entry"] = np.nan
-            positions["precedes_port_entry"] = False
-        else:
-            positions["is_port_exit"] = False
-            positions["follows_port_exit"] = np.nan
-            positions["is_port_entry"] = False
-            positions["precedes_port_entry"] = np.nan
-
-    else:
-        # Build couples of successive positions
-        is_at_port_strides = np.lib.stride_tricks.sliding_window_view(is_at_port, 2)
-
-        # Compute port entries and exits based on changes of is_at_port status
-        is_port_exit = (is_at_port_strides == (True, False)).all(axis=1)
-        is_port_exit = np.append(is_port_exit, np.nan if is_at_port[-1] else False)
-        positions["is_port_exit"] = is_port_exit
-        positions["is_port_exit"] = zeros_ones_to_bools(positions["is_port_exit"])
-
-        follows_port_exit = np.append(
-            False if is_at_port[0] else np.nan, is_port_exit[:-1]
-        )
-        positions["follows_port_exit"] = follows_port_exit
-        positions["follows_port_exit"] = zeros_ones_to_bools(
-            positions["follows_port_exit"]
-        )
-
-        is_port_entry = (is_at_port_strides == (False, True)).all(axis=1)
-        is_port_entry = np.append(np.nan if is_at_port[0] else False, is_port_entry)
-        positions["is_port_entry"] = is_port_entry
-        positions["is_port_entry"] = zeros_ones_to_bools(positions["is_port_entry"])
-
-        precedes_port_entry = np.append(
-            is_port_entry[1:],
-            False if is_at_port[-1] else np.nan,
-        )
-        positions["precedes_port_entry"] = precedes_port_entry
-        positions["precedes_port_entry"] = zeros_ones_to_bools(
-            positions["precedes_port_entry"]
-        )
-
-    return positions
-
-
 def detect_fishing_activity(
     positions: pd.DataFrame,
     is_at_port_column: str = "is_at_port",
-    follows_port_exit_column: str = "follows_port_exit",
-    precedes_port_entry_column: str = "precedes_port_entry",
     average_speed_column: str = "average_speed",
     minimum_consecutive_positions: int = 3,
     fishing_speed_threshold: float = 4.5,
@@ -358,9 +274,7 @@ def detect_fishing_activity(
 
     The DataFrame must have a columns indicating
         1) whether the position is at port
-        2) whether the position is the first position at sea after port exit
-        3) whether the position is the last position at sea before port entry
-        4) the average speed between each position and the previous one, in knots
+        2) the average speed between each position and the previous one, in knots
 
     A vessel will be considered to be fishing if its speed remains below the
     `fishing_speed_threshold` for a minimum of `minimum_consecutive_positions`
@@ -371,10 +285,6 @@ def detect_fishing_activity(
           vessel, assumed to be sorted by ascending datetime
         is_at_port_column (str) : name of the column containing boolean values for
           whether a position is in at port or not
-        follows_port_exit_column (str) : name of the column containing boolean values
-          for whether a position directly follows a port exit (first position at sea)
-        precedes_port_entry_column (str) : name of the column containing boolean values
-          for whether a position directly precedes a port entry (last position at sea)
         average_speed_column (str) : name of the column containing average speed values
           (distance from previous position divided by time since the last position), in
           knots
@@ -390,24 +300,20 @@ def detect_fishing_activity(
 
     positions = positions.copy(deep=True)
 
-    port_movements = positions[
-        [
-            "is_at_port",
-            "follows_port_exit",
-            "precedes_port_entry",
-        ]
-    ].values
+    is_at_port = positions[is_at_port_column].values
+    average_speed = positions[average_speed_column].values
+    is_at_fishing_speed = average_speed < fishing_speed_threshold
 
-    is_at_fishing_speed = (positions["average_speed"].values < fishing_speed_threshold)[
-        :, None
-    ]
-
-    arr = np.concatenate((port_movements, is_at_fishing_speed), axis=1)
+    arr = np.concatenate((is_at_port[:, None], is_at_fishing_speed[:, None]), axis=1)
 
     fishing_activity = rows_belong_to_sequence(
         arr,
-        np.array([False, False, False, True]),
+        np.array([False, True]),
         window_length=minimum_consecutive_positions,
+    )
+
+    fishing_activity = np.where(
+        np.isnan(average_speed) & ~is_at_port, np.nan, fishing_activity
     )
 
     positions["is_fishing"] = fishing_activity

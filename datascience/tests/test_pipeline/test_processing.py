@@ -717,12 +717,18 @@ class TestProcessingMethods(unittest.TestCase):
                 [True, True],
                 [False, True],
                 [False, True],
+                [False, False],
             ]
         )
         res = rows_belong_to_sequence(arr, row, 2)
-        expected_res = np.array([np.nan, 0.0, 0.0, 1.0, 1.0])
+        expected_res = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0])
         np.testing.assert_array_equal(res, expected_res)
 
         res = rows_belong_to_sequence(arr, row, 7)
-        expected_res = np.array([np.nan, np.nan, np.nan, np.nan, np.nan])
+        expected_res = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        np.testing.assert_array_equal(res, expected_res)
+
+        row = np.array([True, True])
+        res = rows_belong_to_sequence(arr, row, 7)
+        expected_res = np.array([np.nan, np.nan, np.nan, 0.0, 0.0, 0.0])
         np.testing.assert_array_equal(res, expected_res)

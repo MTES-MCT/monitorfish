@@ -709,7 +709,7 @@ def try_get_factory(key: Hashable, error_value: Any = None):
 def array_equals_row_on_window(
     arr: np.array, row: np.array, window_length: int
 ) -> np.array:
-    """Tests whether each row of an input 2D array is the first of a sequence of
+    """Tests whether each row of an input 2D array is the last of a sequence of
     `window_length` consecutive rows equal to a given `row` 1D array, and returns the
     result as a float array with the same length as the input array.
 
@@ -808,10 +808,9 @@ def rows_belong_to_sequence(
     arrays cannot contain null values. The values are `0.0` (representing `False`),
     `1.0` (representing `True`) and `np.nan` representing nulls.
 
-    The first (`window_length` - 1) rows may be `np.nan`, since the sliding window
-    would need to know the values of the previous rows which are not given. They will
-    only be `1.0` if they do belong to a sequence of rows equal to `row`, otherwise
-    they will be `np.nan` regardless of whether their values are equal to `row`.
+    The first and last (`window_length` - 1) rows may be `np.nan`, since the rows
+    before the beginning and after the end of the array are not known and might be
+    needed to determine the result.
 
     Args:
         arr (np.array): 2D numpy array
@@ -842,10 +841,11 @@ def rows_belong_to_sequence(
             [True, True],
             [False, True],
             [False, True],
+            [False, False]
         ])
         >>> row = np.array([False, True])
         >>> rows_belong_to_sequence(arr, row, 2)
-        array([nan,  0.,  0.,  1.,  1.])
+        array([nan,  0.,  0.,  1.,  1., 0.])
     """
     ends_of_sequences = array_equals_row_on_window(
         arr,
@@ -853,4 +853,29 @@ def rows_belong_to_sequence(
         window_length=window_length,
     )
 
-    return back_propagate_ones(ends_of_sequences, steps=window_length - 1)
+    rows_known = back_propagate_ones(ends_of_sequences, steps=window_length - 1)
+
+    # To test if rows at the beginning and at the end of the array could possibly
+    # belong to a sequence `row`s exceeding the boundaries of the array, we add rows to
+    # the array and test again
+    extended_arr = np.concatenate(
+        (
+            row * np.ones((window_length - 1, len(row))),
+            arr,
+            row * np.ones((window_length - 1, len(row))),
+        )
+    )
+
+    ends_of_sequences_extended = array_equals_row_on_window(
+        extended_arr,
+        row,
+        window_length=window_length,
+    )
+
+    rows_maybe = back_propagate_ones(
+        ends_of_sequences_extended, steps=window_length - 1
+    )[window_length - 1 : -(window_length - 1)]
+
+    res = np.where(np.isnan(rows_known) & rows_maybe.astype(bool), np.nan, rows_maybe)
+
+    return res

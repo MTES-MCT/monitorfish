@@ -123,10 +123,6 @@ class TestHelpersSpatial(unittest.TestCase):
             True,
         ]
 
-        expected_positions_is_fishing = expected_positions_is_fishing.astype(
-            {"is_fishing": object}
-        )
-
         pd.testing.assert_frame_equal(
             positions_is_fishing, expected_positions_is_fishing
         )
@@ -193,6 +189,45 @@ class TestHelpersSpatial(unittest.TestCase):
             False,
             False,
             False,
+            np.nan,
+        ]
+
+        pd.testing.assert_frame_equal(
+            positions_is_fishing, expected_positions_is_fishing
+        )
+
+    def test_detect_fishing_activity_3(self):
+        """
+        This tests whether situations where there are only `NaN` values are correctly
+        hanlded (which is not trivial given how pandas handles null values in the
+        bool dtype).
+        """
+        positions = pd.DataFrame(
+            data=[
+                [False, np.nan],
+                [False, 1.3743995599575196],
+                [False, 3.4733394561194406],
+            ],
+            columns=pd.Index(
+                [
+                    "is_at_port",
+                    "average_speed",
+                ]
+            ),
+        )
+
+        positions_is_fishing = detect_fishing_activity(
+            positions,
+            is_at_port_column="is_at_port",
+            average_speed_column="average_speed",
+            minimum_consecutive_positions=3,
+            fishing_speed_threshold=4.5,
+        )
+
+        expected_positions_is_fishing = positions.copy(deep=True)
+        expected_positions_is_fishing["is_fishing"] = [
+            np.nan,
+            np.nan,
             np.nan,
         ]
 

@@ -214,17 +214,25 @@ def df_to_dict_series(
     return res
 
 
-def zeros_ones_to_bools(df: pd.DataFrame) -> pd.DataFrame:
-    """Converts a pandas DataFrame containing "0", "1" and None values
-    to a DataFrame with False, True and None values respectively.
+def zeros_ones_to_bools(
+    x: Union[pd.Series, pd.DataFrame]
+) -> Union[pd.Series, pd.DataFrame]:
+    """Converts a pandas DataFrame or Series containing `str`, `int` or `float` values,
+    possibly including null (`None` and `np.nan`) values to a DataFrame with False,
+    True and `np.nan` values respectively.
+
+    Values 1, 1.0, "1", any non zero number... is converted to `True`.
+    Values 0, 0.0, "0" are converted to `False`.
+    Values `None` and `np.nan` are converted to `np.nan`.
 
     Useful to convert boolean data extracted from Oracle databases, since Oracle does
-    not have a boolean data type and boolean data is often stored as "0"s and "1"s.
+    not have a boolean data type and boolean data is often stored as "0"s and "1"s,
+    or to handle sitations in which pandas data structures should contain nullable
+    boolean data (in pandas / numpy, the `bool` dtype is not nullable, and this can
+    be tricky to handle).
     """
-    # /!\ Simply converting to float and then to bool results in None values being
-    # converted into True
-    # The conversion to 'category' makes it possible to preserve None values.
-    return df.astype(float).astype("category").astype(bool)
+    tmp = x.astype(float)
+    return tmp.where(~((tmp > 0) | (tmp < 0)), True).replace([0.0], False)
 
 
 def to_pgarr(

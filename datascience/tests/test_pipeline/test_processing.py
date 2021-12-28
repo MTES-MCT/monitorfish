@@ -27,6 +27,7 @@ from src.pipeline.processing import (
     rows_belong_to_sequence,
     to_json,
     to_pgarr,
+    zeros_ones_to_bools,
 )
 
 
@@ -138,6 +139,69 @@ class TestProcessingMethods(unittest.TestCase):
         self.assertEqual(res.name, "my_column_name")
         self.assertTrue((res.index == [0, 1, 4, 123, 3]).all())
         self.assertEqual(res.values.tolist(), expected_values)
+
+    def test_zeros_ones_to_bools(self):
+        # Test with DataFrame
+        df = pd.DataFrame(
+            {
+                "ints_0_1": [0, 1, 0, 1, 1],
+                "ints_0_1_2": [0, 1, 0, 2, 1],
+                "floats_0_1": [0.0, 1.0, 0.0, 1.0, 1.0],
+                "floats_0_1_2": [0.0, 1.0, 0.0, 2.0, 1.0],
+                "str_0_1": ["0", "1", "0", "1", "1"],
+                "str_0_1_2": ["0", "1", "0", "2", "1"],
+                "ints_0_1_nan": [0, 1, np.nan, 1, None],
+                "ints_0_1_2_nan": [0, 1, np.nan, 2, None],
+                "str_0_1_nan": ["0", "1", np.nan, "1", None],
+                "str_0_1_2_nan": ["0", "1", np.nan, "2", None],
+                "all_nan": [np.nan, np.nan, np.nan, np.nan, np.nan],
+                "all_none": [None, None, None, None, None],
+            }
+        )
+
+        res = zeros_ones_to_bools(df)
+        expected_res = pd.DataFrame(
+            {
+                "ints_0_1": [False, True, False, True, True],
+                "ints_0_1_2": [False, True, False, True, True],
+                "floats_0_1": [False, True, False, True, True],
+                "floats_0_1_2": [False, True, False, True, True],
+                "str_0_1": [False, True, False, True, True],
+                "str_0_1_2": [False, True, False, True, True],
+                "ints_0_1_nan": [False, True, np.nan, True, np.nan],
+                "ints_0_1_2_nan": [False, True, np.nan, True, np.nan],
+                "str_0_1_nan": [False, True, np.nan, True, np.nan],
+                "str_0_1_2_nan": [False, True, np.nan, True, np.nan],
+                "all_nan": [np.nan, np.nan, np.nan, np.nan, np.nan],
+                "all_none": [np.nan, np.nan, np.nan, np.nan, np.nan],
+            }
+        )
+
+        pd.testing.assert_frame_equal(res, expected_res)
+
+        # Test with Series
+        s = pd.Series(
+            [0, 0.0, "0", "0.0", None, np.nan, 1, 1.0, 23.1, -2.3, "1", "12.1"]
+        )
+        res = zeros_ones_to_bools(s)
+        expected_res = pd.Series(
+            [
+                False,
+                False,
+                False,
+                False,
+                np.nan,
+                np.nan,
+                True,
+                True,
+                True,
+                True,
+                True,
+                True,
+            ]
+        )
+
+        pd.testing.assert_series_equal(res, expected_res)
 
     def test_to_pgarr(self):
         a = [1, 2, 3]

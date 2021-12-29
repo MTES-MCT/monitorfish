@@ -3,7 +3,7 @@ from typing import List, Union
 
 import pandas as pd
 import prefect
-from prefect import Flow, Parameter, task, unmapped
+from prefect import Flow, Parameter, case, task, unmapped
 from sqlalchemy import text
 
 from src.db_config import create_engine
@@ -198,6 +198,34 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period):
 
 
 @task(checkpoint=False)
+def reset_positions(period: Period):
+    """
+    Deletes enriched data from positions table in the designated Period.
+    """
+
+    logger = prefect.context.get("logger")
+    e = create_engine("monitorfish_remote")
+
+    logger.info(f"Resetting positions for period {period.start} - {period.end}.")
+
+    e.execute(
+        text(
+            "UPDATE interim.test_positions p "
+            "SET "
+            "    is_at_port = NULL, "
+            "    meters_from_previous_position = NULL, "
+            "    time_since_previous_position = NULL, "
+            "    average_speed = NULL, "
+            "    is_fishing = NULL "
+            "WHERE p.date_time >= :start "
+            "AND p.date_time <= :end;"
+        ),
+        start=period.start,
+        end=period.end,
+    )
+
+
+@task(checkpoint=False)
 def extract_enrich_load(
     period: Period, minimum_consecutive_positions: int, fishing_speed_threshold: float
 ):
@@ -248,6 +276,7 @@ with Flow("Enrich positions") as flow:
     chunk_overlap_minutes = Parameter("chunk_overlap_minutes")
     minimum_consecutive_positions = Parameter("minimum_consecutive_positions")
     fishing_speed_threshold = Parameter("fishing_speed_threshold")
+    recompute_all = Parameter("recompute_all")
 
     periods = make_periods(
         start_hours_ago,
@@ -256,8 +285,18 @@ with Flow("Enrich positions") as flow:
         chunk_overlap_minutes,
     )
 
-    extract_enrich_load.map(
-        periods,
-        minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-        fishing_speed_threshold=unmapped(fishing_speed_threshold),
-    )
+    with case(recompute_all, True):
+        reset = reset_positions.map(periods)
+        extract_enrich_load.map(
+            periods,
+            minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
+            fishing_speed_threshold=unmapped(fishing_speed_threshold),
+            upstream_tasks=[reset],
+        )
+
+    with case(recompute_all, False):
+        extract_enrich_load.map(
+            periods,
+            minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
+            fishing_speed_threshold=unmapped(fishing_speed_threshold),
+        )

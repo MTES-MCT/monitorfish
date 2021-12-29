@@ -182,15 +182,22 @@ def get_step_distances(
         distances = [np.nan] * len(df)
     else:
 
+        # For some reason, this is 100x faster than df[[lat, lon]].values
+        lat_lon = np.concatenate(
+            (df[lat].values[:, None], df[lon].values[:, None]), axis=1
+        )
+
         strides = np.lib.stride_tricks.sliding_window_view(
-            df[[lat, lon]].values,
+            lat_lon,
             window_shape=(2, 2),
         ).reshape((len(df) - 1, 4))
 
-        distances = np.apply_along_axis(
-            lambda x: h3.point_dist(tuple(x[[0, 1]]), tuple(x[[2, 3]]), unit=unit),
-            axis=1,
-            arr=strides,
+        # Using a list comprehension is 5x fasting than unsing np.apply_over_axis here
+        distances = np.array(
+            [
+                h3.point_dist((lat1, lon1), (lat2, lon2), unit=unit)
+                for lat1, lon1, lat2, lon2 in strides
+            ]
         )
 
         if how == "forward":

@@ -265,6 +265,7 @@ def detect_fishing_activity(
     average_speed_column: str = "average_speed",
     minimum_consecutive_positions: int = 3,
     fishing_speed_threshold: float = 4.5,
+    return_floats: bool = False,
 ) -> pd.DataFrame:
     """
     Detects fishing activity from positions of a vessel.
@@ -292,6 +293,11 @@ def detect_fishing_activity(
           below fishing speed threshold to consider that a vessel is fishing
         fishing_speed_threshold (float): speed below which a vessel is considered to be
           fishing
+        return_floats (bool): if `True`, return `float` dtypes with 1.0 representing
+          `True`, 0.0 representing `False` and `np.nan` for null values. If `False`
+          (the default), the return dtype is `object` and values are `True`, `False`
+          and `np.nan`, which is more explicit and natural but slower.
+
 
     Returns:
         pd.DataFrame: copy of the input DataFrame with the added boolean column
@@ -323,7 +329,9 @@ def detect_fishing_activity(
         )
 
         positions["is_fishing"] = fishing_activity
-        positions["is_fishing"] = zeros_ones_to_bools(positions["is_fishing"])
+
+        if not return_floats:
+            positions["is_fishing"] = zeros_ones_to_bools(positions["is_fishing"])
 
     return positions
 
@@ -336,6 +344,7 @@ def enrich_positions(
     is_at_port_column: str = "is_at_port",
     minimum_consecutive_positions: int = 3,
     fishing_speed_threshold: float = 4.5,
+    return_floats: bool = False,
 ) -> pd.DataFrame:
     """
     Applies `compute_movement_metrics` and `detect_fishing_activity` successively.
@@ -356,6 +365,7 @@ def enrich_positions(
         average_speed_column="average_speed",
         minimum_consecutive_positions=minimum_consecutive_positions,
         fishing_speed_threshold=fishing_speed_threshold,
+        return_floats=return_floats,
     )
 
     return positions

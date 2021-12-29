@@ -324,6 +324,96 @@ class TestHelpersSpatial(unittest.TestCase):
             positions_is_fishing, expected_positions_is_fishing, check_dtype=False
         )
 
+    def test_detect_fishing_activity_5(self):
+
+        positions = pd.DataFrame(
+            data=[
+                [False, np.nan],
+                [False, 1.3743995599575196],
+                [False, 3.4733394561194406],
+                [False, 3.6471005850875398],
+                [False, 1.01491998387466],
+                [False, 2.657721803089177],
+                [False, 1.0745565643325738],
+                [False, 3.5526462712359184],
+                [False, 0.47918612345236017],
+                [False, 1.2016245937954306],
+                [False, 0.46534727085138294],
+                [False, 1.764707518758544],
+                [False, 0.1768675527415563],
+                [False, 3.185626122736285],
+                [True, 0.03020495215890416],
+                [False, 3.32201017795906745],
+                [False, 7.9238776369607742],
+                [False, 1.2368204841346149],
+                [False, 5.238948073103732],
+                [False, 0.32462967457964775],
+            ],
+            columns=pd.Index(
+                [
+                    "is_at_port",
+                    "average_speed",
+                ]
+            ),
+        )
+
+        positions_is_fishing = detect_fishing_activity(
+            positions,
+            is_at_port_column="is_at_port",
+            average_speed_column="average_speed",
+            minimum_consecutive_positions=3,
+            fishing_speed_threshold=4.5,
+            return_floats=True,
+        )
+
+        expected_positions_is_fishing = positions.copy(deep=True)
+        expected_positions_is_fishing["is_fishing"] = [
+            np.nan,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            np.nan,
+        ]
+
+        pd.testing.assert_frame_equal(
+            positions_is_fishing, expected_positions_is_fishing
+        )
+
+    def test_detect_fishing_activity_6(self):
+        positions = pd.DataFrame({"is_at_port": [], "average_speed": []})
+
+        positions_is_fishing = detect_fishing_activity(
+            positions,
+            is_at_port_column="is_at_port",
+            average_speed_column="average_speed",
+            minimum_consecutive_positions=3,
+            fishing_speed_threshold=4.5,
+            return_floats=True,
+        )
+
+        expected_positions_is_fishing = pd.DataFrame(
+            {"is_at_port": [], "average_speed": [], "is_fishing": []}
+        )
+
+        pd.testing.assert_frame_equal(
+            positions_is_fishing, expected_positions_is_fishing, check_dtype=False
+        )
+
     def test_enrich_positions(self):
         positions = pd.DataFrame(
             data=[

@@ -242,26 +242,27 @@ def compute_movement_metrics(
 
     positions = positions.copy(deep=True)
 
-    positions["meters_from_previous_position"] = get_step_distances(
+    meters_from_previous_position = get_step_distances(
         positions, lat=lat, lon=lon, how="backward", unit="m"
     )
 
-    positions["time_since_previous_position"] = get_datetime_intervals(
+    positions["meters_from_previous_position"] = meters_from_previous_position
+
+    time_since_previous_position = get_datetime_intervals(
         positions[datetime_col], how="backward"
     )
 
-    positions["average_speed"] = (
-        positions["meters_from_previous_position"].values
-        / 1852
-        / (
-            (
-                positions["time_since_previous_position"].map(
-                    lambda dt: dt.total_seconds()
-                )
-            ).values
-            / 3600
-        )
+    positions["time_since_previous_position"] = time_since_previous_position
+
+    seconds_since_previous_position = (
+        time_since_previous_position.map(lambda dt: dt.total_seconds())
+    ).values
+
+    average_speed = (
+        meters_from_previous_position / 1852 / (seconds_since_previous_position / 3600)
     )
+
+    positions["average_speed"] = average_speed
 
     return positions
 

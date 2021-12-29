@@ -192,7 +192,7 @@ def get_step_distances(
             window_shape=(2, 2),
         ).reshape((len(df) - 1, 4))
 
-        # Using a list comprehension is 5x fasting than unsing np.apply_over_axis here
+        # Using a list comprehension is 5x faster than using np.apply_over_axis here
         distances = np.array(
             [
                 h3.point_dist((lat1, lon1), (lat2, lon2), unit=unit)

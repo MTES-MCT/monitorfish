@@ -116,7 +116,11 @@ def enrich_positions_by_vessel(
             enrich_positions,
             minimum_consecutive_positions=minimum_consecutive_positions,
             fishing_speed_threshold=fishing_speed_threshold,
+            return_floats=True,
         )
+        # It is much faster to apply zeros_ones_to_bool once after processing all
+        # vessels' positions than to apply it inside the enrich_position function
+        # for each vessel individually
         res["is_fishing"] = zeros_ones_to_bools(res["is_fishing"])
     return res
 

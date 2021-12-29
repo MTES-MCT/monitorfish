@@ -11,7 +11,11 @@ from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers import dates
 from src.pipeline.helpers.dates import Period
 from src.pipeline.helpers.spatial import enrich_positions
-from src.pipeline.processing import prepare_df_for_loading
+from src.pipeline.processing import (
+    left_isin_right_by_decreasing_priority,
+    prepare_df_for_loading,
+    zeros_ones_to_bools,
+)
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import make_periods
 from src.pipeline.shared_tasks.positions import tag_positions_at_port
@@ -39,18 +43,82 @@ def extract_positions(period: Period) -> pd.DataFrame:
     )
 
 
+def filter_already_enriched_vessels(positions: pd.DataFrame) -> pd.DataFrame:
+    """
+    Filters the input positions `DateFrame ` by removing positions of vessels that have
+    all there positions already enriched (which is detected by checking whether the
+    `is_at_port` column contains any null values).
+
+    Args:
+        positions (pd.DataFrame): vessels' positions. Must have columns:
+
+          - 'cfr'
+          - 'external_immatriculation'
+          - 'ircs'
+          - 'is_at_port'
+          - any other column required for the rest of the flow (latitude, longitude,
+            datetime...)
+
+    Returns:
+        pd.DataFrame: same as input with some rows removed.
+    """
+    vessels_to_enrich = positions[positions.is_at_port.isna()][
+        ["cfr", "external_immatriculation", "ircs"]
+    ].drop_duplicates()
+
+    positions_to_enrich = positions.loc[
+        left_isin_right_by_decreasing_priority(
+            positions[["cfr", "external_immatriculation", "ircs"]], vessels_to_enrich
+        )
+    ].reset_index(drop=True)
+
+    return positions_to_enrich
+
+
 def enrich_positions_by_vessel(
     positions: pd.DataFrame,
     minimum_consecutive_positions: int,
     fishing_speed_threshold: float,
 ) -> pd.DataFrame:
-    return positions.groupby(
-        ["cfr", "ircs", "external_immatriculation"], dropna=False, group_keys=False
-    ).apply(
-        enrich_positions,
-        minimum_consecutive_positions=minimum_consecutive_positions,
-        fishing_speed_threshold=fishing_speed_threshold,
-    )
+    """
+    Applies `enrich_positions` to each vessel's positions.
+
+    Args:
+        positions (pd.DataFrame): input positions. Must have columns:
+
+          - 'cfr'
+          - 'external_immatriculation'
+          - 'ircs'
+          - 'latitude'
+          - 'longitude'
+          - 'datetime_utc'
+          - 'is_at_port'
+
+    Returns:
+        pd.DataFrame: same as input, with the following columns added:
+
+          - 'meters_since_last_positions'
+          - 'time_since_last_positions'
+          - 'average_speed'
+          - 'is_fishing'
+    """
+    if len(positions) == 0:
+        # With an empty DataFrame, the `groupby` has nothing to group on and therefore
+        # `enrich_positions` does not get applied at all, which causes the result to
+        # be equal to the input and therefore some columns are missing.
+        # In this case, applying `enrich_positions` without any groupby just adds the
+        # desired columns and solves the problem.
+        res = enrich_positions(positions)
+    else:
+        res = positions.groupby(
+            ["cfr", "ircs", "external_immatriculation"], dropna=False, group_keys=False
+        ).apply(
+            enrich_positions,
+            minimum_consecutive_positions=minimum_consecutive_positions,
+            fishing_speed_threshold=fishing_speed_threshold,
+        )
+        res["is_fishing"] = zeros_ones_to_bools(res["is_fishing"])
+    return res
 
 
 def load_fishing_activity(positions: pd.DataFrame, period: Period):
@@ -96,24 +164,29 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period):
 
         connection.execute(
             text(
-                "UPDATE interim.test_positions p"
-                "SET"
-                "    is_at_port = ep.is_at_port,"
-                "    meters_from_previous_position = COALESCE("
-                "        ep.meters_from_previous_position,"
-                "        p.meters_from_previous_position"
-                "    ),"
-                "    time_since_previous_position = COALESCE("
-                "        ep.time_since_previous_position,"
-                "        p.time_since_previous_position"
-                "    ),"
-                "    average_speed = ep.average_speed,"
-                "    is_fishing = ep.is_fishing"
-                "FROM tmp_enriched_positions ep"
-                "WHERE p.id = ep.id"
-                "AND p.date_time >= :start"
-                "AND p.date_time <= :end"
-                ";"
+                "UPDATE interim.test_positions p "
+                "SET "
+                "    is_at_port = ep.is_at_port, "
+                "    meters_from_previous_position = COALESCE( "
+                "        ep.meters_from_previous_position, "
+                "        p.meters_from_previous_position "
+                "    ), "
+                "    time_since_previous_position = COALESCE( "
+                "        ep.time_since_previous_position, "
+                "        p.time_since_previous_position "
+                "    ), "
+                "    average_speed = COALESCE( "
+                "        ep.average_speed, "
+                "        p.average_speed "
+                "    ), "
+                "    is_fishing = COALESCE( "
+                "        ep.is_fishing, "
+                "        p.is_fishing "
+                "    )"
+                "FROM tmp_enriched_positions ep "
+                "WHERE p.id = ep.id "
+                "AND p.date_time >= :start "
+                "AND p.date_time <= :end;"
             ),
             start=period.start,
             end=period.end,
@@ -133,14 +206,34 @@ def extract_enrich_load(
     processing logic in terms of memory consumption.
     """
 
+    logger = prefect.context.get("logger")
+    logger.info(f"Processing positions for period {period.start} - {period.end}.")
+
+    logger.info("Extracting...")
     positions = extract_positions(period)
+    logger.info(
+        f"Extracted {len(positions)} positions from {positions.cfr.nunique()} vessels."
+    )
+
+    logger.info("Filtering...")
+    positions = filter_already_enriched_vessels(positions)
+
+    logger.info(
+        f"Retained {len(positions)} positions from {positions.cfr.nunique()} vessels."
+    )
+
+    logger.info("Tagging positions at port")
     positions = tag_positions_at_port.run(positions)
+
+    logger.info("Enriching positions")
     positions = enrich_positions_by_vessel(
         positions,
         minimum_consecutive_positions=minimum_consecutive_positions,
         fishing_speed_threshold=fishing_speed_threshold,
     )
-    load_fishing_activity(positions)
+
+    logger.info("Loading")
+    load_fishing_activity(positions, period)
 
 
 with Flow("Enrich positions") as flow:

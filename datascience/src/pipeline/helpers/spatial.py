@@ -300,24 +300,31 @@ def detect_fishing_activity(
 
     positions = positions.copy(deep=True)
 
-    is_at_port = positions[is_at_port_column].values
-    average_speed = positions[average_speed_column].values
-    is_at_fishing_speed = average_speed < fishing_speed_threshold
+    if len(positions) == 0:
+        positions["is_fishing"] = None
 
-    arr = np.concatenate((is_at_port[:, None], is_at_fishing_speed[:, None]), axis=1)
+    else:
+        is_at_port = positions[is_at_port_column].values
+        average_speed = positions[average_speed_column].values
+        is_at_fishing_speed = average_speed < fishing_speed_threshold
 
-    fishing_activity = rows_belong_to_sequence(
-        arr,
-        np.array([False, True]),
-        window_length=minimum_consecutive_positions,
-    )
+        arr = np.concatenate(
+            (is_at_port[:, None], is_at_fishing_speed[:, None]), axis=1
+        )
 
-    fishing_activity = np.where(
-        np.isnan(average_speed) & ~is_at_port, np.nan, fishing_activity
-    )
+        fishing_activity = rows_belong_to_sequence(
+            arr,
+            np.array([False, True]),
+            window_length=minimum_consecutive_positions,
+        )
 
-    positions["is_fishing"] = fishing_activity
-    positions["is_fishing"] = zeros_ones_to_bools(positions["is_fishing"])
+        fishing_activity = np.where(
+            np.isnan(average_speed) & ~is_at_port, np.nan, fishing_activity
+        )
+
+        positions["is_fishing"] = fishing_activity
+        positions["is_fishing"] = zeros_ones_to_bools(positions["is_fishing"])
+
     return positions
 
 

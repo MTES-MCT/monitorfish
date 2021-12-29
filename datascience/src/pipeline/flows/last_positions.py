@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
+from prefect.tasks.control_flow import merge
 
 from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS
 from src.pipeline.flows.risk_factor import default_risk_factors
@@ -17,7 +18,7 @@ from src.pipeline.processing import (
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
 )
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running, merge
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.positions import tag_positions_at_port
 
 

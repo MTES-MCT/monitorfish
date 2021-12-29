@@ -22,9 +22,14 @@ def make_periods(
     """
     Returns a list of `Period`s of duration `period_duration` covering the time range
     from `start_datetime_utc` to `end_datetime_utc`.
+
     If `overlap` is specified, the `Period`s returned will overlap by the amount
     specified, otherwise the end of one period will coincide with the start of the
     next one.
+
+    If `period_duration` is shorter than the time between `start_datetime_utc` and
+    `end_datetime_utc`, returns a list with a single `Period` starting on
+    `start_datetime_utc` and ending on `end_datetime_utc`.
 
     This is useful to break a long time range into smaller periods for processing time
     series data that would take up too much memory to handle in one piece.

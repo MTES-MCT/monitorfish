@@ -1,10 +1,13 @@
 import unittest
+from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
 
 from src.pipeline.helpers.spatial import (
+    compute_movement_metrics,
     detect_fishing_activity,
+    enrich_positions,
     get_h3_indices,
     get_step_distances,
 )
@@ -57,6 +60,73 @@ class TestHelpersSpatial(unittest.TestCase):
         np.testing.assert_almost_equal(distances_2, expected_distances_2)
         np.testing.assert_almost_equal(distances_3, expected_distances_3)
         np.testing.assert_almost_equal(distances_4, expected_distances_4)
+
+    def test_compute_movement_metrics_1(self):
+        positions = pd.DataFrame(
+            data=[
+                [45.2, -4.56, datetime(2021, 10, 2, 10, 23, 0)],
+                [45.2, -4.56, datetime(2021, 10, 2, 11, 23, 0)],
+                [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0)],
+                [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0)],
+                [45.32, -4.16, datetime(2021, 10, 2, 14, 23, 0)],
+                [45.41, -4.07, datetime(2021, 10, 2, 15, 23, 0)],
+            ],
+            columns=pd.Index(
+                [
+                    "latitude",
+                    "longitude",
+                    "datetime_utc",
+                ]
+            ),
+        )
+
+        res = compute_movement_metrics(positions)
+
+        expected_res = positions.copy(deep=True)
+        expected_res["meters_from_previous_position"] = [
+            np.nan,
+            0.0,
+            0.0,
+            16620.929159452244,
+            17476.033442064247,
+            12230.645466780992,
+        ]
+        expected_res["time_since_previous_position"] = [
+            None,
+            timedelta(hours=1),
+            timedelta(hours=1),
+            timedelta(hours=1),
+            timedelta(hours=1),
+            timedelta(hours=1),
+        ]
+        expected_res["average_speed"] = [
+            np.nan,
+            0.0,
+            0.0,
+            8.97458377940186,
+            9.436303154462337,
+            6.6040202304433,
+        ]
+
+        pd.testing.assert_frame_equal(res, expected_res)
+
+    def test_compute_movement_metrics_2(self):
+
+        input_columns = ["latitude", "longitude", "datetime_utc"]
+        positions = pd.DataFrame(columns=pd.Index(input_columns))
+
+        res = compute_movement_metrics(positions)
+
+        added_columns = [
+            "meters_from_previous_position",
+            "time_since_previous_position",
+            "average_speed",
+        ]
+        expected_res = positions = pd.DataFrame(
+            columns=pd.Index(input_columns + added_columns)
+        )
+
+        pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
 
     def test_detect_fishing_activity_1(self):
 
@@ -234,3 +304,126 @@ class TestHelpersSpatial(unittest.TestCase):
         pd.testing.assert_frame_equal(
             positions_is_fishing, expected_positions_is_fishing
         )
+
+    def test_detect_fishing_activity_4(self):
+        positions = pd.DataFrame({"is_at_port": [], "average_speed": []})
+
+        positions_is_fishing = detect_fishing_activity(
+            positions,
+            is_at_port_column="is_at_port",
+            average_speed_column="average_speed",
+            minimum_consecutive_positions=3,
+            fishing_speed_threshold=4.5,
+        )
+
+        expected_positions_is_fishing = pd.DataFrame(
+            {"is_at_port": [], "average_speed": [], "is_fishing": []}
+        )
+
+        pd.testing.assert_frame_equal(
+            positions_is_fishing, expected_positions_is_fishing, check_dtype=False
+        )
+
+    def test_enrich_positions(self):
+        positions = pd.DataFrame(
+            data=[
+                [45.2, -4.56, datetime(2021, 10, 2, 10, 23, 0), True],
+                [45.2, -4.56, datetime(2021, 10, 2, 11, 23, 0), True],
+                [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0), True],
+                [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0), False],
+                [45.32, -4.16, datetime(2021, 10, 2, 15, 23, 0), False],
+                [45.41, -4.07, datetime(2021, 10, 2, 16, 23, 0), False],
+            ],
+            columns=pd.Index(
+                [
+                    "latitude",
+                    "longitude",
+                    "datetime_utc",
+                    "is_at_port",
+                ]
+            ),
+        )
+
+        res = enrich_positions(positions)
+
+        expected_res = positions.copy(deep=True)
+
+        expected_res["meters_from_previous_position"] = [
+            np.nan,
+            0.0,
+            0.0,
+            16620.929159452244,
+            17476.033442064247,
+            12230.645466780992,
+        ]
+        expected_res["time_since_previous_position"] = [
+            None,
+            timedelta(hours=1),
+            timedelta(hours=1),
+            timedelta(hours=1),
+            timedelta(hours=2),
+            timedelta(hours=1),
+        ]
+        expected_res["average_speed"] = [
+            np.nan,
+            0.0,
+            0.0,
+            8.97458377940186,
+            4.718151577231168,
+            6.6040202304433,
+        ]
+
+        expected_res["is_fishing"] = [False, False, False, False, False, False]
+
+        pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
+
+        # Test non default arguments
+
+        res = enrich_positions(
+            positions, minimum_consecutive_positions=2, fishing_speed_threshold=7.1
+        )
+
+        expected_res.loc[4, "is_fishing"] = True
+        expected_res.loc[5, "is_fishing"] = True
+        pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
+
+        res = enrich_positions(
+            positions, minimum_consecutive_positions=4, fishing_speed_threshold=7.1
+        )
+
+        expected_res["is_fishing"] = [False, False, False, False, np.nan, np.nan]
+
+        pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
+
+    def test_enrich_positions_empty_input(self):
+        positions = pd.DataFrame(
+            data=[],
+            columns=pd.Index(
+                [
+                    "latitude",
+                    "longitude",
+                    "datetime_utc",
+                    "is_at_port",
+                ]
+            ),
+        )
+
+        res = enrich_positions(positions)
+
+        expected_res = pd.DataFrame(
+            data=[],
+            columns=pd.Index(
+                [
+                    "latitude",
+                    "longitude",
+                    "datetime_utc",
+                    "is_at_port",
+                    "meters_from_previous_position",
+                    "time_since_previous_position",
+                    "average_speed",
+                    "is_fishing",
+                ]
+            ),
+        )
+
+        pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)

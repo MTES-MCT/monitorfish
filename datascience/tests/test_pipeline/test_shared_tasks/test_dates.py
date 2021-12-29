@@ -13,7 +13,10 @@ class TestSharedTasksDates(unittest.TestCase):
         mock_datetime.utcnow.return_value = datetime(2021, 10, 5)
 
         periods = make_periods.run(
-            start_days_ago=3, end_days_ago=0, hours_per_chunk=26, chunk_overlap_hours=2
+            start_hours_ago=72,
+            end_hours_ago=0,
+            minutes_per_chunk=1560,
+            chunk_overlap_minutes=120,
         )
 
         expected_periods = [

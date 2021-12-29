@@ -145,15 +145,18 @@ def extract_enrich_load(
 
 with Flow("Enrich positions") as flow:
 
-    start_days_ago = Parameter("start_days_ago")
-    end_days_ago = Parameter("end_days_ago")
-    hours_per_chunk = Parameter("hours_per_chunk")
-    chunk_overlap_hours = Parameter("chunk_overlap_hours")
+    start_hours_ago = Parameter("start_hours_ago")
+    end_hours_ago = Parameter("end_hours_ago")
+    minutes_per_chunk = Parameter("minutes_per_chunk")
+    chunk_overlap_minutes = Parameter("chunk_overlap_minutes")
     minimum_consecutive_positions = Parameter("minimum_consecutive_positions")
     fishing_speed_threshold = Parameter("fishing_speed_threshold")
 
     periods = make_periods(
-        start_days_ago, end_days_ago, hours_per_chunk, chunk_overlap_hours
+        start_hours_ago,
+        end_hours_ago,
+        minutes_per_chunk,
+        chunk_overlap_minutes,
     )
 
     extract_enrich_load.map(

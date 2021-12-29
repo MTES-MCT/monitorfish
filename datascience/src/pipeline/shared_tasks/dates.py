@@ -8,16 +8,16 @@ from src.pipeline.helpers import dates
 
 @task(checkpoint=False)
 def make_periods(
-    start_days_ago: int,
-    end_days_ago: int,
-    hours_per_chunk: int,
-    chunk_overlap_hours: int,
+    start_hours_ago: int,
+    end_hours_ago: int,
+    minutes_per_chunk: int,
+    chunk_overlap_minutes: int,
 ) -> List[dates.Period]:
     """
     `prefect.Task` version of the function `src.pipeline.helpers.dates.make_periods`,
-    with the difference that start and end dates are to be given as a number of days
+    with the difference that start and end dates are to be given as a number of hours
     from the current date (instead of `datetime` objects), and chunk duration and
-    overlap are to be given as a number of hours (instead of `timedelta` objects).
+    overlap are to be given as a number of minutes (instead of `timedelta` objects).
     This is to accomodate for the fact that Prefect flows' parameters must be
     JSON-serializable, and `datetime` and `timedelta` are not, by default.
 
@@ -30,8 +30,8 @@ def make_periods(
     now = datetime.utcnow()
 
     return dates.make_periods(
-        start_datetime_utc=now - timedelta(days=start_days_ago),
-        end_datetime_utc=now - timedelta(days=end_days_ago),
-        period_duration=timedelta(hours=hours_per_chunk),
-        overlap=timedelta(hours=chunk_overlap_hours),
+        start_datetime_utc=now - timedelta(hours=start_hours_ago),
+        end_datetime_utc=now - timedelta(hours=end_hours_ago),
+        period_duration=timedelta(minutes=minutes_per_chunk),
+        overlap=timedelta(minutes=chunk_overlap_minutes),
     )

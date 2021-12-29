@@ -124,7 +124,7 @@ def coalesce(df: pd.DataFrame) -> pd.Series:
 
     res_values = np.choose(first_non_null_values_idx, non_null_rows.values.T)
 
-    res = pd.Series(index=df.index, data=[None] * len(df))
+    res = pd.Series(index=df.index, data=[None] * len(df), dtype=object)
     res[non_null_rows.index] = res_values
     return res
 

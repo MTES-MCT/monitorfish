@@ -6,4 +6,4 @@ CREATE TABLE public.n_miles_to_shore_areas
 );
 
 CREATE INDEX n_miles_to_shore_areas_geometry_idx
-    ON prod.n_miles_to_shore_areas USING gist (geometry);
+    ON public.n_miles_to_shore_areas USING gist (geometry);

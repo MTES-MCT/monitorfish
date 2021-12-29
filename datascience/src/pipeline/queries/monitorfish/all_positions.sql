@@ -5,7 +5,8 @@ SELECT
     ircs,
     date_time AS datetime_utc, 
     latitude, 
-    longitude 
+    longitude, 
+    is_at_port
 FROM positions 
 WHERE date_time > :start 
 AND date_time < :end 

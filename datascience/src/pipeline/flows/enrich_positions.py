@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from logging import Logger
 from typing import List, Union
 
 import pandas as pd
@@ -125,12 +126,13 @@ def enrich_positions_by_vessel(
     return res
 
 
-def load_fishing_activity(positions: pd.DataFrame, period: Period):
+def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logger):
 
-    logger = prefect.context.get("logger")
     e = create_engine("monitorfish_remote")
 
     with e.begin() as connection:
+
+        logger.info("Creating temporary table")
         connection.execute(
             text(
                 "CREATE TEMP TABLE tmp_enriched_positions("
@@ -158,6 +160,8 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period):
             "is_fishing",
         ]
 
+        logger.info("Loading to temporary table")
+
         positions[columns_to_load].to_sql(
             "tmp_enriched_positions",
             connection,
@@ -165,6 +169,8 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period):
             index=False,
             method=psql_insert_copy,
         )
+
+        logger.info("Updating positions from temporary table")
 
         connection.execute(
             text(
@@ -265,7 +271,7 @@ def extract_enrich_load(
     )
 
     logger.info("Loading")
-    load_fishing_activity(positions, period)
+    load_fishing_activity(positions, period, logger)
 
 
 with Flow("Enrich positions") as flow:

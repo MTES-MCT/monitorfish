@@ -1,0 +1,2 @@
+# Add this line to the crontab file to auto heal unhealthy containers
+2 * * * * docker restart $(docker ps | grep unhealthy | cut -c -12) 2>/dev/null

@@ -1,6 +1,7 @@
 import prefect
 from prefect.agent.local import LocalAgent
 
+from config import FLOWS_HEALTHCHECK_URL
 from src.pipeline.schedules import flows_to_register
 
 PROJECT_NAME = "Monitorfish"
@@ -56,5 +57,5 @@ if __name__ == "__main__":
     # Start local "agent" process
     # This process queries the Prefect GraphQL API every second to ask if any new flows
     # should be run
-    agent = LocalAgent(show_flow_logs=True)
+    agent = LocalAgent(show_flow_logs=True, agent_address=FLOWS_HEALTHCHECK_URL)
     agent.start()

@@ -81,6 +81,9 @@ default_risk_factors = {
 MONITORFISH_URL = "https://monitorfish.din.developpement-durable.gouv.fr/"
 BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
 
+# Flows healthcheck URL
+FLOWS_HEALTHCHECK_URL = "http://localhost:8085"
+
 # Email server
 MONITORFISH_EMAIL_SERVER_URL = os.environ.get("MONITORFISH_EMAIL_SERVER_URL")
 MONITORFISH_EMAIL_SERVER_PORT = os.environ.get("MONITORFISH_EMAIL_SERVER_PORT")

@@ -9,7 +9,7 @@ docker run -d -t --network=host --name monitorfish-pipeline-flows \
         --health-interval=10s \
         --health-retries=5 \
         --health-timeout=2s \
-        --health-start-period=30s \
+        --health-start-period=120s \
         --restart always \
         docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$MONITORFISH_VERSION \
         python main.py

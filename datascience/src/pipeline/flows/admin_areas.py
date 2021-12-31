@@ -16,7 +16,7 @@ def load_n_miles_to_shore_areas(
 ):
     load(
         n_miles_to_shore_areas,
-        table_name="n_miles_to_shore_areas",
+        table_name="n_miles_to_shore_areas_subdivided",
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),

@@ -1,9 +1,9 @@
-CREATE TABLE public.n_miles_to_shore_areas
+CREATE TABLE public.n_miles_to_shore_areas_subdivided
 (
     area character varying(100) NOT NULL,
     miles_to_shore character varying(100) NOT NULL,
-    geometry public.geometry(MultiPolygon,4326)
+    geometry public.geometry(Polygon,4326)
 );
 
-CREATE INDEX n_miles_to_shore_areas_geometry_idx
-    ON public.n_miles_to_shore_areas USING gist (geometry);
+CREATE INDEX n_miles_to_shore_areas_subdivided_geometry_idx
+    ON public.n_miles_to_shore_areas_subdivided USING gist (geometry);

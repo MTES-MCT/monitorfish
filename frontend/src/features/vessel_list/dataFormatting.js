@@ -169,7 +169,7 @@ export function getVesselObjectFromFeature (feature, coordinatesFormat) {
     internalReferenceNumber: feature.internalReferenceNumber,
     externalReferenceNumber: feature.externalReferenceNumber,
     ircs: feature.ircs,
-    dateTimeTimestamp: feature.dateTime ? new Date(feature.dateTime).getTime() : '',
+    lastPositionSentAt: feature.lastPositionSentAt || '',
     dateTime: feature.dateTime,
     latitude: getCoordinates(feature.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0],
     longitude: getCoordinates(feature.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1],

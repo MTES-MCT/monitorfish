@@ -204,7 +204,7 @@ class MonitorFishWorker {
       vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
 
       vessels = vessels.filter(vessel => {
-        const vesselDate = new Date(vessel.dateTimeTimestamp)
+        const vesselDate = new Date(vessel.lastPositionSentAt)
 
         return vesselDate > vesselIsHidden
       })

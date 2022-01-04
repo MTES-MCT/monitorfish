@@ -82,7 +82,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
           const layerToFeatures = layersToFeatures?.find(layerToFeatures => layerToFeatures.name === layer?.name)
           if (layerToFeatures) {
             const features = showSimplifiedFeatures
-              ? layerToFeatures.simplifiedFeatures
+              ? layerToFeatures.simplifiedFeatures || layerToFeatures.features
               : layerToFeatures.features
 
             vectorSource.clear(true)

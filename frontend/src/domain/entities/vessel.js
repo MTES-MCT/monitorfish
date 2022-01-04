@@ -10,25 +10,6 @@ export const VESSEL_SELECTOR_STYLE = 200
 export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
-  static getObjectForFilteringFromFeature (feature) {
-    const vessel = feature.getProperties()
-    return {
-      olCoordinates: feature.getGeometry().getCoordinates(),
-      vesselId: vessel.vesselId,
-      uid: feature.ol_uid,
-      length: vessel.length,
-      flagState: vessel.flagState?.toLowerCase(),
-      dateTimeTimestamp: new Date(vessel.dateTime).getTime(),
-      gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
-      fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
-      speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
-      district: vessel.district,
-      districtCode: vessel.districtCode,
-      isAtPort: vessel.isAtPort,
-      lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : ''
-    }
-  }
-
   static getVesselId (vessel) {
     return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
   }

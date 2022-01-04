@@ -15,22 +15,12 @@ import Layers from '../domain/entities/layers'
 
 import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
 import NoVesselsInFilterError from '../errors/NoVesselsInFilterError'
-import { booleanToInt } from '../utils'
 import { COLORS } from '../constants/constants'
+import { booleanToInt, customHexToRGB } from '../utils'
 
 import { getWebGLVesselStyle } from './styles/vessel.style'
 
 export const MIN_ZOOM_VESSEL_LABELS = 8
-
-export const CustomHexToRGB = (hexColor) => {
-  const aRgbHex = hexColor.substring(1).match(/.{1,2}/g)
-  const aRgb = [
-    parseInt(aRgbHex[0], 16),
-    parseInt(aRgbHex[1], 16),
-    parseInt(aRgbHex[2], 16)
-  ]
-  return aRgb
-}
 
 const VesselsLayer = ({ map }) => {
   const dispatch = useDispatch()
@@ -55,11 +45,11 @@ const VesselsLayer = ({ map }) => {
     filterColor,
     nonFilteredVesselsAreHidden
   } = useSelector((state) => {
-    const showedFilter = state.filter?.filters?.find(filter => filter.showed)
+    const _showedFilter = state.filter?.filters?.find(filter => filter.showed)
     return {
       filters: state.filter?.filters,
-      showedFilter,
-      filterColor: showedFilter ? showedFilter.color : null,
+      showedFilter: _showedFilter,
+      filterColor: _showedFilter ? _showedFilter.color : null,
       nonFilteredVesselsAreHidden: state.filter?.nonFilteredVesselsAreHidden
     }
   })
@@ -71,7 +61,6 @@ const VesselsLayer = ({ map }) => {
   const style = useRef(null)
 
   useEffect(() => {
-    console.log('map has changed')
     if (map) {
       if (currentWebGLLayerRef.current) {
         map.removeLayer(currentWebGLLayerRef.current)
@@ -79,10 +68,10 @@ const VesselsLayer = ({ map }) => {
       // styles derived from state
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-      const filterColorRGBArray = CustomHexToRGB(filterColor || isLight ? COLORS.vesselLightColor : COLORS.vesselColor)
+      const filterColorRGBArray = customHexToRGB(filterColor || isLight ? COLORS.vesselLightColor : COLORS.vesselColor)
       const initStyles = {
-        hideVesselsAtPort: hideVesselsAtPort,
-        hideNonSelectedVessels: hideNonSelectedVessels,
+        hideVesselsAtPort: false,
+        hideNonSelectedVessels: false,
         nonFilteredVesselsAreHidden: nonFilteredVesselsAreHidden,
         previewFilteredVesselsMode: previewFilteredVesselsMode,
         isLight: isLight,
@@ -103,7 +92,7 @@ const VesselsLayer = ({ map }) => {
         useSpatialIndex: false,
         source: GeoJsonVectorSource.current
       })
-      GeoJsonVectorLayer.name = 'GEOJSONLAYER'
+      GeoJsonVectorLayer.name = Layers.VESSELS.code
       map.getLayers().push(GeoJsonVectorLayer)
       currentWebGLLayerRef.current = GeoJsonVectorLayer
     }
@@ -130,7 +119,7 @@ const VesselsLayer = ({ map }) => {
       GeoJsonVectorSource.current?.addFeatures(features)
       console.log('vessels update webgl')
       if (filterColor) {
-        const rgb = CustomHexToRGB(filterColor)
+        const rgb = customHexToRGB(filterColor)
 
         style.current.variables = {
           ...style.current.variables,
@@ -141,7 +130,7 @@ const VesselsLayer = ({ map }) => {
       }
       // map.render()
     }
-  }, [vesselsgeojson])
+  }, [map, vesselsgeojson])
 
   // styles
   useEffect(() => {
@@ -166,42 +155,49 @@ const VesselsLayer = ({ map }) => {
   }, [selectedBaseLayer])
 
   useEffect(() => {
+    if (filterColor) {
+      const rgb = customHexToRGB(filterColor)
+      style.current.variables.filterColorRed = rgb[0]
+      style.current.variables.filterColorGreen = rgb[1]
+      style.current.variables.filterColorBlue = rgb[2]
+    }
+  }, [filterColor])
+
+  useEffect(() => {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
     style.current.variables.vesselIsHiddenTimeThreshold = vesselIsHidden.getTime()
     style.current.variables.vesselIsOpacityReducedTimeThreshold = vesselIsOpacityReduced.getTime()
-  }, [vesselsLastPositionVisibility.hidden, vesselsLastPositionVisibility.opacityReduced])
+  }, [vesselsLastPositionVisibility])
   // end styles
 
   useEffect(() => {
+    const applyFilterToVessels = (vesselsFeatures) => {
+      if (!filters || !filters.length || !showedFilter) {
+        dispatch(setFilteredVesselsFeatures([]))
+        return
+      }
+
+      if (!vesselsFeatures?.length) {
+        return
+      }
+
+      const vesselsObjects = vesselsFeatures.map(feature => {
+        return Vessel.getObjectForFilteringFromFeature(feature)
+      })
+
+      dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
+        .then(filteredVessels => {
+          if (!filteredVessels?.length) {
+            dispatch(setError(new NoVesselsInFilterError('Il n\'y a pas de navire dans ce filtre')))
+          }
+          const filteredVesselsUids = filteredVessels.map(vessel => vessel.vesselId)
+          dispatch(setFilteredVesselsFeatures(filteredVesselsUids))
+        })
+    }
+
     const vesselsFeatures = GeoJsonVectorSource?.current?.getFeatures()
     applyFilterToVessels(vesselsFeatures)
-  }, [filters, showedFilter])
-
-  const applyFilterToVessels = (vesselsFeatures) => new Promise(resolve => {
-    if (!filters || !filters.length || !showedFilter) {
-      dispatch(setFilteredVesselsFeatures([]))
-      return resolve(vesselsFeatures)
-    }
-
-    if (!vesselsFeatures?.length) {
-      return resolve([])
-    }
-
-    const vesselsObjects = vesselsFeatures.map(feature => {
-      return Vessel.getObjectForFilteringFromFeature(feature)
-    })
-
-    dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
-      .then(filteredVessels => {
-        if (!filteredVessels?.length) {
-          dispatch(setError(new NoVesselsInFilterError('Il n\'y a pas de navire dans ce filtre')))
-        }
-        const filteredVesselsUids = filteredVessels.map(vessel => vessel.vesselId)
-        dispatch(setFilteredVesselsFeatures(filteredVesselsUids))
-
-        return resolve(vesselsFeatures)
-      })
-  })
+  }, [filters, showedFilter, dispatch])
 
   return null
 }

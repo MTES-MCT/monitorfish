@@ -7,32 +7,35 @@ import { booleanToInt } from '../../utils'
 const featureHas = (key) => ['==', ['get', key], 1]
 const featureHasNot = (key) => ['==', ['get', key], 0]
 const stateIs = (key) => ['==', ['var', key], 1]
-const and = (cond1, cond2) => ['case', cond1, ['case', cond2, true, false], false]
-const or = (...conditions) => {
-  const conditionInArray = conditions.reduce((result, cond) => {
-    return [...result, ...cond]
-  }, [])
-  return ['case', ...conditionInArray, false]
-}
+// const and = (cond1, cond2) => ['all', cond1, cond2]
 
-const hideVesselsAtPortCondition = [[
+const hideVesselsAtPortCondition = [
   'case',
   // if hideVesselsAtPort...
   stateIs('hideVesselsAtPort'),
   // ... hide vessels atPort
   featureHasNot('isAtPort'),
   true
-], true]
+]
+
 const hideNonSelectedVesselsCondition = [
+  '!',
   // if hideNonSelectedVessels...
-  stateIs('hideNonSelectedVessels'),
-  false // selectedVessel is in a dedicated layer
+  stateIs('hideNonSelectedVessels')
+  // selectedVessel is in a dedicated layer
 ]
 const hideDeprecatedPositionsCondition = [
+  'case',
   // if lastPosition is older than threshold, hide vessel
-  ['>', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']],
+  ['<=', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']],
+  true,
   false
-
+]
+const showOnlyNonFilteredVessels = [
+  'case',
+  stateIs('nonFilteredVesselsAreHidden'),
+  featureHas('isFiltered'),
+  true
 ]
 
 export const getWebGLVesselStyle = ({
@@ -52,17 +55,13 @@ export const getWebGLVesselStyle = ({
   const booleanFilter = ['case',
     // in preview mode, show only vessels in preview mode
     stateIs('previewFilteredVesselsMode'), featureHas('filterPreview'),
-
-    ...hideNonSelectedVesselsCondition,
-    // show only non filtered vessels
-    stateIs('nonFilteredVesselsAreHidden'), and(featureHas('isFiltered'), or(hideDeprecatedPositionsCondition,
-      hideVesselsAtPortCondition)),
-
-    ...hideDeprecatedPositionsCondition,
-    ...hideVesselsAtPortCondition,
-
     // default
-    true
+    ['all',
+      hideNonSelectedVesselsCondition,
+      hideDeprecatedPositionsCondition,
+      showOnlyNonFilteredVessels,
+      hideVesselsAtPortCondition
+    ]
   ]
 
   const style = {

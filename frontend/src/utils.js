@@ -5,6 +5,25 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
 import { all } from 'ol/loadingstrategy'
 
+/**
+ *
+ * @param {string} hexColor
+ * @param {number[]} defaultColor
+ * @returns
+ */
+export const customHexToRGB = (hexColor, defaultColor) => {
+  if (!hexColor || !(typeof hexColor === 'string')) {
+    return defaultColor || [0, 0, 0]
+  }
+  const aRgbHex = hexColor.substring(1).match(/.{1,2}/g)
+  const aRgb = [
+    parseInt(aRgbHex[0], 16),
+    parseInt(aRgbHex[1], 16),
+    parseInt(aRgbHex[2], 16)
+  ]
+  return aRgb
+}
+
 export const booleanToInt = (boolean) => {
   return boolean ? 1 : 0
 }

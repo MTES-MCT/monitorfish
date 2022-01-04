@@ -20,6 +20,7 @@ data class AlertEntity(
         @Id
         @Column(name = "alert_id")
         val id: UUID,
+        // TODO Enlever le champ name (aussi pour les alerts PNO/LAN)
         @Column(name = "name", nullable = false)
         val name: String,
         @Column(name = "vessel_name")

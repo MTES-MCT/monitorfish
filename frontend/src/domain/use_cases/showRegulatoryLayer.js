@@ -4,7 +4,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
 import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
-import { simplify } from '@turf/turf'
+import simplify from 'simplify-geojson'
 
 import Layers, { getGearCategory } from '../entities/layers'
 import { animateToRegulatoryLayer } from '../shared_slices/Map'
@@ -77,9 +77,20 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
     }),
     loader: extent => {
       getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.inBackofficeMode).then(regulatoryZone => {
-        const simplifiedRegulatoryZone = simplify(regulatoryZone, { tolerance: 0.01, highQuality: false })
+        if (!regulatoryZone.geometry) {
+          vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))
+          vectorSource.removeLoadedExtent(extent)
+          return
+        }
 
-        const feature = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone : regulatoryZone
+        let simplifiedRegulatoryZone = null
+        try {
+          simplifiedRegulatoryZone = simplify(regulatoryZone, 0.01)
+        } catch (e) {
+          console.error(e)
+        }
+
+        const feature = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone || regulatoryZone : regulatoryZone
         vectorSource.addFeatures(vectorSource.getFormat().readFeatures(feature))
         const center = getCenter(vectorSource.getExtent())
         const centerHasValidCoordinates = center?.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])

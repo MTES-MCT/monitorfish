@@ -265,6 +265,12 @@ export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, 
     : false
 }
 
+export function findIfSearchStringIncludedInArrayProperty (zone, propertiesToSearch, searchText) {
+  return zone[propertiesToSearch]?.length && searchText
+    ? zone[propertiesToSearch].find(text => getTextForSearch(JSON.stringify(text)).includes(getTextForSearch(searchText)))
+    : false
+}
+
 export function searchByLawType (lawTypes, properties, searchText, gears) {
   const searchResultByLawType = {}
 
@@ -309,6 +315,9 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
             propertiesToSearch.forEach(property => {
               if (property === REGULATORY_SEARCH_PROPERTIES.GEARS) {
                 searchStringIncludedInProperty = findIfStringIsIncludedInZoneGears(zone, searchText, uniqueGearCodes)
+              } else if (property === REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES) {
+                searchStringIncludedInProperty =
+                  searchStringIncludedInProperty || findIfSearchStringIncludedInArrayProperty(zone, property, searchText)
               } else {
                 searchStringIncludedInProperty =
                   searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)

@@ -124,7 +124,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-controls"]', { timeout: 20000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-controls-year"]').first().contains("3 contrôles, 2 infractions", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-controls-year"]').first().contains("1 contrôle, 2 infractions", { timeout: 20000 })
 
     // When
     cy.get('*[data-cy^="vessel-controls-year"]').first().click({ timeout: 20000 })

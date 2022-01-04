@@ -11,7 +11,7 @@ context('VesselSidebar', () => {
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
-    cy.wait(400)
+    cy.wait(1000)
   })
 
   it('Vessel Should be searched from the search bar', () => {

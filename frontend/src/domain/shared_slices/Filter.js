@@ -56,9 +56,7 @@ const filterSlice = createSlice({
       const uuidToShow = action.payload
 
       state.filters = state.filters.map(filter => {
-        filter.showed = filter.uuid === uuidToShow
-
-        return filter
+        return { ...filter, showed: filter.uuid === uuidToShow }
       })
       window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
     },
@@ -70,11 +68,12 @@ const filterSlice = createSlice({
      */
     hideFilters (state) {
       state.filters = state.filters.map(filter => {
-        filter.showed = false
-
-        return filter
+        return { ...filter, showed: false }
       })
       window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
+      // prevents no filters shown & nonFilteredVesselsAreHidden = true leading to empty map
+      state.nonFilteredVesselsAreHidden = false
+      window.localStorage.setItem(nonFilteredVesselsAreHiddenLocalStorageKey, JSON.stringify(state.nonFilteredVesselsAreHidden))
     },
     /**
      * Remove tag from a given filter and delete filter if the filter contains no tag

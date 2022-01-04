@@ -61,14 +61,26 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     style: getLabelLineStyle
   }))
 
-  const vesselsLayer = map.getLayers().getArray()?.find((ollayer) => {
-    return ollayer.name === 'GEOJSONLAYER'
-  })
-  const vesselsLayerSource = vesselsLayer?.getSource()
+  const vesselsLayerSource = useRef(null)
+  const [currentLabels, setCurrentLabels] = useState(null)
 
   useEffect(() => {
-    addLayerToMap()
-  }, [map])
+    if (map) {
+      layer.name = Layers.VESSELS_LABEL.code
+      map.getLayers().push(layer)
+
+      const vesselsLayer = map.getLayers().getArray()?.find((ollayer) => {
+        return ollayer.name === Layers.VESSELS.code
+      })
+      vesselsLayerSource.current = vesselsLayer?.getSource()
+    }
+
+    return () => {
+      if (map) {
+        map.removeLayer(layer)
+      }
+    }
+  })
 
   useEffect(() => {
     if (previousFeaturesAndLabels && featuresAndLabels) {
@@ -83,21 +95,60 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           }
         }
       })
-    }
-  }, [featuresAndLabels])
 
-  function addLayerToMap () {
-    if (map) {
-      layer.name = Layers.VESSELS_LABEL.code
-      map.getLayers().push(layer)
-    }
+      function moveVesselLabelLine (featureId, coordinates, nextCoordinates, offset) {
+        if (vesselToCoordinates.has(featureId)) {
+          const existingLabelLineFeature = vectorSource.getFeatureById(featureId)
+          if (existingLabelLineFeature) {
+            existingLabelLineFeature.setGeometry(new LineString([coordinates, nextCoordinates]))
+          }
+        } else {
+          const labelLineFeature = VesselLabelLine.getFeature(
+            coordinates,
+            nextCoordinates,
+            featureId)
 
-    return () => {
-      if (map) {
-        map.removeLayer(layer)
+          vectorSource.addFeature(labelLineFeature)
+        }
+
+        const nextVesselToCoordinates = vesselToCoordinates
+        nextVesselToCoordinates.set(featureId, { coordinates: nextCoordinates, offset })
+        setVesselToCoordinates(nextVesselToCoordinates)
       }
+      // TODO: use only one useEffect to directly render labels in one .map
+      const labels = featuresAndLabels.map(({ identity, label, offset, featureId, opacity, trackIsShown }) => {
+        return <VesselLabelOverlay
+          map={map}
+          key={identity.key}
+          featureId={featureId}
+          triggerShowRiskDetails={triggerShowRiskDetails}
+          moveLine={moveVesselLabelLine}
+          text={label?.labelText}
+          riskFactor={label?.riskFactor}
+          riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
+          underCharter={label?.underCharter}
+          flagState={identity.flagState}
+          offset={offset}
+          coordinates={identity.coordinates}
+          zoomHasChanged={previousMapZoom.current}
+          opacity={opacity}
+          trackIsShown={trackIsShown}
+          previewFilteredVesselsMode={previewFilteredVesselsMode}
+        />
+      })
+      setCurrentLabels(labels)
     }
-  }
+  }, [
+    featuresAndLabels,
+    previousMapZoom,
+    previousMapZoom,
+    vesselToRiskFactorDetailsShowed,
+    vesselLabelsShowedOnMap,
+    riskFactorShowedOnMap,
+    vesselsLastPositionVisibility,
+    vesselLabel,
+    hideVesselsAtPort
+  ])
 
   useEffect(() => {
     if (!riskFactorShowedOnMap) {
@@ -150,41 +201,9 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     if (currentZoom !== previousMapZoom.current) {
       previousMapZoom.current = currentZoom
     }
-  }, [mapMovingAndZoomEvent])
+  }, [map, mapMovingAndZoomEvent])
 
-  function moveVesselLabelLine (featureId, coordinates, nextCoordinates, offset) {
-    if (vesselToCoordinates.has(featureId)) {
-      const existingLabelLineFeature = vectorSource.getFeatureById(featureId)
-      if (existingLabelLineFeature) {
-        existingLabelLineFeature.setGeometry(new LineString([coordinates, nextCoordinates]))
-      }
-    } else {
-      const labelLineFeature = VesselLabelLine.getFeature(
-        coordinates,
-        nextCoordinates,
-        featureId)
-
-      vectorSource.addFeature(labelLineFeature)
-    }
-
-    const nextVesselToCoordinates = vesselToCoordinates
-    nextVesselToCoordinates.set(featureId, { coordinates: nextCoordinates, offset })
-    setVesselToCoordinates(nextVesselToCoordinates)
-  }
-
-  function showOnlySelectedVesselsLabel () {
-    const extent = vesselsLayerSource.getFeaturesInExtent(map.getView().calculateExtent())
-
-    const selectedVesselFeature = extent
-      .find(feature => selectedVessel && feature.getId() === Vessel.getVesselId(selectedVessel))
-
-    const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
-    const showedTracksFeatures = extent
-      .filter(feature => showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
-
-    const showedFeaturesLabels = showedTracksFeatures.concat(selectedVesselFeature)
-    addLabelToFeatures(showedFeaturesLabels.filter(feature => feature))
-  }
+  // -----------
 
   function addVesselLabelToAllFeaturesInExtent () {
     if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
@@ -193,44 +212,26 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       return
     }
 
-    if (hideNonSelectedVessels) {
-      showOnlySelectedVesselsLabel()
-      return
-    }
-
-    const features = vesselsLayerSource?.getFeaturesInExtent(map.getView().calculateExtent()) || []
+    const featuresInExtent = vesselsLayerSource?.current?.getFeaturesInExtent(map.getView().calculateExtent()) || []
     const filterShowed = filters.find(filter => filter.showed)
 
     const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
-    const isPreviewed = previewFilteredVesselsMode
-    if (isFiltered || isPreviewed) {
-      addLabelToFilteredFeatures(features)
-    } else if (features.length < MAX_LABELS_DISPLAYED) {
-      addLabelToFeatures(features)
+
+    let featuresRequireringLabel
+    if (hideNonSelectedVessels) {
+      const selectedVesselId = selectedVessel && Vessel.getVesselId(selectedVessel)
+      const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
+      featuresRequireringLabel = featuresInExtent.filter(feature => (selectedVessel && feature.getId() === selectedVesselId) || showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
+    } else if (previewFilteredVesselsMode) {
+      featuresRequireringLabel = featuresInExtent.filter(feature => feature.get('filterPreview'))
+    } else if (isFiltered) {
+      featuresRequireringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
     } else {
-      setFeaturesAndLabels([])
-      vectorSource.clear()
+      featuresRequireringLabel = featuresInExtent
     }
-  }
-
-  function addLabelToFilteredFeatures (features) {
-    let filteredFeatures
-    if (previewFilteredVesselsMode) {
-      filteredFeatures = features.filter(feature => {
-        return feature.previewMode
-      })
-    } else {
-      filteredFeatures = features.filter(feature => {
-        return feature.isFiltered
-      })
-    }
-
-    const maxLabelsDisplayed = previewFilteredVesselsMode
-      ? MAX_LABELS_DISPLAYED_IN_PREVIEW
-      : MAX_LABELS_DISPLAYED
-
-    if (filteredFeatures.length < maxLabelsDisplayed) {
-      addLabelToFeatures(filteredFeatures)
+    const maxLabelsDisplayed = previewFilteredVesselsMode ? MAX_LABELS_DISPLAYED_IN_PREVIEW : MAX_LABELS_DISPLAYED
+    if (featuresRequireringLabel.length < maxLabelsDisplayed) {
+      addLabelToFeatures(featuresRequireringLabel)
     } else {
       setFeaturesAndLabels([])
       vectorSource.clear()
@@ -293,7 +294,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           offset,
           featureId: labelLineFeatureId
         }
-      }).filter(object => object)
+      })
 
     setFeaturesAndLabels(nextFeaturesAndLabels)
   }
@@ -307,29 +308,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     setVesselToRiskFactorDetailsShowed(nextVesselToRiskFactorDetailsShowed)
   }
   return (<>
-    {
-      featuresAndLabels.map(({ identity, label, offset, featureId, opacity, trackIsShown }) => {
-        return <VesselLabelOverlay
-          map={map}
-          key={identity.key}
-          featureId={featureId}
-          triggerShowRiskDetails={triggerShowRiskDetails}
-          moveLine={moveVesselLabelLine}
-          text={label?.labelText}
-          riskFactor={label?.riskFactor}
-          riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
-          underCharter={label?.underCharter}
-          flagState={identity.flagState}
-          offset={offset}
-          coordinates={identity.coordinates}
-          zoomHasChanged={previousMapZoom.current}
-          opacity={opacity}
-          trackIsShown={trackIsShown}
-          previewFilteredVesselsMode={previewFilteredVesselsMode}
-        />
-      })
-    }
-    <div />
+    { currentLabels }
+     <div /> { /* returns at least a div */ }
   </>)
 }
 

@@ -1,6 +1,4 @@
-from datetime import datetime, timedelta
 from logging import Logger
-from typing import List, Union
 
 import pandas as pd
 import prefect
@@ -8,8 +6,7 @@ from prefect import Flow, Parameter, case, task, unmapped
 from sqlalchemy import text
 
 from src.db_config import create_engine
-from src.pipeline.generic_tasks import extract, load
-from src.pipeline.helpers import dates
+from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.dates import Period
 from src.pipeline.helpers.spatial import enrich_positions
 from src.pipeline.processing import (
@@ -17,7 +14,6 @@ from src.pipeline.processing import (
     prepare_df_for_loading,
     zeros_ones_to_bools,
 )
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import make_periods
 from src.pipeline.shared_tasks.positions import tag_positions_at_port
 from src.pipeline.utils import psql_insert_copy

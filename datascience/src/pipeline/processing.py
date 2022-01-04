@@ -1,8 +1,7 @@
 import datetime
 import logging
 from functools import partial
-from time import sleep
-from typing import Any, Hashable, Iterable, List, Union
+from typing import Any, Hashable, List, Union
 
 import numpy as np
 import pandas as pd

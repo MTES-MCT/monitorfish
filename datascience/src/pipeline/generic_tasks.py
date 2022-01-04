@@ -1,19 +1,13 @@
 import logging
 from pathlib import Path
-from typing import List, Union
+from typing import Union
 
 import geopandas as gpd
 import pandas as pd
-import prefect
-from prefect import task
 
 from src.db_config import create_engine
 from src.pipeline import utils
-from src.pipeline.processing import (
-    df_values_to_psql_arrays,
-    prepare_df_for_loading,
-    to_json,
-)
+from src.pipeline.processing import prepare_df_for_loading
 from src.pipeline.utils import get_table, psql_insert_copy
 from src.read_query import read_saved_query
 

@@ -4,8 +4,6 @@ from typing import List, Union
 
 import pandas as pd
 
-from src.pipeline.processing import json_converter
-
 
 @dataclass
 class Period:

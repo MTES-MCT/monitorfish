@@ -2,17 +2,9 @@ import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, task
-from sqlalchemy import ARRAY, Date, Float, Integer, MetaData, String, Table
-from sqlalchemy.exc import InvalidRequestError
 
-from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.processing import (
-    coalesce,
-    concatenate_columns,
-    df_values_to_psql_arrays,
-)
-from src.pipeline.utils import delete, psql_insert_copy
+from src.pipeline.processing import coalesce, concatenate_columns
 
 
 @task(checkpoint=False)

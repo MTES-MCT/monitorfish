@@ -1,5 +1,4 @@
 import io
-import zipfile
 
 import pandas as pd
 import prefect

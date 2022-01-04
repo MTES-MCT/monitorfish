@@ -1,9 +1,8 @@
 import pandas as pd
-import prefect
 from prefect import Flow, task
 
 from src.db_config import create_engine
-from src.pipeline.generic_tasks import extract, load
+from src.pipeline.generic_tasks import extract
 from src.pipeline.utils import psql_insert_copy
 
 

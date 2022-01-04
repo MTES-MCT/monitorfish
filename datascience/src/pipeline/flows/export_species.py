@@ -2,7 +2,6 @@ import io
 import zipfile
 
 import pandas as pd
-import prefect
 import requests
 from prefect import Flow, Parameter, task
 

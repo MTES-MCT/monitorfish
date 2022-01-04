@@ -1,6 +1,5 @@
 import pandas as pd
 from prefect import task
-from prefect.tasks.control_flow import merge
 
 from config import ANCHORAGES_H3_CELL_RESOLUTION
 from src.pipeline.generic_tasks import extract

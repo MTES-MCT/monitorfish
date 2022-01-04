@@ -110,7 +110,7 @@ const VesselListTable = props => {
         </Column>
         <Column resizable sortable width={130}>
           <HeaderCell>Dernier signal</HeaderCell>
-          <TimeAgoCell dataKey="dateTimeTimestamp"/>
+          <TimeAgoCell dataKey="lastPositionSentAt"/>
         </Column>
         <Column resizable width={100}>
           <HeaderCell>Latitude</HeaderCell>

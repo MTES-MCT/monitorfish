@@ -5,16 +5,13 @@ import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
-import { setError } from '../domain/shared_slices/Global'
-import { setFilteredVesselsFeatures } from '../domain/shared_slices/Vessel'
 import {
   getVesselLastPositionVisibilityDates,
   Vessel
 } from '../domain/entities/vessel'
 import Layers from '../domain/entities/layers'
 
-import getFilteredVessels from '../domain/use_cases/getFilteredVessels'
-import NoVesselsInFilterError from '../errors/NoVesselsInFilterError'
+import { applyFilterToVessels } from '../domain/use_cases/applyFilterAndSetVessels'
 import { COLORS } from '../constants/constants'
 import { booleanToInt, customHexToRGB } from '../utils'
 
@@ -155,13 +152,14 @@ const VesselsLayer = ({ map }) => {
   }, [selectedBaseLayer])
 
   useEffect(() => {
+    dispatch(applyFilterToVessels())
     if (filterColor) {
       const rgb = customHexToRGB(filterColor)
       style.current.variables.filterColorRed = rgb[0]
       style.current.variables.filterColorGreen = rgb[1]
       style.current.variables.filterColorBlue = rgb[2]
     }
-  }, [filterColor])
+  }, [filterColor, filters, showedFilter, dispatch])
 
   useEffect(() => {
     const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
@@ -169,35 +167,6 @@ const VesselsLayer = ({ map }) => {
     style.current.variables.vesselIsOpacityReducedTimeThreshold = vesselIsOpacityReduced.getTime()
   }, [vesselsLastPositionVisibility])
   // end styles
-
-  useEffect(() => {
-    const applyFilterToVessels = (vesselsFeatures) => {
-      if (!filters || !filters.length || !showedFilter) {
-        dispatch(setFilteredVesselsFeatures([]))
-        return
-      }
-
-      if (!vesselsFeatures?.length) {
-        return
-      }
-
-      const vesselsObjects = vesselsFeatures.map(feature => {
-        return Vessel.getObjectForFilteringFromFeature(feature)
-      })
-
-      dispatch(getFilteredVessels(vesselsObjects, showedFilter.filters))
-        .then(filteredVessels => {
-          if (!filteredVessels?.length) {
-            dispatch(setError(new NoVesselsInFilterError('Il n\'y a pas de navire dans ce filtre')))
-          }
-          const filteredVesselsUids = filteredVessels.map(vessel => vessel.vesselId)
-          dispatch(setFilteredVesselsFeatures(filteredVesselsUids))
-        })
-    }
-
-    const vesselsFeatures = GeoJsonVectorSource?.current?.getFeatures()
-    applyFilterToVessels(vesselsFeatures)
-  }, [filters, showedFilter, dispatch])
 
   return null
 }

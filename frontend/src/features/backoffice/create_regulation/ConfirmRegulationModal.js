@@ -63,7 +63,6 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: scroll;
   box-sizing: border-box;
   width: 100%;
 `
@@ -93,7 +92,7 @@ const RegulationModal = styled.div`
 
 const ModalContent = styled.div`
   position: absolute;
-  left: 33%;
+  left: calc(50% - 200px);
   top: 33%;
   width: 400px;
   box-sizing: border-box;

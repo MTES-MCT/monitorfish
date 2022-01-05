@@ -104,7 +104,7 @@ const SearchIcon = styled(SearchIconSVG)`
   margin-top: 2px;
   margin-right: 8px;
   float: right;
-  color: ${COLORS.lightGray}
+  color: ${COLORS.lightGray};
 `
 
 export default SearchRegulations

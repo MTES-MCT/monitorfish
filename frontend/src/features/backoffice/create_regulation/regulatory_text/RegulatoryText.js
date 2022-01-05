@@ -133,7 +133,6 @@ const RegulatoryText = props => {
 
   useEffect(() => {
     if (saveForm) {
-      console.log('saveForm')
       const nameOrUrlIsMissing = checkNameAndUrl()
       const atLeastOneValueIsMissing = checkOtherRequiredValues() || nameOrUrlIsMissing
       const payload = {

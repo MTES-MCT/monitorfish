@@ -81,12 +81,8 @@ const VesselsLayer = ({ map }) => {
       style.current = getWebGLVesselStyle(initStyles)
       const GeoJsonVectorLayer = new WebGLPointsLayer({
         style: style.current,
-        renderBuffer: 4,
         className: Layers.VESSELS.code,
         zIndex: Layers.VESSELS.zIndex,
-        updateWhileAnimating: true,
-        updateWhileInteracting: true,
-        useSpatialIndex: false,
         source: GeoJsonVectorSource.current
       })
       GeoJsonVectorLayer.name = Layers.VESSELS.code

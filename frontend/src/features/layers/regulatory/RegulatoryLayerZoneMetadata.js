@@ -543,4 +543,4 @@ const NoValue = styled.span`
   display: block;
 `
 
-export default RegulatoryLayerZoneMetadata
+export default React.memo(RegulatoryLayerZoneMetadata)

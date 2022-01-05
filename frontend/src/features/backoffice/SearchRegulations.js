@@ -8,6 +8,7 @@ import { searchByLawType } from '../../domain/entities/regulatory'
 import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
 
 const SearchRegulations = props => {
+  console.log('YALA')
   const {
     setFoundRegulatoryZonesByRegTerritory,
     regulatoryZoneListByRegTerritory
@@ -107,4 +108,4 @@ const SearchIcon = styled(SearchIconSVG)`
   color: ${COLORS.lightGray}
 `
 
-export default SearchRegulations
+export default React.memo(SearchRegulations)

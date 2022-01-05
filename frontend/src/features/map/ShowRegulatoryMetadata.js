@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import LayersEnum from '../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZoneMetadata'
@@ -25,4 +25,4 @@ const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
   return null
 }
 
-export default ShowRegulatoryMetadata
+export default React.memo(ShowRegulatoryMetadata)

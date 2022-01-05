@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import LayersEnum, { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
@@ -195,4 +195,4 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   return null
 }
 
-export default RegulatoryLayers
+export default React.memo(RegulatoryLayers)

@@ -38,6 +38,7 @@ export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, 
 }
 
 const RegulatoryLayerZone = props => {
+  console.log('redreaw', props)
   const dispatch = useDispatch()
   const match = useRouteMatch()
   const history = useHistory()
@@ -79,10 +80,10 @@ const RegulatoryLayerZone = props => {
   }, [regulatoryZoneMetadata, regulatoryZone])
 
   useEffect(() => {
-    if (showWholeLayer) {
-      if (!zoneIsShown && showWholeLayer.show) {
+    if (showWholeLayer !== undefined) {
+      if (!zoneIsShown && showWholeLayer) {
         setShowRegulatoryZone(true)
-      } else if (zoneIsShown && !showWholeLayer.show) {
+      } else if (zoneIsShown && !showWholeLayer) {
         setShowRegulatoryZone(false)
       }
     }
@@ -234,4 +235,4 @@ const ZoneText = styled.span`
   margin-top: 5px;
 `
 
-export default RegulatoryLayerZone
+export default React.memo(RegulatoryLayerZone)

@@ -59,4 +59,4 @@ const Link = styled.a`
   color: ${COLORS.slateGray};
 `
 
-export default MapAttributionsBox
+export default React.memo(MapAttributionsBox)

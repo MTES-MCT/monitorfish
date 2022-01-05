@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getVectorLayer } from '../domain/use_cases/showAdministrativeLayer'
 import Layers, { getLayerNameNormalized, layersType } from '../domain/entities/layers'
@@ -65,4 +65,4 @@ const AdministrativeLayers = ({ map }) => {
   return null
 }
 
-export default AdministrativeLayers
+export default React.memo(AdministrativeLayers)

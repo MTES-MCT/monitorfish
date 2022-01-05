@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch, batch } from 'react-redux'
+import React, { useCallback, useEffect, useState } from 'react'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { EmptyResult } from '../commonStyles/Text.style'
-import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryLayerTopic'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { setLawTypeOpened, setRegulatoryTopicsOpened } from '../../domain/shared_slices/Regulatory'
 import updateLayerNameForAllLayerZones from '../../domain/use_cases/updateLayerNameForAllLayerZones'
+import RegulatoryTopics from './RegulatoryTopics'
 
 const LawType = props => {
   const dispatch = useDispatch()
@@ -24,44 +23,32 @@ const LawType = props => {
     setIsOpen(lawTypeOpened === lawType)
   }, [lawType, lawTypeOpened, setIsOpen])
 
-  function increaseNumberOfZonesOpened (number) {
+  const increaseNumberOfZonesOpened = useCallback((number) => {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
-  }
+  }, [numberOfZonesOpened])
 
-  function decreaseNumberOfZonesOpened (number) {
+  const decreaseNumberOfZonesOpened = useCallback((number) => {
     const value = numberOfZonesOpened - number
     if (value < 0) {
       setNumberOfZonesOpened(0)
     } else {
       setNumberOfZonesOpened(value)
     }
-  }
+  }, [numberOfZonesOpened])
 
-  function updateLayerName (oldLayerName, newLayerName) {
+  const updateLayerName = useCallback((oldLayerName, newLayerName) => {
     dispatch(updateLayerNameForAllLayerZones(territory, lawType, oldLayerName, newLayerName))
-  }
+  }, [territory, lawType])
 
-  const displayRegulatoryTopics = (regulatoryTopics) => {
-    return (
-      regulatoryTopics && Object.keys(regulatoryTopics).length > 0
-        ? Object.keys(regulatoryTopics)
-          .sort()
-          .map((regulatoryTopic, index) => {
-            return <RegulatoryLayerTopic
-              key={regulatoryTopic}
-              increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-              decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-              regulatoryTopic={regulatoryTopic}
-              regulatoryZones={regulatoryTopics[regulatoryTopic]}
-              isLastItem={Object.keys(regulatoryTopics).length === index + 1}
-              allowRemoveZone={false}
-              isEditable={isEditable}
-              updateLayerName={updateLayerName}
-            />
-          })
-        : <EmptyResult>Aucun résultat</EmptyResult>
-    )
-  }
+  const displayRegulatoryTopics = useCallback((regulatoryTopics) => {
+    return <RegulatoryTopics
+      regulatoryTopics={regulatoryTopics}
+      increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+      decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+      isEditable={isEditable}
+      updateLayerName={updateLayerName}
+    />
+  }, [])
 
   const openLawTypeList = () => {
     if (isOpen) {
@@ -140,4 +127,4 @@ const ChevronIcon = styled(ChevronIconSVG)`
   transition: all 0.5s;
 `
 
-export default LawType
+export default React.memo(LawType)

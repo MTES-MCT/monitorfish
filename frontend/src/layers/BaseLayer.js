@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { MapboxVector } from 'ol/layer'
 import Layers, { baseLayers } from '../domain/entities/layers'
@@ -91,4 +91,4 @@ const BaseLayer = ({ map }) => {
   return null
 }
 
-export default BaseLayer
+export default React.memo(BaseLayer)

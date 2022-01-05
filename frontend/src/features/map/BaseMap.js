@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, useEffect, useRef, useState } from 'react'
+import React, { Children, cloneElement, useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import OpenLayerMap from 'ol/Map'
@@ -111,7 +111,7 @@ const BaseMap = props => {
     animateToLayer()
   }, [animateToRegulatoryLayer, map])
 
-  function initMap () {
+  const initMap = useCallback(() => {
     if (!map) {
       const centeredOnFrance = [2.99049, 46.82801]
       const initialMap = new OpenLayerMap({
@@ -149,7 +149,7 @@ const BaseMap = props => {
         setInitRenderIsDone(true)
       }
     }
-  }
+  }, [map])
 
   function throttleAndHandleMovingAndZoom (initialMap) {
     if (timeoutForMove) {
@@ -182,7 +182,7 @@ const BaseMap = props => {
     }, 50)
   }
 
-  function animateToLayer () {
+  const animateToLayer = useCallback(() => {
     if (map && animateToRegulatoryLayer && !isAnimating && initRenderIsDone) {
       if (animateToRegulatoryLayer.extent) {
         map.getView().fit(animateToRegulatoryLayer.extent, {
@@ -210,7 +210,7 @@ const BaseMap = props => {
         })
       }
     }
-  }
+  }, [map, animateToRegulatoryLayer, isAnimating, initRenderIsDone])
 
   function saveCoordinates (event) {
     if (event) {

@@ -48,6 +48,8 @@ const RegulatoryLayerTopic = props => {
     }
   }, [])
 
+  console.log(showWholeLayer)
+
   useEffect(() => {
     if (showedLayers && regulatoryTopic) {
       const topicFoundInShowedLayers = showedLayers
@@ -92,7 +94,7 @@ const RegulatoryLayerTopic = props => {
     )
   }
 
-  const showRegulatoryZones = namespace => {
+  const showRegulatoryZones = useCallback(namespace => {
     return regulatoryZones.map((regulatoryZone, index) => {
       let vectorLayerStyle
       if (regulatoryZone.zone && regulatoryZone.topic && gears) {
@@ -117,7 +119,8 @@ const RegulatoryLayerTopic = props => {
         />
       )
     })
-  }
+  }, [regulatoryZones])
+
   const getZoneIsShown = useCallback(zone => {
     return showedLayers
       .some(layer =>
@@ -183,12 +186,12 @@ const RegulatoryLayerTopic = props => {
               atLeastOneLayerIsShowed
                 ? <ShowIcon
                   title="Cacher la couche"
-                  onClick={() => setShowWholeLayer({ show: false })}
+                  onClick={() => setShowWholeLayer(false)}
                 />
                 : <HideIcon
                   data-cy={'regulatory-layers-my-zones-topic-show'}
                   title="Afficher la couche"
-                  onClick={() => setShowWholeLayer({ show: true })}
+                  onClick={() => setShowWholeLayer(true)}
                 />
             }
             {allowRemoveZone && <CloseIcon title="Supprimer la couche de ma sélection"
@@ -259,7 +262,7 @@ const Row = styled.li`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  cursor: pointer;import LayerNameInput from '../../backoffice/LayerNameInput'
+  cursor: pointer;
 
   margin: 0;
   line-height: 1.9em;

@@ -67,7 +67,12 @@ const vesselSlice = createSlice({
           isFiltered: 0,
           vesselId: Vessel.getVesselId(vessel),
           lastPositionSentAt: new Date(vessel.dateTime).getTime(),
-          coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+          coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+          flagState: vessel.flagState?.toLowerCase(),
+          gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
+          fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
+          speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
+          lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : ''
         }
       })
     },

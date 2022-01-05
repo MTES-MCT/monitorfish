@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import BaseMap from '../map/BaseMap'
@@ -18,6 +18,11 @@ const Backoffice = () => {
   const showedLayers = useSelector(state => state.layer.showedLayers)
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
+  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
+
+  const handleMovingAndZoom = () => {
+    setMapMovingAndZoomEvent({ dummyUpdate: true })
+  }
 
   const {
     regulatoryZoneMetadataPanelIsOpen,
@@ -51,11 +56,11 @@ const Backoffice = () => {
     }
   }, [regulationSaved])
 
-  function callCloseRegulatoryZoneMetadata () {
+  const callCloseRegulatoryZoneMetadata = useCallback(() => {
     dispatch(closeRegulatoryZoneMetadata())
-  }
+  }, [])
 
-  const displayRegulatoryZoneListByLawType = (territory, regZoneByLawType) => {
+  const displayRegulatoryZoneListByLawType = useCallback((territory, regZoneByLawType) => {
     return (regZoneByLawType && Object.keys(regZoneByLawType)
       .sort()
       .length > 0
@@ -72,27 +77,27 @@ const Backoffice = () => {
         />
       })
       : <EmptyResult>Aucun résultat</EmptyResult>)
-  }
+  }, [foundRegulatoryZonesByRegTerritory])
 
-  const displayRegulatoryZoneByRegTerritory = (territory) => {
+  const displayRegulatoryZoneByRegTerritory = useCallback(territory => {
     const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
     return territoryRegList
       ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territory, territoryRegList)}</RegulatoryZoneListByLawTypeList>
       : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
-  }
+  }, [foundRegulatoryZonesByRegTerritory])
 
-  const displaySearchResultList = () => {
+  const searchResultList = useMemo(() => {
     const territoryList = Object.keys(REGULATORY_TERRITORY)
     return (
       <SearchResultList>
         {territoryList.map((territory, id) => {
           return <Territory key={territory} isLast={territoryList.length - 1 === id }>
-              <TerritoryName >{territory}</TerritoryName>
+              <TerritoryName>{territory}</TerritoryName>
               {displayRegulatoryZoneByRegTerritory(territory)}
             </Territory>
         })}
       </SearchResultList>)
-  }
+  }, [foundRegulatoryZonesByRegTerritory])
 
   return (
     <>
@@ -110,10 +115,13 @@ const Backoffice = () => {
             <SecondaryButton disabled>Dernière publications (X)</SecondaryButton>
           </ButtonList> */}
           {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
-            ? displaySearchResultList()
+            ? searchResultList
             : <div>En attente de chargement</div>}
         </RegulatoryZonePanel>
-        <BaseMap/>
+        <BaseMap
+          handleMovingAndZoom={handleMovingAndZoom}
+          mapMovingAndZoomEvent={mapMovingAndZoomEvent}
+        />
       </BackofficeContainer>
       <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}

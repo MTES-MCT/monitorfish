@@ -11,7 +11,7 @@ export const OPACITY = 'opacity'
 
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
-    vesselsgeojson,
+    vessels,
     hideNonSelectedVessels
   } = useSelector(state => state.vessel)
 
@@ -48,15 +48,15 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    if (vesselsgeojson && !showingVesselsEstimatedPositions) {
+    if (vessels && !showingVesselsEstimatedPositions) {
       vectorSourceRef.current.clear(true)
     }
 
-    if (vesselsgeojson && showingVesselsEstimatedPositions) {
+    if (vessels && showingVesselsEstimatedPositions) {
       showVesselEstimatedTrack()
     }
   }, [
-    vesselsgeojson,
+    vessels,
     selectedBaseLayer,
     showingVesselsEstimatedPositions,
     previewFilteredVesselsMode,
@@ -122,7 +122,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
           })
       }
     }
-    const estimatedCurrentPositionsFeatures = vesselsgeojson.reduce((features, vessel) => {
+    const estimatedCurrentPositionsFeatures = vessels.reduce((features, vessel) => {
       const newFeature = createEstimatedTrack(vessel)
       newFeature && features.push(newFeature)
       return features

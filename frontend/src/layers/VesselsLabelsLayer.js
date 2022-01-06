@@ -18,7 +18,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   const throttleDuration = 500 // ms
 
   const {
-    vesselsgeojson,
+    vessels,
     hideNonSelectedVessels,
     selectedVessel,
     vesselsTracksShowed
@@ -157,7 +157,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }, [riskFactorShowedOnMap])
 
   useEffect(() => {
-    if (isThrottled.current || !vesselsgeojson) {
+    if (isThrottled.current || !vessels) {
       return
     }
 
@@ -167,7 +167,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       isThrottled.current = false
     }, throttleDuration)
   }, [
-    vesselsgeojson,
+    vessels,
     mapMovingAndZoomEvent,
     filters,
     nonFilteredVesselsAreHidden,

@@ -19,7 +19,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     animateToExtent
   } = useSelector(state => state.map)
   const {
-    vesselsgeojson,
+    vessels,
     vesselSidebarIsOpen,
     vesselTrackExtent
   } = useSelector(state => state.vessel)
@@ -38,7 +38,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   useEffect(() => {
     const clickedFeatureId = mapClickEvent?.feature?.getId()
     if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
-      const feature = vesselsgeojson.find((vessel) => {
+      const feature = vessels.find((vessel) => {
         return clickedFeatureId?.toString()?.includes(vessel.vesselId)
       })
       if (feature) {

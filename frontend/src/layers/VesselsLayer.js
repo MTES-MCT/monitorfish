@@ -23,7 +23,7 @@ const VesselsLayer = ({ map }) => {
   const dispatch = useDispatch()
 
   const {
-    vesselsgeojson,
+    vessels,
     hideNonSelectedVessels
   } = useSelector(state => state.vessel)
 
@@ -46,21 +46,21 @@ const VesselsLayer = ({ map }) => {
     return {
       filters: state.filter?.filters,
       showedFilter: _showedFilter,
-      filterColor: _showedFilter ? _showedFilter.color : null,
+      filterColor: _showedFilter?.color,
       nonFilteredVesselsAreHidden: state.filter?.nonFilteredVesselsAreHidden
     }
   })
 
-  const GeoJsonVectorSource = useRef(new VectorSource({
+  const VesselsVectorSource = useRef(new VectorSource({
   }))
-  const currentWebGLLayerRef = useRef(null)
+  const VesselWebGLPointsLayerRef = useRef(null)
 
   const style = useRef(null)
 
   useEffect(() => {
     if (map) {
-      if (currentWebGLLayerRef.current) {
-        map.removeLayer(currentWebGLLayerRef.current)
+      if (VesselWebGLPointsLayerRef.current) {
+        map.removeLayer(VesselWebGLPointsLayerRef.current)
       }
       // styles derived from state
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
@@ -79,27 +79,27 @@ const VesselsLayer = ({ map }) => {
         filterColorBlue: filterColorRGBArray[2]
       }
       style.current = getWebGLVesselStyle(initStyles)
-      const GeoJsonVectorLayer = new WebGLPointsLayer({
+      const VesselsVectorLayer = new WebGLPointsLayer({
         style: style.current,
         className: Layers.VESSELS.code,
         zIndex: Layers.VESSELS.zIndex,
-        source: GeoJsonVectorSource.current
+        source: VesselsVectorSource.current
       })
-      GeoJsonVectorLayer.name = Layers.VESSELS.code
-      map.getLayers().push(GeoJsonVectorLayer)
-      currentWebGLLayerRef.current = GeoJsonVectorLayer
+      VesselsVectorLayer.name = Layers.VESSELS.code
+      map.getLayers().push(VesselsVectorLayer)
+      VesselWebGLPointsLayerRef.current = VesselsVectorLayer
     }
 
     return () => {
-      if (map && currentWebGLLayerRef.current) {
-        map.removeLayer(currentWebGLLayerRef.current)
+      if (map && VesselWebGLPointsLayerRef.current) {
+        map.removeLayer(VesselWebGLPointsLayerRef.current)
       }
     }
   }, [map])
 
   useEffect(() => {
     if (map) {
-      const features = vesselsgeojson.map(({ coordinates, vesselId, ...properties }) => {
+      const features = vessels.map(({ coordinates, vesselId, ...properties }) => {
         const f = new Feature({
           ...properties,
           vesselId,
@@ -108,8 +108,8 @@ const VesselsLayer = ({ map }) => {
         f.setId(vesselId)
         return f
       })
-      GeoJsonVectorSource.current?.clear(true)
-      GeoJsonVectorSource.current?.addFeatures(features)
+      VesselsVectorSource.current?.clear(true)
+      VesselsVectorSource.current?.addFeatures(features)
       console.log('vessels update webgl')
       if (filterColor) {
         const rgb = customHexToRGB(filterColor)
@@ -123,7 +123,7 @@ const VesselsLayer = ({ map }) => {
       }
       // map.render()
     }
-  }, [map, vesselsgeojson])
+  }, [map, vessels])
 
   // styles
   useEffect(() => {

@@ -15,10 +15,10 @@ import { convertToUTCFullDay } from '../../utils'
  */
 const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
   const {
-    vesselsgeojson
+    vessels
   } = getState().vessel
   const nextVesselTrackDepthObject = geNextVesselTrackDepthObject(vesselTrackDepth, getState)
-  const feature = vesselsgeojson.find((vessel) => { return Vessel.getVesselId(vesselIdentity) === vessel.vesselId })
+  const feature = vessels.find((vessel) => { return Vessel.getVesselId(vesselIdentity) === vessel.vesselId })
 
   dispatch(doNotAnimate(calledFromCron))
   dispatch(removeError())

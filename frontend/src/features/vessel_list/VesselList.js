@@ -51,7 +51,7 @@ const VesselList = ({ namespace }) => {
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
   const {
-    vesselsgeojson,
+    vessels,
     selectedVessel,
     uniqueVesselsSpecies: species,
     uniqueVesselsDistricts: districts
@@ -67,7 +67,7 @@ const VesselList = ({ namespace }) => {
   const [saveVesselFilterModalIsOpen, setSaveVesselFilterModalIsOpen] = useState(false)
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 
-  const [vessels, setVessels] = useState([])
+  const [_vessels, setVessels] = useState([])
   const [filteredVessels, setFilteredVessels] = useState([])
   const [vesselsCountTotal, setVesselsCountTotal] = useState(0)
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
@@ -126,18 +126,14 @@ const VesselList = ({ namespace }) => {
       firstUpdate.current = false
 
       dispatch(setBlockVesselsUpdate(true))
-      updateVesselsList()
+      const currentvessels = vessels.map((vessel) => getVesselObjectFromFeature(vessel, coordinatesFormat))
+      setVessels(currentvessels)
+      setVesselsCountTotal(currentvessels?.length ? currentvessels?.length : 0)
     }
   }, [vesselListModalIsOpen])
 
-  const updateVesselsList = () => {
-    const vessels = vesselsgeojson.map((vessel) => getVesselObjectFromFeature(vessel, coordinatesFormat))
-    setVessels(vessels)
-    setVesselsCountTotal(vessels?.length ? vessels?.length : 0)
-  }
-
   useEffect(() => {
-    if (vessels?.length) {
+    if (_vessels?.length) {
       const filters = {
         countriesFiltered,
         lastPositionTimeAgoFilter,
@@ -150,14 +146,14 @@ const VesselList = ({ namespace }) => {
         lastControlMonthsAgo,
         vesselsLocationFilter
       }
-      dispatch(getFilteredVessels(vessels, filters))
-        .then(filteredVessels => {
-          setFilteredVessels(filteredVessels)
-          setVesselsCountShowed(filteredVessels.length)
+      dispatch(getFilteredVessels(_vessels, filters))
+        .then(_filteredVessels => {
+          setFilteredVessels(_filteredVessels)
+          setVesselsCountShowed(_filteredVessels.length)
         })
     }
   }, [
-    vessels,
+    _vessels,
     countriesFiltered,
     lastPositionTimeAgoFilter,
     zonesSelected,
@@ -171,7 +167,7 @@ const VesselList = ({ namespace }) => {
   ])
 
   useEffect(() => {
-    const nextVessels = vessels.map(vessel => {
+    const nextVessels = _vessels.map(vessel => {
       return {
         ...vessel,
         checked: allVesselsChecked.globalCheckbox
@@ -182,7 +178,7 @@ const VesselList = ({ namespace }) => {
   }, [allVesselsChecked])
 
   const handleChangeModifiableKey = (id, key, value) => {
-    const nextVessels = Object.assign([], vessels)
+    const nextVessels = Object.assign([], _vessels)
 
     nextVessels.find(item => item.id === id)[key] = value
     setVessels(nextVessels)
@@ -414,7 +410,7 @@ const VesselList = ({ namespace }) => {
               }}
             />
             <VesselListTable
-              vessels={vessels}
+              vessels={_vessels}
               filteredVessels={filteredVessels}
               vesselsCountTotal={vesselsCountTotal}
               vesselsCountShowed={vesselsCountShowed}

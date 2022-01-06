@@ -11,7 +11,7 @@ export const loadVesselsAndApplyFilter = (vessels) => (dispatch, getState) => {
 export const applyFilterToVessels = () => (dispatch, getState) => {
   const state = getState()
   const _showedFilter = state.filter?.filters?.find(filter => filter.showed)
-  const vessels = state.vessel.vesselsgeojson
+  const { vessels } = state.vessel
   if (!_showedFilter) {
     // TODO: just update isFiltered, don't recompute new attributes
     return dispatch(setUnfilteredVessels(vessels))

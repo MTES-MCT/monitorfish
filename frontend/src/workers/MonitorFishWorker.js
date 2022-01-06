@@ -153,14 +153,14 @@ class MonitorFishWorker {
     const species = vessels
       .map(vessel => vessel.speciesOnboard)
       .flat()
-      .reduce((acc, species) => {
-        if (acc.indexOf(species?.species) < 0) {
-          acc.push(species?.species)
+      .reduce((acc, _species) => {
+        if (acc.indexOf(_species?.species) < 0) {
+          acc.push(_species?.species)
         }
 
         return acc
       }, [])
-      .filter(species => species)
+      .filter(_species => _species)
 
     const districts = vessels
       .map(vessel => {

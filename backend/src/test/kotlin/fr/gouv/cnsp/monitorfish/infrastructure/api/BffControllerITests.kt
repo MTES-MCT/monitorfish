@@ -464,8 +464,9 @@ class BffControllerITests {
     @Test
     fun `Should get all beacon statuses`() {
         // Given
-        given(this.getAllBeaconStatuses.execute()).willReturn(listOf(BeaconStatus(1, 2, "CFR",
-                VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER, true, ZonedDateTime.now(), null, ZonedDateTime.now())))
+        given(this.getAllBeaconStatuses.execute()).willReturn(listOf(BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                true, ZonedDateTime.now(), null, ZonedDateTime.now())))
 
         // When
         mockMvc.perform(get("/bff/v1/beacon_statuses"))

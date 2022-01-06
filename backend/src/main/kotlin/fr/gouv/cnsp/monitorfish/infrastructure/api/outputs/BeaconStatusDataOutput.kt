@@ -7,8 +7,11 @@ import java.time.ZonedDateTime
 
 data class BeaconStatusDataOutput(
         val id: Int,
-        val vesselId: Int,
         val internalReferenceNumber: String?,
+        val externalReferenceNumber: String?,
+        val ircs: String?,
+        val vesselIdentifier: String?,
+        val vesselName: String,
         val vesselStatus: VesselStatus,
         val stage: Stage,
         val priority: Boolean,
@@ -19,8 +22,11 @@ data class BeaconStatusDataOutput(
         fun fromBeaconStatus(beaconStatus: BeaconStatus): BeaconStatusDataOutput {
             return BeaconStatusDataOutput(
                     id = beaconStatus.id,
-                    vesselId = beaconStatus.vesselId,
                     internalReferenceNumber = beaconStatus.internalReferenceNumber,
+                    ircs = beaconStatus.ircs,
+                    externalReferenceNumber = beaconStatus.externalReferenceNumber,
+                    vesselName = beaconStatus.vesselName,
+                    vesselIdentifier = beaconStatus.vesselIdentifier,
                     vesselStatus = beaconStatus.vesselStatus,
                     stage = beaconStatus.stage,
                     priority = beaconStatus.priority,

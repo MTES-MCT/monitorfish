@@ -223,7 +223,7 @@ export const getVesselIdentityFromVessel = vessel => {
 }
 
 export const getVesselFeatureIdFromVessel = vessel => {
-  return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.mmsi}/${vessel.ircs}`
+  return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
 }
 
 export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibility => {

@@ -64,7 +64,7 @@ const alertSlice = createSlice({
       } = action.payload
 
       state.focusOnAlert = state.alerts.find(alert =>
-        alert.name === name &&
+        alert.value.type === name &&
         alert.internalReferenceNumber === internalReferenceNumber &&
         alert.externalReferenceNumber === externalReferenceNumber &&
         alert.ircs === ircs)

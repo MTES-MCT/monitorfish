@@ -45,18 +45,8 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }
       selectedMenu === sideWindowMenu.BEACON_STATUSES &&
       <>
         <SideWindowSubMenuLink
-          menu={BeaconStatusesSubMenu.PAIRING}
-          isSelected={selectedSubMenu.code === BeaconStatusesSubMenu.PAIRING.code}
-          setSelected={setSelectedSubMenu}
-        />
-        <SideWindowSubMenuLink
           menu={BeaconStatusesSubMenu.MALFUNCTIONING}
           isSelected={selectedSubMenu.code === BeaconStatusesSubMenu.MALFUNCTIONING.code}
-          setSelected={setSelectedSubMenu}
-        />
-        <SideWindowSubMenuLink
-          menu={BeaconStatusesSubMenu.HISTORIC}
-          isSelected={selectedSubMenu.code === BeaconStatusesSubMenu.HISTORIC.code}
           setSelected={setSelectedSubMenu}
         />
       </>

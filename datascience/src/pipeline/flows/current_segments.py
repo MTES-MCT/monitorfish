@@ -64,9 +64,7 @@ def compute_last_positions_facade(
         unassigned_last_positions, facade_areas, how="left"
     )[["cfr", "facade"]]
 
-    last_positions_facade_2 = last_positions_facade_2.drop_duplicates(
-        subset=["cfr", "facade"]
-    )
+    last_positions_facade_2 = last_positions_facade_2.drop_duplicates(subset=["cfr"])
 
     last_positions_facade = pd.concat(
         [last_positions_facade_1, last_positions_facade_2]

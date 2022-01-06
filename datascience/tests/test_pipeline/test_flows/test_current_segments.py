@@ -14,11 +14,8 @@ from src.pipeline.flows.current_segments import (
     compute_last_positions_facade,
     extract_catches,
     extract_control_priorities,
-    extract_facade_areas,
     extract_last_positions,
-    extract_segments,
     join,
-    unnest_segments,
 )
 from tests.mocks import mock_extract_side_effect
 
@@ -45,9 +42,9 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
     def test_compute_last_positions_facade(self):
         last_positions = gpd.GeoDataFrame(
             {
-                "cfr": ["A", "B", "C"],
-                "latitude": [45, 45.1, 45.2],
-                "longitude": [-5, -5.1, -5.2],
+                "cfr": ["A", "B", "C", "D"],
+                "latitude": [45, 45, 45.1, 45],
+                "longitude": [-5, -5.1, -5, -8],
             }
         )
 
@@ -57,17 +54,35 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
 
         facade_areas = gpd.GeoDataFrame(
             {
-                "facade": ["Facade 1"],
+                "facade": ["Facade 1", "Facade 1", "Facade 2"],
                 "geometry": [
                     Polygon(
                         [
                             (-5.05, 45.05),
                             (0, 45.05),
                             (0, 0),
-                            (0, 45.05),
+                            (-5.05, 0),
                             (-5.05, 45.05),
                         ]
-                    )
+                    ),
+                    Polygon(
+                        [
+                            (-5.15, 45.05),
+                            (-7, 45.05),
+                            (-7, 0),
+                            (-5.15, 0),
+                            (-5.15, 45.05),
+                        ]
+                    ),
+                    Polygon(
+                        [
+                            (-5.05, 47),
+                            (0, 47),
+                            (0, 45.15),
+                            (-5.05, 45.15),
+                            (-5.05, 47),
+                        ]
+                    ),
                 ],
             },
             crs=4326,
@@ -77,13 +92,32 @@ class TestCurrentSegmentsFlow(unittest.TestCase):
             last_positions, facade_areas
         )
 
-        expected_last_positions_facade = pd.DataFrame(
-            {"cfr": ["A", "B", "C"], "facade": ["Facade 1", "Facade 1", None]}
+        # In the (rare) case where a ship is just outside the boundary of two nearby
+        # facades, as is the case for ship C here, it must be attributed to one if the
+        # facades, but without any guarantee on which one will be picked.
+
+        expected_last_positions_facade_1 = pd.DataFrame(
+            {
+                "cfr": ["A", "B", "C", "D"],
+                "facade": ["Facade 1", "Facade 1", "Facade 2", None],
+            }
         ).set_index("cfr")
 
-        pd.testing.assert_frame_equal(
-            last_positions_facade, expected_last_positions_facade
-        )
+        expected_last_positions_facade_2 = pd.DataFrame(
+            {
+                "cfr": ["A", "B", "C", "D"],
+                "facade": ["Facade 1", "Facade 1", "Facade 1", None],
+            }
+        ).set_index("cfr")
+
+        try:
+            pd.testing.assert_frame_equal(
+                last_positions_facade, expected_last_positions_facade_1
+            )
+        except AssertionError:
+            pd.testing.assert_frame_equal(
+                last_positions_facade, expected_last_positions_facade_2
+            )
 
     def test_compute_current_segments(self):
         segments_definitions = pd.DataFrame(

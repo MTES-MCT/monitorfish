@@ -25,7 +25,6 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         // Given
         val alertOne = Alert(
                 id = UUID.randomUUID(),
-                name = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name,
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
@@ -36,7 +35,6 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
 
         val alertTwo = Alert(
                 id = UUID.randomUUID(),
-                name = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name,
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
@@ -61,7 +59,6 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         // Given
         val alertOne = Alert(
                 id = UUID.randomUUID(),
-                name = "BAD_RULE_NAME",
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
@@ -86,7 +83,6 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         // Given
         val alertOne = Alert(
                 id = UUID.randomUUID(),
-                name = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT.name,
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
@@ -102,6 +98,6 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         assertThat(alerts).hasSize(15)
         assertThat(alerts.first().externalReferenceNumber).isEqualTo("DONTSINK")
         assertThat(alerts.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(alerts.first().value.name).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(alerts.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
     }
 }

@@ -13,10 +13,16 @@ data class BeaconStatusEntity(
         @Id
         @Column(name = "id")
         val id: Int,
-        @Column(name = "vessel_id")
-        val vesselId: Int,
-        @Column(name = "cfr")
-        val cfr: String,
+        @Column(name = "internal_reference_number")
+        val internalReferenceNumber: String?,
+        @Column(name = "ircs")
+        val ircs: String?,
+        @Column(name = "external_reference_number")
+        val externalReferenceNumber: String?,
+        @Column(name = "vessel_name")
+        val vesselName: String,
+        @Column(name = "vessel_identifier")
+        val vesselIdentifier: String,
         @Column(name = "vessel_status")
         @Enumerated(EnumType.STRING)
         val vesselStatus: VesselStatus,
@@ -34,8 +40,11 @@ data class BeaconStatusEntity(
 
         fun toBeaconStatus() = BeaconStatus(
                 id = id,
-                vesselId = vesselId,
-                internalReferenceNumber = cfr,
+                internalReferenceNumber = internalReferenceNumber,
+                ircs = ircs,
+                externalReferenceNumber = externalReferenceNumber,
+                vesselName = vesselName,
+                vesselIdentifier = vesselIdentifier,
                 vesselStatus = vesselStatus,
                 stage = stage,
                 priority = priority,

@@ -3,8 +3,11 @@ CREATE TYPE public.beacons_status_stage AS ENUM ('INITIAL_ENCOUNTER', 'FOUR_HOUR
 
 CREATE TABLE public.beacons_status (
     id serial,
-    vessel_id INTEGER not null,
-    cfr VARCHAR(12),
+    internal_reference_number VARCHAR(12),
+    external_reference_number varchar(50),
+    ircs varchar(50),
+    vessel_name varchar(100),
+    vessel_identifier varchar(30),
     vessel_status beacons_status_vessel_status not null,
     stage beacons_status_stage not null,
     priority boolean not null,

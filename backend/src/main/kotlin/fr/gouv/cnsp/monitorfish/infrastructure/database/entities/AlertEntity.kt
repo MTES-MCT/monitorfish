@@ -20,9 +20,6 @@ data class AlertEntity(
         @Id
         @Column(name = "alert_id")
         val id: UUID,
-        // TODO Enlever le champ name (aussi pour les alerts PNO/LAN)
-        @Column(name = "name", nullable = false)
-        val name: String,
         @Column(name = "vessel_name")
         val vesselName: String? = null,
         @Column(name = "internal_reference_number", nullable = false)
@@ -42,7 +39,6 @@ data class AlertEntity(
         fun toAlert(mapper: ObjectMapper) : Alert {
             return Alert(
                     id = id,
-                    name = name,
                     vesselName = vesselName,
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
@@ -56,7 +52,6 @@ data class AlertEntity(
         companion object {
                 fun fromAlert(alert: Alert, mapper: ObjectMapper) = AlertEntity(
                         id = alert.id,
-                        name = alert.name,
                         vesselName = alert.vesselName,
                         internalReferenceNumber = alert.internalReferenceNumber,
                         externalReferenceNumber = alert.externalReferenceNumber,

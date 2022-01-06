@@ -1,4 +1,4 @@
-import React, { createRef } from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
@@ -10,25 +10,28 @@ import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
+import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 
 timeago.register('fr', timeagoFrenchLocale)
 
 const BeaconStatusCard = ({ beaconStatus, updateVesselStatus, baseUrl }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
-  const ref = createRef()
+  const ref = useRef()
 
   return <Wrapper>
     <Header>
       <Row isFirstRow onClick={e => console.log(e)}>
         <Flag rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
         <VesselName>
-          {beaconStatus.internalReferenceNumber || 'Aucun nom'}
+          {beaconStatus.vesselName || 'Aucun nom'}
         </VesselName>
         <ShowIcon
-          onClick={() =>
-            dispatch(showVessel({ internalReferenceNumber: beaconStatus.internalReferenceNumber }, false, false, null))
-          }
+          onClick={() => {
+            const vesselIdentity = { ...beaconStatus, flagState: 'FR' }
+            dispatch(showVessel(vesselIdentity, false, false, null))
+            dispatch(getVesselVoyage(vesselIdentity, null, false))
+          }}
           src={`${window.location.origin}/oeil_affiche.png`}
         />
       </Row>
@@ -49,6 +52,7 @@ const BeaconStatusCard = ({ beaconStatus, updateVesselStatus, baseUrl }) => {
     <Body background={vesselStatus.color} ref={ref}>
       <SelectPicker
         container={() => ref.current}
+        menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
         style={{ width: 70, margin: '2px 10px 10px 0' }}
         searchable={false}
         value={vesselStatus.value}

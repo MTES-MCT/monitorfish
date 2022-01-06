@@ -21,6 +21,7 @@
  * @property {string} mmsi
  * @property {string} flagState
  * @property {string} vesselName
+ * @property {string} vesselIdentifier
  */
 
 /**

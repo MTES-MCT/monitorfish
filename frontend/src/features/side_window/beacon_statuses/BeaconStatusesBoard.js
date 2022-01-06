@@ -10,47 +10,59 @@ import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
 const beaconsStatuses = [
   {
     id: 1,
-    vesselId: 1,
     internalReferenceNumber: 'FAK000999999',
+    externalReferenceNumber: 'DONTSINK',
+    ircs: 'CALLME',
+    vesselIdentifier: 'INTERNAL_REFERENCE_NUMBER',
+    vesselName: 'PHENOMENE',
     vesselStatus: 'AT_SEA',
     stage: 'INITIAL_ENCOUNTER',
     priority: true,
-    malfunctionStartDateTime: '2021-12-01T10:10:47.004691Z',
+    malfunctionStartDateTime: '2021-12-30T15:17:01.689808Z',
     malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2021-12-08T10:10:47.004691Z'
+    vesselStatusLastModificationDateTime: '2022-01-06T15:17:01.689808Z'
   },
   {
     id: 2,
-    vesselId: 2,
     internalReferenceNumber: 'U_W0NTFINDME',
+    externalReferenceNumber: 'TALK2ME',
+    ircs: 'QGDF',
+    vesselIdentifier: 'IRCS',
+    vesselName: 'MALOTRU',
     vesselStatus: 'NO_NEWS',
     stage: 'FOUR_HOUR_REPORT',
     priority: false,
-    malfunctionStartDateTime: '2021-11-24T10:10:47.004691Z',
+    malfunctionStartDateTime: '2021-12-23T15:17:01.689808Z',
     malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2021-12-01T10:10:47.004691Z'
+    vesselStatusLastModificationDateTime: '2021-12-30T15:17:01.689808Z'
   },
   {
     id: 3,
-    vesselId: 3,
     internalReferenceNumber: 'FR263418260',
+    externalReferenceNumber: '08FR65324',
+    ircs: 'IR12A',
+    vesselIdentifier: 'EXTERNAL_REFERENCE_NUMBER',
+    vesselName: 'LE b@TO',
     vesselStatus: 'AT_PORT',
     stage: 'INITIAL_ENCOUNTER',
     priority: true,
-    malfunctionStartDateTime: '2021-11-17T10:10:47.004691Z',
+    malfunctionStartDateTime: '2021-12-16T15:17:01.689808Z',
     malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2021-11-24T10:10:47.004691Z'
+    vesselStatusLastModificationDateTime: '2021-12-23T15:17:01.689808Z'
   },
   {
     id: 4,
-    vesselId: 4,
     internalReferenceNumber: '',
+    externalReferenceNumber: '',
+    ircs: null,
+    vesselIdentifier: null,
+    vesselName: 'NO NAME',
     vesselStatus: 'AT_SEA',
     stage: 'RELAUNCH_REQUEST',
     priority: true,
-    malfunctionStartDateTime: '2021-11-17T10:10:47.004691Z',
+    malfunctionStartDateTime: '2021-12-16T15:17:01.689808Z',
     malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2021-11-24T10:10:47.004691Z'
+    vesselStatusLastModificationDateTime: '2021-12-23T15:17:01.689808Z'
   }
 ]
 

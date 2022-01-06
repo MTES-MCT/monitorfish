@@ -154,7 +154,7 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
 
   const getCatchesOverToleranceAlert = () => {
     if (fishingActivities?.alerts?.length) {
-      return fishingActivities.alerts.find(alert => alert.name === AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
+      return fishingActivities.alerts.find(alert => alert?.value?.type === AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
     }
 
     return null

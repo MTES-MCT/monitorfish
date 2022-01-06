@@ -1,9 +1,13 @@
 import pandas as pd
+import prefect
 from prefect import task
+from sqlalchemy import Table
 
 from config import ANCHORAGES_H3_CELL_RESOLUTION
+from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.spatial import get_h3_indices
+from src.pipeline.utils import get_table
 
 
 @task(checkpoint=False)
@@ -45,3 +49,25 @@ def tag_positions_at_port(positions: pd.DataFrame) -> pd.DataFrame:
         positions = positions.drop(columns=["h3"])
 
     return positions
+
+
+@task(checkpoint=False)
+def get_positions_table() -> Table:
+    """
+    Return a `Table` representing the table in which positions are stored.
+
+    Returns:
+        - Table: table of positions
+
+    """
+
+    logger = prefect.context.get("logger")
+
+    positions_table = get_table(
+        "positions",
+        schema="public",
+        engine=create_engine("monitorfish_remote"),
+        logger=logger,
+    )
+
+    return positions_table

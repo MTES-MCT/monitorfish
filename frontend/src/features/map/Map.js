@@ -53,7 +53,6 @@ const Map = () => {
       handleMovingAndZoom={handleMovingAndZoom}
       handlePointerMove={handlePointerMove}
       setCurrentFeature={setCurrentFeature}
-      mapMovingAndZoomEvent={mapMovingAndZoomEvent}
       showCoordinates={true}
       showAttributions={true}
       container={'map'}

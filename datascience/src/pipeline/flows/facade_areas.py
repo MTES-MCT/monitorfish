@@ -24,7 +24,7 @@ def load_facade_areas(facade_areas: pd.DataFrame):
 
     load(
         facade_areas,
-        table_name="facade_areas",
+        table_name="facade_areas_subdivided",
         schema="public",
         db_name="monitorfish_remote",
         logger=logger,

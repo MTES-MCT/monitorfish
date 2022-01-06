@@ -367,16 +367,15 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
         )
     )
 
-    alerts["name"] = alert_type
+    alerts["type"] = alert_type
     alerts["value"] = df_to_dict_series(
-        alerts.rename(
-            columns={"facade": "seaFront", "flag_state": "flagState", "name": "type"}
-        )[["seaFront", "flagState", "type"]]
+        alerts.rename(columns={"facade": "seaFront", "flag_state": "flagState"})[
+            ["seaFront", "flagState", "type"]
+        ]
     )
 
     return alerts[
         [
-            "name",
             "vessel_name",
             "internal_reference_number",
             "external_reference_number",

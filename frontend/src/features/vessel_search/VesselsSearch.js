@@ -23,7 +23,7 @@ const VesselsSearch = () => {
   const dispatch = useDispatch()
 
   const {
-    vesselsgeojson,
+    vessels,
     vesselSidebarIsOpen,
     isFocusedOnVesselSearch,
     selectedVesselIdentity: vesselIdentity,
@@ -72,7 +72,7 @@ const VesselsSearch = () => {
 
   function getFoundVesselsOnMap () {
     const foundFeatures = []
-    vesselsgeojson.forEach(feature => {
+    vessels.forEach(feature => {
       if (findMatchingFeature(feature, searchText)) {
         foundFeatures.push(feature)
       }

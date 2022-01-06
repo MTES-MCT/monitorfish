@@ -13,7 +13,7 @@ const NOT_FOUND = -1
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
-    vesselsgeojson: [],
+    vessels: [],
     vesselsEstimatedPositions: [],
     /** @type {Object.<string, ShowedVesselTrack>} vesselsTracksShowed */
     vesselsTracksShowed: {},
@@ -45,7 +45,7 @@ const vesselSlice = createSlice({
   },
   reducers: {
     setVessels (state, action) {
-      state.vesselsgeojson = action.payload?.map((vessel) => {
+      state.vessels = action.payload?.map((vessel) => {
         return {
           ...vessel,
           vesselId: Vessel.getVesselId(vessel),
@@ -61,7 +61,7 @@ const vesselSlice = createSlice({
       })
     },
     setUnfilteredVessels (state, action) {
-      state.vesselsgeojson = action.payload?.map((vessel) => {
+      state.vessels = action.payload?.map((vessel) => {
         return {
           ...vessel,
           isFiltered: 0,
@@ -88,7 +88,7 @@ const vesselSlice = createSlice({
      */
     setFilteredVesselsFeatures (state, action) {
       const filteredVesselsFeaturesUids = action.payload
-      state.vesselsgeojson = state.vesselsgeojson.map((vessel) => {
+      state.vessels = state.vessels.map((vessel) => {
         if (filteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
           return {
             ...vessel,
@@ -111,7 +111,7 @@ const vesselSlice = createSlice({
     setPreviewFilteredVesselsFeatures (state, action) {
       const previewFilteredVesselsFeaturesUids = action.payload
       console.time('previewFilteredVesselsFeatures')
-      state.vesselsgeojson = state.vesselsgeojson.map((vessel) => {
+      state.vessels = state.vessels.map((vessel) => {
         if (previewFilteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
           return {
             ...vessel,

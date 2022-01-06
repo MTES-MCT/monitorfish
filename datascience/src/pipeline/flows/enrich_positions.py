@@ -170,7 +170,7 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
 
         connection.execute(
             text(
-                "UPDATE interim.test_positions p "
+                "UPDATE public.positions p "
                 "SET "
                 "    is_at_port = ep.is_at_port, "
                 "    meters_from_previous_position = COALESCE( "
@@ -212,7 +212,7 @@ def reset_positions(period: Period):
 
     e.execute(
         text(
-            "UPDATE interim.test_positions p "
+            "UPDATE public.positions p "
             "SET "
             "    is_at_port = NULL, "
             "    meters_from_previous_position = NULL, "

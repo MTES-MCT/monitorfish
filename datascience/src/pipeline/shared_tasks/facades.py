@@ -7,7 +7,7 @@ from src.pipeline.generic_tasks import extract
 @task(checkpoint=False)
 def extract_facade_areas() -> gpd.GeoDataFrame:
     """
-    Extracts facade areas as a `GeoDataFrame`.
+    Extracts facade areas as a `GeoDataFrame` (subdivided dataset).
 
     Returns:
         gpd.GeoDataFrame : GeoDataFrame of facade areas.

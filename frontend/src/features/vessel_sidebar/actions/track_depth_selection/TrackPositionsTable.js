@@ -17,7 +17,7 @@ const { Column, HeaderCell, Cell } = Table
 const TrackPositionsTable = () => {
   const dispatch = useDispatch()
   const { coordinatesFormat } = useSelector(state => state.map)
-  const { selectedVesselPositions } = useSelector(state => state.vessel)
+  const { selectedVesselPositions, highlightedVesselTrackPosition } = useSelector(state => state.vessel)
 
   const [sortColumn, setSortColumn] = useState(CSVOptions.dateTime.code)
   const [sortType, setSortType] = useState(SortType.DESC)
@@ -27,7 +27,7 @@ const TrackPositionsTable = () => {
 
   useEffect(() => {
     if (clickedOutsideComponent) {
-      dispatch(highlightVesselTrackPosition(null))
+      highlightedVesselTrackPosition && dispatch(highlightVesselTrackPosition(null))
     }
   }, [clickedOutsideComponent])
 

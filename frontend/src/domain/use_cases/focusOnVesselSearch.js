@@ -6,27 +6,28 @@ export const focusState = {
   CLICK_SEARCH_ICON: 'CLICK_SEARCH_ICON'
 }
 
-const focusOnVesselSearch = (state, doNotFocus) => dispatch => {
+const focusOnVesselSearch = (state, doNotFocus) => (dispatch, getState) => {
+  const currentFocus = getState()?.vessel.isFocusedOnVesselSearch
   if (doNotFocus) {
     return
   }
 
   switch (state) {
     case focusState.CLICK_VESSEL_TITLE: {
-      dispatch(setFocusOnVesselSearch(true))
+      !currentFocus && dispatch(setFocusOnVesselSearch(true))
       return
     }
     case focusState.CLICK_SEARCH_ICON: {
-      dispatch(setFocusOnVesselSearch(true))
+      !currentFocus && dispatch(setFocusOnVesselSearch(true))
       return
     }
     case focusState.CLICK_VESSEL_SEARCH_RESULT: {
-      dispatch(setFocusOnVesselSearch(false))
+      currentFocus && dispatch(setFocusOnVesselSearch(false))
       return
     }
   }
 
-  dispatch(setFocusOnVesselSearch(false))
+  currentFocus && dispatch(setFocusOnVesselSearch(false))
 }
 
 export default focusOnVesselSearch

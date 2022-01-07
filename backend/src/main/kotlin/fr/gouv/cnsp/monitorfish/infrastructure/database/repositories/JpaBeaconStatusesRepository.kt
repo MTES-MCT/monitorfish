@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconStatusExce
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBBeaconStatusesRepository
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 @Repository
@@ -16,6 +17,7 @@ class JpaBeaconStatusesRepository(private val dbBeaconStatusesRepository: DBBeac
         return dbBeaconStatusesRepository.findAll().map { it.toBeaconStatus() }
     }
 
+    @Transactional
     override fun update(id: Int, vesselStatus: VesselStatus?, stage: Stage?, updateDateTime: ZonedDateTime) {
         try {
             vesselStatus?.let {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DndContext, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import styled from 'styled-components'
 
@@ -6,8 +6,9 @@ import Droppable from './Droppable'
 import { beaconStatusesStages } from './beaconStatuses'
 import StageColumn from './StageColumn'
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
-import { useSelector } from 'react-redux'
-import shallowEqual from 'react-redux/lib/utils/shallowEqual'
+import { useDispatch, useSelector } from 'react-redux'
+import updateBeaconStatus from '../../../domain/use_cases/updateBeaconStatus'
+import getAllBeaconStatuses from '../../../domain/use_cases/getAllBeaconStatuses'
 
 const getByStage = (stage, items) =>
   items
@@ -23,7 +24,8 @@ const getBeaconStatusesByStage = beaconsStatuses => Object.keys(beaconStatusesSt
 )
 
 const BeaconStatusesBoard = () => {
-  const { beaconStatuses } = useSelector(state => state.beaconStatus, (a, b) => shallowEqual(a, b) || doNotUpdateBoard)
+  const dispatch = useDispatch()
+  const { beaconStatuses } = useSelector(state => state.beaconStatus)
   const [items, setItems] = useState(getBeaconStatusesByStage(beaconStatuses))
   const [isDroppedId, setIsDroppedId] = useState(undefined)
   const [doNotUpdateBoard, setDoNotUpdateBoard] = useState(undefined)
@@ -33,6 +35,8 @@ const BeaconStatusesBoard = () => {
       distance: 10
     }
   })
+  console.log(doNotUpdateBoard)
+  console.log(beaconStatuses, items, 'items')
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -48,59 +52,69 @@ const BeaconStatusesBoard = () => {
   })
   const sensors = useSensors(mouseSensor, pointerSensor, touchSensor)
 
-  const findContainer = (id) => {
-    if (id in beaconStatusesStages) {
-      return id
+  useEffect(() => {
+    dispatch(getAllBeaconStatuses())
+  }, [])
+
+  useEffect(() => {
+    if (beaconStatuses) {
+      setItems(getBeaconStatusesByStage(beaconStatuses))
+    }
+  }, [beaconStatuses])
+
+  const findStage = stageName => {
+    if (stageName in beaconStatusesStages) {
+      return stageName
     }
 
     return Object.keys(beaconStatusesStages)
-      .find((key) => beaconStatusesStages[key]?.code?.includes(id))
+      .find((key) => beaconStatusesStages[key]?.code?.includes(stageName))
   }
 
   const updateVesselStatus = (stage, beaconStatus, status) => {
-    const nextBeaconStatus = { ...beaconStatus, vesselStatus: status, vesselStatusLastModificationDateTime: new Date().toISOString() }
+    const nextBeaconStatus = { ...beaconStatus, vesselStatus: status }
 
-    setItems((items) => ({
+    setItems(items => ({
       ...items,
       [stage]: [
         nextBeaconStatus,
         ...items[stage].filter(stageBeaconStatus => stageBeaconStatus.id !== beaconStatus.id)
       ]
     }))
+
     setIsDroppedId(beaconStatus.id)
-    // TODO Update the vessel beacon status with a PUT request to the API
+    dispatch(updateBeaconStatus(beaconStatus.id, { vesselStatus: nextBeaconStatus.vesselStatus }))
   }
 
   const onDragEnd = event => {
     setDoNotUpdateBoard(false)
     const { active, over } = event
 
-    const previousContainer = findContainer(active.data.current.stageId)
+    const previousStage = findStage(active.data.current.stageId)
     const beaconId = active?.id
-    const nextContainer = findContainer(over?.id)
+    const nextStage = findStage(over?.id)
 
-    if (previousContainer === nextContainer) {
+    if (previousStage === nextStage) {
       return
     }
 
-    if (nextContainer) {
-      const activeIndex = items[previousContainer].map(beaconStatus => beaconStatus.id).indexOf(beaconId)
+    if (nextStage) {
+      const activeIndex = items[previousStage].map(beaconStatus => beaconStatus.id).indexOf(beaconId)
 
       if (activeIndex !== -1) {
-        const nextBeaconStatus = { ...items[previousContainer].find(beaconStatus => beaconStatus.id === beaconId) }
-        nextBeaconStatus.stage = nextContainer
-        nextBeaconStatus.vesselStatusLastModificationDateTime = new Date().toISOString()
+        const nextBeaconStatus = { ...items[previousStage].find(beaconStatus => beaconStatus.id === beaconId) }
+        nextBeaconStatus.stage = nextStage
 
-        setItems((items) => ({
+        setItems(items => ({
           ...items,
-          [previousContainer]: items[previousContainer].filter(beaconStatus => beaconStatus.id !== beaconId),
-          [nextContainer]: [
+          [previousStage]: items[previousStage].filter(beaconStatus => beaconStatus.id !== beaconId),
+          [nextStage]: [
             nextBeaconStatus,
-            ...items[nextContainer]
+            ...items[nextStage]
           ]
         }))
 
-        // TODO Update the vessel beacon status with a PUT request to the API
+        dispatch(updateBeaconStatus(beaconId, { stage: nextBeaconStatus.stage }))
       }
     }
     setIsDroppedId(beaconId)

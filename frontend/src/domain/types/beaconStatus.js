@@ -13,3 +13,9 @@
  * @property {string | null} malfunctionEndDateTime
  * @property {string} vesselStatusLastModificationDateTime
  */
+
+/**
+ * @typedef UpdateBeaconStatus
+ * @property {string | null} [vesselStatus]
+ * @property {string | null} [stage]
+ */

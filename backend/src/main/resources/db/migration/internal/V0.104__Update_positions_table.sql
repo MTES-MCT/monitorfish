@@ -8,9 +8,6 @@ ALTER TABLE public.positions
 
 CREATE INDEX positions_geometry_idx ON positions USING gist (geometry);
 
-UPDATE public.positions
-SET geometry = ST_SetSRID(St_MakePoint(longitude, latitude), 4326);
-
 CREATE FUNCTION public.create_position_geometry() RETURNS trigger AS $$
     BEGIN
         NEW.geometry := ST_SetSRID(ST_MakePoint(NEW.longitude, NEW.latitude), 4326);

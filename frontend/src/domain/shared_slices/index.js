@@ -15,6 +15,7 @@ import interestPoint from './InterestPoint'
 import fishingActivities from './FishingActivities'
 import controls from './Control'
 import alert from './Alert'
+import beaconStatus from './BeaconStatus'
 import { combineReducers } from '@reduxjs/toolkit'
 
 const commonReducerList = {
@@ -37,7 +38,8 @@ const homeReducers = combineReducers({
   measurement,
   fishingActivities,
   controls,
-  alert
+  alert,
+  beaconStatus
 })
 
 const backofficeReducers = combineReducers({

@@ -15,8 +15,10 @@ import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
 import { unByKey } from 'ol/Observable'
 import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
 import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
+import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
 
 export const TEN_MINUTES = 600000
+export const THIRTY_SECONDS = 30000
 
 const APIWorker = () => {
   const dispatch = useDispatch()
@@ -54,8 +56,13 @@ const APIWorker = () => {
       setUpdateVesselSidebarTab(true)
     }, TEN_MINUTES)
 
+    const beaconStatusesInterval = setInterval(() => {
+      dispatch(getAllBeaconStatuses())
+    }, THIRTY_SECONDS)
+
     return () => {
       clearInterval(interval)
+      clearInterval(beaconStatusesInterval)
     }
   }, [])
 

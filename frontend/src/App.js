@@ -30,7 +30,7 @@ import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
 import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
-import { BeaconStatusesBoard } from './features/side_window/beacon_statuses/BeaconStatusesBoard'
+import BeaconStatusesBoard from './features/side_window/beacon_statuses/BeaconStatusesBoard'
 
 function App () {
   switch (browserName) {

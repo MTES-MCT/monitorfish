@@ -14,14 +14,14 @@ import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconStatusCard = ({ beaconStatus, updateVesselStatus, baseUrl }) => {
+const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
   const ref = useRef()
 
   return <Wrapper>
     <Header>
-      <Row isFirstRow onClick={e => console.log(e)}>
+      <Row isFirstRow>
         <Flag rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
         <VesselName>
           {beaconStatus.vesselName || 'Aucun nom'}
@@ -53,10 +53,10 @@ const BeaconStatusCard = ({ beaconStatus, updateVesselStatus, baseUrl }) => {
       <SelectPicker
         container={() => ref.current}
         menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
-        style={{ width: 70, margin: '2px 10px 10px 0' }}
+        style={{ width: 90, margin: '2px 10px 10px 0' }}
         searchable={false}
         value={vesselStatus.value}
-        onChange={updateVesselStatus}
+        onChange={status => updateStageVesselStatus(beaconStatus, status)}
         data={vesselStatuses}
         renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
         cleanable={false}
@@ -95,8 +95,6 @@ const Row = styled.div`
 const Wrapper = styled.div`
   border-radius: 2px;
   border: 1px solid ${COLORS.lightGray};
-  background: ${COLORS.background};
-  margin: 0 10px 8px 10px;
   height: 134px;
   width: 245px;
 `

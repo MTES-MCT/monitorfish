@@ -1,46 +1,52 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { Draggable } from './Draggable'
+import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
 import BeaconStatusCard from './BeaconStatusCard'
+import { SortableContext } from '@dnd-kit/sortable'
 
-const StageColumn = ({ stage, beaconStatuses, baseUrl }) => {
+const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl }) => {
+  const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
+
   return <Wrapper>
     <StageColumnHeader
       title={stage?.title}
       description={stage?.description}
       numberOfItems={beaconStatuses?.length}
     />
-    <Body>
+    <SortableContext items={beaconStatuses}>
       {
-        beaconStatuses.map(beaconStatus => {
-          return <Draggable
-            key={beaconStatus.id}
-            id={beaconStatus.id}
-            stageId={stage.code}
-          >
-            <BeaconStatusCard
-              baseUrl={baseUrl}
-              beaconStatus={beaconStatus}
-            />
-          </Draggable>
-        })
+        beaconStatuses
+          .map(beaconStatus => {
+            return <Draggable
+              key={beaconStatus.id}
+              id={beaconStatus.id}
+              stageId={stage.code}
+              isDroppedId={isDroppedId}
+            >
+              <BeaconStatusCard
+                baseUrl={baseUrl}
+                beaconStatus={beaconStatus}
+                updateStageVesselStatus={updateStageVesselStatus}
+              />
+            </Draggable>
+          })
       }
-    </Body>
+    </SortableContext>
   </Wrapper>
 }
 
 const Wrapper = styled.div`
   width: 282px;
-  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
   border: 1px solid ${COLORS.lightGray};
-  margin: 10px 5px;
-  min-height: 700px;
-`
-
-const Body = styled.div`
-  height: 100%;
+  height: calc(100vh - 50px);
+  
+  @keyframes blink {
+    0%   { background: ${COLORS.background}; }
+    50% { background: ${COLORS.shadowBlue} }
+    0%   { background: ${COLORS.background}; }
+  }
 `
 
 export default StageColumn

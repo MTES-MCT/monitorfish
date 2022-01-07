@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { Radio, RadioGroup } from 'rsuite'
+import { Radio } from 'rsuite'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
-import { ContentLine, CustomCheckbox } from '../../../commonStyles/Backoffice.style'
+import {
+  ContentLine, CustomCheckbox, AuthorizedRadio, Delimiter,
+  RegulatorySectionTitle, FormSection, FormContent
+} from '../../../commonStyles/Backoffice.style'
 import Tag from '../Tag'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import { useSelector } from 'react-redux'
@@ -153,93 +156,125 @@ const RegulatorySpeciesForm = props => {
       }))
   }
 
-  return <Wrapper show={show}>
-    <Title>
-      <AuthorizedRadio
-        inline
-        onChange={value => set(REGULATORY_SPECIES_KEYS.AUTHORIZED, value)}
-        value={authorized}
-      >
-        Espèces
-        <CustomRadio
-          checked={authorized}
-          value={true}
+  return <FormSection show={show}>
+      <RegulatorySectionTitle>
+        <AuthorizedRadio
+          inline
+          onChange={value => set(REGULATORY_SPECIES_KEYS.AUTHORIZED, value)}
+          value={authorized}
         >
-          autorisées
-          <GreenCircle data-cy={'regulation-authorized-species'}/>
-        </CustomRadio>
-        <CustomRadio
-          checked={authorized === false}
-          value={false}
-        >
-          interdites
-          <RedCircle />
-        </CustomRadio>
-      </AuthorizedRadio>
-    </Title>
-    <Content $display={displayForm} authorized={authorized}>
-      {
-        !authorized &&
+          Espèces
+          <CustomRadio
+            checked={authorized}
+            value={true}
+          >
+            autorisées
+            <GreenCircle data-cy={'regulation-authorized-species'}/>
+          </CustomRadio>
+          <CustomRadio
+            checked={authorized === false}
+            value={false}
+          >
+            interdites
+            <RedCircle />
+          </CustomRadio>
+        </AuthorizedRadio>
+      </RegulatorySectionTitle>
+      <Delimiter width='523' />
+      <FormContent display={displayForm} authorized={authorized}>
+        {
+          !authorized &&
+          <ContentLine>
+              <CustomCheckbox
+                inline
+                checked
+                value={REGULATORY_SPECIES_KEYS.ALL_SPECIES}
+                onChange={value => set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, value)}
+              >
+                Toutes les espèces
+              </CustomCheckbox>
+          </ContentLine>
+        }
         <ContentLine>
-            <CustomCheckbox
-              inline
-              checked
-              value={REGULATORY_SPECIES_KEYS.ALL_SPECIES}
-              onChange={value => set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, value)}
-            >
-              Toutes les espèces
-            </CustomCheckbox>
+          <CustomSelectComponent
+            placement={'topStart'}
+            disabled={allSpecies}
+            menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
+            searchable={true}
+            placeholder={'Choisir une ou des catégories d\'espèces'}
+            onChange={onSpeciesGroupChange}
+            value={'Choisir une ou des catégories d\'espèces'}
+            data={getFormattedSpeciesGroups()}
+            emptyMessage={'Aucune catégorie'}
+            renderMenuItem={(_, item) => <MenuItem checked={speciesGroups?.includes(item.value)} item={item} tag={'Checkbox'} />}
+            menuClassName={DEFAULT_MENU_CLASSNAME}
+          />
         </ContentLine>
-      }
-      <ContentLine>
-        <CustomSelectComponent
-          placement={'topStart'}
-          disabled={allSpecies}
-          menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
-          searchable={true}
-          placeholder={'Choisir une ou des catégories d\'espèces'}
-          onChange={onSpeciesGroupChange}
-          value={'Choisir une ou des catégories d\'espèces'}
-          data={getFormattedSpeciesGroups()}
-          emptyMessage={'Aucune catégorie'}
-          renderMenuItem={(_, item) => <MenuItem checked={speciesGroups?.includes(item.value)} item={item} tag={'Checkbox'} />}
-          menuClassName={DEFAULT_MENU_CLASSNAME}
-        />
-      </ContentLine>
-      <ContentLine>
-        <CustomSelectComponent
-          placement={'topStart'}
-          disabled={allSpecies}
-          menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
-          searchable={true}
-          placeholder={'Choisir une ou des espèces'}
-          onChange={onSpeciesChange}
-          value={'Choisir une ou des espèces'}
-          data={getFormattedSpecies()}
-          emptyMessage={'Aucune espèce'}
-          renderMenuItem={(_, item) =>
-            <MenuItem checked={species?.some(species => species?.code?.includes(item.value))} item={item} tag={'Checkbox'} />}
-          menuClassName={DEFAULT_MENU_CLASSNAME}
-        />
-      </ContentLine>
-      {
-        speciesGroups?.map((speciesGroup, index) => (
-          <SpeciesGroupDetail key={speciesGroup.group} isFirst={index === 0}>
-            <Label>Catégorie {index + 1}</Label>
-            <Tag
-              key={speciesGroup}
-              tagValue={speciesGroup}
-              onCloseIconClicked={removeSpeciesGroupToRegulatorySpeciesList}
-            />
-          </SpeciesGroupDetail>
-        ))
-      }
-      {
-        species?.map((speciesValue, index) => (
-          <>
-            {authorized
-              ? <SpeciesDetails key={speciesValue.code} isFirst={index === 0 && !speciesGroups?.length}>
-                <SpeciesDetail>
+        <ContentLine>
+          <CustomSelectComponent
+            placement={'topStart'}
+            disabled={allSpecies}
+            menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
+            searchable={true}
+            placeholder={'Choisir une ou des espèces'}
+            onChange={onSpeciesChange}
+            value={'Choisir une ou des espèces'}
+            data={getFormattedSpecies()}
+            emptyMessage={'Aucune espèce'}
+            renderMenuItem={(_, item) =>
+              <MenuItem checked={species?.some(species => species?.code?.includes(item.value))} item={item} tag={'Checkbox'} />}
+            menuClassName={DEFAULT_MENU_CLASSNAME}
+          />
+        </ContentLine>
+        {
+          speciesGroups?.map((speciesGroup, index) => (
+            <SpeciesGroupDetail key={speciesGroup.group} isFirst={index === 0}>
+              <Label>Catégorie {index + 1}</Label>
+              <Tag
+                key={speciesGroup}
+                tagValue={speciesGroup}
+                onCloseIconClicked={removeSpeciesGroupToRegulatorySpeciesList}
+              />
+            </SpeciesGroupDetail>
+          ))
+        }
+        {
+          species?.map((speciesValue, index) => (
+            <>
+              {authorized
+                ? <SpeciesDetails key={speciesValue.code} isFirst={index === 0 && !speciesGroups?.length}>
+                  <SpeciesDetail>
+                    <Label>Espèce {index + 1}</Label>
+                    <Tag
+                      key={speciesValue.code}
+                      tagValue={speciesValue.code}
+                      onCloseIconClicked={removeSpeciesToRegulatorySpeciesList}
+                    />
+                  </SpeciesDetail>
+                  <SpeciesDetail>
+                    <Label>Quantités</Label>
+                    <CustomInput
+                      data-cy={'regulatory-species-quantity'}
+                      placeholder=''
+                      value={speciesValue.quantity || ''}
+                      onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
+                      width={'200px'}
+                      $isGray={species.find(species => species.code === speciesValue.code)?.quantity}
+                    />
+                  </SpeciesDetail>
+                  <SpeciesDetail>
+                    <Label>Taille minimale</Label>
+                    <CustomInput
+                      data-cy={'regulatory-species-minimum-size'}
+                      placeholder=''
+                      value={speciesValue.minimumSize || ''}
+                      onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
+                      width={'200px'}
+                      $isGray={species.find(species => species.code === speciesValue.code)?.minimumSize}
+                    />
+                  </SpeciesDetail>
+                </SpeciesDetails>
+                : <SpeciesDetail key={speciesValue.code} onlySpeciesName={!authorized}>
                   <Label>Espèce {index + 1}</Label>
                   <Tag
                     key={speciesValue.code}
@@ -247,43 +282,12 @@ const RegulatorySpeciesForm = props => {
                     onCloseIconClicked={removeSpeciesToRegulatorySpeciesList}
                   />
                 </SpeciesDetail>
-                <SpeciesDetail>
-                  <Label>Quantités</Label>
-                  <CustomInput
-                    data-cy={'regulatory-species-quantity'}
-                    placeholder=''
-                    value={speciesValue.quantity || ''}
-                    onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
-                    width={'200px'}
-                    $isGray={species.find(species => species.code === speciesValue.code)?.quantity}
-                  />
-                </SpeciesDetail>
-                <SpeciesDetail>
-                  <Label>Taille minimale</Label>
-                  <CustomInput
-                    data-cy={'regulatory-species-minimum-size'}
-                    placeholder=''
-                    value={speciesValue.minimumSize || ''}
-                    onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
-                    width={'200px'}
-                    $isGray={species.find(species => species.code === speciesValue.code)?.minimumSize}
-                  />
-                </SpeciesDetail>
-              </SpeciesDetails>
-              : <SpeciesDetail key={speciesValue.code} onlySpeciesName={!authorized}>
-                <Label>Espèce {index + 1}</Label>
-                <Tag
-                  key={speciesValue.code}
-                  tagValue={speciesValue.code}
-                  onCloseIconClicked={removeSpeciesToRegulatorySpeciesList}
-                />
-              </SpeciesDetail>
-            }
-            </>
-        ))
-      }
-    </Content>
-  </Wrapper>
+              }
+              </>
+          ))
+        }
+      </FormContent>
+    </FormSection>
 }
 
 const SpeciesDetails = styled.div`
@@ -299,36 +303,6 @@ const SpeciesDetail = styled.div`
 const SpeciesGroupDetail = styled.div`
   display: flex;
   margin-top: ${props => props.isFirst ? 20 : 8}px;
-`
-
-/* const CustomCheckboxGroup = styled(CheckboxGroup)`
-  margin-bottom: 5px;
-` */
-
-const Content = styled.div`
-${props => !props.$display ? 'display: none;' : ''}
-  padding-left: 15px;
-  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
-`
-
-const Wrapper = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
-  ${props => props.show ? 'flex-direction: column;' : ''};
-  width: 100%;
-  margin-bottom: ${props => props.show ? 10 : 0}px;
-`
-
-const normalTitle = css`
-  display: flex;
-  padding: 0px 0px 10px 0px;
-  align-items: center;
-  font-size: 13px;
-  color: ${COLORS.slateGray};
-  border-bottom: 1px solid ${COLORS.lightGray};
-`
-const Title = styled.div`
-  ${normalTitle}
-  margin-bottom: 18px;
 `
 
 const circle = css`
@@ -347,12 +321,6 @@ const GreenCircle = styled.span`
 const RedCircle = styled.span`
   ${circle}
   background-color: ${COLORS.red};
-`
-
-const AuthorizedRadio = styled(RadioGroup)` 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `
 
 const CustomRadio = styled(Radio)`

@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit
 class CaffeineConfiguration {
     val vessels = "vessel"
     val searchVessels = "search_vessels"
+    val gearCodeGroups = "gear_code_groups"
+    val gearCodeGroup = "gear_code_group"
     val gears = "gears"
     val gear = "gear"
     val ports = "ports"
@@ -44,6 +46,9 @@ class CaffeineConfiguration {
         val ersRawMessageCache = buildCache(ersRawMessage, ticker, oneWeek)
         val vesselCache = buildCache(vessels, ticker, 180)
 
+        val gearCodeGroupsCache =  buildCache(gearCodeGroups, ticker, oneWeek)
+        val gearCodeGroupCache =  buildCache(gearCodeGroup, ticker, oneWeek)
+
         val gearsCache = buildCache(gears, ticker, oneWeek)
         val gearCache = buildCache(gear, ticker, oneWeek)
 
@@ -69,6 +74,8 @@ class CaffeineConfiguration {
                 vesselCache,
                 vesselTrackCache,
                 vesselsPositionCache,
+                gearCodeGroupsCache,
+                gearCodeGroupCache,
                 gearsCache,
                 gearCache,
                 portsCache,

@@ -167,4 +167,56 @@ context('NewRegulation', () => {
     cy.get('[data-cy="regulation-modal"]').should('not.exist')
     cy.url().should('include', '/backoffice')
   })
+
+  it('Check authorized yes option in gears section display 2 checkbox and a list', () => {
+    // when
+    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulation-authorized-gears"]').click()
+    // then
+    cy.get('[data-cy="gears-section-content"]').should('have.css', 'border-left-color', 'rgb(41, 179, 97)')
+    cy.get('[data-cy$="-gears-option"]').should('have.length', 2)
+    cy.get('[data-cy="gears-selector"]').should('exist')
+  })
+
+  it('Check authorized no option in gears section display 3 checkbox and a list', () => {
+    // when
+    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulation-forbidden-gears"]').click()
+    // then
+    cy.get('[data-cy="gears-section-content"]').should('have.css', 'border-left-color', 'rgb(225, 0, 15)')
+    cy.get('[data-cy$="-gears-option"]').should('have.length', 3)
+    cy.get('[data-cy="gears-selector"]').should('exist')
+  })
+
+  it('Check options displays a list of towed gear categories', () => {
+    // Given
+    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulation-forbidden-gears"]').click()
+    // when
+    cy.get('[data-cy="all-towed-gears-option"]').click()
+    // then
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 3)
+    cy.get('[data-cy="mesh-label"]').should('have.length', 2)
+    // when
+    cy.get('[data-cy="close-tag-Sennes traînantes"]').click()
+    // then
+    cy.get('[data-cy="tag-Sennes traînantes"]').should('not.exist')
+    cy.get('[data-cy="all-towed-gears-option"]').should('not.be.checked')
+  })
+
+  it('Check all passive gears, display a list of passive gear categories', () => {
+    // Given
+    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulation-forbidden-gears"]').click()
+    // when
+    cy.get('[data-cy="all-passive-gears-option"]').click()
+    // then
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 6)
+    cy.get('[data-cy="mesh-label"]').should('have.length', 3)
+    // when
+    cy.get('[data-cy="close-tag-Sennes tournantes coulissantes"]').click()
+    // then
+    cy.get('[data-cy="tag-Sennes tournantes coulissantes"]').should('not.exist')
+    cy.get('[data-cy="all-passive-gears-option"]').should('not.be.checked')
+  })
 })

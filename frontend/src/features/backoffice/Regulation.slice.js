@@ -1,24 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const INITIAL_STATE = {
-  /** @type {RegulatoryText} selectedRegulation */
+  /** @type {RegulatoryText} */
   selectedRegulation: undefined,
-  /** @type {UpcomingRegulation} upcomingRegulation */
+  /** @type {UpcomingRegulation} */
   upcomingRegulation: undefined,
-  /** @type {boolean} isModalOpen */
+  /** @type {boolean} */
   isModalOpen: false,
-  /** @type {Map<number, RegulatoryText | null>} upcomingRegulatoryTextCheckedMap */
+  /** @type {Map<number, RegulatoryText | null>} */
   upcomingRegulatoryTextCheckedMap: undefined,
-  /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
+  /** @type {Map<number, RegulatoryText | null>} */
   regulatoryTextCheckedMap: undefined,
+  /** @type {boolean} */
   saveOrUpdateRegulation: false,
+  /** @type {boolean} */
   saveUpcomingRegulation: false,
-  /** @type {boolean} regulatorySaved */
+  /** @type {boolean} */
   regulationSaved: false,
+  /** @type {boolean} */
   regulationDeleted: false,
+  /** @type {boolean} */
   atLeastOneValueIsMissing: undefined,
+  /** @type {boolean} */
   isRemoveModalOpen: false,
+  /** @type {boolean} */
   isConfirmModalOpen: false,
+  /** @type {boolean} */
   selectedGeometryId: undefined
 }
 

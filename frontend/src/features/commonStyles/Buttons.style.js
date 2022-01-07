@@ -90,6 +90,7 @@ export const AddRegulationButton = styled.a`
   &:before {
     background-color: ${COLORS.white};
   }
+  cursor: pointer;
 `
 
 export const ValidateButton = styled(PrimaryButton)`

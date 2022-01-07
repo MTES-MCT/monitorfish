@@ -6,8 +6,7 @@ import prefect
 from prefect import Flow, Parameter, case, task
 from prefect.tasks.control_flow import merge
 
-from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS
-from src.pipeline.flows.risk_factor import default_risk_factors
+from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS, default_risk_factors
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.spatial import estimate_current_position
 from src.pipeline.processing import (

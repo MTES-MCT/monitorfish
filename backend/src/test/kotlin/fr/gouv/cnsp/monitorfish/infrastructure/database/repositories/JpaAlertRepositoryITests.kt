@@ -69,7 +69,7 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
 
         // When
         val alerts = jpaAlertRepository.findAlertsOfTypes(
-                listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+                listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT),
                 "FRFGRGR",
                 123456)
 

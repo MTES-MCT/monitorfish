@@ -1,22 +1,29 @@
 import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
+import { COLORS } from '../../../constants/constants'
 
-export function Draggable (props) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: props.id,
+const Draggable = ({ id, stageId, children, isDroppedId }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: id,
     data: {
-      stageId: props.stageId
+      stageId: stageId
     }
   })
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      }
-    : undefined
+
+  const style = {
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'unset',
+    boxShadow: isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset',
+    zIndex: isDragging ? 9999999 : 'unset',
+    margin: '0 10px 8px 10px',
+    background: COLORS.background,
+    animation: isDroppedId === id ? 'blink 1s' : 'unset'
+  }
 
   return (
     <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
-      {props.children}
+      {children}
     </button>
   )
 }
+
+export default Draggable

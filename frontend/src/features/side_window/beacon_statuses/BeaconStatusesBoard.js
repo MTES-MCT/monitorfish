@@ -2,74 +2,19 @@ import React, { useState } from 'react'
 import { DndContext, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import styled from 'styled-components'
 
-import { Droppable } from './Droppable'
+import Droppable from './Droppable'
 import { beaconStatusesStages } from './beaconStatuses'
 import StageColumn from './StageColumn'
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
-
-const beaconsStatuses = [
-  {
-    id: 1,
-    internalReferenceNumber: 'FAK000999999',
-    externalReferenceNumber: 'DONTSINK',
-    ircs: 'CALLME',
-    vesselIdentifier: 'INTERNAL_REFERENCE_NUMBER',
-    vesselName: 'PHENOMENE',
-    vesselStatus: 'AT_SEA',
-    stage: 'INITIAL_ENCOUNTER',
-    priority: true,
-    malfunctionStartDateTime: '2021-12-30T15:17:01.689808Z',
-    malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2022-01-06T15:17:01.689808Z'
-  },
-  {
-    id: 2,
-    internalReferenceNumber: 'U_W0NTFINDME',
-    externalReferenceNumber: 'TALK2ME',
-    ircs: 'QGDF',
-    vesselIdentifier: 'IRCS',
-    vesselName: 'MALOTRU',
-    vesselStatus: 'NO_NEWS',
-    stage: 'FOUR_HOUR_REPORT',
-    priority: false,
-    malfunctionStartDateTime: '2021-12-23T15:17:01.689808Z',
-    malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2021-12-30T15:17:01.689808Z'
-  },
-  {
-    id: 3,
-    internalReferenceNumber: 'FR263418260',
-    externalReferenceNumber: '08FR65324',
-    ircs: 'IR12A',
-    vesselIdentifier: 'EXTERNAL_REFERENCE_NUMBER',
-    vesselName: 'LE b@TO',
-    vesselStatus: 'AT_PORT',
-    stage: 'INITIAL_ENCOUNTER',
-    priority: true,
-    malfunctionStartDateTime: '2021-12-16T15:17:01.689808Z',
-    malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2021-12-23T15:17:01.689808Z'
-  },
-  {
-    id: 4,
-    internalReferenceNumber: '',
-    externalReferenceNumber: '',
-    ircs: null,
-    vesselIdentifier: null,
-    vesselName: 'NO NAME',
-    vesselStatus: 'AT_SEA',
-    stage: 'RELAUNCH_REQUEST',
-    priority: true,
-    malfunctionStartDateTime: '2021-12-16T15:17:01.689808Z',
-    malfunctionEndDateTime: null,
-    vesselStatusLastModificationDateTime: '2021-12-23T15:17:01.689808Z'
-  }
-]
+import { useSelector } from 'react-redux'
+import shallowEqual from 'react-redux/lib/utils/shallowEqual'
 
 const getByStage = (stage, items) =>
-  items.filter((item) => item.stage === stage)
+  items
+    .filter((item) => item.stage === stage)
+    .sort((a, b) => a.vesselStatusLastModificationDateTime?.localeCompare(b.vesselStatusLastModificationDateTime))
 
-const firstBeaconsStatusesMap = Object.keys(beaconStatusesStages).reduce(
+const getBeaconStatusesByStage = beaconsStatuses => Object.keys(beaconStatusesStages).reduce(
   (previous, stage) => ({
     ...previous,
     [stage]: getByStage(stage, beaconsStatuses)
@@ -77,9 +22,11 @@ const firstBeaconsStatusesMap = Object.keys(beaconStatusesStages).reduce(
   {}
 )
 
-console.log(firstBeaconsStatusesMap)
-
-export function BeaconStatusesBoard () {
+const BeaconStatusesBoard = () => {
+  const { beaconStatuses } = useSelector(state => state.beaconStatus, (a, b) => shallowEqual(a, b) || doNotUpdateBoard)
+  const [items, setItems] = useState(getBeaconStatusesByStage(beaconStatuses))
+  const [isDroppedId, setIsDroppedId] = useState(undefined)
+  const [doNotUpdateBoard, setDoNotUpdateBoard] = useState(undefined)
   const baseUrl = window.location.origin
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -99,7 +46,6 @@ export function BeaconStatusesBoard () {
       tolerance: 5
     }
   })
-  const [items, setItems] = useState(firstBeaconsStatusesMap)
   const sensors = useSensors(mouseSensor, pointerSensor, touchSensor)
 
   const findContainer = (id) => {
@@ -111,14 +57,27 @@ export function BeaconStatusesBoard () {
       .find((key) => beaconStatusesStages[key]?.code?.includes(id))
   }
 
+  const updateVesselStatus = (stage, beaconStatus, status) => {
+    const nextBeaconStatus = { ...beaconStatus, vesselStatus: status, vesselStatusLastModificationDateTime: new Date().toISOString() }
+
+    setItems((items) => ({
+      ...items,
+      [stage]: [
+        nextBeaconStatus,
+        ...items[stage].filter(stageBeaconStatus => stageBeaconStatus.id !== beaconStatus.id)
+      ]
+    }))
+    setIsDroppedId(beaconStatus.id)
+    // TODO Update the vessel beacon status with a PUT request to the API
+  }
+
   const onDragEnd = event => {
+    setDoNotUpdateBoard(false)
     const { active, over } = event
 
     const previousContainer = findContainer(active.data.current.stageId)
     const beaconId = active?.id
     const nextContainer = findContainer(over?.id)
-
-    console.log(active, over, previousContainer, nextContainer)
 
     if (previousContainer === nextContainer) {
       return
@@ -130,20 +89,28 @@ export function BeaconStatusesBoard () {
       if (activeIndex !== -1) {
         const nextBeaconStatus = { ...items[previousContainer].find(beaconStatus => beaconStatus.id === beaconId) }
         nextBeaconStatus.stage = nextContainer
+        nextBeaconStatus.vesselStatusLastModificationDateTime = new Date().toISOString()
 
         setItems((items) => ({
           ...items,
           [previousContainer]: items[previousContainer].filter(beaconStatus => beaconStatus.id !== beaconId),
-          [nextContainer]: items[nextContainer].concat(nextBeaconStatus)
+          [nextContainer]: [
+            nextBeaconStatus,
+            ...items[nextContainer]
+          ]
         }))
+
+        // TODO Update the vessel beacon status with a PUT request to the API
       }
     }
+    setIsDroppedId(beaconId)
   }
 
   return (
     <Wrapper innerWidth={window.innerWidth}>
       <DndContext
         onDragEnd={onDragEnd}
+        onDragStart={() => setDoNotUpdateBoard(true)}
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
       >
@@ -154,6 +121,8 @@ export function BeaconStatusesBoard () {
                 baseUrl={baseUrl}
                 stage={beaconStatusesStages[stageId]}
                 beaconStatuses={items[stageId]}
+                updateVesselStatus={updateVesselStatus}
+                isDroppedId={isDroppedId}
               />
             </Droppable>
           ))}
@@ -171,3 +140,5 @@ const Wrapper = styled.div`
 const Columns = styled.div`
   display: flex;
 `
+
+export default BeaconStatusesBoard

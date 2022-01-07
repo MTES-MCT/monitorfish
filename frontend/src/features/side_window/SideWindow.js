@@ -7,7 +7,7 @@ import { AlertsSubMenu } from '../../domain/entities/alerts'
 import SideWindowSubMenu from './SideWindowSubMenu'
 import Alerts from './alerts/Alerts'
 import { BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
-import { BeaconStatusesBoard } from './beacon_statuses/BeaconStatusesBoard'
+import BeaconStatusesBoard from './beacon_statuses/BeaconStatusesBoard'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { COLORS } from '../../constants/constants'
 import { renderRowExpanded } from './alerts/tableCells'
@@ -31,10 +31,8 @@ const SideWindow = ({ menu }) => {
   useEffect(() => {
     setTimeout(() => {
       setIsPreloading(false)
-    }, 700)
+    }, 1000)
   }, [])
-
-  console.log(selectedSubMenu)
 
   useEffect(() => {
     if (selectedMenu === previousSelectedMenu) {
@@ -61,6 +59,26 @@ const SideWindow = ({ menu }) => {
     }
   }, [menu, setSelectedMenu])
 
+  /**
+   * /!\
+   * The components to preload so we got the associated styles
+   **/
+  function getComponentsForPreloading () {
+    return <NotVisible hidden={true}>
+      <Alerts
+        selectedSubMenu={AlertsSubMenu.NAMOSA}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+      <BeaconStatusesBoard/>
+      {renderRowExpanded()}
+      <SideWindowSubMenu
+        selectedMenu={sideWindowMenu.ALERTS}
+        selectedSubMenu={AlertsSubMenu.NAMOSA}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+    </NotVisible>
+  }
+
   return <Wrapper>
     <SideWindowMenu
       selectedMenu={selectedMenu}
@@ -73,14 +91,7 @@ const SideWindow = ({ menu }) => {
     />
     {
       isPreloading
-        ? <NotVisible hidden={true}>
-          <Alerts
-            selectedSubMenu={selectedSubMenu}
-            setSelectedSubMenu={setSelectedSubMenu}
-          />
-          <BeaconStatusesBoard/>
-          { renderRowExpanded() }
-      </NotVisible>
+        ? getComponentsForPreloading()
         : null
     }
     {

@@ -11,8 +11,6 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
     focusOnAlert
   } = useSelector(state => state.alert)
 
-  console.log(alerts)
-
   useEffect(() => {
     if (focusOnAlert) {
       const seaFront = focusOnAlert?.value?.seaFront

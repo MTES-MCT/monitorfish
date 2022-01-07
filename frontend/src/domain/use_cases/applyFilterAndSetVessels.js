@@ -1,10 +1,10 @@
 import { setError } from '../shared_slices/Global'
-import { setUnfilteredVessels, setFilteredVesselsFeatures } from '../shared_slices/Vessel'
+import { setVesselsFromAPI, setUnfilteredVessels, setFilteredVesselsFeatures } from '../shared_slices/Vessel'
 import getFilteredVessels from './getFilteredVessels'
 import NoVesselsInFilterError from '../../errors/NoVesselsInFilterError'
 
-export const loadVesselsAndApplyFilter = (vessels) => (dispatch, getState) => {
-  dispatch(setUnfilteredVessels(vessels))
+export const loadVesselsFromAPIAndApplyFilter = (vessels) => (dispatch, getState) => {
+  dispatch(setVesselsFromAPI(vessels))
   dispatch(applyFilterToVessels())
 }
 

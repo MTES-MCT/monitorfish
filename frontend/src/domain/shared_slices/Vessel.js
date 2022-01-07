@@ -44,14 +44,13 @@ const vesselSlice = createSlice({
     fishingActivitiesShowedOnMap: []
   },
   reducers: {
-    setVessels (state, action) {
+    setVesselsFromAPI (state, action) {
       state.vessels = action.payload?.map((vessel) => {
         return {
           ...vessel,
           vesselId: Vessel.getVesselId(vessel),
           lastPositionSentAt: new Date(vessel.dateTime).getTime(),
           coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-          // new params
           flagState: vessel.flagState?.toLowerCase(),
           gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
           fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
@@ -64,7 +63,6 @@ const vesselSlice = createSlice({
       state.vessels = action.payload?.map((vessel) => {
         return {
           ...vessel,
-          isFiltered: 0,
           vesselId: Vessel.getVesselId(vessel),
           lastPositionSentAt: new Date(vessel.dateTime).getTime(),
           coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
@@ -72,7 +70,8 @@ const vesselSlice = createSlice({
           gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
           fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
           speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
-          lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : ''
+          lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
+          isFiltered: 0
         }
       })
     },
@@ -315,7 +314,7 @@ const vesselSlice = createSlice({
 })
 
 export const {
-  setVessels,
+  setVesselsFromAPI,
   setUnfilteredVessels,
   setFilteredVesselsFeatures,
   setPreviewFilteredVesselsFeatures,

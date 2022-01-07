@@ -1,14 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.BeaconStatus
-import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.Stage
-import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.VesselStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselStatus
 import java.time.Instant
 import java.time.ZoneOffset
 import javax.persistence.*
 
 @Entity
-@Table(name = "beacons_status")
+@Table(name = "beacon_statuses")
 data class BeaconStatusEntity(
         @Id
         @Column(name = "id")

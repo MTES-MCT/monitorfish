@@ -42,6 +42,7 @@ const APIWorker = () => {
       dispatch(showAllVessels())
       dispatch(getOperationalAlerts())
       dispatch(getAllRegulatoryLayersByRegTerritory())
+      dispatch(getAllBeaconStatuses())
     })
 
     const interval = setInterval(() => {

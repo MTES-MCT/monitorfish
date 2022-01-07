@@ -21,6 +21,7 @@ from src.pipeline.flows import (
     last_positions,
     missing_trip_numbers,
     ports,
+    position_alerts,
     regulations,
     regulations_checkup,
     risk_factor,
@@ -77,6 +78,24 @@ last_positions.flow.schedule = Schedule(
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
+position_alerts.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "1 * * * *",
+            parameter_defaults={
+                "alert_type": "THREE_MILES_TRAWLING_ALERT",
+                "zones": "0-3",
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "flag_states": None,
+                "fishing_gears": None,
+                "fishing_gear_categories": "Chaluts",
+                "include_vessels_unknown_gear": True,
+            },
+        ),
+    ]
+)
+
 regulations.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
 regulations_checkup.flow.schedule = CronSchedule("58 7 * * 1,2,3,4,5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
@@ -110,6 +129,7 @@ flows_to_register = [
     last_positions.flow,
     missing_trip_numbers.flow,
     ports.flow,
+    position_alerts.flow,
     regulations.flow,
     regulations_checkup.flow,
     risk_factor.flow,

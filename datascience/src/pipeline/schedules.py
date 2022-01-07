@@ -1,6 +1,7 @@
 from prefect.executors.dask import LocalDaskExecutor
 from prefect.schedules import CronSchedule, Schedule, clocks
 
+from config import FISHING_SPEED_THRESHOLD, MINIMUM_CONSECUTIVE_POSITIONS
 from src.pipeline.flows import (
     admin_areas,
     anchorages,
@@ -9,6 +10,7 @@ from src.pipeline.flows import (
     controllers,
     controls,
     current_segments,
+    enrich_positions,
     ers,
     facade_areas,
     fao_areas,
@@ -44,6 +46,22 @@ controls.flow.schedule = Schedule(
 )
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
 ers.flow.schedule = CronSchedule("* * * * *")
+enrich_positions.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "1 * * * *",
+            parameter_defaults={
+                "start_hours_ago": 7,
+                "end_hours_ago": 0,
+                "minutes_per_chunk": 420,
+                "chunk_overlap_minutes": 0,
+                "minimum_consecutive_positions": MINIMUM_CONSECUTIVE_POSITIONS,
+                "fishing_speed_threshold": FISHING_SPEED_THRESHOLD,
+                "recompute_all": False,
+            },
+        ),
+    ]
+)
 fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")
 infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = Schedule(
@@ -81,6 +99,7 @@ flows_to_register = [
     controllers.flow,
     controls.flow,
     current_segments.flow,
+    enrich_positions.flow,
     ers.flow,
     facade_areas.flow,
     fao_areas.flow,

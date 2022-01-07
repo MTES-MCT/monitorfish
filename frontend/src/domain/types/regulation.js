@@ -1,21 +1,18 @@
 /**
- * @typedef Regulation
- * @property {string} bloc
- * @property {string} zoneTheme
- * @property {string} zoneName
- * @property {string} seaFront
- * @property {string} region
+ * @typedef RegulatoryZone
+ * @property {string} lawType
+ * @property {string} topic
+ * @property {string} zone
+ * @property {RegulatoryGears} regulatoryGears
+ * @property {RegulatorySpecies} regulatorySpecies
+ * @property {RegulatoryText[]} regulatoryReference
+ * @property {RegulatoryText[]} upcomingRegulation
  * @property {GeoJSONGeometry} geometry
- * @property {[RegulatoryText]} regulatoryTextList
- * @property {[UpcomingRegulation]} UpcomingRegulationList
+ * @property {string} region
  * @property {string} color
  * @property {boolean} showed
  * @property {string} uuid
  */
-
-/**
- * @typedef {string} RegulatoryTextType
- **/
 
 /**
  * @typedef RegulatoryText
@@ -27,29 +24,15 @@
  */
 
 /**
- * @typedef UpcomingRegulationList
- * @property {[RegulatoryText]} regulatoryTextList
+ * @typedef {RegulatoryText[]} UpcomingRegulation
  */
 
 /**
- * @typedef SelectedRegulatoryZone
- * @property {string} topic
- * @property {string} zone
- * @property {string} prohibitedGears
- * @property {string} gears
- * @property {string} zone
- * @property {string} species
- * @property {string} prohibitedSpecies
- * @property {string} regulatoryReferences
- * @property {string} region
- */
-
-/**
- * @typedef RegulatoryTopics {Object.<string, SelectedRegulatoryZone[]>}
+ * @typedef {Map<string, RegulatoryZone[]>} RegulatoryTopics - key is a topic
  **/
 
 /**
- * @typedef RegulatoryLawTypes {Object.<string, RegulatoryTopics>}
+ * @typedef {Map<string, RegulatoryTopics>} RegulatoryLawTypes - key is the law type name
  **/
 
 /**
@@ -79,6 +62,13 @@
  */
 
 /**
+ * @typedef RegulatorySpeciesDetail
+ * @property {string} code - FAO code
+ * @property {string} quantity
+ * @property {string} minimumSize
+ */
+
+/**
  * @typedef RegulatorySpecies
  * @property {boolean} authorized
  * @property {boolean} allSpecies
@@ -88,8 +78,30 @@
  */
 
 /**
- * @typedef RegulatorySpeciesDetail
- * @property {string} code - FAO code
- * @property {string} quantity
- * @property {string} minimumSize
+ * @typedef Gear
+ * @property {string} code
+ * @property {string} name
+ * @property {string} groupId
+ * @property {string} category
+ * @property {string} meshType - (between or greaterThan)
+ * @property {string[]} mesh
+ */
+
+/**
+ * @typedef GearCategory
+ * @property {string} name
+ * @property {string} meshType
+ * @property {string[]} mesh
+ */
+
+/**
+ * @typedef RegulatoryGears
+ * @property {boolean} authorized
+ * @property {boolean} allGears
+ * @property {boolean} allTowedGears
+ * @property {boolean} allPassiveGears
+ * @property {Gear[]} regulatedGears
+ * @property {GearCategory[]} regulatedGearCategories
+ * @property {string[]} selectedCategoriesAndGears - a list of categories name and gears code
+ * @property {boolean} derogation
  */

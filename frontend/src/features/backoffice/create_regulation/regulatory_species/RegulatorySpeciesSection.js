@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import SectionTitle from '../../SectionTitle'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import RegulatorySpeciesForm from './RegulatorySpeciesForm'
+import { FormSection, OtherRemark } from '../../../commonStyles/Backoffice.style'
 
-const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) => {
+const RegulatorySpeciesSection = props => {
+  const {
+    /** @type {RegulatorySpecies} */
+    regulatorySpecies,
+    setRegulatorySpecies
+  } = props
   const [show, setShow] = useState(false)
 
   const setOtherInfo = value => {
@@ -14,7 +19,7 @@ const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) =
     })
   }
 
-  return <>
+  return <FormSection show>
     <SectionTitle
       dataCy={'open-regulated-species'}
       title={'ESPÈCES RÉGLEMENTÉES'}
@@ -34,13 +39,7 @@ const RegulatorySpeciesSection = ({ regulatorySpecies, setRegulatorySpecies }) =
         value={regulatorySpecies?.otherInfo || ''}
         onChange={setOtherInfo} />
     </OtherRemark>
-  </>
+  </FormSection>
 }
-
-const OtherRemark = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
-  align-items: center;
-  margin-top: 10px;
-`
 
 export default RegulatorySpeciesSection

@@ -30,7 +30,7 @@ const regulatorySlice = createSlice({
   name: 'regulatory',
   initialState: {
     isReadyToShowRegulatoryLayers: false,
-    /** @type {Object.<string, SelectedRegulatoryZone[]>} selectedRegulatoryLayers */
+    /** @type {Object.<string, RegulatoryZone[]>} selectedRegulatoryLayers */
     selectedRegulatoryLayers: reOrderOldObjectHierarchyIfFound(getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey)),
     regulatoryZoneMetadata: null,
     /** @type RegulatoryLawTypes regulatoryLayers */
@@ -53,7 +53,7 @@ const regulatorySlice = createSlice({
      * Add regulatory zones to "My Zones" regulatory selection
      * @memberOf RegulatoryReducer
      * @param {Object=} state
-     * @param {SelectedRegulatoryZone[]} action - The regulatory zones
+     * @param {RegulatoryZone[]} action - The regulatory zones
      */
     addRegulatoryZonesToMyLayers (state, action) {
       const myRegulatoryLayers = { ...state.selectedRegulatoryLayers }

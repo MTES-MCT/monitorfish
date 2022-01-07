@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
 import { getDate } from '../../src/utils'
@@ -35,16 +36,16 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-name"]').contains("PHENOMENE (GB)", { timeout: 20000 })
-    cy.get('*[data-cy^="global-risk-factor"]').contains("2.5", { timeout: 20000 })
-    cy.get('*[data-cy^="impact-risk-factor"]').contains("2.1", { timeout: 20000 })
-    cy.get('*[data-cy^="probability-risk-factor"]').contains("2.0", { timeout: 20000 })
-    cy.get('*[data-cy^="detectability-risk-factor"]').contains("3.0", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-name"]').contains('PHENOMENE (GB)', { timeout: 20000 })
+    cy.get('*[data-cy^="global-risk-factor"]').contains('2.5', { timeout: 20000 })
+    cy.get('*[data-cy^="impact-risk-factor"]').contains('2.1', { timeout: 20000 })
+    cy.get('*[data-cy^="probability-risk-factor"]').contains('2.0', { timeout: 20000 })
+    cy.get('*[data-cy^="detectability-risk-factor"]').contains('3.0', { timeout: 20000 })
 
     cy.get('*[data-cy^="impact-risk-factor"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="probability-risk-factor"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="detectability-risk-factor"]').click({ timeout: 20000, force: true })
-    cy.get('*[data-cy^="risk-factor-priority-level"]').contains("2.6 – élevée", { timeout: 20000 })
+    cy.get('*[data-cy^="risk-factor-priority-level"]').contains('2.6 – élevée', { timeout: 20000 })
 
     cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ timeout: 20000, force: true })
   })
@@ -60,7 +61,7 @@ context('VesselSidebar', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-identity-gears"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-identity-gears"]').contains("Sennes danoises (SDN)", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-identity-gears"]').contains('Sennes danoises (SDN)', { timeout: 20000 })
   })
 
   it('Fishing Should contain the vessel fishing resume', () => {
@@ -74,8 +75,8 @@ context('VesselSidebar', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-fishing-gears"]').contains("Trémails et filets maillants combinés (GTN)", { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("1 message - 2256 kg pêchés au total", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-gears"]').contains('Trémails et filets maillants combinés (GTN)', { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - 2256 kg pêchés au total', { timeout: 20000 })
   })
 
   it('Fishing trips Should be walkable', () => {
@@ -87,16 +88,16 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-fishing"]', { timeout: 20000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains("Marée n°9463715", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 20000 })
 
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains("Marée n°9463714", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463714', { timeout: 20000 })
 
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains("1 message - aucune capture", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - aucune capture', { timeout: 20000 })
 
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains("Marée n°9463715", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 20000 })
   })
 
   it('Fishing Should contain the vessel DEP message', () => {
@@ -110,8 +111,8 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 20000 })
 
     // Then
-    cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains("Départ", { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains("Al Jazeera Port le 11/10/2019 à 01h40 (UTC)", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains('Départ', { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains('Al Jazeera Port le 11/10/2019 à 01h40 (UTC)', { timeout: 20000 })
   })
 
   it('Controls Should contain the controls resume', () => {
@@ -124,7 +125,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-controls"]', { timeout: 20000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-controls-year"]').first().contains("1 contrôle, 2 infractions", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-controls-year"]').first().contains('1 contrôle, 2 infractions', { timeout: 20000 })
 
     // When
     cy.get('*[data-cy^="vessel-controls-year"]').first().click({ timeout: 20000 })
@@ -146,8 +147,8 @@ context('VesselSidebar', () => {
     // Then
     const date = getDate(new Date().toISOString())
     cy.get('*[data-cy^="vessel-controls-last-control-date"]').first().contains(`le ${date}`, { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-controls-last-control-unit"]').first().contains("ULAM 56", { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains("2 infractions", { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-controls-last-control-unit"]').first().contains('ULAM 56', { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-controls-last-control-infractions"]').first().contains('2 infractions', { timeout: 20000 })
   })
 
   it('Vessel track depth Should be changed', () => {
@@ -160,15 +161,15 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
 
     // Then
-    cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("0 nds", { timeout: 20000 })
+    cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains('0 nds', { timeout: 20000 })
 
     // And click on a position to zoom in
-    cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').trigger('pointermove',  { pointerId: 1, force: true })
+    cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').trigger('pointermove', { pointerId: 1, force: true })
     cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').click({ force: true })
 
     // The table should be sorted in ascending datetime order
     cy.get('.rs-table-cell-group > :nth-child(1) > .rs-table-cell > .rs-table-cell-content').click({ timeout: 20000 })
-    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains("8.7 nds", { timeout: 20000 })
+    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains('8.7 nds', { timeout: 20000 })
   })
 
   it('Vessel track dates Should be changed When walking in fishing trips', () => {
@@ -195,9 +196,9 @@ context('VesselSidebar', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // Then
@@ -216,9 +217,9 @@ context('VesselSidebar', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
 
     // When
@@ -251,7 +252,7 @@ context('VesselSidebar', () => {
     // Go back to the default track depth
     cy.get('*[data-cy="custom-dates-show-last-positions"]').click()
     cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-twelve-hours"]').should('have.class', 'rs-radio-checked')
   })
 
@@ -259,9 +260,9 @@ context('VesselSidebar', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
@@ -286,9 +287,9 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
 
     // Then, the last position should be positioned in the bottom of the window
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 910, clientY: 300, pointerId: 1, force: true })
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 315, clientY: 835, pointerId: 1, force: true })
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 315, clientY: 835, pointerId: 1, force: true })
+    cy.get('.vessels > canvas').trigger('pointermove', { clientX: 910, clientY: 300, pointerId: 1, force: true })
+    cy.get('.vessels > canvas').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
+    cy.get('.vessels > canvas').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
     cy.wait(200)
 
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')

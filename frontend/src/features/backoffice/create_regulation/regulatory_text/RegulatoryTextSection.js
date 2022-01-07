@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../../constants/constants'
-import { Section, Title } from '../../../commonStyles/Backoffice.style'
+import { Title, Section } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcomingRegulationSection from './UpcomingRegulationSection'
@@ -58,7 +58,7 @@ const RegulatoryTextSection = props => {
     setRegulatoryTextList(newRegulatoryTextList)
   }
 
-  return (<Section>
+  return <Section show>
     <Title>
       {source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION
         ? 'références réglementaires À VENIR'
@@ -104,7 +104,7 @@ const RegulatoryTextSection = props => {
       upcomingRegulation && upcomingRegulation !== {} &&
         <UpcomingRegulationSection upcomingRegulation={upcomingRegulation} />
     }
-  </Section>)
+  </Section>
 }
 
 const CustomCancelButton = styled(CancelButton)`

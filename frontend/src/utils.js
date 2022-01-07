@@ -217,9 +217,8 @@ const item = (e) => {
  * @returns {SelectPickerObject[]} - a new array
  */
 export const formatDataForSelectPicker = (list, groupName) => {
-  const orderedList = [...list]
   if (list?.length > 0) {
-    const array = orderedList
+    const array = [...list]
       .map(e => {
         const i = item(e)
         if (groupName) {

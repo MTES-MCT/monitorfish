@@ -133,7 +133,6 @@ const RegulatoryText = props => {
 
   useEffect(() => {
     if (saveForm) {
-      console.log('saveForm')
       const nameOrUrlIsMissing = checkNameAndUrl()
       const atLeastOneValueIsMissing = checkOtherRequiredValues() || nameOrUrlIsMissing
       const payload = {
@@ -295,6 +294,7 @@ const CustomCheckboxGroup = styled(CheckboxGroup)`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+  padding-left: 10px;
 `
 
 const Or = styled.span`

@@ -1,17 +1,12 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import { Checkbox } from 'rsuite'
+import { Checkbox, RadioGroup } from 'rsuite'
 
 export const ContentLine = styled.div`
   display: flex;
   flex-direction : ${props => props.isFormOpened && props.isInfoTextShown ? 'column' : 'row'};
   align-items: ${props => props.isFormOpened && props.isInfoTextShown ? 'flex-start' : 'center'};
   margin-bottom: 8px;
-`
-
-export const Section = styled.div`
-  display: flex;
-  flex-direction: column;
 `
 
 export const Title = styled.span`
@@ -76,6 +71,7 @@ export const CustomCheckbox = styled(Checkbox)`
   color: ${COLORS.gunMetal};
   display: flex;
   vertical-align: baseline;
+  margin-left: 0px;
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
@@ -95,4 +91,48 @@ export const CustomCheckbox = styled(Checkbox)`
     padding-top: 0px !important;
     padding-left: 24px !important;
 } 
+`
+
+export const customRadioGroup = css`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+export const AuthorizedRadio = styled(RadioGroup)` 
+  ${customRadioGroup}
+`
+
+export const RegulatorySectionTitle = styled.div`
+  display: flex;
+  padding: 0px 0px 10px 0px;
+  align-items: center;
+  font-size: 13px;
+  color: ${COLORS.slateGray};
+`
+
+export const FormSection = styled.div`
+  display: ${props => props.show ? 'flex' : 'none'};
+  ${props => props.show ? 'flex-direction: column;' : ''};
+`
+
+export const FormContent = styled.div`
+  display: ${props => !props.display ? 'none' : 'flex'};
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 15px;
+  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
+  margin-bottom: 15px;
+`
+
+export const Section = styled(FormSection)`
+  display: ${props => props.show ? 'flex' : 'none'};
+  ${props => props.show ? 'flex-direction: column;' : ''};
+  padding-bottom: 60px;
+`
+
+export const OtherRemark = styled.div`
+  display: ${props => props.show ? 'flex' : 'none'};
+  align-items: center;
+  margin-top: 15px;
 `

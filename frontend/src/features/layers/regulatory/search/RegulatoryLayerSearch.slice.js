@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const regulatoryLayerSearchSlice = createSlice({
   name: 'regulatoryLayerSearch',
   initialState: {
-    /** @type SelectedRegulatoryZone[] regulatoryZonesChecked */
+    /** @type RegulatoryZone[] regulatoryZonesChecked */
     regulatoryZonesChecked: [],
     /** @type RegulatoryLawTypes regulatoryLayersSearchResult */
     regulatoryLayersSearchResult: null,
@@ -14,7 +14,7 @@ const regulatoryLayerSearchSlice = createSlice({
     /**
      * Add zones to regulatory zones selection in progress to add to "My Zones"
      * @param {Object=} state
-     * @param {SelectedRegulatoryZone[]} action - The regulatory zones
+     * @param {RegulatoryZone[]} action - The regulatory zones
      */
     checkRegulatoryZones (state, action) {
       state.regulatoryZonesChecked = state.regulatoryZonesChecked.concat(action.payload)

@@ -8,7 +8,10 @@ import DateRange from './DateRange'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
 import DayPicker from './DayPicker'
 import TimeInterval from './TimeInterval'
-import { CustomCheckbox, Delimiter } from '../../../commonStyles/Backoffice.style'
+import {
+  CustomCheckbox, Delimiter, AuthorizedRadio,
+  RegulatorySectionTitle, FormSection, FormContent
+} from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { DEFAULT_DATE_RANGE, fishingPeriodToString } from '../../../../domain/entities/regulatory'
 
@@ -136,8 +139,8 @@ const FishingPeriodForm = (props) => {
   const setHolidays = _ => set(FISHING_PERIOD_KEYS.HOLIDAYS, !holidays)
   const setDaytime = _ => set(FISHING_PERIOD_KEYS.DAYTIME, !daytime)
 
-  return <Wrapper show={show}>
-    <Title >
+  return <FormSection show={show}>
+    <RegulatorySectionTitle >
       <AuthorizedRadio
         inline
         onChange={value => set(FISHING_PERIOD_KEYS.AUTHORIZED, value)}
@@ -153,162 +156,164 @@ const FishingPeriodForm = (props) => {
           <RedCircle />
         </CustomRadio>
       </AuthorizedRadio>
-    </Title>
+    </RegulatorySectionTitle>
     <Delimiter width='523' />
-    <AnnualRecurrence $display={displayForm} authorized={authorized}>
-      <Label>Récurrence annuelle</Label>
-      <RadioGroup
-        inline
-        onChange={value => set(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE, value)}
-        value={annualRecurrence}
-      >
-        <CustomRadio value={true}>oui</CustomRadio>
-        <CustomRadio value={false}>non</CustomRadio>
-      </RadioGroup>
-    </AnnualRecurrence>
-    <DateTime $display={displayForm} authorized={authorized}>
-      <ConditionalLines $display={displayForm} disabled={disabled}>
-        <Row>
-          <ContentWrapper>
-            <Label>Plages de dates</Label>
-          </ContentWrapper>
-          <DateRanges>
-            { dateRanges?.length > 0
-              ? dateRanges.map((dateRange, id) => {
-                return <DateRange
-                    key={id}
-                    id={id}
-                    annualRecurrence={annualRecurrence}
-                    dateRange={dateRange}
-                    updateList={updateDateRanges}
-                    disabled={disabled}
-                    isLast={id === dateRanges.length - 1}
-                  />
-              })
-              : <DateRange
-                key={-1}
-                id={-1}
-                isLast
-                annualRecurrence={annualRecurrence}
-                dateRange={DEFAULT_DATE_RANGE}
-                updateList={updateDateRanges}
-                disabled={disabled}
-              />
-            }
-          </DateRanges>
-          <ContentWrapper alignItems={'flex-end'}>
-            <SquareButton
-              disabled={disabled || dateRanges?.length === 0}
-              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, DEFAULT_DATE_RANGE)} />
-            <SquareButton
-              disabled={disabled || dateRanges?.length === 0}
-              type={SQUARE_BUTTON_TYPE.DELETE}
-              onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)} />
-          </ContentWrapper>
-        </Row>
-        <Row>
-          <ContentWrapper>
-            <Label>Dates précises</Label>
-          </ContentWrapper>
-          <DateList>
-            { dates?.length > 0
-              ? dates.map((date, id) => {
-                return <DateRow key={id} $isLast={id === dates.length - 1}>
-                  <CustomDatePicker
-                    disabled={disabled}
-                    value={date}
-                    saveValue={date => onDateChange(id, date)}
-                    format='DD/MM/YYYY'
-                    placement={'rightStart'}
-                    oneTap
-                  />
-                </DateRow>
-              })
-              : <DateRow key={-1} $isLast>
-                  <CustomDatePicker
-                    disabled={disabled}
-                    value={undefined}
-                    saveValue={date => onDateChange(-1, date)}
-                    format='DD/MM/YYYY'
-                    placement={'rightStart'}
-                    oneTap
-                  />
-                </DateRow>
-            }
-          </DateList>
-          <ContentWrapper alignItems={'flex-end'}>
-            <SquareButton
-              type={SQUARE_BUTTON_TYPE.DELETE}
-              disabled={disabled || !dates?.length > 0}
-              onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATES, dates)} />
-            <SquareButton
-              disabled={disabled || !dates?.length > 0}
-              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATES, dates)} />
-          </ContentWrapper>
-        </Row>
-        <Row>
-          <Label>Jours de la semaine</Label>
-          <DayPicker
-            disabled={disabled}
-            selectedList={weekdays}
-            setSelectedList={setWeekdays}
-          />
-        </Row>
-        <Row>
-          <Label>Jours fériés</Label>
-          <HolidaysCheckbox disabled={disabled} onChange={setHolidays} checked={holidays}/>
-        </Row>
-        <TimeTitle>Horaires {authorized ? 'autorisés' : 'interdits'}</TimeTitle>
-        <Delimiter width='500' />
-        <TimeRow disabled={timeIsDisabled}>
-          <DateRanges>
-              { timeIntervals?.length > 0
-                ? timeIntervals.map((timeInterval, id) => {
-                  return <TimeInterval
-                    key={id}
-                    id={id}
-                    isLast={id === timeIntervals.length - 1}
-                    timeInterval={timeInterval}
-                    disabled={timeIsDisabled || disabled || daytime}
-                    onTimeIntervalChange={onTimeIntervalChange}
-                  />
+    <FormContent display={displayForm} authorized={authorized}>
+      <AnnualRecurrence >
+        <Label>Récurrence annuelle</Label>
+        <RadioGroup
+          inline
+          onChange={value => set(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE, value)}
+          value={annualRecurrence}
+        >
+          <CustomRadio value={true}>oui</CustomRadio>
+          <CustomRadio value={false}>non</CustomRadio>
+        </RadioGroup>
+      </AnnualRecurrence>
+      <DateTime >
+        <ConditionalLines $display={displayForm} disabled={disabled}>
+          <Row>
+            <ContentWrapper>
+              <Label>Plages de dates</Label>
+            </ContentWrapper>
+            <DateRanges>
+              { dateRanges?.length > 0
+                ? dateRanges.map((dateRange, id) => {
+                  return <DateRange
+                      key={id}
+                      id={id}
+                      annualRecurrence={annualRecurrence}
+                      dateRange={dateRange}
+                      updateList={updateDateRanges}
+                      disabled={disabled}
+                      isLast={id === dateRanges.length - 1}
+                    />
                 })
-                : <TimeInterval
+                : <DateRange
                   key={-1}
                   id={-1}
                   isLast
-                  timeInterval={undefined}
-                  disabled={timeIsDisabled || disabled || daytime}
-                  onTimeIntervalChange={onTimeIntervalChange}
+                  annualRecurrence={annualRecurrence}
+                  dateRange={DEFAULT_DATE_RANGE}
+                  updateList={updateDateRanges}
+                  disabled={disabled}
                 />
               }
-          </DateRanges>
-          <ContentWrapper alignItems={'flex-end'}>
-            <SquareButton
-              disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-              onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})} />
-            <SquareButton
-              type={SQUARE_BUTTON_TYPE.DELETE}
-              disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-              onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)} />
-          </ContentWrapper>
-        </TimeRow>
-        <TimeRow disabled={timeIsDisabled}>
-          Ou<DaytimeCheckbox
-            disabled={timeIsDisabled || disabled}
-            checked={daytime}
-            onChange={setDaytime}
-          >du lever au coucher du soleil</DaytimeCheckbox>
-        </TimeRow>
-      </ConditionalLines>
-    </DateTime>
-    {fishingPeriodAsString &&
-    <PeriodAsStringWrapper $display={displayForm} authorized={authorized}>
-      <PeriodAsString>
-        {fishingPeriodAsString}
-      </PeriodAsString>
-    </PeriodAsStringWrapper>}
-  </Wrapper>
+            </DateRanges>
+            <ContentWrapper alignItems={'flex-end'}>
+              <SquareButton
+                disabled={disabled || dateRanges?.length === 0}
+                onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, DEFAULT_DATE_RANGE)} />
+              <SquareButton
+                disabled={disabled || dateRanges?.length === 0}
+                type={SQUARE_BUTTON_TYPE.DELETE}
+                onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)} />
+            </ContentWrapper>
+          </Row>
+          <Row>
+            <ContentWrapper>
+              <Label>Dates précises</Label>
+            </ContentWrapper>
+            <DateList>
+              { dates?.length > 0
+                ? dates.map((date, id) => {
+                  return <DateRow key={id} $isLast={id === dates.length - 1}>
+                    <CustomDatePicker
+                      disabled={disabled}
+                      value={date}
+                      saveValue={date => onDateChange(id, date)}
+                      format='DD/MM/YYYY'
+                      placement={'rightStart'}
+                      oneTap
+                    />
+                  </DateRow>
+                })
+                : <DateRow key={-1} $isLast>
+                    <CustomDatePicker
+                      disabled={disabled}
+                      value={undefined}
+                      saveValue={date => onDateChange(-1, date)}
+                      format='DD/MM/YYYY'
+                      placement={'rightStart'}
+                      oneTap
+                    />
+                  </DateRow>
+              }
+            </DateList>
+            <ContentWrapper alignItems={'flex-end'}>
+              <SquareButton
+                type={SQUARE_BUTTON_TYPE.DELETE}
+                disabled={disabled || !dates?.length > 0}
+                onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATES, dates)} />
+              <SquareButton
+                disabled={disabled || !dates?.length > 0}
+                onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATES, dates)} />
+            </ContentWrapper>
+          </Row>
+          <Row>
+            <Label>Jours de la semaine</Label>
+            <DayPicker
+              disabled={disabled}
+              selectedList={weekdays}
+              setSelectedList={setWeekdays}
+            />
+          </Row>
+          <Row>
+            <Label>Jours fériés</Label>
+            <HolidaysCheckbox disabled={disabled} onChange={setHolidays} checked={holidays}/>
+          </Row>
+          <TimeTitle>Horaires {authorized ? 'autorisés' : 'interdits'}</TimeTitle>
+          <Delimiter width='500' />
+          <TimeRow disabled={timeIsDisabled}>
+            <DateRanges>
+                { timeIntervals?.length > 0
+                  ? timeIntervals.map((timeInterval, id) => {
+                    return <TimeInterval
+                      key={id}
+                      id={id}
+                      isLast={id === timeIntervals.length - 1}
+                      timeInterval={timeInterval}
+                      disabled={timeIsDisabled || disabled || daytime}
+                      onTimeIntervalChange={onTimeIntervalChange}
+                    />
+                  })
+                  : <TimeInterval
+                    key={-1}
+                    id={-1}
+                    isLast
+                    timeInterval={undefined}
+                    disabled={timeIsDisabled || disabled || daytime}
+                    onTimeIntervalChange={onTimeIntervalChange}
+                  />
+                }
+            </DateRanges>
+            <ContentWrapper alignItems={'flex-end'}>
+              <SquareButton
+                disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
+                onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})} />
+              <SquareButton
+                type={SQUARE_BUTTON_TYPE.DELETE}
+                disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
+                onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)} />
+            </ContentWrapper>
+          </TimeRow>
+          <TimeRow disabled={timeIsDisabled}>
+            Ou<DaytimeCheckbox
+              disabled={timeIsDisabled || disabled}
+              checked={daytime}
+              onChange={setDaytime}
+            >du lever au coucher du soleil</DaytimeCheckbox>
+          </TimeRow>
+        </ConditionalLines>
+      </DateTime>
+      {fishingPeriodAsString &&
+      <PeriodAsStringWrapper >
+        <PeriodAsString>
+          {fishingPeriodAsString}
+        </PeriodAsString>
+      </PeriodAsStringWrapper>}
+    </FormContent>
+  </FormSection>
 }
 
 const ContentWrapper = styled.div`
@@ -319,8 +324,6 @@ const ContentWrapper = styled.div`
 `
 
 const PeriodAsStringWrapper = styled.div`
-  display: ${props => !props.$display ? 'none' : 'flex'};
-  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
   padding-top: 20px;
 `
 const PeriodAsString = styled.div`
@@ -334,9 +337,6 @@ const PeriodAsString = styled.div`
 `
 
 const AnnualRecurrence = styled.div`
-  display: ${props => !props.$display ? 'none' : 'flex'};
-  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
-  padding-left: 15px;
   .rs-radio-group {
     margin-left: -10px;
   }
@@ -350,11 +350,6 @@ const ConditionalLines = styled.div`
   display: ${props => props.$display ? 'flex' : 'none'};
   opacity: ${props => props.disabled ? '0.4' : '1'};
   flex-direction: column;
-`
-
-const Wrapper = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
-  ${props => props.show ? 'flex-direction: column;' : ''};
 `
 
 const DateRow = styled.div`
@@ -375,27 +370,12 @@ const HolidaysCheckbox = styled(CustomCheckbox)`
   margin-top: -15px;
 `
 const DateTime = styled.div`
-  display: ${props => props.$display ? 'flex' : 'none'};
+  display: 'flex';
   flex-direction: row;
-  opacity: ${props => props.disabled ? '0.4' : '1'};
-  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
-  padding-left: 15px;
   padding-top: 25px;
 `
 
-const normalTitle = css`
-  display: flex;
-  padding: 0px 0px 10px 0px;
-  align-items: center;
-  font-size: 13px;
-  color: ${COLORS.slateGray};
-`
-const Title = styled.div`
-  ${normalTitle}
-`
-
-const TimeTitle = styled(Title)`
-  ${normalTitle}
+const TimeTitle = styled(RegulatorySectionTitle)`
   margin-top: 30px;
 `
 
@@ -424,12 +404,6 @@ const GreenCircle = styled.span`
 const RedCircle = styled.span`
   ${circle}
   background-color: ${COLORS.red};
-`
-
-const AuthorizedRadio = styled(RadioGroup)` 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `
 
 const CustomRadio = styled(Radio)`

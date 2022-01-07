@@ -15,6 +15,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     zone: decodeURI(properties.zones),
     species: properties.especes,
     prohibitedSpecies: properties.especes_interdites,
+    regulatoryGears: parseRegulatoryGears(properties.gears),
     regulatorySpecies: parseRegulatorySpecies(properties.species),
     regulatoryReferences: parseRegulatoryReferences(properties.references_reglementaires),
     upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(properties.references_reglementaires_a_venir),
@@ -35,6 +36,12 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     rejections: properties.rejets,
     deposit: properties.gisement
   }
+}
+
+function parseRegulatoryGears (gears) {
+  return gears
+    ? parseJSON(gears)
+    : initialRegulatoryGearsValues
 }
 
 function parseRegulatorySpecies (species) {
@@ -128,7 +135,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     regulatoryReferences,
     upcomingRegulatoryReferences,
     fishingPeriod,
-    regulatorySpecies
+    regulatorySpecies,
+    regulatoryGears
   } = properties
 
   return {
@@ -139,7 +147,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     references_reglementaires: JSON.stringify(regulatoryReferences),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
-    species: JSON.stringify(regulatorySpecies)
+    species: JSON.stringify(regulatorySpecies),
+    gears: JSON.stringify(regulatoryGears)
   }
 }
 
@@ -246,6 +255,26 @@ export const initialRegulatorySpeciesValues = {
   species: [],
   speciesGroups: []
 }
+
+/** @type {RegulatoryGears} */
+export const initialRegulatoryGearsValues = {
+  authorized: undefined,
+  allGears: undefined,
+  allTowedGears: undefined,
+  allPassiveGears: undefined,
+  regulatedGearCategories: {},
+  regulatedGears: {},
+  selectedCategoriesAndGears: [],
+  derogation: undefined
+}
+
+export const GEARS_CATEGORES_WITH_MESH = [
+  'Chaluts',
+  'Sennes traînantes',
+  'Filets tournants',
+  'Filets soulevés',
+  'Filets maillants et filets emmêlants'
+]
 
 export const WEEKDAYS = {
   lundi: 'L',
@@ -413,6 +442,14 @@ export const getRegulatoryLayersWithoutTerritory = layersTopicsByRegTerritory =>
   return nextRegulatoryLayersWithoutTerritory
 }
 
+/**
+ * Convert an array of word to a sentence.
+ * Each word or separated with a coma,
+ * exept the second last word is fellowed by 'et'
+ * and the last word with nothing
+ * @param {string[]} array
+ * @returns {string}
+ */
 const toArrayString = (array) => {
   if (array?.length) {
     if (array.length === 1) {
@@ -425,6 +462,14 @@ const toArrayString = (array) => {
   }
 }
 
+/**
+ * dateToString
+ * Convert date to string
+ * if annualRecurrence, the year is added, then nothing
+ * @param {Date} date
+ * @param {boolean} annualRecurrence
+ * @returns
+ */
 const dateToString = (date, annualRecurrence) => {
   const options = { day: 'numeric', month: 'long' }
   if (!annualRecurrence) {
@@ -446,12 +491,13 @@ const getHoursValues = () => {
 
 export const TIMES_SELECT_PICKER_VALUES = getHoursValues()
 
-const timeToString = (date) => {
-  const minutes = date.getMinutes()
-  const hours = date.getHours()
-  return `${hours < 10 ? '0' : ''}${hours}h${minutes < 10 ? '0' : ''}${minutes}`
-}
-
+/**
+ * timeToString
+ * Convert date time to string
+ * 0 is added in front of number lesser than 10
+ * @param {Date} date
+ * @returns {string} date as string
+ */
 export const convertTimeToString = (date) => {
   if (date) {
     const minutes = date.getMinutes()
@@ -460,6 +506,12 @@ export const convertTimeToString = (date) => {
   }
 }
 
+/**
+ * fishingPeriodToString
+ * Convert a fishing period object to a sentence understandable by a human
+ * @param {FishingPeriod} fishingPeriod
+ * @returns {string} - fishing period convert to string
+ */
 export const fishingPeriodToString = fishingPeriod => {
   const {
     dateRanges,
@@ -516,7 +568,7 @@ export const fishingPeriodToString = fishingPeriod => {
   if (timeIntervals?.length) {
     const array = toArrayString(timeIntervals.map(({ from, to }) => {
       if (from && to) {
-        return `de ${timeToString(from)} à ${timeToString(to)}`
+        return `de ${convertTimeToString(from)} à ${convertTimeToString(to)}`
       }
       return undefined
     }).filter(e => e))
@@ -535,6 +587,13 @@ export const fishingPeriodToString = fishingPeriod => {
   return null
 }
 
+/**
+ * sortLayersTopicsByRegTerritory
+ * Sort the layer topics group by regulatory territory
+ * respecting a particular order.
+ * @param {Map<string, RegulatoryTopics} layersTopicsByRegTerritory
+ * @returns {Map<string, RegulatoryTopics}
+ */
 export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
   const UEObject = { ...layersTopicsByRegTerritory[UE] }
 

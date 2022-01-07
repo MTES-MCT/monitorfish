@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
@@ -39,6 +40,7 @@ class BffController(
         private val updateControlObjective: UpdateControlObjective,
         private val getOperationalAlerts: GetOperationalAlerts,
         private val getAllBeaconStatuses: GetAllBeaconStatuses,
+        private val updateBeaconStatus: UpdateBeaconStatus,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -246,8 +248,7 @@ class BffController(
                 id = controlObjectiveId,
                 targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
                 targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
-                controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel
-        )
+                controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel)
     }
 
     @GetMapping("/v1/alerts")
@@ -262,5 +263,18 @@ class BffController(
         return getAllBeaconStatuses.execute().map {
             BeaconStatusDataOutput.fromBeaconStatus(it)
         }
+    }
+
+    @PutMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"], consumes = ["application/json"])
+    @ApiOperation("Update a beacon status")
+    fun updateBeaconStatus(@PathParam("Control objective id")
+                               @PathVariable(name = "beaconStatusId")
+                               beaconStatusId: Int,
+                               @RequestBody
+                               updateBeaconStatusData: UpdateBeaconStatusDataInput) {
+        updateBeaconStatus.execute(
+                id = beaconStatusId,
+                vesselStatus = updateBeaconStatusData.vesselStatus,
+                stage = updateBeaconStatusData.stage)
     }
 }

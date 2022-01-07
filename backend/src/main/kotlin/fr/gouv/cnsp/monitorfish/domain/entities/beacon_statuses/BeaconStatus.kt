@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.entities.beacons_status
+package fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses
 
 import java.time.ZonedDateTime
 

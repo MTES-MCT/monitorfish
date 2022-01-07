@@ -38,10 +38,12 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.BeaconStatus
-import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.Stage
-import fr.gouv.cnsp.monitorfish.domain.entities.beacons_status.VesselStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselStatus
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconStatusException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
 
 @Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
@@ -92,6 +94,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var getAllBeaconStatuses: GetAllBeaconStatuses
+
+    @MockBean
+    private lateinit var updateBeaconStatus: UpdateBeaconStatus
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -476,5 +481,27 @@ class BffControllerITests {
                 .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo("CFR")))
                 .andExpect(jsonPath("$[0].vesselStatus", equalTo("AT_SEA")))
                 .andExpect(jsonPath("$[0].stage", equalTo("INITIAL_ENCOUNTER")))
+    }
+
+    @Test
+    fun `Should return Created When an update of a beacon status is done`() {
+        // When
+        mockMvc.perform(put("/bff/v1/beacon_statuses/123")
+                .content(objectMapper.writeValueAsString(UpdateBeaconStatusDataInput(vesselStatus = VesselStatus.AT_SEA)))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Should return Bad request When an update of a beacon status is empty`() {
+        given(this.updateBeaconStatus.execute(1, null, null))
+                .willThrow(CouldNotUpdateBeaconStatusException("FAIL"))
+
+        // When
+        mockMvc.perform(put("/bff/v1/beacon_statuses/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isBadRequest)
     }
 }

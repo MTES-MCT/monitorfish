@@ -53,7 +53,56 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     }
 
     if (vessels && showingVesselsEstimatedPositions) {
-      showVesselEstimatedTrack()
+      vectorSourceRef.current.clear(true)
+      const isLight = Vessel.iconIsLight(selectedBaseLayer)
+      const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+
+      function createEstimatedTrack (vesselFeature) {
+        const {
+          estimatedCurrentLatitude,
+          estimatedCurrentLongitude,
+          latitude,
+          longitude,
+          dateTime,
+          isAtPort,
+          isFiltered,
+          filterPreview,
+          vesselId
+        } = vesselFeature
+
+        if (nonFilteredVesselsAreHidden && !isFiltered) {
+          return
+        }
+
+        if (previewFilteredVesselsMode && !filterPreview) {
+          return
+        }
+
+        if (hideVesselsAtPort && isAtPort) {
+          return
+        }
+
+        if (estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
+          return EstimatedPosition.getFeatures(
+            [longitude, latitude],
+            [estimatedCurrentLongitude, estimatedCurrentLatitude],
+            {
+              id: vesselId.replace(`${Layers.VESSELS.code}:`, ''),
+              isLight,
+              dateTime,
+              vesselIsHidden,
+              vesselIsOpacityReduced,
+              hideNonSelectedVessels
+            })
+        }
+      }
+      const estimatedCurrentPositionsFeatures = vessels.reduce((features, vessel) => {
+        const newFeature = createEstimatedTrack(vessel)
+        newFeature && features.push(newFeature)
+        return features
+      }, [])
+
+      vectorSourceRef.current.addFeatures(estimatedCurrentPositionsFeatures.flat())
     }
   }, [
     vessels,
@@ -62,7 +111,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     previewFilteredVesselsMode,
     nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,
-    hideVesselsAtPort
+    hideVesselsAtPort,
+    vesselsLastPositionVisibility
   ])
 
   function addLayerToMap () {
@@ -76,59 +126,6 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         map.removeLayer(layerRef.current)
       }
     }
-  }
-
-  function showVesselEstimatedTrack () {
-    vectorSourceRef.current.clear(true)
-    const isLight = Vessel.iconIsLight(selectedBaseLayer)
-    const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-
-    function createEstimatedTrack (vesselFeature) {
-      const {
-        estimatedCurrentLatitude,
-        estimatedCurrentLongitude,
-        latitude,
-        longitude,
-        dateTime,
-        isAtPort,
-        isFiltered,
-        filterPreview,
-        vesselId
-      } = vesselFeature
-
-      if (nonFilteredVesselsAreHidden && !isFiltered) {
-        return
-      }
-
-      if (previewFilteredVesselsMode && !filterPreview) {
-        return
-      }
-
-      if (hideVesselsAtPort && isAtPort) {
-        return
-      }
-
-      if (estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {
-        return EstimatedPosition.getFeatures(
-          [longitude, latitude],
-          [estimatedCurrentLongitude, estimatedCurrentLatitude],
-          {
-            id: vesselId.replace(`${Layers.VESSELS.code}:`, ''),
-            isLight,
-            dateTime,
-            vesselIsHidden,
-            vesselIsOpacityReduced,
-            hideNonSelectedVessels
-          })
-      }
-    }
-    const estimatedCurrentPositionsFeatures = vessels.reduce((features, vessel) => {
-      const newFeature = createEstimatedTrack(vessel)
-      newFeature && features.push(newFeature)
-      return features
-    }, [])
-
-    vectorSourceRef.current.addFeatures(estimatedCurrentPositionsFeatures.flat())
   }
 
   return null

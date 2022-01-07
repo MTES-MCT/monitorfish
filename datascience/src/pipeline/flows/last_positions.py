@@ -66,6 +66,14 @@ def extract_last_positions(minutes: int) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_pending_alerts() -> pd.DataFrame:
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/pending_alerts.sql",
+    )
+
+
+@task(checkpoint=False)
 def drop_duplicates(positions: pd.DataFrame) -> pd.DataFrame:
     """
     Drop duplicate vessels in a `pandas.DataFrame` of positions.
@@ -340,10 +348,25 @@ def estimate_current_positions(
 
 
 @task(checkpoint=False)
-def merge_last_positions_risk_factors(last_positions, risk_factors):
+def merge_last_positions_risk_factors_alerts(
+    last_positions: pd.DataFrame,
+    risk_factors: pd.DataFrame,
+    pending_alerts: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Performs a left join on last_positions, risk_factors and pending_alerts using cfr,
+    ircs and external_immatriculation as join keys.
+    """
     last_positions = join_on_multiple_keys(
         last_positions,
         risk_factors,
+        on=["cfr", "ircs", "external_immatriculation"],
+        how="left",
+    )
+
+    last_positions = join_on_multiple_keys(
+        last_positions,
+        pending_alerts,
         on=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
@@ -364,7 +387,7 @@ def load_last_positions(last_positions):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
-        pg_array_columns=["segments"],
+        pg_array_columns=["segments", "alerts"],
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
@@ -390,6 +413,7 @@ with Flow("Last positions") as flow:
 
         # Extract & Transform
         risk_factors = extract_risk_factors()
+        pending_alerts = extract_pending_alerts()
 
         last_positions = extract_last_positions(minutes=minutes)
         last_positions = drop_duplicates(last_positions)
@@ -425,7 +449,9 @@ with Flow("Last positions") as flow:
             last_positions=last_positions,
             max_hours_since_last_position=current_position_estimation_max_hours,
         )
-        last_positions = merge_last_positions_risk_factors(last_positions, risk_factors)
+        last_positions = merge_last_positions_risk_factors_alerts(
+            last_positions, risk_factors, pending_alerts
+        )
 
         # Load
         load_last_positions(last_positions)

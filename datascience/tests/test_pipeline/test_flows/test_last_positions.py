@@ -16,11 +16,9 @@ from src.pipeline.flows.last_positions import (
     extract_last_positions,
     extract_previous_last_positions,
     extract_risk_factors,
-    flow,
     load_last_positions,
-    merge_last_positions_risk_factors,
+    merge_last_positions_risk_factors_alerts,
     split,
-    tag_positions_at_port,
     validate_action,
 )
 from tests.mocks import mock_extract_side_effect
@@ -315,7 +313,7 @@ class TestLastPositionsFlow(unittest.TestCase):
             estimated_current_positions, expected_estimated_current_positions
         )
 
-    def test_merge_last_positions_risk_factors(self):
+    def test_merge_last_positions_risk_factors_alerts(self):
 
         last_positions = pd.DataFrame(
             {
@@ -340,7 +338,21 @@ class TestLastPositionsFlow(unittest.TestCase):
             }
         )
 
-        res = merge_last_positions_risk_factors.run(last_positions, risk_factors)
+        pending_alerts = pd.DataFrame(
+            {
+                "cfr": ["A", "F"],
+                "ircs": [None, "ff"],
+                "external_immatriculation": ["aaa", None],
+                "alerts": [
+                    ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
+                    ["THREE_MILES_TRAWLING_ALERT"],
+                ],
+            }
+        )
+
+        res = merge_last_positions_risk_factors_alerts.run(
+            last_positions, risk_factors, pending_alerts
+        )
 
         res = (
             res.sort_values(["cfr", "ircs", "external_immatriculation"])
@@ -360,6 +372,12 @@ class TestLastPositionsFlow(unittest.TestCase):
                 "detectability_risk_factor": [2.1, None, 2.3, 2.3],
                 "risk_factor": [1.8, None, 3.0, 1.9],
                 "total_weight_onboard": [121.2, 0.0, 0.0, 0.0],
+                "alerts": [
+                    ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
+                    None,
+                    None,
+                    None,
+                ],
             }
         ).fillna({**default_risk_factors})
 

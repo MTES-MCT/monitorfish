@@ -89,7 +89,6 @@ const ShowIcon = styled.img`
 const Row = styled.div`
   display: flex;
   margin: ${props => props.isFirstRow ? 7 : 5}px 0 0 10px;
-  color: ${COLORS.gunMetal};
 `
 
 const Wrapper = styled.div`
@@ -146,13 +145,14 @@ const Flag = styled.img`
   display: inline-block;
   vertical-align: middle;
   margin-top: 3px;
+  cursor: pointer;
 `
 
 const VesselName = styled.div`
   font-size: 13px;
   font-weight: 500;
-  color: ${COLORS.gunMetal};
   margin-left: 8px;
+  cursor: pointer;
 `
 
 const Priority = styled.div`

@@ -16,7 +16,9 @@ const Draggable = ({ id, stageId, children, isDroppedId }) => {
     zIndex: isDragging ? 9999999 : 'unset',
     margin: '0 10px 8px 10px',
     background: COLORS.background,
-    animation: isDroppedId === id ? 'blink 1s' : 'unset'
+    animation: isDroppedId === id ? 'blink 1s' : 'unset',
+    color: COLORS.gunMetal,
+    cursor: 'move'
   }
 
   return (

@@ -21,7 +21,8 @@ import HideOtherVessels from './actions/hide_other_vessels/HideOtherVessels'
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
 import { getAlertNameFromType } from '../../domain/entities/alerts'
-import { focusOnAlert, openAlertList } from '../../domain/shared_slices/Alert'
+import { focusOnAlert } from '../../domain/shared_slices/Alert'
+import { openSideWindow } from '../../domain/shared_slices/Global'
 import { ReactComponent as AlertSVG } from '../icons/Icone_alertes.svg'
 
 const VesselSidebar = () => {
@@ -141,7 +142,7 @@ const VesselSidebar = () => {
                 ? <VesselCardAlerts
                   onClick={() => {
                     batch(() => {
-                      dispatch(openAlertList())
+                      dispatch(openSideWindow())
                       dispatch(focusOnAlert({
                         name: selectedVessel?.alerts[0],
                         internalReferenceNumber: selectedVessel.internalReferenceNumber,

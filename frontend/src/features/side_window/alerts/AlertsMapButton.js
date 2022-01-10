@@ -5,7 +5,8 @@ import { batch, useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
 import { COLORS } from '../../../constants/constants'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
-import { closeAlertList, openAlertList, resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
+import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
+import { openSideWindow, closeSideWindow } from '../../../domain/shared_slices/Global'
 import NewWindow from 'react-new-window'
 import SideWindow from '../SideWindow'
 
@@ -15,26 +16,24 @@ const AlertsMapButton = () => {
     regulatoryZoneMetadataPanelIsOpen
   } = useSelector(state => state.regulatory)
   const {
-    alertListIsOpen
-  } = useSelector(state => state.alert)
-  const {
     healthcheckTextWarning,
-    previewFilteredVesselsMode
+    previewFilteredVesselsMode,
+    sideWindowIsOpen
   } = useSelector(state => state.global)
 
   return <>
     <AlertsButton
       data-cy={'alerts-button'}
       title={'Alertes'}
-      isVisible={alertListIsOpen}
+      isVisible={sideWindowIsOpen}
       regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       healthcheckTextWarning={healthcheckTextWarning}
       isHidden={previewFilteredVesselsMode}
-      onClick={() => alertListIsOpen ? dispatch(closeAlertList()) : dispatch(openAlertList())}>
+      onClick={() => sideWindowIsOpen ? dispatch(closeSideWindow()) : dispatch(openSideWindow())}>
       <AlertsIcon/>
-    </AlertsButton>
+    </AlertsButton>Vessel
     {
-      alertListIsOpen
+      sideWindowIsOpen
         ? <NewWindow
           copyStyles
           name={'MonitorFish'}
@@ -42,7 +41,7 @@ const AlertsMapButton = () => {
           features={{ scrollbars: true, width: '1500px', height: '900px' }}
           onUnload={() => {
             batch(() => {
-              dispatch(closeAlertList())
+              dispatch(closeSideWindow())
               dispatch(resetFocusOnAlert())
             })
           }}

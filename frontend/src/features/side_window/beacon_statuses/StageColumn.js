@@ -49,4 +49,4 @@ const Wrapper = styled.div`
   }
 `
 
-export default StageColumn
+export default React.memo(StageColumn)

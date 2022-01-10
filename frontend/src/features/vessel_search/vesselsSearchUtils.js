@@ -1,10 +1,4 @@
-function getTextForSearch (text) {
-  return text
-    .toLowerCase()
-    .replace(/[ ]/g, '')
-    .replace(/[']/g, '')
-    .replace(/["]/g, '')
-}
+import { getTextForSearch } from '../../utils'
 
 export function findMatchingFeature (feature, searchText) {
   return (feature.vessel.internalReferenceNumber &&

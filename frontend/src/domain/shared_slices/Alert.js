@@ -10,7 +10,6 @@ const alertSlice = createSlice({
   initialState: {
     /** @type {Alert[]} alerts */
     alerts: [],
-    alertListIsOpen: false,
     /** @type {Alert | null} focusOnAlert */
     focusOnAlert: null
   },
@@ -24,24 +23,6 @@ const alertSlice = createSlice({
      */
     setAlerts (state, action) {
       state.alerts = action.payload
-    },
-    /**
-     * Open alert list
-     * @function openAlertList
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     */
-    openAlertList (state) {
-      state.alertListIsOpen = true
-    },
-    /**
-     * Close alert list
-     * @function closeAlertList
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     */
-    closeAlertList (state) {
-      state.alertListIsOpen = false
     },
     /**
      * Focus on alert in the alert list
@@ -83,8 +64,6 @@ const alertSlice = createSlice({
 
 export const {
   setAlerts,
-  openAlertList,
-  closeAlertList,
   focusOnAlert,
   resetFocusOnAlert
 } = alertSlice.actions

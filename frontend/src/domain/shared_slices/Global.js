@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+/* eslint-disable */
+/** @namespace GlobalReducer */
+const GlobalReducer = null
+/* eslint-enable */
+
 const globalSlice = createSlice({
   name: 'global',
   initialState: {
@@ -11,7 +16,8 @@ const globalSlice = createSlice({
     /** @type {string | null} healthcheckTextWarning */
     healthcheckTextWarning: null,
     previewFilteredVesselsMode: undefined,
-    inBackofficeMode: false
+    inBackofficeMode: false,
+    sideWindowIsOpen: false
   },
   reducers: {
     expandRightMenu (state) {
@@ -71,6 +77,24 @@ const globalSlice = createSlice({
      */
     setInBackofficeMode (state, action) {
       state.inBackofficeMode = action.payload
+    },
+    /**
+     * Open side window
+     * @function openSideWindow
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     */
+    openSideWindow (state) {
+      state.sideWindowIsOpen = true
+    },
+    /**
+     * Close side window
+     * @function closeSideWindow
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     */
+    closeSideWindow (state) {
+      state.sideWindowIsOpen = false
     }
   }
 })
@@ -87,7 +111,9 @@ export const {
   setHealthcheckTextWarning,
   setPreviewFilteredVesselsMode,
   setBlockVesselsUpdate,
-  setInBackofficeMode
+  setInBackofficeMode,
+  openSideWindow,
+  closeSideWindow
 } = globalSlice.actions
 
 export default globalSlice.reducer

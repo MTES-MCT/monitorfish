@@ -39,7 +39,7 @@ On the initiative of the french FMC, the project started in September 2020 as a 
 
 After 10 months of incubation in the EIG program, the software is in production and used daily by the french FMC.
 
-The project continues outside of the context of the EIG program, with the objective to develop additional funtionalities.
+The project continues as a [startup d'Etat](https://beta.gouv.fr/startups/monitorfish.html) in the [beta.gouv.fr](https://beta.gouv.fr) organization, with the objective to develop additional funtionalities.
 
 ## Roadmap
 The project roadmap can be found [here](https://github.com/MTES-MCT/monitorfish/projects/3)

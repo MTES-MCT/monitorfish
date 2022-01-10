@@ -4,9 +4,12 @@ import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
-import { BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
+import { beaconStatusesStages, BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
+import { useSelector } from 'react-redux'
 
 const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+  const beaconStatuses = useSelector(state => state.beaconStatus.beaconStatuses)
+
   return <Menu>
     <Title>
       Vue d&apos;ensemble
@@ -45,6 +48,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }
       selectedMenu === sideWindowMenu.BEACON_STATUSES &&
       <>
         <SideWindowSubMenuLink
+          number={beaconStatuses.filter(beaconStatus => beaconStatus.stage !== beaconStatusesStages.RESUMED_TRANSMISSION.code).length}
           menu={BeaconStatusesSubMenu.MALFUNCTIONING}
           isSelected={selectedSubMenu.code === BeaconStatusesSubMenu.MALFUNCTIONING.code}
           setSelected={setSelectedSubMenu}
@@ -55,7 +59,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }
 }
 
 const Menu = styled.div`
-  width: 160px;
+  width: 200px;
   height: 100vh;
   background: ${COLORS.gainsboro};
   flex-shrink: 0;

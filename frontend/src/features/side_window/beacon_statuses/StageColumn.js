@@ -40,13 +40,22 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
 const Wrapper = styled.div`
   width: 282px;
   border: 1px solid ${COLORS.lightGray};
-  height: calc(100vh - 50px);
+  height: calc(100vh - 100px);
   
   @keyframes blink {
-    0%   { background: ${COLORS.background}; }
-    50% { background: ${COLORS.shadowBlue} }
-    0%   { background: ${COLORS.background}; }
+    0%   {
+      background: ${COLORS.background};
+      color: ${COLORS.gunMetal};
+    }
+    50% {
+      background: ${COLORS.gunMetal};
+      color: ${COLORS.gainsboro};
+    }
+    0% {
+      background: ${COLORS.background};
+      color: ${COLORS.gunMetal};
+    }
   }
 `
 
-export default React.memo(StageColumn)
+export default StageColumn

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { DndContext, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import styled from 'styled-components'
 
@@ -14,6 +14,7 @@ import { COLORS } from '../../../constants/constants'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 import { updateLocalBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
+import { setError } from '../../../domain/shared_slices/Global'
 
 const getByStage = (stage, beaconStatuses) =>
   beaconStatuses
@@ -33,10 +34,10 @@ const getMemoizedBeaconStatusesByStage = createSelector(
 const BeaconStatusesBoard = () => {
   const dispatch = useDispatch()
   const beaconStatuses = useSelector(state => getMemoizedBeaconStatusesByStage(state))
-  const [filteredItems, setFilteredItems] = useState({})
+  const [allDroppableDisabled, setAllDroppableDisabled] = useState(false)
+  const [filteredBeaconStatuses, setFilteredBeaconStatuses] = useState({})
   const [isDroppedId, setIsDroppedId] = useState(undefined)
   const [searchedVessel, setSearchedVessel] = useState(undefined)
-  const doNotUpdateBoard = useRef(false)
   const baseUrl = window.location.origin
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -78,7 +79,7 @@ const BeaconStatusesBoard = () => {
     }
 
     if (!searchedVessel?.length || searchedVessel?.length <= 1) {
-      setFilteredItems(beaconStatuses)
+      setFilteredBeaconStatuses(beaconStatuses)
       return
     }
 
@@ -94,7 +95,7 @@ const BeaconStatusesBoard = () => {
         }),
         {}
       )
-      setFilteredItems(nextFilteredItems)
+      setFilteredBeaconStatuses(nextFilteredItems)
     }
   }, [beaconStatuses, searchedVessel])
 
@@ -118,13 +119,17 @@ const BeaconStatusesBoard = () => {
     }))
   }, [beaconStatuses])
 
-  const onDragEnd = useCallback((event) => {
-    doNotUpdateBoard.current = false
+  const onDragEnd = useCallback(event => {
     const { active, over } = event
 
     const previousStage = findStage(active.data.current.stageId)
     const beaconId = active?.id
     const nextStage = findStage(over?.id)
+
+    if (previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code) {
+      dispatch(setError(new Error('Une avarie en REPRISE DES ÉMISSIONS ne peut revenir en arrière')))
+      return
+    }
 
     if (previousStage === nextStage) {
       return
@@ -145,6 +150,13 @@ const BeaconStatusesBoard = () => {
     setIsDroppedId(beaconId)
   }, [beaconStatuses])
 
+  const onDragStart = useCallback(event => {
+    const { active } = event
+
+    const previousStage = findStage(active.data.current.stageId)
+    setAllDroppableDisabled(previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code)
+  }, [])
+
   return (
     <Wrapper innerWidth={window.innerWidth}>
       <SearchVesselInput
@@ -156,19 +168,17 @@ const BeaconStatusesBoard = () => {
         onChange={e => setSearchedVessel(e.target.value)}/>
       <DndContext
         onDragEnd={onDragEnd}
-        onDragStart={() => {
-          doNotUpdateBoard.current = true
-        }}
+        onDragStart={onDragStart}
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
       >
         <Columns>
           {Object.keys(beaconStatusesStages).map((stageId) => (
-            <Droppable key={stageId} id={stageId}>
+            <Droppable key={stageId} id={stageId} disabled={allDroppableDisabled}>
               <StageColumn
                 baseUrl={baseUrl}
                 stage={beaconStatusesStages[stageId]}
-                beaconStatuses={filteredItems[stageId] || []}
+                beaconStatuses={filteredBeaconStatuses[stageId] || []}
                 updateVesselStatus={updateVesselStatus}
                 isDroppedId={isDroppedId}
               />
@@ -181,7 +191,7 @@ const BeaconStatusesBoard = () => {
 }
 
 const SearchVesselInput = styled.input`
-  margin: 20px 0 5px 5px;
+  margin: 0 0 5px 5px;
   background-color: white;
   border: none;
   border-bottom: 1px ${COLORS.lightGray} solid;
@@ -204,7 +214,8 @@ const SearchVesselInput = styled.input`
 
 const Wrapper = styled.div`
   overflow-x: scroll;
-  height: 100vh;
+  height: calc(100vh - 20px);
+  padding: 20px 0 0 10px;
 `
 
 const Columns = styled.div`

@@ -7,6 +7,7 @@ import { sideWindowMenu } from '../../domain/entities/sideWindow'
 
 const SideWindowMenu = ({ selectedMenu, setSelectedMenu }) => {
   return <Menu>
+    <Link/>
     <Link
       title={sideWindowMenu.ALERTS.name}
       selected={selectedMenu === sideWindowMenu.ALERTS}
@@ -31,15 +32,16 @@ const Menu = styled.div`
   flex-shrink: 0;
   font-size: 11px;
   color: ${COLORS.gainsboro};
-  padding: 50px 0;
+  padding: 0;
 `
 
 const Link = styled.div`
   text-align: center;
   background: ${props => props.selected ? COLORS.shadowBlue : 'none'};
-  padding: 0 5px;
+  padding: 7px 5px;
   height: 50px;
   cursor: pointer;
+  border-bottom: 0.5px solid ${COLORS.slateGray};
 `
 
 const AlertsIcon = styled(AlertsSVG)`
